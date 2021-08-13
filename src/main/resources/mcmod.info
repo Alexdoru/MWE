@@ -1,0 +1,54 @@
+[
+{
+  "modid": "mwenhancements",
+  "name": "MegaWallsEnhancements",
+  "description": "Enhancements for Hypixel's Mega Walls, Hypixel and minecraft in general",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Alexdoru"],
+  "credits": "Alexdoru",
+  "logoFile": "MegaWalls-logo.png",
+  "screenshots": [],
+  "dependencies": []
+},
+{
+  "modid": "fkcounter",
+  "name": "FKCounter",
+  "description": "Final Kill Counter - tracks final kills in the Hypixel minigame Mega Walls
+  
+  /fks - to see the number of finals per team
+  /fps p or /fks players to see the number of finals per player
+  /fks say - to say the current score in chat
+  /fks settings - to open settings GUI
+  ",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["P0ke", "BasicallyLouis", "ziment", "Alexdoru"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+},
+{
+  "modid": "nocheaters",
+  "name": "No cheaters",
+  "description": "Warns you about previously reported players in your game with clickable messages to send report again or stop the warnings for a certain player.
+  
+  Use /wdr to report the players you want to remember and /report to report the players you don't want to remember
+  Use /nocheaters to scan your world and /nocheaters toggle to disable the warnings
+  Use /unwdr playername to stop receiving warnings about a certain player",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["leduyquang753","Updated by Alexdoru"],
+  "credits": "Le Duy Quang ground his brain.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
