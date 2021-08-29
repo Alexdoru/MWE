@@ -1,5 +1,7 @@
 This is a minecraft forge 1.8.9 mod for Hypixel's mega walls
 
+link to the Hypixel post : https://hypixel.net/threads/forge-1-8-9-mega-walls-enhancements-mod-a-mod-for-mega-walls.4470633/
+
 FKCOUNTER:
 bug fixes
 /fks say to say current score in chat
