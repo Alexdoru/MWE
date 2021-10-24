@@ -53,9 +53,4 @@ public class CommandHypixelShout extends CommandBase {
 		return true;
 	}
 
-	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-		return (FKCounterMod.isitPrepPhase() ? null : getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()));
-	}
-
 }

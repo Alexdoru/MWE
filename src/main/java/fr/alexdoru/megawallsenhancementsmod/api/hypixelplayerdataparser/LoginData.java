@@ -141,7 +141,7 @@ public class LoginData {
 	}
 
 	public boolean hasNeverJoinedHypixel() {
-		return rank == null && lastLogin == 0;
+		return this.displayname == null;
 	}
 
 	public boolean isStaffonHypixel() { // for moderators, admins etc
