@@ -30,7 +30,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = "mwenhancements", name = "MegaWallsEnhancements", version = "1.1",acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
+@Mod(modid = "mwenhancements", name = "MegaWallsEnhancements", version = "1.2",acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
 public class MegaWallsEnhancementsMod {
 	
 	@EventHandler

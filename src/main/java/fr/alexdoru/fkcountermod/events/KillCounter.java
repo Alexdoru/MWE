@@ -129,18 +129,24 @@ public class KillCounter {
 		for(String kill_pattern : KILL_PATTERNS) {
 			Matcher killMessageMatcher = Pattern.compile(kill_pattern).matcher(UnformattedText);
 			if(killMessageMatcher.matches()) {
+
 				String killed = killMessageMatcher.group(1);
 				String killer = killMessageMatcher.group(2);
+				String[] split = FormattedText.split("\u00a7");
 
-				String killedTeam = FormattedText.split("\u00a7")[2].substring(0, 1);
-				String killerTeam = FormattedText.split("\u00a7")[8].substring(0, 1);
+				if(split.length >= 6) {
+					
+					String killedTeam = split[2].substring(0, 1);
+					String killerTeam = split[6].substring(0, 1);
 
-				removeKilledPlayer(killed, killedTeam);
+					removeKilledPlayer(killed, killedTeam);
 
-				if(isWitherDead(killedTeam)) {
-					addKill(killer, killerTeam);
+					if(isWitherDead(killedTeam)) {
+						addKill(killer, killerTeam);
+					}
+
 				}
-				
+
 				return true;
 
 			}
