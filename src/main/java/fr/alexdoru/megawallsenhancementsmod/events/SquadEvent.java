@@ -25,6 +25,11 @@ public class SquadEvent {
 
 		String squadname = squadmap.get(event.username);
 		if(squadname != null) {
+			
+			if(event.displayname.contains(prefix)) {
+				return;
+			}
+			
 			event.displayname = squadname;
 			EntityPlayer player = (EntityPlayer) event.entity;
 			player.addPrefix(iprefix);					
