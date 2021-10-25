@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import fr.alexdoru.fkcountermod.events.KillCounter;
+import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.nocheatersmod.commands.CommandReport;
@@ -24,9 +25,7 @@ public class ChatEvents {
 	private static final Pattern SHOUT_PATTERN1 = Pattern.compile("^\\[SHOUT\\].+?(\\w+) is b?hop?ping.*",Pattern.CASE_INSENSITIVE);
 	private static final Pattern SHOUT_PATTERN2 = Pattern.compile("^\\[SHOUT\\].+?(?:wdr|report) (\\w+) (\\w+).*",Pattern.CASE_INSENSITIVE);
 	private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Active Booster, |)\\w+'s Network Booster\\)).*");
-
-	private static final String api_key_msg = "Your new API key is ";
-	private static final int api_key_msg_len = api_key_msg.length();
+	private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
 
 	@SubscribeEvent
 	public void onChatMessage(ClientChatReceivedEvent event) { 
@@ -57,16 +56,7 @@ public class ChatEvents {
 		if(msg.equals(OWN_WITHER_DEATH_MESSAGE)) {
 			KillCooldownEvent.hideGUI();
 			return;
-		}
-
-		/*
-		 * automatically sets up the api key on hypixel when you type /api new
-		 */
-		if(msg.length() > api_key_msg_len && msg.substring(0, api_key_msg_len).equals(api_key_msg)) {	    	
-			String api_key = msg.substring(api_key_msg_len, msg.length());	
-			HypixelApiKeyUtil.setApiKey(api_key);	    	    		    	
-			return;
-		}
+		}	
 
 		/*
 		 * shortens the coins messages removing the booster info
@@ -81,6 +71,21 @@ public class ChatEvents {
 		if(ArrowHitLeapHitEvent.processMessage(msg)) {return;}
 		if(parseReportMessage(msg)) {return;}
 		if(MWGameStatsEvent.processMessage(msg)) {return;}
+		if(parseAPIKey(msg)) {return;}
+	}
+
+	/*
+	 * automatically sets up the api key on hypixel when you type /api new
+	 */
+	private boolean parseAPIKey(String msg) {	
+		Matcher matcherapikey = API_KEY_PATTERN.matcher(msg);		
+		if(matcherapikey.matches()) {
+			if(!MinecraftUtils.isHypixel()) {return false;}
+			String api_key = matcherapikey.group(1);	
+			HypixelApiKeyUtil.setApiKey(api_key);	    	    		    	
+			return true;
+		}
+		return false;
 	}
 
 	private static boolean parseReportMessage(String msgIn) {
