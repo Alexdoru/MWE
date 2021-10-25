@@ -2,6 +2,7 @@ package fr.alexdoru.nocheatersmod;
 
 import java.io.File;
 
+import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.nocheatersmod.commands.CommandNocheaters;
 import fr.alexdoru.nocheatersmod.commands.CommandReport;
 import fr.alexdoru.nocheatersmod.commands.CommandSendReportAgain;
@@ -25,14 +26,6 @@ public class NoCheatersMod {
 
 	public static KeyBinding addtimemark_key = new KeyBinding("Add Timestamp", 0, "NoCheaters");
 	
-	private static boolean toggleicons = true;
-	private static boolean togglewarnings = true;
-	private static boolean toggleautoreport = false;
-	/* Time before the mod suggests to report the player again */
-	private static final long timeBetweenReports = 21600000L; // 6 heures
-	/* It won't autoreport players whose last report is older than*/
-	private static final long timeAutoReport = 1209600000L; // Two weeks
-
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		
@@ -51,34 +44,37 @@ public class NoCheatersMod {
 	}
 
 	public static boolean areIconsToggled() {
-		return toggleicons;
+		return MWEnConfigHandler.toggleicons;
 	}
 
 	public static void setToggleicons(boolean toggleicons) {
-		NoCheatersMod.toggleicons = toggleicons;
+		MWEnConfigHandler.toggleicons = toggleicons;
+		MWEnConfigHandler.syncFromInGameChange();
 	}
 
 	public static boolean areWarningsToggled() {
-		return togglewarnings;
+		return MWEnConfigHandler.togglewarnings;
 	}
 
 	public static void setTogglewarnings(boolean togglewarnings) {
-		NoCheatersMod.togglewarnings = togglewarnings;
+		MWEnConfigHandler.togglewarnings = togglewarnings;
+		MWEnConfigHandler.syncFromInGameChange();
 	}
 
 	public static boolean isAutoreportToggled() {
-		return toggleautoreport;
+		return MWEnConfigHandler.toggleautoreport;
 	}
 
 	public static void setToggleautoreport(boolean toggleautoreport) {
-		NoCheatersMod.toggleautoreport = toggleautoreport;
+		MWEnConfigHandler.toggleautoreport = toggleautoreport;
+		MWEnConfigHandler.syncFromInGameChange();
 	}
 	
 	public static long getTimebetweenreports() {
-		return timeBetweenReports;
+		return MWEnConfigHandler.timeBetweenReports;
 	}
 
 	public static long getTimeautoreport() {
-		return timeAutoReport;
+		return MWEnConfigHandler.timeAutoReport;
 	}
 }
