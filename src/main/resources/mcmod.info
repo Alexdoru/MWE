@@ -1,0 +1,65 @@
+[
+{
+  "modid": "mwenhancements",
+  "name": "MegaWallsEnhancements",
+  "description": "Enhancements for Hypixel's Mega Walls, Hypixel and minecraft in general
+  
+  Removes the hunger message in mega walls deathmatch
+  Adds tab completion for names in mega walls on the commands : /wdr /report /msg /shout, doesn't work before the walls fall.
+  
+  /stalk playername - displays what a player is doing and his currently equipped class and skin if he is in mega walls
+  /stalklist - stalks your whole watch list at once
+  /name playername - displays the name history
+  /setapikey key - to setup your api key
+  /plancke playername - get stats for a player
+  ",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Alexdoru"],
+  "credits": "Alexdoru",
+  "logoFile": "MegaWalls-logo.png",
+  "screenshots": [],
+  "dependencies": []
+},
+{
+  "modid": "fkcounter",
+  "name": "FKCounter",
+  "description": "Final Kill Counter - tracks final kills in the Hypixel minigame Mega Walls
+  
+  /fks - to see the number of finals per team
+  /fps p or /fks - players to see the number of finals per player
+  /fks say - to say the current score in chat
+  /fks settings - to open settings GUI
+  ",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["P0ke", "BasicallyLouis", "ziment", "Alexdoru"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+},
+{
+  "modid": "nocheaters",
+  "name": "No cheaters",
+  "description": "Warns you about previously reported players in your game with clickable messages to send report again or stop the warnings for a certain player.
+  
+  Use /wdr to report the players you want to remember and /report to report the players you don't want to remember
+  Use /nocheaters to scan your world and /nocheaters toggle to disable the warnings
+  Use /unwdr playername to stop receiving warnings about a certain player
+  It is possible to add a timestamp on a report to save the informations needed to catch the relubreaker via the replay system.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["leduyquang753","Updated by Alexdoru"],
+  "credits": "Le Duy Quang ground his brain.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

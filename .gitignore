@@ -1,0 +1,26 @@
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# gradle
+build
+.gradle
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# other
+*.bat
+logs
+eclipse
+backup
+run
+MWEnhancement-Changelog.txt
