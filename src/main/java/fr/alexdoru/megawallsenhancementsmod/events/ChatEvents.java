@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
+import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.nocheatersmod.commands.CommandReport;
@@ -61,15 +62,17 @@ public class ChatEvents {
 		/*
 		 * shortens the coins messages removing the booster info
 		 */
-		Matcher matchercoins = COINS_PATTERN.matcher(msg);
-		if(matchercoins.matches()) {
-			event.message = new ChatComponentText(fmsg.replace(matchercoins.group(1), ""));
-			return;
+		if(MWEnConfigHandler.shortencoinmessage) {
+			Matcher matchercoins = COINS_PATTERN.matcher(msg);
+			if(matchercoins.matches()) {
+				event.message = new ChatComponentText(fmsg.replace(matchercoins.group(1), ""));
+				return;
+			}
 		}
 
 		if(KillCounter.processMessage(fmsg, msg)) {return;}
-		if(ArrowHitLeapHitEvent.processMessage(msg)) {return;}
-		if(parseReportMessage(msg)) {return;}
+		if(MWEnConfigHandler.show_ArrowHitGui && ArrowHitLeapHitEvent.processMessage(msg)) {return;}
+		if(MWEnConfigHandler.reportsuggestions && parseReportMessage(msg)) {return;}
 		if(MWGameStatsEvent.processMessage(msg)) {return;}
 		if(parseAPIKey(msg)) {return;}
 	}
@@ -114,17 +117,16 @@ public class ChatEvents {
 	}
 
 	private static void printReportSuggestion(String playername, String cheat) {
-		IChatComponent imsg = new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.DARK_GREEN + "Command suggestion : ")
+		IChatComponent imsg = new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.DARK_RED + "Command suggestion : ")
 				.appendSibling(ChatUtil.makeReportButtons(playername, cheat, ClickEvent.Action.SUGGEST_COMMAND, ClickEvent.Action.SUGGEST_COMMAND));
 		ChatUtil.addChatMessage(imsg);
 	}
 
 	private static boolean isAValidName(String playername) {
 
-		for (NetworkPlayerInfo networkplayerinfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap())
-		{
-			if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(playername))
-			{
+		for (NetworkPlayerInfo networkplayerinfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+			
+			if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
 				return true;
 			}
 		}

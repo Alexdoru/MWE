@@ -1,12 +1,11 @@
 package fr.alexdoru.megawallsenhancementsmod;
 
-import java.io.File;
-
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandCopyToClipboard;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandHypixelMessage;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandHypixelReply;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandHypixelShout;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandKill;
+import fr.alexdoru.megawallsenhancementsmod.commands.CommandMWEnhancements;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandMWGameStats;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandName;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandPlancke;
@@ -15,14 +14,13 @@ import fr.alexdoru.megawallsenhancementsmod.commands.CommandSetupApiKey;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandSquad;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandStalk;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandStalkList;
+import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.ArrowHitLeapHitEvent;
 import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
 import fr.alexdoru.megawallsenhancementsmod.events.KeybindingsEvent;
 import fr.alexdoru.megawallsenhancementsmod.events.KillCooldownEvent;
 import fr.alexdoru.megawallsenhancementsmod.events.MWGameStatsEvent;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
-import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.command.ICommand;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -34,7 +32,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = "mwenhancements", name = "MegaWallsEnhancements", version = "2.9.3",acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
+@Mod(modid = "mwenhancements", name = "MegaWallsEnhancements", version = "2.9.4",acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
 public class MegaWallsEnhancementsMod {
 	
 	public static KeyBinding log_key_fast = new KeyBinding("Fast log glitch", 0, "MegaWallsEnhancements");
@@ -43,7 +41,7 @@ public class MegaWallsEnhancementsMod {
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-
+		MWEnConfigHandler.preinit(event.getSuggestedConfigurationFile());
 	}
 
 	@EventHandler
@@ -72,12 +70,9 @@ public class MegaWallsEnhancementsMod {
 		//ClientCommandHandler.instance.registerCommand((ICommand)new CommandAPIRequests());
 		ClientCommandHandler.instance.registerCommand((ICommand)new CommandHypixelShout());
 		ClientCommandHandler.instance.registerCommand((ICommand)new CommandHypixelReply());
+		ClientCommandHandler.instance.registerCommand((ICommand)new CommandMWEnhancements());
 		ClientCommandHandler.instance.registerCommand((ICommand)new CommandHypixelMessage());	
 		ClientCommandHandler.instance.registerCommand((ICommand)new CommandCopyToClipboard());	
-
-		HypixelApiKeyUtil.apiFile = new File((Minecraft.getMinecraft()).mcDataDir,"config/HypixelApiKey.txt");
-		HypixelApiKeyUtil.loadApiKey();
-		Runtime.getRuntime().addShutdownHook(new Thread() {public void run() {HypixelApiKeyUtil.saveApiKey();}});
 
 	}
 

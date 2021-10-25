@@ -82,7 +82,7 @@ public class GeneralInfo extends LoginData {
 
 	}
 
-	public IChatComponent getFormattedMessage(String formattedname) {
+	public IChatComponent getFormattedMessage(String formattedname) { // TODO vérifier que l'api est pas bloque avec de mettre le last login
 		
 		IChatComponent msg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
 

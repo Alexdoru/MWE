@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
+import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -16,7 +17,7 @@ public class ArrowHitGui extends Gui {
 		ScaledResolution scaled = new ScaledResolution(mc);
 		int width = scaled.getScaledWidth();
 		int height = scaled.getScaledHeight();
-		drawCenteredString(mc.fontRendererObj, HPvalue, width / 2, (height/20)*9 - 4, Integer.parseInt(Color, 16));
+		drawCenteredString(mc.fontRendererObj, HPvalue, (int)(((double)width)*MWEnConfigHandler.xpos_ArrowHitGui), (int)(((double)height)*MWEnConfigHandler.ypos_ArrowHitGui) - 4, Integer.parseInt(Color, 16));
 	}
 	
 	/**

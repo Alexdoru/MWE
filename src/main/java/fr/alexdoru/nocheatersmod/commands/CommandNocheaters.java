@@ -123,7 +123,7 @@ public class CommandNocheaters extends CommandBase {
 					return;
 				}
 
-			}
+			}			
 
 		} else if (args.length == 1 && args[0].equalsIgnoreCase("getgameid")) {
 
