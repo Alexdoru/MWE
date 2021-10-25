@@ -82,7 +82,7 @@ public class GeneralInfo extends LoginData {
 
 	}
 
-	public IChatComponent getFormattedMessage(String formattedname) { // TODO vérifier que l'api est pas bloque avec de mettre le last login
+	public IChatComponent getFormattedMessage(String formattedname) {
 		
 		IChatComponent msg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
 
@@ -99,7 +99,7 @@ public class GeneralInfo extends LoginData {
 
 				+ ChatUtil.centerLine(EnumChatFormatting.GREEN + "Firstlogin : " + EnumChatFormatting.GOLD + DateUtil.localformatTimestampday(this.getFirstLogin()) + " "
 
-				+ (this.isStaffonHypixel()? "" : EnumChatFormatting.GREEN + "Status : " + (this.isOnline() ? EnumChatFormatting.DARK_GREEN + "Online" :
+				+ (this.isStaffonHypixel() || this.isHidingFromAPI() ? "" : EnumChatFormatting.GREEN + "Status : " + (this.isOnline() ? EnumChatFormatting.DARK_GREEN + "Online" :
 					EnumChatFormatting.RED + "Offline " + EnumChatFormatting.DARK_GRAY + "for " + EnumChatFormatting.YELLOW + DateUtil.timeSince(this.getLastLogout())))) + "\n"
 
 				+ (this.mcVersionRp==null ? "" :  ChatUtil.centerLine(EnumChatFormatting.GREEN + "Minecraft version : " + EnumChatFormatting.GOLD + this.mcVersionRp) + "\n")));
