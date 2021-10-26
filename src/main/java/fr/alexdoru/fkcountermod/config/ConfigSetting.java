@@ -4,8 +4,9 @@ public enum ConfigSetting {
 
 	FKCOUNTER_HUD("Show HUD", true, new SettingData(0, 0.1)),
 	COMPACT_HUD("Compact HUD", false, null),
-	//SHOW_PLAYERS("Show Players", false, null),
-	DRAW_BACKGROUND("HUD Background", false, null);
+	SHOW_PLAYERS("Show Players", false, null),
+	DRAW_BACKGROUND("HUD Background", false, null),
+	TEXT_SHADOW("Text Shadow", true, null);
 
 	private String title;
 	private boolean value;
