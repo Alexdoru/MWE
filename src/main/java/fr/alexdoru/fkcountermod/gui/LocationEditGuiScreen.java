@@ -14,8 +14,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 
-public class LocationEditGui extends GuiScreen {
-
+public class LocationEditGuiScreen extends GuiScreen {
+	
 	private Minecraft mc = Minecraft.getMinecraft();
 
 	private final HashMap<IRenderer, ScreenPosition> renderers = new HashMap<>();
@@ -25,12 +25,12 @@ public class LocationEditGui extends GuiScreen {
 
 	private GuiScreen parent;
 
-	public LocationEditGui(HudPropertyApi api, GuiScreen parent) {
+	public LocationEditGuiScreen(HudPropertyApi api, GuiScreen parent) {
 		this(api);
 		this.parent = parent;
 	}
 
-	public LocationEditGui(HudPropertyApi api){
+	public LocationEditGuiScreen(HudPropertyApi api){
 		Collection<IRenderer> registeredRenderers = api.getHandlers();
 
 		for(IRenderer ren : registeredRenderers){ 

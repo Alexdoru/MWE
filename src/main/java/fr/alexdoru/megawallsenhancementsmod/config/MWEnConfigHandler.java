@@ -36,7 +36,7 @@ public class MWEnConfigHandler {
 	public static long timeAutoReport;
 
 	public static void preinit(File file) {
-		config = new Configuration(file);		
+		config = new Configuration(file);
 		syncConfig(true, true, false);
 	}
 

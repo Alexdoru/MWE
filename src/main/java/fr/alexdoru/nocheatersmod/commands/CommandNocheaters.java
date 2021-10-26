@@ -16,6 +16,7 @@ import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
+import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
@@ -72,6 +73,10 @@ public class CommandNocheaters extends CommandBase {
 			reportWorld();
 			return;
 
+		} else if (args.length == 1 && args[0].equalsIgnoreCase("config")) {
+			
+			new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(new NoCheatersConfigGuiScreen()), 1);
+			
 		} else if(args.length >= 1 && args[0].equalsIgnoreCase("toggle")) {
 
 			if(args.length == 2 && args[1].equalsIgnoreCase("icons")) {
@@ -123,7 +128,7 @@ public class CommandNocheaters extends CommandBase {
 					return;
 				}
 
-			}			
+			}
 
 		} else if (args.length == 1 && args[0].equalsIgnoreCase("getgameid")) {
 
@@ -248,7 +253,7 @@ public class CommandNocheaters extends CommandBase {
 	@Override
 	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
 		//String[] arguments = {"help","toggle","getgameid","getstoreddata","isitprepphase","getscoreboard","reportlist","stalkreportlist"}; // debug
-		String[] arguments = {"help","toggle","reportlist","stalkreportlist", "reportworld"};
+		String[] arguments = {"config", "help","toggle","reportlist", "reportworld"};
 		String[] toggleargs = {"autoreport","icons","warnings"};
 		return args.length == 1 ? getListOfStringsMatchingLastWord(args, arguments) : ((args.length == 2 && args[0].equals("toggle")) ? getListOfStringsMatchingLastWord(args, toggleargs) : null);
 	}
