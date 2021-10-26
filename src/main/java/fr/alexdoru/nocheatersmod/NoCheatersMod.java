@@ -49,7 +49,7 @@ public class NoCheatersMod {
 
 	public static void setToggleicons(boolean toggleicons) {
 		MWEnConfigHandler.toggleicons = toggleicons;
-		MWEnConfigHandler.syncFromInGameChange();
+		MWEnConfigHandler.saveConfig();
 	}
 
 	public static boolean areWarningsToggled() {
@@ -58,7 +58,7 @@ public class NoCheatersMod {
 
 	public static void setTogglewarnings(boolean togglewarnings) {
 		MWEnConfigHandler.togglewarnings = togglewarnings;
-		MWEnConfigHandler.syncFromInGameChange();
+		MWEnConfigHandler.saveConfig();
 	}
 
 	public static boolean isAutoreportToggled() {
@@ -67,7 +67,7 @@ public class NoCheatersMod {
 
 	public static void setToggleautoreport(boolean toggleautoreport) {
 		MWEnConfigHandler.toggleautoreport = toggleautoreport;
-		MWEnConfigHandler.syncFromInGameChange();
+		MWEnConfigHandler.saveConfig();
 	}
 	
 	public static long getTimebetweenreports() {

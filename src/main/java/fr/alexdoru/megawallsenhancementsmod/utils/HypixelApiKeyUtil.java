@@ -26,7 +26,7 @@ public class HypixelApiKeyUtil {
 	public static void setApiKey(String key) {
 		ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Api key set successfully"));
 		MWEnConfigHandler.APIKey = key;
-		MWEnConfigHandler.syncFromInGameChange();
+		MWEnConfigHandler.saveConfig();
 	}
 
 	public static boolean isApiKeySetup() {
