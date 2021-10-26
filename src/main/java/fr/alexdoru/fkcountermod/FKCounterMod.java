@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class FKCounterMod {
 
 	public static final String MODID = "fkcounter";
-	public static final String VERSION = "2.5";   
+	public static final String VERSION = "2.6";   
 	private static ConfigHandler configHandler;
 	private static HudPropertyApi hudManager;
 	private static KillCounter killCounter;
