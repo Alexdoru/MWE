@@ -23,7 +23,7 @@ public interface IRenderer extends IConfigExchange {
 	
 	/**
 	 * Render the HUD at the given position, 
-	 * used to for the configuration screen 
+	 * used in the configuration screen 
 	 * where you can move it around.
 	 */
 	void renderDummy(ScreenPosition position);
