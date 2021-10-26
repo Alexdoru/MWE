@@ -8,28 +8,31 @@ import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.hudproperty.IRenderer;
 import fr.alexdoru.fkcountermod.hudproperty.ScreenPosition;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.EnumChatFormatting;
 
 public class FKCounterGui extends Gui implements IRenderer {
 
-	/**
-	 * used as an example when in the settings 
-	 */
-	private static final String DUMMY_TEXT = EnumChatFormatting.RED + "RED" + EnumChatFormatting.WHITE + ": 1\n"
-			+ EnumChatFormatting.GREEN + "GREEN" + EnumChatFormatting.WHITE + ": 2\n"
-			+ EnumChatFormatting.YELLOW + "YELLOW" + EnumChatFormatting.WHITE + ": 3\n"
-			+ EnumChatFormatting.BLUE + "BLUE" + EnumChatFormatting.WHITE + ": 4";
-	/**
-	 * used as an example when in the settings 
-	 */
+	/*used as an example when in the settings*/
+	private static final String DUMMY_TEXT = EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 1\n"
+			+ EnumChatFormatting.GREEN + "Green" + EnumChatFormatting.WHITE + ": 2\n"
+			+ EnumChatFormatting.YELLOW + "Yellow" + EnumChatFormatting.WHITE + ": 3\n"
+			+ EnumChatFormatting.BLUE + "Blue" + EnumChatFormatting.WHITE + ": 4";
+	/*used as an example when in the settings*/
 	private static final String DUMMY_TEXT_COMPACT = EnumChatFormatting.RED + "1" + EnumChatFormatting.GRAY + " / "
 			+ EnumChatFormatting.GREEN + "2" + EnumChatFormatting.GRAY + " / "
 			+ EnumChatFormatting.YELLOW + "3" + EnumChatFormatting.GRAY + " / "
 			+ EnumChatFormatting.BLUE + "4";
+	/*used as an example when in the settings*/
+	private static final String DUMMY_TEXT_PLAYERS = EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 5 - RedPlayer 1 \n"
+			+ EnumChatFormatting.GREEN + "Green" + EnumChatFormatting.WHITE + ": 12 - GreenPlayer 2 \n"
+			+ EnumChatFormatting.YELLOW + "Yellow" + EnumChatFormatting.WHITE + ": 6 - YellowPlayer 3 \n"
+			+ EnumChatFormatting.BLUE + "Blue" + EnumChatFormatting.WHITE + ": 9 - BluePlayer 4";
 
 	private boolean dummy = false;
 	private static String displayText = "";
+	private FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
 
 	@Override
 	public void save(ScreenPosition pos) {
@@ -48,32 +51,33 @@ public class FKCounterGui extends Gui implements IRenderer {
 	@Override
 	public int getHeight() {
 		if(ConfigSetting.COMPACT_HUD.getValue()) {
-			return Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT;
+			return fr.FONT_HEIGHT;
 		} else {
-			return Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT*4;
+			return fr.FONT_HEIGHT*4;
 		}
 	}
 
 	@Override
 	public int getWidth() {
-
 		if(dummy) {
 			if(ConfigSetting.COMPACT_HUD.getValue()) {
-				return Minecraft.getMinecraft().fontRendererObj.getStringWidth(DUMMY_TEXT_COMPACT);
-			}
-			else {
-				return Minecraft.getMinecraft().fontRendererObj.getStringWidth("YELLOW: 3");
+				return fr.getStringWidth(DUMMY_TEXT_COMPACT);
+			} else if(ConfigSetting.SHOW_PLAYERS.getValue()){
+				return getMultilineWidth(DUMMY_TEXT_PLAYERS);
+			} else {
+				return getMultilineWidth(DUMMY_TEXT);
 			}
 		}
+		return getMultilineWidth(getDisplayText());
+	}
 
+	private int getMultilineWidth(String string) {
 		int maxwidth = 0;
-		for(String line : getDisplayText().split("\n")) {
-
-			int width = Minecraft.getMinecraft().fontRendererObj.getStringWidth(line);
+		for(String line : string.split("\n")) {
+			int width = fr.getStringWidth(line);
 			if(width > maxwidth) {
-				maxwidth = width;				
+				maxwidth = width;
 			}
-
 		}
 		return maxwidth;
 	}
@@ -96,6 +100,7 @@ public class FKCounterGui extends Gui implements IRenderer {
 
 	@Override
 	public void renderDummy(ScreenPosition position) {
+
 		dummy = true;
 
 		int x = position.getAbsoluteX();
@@ -104,7 +109,7 @@ public class FKCounterGui extends Gui implements IRenderer {
 		int width = getWidth();
 		int height = getHeight();
 
-		drawRect(x - 1, y - 1, x + width + 1, y + height + 1, new Color(255, 255, 255, 127).getRGB());
+		drawRect(x - 1, y - 1, x + width + 1, y + height + 1, new Color(255, 255, 255, 127).getRGB()); // TODO fix la boite rouge
 		drawHorizontalLine(x - 1, x + width + 1, y - 1, Color.RED.getRGB());
 		drawHorizontalLine(x - 1, x + width + 1, y + height + 1, Color.RED.getRGB());
 		drawVerticalLine(x - 1, y - 1, y + height + 1, Color.RED.getRGB());
@@ -112,8 +117,9 @@ public class FKCounterGui extends Gui implements IRenderer {
 
 		if(ConfigSetting.COMPACT_HUD.getValue()) {
 			drawMultilineString(DUMMY_TEXT_COMPACT, x, y);
-		}
-		else {
+		} else if(ConfigSetting.SHOW_PLAYERS.getValue()){
+			drawMultilineString(DUMMY_TEXT_PLAYERS, x, y);
+		} else {
 			drawMultilineString(DUMMY_TEXT, x, y);
 		}
 	}
@@ -126,8 +132,12 @@ public class FKCounterGui extends Gui implements IRenderer {
 	private void drawMultilineString(String msg, int x, int y) {
 
 		for(String line : msg.split("\n")) {
-			Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(line, x, y, 0); // TODO ajouter une config pour choisir avec ou sans shadow
-			y += Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT;
+			if(ConfigSetting.TEXT_SHADOW.getValue()) {
+				fr.drawStringWithShadow(line, x, y, 0);
+			} else {
+				fr.drawString(line, x, y, 0);
+			}			 
+			y += fr.FONT_HEIGHT;
 		}
 	}
 
@@ -135,7 +145,12 @@ public class FKCounterGui extends Gui implements IRenderer {
 		return displayText;
 	}
 
-	public static void updateDisplayText() {
+	public static void updateDisplayText() { // TODO add support for Players option
+
+		// TODO mettre le score de la team qui a le plus de final d'une couleur différente en mode players et normal
+		// TODO si compact, trier le compteur avec la team qui a le plus en premier
+		// TODO faire autre couleur si ya égalité
+		// TODO si la team est éliminée la retirer de l'affichage
 
 		if(KillCounter.getGameId()!= null) {
 
@@ -148,10 +163,10 @@ public class FKCounterGui extends Gui implements IRenderer {
 
 			} else {
 
-				displayText = KillCounter.getRedPrefix() + "RED" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.RED_TEAM) + "\n"
-						+ KillCounter.getGreenPrefix() + "GREEN" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.GREEN_TEAM) + "\n"
-						+ KillCounter.getYellowPrefix() + "YELLOW" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.YELLOW_TEAM) + "\n"
-						+ KillCounter.getBluePrefix() + "BLUE" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.BLUE_TEAM);
+				displayText = KillCounter.getRedPrefix() + "Red" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.RED_TEAM) + "\n"
+						+ KillCounter.getGreenPrefix() + "Green" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.GREEN_TEAM) + "\n"
+						+ KillCounter.getYellowPrefix() + "Yellow" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.YELLOW_TEAM) + "\n"
+						+ KillCounter.getBluePrefix() + "Blue" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.BLUE_TEAM);
 
 			}
 

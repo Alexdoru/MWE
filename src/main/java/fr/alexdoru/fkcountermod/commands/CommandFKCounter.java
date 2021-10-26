@@ -1,10 +1,11 @@
 package fr.alexdoru.fkcountermod.commands;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import fr.alexdoru.fkcountermod.events.KillCounter;
-import fr.alexdoru.fkcountermod.gui.FKCounterSettingsGui;
+import fr.alexdoru.fkcountermod.gui.FKCounterConfigGuiScreen;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import net.minecraft.client.Minecraft;
@@ -38,21 +39,22 @@ public class CommandFKCounter extends CommandBase {
 
 		if(args.length > 0 && args[0].equalsIgnoreCase("settings")) {
 
-			new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(new FKCounterSettingsGui()), 1);
+			new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(new FKCounterConfigGuiScreen()), 1);
 
 		} else if(args.length > 0 && ( args[0].equalsIgnoreCase("players") || args[0].equalsIgnoreCase("player")  || args[0].equalsIgnoreCase("p") ) ) {
 
-			if(KillCounter.getGameId() == null) {				
+			if(KillCounter.getGameId() == null) {
+				// TODO ajouter un message
 				return;
 			}
 			String msg = "";
-			msg += KillCounter.getRedPrefix() + "RED" + EnumChatFormatting.WHITE + ": " + 
+			msg += KillCounter.getRedPrefix() + "Red" + EnumChatFormatting.WHITE + ": " + 
 					(KillCounter.getPlayers(KillCounter.RED_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", "))) + "\n";
-			msg += KillCounter.getGreenPrefix() + "GREEN" + EnumChatFormatting.WHITE + ": " + 
+			msg += KillCounter.getGreenPrefix() + "Green" + EnumChatFormatting.WHITE + ": " + 
 					(KillCounter.getPlayers(KillCounter.GREEN_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", "))) + "\n";
-			msg += KillCounter.getYellowPrefix() + "YELLOW" + EnumChatFormatting.WHITE + ": " + 
+			msg += KillCounter.getYellowPrefix() + "Yellow" + EnumChatFormatting.WHITE + ": " + 
 					(KillCounter.getPlayers(KillCounter.YELLOW_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", "))) + "\n";
-			msg += KillCounter.getBluePrefix() + "BLUE" + EnumChatFormatting.WHITE + ": " + 
+			msg += KillCounter.getBluePrefix() + "Blue" + EnumChatFormatting.WHITE + ": " + 
 					(KillCounter.getPlayers(KillCounter.BLUE_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
 
 			ChatUtil.addChatMessage(new ChatComponentText(msg));
@@ -60,7 +62,8 @@ public class CommandFKCounter extends CommandBase {
 
 		} else if(args.length > 0 && args[0].equalsIgnoreCase("say")) {
 
-			if(KillCounter.getGameId() == null) {				
+			if(KillCounter.getGameId() == null) {
+				// TODO ajouter un message
 				return;
 			}
 
@@ -113,20 +116,26 @@ public class CommandFKCounter extends CommandBase {
 			return;
 
 		} else {
-			if(KillCounter.getGameId() == null) {				
+			if(KillCounter.getGameId() == null) {
+				// TODO ajouter un message
 				return;
 			}
 			String msg = "";
-			msg += KillCounter.getRedPrefix() + "RED" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.RED_TEAM) + "\n";
-			msg += KillCounter.getGreenPrefix() + "GREEN" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.GREEN_TEAM) + "\n";
-			msg += KillCounter.getYellowPrefix() + "YELLOW" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.YELLOW_TEAM) + "\n";
-			msg += KillCounter.getBluePrefix() + "BLUE" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.BLUE_TEAM);
+			msg += KillCounter.getRedPrefix() + "Red" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.RED_TEAM) + "\n";
+			msg += KillCounter.getGreenPrefix() + "Green" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.GREEN_TEAM) + "\n";
+			msg += KillCounter.getYellowPrefix() + "Yellow" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.YELLOW_TEAM) + "\n";
+			msg += KillCounter.getBluePrefix() + "Blue" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.BLUE_TEAM);
 
 			ChatUtil.addChatMessage(new ChatComponentText(msg));
 			return;
 
 		}
 
+	}
+	
+	@Override
+	public List<String> getCommandAliases() {
+		return Arrays.<String>asList(new String[] {"finalkillcounter"});
 	}
 
 	@Override

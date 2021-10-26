@@ -64,15 +64,24 @@ public class FKCounterConfigGuiScreen extends MyGuiScreen {
 	@Override
 	public void actionPerformed(GuiButton button) {
 		if(button instanceof ButtonToggle) {
-			((ButtonToggle) button).getSetting().toggleValue();
-			FKCounterGui.updateDisplayText();
-			// TODO si toggle player et que compact est allumé faut allumer le normal
+			
+			ButtonToggle buttonToggle = (ButtonToggle) button;		
+			buttonToggle.getSetting().toggleValue();
+			
+			if(buttonToggle.getSetting() == ConfigSetting.SHOW_PLAYERS && buttonToggle.getSetting().getValue() && ConfigSetting.COMPACT_HUD.getValue()) {
+				ConfigSetting.COMPACT_HUD.toggleValue();
+			}
+			
+			if(buttonToggle.getSetting() == ConfigSetting.COMPACT_HUD && buttonToggle.getSetting().getValue() && ConfigSetting.SHOW_PLAYERS.getValue()) {
+				ConfigSetting.SHOW_PLAYERS.toggleValue();
+			}
+
 		}
 		if(button instanceof ButtonFancy) {
 			if(button.id == 100) {
 				Minecraft.getMinecraft().displayGuiScreen(new LocationEditGuiScreen(FKCounterMod.getHudManager(), this));
 			}
-			FKCounterGui.updateDisplayText();
+
 		}
 		
 	}
