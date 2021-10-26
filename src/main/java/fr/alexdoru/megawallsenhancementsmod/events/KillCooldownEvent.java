@@ -25,7 +25,9 @@ public class KillCooldownEvent {
 
 		if (event.type != ElementType.EXPERIENCE) { 
 			return;
-		} else if(System.currentTimeMillis() - lastkilltime < 60000L) {
+		} 
+
+		if(System.currentTimeMillis() - lastkilltime < 60000L) {
 
 			int timeleft = 60 - ((int)(System.currentTimeMillis() - lastkilltime))/1000;
 			message = "/kill cooldown : " + timeleft + "s";					
@@ -34,7 +36,7 @@ public class KillCooldownEvent {
 		}
 
 	}
-		
+
 	public static void hideGUI() {
 		lastkilltime = 0;
 	}
