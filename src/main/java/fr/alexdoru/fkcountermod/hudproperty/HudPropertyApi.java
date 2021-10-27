@@ -55,12 +55,12 @@ public final class HudPropertyApi {
 	}
 
 	@SubscribeEvent
-	public void onRenderGUI(RenderGameOverlayEvent.Post event) { // TODO ca se décale pendant les games
-																 // TODO ca s'affiche en dessous du scoreboard
+	public void onRenderGUI(RenderGameOverlayEvent.Post event) {
+
 		if(event.type != ElementType.EXPERIENCE) {
 			return;
 		}
-		
+
 		if(!(mc.currentScreen instanceof PropertyScreen)) {
 			registeredRenderers.forEach(this::callRenderer);
 		}

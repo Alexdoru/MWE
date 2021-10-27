@@ -149,7 +149,7 @@ public class KillCounter {
 				String killer = killMessageMatcher.group(2);
 				String[] split = FormattedText.split("\u00a7");
 
-				if(split.length >= 6) {
+				if(split.length >= 7) {
 					
 					String killedTeam = split[2].substring(0, 1);
 					String killerTeam = split[6].substring(0, 1);
