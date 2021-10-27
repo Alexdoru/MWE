@@ -19,7 +19,7 @@ public class FKCounterConfigGuiScreen extends MyGuiScreen {
 	
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("fkcounter", "background.png");
 		
-	private int columns = 4;
+	private int columns = 3;
 	private int rows;
 	
 	private final int buttonSize = 50;
@@ -65,7 +65,7 @@ public class FKCounterConfigGuiScreen extends MyGuiScreen {
 	public void actionPerformed(GuiButton button) {
 		if(button instanceof ButtonToggle) {
 			
-			ButtonToggle buttonToggle = (ButtonToggle) button;		
+			ButtonToggle buttonToggle = (ButtonToggle) button;
 			buttonToggle.getSetting().toggleValue();
 			
 			if(buttonToggle.getSetting() == ConfigSetting.SHOW_PLAYERS && buttonToggle.getSetting().getValue() && ConfigSetting.COMPACT_HUD.getValue()) {
@@ -75,15 +75,14 @@ public class FKCounterConfigGuiScreen extends MyGuiScreen {
 			if(buttonToggle.getSetting() == ConfigSetting.COMPACT_HUD && buttonToggle.getSetting().getValue() && ConfigSetting.SHOW_PLAYERS.getValue()) {
 				ConfigSetting.SHOW_PLAYERS.toggleValue();
 			}
-
+			FKCounterGui.updateDisplayText();
 		}
 		if(button instanceof ButtonFancy) {
 			if(button.id == 100) {
 				Minecraft.getMinecraft().displayGuiScreen(new LocationEditGuiScreen(FKCounterMod.getHudManager(), this));
 			}
-
 		}
-		
+	
 	}
 	
 	@Override

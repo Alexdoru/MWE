@@ -163,15 +163,15 @@ public class FKCounterGui extends Gui implements IRenderer {
 
 			} else if(ConfigSetting.SHOW_PLAYERS.getValue()) {
 				
-				Tuple<String, Integer> red = KillCounter.getHighestFinalsRedPlayer();
-				Tuple<String, Integer> green = KillCounter.getHighestFinalsGreenPlayer();
-				Tuple<String, Integer> yellow = KillCounter.getHighestFinalsYellowPlayer();
-				Tuple<String, Integer> blue = KillCounter.getHighestFinalsBluePlayer();
+				Tuple<String, Integer> redTuple = KillCounter.getHighestFinalsRedPlayer();
+				Tuple<String, Integer> greenTuple = KillCounter.getHighestFinalsGreenPlayer();
+				Tuple<String, Integer> yellowTuple = KillCounter.getHighestFinalsYellowPlayer();
+				Tuple<String, Integer> blueTuple = KillCounter.getHighestFinalsBluePlayer();
 				
-				displayText = KillCounter.getRedPrefix() + "Red" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.RED_TEAM) + (red == null ? "" : " - " + red.getFirst() + " " + red.getSecond()) + "\n"
-						+ KillCounter.getGreenPrefix() + "Green" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.GREEN_TEAM) + (green == null ? "" : " - " + green.getFirst() + " " + green.getSecond()) + "\n"
-						+ KillCounter.getYellowPrefix() + "Yellow" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.YELLOW_TEAM) + (yellow == null ? "" : " - " + yellow.getFirst() + " " + yellow.getSecond()) + "\n"
-						+ KillCounter.getBluePrefix() + "Blue" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.BLUE_TEAM) + (blue == null ? "" : " - " + blue.getFirst() + " " + blue.getSecond());
+				displayText = KillCounter.getRedPrefix() + "Red" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.RED_TEAM) + (redTuple == null ? "" : " - " + redTuple.getFirst() + " " + redTuple.getSecond()) + "\n"
+						+ KillCounter.getGreenPrefix() + "Green" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.GREEN_TEAM) + (greenTuple == null ? "" : " - " + greenTuple.getFirst() + " " + greenTuple.getSecond()) + "\n"
+						+ KillCounter.getYellowPrefix() + "Yellow" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.YELLOW_TEAM) + (yellowTuple == null ? "" : " - " + yellowTuple.getFirst() + " " + yellowTuple.getSecond()) + "\n"
+						+ KillCounter.getBluePrefix() + "Blue" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.BLUE_TEAM) + (blueTuple == null ? "" : " - " + blueTuple.getFirst() + " " + blueTuple.getSecond());
 
 			} else {
 
