@@ -303,14 +303,14 @@ public class CommandNocheaters extends CommandBase {
 	}
 
 	/**
-	 * Returns a sorted hashmap of timestamped reports 
+	 * Returns a sorted hashmap of timestamped reports from high to low
 	 * 
-	 * @param hm
+	 * @param hashmapIn
 	 * @return
 	 */
-	public static HashMap<String, WDR> sortByValue(HashMap<String, WDR> hm) {
+	public static HashMap<String, WDR> sortByValue(HashMap<String, WDR> hashmapIn) {
 		// Create a list from elements of HashMap
-		List<Map.Entry<String, WDR>> list = new LinkedList<Map.Entry<String, WDR> >(hm.entrySet());
+		List<Map.Entry<String, WDR>> list = new LinkedList<Map.Entry<String, WDR> >(hashmapIn.entrySet());
 
 		// Sort the list
 		Collections.sort(list, new Comparator<Map.Entry<String, WDR> >() {
