@@ -44,17 +44,20 @@ public class CommandFKCounter extends CommandBase {
 		} else if(args.length > 0 && ( args[0].equalsIgnoreCase("players") || args[0].equalsIgnoreCase("player")  || args[0].equalsIgnoreCase("p") ) ) {
 
 			if(KillCounter.getGameId() == null) {
-				// TODO ajouter un message
+				ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "This is not available right now"));
 				return;
 			}
 			String msg = "";
-			msg += KillCounter.getRedPrefix() + "Red" + EnumChatFormatting.WHITE + ": " + 
+			msg += KillCounter.getColorPrefixFromTeam(KillCounter.RED_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.RED_TEAM) + EnumChatFormatting.WHITE + ": " + 
 					(KillCounter.getPlayers(KillCounter.RED_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", "))) + "\n";
-			msg += KillCounter.getGreenPrefix() + "Green" + EnumChatFormatting.WHITE + ": " + 
+			
+			msg += KillCounter.getColorPrefixFromTeam(KillCounter.GREEN_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.GREEN_TEAM) + EnumChatFormatting.WHITE + ": " + 
 					(KillCounter.getPlayers(KillCounter.GREEN_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", "))) + "\n";
-			msg += KillCounter.getYellowPrefix() + "Yellow" + EnumChatFormatting.WHITE + ": " + 
+			
+			msg += KillCounter.getColorPrefixFromTeam(KillCounter.YELLOW_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.YELLOW_TEAM) + EnumChatFormatting.WHITE + ": " + 
 					(KillCounter.getPlayers(KillCounter.YELLOW_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", "))) + "\n";
-			msg += KillCounter.getBluePrefix() + "Blue" + EnumChatFormatting.WHITE + ": " + 
+			
+			msg += KillCounter.getColorPrefixFromTeam(KillCounter.BLUE_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.BLUE_TEAM) + EnumChatFormatting.WHITE + ": " + 
 					(KillCounter.getPlayers(KillCounter.BLUE_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
 
 			ChatUtil.addChatMessage(new ChatComponentText(msg));
@@ -63,7 +66,7 @@ public class CommandFKCounter extends CommandBase {
 		} else if(args.length > 0 && args[0].equalsIgnoreCase("say")) {
 
 			if(KillCounter.getGameId() == null) {
-				// TODO ajouter un message
+				ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "This is not available right now"));
 				return;
 			}
 
@@ -71,40 +74,39 @@ public class CommandFKCounter extends CommandBase {
 
 				String msg = "";
 
-				msg += "Red: " + KillCounter.getKills(KillCounter.RED_TEAM) +", ";
-				msg += "Green: " + KillCounter.getKills(KillCounter.GREEN_TEAM) +", ";
-				msg += "Yellow: " + KillCounter.getKills(KillCounter.YELLOW_TEAM) +", ";
-				msg += "Blue: " + KillCounter.getKills(KillCounter.BLUE_TEAM);
+				msg += KillCounter.getTeamNameFromTeam(KillCounter.RED_TEAM) + ": " + KillCounter.getKills(KillCounter.RED_TEAM) +", ";
+				msg += KillCounter.getTeamNameFromTeam(KillCounter.GREEN_TEAM) + ": " + KillCounter.getKills(KillCounter.GREEN_TEAM) +", ";
+				msg += KillCounter.getTeamNameFromTeam(KillCounter.YELLOW_TEAM) + ": " + KillCounter.getKills(KillCounter.YELLOW_TEAM) +", ";
+				msg += KillCounter.getTeamNameFromTeam(KillCounter.BLUE_TEAM) + ": " + KillCounter.getKills(KillCounter.BLUE_TEAM);
 
 				(Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg);
 				return;
 
 			} else if(args.length == 2 && args[1].equalsIgnoreCase("red")) {
 				
-				String msg = "Red : " + (KillCounter.getPlayers(KillCounter.RED_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
+				String msg = KillCounter.getTeamNameFromTeam(KillCounter.RED_TEAM) + ": " + (KillCounter.getPlayers(KillCounter.RED_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
 				(Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg);
 				return;
 
 			} else if(args.length == 2 && args[1].equalsIgnoreCase("green")) {
 				
-				String msg = "Green : " + (KillCounter.getPlayers(KillCounter.GREEN_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
+				String msg = KillCounter.getTeamNameFromTeam(KillCounter.GREEN_TEAM) + ": " + (KillCounter.getPlayers(KillCounter.GREEN_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
 				(Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg);
 				return;
 
 			} else if(args.length == 2 && args[1].equalsIgnoreCase("yellow")) {
 				
-				String msg = "Yellow : " + (KillCounter.getPlayers(KillCounter.YELLOW_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
+				String msg = KillCounter.getTeamNameFromTeam(KillCounter.YELLOW_TEAM) + ": " + (KillCounter.getPlayers(KillCounter.YELLOW_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
 				(Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg);
 				return;
 
 			} else if(args.length == 2 && args[1].equalsIgnoreCase("blue")) {
 				
-				String msg = "Blue : " + (KillCounter.getPlayers(KillCounter.BLUE_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
+				String msg = KillCounter.getTeamNameFromTeam(KillCounter.BLUE_TEAM) + ": " + (KillCounter.getPlayers(KillCounter.BLUE_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
 				(Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg);
 				return;
 
 			}
-
 
 		} else if(args.length > 0 && args[0].equalsIgnoreCase("help")) {
 
@@ -117,15 +119,14 @@ public class CommandFKCounter extends CommandBase {
 
 		} else {
 			if(KillCounter.getGameId() == null) {
-				// TODO ajouter un message
+				ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "This is not available right now"));
 				return;
 			}
 			String msg = "";
-			msg += KillCounter.getRedPrefix() + "Red" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.RED_TEAM) + "\n";
-			msg += KillCounter.getGreenPrefix() + "Green" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.GREEN_TEAM) + "\n";
-			msg += KillCounter.getYellowPrefix() + "Yellow" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.YELLOW_TEAM) + "\n";
-			msg += KillCounter.getBluePrefix() + "Blue" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.BLUE_TEAM);
-
+			msg += KillCounter.getColorPrefixFromTeam(KillCounter.RED_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.RED_TEAM) + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.RED_TEAM) + "\n";
+			msg += KillCounter.getColorPrefixFromTeam(KillCounter.GREEN_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.GREEN_TEAM) + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.GREEN_TEAM) + "\n";
+			msg += KillCounter.getColorPrefixFromTeam(KillCounter.YELLOW_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.YELLOW_TEAM) + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.YELLOW_TEAM) + "\n";
+			msg += KillCounter.getColorPrefixFromTeam(KillCounter.BLUE_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.BLUE_TEAM) + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.BLUE_TEAM);
 			ChatUtil.addChatMessage(new ChatComponentText(msg));
 			return;
 
