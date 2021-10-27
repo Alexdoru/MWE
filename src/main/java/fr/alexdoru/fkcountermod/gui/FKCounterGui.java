@@ -1,6 +1,8 @@
 package fr.alexdoru.fkcountermod.gui;
 
 import java.awt.Color;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.config.ConfigSetting;
@@ -149,36 +151,38 @@ public class FKCounterGui extends Gui implements IRenderer {
 	public static void updateDisplayText() { 
 
 		// TODO mettre le score de la team qui a le plus de final d'une couleur différente en mode players et normal
-		// TODO si compact, trier le compteur avec la team qui a le plus en premier
 		// TODO faire autre couleur si ya égalité
 
 		if(KillCounter.getGameId()!= null) {
 
+			HashMap<Integer, Integer> sortedmap = KillCounter.getSortedTeamKillsMap();
+			displayText = "";				
+
 			if(ConfigSetting.COMPACT_HUD.getValue()) {
 
-				displayText = KillCounter.getRedPrefix() + KillCounter.getKills(KillCounter.RED_TEAM) + EnumChatFormatting.GRAY + " / "
-						+ KillCounter.getGreenPrefix() + KillCounter.getKills(KillCounter.GREEN_TEAM) + EnumChatFormatting.GRAY + " / "
-						+ KillCounter.getYellowPrefix() + KillCounter.getKills(KillCounter.YELLOW_TEAM) + EnumChatFormatting.GRAY + " / "
-						+ KillCounter.getBluePrefix() + KillCounter.getKills(KillCounter.BLUE_TEAM);
+				for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
+					displayText += (displayText.equals("") ? "" : " / ") + KillCounter.getColorPrefixFromTeam(entry.getKey()) + entry.getValue() ;
+				}
+				return;
 
 			} else if(ConfigSetting.SHOW_PLAYERS.getValue()) {
-				
-				Tuple<String, Integer> redTuple = KillCounter.getHighestFinalsRedPlayer();
-				Tuple<String, Integer> greenTuple = KillCounter.getHighestFinalsGreenPlayer();
-				Tuple<String, Integer> yellowTuple = KillCounter.getHighestFinalsYellowPlayer();
-				Tuple<String, Integer> blueTuple = KillCounter.getHighestFinalsBluePlayer();
-				
-				displayText = KillCounter.getRedPrefix() + "Red" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.RED_TEAM) + (redTuple == null ? "" : " - " + redTuple.getFirst() + " " + redTuple.getSecond()) + "\n"
-						+ KillCounter.getGreenPrefix() + "Green" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.GREEN_TEAM) + (greenTuple == null ? "" : " - " + greenTuple.getFirst() + " " + greenTuple.getSecond()) + "\n"
-						+ KillCounter.getYellowPrefix() + "Yellow" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.YELLOW_TEAM) + (yellowTuple == null ? "" : " - " + yellowTuple.getFirst() + " " + yellowTuple.getSecond()) + "\n"
-						+ KillCounter.getBluePrefix() + "Blue" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.BLUE_TEAM) + (blueTuple == null ? "" : " - " + blueTuple.getFirst() + " " + blueTuple.getSecond());
+
+				for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
+					int team = entry.getKey();
+					Tuple<String, Integer> tuple = KillCounter.getHighestFinalsPlayerOfTeam(team);
+					displayText += (displayText.equals("") ? "" : "\n") + KillCounter.getColorPrefixFromTeam(team) + KillCounter.getTeamNameFromTeam(team) 
+					+ EnumChatFormatting.WHITE + ": " + KillCounter.getKills(team) + (tuple == null ? "" : " - " + tuple.getFirst() + " " + tuple.getSecond());
+				}
+				return;
 
 			} else {
 
-				displayText = KillCounter.getRedPrefix() + "Red" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.RED_TEAM) + "\n"
-						+ KillCounter.getGreenPrefix() + "Green" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.GREEN_TEAM) + "\n"
-						+ KillCounter.getYellowPrefix() + "Yellow" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.YELLOW_TEAM) + "\n"
-						+ KillCounter.getBluePrefix() + "Blue" + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.BLUE_TEAM);
+				for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
+					int team = entry.getKey();
+					displayText += (displayText.equals("") ? "" : "\n") + KillCounter.getColorPrefixFromTeam(team) + KillCounter.getTeamNameFromTeam(team) 
+					+ EnumChatFormatting.WHITE + ": " + KillCounter.getKills(team);
+				}
+				return;
 
 			}
 

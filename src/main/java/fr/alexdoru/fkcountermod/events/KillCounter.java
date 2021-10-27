@@ -1,14 +1,16 @@
 package fr.alexdoru.fkcountermod.events;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.gui.FKCounterGui;
@@ -156,6 +158,8 @@ public class KillCounter {
 
 					if(isWitherDead(killedTeam)) {
 						addKill(killer, killerTeam);
+						sortTeamKills(killerTeam);
+						sortTeamKills(killedTeam);
 					}
 					
 					FKCounterGui.updateDisplayText();
@@ -192,6 +196,15 @@ public class KillCounter {
 			kills += k;
 		}
 		return kills;
+	}
+	
+	public static HashMap<Integer, Integer> getSortedTeamKillsMap() {	
+		HashMap<Integer, Integer> hashmap = new HashMap<Integer, Integer>();
+		hashmap.put(RED_TEAM, getKills(RED_TEAM));
+		hashmap.put(GREEN_TEAM, getKills(GREEN_TEAM));
+		hashmap.put(YELLOW_TEAM, getKills(YELLOW_TEAM));
+		hashmap.put(BLUE_TEAM, getKills(BLUE_TEAM));				
+		return sortByDecreasingValue2(hashmap);
 	}
 
 	public static HashMap<String, Integer> getPlayers(int team){
@@ -234,24 +247,20 @@ public class KillCounter {
 
 	private static void addKill(String player, String color) {
 		int team = getTeamFromColor(color);
-		if(!isValidTeam(team)) { return; }
-		if(deadPlayers.contains(player)) { return; }
+		if(!isValidTeam(team)) {return;}
+		if(deadPlayers.contains(player)) {return;}
 
 		if(teamKillsArray[team].containsKey(player)) {
 			teamKillsArray[team].put(player, teamKillsArray[team].get(player) + 1);
 		} else {
 			teamKillsArray[team].put(player, 1);
 		}
-
-		sortTeamKills(team);
-
 	}
 
-	private static void sortTeamKills(int team) {
-		if(!isValidTeam(team)) { return; }
-
-		teamKillsArray[team] = teamKillsArray[team].entrySet().stream().sorted(Entry.<String, Integer>comparingByValue().reversed())
-				.collect(Collectors.toMap(Entry::getKey, Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+	private static void sortTeamKills(String color) {
+		int team = getTeamFromColor(color);
+		if(!isValidTeam(team)) {return;}
+		teamKillsArray[team] = sortByDecreasingValue1(teamKillsArray[team]);
 	}
 
 	private static int getTeamFromColor(String color) {
@@ -260,14 +269,32 @@ public class KillCounter {
 				return team;
 			}
 		}
-
 		return -1;
+	}
+	
+	public static String getColorPrefixFromTeam(int team) {
+		return "\u00a7" + prefixes[team];
+	}
+	
+	public static String getTeamNameFromTeam(int team) {
+		switch(team) {
+		case 0:
+			return "Red";
+		case 1:
+			return "Green";
+		case 2:
+			return "Yellow";
+		case 3:
+			return "Blue";
+		default:
+			return "?";	
+		}
 	}
 	
 	/*
 	 * returns the name of the player from the team that has the highest finals
 	 */
-	private static Tuple<String, Integer> getHighestFinalsPlayerOfTeam(int team) {
+	public static Tuple<String, Integer> getHighestFinalsPlayerOfTeam(int team) {
 		
 		HashMap<String, Integer> teamkills = teamKillsArray[team];
 		
@@ -277,42 +304,40 @@ public class KillCounter {
 	      return new Tuple(entry.getKey(), entry.getValue());
 	    }
 	    return null;
-	}
-	
-	public static Tuple<String, Integer> getHighestFinalsRedPlayer() {
-		return getHighestFinalsPlayerOfTeam(RED_TEAM);
-	}
-	
-	public static Tuple<String, Integer> getHighestFinalsGreenPlayer() {
-		return getHighestFinalsPlayerOfTeam(GREEN_TEAM);
-	}
-	
-	public static Tuple<String, Integer> getHighestFinalsYellowPlayer() {
-		return getHighestFinalsPlayerOfTeam(YELLOW_TEAM);
-	}
-	
-	public static Tuple<String, Integer> getHighestFinalsBluePlayer() {
-		return getHighestFinalsPlayerOfTeam(BLUE_TEAM);
-	}
+	}	
 
 	private static boolean isValidTeam(int team) {
 		return (team >= 0 && team < TEAMS);
 	}
-	
-	public static String getRedPrefix() {
-		return "\u00a7" + prefixes[0];
+		
+	private static HashMap<String, Integer> sortByDecreasingValue1(HashMap<String, Integer> hashmapIn) {
+		List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer> >(hashmapIn.entrySet());
+		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+
+			public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+				return (o2.getValue()).compareTo(o1.getValue());
+			}});
+
+		HashMap<String, Integer> temp = new LinkedHashMap<String, Integer>();
+		for (Map.Entry<String, Integer> aa : list) {
+			temp.put(aa.getKey(), aa.getValue());
+		}
+		return temp;
 	}
 	
-	public static String getGreenPrefix() {
-		return "\u00a7" + prefixes[1];
-	}
-	
-	public static String getYellowPrefix() {
-		return "\u00a7" + prefixes[2];
-	}
-	
-	public static String getBluePrefix() {
-		return "\u00a7" + prefixes[3];
+	private static HashMap<Integer, Integer> sortByDecreasingValue2(HashMap<Integer, Integer> hashmapIn) {
+		List<Map.Entry<Integer, Integer>> list = new LinkedList<Map.Entry<Integer, Integer> >(hashmapIn.entrySet());
+		Collections.sort(list, new Comparator<Map.Entry<Integer, Integer>>() {
+
+			public int compare(Map.Entry<Integer, Integer> o1, Map.Entry<Integer, Integer> o2) {
+				return (o2.getValue()).compareTo(o1.getValue());
+			}});
+
+		HashMap<Integer, Integer> temp = new LinkedHashMap<Integer, Integer>();
+		for (Map.Entry<Integer, Integer> aa : list) {
+			temp.put(aa.getKey(), aa.getValue());
+		}
+		return temp;
 	}
 
 }
