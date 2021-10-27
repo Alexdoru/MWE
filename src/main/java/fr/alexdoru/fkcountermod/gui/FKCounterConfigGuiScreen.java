@@ -7,7 +7,6 @@ import com.google.common.collect.Lists;
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.config.ConfigSetting;
 import fr.alexdoru.fkcountermod.gui.elements.ButtonFancy;
-import fr.alexdoru.fkcountermod.gui.elements.ButtonTitle;
 import fr.alexdoru.fkcountermod.gui.elements.ButtonToggle;
 import fr.alexdoru.megawallsenhancementsmod.gui.MyGuiScreen;
 import net.minecraft.client.Minecraft;
@@ -102,10 +101,8 @@ public class FKCounterConfigGuiScreen extends MyGuiScreen {
 			x = getxCenter() - buttonSize/2 + (widthBetweenButtons + buttonSize)*(column-columns/2);
 		}
 		
-		int y = getyCenter() - findMenuHeight()/2 + heightBetweenButtons + row*buttonSize;
-		
-		buttonList.add(new ButtonTitle(x, y + 5, 50, 10, title));
-		buttonList.add(new ButtonToggle(x + 13, y + 20, setting));// TODO merge the two Button classes
+		int y = getyCenter() - findMenuHeight()/2 + heightBetweenButtons + row*buttonSize;		
+		buttonList.add(new ButtonToggle(x + 13, y + 20, setting));
 	}
 	
 	private int findMenuWidth() {
