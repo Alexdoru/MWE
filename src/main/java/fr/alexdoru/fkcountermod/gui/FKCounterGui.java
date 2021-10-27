@@ -23,14 +23,14 @@ public class FKCounterGui extends Gui implements IRenderer {
 			+ EnumChatFormatting.YELLOW + "Yellow" + EnumChatFormatting.WHITE + ": 3\n"
 			+ EnumChatFormatting.BLUE + "Blue" + EnumChatFormatting.WHITE + ": 4";
 	/*used as an example when in the settings*/
-	private static final String DUMMY_TEXT_COMPACT = EnumChatFormatting.RED + "1" + EnumChatFormatting.GRAY + " / "
-			+ EnumChatFormatting.GREEN + "2" + EnumChatFormatting.GRAY + " / "
-			+ EnumChatFormatting.YELLOW + "3" + EnumChatFormatting.GRAY + " / "
+	private static final String DUMMY_TEXT_COMPACT = EnumChatFormatting.RED + "1" + EnumChatFormatting.DARK_GRAY + " / "
+			+ EnumChatFormatting.GREEN + "2" + EnumChatFormatting.DARK_GRAY + " / "
+			+ EnumChatFormatting.YELLOW + "3" + EnumChatFormatting.DARK_GRAY + " / "
 			+ EnumChatFormatting.BLUE + "4";
 	/*used as an example when in the settings*/
-	private static final String DUMMY_TEXT_PLAYERS = EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 5 - RedPlayer 1 \n"
-			+ EnumChatFormatting.GREEN + "Green" + EnumChatFormatting.WHITE + ": 12 - GreenPlayer 2 \n"
-			+ EnumChatFormatting.YELLOW + "Yellow" + EnumChatFormatting.WHITE + ": 6 - YellowPlayer 3 \n"
+	private static final String DUMMY_TEXT_PLAYERS = EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 5 - RedPlayer 1\n"
+			+ EnumChatFormatting.GREEN + "Green" + EnumChatFormatting.WHITE + ": 12 - GreenPlayer 2\n"
+			+ EnumChatFormatting.YELLOW + "Yellow" + EnumChatFormatting.WHITE + ": 6 - YellowPlayer 3\n"
 			+ EnumChatFormatting.BLUE + "Blue" + EnumChatFormatting.WHITE + ": 9 - BluePlayer 4";
 
 	private boolean dummy = false;
@@ -86,8 +86,9 @@ public class FKCounterGui extends Gui implements IRenderer {
 	}
 
 	@Override
-	public void render(ScreenPosition position) { // TODO ca se décale pendant les games
-
+	public void render(ScreenPosition position) {
+		// TODO ca s'affiche en dessous du scoreboard
+		// TODO ca se décale pendant les games
 		dummy = false;
 
 		int x = position.getAbsoluteX();
@@ -112,11 +113,23 @@ public class FKCounterGui extends Gui implements IRenderer {
 		int width = getWidth();
 		int height = getHeight();
 
-		drawRect(x - 1, y - 1, x + width + 1, y + height + 1, new Color(255, 255, 255, 127).getRGB()); // TODO fix la boite rouge
-		drawHorizontalLine(x - 1, x + width + 1, y - 1, Color.RED.getRGB());
-		drawHorizontalLine(x - 1, x + width + 1, y + height + 1, Color.RED.getRGB());
-		drawVerticalLine(x - 1, y - 1, y + height + 1, Color.RED.getRGB());
-		drawVerticalLine(x + width + 1, y - 1, y + height + 1, Color.RED.getRGB());
+		int XtopLeft = x - 2;
+		int YtopLeft = y - 2;
+
+		int XtopRight = x + width + 1;
+		int YtopRight = YtopLeft;
+
+		int XbotLeft = XtopLeft;
+		int YbotLeft = y + height;
+
+		int XbotRight = XtopRight;
+		int YbotRight = YbotLeft;
+
+		drawRect(XtopLeft, YtopLeft, XtopRight, YbotLeft, new Color(255, 255, 255, 127).getRGB());
+		drawHorizontalLine(XtopLeft, XtopRight, YtopLeft, Color.RED.getRGB());
+		drawHorizontalLine(XbotLeft, XbotRight, YbotLeft, Color.RED.getRGB());
+		drawVerticalLine(XtopLeft, YtopLeft, YbotLeft, Color.RED.getRGB());
+		drawVerticalLine(XtopRight, YtopRight, YbotLeft, Color.RED.getRGB());
 
 		if(ConfigSetting.COMPACT_HUD.getValue()) {
 			drawMultilineString(DUMMY_TEXT_COMPACT, x, y);
@@ -150,9 +163,6 @@ public class FKCounterGui extends Gui implements IRenderer {
 
 	public static void updateDisplayText() { 
 
-		// TODO mettre le score de la team qui a le plus de final d'une couleur différente en mode players et normal
-		// TODO faire autre couleur si ya égalité
-
 		if(KillCounter.getGameId()!= null) {
 
 			HashMap<Integer, Integer> sortedmap = KillCounter.getSortedTeamKillsMap();
@@ -161,7 +171,7 @@ public class FKCounterGui extends Gui implements IRenderer {
 			if(ConfigSetting.COMPACT_HUD.getValue()) {
 
 				for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
-					displayText += (displayText.equals("") ? "" : " / ") + KillCounter.getColorPrefixFromTeam(entry.getKey()) + entry.getValue() ;
+					displayText += (displayText.equals("") ? "" : EnumChatFormatting.DARK_GRAY + " / ") + KillCounter.getColorPrefixFromTeam(entry.getKey()) + entry.getValue() ;
 				}
 				return;
 
