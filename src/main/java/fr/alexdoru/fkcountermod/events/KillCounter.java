@@ -2,7 +2,9 @@ package fr.alexdoru.fkcountermod.events;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,6 +13,7 @@ import java.util.stream.Collectors;
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.gui.FKCounterGui;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -85,7 +88,7 @@ public class KillCounter {
 
 	private static String gameId;
 	private static String[] prefixes; // color codes prefix that you are using in your hypixel mega walls settings
-	private static HashMap<String, Integer>[] teamKills;
+	private static HashMap<String, Integer>[] teamKillsArray;
 	private static ArrayList<String> deadPlayers;
 
 	public KillCounter() {
@@ -103,12 +106,12 @@ public class KillCounter {
 
 		gameId = gameIdIn;		
 		prefixes = new String[TEAMS];
-		teamKills = new HashMap[TEAMS];
+		teamKillsArray = new HashMap[TEAMS];
 		deadPlayers = new ArrayList<String>();
 
 		for(int i = 0; i < TEAMS; i++) {
 			prefixes[i] = DEFAULT_PREFIXES[i];
-			teamKills[i] = new HashMap<String, Integer>();
+			teamKillsArray[i] = new HashMap<String, Integer>();
 		}
 		FKCounterGui.updateDisplayText();
 
@@ -169,11 +172,12 @@ public class KillCounter {
 	@SubscribeEvent
 	public void onMwGame(MwGameEvent event) {
 		/*
-		 * this is here to fix the bug where to killcounter doesn't work if you re-start you minecraft during a MW game and you are using different colors for the teams in your MW settings
+		 * this is here to fix the bug where the killcounter doesn't work if you re-start your minecraft during a MW game 
+		 * or if you changed your colors for the teams in your MW settings and rejoined the game
 		 */
 		if (event.getType() == MwGameEvent.EventType.CONNECT) {
 			setTeamPrefixes();
-		}		
+		}
 	}
 
 	public static String getGameId() {
@@ -184,7 +188,7 @@ public class KillCounter {
 		if(!isValidTeam(team)) { return 0; }
 
 		int kills = 0;
-		for(int k : teamKills[team].values()) {
+		for(int k : teamKillsArray[team].values()) {
 			kills += k;
 		}
 		return kills;
@@ -192,7 +196,7 @@ public class KillCounter {
 
 	public static HashMap<String, Integer> getPlayers(int team){
 		if(!isValidTeam(team)) { return new HashMap<String, Integer>(); }
-		return teamKills[team];
+		return teamKillsArray[team];
 	}
 
 	private static boolean isWitherDead(String color) {
@@ -222,7 +226,7 @@ public class KillCounter {
 		if(!isValidTeam(team)) { return; }
 
 		if(isWitherDead(color)) {
-			teamKills[team].remove(player);
+			teamKillsArray[team].remove(player);
 			deadPlayers.add(player);
 		}
 
@@ -233,10 +237,10 @@ public class KillCounter {
 		if(!isValidTeam(team)) { return; }
 		if(deadPlayers.contains(player)) { return; }
 
-		if(teamKills[team].containsKey(player)) {
-			teamKills[team].put(player, teamKills[team].get(player) + 1);
+		if(teamKillsArray[team].containsKey(player)) {
+			teamKillsArray[team].put(player, teamKillsArray[team].get(player) + 1);
 		} else {
-			teamKills[team].put(player, 1);
+			teamKillsArray[team].put(player, 1);
 		}
 
 		sortTeamKills(team);
@@ -246,17 +250,49 @@ public class KillCounter {
 	private static void sortTeamKills(int team) {
 		if(!isValidTeam(team)) { return; }
 
-		teamKills[team] = teamKills[team].entrySet().stream().sorted(Entry.<String, Integer>comparingByValue().reversed())
+		teamKillsArray[team] = teamKillsArray[team].entrySet().stream().sorted(Entry.<String, Integer>comparingByValue().reversed())
 				.collect(Collectors.toMap(Entry::getKey, Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 	}
 
 	private static int getTeamFromColor(String color) {
 		for(int team = 0; team < TEAMS; team++) {
-			if(prefixes[team].equalsIgnoreCase(color))
+			if(prefixes[team].equalsIgnoreCase(color)) {
 				return team;
+			}
 		}
 
 		return -1;
+	}
+	
+	/*
+	 * returns the name of the player from the team that has the highest finals
+	 */
+	private static Tuple<String, Integer> getHighestFinalsPlayerOfTeam(int team) {
+		
+		HashMap<String, Integer> teamkills = teamKillsArray[team];
+		
+		Iterator<Map.Entry<String, Integer>> iterator = teamkills.entrySet().iterator();
+	    if (iterator.hasNext()) {
+	      Map.Entry<String, Integer> entry = iterator.next();
+	      return new Tuple(entry.getKey(), entry.getValue());
+	    }
+	    return null;
+	}
+	
+	public static Tuple<String, Integer> getHighestFinalsRedPlayer() {
+		return getHighestFinalsPlayerOfTeam(RED_TEAM);
+	}
+	
+	public static Tuple<String, Integer> getHighestFinalsGreenPlayer() {
+		return getHighestFinalsPlayerOfTeam(GREEN_TEAM);
+	}
+	
+	public static Tuple<String, Integer> getHighestFinalsYellowPlayer() {
+		return getHighestFinalsPlayerOfTeam(YELLOW_TEAM);
+	}
+	
+	public static Tuple<String, Integer> getHighestFinalsBluePlayer() {
+		return getHighestFinalsPlayerOfTeam(BLUE_TEAM);
 	}
 
 	private static boolean isValidTeam(int team) {
