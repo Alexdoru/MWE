@@ -3,7 +3,6 @@ package fr.alexdoru.megawallsenhancementsmod.utils;
 import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 
 public class HypixelApiKeyUtil {
 
@@ -24,13 +23,13 @@ public class HypixelApiKeyUtil {
 	}
 
 	public static void setApiKey(String key) {
-		ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Api key set successfully"));
+		ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Api key set successfully"));
 		MWEnConfigHandler.APIKey = key;
 		MWEnConfigHandler.saveConfig();
 	}
 
-	public static boolean isApiKeySetup() {
-		return MWEnConfigHandler.APIKey != null && !MWEnConfigHandler.APIKey.equals("");
+	public static boolean apiKeyIsNotSetup() {
+		return MWEnConfigHandler.APIKey == null || MWEnConfigHandler.APIKey.equals("");
 	}
 	
 //	/*

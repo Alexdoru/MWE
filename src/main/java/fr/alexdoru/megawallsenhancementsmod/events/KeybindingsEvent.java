@@ -1,7 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.events;
 
-import org.lwjgl.input.Keyboard;
-
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.misc.LogGlitching;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
@@ -10,44 +8,39 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
+import org.lwjgl.input.Keyboard;
 
 public class KeybindingsEvent {
-	
-	private final LogGlitching logGlitching = new LogGlitching();
 
-	@SubscribeEvent
-	public void key(KeyInputEvent e) {
+    private final LogGlitching logGlitching = new LogGlitching();
 
-		if(Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null) {
-			return;
-		}
+    @SubscribeEvent
+    public void key(KeyInputEvent e) {
 
-		try {
-			if (Keyboard.isCreated()) {
-				if (Keyboard.getEventKeyState()) {					
-					int keycode = Keyboard.getEventKey();
+        if (Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null) {
+            return;
+        }
 
-					if (keycode <=0) {
-						return;
-					} else if (keycode == MegaWallsEnhancementsMod.log_key_fast.getKeyCode()) {
-						logGlitching.fastlogglitch();
-						return;
-					} else if (keycode == MegaWallsEnhancementsMod.log_key_normal.getKeyCode()) {
-						logGlitching.logglitch();
-						return;
-					}else if (keycode == MegaWallsEnhancementsMod.killkey.getKeyCode()) {
-						ClientCommandHandler.instance.executeCommand(Minecraft.getMinecraft().thePlayer, "/kill");
-						return;
-					} else if (keycode == NoCheatersMod.addtimemark_key.getKeyCode()) {
-						CommandWDR.addTimeMark();
-						return;
-					}
+        try {
+            if (Keyboard.isCreated()) {
+                if (Keyboard.getEventKeyState()) {
+                    int keycode = Keyboard.getEventKey();
 
-				}
-			}
-		} catch (Exception q) {
-			q.printStackTrace();
-		}
-	}
+                    if (keycode == MegaWallsEnhancementsMod.log_key_fast.getKeyCode()) {
+                        logGlitching.fastlogglitch();
+                    } else if (keycode == MegaWallsEnhancementsMod.log_key_normal.getKeyCode()) {
+                        logGlitching.logglitch();
+                    } else if (keycode == MegaWallsEnhancementsMod.killkey.getKeyCode()) {
+                        ClientCommandHandler.instance.executeCommand(Minecraft.getMinecraft().thePlayer, "/kill");
+                    } else if (keycode == NoCheatersMod.addtimemark_key.getKeyCode()) {
+                        CommandWDR.addTimeMark();
+                    }
+
+                }
+            }
+        } catch (Exception q) {
+            q.printStackTrace();
+        }
+    }
 
 }

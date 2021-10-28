@@ -8,9 +8,9 @@ public enum ConfigSetting {
 	DRAW_BACKGROUND("HUD Background", false, null),
 	TEXT_SHADOW("Text Shadow", true, null);
 
-	private String title;
+	private final String title;
 	private boolean value;
-	private SettingData data;
+	private final SettingData data;
 
 	ConfigSetting(String title, boolean defaultValue, SettingData data){
 		this.title = title;

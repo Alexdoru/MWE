@@ -1,14 +1,14 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import java.util.Arrays;
-import java.util.List;
-
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.gui.GeneralConfigGuiScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+
+import java.util.Collections;
+import java.util.List;
 
 public class CommandMWEnhancements extends CommandBase {
 
@@ -35,7 +35,7 @@ public class CommandMWEnhancements extends CommandBase {
 	@Override
 	public List<String> getCommandAliases()
 	{
-		return Arrays.<String>asList(new String[] {"megawallsenhancements"});
+		return Collections.singletonList("megawallsenhancements");
 	}
 
 }

@@ -1,17 +1,15 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
-import java.io.IOException;
-
 import fr.alexdoru.fkcountermod.gui.FKCounterConfigGuiScreen;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.io.IOException;
+
 public class GeneralConfigGuiScreen extends MyGuiScreen { // TODO config gui
 
-	private int ButtonsWidth = 150;
-	private int ButtonsHeight = 20;
-	private String title = "Config";
+	private final int ButtonsHeight = 20;
 
 	@Override
 	public void initGui() {
@@ -19,10 +17,11 @@ public class GeneralConfigGuiScreen extends MyGuiScreen { // TODO config gui
 		/*
 		 * Define the button list
 		 */
-		this.buttonList.add(new GuiButton(0, getxCenter()-ButtonsWidth/2, getyCenter()-ButtonsHeight/2-(ButtonsHeight+4), ButtonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "Final Kill Counter"));
-		this.buttonList.add(new GuiButton(1, getxCenter()-ButtonsWidth/2, getyCenter()-ButtonsHeight/2, ButtonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "Mega Walls Enhancements"));
-		this.buttonList.add(new GuiButton(2, getxCenter()-ButtonsWidth/2, getyCenter()-ButtonsHeight/2+(ButtonsHeight+4), ButtonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "No Cheaters"));
-		this.buttonList.add(new GuiButton(3, getxCenter()-ButtonsWidth/2, getyCenter()-ButtonsHeight/2+(ButtonsHeight+4)*3, ButtonsWidth, ButtonsHeight, "Close"));
+		int buttonsWidth = 150;
+		this.buttonList.add(new GuiButton(0, getxCenter()- buttonsWidth /2, getyCenter()-ButtonsHeight/2-(ButtonsHeight+4), buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "Final Kill Counter"));
+		this.buttonList.add(new GuiButton(1, getxCenter()- buttonsWidth /2, getyCenter()-ButtonsHeight/2, buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "Mega Walls Enhancements"));
+		this.buttonList.add(new GuiButton(2, getxCenter()- buttonsWidth /2, getyCenter()-ButtonsHeight/2+(ButtonsHeight+4), buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "No Cheaters"));
+		this.buttonList.add(new GuiButton(3, getxCenter()- buttonsWidth /2, getyCenter()-ButtonsHeight/2+(ButtonsHeight+4)*3, buttonsWidth, ButtonsHeight, "Close"));
 
 		super.initGui();
 	}
@@ -53,17 +52,13 @@ public class GeneralConfigGuiScreen extends MyGuiScreen { // TODO config gui
 		GlStateManager.pushMatrix();
         {
         	int dilatation = 2;
-            GlStateManager.translate((width / 2) - mc.fontRendererObj.getStringWidth(title), getyCenter() - (ButtonsHeight+4)*3, 0);
+			String title = "Config";
+			GlStateManager.translate((width / 2.0f) - mc.fontRendererObj.getStringWidth(title), getyCenter() - (ButtonsHeight+4)*3, 0);
             GlStateManager.scale(dilatation, dilatation, dilatation);
             mc.fontRendererObj.drawString(title, 0, 0, Integer.parseInt("55FF55", 16));
         }
         GlStateManager.popMatrix();
 		super.drawScreen(mouseX, mouseY, partialTicks);
-	}
-
-	@Override
-	public void onGuiClosed() {
-		super.onGuiClosed();
 	}
 
 }

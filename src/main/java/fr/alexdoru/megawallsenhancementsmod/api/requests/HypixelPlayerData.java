@@ -3,15 +3,14 @@ package fr.alexdoru.megawallsenhancementsmod.api.requests;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 
 public class HypixelPlayerData {
 
-	private JsonObject playerData;
-	private String uuid;
+	private final JsonObject playerData;
+	private final String uuid;
 	
 	public HypixelPlayerData(String uuid, String apikey) throws ApiException {
 				
@@ -52,7 +51,6 @@ public class HypixelPlayerData {
 
 		this.playerData = playerdata;
 		this.uuid = uuid;
-		return;
 
 	}
 

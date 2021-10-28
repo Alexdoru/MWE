@@ -1,23 +1,15 @@
 package fr.alexdoru.fkcountermod.events;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.gui.FKCounterGui;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class KillCounter {
 
@@ -104,16 +96,17 @@ public class KillCounter {
 	/*
 	 * Resets the Killcounter and assigns it to a new game ID
 	 */
+	@SuppressWarnings("unchecked")
 	public static void ResetKillCounterTo(String gameIdIn) {
 
 		gameId = gameIdIn;		
 		prefixes = new String[TEAMS];
 		teamKillsArray = new HashMap[TEAMS];
-		deadPlayers = new ArrayList<String>();
+		deadPlayers = new ArrayList<>();
 
 		for(int i = 0; i < TEAMS; i++) {
 			prefixes[i] = DEFAULT_PREFIXES[i];
-			teamKillsArray[i] = new HashMap<String, Integer>();
+			teamKillsArray[i] = new HashMap<>();
 		}
 		FKCounterGui.updateDisplayText();
 
@@ -176,7 +169,7 @@ public class KillCounter {
 	@SubscribeEvent
 	public void onMwGame(MwGameEvent event) {
 		/*
-		 * this is here to fix the bug where the killcounter doesn't work if you re-start your minecraft during a MW game 
+		 * this is here to fix the bug where the killcounter doesn't work if you re-start your minecraft during a game of MW
 		 * or if you changed your colors for the teams in your MW settings and rejoined the game
 		 */
 		if (event.getType() == MwGameEvent.EventType.CONNECT) {
@@ -189,7 +182,7 @@ public class KillCounter {
 	}
 
 	public static int getKills(int team) {
-		if(!isValidTeam(team)) { return 0; }
+		if(isNotValidTeam(team)) {return 0;}
 
 		int kills = 0;
 		for(int k : teamKillsArray[team].values()) {
@@ -199,7 +192,7 @@ public class KillCounter {
 	}
 	
 	public static HashMap<Integer, Integer> getSortedTeamKillsMap() {	
-		HashMap<Integer, Integer> hashmap = new HashMap<Integer, Integer>();
+		HashMap<Integer, Integer> hashmap = new HashMap<>();
 		hashmap.put(RED_TEAM, getKills(RED_TEAM));
 		hashmap.put(GREEN_TEAM, getKills(GREEN_TEAM));
 		hashmap.put(YELLOW_TEAM, getKills(YELLOW_TEAM));
@@ -208,7 +201,7 @@ public class KillCounter {
 	}
 
 	public static HashMap<String, Integer> getPlayers(int team){
-		if(!isValidTeam(team)) { return new HashMap<String, Integer>(); }
+		if(isNotValidTeam(team)) {return new HashMap<>();}
 		return teamKillsArray[team];
 	}
 
@@ -221,7 +214,7 @@ public class KillCounter {
 	}
 
 	/*
-	 * Detects the color codes your are using in your mega walls settings by looking at the scoreboard/sidebartext
+	 * Detects the color codes you are using in your mega walls settings by looking at the scoreboard/sidebartext
 	 */
 	private static void setTeamPrefixes() { 
 		for(String line : ScoreboardUtils.getFormattedSidebarText()) {
@@ -236,7 +229,7 @@ public class KillCounter {
 
 	private static void removeKilledPlayer(String player, String color) {
 		int team = getTeamFromColor(color);
-		if(!isValidTeam(team)) { return; }
+		if(isNotValidTeam(team)) {return;}
 
 		if(isWitherDead(color)) {
 			teamKillsArray[team].remove(player);
@@ -247,7 +240,7 @@ public class KillCounter {
 
 	private static void addKill(String player, String color) {
 		int team = getTeamFromColor(color);
-		if(!isValidTeam(team)) {return;}
+		if(isNotValidTeam(team)) {return;}
 		if(deadPlayers.contains(player)) {return;}
 
 		if(teamKillsArray[team].containsKey(player)) {
@@ -259,7 +252,7 @@ public class KillCounter {
 
 	private static void sortTeamKills(String color) {
 		int team = getTeamFromColor(color);
-		if(!isValidTeam(team)) {return;}
+		if(isNotValidTeam(team)) {return;}
 		teamKillsArray[team] = sortByDecreasingValue1(teamKillsArray[team]);
 	}
 
@@ -294,31 +287,27 @@ public class KillCounter {
 	/*
 	 * returns the name of the player from the team that has the highest finals
 	 */
-	public static Tuple<String, Integer> getHighestFinalsPlayerOfTeam(int team) {
+	public static Tuple getHighestFinalsPlayerOfTeam(int team) {
 		
 		HashMap<String, Integer> teamkills = teamKillsArray[team];
 		
 		Iterator<Map.Entry<String, Integer>> iterator = teamkills.entrySet().iterator();
 	    if (iterator.hasNext()) {
 	      Map.Entry<String, Integer> entry = iterator.next();
-	      return new Tuple(entry.getKey(), entry.getValue());
+			//noinspection unchecked
+			return new Tuple(entry.getKey(), entry.getValue());
 	    }
 	    return null;
 	}	
 
-	private static boolean isValidTeam(int team) {
-		return (team >= 0 && team < TEAMS);
+	private static boolean isNotValidTeam(int team) {
+		return (team < 0 || team >= TEAMS);
 	}
-		
+
 	private static HashMap<String, Integer> sortByDecreasingValue1(HashMap<String, Integer> hashmapIn) {
-		List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer> >(hashmapIn.entrySet());
-		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-
-			public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-				return (o2.getValue()).compareTo(o1.getValue());
-			}});
-
-		HashMap<String, Integer> temp = new LinkedHashMap<String, Integer>();
+		List<Map.Entry<String, Integer>> list = new LinkedList<>(hashmapIn.entrySet());
+		list.sort((o1, o2) -> (o2.getValue()).compareTo(o1.getValue()));
+		HashMap<String, Integer> temp = new LinkedHashMap<>();
 		for (Map.Entry<String, Integer> aa : list) {
 			temp.put(aa.getKey(), aa.getValue());
 		}
@@ -326,14 +315,9 @@ public class KillCounter {
 	}
 	
 	private static HashMap<Integer, Integer> sortByDecreasingValue2(HashMap<Integer, Integer> hashmapIn) {
-		List<Map.Entry<Integer, Integer>> list = new LinkedList<Map.Entry<Integer, Integer> >(hashmapIn.entrySet());
-		Collections.sort(list, new Comparator<Map.Entry<Integer, Integer>>() {
-
-			public int compare(Map.Entry<Integer, Integer> o1, Map.Entry<Integer, Integer> o2) {
-				return (o2.getValue()).compareTo(o1.getValue());
-			}});
-
-		HashMap<Integer, Integer> temp = new LinkedHashMap<Integer, Integer>();
+		List<Map.Entry<Integer, Integer>> list = new LinkedList<>(hashmapIn.entrySet());
+		list.sort((o1, o2) -> (o2.getValue()).compareTo(o1.getValue()));
+		HashMap<Integer, Integer> temp = new LinkedHashMap<>();
 		for (Map.Entry<Integer, Integer> aa : list) {
 			temp.put(aa.getKey(), aa.getValue());
 		}

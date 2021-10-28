@@ -1,10 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser;
 
-import java.lang.reflect.Field;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import net.minecraft.event.HoverEvent;
@@ -12,6 +9,8 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+
+import java.lang.reflect.Field;
 
 public class MegaWallsClassStats {
 
@@ -56,7 +55,6 @@ public class MegaWallsClassStats {
 	private int classname_wither_damage = 0;
 	private int classname_defender_kills = 0;
 	private int classname_defender_assists = 0;
-	private int classname_potions_drunk = 0;
 	private int classname_a_activations = 0;
 	private int classname_a_activations_deathmatch = 0;
 	private int classname_a_damage_dealt = 0;
@@ -133,7 +131,6 @@ public class MegaWallsClassStats {
 		this.classname_wither_damage = JsonUtil.getInt(mwdata,this.classname + "_wither_damage");		
 		this.classname_defender_kills = JsonUtil.getInt(mwdata,this.classname + "_defender_kills");
 		this.classname_defender_assists = JsonUtil.getInt(mwdata,this.classname + "_defender_assists");
-		this.classname_potions_drunk = JsonUtil.getInt(mwdata,this.classname + "_potions_drunk");
 		this.classname_a_activations = JsonUtil.getInt(mwdata,this.classname + "_a_activations");
 		this.classname_a_activations_deathmatch = JsonUtil.getInt(mwdata,this.classname + "_a_activations_deathmatch");
 		this.classname_a_damage_dealt = JsonUtil.getInt(mwdata,this.classname + "_a_damage_dealt");
@@ -165,7 +162,7 @@ public class MegaWallsClassStats {
 	 */
 	public IChatComponent getGameStatMessage(String formattedname) {
 
-		float arrowaccuracy = 100*this.classname_arrows_hit / (this.classname_arrows_fired == 0 ? 1 : this.classname_arrows_fired);
+		float arrowaccuracy = 100f*(float)this.classname_arrows_hit / (float)(this.classname_arrows_fired == 0 ? 1 : this.classname_arrows_fired);
 
 		String[][] matrix1 = { 
 				{

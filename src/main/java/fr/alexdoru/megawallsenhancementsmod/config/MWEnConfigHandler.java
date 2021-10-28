@@ -1,11 +1,11 @@
 package fr.alexdoru.megawallsenhancementsmod.config;
 
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
 
 //https://github.com/CJMinecraft01/BitOfEverything/blob/6ab40135d1c4f9e97e898925d85a33334b13036e/src/main/java/cjminecraft/bitofeverything/config/BoeConfig.java
 public class MWEnConfigHandler {
@@ -64,13 +64,13 @@ public class MWEnConfigHandler {
 		Property propertytimeBetweenReports = config.get(CATEGORY_NOCHEATERS, "Time between reports", 6, "Time before the mod suggests to report the player again (hours)");
 		Property propertytimeAutoReport = config.get(CATEGORY_NOCHEATERS, "Time for autoreports", 336, "It won't autoreport players whose last report is older than this (hours)");
 
-		List<String> propertyOrderMWWENh = new ArrayList<String>();
+		List<String> propertyOrderMWWENh = new ArrayList<>();
 		propertyOrderMWWENh.add(propertyAPIKey.getName());
 		propertyOrderMWWENh.add(propertyshortencoinmessage.getName());
 		propertyOrderMWWENh.add(propertyreportsuggestions.getName());
 		config.setCategoryPropertyOrder(CATEGORY_MWENh, propertyOrderMWWENh);
 
-		List<String> propertyOrderGUI = new ArrayList<String>();
+		List<String> propertyOrderGUI = new ArrayList<>();
 		propertyOrderGUI.add(propertyshow_killcooldownGUI.getName());
 		propertyOrderGUI.add(propertyxpos_killcooldownGUI.getName());
 		propertyOrderGUI.add(propertyypos_killcooldownGUI.getName());
@@ -79,7 +79,7 @@ public class MWEnConfigHandler {
 		propertyOrderGUI.add(propertyypos_ArrowHitGui.getName());
 		config.setCategoryPropertyOrder(CATEGORY_GUI, propertyOrderGUI);
 
-		List<String> propertyOrderNOCHEATERS = new ArrayList<String>();
+		List<String> propertyOrderNOCHEATERS = new ArrayList<>();
 		propertyOrderNOCHEATERS.add(propertytoggleicons.getName());
 		propertyOrderNOCHEATERS.add(propertytogglewarnings.getName());
 		propertyOrderNOCHEATERS.add(propertytoggleautoreport.getName());
@@ -103,8 +103,8 @@ public class MWEnConfigHandler {
 			toggleicons = propertytoggleicons.getBoolean();
 			togglewarnings = propertytogglewarnings.getBoolean();
 			toggleautoreport = propertytoggleautoreport.getBoolean();
-			timeBetweenReports = (long) 3600l*1000l*propertytimeBetweenReports.getInt();
-			timeAutoReport = (long) 3600l*1000l*propertytimeAutoReport.getInt();
+			timeBetweenReports = 3600L*1000L*((long)propertytimeBetweenReports.getInt());
+			timeAutoReport = 3600L*1000L*((long)propertytimeAutoReport.getInt());
 		}
 
 		if(saveFieldsToConfig) {	
@@ -122,8 +122,8 @@ public class MWEnConfigHandler {
 			propertytoggleicons.set(toggleicons);
 			propertytogglewarnings.set(togglewarnings);
 			propertytoggleautoreport.set(toggleautoreport);
-			propertytimeBetweenReports.set((int)timeBetweenReports/(3600l*1000l));
-			propertytimeAutoReport.set((int)timeAutoReport/(3600l*1000l));
+			propertytimeBetweenReports.set((int)timeBetweenReports/(3600*1000));
+			propertytimeAutoReport.set((int)timeAutoReport/(3600*1000));
 		}
 		
 		/*automatically saves the values to the config file if any of the values change*/

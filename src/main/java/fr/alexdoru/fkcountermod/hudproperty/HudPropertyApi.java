@@ -1,15 +1,15 @@
 package fr.alexdoru.fkcountermod.hudproperty;
 
-import java.util.Collection;
-import java.util.Set;
-
 import com.google.common.collect.Sets;
-
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Set;
 
 public final class HudPropertyApi {
 
@@ -19,17 +19,15 @@ public final class HudPropertyApi {
 		return api;
 	}
 
-	private Set<IRenderer> registeredRenderers = Sets.newHashSet();
-	private Minecraft mc = Minecraft.getMinecraft();
+	private final Set<IRenderer> registeredRenderers = Sets.newHashSet();
+	private final Minecraft mc = Minecraft.getMinecraft();
 
 	private boolean renderOutlines = true;
 
 	private HudPropertyApi(){}
 
 	public void register(IRenderer... renderers) {
-		for(IRenderer renderer : renderers) {
-			this.registeredRenderers.add(renderer);
-		}
+		this.registeredRenderers.addAll(Arrays.asList(renderers));
 	}
 
 	public void unregister(IRenderer... renderers) {

@@ -1,8 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import java.util.HashMap;
-import java.util.List;
-
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
@@ -18,7 +15,9 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class CommandPlancke extends CommandBase {
 
@@ -74,7 +73,7 @@ public class CommandPlancke extends CommandBase {
 		put("werewolf","Werewolf");
 		put("zombie","Zombie");  
 
-	};};
+	}};
 
 	@Override
 	public String getCommandName() {
@@ -90,12 +89,12 @@ public class CommandPlancke extends CommandBase {
 	public void processCommand(ICommandSender sender, String[] args) throws CommandException { // TODO faire les stats pour les autres jeux
 
 		if (args.length < 1) {
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
+			ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
 			return;
 		} 
 
-		if(!HypixelApiKeyUtil.isApiKeySetup()) { // api key not setup
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.apikeyMissingErrorMsg()));
+		if(HypixelApiKeyUtil.apiKeyIsNotSetup()) { // api key not setup
+			ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.apikeyMissingErrorMsg()));
 			return;
 		}
 
@@ -105,7 +104,7 @@ public class CommandPlancke extends CommandBase {
 			try {
 				apiname = new CachedMojangUUID(args[0]);
 			} catch (ApiException e) {
-				ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+				ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e.getMessage()));
 				return;
 			}
 			
@@ -115,7 +114,7 @@ public class CommandPlancke extends CommandBase {
 			try {
 				playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
 			} catch (ApiException e) {
-				ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+				ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e.getMessage()));
 				return;
 			}
 			
@@ -124,7 +123,7 @@ public class CommandPlancke extends CommandBase {
 
 			if(generalstats.hasNeverJoinedHypixel()) { // player never joined hypixel
 
-				ChatUtil.addChatMessage((IChatComponent)new ChatComponentText( ChatUtil.getTagMW()
+				ChatUtil.addChatMessage(new ChatComponentText( ChatUtil.getTagMW()
 						+ EnumChatFormatting.YELLOW + args[0] + EnumChatFormatting.RED + " has never joined Hypixel." ));
 				return;
 			}
@@ -132,24 +131,20 @@ public class CommandPlancke extends CommandBase {
 			if(args.length == 1) { 
 				
 				ChatUtil.addChatMessage(generalstats.getFormattedMessage(formattedname));
-				return;
 
-			} else if(args.length >= 2) { 
+			} else {
 
 				if(args[1].equalsIgnoreCase("bw") || args[1].equalsIgnoreCase("bedwars")) { // general stats for bedwars
 
-					ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "WIP bedwars"));
-					return;
+					ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP bedwars"));
 
 				} else if(args[1].equalsIgnoreCase("bsg") || args[1].equalsIgnoreCase("blitz")) { // general stats for blitz survival games
 
-					ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "WIP blitz"));
-					return;
+					ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP blitz"));
 
 				} else if(args[1].equalsIgnoreCase("duel") || args[1].equalsIgnoreCase("duels")) { // general stats for duels
 
-					ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "WIP duels"));
-					return;
+					ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP duels"));
 
 				} else if(args[1].equalsIgnoreCase("mw") || args[1].equalsIgnoreCase("megawalls")) { // stats for mega walls
 
@@ -157,44 +152,38 @@ public class CommandPlancke extends CommandBase {
 
 						MegaWallsStats mwstats = new MegaWallsStats(playerdata.getPlayerData());
 						ChatUtil.addChatMessage(mwstats.getFormattedMessage(formattedname,apiname.getName()));
-						return;
 
 					} else if (args.length == 3) {
 
 						String mwclassname = megawallsclassesmap.get(args[2].toLowerCase());
 
 						if(mwclassname == null) { // not a valid mw class
-							ChatUtil.addChatMessage((IChatComponent)new ChatComponentText( ChatUtil.getTagMW()
+							ChatUtil.addChatMessage(new ChatComponentText( ChatUtil.getTagMW()
 									+ EnumChatFormatting.YELLOW + args[2] + EnumChatFormatting.RED + " isn't a valid mega walls class name." ));
 							return;
 						}	// print mw stats for a certain class
 
 						MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(),mwclassname);
 						ChatUtil.addChatMessage(mwclassstats.getFormattedMessage(formattedname, apiname.getName()));
-						return;
 
 					}
 
 				} else if(args[1].equalsIgnoreCase("sw") || args[1].equalsIgnoreCase("skywars")) { // general stats for skywars
 
-					ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "WIP skywars"));
-					return;
+					ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP skywars"));
 
 				} else if(args[1].equalsIgnoreCase("tnt") || args[1].equalsIgnoreCase("tntgames")) { // general stats for tnt games
 
-					ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "WIP tntgames"));
-					return;
+					ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP tntgames"));
 
 				} else if(args[1].equalsIgnoreCase("uhc")) { // general stats for UHC champions
 
-					ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "WIP uhc"));
-					return;
+					ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP uhc"));
 
 				} else {
 
-					ChatUtil.addChatMessage((IChatComponent)new ChatComponentText( ChatUtil.getTagMW()
+					ChatUtil.addChatMessage(new ChatComponentText( ChatUtil.getTagMW()
 							+ EnumChatFormatting.YELLOW + args[1] + EnumChatFormatting.RED + " isn't a valid/supported game name." ));
-					return;
 
 				}			
 

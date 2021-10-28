@@ -1,12 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import java.util.Arrays;
-import java.util.List;
-
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangNameHistory;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.CommandBase;
@@ -17,6 +13,11 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+
+import java.util.Collections;
+import java.util.List;
+
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class CommandName extends CommandBase {
 
@@ -37,7 +38,7 @@ public class CommandName extends CommandBase {
 	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 
 		if (args.length < 1) {
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
+			addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
 			return;
 		} 
 
@@ -47,7 +48,7 @@ public class CommandName extends CommandBase {
 			try {
 				apiname = new CachedMojangUUID(args[0]);
 			} catch (ApiException e1) {
-				ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e1.getMessage()));
+				addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e1.getMessage()));
 				return;
 			}
 			String uuid = apiname.getUuid();
@@ -56,7 +57,7 @@ public class CommandName extends CommandBase {
 			try {
 				apinamehistory = new MojangNameHistory(uuid);
 			} catch (ApiException e1) {
-				ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e1.getMessage()));
+				addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e1.getMessage()));
 				return;
 			}
 
@@ -64,13 +65,13 @@ public class CommandName extends CommandBase {
 			int nbnames = 1; 
 			int nbpage = 1;
 
-			String messagebody = "";
+			StringBuilder messagebody = new StringBuilder();
 
 			if(args.length > 1) {
 				try {
 					displaypage = parseInt(args[1]);
 				} catch (NumberInvalidException e) {
-					ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + args[1] + " isn't a valid number."));
+					addChatMessage(new ChatComponentText(EnumChatFormatting.RED + args[1] + " isn't a valid number."));
 					e.printStackTrace();
 					return;
 				}
@@ -89,21 +90,15 @@ public class CommandName extends CommandBase {
 
 					if(i == 0) { // original name
 
-						messagebody = messagebody + ",{\"text\":\"" + apinamehistory.getNames().get(i) + "  \",\"color\":\"gold\"}"
-								+ ",{\"text\":\"Original name\",\"color\":\"dark_gray\"}"
-								+ ",{\"text\":\"\\n\"}";
+						messagebody.append(",{\"text\":\"").append(apinamehistory.getNames().get(i)).append("  \",\"color\":\"gold\"}").append(",{\"text\":\"Original name\",\"color\":\"dark_gray\"}").append(",{\"text\":\"\\n\"}");
 
 					} else if (i == n-1) {
 
-						messagebody = messagebody + ",{\"text\":\"" + apinamehistory.getNames().get(i) + "  \",\"color\":\"gold\"}"
-								+ ",{\"text\":\"since " + DateUtil.localformatTimestampday(apinamehistory.getTimestamps().get(i)) + "\",\"color\":\"dark_gray\"}"
-								+ ",{\"text\":\"\\n\"}";
+						messagebody.append(",{\"text\":\"").append(apinamehistory.getNames().get(i)).append("  \",\"color\":\"gold\"}").append(",{\"text\":\"since ").append(DateUtil.localformatTimestampday(apinamehistory.getTimestamps().get(i))).append("\",\"color\":\"dark_gray\"}").append(",{\"text\":\"\\n\"}");
 
 					} else {
 
-						messagebody = messagebody + ",{\"text\":\"" + apinamehistory.getNames().get(i) + "  \",\"color\":\"gold\"}"
-								+ ",{\"text\":\"" + DateUtil.localformatTimestampday(apinamehistory.getTimestamps().get(i)) + "\",\"color\":\"dark_gray\"}"
-								+ ",{\"text\":\"\\n\"}";
+						messagebody.append(",{\"text\":\"").append(apinamehistory.getNames().get(i)).append("  \",\"color\":\"gold\"}").append(",{\"text\":\"").append(DateUtil.localformatTimestampday(apinamehistory.getTimestamps().get(i))).append("\",\"color\":\"dark_gray\"}").append(",{\"text\":\"\\n\"}");
 
 					}
 
@@ -112,13 +107,13 @@ public class CommandName extends CommandBase {
 				nbnames++;
 			}
 
-			if(!messagebody.equals("")) {
+			if(!messagebody.toString().equals("")) {
 
-				ChatUtil.addChatMessage(IChatComponent.Serializer.jsonToComponent(ChatUtil.makeChatList("Name History", messagebody, displaypage, nbpage, "/name " + args[0])));
+				addChatMessage(IChatComponent.Serializer.jsonToComponent(makeChatList("Name History", messagebody.toString(), displaypage, nbpage, "/name " + args[0])));
 
 			} else {
 
-				ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "No names to display, " + nbpage + " page" + (nbpage==1?"":"s") + " available."  ));
+				addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "No names to display, " + nbpage + " page" + (nbpage==1?"":"s") + " available."  ));
 
 			}
 
@@ -129,7 +124,7 @@ public class CommandName extends CommandBase {
 	@Override
 	public List<String> getCommandAliases()
 	{
-		return Arrays.<String>asList(new String[] {"names"});
+		return Collections.singletonList("names");
 	}
 
 	@Override

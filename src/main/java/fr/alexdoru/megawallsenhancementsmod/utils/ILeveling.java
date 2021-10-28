@@ -54,7 +54,7 @@ public interface ILeveling {
      * - 79342431 XP = 249.46...
      *
      * @param exp Total experience gathered by the player.
-     * @return Exact level of player (Smallest value is 1.0)
+     * @return Exact level of player (The smallest value is 1.0)
      */
     static double getExactLevel(double exp) {
         return ILeveling.getLevel(exp) + ILeveling.getPercentageToNextLevel(exp);
@@ -86,7 +86,7 @@ public interface ILeveling {
      * This method returns the experience it needs to reach that level. If you want to reach the given level
      * you have to gather the amount of experience returned by this method. This method is precise, that means
      * you can pass any progress of a level to receive the experience to reach that progress. (5.764 to get
-     * the experience to reach level 5 with 76.4% of level 6.
+     * the experience to reach level 5 with 76.4% of level 6.)
      * <p>
      * Examples:
      * -    1.0 =        0.0 XP

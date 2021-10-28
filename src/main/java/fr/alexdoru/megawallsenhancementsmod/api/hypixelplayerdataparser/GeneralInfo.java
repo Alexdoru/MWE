@@ -1,11 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser;
 
-import java.util.Map;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.ILeveling;
@@ -17,12 +14,14 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
+import java.util.Map;
+
 public class GeneralInfo extends LoginData {
 
-	private long networkExp = 0;
-	private int achievementPoints = 0;
-	private int karma = 0;
-	private String mcVersionRp;
+	private final long networkExp;
+	private final int achievementPoints;
+	private final int karma;
+	private final String mcVersionRp;
 
 	private int completedQuests = 0;
 
@@ -57,9 +56,8 @@ public class GeneralInfo extends LoginData {
 					if(completionsArray == null) 
 						continue;
 
-					for(JsonElement elem : completionsArray) {
+					for(JsonElement ignored : completionsArray) {
 						this.completedQuests++;
-
 					}
 				}
 			}

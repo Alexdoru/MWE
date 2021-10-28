@@ -1,19 +1,15 @@
 package fr.alexdoru.nocheatersmod.data;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 public class WdredPlayers {
 	
-	private static HashMap<String, WDR> wdred = new HashMap<String, WDR>();
+	private static final HashMap<String, WDR> wdred = new HashMap<>();
 	public static File wdrsFile;
 	
 	public static HashMap<String, WDR> getWdredMap() {
@@ -75,13 +71,10 @@ public class WdredPlayers {
 	
 	/**
 	 * Transforms the timestamped reports older than a month into normal reports
-	 * 
-	 * @param split
-	 * @return
 	 */
 	private static ArrayList<String> transformOldReports(String[] split, long datenow) { 
 
-		ArrayList<String> hacks = new ArrayList<String>();
+		ArrayList<String> hacks = new ArrayList<>();
 
 		if(split[2].charAt(0) == '-' && datenow > Long.parseLong(split[5]) + 2592000000L ) {
 
@@ -100,10 +93,7 @@ public class WdredPlayers {
 
 		} else {
 
-			for (int i = 2; i < split.length; i++) {
-											
-				hacks.add(split[i]);
-			}
+			hacks.addAll(Arrays.asList(split).subList(2, split.length));
 			return hacks;
 		}
 
@@ -111,7 +101,7 @@ public class WdredPlayers {
 	
 	public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list) {
 
-		ArrayList<T> newList = new ArrayList<T>();
+		ArrayList<T> newList = new ArrayList<>();
 
 		for (T element : list) {
 			if (!newList.contains(element)) {

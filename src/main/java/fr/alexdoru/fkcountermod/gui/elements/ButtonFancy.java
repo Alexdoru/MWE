@@ -9,7 +9,7 @@ public class ButtonFancy extends GuiButton {
 	
 	private static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation("fkcounter", "button.png");
 	
-	private double scale;
+	private final double scale;
 	
 	public ButtonFancy(int id, int x, int y, int width, int height, String text) {
 		this(id, x, y, width, height, text, 1);

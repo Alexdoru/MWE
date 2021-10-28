@@ -1,7 +1,5 @@
 package fr.alexdoru.nocheatersmod.commands;
 
-import java.util.List;
-
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.misc.NameModifier;
@@ -14,82 +12,81 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+
+import java.util.List;
 
 public class CommandUnWDR extends CommandBase {
 
-	public String getCommandName() {
-		return "unwdr";
-	}
+    public String getCommandName() {
+        return "unwdr";
+    }
 
-	public void processCommand(ICommandSender sender, String[] args) {
+    public void processCommand(ICommandSender sender, String[] args) {
 
-		if (args.length < 1 || args.length > 3 ) {
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
-			return;
-		}
+        if (args.length < 1 || args.length > 3) {
+            ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
+            return;
+        }
 
-		if (args.length == 1) { // if you use /unwdr <playername>
-			
-			(new Thread(() -> {
-				
-				CachedMojangUUID apireq;
-				String playername = args[0];
-				try {
-					apireq = (new CachedMojangUUID(args[0]));
-					playername = apireq.getName();
-				} catch (ApiException e) {
-					ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagNoCheaters()
-							+ EnumChatFormatting.RED + e.getMessage()));
-					return;
-				}
 
-				String uuid = apireq.getUuid();
 
-				WDR wdr = WdredPlayers.getWdredMap().remove(uuid);
+        if (args.length == 1) { // if you use /unwdr <playername>
 
-				if (wdr == null) {
-					ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagNoCheaters() +
-							EnumChatFormatting.RED + "Player not found in your report list."));
-					return;
-				} else {
-					NameModifier.transformDisplayName(playername);
-					ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagNoCheaters() + 
-							EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.LIGHT_PURPLE + playername + EnumChatFormatting.GREEN + "."));
-					return;
-				}
-				
-			})).start();
-			
-		} else if(args.length == 2) { // when you click the message it does /unwdr <UUID> <playername>
+            new Thread(() -> {
 
-			WDR wdr = WdredPlayers.getWdredMap().remove(args[0]);
+                CachedMojangUUID apireq;
+                String playername = args[0];
+                try {
+                    apireq = (new CachedMojangUUID(playername));
+                    playername = apireq.getName();
+                } catch (ApiException e) {
+                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters()
+                            + EnumChatFormatting.RED + e.getMessage()));
+                    return;
+                }
 
-			if (wdr == null) {
-				ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagNoCheaters() +
-						EnumChatFormatting.RED + "Player not found in your report list."));
-				return;
-			} else {
-				NameModifier.transformDisplayName(args[1]);
-				ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagNoCheaters() + 
-						EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.LIGHT_PURPLE + args[1] + EnumChatFormatting.GREEN + "."  ));
-				return;
-			}
+                String uuid = apireq.getUuid();
 
-		}
+                WDR wdr = WdredPlayers.getWdredMap().remove(uuid);
 
-	}
+                if (wdr == null) {
+                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+                            EnumChatFormatting.RED + "Player not found in your report list."));
+                } else {
+                    NameModifier.transformDisplayName(playername);
+                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+                            EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.LIGHT_PURPLE + playername + EnumChatFormatting.GREEN + "."));
+                }
 
-	public String getCommandUsage(ICommandSender sender) {
-		return "/unwdr <playername>";
-	}
+            }).start();
 
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		return true;
-	}
+        } else if (args.length == 2) { // when you click the message it does /unwdr <UUID> <playername>
 
-	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-		return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
-	}
+            WDR wdr = WdredPlayers.getWdredMap().remove(args[0]);
+
+            if (wdr == null) {
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+                        EnumChatFormatting.RED + "Player not found in your report list."));
+            } else {
+                NameModifier.transformDisplayName(args[1]);
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+                        EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.LIGHT_PURPLE + args[1] + EnumChatFormatting.GREEN + "."));
+            }
+
+        }
+
+    }
+
+    public String getCommandUsage(ICommandSender sender) {
+        return "/unwdr <playername>";
+    }
+
+    public boolean canCommandSenderUseCommand(ICommandSender sender) {
+        return true;
+    }
+
+    @Override
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+        return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+    }
 }

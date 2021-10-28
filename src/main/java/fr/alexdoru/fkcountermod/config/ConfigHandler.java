@@ -1,19 +1,15 @@
 package fr.alexdoru.fkcountermod.config;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.*;
+
 public class ConfigHandler {
 
-	private File configFile;
+	private final File configFile;
 	private JsonObject configJson;
 
 	public ConfigHandler(File file) {

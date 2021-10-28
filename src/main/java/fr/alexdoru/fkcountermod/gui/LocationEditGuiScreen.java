@@ -1,11 +1,5 @@
 package fr.alexdoru.fkcountermod.gui;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.function.Predicate;
-
 import fr.alexdoru.fkcountermod.hudproperty.HudPropertyApi;
 import fr.alexdoru.fkcountermod.hudproperty.IRenderer;
 import fr.alexdoru.fkcountermod.hudproperty.ScreenPosition;
@@ -14,9 +8,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.function.Predicate;
+
 public class LocationEditGuiScreen extends GuiScreen {
 	
-	private Minecraft mc = Minecraft.getMinecraft();
+	private final Minecraft mc = Minecraft.getMinecraft();
 
 	private final HashMap<IRenderer, ScreenPosition> renderers = new HashMap<>();
 	private Optional<IRenderer> selectedRenderer = Optional.empty(); 
@@ -55,16 +54,15 @@ public class LocationEditGuiScreen extends GuiScreen {
 		float zBackup = this.zLevel;
 		this.zLevel = 200;	
 
-		renderers.forEach((renderer, position) -> renderer.renderDummy(position));
+		renderers.forEach(IRenderer::renderDummy);
 
 		this.zLevel = zBackup;
 	}
 
 	@Override
-	protected void mouseClicked(int x, int y, int button) throws IOException {
+	protected void mouseClicked(int x, int y, int button) {
 		prevX = x;
 		prevY = y;
-
 		loadMouseOver(x, y);
 	}
 
@@ -118,7 +116,8 @@ public class LocationEditGuiScreen extends GuiScreen {
 
 	private class MouseOverFinder implements Predicate<IRenderer>{
 
-		private int mouseX, mouseY;
+		private final int mouseX;
+		private final int mouseY;
 
 		public MouseOverFinder(int mouseX, int mouseY) {
 			this.mouseX = mouseX;
@@ -133,9 +132,7 @@ public class LocationEditGuiScreen extends GuiScreen {
 			int absoluteY = pos.getAbsoluteY();
 
 			if(mouseX >= absoluteX && mouseX <= absoluteX + renderer.getWidth()){
-				if(mouseY >= absoluteY && mouseY <= absoluteY + renderer.getHeight()){
-					return true;
-				}
+				return mouseY >= absoluteY && mouseY <= absoluteY + renderer.getHeight();
 			}
 
 			return false;

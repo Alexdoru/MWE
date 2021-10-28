@@ -8,7 +8,7 @@ public interface IConfigExchange {
 	 * @param  pos  Provided by the API. The chosen position for the HUD.
 	 * Preferably save the values in a configuration file.
 	 */
-	public abstract void save(ScreenPosition pos);
+	void save(ScreenPosition pos);
 
 	/**
 	 * Creates a new ScreenPosition object based on relative coordinates. 
@@ -19,6 +19,6 @@ public interface IConfigExchange {
 	 * Preferably load the values from a configuration file. 
 	 * Can be null.
 	 */
-	public abstract ScreenPosition load();
+	ScreenPosition load();
 	
 }

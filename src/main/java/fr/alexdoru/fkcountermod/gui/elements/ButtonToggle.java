@@ -11,7 +11,7 @@ public class ButtonToggle extends GuiButton {
 	private static final ResourceLocation TOGGLE_ON = new ResourceLocation("fkcounter", "toggleon.png");
 	private static final ResourceLocation TOGGLE_OFF = new ResourceLocation("fkcounter", "toggleoff.png");
 
-	ConfigSetting setting;
+	final ConfigSetting setting;
 
 	public ButtonToggle(int x, int y, ConfigSetting setting) {
 		super(0, x, y, "");
@@ -36,7 +36,7 @@ public class ButtonToggle extends GuiButton {
 		GlStateManager.pushMatrix();
 		{
 			float dilatation = 0.5f;
-			GlStateManager.translate(xPosition + width/2, yPosition - 20/2, 0);
+			GlStateManager.translate(xPosition + (float)width/2.0f, yPosition - 10f, 0);
 			GlStateManager.scale(dilatation, dilatation, 1);
 			this.drawCenteredString(mc.fontRendererObj, setting.getTitle(), 0, 0, 0xFFFFFF);
 		}

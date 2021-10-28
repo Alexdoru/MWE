@@ -1,9 +1,5 @@
 package fr.alexdoru.fkcountermod.gui;
 
-import java.awt.Color;
-import java.util.HashMap;
-import java.util.Map.Entry;
-
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.config.ConfigSetting;
 import fr.alexdoru.fkcountermod.events.KillCounter;
@@ -15,189 +11,198 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Tuple;
 
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 public class FKCounterGui extends Gui implements IRenderer {
 
-	/*used as an example when in the settings*/
-	private static final String DUMMY_TEXT = EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 1\n"
-			+ EnumChatFormatting.GREEN + "Green" + EnumChatFormatting.WHITE + ": 2\n"
-			+ EnumChatFormatting.YELLOW + "Yellow" + EnumChatFormatting.WHITE + ": 3\n"
-			+ EnumChatFormatting.BLUE + "Blue" + EnumChatFormatting.WHITE + ": 4";
-	/*used as an example when in the settings*/
-	private static final String DUMMY_TEXT_COMPACT = EnumChatFormatting.RED + "1" + EnumChatFormatting.DARK_GRAY + " / "
-			+ EnumChatFormatting.GREEN + "2" + EnumChatFormatting.DARK_GRAY + " / "
-			+ EnumChatFormatting.YELLOW + "3" + EnumChatFormatting.DARK_GRAY + " / "
-			+ EnumChatFormatting.BLUE + "4";
-	/*used as an example when in the settings*/
-	private static final String DUMMY_TEXT_PLAYERS = EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 5 - RedPlayer 1\n"
-			+ EnumChatFormatting.GREEN + "Green" + EnumChatFormatting.WHITE + ": 12 - GreenPlayer 2\n"
-			+ EnumChatFormatting.YELLOW + "Yellow" + EnumChatFormatting.WHITE + ": 6 - YellowPlayer 3\n"
-			+ EnumChatFormatting.BLUE + "Blue" + EnumChatFormatting.WHITE + ": 9 - BluePlayer 4";
+    /*used as an example when in the settings*/
+    private static final String DUMMY_TEXT = EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 1\n"
+            + EnumChatFormatting.GREEN + "Green" + EnumChatFormatting.WHITE + ": 2\n"
+            + EnumChatFormatting.YELLOW + "Yellow" + EnumChatFormatting.WHITE + ": 3\n"
+            + EnumChatFormatting.BLUE + "Blue" + EnumChatFormatting.WHITE + ": 4";
+    /*used as an example when in the settings*/
+    private static final String DUMMY_TEXT_COMPACT = EnumChatFormatting.RED + "1" + EnumChatFormatting.DARK_GRAY + " / "
+            + EnumChatFormatting.GREEN + "2" + EnumChatFormatting.DARK_GRAY + " / "
+            + EnumChatFormatting.YELLOW + "3" + EnumChatFormatting.DARK_GRAY + " / "
+            + EnumChatFormatting.BLUE + "4";
+    /*used as an example when in the settings*/
+    private static final String DUMMY_TEXT_PLAYERS = EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 5 - RedPlayer 1\n"
+            + EnumChatFormatting.GREEN + "Green" + EnumChatFormatting.WHITE + ": 12 - GreenPlayer 2\n"
+            + EnumChatFormatting.YELLOW + "Yellow" + EnumChatFormatting.WHITE + ": 6 - YellowPlayer 3\n"
+            + EnumChatFormatting.BLUE + "Blue" + EnumChatFormatting.WHITE + ": 9 - BluePlayer 4";
 
-	private boolean dummy = false;
-	private static String displayText = "";
-	private FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+    private boolean dummy = false;
+    private static String displayText = "";
+    private final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
 
-	@Override
-	public void save(ScreenPosition pos) {
-		int x = pos.getAbsoluteX();
-		int y = pos.getAbsoluteY();
+    @Override
+    public void save(ScreenPosition pos) {
+        int x = pos.getAbsoluteX();
+        int y = pos.getAbsoluteY();
 
-		ConfigSetting.FKCOUNTER_HUD.getData().setScreenPos(x, y);
-		FKCounterMod.getConfigHandler().saveConfig();
-	}
+        ConfigSetting.FKCOUNTER_HUD.getData().setScreenPos(x, y);
+        FKCounterMod.getConfigHandler().saveConfig();
+    }
 
-	@Override
-	public ScreenPosition load() {
-		return ConfigSetting.FKCOUNTER_HUD.getData().getScreenPos();
-	}
+    @Override
+    public ScreenPosition load() {
+        return ConfigSetting.FKCOUNTER_HUD.getData().getScreenPos();
+    }
 
-	@Override
-	public int getHeight() {
-		if(ConfigSetting.COMPACT_HUD.getValue()) {
-			return fr.FONT_HEIGHT;
-		} else {
-			return fr.FONT_HEIGHT*4;
-		}
-	}
+    @Override
+    public int getHeight() {
+        if (ConfigSetting.COMPACT_HUD.getValue()) {
+            return fr.FONT_HEIGHT;
+        } else {
+            return fr.FONT_HEIGHT * 4;
+        }
+    }
 
-	@Override
-	public int getWidth() {
-		if(dummy) {
-			if(ConfigSetting.COMPACT_HUD.getValue()) {
-				return fr.getStringWidth(DUMMY_TEXT_COMPACT);
-			} else if(ConfigSetting.SHOW_PLAYERS.getValue()){
-				return getMultilineWidth(DUMMY_TEXT_PLAYERS);
-			} else {
-				return getMultilineWidth(DUMMY_TEXT);
-			}
-		}
-		return getMultilineWidth(getDisplayText());
-	}
+    @Override
+    public int getWidth() {
+        if (dummy) {
+            if (ConfigSetting.COMPACT_HUD.getValue()) {
+                return fr.getStringWidth(DUMMY_TEXT_COMPACT);
+            } else if (ConfigSetting.SHOW_PLAYERS.getValue()) {
+                return getMultilineWidth(DUMMY_TEXT_PLAYERS);
+            } else {
+                return getMultilineWidth(DUMMY_TEXT);
+            }
+        }
+        return getMultilineWidth(getDisplayText());
+    }
 
-	private int getMultilineWidth(String string) {
-		int maxwidth = 0;
-		for(String line : string.split("\n")) {
-			int width = fr.getStringWidth(line);
-			if(width > maxwidth) {
-				maxwidth = width;
-			}
-		}
-		return maxwidth;
-	}
+    private int getMultilineWidth(String string) {
+        int maxwidth = 0;
+        for (String line : string.split("\n")) {
+            int width = fr.getStringWidth(line);
+            if (width > maxwidth) {
+                maxwidth = width;
+            }
+        }
+        return maxwidth;
+    }
 
-	@Override
-	public void render(ScreenPosition position) {
-		// TODO ca s'affiche en dessous du scoreboard
-		// TODO ca se décale pendant les games
-		dummy = false;
+    @Override
+    public void render(ScreenPosition position) {
+        // TODO ca s'affiche en dessous du scoreboard
+        // TODO ca se dÃ©cale pendant les games
+        dummy = false;
 
-		int x = position.getAbsoluteX();
-		int y = position.getAbsoluteY();
+        int x = position.getAbsoluteX();
+        int y = position.getAbsoluteY();
 
-		if(ConfigSetting.DRAW_BACKGROUND.getValue()) {
-			drawRect(x - 1, y - 1, x + getWidth(), y + getHeight(), new Color(0, 0, 0, 64).getRGB());
-		}
+        if (ConfigSetting.DRAW_BACKGROUND.getValue()) {
+            drawRect(x - 1, y - 1, x + getWidth(), y + getHeight(), new Color(0, 0, 0, 64).getRGB());
+        }
 
-		drawMultilineString(getDisplayText(), x, y);
+        drawMultilineString(getDisplayText(), x, y);
 
-	}
+    }
 
-	@Override
-	public void renderDummy(ScreenPosition position) {
+    @Override
+    public void renderDummy(ScreenPosition position) {
 
-		dummy = true;
+        dummy = true;
 
-		int x = position.getAbsoluteX();
-		int y = position.getAbsoluteY();
+        int x = position.getAbsoluteX();
+        int y = position.getAbsoluteY();
 
-		int width = getWidth();
-		int height = getHeight();
+        int width = getWidth();
+        int height = getHeight();
 
-		int XtopLeft = x - 2;
-		int YtopLeft = y - 2;
+        int XtopLeft = x - 2;
+        int YtopLeft = y - 2;
 
-		int XtopRight = x + width + 1;
-		int YtopRight = YtopLeft;
+        int XtopRight = x + width + 1;
+        int YbotLeft = y + height;
 
-		int XbotLeft = XtopLeft;
-		int YbotLeft = y + height;
+        drawRect(XtopLeft, YtopLeft, XtopRight, YbotLeft, new Color(255, 255, 255, 127).getRGB());
+        drawHorizontalLine(XtopLeft, XtopRight, YtopLeft, Color.RED.getRGB());
+        drawHorizontalLine(XtopLeft, XtopRight, YbotLeft, Color.RED.getRGB());
+        drawVerticalLine(XtopLeft, YtopLeft, YbotLeft, Color.RED.getRGB());
+        drawVerticalLine(XtopRight, YtopLeft, YbotLeft, Color.RED.getRGB());
 
-		int XbotRight = XtopRight;
-		int YbotRight = YbotLeft;
+        if (ConfigSetting.COMPACT_HUD.getValue()) {
+            drawMultilineString(DUMMY_TEXT_COMPACT, x, y);
+        } else if (ConfigSetting.SHOW_PLAYERS.getValue()) {
+            drawMultilineString(DUMMY_TEXT_PLAYERS, x, y);
+        } else {
+            drawMultilineString(DUMMY_TEXT, x, y);
+        }
+    }
 
-		drawRect(XtopLeft, YtopLeft, XtopRight, YbotLeft, new Color(255, 255, 255, 127).getRGB());
-		drawHorizontalLine(XtopLeft, XtopRight, YtopLeft, Color.RED.getRGB());
-		drawHorizontalLine(XbotLeft, XbotRight, YbotLeft, Color.RED.getRGB());
-		drawVerticalLine(XtopLeft, YtopLeft, YbotLeft, Color.RED.getRGB());
-		drawVerticalLine(XtopRight, YtopRight, YbotLeft, Color.RED.getRGB());
+    @Override
+    public boolean isEnabled() {
+        return (ConfigSetting.FKCOUNTER_HUD.getValue() && FKCounterMod.isInMwGame() && KillCounter.getGameId() != null);
+    }
 
-		if(ConfigSetting.COMPACT_HUD.getValue()) {
-			drawMultilineString(DUMMY_TEXT_COMPACT, x, y);
-		} else if(ConfigSetting.SHOW_PLAYERS.getValue()){
-			drawMultilineString(DUMMY_TEXT_PLAYERS, x, y);
-		} else {
-			drawMultilineString(DUMMY_TEXT, x, y);
-		}
-	}
+    private void drawMultilineString(String msg, int x, int y) {
 
-	@Override
-	public boolean isEnabled() {
-		return (ConfigSetting.FKCOUNTER_HUD.getValue() && FKCounterMod.isInMwGame() && FKCounterMod.getKillCounter().getGameId() != null);
-	}
+        for (String line : msg.split("\n")) {
+            if (ConfigSetting.TEXT_SHADOW.getValue()) {
+                fr.drawStringWithShadow(line, x, y, 0);
+            } else {
+                fr.drawString(line, x, y, 0);
+            }
+            y += fr.FONT_HEIGHT;
+        }
+    }
 
-	private void drawMultilineString(String msg, int x, int y) {
+    private String getDisplayText() {
+        return displayText;
+    }
 
-		for(String line : msg.split("\n")) {
-			if(ConfigSetting.TEXT_SHADOW.getValue()) {
-				fr.drawStringWithShadow(line, x, y, 0);
-			} else {
-				fr.drawString(line, x, y, 0);
-			}			 
-			y += fr.FONT_HEIGHT;
-		}
-	}
+    public static void updateDisplayText() {
 
-	private String getDisplayText() {
-		return displayText;
-	}
+        if (KillCounter.getGameId() != null) {
 
-	public static void updateDisplayText() { 
+            HashMap<Integer, Integer> sortedmap = KillCounter.getSortedTeamKillsMap();
+            StringBuilder strBuilder = new StringBuilder();
+            int i = 0;
 
-		if(KillCounter.getGameId()!= null) {
+            if (ConfigSetting.COMPACT_HUD.getValue()) {
 
-			HashMap<Integer, Integer> sortedmap = KillCounter.getSortedTeamKillsMap();
-			displayText = "";				
+                for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
+                    strBuilder.append(i == 0 ? "" : EnumChatFormatting.DARK_GRAY + " / ")
+                            .append(KillCounter.getColorPrefixFromTeam(entry.getKey()))
+                            .append(entry.getValue());
+                    i++;
+                }
 
-			if(ConfigSetting.COMPACT_HUD.getValue()) {
+            } else if (ConfigSetting.SHOW_PLAYERS.getValue()) {
 
-				for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
-					displayText += (displayText.equals("") ? "" : EnumChatFormatting.DARK_GRAY + " / ") + KillCounter.getColorPrefixFromTeam(entry.getKey()) + entry.getValue() ;
-				}
-				return;
+                for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
+                    int team = entry.getKey();
+                    Tuple<String, Integer> tuple = KillCounter.getHighestFinalsPlayerOfTeam(team);
+                    strBuilder.append(i == 0 ? "" : "\n")
+                            .append(KillCounter.getColorPrefixFromTeam(team))
+                            .append(KillCounter.getTeamNameFromTeam(team)).append(EnumChatFormatting.WHITE)
+                            .append(": ").append(KillCounter.getKills(team))
+                            .append(tuple == null ? "" : " - " + tuple.getFirst() + " " + tuple.getSecond());
+                    i++;
+                }
 
-			} else if(ConfigSetting.SHOW_PLAYERS.getValue()) {
+            } else {
 
-				for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
-					int team = entry.getKey();
-					Tuple<String, Integer> tuple = KillCounter.getHighestFinalsPlayerOfTeam(team);
-					displayText += (displayText.equals("") ? "" : "\n") + KillCounter.getColorPrefixFromTeam(team) + KillCounter.getTeamNameFromTeam(team) 
-					+ EnumChatFormatting.WHITE + ": " + KillCounter.getKills(team) + (tuple == null ? "" : " - " + tuple.getFirst() + " " + tuple.getSecond());
-				}
-				return;
+                for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
+                    int team = entry.getKey();
+                    strBuilder.append(i == 0 ? "" : "\n")
+                            .append(KillCounter.getColorPrefixFromTeam(team))
+                            .append(KillCounter.getTeamNameFromTeam(team))
+                            .append(EnumChatFormatting.WHITE).append(": ")
+                            .append(KillCounter.getKills(team));
+                    i++;
+                }
 
-			} else {
+            }
 
-				for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
-					int team = entry.getKey();
-					displayText += (displayText.equals("") ? "" : "\n") + KillCounter.getColorPrefixFromTeam(team) + KillCounter.getTeamNameFromTeam(team) 
-					+ EnumChatFormatting.WHITE + ": " + KillCounter.getKills(team);
-				}
-				return;
+            displayText = strBuilder.toString();
 
-			}
+        }
 
-		}
-
-	}
+    }
 
 }

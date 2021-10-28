@@ -8,13 +8,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class KillCooldownEvent {
 
-	public static Minecraft mc = Minecraft.getMinecraft();
+	public static final Minecraft mc = Minecraft.getMinecraft();
 	private static long lastkilltime = 0;
-	private static String message;
 
 	public static void drawCooldownGui() {
 
-		if(!(System.currentTimeMillis() - lastkilltime < 60000)) { // doesn't update the cooldown if you used /kill in the last 60 seconds
+		if(!(System.currentTimeMillis() - lastkilltime < 60000L)) { // doesn't update the cooldown if you used /kill in the last 60 seconds
 			lastkilltime = System.currentTimeMillis();
 		}
 
@@ -30,8 +29,8 @@ public class KillCooldownEvent {
 		if(System.currentTimeMillis() - lastkilltime < 60000L) {
 
 			int timeleft = 60 - ((int)(System.currentTimeMillis() - lastkilltime))/1000;
-			message = "/kill cooldown : " + timeleft + "s";					
-			new KillCooldownGui(mc,message);
+			String message = "/kill cooldown : " + timeleft + "s";
+			new KillCooldownGui(mc, message);
 
 		}
 

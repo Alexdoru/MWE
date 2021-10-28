@@ -1,13 +1,8 @@
 package fr.alexdoru.fkcountermod.commands;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.gui.FKCounterConfigGuiScreen;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -15,7 +10,12 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
 
 public class CommandFKCounter extends CommandBase {
 
@@ -44,7 +44,7 @@ public class CommandFKCounter extends CommandBase {
 		} else if(args.length > 0 && ( args[0].equalsIgnoreCase("players") || args[0].equalsIgnoreCase("player")  || args[0].equalsIgnoreCase("p") ) ) {
 
 			if(KillCounter.getGameId() == null) {
-				ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "This is not available right now"));
+				addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "This is not available right now"));
 				return;
 			}
 			String msg = "";
@@ -60,13 +60,12 @@ public class CommandFKCounter extends CommandBase {
 			msg += KillCounter.getColorPrefixFromTeam(KillCounter.BLUE_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.BLUE_TEAM) + EnumChatFormatting.WHITE + ": " + 
 					(KillCounter.getPlayers(KillCounter.BLUE_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
 
-			ChatUtil.addChatMessage(new ChatComponentText(msg));
-			return;
+			addChatMessage(new ChatComponentText(msg));
 
 		} else if(args.length > 0 && args[0].equalsIgnoreCase("say")) {
 
 			if(KillCounter.getGameId() == null) {
-				ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "This is not available right now"));
+				addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "This is not available right now"));
 				return;
 			}
 
@@ -80,46 +79,40 @@ public class CommandFKCounter extends CommandBase {
 				msg += KillCounter.getTeamNameFromTeam(KillCounter.BLUE_TEAM) + ": " + KillCounter.getKills(KillCounter.BLUE_TEAM);
 
 				(Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg);
-				return;
 
 			} else if(args.length == 2 && args[1].equalsIgnoreCase("red")) {
 				
 				String msg = KillCounter.getTeamNameFromTeam(KillCounter.RED_TEAM) + ": " + (KillCounter.getPlayers(KillCounter.RED_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
 				(Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg);
-				return;
 
 			} else if(args.length == 2 && args[1].equalsIgnoreCase("green")) {
 				
 				String msg = KillCounter.getTeamNameFromTeam(KillCounter.GREEN_TEAM) + ": " + (KillCounter.getPlayers(KillCounter.GREEN_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
 				(Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg);
-				return;
 
 			} else if(args.length == 2 && args[1].equalsIgnoreCase("yellow")) {
 				
 				String msg = KillCounter.getTeamNameFromTeam(KillCounter.YELLOW_TEAM) + ": " + (KillCounter.getPlayers(KillCounter.YELLOW_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
 				(Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg);
-				return;
 
 			} else if(args.length == 2 && args[1].equalsIgnoreCase("blue")) {
 				
 				String msg = KillCounter.getTeamNameFromTeam(KillCounter.BLUE_TEAM) + ": " + (KillCounter.getPlayers(KillCounter.BLUE_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
 				(Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg);
-				return;
 
 			}
 
 		} else if(args.length > 0 && args[0].equalsIgnoreCase("help")) {
 
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + "\n"
+			addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + "\n"
 					+ EnumChatFormatting.RED + "/fks : prints the amount of finals per team in the chat \n"
 					+ EnumChatFormatting.RED + "/fks p or players : prints the amount of finals per player in the chat \n "
 					+ EnumChatFormatting.RED + "/fks say : makes you send a message in the chat with the amount of finals per team \n"
 					+ EnumChatFormatting.RED + "/fks settings : opens the settings GUI"));
-			return;
 
 		} else {
 			if(KillCounter.getGameId() == null) {
-				ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "This is not available right now"));
+				addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "This is not available right now"));
 				return;
 			}
 			String msg = "";
@@ -127,8 +120,7 @@ public class CommandFKCounter extends CommandBase {
 			msg += KillCounter.getColorPrefixFromTeam(KillCounter.GREEN_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.GREEN_TEAM) + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.GREEN_TEAM) + "\n";
 			msg += KillCounter.getColorPrefixFromTeam(KillCounter.YELLOW_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.YELLOW_TEAM) + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.YELLOW_TEAM) + "\n";
 			msg += KillCounter.getColorPrefixFromTeam(KillCounter.BLUE_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.BLUE_TEAM) + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.BLUE_TEAM);
-			ChatUtil.addChatMessage(new ChatComponentText(msg));
-			return;
+			addChatMessage(new ChatComponentText(msg));
 
 		}
 
@@ -136,7 +128,7 @@ public class CommandFKCounter extends CommandBase {
 	
 	@Override
 	public List<String> getCommandAliases() {
-		return Arrays.<String>asList(new String[] {"finalkillcounter"});
+		return Collections.singletonList("finalkillcounter");
 	}
 
 	@Override
@@ -145,6 +137,5 @@ public class CommandFKCounter extends CommandBase {
 		String[] colors = {"red","green","yellow","blue"};
 		return args.length == 1 ? getListOfStringsMatchingLastWord(args, fksarguments) : args.length == 2 ? getListOfStringsMatchingLastWord(args, colors) : null;
 	}
-
 
 }
