@@ -7,7 +7,6 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 
 public class CommandSetupApiKey extends CommandBase {
 
@@ -25,14 +24,12 @@ public class CommandSetupApiKey extends CommandBase {
 	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		
 		if(args.length != 1) {
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + "\n"
+			ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + "\n"
 					+ EnumChatFormatting.RED + "Connect on Hypixel and type \"/api new\" to get an Api key"));
-			return;	
 		} else {
 			HypixelApiKeyUtil.setApiKey(args[0]);
-			return;	
 		}
-		
+
 	}
 
 	@Override

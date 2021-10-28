@@ -1,8 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.events;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
@@ -18,6 +15,9 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ChatEvents {
 
@@ -85,7 +85,7 @@ public class ChatEvents {
 		if(matcherapikey.matches()) {
 			if(!MinecraftUtils.isHypixel()) {return false;}
 			String api_key = matcherapikey.group(1);	
-			HypixelApiKeyUtil.setApiKey(api_key);	    	    		    	
+			HypixelApiKeyUtil.setApiKey(api_key);
 			return true;
 		}
 		return false;

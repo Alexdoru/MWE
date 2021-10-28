@@ -2,9 +2,9 @@ package fr.alexdoru.nocheatersmod.data;
 
 public class TimeMark {
 	
-	public long timestamp;
-	public String serverID;
-	public String timerOnReplay;
+	public final long timestamp;
+	public final String serverID;
+	public final String timerOnReplay;
 	
 	public TimeMark(long timestamp, String serverID, String timerOnReplay) {
 		

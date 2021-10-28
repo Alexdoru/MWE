@@ -3,14 +3,13 @@ package fr.alexdoru.megawallsenhancementsmod.api.requests;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 
 public class HypixelPlayerStatus {
 
-	private boolean online;
+	private final boolean online;
 	private String gamemode;
 	private String mode;
 	private String map;
@@ -54,8 +53,6 @@ public class HypixelPlayerStatus {
 				this.map = mapelem.getAsString();                     // can be null    
 
 		}
-
-		return;
 
 	}
 

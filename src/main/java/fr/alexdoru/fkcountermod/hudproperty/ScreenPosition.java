@@ -5,7 +5,7 @@ import net.minecraft.client.gui.ScaledResolution;
 
 public final class ScreenPosition {
 
-	private Minecraft mc = Minecraft.getMinecraft();
+	private final Minecraft mc = Minecraft.getMinecraft();
 	
 	private double x, y;
 	

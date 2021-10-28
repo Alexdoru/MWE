@@ -33,7 +33,7 @@ public interface IRenderer extends IConfigExchange {
 	 * more conveniently than unregistering
 	 * it from the API.
 	 */
-	public default boolean isEnabled(){
+	default boolean isEnabled(){
 		return true;
 	}
 	

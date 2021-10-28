@@ -7,7 +7,6 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 
 public class CommandMWGameStats extends CommandBase {
 
@@ -27,7 +26,7 @@ public class CommandMWGameStats extends CommandBase {
 		if(MWGameStatsEvent.getGameStats() != null) {
 			ChatUtil.addChatMessage(MWGameStatsEvent.getGameStats().getGameStatMessage(MWGameStatsEvent.getFormattedname()));
 		} else {
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + "No game stats available"));
+			ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + "No game stats available"));
 		}
 		
 	}

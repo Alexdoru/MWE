@@ -1,10 +1,10 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import java.util.List;
 // https://github.com/5zig/The-5zig-Mod/blob/efce66b2cec83e76f40e4e18e96a2013a89e0a42/The%205zig%20Mod/src/eu/the5zig/mod/util/JsonUtil.java
 public class JsonUtil {
 

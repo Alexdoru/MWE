@@ -1,15 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
@@ -29,16 +21,25 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
+
 public class CommandScanGame extends CommandBase {
 
-	private static HashMap<String, IChatComponent> scanmap = new HashMap<String, IChatComponent>();
+	private static final HashMap<String, IChatComponent> scanmap = new HashMap<>();
 	private static String scanGameId;
-	public static final IChatComponent iprefix = (IChatComponent) new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + "" + EnumChatFormatting.BOLD + "\u26a0 ");
+	public static final IChatComponent iprefix = new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + "" + EnumChatFormatting.BOLD + "\u26a0 ");
 	public static final String prefix = iprefix.getFormattedText();
 	/*
 	 * fills the hashmap with this instead if null when there is no match
 	 */
-	public static final IChatComponent nomatch = (IChatComponent) new ChatComponentText("none");
+	public static final IChatComponent nomatch = new ChatComponentText("none");
 
 	@Override
 	public String getCommandName() {
@@ -53,13 +54,12 @@ public class CommandScanGame extends CommandBase {
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 
-		if(!HypixelApiKeyUtil.isApiKeySetup()) { // api key not setup
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.apikeyMissingErrorMsg()));
+		if(HypixelApiKeyUtil.apiKeyIsNotSetup()) {
+			addChatMessage(new ChatComponentText(ChatUtil.apikeyMissingErrorMsg()));
 			return;
 		}
 
 		String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
-
 		Collection<NetworkPlayerInfo> playerCollection = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
 
 		int nbcores = Runtime.getRuntime().availableProcessors();
@@ -67,7 +67,7 @@ public class CommandScanGame extends CommandBase {
 
 		int i = 0;
 
-		if(!currentGameId.equals("?") && scanGameId != null && currentGameId.equals(scanGameId)) {
+		if(!currentGameId.equals("?") && currentGameId.equals(scanGameId)) {
 
 			for (NetworkPlayerInfo networkPlayerInfo : playerCollection) {
 
@@ -78,12 +78,11 @@ public class CommandScanGame extends CommandBase {
 					i++;
 					service.submit(new ScanPlayerTask(networkPlayerInfo));
 				} else if (!imsg.equals(nomatch)) {
-					ChatUtil.addChatMessage(imsg);					
+					addChatMessage(imsg);
 				}
 
 			}
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " more players..."));
-			return;
+			addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " more players..."));
 
 		} else {
 
@@ -94,7 +93,7 @@ public class CommandScanGame extends CommandBase {
 				service.submit(new ScanPlayerTask(networkPlayerInfo));
 			}
 
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " players..."));
+			addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " players..."));
 
 		}
 
@@ -126,20 +125,20 @@ public class CommandScanGame extends CommandBase {
 
 class ScanPlayerTask implements Callable<String> {
 
-	NetworkPlayerInfo networkPlayerInfo;
+	final NetworkPlayerInfo networkPlayerInfo;
 
 	public ScanPlayerTask(NetworkPlayerInfo networkPlayerInfoIn) {
 		this.networkPlayerInfo = networkPlayerInfoIn;
 	}
 
 	@Override
-	public String call() throws Exception {
+	public String call() {
 
 		try {
 
 			String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
 			String playername = networkPlayerInfo.getGameProfile().getName();
-			CommandScanGame.getScanmap().put(uuid, (IChatComponent) new ChatComponentText("none"));
+			CommandScanGame.getScanmap().put(uuid, new ChatComponentText("none"));
 
 			HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
 			MegaWallsStats megawallsstats = new MegaWallsStats(playerdata.getPlayerData());
@@ -149,7 +148,7 @@ class ScanPlayerTask implements Callable<String> {
 					(megawallsstats.getGames_played() <= 500 && megawallsstats.getFkdr() > 8f)	|| // change it to 10
 					(megawallsstats.getFkdr() > 10f)) {
 				// RETIRER String formattedname = getFormattedName(networkPlayerInfo); //get the name from the logindata formatted name
-				IChatComponent msg = (IChatComponent) new ChatComponentText(ChatUtil.getTagMW())
+				IChatComponent msg = new ChatComponentText(ChatUtil.getTagMW())
 						.appendSibling(ChatUtil.makeReportButtons(playername, "bhop", ClickEvent.Action.RUN_COMMAND, ClickEvent.Action.SUGGEST_COMMAND))						
 						.appendSibling(new ChatComponentText(getFormattedName(networkPlayerInfo)
 								+ EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played() 
@@ -157,7 +156,7 @@ class ScanPlayerTask implements Callable<String> {
 								+ EnumChatFormatting.GRAY + " FK/game : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkpergame())
 								+ EnumChatFormatting.GRAY + " W/L : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getWlr())));				
 
-				ChatUtil.addChatMessage(msg);
+				addChatMessage(msg);
 				CommandScanGame.getScanmap().put(uuid, msg);
 				//if(NoCheatersMod.areIconsToggled()) {
 					this.networkPlayerInfo.setDisplayName(NameModifier.getTransformedDisplayName(this.networkPlayerInfo));
@@ -165,7 +164,7 @@ class ScanPlayerTask implements Callable<String> {
 				return null;
 			}
 
-			if(megawallsstats.getGames_played() == 0) { // TODO v�rifier que la classe equipee est bien la class qui flag
+			if(megawallsstats.getGames_played() == 0) { // TODO vérifier que la classe équipée est bien la class qui flag
 
 				JsonObject classesdata = megawallsstats.getClassesdata();
 				IChatComponent msg = new ChatComponentText("");
@@ -199,7 +198,7 @@ class ScanPlayerTask implements Callable<String> {
 				}
 
 				if(!msg.equals(new ChatComponentText(""))) {
-					ChatUtil.addChatMessage(msg);
+					addChatMessage(msg);
 					CommandScanGame.getScanmap().put(uuid, msg);
 					//if(NoCheatersMod.areIconsToggled()) {
 						this.networkPlayerInfo.setDisplayName(NameModifier.getTransformedDisplayName(this.networkPlayerInfo));
@@ -211,9 +210,9 @@ class ScanPlayerTask implements Callable<String> {
 		} catch (ApiException e) {
 
 			if(e.getMessage().equals("This player never joined Hypixel")) {
-				ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.DARK_GRAY + "This player never joined Hypixel"));
+				addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.DARK_GRAY + "This player never joined Hypixel"));
 			} else {
-				ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+				addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e.getMessage()));
 			}
 
 		}

@@ -35,9 +35,6 @@ public class DateUtil {
 	
 	/**
 	 * Returns the time since input as a string message
-	 * 
-	 * @param epoch
-	 * @return
 	 */
 	public static String timeSince(long epoch) {
 		
@@ -46,7 +43,7 @@ public class DateUtil {
 		
 		if(diff < 1000*60) { // less than 60 sec
 			
-			return String.valueOf(diff/1000) + "sec";
+			return diff / 1000 + "sec";
 			
 		} else if(diff < 1000*60*60) { // less than 60 minutes
 			
@@ -56,7 +53,7 @@ public class DateUtil {
 			sec = diff/1000;
 			min = sec/60;
 			
-			return String.valueOf(min) + "min"+ String.valueOf(sec%60) + "sec";
+			return min + "min"+ sec % 60 + "sec";
 			
 			
 		} else if(diff < 1000*60*60*24) { // less than 24hours
@@ -67,7 +64,7 @@ public class DateUtil {
 			min = diff/(1000*60);
 			hours = min/60;
 			
-			return String.valueOf(hours) + "h" + String.valueOf(min%60) + "min";
+			return hours + "h" + min % 60 + "min";
 			
 		} else { // more than a day
 			
@@ -79,7 +76,7 @@ public class DateUtil {
 			hours = min/60;
 			days = hours/24;
 			
-			return String.valueOf(days) + (days==1?"day":"days") + String.valueOf(hours%24) + "h";
+			return days + (days==1?"day":"days") + hours % 24 + "h";
 			//return String.valueOf(days) + (days==1?"day":"days") + String.valueOf(hours%24) + "h" + String.valueOf(min%60) + "min";
 			
 		}

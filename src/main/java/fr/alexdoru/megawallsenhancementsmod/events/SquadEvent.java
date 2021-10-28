@@ -1,8 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.events;
 
-import java.util.HashMap;
-import java.util.List;
-
 import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.misc.NameModifier;
@@ -16,126 +13,129 @@ import net.minecraft.util.IChatComponent;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class SquadEvent {
-	
-	// TODO se rajouter soit meme et mettre une commande pour mettre son propre nick
 
-	private static HashMap<String, String> squadmap = new HashMap<String, String>();
-	private static final IChatComponent iprefix = (IChatComponent) new ChatComponentText(EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] ");
-	private static final String prefix = iprefix.getFormattedText();
+    // TODO se rajouter soit meme et mettre une commande pour mettre son propre nick
 
-	@SubscribeEvent
-	public void onNameFormat(NameFormat event) {
-		
-		if(!NoCheatersMod.areIconsToggled()) {
-			return;
-		}
+    private static final HashMap<String, String> squadmap = new HashMap<>();
+    private static final IChatComponent iprefix = new ChatComponentText(EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] ");
+    private static final String prefix = iprefix.getFormattedText();
 
-		String squadname = squadmap.get(event.username);
-		if(squadname != null) {
-			
-			if(event.displayname.contains(prefix)) {
-				return;
-			}
-			
-			event.displayname = squadname;
-			EntityPlayer player = (EntityPlayer) event.entity;
-			player.addPrefix(iprefix);
-		}
+    @SubscribeEvent
+    public void onNameFormat(NameFormat event) {
 
-	}
+        if (!NoCheatersMod.areIconsToggled()) {
+            return;
+        }
 
-	public static void addPlayer(String playername) {
-		squadmap.put(playername, playername);
-		NameModifier.transformDisplayName(playername);
-	}
+        String squadname = squadmap.get(event.username);
+        if (squadname != null) {
 
-	public static void addPlayer(String playername, String newname) {
-		squadmap.put(playername, newname);
-	}
+            if (event.displayname.contains(prefix)) {
+                return;
+            }
 
-	public static boolean removePlayer(String playername) {
-		boolean success = false;
-		success = squadmap.get(playername) != null;
-		squadmap.remove(playername);
-		if(success) {NameModifier.transformDisplayName(playername);}
-		return success;
-	}
+            event.displayname = squadname;
+            EntityPlayer player = (EntityPlayer) event.entity;
+            player.addPrefix(iprefix);
+        }
 
-	public static void clearSquad() {
-		squadmap.clear();
-	}
+    }
 
-	public static HashMap<String, String> getSquad() {
-		return squadmap;
-	}
+    public static void addPlayer(String playername) {
+        squadmap.put(playername, playername);
+        NameModifier.transformDisplayName(playername);
+    }
 
-	public static IChatComponent getIprefix() {
-		return iprefix;
-	}
+    public static void addPlayer(String playername, String newname) {
+        squadmap.put(playername, newname);
+    }
 
-	public static String getprefix() {
-		return prefix;
-	}
+    public static boolean removePlayer(String playername) {
+        boolean success = squadmap.remove(playername) != null;
+        if (success) {
+            NameModifier.transformDisplayName(playername);
+        }
+        return success;
+    }
 
-	/**
-	 * At the start of any game it checks the scoreboard for teamates and adds them to the team
-	 * if you have the same teamates it keeps the nicks you gave them
-	 */
-	public static void formSquad() {
+    public static void clearSquad() {
+        squadmap.clear();
+    }
 
-		Minecraft mc = Minecraft.getMinecraft();
+    public static HashMap<String, String> getSquad() {
+        return squadmap;
+    }
 
-		if (mc.theWorld == null || !MinecraftUtils.isHypixel()) {
-			return;
-		}
+    public static IChatComponent getIprefix() {
+        return iprefix;
+    }
 
-		Scoreboard scoreboard = mc.theWorld.getScoreboard();
-		if (scoreboard == null) {
-			return;
-		}
-			
-		boolean isinMW = ScoreboardUtils.getUnformattedSidebarTitle(scoreboard).contains("MEGA WALLS");
+    public static String getprefix() {
+        return prefix;
+    }
 
-		if(!isinMW) {
-			return;
-		}
-		
-		List<String> scoresRaw = ScoreboardUtils.getUnformattedSidebarText();
-		boolean found_teammates = false;
+    /**
+     * At the start of any game it checks the scoreboard for teamates and adds them to the team
+     * if you have the same teamates it keeps the nicks you gave them
+     */
+    public static void formSquad() {
 
-		HashMap<String, String> newsquad = new HashMap<String, String>();
+        Minecraft mc = Minecraft.getMinecraft();
 
-		for(String line : scoresRaw) {
-			
-			if(found_teammates) {
+        if (mc.theWorld == null || !MinecraftUtils.isHypixel()) {
+            return;
+        }
 
-				if(line.contains("www.hypixel.net") || line.contains("HAPPY HOUR!") || line.equals("")) {
-					break;
-				}
+        Scoreboard scoreboard = mc.theWorld.getScoreboard();
+        if (scoreboard == null) {
+            return;
+        }
 
-				String nameonscoreboard = line.replace(" ", "");
-				String squadmate = squadmap.get(nameonscoreboard);
-				/*
-				 * the player was already in the squad before, reuse the same name transformation
-				 */
-				if(squadmate == null) {
-					newsquad.put(nameonscoreboard, nameonscoreboard);
-				} else {
-					newsquad.put(nameonscoreboard, squadmate);
-				}
+        boolean isinMW = ScoreboardUtils.getUnformattedSidebarTitle(scoreboard).contains("MEGA WALLS");
 
-			}
-			
-			if(line.contains("Teammates:")) {
-				found_teammates = true;
-			}
+        if (!isinMW) {
+            return;
+        }
 
-		}
-		
-		squadmap.clear();
-		squadmap.putAll(newsquad);
+        List<String> scoresRaw = ScoreboardUtils.getUnformattedSidebarText();
+        boolean found_teammates = false;
 
-	}
+        HashMap<String, String> newsquad = new HashMap<>();
+
+        for (String line : scoresRaw) {
+
+            if (found_teammates) {
+
+                if (line.contains("www.hypixel.net") || line.contains("HAPPY HOUR!") || line.equals("")) {
+                    break;
+                }
+
+                String nameonscoreboard = line.replace(" ", "");
+                String squadmate = squadmap.get(nameonscoreboard);
+                /*
+                 * the player was already in the squad before, reuse the same name transformation
+                 */
+                if (squadmate == null) {
+                    newsquad.put(nameonscoreboard, nameonscoreboard);
+                } else {
+                    newsquad.put(nameonscoreboard, squadmate);
+                }
+
+            }
+
+            if (line.contains("Teammates:")) {
+                found_teammates = true;
+            }
+
+        }
+
+        squadmap.clear();
+        squadmap.putAll(newsquad);
+
+    }
 
 }

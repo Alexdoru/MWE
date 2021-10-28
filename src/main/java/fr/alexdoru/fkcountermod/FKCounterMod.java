@@ -23,7 +23,6 @@ public class FKCounterMod {
 	public static final String VERSION = "2.6";   
 	private static ConfigHandler configHandler;
 	private static HudPropertyApi hudManager;
-	private static KillCounter killCounter;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -32,11 +31,9 @@ public class FKCounterMod {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		
-		killCounter = new KillCounter();
 
 		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.register(killCounter);
+		MinecraftForge.EVENT_BUS.register(new KillCounter());
 		MinecraftForge.EVENT_BUS.register(new ScoreboardEvent());
 
 		hudManager = HudPropertyApi.newInstance();
@@ -57,10 +54,10 @@ public class FKCounterMod {
 			
 			String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId(); // this is not null due to how the event is defined/Posted
 
-			if (killCounter.getGameId() == null || !killCounter.getGameId().equals(currentGameId)) {
-				killCounter.ResetKillCounterTo(currentGameId);				
+			if (KillCounter.getGameId() == null || !KillCounter.getGameId().equals(currentGameId)) {
+				KillCounter.ResetKillCounterTo(currentGameId);
 			}
-			
+
 			return;
 		}
 		
@@ -68,15 +65,13 @@ public class FKCounterMod {
 		 * to fix the bug where the FKCounter doesn't work properly if you play two games in a row on a server with the same serverID
 		 */
 		if(event.getType() == MwGameEvent.EventType.GAME_END) {
-			killCounter.ResetKillCounterTo(null);
-			return;
+			KillCounter.ResetKillCounterTo(null);
 		}
 		
 	}
 	
 	/**
 	 * Returns true during a mega walls game
-	 * @return
 	 */
 	public static boolean isInMwGame() {
 		return (ScoreboardEvent.getMwScoreboardParser().getGameId() != null);
@@ -84,14 +79,9 @@ public class FKCounterMod {
 
 	/**
 	 * Returns true during the preparation phase of a mega walls game
-	 * @return
 	 */
 	public static boolean isitPrepPhase() {
 		return (ScoreboardEvent.getMwScoreboardParser().isitPrepPhase());
-	}
-
-	public static KillCounter getKillCounter() {
-		return killCounter;
 	}
 
 	public static ConfigHandler getConfigHandler() {

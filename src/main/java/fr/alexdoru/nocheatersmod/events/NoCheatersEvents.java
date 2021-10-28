@@ -23,289 +23,273 @@ import java.util.Date;
 
 public class NoCheatersEvents {
 
-	private static int ticks = 0;
-	public static final IChatComponent iprefix = (IChatComponent) new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + "\u26a0 ");
-	public static final String prefix = iprefix.getFormattedText();
-	public static final IChatComponent iprefix_bhop = (IChatComponent) new ChatComponentText(EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD + "\u26a0 ");
-	public static final String prefix_bhop = iprefix_bhop.getFormattedText();
-
-	@SubscribeEvent
-	public void onGui(GuiOpenEvent event) { //resets the ticks counter when you have a loading screen
-		if (event.gui instanceof GuiDownloadTerrain)
-			ticks = 0; 
-	}
-
-	@SubscribeEvent
-	public void onTick(TickEvent.ClientTickEvent event) {  // scans your world 2 seconds avec joining // TODO ajouter un decompte pour pas que ca envoie toutes les commandes auto report en meme temps
-		if (!NoCheatersMod.areWarningsToggled() || !(Minecraft.getMinecraft()).inGameHasFocus) {
-			return; 
-		}
-		if (ticks == 39) {
-			scanCurrentWorld();
-		} else if (ticks < 39) {
-			ticks++;
-		} 
-	}
-
-	@SubscribeEvent
-	public void onPlayerJoin(EntityJoinWorldEvent event) { // check chaque nouveau joueur qui est rendu dans le jeu
-		
-		// TODO ca met le triangle scangame sur le mec en squad
-		
-		if (ticks < 40 || (Minecraft.getMinecraft()).thePlayer == null || !(event.entity instanceof EntityPlayer)) 
-			return; 
-
-		EntityPlayer player = (EntityPlayer)event.entity;
-		String uuid = player.getUniqueID().toString().replace("-", "");
-		String playerName = player.getName();
-		WDR wdr = WdredPlayers.getWdredMap().get(uuid);
-		boolean printmsg = false;
-		long timenow = (new Date()).getTime();
-
-		if(wdr == null) {
-			wdr = WdredPlayers.getWdredMap().get(playerName);
-			if(wdr != null) {
-				uuid = playerName;
-			}
-		}
-
-		if(wdr != null && NoCheatersMod.isAutoreportToggled()) {
-			if(timenow - wdr.timestamp > NoCheatersMod.getTimebetweenreports() && timenow - wdr.timestamp < NoCheatersMod.getTimeautoreport()) {
-				ClientCommandHandler.instance.executeCommand(Minecraft.getMinecraft().thePlayer, "/sendreportagain " + uuid + " " + playerName);
-			}
-		}
-
-		if (wdr != null) {
-
-			if(wdr.hacks.contains("bhop")) {
-				if(NoCheatersMod.areIconsToggled()) {
-					player.addPrefix(iprefix_bhop);
-					player.refreshDisplayName();
-				}
-				printmsg = true;
-			} else if(!(wdr.isOnlyStalking())){
-				if(NoCheatersMod.areIconsToggled()) {
-					player.addPrefix(iprefix);
-					player.refreshDisplayName();
-				}
-				printmsg = true;
-			}
+    private static int ticks = 0;
+    public static final IChatComponent iprefix = new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + "\u26a0 ");
+    public static final String prefix = iprefix.getFormattedText();
+    public static final IChatComponent iprefix_bhop = new ChatComponentText(EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD + "\u26a0 ");
+    public static final String prefix_bhop = iprefix_bhop.getFormattedText();
+
+    @SubscribeEvent
+    public void onGui(GuiOpenEvent event) { //resets the ticks counter when you have a loading screen
+        if (event.gui instanceof GuiDownloadTerrain)
+            ticks = 0;
+    }
+
+    @SubscribeEvent
+    public void onTick(TickEvent.ClientTickEvent event) {  // scans your world 2 seconds avec joining // TODO ajouter un decompte pour pas que ca envoie toutes les commandes auto report en meme temps
+        if (!NoCheatersMod.areWarningsToggled() || !(Minecraft.getMinecraft()).inGameHasFocus) {
+            return;
+        }
+        if (ticks == 39) {
+            scanCurrentWorld();
+        } else if (ticks < 39) {
+            ticks++;
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerJoin(EntityJoinWorldEvent event) { // check chaque nouveau joueur qui est rendu dans le jeu
+
+        // TODO ca met le triangle scangame sur le mec en squad
+
+        if (ticks < 40 || (Minecraft.getMinecraft()).thePlayer == null || !(event.entity instanceof EntityPlayer))
+            return;
+
+        EntityPlayer player = (EntityPlayer) event.entity;
+        String uuid = player.getUniqueID().toString().replace("-", "");
+        String playerName = player.getName();
+        WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+        boolean printmsg = false;
+        long timenow = (new Date()).getTime();
+
+        if (wdr == null) {
+            wdr = WdredPlayers.getWdredMap().get(playerName);
+            if (wdr != null) {
+                uuid = playerName;
+            }
+        }
 
-			if(NoCheatersMod.areWarningsToggled() && printmsg) {
-				String chatmessage = createwarningmessage(timenow, uuid, playerName, wdr) ;
-				(Minecraft.getMinecraft()).thePlayer.addChatComponentMessage(IChatComponent.Serializer.jsonToComponent(chatmessage));
-			}
+        if (wdr != null && NoCheatersMod.isAutoreportToggled()) {
+            if (timenow - wdr.timestamp > NoCheatersMod.getTimebetweenreports() && timenow - wdr.timestamp < NoCheatersMod.getTimeautoreport()) {
+                ClientCommandHandler.instance.executeCommand(Minecraft.getMinecraft().thePlayer, "/sendreportagain " + uuid + " " + playerName);
+            }
+        }
 
-		} else if(NoCheatersMod.areIconsToggled()) {
+        if (wdr != null) {
 
-			IChatComponent imsg = CommandScanGame.getScanmap().get(uuid);
-			if(imsg != null && !imsg.equals(CommandScanGame.nomatch)) {				
-				player.addPrefix(CommandScanGame.iprefix);
-				player.refreshDisplayName();
-			}
+            if (wdr.hacks.contains("bhop")) {
+                if (NoCheatersMod.areIconsToggled()) {
+                    player.addPrefix(iprefix_bhop);
+                    player.refreshDisplayName();
+                }
+                printmsg = true;
+            } else if (!(wdr.isOnlyStalking())) {
+                if (NoCheatersMod.areIconsToggled()) {
+                    player.addPrefix(iprefix);
+                    player.refreshDisplayName();
+                }
+                printmsg = true;
+            }
 
-		}
+            if (NoCheatersMod.areWarningsToggled() && printmsg) {
+                String chatmessage = createwarningmessage(timenow, uuid, playerName, wdr);
+                (Minecraft.getMinecraft()).thePlayer.addChatComponentMessage(IChatComponent.Serializer.jsonToComponent(chatmessage));
+            }
 
-	}
+        } else if (NoCheatersMod.areIconsToggled()) {
 
-	public static void scanCurrentWorld() { // TODO ajouter le autoreport
-		
-		long timenow = (new Date()).getTime();
+            IChatComponent imsg = CommandScanGame.getScanmap().get(uuid);
+            if (imsg != null && !imsg.equals(CommandScanGame.nomatch)) {
+                player.addPrefix(CommandScanGame.iprefix);
+                player.refreshDisplayName();
+            }
 
-		try {
+        }
 
-			for (NetworkPlayerInfo networkPlayerInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {	        
+    }
 
-				String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-				String playerName = networkPlayerInfo.getGameProfile().getName();
-				WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+    public static void scanCurrentWorld() { // TODO ajouter le autoreport
 
-				if(wdr == null) {
-					wdr = WdredPlayers.getWdredMap().get(playerName);
-					if(wdr != null) {
-						uuid = playerName;
-					}
-				}
-				
-				if (wdr == null) {
-					continue; 
-				}
+        long timenow = (new Date()).getTime();
 
-				String chatmessage = createwarningmessage(timenow, uuid, playerName, wdr);
-				(Minecraft.getMinecraft()).thePlayer.addChatComponentMessage(IChatComponent.Serializer.jsonToComponent(chatmessage));
-			}
+        try {
 
-		} catch (Exception exception) {
+            for (NetworkPlayerInfo networkPlayerInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
 
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagNoCheaters() +
-					EnumChatFormatting.RED + "Error, scan incomplete"));
-		}
+                String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
+                String playerName = networkPlayerInfo.getGameProfile().getName();
+                WDR wdr = WdredPlayers.getWdredMap().get(uuid);
 
-		ticks++;
-	}
+                if (wdr == null) {
+                    wdr = WdredPlayers.getWdredMap().get(playerName);
+                    if (wdr != null) {
+                        uuid = playerName;
+                    }
+                }
 
-	public static String createwarningmessage(long datenow, String uuid, String playername, WDR wdr) {
-		// format for timestamps reports : UUID timestamplastreport -serverID timeonreplay playernameduringgame timestampforcheat specialcheat cheat1 cheat2 cheat3 etc
-		if(wdr.hacks.get(0).charAt(0) == '-') { // is a timestamped report
+                if (wdr == null) {
+                    continue;
+                }
 
-			String [] formattedmessageArray = createPlayerTimestampedMsg(playername, wdr, "light_purple");
-			String allCheats = formattedmessageArray[1];
+                String chatmessage = createwarningmessage(timenow, uuid, playerName, wdr);
+                (Minecraft.getMinecraft()).thePlayer.addChatComponentMessage(IChatComponent.Serializer.jsonToComponent(chatmessage));
+            }
 
-			String message = "[\"\",{\"text\":\"Warning : \",\"color\":\"red\"}" + formattedmessageArray[0] + ",{\"text\":\" joined,\",\"color\":\"gray\"}";
+        } catch (Exception exception) {
 
-			if(datenow - wdr.timestamp > NoCheatersMod.getTimebetweenreports()) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
+            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+                    EnumChatFormatting.RED + "Error, scan incomplete"));
+        }
 
-				message = message + ",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain " + uuid + " " + playername +"\"}"
+        ticks++;
+    }
 
-					+ ",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click here to report this player again\",\"color\":\"yellow\"}]}}";
+    public static String createwarningmessage(long datenow, String uuid, String playername, WDR wdr) {
+        // format for timestamps reports : UUID timestamplastreport -serverID timeonreplay playernameduringgame timestampforcheat specialcheat cheat1 cheat2 cheat3 etc
+        if (wdr.hacks.get(0).charAt(0) == '-') { // is a timestamped report
 
-			}
+            String[] formattedmessageArray = createPlayerTimestampedMsg(playername, wdr, "light_purple");
+            String allCheats = formattedmessageArray[1];
 
-			return message + ",{\"text\":\" Cheats : \",\"color\":\"gray\"},{\"text\":\"" + allCheats + "\",\"color\":\"dark_blue\"}]";
+            String message = "[\"\",{\"text\":\"Warning : \",\"color\":\"red\"}" + formattedmessageArray[0] + ",{\"text\":\" joined,\",\"color\":\"gray\"}";
 
-		} else { // report not timestamped
+            if (datenow - wdr.timestamp > NoCheatersMod.getTimebetweenreports()) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
 
-			String cheats = "";
+                message = message + ",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain " + uuid + " " + playername + "\"}"
 
-			for (String hack : wdr.hacks) {
-				cheats = cheats + " " + hack;
-			}
+                        + ",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click here to report this player again\",\"color\":\"yellow\"}]}}";
 
-			String message = "[\"\",{\"text\":\"Warning : \",\"color\":\"red\"},{\"text\":\"" + playername + "\",\"color\":\"light_purple\""
+            }
 
-		    		+ ",\"hoverEvent\":{\"action\":\"show_text\",\"value\":"
+            return message + ",{\"text\":\" Cheats : \",\"color\":\"gray\"},{\"text\":\"" + allCheats + "\",\"color\":\"dark_blue\"}]";
 
-					+ "[\"\",{\"text\":\"" + playername + "\",\"color\":\"light_purple\"},{\"text\":\"\\n\"},"
+        } else { // report not timestamped
 
-					+ "{\"text\":\"Reported at : \",\"color\":\"green\"},{\"text\":\"" + DateUtil.localformatTimestamp(wdr.timestamp) + "\",\"color\":\"yellow\"},{\"text\":\"\\n\"},"
+            StringBuilder cheats = new StringBuilder();
 
-					+ "{\"text\":\"Reported for :\",\"color\":\"green\"},{\"text\":\"" + cheats + "\",\"color\":\"gold\"},{\"text\":\"\\n\\n\"},"
+            for (String hack : wdr.hacks) {
+                cheats.append(" ").append(hack);
+            }
 
-					+ "{\"text\":\"Click this message to stop receiving warnings for this player\",\"color\":\"yellow\"},{\"text\":\" \"}]}"
+            StringBuilder message = new StringBuilder("[\"\",{\"text\":\"Warning : \",\"color\":\"red\"},{\"text\":\"" + playername + "\",\"color\":\"light_purple\""
 
-					+ ",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/unwdr " + uuid + " " + playername + "\"}}"
+                    + ",\"hoverEvent\":{\"action\":\"show_text\",\"value\":"
 
-					+ ",{\"text\":\" joined,\",\"color\":\"gray\"}";
+                    + "[\"\",{\"text\":\"" + playername + "\",\"color\":\"light_purple\"},{\"text\":\"\\n\"},"
 
-			if(datenow - wdr.timestamp > NoCheatersMod.getTimebetweenreports() && !(wdr.isOnlyStalking())) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
+                    + "{\"text\":\"Reported at : \",\"color\":\"green\"},{\"text\":\"" + DateUtil.localformatTimestamp(wdr.timestamp) + "\",\"color\":\"yellow\"},{\"text\":\"\\n\"},"
 
-				message = message + ",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain " + uuid + " " + playername + "\"}"
+                    + "{\"text\":\"Reported for :\",\"color\":\"green\"},{\"text\":\"" + cheats + "\",\"color\":\"gold\"},{\"text\":\"\\n\\n\"},"
 
-					+ ",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click here to report this player again\",\"color\":\"yellow\"}]}}";
+                    + "{\"text\":\"Click this message to stop receiving warnings for this player\",\"color\":\"yellow\"},{\"text\":\" \"}]}"
 
-			}
+                    + ",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/unwdr " + uuid + " " + playername + "\"}}"
 
-			message = message + ",{\"text\":\" Cheats : \",\"color\":\"gray\"}";
+                    + ",{\"text\":\" joined,\",\"color\":\"gray\"}");
 
-			for (String hack : wdr.hacks) {
-				if(hack.equalsIgnoreCase("bhop")) {
-					message = message + ",{\"text\":\"" + hack + " " + "\",\"color\":\"dark_red\"}";
-				} else if(hack.contains("stalk")) {
-					message = message + ",{\"text\":\"" + hack + " " + "\",\"color\":\"dark_green\"}";					
-				} else if(hack.equalsIgnoreCase("nick")) {
-					message = message + ",{\"text\":\"" + hack + " " + "\",\"color\":\"dark_purple\"}";					
-				} else {
-					message = message + ",{\"text\":\"" + hack + " " + "\",\"color\":\"gold\"}";					
-				}											
-			}
+            if (datenow - wdr.timestamp > NoCheatersMod.getTimebetweenreports() && !(wdr.isOnlyStalking())) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
 
-			return message + "]";
+                message.append(",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain ").append(uuid).append(" ").append(playername).append("\"}").append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click here to report this player again\",\"color\":\"yellow\"}]}}");
 
-		}
+            }
 
-	}
+            message.append(",{\"text\":\" Cheats : \",\"color\":\"gray\"}");
 
-	/**
-	 * Return an array with new String[]{message,allCheats};
-	 * "message" is a message with the player name and an hover event on top with the timestamped report info
-	 * allCheats is a list of all the hacks for this player
-	 */
-	public static String[] createPlayerTimestampedMsg(String playername, WDR wdr, String namecolor) { 
+            for (String hack : wdr.hacks) {
+                if (hack.equalsIgnoreCase("bhop")) {
+                    message.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"dark_red\"}");
+                } else if (hack.contains("stalk")) {
+                    message.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"dark_green\"}");
+                } else if (hack.equalsIgnoreCase("nick")) {
+                    message.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"dark_purple\"}");
+                } else {
+                    message.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"gold\"}");
+                }
+            }
 
-		String cheats = "";
-		Long timestamphackreport = 0L ;
-		String allCheats="";
-		String serverID="";
-		String timeronreplay="";
-		String playernamewhenreported="";
-		String oldname="";
-		Long oldtimestamp=0L;
-		String oldgameID="";
-		String message = ",{\"text\":\"" + playername + "\",\"color\":\"" + namecolor + "\""
+            return message + "]";
 
-	    		+ ",\"hoverEvent\":{\"action\":\"show_text\",\"value\":"
+        }
 
-				+ "[\"\",{\"text\":\"" + playername + "\",\"color\":\"light_purple\"}";
+    }
 
-		int j = 0; // indice of timestamp
-		for(int i=0; i < wdr.hacks.size(); i++) {
+    /**
+     * Return an array with new String[]{message,allCheats};
+     * "message" is a message with the player name and a hover event on top with the timestamped report info
+     * allCheats is a list of all the hacks for this player
+     */
+    public static String[] createPlayerTimestampedMsg(String playername, WDR wdr, String namecolor) {
 
-			if((wdr.hacks.get(i).charAt(0) == '-' && i!=0) || i==wdr.hacks.size()-1) { // constructmessage
+        String cheats = "";
+        long timestamphackreport = 0L;
+        StringBuilder allCheats = new StringBuilder();
+        String serverID = "";
+        String timeronreplay = "";
+        String playernamewhenreported = "";
+        String oldname = "";
+        long oldtimestamp = 0L;
+        String oldgameID = "";
+        StringBuilder message = new StringBuilder(",{\"text\":\"" + playername + "\",\"color\":\"" + namecolor + "\""
 
-				if(i==wdr.hacks.size()-1) { 
-					cheats = cheats + " " + wdr.hacks.get(i);
-					allCheats = allCheats + (allCheats.contains(wdr.hacks.get(i)) ? "" : " " + wdr.hacks.get(i));
-				}
+                + ",\"hoverEvent\":{\"action\":\"show_text\",\"value\":"
 
-				if(serverID.equals(oldgameID) && Math.abs(timestamphackreport-oldtimestamp) < 3000000 && playernamewhenreported.equals(oldname) ) { // if it is same server ID and reports
+                + "[\"\",{\"text\":\"" + playername + "\",\"color\":\"light_purple\"}");
 
-					message = message + ",{\"text\":\"\\n\"},{\"text\":\"Reported at (EST - server time) : \",\"color\":\"green\"},{\"text\":\"" + DateUtil.ESTformatTimestamp(timestamphackreport) + "\",\"color\":\"yellow\"},{\"text\":\"\\n\"},"
+        int j = 0; // indice of timestamp
+        for (int i = 0; i < wdr.hacks.size(); i++) {
 
-				+ "{\"text\":\"Timer on replay (approx.) : \",\"color\":\"green\"},{\"text\":\"" + timeronreplay + "\",\"color\":\"gold\"},{\"text\":\"\\n\"},"
+            if ((wdr.hacks.get(i).charAt(0) == '-' && i != 0) || i == wdr.hacks.size() - 1) { // constructmessage
 
-				+ "{\"text\":\"Timestamp for : \",\"color\":\"green\"},{\"text\":\"" + cheats + "\",\"color\":\"gold\"}" + ( (i==wdr.hacks.size()-1) ? "" : ",{\"text\":\"\\n\"}");
+                if (i == wdr.hacks.size() - 1) {
+                    cheats = cheats + " " + wdr.hacks.get(i);
+                    allCheats.append(allCheats.toString().contains(wdr.hacks.get(i)) ? "" : " " + wdr.hacks.get(i));
+                }
 
-				} else {
+                if (serverID.equals(oldgameID) && Math.abs(timestamphackreport - oldtimestamp) < 3000000 && playernamewhenreported.equals(oldname)) { // if it is same server ID and reports
 
-					message = message + ",{\"text\":\"\\n\"},{\"text\":\"Reported at (EST - server time) : \",\"color\":\"green\"},{\"text\":\"" + DateUtil.ESTformatTimestamp(timestamphackreport) + "\",\"color\":\"yellow\"},{\"text\":\"\\n\"},"
+                    message.append(",{\"text\":\"\\n\"},{\"text\":\"Reported at (EST - server time) : \",\"color\":\"green\"},{\"text\":\"").append(DateUtil.ESTformatTimestamp(timestamphackreport)).append("\",\"color\":\"yellow\"},{\"text\":\"\\n\"},").append("{\"text\":\"Timer on replay (approx.) : \",\"color\":\"green\"},{\"text\":\"").append(timeronreplay).append("\",\"color\":\"gold\"},{\"text\":\"\\n\"},").append("{\"text\":\"Timestamp for : \",\"color\":\"green\"},{\"text\":\"").append(cheats).append("\",\"color\":\"gold\"}").append((i == wdr.hacks.size() - 1) ? "" : ",{\"text\":\"\\n\"}");
 
-				+ "{\"text\":\"Playername at the moment of the report : \",\"color\":\"green\"},{\"text\":\"" + playernamewhenreported + "\",\"color\":\"red\"},{\"text\":\"\\n\"},"
+                } else {
 
-				+ "{\"text\":\"ServerID : \",\"color\":\"green\"},{\"text\":\"" + serverID + "\",\"color\":\"gold\"}," 
+                    message.append(",{\"text\":\"\\n\"},{\"text\":\"Reported at (EST - server time) : \",\"color\":\"green\"},{\"text\":\"").append(DateUtil.ESTformatTimestamp(timestamphackreport)).append("\",\"color\":\"yellow\"},{\"text\":\"\\n\"},").append("{\"text\":\"Playername at the moment of the report : \",\"color\":\"green\"},{\"text\":\"").append(playernamewhenreported).append("\",\"color\":\"red\"},{\"text\":\"\\n\"},").append("{\"text\":\"ServerID : \",\"color\":\"green\"},{\"text\":\"").append(serverID).append("\",\"color\":\"gold\"},").append("{\"text\":\" Timer on replay (approx.) : \",\"color\":\"green\"},{\"text\":\"").append(timeronreplay).append("\",\"color\":\"gold\"},{\"text\":\"\\n\"},").append("{\"text\":\"Timestamp for : \",\"color\":\"green\"},{\"text\":\"").append(cheats).append("\",\"color\":\"gold\"}").append((i == wdr.hacks.size() - 1) ? "" : ",{\"text\":\"\\n\"}");
 
-				+ "{\"text\":\" Timer on replay (approx.) : \",\"color\":\"green\"},{\"text\":\"" + timeronreplay + "\",\"color\":\"gold\"},{\"text\":\"\\n\"},"
+                }
 
-				+ "{\"text\":\"Timestamp for : \",\"color\":\"green\"},{\"text\":\"" + cheats + "\",\"color\":\"gold\"}" + ( (i==wdr.hacks.size()-1) ? "" : ",{\"text\":\"\\n\"}");
+            }
 
-				}
+            if (wdr.hacks.get(i).charAt(0) == '-') { // serverID
 
-			}
+                j = i;
+                oldgameID = serverID;
+                serverID = wdr.hacks.get(i).substring(1);
+                cheats = "";
 
-			if(wdr.hacks.get(i).charAt(0) == '-') { // serverID 
+            } else if (i == j + 1) { // timer on replay
 
-				j=i;
-				oldgameID=serverID;
-				serverID = wdr.hacks.get(i).substring(1);
-				cheats="";
+                timeronreplay = wdr.hacks.get(i);
 
-			} else if(i==j+1) { // timer on replay
+            } else if (i == j + 2) { // playernameduringgame
 
-				timeronreplay = wdr.hacks.get(i);
+                oldname = playernamewhenreported;
+                playernamewhenreported = wdr.hacks.get(i);
 
-			} else if(i==j+2) { // playernameduringgame
+            } else if (i == j + 3) { // timestampforcheat
 
-				oldname=playernamewhenreported;
-				playernamewhenreported = wdr.hacks.get(i);
+                oldtimestamp = timestamphackreport;
+                timestamphackreport = Long.parseLong(wdr.hacks.get(i));
 
-			} else if(i==j+3) { // timestampforcheat
+            } else if (i > j + 3 && i != wdr.hacks.size() - 1) { // cheats
 
-				oldtimestamp=timestamphackreport;
-				timestamphackreport = Long.parseLong(wdr.hacks.get(i));
+                cheats = cheats + " " + wdr.hacks.get(i);
+                allCheats.append(allCheats.toString().contains(wdr.hacks.get(i)) ? "" : " " + wdr.hacks.get(i));
 
-			} else if(i>j+3 && i!=wdr.hacks.size()-1) { // cheats
+            }
 
-				cheats = cheats + " " + wdr.hacks.get(i);
-				allCheats = allCheats + (allCheats.contains(wdr.hacks.get(i)) ? "" : " " + wdr.hacks.get(i));
+        }
 
-			} 
+        message.append("]}}");
 
-		}
-
-		message = message + "]}}"; 
-
-		String[] array = new String[]{message,allCheats};
-
-		return array;
-	}
+        return new String[]{message.toString(), allCheats.toString()};
+    }
 
 }

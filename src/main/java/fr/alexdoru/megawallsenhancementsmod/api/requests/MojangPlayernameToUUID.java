@@ -2,7 +2,6 @@ package fr.alexdoru.megawallsenhancementsmod.api.requests;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
@@ -19,8 +18,8 @@ import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 
 public class MojangPlayernameToUUID {
 
-	private String name;
-	private String uuid;
+	private final String name;
+	private final String uuid;
 
 	public MojangPlayernameToUUID(String playername) throws ApiException {
 		
@@ -39,7 +38,6 @@ public class MojangPlayernameToUUID {
 
 		this.name = obj.get("name").getAsString();
 		this.uuid = id.replace("-", "");
-		return;
 
 	}
 

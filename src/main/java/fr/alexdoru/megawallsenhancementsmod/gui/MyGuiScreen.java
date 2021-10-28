@@ -1,10 +1,10 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
-import java.lang.reflect.Method;
-
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.util.ResourceLocation;
+
+import java.lang.reflect.Method;
 
 public class MyGuiScreen extends GuiScreen {
 	
@@ -19,14 +19,14 @@ public class MyGuiScreen extends GuiScreen {
 		} catch (NoSuchMethodException e) {
 			try {
 				loadShaderMethod = EntityRenderer.class.getDeclaredMethod("func_175069_a", ResourceLocation.class);
-			} catch (NoSuchMethodException e1) { }
+			} catch (NoSuchMethodException ignored) { }
 		}
 
 		if(loadShaderMethod != null) {
 			loadShaderMethod.setAccessible(true);
 			try {
 				loadShaderMethod.invoke(mc.entityRenderer, SHADER);
-			} catch (Exception e) { }
+			} catch (Exception ignored) { }
 		}
 		super.initGui();
 	}

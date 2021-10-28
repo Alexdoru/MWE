@@ -1,10 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser;
 
-import java.util.Map;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import net.minecraft.event.ClickEvent;
@@ -13,6 +10,8 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+
+import java.util.Map;
 
 public class MegaWallsStats {
 
@@ -132,8 +131,6 @@ public class MegaWallsStats {
 	}
 
 	public IChatComponent getFormattedMessage(String formattedname, String playername) {
-		
-		
 
 		String[][] matrix1 = { 
 				{
@@ -180,46 +177,24 @@ public class MegaWallsStats {
 					EnumChatFormatting.AQUA + "Mythic favors : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.mythic_favor) + "\n"
 				}};
 
-		//		IChatComponent msg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
-		//
-		//				.appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls stats"))
-		//
-		//				.appendSibling(new ChatComponentText("\n" + "\n"				
-		//						+ ChatUtil.alignText(matrix1) + ChatUtil.alignText(matrix2)))
-		//
-		//				.appendSibling(new ChatComponentText(
-		//						ChatUtil.centerLine(EnumChatFormatting.GREEN + "Selected class : " + EnumChatFormatting.GOLD + (this.chosen_class==null?"None":this.chosen_class) + " " 
-		//								+ EnumChatFormatting.GREEN + " Selected skin : " + EnumChatFormatting.GOLD +  (this.chosen_skin_class==null?(this.chosen_class==null?"None":this.chosen_class):this.chosen_skin_class)) + "\n" + "\n")
-		//						.setChatStyle(new ChatStyle()
-		//								.setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for this class' stats")))
-		//								.setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + (this.chosen_class==null?"None":this.chosen_class)))))
-		//
-		//				.appendSibling(new ChatComponentText(
-		//						ChatUtil.centerLine(EnumChatFormatting.GREEN + "Prestiges : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.nbprestiges) + " " 
-		//								+ EnumChatFormatting.GREEN + " Playtime (approx.) : " + EnumChatFormatting.GOLD + String.format("%.2f", this.time_played/60f) + "h") + "\n"))
-		//				
-		//				.appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
-
-		IChatComponent msg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
+		return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
 
 				.appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls stats"))
 
 				.appendSibling(new ChatComponentText("\n" + "\n" +
-						ChatUtil.centerLine(EnumChatFormatting.GREEN + "Prestiges : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.nbprestiges) + " " 
+						ChatUtil.centerLine(EnumChatFormatting.GREEN + "Prestiges : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.nbprestiges) + " "
 								+ EnumChatFormatting.GREEN + " Playtime (approx.) : " + EnumChatFormatting.GOLD + String.format("%.2f", this.time_played/60f) + "h") + "\n"))
 
 				.appendSibling(new ChatComponentText(
-						ChatUtil.centerLine(EnumChatFormatting.GREEN + "Selected class : " + EnumChatFormatting.GOLD + (this.chosen_class==null?"None":this.chosen_class) + " " 
-								+ EnumChatFormatting.GREEN + " Selected skin : " + EnumChatFormatting.GOLD +  (this.chosen_skin_class==null?(this.chosen_class==null?"None":this.chosen_class):this.chosen_skin_class)) + "\n" + "\n")
+						ChatUtil.centerLine(EnumChatFormatting.GREEN + "Selected class : " + EnumChatFormatting.GOLD + (this.chosen_class==null?"None": this.chosen_class) + " "
+								+ EnumChatFormatting.GREEN + " Selected skin : " + EnumChatFormatting.GOLD +  (this.chosen_skin_class==null?(this.chosen_class==null?"None": this.chosen_class): this.chosen_skin_class)) + "\n" + "\n")
 						.setChatStyle(new ChatStyle()
 								.setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for this class' stats")))
-								.setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + (this.chosen_class==null?"None":this.chosen_class)))))
+								.setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + (this.chosen_class==null?"None": this.chosen_class)))))
 
 				.appendSibling(new ChatComponentText(ChatUtil.alignText(matrix2) + ChatUtil.alignText(matrix1)))
 
 				.appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
-
-		return msg;
 
 	}
 

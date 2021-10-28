@@ -1,11 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.mixin.mixins;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
-
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -16,19 +10,26 @@ import net.minecraft.scoreboard.IScoreObjectiveCriteria;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 @Mixin(GuiPlayerTabOverlay.class)
 public class GUIPlayerTabOverlayMixin extends Gui {
 
+	@Final
 	@Shadow
 	private Minecraft mc;
 
+	@Final
 	@Shadow
 	private GuiIngame guiIngame;
 
 	@Shadow
 	private long lastTimeOpened;
-	
 	
 	/**
 	 * makes the tablist show up to 100 players instead of 80 in vanilla
@@ -69,12 +70,12 @@ public class GUIPlayerTabOverlayMixin extends Gui {
 				if (i < p_175247_6_.func_178835_l())
 				{
 					p_175247_6_.func_178846_a(Minecraft.getSystemTime());
-					p_175247_6_.func_178844_b((long)(this.guiIngame.getUpdateCounter() + 20));
+					p_175247_6_.func_178844_b(this.guiIngame.getUpdateCounter() + 20);
 				}
 				else if (i > p_175247_6_.func_178835_l())
 				{
 					p_175247_6_.func_178846_a(Minecraft.getSystemTime());
-					p_175247_6_.func_178844_b((long)(this.guiIngame.getUpdateCounter() + 10));
+					p_175247_6_.func_178844_b(this.guiIngame.getUpdateCounter() + 10);
 				}
 			}
 

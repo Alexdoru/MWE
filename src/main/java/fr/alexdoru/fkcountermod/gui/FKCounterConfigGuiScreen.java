@@ -1,9 +1,6 @@
 package fr.alexdoru.fkcountermod.gui;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.config.ConfigSetting;
 import fr.alexdoru.fkcountermod.gui.elements.ButtonFancy;
@@ -13,6 +10,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.List;
 
 public class FKCounterConfigGuiScreen extends MyGuiScreen {
 	
@@ -91,14 +90,14 @@ public class FKCounterConfigGuiScreen extends MyGuiScreen {
 	}
 	
 	private void addSettingButton(ConfigSetting setting, int row, int column) {
-		String title = setting.getTitle();
-			
-		int x = 0;
-		
+
+		int x;
+		final int i = (widthBetweenButtons + buttonSize) * (column - columns / 2);
+
 		if(columns%2==0) { // even
-			x = getxCenter() + widthBetweenButtons/2 + (widthBetweenButtons + buttonSize)*(column-columns/2);
+			x = getxCenter() + widthBetweenButtons/2 + i;
 		} else { // odd
-			x = getxCenter() - buttonSize/2 + (widthBetweenButtons + buttonSize)*(column-columns/2);
+			x = getxCenter() - buttonSize/2 + i;
 		}
 		
 		int y = getyCenter() - findMenuHeight()/2 + heightBetweenButtons + row*buttonSize;		

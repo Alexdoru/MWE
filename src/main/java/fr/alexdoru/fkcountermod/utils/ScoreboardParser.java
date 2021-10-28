@@ -1,11 +1,11 @@
 package fr.alexdoru.fkcountermod.utils;
 
+import net.minecraft.scoreboard.Scoreboard;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import net.minecraft.scoreboard.Scoreboard;
 
 public class ScoreboardParser {
 	
@@ -16,12 +16,12 @@ public class ScoreboardParser {
     private static final Pattern PREGAME_LOBBY_PATTERN = Pattern.compile(".+[0-9]+/[0-9]+\\s*");
     private static final Pattern WITHER_ALIVE_PATTERN = Pattern.compile("\\s*\\[.\\].*(?:HP|\u2764|\u2665).*", Pattern.CASE_INSENSITIVE);
 
-    private ArrayList<String> aliveWithers = new ArrayList<>();
+    private final ArrayList<String> aliveWithers = new ArrayList<>();
     private String gameId = null;
     private boolean hasgameended = false;
     private boolean isitPrepPhase = false;
 
-    /* This gets run on every tick to parse the scoreboard data */
+    /* This is run on every tick to parse the scoreboard data */
     public ScoreboardParser(Scoreboard scoreboard) {
         if (scoreboard == null) {
             return;

@@ -1,150 +1,143 @@
 package fr.alexdoru.fkcountermod.hudproperty;
 
-import java.io.IOException;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
-
 public class PropertyScreen extends GuiScreen {
 
-	private Minecraft mc = Minecraft.getMinecraft();
+    private final Minecraft mc = Minecraft.getMinecraft();
 
-	private final HashMap<IRenderer, ScreenPosition> renderers = new HashMap<>();
-	private Optional<IRenderer> selectedRenderer = Optional.empty(); 
+    private final HashMap<IRenderer, ScreenPosition> renderers = new HashMap<>();
+    private Optional<IRenderer> selectedRenderer = Optional.empty();
+    private int prevX, prevY;
 
-	private boolean renderOutlines;
+    public PropertyScreen(HudPropertyApi api) {
+        Collection<IRenderer> registeredRenderers = api.getHandlers();
 
-	private int prevX, prevY;
+        for (IRenderer ren : registeredRenderers) {
+            if (!ren.isEnabled()) {
+                continue;
+            }
 
-	public PropertyScreen(HudPropertyApi api){
-		Collection<IRenderer> registeredRenderers = api.getHandlers();
+            ScreenPosition pos = ren.load();
 
-		for(IRenderer ren : registeredRenderers){ 
-			if(!ren.isEnabled()){
-				continue;
-			}
-			
-			ScreenPosition pos = ren.load();
+            if (pos == null) {
+                pos = ScreenPosition.fromRelativePosition(0.5, 0.5);
+            }
 
-			if(pos == null){
-				pos = ScreenPosition.fromRelativePosition(0.5, 0.5);
-			}
+            adjustBounds(ren, pos);
 
-			adjustBounds(ren, pos);	
+            this.renderers.put(ren, pos);
+        }
 
-			this.renderers.put(ren, pos);
-		}
+    }
 
-		this.renderOutlines = api.getRenderOutlines();
-	}
+    @Override
+    public void drawScreen(int x, int y, float partialTicks) {
+        super.drawDefaultBackground();
 
-	@Override
-	public void drawScreen(int x, int y, float partialTicks) {
-		super.drawDefaultBackground();
+        float zBackup = this.zLevel;
+        this.zLevel = 200;
 
-		float zBackup = this.zLevel;
-		this.zLevel = 200;	
+        renderers.forEach(IRenderer::renderDummy);
 
-		renderers.forEach((renderer, position) -> renderer.renderDummy(position));
+        this.zLevel = zBackup;
+    }
 
-		this.zLevel = zBackup;
-	}
+    @Override
+    protected void keyTyped(char c, int key) {
+        if (key == 1) {
+            // Saves all entries
+            renderers.forEach(IConfigExchange::save);
+            this.mc.displayGuiScreen(null);
+        }
+    }
 
+    @Override
+    protected void mouseClicked(int x, int y, int button) {
+        prevX = x;
+        prevY = y;
 
-	@Override
-	protected void keyTyped(char c, int key) {
-		if (key == 1) {
-			renderers.entrySet().forEach((entry) -> { // Save all entries
-				entry.getKey().save(entry.getValue());	
-			});
-			this.mc.displayGuiScreen(null);
-		}
-	}
+        loadMouseOver(x, y);
+    }
 
-	@Override
-	protected void mouseClicked(int x, int y, int button) throws IOException {
-		prevX = x;
-		prevY = y;
+    @Override
+    protected void mouseClickMove(int x, int y, int button, long time) {
+        if (selectedRenderer.isPresent()) {
+            moveSelectedRendererBy(x - prevX, y - prevY);
+        }
 
-		loadMouseOver(x, y);
-	}
+        this.prevX = x;
+        this.prevY = y;
+    }
 
-	@Override
-	protected void mouseClickMove(int x, int y, int button, long time) {
-		if(selectedRenderer.isPresent()){
-			moveSelectedRendererBy(x - prevX, y - prevY);
-		}
+    private void moveSelectedRendererBy(int offsetX, int offsetY) {
+        IRenderer renderer = selectedRenderer.get();
+        ScreenPosition position = renderers.get(renderer);
 
-		this.prevX = x;
-		this.prevY = y;
-	}
+        position.setAbsolute(position.getAbsoluteX() + offsetX, position.getAbsoluteY() + offsetY);
 
-	private void moveSelectedRendererBy(int offsetX, int offsetY){
-		IRenderer renderer = selectedRenderer.get();
-		ScreenPosition position = renderers.get(renderer);
+        adjustBounds(renderer, position);
+    }
 
-		position.setAbsolute(position.getAbsoluteX() + offsetX, position.getAbsoluteY() + offsetY);
+    @Override
+    public void onGuiClosed() {
+        renderers.forEach(IRenderer::save);
+    }
 
-		adjustBounds(renderer, position);
-	}
+    @Override
+    public boolean doesGuiPauseGame() {
+        return true;
+    }
 
-	@Override
-	public void onGuiClosed() {
-		renderers.forEach(IRenderer::save);
-	}
+    private void adjustBounds(IRenderer renderer, ScreenPosition pos) {
+        ScaledResolution res = new ScaledResolution(mc);
 
-	@Override
-	public boolean doesGuiPauseGame() {
-		return true;
-	}
+        int screenWidth = res.getScaledWidth();
+        int screenHeight = res.getScaledHeight();
 
-	private void adjustBounds(IRenderer renderer, ScreenPosition pos){
-		ScaledResolution res = new ScaledResolution(mc);
+        int absoluteX = Math.max(0, Math.min(pos.getAbsoluteX(), Math.max(screenWidth - renderer.getWidth(), 0)));
+        int absoluteY = Math.max(0, Math.min(pos.getAbsoluteY(), Math.max(screenHeight - renderer.getHeight(), 0)));
 
-		int screenWidth = res.getScaledWidth();
-		int screenHeight = res.getScaledHeight();
+        pos.setAbsolute(absoluteX, absoluteY);
+    }
 
-		int absoluteX = Math.max(0, Math.min(pos.getAbsoluteX(), Math.max(screenWidth-renderer.getWidth(), 0)));
-		int absoluteY = Math.max(0, Math.min(pos.getAbsoluteY(), Math.max(screenHeight-renderer.getHeight(), 0)));
+    private void loadMouseOver(int x, int y) {
+        this.selectedRenderer = renderers.keySet().stream()
+                .filter(new MouseOverFinder(x, y))
+                .findFirst();
+    }
 
-		pos.setAbsolute(absoluteX, absoluteY);
-	}
+    private class MouseOverFinder implements Predicate<IRenderer> {
 
-	private void loadMouseOver(int x, int y){
-		this.selectedRenderer = renderers.keySet().stream()
-				.filter(new MouseOverFinder(x, y))
-				.findFirst();
-	}
+        private final int mouseX;
+        private final int mouseY;
 
-private class MouseOverFinder implements Predicate<IRenderer> {
+        public MouseOverFinder(int mouseX, int mouseY) {
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+        }
 
-		private int mouseX, mouseY;
+        @Override
+        public boolean test(IRenderer renderer) {
+            ScreenPosition pos = renderers.get(renderer);
 
-		public MouseOverFinder(int mouseX, int mouseY) {
-			this.mouseX = mouseX;
-			this.mouseY = mouseY;
-		}
+            int absoluteX = pos.getAbsoluteX();
+            int absoluteY = pos.getAbsoluteY();
 
-		@Override
-		public boolean test(IRenderer renderer) {
-			ScreenPosition pos = renderers.get(renderer);
+            if (mouseX >= absoluteX && mouseX <= absoluteX + renderer.getWidth()) {
+                return mouseY >= absoluteY && mouseY <= absoluteY + renderer.getHeight();
+            }
 
-			int absoluteX = pos.getAbsoluteX();
-			int absoluteY = pos.getAbsoluteY();
+            return false;
+        }
 
-			if(mouseX >= absoluteX && mouseX <= absoluteX + renderer.getWidth()) {
-				if(mouseY >= absoluteY && mouseY <= absoluteY + renderer.getHeight()) {
-					return true;
-				}
-			}
+    }
 
-			return false;
-		}
-
-	}
 }

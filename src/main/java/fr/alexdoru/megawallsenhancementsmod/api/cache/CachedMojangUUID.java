@@ -5,27 +5,27 @@ import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangPlayernameToUUID;
 
 public class CachedMojangUUID {
 
-	private static String name;
+	private static String Playername;
 	private static String uuid;
 
-	public CachedMojangUUID(String playername) throws ApiException {		
+	public CachedMojangUUID(String playernameIn) throws ApiException {
 		
-		if(this.name !=null && this.name.equalsIgnoreCase(playername)) // don't send a request again if it is the same player as before
+		if(Playername !=null && Playername.equalsIgnoreCase(playernameIn)) // don't send a request again if it is the same player as before
 			return;
 		
-		MojangPlayernameToUUID mojangPlayernameToUUID = new MojangPlayernameToUUID(playername);
+		MojangPlayernameToUUID mojangPlayernameToUUID = new MojangPlayernameToUUID(playernameIn);
 		
-		this.name = mojangPlayernameToUUID.getName();
-		this.uuid = mojangPlayernameToUUID.getUuid();
+		Playername = mojangPlayernameToUUID.getName();
+		uuid = mojangPlayernameToUUID.getUuid();
 		
 	}
 	
 	public String getName() {
-		return this.name;
+		return Playername;
 	}
 
 	public String getUuid() {
-		return this.uuid;
+		return uuid;
 	}
 	
 }

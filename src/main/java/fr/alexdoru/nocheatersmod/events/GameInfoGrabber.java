@@ -1,14 +1,14 @@
 package fr.alexdoru.nocheatersmod.events;
 
-import java.util.Date;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import net.minecraft.util.ChatComponentText;
+
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GameInfoGrabber {
 
@@ -26,7 +26,7 @@ public class GameInfoGrabber {
 
 		List<String> scoresRaw = ScoreboardUtils.getUnformattedSidebarText();
 
-		if (scoresRaw == null || scoresRaw.size() == 0) {
+		if (scoresRaw.size() == 0) {
 			return"?";
 		}
 
@@ -46,7 +46,7 @@ public class GameInfoGrabber {
 
 		List<String> scoresColor = ScoreboardUtils.getFormattedSidebarText();
 
-		if (scoresColor == null || scoresColor.size() == 0) {
+		if (scoresColor.size() == 0) {
 			ChatUtil.addChatMessage(new ChatComponentText("There are no active scoreboards in this world."));
 			return;
 		}
@@ -67,7 +67,6 @@ public class GameInfoGrabber {
 	 * 
 	 * @param timestamp - date time in millisecond when you press the timestamp keybind
 	 * @param serverID - current serverID when you press the timestamp keybind
-	 * @return 
 	 */
 	public static String getTimeSinceGameStart(long timestamp, String serverID, int delay) { 
 
@@ -75,7 +74,7 @@ public class GameInfoGrabber {
 
 			List<String> scoresRaw = ScoreboardUtils.getUnformattedSidebarText();
 
-			if (scoresRaw == null || scoresRaw.size() < 2) {
+			if (scoresRaw.size() < 2) {
 				return "?";
 			}
 
@@ -85,38 +84,33 @@ public class GameInfoGrabber {
 			int score_sec = 60*Integer.parseInt(split[1].replace(" ", "")) + Integer.parseInt(split[2].replace(" ", ""));			
 			int sec_since_start = 0;
 
-			if(split[0].equals(TIME_WALLS_FALL)) {
-
-				sec_since_start = 0 + (6*60 - score_sec);
-
-			} else if(split[0].equals(TIME_ENRAGE_OFF)) {
-
-				sec_since_start = 6*60 + (8*60 - score_sec);
-
-			} else if(split[0].equals(TIME_DEATHMATCH)) {
-
-				if (getstoredGameID() != "?" && getstoredGameID().equals(serverID)) {
-
-					long long_sec_since_start = (timestamp > getstoredTimestamp() ? timestamp - getstoredTimestamp() : 0L )/1000; //en secondes
-					return String.valueOf(long_sec_since_start / 60) + "min"+ String.valueOf(long_sec_since_start%60) + "sec";	
-
-				} else {
-					return "?";
-				}
-
-			} else if(split[0].equals(TIME_GAME_END)) {
-
-				sec_since_start = (45*60 - score_sec);
-
-			} 
+			switch (split[0]) {
+				case TIME_WALLS_FALL:
+					sec_since_start = (6 * 60 - score_sec);
+					break;
+				case TIME_ENRAGE_OFF:
+					sec_since_start = 6 * 60 + (8 * 60 - score_sec);
+					break;
+				case TIME_DEATHMATCH:
+					String storedGameID = getstoredGameID();
+					if (!storedGameID.equals("?") && storedGameID.equals(serverID)) {
+						long long_sec_since_start = (timestamp > getstoredTimestamp() ? timestamp - getstoredTimestamp() : 0L) / 1000; //en secondes
+						return long_sec_since_start / 60 + "min" + long_sec_since_start % 60 + "sec";
+					} else {
+						return "?";
+					}
+				case TIME_GAME_END:
+					sec_since_start = (45 * 60 - score_sec);
+					break;
+			}
 			
 			int result = sec_since_start > delay ? sec_since_start-delay : 0 ;
-			return String.valueOf(result/60) + "min"+ String.valueOf(result%60) + "sec";					
+			return result / 60 + "min"+ result % 60 + "sec";
 
-		} else if (getstoredGameID() != "?" && getstoredGameID().equals(serverID)) {
+		} else if (!getstoredGameID().equals("?") && getstoredGameID().equals(serverID)) {
 
 			long sec_since_start = (timestamp > getstoredTimestamp() ? timestamp - getstoredTimestamp() : 0L )/1000; //en secondes			
-			return String.valueOf(sec_since_start / 60) + "min"+ String.valueOf(sec_since_start%60) + "sec";	
+			return sec_since_start / 60 + "min"+ sec_since_start % 60 + "sec";
 
 		}
 

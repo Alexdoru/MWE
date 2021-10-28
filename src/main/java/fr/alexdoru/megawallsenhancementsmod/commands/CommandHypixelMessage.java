@@ -1,14 +1,14 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import java.util.Arrays;
-import java.util.List;
-
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class CommandHypixelMessage extends CommandBase {
 
@@ -30,7 +30,7 @@ public class CommandHypixelMessage extends CommandBase {
 	@Override
 	public List<String> getCommandAliases()
 	{
-		return Arrays.<String>asList(new String[] {"w", "msg","MSG","Msg"});
+		return Arrays.asList("w", "msg","MSG","Msg");
 	}
 
 	@Override

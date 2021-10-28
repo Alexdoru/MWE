@@ -1,11 +1,11 @@
 package fr.alexdoru.fkcountermod.gui.elements;
 
-import java.awt.Color;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
+
+import java.awt.*;
 
 public class CleanButton extends GuiButton {
 	

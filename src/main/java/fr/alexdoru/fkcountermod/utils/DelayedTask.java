@@ -7,25 +7,26 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 public class DelayedTask {
 
-	private int counter;
-	private Runnable run;
-	
-	public DelayedTask(Runnable run, int ticks){
-		counter = ticks;
-		this.run = run;
-		MinecraftForge.EVENT_BUS.register(this);
-	}
-	
-	@SubscribeEvent
-	public void onTick(TickEvent.ClientTickEvent event){
-		if(event.phase != Phase.START)return;
-		
-		if(counter <= 0){
-			MinecraftForge.EVENT_BUS.unregister(this);
-			run.run();
-		}
-		
-		counter--;
-	}
-	
+    private int counter;
+    private final Runnable run;
+
+    public DelayedTask(Runnable run, int ticks) {
+        counter = ticks;
+        this.run = run;
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @SubscribeEvent
+    public void onTick(TickEvent.ClientTickEvent event) {
+        if (event.phase != Phase.START) return;
+
+        if (counter <= 0) {
+            MinecraftForge.EVENT_BUS.unregister(this);
+            run.run();
+        }
+
+        counter--;
+
+    }
+
 }

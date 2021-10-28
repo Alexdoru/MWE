@@ -6,12 +6,13 @@ import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
 
 public class LogGlitching {
 
@@ -19,13 +20,13 @@ public class LogGlitching {
 
 		if(FKCounterMod.isInMwGame()) {
 
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Emergency exit"));			
+			addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Emergency exit"));
 			(Minecraft.getMinecraft()).thePlayer.sendChatMessage("/l mm");
 			new DelayedTask(() -> (Minecraft.getMinecraft()).thePlayer.sendChatMessage("/rejoin"), 3);
 			new DelayedTask(() -> (Minecraft.getMinecraft()).thePlayer.sendChatMessage("/l mw"), 6);			
 			new DelayedTask(() -> (Minecraft.getMinecraft()).thePlayer.sendChatMessage("/rejoin"), 60);
 		} else {
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + "The emergency exit isn't available right now"));
+			addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + "The emergency exit isn't available right now"));
 		}
 
 	}
@@ -38,7 +39,7 @@ public class LogGlitching {
 		if(FKCounterMod.isInMwGame()) {
 			islogglitching = true;
 			logcounter = 0;
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagMW() +
+			addChatMessage(new ChatComponentText(ChatUtil.getTagMW() +
 					EnumChatFormatting.GREEN + "Emergency exit"));
 			(Minecraft.getMinecraft()).thePlayer.sendChatMessage("/l mm");
 			new DelayedTask(() -> (Minecraft.getMinecraft()).thePlayer.sendChatMessage("/rejoin"), 60);
@@ -46,7 +47,7 @@ public class LogGlitching {
 
 		} else {
 
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagMW() +
+			addChatMessage(new ChatComponentText(ChatUtil.getTagMW() +
 					EnumChatFormatting.RED + "The emergency exit isn't available right now"));
 
 		}
@@ -56,7 +57,7 @@ public class LogGlitching {
 	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load event) {
 		
-		if(islogglitching == false)
+		if(!islogglitching)
 			return;
 		
 		if(logcounter==0)
@@ -69,7 +70,7 @@ public class LogGlitching {
 	@SubscribeEvent
 	public void onChunkLoad(ChunkEvent.Load event) {
 		
-		if(islogglitching == false)
+		if(!islogglitching)
 			return;
 		
 		if(logcounter==1)
@@ -83,7 +84,7 @@ public class LogGlitching {
 	@SubscribeEvent
     public void onRenderGui(RenderGameOverlayEvent.Post event) {
 		
-		if(islogglitching == false)
+		if(!islogglitching)
 			return;
 		
 		if(logcounter == 2 && Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().thePlayer!=null) {

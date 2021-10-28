@@ -1,14 +1,13 @@
 package fr.alexdoru.megawallsenhancementsmod.api.requests;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MojangNameHistory {
 
@@ -16,12 +15,12 @@ public class MojangNameHistory {
 	private static List<Long> timestamps;
 	private static String uuid;
 
-	public MojangNameHistory(String uuid) throws ApiException {
+	public MojangNameHistory(String uuidIn) throws ApiException {
 		
-		if(this.uuid != null && this.uuid.equals(uuid))
+		if(uuid != null && uuid.equals(uuidIn))
 			return;
 
-		HttpClient httpclient = new HttpClient("https://api.mojang.com/user/profiles/" + uuid + "/names");
+		HttpClient httpclient = new HttpClient("https://api.mojang.com/user/profiles/" + uuidIn + "/names");
 		String rawresponse = httpclient.getrawresponse();
 
 		if(rawresponse == null)
@@ -33,8 +32,8 @@ public class MojangNameHistory {
 		if (array.size() == 0) 
 			throw new ApiException("Name history data is empty");	
 
-		List<String> nameslist = new ArrayList<String>();
-		List<Long> timestampslist = new ArrayList<Long>();
+		List<String> nameslist = new ArrayList<>();
+		List<Long> timestampslist = new ArrayList<>();
 
 		for (int i = 0; i < array.size(); i++) {
 
@@ -46,20 +45,18 @@ public class MojangNameHistory {
 			timestampslist.add(timestamp);
 		} 
 
-		this.names = nameslist;
-		this.timestamps = timestampslist;
-		this.uuid = uuid;
-
-		return;
+		names = nameslist;
+		timestamps = timestampslist;
+		uuid = uuidIn;
 
 	}
 
 	public List<String> getNames() {
-		return this.names;
+		return names;
 	}
 
 	public List<Long> getTimestamps() {
-		return this.timestamps;
+		return timestamps;
 	}
 
 }

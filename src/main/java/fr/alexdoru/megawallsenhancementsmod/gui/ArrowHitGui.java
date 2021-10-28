@@ -9,9 +9,6 @@ public class ArrowHitGui extends Gui {
 	
 	/**
 	 * GUI for normal arrows hits and leaps
-	 * @param mc
-	 * @param HPvalue
-	 * @param Color
 	 */
 	public ArrowHitGui(Minecraft mc, String HPvalue, String Color) {
 		ScaledResolution scaled = new ScaledResolution(mc);
@@ -22,10 +19,6 @@ public class ArrowHitGui extends Gui {
 	
 	/**
 	 * GUI for renegade arrow hits
-	 * @param mc
-	 * @param HPvalue
-	 * @param Color - of the HP
-	 * @param i - arrows pinned 
 	 */
 	public ArrowHitGui(Minecraft mc, String HPvalue, String Color, int i) {
 		ScaledResolution scaled = new ScaledResolution(mc);

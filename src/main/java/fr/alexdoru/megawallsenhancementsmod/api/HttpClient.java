@@ -1,5 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.api;
 
+import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,12 +9,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
-
 public class HttpClient {
 
 	private URL url;
-	private String urlstr;
+	private final String urlstr;
 
 	public HttpClient(String urlstr) {
 
@@ -30,7 +30,7 @@ public class HttpClient {
 
 		BufferedReader reader;
 		String line;
-		StringBuffer responsecontent = new StringBuffer();
+		StringBuilder responsecontent = new StringBuilder();
 
 		try {
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();

@@ -2,7 +2,6 @@ package fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 
 public class MegaWallsClassSkinData {
@@ -29,8 +28,6 @@ public class MegaWallsClassSkinData {
 		
 		this.chosen_class = JsonUtil.getString(mwdata,"chosen_class");
 		this.chosen_skin_class = JsonUtil.getString(mwdata,"chosen_skin_" + this.chosen_class);
-
-		return;
 		
 	}
 
