@@ -55,7 +55,7 @@ public class CommandNocheaters extends CommandBase {
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+	public void processCommand(ICommandSender sender, String[] args) throws CommandException { // TODO ca affiche le msg reported players meme si y'en a pas
 
 		if(args.length == 0) {
 			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTagNoCheaters() +
