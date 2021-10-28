@@ -4,6 +4,7 @@ import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
+import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.misc.NameModifier;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
@@ -192,14 +193,13 @@ public class CommandWDR extends CommandBase {
 
                 if (uuid != null) {
                     CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                    LoginData loginData = new LoginData(playerdata.getPlayerData());
+                    if (loginData.hasNeverJoinedHypixel()) {
+                        uuid = null;
+                    }
                 }
 
-            } catch (ApiException e) {
-
-                if (e.getMessage().equals("This player never joined Hypixel")) {
-                    uuid = null;
-                }
-
+            } catch (ApiException ignored) {
             }
 
             if (uuid == null) {  // The playername doesn't exist or never joined hypixel
