@@ -2,11 +2,6 @@ package fr.alexdoru.megawallsenhancementsmod.api.enums;
 
 public enum GameType {
 
-	// TODO enum
-	// to use in
-	// HypixelPlayerStatus
-	// LoginData
-
 	QUAKECRAFT("QUAKECRAFT", "Quake"),
 	WALLS("WALLS", "Walls"),
 	PAINTBALL("PAINTBALL", "Paintball"),

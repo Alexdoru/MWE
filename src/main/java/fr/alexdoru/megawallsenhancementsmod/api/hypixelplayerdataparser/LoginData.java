@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser;
 
 import com.google.gson.JsonObject;
+import fr.alexdoru.megawallsenhancementsmod.api.enums.GameType;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -18,7 +19,7 @@ public class LoginData {
     /**
      * Parses the player's login data
      */
-    public LoginData(JsonObject playerData) { // TODO merge this with the constructor above
+    public LoginData(JsonObject playerData) {
 
         if (playerData == null)
             return;
@@ -39,17 +40,6 @@ public class LoginData {
         this.mostRecentGameType = JsonUtil.getString(playerData, "mostRecentGameType");
         this.rank = JsonUtil.getString(playerData, "rank");
         this.displayname = JsonUtil.getString(playerData, "displayname");
-        this.formattedname = ParseFormattedName(playerData);
-
-    }
-
-    /**
-     * Be carefull to only call this method once and then store it otherwise it will parse the information everytime
-     */
-    private String ParseFormattedName(JsonObject playerData) {
-
-        if (playerData == null)
-            return "?";
 
         String prefix = JsonUtil.getString(playerData, "prefix");
         String rankPlusColor = JsonUtil.getString(playerData, "rankPlusColor");
@@ -60,22 +50,27 @@ public class LoginData {
 
         if (prefix != null) {
             if ("\u00a7[OWNER]".equals(rank)) {
-                return EnumChatFormatting.RED + "[OWNER]" + " " + this.displayname;
+                this.formattedname = EnumChatFormatting.RED + "[OWNER]" + " " + this.displayname;
+                return;
             }
         }
 
         if (rank != null) {
             switch (rank) {
                 case "HELPER":
-                    return EnumChatFormatting.BLUE + "[HELPER]" + " " + this.displayname;
+                    this.formattedname = EnumChatFormatting.BLUE + "[HELPER]" + " " + this.displayname;
+                    return;
                 case "MODERATOR":
-                    return EnumChatFormatting.DARK_GREEN + "[MOD]" + " " + this.displayname;
+                    this.formattedname = EnumChatFormatting.DARK_GREEN + "[MOD]" + " " + this.displayname;
+                    return;
                 case "GAME_MASTER":
-                    return EnumChatFormatting.DARK_GREEN + "[GM]" + " " + this.displayname;
+                    this.formattedname = EnumChatFormatting.DARK_GREEN + "[GM]" + " " + this.displayname;
+                    return;
                 case "ADMIN":
-                    return EnumChatFormatting.RED + "[ADMIN]" + " " + this.displayname;
+                    this.formattedname = EnumChatFormatting.RED + "[ADMIN]" + " " + this.displayname;
+                    return;
                 case "YOUTUBER":
-                    return EnumChatFormatting.RED + "[" + EnumChatFormatting.WHITE + "YOUTUBE" + EnumChatFormatting.RED + "]" + " " + this.displayname;
+                    this.formattedname = EnumChatFormatting.RED + "[" + EnumChatFormatting.WHITE + "YOUTUBE" + EnumChatFormatting.RED + "]" + " " + this.displayname;
                 case "NORMAL": // the player used to have a rank in the hypixel staff but got demoted
                     break;
                 default:
@@ -89,40 +84,50 @@ public class LoginData {
 
         if (monthlyPackageRank != null && monthlyPackageRank.equals("SUPERSTAR")) { // MVP++
             EnumChatFormatting rankPlusPlusColor = monthlyRankColor != null ? EnumChatFormatting.getValueByName(monthlyRankColor) : EnumChatFormatting.GOLD;
-            return rankPlusPlusColor + "[MVP" + EnumChatFormatting.getValueByName(rankPlusColor) + "++" + rankPlusPlusColor + "]" + " " + this.displayname;
+            this.formattedname = rankPlusPlusColor + "[MVP" + EnumChatFormatting.getValueByName(rankPlusColor) + "++" + rankPlusPlusColor + "]" + " " + this.displayname;
+            return;
         }
 
         if (newPackageRank != null) {
             switch (newPackageRank) {
                 case "VIP":
-                    return EnumChatFormatting.GREEN + "[VIP]" + " " + this.displayname;
+                    this.formattedname = EnumChatFormatting.GREEN + "[VIP]" + " " + this.displayname;
+                    return;
                 case "VIP_PLUS":
-                    return EnumChatFormatting.GREEN + "[VIP" + EnumChatFormatting.GOLD + "+" + EnumChatFormatting.GREEN + "]" + " " + this.displayname;
+                    this.formattedname = EnumChatFormatting.GREEN + "[VIP" + EnumChatFormatting.GOLD + "+" + EnumChatFormatting.GREEN + "]" + " " + this.displayname;
+                    return;
                 case "MVP":
-                    return EnumChatFormatting.AQUA + "[MVP]" + " " + this.displayname;
+                    this.formattedname = EnumChatFormatting.AQUA + "[MVP]" + " " + this.displayname;
+                    return;
                 case "MVP_PLUS":
-                    return EnumChatFormatting.AQUA + "[MVP" + EnumChatFormatting.getValueByName(rankPlusColor) + "+" + EnumChatFormatting.AQUA + "]" + " " + this.displayname;
+                    this.formattedname = EnumChatFormatting.AQUA + "[MVP" + EnumChatFormatting.getValueByName(rankPlusColor) + "+" + EnumChatFormatting.AQUA + "]" + " " + this.displayname;
+                    return;
                 default:
-                    return EnumChatFormatting.GRAY + " " + this.displayname;
+                    this.formattedname = EnumChatFormatting.GRAY + " " + this.displayname;
             }
         }
 
         if (packageRank != null) {
             switch (packageRank) {
                 case "VIP":
-                    return EnumChatFormatting.GREEN + "[VIP]" + " " + this.displayname;
+                    this.formattedname = EnumChatFormatting.GREEN + "[VIP]" + " " + this.displayname;
+                    return;
                 case "VIP_PLUS":
-                    return EnumChatFormatting.GREEN + "[VIP" + EnumChatFormatting.GOLD + "+" + EnumChatFormatting.GREEN + "]" + " " + this.displayname;
+                    this.formattedname = EnumChatFormatting.GREEN + "[VIP" + EnumChatFormatting.GOLD + "+" + EnumChatFormatting.GREEN + "]" + " " + this.displayname;
+                    return;
                 case "MVP":
-                    return EnumChatFormatting.AQUA + "[MVP]" + " " + this.displayname;
+                    this.formattedname = EnumChatFormatting.AQUA + "[MVP]" + " " + this.displayname;
                 case "MVP_PLUS":
-                    return EnumChatFormatting.AQUA + "[MVP" + EnumChatFormatting.getValueByName(rankPlusColor) + "+" + EnumChatFormatting.AQUA + "]" + " " + this.displayname;
+                    this.formattedname = EnumChatFormatting.AQUA + "[MVP" + EnumChatFormatting.getValueByName(rankPlusColor) + "+" + EnumChatFormatting.AQUA + "]" + " " + this.displayname;
+                    return;
                 default:
-                    return EnumChatFormatting.GRAY + " " + this.displayname;
+                    this.formattedname = EnumChatFormatting.GRAY + " " + this.displayname;
+                    return;
             }
         }
 
-        return EnumChatFormatting.GRAY + " " + this.displayname;
+        this.formattedname = EnumChatFormatting.GRAY + " " + this.displayname;
+
     }
 
     public String getdisplayname() {
@@ -166,74 +171,11 @@ public class LoginData {
     }
 
     public String getMostRecentGameType() {
-
-        if (this.mostRecentGameType == null)
+        if (this.mostRecentGameType == null) {
             return "?";
-
-        switch (this.mostRecentGameType) {
-            case "QUAKECRAFT":
-                return "Quake";
-            case "WALLS":
-                return "Walls";
-            case "PAINTBALL":
-                return "Paintball";
-            case "SURVIVAL_GAMES":
-                return "Blitz Survival Games";
-            case "TNTGAMES":
-                return "TNT Games";
-            case "VAMPIREZ":
-                return "VampireZ";
-            case "WALLS3":
-                return "Mega Walls";
-            case "ARCADE":
-                return "Arcade";
-            case "ARENA":
-                return "Arena";
-            case "UHC":
-                return "UHC Champions";
-            case "MCGO":
-                return "Cops and Crims";
-            case "BATTLEGROUND":
-                return "Warlords";
-            case "SUPER_SMASH":
-                return "Smash Heroes";
-            case "GINGERBREAD":
-                return "Turbo Kart Racers";
-            case "HOUSING":
-                return "Housing";
-            case "SKYWARS":
-                return "SkyWars";
-            case "TRUE_COMBAT":
-                return "Crazy Walls";
-            case "SPEED_UHC":
-                return "Speed UHC";
-            case "SKYCLASH":
-                return "SkyClash";
-            case "LEGACY":
-                return "Classic Games";
-            case "PROTOTYPE":
-                return "Prototype";
-            case "BEDWARS":
-                return "Bed Wars";
-            case "MURDER_MYSTERY":
-                return "Murder Mystery";
-            case "BUILD_BATTLE":
-                return "Build Battle";
-            case "DUELS":
-                return "Duels";
-            case "SKYBLOCK":
-                return "SkyBlock";
-            case "PIT":
-                return "Pit";
-            case "REPLAY":
-                return "Replay";
-            case "SMP":
-                return "SMP";
-            default:
-                return this.mostRecentGameType;
-
         }
-
+        final GameType gameType = GameType.fromId(this.mostRecentGameType);
+        return gameType == GameType.UNKNOWN ? this.mostRecentGameType : gameType.toString();
     }
 
 }
