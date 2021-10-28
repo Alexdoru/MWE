@@ -1,7 +1,5 @@
 package fr.alexdoru.nocheatersmod.events;
 
-import java.util.Date;
-
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
@@ -20,6 +18,8 @@ import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import java.util.Date;
 
 public class NoCheatersEvents {
 
@@ -217,14 +217,8 @@ public class NoCheatersEvents {
 
 	/**
 	 * Return an array with new String[]{message,allCheats};
-	 * 
 	 * "message" is a message with the player name and an hover event on top with the timestamped report info
-	 * 
 	 * allCheats is a list of all the hacks for this player
-	 * @param uuid
-	 * @param playername
-	 * @param wdr
-	 * @return
 	 */
 	public static String[] createPlayerTimestampedMsg(String playername, WDR wdr, String namecolor) { 
 

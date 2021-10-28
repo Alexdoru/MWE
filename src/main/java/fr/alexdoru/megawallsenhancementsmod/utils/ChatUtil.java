@@ -67,7 +67,7 @@ public class ChatUtil {
 
 	public static String makeChatList(String listtitle, String messagebody, int displaypage, int nbpage, String command) {
 
-		String messagestart = "";
+		String messagestart;
 
 		if(displaypage > 1) { // put previous page arrow
 
@@ -121,7 +121,6 @@ public class ChatUtil {
 
 	/**
 	 * Draws a bar that takes the width of the chat window
-	 * @return
 	 */
 	public static String bar() {
 
@@ -133,10 +132,7 @@ public class ChatUtil {
 	}
 	
 	/**
-	 * Return the message with spaces at the start to make the message centered in the chat box
-	 * 
-	 * @param message
-	 * @return
+	 * Returns the message with spaces at the start to make the message centered in the chat box
 	 */
 	public static String centerLine(String message) {
 
@@ -157,7 +153,6 @@ public class ChatUtil {
 	 * Returns the amounts of spaces needed to make a message centered 
 	 * 
 	 * @param message
-	 * @return
 	 */
 	public static String getSeparatorToCenter(String message) {
 
