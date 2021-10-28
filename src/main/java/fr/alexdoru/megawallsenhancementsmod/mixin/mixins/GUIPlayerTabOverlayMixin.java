@@ -50,7 +50,8 @@ public class GUIPlayerTabOverlayMixin extends Gui {
 	private int changeColumnLength(int original) {
 	    return 25;
 	}
-	
+
+	// TODO afficher les finals en tab, faire un cache sinon ca va lager
 	/**
 	 * draws the scoreboard values with colors
 	 * @author Alexdoru
