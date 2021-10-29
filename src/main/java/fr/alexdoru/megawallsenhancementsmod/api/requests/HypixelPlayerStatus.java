@@ -4,8 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
-import fr.alexdoru.megawallsenhancementsmod.api.enums.GameType;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
+import fr.alexdoru.megawallsenhancementsmod.enums.GameType;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 
 public class HypixelPlayerStatus {

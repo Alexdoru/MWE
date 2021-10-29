@@ -1,7 +1,6 @@
 package fr.alexdoru.nocheatersmod.events;
 
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import fr.alexdoru.nocheatersmod.data.WDR;
@@ -20,6 +19,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.Date;
+
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.getTagNoCheaters;
 
 public class NoCheatersEvents {
 
@@ -137,7 +139,7 @@ public class NoCheatersEvents {
 
         } catch (Exception exception) {
 
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+            addChatMessage(new ChatComponentText(getTagNoCheaters() +
                     EnumChatFormatting.RED + "Error, scan incomplete"));
         }
 

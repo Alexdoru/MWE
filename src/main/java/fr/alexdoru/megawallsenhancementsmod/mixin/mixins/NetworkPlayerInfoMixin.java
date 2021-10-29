@@ -14,21 +14,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(NetworkPlayerInfo.class)
 public class NetworkPlayerInfoMixin {
-	
-	@Shadow
-	private IChatComponent displayName;
 
-	@Final
-	@Shadow
-	private GameProfile gameProfile;
+    @Shadow
+    private IChatComponent displayName;
 
-	/*
-	 * Adds a hook
-	 */
-	@Inject(method = "<init>(Lnet/minecraft/network/play/server/S38PacketPlayerListItem$AddPlayerData;)V", at = @At("RETURN"))
-	public void NetworkPlayerInfo(S38PacketPlayerListItem.AddPlayerData p_i46295_1_, CallbackInfo ci)
-	{
-		this.displayName = NameModifier.getTransformedDisplayName(this.gameProfile, this.displayName);
-	}
+    @Final
+    @Shadow
+    private GameProfile gameProfile;
+
+    /*
+     * Adds a hook
+     */
+    @Inject(method = "<init>(Lnet/minecraft/network/play/server/S38PacketPlayerListItem$AddPlayerData;)V", at = @At("RETURN"))
+    public void NetworkPlayerInfo(S38PacketPlayerListItem.AddPlayerData p_i46295_1_, CallbackInfo ci) {
+        this.displayName = NameModifier.getTransformedDisplayName(this.gameProfile, this.displayName);
+    }
 
 }

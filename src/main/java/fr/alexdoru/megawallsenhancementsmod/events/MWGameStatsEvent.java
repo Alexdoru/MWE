@@ -8,7 +8,6 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWall
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassStats;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.event.ClickEvent;
@@ -19,6 +18,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.getTagMW;
 
 public class MWGameStatsEvent {
 
@@ -67,7 +69,7 @@ public class MWGameStatsEvent {
                 MWclassStats = new MegaWallsClassStats(playerdata.getPlayerData(), chosen_class);
             } catch (ApiException e) {
                 e.printStackTrace();
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
             }
             isRandom = false;
         })).start();
@@ -87,11 +89,11 @@ public class MWGameStatsEvent {
                     return;
                 }
                 gameStats.minus(MWclassStats);
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Click to view the stats of your " + EnumChatFormatting.AQUA + "Mega Walls " + EnumChatFormatting.YELLOW + "game!")
+                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.YELLOW + "Click to view the stats of your " + EnumChatFormatting.AQUA + "Mega Walls " + EnumChatFormatting.YELLOW + "game!")
                         .setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/mwgamestats"))));
             } catch (ApiException e) {
                 e.printStackTrace();
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 e.printStackTrace();
             }

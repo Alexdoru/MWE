@@ -10,31 +10,31 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class CommandSetupApiKey extends CommandBase {
 
-	@Override
-	public String getCommandName() {
-		return "setapikey";
-	}
+    @Override
+    public String getCommandName() {
+        return "setapikey";
+    }
 
-	@Override
-	public String getCommandUsage(ICommandSender sender) {
-		return "/setapikey <key>";
-	}
+    @Override
+    public String getCommandUsage(ICommandSender sender) {
+        return "/setapikey <key>";
+    }
 
-	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-		
-		if(args.length != 1) {
-			ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + "\n"
-					+ EnumChatFormatting.RED + "Connect on Hypixel and type \"/api new\" to get an Api key"));
-		} else {
-			HypixelApiKeyUtil.setApiKey(args[0]);
-		}
+    @Override
+    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 
-	}
+        if (args.length != 1) {
+            ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + "\n"
+                    + EnumChatFormatting.RED + "Connect on Hypixel and type \"/api new\" to get an Api key"));
+        } else {
+            HypixelApiKeyUtil.setApiKey(args[0]);
+        }
 
-	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		return true;
-	}
+    }
+
+    @Override
+    public boolean canCommandSenderUseCommand(ICommandSender sender) {
+        return true;
+    }
 
 }

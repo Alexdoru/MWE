@@ -11,52 +11,52 @@ import java.util.List;
 
 public class MojangNameHistory {
 
-	private static List<String> names;
-	private static List<Long> timestamps;
-	private static String uuid;
+    private static List<String> names;
+    private static List<Long> timestamps;
+    private static String uuid;
 
-	public MojangNameHistory(String uuidIn) throws ApiException {
-		
-		if(uuid != null && uuid.equals(uuidIn))
-			return;
+    public MojangNameHistory(String uuidIn) throws ApiException {
 
-		HttpClient httpclient = new HttpClient("https://api.mojang.com/user/profiles/" + uuidIn + "/names");
-		String rawresponse = httpclient.getrawresponse();
+        if (uuid != null && uuid.equals(uuidIn))
+            return;
 
-		if(rawresponse == null)
-			throw new ApiException("No response from Mojang's Api");	
+        HttpClient httpclient = new HttpClient("https://api.mojang.com/user/profiles/" + uuidIn + "/names");
+        String rawresponse = httpclient.getrawresponse();
 
-		JsonParser parser = new JsonParser();
-		JsonArray array = parser.parse(rawresponse).getAsJsonArray();
-		
-		if (array.size() == 0) 
-			throw new ApiException("Name history data is empty");	
+        if (rawresponse == null)
+            throw new ApiException("No response from Mojang's Api");
 
-		List<String> nameslist = new ArrayList<>();
-		List<Long> timestampslist = new ArrayList<>();
+        JsonParser parser = new JsonParser();
+        JsonArray array = parser.parse(rawresponse).getAsJsonArray();
 
-		for (int i = 0; i < array.size(); i++) {
+        if (array.size() == 0)
+            throw new ApiException("Name history data is empty");
 
-			JsonObject obj = array.get(i).getAsJsonObject();
-			String name = obj.get("name").getAsString();
-			Long timestamp = (i == 0) ? 0L : obj.get("changedToAt").getAsLong();
+        List<String> nameslist = new ArrayList<>();
+        List<Long> timestampslist = new ArrayList<>();
 
-			nameslist.add(name);
-			timestampslist.add(timestamp);
-		} 
+        for (int i = 0; i < array.size(); i++) {
 
-		names = nameslist;
-		timestamps = timestampslist;
-		uuid = uuidIn;
+            JsonObject obj = array.get(i).getAsJsonObject();
+            String name = obj.get("name").getAsString();
+            Long timestamp = (i == 0) ? 0L : obj.get("changedToAt").getAsLong();
 
-	}
+            nameslist.add(name);
+            timestampslist.add(timestamp);
+        }
 
-	public List<String> getNames() {
-		return names;
-	}
+        names = nameslist;
+        timestamps = timestampslist;
+        uuid = uuidIn;
 
-	public List<Long> getTimestamps() {
-		return timestamps;
-	}
+    }
+
+    public List<String> getNames() {
+        return names;
+    }
+
+    public List<Long> getTimestamps() {
+        return timestamps;
+    }
 
 }

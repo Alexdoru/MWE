@@ -6,7 +6,6 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.GeneralInfo;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassStats;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.CommandBase;
@@ -19,203 +18,205 @@ import net.minecraft.util.EnumChatFormatting;
 import java.util.HashMap;
 import java.util.List;
 
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
+
 public class CommandPlancke extends CommandBase {
 
-	private static final HashMap<String, String> megawallsclassesmap = new HashMap<String, String>() {{
+    private static final HashMap<String, String> megawallsclassesmap = new HashMap<String, String>() {{ // TODO replace with enum
 
-		put("arc","Arcanist");
-		put("asn","Assassin");
-		put("atn","Automaton");
-		put("bla","Blaze");
-		put("cre","Creeper");
-		put("cow","Cow");
-		put("dre","Dreadlord");
-		put("end","Enderman");
-		put("gol","Golem");
-		put("hbr","Herobrine");
-		put("hun","Hunter");
-		put("mol","Moleman");
-		put("phx","Phoenix");
-		put("pir","Pirate");
-		put("ren","Renegade");
-		put("sha","Shaman");
-		put("srk","Shark");
-		put("ske","Skeleton");
-		put("sno","Snowman");	
-		put("spi","Spider");
-		put("squ","Squid");
-		put("pig","Pigman");
-		put("wer","Werewolf");
-		put("zom","Zombie");
+        put("arc", "Arcanist");
+        put("asn", "Assassin");
+        put("atn", "Automaton");
+        put("bla", "Blaze");
+        put("cre", "Creeper");
+        put("cow", "Cow");
+        put("dre", "Dreadlord");
+        put("end", "Enderman");
+        put("gol", "Golem");
+        put("hbr", "Herobrine");
+        put("hun", "Hunter");
+        put("mol", "Moleman");
+        put("phx", "Phoenix");
+        put("pir", "Pirate");
+        put("ren", "Renegade");
+        put("sha", "Shaman");
+        put("srk", "Shark");
+        put("ske", "Skeleton");
+        put("sno", "Snowman");
+        put("spi", "Spider");
+        put("squ", "Squid");
+        put("pig", "Pigman");
+        put("wer", "Werewolf");
+        put("zom", "Zombie");
 
-		put("arcanist","Arcanist");
-		put("assassin","Assassin");
-		put("automaton","Automaton");
-		put("blaze","Blaze");
-		put("creeper","Creeper");
-		//put("cow","Cow");
-		put("dreadlord","Dreadlord");
-		put("enderman","Enderman");
-		put("golem","Golem");
-		put("herobrine","Herobrine");
-		put("hunter","Hunter");
-		put("moleman","Moleman");
-		put("phoenix","Phoenix");
-		put("pirate","Pirate");
-		put("renegade","Renegade");
-		put("shaman","Shaman");
-		put("shark","Shark");
-		put("skeleton","Skeleton");
-		put("snowman","Snowman");	
-		put("spider","Spider");
-		put("squid","Squid");
-		put("pigman","Pigman");
-		put("werewolf","Werewolf");
-		put("zombie","Zombie");  
+        put("arcanist", "Arcanist");
+        put("assassin", "Assassin");
+        put("automaton", "Automaton");
+        put("blaze", "Blaze");
+        put("creeper", "Creeper");
+        //put("cow","Cow");
+        put("dreadlord", "Dreadlord");
+        put("enderman", "Enderman");
+        put("golem", "Golem");
+        put("herobrine", "Herobrine");
+        put("hunter", "Hunter");
+        put("moleman", "Moleman");
+        put("phoenix", "Phoenix");
+        put("pirate", "Pirate");
+        put("renegade", "Renegade");
+        put("shaman", "Shaman");
+        put("shark", "Shark");
+        put("skeleton", "Skeleton");
+        put("snowman", "Snowman");
+        put("spider", "Spider");
+        put("squid", "Squid");
+        put("pigman", "Pigman");
+        put("werewolf", "Werewolf");
+        put("zombie", "Zombie");
 
-	}};
+    }};
 
-	@Override
-	public String getCommandName() {
-		return "plancke";
-	}
+    @Override
+    public String getCommandName() {
+        return "plancke";
+    }
 
-	@Override
-	public String getCommandUsage(ICommandSender sender) {
-		return "/plancke <playername> <args(optional)>";
-	}
+    @Override
+    public String getCommandUsage(ICommandSender sender) {
+        return "/plancke <playername> <args(optional)>";
+    }
 
-	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException { // TODO faire les stats pour les autres jeux
+    @Override
+    public void processCommand(ICommandSender sender, String[] args) throws CommandException { // TODO faire les stats pour les autres jeux
 
-		if (args.length < 1) {
-			ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
-			return;
-		} 
+        if (args.length < 1) {
+            addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
+            return;
+        }
 
-		if(HypixelApiKeyUtil.apiKeyIsNotSetup()) { // api key not setup
-			ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.apikeyMissingErrorMsg()));
-			return;
-		}
+        if (HypixelApiKeyUtil.apiKeyIsNotSetup()) { // api key not setup
+            addChatMessage(new ChatComponentText(apikeyMissingErrorMsg()));
+            return;
+        }
 
-		(new Thread(() -> {
+        (new Thread(() -> {
 
-			CachedMojangUUID apiname;
-			try {
-				apiname = new CachedMojangUUID(args[0]);
-			} catch (ApiException e) {
-				ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e.getMessage()));
-				return;
-			}
-			
-			String uuid = apiname.getUuid();
+            CachedMojangUUID apiname;
+            try {
+                apiname = new CachedMojangUUID(args[0]);
+            } catch (ApiException e) {
+                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+                return;
+            }
 
-			CachedHypixelPlayerData playerdata;
-			try {
-				playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
-			} catch (ApiException e) {
-				ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e.getMessage()));
-				return;
-			}
-			
-			GeneralInfo generalstats = new GeneralInfo(playerdata.getPlayerData());
-			String formattedname = generalstats.getFormattedName();
+            String uuid = apiname.getUuid();
 
-			if(generalstats.hasNeverJoinedHypixel()) { // player never joined hypixel
+            CachedHypixelPlayerData playerdata;
+            try {
+                playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+            } catch (ApiException e) {
+                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+                return;
+            }
 
-				ChatUtil.addChatMessage(new ChatComponentText( ChatUtil.getTagMW()
-						+ EnumChatFormatting.YELLOW + args[0] + EnumChatFormatting.RED + " has never joined Hypixel." ));
-				return;
-			}
+            GeneralInfo generalstats = new GeneralInfo(playerdata.getPlayerData());
+            String formattedname = generalstats.getFormattedName();
 
-			if(args.length == 1) { 
-				
-				ChatUtil.addChatMessage(generalstats.getFormattedMessage(formattedname));
+            if (generalstats.hasNeverJoinedHypixel()) { // player never joined hypixel
 
-			} else {
+                addChatMessage(new ChatComponentText(getTagMW()
+                        + EnumChatFormatting.YELLOW + args[0] + EnumChatFormatting.RED + " has never joined Hypixel."));
+                return;
+            }
 
-				if(args[1].equalsIgnoreCase("bw") || args[1].equalsIgnoreCase("bedwars")) { // general stats for bedwars
+            if (args.length == 1) {
 
-					ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP bedwars"));
+                addChatMessage(generalstats.getFormattedMessage(formattedname));
 
-				} else if(args[1].equalsIgnoreCase("bsg") || args[1].equalsIgnoreCase("blitz")) { // general stats for blitz survival games
+            } else {
 
-					ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP blitz"));
+                if (args[1].equalsIgnoreCase("bw") || args[1].equalsIgnoreCase("bedwars")) { // general stats for bedwars
 
-				} else if(args[1].equalsIgnoreCase("duel") || args[1].equalsIgnoreCase("duels")) { // general stats for duels
+                    addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP bedwars"));
 
-					ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP duels"));
+                } else if (args[1].equalsIgnoreCase("bsg") || args[1].equalsIgnoreCase("blitz")) { // general stats for blitz survival games
 
-				} else if(args[1].equalsIgnoreCase("mw") || args[1].equalsIgnoreCase("megawalls")) { // stats for mega walls
+                    addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP blitz"));
 
-					if(args.length == 2) { 
+                } else if (args[1].equalsIgnoreCase("duel") || args[1].equalsIgnoreCase("duels")) { // general stats for duels
 
-						MegaWallsStats mwstats = new MegaWallsStats(playerdata.getPlayerData());
-						ChatUtil.addChatMessage(mwstats.getFormattedMessage(formattedname,apiname.getName()));
+                    addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP duels"));
 
-					} else if (args.length == 3) {
+                } else if (args[1].equalsIgnoreCase("mw") || args[1].equalsIgnoreCase("megawalls")) { // stats for mega walls
 
-						String mwclassname = megawallsclassesmap.get(args[2].toLowerCase());
+                    if (args.length == 2) {
 
-						if(mwclassname == null) { // not a valid mw class
-							ChatUtil.addChatMessage(new ChatComponentText( ChatUtil.getTagMW()
-									+ EnumChatFormatting.YELLOW + args[2] + EnumChatFormatting.RED + " isn't a valid mega walls class name." ));
-							return;
-						}	// print mw stats for a certain class
+                        MegaWallsStats mwstats = new MegaWallsStats(playerdata.getPlayerData());
+                        addChatMessage(mwstats.getFormattedMessage(formattedname, apiname.getName()));
 
-						MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(),mwclassname);
-						ChatUtil.addChatMessage(mwclassstats.getFormattedMessage(formattedname, apiname.getName()));
+                    } else if (args.length == 3) {
 
-					}
+                        String mwclassname = megawallsclassesmap.get(args[2].toLowerCase());
 
-				} else if(args[1].equalsIgnoreCase("sw") || args[1].equalsIgnoreCase("skywars")) { // general stats for skywars
+                        if (mwclassname == null) { // not a valid mw class
+                            addChatMessage(new ChatComponentText(getTagMW()
+                                    + EnumChatFormatting.YELLOW + args[2] + EnumChatFormatting.RED + " isn't a valid mega walls class name."));
+                            return;
+                        }    // print mw stats for a certain class
 
-					ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP skywars"));
+                        MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwclassname);
+                        addChatMessage(mwclassstats.getFormattedMessage(formattedname, apiname.getName()));
 
-				} else if(args[1].equalsIgnoreCase("tnt") || args[1].equalsIgnoreCase("tntgames")) { // general stats for tnt games
+                    }
 
-					ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP tntgames"));
+                } else if (args[1].equalsIgnoreCase("sw") || args[1].equalsIgnoreCase("skywars")) { // general stats for skywars
 
-				} else if(args[1].equalsIgnoreCase("uhc")) { // general stats for UHC champions
+                    addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP skywars"));
 
-					ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP uhc"));
+                } else if (args[1].equalsIgnoreCase("tnt") || args[1].equalsIgnoreCase("tntgames")) { // general stats for tnt games
 
-				} else {
+                    addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP tntgames"));
 
-					ChatUtil.addChatMessage(new ChatComponentText( ChatUtil.getTagMW()
-							+ EnumChatFormatting.YELLOW + args[1] + EnumChatFormatting.RED + " isn't a valid/supported game name." ));
+                } else if (args[1].equalsIgnoreCase("uhc")) { // general stats for UHC champions
 
-				}			
+                    addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP uhc"));
 
-			}
+                } else {
 
-		})).start();
+                    addChatMessage(new ChatComponentText(getTagMW()
+                            + EnumChatFormatting.YELLOW + args[1] + EnumChatFormatting.RED + " isn't a valid/supported game name."));
 
-	}
+                }
 
-	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		return true;
-	}
+            }
 
-	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+        })).start();
 
-		String[] games = {"megawalls"};
-		String[] mwargs = {"arcanist","assassin","automaton","blaze","creeper","cow","dreadlord","enderman","golem","herobrine","hunter","moleman","phoenix","pirate","renegade","shaman","shark","skeleton","snowman","spider","squid","pigman","werewolf","zombie"};
+    }
 
-		if(args.length == 1) 
-			//return (GameInfoGrabber.isitPrepPhase() ? null : getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()));
-			return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+    @Override
+    public boolean canCommandSenderUseCommand(ICommandSender sender) {
+        return true;
+    }
 
-		if(args.length == 2) 
-			return getListOfStringsMatchingLastWord(args,games);
+    @Override
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
 
-		if(args.length == 3 && (args[1].equalsIgnoreCase("mw") || args[1].equalsIgnoreCase("megawalls")) )
-			return getListOfStringsMatchingLastWord(args,mwargs);
+        String[] games = {"megawalls"};
+        String[] mwargs = {"arcanist", "assassin", "automaton", "blaze", "creeper", "cow", "dreadlord", "enderman", "golem", "herobrine", "hunter", "moleman", "phoenix", "pirate", "renegade", "shaman", "shark", "skeleton", "snowman", "spider", "squid", "pigman", "werewolf", "zombie"};
 
-		return null;
+        if (args.length == 1)
+            //return (GameInfoGrabber.isitPrepPhase() ? null : getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()));
+            return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
 
-	}
+        if (args.length == 2)
+            return getListOfStringsMatchingLastWord(args, games);
+
+        if (args.length == 3 && (args[1].equalsIgnoreCase("mw") || args[1].equalsIgnoreCase("megawalls")))
+            return getListOfStringsMatchingLastWord(args, mwargs);
+
+        return null;
+
+    }
 
 }

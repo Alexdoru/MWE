@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.utils;
 
 /**
  * https://github.com/HypixelDev/PublicAPI/blob/f95d38170aef8ed40441313743ab8e60a31dc007/Java/src/main/java/net/hypixel/api/util/ILeveling.java
+ *
  * @author Plancke
  */
 public interface ILeveling {

@@ -12,36 +12,35 @@ import java.util.List;
 
 public class CommandHypixelMessage extends CommandBase {
 
-	@Override
-	public String getCommandName() {
-		return "message";
-	}
+    @Override
+    public String getCommandName() {
+        return "message";
+    }
 
-	@Override
-	public String getCommandUsage(ICommandSender sender) {
-		return "/msg <playername> <message>";
-	}
+    @Override
+    public String getCommandUsage(ICommandSender sender) {
+        return "/msg <playername> <message>";
+    }
 
-	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-		(Minecraft.getMinecraft()).thePlayer.sendChatMessage("/msg " + CommandBase.buildString(args, 0));
-	}
+    @Override
+    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+        (Minecraft.getMinecraft()).thePlayer.sendChatMessage("/msg " + CommandBase.buildString(args, 0));
+    }
 
-	@Override
-	public List<String> getCommandAliases()
-	{
-		return Arrays.asList("w", "msg","MSG","Msg");
-	}
+    @Override
+    public List<String> getCommandAliases() {
+        return Arrays.asList("w", "msg", "MSG", "Msg");
+    }
 
-	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		return true;
-	}
+    @Override
+    public boolean canCommandSenderUseCommand(ICommandSender sender) {
+        return true;
+    }
 
-	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-		//return (GameInfoGrabber.isitPrepPhase() ? null : getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()));
-		return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
-	}
+    @Override
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+        //return (GameInfoGrabber.isitPrepPhase() ? null : getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()));
+        return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+    }
 
 }

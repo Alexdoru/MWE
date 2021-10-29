@@ -4,12 +4,15 @@ import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.getTagMW;
+
 public class HypixelApiKeyUtil {
 
 //	private static List<Long> request_times = new ArrayList<Long>();
 //	public static final int NB_MAX_REQUESTS = 120;
 
-	public static String getApiKey() {
+    public static String getApiKey() {
 
 //		long time = System.currentTimeMillis();
 //		request_times.add(time);
@@ -19,19 +22,19 @@ public class HypixelApiKeyUtil {
 //			throw new ApiException("Exceeding the limit of " + NB_MAX_REQUESTS + " requests per minute allowed by Hypixel");
 //		}
 
-		return MWEnConfigHandler.APIKey;
-	}
+        return MWEnConfigHandler.APIKey;
+    }
 
-	public static void setApiKey(String key) {
-		ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Api key set successfully"));
-		MWEnConfigHandler.APIKey = key;
-		MWEnConfigHandler.saveConfig();
-	}
+    public static void setApiKey(String key) {
+        addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.GREEN + "Api key set successfully"));
+        MWEnConfigHandler.APIKey = key;
+        MWEnConfigHandler.saveConfig();
+    }
 
-	public static boolean apiKeyIsNotSetup() {
-		return MWEnConfigHandler.APIKey == null || MWEnConfigHandler.APIKey.equals("");
-	}
-	
+    public static boolean apiKeyIsNotSetup() {
+        return MWEnConfigHandler.APIKey == null || MWEnConfigHandler.APIKey.equals("");
+    }
+
 //	/*
 //	 * returns the amounts of requests send in the last minute
 //	 */
@@ -40,7 +43,7 @@ public class HypixelApiKeyUtil {
 //		request_times.removeIf(o -> (o.longValue() + 60000L < time));
 //		return request_times.size();	
 //	}
-	
+
 //	public static void saveApiKey() {
 //		try {
 //			BufferedWriter writer = new BufferedWriter(new FileWriter(apiFile));

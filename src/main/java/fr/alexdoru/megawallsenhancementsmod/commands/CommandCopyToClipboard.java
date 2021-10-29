@@ -7,26 +7,26 @@ import net.minecraft.command.ICommandSender;
 
 public class CommandCopyToClipboard extends CommandBase {
 
-	@Override
-	public String getCommandName() {
-		return "copytoclipboard";
-	}
+    @Override
+    public String getCommandName() {
+        return "copytoclipboard";
+    }
 
-	@Override
-	public String getCommandUsage(ICommandSender sender) {
-		return "/copytoclipboard <text>";
-	}
+    @Override
+    public String getCommandUsage(ICommandSender sender) {
+        return "/copytoclipboard <text>";
+    }
 
-	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-		
-		ClipboardUtil.copyString(args[0]);
-				
-	}
-	
-	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		return true;
-	}
+    @Override
+    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+
+        ClipboardUtil.copyString(args[0]);
+
+    }
+
+    @Override
+    public boolean canCommandSenderUseCommand(ICommandSender sender) {
+        return true;
+    }
 
 }

@@ -6,7 +6,6 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWall
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerStatus;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangPlayernameToUUID;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
@@ -21,6 +20,8 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class CommandStalk extends CommandBase {
 
@@ -43,12 +44,12 @@ public class CommandStalk extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 
         if (args.length < 1) {
-            ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
+            addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
             return;
         }
 
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) { // api key not setup
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.apikeyMissingErrorMsg()));
+            addChatMessage(new ChatComponentText(apikeyMissingErrorMsg()));
             return;
         }
 
@@ -96,7 +97,7 @@ class StalkTask implements Callable<String> {
                     HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
                     MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
 
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()
+                    addChatMessage(new ChatComponentText(getTagMW()
                             + EnumChatFormatting.YELLOW + playername + EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + apistatus.getGamemode() + " " + apistatus.getMode() +
                             (apistatus.getMap() == null ? "" : (EnumChatFormatting.GREEN + " on " + EnumChatFormatting.YELLOW + apistatus.getMap()))
                             + EnumChatFormatting.GREEN + " playing "
@@ -107,7 +108,7 @@ class StalkTask implements Callable<String> {
 
                 } else { // player isn't in MW
 
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()
+                    addChatMessage(new ChatComponentText(getTagMW()
                             + EnumChatFormatting.YELLOW + playername + EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + apistatus.getGamemode() + " " + apistatus.getMode() +
                             (apistatus.getMap() == null ? "" : (EnumChatFormatting.GREEN + " on " + EnumChatFormatting.YELLOW + apistatus.getMap()))));
                     return null;
@@ -121,26 +122,26 @@ class StalkTask implements Callable<String> {
 
                 if (playerdata.getPlayerData() == null) { // Failed to contact hypixel's API
 
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()
+                    addChatMessage(new ChatComponentText(getTagMW()
                             + EnumChatFormatting.RED + "Failed to retrieve information from Hypixel's api for : " + playername + EnumChatFormatting.RED + "."));
                     return null;
 
                 } else if (logindata.hasNeverJoinedHypixel()) { // player never joined hypixel
 
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()
+                    addChatMessage(new ChatComponentText(getTagMW()
                             + EnumChatFormatting.YELLOW + playername + EnumChatFormatting.RED + " has never joined Hypixel."));
                     return null;
 
                 } else if (logindata.isStaffonHypixel()) { // player is a staff member
 
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()
+                    addChatMessage(new ChatComponentText(getTagMW()
                             + formattedname + EnumChatFormatting.RED + " is completely hiding their online status from the API."
                             + EnumChatFormatting.DARK_GRAY + " It happens for staff members."));
                     return null;
 
                 } else if (logindata.isHidingFromAPI()) {
 
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()
+                    addChatMessage(new ChatComponentText(getTagMW()
                             + formattedname + EnumChatFormatting.RED + " is blocking their online status from the API."));
                     return null;
 
@@ -150,7 +151,7 @@ class StalkTask implements Callable<String> {
 
                         MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
 
-                        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()
+                        addChatMessage(new ChatComponentText(getTagMW()
                                 + formattedname + EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType()
                                 + EnumChatFormatting.GREEN + " playing "
                                 + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass())
@@ -161,7 +162,7 @@ class StalkTask implements Callable<String> {
 
                     } else { // online not in MW
 
-                        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()
+                        addChatMessage(new ChatComponentText(getTagMW()
                                 + formattedname + EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType()
                                 + EnumChatFormatting.GREEN + "." + EnumChatFormatting.DARK_GRAY + " (This player hides their session.)"));
                         return null;
@@ -170,7 +171,7 @@ class StalkTask implements Callable<String> {
                 } else { // offline
 
                     String offlinesince = DateUtil.timeSince(logindata.getLastLogout());
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()
+                    addChatMessage(new ChatComponentText(getTagMW()
                             + formattedname + EnumChatFormatting.RED + " has been offline for " + EnumChatFormatting.YELLOW + offlinesince
                             + EnumChatFormatting.RED + "." + (logindata.getMostRecentGameType().equals("?") ? "" : EnumChatFormatting.RED + " Last seen in : " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType())));
                     return null;
@@ -179,7 +180,7 @@ class StalkTask implements Callable<String> {
             }
         } catch (ApiException e) {
             e.printStackTrace();
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+            addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
         }
 
         return null;

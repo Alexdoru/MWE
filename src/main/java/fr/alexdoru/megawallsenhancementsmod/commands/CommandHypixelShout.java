@@ -12,51 +12,51 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CommandHypixelShout extends CommandBase {
-	
-	private static final String guide_url = "https://hypixel.net/threads/the-complete-mega-walls-guide.3489088/";
 
-	@Override
-	public String getCommandName() {
-		return "shout";
-	}
+    private static final String guide_url = "https://hypixel.net/threads/the-complete-mega-walls-guide.3489088/";
 
-	@Override
-	public String getCommandUsage(ICommandSender sender) {
-		return "/shout <message>";
-	}
+    @Override
+    public String getCommandName() {
+        return "shout";
+    }
 
-	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-		
-		StringBuilder msg = new StringBuilder("/shout");
-		
-		for(String arg : args) {
-			
-			if(arg.equalsIgnoreCase("/guide")) {
-				msg.append(" " + guide_url);
-			} else {
-				msg.append(" ").append(arg);
-			}
-			
-		}
-		
-		(Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg.toString());
-	}
+    @Override
+    public String getCommandUsage(ICommandSender sender) {
+        return "/shout <message>";
+    }
 
-	@Override
-	public List<String> getCommandAliases() {
-		return Arrays.asList("SHOUT","Shout");
-	}
+    @Override
+    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 
-	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		return true;
-	}
+        StringBuilder msg = new StringBuilder("/shout");
 
-	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-		//return (GameInfoGrabber.isitPrepPhase() ? null : getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()));
-		return  FKCounterMod.isitPrepPhase() ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null;
-	}
+        for (String arg : args) {
+
+            if (arg.equalsIgnoreCase("/guide")) {
+                msg.append(" " + guide_url);
+            } else {
+                msg.append(" ").append(arg);
+            }
+
+        }
+
+        (Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg.toString());
+    }
+
+    @Override
+    public List<String> getCommandAliases() {
+        return Arrays.asList("SHOUT", "Shout");
+    }
+
+    @Override
+    public boolean canCommandSenderUseCommand(ICommandSender sender) {
+        return true;
+    }
+
+    @Override
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+        //return (GameInfoGrabber.isitPrepPhase() ? null : getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()));
+        return FKCounterMod.isitPrepPhase() ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null;
+    }
 
 }
