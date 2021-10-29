@@ -18,35 +18,35 @@ import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 
 public class MojangPlayernameToUUID {
 
-	private final String name;
-	private final String uuid;
+    private final String name;
+    private final String uuid;
 
-	public MojangPlayernameToUUID(String playername) throws ApiException {
-		
-		HttpClient httpclient = new HttpClient("https://api.mojang.com/users/profiles/minecraft/" + playername);
-		String rawresponse = httpclient.getrawresponse();
+    public MojangPlayernameToUUID(String playername) throws ApiException {
 
-		if(rawresponse == null) {
-			this.name = null;
-			this.uuid = null;
-			throw new ApiException(ChatUtil.invalidplayernameMsg(playername));
-		}
+        HttpClient httpclient = new HttpClient("https://api.mojang.com/users/profiles/minecraft/" + playername);
+        String rawresponse = httpclient.getrawresponse();
 
-		JsonParser parser = new JsonParser();
-		JsonObject obj = parser.parse(rawresponse).getAsJsonObject();
-		String id = obj.get("id").getAsString();
+        if (rawresponse == null) {
+            this.name = null;
+            this.uuid = null;
+            throw new ApiException(ChatUtil.invalidplayernameMsg(playername));
+        }
 
-		this.name = obj.get("name").getAsString();
-		this.uuid = id.replace("-", "");
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(rawresponse).getAsJsonObject();
+        String id = obj.get("id").getAsString();
 
-	}
+        this.name = obj.get("name").getAsString();
+        this.uuid = id.replace("-", "");
 
-	public String getName() {
-		return this.name;
-	}
+    }
 
-	public String getUuid() {
-		return this.uuid;
-	}
+    public String getName() {
+        return this.name;
+    }
+
+    public String getUuid() {
+        return this.uuid;
+    }
 
 }

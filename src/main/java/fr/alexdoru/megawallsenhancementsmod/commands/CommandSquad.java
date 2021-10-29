@@ -1,7 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import net.minecraft.client.Minecraft;
@@ -17,6 +16,9 @@ import net.minecraft.util.IChatComponent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.getTagMW;
 
 public class CommandSquad extends CommandBase {
 
@@ -39,14 +41,14 @@ public class CommandSquad extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 
         if (args.length < 1) {
-            ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
+            addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
             return;
         }
 
         if (args[0].equalsIgnoreCase("add")) {
 
             if (args.length < 2) {
-                ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : /squad <add> <playername>"));
+                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : /squad <add> <playername>"));
                 return;
             }
 
@@ -59,7 +61,7 @@ public class CommandSquad extends CommandBase {
                     player.refreshDisplayName();
                 }
 
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() +
+                addChatMessage(new ChatComponentText(getTagMW() +
                         EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[1] + EnumChatFormatting.GREEN + " as " +
                         EnumChatFormatting.GOLD + args[3] + EnumChatFormatting.GREEN + " to the squad."));
                 return;
@@ -74,7 +76,7 @@ public class CommandSquad extends CommandBase {
                     player.refreshDisplayName();
                 }
 
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() +
+                addChatMessage(new ChatComponentText(getTagMW() +
                         EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " to the squad."));
             }
 
@@ -84,19 +86,19 @@ public class CommandSquad extends CommandBase {
         } else if (args[0].equalsIgnoreCase("disband")) {
 
             SquadEvent.clearSquad();
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Removed all players from the squad."));
+            addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.GREEN + "Removed all players from the squad."));
 
         } else if (args[0].equalsIgnoreCase("l") || args[0].equalsIgnoreCase("list")) {
 
             HashMap<String, String> squad = SquadEvent.getSquad();
 
             if (squad.size() == 0) {
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() +
+                addChatMessage(new ChatComponentText(getTagMW() +
                         EnumChatFormatting.RED + "No one in the squad right now."));
                 return;
             }
 
-            IChatComponent imsg = new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Players in your squad : \n");
+            IChatComponent imsg = new ChatComponentText(getTagMW() + EnumChatFormatting.GREEN + "Players in your squad : \n");
 
             for (Entry<String, String> entry : squad.entrySet()) {
 
@@ -107,7 +109,7 @@ public class CommandSquad extends CommandBase {
                         + (displayname.equals(fakename) ? "" : EnumChatFormatting.GREEN + " renamed as : " + EnumChatFormatting.GOLD + entry.getValue()) + "\n"));
 
             }
-            ChatUtil.addChatMessage(imsg);
+            addChatMessage(imsg);
 
             /*
              * this doesn't update the nametag instantly since we can only add and not remove a prefix and then refresh the nametag
@@ -115,7 +117,7 @@ public class CommandSquad extends CommandBase {
         } else if (args[0].equalsIgnoreCase("remove")) {
 
             if (args.length < 2) {
-                ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : /squad <remove> <playername>"));
+                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : /squad <remove> <playername>"));
                 return;
             }
 
@@ -123,10 +125,10 @@ public class CommandSquad extends CommandBase {
 
                 if (SquadEvent.removePlayer(args[i])) {
 
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() +
+                    addChatMessage(new ChatComponentText(getTagMW() +
                             EnumChatFormatting.GREEN + "Removed " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " from the squad."));
                 } else {
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() +
+                    addChatMessage(new ChatComponentText(getTagMW() +
                             EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.RED + " isn't in the squad."));
                 }
             }

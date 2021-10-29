@@ -5,7 +5,6 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginDat
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassSkinData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerStatus;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
@@ -26,6 +25,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
+
 public class CommandStalkList extends CommandBase {
 
     @Override
@@ -42,7 +43,7 @@ public class CommandStalkList extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) { // api key not setup
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.apikeyMissingErrorMsg()));
+            addChatMessage(new ChatComponentText(apikeyMissingErrorMsg()));
             return;
         }
 
@@ -51,14 +52,14 @@ public class CommandStalkList extends CommandBase {
             if (args.length >= 2) {
 
                 String listkey = args[1].contains("stalk") ? args[1] : "stalk" + args[1];
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Making player list for : " + listkey + "..."));
+                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.GREEN + "Making player list for : " + listkey + "..."));
 
                 if (args.length == 2) {
                     (new Thread(() -> {
                         try {
                             listThePlayers(listkey, 1);
                         } catch (ApiException e) {
-                            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+                            addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
                             e.printStackTrace();
                         }
                     })).start();
@@ -69,21 +70,21 @@ public class CommandStalkList extends CommandBase {
                         } catch (NumberInvalidException e) {
                             e.printStackTrace();
                         } catch (ApiException e) {
-                            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+                            addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
                             e.printStackTrace();
                         }
                     })).start();
                 }
 
             } else {
-                ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + " list <listname> <page(optional)>"));
+                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + " list <listname> <page(optional)>"));
             }
             return;
 
         } else if (args.length >= 1 && args[0].equals("move")) {
 
             if (args.length != 3) {
-                ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + " move <uuid> <newlistname>"));
+                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + " move <uuid> <newlistname>"));
             } else {
                 movePlayerTo(args[1], args[2]);
             }
@@ -112,7 +113,7 @@ public class CommandStalkList extends CommandBase {
             }
 
         }
-        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Using : \"" + keyword + "\", Stalking " + i + " players..."));
+        addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.GREEN + "Using : \"" + keyword + "\", Stalking " + i + " players..."));
     }
 
     @Override
@@ -153,7 +154,7 @@ public class CommandStalkList extends CommandBase {
 
         }
 
-        ChatUtil.addChatMessage(ChatUtil.makeiChatList("Players in " + listkey, imsgbody, displaypage, nbpage, "/stalklist list " + listkey));
+        addChatMessage(makeiChatList("Players in " + listkey, imsgbody, displaypage, nbpage, "/stalklist list " + listkey));
 
     }
 
@@ -162,7 +163,7 @@ public class CommandStalkList extends CommandBase {
         WDR wdr = WdredPlayers.getWdredMap().get(uuid);
 
         if (wdr == null) {
-            ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "This uuid is not report list"));
+            addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "This uuid is not report list"));
         } else {
             String newlistname = newlist.contains("stalk") ? newlist : "stalk" + newlist;
             ArrayList<String> newHacksArray = new ArrayList<>();
@@ -174,7 +175,7 @@ public class CommandStalkList extends CommandBase {
                 }
             }
             WdredPlayers.getWdredMap().put(uuid, new WDR(wdr.timestamp, newHacksArray));
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Successfully moved this player to : " + EnumChatFormatting.GOLD + newlistname));
+            addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.GREEN + "Successfully moved this player to : " + EnumChatFormatting.GOLD + newlistname));
         }
 
     }
@@ -207,7 +208,7 @@ class StalkListTask implements Callable<String> {
                 if (apistatus.getGamemode().equals("Mega Walls")) { // player is in MW, display currrent class and skin
 
                     MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
-                    imsg = new ChatComponentText(ChatUtil.getTagMW()
+                    imsg = new ChatComponentText(getTagMW()
                             + formattedname + EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + apistatus.getGamemode() + " " + apistatus.getMode() +
                             (apistatus.getMap() == null ? "" : (EnumChatFormatting.GREEN + " on " + EnumChatFormatting.YELLOW + apistatus.getMap()))
                             + EnumChatFormatting.GREEN + " playing "
@@ -216,7 +217,7 @@ class StalkListTask implements Callable<String> {
                     );
 
                 } else { // player isn't in MW
-                    imsg = new ChatComponentText(ChatUtil.getTagMW()
+                    imsg = new ChatComponentText(getTagMW()
                             + formattedname + EnumChatFormatting.GRAY + " is in " + apistatus.getGamemode() + " " + apistatus.getMode() +
                             (apistatus.getMap() == null ? "" : (EnumChatFormatting.GRAY + " on " + EnumChatFormatting.GRAY + apistatus.getMap())));
 
@@ -229,12 +230,12 @@ class StalkListTask implements Callable<String> {
                                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/stalklist move " + this.uuid + " "))));
                 }
 
-                ChatUtil.addChatMessage(imsg);
+                addChatMessage(imsg);
 
             }
 
         } catch (ApiException e) {
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+            addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
         }
 
         return null;

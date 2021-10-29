@@ -6,10 +6,10 @@ import java.awt.datatransfer.StringSelection;
 // https://github.com/Moulberry/Hychat/blob/ebc70c6023f158f5a833894088e8da91771bcf7d/src/main/java/io/github/moulberry/hychat/core/util/MiscUtils.java
 public class ClipboardUtil {
 
-	public static void copyString(String msg) {		
-		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(msg), null);
-	}
-	
+    public static void copyString(String msg) {
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(msg), null);
+    }
+
 //	public static void copyToClipboard(BufferedImage bufferedImage) {
 //
 //		if(SystemUtils.IS_OS_WINDOWS) {
@@ -280,5 +280,5 @@ public class ClipboardUtil {
 //
 //        return framebuffer;
 //    }
-	
+
 }

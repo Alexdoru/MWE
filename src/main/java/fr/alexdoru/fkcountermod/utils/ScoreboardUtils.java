@@ -16,35 +16,35 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ScoreboardUtils {
-	
-	/**
+
+    /**
      * Returns a list of formatted strings containing each line of the scoreboard/sidebar
      * Item at index 0 is the first line etc
-	 */
-	public static List<String> getFormattedSidebarText() {
-		
-		List<String> lines = new ArrayList<>();
-		
-		Minecraft mc = Minecraft.getMinecraft();
+     */
+    public static List<String> getFormattedSidebarText() {
 
-		if (mc.theWorld == null || !MinecraftUtils.isHypixel()) {
-			return lines;
-		}
+        List<String> lines = new ArrayList<>();
 
-		Scoreboard scoreboard = mc.theWorld.getScoreboard();
-		if (scoreboard == null) {
-			return lines;
-		}
-		
-		return getFormattedSidebarText(scoreboard);
-	}
-	
-	/**
+        Minecraft mc = Minecraft.getMinecraft();
+
+        if (mc.theWorld == null || !MinecraftUtils.isHypixel()) {
+            return lines;
+        }
+
+        Scoreboard scoreboard = mc.theWorld.getScoreboard();
+        if (scoreboard == null) {
+            return lines;
+        }
+
+        return getFormattedSidebarText(scoreboard);
+    }
+
+    /**
      * Returns a list of formatted strings containing each line of the scoreboard/sidebar
      * Item at index 0 is the first line etc
      */
     public static List<String> getFormattedSidebarText(Scoreboard scoreboard) {
-    	
+
         List<String> lines = new ArrayList<>();
         ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(1);
 
@@ -72,39 +72,39 @@ public class ScoreboardUtils {
         Collections.reverse(lines);
         return lines;
     }
-    
+
     /**
      * Returns the sidebar text as a list of unformatted strings, each element is a line of the scoreboard/sidebar
      * Item at index 0 is the first line etc
      */
-    public static List<String> getUnformattedSidebarText(){
-    	return stripControlCodes(getFormattedSidebarText());
+    public static List<String> getUnformattedSidebarText() {
+        return stripControlCodes(getFormattedSidebarText());
     }
 
     /**
      * Returns the sidebar text as a list of unformatted strings, each element is a line of the scoreboard/sidebar
      * Item at index 0 is the first line etc
-     * 
+     *
      * @param scoreboard - raw minecraft scoreboard - mc.theWorld.getScoreboard()
      */
     public static List<String> getUnformattedSidebarText(Scoreboard scoreboard) {
         List<String> lines = getFormattedSidebarText(scoreboard);
         return stripControlCodes(lines);
     }
-    
+
     /**
      * Strips the color control codes of all the lines of the input list
-     * 
+     *
      * @param ListIn - String list with chat color control codes
      */
     public static List<String> stripControlCodes(List<String> ListIn) {
         List<String> unformattedList = new ArrayList<>();
         for (int i = 0; i < ListIn.size(); i++) {
-        	unformattedList.add(i, StringUtils.stripControlCodes(ListIn.get(i)));
+            unformattedList.add(i, StringUtils.stripControlCodes(ListIn.get(i)));
         }
         return unformattedList;
     }
-    
+
     /**
      * Returns formatted top of the scoreboard/sidebar
      */
@@ -117,13 +117,13 @@ public class ScoreboardUtils {
 
         return objective.getDisplayName();
     }
-    
+
     /**
      * Returns unformatted top of the scoreboard/sidebar
      */
     public static String getUnformattedSidebarTitle(Scoreboard scoreboard) {
         return StringUtils.stripControlCodes(getSidebarTitle(scoreboard));
     }
-    
+
 }
 

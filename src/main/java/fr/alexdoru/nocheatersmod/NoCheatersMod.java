@@ -19,57 +19,57 @@ import java.io.File;
 @Mod(name = "No cheaters", modid = "nocheaters", version = "2.1", acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
 public class NoCheatersMod {
 
-	public static final KeyBinding addtimemark_key = new KeyBinding("Add Timestamp", 0, "NoCheaters");
-	
-	@EventHandler
-	public void init(FMLInitializationEvent event) {
-		
-		ClientRegistry.registerKeyBinding(addtimemark_key);
-		MinecraftForge.EVENT_BUS.register(new NoCheatersEvents());
-		MinecraftForge.EVENT_BUS.register(new GameInfoGrabber());
-		ClientCommandHandler.instance.registerCommand(new CommandWDR());
-		ClientCommandHandler.instance.registerCommand(new CommandUnWDR());
-		ClientCommandHandler.instance.registerCommand(new CommandReport());
-		ClientCommandHandler.instance.registerCommand(new CommandNocheaters());
-		ClientCommandHandler.instance.registerCommand(new CommandSendReportAgain());
-		WdredPlayers.wdrsFile = new File((Minecraft.getMinecraft()).mcDataDir,"config/wdred.txt");
-		Runtime.getRuntime().addShutdownHook(new Thread(WdredPlayers::saveReportedPlayers));
-		WdredPlayers.loadReportedPlayers();
-		
-	}
+    public static final KeyBinding addtimemark_key = new KeyBinding("Add Timestamp", 0, "NoCheaters");
 
-	public static boolean areIconsToggled() {
-		return MWEnConfigHandler.toggleicons;
-	}
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
 
-	public static void setToggleicons(boolean toggleicons) {
-		MWEnConfigHandler.toggleicons = toggleicons;
-		MWEnConfigHandler.saveConfig();
-	}
+        ClientRegistry.registerKeyBinding(addtimemark_key);
+        MinecraftForge.EVENT_BUS.register(new NoCheatersEvents());
+        MinecraftForge.EVENT_BUS.register(new GameInfoGrabber());
+        ClientCommandHandler.instance.registerCommand(new CommandWDR());
+        ClientCommandHandler.instance.registerCommand(new CommandUnWDR());
+        ClientCommandHandler.instance.registerCommand(new CommandReport());
+        ClientCommandHandler.instance.registerCommand(new CommandNocheaters());
+        ClientCommandHandler.instance.registerCommand(new CommandSendReportAgain());
+        WdredPlayers.wdrsFile = new File((Minecraft.getMinecraft()).mcDataDir, "config/wdred.txt");
+        Runtime.getRuntime().addShutdownHook(new Thread(WdredPlayers::saveReportedPlayers));
+        WdredPlayers.loadReportedPlayers();
 
-	public static boolean areWarningsToggled() {
-		return MWEnConfigHandler.togglewarnings;
-	}
+    }
 
-	public static void setTogglewarnings(boolean togglewarnings) {
-		MWEnConfigHandler.togglewarnings = togglewarnings;
-		MWEnConfigHandler.saveConfig();
-	}
+    public static boolean areIconsToggled() {
+        return MWEnConfigHandler.toggleicons;
+    }
 
-	public static boolean isAutoreportToggled() {
-		return MWEnConfigHandler.toggleautoreport;
-	}
+    public static void setToggleicons(boolean toggleicons) {
+        MWEnConfigHandler.toggleicons = toggleicons;
+        MWEnConfigHandler.saveConfig();
+    }
 
-	public static void setToggleautoreport(boolean toggleautoreport) {
-		MWEnConfigHandler.toggleautoreport = toggleautoreport;
-		MWEnConfigHandler.saveConfig();
-	}
-	
-	public static long getTimebetweenreports() {
-		return MWEnConfigHandler.timeBetweenReports;
-	}
+    public static boolean areWarningsToggled() {
+        return MWEnConfigHandler.togglewarnings;
+    }
 
-	public static long getTimeautoreport() {
-		return MWEnConfigHandler.timeAutoReport;
-	}
+    public static void setTogglewarnings(boolean togglewarnings) {
+        MWEnConfigHandler.togglewarnings = togglewarnings;
+        MWEnConfigHandler.saveConfig();
+    }
+
+    public static boolean isAutoreportToggled() {
+        return MWEnConfigHandler.toggleautoreport;
+    }
+
+    public static void setToggleautoreport(boolean toggleautoreport) {
+        MWEnConfigHandler.toggleautoreport = toggleautoreport;
+        MWEnConfigHandler.saveConfig();
+    }
+
+    public static long getTimebetweenreports() {
+        return MWEnConfigHandler.timeBetweenReports;
+    }
+
+    public static long getTimeautoreport() {
+        return MWEnConfigHandler.timeAutoReport;
+    }
 }

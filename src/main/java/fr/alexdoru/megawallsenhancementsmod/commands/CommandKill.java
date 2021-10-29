@@ -13,32 +13,32 @@ import java.util.List;
 
 public class CommandKill extends CommandBase {
 
-	@Override
-	public String getCommandName() {
-		return "kill";
-	}
+    @Override
+    public String getCommandName() {
+        return "kill";
+    }
 
-	@Override
-	public String getCommandUsage(ICommandSender sender) {
-		return "/kill";
-	}
-	
-	@Override
-	public List<String> getCommandAliases() {
-		return Collections.singletonList("Kill");
-	}
+    @Override
+    public String getCommandUsage(ICommandSender sender) {
+        return "/kill";
+    }
 
-	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-		(Minecraft.getMinecraft()).thePlayer.sendChatMessage("/kill");
-		if(MWEnConfigHandler.show_killcooldownGUI && FKCounterMod.isInMwGame()) {
-			KillCooldownEvent.drawCooldownGui();
-		}
-	}
+    @Override
+    public List<String> getCommandAliases() {
+        return Collections.singletonList("Kill");
+    }
 
-	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		return true;
-	}
+    @Override
+    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+        (Minecraft.getMinecraft()).thePlayer.sendChatMessage("/kill");
+        if (MWEnConfigHandler.show_killcooldownGUI && FKCounterMod.isInMwGame()) {
+            KillCooldownEvent.drawCooldownGui();
+        }
+    }
+
+    @Override
+    public boolean canCommandSenderUseCommand(ICommandSender sender) {
+        return true;
+    }
 
 }

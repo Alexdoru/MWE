@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser;
 
 import com.google.gson.JsonObject;
-import fr.alexdoru.megawallsenhancementsmod.api.enums.GameType;
+import fr.alexdoru.megawallsenhancementsmod.enums.GameType;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import net.minecraft.util.EnumChatFormatting;
 

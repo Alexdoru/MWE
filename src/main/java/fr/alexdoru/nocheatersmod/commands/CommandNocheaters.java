@@ -6,7 +6,6 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
@@ -29,6 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
+
 public class CommandNocheaters extends CommandBase {
 
     private static HashMap<String, WDR> sortedmap = new HashMap<>();
@@ -47,7 +48,7 @@ public class CommandNocheaters extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) throws CommandException { // TODO ca affiche le msg reported players meme si y'en a pas
 
         if (args.length == 0) {
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+            addChatMessage(new ChatComponentText(getTagNoCheaters() +
                     EnumChatFormatting.YELLOW + "Reported players : ")
                     .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + "Report ALL"))
                     .setChatStyle(new ChatStyle()
@@ -71,11 +72,11 @@ public class CommandNocheaters extends CommandBase {
 
                 if (NoCheatersMod.areIconsToggled()) {
                     NoCheatersMod.setToggleicons(false);
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() +
                             EnumChatFormatting.RED + "Icons disabled"));
                 } else {
                     NoCheatersMod.setToggleicons(true);
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() +
                             EnumChatFormatting.GREEN + "Icons enabled"));
                 }
 
@@ -84,13 +85,13 @@ public class CommandNocheaters extends CommandBase {
                 if (NoCheatersMod.isAutoreportToggled()) {
 
                     NoCheatersMod.setToggleautoreport(false);
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() +
                             EnumChatFormatting.RED + "Autoreports disabled"));
 
                 } else {
 
                     NoCheatersMod.setToggleautoreport(true);
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() +
                             EnumChatFormatting.GREEN + "Autoreports enabled"));
                 }
 
@@ -99,13 +100,13 @@ public class CommandNocheaters extends CommandBase {
                 if (NoCheatersMod.areWarningsToggled()) {
 
                     NoCheatersMod.setTogglewarnings(false);
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() +
                             EnumChatFormatting.RED + "Warnings disabled"));
 
                 } else {
 
                     NoCheatersMod.setTogglewarnings(true);
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() +
                             EnumChatFormatting.GREEN + "Warnings enabled"));
                     NoCheatersEvents.scanCurrentWorld();
 
@@ -115,19 +116,19 @@ public class CommandNocheaters extends CommandBase {
 
         } else if (args.length == 1 && args[0].equalsIgnoreCase("getgameid")) {
 
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+            addChatMessage(new ChatComponentText(getTagNoCheaters() +
                     EnumChatFormatting.GREEN + "Current server : " + EnumChatFormatting.DARK_GRAY + GameInfoGrabber.getGameIDfromscoreboard()));
 
         } else if (args.length == 1 && args[0].equalsIgnoreCase("getstoreddata")) {
 
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+            addChatMessage(new ChatComponentText(getTagNoCheaters() +
                     EnumChatFormatting.GREEN + "ServerID stored : " + EnumChatFormatting.DARK_GRAY + GameInfoGrabber.getstoredGameID() + "\n"
                     + EnumChatFormatting.GREEN + "Timestamp stored (local) : " + EnumChatFormatting.DARK_GRAY + DateUtil.localformatTimestamp(GameInfoGrabber.getstoredTimestamp()) + "\n"
                     + EnumChatFormatting.GREEN + "Timestamp stored (EST) : " + EnumChatFormatting.DARK_GRAY + DateUtil.ESTformatTimestamp(GameInfoGrabber.getstoredTimestamp())));
 
         } else if (args.length == 1 && args[0].equalsIgnoreCase("isitprepphase")) {
 
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+            addChatMessage(new ChatComponentText(getTagNoCheaters() +
                     EnumChatFormatting.GREEN + "Preparation phase : " + EnumChatFormatting.DARK_GRAY + (FKCounterMod.isitPrepPhase() ? "True" : "False")));
 
         } else if (args.length == 1 && args[0].equalsIgnoreCase("getscoreboard")) {
@@ -139,11 +140,11 @@ public class CommandNocheaters extends CommandBase {
             if (args[0].equalsIgnoreCase("stalkreportlist")) {
 
                 if (HypixelApiKeyUtil.apiKeyIsNotSetup()) { //api key not setup
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.apikeyMissingErrorMsg()));
+                    addChatMessage(new ChatComponentText(apikeyMissingErrorMsg()));
                     return;
                 }
 
-                ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Processing command..."));
+                addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Processing command..."));
 
             }
 
@@ -159,7 +160,7 @@ public class CommandNocheaters extends CommandBase {
                     try {
                         displaypage = parseInt(args[1]);
                     } catch (NumberInvalidException e) {
-                        ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Not a valid number"));
+                        addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Not a valid number"));
                         e.printStackTrace();
                     }
                 }
@@ -193,7 +194,7 @@ public class CommandNocheaters extends CommandBase {
                             messagebody.append(createReportLine(uuid, wdr, args[0].equalsIgnoreCase("stalkreportlist"))).append(",{\"text\":\"\\n\"}");
                         } catch (ApiException e) {
                             e.printStackTrace();
-                            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+                            addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
                         }
                     }
 
@@ -203,12 +204,12 @@ public class CommandNocheaters extends CommandBase {
 
                 if (!messagebody.toString().equals("")) {
 
-                    ChatUtil.addChatMessage(IChatComponent.Serializer.jsonToComponent(
-                            ChatUtil.makeChatList("Timestamped Reports", messagebody.toString(), displaypage, nbpage, (args[0].equalsIgnoreCase("stalkreportlist") ? "/nocheaters stalkreportlist" : "/nocheaters reportlist"))));
+                    addChatMessage(IChatComponent.Serializer.jsonToComponent(
+                            makeChatList("Timestamped Reports", messagebody.toString(), displaypage, nbpage, (args[0].equalsIgnoreCase("stalkreportlist") ? "/nocheaters stalkreportlist" : "/nocheaters reportlist"))));
 
                 } else {
 
-                    ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "No reports to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available."));
+                    addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "No reports to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available."));
 
                 }
 
@@ -216,7 +217,7 @@ public class CommandNocheaters extends CommandBase {
 
         } else if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
 
-            ChatUtil.addChatMessage(new ChatComponentText(
+            addChatMessage(new ChatComponentText(
                     EnumChatFormatting.RED + "/nocheaters : scans the world and warns you about previously reported players \n" +
                             EnumChatFormatting.RED + "/nocheaters toggle warnings : toggles the warning messages on or off \n" +
                             EnumChatFormatting.RED + "/nocheaters reportlist : prints the reports with timestamps"));

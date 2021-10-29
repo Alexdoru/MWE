@@ -1,13 +1,13 @@
 {
-    "required": true,
-    "minVersion": "0.7.10",
-    "package": "fr.alexdoru.megawallsenhancementsmod.mixin.mixins",
-    "target": "@env(DEFAULT)",
-    "compatibilityLevel": "JAVA_8",
-    "refmap": "mixins.MegaWallsEnhancements.refmap.json",
-    "mixins": [
-        "CancelHungerTitleMWMixin",
-        "GUIPlayerTabOverlayMixin",
-        "NetworkPlayerInfoMixin"
-    ]   
+  "required": true,
+  "minVersion": "0.7.10",
+  "package": "fr.alexdoru.megawallsenhancementsmod.mixin.mixins",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "mixins.MegaWallsEnhancements.refmap.json",
+  "mixins": [
+    "CancelHungerTitleMWMixin",
+    "GUIPlayerTabOverlayMixin",
+    "NetworkPlayerInfoMixin"
+  ]
 }

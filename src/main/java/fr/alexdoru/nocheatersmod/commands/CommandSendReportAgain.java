@@ -1,6 +1,5 @@
 package fr.alexdoru.nocheatersmod.commands;
 
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import net.minecraft.client.Minecraft;
@@ -12,6 +11,8 @@ import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
 import java.util.Date;
+
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
 
 public class CommandSendReportAgain extends CommandBase {
 
@@ -29,7 +30,7 @@ public class CommandSendReportAgain extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 
         if (args.length < 2) {
-            ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
+            addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
             return;
         }
 
