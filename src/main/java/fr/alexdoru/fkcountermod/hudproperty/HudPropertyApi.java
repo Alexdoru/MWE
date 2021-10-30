@@ -55,6 +55,7 @@ public final class HudPropertyApi {
 
     @SubscribeEvent
     public void onRenderGUI(RenderGameOverlayEvent.Post event) {
+        // TODO ca s'affiche en dessous du scoreboard
 
         if (event.type != ElementType.EXPERIENCE) {
             return;

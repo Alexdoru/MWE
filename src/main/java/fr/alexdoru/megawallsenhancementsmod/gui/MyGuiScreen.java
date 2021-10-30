@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 
@@ -47,6 +48,17 @@ public class MyGuiScreen extends GuiScreen {
 
     public String getSuffix(boolean enabled) {
         return enabled ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled";
+    }
+
+    public void drawCenteredTitle(String title, int buttonsHeight) {
+        GlStateManager.pushMatrix();
+        {
+            int dilatation = 2;
+            GlStateManager.translate((width / 2.0f) - mc.fontRendererObj.getStringWidth(title), getyCenter() - (buttonsHeight + 4) * 3, 0);
+            GlStateManager.scale(dilatation, dilatation, dilatation);
+            mc.fontRendererObj.drawString(title, 0, 0, Integer.parseInt("55FF55", 16));
+        }
+        GlStateManager.popMatrix();
     }
 
     public int getxCenter() {

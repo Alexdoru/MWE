@@ -2,12 +2,11 @@ package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.fkcountermod.gui.FKCounterConfigGuiScreen;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.io.IOException;
 
-public class GeneralConfigGuiScreen extends MyGuiScreen { // TODO config gui
+public class GeneralConfigGuiScreen extends MyGuiScreen {
 
     private final int ButtonsHeight = 20;
 
@@ -26,15 +25,7 @@ public class GeneralConfigGuiScreen extends MyGuiScreen { // TODO config gui
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        GlStateManager.pushMatrix();
-        {
-            int dilatation = 2;
-            String title = "Config";
-            GlStateManager.translate((width / 2.0f) - mc.fontRendererObj.getStringWidth(title), getyCenter() - (ButtonsHeight + 4) * 3, 0);
-            GlStateManager.scale(dilatation, dilatation, dilatation);
-            mc.fontRendererObj.drawString(title, 0, 0, Integer.parseInt("55FF55", 16));
-        }
-        GlStateManager.popMatrix();
+        drawCenteredTitle("Config", ButtonsHeight);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -43,13 +34,13 @@ public class GeneralConfigGuiScreen extends MyGuiScreen { // TODO config gui
 
         switch (button.id) {
             case 0:
-                mc.displayGuiScreen(new FKCounterConfigGuiScreen());
+                mc.displayGuiScreen(new FKCounterConfigGuiScreen(this));
                 break;
             case 1:
-                mc.displayGuiScreen(new MWEnConfigGuiScreen());
+                mc.displayGuiScreen(new MWEnConfigGuiScreen(this));
                 break;
             case 2:
-                mc.displayGuiScreen(new NoCheatersConfigGuiScreen());
+                mc.displayGuiScreen(new NoCheatersConfigGuiScreen(this));
                 break;
             case 3:
                 mc.displayGuiScreen(null);
