@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.GeneralInfo;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassStats;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
+import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.CommandBase;
@@ -15,66 +16,11 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
-import java.util.HashMap;
 import java.util.List;
 
 import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class CommandPlancke extends CommandBase {
-
-    private static final HashMap<String, String> megawallsclassesmap = new HashMap<String, String>() {{ // TODO replace with enum
-
-        put("arc", "Arcanist");
-        put("asn", "Assassin");
-        put("atn", "Automaton");
-        put("bla", "Blaze");
-        put("cre", "Creeper");
-        put("cow", "Cow");
-        put("dre", "Dreadlord");
-        put("end", "Enderman");
-        put("gol", "Golem");
-        put("hbr", "Herobrine");
-        put("hun", "Hunter");
-        put("mol", "Moleman");
-        put("phx", "Phoenix");
-        put("pir", "Pirate");
-        put("ren", "Renegade");
-        put("sha", "Shaman");
-        put("srk", "Shark");
-        put("ske", "Skeleton");
-        put("sno", "Snowman");
-        put("spi", "Spider");
-        put("squ", "Squid");
-        put("pig", "Pigman");
-        put("wer", "Werewolf");
-        put("zom", "Zombie");
-
-        put("arcanist", "Arcanist");
-        put("assassin", "Assassin");
-        put("automaton", "Automaton");
-        put("blaze", "Blaze");
-        put("creeper", "Creeper");
-        //put("cow","Cow");
-        put("dreadlord", "Dreadlord");
-        put("enderman", "Enderman");
-        put("golem", "Golem");
-        put("herobrine", "Herobrine");
-        put("hunter", "Hunter");
-        put("moleman", "Moleman");
-        put("phoenix", "Phoenix");
-        put("pirate", "Pirate");
-        put("renegade", "Renegade");
-        put("shaman", "Shaman");
-        put("shark", "Shark");
-        put("skeleton", "Skeleton");
-        put("snowman", "Snowman");
-        put("spider", "Spider");
-        put("squid", "Squid");
-        put("pigman", "Pigman");
-        put("werewolf", "Werewolf");
-        put("zombie", "Zombie");
-
-    }};
 
     @Override
     public String getCommandName() {
@@ -156,15 +102,15 @@ public class CommandPlancke extends CommandBase {
 
                     } else if (args.length == 3) {
 
-                        String mwclassname = megawallsclassesmap.get(args[2].toLowerCase());
+                        MWClass mwclass = MWClass.fromTagOrName(args[2]);
 
-                        if (mwclassname == null) { // not a valid mw class
+                        if (mwclass == null) { // not a valid mw class
                             addChatMessage(new ChatComponentText(getTagMW()
                                     + EnumChatFormatting.YELLOW + args[2] + EnumChatFormatting.RED + " isn't a valid mega walls class name."));
                             return;
                         }    // print mw stats for a certain class
 
-                        MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwclassname);
+                        MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwclass.className);
                         addChatMessage(mwclassstats.getFormattedMessage(formattedname, apiname.getName()));
 
                     }

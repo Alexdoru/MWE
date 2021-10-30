@@ -7,6 +7,8 @@ public enum ConfigSetting {
     SHOW_PLAYERS("Show Players", false, null),
     DRAW_BACKGROUND("HUD Background", false, null),
     TEXT_SHADOW("Text Shadow", true, null);
+    // TODO add counter to sidebar
+    // TODO add the finals to the tablist
 
     private final String title;
     private boolean value;
