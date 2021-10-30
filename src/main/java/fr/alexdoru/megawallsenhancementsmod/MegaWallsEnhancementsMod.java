@@ -12,8 +12,11 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = "mwenhancements", name = "MegaWallsEnhancements", version = "2.9.4", acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
+@Mod(modid = MegaWallsEnhancementsMod.modid, name = "MegaWallsEnhancements", version = MegaWallsEnhancementsMod.version, acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
 public class MegaWallsEnhancementsMod {
+
+    public static final String modid = "mwenhancements";
+    public static final String version = "2.9.4";
 
     public static final KeyBinding log_key_fast = new KeyBinding("Fast log glitch", 0, "MegaWallsEnhancements");
     public static final KeyBinding log_key_normal = new KeyBinding("Log glitch", 0, "MegaWallsEnhancements");

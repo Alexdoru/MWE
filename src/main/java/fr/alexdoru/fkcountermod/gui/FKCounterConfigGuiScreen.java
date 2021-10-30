@@ -2,9 +2,10 @@ package fr.alexdoru.fkcountermod.gui;
 
 import com.google.common.collect.Lists;
 import fr.alexdoru.fkcountermod.FKCounterMod;
-import fr.alexdoru.fkcountermod.config.ConfigSetting;
+import fr.alexdoru.fkcountermod.config.FKConfigSetting;
 import fr.alexdoru.fkcountermod.gui.elements.ButtonFancy;
 import fr.alexdoru.fkcountermod.gui.elements.ButtonToggle;
+import fr.alexdoru.megawallsenhancementsmod.gui.GeneralConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.gui.MyGuiScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -26,8 +27,7 @@ public class FKCounterConfigGuiScreen extends MyGuiScreen {
 
     @Override
     public void initGui() {
-        List<ConfigSetting> settings = Lists.newArrayList(ConfigSetting.values());
-
+        List<FKConfigSetting> settings = Lists.newArrayList(FKConfigSetting.values());
         rows = (int) Math.ceil(settings.size() / ((float) columns));
 
         buttonList.add(new ButtonFancy(100, width / 2 + 45, height / 2 - findMenuHeight() / 2 + 8, 30, 14, "Move HUD", 0.5));
@@ -41,6 +41,7 @@ public class FKCounterConfigGuiScreen extends MyGuiScreen {
             }
         }
 
+        this.buttonList.add(new GuiButton(200, getxCenter() - 25, getyCenter() + 80, 50, 20, "Done"));
         super.initGui();
 
     }
@@ -61,24 +62,30 @@ public class FKCounterConfigGuiScreen extends MyGuiScreen {
 
     @Override
     public void actionPerformed(GuiButton button) {
+
         if (button instanceof ButtonToggle) {
 
             ButtonToggle buttonToggle = (ButtonToggle) button;
             buttonToggle.getSetting().toggleValue();
 
-            if (buttonToggle.getSetting() == ConfigSetting.SHOW_PLAYERS && buttonToggle.getSetting().getValue() && ConfigSetting.COMPACT_HUD.getValue()) {
-                ConfigSetting.COMPACT_HUD.toggleValue();
+            if (buttonToggle.getSetting() == FKConfigSetting.SHOW_PLAYERS && buttonToggle.getSetting().getValue() && FKConfigSetting.COMPACT_HUD.getValue()) {
+                FKConfigSetting.COMPACT_HUD.toggleValue();
             }
 
-            if (buttonToggle.getSetting() == ConfigSetting.COMPACT_HUD && buttonToggle.getSetting().getValue() && ConfigSetting.SHOW_PLAYERS.getValue()) {
-                ConfigSetting.SHOW_PLAYERS.toggleValue();
+            if (buttonToggle.getSetting() == FKConfigSetting.COMPACT_HUD && buttonToggle.getSetting().getValue() && FKConfigSetting.SHOW_PLAYERS.getValue()) {
+                FKConfigSetting.SHOW_PLAYERS.toggleValue();
             }
             FKCounterGui.updateDisplayText();
         }
+
         if (button instanceof ButtonFancy) {
             if (button.id == 100) {
                 Minecraft.getMinecraft().displayGuiScreen(new LocationEditGuiScreen(FKCounterMod.getHudManager(), this));
             }
+        }
+
+        if(button.id == 200) {
+            mc.displayGuiScreen(new GeneralConfigGuiScreen());
         }
 
     }
@@ -89,7 +96,7 @@ public class FKCounterConfigGuiScreen extends MyGuiScreen {
         super.onGuiClosed();
     }
 
-    private void addSettingButton(ConfigSetting setting, int row, int column) {
+    private void addSettingButton(FKConfigSetting setting, int row, int column) {
 
         int x;
         final int i = (widthBetweenButtons + buttonSize) * (column - columns / 2);

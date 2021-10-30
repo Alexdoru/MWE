@@ -16,8 +16,11 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 import java.io.File;
 
-@Mod(name = "No cheaters", modid = "nocheaters", version = "2.1", acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
+@Mod(name = "No cheaters", modid = NoCheatersMod.modid, version = NoCheatersMod.version, acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
 public class NoCheatersMod {
+
+    public static final String modid = "nocheaters";
+    public static final String version = "2.1";
 
     public static final KeyBinding addtimemark_key = new KeyBinding("Add Timestamp", 0, "NoCheaters");
 

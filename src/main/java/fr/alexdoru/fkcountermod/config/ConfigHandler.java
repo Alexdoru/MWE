@@ -28,7 +28,7 @@ public class ConfigHandler {
                 configJson = new JsonParser().parse(builder.toString()).getAsJsonObject();
                 br.close();
 
-                for (ConfigSetting setting : ConfigSetting.values()) {
+                for (FKConfigSetting setting : FKConfigSetting.values()) {
                     if (configJson.has(setting.getTitle())) {
                         setting.setValue(configJson.get(setting.getTitle()).getAsBoolean());
                     }
@@ -51,7 +51,7 @@ public class ConfigHandler {
         try {
             configFile.createNewFile();
             BufferedWriter bw = new BufferedWriter(new FileWriter(configFile));
-            for (ConfigSetting setting : ConfigSetting.values()) {
+            for (FKConfigSetting setting : FKConfigSetting.values()) {
                 configJson.addProperty(setting.getTitle(), setting.getValue());
                 if (setting.getData() != null) {
                     JsonArray posArray = new JsonArray();

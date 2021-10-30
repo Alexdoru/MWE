@@ -14,12 +14,12 @@ public class CommandMWGameStats extends CommandBase {
 
     @Override
     public String getCommandName() {
-        return "mwgamestats";
+        return "gamestatsmw";
     }
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "/mwgamestats";
+        return "/gamestatsmw";
     }
 
     @Override

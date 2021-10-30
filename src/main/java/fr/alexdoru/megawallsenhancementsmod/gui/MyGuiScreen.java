@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 
 import java.lang.reflect.Method;
@@ -42,6 +43,10 @@ public class MyGuiScreen extends GuiScreen {
     @Override
     public boolean doesGuiPauseGame() {
         return false;
+    }
+
+    public String getSuffix(boolean enabled) {
+        return enabled ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled";
     }
 
     public int getxCenter() {
