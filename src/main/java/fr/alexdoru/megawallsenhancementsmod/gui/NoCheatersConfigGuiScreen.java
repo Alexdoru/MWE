@@ -3,13 +3,22 @@ package fr.alexdoru.megawallsenhancementsmod.gui;
 import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
 
 public class NoCheatersConfigGuiScreen extends MyGuiScreen {
 
     private final int ButtonsHeight = 20;
+    private final GuiScreen parent;
+
+    public NoCheatersConfigGuiScreen() {
+        this.parent = null;
+    }
+
+    public NoCheatersConfigGuiScreen(GuiScreen parent) {
+        this.parent = parent;
+    }
 
     @Override
     public void initGui() { // TODO still missing time between report and autoreport
@@ -53,7 +62,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen {
                 MWEnConfigHandler.toggleautoreport = !MWEnConfigHandler.toggleautoreport;
                 break;
             case 3:
-                mc.displayGuiScreen(new GeneralConfigGuiScreen());
+                mc.displayGuiScreen(parent);
                 break;
             default:
                 break;
@@ -65,15 +74,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        GlStateManager.pushMatrix();
-        {
-            int dilatation = 2;
-            String title = "NoCheaters v" + NoCheatersMod.version;
-            GlStateManager.translate((width / 2.0f) - mc.fontRendererObj.getStringWidth(title), getyCenter() - (ButtonsHeight + 4) * 3, 0);
-            GlStateManager.scale(dilatation, dilatation, dilatation);
-            mc.fontRendererObj.drawString(title, 0, 0, Integer.parseInt("55FF55", 16));
-        }
-        GlStateManager.popMatrix();
+        drawCenteredTitle("NoCheaters v" + NoCheatersMod.version, ButtonsHeight);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

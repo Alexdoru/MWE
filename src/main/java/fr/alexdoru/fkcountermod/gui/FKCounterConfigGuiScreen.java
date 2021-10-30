@@ -5,10 +5,10 @@ import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.config.FKConfigSetting;
 import fr.alexdoru.fkcountermod.gui.elements.ButtonFancy;
 import fr.alexdoru.fkcountermod.gui.elements.ButtonToggle;
-import fr.alexdoru.megawallsenhancementsmod.gui.GeneralConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.gui.MyGuiScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
@@ -24,6 +24,16 @@ public class FKCounterConfigGuiScreen extends MyGuiScreen {
     private final int buttonSize = 50;
     private final int widthBetweenButtons = 10;
     private final int heightBetweenButtons = 30;
+
+    private final GuiScreen parent;
+
+    public FKCounterConfigGuiScreen() {
+        this.parent = null;
+    }
+
+    public FKCounterConfigGuiScreen(GuiScreen parent) {
+        this.parent = parent;
+    }
 
     @Override
     public void initGui() {
@@ -84,8 +94,8 @@ public class FKCounterConfigGuiScreen extends MyGuiScreen {
             }
         }
 
-        if(button.id == 200) {
-            mc.displayGuiScreen(new GeneralConfigGuiScreen());
+        if (button.id == 200) {
+            mc.displayGuiScreen(parent);
         }
 
     }

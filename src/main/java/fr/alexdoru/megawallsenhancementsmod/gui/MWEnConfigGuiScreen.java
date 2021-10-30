@@ -3,13 +3,18 @@ package fr.alexdoru.megawallsenhancementsmod.gui;
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
 
 public class MWEnConfigGuiScreen extends MyGuiScreen {
 
     private final int ButtonsHeight = 20;
+    private final GuiScreen parent;
+
+    public MWEnConfigGuiScreen(GuiScreen parent) {
+        this.parent = parent;
+    }
 
     @Override
     public void initGui() { // TODO still missing GUI positioning
@@ -58,7 +63,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
                 MWEnConfigHandler.show_ArrowHitGui = !MWEnConfigHandler.show_ArrowHitGui;
                 break;
             case 4:
-                mc.displayGuiScreen(new GeneralConfigGuiScreen());
+                mc.displayGuiScreen(parent);
                 break;
             default:
                 break;
@@ -69,15 +74,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        GlStateManager.pushMatrix();
-        {
-            int dilatation = 2;
-            String title = "Mega Walls Enhancements v" + MegaWallsEnhancementsMod.version;
-            GlStateManager.translate((width / 2.0f) - mc.fontRendererObj.getStringWidth(title), getyCenter() - (ButtonsHeight + 4) * 3, 0);
-            GlStateManager.scale(dilatation, dilatation, dilatation);
-            mc.fontRendererObj.drawString(title, 0, 0, Integer.parseInt("55FF55", 16));
-        }
-        GlStateManager.popMatrix();
+        drawCenteredTitle("Mega Walls Enhancements v" + MegaWallsEnhancementsMod.version, ButtonsHeight);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

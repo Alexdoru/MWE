@@ -87,7 +87,6 @@ public class FKCounterGui extends Gui implements IRenderer {
 
     @Override
     public void render(ScreenPosition position) {
-        // TODO ca s'affiche en dessous du scoreboard
         // TODO ca se décale pendant les games
         dummy = false;
 
