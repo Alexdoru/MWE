@@ -1,6 +1,6 @@
 package fr.alexdoru.fkcountermod.config;
 
-public enum ConfigSetting {
+public enum FKConfigSetting {
 
     FKCOUNTER_HUD("Show HUD", true, new SettingData(0, 0.1)),
     COMPACT_HUD("Compact HUD", false, null),
@@ -14,7 +14,7 @@ public enum ConfigSetting {
     private boolean value;
     private final SettingData data;
 
-    ConfigSetting(String title, boolean defaultValue, SettingData data) {
+    FKConfigSetting(String title, boolean defaultValue, SettingData data) {
         this.title = title;
         this.value = defaultValue;
         this.data = data;

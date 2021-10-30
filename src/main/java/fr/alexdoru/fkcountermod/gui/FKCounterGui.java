@@ -1,7 +1,7 @@
 package fr.alexdoru.fkcountermod.gui;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
-import fr.alexdoru.fkcountermod.config.ConfigSetting;
+import fr.alexdoru.fkcountermod.config.FKConfigSetting;
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.hudproperty.IRenderer;
 import fr.alexdoru.fkcountermod.hudproperty.ScreenPosition;
@@ -42,18 +42,18 @@ public class FKCounterGui extends Gui implements IRenderer {
         int x = pos.getAbsoluteX();
         int y = pos.getAbsoluteY();
 
-        ConfigSetting.FKCOUNTER_HUD.getData().setScreenPos(x, y);
+        FKConfigSetting.FKCOUNTER_HUD.getData().setScreenPos(x, y);
         FKCounterMod.getConfigHandler().saveConfig();
     }
 
     @Override
     public ScreenPosition load() {
-        return ConfigSetting.FKCOUNTER_HUD.getData().getScreenPos();
+        return FKConfigSetting.FKCOUNTER_HUD.getData().getScreenPos();
     }
 
     @Override
     public int getHeight() {
-        if (ConfigSetting.COMPACT_HUD.getValue()) {
+        if (FKConfigSetting.COMPACT_HUD.getValue()) {
             return fr.FONT_HEIGHT;
         } else {
             return fr.FONT_HEIGHT * 4;
@@ -63,9 +63,9 @@ public class FKCounterGui extends Gui implements IRenderer {
     @Override
     public int getWidth() {
         if (dummy) {
-            if (ConfigSetting.COMPACT_HUD.getValue()) {
+            if (FKConfigSetting.COMPACT_HUD.getValue()) {
                 return fr.getStringWidth(DUMMY_TEXT_COMPACT);
-            } else if (ConfigSetting.SHOW_PLAYERS.getValue()) {
+            } else if (FKConfigSetting.SHOW_PLAYERS.getValue()) {
                 return getMultilineWidth(DUMMY_TEXT_PLAYERS);
             } else {
                 return getMultilineWidth(DUMMY_TEXT);
@@ -94,7 +94,7 @@ public class FKCounterGui extends Gui implements IRenderer {
         int x = position.getAbsoluteX();
         int y = position.getAbsoluteY();
 
-        if (ConfigSetting.DRAW_BACKGROUND.getValue()) {
+        if (FKConfigSetting.DRAW_BACKGROUND.getValue()) {
             drawRect(x - 1, y - 1, x + getWidth(), y + getHeight(), new Color(0, 0, 0, 64).getRGB());
         }
 
@@ -125,9 +125,9 @@ public class FKCounterGui extends Gui implements IRenderer {
         drawVerticalLine(XtopLeft, YtopLeft, YbotLeft, Color.RED.getRGB());
         drawVerticalLine(XtopRight, YtopLeft, YbotLeft, Color.RED.getRGB());
 
-        if (ConfigSetting.COMPACT_HUD.getValue()) {
+        if (FKConfigSetting.COMPACT_HUD.getValue()) {
             drawMultilineString(DUMMY_TEXT_COMPACT, x, y);
-        } else if (ConfigSetting.SHOW_PLAYERS.getValue()) {
+        } else if (FKConfigSetting.SHOW_PLAYERS.getValue()) {
             drawMultilineString(DUMMY_TEXT_PLAYERS, x, y);
         } else {
             drawMultilineString(DUMMY_TEXT, x, y);
@@ -136,13 +136,13 @@ public class FKCounterGui extends Gui implements IRenderer {
 
     @Override
     public boolean isEnabled() {
-        return (ConfigSetting.FKCOUNTER_HUD.getValue() && FKCounterMod.isInMwGame() && KillCounter.getGameId() != null);
+        return (FKConfigSetting.FKCOUNTER_HUD.getValue() && FKCounterMod.isInMwGame() && KillCounter.getGameId() != null);
     }
 
     private void drawMultilineString(String msg, int x, int y) {
 
         for (String line : msg.split("\n")) {
-            if (ConfigSetting.TEXT_SHADOW.getValue()) {
+            if (FKConfigSetting.TEXT_SHADOW.getValue()) {
                 fr.drawStringWithShadow(line, x, y, 0);
             } else {
                 fr.drawString(line, x, y, 0);
@@ -163,7 +163,7 @@ public class FKCounterGui extends Gui implements IRenderer {
             StringBuilder strBuilder = new StringBuilder();
             int i = 0;
 
-            if (ConfigSetting.COMPACT_HUD.getValue()) {
+            if (FKConfigSetting.COMPACT_HUD.getValue()) {
 
                 for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
                     strBuilder.append(i == 0 ? "" : EnumChatFormatting.DARK_GRAY + " / ")
@@ -172,7 +172,7 @@ public class FKCounterGui extends Gui implements IRenderer {
                     i++;
                 }
 
-            } else if (ConfigSetting.SHOW_PLAYERS.getValue()) {
+            } else if (FKConfigSetting.SHOW_PLAYERS.getValue()) {
 
                 for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
                     int team = entry.getKey();
