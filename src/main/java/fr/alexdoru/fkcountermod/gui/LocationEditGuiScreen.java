@@ -1,6 +1,6 @@
 package fr.alexdoru.fkcountermod.gui;
 
-import fr.alexdoru.fkcountermod.hudproperty.HudPropertyApi;
+import fr.alexdoru.fkcountermod.hudproperty.HUDManager;
 import fr.alexdoru.fkcountermod.hudproperty.IRenderer;
 import fr.alexdoru.fkcountermod.hudproperty.ScreenPosition;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
@@ -19,20 +19,22 @@ public class LocationEditGuiScreen extends GuiScreen {
 
     private final HashMap<IRenderer, ScreenPosition> renderers = new HashMap<>();
     private Optional<IRenderer> selectedRenderer = Optional.empty();
-
     private int prevX, prevY;
 
     private GuiScreen parent;
 
-    public LocationEditGuiScreen(HudPropertyApi api, GuiScreen parent) {
+    public LocationEditGuiScreen(HUDManager api, GuiScreen parent) {
         this(api);
         this.parent = parent;
     }
 
-    public LocationEditGuiScreen(HudPropertyApi api) {
+    public LocationEditGuiScreen(HUDManager api) {
         Collection<IRenderer> registeredRenderers = api.getRegisteredRenderers();
 
         for (IRenderer renderer : registeredRenderers) {
+            if (!renderer.isEnabled()) {
+                continue;
+            }
 
             ScreenPosition pos = renderer.load();
 
@@ -51,12 +53,12 @@ public class LocationEditGuiScreen extends GuiScreen {
     public void drawScreen(int x, int y, float partialTicks) {
         super.drawDefaultBackground();
 
-        //float zBackup = this.zLevel;
-        //this.zLevel = 200;
+        float zBackup = this.zLevel;
+        this.zLevel = 200;
 
         renderers.forEach(IRenderer::renderDummy);
 
-        //this.zLevel = zBackup;
+        this.zLevel = zBackup;
     }
 
     @Override
@@ -82,7 +84,7 @@ public class LocationEditGuiScreen extends GuiScreen {
 
         position.setAbsolute(position.getAbsoluteX() + offsetX, position.getAbsoluteY() + offsetY);
 
-        //adjustBounds(renderer, position);
+        adjustBounds(renderer, position);
     }
 
     @Override
@@ -139,4 +141,5 @@ public class LocationEditGuiScreen extends GuiScreen {
         }
 
     }
+
 }

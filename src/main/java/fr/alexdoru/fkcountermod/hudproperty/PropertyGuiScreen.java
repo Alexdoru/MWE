@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class PropertyScreen extends GuiScreen {
+public class PropertyGuiScreen extends GuiScreen {
 
     private final Minecraft mc = Minecraft.getMinecraft();
 
@@ -17,23 +17,23 @@ public class PropertyScreen extends GuiScreen {
     private Optional<IRenderer> selectedRenderer = Optional.empty();
     private int prevX, prevY;
 
-    public PropertyScreen(HudPropertyApi api) {
+    public PropertyGuiScreen(HUDManager api) {
         Collection<IRenderer> registeredRenderers = api.getRegisteredRenderers();
 
-        for (IRenderer ren : registeredRenderers) {
-            if (!ren.isEnabled()) {
+        for (IRenderer renderer : registeredRenderers) {
+            if (!renderer.isEnabled()) {
                 continue;
             }
 
-            ScreenPosition pos = ren.load();
+            ScreenPosition pos = renderer.load();
 
             if (pos == null) {
                 pos = ScreenPosition.fromRelativePosition(0.5, 0.5);
             }
 
-            adjustBounds(ren, pos);
+            adjustBounds(renderer, pos);
 
-            this.renderers.put(ren, pos);
+            this.renderers.put(renderer, pos);
         }
 
     }
@@ -51,19 +51,9 @@ public class PropertyScreen extends GuiScreen {
     }
 
     @Override
-    protected void keyTyped(char c, int key) {
-        if (key == 1) {
-            // Saves all entries
-            renderers.forEach(IConfigExchange::save);
-            this.mc.displayGuiScreen(null);
-        }
-    }
-
-    @Override
     protected void mouseClicked(int x, int y, int button) {
         prevX = x;
         prevY = y;
-
         loadMouseOver(x, y);
     }
 
@@ -93,7 +83,7 @@ public class PropertyScreen extends GuiScreen {
 
     @Override
     public boolean doesGuiPauseGame() {
-        return true;
+        return false;
     }
 
     private void adjustBounds(IRenderer renderer, ScreenPosition pos) {

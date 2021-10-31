@@ -6,7 +6,7 @@ import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.events.MwGameEvent;
 import fr.alexdoru.fkcountermod.events.ScoreboardEvent;
 import fr.alexdoru.fkcountermod.gui.FKCounterGui;
-import fr.alexdoru.fkcountermod.hudproperty.HudPropertyApi;
+import fr.alexdoru.fkcountermod.hudproperty.HUDManager;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -22,7 +22,7 @@ public class FKCounterMod {
     public static final String MODID = "fkcounter";
     public static final String VERSION = "2.6";
     private static ConfigHandler configHandler;
-    private static HudPropertyApi hudManager;
+    private static HUDManager hudManager;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -36,7 +36,7 @@ public class FKCounterMod {
         MinecraftForge.EVENT_BUS.register(new KillCounter());
         MinecraftForge.EVENT_BUS.register(new ScoreboardEvent());
 
-        hudManager = HudPropertyApi.newInstance();
+        hudManager = HUDManager.newInstance();
         hudManager.register(new FKCounterGui());
 
         configHandler.loadConfig();
@@ -88,7 +88,7 @@ public class FKCounterMod {
         return configHandler;
     }
 
-    public static HudPropertyApi getHudManager() {
+    public static HUDManager getHudManager() {
         return hudManager;
     }
 
