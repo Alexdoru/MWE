@@ -5,7 +5,6 @@ import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.KillCooldownEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 
 import java.util.Collections;
@@ -29,7 +28,7 @@ public class CommandKill extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+    public void processCommand(ICommandSender sender, String[] args) {
         (Minecraft.getMinecraft()).thePlayer.sendChatMessage("/kill");
         if (MWEnConfigHandler.show_killcooldownGUI && FKCounterMod.isInMwGame()) {
             KillCooldownEvent.drawCooldownGui();

@@ -2,7 +2,6 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.megawallsenhancementsmod.utils.ClipboardUtil;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 
 public class CommandCopyToClipboard extends CommandBase {
@@ -18,7 +17,7 @@ public class CommandCopyToClipboard extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+    public void processCommand(ICommandSender sender, String[] args) {
 
         ClipboardUtil.copyString(args[0]);
 

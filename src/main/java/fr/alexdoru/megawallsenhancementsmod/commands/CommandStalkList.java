@@ -9,7 +9,6 @@ import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
 import net.minecraft.event.ClickEvent;
@@ -40,7 +39,7 @@ public class CommandStalkList extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+    public void processCommand(ICommandSender sender, String[] args) {
 
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) { // api key not setup
             addChatMessage(new ChatComponentText(apikeyMissingErrorMsg()));

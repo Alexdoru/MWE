@@ -13,7 +13,6 @@ import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.scoreboard.ScorePlayerTeam;
@@ -52,7 +51,7 @@ public class CommandScanGame extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+    public void processCommand(ICommandSender sender, String[] args) {
 
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
             addChatMessage(new ChatComponentText(ChatUtil.apikeyMissingErrorMsg()));
