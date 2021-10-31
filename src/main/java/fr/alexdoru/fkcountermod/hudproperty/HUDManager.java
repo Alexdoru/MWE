@@ -11,10 +11,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 
-public final class HudPropertyApi {
+public final class HUDManager {
 
-    public static HudPropertyApi newInstance() {
-        HudPropertyApi api = new HudPropertyApi();
+    public static HUDManager newInstance() {
+        HUDManager api = new HUDManager();
         MinecraftForge.EVENT_BUS.register(api);
         return api;
     }
@@ -24,7 +24,7 @@ public final class HudPropertyApi {
 
     private boolean renderOutlines = true;
 
-    private HudPropertyApi() {
+    private HUDManager() {
     }
 
     public void register(IRenderer... renderers) {
@@ -50,7 +50,7 @@ public final class HudPropertyApi {
     }
 
     public void openConfigScreen() {
-        mc.displayGuiScreen(new PropertyScreen(this));
+        mc.displayGuiScreen(new PropertyGuiScreen(this));
     }
 
     @SubscribeEvent
@@ -61,7 +61,7 @@ public final class HudPropertyApi {
             return;
         }
 
-        if (!(mc.currentScreen instanceof PropertyScreen)) {
+        if (!(mc.currentScreen instanceof PropertyGuiScreen)) {
             registeredRenderers.forEach(this::callRenderer);
         }
 
