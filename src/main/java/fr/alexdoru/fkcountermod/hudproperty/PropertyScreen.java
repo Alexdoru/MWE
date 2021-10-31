@@ -18,7 +18,7 @@ public class PropertyScreen extends GuiScreen {
     private int prevX, prevY;
 
     public PropertyScreen(HudPropertyApi api) {
-        Collection<IRenderer> registeredRenderers = api.getHandlers();
+        Collection<IRenderer> registeredRenderers = api.getRegisteredRenderers();
 
         for (IRenderer ren : registeredRenderers) {
             if (!ren.isEnabled()) {
