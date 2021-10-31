@@ -35,7 +35,7 @@ public class FKCounterGui extends Gui implements IRenderer {
 
     private boolean dummy = false;
     private static String displayText = "";
-    private final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+    private final FontRenderer frObj = Minecraft.getMinecraft().fontRendererObj;
 
     @Override
     public void save(ScreenPosition pos) {
@@ -54,9 +54,9 @@ public class FKCounterGui extends Gui implements IRenderer {
     @Override
     public int getHeight() {
         if (FKConfigSetting.COMPACT_HUD.getValue()) {
-            return fr.FONT_HEIGHT;
+            return frObj.FONT_HEIGHT;
         } else {
-            return fr.FONT_HEIGHT * 4;
+            return frObj.FONT_HEIGHT * 4;
         }
     }
 
@@ -64,7 +64,7 @@ public class FKCounterGui extends Gui implements IRenderer {
     public int getWidth() {
         if (dummy) {
             if (FKConfigSetting.COMPACT_HUD.getValue()) {
-                return fr.getStringWidth(DUMMY_TEXT_COMPACT);
+                return frObj.getStringWidth(DUMMY_TEXT_COMPACT);
             } else if (FKConfigSetting.SHOW_PLAYERS.getValue()) {
                 return getMultilineWidth(DUMMY_TEXT_PLAYERS);
             } else {
@@ -77,7 +77,7 @@ public class FKCounterGui extends Gui implements IRenderer {
     private int getMultilineWidth(String string) {
         int maxwidth = 0;
         for (String line : string.split("\n")) {
-            int width = fr.getStringWidth(line);
+            int width = frObj.getStringWidth(line);
             if (width > maxwidth) {
                 maxwidth = width;
             }
@@ -142,11 +142,11 @@ public class FKCounterGui extends Gui implements IRenderer {
 
         for (String line : msg.split("\n")) {
             if (FKConfigSetting.TEXT_SHADOW.getValue()) {
-                fr.drawStringWithShadow(line, x, y, 0);
+                frObj.drawStringWithShadow(line, x, y, 0);
             } else {
-                fr.drawString(line, x, y, 0);
+                frObj.drawString(line, x, y, 0);
             }
-            y += fr.FONT_HEIGHT;
+            y += frObj.FONT_HEIGHT;
         }
     }
 

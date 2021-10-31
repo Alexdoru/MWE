@@ -16,7 +16,6 @@ import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
 import net.minecraft.event.ClickEvent;
@@ -45,7 +44,7 @@ public class CommandNocheaters extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) throws CommandException { // TODO ca affiche le msg reported players meme si y'en a pas
+    public void processCommand(ICommandSender sender, String[] args) { // TODO ca affiche le msg reported players meme si y'en a pas
 
         if (args.length == 0) {
             addChatMessage(new ChatComponentText(getTagNoCheaters() +

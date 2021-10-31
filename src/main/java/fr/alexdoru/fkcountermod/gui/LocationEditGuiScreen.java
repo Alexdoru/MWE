@@ -3,7 +3,6 @@ package fr.alexdoru.fkcountermod.gui;
 import fr.alexdoru.fkcountermod.hudproperty.HudPropertyApi;
 import fr.alexdoru.fkcountermod.hudproperty.IRenderer;
 import fr.alexdoru.fkcountermod.hudproperty.ScreenPosition;
-import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -88,12 +87,12 @@ public class LocationEditGuiScreen extends GuiScreen {
     @Override
     public void onGuiClosed() {
         renderers.forEach(IRenderer::save);
-        new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(parent), 0);
+        mc.displayGuiScreen(parent);
     }
 
     @Override
     public boolean doesGuiPauseGame() {
-        return true;
+        return false;
     }
 
     private void adjustBounds(IRenderer renderer, ScreenPosition pos) {
