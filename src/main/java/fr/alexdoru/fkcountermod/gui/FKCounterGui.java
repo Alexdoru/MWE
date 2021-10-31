@@ -2,7 +2,6 @@ package fr.alexdoru.fkcountermod.gui;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.config.FKConfigSetting;
-import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.hudproperty.IRenderer;
 import fr.alexdoru.fkcountermod.hudproperty.ScreenPosition;
 import net.minecraft.client.Minecraft;
@@ -14,6 +13,8 @@ import net.minecraft.util.Tuple;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map.Entry;
+
+import static fr.alexdoru.fkcountermod.events.KillCounter.*;
 
 public class FKCounterGui extends Gui implements IRenderer {
 
@@ -135,7 +136,7 @@ public class FKCounterGui extends Gui implements IRenderer {
 
     @Override
     public boolean isEnabled() {
-        return (FKConfigSetting.FKCOUNTER_HUD.getValue() && FKCounterMod.isInMwGame() && KillCounter.getGameId() != null);
+        return (FKConfigSetting.FKCOUNTER_HUD.getValue() && FKCounterMod.isInMwGame() && getGameId() != null);
     }
 
     private void drawMultilineString(String msg, int x, int y) {
@@ -156,9 +157,9 @@ public class FKCounterGui extends Gui implements IRenderer {
 
     public static void updateDisplayText() {
 
-        if (KillCounter.getGameId() != null) {
+        if (getGameId() != null) {
 
-            HashMap<Integer, Integer> sortedmap = KillCounter.getSortedTeamKillsMap();
+            HashMap<Integer, Integer> sortedmap = getSortedTeamKillsMap();
             StringBuilder strBuilder = new StringBuilder();
             int i = 0;
 
@@ -166,7 +167,7 @@ public class FKCounterGui extends Gui implements IRenderer {
 
                 for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
                     strBuilder.append(i == 0 ? "" : EnumChatFormatting.DARK_GRAY + " / ")
-                            .append(KillCounter.getColorPrefixFromTeam(entry.getKey()))
+                            .append(getColorPrefixFromTeam(entry.getKey()))
                             .append(entry.getValue());
                     i++;
                 }
@@ -175,11 +176,11 @@ public class FKCounterGui extends Gui implements IRenderer {
 
                 for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
                     int team = entry.getKey();
-                    Tuple<String, Integer> tuple = KillCounter.getHighestFinalsPlayerOfTeam(team);
+                    Tuple<String, Integer> tuple = getHighestFinalsPlayerOfTeam(team);
                     strBuilder.append(i == 0 ? "" : "\n")
-                            .append(KillCounter.getColorPrefixFromTeam(team))
-                            .append(KillCounter.getTeamNameFromTeam(team)).append(EnumChatFormatting.WHITE)
-                            .append(": ").append(KillCounter.getKills(team))
+                            .append(getColorPrefixFromTeam(team))
+                            .append(getTeamNameFromTeam(team)).append(EnumChatFormatting.WHITE)
+                            .append(": ").append(getKills(team))
                             .append(tuple == null ? "" : " - " + tuple.getFirst() + " " + tuple.getSecond());
                     i++;
                 }
@@ -189,10 +190,10 @@ public class FKCounterGui extends Gui implements IRenderer {
                 for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
                     int team = entry.getKey();
                     strBuilder.append(i == 0 ? "" : "\n")
-                            .append(KillCounter.getColorPrefixFromTeam(team))
-                            .append(KillCounter.getTeamNameFromTeam(team))
+                            .append(getColorPrefixFromTeam(team))
+                            .append(getTeamNameFromTeam(team))
                             .append(EnumChatFormatting.WHITE).append(": ")
-                            .append(KillCounter.getKills(team));
+                            .append(getKills(team));
                     i++;
                 }
 

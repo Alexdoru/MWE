@@ -3,6 +3,7 @@ package fr.alexdoru.fkcountermod.gui;
 import fr.alexdoru.fkcountermod.hudproperty.HudPropertyApi;
 import fr.alexdoru.fkcountermod.hudproperty.IRenderer;
 import fr.alexdoru.fkcountermod.hudproperty.ScreenPosition;
+import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -29,19 +30,19 @@ public class LocationEditGuiScreen extends GuiScreen {
     }
 
     public LocationEditGuiScreen(HudPropertyApi api) {
-        Collection<IRenderer> registeredRenderers = api.getHandlers();
+        Collection<IRenderer> registeredRenderers = api.getRegisteredRenderers();
 
-        for (IRenderer ren : registeredRenderers) {
+        for (IRenderer renderer : registeredRenderers) {
 
-            ScreenPosition pos = ren.load();
+            ScreenPosition pos = renderer.load();
 
             if (pos == null) {
                 pos = ScreenPosition.fromRelativePosition(0.5, 0.5);
             }
 
-            adjustBounds(ren, pos);
+            adjustBounds(renderer, pos);
 
-            this.renderers.put(ren, pos);
+            this.renderers.put(renderer, pos);
         }
 
     }
@@ -50,12 +51,12 @@ public class LocationEditGuiScreen extends GuiScreen {
     public void drawScreen(int x, int y, float partialTicks) {
         super.drawDefaultBackground();
 
-        float zBackup = this.zLevel;
-        this.zLevel = 200;
+        //float zBackup = this.zLevel;
+        //this.zLevel = 200;
 
         renderers.forEach(IRenderer::renderDummy);
 
-        this.zLevel = zBackup;
+        //this.zLevel = zBackup;
     }
 
     @Override
@@ -87,7 +88,7 @@ public class LocationEditGuiScreen extends GuiScreen {
     @Override
     public void onGuiClosed() {
         renderers.forEach(IRenderer::save);
-        mc.displayGuiScreen(parent);
+        new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(parent), 0);
     }
 
     @Override

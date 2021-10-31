@@ -132,7 +132,7 @@ public class GUIPlayerTabOverlayMixin extends Gui {
                 }
             }
         } else {
-            /****************** MODIFIED WITH MIXINS - START ******************/
+            /* ***************** MODIFIED WITH MIXINS - START ******************/
 
             float maxhealth;
             float playerhealth = mc.thePlayer.getMaxHealth();
@@ -160,7 +160,7 @@ public class GUIPlayerTabOverlayMixin extends Gui {
 
             s1 += "" + i;
 
-            /****************** MODIFIED WITH MIXINS - END ********************/
+            /* ***************** MODIFIED WITH MIXINS - END ********************/
             this.mc.fontRendererObj.drawStringWithShadow(s1, (float) (p_175247_5_ - this.mc.fontRendererObj.getStringWidth(s1)), (float) p_175247_2_, 16777215);
         }
     }

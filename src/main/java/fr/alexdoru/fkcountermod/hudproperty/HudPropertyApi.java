@@ -37,7 +37,7 @@ public final class HudPropertyApi {
         }
     }
 
-    public Collection<IRenderer> getHandlers() {
+    public Collection<IRenderer> getRegisteredRenderers() {
         return Sets.newHashSet(registeredRenderers);
     }
 
