@@ -1,9 +1,9 @@
 package fr.alexdoru.fkcountermod.gui;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
-import fr.alexdoru.fkcountermod.config.FKConfigSetting;
-import fr.alexdoru.fkcountermod.hudmanager.HUDPosition;
-import fr.alexdoru.fkcountermod.hudmanager.IRenderer;
+import fr.alexdoru.fkcountermod.config.EnumFKConfigSetting;
+import fr.alexdoru.fkcountermod.gui.hudapi.HUDPosition;
+import fr.alexdoru.fkcountermod.gui.hudapi.IRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -42,13 +42,13 @@ public class FKCounterGui extends Gui implements IRenderer {
 
     public FKCounterGui() {
         instance = this;
-        hudPosition = FKConfigSetting.FKCOUNTER_HUD.getHUDPosition();
+        hudPosition = EnumFKConfigSetting.FKCOUNTER_HUD.getHUDPosition();
     }
 
     @Override
     public void save(HUDPosition pos) {
         int[] absolutePos = pos.getAbsolutePosition();
-        FKConfigSetting.FKCOUNTER_HUD.getHUDPosition().setAbsolute(absolutePos[0], absolutePos[1]);
+        EnumFKConfigSetting.FKCOUNTER_HUD.getHUDPosition().setAbsolute(absolutePos[0], absolutePos[1]);
         FKCounterMod.getConfigHandler().saveConfig();
     }
 
@@ -59,7 +59,7 @@ public class FKCounterGui extends Gui implements IRenderer {
 
     @Override
     public int getHeight() {
-        if (FKConfigSetting.COMPACT_HUD.getValue()) {
+        if (EnumFKConfigSetting.COMPACT_HUD.getValue()) {
             return frObj.FONT_HEIGHT;
         } else {
             return frObj.FONT_HEIGHT * 4;
@@ -69,9 +69,9 @@ public class FKCounterGui extends Gui implements IRenderer {
     @Override
     public int getWidth() {
         if (dummy) {
-            if (FKConfigSetting.COMPACT_HUD.getValue()) {
+            if (EnumFKConfigSetting.COMPACT_HUD.getValue()) {
                 return frObj.getStringWidth(DUMMY_TEXT_COMPACT);
-            } else if (FKConfigSetting.SHOW_PLAYERS.getValue()) {
+            } else if (EnumFKConfigSetting.SHOW_PLAYERS.getValue()) {
                 return getMultilineWidth(DUMMY_TEXT_PLAYERS);
             } else {
                 return getMultilineWidth(DUMMY_TEXT);
@@ -100,7 +100,7 @@ public class FKCounterGui extends Gui implements IRenderer {
         int x = absolutePos[0];
         int y = absolutePos[1];
 
-        if (FKConfigSetting.DRAW_BACKGROUND.getValue()) {
+        if (EnumFKConfigSetting.DRAW_BACKGROUND.getValue()) {
             drawRect(x - 1, y - 1, x + getWidth(), y + getHeight(), new Color(0, 0, 0, 64).getRGB());
         }
 
@@ -131,9 +131,9 @@ public class FKCounterGui extends Gui implements IRenderer {
         drawVerticalLine(XtopLeft, YtopLeft, YbotLeft, Color.RED.getRGB());
         drawVerticalLine(XtopRight, YtopLeft, YbotLeft, Color.RED.getRGB());
 
-        if (FKConfigSetting.COMPACT_HUD.getValue()) {
+        if (EnumFKConfigSetting.COMPACT_HUD.getValue()) {
             drawMultilineString(DUMMY_TEXT_COMPACT, x, y);
-        } else if (FKConfigSetting.SHOW_PLAYERS.getValue()) {
+        } else if (EnumFKConfigSetting.SHOW_PLAYERS.getValue()) {
             drawMultilineString(DUMMY_TEXT_PLAYERS, x, y);
         } else {
             drawMultilineString(DUMMY_TEXT, x, y);
@@ -142,13 +142,13 @@ public class FKCounterGui extends Gui implements IRenderer {
 
     @Override
     public boolean isEnabled() {
-        return (FKConfigSetting.FKCOUNTER_HUD.getValue() && FKCounterMod.isInMwGame() && getGameId() != null);
+        return (EnumFKConfigSetting.FKCOUNTER_HUD.getValue() && FKCounterMod.isInMwGame() && getGameId() != null);
     }
 
     private void drawMultilineString(String msg, int x, int y) {
 
         for (String line : msg.split("\n")) {
-            if (FKConfigSetting.TEXT_SHADOW.getValue()) {
+            if (EnumFKConfigSetting.TEXT_SHADOW.getValue()) {
                 frObj.drawStringWithShadow(line, x, y, 0);
             } else {
                 frObj.drawString(line, x, y, 0);
@@ -169,7 +169,7 @@ public class FKCounterGui extends Gui implements IRenderer {
             StringBuilder strBuilder = new StringBuilder();
             int i = 0;
 
-            if (FKConfigSetting.COMPACT_HUD.getValue()) {
+            if (EnumFKConfigSetting.COMPACT_HUD.getValue()) {
 
                 for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
                     strBuilder.append(i == 0 ? "" : EnumChatFormatting.DARK_GRAY + " / ")
@@ -178,7 +178,7 @@ public class FKCounterGui extends Gui implements IRenderer {
                     i++;
                 }
 
-            } else if (FKConfigSetting.SHOW_PLAYERS.getValue()) {
+            } else if (EnumFKConfigSetting.SHOW_PLAYERS.getValue()) {
 
                 for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
                     int team = entry.getKey();

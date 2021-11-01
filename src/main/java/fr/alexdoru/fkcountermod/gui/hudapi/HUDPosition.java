@@ -1,4 +1,4 @@
-package fr.alexdoru.fkcountermod.hudmanager;
+package fr.alexdoru.fkcountermod.gui.hudapi;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;

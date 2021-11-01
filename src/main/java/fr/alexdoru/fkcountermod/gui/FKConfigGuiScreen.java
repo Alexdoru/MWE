@@ -2,10 +2,10 @@ package fr.alexdoru.fkcountermod.gui;
 
 import com.google.common.collect.Lists;
 import fr.alexdoru.fkcountermod.FKCounterMod;
-import fr.alexdoru.fkcountermod.config.FKConfigSetting;
+import fr.alexdoru.fkcountermod.config.EnumFKConfigSetting;
 import fr.alexdoru.fkcountermod.gui.elements.ButtonFancy;
 import fr.alexdoru.fkcountermod.gui.elements.ButtonToggle;
-import fr.alexdoru.fkcountermod.hudmanager.PropertyGuiScreen;
+import fr.alexdoru.fkcountermod.gui.hudapi.PropertyGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.gui.MyGuiScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 
-public class FKCounterConfigGuiScreen extends MyGuiScreen {
+public class FKConfigGuiScreen extends MyGuiScreen {
 
     private static final ResourceLocation BACKGROUND = new ResourceLocation("fkcounter", "background.png");
 
@@ -28,17 +28,17 @@ public class FKCounterConfigGuiScreen extends MyGuiScreen {
 
     private final GuiScreen parent;
 
-    public FKCounterConfigGuiScreen() {
+    public FKConfigGuiScreen() {
         this.parent = null;
     }
 
-    public FKCounterConfigGuiScreen(GuiScreen parent) {
+    public FKConfigGuiScreen(GuiScreen parent) {
         this.parent = parent;
     }
 
     @Override
     public void initGui() {
-        List<FKConfigSetting> settings = Lists.newArrayList(FKConfigSetting.values());
+        List<EnumFKConfigSetting> settings = Lists.newArrayList(EnumFKConfigSetting.values());
         rows = (int) Math.ceil(settings.size() / ((float) columns));
 
         buttonList.add(new ButtonFancy(100, width / 2 + 45, height / 2 - findMenuHeight() / 2 + 8, 30, 14, "Move HUD", 0.5));
@@ -79,12 +79,12 @@ public class FKCounterConfigGuiScreen extends MyGuiScreen {
             ButtonToggle buttonToggle = (ButtonToggle) button;
             buttonToggle.getSetting().toggleValue();
 
-            if (buttonToggle.getSetting() == FKConfigSetting.SHOW_PLAYERS && buttonToggle.getSetting().getValue() && FKConfigSetting.COMPACT_HUD.getValue()) {
-                FKConfigSetting.COMPACT_HUD.toggleValue();
+            if (buttonToggle.getSetting() == EnumFKConfigSetting.SHOW_PLAYERS && buttonToggle.getSetting().getValue() && EnumFKConfigSetting.COMPACT_HUD.getValue()) {
+                EnumFKConfigSetting.COMPACT_HUD.toggleValue();
             }
 
-            if (buttonToggle.getSetting() == FKConfigSetting.COMPACT_HUD && buttonToggle.getSetting().getValue() && FKConfigSetting.SHOW_PLAYERS.getValue()) {
-                FKConfigSetting.SHOW_PLAYERS.toggleValue();
+            if (buttonToggle.getSetting() == EnumFKConfigSetting.COMPACT_HUD && buttonToggle.getSetting().getValue() && EnumFKConfigSetting.SHOW_PLAYERS.getValue()) {
+                EnumFKConfigSetting.SHOW_PLAYERS.toggleValue();
             }
             FKCounterGui.updateDisplayText();
         }
@@ -107,7 +107,7 @@ public class FKCounterConfigGuiScreen extends MyGuiScreen {
         super.onGuiClosed();
     }
 
-    private void addSettingButton(FKConfigSetting setting, int row, int column) {
+    private void addSettingButton(EnumFKConfigSetting setting, int row, int column) {
 
         int x;
         final int i = (widthBetweenButtons + buttonSize) * (column - columns / 2);

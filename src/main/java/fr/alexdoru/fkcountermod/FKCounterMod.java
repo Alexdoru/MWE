@@ -5,7 +5,7 @@ import fr.alexdoru.fkcountermod.config.ConfigHandler;
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.events.ScoreboardEvent;
 import fr.alexdoru.fkcountermod.gui.FKCounterGui;
-import fr.alexdoru.fkcountermod.hudmanager.HUDManager;
+import fr.alexdoru.fkcountermod.gui.hudapi.HUDManager;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;

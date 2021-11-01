@@ -1,4 +1,4 @@
-package fr.alexdoru.fkcountermod.hudmanager;
+package fr.alexdoru.fkcountermod.gui.hudapi;
 
 public interface IRenderer {
 

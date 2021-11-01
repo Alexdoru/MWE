@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
-import fr.alexdoru.fkcountermod.gui.FKCounterConfigGuiScreen;
+import fr.alexdoru.fkcountermod.gui.FKConfigGuiScreen;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -34,7 +34,7 @@ public class GeneralConfigGuiScreen extends MyGuiScreen {
 
         switch (button.id) {
             case 0:
-                mc.displayGuiScreen(new FKCounterConfigGuiScreen(this));
+                mc.displayGuiScreen(new FKConfigGuiScreen(this));
                 break;
             case 1:
                 mc.displayGuiScreen(new MWEnConfigGuiScreen(this));
