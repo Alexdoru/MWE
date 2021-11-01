@@ -17,13 +17,10 @@ public class ArrowHitGui extends MyCachedGui {
     private static EnumChatFormatting Color;
     private static String arrowspinned;
 
-    private static final Pattern HIT_PATTERN0 = Pattern.compile("^\\w+ is on 0 HP!");
-    private static final Pattern HIT_PATTERN1 = Pattern.compile("^\\w+ is on (\\d+) HP!"); // TODO utiliser de la meilleur regex
-    private static final Pattern HIT_PATTERN2 = Pattern.compile("^\\w+ is on (\\d+\\.\\d+) HP!");
-    private static final Pattern HIT_PATTERN3 = Pattern.compile("^\\w+ is on (\\d+) HP, pinned by (\\d+) arrows.*");
-    private static final Pattern HIT_PATTERN4 = Pattern.compile("^\\w+ is on (\\d+\\.\\d+) HP, pinned by (\\d+) arrows.*");
-    private static final Pattern HIT_PATTERN5 = Pattern.compile("^You took (\\d+\\.\\d+) recoil damage after traveling \\d+.\\d+ blocks!");
-    private static final Pattern HIT_PATTERN6 = Pattern.compile("^You landed a direct hit against \\w+, taking (\\d+\\.\\d+) recoil damage after traveling \\d+\\.\\d+ blocks!");
+    private static final Pattern PATTERN_ARROW_HIT = Pattern.compile("^\\w+ is on ([0-9]*[.]?[0-9]+) HP!");
+    private static final Pattern PATTERN_RENEGADE_HIT = Pattern.compile("^\\w+ is on ([0-9]*[.]?[0-9]+) HP, pinned by (\\d+) arrows.*");
+    private static final Pattern PATTERN_LEAP_HIT = Pattern.compile("^You took ([0-9]*[.]?[0-9]+) recoil damage after traveling \\d+.\\d+ blocks!");
+    private static final Pattern PATTERN_LEAP_DIRECT_HIT = Pattern.compile("^You landed a direct hit against \\w+, taking ([0-9]*[.]?[0-9]+) recoil damage after traveling [0-9]*[.]?[0-9]+ blocks!");
 
     public ArrowHitGui() {
         instance = this;
@@ -70,73 +67,47 @@ public class ArrowHitGui extends MyCachedGui {
 
     public static boolean processMessage(String rawMessage) {
 
-        Matcher hitMatcher0 = HIT_PATTERN0.matcher(rawMessage);
-        Matcher hitMatcher1 = HIT_PATTERN1.matcher(rawMessage);
-        Matcher hitMatcher2 = HIT_PATTERN2.matcher(rawMessage);
-        Matcher hitMatcher3 = HIT_PATTERN3.matcher(rawMessage);// renegade
-        Matcher hitMatcher4 = HIT_PATTERN4.matcher(rawMessage);// renegade
-        Matcher HitLeapMatcher = HIT_PATTERN5.matcher(rawMessage);//leap
-        Matcher DirectHitLeapMatcher = HIT_PATTERN6.matcher(rawMessage);//leap
+        Matcher matcherArrowHit = PATTERN_ARROW_HIT.matcher(rawMessage);
+        Matcher matcherRenegadeHit = PATTERN_RENEGADE_HIT.matcher(rawMessage);
+        Matcher matcherLeapHit = PATTERN_LEAP_HIT.matcher(rawMessage);
+        Matcher matcherLeapDirectHit = PATTERN_LEAP_DIRECT_HIT.matcher(rawMessage);
 
-        if (hitMatcher0.matches()) {
+        if (matcherArrowHit.matches()) {
 
-            HPvalue = "Kill";
-            hittime = System.currentTimeMillis();
+            HPvalue = matcherArrowHit.group(1);
+            if (HPvalue.equals("0")) {
+                HPvalue = "Kill";
+                Color = EnumChatFormatting.GOLD;
+            } else {
+                setColor(HPvalue);
+            }
             normalhit = true;
-            Color = EnumChatFormatting.GOLD;
+            hittime = System.currentTimeMillis();
             instance.updateDisplayText();
             return true;
 
-        } else if (hitMatcher1.matches()) {
+        } else if (matcherRenegadeHit.matches()) {
 
-            HPvalue = hitMatcher1.group(1);
-            hittime = System.currentTimeMillis();
-            normalhit = true;
-            setColor(HPvalue);
-            instance.updateDisplayText();
-            return true;
-
-        } else if (hitMatcher2.matches()) {
-
-            HPvalue = hitMatcher2.group(1);
-            hittime = System.currentTimeMillis();
-            normalhit = true;
-            setColor(HPvalue);
-            instance.updateDisplayText();
-            return true;
-
-        } else if (hitMatcher3.matches()) { // renegade hits
-
-            HPvalue = hitMatcher3.group(1);
-            arrowspinned = hitMatcher3.group(2);
+            HPvalue = matcherRenegadeHit.group(1);
+            arrowspinned = matcherRenegadeHit.group(2);
             hittime = System.currentTimeMillis();
             normalhit = false;
             setColor(HPvalue);
             instance.updateDisplayText();
             return true;
 
-        } else if (hitMatcher4.matches()) { // renegade hits
+        } else if (matcherLeapHit.matches()) {
 
-            HPvalue = hitMatcher4.group(1);
-            arrowspinned = hitMatcher4.group(2);
-            hittime = System.currentTimeMillis();
-            normalhit = false;
-            setColor(HPvalue);
-            instance.updateDisplayText();
-            return true;
-
-        } else if (HitLeapMatcher.matches()) {
-
-            HPvalue = "-" + 2f * Float.parseFloat(HitLeapMatcher.group(1));
+            HPvalue = "-" + 2f * Float.parseFloat(matcherLeapHit.group(1));
             hittime = System.currentTimeMillis() + 1000L;
             normalhit = true;
             Color = EnumChatFormatting.GREEN;
             instance.updateDisplayText();
             return true;
 
-        } else if (DirectHitLeapMatcher.matches()) {
+        } else if (matcherLeapDirectHit.matches()) {
 
-            HPvalue = "-" + 2f * Float.parseFloat(DirectHitLeapMatcher.group(1));
+            HPvalue = "-" + 2f * Float.parseFloat(matcherLeapDirectHit.group(1));
             hittime = System.currentTimeMillis() + 1000L;
             normalhit = true;
             Color = EnumChatFormatting.GREEN;
