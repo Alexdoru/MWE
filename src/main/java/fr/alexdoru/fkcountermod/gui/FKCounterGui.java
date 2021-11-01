@@ -2,12 +2,7 @@ package fr.alexdoru.fkcountermod.gui;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.config.EnumFKConfigSetting;
-import fr.alexdoru.fkcountermod.gui.hudapi.HUDPosition;
-import fr.alexdoru.fkcountermod.gui.hudapi.ICachedHUDText;
-import fr.alexdoru.fkcountermod.gui.hudapi.IRenderer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
+import fr.alexdoru.megawallsenhancementsmod.gui.MyCachedGui;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Tuple;
 
@@ -17,13 +12,9 @@ import java.util.Map.Entry;
 
 import static fr.alexdoru.fkcountermod.events.KillCounter.*;
 
-public class FKCounterGui extends Gui implements IRenderer, ICachedHUDText {
+public class FKCounterGui extends MyCachedGui {
 
     public static FKCounterGui instance;
-    private final HUDPosition hudPosition;
-    private boolean dummy = false;
-    private static String displayText = "";
-    private final FontRenderer frObj = Minecraft.getMinecraft().fontRendererObj;
 
     /*used as an example when in the settings*/
     private static final String DUMMY_TEXT = EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 1\n"
@@ -47,15 +38,8 @@ public class FKCounterGui extends Gui implements IRenderer, ICachedHUDText {
     }
 
     @Override
-    public void save(HUDPosition pos) {
-        int[] absolutePos = pos.getAbsolutePosition();
-        EnumFKConfigSetting.FKCOUNTER_HUD.getHUDPosition().setAbsolute(absolutePos[0], absolutePos[1]);
+    public void save() {
         FKCounterMod.getConfigHandler().saveConfig();
-    }
-
-    @Override
-    public HUDPosition getHUDPosition() {
-        return this.hudPosition;
     }
 
     @Override
@@ -63,13 +47,13 @@ public class FKCounterGui extends Gui implements IRenderer, ICachedHUDText {
         if (EnumFKConfigSetting.COMPACT_HUD.getValue()) {
             return frObj.FONT_HEIGHT;
         } else {
-            return frObj.FONT_HEIGHT * 4;
+            return frObj.FONT_HEIGHT*4;
         }
     }
 
     @Override
     public int getWidth() {
-        if (dummy) {
+        if (isRenderingDummy) {
             if (EnumFKConfigSetting.COMPACT_HUD.getValue()) {
                 return frObj.getStringWidth(DUMMY_TEXT_COMPACT);
             } else if (EnumFKConfigSetting.SHOW_PLAYERS.getValue()) {
@@ -81,21 +65,10 @@ public class FKCounterGui extends Gui implements IRenderer, ICachedHUDText {
         return getMultilineWidth(getDisplayText());
     }
 
-    private int getMultilineWidth(String string) {
-        int maxwidth = 0;
-        for (String line : string.split("\n")) {
-            int width = frObj.getStringWidth(line);
-            if (width > maxwidth) {
-                maxwidth = width;
-            }
-        }
-        return maxwidth;
-    }
-
     @Override
     public void render() {
         // TODO ca se décale pendant les games, voir si c'est fix avec le rewrite du hud api
-        dummy = false;
+        super.render();
 
         int[] absolutePos = this.hudPosition.getAbsolutePosition();
         int x = absolutePos[0];
@@ -105,14 +78,15 @@ public class FKCounterGui extends Gui implements IRenderer, ICachedHUDText {
             drawRect(x - 1, y - 1, x + getWidth(), y + getHeight(), new Color(0, 0, 0, 64).getRGB());
         }
 
-        drawMultilineString(getDisplayText(), x, y);
+        drawMultilineString(getDisplayText(), x, y, EnumFKConfigSetting.TEXT_SHADOW.getValue());
 
     }
 
     @Override
     public void renderDummy() {
 
-        dummy = true;
+        super.renderDummy();
+
         int[] absolutePos = this.hudPosition.getAbsolutePosition();
         int x = absolutePos[0];
         int y = absolutePos[1];
@@ -133,34 +107,18 @@ public class FKCounterGui extends Gui implements IRenderer, ICachedHUDText {
         drawVerticalLine(XtopRight, YtopLeft, YbotLeft, Color.RED.getRGB());
 
         if (EnumFKConfigSetting.COMPACT_HUD.getValue()) {
-            drawMultilineString(DUMMY_TEXT_COMPACT, x, y);
+            drawMultilineString(DUMMY_TEXT_COMPACT, x, y, EnumFKConfigSetting.TEXT_SHADOW.getValue());
         } else if (EnumFKConfigSetting.SHOW_PLAYERS.getValue()) {
-            drawMultilineString(DUMMY_TEXT_PLAYERS, x, y);
+            drawMultilineString(DUMMY_TEXT_PLAYERS, x, y, EnumFKConfigSetting.TEXT_SHADOW.getValue());
         } else {
-            drawMultilineString(DUMMY_TEXT, x, y);
+            drawMultilineString(DUMMY_TEXT, x, y, EnumFKConfigSetting.TEXT_SHADOW.getValue());
         }
+
     }
 
     @Override
     public boolean isEnabled() {
         return (EnumFKConfigSetting.FKCOUNTER_HUD.getValue() && FKCounterMod.isInMwGame() && getGameId() != null);
-    }
-
-    private void drawMultilineString(String msg, int x, int y) {
-
-        for (String line : msg.split("\n")) {
-            if (EnumFKConfigSetting.TEXT_SHADOW.getValue()) {
-                frObj.drawStringWithShadow(line, x, y, 0);
-            } else {
-                frObj.drawString(line, x, y, 0);
-            }
-            y += frObj.FONT_HEIGHT;
-        }
-    }
-
-    @Override
-    public String getDisplayText() {
-        return displayText;
     }
 
     @Override

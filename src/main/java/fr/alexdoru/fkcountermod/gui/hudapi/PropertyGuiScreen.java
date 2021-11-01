@@ -57,7 +57,7 @@ public class PropertyGuiScreen extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
-        renderer.save(hudPosition);
+        renderer.save();
         new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(parent), 0);
     }
 
