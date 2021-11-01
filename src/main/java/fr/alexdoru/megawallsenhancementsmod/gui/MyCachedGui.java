@@ -9,8 +9,8 @@ import net.minecraft.client.gui.Gui;
 
 public class MyCachedGui extends Gui implements IRenderer, ICachedHUDText {
 
-    public final Minecraft mc = Minecraft.getMinecraft();
-    public final FontRenderer frObj = mc.fontRendererObj;
+    public static final Minecraft mc = Minecraft.getMinecraft();
+    public static final FontRenderer frObj = mc.fontRendererObj;
 
     public String displayText = "";
     public boolean isRenderingDummy = false;
@@ -46,7 +46,7 @@ public class MyCachedGui extends Gui implements IRenderer, ICachedHUDText {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 
     @Override

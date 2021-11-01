@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.config;
 
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -22,11 +23,9 @@ public class MWEnConfigHandler {
 
     /*GUI config*/
     public static boolean show_killcooldownGUI;
-    public static double xpos_killcooldownGUI;
-    public static double ypos_killcooldownGUI;
+    public static final GuiPosition killcooldownHUDPosition = new GuiPosition(0d,0d);
     public static boolean show_ArrowHitGui;
-    public static double xpos_ArrowHitGui;
-    public static double ypos_ArrowHitGui;
+    public static final GuiPosition arrowHitHUDPosition = new GuiPosition(0d,0d);
 
     /*NoCheaters Config*/
     public static boolean toggleicons;
@@ -46,84 +45,85 @@ public class MWEnConfigHandler {
             config.load();
         }
 
-        /*Reads the fiels in the config and stores them in the property objects*/
-        Property propertyAPIKey = config.get(CATEGORY_MWENh, "APIKey", "", "Your Hypixel API Key");
-        Property propertyshortencoinmessage = config.get(CATEGORY_MWENh, "Shorten coin message", true, "Shorten the coins messages by removing the network booster info");
-        Property propertyreportsuggestions = config.get(CATEGORY_MWENh, "Report suggestion", true, "Give report suggestions in the chat based on messages in shouts");
+        /*Reads the fiels in the config and stores them in the property objects, and defines a default value if the fields doesn't exist*/
+        Property pAPIKey = config.get(CATEGORY_MWENh, "APIKey", "", "Your Hypixel API Key");
+        Property pShortencoinmessage = config.get(CATEGORY_MWENh, "Shorten coin message", true, "Shorten the coins messages by removing the network booster info");
+        Property pReportsuggestions = config.get(CATEGORY_MWENh, "Report suggestion", true, "Give report suggestions in the chat based on messages in shouts");
 
-        Property propertyshow_killcooldownGUI = config.get(CATEGORY_GUI, "Show kill cooldown GUI", true, "Displays the cooldown for the /kill command when in MegaWalls");
-        Property propertyxpos_killcooldownGUI = config.get(CATEGORY_GUI, "Xpos killcooldown GUI", 0d, "The x position of the killcooldown GUI, value ranges from 0 to 1");
-        Property propertyypos_killcooldownGUI = config.get(CATEGORY_GUI, "Ypos killcooldown GUI", 0d, "The y position of the killcooldown GUI, value ranges from 0 to 1");
-        Property propertyshow_ArrowHitGui = config.get(CATEGORY_GUI, "Show arrow hit GUI", true, "Displays the HP of opponents on arrow hits");
-        Property propertyxpos_ArrowHitGui = config.get(CATEGORY_GUI, "Xpos ArrowHit Gui", 0.5d, "The x position of the ArrowHitGui, value ranges from 0 to 1");
-        Property propertyypos_ArrowHitGui = config.get(CATEGORY_GUI, "Ypos ArrowHit Gui", 9d / 20d, "The y position of the ArrowHitGui, value ranges from 0 to 1");
+        Property pShow_killcooldownGUI = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
+        Property pXpos_killcooldownGUI = config.get(CATEGORY_GUI, "Xpos kill cooldown HUD", 0d, "The x position of the killcooldown GUI, value ranges from 0 to 1");
+        Property pYpos_killcooldownGUI = config.get(CATEGORY_GUI, "Ypos kill cooldown HUD", 0d, "The y position of the killcooldown GUI, value ranges from 0 to 1");
+        Property pShow_ArrowHitGui = config.get(CATEGORY_GUI, "Show Arrow Hit HUD", true, "Displays the HP of opponents on arrow hits");
+        Property pXpos_ArrowHitGui = config.get(CATEGORY_GUI, "Xpos Arrow Hit HUD", 0.5d, "The x position of the ArrowHitGui, value ranges from 0 to 1");
+        Property pYpos_ArrowHitGui = config.get(CATEGORY_GUI, "Ypos Arrow Hit HUD", 9d / 20d, "The y position of the ArrowHitGui, value ranges from 0 to 1");
 
-        Property propertytoggleicons = config.get(CATEGORY_NOCHEATERS, "Toggle Icons", true, "Display warning symbol on nametags of reported players");
-        Property propertytogglewarnings = config.get(CATEGORY_NOCHEATERS, "Toggle Warnings", true, "Gives warning messages in chat for reported players");
-        Property propertytoggleautoreport = config.get(CATEGORY_NOCHEATERS, "Toggle Autoreport", false, "Automatically report previously reported players when they are in your lobby");
-        Property propertytimeBetweenReports = config.get(CATEGORY_NOCHEATERS, "Time between reports", 6, "Time before the mod suggests to report the player again (hours)");
-        Property propertytimeAutoReport = config.get(CATEGORY_NOCHEATERS, "Time for autoreports", 336, "It won't autoreport players whose last report is older than this (hours)");
+        Property pToggleicons = config.get(CATEGORY_NOCHEATERS, "Toggle Icons", true, "Display warning symbol on nametags of reported players");
+        Property pTogglewarnings = config.get(CATEGORY_NOCHEATERS, "Toggle Warnings", true, "Gives warning messages in chat for reported players");
+        Property pToggleautoreport = config.get(CATEGORY_NOCHEATERS, "Toggle Autoreport", false, "Automatically report previously reported players when they are in your lobby");
+        Property pTimeBetweenReports = config.get(CATEGORY_NOCHEATERS, "Time between reports", 6, "Time before the mod suggests to report the player again (hours)");
+        Property pTimeAutoReport = config.get(CATEGORY_NOCHEATERS, "Time for autoreports", 336, "It won't autoreport players whose last report is older than this (hours)");
 
+        /*Set the Order in which the config entries appear in the config file */
         List<String> propertyOrderMWWENh = new ArrayList<>();
-        propertyOrderMWWENh.add(propertyAPIKey.getName());
-        propertyOrderMWWENh.add(propertyshortencoinmessage.getName());
-        propertyOrderMWWENh.add(propertyreportsuggestions.getName());
+        propertyOrderMWWENh.add(pAPIKey.getName());
+        propertyOrderMWWENh.add(pShortencoinmessage.getName());
+        propertyOrderMWWENh.add(pReportsuggestions.getName());
         config.setCategoryPropertyOrder(CATEGORY_MWENh, propertyOrderMWWENh);
 
         List<String> propertyOrderGUI = new ArrayList<>();
-        propertyOrderGUI.add(propertyshow_killcooldownGUI.getName());
-        propertyOrderGUI.add(propertyxpos_killcooldownGUI.getName());
-        propertyOrderGUI.add(propertyypos_killcooldownGUI.getName());
-        propertyOrderGUI.add(propertyshow_ArrowHitGui.getName());
-        propertyOrderGUI.add(propertyxpos_ArrowHitGui.getName());
-        propertyOrderGUI.add(propertyypos_ArrowHitGui.getName());
+        propertyOrderGUI.add(pShow_killcooldownGUI.getName());
+        propertyOrderGUI.add(pXpos_killcooldownGUI.getName());
+        propertyOrderGUI.add(pYpos_killcooldownGUI.getName());
+        propertyOrderGUI.add(pShow_ArrowHitGui.getName());
+        propertyOrderGUI.add(pXpos_ArrowHitGui.getName());
+        propertyOrderGUI.add(pYpos_ArrowHitGui.getName());
         config.setCategoryPropertyOrder(CATEGORY_GUI, propertyOrderGUI);
 
         List<String> propertyOrderNOCHEATERS = new ArrayList<>();
-        propertyOrderNOCHEATERS.add(propertytoggleicons.getName());
-        propertyOrderNOCHEATERS.add(propertytogglewarnings.getName());
-        propertyOrderNOCHEATERS.add(propertytoggleautoreport.getName());
-        propertyOrderNOCHEATERS.add(propertytimeBetweenReports.getName());
-        propertyOrderNOCHEATERS.add(propertytimeAutoReport.getName());
+        propertyOrderNOCHEATERS.add(pToggleicons.getName());
+        propertyOrderNOCHEATERS.add(pTogglewarnings.getName());
+        propertyOrderNOCHEATERS.add(pToggleautoreport.getName());
+        propertyOrderNOCHEATERS.add(pTimeBetweenReports.getName());
+        propertyOrderNOCHEATERS.add(pTimeAutoReport.getName());
         config.setCategoryPropertyOrder(CATEGORY_NOCHEATERS, propertyOrderNOCHEATERS);
 
         /*sets the fields of this class to the fields in the properties*/
         if (readFieldsFromConfig) {
-            APIKey = propertyAPIKey.getString();
-            shortencoinmessage = propertyshortencoinmessage.getBoolean();
-            reportsuggestions = propertyreportsuggestions.getBoolean();
+            APIKey = pAPIKey.getString();
+            shortencoinmessage = pShortencoinmessage.getBoolean();
+            reportsuggestions = pReportsuggestions.getBoolean();
 
-            show_killcooldownGUI = propertyshow_killcooldownGUI.getBoolean();
-            xpos_killcooldownGUI = propertyxpos_killcooldownGUI.getDouble();
-            ypos_killcooldownGUI = propertyypos_killcooldownGUI.getDouble();
-            show_ArrowHitGui = propertyshow_ArrowHitGui.getBoolean();
-            xpos_ArrowHitGui = propertyxpos_ArrowHitGui.getDouble();
-            ypos_ArrowHitGui = propertyypos_ArrowHitGui.getDouble();
+            show_killcooldownGUI = pShow_killcooldownGUI.getBoolean();
+            killcooldownHUDPosition.setRelative(pXpos_killcooldownGUI.getDouble(), pYpos_killcooldownGUI.getDouble());
+            show_ArrowHitGui = pShow_ArrowHitGui.getBoolean();
+            arrowHitHUDPosition.setRelative(pXpos_ArrowHitGui.getDouble(), pYpos_ArrowHitGui.getDouble());
 
-            toggleicons = propertytoggleicons.getBoolean();
-            togglewarnings = propertytogglewarnings.getBoolean();
-            toggleautoreport = propertytoggleautoreport.getBoolean();
-            timeBetweenReports = 3600L * 1000L * ((long) propertytimeBetweenReports.getInt());
-            timeAutoReport = 3600L * 1000L * ((long) propertytimeAutoReport.getInt());
+            toggleicons = pToggleicons.getBoolean();
+            togglewarnings = pTogglewarnings.getBoolean();
+            toggleautoreport = pToggleautoreport.getBoolean();
+            timeBetweenReports = 3600L * 1000L * ((long) pTimeBetweenReports.getInt());
+            timeAutoReport = 3600L * 1000L * ((long) pTimeAutoReport.getInt());
         }
 
         if (saveFieldsToConfig) {
-            propertyAPIKey.set(APIKey);
-            propertyshortencoinmessage.set(shortencoinmessage);
-            propertyreportsuggestions.set(reportsuggestions);
+            pAPIKey.set(APIKey);
+            pShortencoinmessage.set(shortencoinmessage);
+            pReportsuggestions.set(reportsuggestions);
 
-            propertyshow_killcooldownGUI.set(show_killcooldownGUI);
-            propertyxpos_killcooldownGUI.set(xpos_killcooldownGUI);
-            propertyypos_killcooldownGUI.set(ypos_killcooldownGUI);
-            propertyshow_ArrowHitGui.set(show_ArrowHitGui);
-            propertyxpos_ArrowHitGui.set(xpos_ArrowHitGui);
-            propertyypos_ArrowHitGui.set(ypos_ArrowHitGui);
+            pShow_killcooldownGUI.set(show_killcooldownGUI);
+            double[] killcooldownGUIarray = killcooldownHUDPosition.getRelativePosition();
+            pXpos_killcooldownGUI.set(killcooldownGUIarray[0]);
+            pYpos_killcooldownGUI.set(killcooldownGUIarray[1]);
+            pShow_ArrowHitGui.set(show_ArrowHitGui);
+            double[] ArrowHitGuiarray = arrowHitHUDPosition.getRelativePosition();
+            pXpos_ArrowHitGui.set(ArrowHitGuiarray[0]);
+            pYpos_ArrowHitGui.set(ArrowHitGuiarray[1]);
 
-            propertytoggleicons.set(toggleicons);
-            propertytogglewarnings.set(togglewarnings);
-            propertytoggleautoreport.set(toggleautoreport);
-            propertytimeBetweenReports.set((int) timeBetweenReports / (3600 * 1000));
-            propertytimeAutoReport.set((int) timeAutoReport / (3600 * 1000));
+            pToggleicons.set(toggleicons);
+            pTogglewarnings.set(togglewarnings);
+            pToggleautoreport.set(toggleautoreport);
+            pTimeBetweenReports.set((int) timeBetweenReports / (3600 * 1000));
+            pTimeAutoReport.set((int) timeAutoReport / (3600 * 1000));
         }
 
         /*automatically saves the values to the config file if any of the values change*/

@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
@@ -17,16 +18,21 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
     }
 
     @Override
-    public void initGui() { // TODO still missing GUI positioning
+    public void initGui() {
         /*
          * Defines the button list
          */
-        int buttonsWidth = 200;
+        final int buttonsWidth = 200;
+        final int sideButtonsWidth = 100;
         this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
         this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
         this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
         this.buttonList.add(new GuiButton(3, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
-        this.buttonList.add(new GuiButton(4, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 3, buttonsWidth, ButtonsHeight, getButtonDisplayString(4)));
+        this.buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 4, 150, ButtonsHeight, getButtonDisplayString(4)));
+        this.buttonList.add(new GuiButton(5, getxCenter() + buttonsWidth / 2 + 4, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(5)));
+        this.buttonList.add(new GuiButton(6, getxCenter() + buttonsWidth / 2 + 4, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(6)));
+        this.buttonList.add(new GuiButton(7, getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(7)));
+        this.buttonList.add(new GuiButton(8, getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(8)));
         super.initGui();
     }
 
@@ -37,13 +43,19 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
             case 1:
                 return "Report suggestions in chat : " + getSuffix(MWEnConfigHandler.reportsuggestions);
             case 2:
-                return "Show /kill cooldown GUI : " + getSuffix(MWEnConfigHandler.show_killcooldownGUI);
+                return "Show /kill cooldown HUD : " + getSuffix(MWEnConfigHandler.show_killcooldownGUI);
             case 3:
-                return "Show Arrow Hit GUI : " + getSuffix(MWEnConfigHandler.show_ArrowHitGui);
+                return "Show Arrow Hit HUD : " + getSuffix(MWEnConfigHandler.show_ArrowHitGui);
             case 4:
                 return "Done";
+            case 5:
+            case 6:
+                return "Move HUD";
+            case 7:
+            case 8:
+                return "Reset HUD position";
             default:
-                return "invalid button id";
+                return "no display text for this button id";
         }
     }
 
@@ -64,6 +76,18 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
                 break;
             case 4:
                 mc.displayGuiScreen(parent);
+                break;
+            case 5:
+                mc.displayGuiScreen(new PositionEditGuiScreen(KillCooldownGui.instance, this));
+                break;
+            case 6:
+                mc.displayGuiScreen(new PositionEditGuiScreen(ArrowHitGui.instance, this));
+                break;
+            case 7:
+                KillCooldownGui.instance.guiPosition.setRelative(0d, 0d);
+                break;
+            case 8:
+                ArrowHitGui.instance.guiPosition.setRelative(0.5d, 9d / 20d);
                 break;
             default:
                 break;

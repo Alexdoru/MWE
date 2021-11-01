@@ -1,6 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.guiapi;
 
 import fr.alexdoru.fkcountermod.gui.FKCounterGui;
+import fr.alexdoru.megawallsenhancementsmod.gui.ArrowHitGui;
+import fr.alexdoru.megawallsenhancementsmod.gui.KillCooldownGui;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -19,6 +21,8 @@ public final class GuiManager {
      */
     public GuiManager() {
         this.registeredRenderers.add(new FKCounterGui());
+        this.registeredRenderers.add(new ArrowHitGui());
+        this.registeredRenderers.add(new KillCooldownGui());
     }
 
     @SubscribeEvent
