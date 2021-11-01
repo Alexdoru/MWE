@@ -12,6 +12,12 @@ import java.util.regex.Pattern;
 public class ArrowHitLeapHitEvent {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
+    private static final String GOLD = "FFAA00";
+    private static final String GREEN = "55FF55";
+    private static final String DARK_GREEN = "00AA00";
+    private static final String YELLOW = "FFFF55";
+    private static final String RED = "FF5555";
+    private static final String DARK_RED = "AA0000";
     private static String HPvalue;
     private static long lasthittime;
     private static long renhittime;
@@ -40,7 +46,7 @@ public class ArrowHitLeapHitEvent {
 
             HPvalue = "Kill";
             lasthittime = System.currentTimeMillis();
-            Color = "FFAA00"; // Gold
+            Color = GOLD;
             return true;
 
         } else if (hitMatcher1.matches()) {
@@ -76,15 +82,15 @@ public class ArrowHitLeapHitEvent {
         } else if (HitLeapMatcher.matches()) {
 
             HPvalue = "-" + 2f * Float.parseFloat(HitLeapMatcher.group(1));
-            lasthittime = System.currentTimeMillis() + 1000;
-            Color = "55FF55"; // Green
+            lasthittime = System.currentTimeMillis() + 1000L;
+            Color = GREEN;
             return true;
 
         } else if (DirectHitLeapMatcher.matches()) {
 
             HPvalue = "-" + 2f * Float.parseFloat(DirectHitLeapMatcher.group(1));
-            lasthittime = System.currentTimeMillis() + 1000;
-            Color = "55FF55"; // Green
+            lasthittime = System.currentTimeMillis() + 1000L;
+            Color = GREEN;
             return true;
 
         }
@@ -102,11 +108,11 @@ public class ArrowHitLeapHitEvent {
 
         long time = System.currentTimeMillis();
 
-        if (time - lasthittime < 1000) {
+        if (time - lasthittime < 1000L) {
 
             new ArrowHitGui(mc, HPvalue, Color);
 
-        } else if (time - renhittime < 1000) {
+        } else if (time - renhittime < 1000L) {
 
             new ArrowHitGui(mc, HPvalue, Color, arrowspinned);
 
@@ -123,15 +129,15 @@ public class ArrowHitLeapHitEvent {
         float floathpvalue = Float.parseFloat(hpvalue);
 
         if (floathpvalue > maxhealth) {
-            Color = "00AA00"; // Dark_Green
+            Color = DARK_GREEN;
         } else if (floathpvalue > maxhealth * 3 / 4) {
-            Color = "55FF55"; // Green
+            Color = GREEN;
         } else if (floathpvalue > maxhealth / 2) {
-            Color = "FFFF55"; // Yellow
+            Color = YELLOW;
         } else if (floathpvalue > maxhealth / 4) {
-            Color = "FF5555"; // Red
+            Color = RED;
         } else {
-            Color = "AA0000"; // Dark_Red
+            Color = DARK_RED;
         }
 
     }
