@@ -11,6 +11,7 @@ public enum EnumFKConfigSetting {
     TEXT_SHADOW("Text Shadow", true, null);
     // TODO add counter to sidebar
     // TODO add the finals to the tablist
+    // TODO hud dilation, size
 
     private final String title;
     private boolean value;
