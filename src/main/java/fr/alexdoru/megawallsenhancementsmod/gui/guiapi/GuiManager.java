@@ -1,4 +1,4 @@
-package fr.alexdoru.fkcountermod.gui.hudapi;
+package fr.alexdoru.megawallsenhancementsmod.gui.guiapi;
 
 import fr.alexdoru.fkcountermod.gui.FKCounterGui;
 import net.minecraft.client.Minecraft;
@@ -9,15 +9,15 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class HUDManager {
+public final class GuiManager {
 
     private final List<IRenderer> registeredRenderers = new ArrayList<>();
     private final Minecraft mc = Minecraft.getMinecraft();
 
     /**
-     * Register your HUDs here
+     * Register your Guis here
      */
-    public HUDManager() {
+    public GuiManager() {
         this.registeredRenderers.add(new FKCounterGui());
     }
 
@@ -25,7 +25,7 @@ public final class HUDManager {
     public void onRenderGUI(RenderGameOverlayEvent.Post event) {
         // TODO ca s'affiche en dessous du scoreboard
 
-        if (event.type == ElementType.EXPERIENCE && !(mc.currentScreen instanceof PropertyGuiScreen)) {
+        if (event.type == ElementType.EXPERIENCE && !(mc.currentScreen instanceof PositionEditGuiScreen)) {
             registeredRenderers.forEach(this::callRenderer);
         }
 

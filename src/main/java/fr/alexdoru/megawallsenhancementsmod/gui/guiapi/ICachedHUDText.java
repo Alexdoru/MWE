@@ -1,4 +1,4 @@
-package fr.alexdoru.fkcountermod.gui.hudapi;
+package fr.alexdoru.megawallsenhancementsmod.gui.guiapi;
 
 public interface ICachedHUDText {
 

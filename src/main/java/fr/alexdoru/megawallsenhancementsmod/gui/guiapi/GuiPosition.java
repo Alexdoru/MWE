@@ -1,20 +1,20 @@
-package fr.alexdoru.fkcountermod.gui.hudapi;
+package fr.alexdoru.megawallsenhancementsmod.gui.guiapi;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 
-public final class HUDPosition {
+public final class GuiPosition {
 
     private final Minecraft mc = Minecraft.getMinecraft();
 
     /*The relative x and y coordinates. Ranging from 0 to 1.*/
     private double x, y;
 
-    public HUDPosition(double x, double y) {
+    public GuiPosition(double x, double y) {
         setRelative(x, y);
     }
 
-    public HUDPosition(int x, int y) {
+    public GuiPosition(int x, int y) {
         setAbsolute(x, y);
     }
 
@@ -55,11 +55,6 @@ public final class HUDPosition {
     public double getRelativeY() {
         return y;
     }
-
-    //@Override
-    //public String toString() {
-    //    return String.format(getClass().getSimpleName() + "[absoluteX=%d,absoluteY=%d,relativeX=%.1f,relativeY=%.1f]", this.getAbsoluteX(), this.getAbsoluteY(), x, y);
-    //}
 
 }
 	
