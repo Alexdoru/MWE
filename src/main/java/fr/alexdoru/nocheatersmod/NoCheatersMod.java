@@ -29,7 +29,6 @@ public class NoCheatersMod {
 
         ClientRegistry.registerKeyBinding(addtimemark_key);
         MinecraftForge.EVENT_BUS.register(new NoCheatersEvents());
-        MinecraftForge.EVENT_BUS.register(new GameInfoGrabber());
         ClientCommandHandler.instance.registerCommand(new CommandWDR());
         ClientCommandHandler.instance.registerCommand(new CommandUnWDR());
         ClientCommandHandler.instance.registerCommand(new CommandReport());
