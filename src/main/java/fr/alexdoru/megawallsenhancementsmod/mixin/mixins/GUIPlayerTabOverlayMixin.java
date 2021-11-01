@@ -137,8 +137,8 @@ public class GUIPlayerTabOverlayMixin extends Gui {
             float maxhealth;
             float playerhealth = mc.thePlayer.getMaxHealth();
 
-            if (FKCounterMod.isInMwGame() && playerhealth == 20.0f) {
-                maxhealth = 40.0f;
+            if (FKCounterMod.isInMwGame() && playerhealth == 20f) {
+                maxhealth = 40f;
             } else {
                 maxhealth = playerhealth;
             }

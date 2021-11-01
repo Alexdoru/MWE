@@ -29,7 +29,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen {
         this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
         this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
         this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
-        this.buttonList.add(new GuiButton(3, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 3, buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
+        this.buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 4, 150, ButtonsHeight, getButtonDisplayString(3)));
         super.initGui();
     }
 
@@ -42,7 +42,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen {
             case 2:
                 return "Autoreport cheaters : " + getSuffix(MWEnConfigHandler.toggleautoreport);
             case 3:
-                return "Done";
+                return parent == null ? "Close" : "Done";
             default:
                 return "invalid button id";
         }

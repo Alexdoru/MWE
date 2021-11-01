@@ -1,8 +1,13 @@
 package fr.alexdoru.megawallsenhancementsmod;
 
+import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.commands.*;
 import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.events.*;
+import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
+import fr.alexdoru.megawallsenhancementsmod.events.KeybindingsEvent;
+import fr.alexdoru.megawallsenhancementsmod.events.MWGameStatsEvent;
+import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
@@ -34,12 +39,12 @@ public class MegaWallsEnhancementsMod {
         ClientRegistry.registerKeyBinding(log_key_normal);
         ClientRegistry.registerKeyBinding(killkey);
 
+        MinecraftForge.EVENT_BUS.register(new GuiManager());
         MinecraftForge.EVENT_BUS.register(new ChatEvents());
         MinecraftForge.EVENT_BUS.register(new SquadEvent());
+        MinecraftForge.EVENT_BUS.register(new KillCounter());
         MinecraftForge.EVENT_BUS.register(new KeybindingsEvent());
         MinecraftForge.EVENT_BUS.register(new MWGameStatsEvent());
-        MinecraftForge.EVENT_BUS.register(new KillCooldownEvent());
-        MinecraftForge.EVENT_BUS.register(new ArrowHitLeapHitEvent());
 
         ClientCommandHandler.instance.registerCommand(new CommandName());
         ClientCommandHandler.instance.registerCommand(new CommandKill());

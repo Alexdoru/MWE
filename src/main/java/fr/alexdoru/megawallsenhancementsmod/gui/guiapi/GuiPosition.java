@@ -42,6 +42,10 @@ public final class GuiPosition {
         return new int[]{(int) (x * res.getScaledWidth()), (int) (y * res.getScaledHeight())};
     }
 
+    public double[] getRelativePosition() {
+        return new double[]{x, y};
+    }
+
     /**
      * @return The relative x coordinate, ranging from 0 to 1.
      */

@@ -3,6 +3,8 @@ package fr.alexdoru.megawallsenhancementsmod.events;
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.gui.ArrowHitGui;
+import fr.alexdoru.megawallsenhancementsmod.gui.KillCooldownGui;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.nocheatersmod.commands.CommandReport;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
@@ -58,7 +60,7 @@ public class ChatEvents {
         }
 
         if (msg.equals(OWN_WITHER_DEATH_MESSAGE)) {
-            KillCooldownEvent.hideGUI();
+            KillCooldownGui.hideGUI();
             return;
         }
 
@@ -76,7 +78,7 @@ public class ChatEvents {
         if (KillCounter.processMessage(fmsg, msg)) {
             return;
         }
-        if (MWEnConfigHandler.show_ArrowHitGui && ArrowHitLeapHitEvent.processMessage(msg)) {
+        if (MWEnConfigHandler.show_ArrowHitGui && ArrowHitGui.processMessage(msg)) {
             return;
         }
         if (MWEnConfigHandler.reportsuggestions && parseReportMessage(msg)) {
