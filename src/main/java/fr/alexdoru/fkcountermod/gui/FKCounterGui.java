@@ -3,6 +3,7 @@ package fr.alexdoru.fkcountermod.gui;
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.config.EnumFKConfigSetting;
 import fr.alexdoru.fkcountermod.gui.hudapi.HUDPosition;
+import fr.alexdoru.fkcountermod.gui.hudapi.ICachedHUDText;
 import fr.alexdoru.fkcountermod.gui.hudapi.IRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -16,7 +17,7 @@ import java.util.Map.Entry;
 
 import static fr.alexdoru.fkcountermod.events.KillCounter.*;
 
-public class FKCounterGui extends Gui implements IRenderer {
+public class FKCounterGui extends Gui implements IRenderer, ICachedHUDText {
 
     public static FKCounterGui instance;
     private final HUDPosition hudPosition;
@@ -93,7 +94,7 @@ public class FKCounterGui extends Gui implements IRenderer {
 
     @Override
     public void render() {
-        // TODO ca se décale pendant les games
+        // TODO ca se décale pendant les games, voir si c'est fix avec le rewrite du hud api
         dummy = false;
 
         int[] absolutePos = this.hudPosition.getAbsolutePosition();
@@ -157,11 +158,13 @@ public class FKCounterGui extends Gui implements IRenderer {
         }
     }
 
-    private String getDisplayText() {
+    @Override
+    public String getDisplayText() {
         return displayText;
     }
 
-    public static void updateDisplayText() {
+    @Override
+    public void updateDisplayText() {
 
         if (getGameId() != null) {
 

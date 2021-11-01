@@ -86,7 +86,7 @@ public class FKConfigGuiScreen extends MyGuiScreen {
             if (buttonToggle.getSetting() == EnumFKConfigSetting.COMPACT_HUD && buttonToggle.getSetting().getValue() && EnumFKConfigSetting.SHOW_PLAYERS.getValue()) {
                 EnumFKConfigSetting.SHOW_PLAYERS.toggleValue();
             }
-            FKCounterGui.updateDisplayText();
+            FKCounterGui.instance.updateDisplayText();
         }
 
         if (button instanceof ButtonFancy) {
