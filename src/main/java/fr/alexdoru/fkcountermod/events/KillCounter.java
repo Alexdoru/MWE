@@ -90,7 +90,7 @@ public class KillCounter {
         for (int i = 0; i < KILL_MESSAGES.length; i++) {
             KILL_PATTERNS[i] = Pattern.compile(KILL_MESSAGES[i]);
         }
-        FKCounterGui.updateDisplayText();
+        FKCounterGui.instance.updateDisplayText();
     }
 
     /*
@@ -108,7 +108,7 @@ public class KillCounter {
             prefixes[i] = DEFAULT_PREFIXES[i];
             teamKillsArray[i] = new HashMap<>();
         }
-        FKCounterGui.updateDisplayText();
+        FKCounterGui.instance.updateDisplayText();
 
     }
 
@@ -155,7 +155,7 @@ public class KillCounter {
                         sortTeamKills(killedTeam);
                     }
 
-                    FKCounterGui.updateDisplayText();
+                    FKCounterGui.instance.updateDisplayText();
 
                 }
 
@@ -242,7 +242,7 @@ public class KillCounter {
                 }
             }
         }
-        FKCounterGui.updateDisplayText();
+        FKCounterGui.instance.updateDisplayText();
     }
 
     private static void removeKilledPlayer(String player, String color) {

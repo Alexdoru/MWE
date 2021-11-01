@@ -1,21 +1,24 @@
 package fr.alexdoru.fkcountermod.gui.hudapi;
 
-import com.google.common.collect.Sets;
+import fr.alexdoru.fkcountermod.gui.FKCounterGui;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.Arrays;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class HUDManager {
 
-    private final Set<IRenderer> registeredRenderers = Sets.newHashSet();
+    private final List<IRenderer> registeredRenderers = new ArrayList<>();
     private final Minecraft mc = Minecraft.getMinecraft();
 
-    public void register(IRenderer... renderers) {
-        this.registeredRenderers.addAll(Arrays.asList(renderers));
+    /**
+     * Register your HUDs here
+     */
+    public HUDManager() {
+        this.registeredRenderers.add(new FKCounterGui());
     }
 
     @SubscribeEvent
