@@ -28,9 +28,9 @@ public class FKCounterMod {
     @EventHandler
     public void init(FMLInitializationEvent event) {
 
+        MinecraftForge.EVENT_BUS.register(new HUDManager());
         MinecraftForge.EVENT_BUS.register(new KillCounter());
         MinecraftForge.EVENT_BUS.register(new ScoreboardEvent());
-        MinecraftForge.EVENT_BUS.register(new HUDManager());
         configHandler.loadConfig();
 
     }

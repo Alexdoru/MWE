@@ -3,14 +3,14 @@ package fr.alexdoru.fkcountermod.gui.hudapi;
 public interface IRenderer {
 
     /**
-     * Returns the height of the currently rendered HUD.
+     * Returns the height of the HUD.
      *
      * @return The height in pixel.
      */
     int getHeight();
 
     /**
-     * Returns the width of the currently rendered HUD.
+     * Returns the width of the HUD.
      *
      * @return The width in pixel.
      */
@@ -36,15 +36,13 @@ public interface IRenderer {
     boolean isEnabled();
 
     /**
-     * Is called for each HUD when the screen is closed.
-     *
-     * @param position Provided by the API. The chosen position for the HUD.
-     *            Preferably save the values in a configuration file.
+     * Is called for each HUD when the configuration screen is closed
+     * in order to save the now Gui position to the settings.
      */
-    void save(HUDPosition position);
+    void save();
 
     /**
-     * Creates a new ScreenPosition object based on relative coordinates.
+     * Creates a new HUDPosition object based on relative coordinates.
      * From 0 to 1. Example: 0.3 being 30% of the screen size.
      *
      * @return The initial ScreenPosition position.
