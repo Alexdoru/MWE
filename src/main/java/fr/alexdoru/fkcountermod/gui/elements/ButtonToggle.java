@@ -1,6 +1,6 @@
 package fr.alexdoru.fkcountermod.gui.elements;
 
-import fr.alexdoru.fkcountermod.config.FKConfigSetting;
+import fr.alexdoru.fkcountermod.config.EnumFKConfigSetting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
@@ -11,9 +11,9 @@ public class ButtonToggle extends GuiButton {
     private static final ResourceLocation TOGGLE_ON = new ResourceLocation("fkcounter", "toggleon.png");
     private static final ResourceLocation TOGGLE_OFF = new ResourceLocation("fkcounter", "toggleoff.png");
 
-    final FKConfigSetting setting;
+    final EnumFKConfigSetting setting;
 
-    public ButtonToggle(int x, int y, FKConfigSetting setting) {
+    public ButtonToggle(int x, int y, EnumFKConfigSetting setting) {
         super(0, x, y, "");
         this.setting = setting;
         this.width = 24;
@@ -43,7 +43,7 @@ public class ButtonToggle extends GuiButton {
         GlStateManager.popMatrix();
     }
 
-    public FKConfigSetting getSetting() {
+    public EnumFKConfigSetting getSetting() {
         return setting;
     }
 

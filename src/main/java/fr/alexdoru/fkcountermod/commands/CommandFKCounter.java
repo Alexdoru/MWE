@@ -1,6 +1,6 @@
 package fr.alexdoru.fkcountermod.commands;
 
-import fr.alexdoru.fkcountermod.gui.FKCounterConfigGuiScreen;
+import fr.alexdoru.fkcountermod.gui.FKConfigGuiScreen;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
@@ -38,7 +38,7 @@ public class CommandFKCounter extends CommandBase {
 
         if (args.length > 0 && args[0].equalsIgnoreCase("settings")) {
 
-            new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(new FKCounterConfigGuiScreen()), 1);
+            new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(new FKConfigGuiScreen()), 1);
 
         } else if (args.length > 0 && (args[0].equalsIgnoreCase("players") || args[0].equalsIgnoreCase("player") || args[0].equalsIgnoreCase("p"))) {
 

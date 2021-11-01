@@ -1,8 +1,8 @@
 package fr.alexdoru.fkcountermod.config;
 
-import fr.alexdoru.fkcountermod.hudmanager.HUDPosition;
+import fr.alexdoru.fkcountermod.gui.hudapi.HUDPosition;
 
-public enum FKConfigSetting {
+public enum EnumFKConfigSetting {
 
     FKCOUNTER_HUD("Show HUD", true, new HUDPosition(0d, 0.1d)),
     COMPACT_HUD("Compact HUD", false, null),
@@ -16,7 +16,7 @@ public enum FKConfigSetting {
     private boolean value;
     private final HUDPosition hudPosition;
 
-    FKConfigSetting(String title, boolean defaultValue, HUDPosition hudPosition) {
+    EnumFKConfigSetting(String title, boolean defaultValue, HUDPosition hudPosition) {
         this.title = title;
         this.value = defaultValue;
         this.hudPosition = hudPosition;

@@ -1,4 +1,4 @@
-package fr.alexdoru.fkcountermod.hudmanager;
+package fr.alexdoru.fkcountermod.gui.hudapi;
 
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import net.minecraft.client.Minecraft;
