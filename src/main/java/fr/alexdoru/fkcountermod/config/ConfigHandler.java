@@ -35,7 +35,7 @@ public class ConfigHandler {
 
                     if (configJson.has(setting.getTitle() + "_POS")) {
                         JsonArray posArray = configJson.getAsJsonArray(setting.getTitle() + "_POS");
-                        setting.getData().setScreenPos(posArray.get(0).getAsDouble(), posArray.get(1).getAsDouble());
+                        setting.getHUDPosition().setRelative(posArray.get(0).getAsDouble(), posArray.get(1).getAsDouble());
                     }
                 }
             } catch (Exception e) {
@@ -53,10 +53,10 @@ public class ConfigHandler {
             BufferedWriter bw = new BufferedWriter(new FileWriter(configFile));
             for (FKConfigSetting setting : FKConfigSetting.values()) {
                 configJson.addProperty(setting.getTitle(), setting.getValue());
-                if (setting.getData() != null) {
+                if (setting.getHUDPosition() != null) {
                     JsonArray posArray = new JsonArray();
-                    posArray.add(new GsonBuilder().create().toJsonTree(setting.getData().getScreenPos().getRelativeX()));
-                    posArray.add(new GsonBuilder().create().toJsonTree(setting.getData().getScreenPos().getRelativeY()));
+                    posArray.add(new GsonBuilder().create().toJsonTree(setting.getHUDPosition().getRelativeX()));
+                    posArray.add(new GsonBuilder().create().toJsonTree(setting.getHUDPosition().getRelativeY()));
                     configJson.add(setting.getTitle() + "_POS", posArray);
                 }
             }
