@@ -33,9 +33,7 @@ public interface IRenderer {
      * more conveniently than unregistering
      * it from the API.
      */
-    default boolean isEnabled() {
-        return true;
-    }
+    boolean isEnabled();
 
     /**
      * Is called for each HUD when the screen is closed.
