@@ -4,7 +4,7 @@ import fr.alexdoru.fkcountermod.commands.CommandFKCounter;
 import fr.alexdoru.fkcountermod.config.ConfigHandler;
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.events.ScoreboardEvent;
-import fr.alexdoru.fkcountermod.gui.hudapi.HUDManager;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -28,7 +28,7 @@ public class FKCounterMod {
     @EventHandler
     public void init(FMLInitializationEvent event) {
 
-        MinecraftForge.EVENT_BUS.register(new HUDManager());
+        MinecraftForge.EVENT_BUS.register(new GuiManager());
         MinecraftForge.EVENT_BUS.register(new KillCounter());
         MinecraftForge.EVENT_BUS.register(new ScoreboardEvent());
         configHandler.loadConfig();

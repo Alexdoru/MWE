@@ -1,4 +1,4 @@
-package fr.alexdoru.fkcountermod.gui.hudapi;
+package fr.alexdoru.megawallsenhancementsmod.gui.guiapi;
 
 public interface IRenderer {
 
@@ -50,6 +50,6 @@ public interface IRenderer {
      * Preferably load the values from a configuration file.
      * Can be null.
      */
-    HUDPosition getHUDPosition();
+    GuiPosition getHUDPosition();
 
 }

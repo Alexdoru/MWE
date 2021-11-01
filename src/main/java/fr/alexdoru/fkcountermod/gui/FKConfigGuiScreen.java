@@ -5,7 +5,7 @@ import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.config.EnumFKConfigSetting;
 import fr.alexdoru.fkcountermod.gui.elements.ButtonFancy;
 import fr.alexdoru.fkcountermod.gui.elements.ButtonToggle;
-import fr.alexdoru.fkcountermod.gui.hudapi.PropertyGuiScreen;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.gui.MyGuiScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -91,7 +91,7 @@ public class FKConfigGuiScreen extends MyGuiScreen {
 
         if (button instanceof ButtonFancy) {
             if (button.id == 100) {
-                Minecraft.getMinecraft().displayGuiScreen(new PropertyGuiScreen(FKCounterGui.instance, this));
+                Minecraft.getMinecraft().displayGuiScreen(new PositionEditGuiScreen(FKCounterGui.instance, this));
             }
         }
 

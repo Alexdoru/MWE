@@ -1,10 +1,10 @@
 package fr.alexdoru.fkcountermod.config;
 
-import fr.alexdoru.fkcountermod.gui.hudapi.HUDPosition;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
 
 public enum EnumFKConfigSetting {
 
-    FKCOUNTER_HUD("Show HUD", true, new HUDPosition(0d, 0.1d)),
+    FKCOUNTER_HUD("Show HUD", true, new GuiPosition(0d, 0.1d)),
     COMPACT_HUD("Compact HUD", false, null),
     SHOW_PLAYERS("Show Players", false, null),
     DRAW_BACKGROUND("HUD Background", false, null),
@@ -15,12 +15,12 @@ public enum EnumFKConfigSetting {
 
     private final String title;
     private boolean value;
-    private final HUDPosition hudPosition;
+    private final GuiPosition guiPosition;
 
-    EnumFKConfigSetting(String title, boolean defaultValue, HUDPosition hudPosition) {
+    EnumFKConfigSetting(String title, boolean defaultValue, GuiPosition guiPosition) {
         this.title = title;
         this.value = defaultValue;
-        this.hudPosition = hudPosition;
+        this.guiPosition = guiPosition;
     }
 
     public String getTitle() {
@@ -31,8 +31,8 @@ public enum EnumFKConfigSetting {
         return value;
     }
 
-    public HUDPosition getHUDPosition() {
-        return hudPosition;
+    public GuiPosition getHUDPosition() {
+        return guiPosition;
     }
 
     public void setValue(boolean value) {

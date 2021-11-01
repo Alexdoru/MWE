@@ -1,8 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
-import fr.alexdoru.fkcountermod.gui.hudapi.HUDPosition;
-import fr.alexdoru.fkcountermod.gui.hudapi.ICachedHUDText;
-import fr.alexdoru.fkcountermod.gui.hudapi.IRenderer;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.ICachedHUDText;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.IRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -14,7 +14,7 @@ public class MyCachedGui extends Gui implements IRenderer, ICachedHUDText {
 
     public String displayText = "";
     public boolean isRenderingDummy = false;
-    public HUDPosition hudPosition;
+    public GuiPosition guiPosition;
 
     @Override
     public String getDisplayText() {
@@ -53,8 +53,8 @@ public class MyCachedGui extends Gui implements IRenderer, ICachedHUDText {
     public void save() {}
 
     @Override
-    public HUDPosition getHUDPosition() {
-        return this.hudPosition;
+    public GuiPosition getHUDPosition() {
+        return this.guiPosition;
     }
 
     public void drawMultilineString(String msg, int x, int y, boolean shadow) {

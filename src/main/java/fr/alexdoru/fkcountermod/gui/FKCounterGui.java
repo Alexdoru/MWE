@@ -34,7 +34,7 @@ public class FKCounterGui extends MyCachedGui {
 
     public FKCounterGui() {
         instance = this;
-        hudPosition = EnumFKConfigSetting.FKCOUNTER_HUD.getHUDPosition();
+        guiPosition = EnumFKConfigSetting.FKCOUNTER_HUD.getHUDPosition();
     }
 
     @Override
@@ -70,7 +70,7 @@ public class FKCounterGui extends MyCachedGui {
         // TODO ca se décale pendant les games, voir si c'est fix avec le rewrite du hud api
         super.render();
 
-        int[] absolutePos = this.hudPosition.getAbsolutePosition();
+        int[] absolutePos = this.guiPosition.getAbsolutePosition();
         int x = absolutePos[0];
         int y = absolutePos[1];
 
@@ -87,7 +87,7 @@ public class FKCounterGui extends MyCachedGui {
 
         super.renderDummy();
 
-        int[] absolutePos = this.hudPosition.getAbsolutePosition();
+        int[] absolutePos = this.guiPosition.getAbsolutePosition();
         int x = absolutePos[0];
         int y = absolutePos[1];
 
