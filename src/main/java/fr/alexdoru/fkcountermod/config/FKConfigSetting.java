@@ -1,8 +1,10 @@
 package fr.alexdoru.fkcountermod.config;
 
+import fr.alexdoru.fkcountermod.hudmanager.HUDPosition;
+
 public enum FKConfigSetting {
 
-    FKCOUNTER_HUD("Show HUD", true, new SettingData(0, 0.1)),
+    FKCOUNTER_HUD("Show HUD", true, new HUDPosition(0d, 0.1d)),
     COMPACT_HUD("Compact HUD", false, null),
     SHOW_PLAYERS("Show Players", false, null),
     DRAW_BACKGROUND("HUD Background", false, null),
@@ -12,12 +14,12 @@ public enum FKConfigSetting {
 
     private final String title;
     private boolean value;
-    private final SettingData data;
+    private final HUDPosition hudPosition;
 
-    FKConfigSetting(String title, boolean defaultValue, SettingData data) {
+    FKConfigSetting(String title, boolean defaultValue, HUDPosition hudPosition) {
         this.title = title;
         this.value = defaultValue;
-        this.data = data;
+        this.hudPosition = hudPosition;
     }
 
     public String getTitle() {
@@ -28,8 +30,8 @@ public enum FKConfigSetting {
         return value;
     }
 
-    public SettingData getData() {
-        return data;
+    public HUDPosition getHUDPosition() {
+        return hudPosition;
     }
 
     public void setValue(boolean value) {
@@ -39,6 +41,5 @@ public enum FKConfigSetting {
     public void toggleValue() {
         this.value = !value;
     }
-
 
 }

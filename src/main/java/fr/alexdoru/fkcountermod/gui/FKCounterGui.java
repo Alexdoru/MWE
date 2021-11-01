@@ -2,8 +2,8 @@ package fr.alexdoru.fkcountermod.gui;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.config.FKConfigSetting;
-import fr.alexdoru.fkcountermod.hudproperty.IRenderer;
-import fr.alexdoru.fkcountermod.hudproperty.ScreenPosition;
+import fr.alexdoru.fkcountermod.hudmanager.HUDPosition;
+import fr.alexdoru.fkcountermod.hudmanager.IRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -17,6 +17,12 @@ import java.util.Map.Entry;
 import static fr.alexdoru.fkcountermod.events.KillCounter.*;
 
 public class FKCounterGui extends Gui implements IRenderer {
+
+    public static FKCounterGui instance;
+    private final HUDPosition hudPosition;
+    private boolean dummy = false;
+    private static String displayText = "";
+    private final FontRenderer frObj = Minecraft.getMinecraft().fontRendererObj;
 
     /*used as an example when in the settings*/
     private static final String DUMMY_TEXT = EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 1\n"
@@ -34,22 +40,21 @@ public class FKCounterGui extends Gui implements IRenderer {
             + EnumChatFormatting.YELLOW + "Yellow" + EnumChatFormatting.WHITE + ": 6 - YellowPlayer 3\n"
             + EnumChatFormatting.BLUE + "Blue" + EnumChatFormatting.WHITE + ": 9 - BluePlayer 4";
 
-    private boolean dummy = false;
-    private static String displayText = "";
-    private final FontRenderer frObj = Minecraft.getMinecraft().fontRendererObj;
+    public FKCounterGui() {
+        instance = this;
+        hudPosition = FKConfigSetting.FKCOUNTER_HUD.getHUDPosition();
+    }
 
     @Override
-    public void save(ScreenPosition pos) {
-        int x = pos.getAbsoluteX();
-        int y = pos.getAbsoluteY();
-
-        FKConfigSetting.FKCOUNTER_HUD.getData().setScreenPos(x, y);
+    public void save(HUDPosition pos) {
+        int[] absolutePos = pos.getAbsolutePosition();
+        FKConfigSetting.FKCOUNTER_HUD.getHUDPosition().setAbsolute(absolutePos[0], absolutePos[1]);
         FKCounterMod.getConfigHandler().saveConfig();
     }
 
     @Override
-    public ScreenPosition load() {
-        return FKConfigSetting.FKCOUNTER_HUD.getData().getScreenPos();
+    public HUDPosition getHUDPosition() {
+        return this.hudPosition;
     }
 
     @Override
@@ -87,12 +92,13 @@ public class FKCounterGui extends Gui implements IRenderer {
     }
 
     @Override
-    public void render(ScreenPosition position) {
+    public void render() {
         // TODO ca se décale pendant les games
         dummy = false;
 
-        int x = position.getAbsoluteX();
-        int y = position.getAbsoluteY();
+        int[] absolutePos = this.hudPosition.getAbsolutePosition();
+        int x = absolutePos[0];
+        int y = absolutePos[1];
 
         if (FKConfigSetting.DRAW_BACKGROUND.getValue()) {
             drawRect(x - 1, y - 1, x + getWidth(), y + getHeight(), new Color(0, 0, 0, 64).getRGB());
@@ -103,12 +109,12 @@ public class FKCounterGui extends Gui implements IRenderer {
     }
 
     @Override
-    public void renderDummy(ScreenPosition position) {
+    public void renderDummy() {
 
         dummy = true;
-
-        int x = position.getAbsoluteX();
-        int y = position.getAbsoluteY();
+        int[] absolutePos = this.hudPosition.getAbsolutePosition();
+        int x = absolutePos[0];
+        int y = absolutePos[1];
 
         int width = getWidth();
         int height = getHeight();

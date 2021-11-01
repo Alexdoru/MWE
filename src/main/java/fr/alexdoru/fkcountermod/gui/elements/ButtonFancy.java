@@ -42,7 +42,6 @@ public class ButtonFancy extends GuiButton {
             this.drawCenteredString(mc.fontRendererObj, this.displayString, (int) (x / scale), (int) (y / scale), 0xFFFFFF);
             GlStateManager.scale(1 / scale, 1 / scale, 1);
 
-
         }
     }
 

@@ -168,13 +168,27 @@ public class KillCounter {
 
     @SubscribeEvent
     public void onMwGame(MwGameEvent event) {
-        /*
-         * this is here to fix the bug where the killcounter doesn't work if you re-start your minecraft during a game of MW
-         * or if you changed your colors for the teams in your MW settings and rejoined the game
-         */
+
         if (event.getType() == MwGameEvent.EventType.CONNECT) {
+            /*
+             * this is here to fix the bug where the killcounter doesn't work if you re-start your minecraft during a game of MW
+             * or if you changed your colors for the teams in your MW settings and rejoined the game
+             */
             setTeamPrefixes();
+            String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId(); // this is not null due to how the event is defined/Posted
+            if (gameId == null || !gameId.equals(currentGameId)) {
+                ResetKillCounterTo(currentGameId);
+            }
+            return;
         }
+
+        /*
+         * to fix the bug where the FKCounter doesn't work properly if you play two games in a row on a server with the same serverID
+         */
+        if (event.getType() == MwGameEvent.EventType.GAME_END) {
+            ResetKillCounterTo(null);
+        }
+
     }
 
     public static String getGameId() {
