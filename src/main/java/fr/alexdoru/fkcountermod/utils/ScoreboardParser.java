@@ -9,17 +9,17 @@ import java.util.regex.Pattern;
 
 public class ScoreboardParser {
 
-    // TODO ajouter un truc pour choper la vie du dernier wither et afficher un HUD
-
     private static final Pattern GAME_ID_PATTERN = Pattern.compile("\\s*\\d+/\\d+/\\d+\\s+([\\d\\w]+)\\s*", Pattern.CASE_INSENSITIVE);
     private static final Pattern MW_TITLE_PATTERN = Pattern.compile("\\s*MEGA\\sWALLS\\s*", Pattern.CASE_INSENSITIVE);
     private static final Pattern PREGAME_LOBBY_PATTERN = Pattern.compile(".+[0-9]+/[0-9]+\\s*");
-    private static final Pattern WITHER_ALIVE_PATTERN = Pattern.compile("\\s*\\[.\\].*(?:HP|\u2764|\u2665).*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern WITHER_ALIVE_PATTERN = Pattern.compile("\\s*\\[.\\] Wither HP: ?(\\d+).*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern WITHER_ALIVE_HEART_PATTERN = Pattern.compile("\\s*\\[.\\] Wither (?:\u2764|\u2665): ?(\\d+).*", Pattern.CASE_INSENSITIVE);
 
     private final ArrayList<String> aliveWithers = new ArrayList<>();
     private String gameId = null;
     private boolean hasgameended = false;
     private boolean isitPrepPhase = false;
+    private int witherHP = 1000;
 
     /* This is run on every tick to parse the scoreboard data */
     public ScoreboardParser(Scoreboard scoreboard) {
@@ -67,12 +67,24 @@ public class ScoreboardParser {
 
             String line = scoresRaw.get(i);
             /*Wither alive detection*/
-            if (WITHER_ALIVE_PATTERN.matcher(line).matches()) {
+            final Matcher matcher1 = WITHER_ALIVE_PATTERN.matcher(line);
+            if (matcher1.matches()) {
 
                 String lineColor = scoresColor.get(i);
                 String colorCode = lineColor.split("\u00a7")[1].substring(0, 1);
                 aliveWithers.add(colorCode);
+                witherHP = Integer.parseInt(matcher1.group(1));
 
+            } else {
+                final Matcher matcher2 = WITHER_ALIVE_HEART_PATTERN.matcher(line);
+                if (matcher2.matches()) {
+
+                    String lineColor = scoresColor.get(i);
+                    String colorCode = lineColor.split("\u00a7")[1].substring(0, 1);
+                    aliveWithers.add(colorCode);
+                    witherHP = 2*Integer.parseInt(matcher2.group(1));
+
+                }
             }
 
             if (line.contains("eliminated!")) {
@@ -111,4 +123,11 @@ public class ScoreboardParser {
         return isitPrepPhase;
     }
 
+    public int getWitherHP() {
+        return witherHP;
+    }
+
+    public boolean isOnlyOneWitherAlive() {
+        return aliveWithers.size() == 1;
+    }
 }

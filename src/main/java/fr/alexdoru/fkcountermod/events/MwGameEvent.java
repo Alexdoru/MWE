@@ -8,7 +8,8 @@ public class MwGameEvent extends Event {
         CONNECT,
         DISCONNECT,
         GAME_START,
-        GAME_END
+        GAME_END,
+        THIRD_WITHER_DEATH
     }
 
     private final EventType type;
@@ -16,8 +17,9 @@ public class MwGameEvent extends Event {
     /**
      * CONNECT is fired when a game of MW starts or when you rejoin a server of mega walls
      * DISCONNECT is fired when you leave a game of MW
-     * GAME_START is fired when the gates open
+     * GAME_START is fired when the gates at spawn open
      * GAME_END is fired when the game ends
+     * THIRD_WITHER_DIED is fired when the thrid wither dies
      */
     public MwGameEvent(EventType type) {
         this.type = type;
