@@ -30,6 +30,7 @@ public class NoCheatersEvents {
     public static final String prefix = iprefix.getFormattedText();
     public static final IChatComponent iprefix_bhop = new ChatComponentText(EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD + "\u26a0 ");
     public static final String prefix_bhop = iprefix_bhop.getFormattedText();
+    private final Minecraft mc = Minecraft.getMinecraft();
 
     @SubscribeEvent
     public void onGui(GuiOpenEvent event) { //resets the ticks counter when you have a loading screen
@@ -39,7 +40,7 @@ public class NoCheatersEvents {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {  // scans your world 2 seconds avec joining // TODO ajouter un decompte pour pas que ca envoie toutes les commandes auto report en meme temps
-        if (!NoCheatersMod.areWarningsToggled() || !(Minecraft.getMinecraft()).inGameHasFocus) {
+        if (!NoCheatersMod.areWarningsToggled() || !mc.inGameHasFocus) {
             return;
         }
         if (ticks == 39) {
@@ -54,15 +55,15 @@ public class NoCheatersEvents {
 
         // TODO ca met le triangle scangame sur le mec en squad
 
-        if (ticks < 40 || (Minecraft.getMinecraft()).thePlayer == null || !(event.entity instanceof EntityPlayer))
+        if (ticks < 40 || mc.thePlayer == null || !(event.entity instanceof EntityPlayer)) {
             return;
-
+        }
         EntityPlayer player = (EntityPlayer) event.entity;
         String uuid = player.getUniqueID().toString().replace("-", "");
         String playerName = player.getName();
         WDR wdr = WdredPlayers.getWdredMap().get(uuid);
         boolean printmsg = false;
-        long timenow = (new Date()).getTime();
+        long datenow = (new Date()).getTime();
 
         if (wdr == null) {
             wdr = WdredPlayers.getWdredMap().get(playerName);
@@ -71,21 +72,19 @@ public class NoCheatersEvents {
             }
         }
 
-        if (wdr != null && NoCheatersMod.isAutoreportToggled()) {
-            if (timenow - wdr.timestamp > NoCheatersMod.getTimebetweenreports() && timenow - wdr.timestamp < NoCheatersMod.getTimeautoreport()) {
-                ClientCommandHandler.instance.executeCommand(Minecraft.getMinecraft().thePlayer, "/sendreportagain " + uuid + " " + playerName);
+        if (wdr != null) { // player was reported
+
+            if (NoCheatersMod.isAutoreportToggled() && datenow - wdr.timestamp > NoCheatersMod.getTimebetweenreports() && datenow - wdr.timestamp < NoCheatersMod.getTimeautoreport()) {
+                ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + uuid + " " + playerName);
             }
-        }
 
-        if (wdr != null) {
-
-            if (wdr.hacks.contains("bhop")) {
+            if (wdr.hacks.contains("bhop")) { // player bhops
                 if (NoCheatersMod.areIconsToggled()) {
                     player.addPrefix(iprefix_bhop);
                     player.refreshDisplayName();
                 }
                 printmsg = true;
-            } else if (!(wdr.isOnlyStalking())) {
+            } else if (!(wdr.isOnlyStalking())) { // player is cheating
                 if (NoCheatersMod.areIconsToggled()) {
                     player.addPrefix(iprefix);
                     player.refreshDisplayName();
@@ -94,11 +93,11 @@ public class NoCheatersEvents {
             }
 
             if (NoCheatersMod.areWarningsToggled() && printmsg) {
-                String chatmessage = createwarningmessage(timenow, uuid, playerName, wdr);
-                (Minecraft.getMinecraft()).thePlayer.addChatComponentMessage(IChatComponent.Serializer.jsonToComponent(chatmessage));
+                String chatmessage = createwarningmessage(datenow, uuid, playerName, wdr);
+                mc.thePlayer.addChatComponentMessage(IChatComponent.Serializer.jsonToComponent(chatmessage));
             }
 
-        } else if (NoCheatersMod.areIconsToggled()) {
+        } else if (NoCheatersMod.areIconsToggled()) { // check the scangame map
 
             IChatComponent imsg = CommandScanGame.getScanmap().get(uuid);
             if (imsg != null && !imsg.equals(CommandScanGame.nomatch)) {

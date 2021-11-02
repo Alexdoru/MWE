@@ -5,6 +5,7 @@ import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
+import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
@@ -70,46 +71,33 @@ public class CommandNocheaters extends CommandBase {
             if (args[1].equalsIgnoreCase("icons")) {
 
                 if (NoCheatersMod.areIconsToggled()) {
-                    NoCheatersMod.setToggleicons(false);
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() +
-                            EnumChatFormatting.RED + "Icons disabled"));
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Icons disabled"));
                 } else {
-                    NoCheatersMod.setToggleicons(true);
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() +
-                            EnumChatFormatting.GREEN + "Icons enabled"));
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "Icons enabled"));
                 }
+                MWEnConfigHandler.toggleicons = !MWEnConfigHandler.toggleicons;
+                MWEnConfigHandler.saveConfig();
 
             } else if (args[1].equalsIgnoreCase("autoreport")) {
 
                 if (NoCheatersMod.isAutoreportToggled()) {
-
-                    NoCheatersMod.setToggleautoreport(false);
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() +
-                            EnumChatFormatting.RED + "Autoreports disabled"));
-
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Autoreports disabled"));
                 } else {
-
-                    NoCheatersMod.setToggleautoreport(true);
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() +
-                            EnumChatFormatting.GREEN + "Autoreports enabled"));
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "Autoreports enabled"));
                 }
+                MWEnConfigHandler.toggleautoreport = !MWEnConfigHandler.toggleautoreport;
+                MWEnConfigHandler.saveConfig();
 
             } else if (args[1].equalsIgnoreCase("warnings")) {
 
                 if (NoCheatersMod.areWarningsToggled()) {
-
-                    NoCheatersMod.setTogglewarnings(false);
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() +
-                            EnumChatFormatting.RED + "Warnings disabled"));
-
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Warnings disabled"));
                 } else {
-
-                    NoCheatersMod.setTogglewarnings(true);
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() +
-                            EnumChatFormatting.GREEN + "Warnings enabled"));
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "Warnings enabled"));
                     NoCheatersEvents.scanCurrentWorld();
-
                 }
+                MWEnConfigHandler.togglewarnings = !MWEnConfigHandler.togglewarnings;
+                MWEnConfigHandler.saveConfig();
 
             }
 
