@@ -45,8 +45,6 @@ public class CommandReport extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-
-        //return args.length == 1 ? ( FKCounterMod.isInMwGame() && !GameInfoGrabber.isitPrepPhase() ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null ) : (args.length > 1 ? getListOfStringsMatchingLastWord(args, cheats) : null);
         return args.length == 1 ? (FKCounterMod.isInMwGame() && FKCounterMod.isitPrepPhase() ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null) : (args.length > 1 ? getListOfStringsMatchingLastWord(args, cheatsArray) : null);
     }
 

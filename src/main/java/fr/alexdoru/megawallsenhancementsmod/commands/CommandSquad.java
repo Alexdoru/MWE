@@ -139,7 +139,6 @@ public class CommandSquad extends CommandBase {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         String[] args1 = {"add", "disband", "list", "remove"};
-        //return args.length == 1 ? getListOfStringsMatchingLastWord(args, args1) : args.length == 2 ? ( FKCounterMod.isInMwGame() && !GameInfoGrabber.isitPrepPhase() ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null ) : null ;
         return args.length == 1 ? getListOfStringsMatchingLastWord(args, args1) : args.length >= 2 ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null;
     }
 

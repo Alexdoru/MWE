@@ -151,7 +151,6 @@ public class CommandPlancke extends CommandBase {
         String[] mwargs = {"arcanist", "assassin", "automaton", "blaze", "creeper", "cow", "dreadlord", "enderman", "golem", "herobrine", "hunter", "moleman", "phoenix", "pirate", "renegade", "shaman", "shark", "skeleton", "snowman", "spider", "squid", "pigman", "werewolf", "zombie"};
 
         if (args.length == 1)
-            //return (GameInfoGrabber.isitPrepPhase() ? null : getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()));
             return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
 
         if (args.length == 2)
