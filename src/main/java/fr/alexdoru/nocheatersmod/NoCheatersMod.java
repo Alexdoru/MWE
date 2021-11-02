@@ -3,7 +3,6 @@ package fr.alexdoru.nocheatersmod;
 import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.nocheatersmod.commands.*;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
-import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -44,27 +43,12 @@ public class NoCheatersMod {
         return MWEnConfigHandler.toggleicons;
     }
 
-    public static void setToggleicons(boolean toggleicons) {
-        MWEnConfigHandler.toggleicons = toggleicons;
-        MWEnConfigHandler.saveConfig();
-    }
-
     public static boolean areWarningsToggled() {
         return MWEnConfigHandler.togglewarnings;
     }
 
-    public static void setTogglewarnings(boolean togglewarnings) {
-        MWEnConfigHandler.togglewarnings = togglewarnings;
-        MWEnConfigHandler.saveConfig();
-    }
-
     public static boolean isAutoreportToggled() {
         return MWEnConfigHandler.toggleautoreport;
-    }
-
-    public static void setToggleautoreport(boolean toggleautoreport) {
-        MWEnConfigHandler.toggleautoreport = toggleautoreport;
-        MWEnConfigHandler.saveConfig();
     }
 
     public static long getTimebetweenreports() {
@@ -74,4 +58,5 @@ public class NoCheatersMod {
     public static long getTimeautoreport() {
         return MWEnConfigHandler.timeAutoReport;
     }
+
 }
