@@ -314,15 +314,12 @@ public class KillCounter {
     /*
      * returns the name of the player from the team that has the highest finals
      */
-    public static Tuple getHighestFinalsPlayerOfTeam(int team) {
-
+    public static Tuple<String, Integer> getHighestFinalsPlayerOfTeam(int team) {
         HashMap<String, Integer> teamkills = teamKillsArray[team];
-
         Iterator<Map.Entry<String, Integer>> iterator = teamkills.entrySet().iterator();
         if (iterator.hasNext()) {
             Map.Entry<String, Integer> entry = iterator.next();
-            //noinspection unchecked
-            return new Tuple(entry.getKey(), entry.getValue());
+            return new Tuple<>(entry.getKey(), entry.getValue());
         }
         return null;
     }

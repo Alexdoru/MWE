@@ -46,6 +46,7 @@ public class ConfigHandler {
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void saveConfig() {
         configJson = new JsonObject();
         try {
