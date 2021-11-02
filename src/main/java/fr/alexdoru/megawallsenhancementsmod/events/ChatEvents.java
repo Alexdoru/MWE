@@ -33,6 +33,7 @@ public class ChatEvents {
     private static final Pattern SHOUT_PATTERN2 = Pattern.compile("^\\[SHOUT\\].+?(?:wdr|report) (\\w+) (\\w+).*", Pattern.CASE_INSENSITIVE);
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Active Booster, |)\\w+'s Network Booster\\)).*");
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
+    private static long lastStrength;
 
     @SubscribeEvent
     public void onChatMessage(ClientChatReceivedEvent event) {
@@ -92,7 +93,11 @@ public class ChatEvents {
             /*Status messages*/
         } else if (MWEnConfigHandler.hunterStrengthSound && event.type == 2) {
             if (msg.contains(HUNTER_STRENGTH_MESSAGE)) {
-                Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("mob.wolf.growl"), 1.0F));
+                long time = System.currentTimeMillis();
+                if (time - lastStrength > 10000L) {
+                    lastStrength = time;
+                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("mob.wolf.growl"), 1.0F));
+                }
             }
         }
 
