@@ -33,7 +33,6 @@ public class CommandHypixelReply extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        //return (GameInfoGrabber.isitPrepPhase() ? null : getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()));
         return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
     }
 
