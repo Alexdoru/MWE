@@ -74,7 +74,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredTitle("NoCheaters v" + NoCheatersMod.version, ButtonsHeight);
+        drawCenteredTitle("NoCheaters v" + NoCheatersMod.version, 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 5);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

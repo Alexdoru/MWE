@@ -50,11 +50,10 @@ public class MyGuiScreen extends GuiScreen {
         return enabled ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled";
     }
 
-    public void drawCenteredTitle(String title, int buttonsHeight) {
+    public void drawCenteredTitle(String title, int dilatation, float xPos, float yPos) {
         GlStateManager.pushMatrix();
         {
-            int dilatation = 2;
-            GlStateManager.translate((width / 2.0f) - mc.fontRendererObj.getStringWidth(title), getyCenter() - (buttonsHeight + 4) * 3, 0);
+            GlStateManager.translate(xPos - mc.fontRendererObj.getStringWidth(title), yPos, 0);
             GlStateManager.scale(dilatation, dilatation, dilatation);
             mc.fontRendererObj.drawString(title, 0, 0, Integer.parseInt("55FF55", 16));
         }
