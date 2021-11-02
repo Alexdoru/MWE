@@ -2,12 +2,12 @@ package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ResourceLocation;
 
 import java.io.IOException;
 
@@ -73,13 +73,13 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
                 break;
             case 9:
                 if (!MWEnConfigHandler.hunterStrengthSound) {
-                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("mob.wolf.growl"), 1.0F));
+                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(ChatEvents.strengthSound, 0.0F));
                 }
                 MWEnConfigHandler.hunterStrengthSound = !MWEnConfigHandler.hunterStrengthSound;
                 break;
             case 1:
                 if (!MWEnConfigHandler.reportsuggestions) {
-                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("random.successful_hit"), 1.0F));
+                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(ChatEvents.reportSuggestionSound, 0.0F));
                 }
                 MWEnConfigHandler.reportsuggestions = !MWEnConfigHandler.reportsuggestions;
                 break;

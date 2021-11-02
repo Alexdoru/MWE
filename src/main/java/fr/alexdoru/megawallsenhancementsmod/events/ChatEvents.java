@@ -33,6 +33,8 @@ public class ChatEvents {
     private static final Pattern SHOUT_PATTERN2 = Pattern.compile("^\\[SHOUT\\].+?(?:wdr|report) (\\w+) (\\w+).*", Pattern.CASE_INSENSITIVE);
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Active Booster, |)\\w+'s Network Booster\\)).*");
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
+    public static final ResourceLocation reportSuggestionSound = new ResourceLocation("random.successful_hit");
+    public static final ResourceLocation strengthSound = new ResourceLocation("item.fireCharge.use"); // item.fireCharge.  usefireworks.twinkle
     private static long lastStrength = 0;
 
     @SubscribeEvent
@@ -96,7 +98,7 @@ public class ChatEvents {
                 long time = System.currentTimeMillis();
                 if (time - lastStrength > 10000L) {
                     lastStrength = time;
-                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("mob.wolf.growl"), 1.0F));
+                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(strengthSound, 0.0F));
                 }
             }
         }
@@ -145,7 +147,7 @@ public class ChatEvents {
     }
 
     private static void printReportSuggestion(String playername, String cheat) {
-        Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("random.successful_hit"), 1.0F));
+        Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(reportSuggestionSound, 1.0F));
         IChatComponent imsg = new ChatComponentText(getTagMW() + EnumChatFormatting.DARK_RED + "Command suggestion : ")
                 .appendSibling(makeReportButtons(playername, cheat, ClickEvent.Action.SUGGEST_COMMAND, ClickEvent.Action.SUGGEST_COMMAND));
         addChatMessage(imsg);
