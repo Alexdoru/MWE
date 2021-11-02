@@ -37,6 +37,7 @@ public class GUIPlayerTabOverlayMixin extends Gui {
      * @author Alexdoru
      * @reason I want to see more people on the tablist
      */
+    @SuppressWarnings("MethodReturnAlwaysConstant")
     @ModifyConstant(method = "renderPlayerlist", constant = @Constant(intValue = 80))
     private int changeMaxPlayers(int original) {
         return 100;
@@ -48,6 +49,7 @@ public class GUIPlayerTabOverlayMixin extends Gui {
      * @author Alexdoru
      * @reason I want to see more people on the tablist
      */
+    @SuppressWarnings("MethodReturnAlwaysConstant")
     @ModifyConstant(method = "renderPlayerlist", constant = @Constant(intValue = 20))
     private int changeColumnLength(int original) {
         return 25;
@@ -146,7 +148,7 @@ public class GUIPlayerTabOverlayMixin extends Gui {
             float ifloat = (float) i;
             String s1 = "";
 
-            if (ifloat > maxhealth) {
+            if (ifloat > maxhealth) { // TODO faire un dégradé de couleur continu
                 s1 += EnumChatFormatting.DARK_GREEN;
             } else if (ifloat > maxhealth * 3 / 4) {
                 s1 += EnumChatFormatting.GREEN;

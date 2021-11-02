@@ -19,6 +19,7 @@ public class FKConfigGuiScreen extends MyGuiScreen {
 
     private static final ResourceLocation BACKGROUND = new ResourceLocation("fkcounter", "background.png");
 
+    @SuppressWarnings("FieldMayBeFinal")
     private int columns = 3;
     private int rows;
 
