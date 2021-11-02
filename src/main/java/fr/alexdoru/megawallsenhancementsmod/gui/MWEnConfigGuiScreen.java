@@ -32,11 +32,14 @@ public class MWEnConfigGuiScreen extends MyGuiScreen { // TODO ajouter des toolt
         this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
         this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
         this.buttonList.add(new GuiButton(3, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
+        this.buttonList.add(new GuiButton(11, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 3, buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
         this.buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 4, 150, ButtonsHeight, getButtonDisplayString(4)));
         this.buttonList.add(new GuiButton(5, getxCenter() + buttonsWidth / 2 + 4, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(5)));
         this.buttonList.add(new GuiButton(6, getxCenter() + buttonsWidth / 2 + 4, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(6)));
+        this.buttonList.add(new GuiButton(10, getxCenter() + buttonsWidth / 2 + 4, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 3, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(10)));
         this.buttonList.add(new GuiButton(7, getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(7)));
         this.buttonList.add(new GuiButton(8, getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(8)));
+        this.buttonList.add(new GuiButton(12, getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 3, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(12)));
         super.initGui();
     }
 
@@ -52,13 +55,17 @@ public class MWEnConfigGuiScreen extends MyGuiScreen { // TODO ajouter des toolt
                 return "Show /kill cooldown HUD : " + getSuffix(MWEnConfigHandler.show_killcooldownHUD);
             case 3:
                 return "Show Arrow Hit HUD : " + getSuffix(MWEnConfigHandler.show_ArrowHitHUD);
+            case 11:
+                return "Show wither death time HUD : " + getSuffix(MWEnConfigHandler.show_lastWitherHUD);
             case 4:
                 return "Done";
             case 5:
             case 6:
+            case 10:
                 return "Move HUD";
             case 7:
             case 8:
+            case 12:
                 return "Reset HUD position";
             default:
                 return "no display text for this button id";
@@ -89,6 +96,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen { // TODO ajouter des toolt
             case 3:
                 MWEnConfigHandler.show_ArrowHitHUD = !MWEnConfigHandler.show_ArrowHitHUD;
                 break;
+            case 11:
+                MWEnConfigHandler.show_lastWitherHUD =! MWEnConfigHandler.show_lastWitherHUD;
+                break;
             case 4:
                 mc.displayGuiScreen(parent);
                 break;
@@ -98,11 +108,17 @@ public class MWEnConfigGuiScreen extends MyGuiScreen { // TODO ajouter des toolt
             case 6:
                 mc.displayGuiScreen(new PositionEditGuiScreen(ArrowHitGui.instance, this));
                 break;
+            case 10:
+                mc.displayGuiScreen(new PositionEditGuiScreen(LastWitherHPGui.instance, this));
+                break;
             case 7:
                 KillCooldownGui.instance.guiPosition.setRelative(0d, 0d);
                 break;
             case 8:
                 ArrowHitGui.instance.guiPosition.setRelative(0.5d, 9d / 20d);
+                break;
+            case 12:
+                LastWitherHPGui.instance.guiPosition.setRelative(0.9d, 0.1d);
                 break;
             default:
                 break;

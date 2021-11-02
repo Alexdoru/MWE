@@ -23,7 +23,7 @@ public class LastWitherHPGui extends MyCachedGui {
 
     @Override
     public void updateDisplayText() {
-        int timeToDie = ScoreboardEvent.getMwScoreboardParser().getWitherHP()*5/8 + (int)Math.max(0, thirdWitherDeathTime + 60000L - System.currentTimeMillis());
+        int timeToDie = ScoreboardEvent.getMwScoreboardParser().getWitherHP()*5/8 + (int)Math.max(0, (thirdWitherDeathTime + 60000L - System.currentTimeMillis())/1000L);
         displayText = color + "Wither dies in " + timeToDie + "s";
     }
 
@@ -31,7 +31,7 @@ public class LastWitherHPGui extends MyCachedGui {
     public void onMWEvent(MwGameEvent event) {
         if(event.getType() == MwGameEvent.EventType.THIRD_WITHER_DEATH) {
             thirdWitherDeathTime = System.currentTimeMillis();
-            color = ScoreboardEvent.getMwScoreboardParser().getAliveWithers().get(0);
+            color = "\u00a7" + ScoreboardEvent.getMwScoreboardParser().getAliveWithers().get(0);
         }
     }
 
@@ -55,7 +55,7 @@ public class LastWitherHPGui extends MyCachedGui {
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
         int x = absolutePos[0];
         int y = absolutePos[1];
-        drawString(frObj, DUMMY_TEXT, x, y, 0);
+        frObj.drawStringWithShadow(DUMMY_TEXT, x, y, 0);
     }
 
     @Override

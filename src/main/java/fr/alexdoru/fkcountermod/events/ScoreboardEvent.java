@@ -61,6 +61,7 @@ public class ScoreboardEvent {
 
         prevGameId = gameId;
         prevHasGameEnded = hasgameended;
+        prevAmountWitherAlive = amountWitherAlive;
 
     }
 
