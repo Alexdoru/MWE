@@ -26,14 +26,14 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class ChatEvents {
 
-    private static final String HUNTER_STRENGTH_MESSAGE = "F.O.N. (Strength) 10";
+    private static final String HUNTER_STRENGTH_MESSAGE = "\u00a7a\u00a7lF.O.N. \u00a77(\u00a7l\u00a7c\u00a7lStrength\u00a77) \u00a7e\u00a7l10";
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
     private static final Pattern SHOUT_PATTERN1 = Pattern.compile("^\\[SHOUT\\].+?(\\w+) is b?hop?ping.*", Pattern.CASE_INSENSITIVE);
     private static final Pattern SHOUT_PATTERN2 = Pattern.compile("^\\[SHOUT\\].+?(?:wdr|report) (\\w+) (\\w+).*", Pattern.CASE_INSENSITIVE);
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Active Booster, |)\\w+'s Network Booster\\)).*");
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
-    private static long lastStrength;
+    private static long lastStrength = 0;
 
     @SubscribeEvent
     public void onChatMessage(ClientChatReceivedEvent event) {
@@ -92,7 +92,7 @@ public class ChatEvents {
 
             /*Status messages*/
         } else if (MWEnConfigHandler.hunterStrengthSound && event.type == 2) {
-            if (msg.contains(HUNTER_STRENGTH_MESSAGE)) {
+            if (fmsg.contains(HUNTER_STRENGTH_MESSAGE)) {
                 long time = System.currentTimeMillis();
                 if (time - lastStrength > 10000L) {
                     lastStrength = time;
