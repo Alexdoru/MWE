@@ -11,7 +11,7 @@ import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
 
-public class MWEnConfigGuiScreen extends MyGuiScreen {
+public class MWEnConfigGuiScreen extends MyGuiScreen { // TODO ajouter des tooltips par dessus les boutons pour expliquer ?
 
     private final int ButtonsHeight = 20;
     private final GuiScreen parent;
@@ -49,9 +49,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
             case 1:
                 return "Report suggestions in chat : " + getSuffix(MWEnConfigHandler.reportsuggestions);
             case 2:
-                return "Show /kill cooldown HUD : " + getSuffix(MWEnConfigHandler.show_killcooldownGUI);
+                return "Show /kill cooldown HUD : " + getSuffix(MWEnConfigHandler.show_killcooldownHUD);
             case 3:
-                return "Show Arrow Hit HUD : " + getSuffix(MWEnConfigHandler.show_ArrowHitGui);
+                return "Show Arrow Hit HUD : " + getSuffix(MWEnConfigHandler.show_ArrowHitHUD);
             case 4:
                 return "Done";
             case 5:
@@ -84,10 +84,10 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
                 MWEnConfigHandler.reportsuggestions = !MWEnConfigHandler.reportsuggestions;
                 break;
             case 2:
-                MWEnConfigHandler.show_killcooldownGUI = !MWEnConfigHandler.show_killcooldownGUI;
+                MWEnConfigHandler.show_killcooldownHUD = !MWEnConfigHandler.show_killcooldownHUD;
                 break;
             case 3:
-                MWEnConfigHandler.show_ArrowHitGui = !MWEnConfigHandler.show_ArrowHitGui;
+                MWEnConfigHandler.show_ArrowHitHUD = !MWEnConfigHandler.show_ArrowHitHUD;
                 break;
             case 4:
                 mc.displayGuiScreen(parent);

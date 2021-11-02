@@ -15,6 +15,7 @@ public class ScoreboardEvent {
     private static String prevGameId = null;
     private static boolean prevHasGameEnded = false;
     private static boolean isHypixel = false;
+    private static int prevAmountWitherAlive = 4;
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
@@ -34,25 +35,33 @@ public class ScoreboardEvent {
 
         String gameId = mwScoreboardParser.getGameId();
         boolean hasgameended = mwScoreboardParser.hasGameEnded();
+        int amountWitherAlive = mwScoreboardParser.getAliveWithers().size();
 
-        if (gameId == null) {
+        if (gameId == null) { // not in a MW game
 
             if (prevGameId != null) {
                 MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.DISCONNECT));
             }
 
-        } else if (!gameId.equals(prevGameId)) {
-            MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.CONNECT));
+        } else { // is in a MW game
+
+            if (amountWitherAlive == 1 && prevAmountWitherAlive > 1) {
+                MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.THIRD_WITHER_DEATH));
+            }
+
+            if (!gameId.equals(prevGameId)) {
+                MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.CONNECT));
+            }
+
         }
 
-        if (hasgameended) {
-            if (!prevHasGameEnded) {
-                MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.GAME_END));
-            }
+        if (hasgameended && !prevHasGameEnded) {
+            MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.GAME_END));
         }
 
         prevGameId = gameId;
         prevHasGameEnded = hasgameended;
+
     }
 
     @SubscribeEvent

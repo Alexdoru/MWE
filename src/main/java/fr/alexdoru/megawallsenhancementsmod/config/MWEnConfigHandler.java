@@ -23,10 +23,12 @@ public class MWEnConfigHandler {
     public static boolean hunterStrengthSound;
 
     /*GUI config*/
-    public static boolean show_killcooldownGUI;
+    public static boolean show_killcooldownHUD;
     public static final GuiPosition killcooldownHUDPosition = new GuiPosition(0d,0d);
-    public static boolean show_ArrowHitGui;
+    public static boolean show_ArrowHitHUD;
     public static final GuiPosition arrowHitHUDPosition = new GuiPosition(0d,0d);
+    public static boolean show_lastWitherHUD;
+    public static final GuiPosition lastWitherHUDPosition = new GuiPosition(0d,0d);
 
     /*NoCheaters Config*/
     public static boolean toggleicons;
@@ -52,12 +54,15 @@ public class MWEnConfigHandler {
         Property pReportsuggestions = config.get(CATEGORY_MWENh, "Report suggestion", true, "Give report suggestions in the chat based on messages in shouts");
         Property pHunterStrengthSound = config.get(CATEGORY_MWENh, "Hunter Strength Sound", true, "Plays a sound 10 seconds before getting strength when playing hunter");
 
-        Property pShow_killcooldownGUI = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
-        Property pXpos_killcooldownGUI = config.get(CATEGORY_GUI, "Xpos kill cooldown HUD", 0d, "The x position of the killcooldown GUI, value ranges from 0 to 1");
-        Property pYpos_killcooldownGUI = config.get(CATEGORY_GUI, "Ypos kill cooldown HUD", 0d, "The y position of the killcooldown GUI, value ranges from 0 to 1");
-        Property pShow_ArrowHitGui = config.get(CATEGORY_GUI, "Show Arrow Hit HUD", true, "Displays the HP of opponents on arrow hits");
-        Property pXpos_ArrowHitGui = config.get(CATEGORY_GUI, "Xpos Arrow Hit HUD", 0.5d, "The x position of the ArrowHitGui, value ranges from 0 to 1");
-        Property pYpos_ArrowHitGui = config.get(CATEGORY_GUI, "Ypos Arrow Hit HUD", 9d / 20d, "The y position of the ArrowHitGui, value ranges from 0 to 1");
+        Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
+        Property pXpos_killcooldownHUD = config.get(CATEGORY_GUI, "Xpos kill cooldown HUD", 0d, "The x position of the killcooldown GUI, value ranges from 0 to 1");
+        Property pYpos_killcooldownHUD = config.get(CATEGORY_GUI, "Ypos kill cooldown HUD", 0d, "The y position of the killcooldown GUI, value ranges from 0 to 1");
+        Property pShow_ArrowHitHUD = config.get(CATEGORY_GUI, "Show Arrow Hit HUD", true, "Displays the HP of opponents on arrow hits");
+        Property pXpos_ArrowHitHUD = config.get(CATEGORY_GUI, "Xpos Arrow Hit HUD", 0.5d, "The x position of the ArrowHitGui, value ranges from 0 to 1");
+        Property pYpos_ArrowHitHUD = config.get(CATEGORY_GUI, "Ypos Arrow Hit HUD", 9d / 20d, "The y position of the ArrowHitGui, value ranges from 0 to 1");
+        Property pShow_lastWitherHUD = config.get(CATEGORY_GUI, "Show last wither HUD", true, "Displays the time it takes for the last wither to die");
+        Property pXpos_lastWitherHUD = config.get(CATEGORY_GUI, "Xpos last wither HUD", 0.9d, "The x position of the LastWitherHUD, value ranges from 0 to 1");
+        Property pYpos_lastWitherHUD = config.get(CATEGORY_GUI, "Ypos last wither HUD", 0.1d, "The y position of the LastWitherHUD, value ranges from 0 to 1");
 
         Property pToggleicons = config.get(CATEGORY_NOCHEATERS, "Toggle Icons", true, "Display warning symbol on nametags of reported players");
         Property pTogglewarnings = config.get(CATEGORY_NOCHEATERS, "Toggle Warnings", true, "Gives warning messages in chat for reported players");
@@ -74,12 +79,15 @@ public class MWEnConfigHandler {
         config.setCategoryPropertyOrder(CATEGORY_MWENh, propertyOrderMWWENh);
 
         List<String> propertyOrderGUI = new ArrayList<>();
-        propertyOrderGUI.add(pShow_killcooldownGUI.getName());
-        propertyOrderGUI.add(pXpos_killcooldownGUI.getName());
-        propertyOrderGUI.add(pYpos_killcooldownGUI.getName());
-        propertyOrderGUI.add(pShow_ArrowHitGui.getName());
-        propertyOrderGUI.add(pXpos_ArrowHitGui.getName());
-        propertyOrderGUI.add(pYpos_ArrowHitGui.getName());
+        propertyOrderGUI.add(pShow_killcooldownHUD.getName());
+        propertyOrderGUI.add(pXpos_killcooldownHUD.getName());
+        propertyOrderGUI.add(pYpos_killcooldownHUD.getName());
+        propertyOrderGUI.add(pShow_ArrowHitHUD.getName());
+        propertyOrderGUI.add(pXpos_ArrowHitHUD.getName());
+        propertyOrderGUI.add(pYpos_ArrowHitHUD.getName());
+        propertyOrderGUI.add(pShow_lastWitherHUD.getName());
+        propertyOrderGUI.add(pXpos_lastWitherHUD.getName());
+        propertyOrderGUI.add(pYpos_lastWitherHUD.getName());
         config.setCategoryPropertyOrder(CATEGORY_GUI, propertyOrderGUI);
 
         List<String> propertyOrderNOCHEATERS = new ArrayList<>();
@@ -97,10 +105,12 @@ public class MWEnConfigHandler {
             reportsuggestions = pReportsuggestions.getBoolean();
             hunterStrengthSound = pHunterStrengthSound.getBoolean();
 
-            show_killcooldownGUI = pShow_killcooldownGUI.getBoolean();
-            killcooldownHUDPosition.setRelative(pXpos_killcooldownGUI.getDouble(), pYpos_killcooldownGUI.getDouble());
-            show_ArrowHitGui = pShow_ArrowHitGui.getBoolean();
-            arrowHitHUDPosition.setRelative(pXpos_ArrowHitGui.getDouble(), pYpos_ArrowHitGui.getDouble());
+            show_killcooldownHUD = pShow_killcooldownHUD.getBoolean();
+            killcooldownHUDPosition.setRelative(pXpos_killcooldownHUD.getDouble(), pYpos_killcooldownHUD.getDouble());
+            show_ArrowHitHUD = pShow_ArrowHitHUD.getBoolean();
+            arrowHitHUDPosition.setRelative(pXpos_ArrowHitHUD.getDouble(), pYpos_ArrowHitHUD.getDouble());
+            show_lastWitherHUD = pShow_lastWitherHUD.getBoolean();
+            lastWitherHUDPosition.setRelative(pXpos_lastWitherHUD.getDouble(), pYpos_lastWitherHUD.getDouble());
 
             toggleicons = pToggleicons.getBoolean();
             togglewarnings = pTogglewarnings.getBoolean();
@@ -115,14 +125,18 @@ public class MWEnConfigHandler {
             pReportsuggestions.set(reportsuggestions);
             pHunterStrengthSound.set(hunterStrengthSound);
 
-            pShow_killcooldownGUI.set(show_killcooldownGUI);
-            double[] killcooldownGUIarray = killcooldownHUDPosition.getRelativePosition();
-            pXpos_killcooldownGUI.set(killcooldownGUIarray[0]);
-            pYpos_killcooldownGUI.set(killcooldownGUIarray[1]);
-            pShow_ArrowHitGui.set(show_ArrowHitGui);
-            double[] ArrowHitGuiarray = arrowHitHUDPosition.getRelativePosition();
-            pXpos_ArrowHitGui.set(ArrowHitGuiarray[0]);
-            pYpos_ArrowHitGui.set(ArrowHitGuiarray[1]);
+            pShow_killcooldownHUD.set(show_killcooldownHUD);
+            double[] killcooldownHUDarray = killcooldownHUDPosition.getRelativePosition();
+            pXpos_killcooldownHUD.set(killcooldownHUDarray[0]);
+            pYpos_killcooldownHUD.set(killcooldownHUDarray[1]);
+            pShow_ArrowHitHUD.set(show_ArrowHitHUD);
+            double[] ArrowHitHUDarray = arrowHitHUDPosition.getRelativePosition();
+            pXpos_ArrowHitHUD.set(ArrowHitHUDarray[0]);
+            pYpos_ArrowHitHUD.set(ArrowHitHUDarray[1]);
+            pShow_lastWitherHUD.set(show_lastWitherHUD);
+            double[] lastWitherHUDarray = lastWitherHUDPosition.getRelativePosition();
+            pXpos_lastWitherHUD.set(lastWitherHUDarray[0]);
+            pYpos_lastWitherHUD.set(lastWitherHUDarray[1]);
 
             pToggleicons.set(toggleicons);
             pTogglewarnings.set(togglewarnings);

@@ -79,7 +79,7 @@ public class ChatEvents {
             if (KillCounter.processMessage(fmsg, msg)) {
                 return;
             }
-            if (MWEnConfigHandler.show_ArrowHitGui && ArrowHitGui.processMessage(msg)) {
+            if (MWEnConfigHandler.show_ArrowHitHUD && ArrowHitGui.processMessage(msg)) {
                 return;
             }
             if (MWEnConfigHandler.reportsuggestions && parseReportMessage(msg)) {
