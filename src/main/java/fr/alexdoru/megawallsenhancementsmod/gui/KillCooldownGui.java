@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
+import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -25,17 +26,15 @@ public class KillCooldownGui extends MyCachedGui {
     @Override
     public void render() {
         super.render();
-
         final long time = System.currentTimeMillis();
         if (time - lastupdate >= 1000L) {
             updateDisplayText();
             lastupdate = time;
         }
-
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
         int x = absolutePos[0];
         int y = absolutePos[1];
-        frObj.drawString(displayText, x, y, 0);
+        frObj.drawStringWithShadow(displayText, x, y, 0);
     }
 
     @Override
@@ -49,7 +48,7 @@ public class KillCooldownGui extends MyCachedGui {
 
     @Override
     public boolean isEnabled() {
-        return System.currentTimeMillis() - lastkilltime < 60000L;
+        return System.currentTimeMillis() - lastkilltime < 60000L && FKCounterMod.isInMwGame();
     }
 
     @Override
