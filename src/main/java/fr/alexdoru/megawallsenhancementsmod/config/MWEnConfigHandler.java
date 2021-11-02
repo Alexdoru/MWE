@@ -20,6 +20,7 @@ public class MWEnConfigHandler {
     public static String APIKey;
     public static boolean shortencoinmessage;
     public static boolean reportsuggestions;
+    public static boolean hunterStrengthSound;
 
     /*GUI config*/
     public static boolean show_killcooldownGUI;
@@ -49,6 +50,7 @@ public class MWEnConfigHandler {
         Property pAPIKey = config.get(CATEGORY_MWENh, "APIKey", "", "Your Hypixel API Key");
         Property pShortencoinmessage = config.get(CATEGORY_MWENh, "Shorten coin message", true, "Shorten the coins messages by removing the network booster info");
         Property pReportsuggestions = config.get(CATEGORY_MWENh, "Report suggestion", true, "Give report suggestions in the chat based on messages in shouts");
+        Property pHunterStrengthSound = config.get(CATEGORY_MWENh, "Hunter Strength Sound", true, "Plays a sound 10 seconds before getting strength when playing hunter");
 
         Property pShow_killcooldownGUI = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
         Property pXpos_killcooldownGUI = config.get(CATEGORY_GUI, "Xpos kill cooldown HUD", 0d, "The x position of the killcooldown GUI, value ranges from 0 to 1");
@@ -68,6 +70,7 @@ public class MWEnConfigHandler {
         propertyOrderMWWENh.add(pAPIKey.getName());
         propertyOrderMWWENh.add(pShortencoinmessage.getName());
         propertyOrderMWWENh.add(pReportsuggestions.getName());
+        propertyOrderMWWENh.add(pHunterStrengthSound.getName());
         config.setCategoryPropertyOrder(CATEGORY_MWENh, propertyOrderMWWENh);
 
         List<String> propertyOrderGUI = new ArrayList<>();
@@ -92,6 +95,7 @@ public class MWEnConfigHandler {
             APIKey = pAPIKey.getString();
             shortencoinmessage = pShortencoinmessage.getBoolean();
             reportsuggestions = pReportsuggestions.getBoolean();
+            hunterStrengthSound = pHunterStrengthSound.getBoolean();
 
             show_killcooldownGUI = pShow_killcooldownGUI.getBoolean();
             killcooldownHUDPosition.setRelative(pXpos_killcooldownGUI.getDouble(), pYpos_killcooldownGUI.getDouble());
@@ -109,6 +113,7 @@ public class MWEnConfigHandler {
             pAPIKey.set(APIKey);
             pShortencoinmessage.set(shortencoinmessage);
             pReportsuggestions.set(reportsuggestions);
+            pHunterStrengthSound.set(hunterStrengthSound);
 
             pShow_killcooldownGUI.set(show_killcooldownGUI);
             double[] killcooldownGUIarray = killcooldownHUDPosition.getRelativePosition();

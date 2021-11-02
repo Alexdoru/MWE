@@ -3,8 +3,11 @@ package fr.alexdoru.megawallsenhancementsmod.gui;
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.ResourceLocation;
 
 import java.io.IOException;
 
@@ -22,9 +25,10 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
         /*
          * Defines the button list
          */
-        final int buttonsWidth = 200;
+        final int buttonsWidth = 210;
         final int sideButtonsWidth = 100;
-        this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
+        this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4) * 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
+        this.buttonList.add(new GuiButton(9, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
         this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
         this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
         this.buttonList.add(new GuiButton(3, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
@@ -40,6 +44,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
         switch (id) {
             case 0:
                 return "Shorten coin messages : " + getSuffix(MWEnConfigHandler.shortencoinmessage);
+            case 9:
+                return "Sound before hunter strength : " + getSuffix(MWEnConfigHandler.hunterStrengthSound);
             case 1:
                 return "Report suggestions in chat : " + getSuffix(MWEnConfigHandler.reportsuggestions);
             case 2:
@@ -65,7 +71,16 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
             case 0:
                 MWEnConfigHandler.shortencoinmessage = !MWEnConfigHandler.shortencoinmessage;
                 break;
+            case 9:
+                if (!MWEnConfigHandler.hunterStrengthSound) {
+                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("mob.wolf.growl"), 1.0F));
+                }
+                MWEnConfigHandler.hunterStrengthSound = !MWEnConfigHandler.hunterStrengthSound;
+                break;
             case 1:
+                if (!MWEnConfigHandler.reportsuggestions) {
+                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("random.successful_hit"), 1.0F));
+                }
                 MWEnConfigHandler.reportsuggestions = !MWEnConfigHandler.reportsuggestions;
                 break;
             case 2:
@@ -98,7 +113,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredTitle("Mega Walls Enhancements v" + MegaWallsEnhancementsMod.version, ButtonsHeight);
+        drawCenteredTitle("Mega Walls Enhancements v" + MegaWallsEnhancementsMod.version, 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 5);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
