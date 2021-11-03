@@ -53,7 +53,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen {
 
         switch (button.id) {
             case 0:
-                MWEnConfigHandler.toggleicons = !MWEnConfigHandler.toggleicons;
+                MWEnConfigHandler.toggleIcons();
                 break;
             case 1:
                 MWEnConfigHandler.togglewarnings = !MWEnConfigHandler.togglewarnings;

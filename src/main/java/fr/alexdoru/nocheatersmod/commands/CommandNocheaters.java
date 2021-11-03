@@ -75,7 +75,7 @@ public class CommandNocheaters extends CommandBase {
                 } else {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "Icons enabled"));
                 }
-                MWEnConfigHandler.toggleicons = !MWEnConfigHandler.toggleicons;
+                MWEnConfigHandler.toggleIcons();
                 MWEnConfigHandler.saveConfig();
 
             } else if (args[1].equalsIgnoreCase("autoreport")) {

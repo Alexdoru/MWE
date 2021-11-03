@@ -1,6 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.config;
 
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -157,6 +159,15 @@ public class MWEnConfigHandler {
      */
     public static void saveConfig() {
         syncConfig(false, false, true);
+    }
+
+    public static void toggleIcons() {
+        toggleicons = !toggleicons;
+        refreshNametagsWorld();
+    }
+
+    private static void refreshNametagsWorld() {
+        Minecraft.getMinecraft().theWorld.playerEntities.forEach(EntityPlayer::refreshDisplayName);
     }
 
 }
