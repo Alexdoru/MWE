@@ -55,8 +55,6 @@ public class GUIPlayerTabOverlayMixin extends Gui {
         return 25;
     }
 
-    // TODO afficher les finals en tab, faire un cache sinon ca va lager
-
     /**
      * draws the scoreboard values with colors
      *

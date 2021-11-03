@@ -21,7 +21,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen {
     }
 
     @Override
-    public void initGui() { // TODO still missing time between report and autoreport
+    public void initGui() {
         /*
          * Defines the button list
          */
