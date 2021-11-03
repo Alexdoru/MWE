@@ -34,7 +34,7 @@ public class ChatEvents {
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Active Booster, |)\\w+'s Network Booster\\)).*");
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
     public static final ResourceLocation reportSuggestionSound = new ResourceLocation("random.successful_hit");
-    public static final ResourceLocation strengthSound = new ResourceLocation("item.fireCharge.use"); // item.fireCharge.  usefireworks.twinkle
+    public static final ResourceLocation strengthSound = new ResourceLocation("item.fireCharge.use"); // item.fireCharge.use  usefireworks.twinkle
     private static long lastStrength = 0;
 
     @SubscribeEvent
@@ -94,7 +94,7 @@ public class ChatEvents {
 
             /*Status messages*/
         } else if (MWEnConfigHandler.hunterStrengthSound && event.type == 2) {
-            if (fmsg.contains(HUNTER_STRENGTH_MESSAGE)) {
+            if (fmsg.contains(HUNTER_STRENGTH_MESSAGE)) { // TODO petit HUD pour la strength ?
                 long time = System.currentTimeMillis();
                 if (time - lastStrength > 10000L) {
                     lastStrength = time;
