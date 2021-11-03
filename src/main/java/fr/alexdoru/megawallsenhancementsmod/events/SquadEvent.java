@@ -34,7 +34,7 @@ public class SquadEvent {
         String squadname = squadmap.get(event.username);
         if (squadname != null) {
 
-            if (event.displayname.contains(squadprefix)) {
+            if (event.entity.getDisplayName().getFormattedText().contains(squadprefix)) {
                 return;
             }
 
