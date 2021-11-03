@@ -43,7 +43,7 @@ public class ArrowHitGui extends MyCachedGui {
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
         int x = absolutePos[0];
         int y = absolutePos[1];
-        drawCenteredString(frObj, displayText, x, y - 4, 0);
+        drawCenteredString(frObj, displayText, x, y - frObj.FONT_HEIGHT, 0);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ArrowHitGui extends MyCachedGui {
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
         int x = absolutePos[0];
         int y = absolutePos[1];
-        drawCenteredString(frObj, DUMMY_TEXT, x, y - 4, 0);
+        drawCenteredString(frObj, DUMMY_TEXT, x, y - frObj.FONT_HEIGHT, 0);
     }
 
     @Override

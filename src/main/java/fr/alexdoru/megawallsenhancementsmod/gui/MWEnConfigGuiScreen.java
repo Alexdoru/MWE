@@ -48,7 +48,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen { // TODO ajouter des toolt
             case 0:
                 return "Shorten coin messages : " + getSuffix(MWEnConfigHandler.shortencoinmessage);
             case 9:
-                return "Sound before hunter strength : " + getSuffix(MWEnConfigHandler.hunterStrengthSound);
+                return "HUD before hunter strength : " + getSuffix(MWEnConfigHandler.hunterStrengthHUD);
             case 1:
                 return "Report suggestions in chat : " + getSuffix(MWEnConfigHandler.reportsuggestions);
             case 2:
@@ -79,10 +79,10 @@ public class MWEnConfigGuiScreen extends MyGuiScreen { // TODO ajouter des toolt
                 MWEnConfigHandler.shortencoinmessage = !MWEnConfigHandler.shortencoinmessage;
                 break;
             case 9:
-                if (!MWEnConfigHandler.hunterStrengthSound) {
+                if (!MWEnConfigHandler.hunterStrengthHUD) {
                     Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(ChatEvents.strengthSound, 0.0F));
                 }
-                MWEnConfigHandler.hunterStrengthSound = !MWEnConfigHandler.hunterStrengthSound;
+                MWEnConfigHandler.hunterStrengthHUD = !MWEnConfigHandler.hunterStrengthHUD;
                 break;
             case 1:
                 if (!MWEnConfigHandler.reportsuggestions) {
