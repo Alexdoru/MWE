@@ -1,6 +1,7 @@
 package fr.alexdoru.nocheatersmod.events;
 
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
+import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import fr.alexdoru.nocheatersmod.data.WDR;
@@ -53,14 +54,17 @@ public class NoCheatersEvents {
     @SubscribeEvent
     public void onPlayerJoin(EntityJoinWorldEvent event) { // check chaque nouveau joueur qui est rendu dans le jeu
 
-        // TODO ca met le triangle scangame sur le mec en squad
-
         if (ticks < 40 || mc.thePlayer == null || !(event.entity instanceof EntityPlayer)) {
             return;
         }
         EntityPlayer player = (EntityPlayer) event.entity;
-        String uuid = player.getUniqueID().toString().replace("-", "");
         String playerName = player.getName();
+
+        if(SquadEvent.getSquad().get(playerName) != null) {
+            return;
+        }
+
+        String uuid = player.getUniqueID().toString().replace("-", "");
         WDR wdr = WdredPlayers.getWdredMap().get(uuid);
         boolean printmsg = false;
         long datenow = (new Date()).getTime();

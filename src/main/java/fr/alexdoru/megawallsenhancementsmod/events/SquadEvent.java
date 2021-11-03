@@ -21,8 +21,8 @@ public class SquadEvent {
     // TODO se rajouter soit meme et mettre une commande pour mettre son propre nick
 
     private static final HashMap<String, String> squadmap = new HashMap<>();
-    private static final IChatComponent iprefix = new ChatComponentText(EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] ");
-    private static final String prefix = iprefix.getFormattedText();
+    private static final IChatComponent isquadprefix = new ChatComponentText(EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] ");
+    private static final String squadprefix = isquadprefix.getFormattedText();
 
     @SubscribeEvent
     public void onNameFormat(NameFormat event) {
@@ -34,13 +34,13 @@ public class SquadEvent {
         String squadname = squadmap.get(event.username);
         if (squadname != null) {
 
-            if (event.displayname.contains(prefix)) {
+            if (event.displayname.contains(squadprefix)) {
                 return;
             }
 
             event.displayname = squadname;
             EntityPlayer player = (EntityPlayer) event.entity;
-            player.addPrefix(iprefix);
+            player.addPrefix(isquadprefix);
         }
 
     }
@@ -71,11 +71,11 @@ public class SquadEvent {
     }
 
     public static IChatComponent getIprefix() {
-        return iprefix;
+        return isquadprefix;
     }
 
     public static String getprefix() {
-        return prefix;
+        return squadprefix;
     }
 
     /**

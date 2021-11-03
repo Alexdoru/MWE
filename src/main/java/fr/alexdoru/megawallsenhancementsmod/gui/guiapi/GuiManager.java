@@ -34,12 +34,9 @@ public final class GuiManager {
 
     @SubscribeEvent
     public void onRenderGUI(RenderGameOverlayEvent.Post event) {
-        // TODO ca s'affiche en dessous du scoreboard
-
         if (event.type == ElementType.EXPERIENCE && !(mc.currentScreen instanceof PositionEditGuiScreen)) {
             registeredRenderers.forEach(this::callRenderer);
         }
-
     }
 
     private void callRenderer(IRenderer renderer) {
