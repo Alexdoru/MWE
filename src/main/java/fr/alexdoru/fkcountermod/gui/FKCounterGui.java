@@ -47,7 +47,7 @@ public class FKCounterGui extends MyCachedGui {
         if (EnumFKConfigSetting.COMPACT_HUD.getValue()) {
             return frObj.FONT_HEIGHT;
         } else {
-            return frObj.FONT_HEIGHT*4;
+            return frObj.FONT_HEIGHT * 4;
         }
     }
 
@@ -67,7 +67,7 @@ public class FKCounterGui extends MyCachedGui {
 
     @Override
     public void render() {
-        // TODO ca se décale pendant les games, voir si c'est fix avec le rewrite du hud api
+        // TODO ca se décale pendant les games
         super.render();
 
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
@@ -78,7 +78,11 @@ public class FKCounterGui extends MyCachedGui {
             drawRect(x - 1, y - 1, x + getWidth(), y + getHeight(), new Color(0, 0, 0, 64).getRGB());
         }
 
-        drawMultilineString(getDisplayText(), x, y, EnumFKConfigSetting.TEXT_SHADOW.getValue());
+        if (EnumFKConfigSetting.COMPACT_HUD.getValue()) {
+            frObj.drawString(getDisplayText(), x, y, 0, EnumFKConfigSetting.TEXT_SHADOW.getValue());
+        } else {
+            drawMultilineString(getDisplayText(), x, y, EnumFKConfigSetting.TEXT_SHADOW.getValue());
+        }
 
     }
 
