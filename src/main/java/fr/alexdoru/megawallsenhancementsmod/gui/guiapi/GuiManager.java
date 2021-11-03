@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui.guiapi;
 
 import fr.alexdoru.fkcountermod.gui.FKCounterGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.ArrowHitGui;
+import fr.alexdoru.megawallsenhancementsmod.gui.HunterStrengthGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.KillCooldownGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.LastWitherHPGui;
 import net.minecraft.client.Minecraft;
@@ -25,6 +26,7 @@ public final class GuiManager {
         this.registeredRenderers.add(new FKCounterGui());
         this.registeredRenderers.add(new ArrowHitGui());
         this.registeredRenderers.add(new KillCooldownGui());
+        this.registeredRenderers.add(new HunterStrengthGui());
         LastWitherHPGui lastWitherHPGui = new LastWitherHPGui();
         this.registeredRenderers.add(lastWitherHPGui);
         MinecraftForge.EVENT_BUS.register(lastWitherHPGui);

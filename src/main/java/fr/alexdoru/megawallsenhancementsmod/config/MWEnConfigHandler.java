@@ -20,7 +20,7 @@ public class MWEnConfigHandler {
     public static String APIKey;
     public static boolean shortencoinmessage;
     public static boolean reportsuggestions;
-    public static boolean hunterStrengthSound;
+    public static boolean hunterStrengthHUD;
 
     /*GUI config*/
     public static boolean show_killcooldownHUD;
@@ -103,7 +103,7 @@ public class MWEnConfigHandler {
             APIKey = pAPIKey.getString();
             shortencoinmessage = pShortencoinmessage.getBoolean();
             reportsuggestions = pReportsuggestions.getBoolean();
-            hunterStrengthSound = pHunterStrengthSound.getBoolean();
+            hunterStrengthHUD = pHunterStrengthSound.getBoolean();
 
             show_killcooldownHUD = pShow_killcooldownHUD.getBoolean();
             killcooldownHUDPosition.setRelative(pXpos_killcooldownHUD.getDouble(), pYpos_killcooldownHUD.getDouble());
@@ -123,7 +123,7 @@ public class MWEnConfigHandler {
             pAPIKey.set(APIKey);
             pShortencoinmessage.set(shortencoinmessage);
             pReportsuggestions.set(reportsuggestions);
-            pHunterStrengthSound.set(hunterStrengthSound);
+            pHunterStrengthSound.set(hunterStrengthHUD);
 
             pShow_killcooldownHUD.set(show_killcooldownHUD);
             double[] killcooldownHUDarray = killcooldownHUDPosition.getRelativePosition();
