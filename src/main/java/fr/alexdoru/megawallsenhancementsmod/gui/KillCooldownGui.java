@@ -43,17 +43,12 @@ public class KillCooldownGui extends MyCachedGui {
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
         int x = absolutePos[0];
         int y = absolutePos[1];
-        drawString(frObj, DUMMY_TEXT, x, y, 0);
+        frObj.drawStringWithShadow(DUMMY_TEXT, x, y, 0);
     }
 
     @Override
     public boolean isEnabled() {
         return System.currentTimeMillis() - lastkilltime < 60000L && FKCounterMod.isInMwGame();
-    }
-
-    @Override
-    public void save() {
-        MWEnConfigHandler.saveConfig();
     }
 
     /**

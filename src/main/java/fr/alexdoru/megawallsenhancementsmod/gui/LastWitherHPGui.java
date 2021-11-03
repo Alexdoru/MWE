@@ -63,9 +63,4 @@ public class LastWitherHPGui extends MyCachedGui {
         return MWEnConfigHandler.show_lastWitherHUD && FKCounterMod.isInMwGame() && ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive();
     }
 
-    @Override
-    public void save() {
-        MWEnConfigHandler.saveConfig();
-    }
-
 }

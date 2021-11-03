@@ -60,11 +60,6 @@ public class ArrowHitGui extends MyCachedGui {
         return System.currentTimeMillis() - hittime < 1000L;
     }
 
-    @Override
-    public void save() {
-        MWEnConfigHandler.saveConfig();
-    }
-
     public static boolean processMessage(String rawMessage) {
 
         Matcher matcherArrowHit = PATTERN_ARROW_HIT.matcher(rawMessage);
@@ -123,7 +118,7 @@ public class ArrowHitGui extends MyCachedGui {
     /**
      * Sets the HP color depending on the HP input
      */
-    private static void setColor(String hpvalue) {
+    private static void setColor(String hpvalue) { // TODO faire un dégradé de couleur continu
 
         float maxhealth = mc.thePlayer.getMaxHealth();
         float floathpvalue = Float.parseFloat(hpvalue);
