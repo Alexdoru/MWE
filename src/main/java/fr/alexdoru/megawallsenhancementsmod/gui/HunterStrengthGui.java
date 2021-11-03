@@ -8,7 +8,7 @@ public class HunterStrengthGui extends MyCachedGui {
 
     private static long timeStartRender;
     private static final double xd = 0.5d;
-    private static final double yd = 11d / 20d;
+    private static final double yd = 8d / 20d;
 
     public HunterStrengthGui() {
         instance = this;
