@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 
-public class MyCachedGui extends Gui implements IRenderer, ICachedHUDText {
+public class MyCachedGui extends Gui implements IRenderer, ICachedHUDText { // TODO mettre en commun les truc comme save() et renderdummy()
 
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static final FontRenderer frObj = mc.fontRendererObj;
@@ -59,11 +59,7 @@ public class MyCachedGui extends Gui implements IRenderer, ICachedHUDText {
 
     public void drawMultilineString(String msg, int x, int y, boolean shadow) {
         for (String line : msg.split("\n")) {
-            if (shadow) {
-                frObj.drawStringWithShadow(line, x, y, 0);
-            } else {
-                frObj.drawString(line, x, y, 0);
-            }
+            frObj.drawString(line, x, y, 0, shadow);
             y += frObj.FONT_HEIGHT;
         }
     }
