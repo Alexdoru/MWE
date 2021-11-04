@@ -28,7 +28,7 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 public class ChatEvents {
 
     //private static final String HUNTER_STRENGTH_MESSAGE = "\u00a7a\u00a7lF.O.N. \u00a77(\u00a7l\u00a7c\u00a7lStrength\u00a77) \u00a7e\u00a7l10";
-    private static final Pattern HUNTER_STRENGTH_PATTERN = Pattern.compile(".*(\u00a7a\u00a7lF\\.O\\.N\\. \u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l[0-9]+).*");
+    private static final Pattern HUNTER_STRENGTH_PATTERN = Pattern.compile(".*\u00a7a\u00a7lF\\.O\\.N\\. (\u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l[0-9]+).*");
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
     private static final Pattern SHOUT_PATTERN1 = Pattern.compile("^\\[SHOUT\\].+?(\\w+) is b?hop?ping.*", Pattern.CASE_INSENSITIVE);
