@@ -52,6 +52,7 @@ public class SquadEvent {
 
     public static void addPlayer(String playername, String newname) {
         squadmap.put(playername, newname);
+        NameModifier.transformDisplayName(playername);
     }
 
     public static boolean removePlayer(String playername) {

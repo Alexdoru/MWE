@@ -51,7 +51,7 @@ public class CommandSquad extends CommandBase {
                 return;
             }
 
-            if (args.length == 4 && args[2].equalsIgnoreCase("as")) { // TODO refresh le name en tab
+            if (args.length == 4 && args[2].equalsIgnoreCase("as")) {
 
                 SquadEvent.addPlayer(args[1], args[3]);
                 EntityPlayer player = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(args[1]);
