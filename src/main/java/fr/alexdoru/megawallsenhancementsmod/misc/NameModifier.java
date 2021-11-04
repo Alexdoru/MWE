@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.misc;
 import com.mojang.authlib.GameProfile;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
@@ -14,10 +15,13 @@ import net.minecraft.util.IChatComponent;
 
 public class NameModifier {
 
+    private static final Minecraft mc = Minecraft.getMinecraft();
+
     public static void transformDisplayName(String playername) {
-        //if(!NoCheatersMod.areIconsToggled()) {return;}
-        NetworkPlayerInfo networkPlayerInfo = Minecraft.getMinecraft().getNetHandler().getPlayerInfo(playername);
-        if (networkPlayerInfo != null) networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo));
+        NetworkPlayerInfo networkPlayerInfo = mc.getNetHandler().getPlayerInfo(playername);
+        if (networkPlayerInfo != null) {
+            networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo));
+        }
     }
 
     public static IChatComponent getTransformedDisplayName(NetworkPlayerInfo networkPlayerInfo) {
@@ -49,76 +53,81 @@ public class NameModifier {
 
         String username = gameProfile.getName();
         String uuid = gameProfile.getId().toString().replace("-", "");
-        WDR wdr = WdredPlayers.getWdredMap().get(uuid);
-        String squadname = SquadEvent.getSquad().get(username);
         String extraprefix = "";
-        boolean issquadmate = false;
         boolean needtochange = false;
 
-        if (wdr == null) {
-            wdr = WdredPlayers.getWdredMap().get(username);
-            if (wdr != null) {
-                uuid = username;
-            }
-        }
+        String squadname = SquadEvent.getSquad().get(username);
+        boolean isSquadMate = squadname != null;
 
-        //if(NoCheatersMod.areIconsToggled()) {
+        if (NoCheatersMod.areIconsToggled()) {
 
-        if (squadname != null) { // squad
+            if (isSquadMate) {
 
-            extraprefix = SquadEvent.getprefix();
-            issquadmate = true;
-            needtochange = true;
+                extraprefix = SquadEvent.getprefix();
+                needtochange = true;
 
-        } else if (wdr != null) { // nocheaters
+            } else {
 
-            if (!wdr.isOnlyStalking()) {
+                WDR wdr = WdredPlayers.getWdredMap().get(uuid);
 
-                if (wdr.hacks.contains("bhop")) {
-                    extraprefix += NoCheatersEvents.prefix_bhop;
-                } else {
-                    extraprefix += NoCheatersEvents.prefix;
+                if (wdr == null) {
+                    wdr = WdredPlayers.getWdredMap().get(username);
+                    if (wdr != null) {
+                        uuid = username;
+                    }
+                }
+
+                if (wdr != null) {
+
+                    if (!wdr.isOnlyStalking()) {
+
+                        if (wdr.hacks.contains("bhop")) {
+                            extraprefix = NoCheatersEvents.prefix_bhop;
+                        } else {
+                            extraprefix = NoCheatersEvents.prefix;
+                        }
+
+                    }
+
+                    needtochange = true;
+
+                } else { //scangame
+
+                    IChatComponent imsg = CommandScanGame.getScanmap().get(uuid);
+
+                    if (imsg != null && !imsg.equals(CommandScanGame.nomatch)) {
+                        extraprefix = CommandScanGame.prefix;
+                        needtochange = true;
+                    }
+
                 }
 
             }
 
-            needtochange = true;
-
-        } else { //scangame
-
-            IChatComponent imsg = CommandScanGame.getScanmap().get(uuid);
-
-            if (imsg != null && !imsg.equals(CommandScanGame.nomatch)) {
-                extraprefix += CommandScanGame.prefix;
-                needtochange = true;
-            }
-
         }
-        //}
 
         if (displayName != null) {
 
             String formattedname = displayName.getFormattedText().replace(SquadEvent.getprefix(), "").replace(NoCheatersEvents.prefix_bhop, "").replace(NoCheatersEvents.prefix, "").replace(CommandScanGame.prefix, "");
 
             if (needtochange) {
-                return new ChatComponentText(extraprefix).appendSibling(new ChatComponentText((issquadmate ? formattedname.replace(username, squadname).replace("\u00a7k", "") : formattedname.replace("\u00a7k", ""))));
+                return new ChatComponentText(extraprefix).appendSibling(new ChatComponentText((isSquadMate ? formattedname.replace(username, squadname).replace("\u00a7k", "") : formattedname.replace("\u00a7k", ""))));
             } else {
-                return new ChatComponentText(formattedname);
+                return new ChatComponentText(formattedname.replace("\u00a7k", ""));
             }
 
         }
 
-        ScorePlayerTeam team = Minecraft.getMinecraft().theWorld.getScoreboard().getPlayersTeam(username);
+        ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
 
         if (team != null) {
 
             String teamprefix = team.getColorPrefix();
-            if (teamprefix.contains("\u00a7k")) {
-                needtochange = true;
+
+            if (teamprefix.contains("\u00a7k") || needtochange) {
+                return new ChatComponentText(extraprefix + teamprefix.replace("\u00a7k", "").replace("O", "") + (isSquadMate ? squadname : username) + team.getColorSuffix());
             }
-            if (needtochange) {
-                return new ChatComponentText(extraprefix + teamprefix.replace("\u00a7k", "").replace("O", "") + (issquadmate ? squadname : username) + team.getColorSuffix());
-            }
+
         }
 
         return null;
