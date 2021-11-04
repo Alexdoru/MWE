@@ -32,6 +32,9 @@ public class FKCounterGui extends MyCachedGui {
             + EnumChatFormatting.YELLOW + "Yellow" + EnumChatFormatting.WHITE + ": 6 - YellowPlayer 3\n"
             + EnumChatFormatting.BLUE + "Blue" + EnumChatFormatting.WHITE + ": 9 - BluePlayer 4";
 
+    private final int BACKGROUND_COLOR = new Color(0, 0, 0, 64).getRGB();
+    private final int DUMMY_BACKGROUND_COLOR = new Color(255, 255, 255, 127).getRGB();
+
     public FKCounterGui() {
         instance = this;
         guiPosition = EnumFKConfigSetting.FKCOUNTER_HUD.getHUDPosition();
@@ -75,7 +78,7 @@ public class FKCounterGui extends MyCachedGui {
         int y = absolutePos[1];
 
         if (EnumFKConfigSetting.DRAW_BACKGROUND.getValue()) {
-            drawRect(x - 1, y - 1, x + getWidth(), y + getHeight(), new Color(0, 0, 0, 64).getRGB());
+            drawRect(x - 1, y - 1, x + getWidth(), y + getHeight(), BACKGROUND_COLOR);
         }
 
         if (EnumFKConfigSetting.COMPACT_HUD.getValue()) {
@@ -104,7 +107,7 @@ public class FKCounterGui extends MyCachedGui {
         int XtopRight = x + width + 1;
         int YbotLeft = y + height;
 
-        drawRect(XtopLeft, YtopLeft, XtopRight, YbotLeft, new Color(255, 255, 255, 127).getRGB());
+        drawRect(XtopLeft, YtopLeft, XtopRight, YbotLeft, DUMMY_BACKGROUND_COLOR);
         drawHorizontalLine(XtopLeft, XtopRight, YtopLeft, Color.RED.getRGB());
         drawHorizontalLine(XtopLeft, XtopRight, YbotLeft, Color.RED.getRGB());
         drawVerticalLine(XtopLeft, YtopLeft, YbotLeft, Color.RED.getRGB());
