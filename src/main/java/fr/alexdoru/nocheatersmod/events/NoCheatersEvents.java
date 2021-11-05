@@ -40,7 +40,8 @@ public class NoCheatersEvents {
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {  // scans your world 2 seconds avec joining // TODO ajouter un decompte pour pas que ca envoie toutes les commandes auto report en meme temps
+    public void onTick(TickEvent.ClientTickEvent event) {  // scans your world 2 seconds avec joining
+        // TODO ajouter un decompte pour pas que ca envoie toutes les commandes auto report en meme temps
         if (!NoCheatersMod.areWarningsToggled() || !mc.inGameHasFocus) {
             return;
         }

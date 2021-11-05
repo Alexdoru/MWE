@@ -11,7 +11,8 @@ import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
 
-public class MWEnConfigGuiScreen extends MyGuiScreen { // TODO ajouter des tooltips par dessus les boutons pour expliquer ?
+public class MWEnConfigGuiScreen extends MyGuiScreen {
+    // TODO ajouter des tooltips par dessus les boutons pour expliquer ?
 
     private final int ButtonsHeight = 20;
     private final GuiScreen parent;

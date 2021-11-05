@@ -70,7 +70,7 @@ public class FKCounterGui extends MyCachedGui {
 
     @Override
     public void render() {
-        // TODO ca se décale pendant les games
+        // FIXME ca se décale pendant les games
         super.render();
 
         int[] absolutePos = this.guiPosition.getAbsolutePosition();

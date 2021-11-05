@@ -45,7 +45,8 @@ public class CommandNocheaters extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) { // TODO ca affiche le msg reported players meme si y'en a pas
+    public void processCommand(ICommandSender sender, String[] args) {
+        // FIXME ca affiche le msg reported players meme si y'en a pas
 
         if (args.length == 0) {
             addChatMessage(new ChatComponentText(getTagNoCheaters() +
