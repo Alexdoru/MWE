@@ -11,7 +11,7 @@ public class LastWitherHPGui extends MyCachedGui {
 
     public static LastWitherHPGui instance;
 
-    private static final String DUMMY_TEXT = EnumChatFormatting.BLUE + "Wither dies in 148s";
+    private static final String DUMMY_TEXT = EnumChatFormatting.GREEN + "Wither dies in 148s";
     private static long lastupdate = 0;
     private static long thirdWitherDeathTime = 0;
     private static String color;
