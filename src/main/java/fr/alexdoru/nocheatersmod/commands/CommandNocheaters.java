@@ -46,17 +46,28 @@ public class CommandNocheaters extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        // FIXME ca affiche le msg reported players meme si y'en a pas
 
         if (args.length == 0) {
-            addChatMessage(new ChatComponentText(getTagNoCheaters() +
-                    EnumChatFormatting.YELLOW + "Reported players : ")
-                    .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + "Report ALL"))
-                    .setChatStyle(new ChatStyle()
-                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to report again all the reported players in your world")))
-                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nocheaters reportworld"))));
-            NoCheatersEvents.scanCurrentWorld();
+
+            List<IChatComponent> list = NoCheatersEvents.getReportMessagesforWorld();
+
+            if (list.isEmpty()) {
+                addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "No reported players here !"));
+            } else {
+                addChatMessage(new ChatComponentText(getTagNoCheaters() +
+                        EnumChatFormatting.YELLOW + "Reported players : ")
+                        .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + "Report ALL"))
+                        .setChatStyle(new ChatStyle()
+                                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to report again all the reported players in your world")))
+                                .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nocheaters reportworld"))));
+                for (IChatComponent report : list) {
+                    addChatMessage(report);
+                }
+
+            }
+
             return;
+
         }
 
         if (args.length == 1 && args[0].equalsIgnoreCase("reportworld")) {
