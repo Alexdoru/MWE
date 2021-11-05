@@ -82,7 +82,7 @@ public class FKCounterGui extends MyCachedGui {
         }
 
         if (EnumFKConfigSetting.COMPACT_HUD.getValue()) {
-            frObj.drawString(getDisplayText(), x, y, 0, EnumFKConfigSetting.TEXT_SHADOW.getValue());
+            frObj.drawString(getDisplayText(), x - (float) frObj.getStringWidth(getDisplayText()) / 2, y, 0, EnumFKConfigSetting.TEXT_SHADOW.getValue());
         } else {
             drawMultilineString(getDisplayText(), x, y, EnumFKConfigSetting.TEXT_SHADOW.getValue());
         }
@@ -114,7 +114,7 @@ public class FKCounterGui extends MyCachedGui {
         drawVerticalLine(XtopRight, YtopLeft, YbotLeft, Color.RED.getRGB());
 
         if (EnumFKConfigSetting.COMPACT_HUD.getValue()) {
-            frObj.drawString(DUMMY_TEXT_COMPACT, x, y, 0, EnumFKConfigSetting.TEXT_SHADOW.getValue());
+            frObj.drawString(DUMMY_TEXT_COMPACT, x - (float) frObj.getStringWidth(getDisplayText()) / 2, y, 0, EnumFKConfigSetting.TEXT_SHADOW.getValue());
         } else if (EnumFKConfigSetting.SHOW_PLAYERS.getValue()) {
             drawMultilineString(DUMMY_TEXT_PLAYERS, x, y, EnumFKConfigSetting.TEXT_SHADOW.getValue());
         } else {
