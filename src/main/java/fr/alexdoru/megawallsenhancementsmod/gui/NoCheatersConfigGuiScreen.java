@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
+import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
@@ -57,6 +58,9 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen {
                 break;
             case 1:
                 MWEnConfigHandler.togglewarnings = !MWEnConfigHandler.togglewarnings;
+                if (MWEnConfigHandler.togglewarnings) {
+                    NoCheatersEvents.scanCurrentWorld();
+                }
                 break;
             case 2:
                 MWEnConfigHandler.toggleautoreport = !MWEnConfigHandler.toggleautoreport;
