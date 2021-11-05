@@ -163,7 +163,8 @@ class ScanPlayerTask implements Callable<String> {
                 return null;
             }
 
-            if (megawallsstats.getGames_played() == 0) { // TODO vérifier que la classe équipée est bien la class qui flag
+            if (megawallsstats.getGames_played() == 0) {
+                // FIXME vérifier que la classe équipée est bien la class qui flag
 
                 JsonObject classesdata = megawallsstats.getClassesdata();
                 IChatComponent msg = new ChatComponentText("");

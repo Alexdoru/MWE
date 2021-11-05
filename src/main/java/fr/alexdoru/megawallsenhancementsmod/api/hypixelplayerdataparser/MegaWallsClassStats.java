@@ -190,7 +190,7 @@ public class MegaWallsClassStats {
                         EnumChatFormatting.GREEN + "Defender kills : " + EnumChatFormatting.GOLD + formatInt(this.classname_defender_kills),
                 },
 
-                {// TODO ya un pb avec zombie ca affiche le double du self healed
+                {// FIXME ya un pb avec zombie ca affiche le double du self healed
                         EnumChatFormatting.GREEN + "Self healed : " + EnumChatFormatting.GOLD + formatInt(this.classname_self_healed / 2) + EnumChatFormatting.RED + "\u2764" + " ",
                         EnumChatFormatting.GREEN + "Allies healed : " + EnumChatFormatting.GOLD + formatInt(this.classname_allies_healed / 2) + EnumChatFormatting.RED + "\u2764",
                 },

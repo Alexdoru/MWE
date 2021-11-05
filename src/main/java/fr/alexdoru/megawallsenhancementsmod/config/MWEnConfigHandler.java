@@ -173,7 +173,8 @@ public class MWEnConfigHandler {
         syncConfig(false, false, true);
     }
 
-    public static void toggleIcons() { // FIXME ca ne change pas les icones dans la tablist et sur les nametags
+    public static void toggleIcons() {
+        // FIXME ca ne change pas les icones dans la tablist et sur les nametags
         toggleicons = !toggleicons;
         refreshNametagsWorld();
     }
