@@ -52,7 +52,7 @@ public class CommandNocheaters extends CommandBase {
             List<IChatComponent> list = NoCheatersEvents.getReportMessagesforWorld();
 
             if (list.isEmpty()) {
-                addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "No reported players here !"));
+                addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "No reported player here !"));
             } else {
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
                         EnumChatFormatting.YELLOW + "Reported players : ")
