@@ -19,10 +19,11 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.getTagNoCheaters;
 
 public class NoCheatersEvents {
 
@@ -31,7 +32,7 @@ public class NoCheatersEvents {
     public static final String prefix = iprefix.getFormattedText();
     public static final IChatComponent iprefix_bhop = new ChatComponentText(EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD + "\u26a0 ");
     public static final String prefix_bhop = iprefix_bhop.getFormattedText();
-    private final Minecraft mc = Minecraft.getMinecraft();
+    private static final Minecraft mc = Minecraft.getMinecraft();
 
     @SubscribeEvent
     public void onGui(GuiOpenEvent event) { //resets the ticks counter when you have a loading screen
@@ -61,7 +62,7 @@ public class NoCheatersEvents {
         EntityPlayer player = (EntityPlayer) event.entity;
         String playerName = player.getName();
 
-        if(SquadEvent.getSquad().get(playerName) != null) {
+        if (SquadEvent.getSquad().get(playerName) != null) {
             return;
         }
 
@@ -118,36 +119,55 @@ public class NoCheatersEvents {
 
         long timenow = (new Date()).getTime();
 
-        try {
+        for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
 
-            for (NetworkPlayerInfo networkPlayerInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+            String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
+            String playerName = networkPlayerInfo.getGameProfile().getName();
+            WDR wdr = WdredPlayers.getWdredMap().get(uuid);
 
-                String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-                String playerName = networkPlayerInfo.getGameProfile().getName();
-                WDR wdr = WdredPlayers.getWdredMap().get(uuid);
-
-                if (wdr == null) {
-                    wdr = WdredPlayers.getWdredMap().get(playerName);
-                    if (wdr != null) {
-                        uuid = playerName;
-                    }
+            if (wdr == null) {
+                wdr = WdredPlayers.getWdredMap().get(playerName);
+                if (wdr != null) {
+                    uuid = playerName;
                 }
-
-                if (wdr == null) {
-                    continue;
-                }
-
-                String chatmessage = createwarningmessage(timenow, uuid, playerName, wdr);
-                (Minecraft.getMinecraft()).thePlayer.addChatComponentMessage(IChatComponent.Serializer.jsonToComponent(chatmessage));
             }
 
-        } catch (Exception exception) {
+            if (wdr != null) {
+                addChatMessage(IChatComponent.Serializer.jsonToComponent(createwarningmessage(timenow, uuid, playerName, wdr)));
+            }
 
-            addChatMessage(new ChatComponentText(getTagNoCheaters() +
-                    EnumChatFormatting.RED + "Error, scan incomplete"));
         }
 
         ticks++;
+
+    }
+
+    public static List<IChatComponent> getReportMessagesforWorld() {
+
+        List<IChatComponent> list = new ArrayList<>();
+        long timenow = (new Date()).getTime();
+
+        for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
+
+            String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
+            String playerName = networkPlayerInfo.getGameProfile().getName();
+            WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+
+            if (wdr == null) {
+                wdr = WdredPlayers.getWdredMap().get(playerName);
+                if (wdr != null) {
+                    uuid = playerName;
+                }
+            }
+
+            if (wdr != null) {
+                list.add(IChatComponent.Serializer.jsonToComponent(createwarningmessage(timenow, uuid, playerName, wdr)));
+            }
+
+        }
+
+        return list;
+
     }
 
     public static String createwarningmessage(long datenow, String uuid, String playername, WDR wdr) {
