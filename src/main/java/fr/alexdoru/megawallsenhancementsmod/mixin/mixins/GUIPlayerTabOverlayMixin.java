@@ -146,7 +146,7 @@ public class GUIPlayerTabOverlayMixin extends Gui {
             float ifloat = (float) i;
             String s1 = "";
 
-            if (ifloat > maxhealth) { // TODO faire un dégradé de couleur continu
+            if (ifloat > maxhealth) {
                 s1 += EnumChatFormatting.DARK_GREEN;
             } else if (ifloat > maxhealth * 3 / 4) {
                 s1 += EnumChatFormatting.GREEN;

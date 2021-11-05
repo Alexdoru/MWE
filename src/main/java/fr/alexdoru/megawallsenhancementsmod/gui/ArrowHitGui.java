@@ -118,7 +118,7 @@ public class ArrowHitGui extends MyCachedGui {
     /**
      * Sets the HP color depending on the HP input
      */
-    private static void setColor(String hpvalue) { // TODO faire un dégradé de couleur continu
+    private static void setColor(String hpvalue) {
 
         float maxhealth = mc.thePlayer.getMaxHealth();
         float floathpvalue = Float.parseFloat(hpvalue);
