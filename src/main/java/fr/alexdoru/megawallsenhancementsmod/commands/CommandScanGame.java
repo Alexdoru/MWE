@@ -174,8 +174,6 @@ class ScanPlayerTask implements Callable<String> {
                     MWClass mwClass = MWClass.fromTagOrName(classTag);
 
                     if (mwClass != null) {
-                        addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + ">>> Debug : found new player with class : " + mwClass.className)); // TODO debug
-
                         JsonObject entryclassobj = classesdata.getAsJsonObject(mwClass.className.toLowerCase());
                         IChatComponent reportmsg = getReportMessageForClass(playername, mwClass.className, entryclassobj);
                         if (reportmsg != null) {
@@ -184,7 +182,6 @@ class ScanPlayerTask implements Callable<String> {
                             this.networkPlayerInfo.setDisplayName(NameModifier.getTransformedDisplayName(this.networkPlayerInfo));
                             return null;
                         }
-
                     }
 
                 } else {
