@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.events;
 
 import fr.alexdoru.fkcountermod.events.KillCounter;
+import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.ArrowHitGui;
@@ -137,14 +138,14 @@ public class ChatEvents {
             String name = matcher1.group(1);
             String cheat = "bhop";
             if (isAValidName(name)) {
-                printReportSuggestion(name, cheat);
+                new DelayedTask(() -> printReportSuggestion(name, cheat),0);
             }
             return true;
         } else if (matcher2.matches()) {
             String name = matcher2.group(1);
             String cheat = matcher2.group(2);
-            if (isAValidCheat(cheat) || isAValidName(name)) {
-                printReportSuggestion(name, cheat);
+            if (isAValidCheat(cheat) && isAValidName(name)) {
+                new DelayedTask(() -> printReportSuggestion(name, cheat),0);
             }
             return true;
         }
