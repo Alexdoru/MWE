@@ -39,7 +39,7 @@ public class ChatUtil {
 
             imsgstart.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + bar() + "\n" + "             "));
 
-            imsgstart.appendSibling(new ChatComponentText(EnumChatFormatting.YELLOW + " <<")
+            imsgstart.appendSibling(new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + " <<")
                     .setChatStyle(new ChatStyle()
                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to view page " + (displaypage - 1))))
                             .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command + " " + (displaypage - 1)))));
@@ -55,7 +55,7 @@ public class ChatUtil {
 
         if (displaypage < nbpage) {
 
-            imsgstart.appendSibling(new ChatComponentText(EnumChatFormatting.YELLOW + " >>" + "\n")
+            imsgstart.appendSibling(new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + " >>" + "\n")
                     .setChatStyle(new ChatStyle()
                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to view page " + (displaypage + 1))))
                             .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command + " " + (displaypage + 1)))));
@@ -79,7 +79,7 @@ public class ChatUtil {
 
                     + ",{\"text\":\"             \",\"color\":\"white\"}"
 
-                    + ",{\"text\":\" <<\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + command + " " + (displaypage - 1)
+                    + ",{\"text\":\" <<\",\"bold\":true,\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + command + " " + (displaypage - 1)
 
                     + "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click to view page " + (displaypage - 1) + "\",\"color\":\"yellow\"}]}}"
 
@@ -95,7 +95,7 @@ public class ChatUtil {
 
         if (displaypage < nbpage) {
 
-            messagestart = messagestart + ",{\"text\":\" >>\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + command + " " + (displaypage + 1)
+            messagestart = messagestart + ",{\"text\":\" >>\",\"bold\":true,\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + command + " " + (displaypage + 1)
 
                     + "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click to view page " + (displaypage + 1) + "\",\"color\":\"yellow\"}]}}"
 
