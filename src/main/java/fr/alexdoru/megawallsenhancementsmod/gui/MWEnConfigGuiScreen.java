@@ -28,18 +28,22 @@ public class MWEnConfigGuiScreen extends MyGuiScreen { // TODO ajouter des toolt
         final int buttonsWidth = 210;
         final int sideButtonsWidth = 100;
         this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4) * 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
-        this.buttonList.add(new GuiButton(9, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
-        this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
+        this.buttonList.add(new GuiButton(9, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
+        this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
         this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
         this.buttonList.add(new GuiButton(3, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
         this.buttonList.add(new GuiButton(11, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 3, buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
         this.buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 4, 150, ButtonsHeight, getButtonDisplayString(4)));
+
         this.buttonList.add(new GuiButton(5, getxCenter() + buttonsWidth / 2 + 4, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(5)));
         this.buttonList.add(new GuiButton(6, getxCenter() + buttonsWidth / 2 + 4, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(6)));
         this.buttonList.add(new GuiButton(10, getxCenter() + buttonsWidth / 2 + 4, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 3, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(10)));
+        this.buttonList.add(new GuiButton(13, getxCenter() + buttonsWidth / 2 + 4, getyCenter() - ButtonsHeight / 2, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(13)));
+
         this.buttonList.add(new GuiButton(7, getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(7)));
         this.buttonList.add(new GuiButton(8, getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(8)));
         this.buttonList.add(new GuiButton(12, getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 3, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(12)));
+        this.buttonList.add(new GuiButton(14, getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth, getyCenter() - ButtonsHeight / 2, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(14)));
         super.initGui();
     }
 
@@ -62,10 +66,12 @@ public class MWEnConfigGuiScreen extends MyGuiScreen { // TODO ajouter des toolt
             case 5:
             case 6:
             case 10:
+            case 13:
                 return "Move HUD";
             case 7:
             case 8:
             case 12:
+            case 14:
                 return "Reset HUD position";
             default:
                 return "no display text for this button id";
@@ -111,6 +117,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen { // TODO ajouter des toolt
             case 10:
                 mc.displayGuiScreen(new PositionEditGuiScreen(LastWitherHPGui.instance, this));
                 break;
+            case 13:
+                mc.displayGuiScreen(new PositionEditGuiScreen(HunterStrengthGui.instance, this));
+                break;
             case 7:
                 KillCooldownGui.instance.guiPosition.setRelative(0d, 0d);
                 break;
@@ -119,6 +128,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen { // TODO ajouter des toolt
                 break;
             case 12:
                 LastWitherHPGui.instance.guiPosition.setRelative(0.9d, 0.1d);
+                break;
+            case 14:
+                HunterStrengthGui.instance.guiPosition.setRelative(0.5d, 8d / 20d);
                 break;
             default:
                 break;

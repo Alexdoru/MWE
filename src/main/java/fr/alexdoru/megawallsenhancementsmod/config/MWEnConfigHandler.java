@@ -22,7 +22,6 @@ public class MWEnConfigHandler {
     public static String APIKey;
     public static boolean shortencoinmessage;
     public static boolean reportsuggestions;
-    public static boolean hunterStrengthHUD;
 
     /*GUI config*/
     public static boolean show_killcooldownHUD;
@@ -31,6 +30,8 @@ public class MWEnConfigHandler {
     public static final GuiPosition arrowHitHUDPosition = new GuiPosition(0d,0d);
     public static boolean show_lastWitherHUD;
     public static final GuiPosition lastWitherHUDPosition = new GuiPosition(0d,0d);
+    public static boolean hunterStrengthHUD;
+    public static final GuiPosition hunterStrengthHUDPosition = new GuiPosition(0d,0d);
 
     /*NoCheaters Config*/
     public static boolean toggleicons;
@@ -54,7 +55,6 @@ public class MWEnConfigHandler {
         Property pAPIKey = config.get(CATEGORY_MWENh, "APIKey", "", "Your Hypixel API Key");
         Property pShortencoinmessage = config.get(CATEGORY_MWENh, "Shorten coin message", true, "Shorten the coins messages by removing the network booster info");
         Property pReportsuggestions = config.get(CATEGORY_MWENh, "Report suggestion", true, "Give report suggestions in the chat based on messages in shouts");
-        Property pHunterStrengthSound = config.get(CATEGORY_MWENh, "Hunter Strength Sound", true, "Plays a sound 10 seconds before getting strength when playing hunter");
 
         Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
         Property pXpos_killcooldownHUD = config.get(CATEGORY_GUI, "Xpos kill cooldown HUD", 0d, "The x position of the killcooldown GUI, value ranges from 0 to 1");
@@ -65,6 +65,9 @@ public class MWEnConfigHandler {
         Property pShow_lastWitherHUD = config.get(CATEGORY_GUI, "Show last wither HUD", true, "Displays the time it takes for the last wither to die");
         Property pXpos_lastWitherHUD = config.get(CATEGORY_GUI, "Xpos last wither HUD", 0.9d, "The x position of the LastWitherHUD, value ranges from 0 to 1");
         Property pYpos_lastWitherHUD = config.get(CATEGORY_GUI, "Ypos last wither HUD", 0.1d, "The y position of the LastWitherHUD, value ranges from 0 to 1");
+        Property pHunterStrengthHUD = config.get(CATEGORY_GUI, "Hunter Strength HUD", true, "Displays HUD and plays a sound 10 seconds before getting strength with hunter");
+        Property pXpos_hunterHUD = config.get(CATEGORY_GUI, "Xpos hunter Strength HUD", 0.5d, "The x position of the Hunter Strength HUD, value ranges from 0 to 1");
+        Property pYpos_hunterHUD = config.get(CATEGORY_GUI, "Ypos hunter Strength HUD", 8d / 20d, "The y position of the Hunter Strength HUD, value ranges from 0 to 1");
 
         Property pToggleicons = config.get(CATEGORY_NOCHEATERS, "Toggle Icons", true, "Display warning symbol on nametags of reported players");
         Property pTogglewarnings = config.get(CATEGORY_NOCHEATERS, "Toggle Warnings", true, "Gives warning messages in chat for reported players");
@@ -77,7 +80,6 @@ public class MWEnConfigHandler {
         propertyOrderMWWENh.add(pAPIKey.getName());
         propertyOrderMWWENh.add(pShortencoinmessage.getName());
         propertyOrderMWWENh.add(pReportsuggestions.getName());
-        propertyOrderMWWENh.add(pHunterStrengthSound.getName());
         config.setCategoryPropertyOrder(CATEGORY_MWENh, propertyOrderMWWENh);
 
         List<String> propertyOrderGUI = new ArrayList<>();
@@ -90,6 +92,9 @@ public class MWEnConfigHandler {
         propertyOrderGUI.add(pShow_lastWitherHUD.getName());
         propertyOrderGUI.add(pXpos_lastWitherHUD.getName());
         propertyOrderGUI.add(pYpos_lastWitherHUD.getName());
+        propertyOrderGUI.add(pHunterStrengthHUD.getName());
+        propertyOrderGUI.add(pXpos_hunterHUD.getName());
+        propertyOrderGUI.add(pYpos_hunterHUD.getName());
         config.setCategoryPropertyOrder(CATEGORY_GUI, propertyOrderGUI);
 
         List<String> propertyOrderNOCHEATERS = new ArrayList<>();
@@ -105,7 +110,6 @@ public class MWEnConfigHandler {
             APIKey = pAPIKey.getString();
             shortencoinmessage = pShortencoinmessage.getBoolean();
             reportsuggestions = pReportsuggestions.getBoolean();
-            hunterStrengthHUD = pHunterStrengthSound.getBoolean();
 
             show_killcooldownHUD = pShow_killcooldownHUD.getBoolean();
             killcooldownHUDPosition.setRelative(pXpos_killcooldownHUD.getDouble(), pYpos_killcooldownHUD.getDouble());
@@ -113,6 +117,8 @@ public class MWEnConfigHandler {
             arrowHitHUDPosition.setRelative(pXpos_ArrowHitHUD.getDouble(), pYpos_ArrowHitHUD.getDouble());
             show_lastWitherHUD = pShow_lastWitherHUD.getBoolean();
             lastWitherHUDPosition.setRelative(pXpos_lastWitherHUD.getDouble(), pYpos_lastWitherHUD.getDouble());
+            hunterStrengthHUD = pHunterStrengthHUD.getBoolean();
+            hunterStrengthHUDPosition.setRelative(pXpos_hunterHUD.getDouble(), pYpos_hunterHUD.getDouble());
 
             toggleicons = pToggleicons.getBoolean();
             togglewarnings = pTogglewarnings.getBoolean();
@@ -125,20 +131,26 @@ public class MWEnConfigHandler {
             pAPIKey.set(APIKey);
             pShortencoinmessage.set(shortencoinmessage);
             pReportsuggestions.set(reportsuggestions);
-            pHunterStrengthSound.set(hunterStrengthHUD);
 
             pShow_killcooldownHUD.set(show_killcooldownHUD);
             double[] killcooldownHUDarray = killcooldownHUDPosition.getRelativePosition();
             pXpos_killcooldownHUD.set(killcooldownHUDarray[0]);
             pYpos_killcooldownHUD.set(killcooldownHUDarray[1]);
+
             pShow_ArrowHitHUD.set(show_ArrowHitHUD);
             double[] ArrowHitHUDarray = arrowHitHUDPosition.getRelativePosition();
             pXpos_ArrowHitHUD.set(ArrowHitHUDarray[0]);
             pYpos_ArrowHitHUD.set(ArrowHitHUDarray[1]);
+
             pShow_lastWitherHUD.set(show_lastWitherHUD);
             double[] lastWitherHUDarray = lastWitherHUDPosition.getRelativePosition();
             pXpos_lastWitherHUD.set(lastWitherHUDarray[0]);
             pYpos_lastWitherHUD.set(lastWitherHUDarray[1]);
+
+            pHunterStrengthHUD.set(hunterStrengthHUD);
+            double[] hunterStrengtharray = hunterStrengthHUDPosition.getRelativePosition();
+            pXpos_hunterHUD.set(hunterStrengtharray[0]);
+            pYpos_hunterHUD.set(hunterStrengtharray[1]);
 
             pToggleicons.set(toggleicons);
             pTogglewarnings.set(togglewarnings);
@@ -161,7 +173,7 @@ public class MWEnConfigHandler {
         syncConfig(false, false, true);
     }
 
-    public static void toggleIcons() {
+    public static void toggleIcons() { // FIXME ca ne change pas les icones dans la tablist et sur les nametags
         toggleicons = !toggleicons;
         refreshNametagsWorld();
     }
