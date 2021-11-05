@@ -32,12 +32,7 @@ public class SquadEvent {
         }
 
         String squadname = squadmap.get(event.username);
-        if (squadname != null) {
-
-            if (event.entity.getDisplayName().getFormattedText().contains(squadprefix)) {
-                return;
-            }
-
+        if (squadname != null) { // TODO ca met multiples [S]
             event.displayname = squadname;
             EntityPlayer player = (EntityPlayer) event.entity;
             player.addPrefix(isquadprefix);
