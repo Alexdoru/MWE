@@ -37,7 +37,7 @@ public enum MWClass {
 
     public static MWClass fromTagOrName(String nameIn) {
         for (MWClass mwClass : values()) {
-            if (nameIn.equals(mwClass.tag) || nameIn.equalsIgnoreCase(mwClass.className)) {
+            if (nameIn.equalsIgnoreCase(mwClass.tag) || nameIn.equalsIgnoreCase(mwClass.className)) {
                 return mwClass;
             }
         }
