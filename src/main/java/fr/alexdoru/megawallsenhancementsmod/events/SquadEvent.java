@@ -2,76 +2,67 @@ package fr.alexdoru.megawallsenhancementsmod.events;
 
 import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
-import fr.alexdoru.megawallsenhancementsmod.misc.NameModifier;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class SquadEvent {
 
     // TODO se rajouter soit meme et mettre une commande pour mettre son propre nick
+    // juste besoin de ne pas enlever son propre pseudo sur un nouvelle game
 
     private static final HashMap<String, String> squadmap = new HashMap<>();
-    private static final IChatComponent isquadprefix = new ChatComponentText(EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] ");
-    private static final String squadprefix = isquadprefix.getFormattedText();
 
     @SubscribeEvent
     public void onNameFormat(NameFormat event) {
-
-        if (!NoCheatersMod.areIconsToggled()) {
-            return;
+        if (NoCheatersMod.areIconsToggled()) {
+            String squadname = squadmap.get(event.username);
+            if (squadname != null) {
+                event.displayname = squadname;
+            }
         }
-
-        String squadname = squadmap.get(event.username);
-        if (squadname != null) { // TODO ca met multiples [S]
-            event.displayname = squadname;
-            EntityPlayer player = (EntityPlayer) event.entity;
-            player.addPrefix(isquadprefix);
-        }
-
     }
 
     public static void addPlayer(String playername) {
-        squadmap.put(playername, playername);
-        NameModifier.transformDisplayName(playername);
+        addPlayer(playername, playername);
     }
 
     public static void addPlayer(String playername, String newname) {
         squadmap.put(playername, newname);
-        NameModifier.transformDisplayName(playername);
+        NameUtil.transformNameTablist(playername);
+        NameUtil.updateNametag(playername);
     }
 
     public static boolean removePlayer(String playername) {
         boolean success = squadmap.remove(playername) != null;
         if (success) {
-            NameModifier.transformDisplayName(playername);
+            NameUtil.transformNameTablist(playername);
+            NameUtil.updateNametag(playername);
         }
         return success;
     }
 
     public static void clearSquad() {
+        List<String> playerlist = new ArrayList<>();
+        squadmap.forEach((key, value) -> playerlist.add(key));
         squadmap.clear();
+
+        for (String playername : playerlist) {
+            NameUtil.transformNameTablist(playername);
+            NameUtil.updateNametag(playername);
+        }
+
     }
 
     public static HashMap<String, String> getSquad() {
         return squadmap;
-    }
-
-    public static IChatComponent getIprefix() {
-        return isquadprefix;
-    }
-
-    public static String getprefix() {
-        return squadprefix;
     }
 
     /**

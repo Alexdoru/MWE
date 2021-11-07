@@ -2,7 +2,7 @@ package fr.alexdoru.nocheatersmod.commands;
 
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
-import fr.alexdoru.megawallsenhancementsmod.misc.NameModifier;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
@@ -54,7 +54,8 @@ public class CommandUnWDR extends CommandBase {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() +
                             EnumChatFormatting.RED + "Player not found in your report list."));
                 } else {
-                    NameModifier.transformDisplayName(playername);
+                    NameUtil.transformNameTablist(playername);
+                    NameUtil.updateNametag(playername);
                     addChatMessage(new ChatComponentText(getTagNoCheaters() +
                             EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.LIGHT_PURPLE + playername + EnumChatFormatting.GREEN + "."));
                 }
@@ -69,7 +70,8 @@ public class CommandUnWDR extends CommandBase {
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
                         EnumChatFormatting.RED + "Player not found in your report list."));
             } else {
-                NameModifier.transformDisplayName(args[1]);
+                NameUtil.transformNameTablist(args[1]);
+                NameUtil.updateNametag(args[1]);
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
                         EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.LIGHT_PURPLE + args[1] + EnumChatFormatting.GREEN + "."));
             }

@@ -2,11 +2,8 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
-import fr.alexdoru.nocheatersmod.NoCheatersMod;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
@@ -54,12 +51,6 @@ public class CommandSquad extends CommandBase {
             if (args.length == 4 && args[2].equalsIgnoreCase("as")) {
 
                 SquadEvent.addPlayer(args[1], args[3]);
-                EntityPlayer player = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(args[1]);
-
-                if (NoCheatersMod.areIconsToggled() && player != null) {
-                    player.refreshDisplayName();
-                }
-
                 addChatMessage(new ChatComponentText(getTagMW() +
                         EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[1] + EnumChatFormatting.GREEN + " as " +
                         EnumChatFormatting.GOLD + args[3] + EnumChatFormatting.GREEN + " to the squad."));
@@ -69,12 +60,6 @@ public class CommandSquad extends CommandBase {
             for (int i = 1; i < args.length; i++) {
 
                 SquadEvent.addPlayer(args[i]);
-                EntityPlayer player = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(args[i]);
-
-                if (NoCheatersMod.areIconsToggled() && player != null) {
-                    player.refreshDisplayName();
-                }
-
                 addChatMessage(new ChatComponentText(getTagMW() +
                         EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " to the squad."));
             }
