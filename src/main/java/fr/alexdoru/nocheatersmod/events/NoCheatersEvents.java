@@ -40,15 +40,17 @@ public class NoCheatersEvents {
         }
         if (ticks == 39) {
             scanCurrentWorld();
+            ticks++;
         } else if (ticks < 39) {
             ticks++;
         }
+
     }
 
     @SubscribeEvent
     public void onPlayerJoin(EntityJoinWorldEvent event) { // check chaque nouveau joueur qui est rendu dans le jeu
 
-        if (ticks < 40 || mc.thePlayer == null || !(event.entity instanceof EntityPlayer)) {
+        if (ticks < 39 || mc.thePlayer == null || !(event.entity instanceof EntityPlayer)) {
             return;
         }
         EntityPlayer player = (EntityPlayer) event.entity;
@@ -78,8 +80,6 @@ public class NoCheatersEvents {
             }
 
         }
-
-        ticks++;
 
     }
 
