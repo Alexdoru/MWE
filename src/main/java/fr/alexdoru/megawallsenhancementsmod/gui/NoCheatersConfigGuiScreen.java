@@ -37,7 +37,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen {
     private String getButtonDisplayString(int id) {
         switch (id) {
             case 0:
-                return "Warning icons on names : " + getSuffix(MWEnConfigHandler.toggleicons);
+                return "Toggle icons on names : " + getSuffix(MWEnConfigHandler.toggleicons);
             case 1:
                 return "Warning messages in chat : " + getSuffix(MWEnConfigHandler.togglewarnings);
             case 2:

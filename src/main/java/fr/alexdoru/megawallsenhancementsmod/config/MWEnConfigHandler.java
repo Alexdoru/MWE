@@ -178,9 +178,15 @@ public class MWEnConfigHandler {
     public static void toggleIcons() {
         toggleicons = !toggleicons;
         if (toggleicons) {
-            mc.theWorld.playerEntities.forEach(player -> NameUtil.updateNametag(player, true, false, false));
+            mc.theWorld.playerEntities.forEach(playerEntity -> {
+                NameUtil.updateNametag(playerEntity, true, false, false);
+                NameUtil.transformNameTablist(playerEntity.getName());
+            });
         } else {
-            mc.theWorld.playerEntities.forEach(NameUtil::removeNametagIcons);
+            mc.theWorld.playerEntities.forEach(playerEntity -> {
+                NameUtil.removeNametagIcons(playerEntity);
+                NameUtil.transformNameTablist(playerEntity.getName());
+            });
         }
     }
 
