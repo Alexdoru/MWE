@@ -9,7 +9,6 @@ import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
-import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
@@ -82,7 +81,7 @@ public class CommandNocheaters extends CommandBase {
 
             if (args[1].equalsIgnoreCase("icons")) {
 
-                if (NoCheatersMod.areIconsToggled()) {
+                if (MWEnConfigHandler.toggleicons) {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Icons disabled"));
                 } else {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "Icons enabled"));
@@ -92,7 +91,7 @@ public class CommandNocheaters extends CommandBase {
 
             } else if (args[1].equalsIgnoreCase("autoreport")) {
 
-                if (NoCheatersMod.isAutoreportToggled()) {
+                if (MWEnConfigHandler.toggleautoreport) {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Autoreports disabled"));
                 } else {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "Autoreports enabled"));
@@ -102,7 +101,7 @@ public class CommandNocheaters extends CommandBase {
 
             } else if (args[1].equalsIgnoreCase("warnings")) {
 
-                if (NoCheatersMod.areWarningsToggled()) {
+                if (MWEnConfigHandler.togglewarnings) {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Warnings disabled"));
                 } else {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "Warnings enabled"));
@@ -309,7 +308,7 @@ public class CommandNocheaters extends CommandBase {
                 continue;
             }
 
-            if (timenow - wdr.timestamp > NoCheatersMod.getTimebetweenreports() && !(wdr.isOnlyStalking())) {
+            if (timenow - wdr.timestamp > MWEnConfigHandler.timeBetweenReports && !(wdr.isOnlyStalking())) {
 
                 if (isaNick) {
 

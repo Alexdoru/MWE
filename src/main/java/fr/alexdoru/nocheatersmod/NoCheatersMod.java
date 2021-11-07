@@ -1,6 +1,5 @@
 package fr.alexdoru.nocheatersmod;
 
-import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.nocheatersmod.commands.*;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
@@ -37,26 +36,6 @@ public class NoCheatersMod {
         Runtime.getRuntime().addShutdownHook(new Thread(WdredPlayers::saveReportedPlayers));
         WdredPlayers.loadReportedPlayers();
 
-    }
-
-    public static boolean areIconsToggled() {
-        return MWEnConfigHandler.toggleicons;
-    }
-
-    public static boolean areWarningsToggled() {
-        return MWEnConfigHandler.togglewarnings;
-    }
-
-    public static boolean isAutoreportToggled() {
-        return MWEnConfigHandler.toggleautoreport;
-    }
-
-    public static long getTimebetweenreports() {
-        return MWEnConfigHandler.timeBetweenReports;
-    }
-
-    public static long getTimeautoreport() {
-        return MWEnConfigHandler.timeAutoReport;
     }
 
 }
