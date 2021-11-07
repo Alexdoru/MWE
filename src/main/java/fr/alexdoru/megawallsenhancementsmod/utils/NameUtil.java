@@ -2,8 +2,8 @@ package fr.alexdoru.megawallsenhancementsmod.utils;
 
 import com.mojang.authlib.GameProfile;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
+import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
-import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
@@ -23,13 +23,13 @@ import java.util.List;
 public class NameUtil {
 
     private static final IChatComponent iprefix = new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + "\u26a0 ");
-    private static final String prefix = iprefix.getFormattedText();
+    public static final String prefix = iprefix.getFormattedText();
     private static final IChatComponent iprefix_bhop = new ChatComponentText(EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD + "\u26a0 ");
     private static final String prefix_bhop = iprefix_bhop.getFormattedText();
     private static final IChatComponent iprefix_scan = new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + "" + EnumChatFormatting.BOLD + "\u26a0 ");
     private static final String prefix_scan = iprefix_scan.getFormattedText();
     private static final IChatComponent isquadprefix = new ChatComponentText(EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] ");
-    private static final String squadprefix = isquadprefix.getFormattedText();
+    public static final String squadprefix = isquadprefix.getFormattedText();
     private static final List<IChatComponent> allPrefix = Arrays.asList(iprefix, iprefix_bhop, iprefix_scan, isquadprefix);
     private static final Minecraft mc = Minecraft.getMinecraft();
 
@@ -65,7 +65,7 @@ public class NameUtil {
 
         if (wdr != null) { // player was reported
 
-            if (isAutoreportToggled && datenow - wdr.timestamp > NoCheatersMod.getTimebetweenreports() && datenow - wdr.timestamp < NoCheatersMod.getTimeautoreport()) {
+            if (isAutoreportToggled && datenow - wdr.timestamp > MWEnConfigHandler.timeBetweenReports && datenow - wdr.timestamp < MWEnConfigHandler.timeAutoReport) {
                 ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + uuid + " " + playerName);
             }
 
@@ -147,7 +147,7 @@ public class NameUtil {
         String squadname = SquadEvent.getSquad().get(username);
         boolean isSquadMate = squadname != null;
 
-        if (NoCheatersMod.areIconsToggled()) {
+        if (MWEnConfigHandler.toggleicons) {
 
             if (isSquadMate) {
 

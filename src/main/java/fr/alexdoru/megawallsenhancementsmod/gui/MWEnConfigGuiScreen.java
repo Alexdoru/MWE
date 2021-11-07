@@ -4,6 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
@@ -12,7 +13,6 @@ import net.minecraft.client.gui.GuiScreen;
 import java.io.IOException;
 
 public class MWEnConfigGuiScreen extends MyGuiScreen {
-    // TODO ajouter des tooltips par dessus les boutons pour expliquer ?
 
     private final int ButtonsHeight = 20;
     private final GuiScreen parent;
@@ -28,6 +28,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
          */
         final int buttonsWidth = 210;
         final int sideButtonsWidth = 100;
+        this.buttonList.add(new GuiButton(15, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4) * 3, buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
         this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4) * 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
         this.buttonList.add(new GuiButton(9, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
         this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
@@ -50,6 +51,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
 
     private String getButtonDisplayString(int id) {
         switch (id) {
+            case 15:
+                return "Icons on names " + NameUtil.squadprefix + NameUtil.prefix + " : " + getSuffix(MWEnConfigHandler.toggleicons);
             case 0:
                 return "Shorten coin messages : " + getSuffix(MWEnConfigHandler.shortencoinmessage);
             case 9:
@@ -82,6 +85,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         switch (button.id) {
+            case 15:
+                MWEnConfigHandler.toggleIcons();
+                break;
             case 0:
                 MWEnConfigHandler.shortencoinmessage = !MWEnConfigHandler.shortencoinmessage;
                 break;
@@ -104,7 +110,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
                 MWEnConfigHandler.show_ArrowHitHUD = !MWEnConfigHandler.show_ArrowHitHUD;
                 break;
             case 11:
-                MWEnConfigHandler.show_lastWitherHUD =! MWEnConfigHandler.show_lastWitherHUD;
+                MWEnConfigHandler.show_lastWitherHUD = !MWEnConfigHandler.show_lastWitherHUD;
                 break;
             case 4:
                 mc.displayGuiScreen(parent);
