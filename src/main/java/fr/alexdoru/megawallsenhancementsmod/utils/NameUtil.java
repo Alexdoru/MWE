@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
 import com.mojang.authlib.GameProfile;
+import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
@@ -20,6 +21,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static fr.alexdoru.nocheatersmod.events.NoCheatersEvents.nbReport;
+
 public class NameUtil {
 
     private static final IChatComponent iprefix = new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + "\u26a0 ");
@@ -33,15 +36,15 @@ public class NameUtil {
     private static final List<IChatComponent> allPrefix = Arrays.asList(iprefix, iprefix_bhop, iprefix_scan, isquadprefix);
     private static final Minecraft mc = Minecraft.getMinecraft();
 
-    public static void updateNametag(String playername) {
+    public static void handlePlayer(String playername) {
         EntityPlayer player = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(playername);
         if (player != null) {
             NameUtil.removeNametagIcons(player);
-            NameUtil.updateNametag(player, true, false, false);
+            NameUtil.handlePlayer(player, true, false, false);
         }
     }
 
-    public static void updateNametag(EntityPlayer player, boolean areIconsToggled, boolean areWarningsToggled, boolean isAutoreportToggled) {
+    public static void handlePlayer(EntityPlayer player, boolean areIconsToggled, boolean areWarningsToggled, boolean isAutoreportToggled) {
 
         String playerName = player.getName();
         String squadname = SquadEvent.getSquad().get(playerName);
@@ -66,7 +69,12 @@ public class NameUtil {
         if (wdr != null) { // player was reported
 
             if (isAutoreportToggled && datenow - wdr.timestamp > MWEnConfigHandler.timeBetweenReports && datenow - wdr.timestamp < MWEnConfigHandler.timeAutoReport) {
-                ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + uuid + " " + playerName);
+                String finalUuid = uuid;
+                new DelayedTask(() -> {
+                    ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
+                    nbReport--;
+                }, 20 * nbReport);
+                nbReport++;
             }
 
             if (wdr.hacks.contains("bhop")) { // player bhops

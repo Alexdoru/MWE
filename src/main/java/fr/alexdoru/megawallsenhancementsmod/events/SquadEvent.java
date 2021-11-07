@@ -47,14 +47,14 @@ public class SquadEvent {
     public static void addPlayer(String playername, String friendlyName) {
         squadmap.put(playername, friendlyName);
         NameUtil.transformNameTablist(playername);
-        NameUtil.updateNametag(playername);
+        NameUtil.handlePlayer(playername);
     }
 
     public static boolean removePlayer(String playername) {
         boolean success = squadmap.remove(playername) != null;
         if (success) {
             NameUtil.transformNameTablist(playername);
-            NameUtil.updateNametag(playername);
+            NameUtil.handlePlayer(playername);
         }
         if (squadmap.isEmpty()) {
             myNick = null;
@@ -72,7 +72,7 @@ public class SquadEvent {
 
         for (String playername : playerlist) {
             NameUtil.transformNameTablist(playername);
-            NameUtil.updateNametag(playername);
+            NameUtil.handlePlayer(playername);
         }
 
     }

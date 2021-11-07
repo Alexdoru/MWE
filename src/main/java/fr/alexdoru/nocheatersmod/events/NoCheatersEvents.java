@@ -1,5 +1,6 @@
 package fr.alexdoru.nocheatersmod.events;
 
+import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
@@ -10,6 +11,7 @@ import net.minecraft.client.gui.GuiDownloadTerrain;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IChatComponent;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -24,17 +26,17 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage
 public class NoCheatersEvents {
 
     private static int ticks = 0;
+    public static int nbReport = 0;
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     @SubscribeEvent
-    public void onGui(GuiOpenEvent event) { //resets the ticks counter when you have a loading screen
+    public void onGui(GuiOpenEvent event) {
         if (event.gui instanceof GuiDownloadTerrain)
             ticks = 0;
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {  // scans your world 2 seconds avec joining
-        // TODO ajouter un decompte pour pas que ca envoie toutes les commandes auto report en meme temps
+    public void onTick(TickEvent.ClientTickEvent event) {
         if (!MWEnConfigHandler.togglewarnings || !mc.inGameHasFocus) {
             return;
         }
@@ -44,23 +46,20 @@ public class NoCheatersEvents {
         } else if (ticks < 39) {
             ticks++;
         }
-
     }
 
     @SubscribeEvent
-    public void onPlayerJoin(EntityJoinWorldEvent event) { // check chaque nouveau joueur qui est rendu dans le jeu
-
+    public void onPlayerJoin(EntityJoinWorldEvent event) {
         if (ticks < 39 || mc.thePlayer == null || !(event.entity instanceof EntityPlayer)) {
             return;
         }
         EntityPlayer player = (EntityPlayer) event.entity;
-        NameUtil.updateNametag(player, MWEnConfigHandler.toggleicons, MWEnConfigHandler.togglewarnings, MWEnConfigHandler.toggleautoreport);
-
+        NameUtil.handlePlayer(player, MWEnConfigHandler.toggleicons, MWEnConfigHandler.togglewarnings, MWEnConfigHandler.toggleautoreport);
     }
 
-    public static void scanCurrentWorld() { // TODO ajouter le autoreport
+    public static void scanCurrentWorld() {
 
-        long timenow = (new Date()).getTime();
+        long datenow = (new Date()).getTime();
 
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
 
@@ -76,7 +75,15 @@ public class NoCheatersEvents {
             }
 
             if (wdr != null) {
-                addChatMessage(IChatComponent.Serializer.jsonToComponent(createwarningmessage(timenow, uuid, playerName, wdr)));
+                addChatMessage(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr)));
+                if (MWEnConfigHandler.toggleautoreport && datenow - wdr.timestamp > MWEnConfigHandler.timeBetweenReports && datenow - wdr.timestamp < MWEnConfigHandler.timeAutoReport) {
+                    String finalUuid = uuid;
+                    new DelayedTask(() -> {
+                        ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
+                        nbReport--;
+                    }, 20 * nbReport);
+                    nbReport++;
+                }
             }
 
         }
@@ -86,7 +93,7 @@ public class NoCheatersEvents {
     public static List<IChatComponent> getReportMessagesforWorld() {
 
         List<IChatComponent> list = new ArrayList<>();
-        long timenow = (new Date()).getTime();
+        long datenow = (new Date()).getTime();
 
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
 
@@ -102,7 +109,15 @@ public class NoCheatersEvents {
             }
 
             if (wdr != null) {
-                list.add(IChatComponent.Serializer.jsonToComponent(createwarningmessage(timenow, uuid, playerName, wdr)));
+                list.add(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr)));
+                if (MWEnConfigHandler.toggleautoreport && datenow - wdr.timestamp > MWEnConfigHandler.timeBetweenReports && datenow - wdr.timestamp < MWEnConfigHandler.timeAutoReport) {
+                    String finalUuid = uuid;
+                    new DelayedTask(() -> {
+                        ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
+                        nbReport--;
+                    }, 20 * nbReport);
+                    nbReport++;
+                }
             }
 
         }
