@@ -2,7 +2,14 @@ package fr.alexdoru.fkcountermod.events;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.gui.FKCounterGui;
+import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
+import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -85,7 +92,10 @@ public class KillCounter {
     private static HashMap<String, Integer>[] teamKillsArray;
     private static ArrayList<String> deadPlayers;
 
+    private static Random rand;
+
     public KillCounter() {
+        rand = new Random();
         KILL_PATTERNS = new Pattern[KILL_MESSAGES.length];
         for (int i = 0; i < KILL_MESSAGES.length; i++) {
             KILL_PATTERNS[i] = Pattern.compile(KILL_MESSAGES[i]);
@@ -128,9 +138,6 @@ public class KillCounter {
             return false;
         }
 
-        // TODO ajouter des particules quand un hb ou dread fait un kill ?
-        // this.worldObj.spawnParticle example d'utilisation dans le EntityVillager.class
-
         /*
          * Kill message detection
          */
@@ -140,6 +147,7 @@ public class KillCounter {
 
                 String killed = killMessageMatcher.group(1);
                 String killer = killMessageMatcher.group(2);
+                spawnParticles(killer);
                 String[] split = FormattedText.split("\u00a7");
 
                 if (split.length >= 7) {
@@ -346,6 +354,55 @@ public class KillCounter {
             temp.put(aa.getKey(), aa.getValue());
         }
         return temp;
+    }
+
+    public static void spawnParticles(String killer) {
+        EntityPlayer player = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(killer); // O(N)
+        if (player == null) {
+            return;
+        }
+        ScorePlayerTeam team = Minecraft.getMinecraft().theWorld.getScoreboard().getPlayersTeam(killer); // O(1)
+        if (team == null) {
+            return;
+        }
+        String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replace("[", "").replace("]", "").replace(" ", ""));
+        MWClass mwClass = MWClass.fromTagOrName(classTag);
+        if (mwClass == null) {
+            return;
+        }
+
+        int duration;
+
+        if (mwClass == MWClass.DREADLORD) {
+            duration = 5 * 20;
+        } else if (mwClass == MWClass.HEROBRINE) {
+            duration = 6 * 20;
+        } else {
+            return;
+        }
+
+        for (int i = 0; i < duration / 10; i++) {
+
+            new DelayedTask(() ->
+            {
+                for (int j = 0; j < 5; ++j) {
+                    double d0 = rand.nextGaussian() * 0.02D;
+                    double d1 = rand.nextGaussian() * 0.02D;
+                    double d2 = rand.nextGaussian() * 0.02D;
+                    Minecraft.getMinecraft().theWorld.spawnParticle(
+                            EnumParticleTypes.VILLAGER_ANGRY,
+                            player.posX + (double) (rand.nextFloat() * player.width * 2.0F) - (double) player.width,
+                            player.posY + 1.0D + (double) (rand.nextFloat() * player.height),
+                            player.posZ + (double) (rand.nextFloat() * player.width * 2.0F) - (double) player.width,
+                            d0,
+                            d1,
+                            d2
+                    );
+                }
+            }, i * 10);
+
+        }
+
     }
 
 }
