@@ -15,10 +15,9 @@ import java.util.List;
 
 public class SquadEvent {
 
-    // TODO se rajouter soit meme et mettre une commande pour mettre son propre nick
-    // juste besoin de ne pas enlever son propre pseudo sur un nouvelle game
-
     private static final HashMap<String, String> squadmap = new HashMap<>();
+    private static String myNick;
+    private static String myFriendlyName;
 
     @SubscribeEvent
     public void onNameFormat(NameFormat event) {
@@ -30,12 +29,23 @@ public class SquadEvent {
         }
     }
 
+    public static void addMyself(String myNickIn) {
+        myNick = myNickIn;
+        addPlayer(myNickIn);
+    }
+
+    public static void addMyself(String myNickIn, String myFriendlyNameIn) {
+        myNick = myNickIn;
+        myFriendlyName = myFriendlyNameIn;
+        addPlayer(myNickIn, myFriendlyNameIn);
+    }
+
     public static void addPlayer(String playername) {
         addPlayer(playername, playername);
     }
 
-    public static void addPlayer(String playername, String newname) {
-        squadmap.put(playername, newname);
+    public static void addPlayer(String playername, String friendlyName) {
+        squadmap.put(playername, friendlyName);
         NameUtil.transformNameTablist(playername);
         NameUtil.updateNametag(playername);
     }
@@ -46,6 +56,10 @@ public class SquadEvent {
             NameUtil.transformNameTablist(playername);
             NameUtil.updateNametag(playername);
         }
+        if (squadmap.isEmpty()) {
+            myNick = null;
+            myFriendlyName = null;
+        }
         return success;
     }
 
@@ -53,6 +67,8 @@ public class SquadEvent {
         List<String> playerlist = new ArrayList<>();
         squadmap.forEach((key, value) -> playerlist.add(key));
         squadmap.clear();
+        myNick = null;
+        myFriendlyName = null;
 
         for (String playername : playerlist) {
             NameUtil.transformNameTablist(playername);
@@ -122,6 +138,22 @@ public class SquadEvent {
 
         squadmap.clear();
         squadmap.putAll(newsquad);
+
+        if (!squadmap.isEmpty()) {
+
+            if (myNick == null) {
+                addPlayer(Minecraft.getMinecraft().thePlayer.getName());
+            } else {
+
+                if (myFriendlyName == null) {
+                    addPlayer(myNick, myNick);
+                } else {
+                    addPlayer(myNick, myFriendlyName);
+                }
+
+            }
+
+        }
 
     }
 

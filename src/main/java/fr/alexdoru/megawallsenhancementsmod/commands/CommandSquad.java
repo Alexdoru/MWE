@@ -64,9 +64,26 @@ public class CommandSquad extends CommandBase {
                         EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " to the squad."));
             }
 
-            /*
-             * this doesn't update the nametag instantly since we can only add and not remove a prefix and then refresh the nametag
-             */
+        } else if (args[0].equalsIgnoreCase("addmyself")) {
+
+            if (args.length < 2) {
+                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : /squad <addmyself> <myNick>"));
+                return;
+            }
+
+            if (args.length == 4 && args[2].equalsIgnoreCase("as")) {
+                SquadEvent.addMyself(args[1], args[3]);
+                addChatMessage(new ChatComponentText(getTagMW() +
+                        EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[1] + EnumChatFormatting.GREEN + " as " +
+                        EnumChatFormatting.GOLD + args[3] + EnumChatFormatting.GREEN + " to the squad."));
+
+                return;
+            }
+
+            SquadEvent.addMyself(args[1]);
+            addChatMessage(new ChatComponentText(getTagMW() +
+                    EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[1] + EnumChatFormatting.GREEN + " to the squad."));
+
         } else if (args[0].equalsIgnoreCase("disband")) {
 
             SquadEvent.clearSquad();
@@ -88,16 +105,13 @@ public class CommandSquad extends CommandBase {
 
                 String displayname = entry.getKey();
                 String fakename = entry.getValue();
-
                 imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + "- " + EnumChatFormatting.GOLD + displayname
                         + (displayname.equals(fakename) ? "" : EnumChatFormatting.GREEN + " renamed as : " + EnumChatFormatting.GOLD + entry.getValue()) + "\n"));
 
             }
+
             addChatMessage(imsg);
 
-            /*
-             * this doesn't update the nametag instantly since we can only add and not remove a prefix and then refresh the nametag
-             */
         } else if (args[0].equalsIgnoreCase("remove")) {
 
             if (args.length < 2) {
@@ -115,6 +129,7 @@ public class CommandSquad extends CommandBase {
                     addChatMessage(new ChatComponentText(getTagMW() +
                             EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.RED + " isn't in the squad."));
                 }
+
             }
 
         }
@@ -123,7 +138,7 @@ public class CommandSquad extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        String[] args1 = {"add", "disband", "list", "remove"};
+        String[] args1 = {"add", "addmyself", "disband", "list", "remove"};
         return args.length == 1 ? getListOfStringsMatchingLastWord(args, args1) : args.length >= 2 ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null;
     }
 
