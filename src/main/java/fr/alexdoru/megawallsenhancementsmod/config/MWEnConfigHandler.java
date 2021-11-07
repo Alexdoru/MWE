@@ -22,6 +22,7 @@ public class MWEnConfigHandler {
 
     /*MWEnhancements config*/
     public static String APIKey;
+    public static boolean strengthParticules;
     public static boolean shortencoinmessage;
     public static boolean reportsuggestions;
 
@@ -39,7 +40,7 @@ public class MWEnConfigHandler {
     public static boolean toggleicons;
     public static boolean togglewarnings;
     public static boolean toggleautoreport;
-    public static long timeBetweenReports;
+    public static long timeBetweenReports;// TODO config for those
     public static long timeAutoReport;
 
     public static void preinit(File file) {
@@ -55,6 +56,7 @@ public class MWEnConfigHandler {
 
         /*Reads the fiels in the config and stores them in the property objects, and defines a default value if the fields doesn't exist*/
         Property pAPIKey = config.get(CATEGORY_MWENh, "APIKey", "", "Your Hypixel API Key");
+        Property pstrengthParticules = config.get(CATEGORY_MWENh, "Strength particules", true, "Spawns strength particules when an herobrine or dreadlord get a final");
         Property pShortencoinmessage = config.get(CATEGORY_MWENh, "Shorten coin message", true, "Shorten the coins messages by removing the network booster info");
         Property pReportsuggestions = config.get(CATEGORY_MWENh, "Report suggestion", true, "Give report suggestions in the chat based on messages in shouts");
 
@@ -80,6 +82,7 @@ public class MWEnConfigHandler {
         /*Set the Order in which the config entries appear in the config file */
         List<String> propertyOrderMWWENh = new ArrayList<>();
         propertyOrderMWWENh.add(pAPIKey.getName());
+        propertyOrderMWWENh.add(pstrengthParticules.getName());
         propertyOrderMWWENh.add(pShortencoinmessage.getName());
         propertyOrderMWWENh.add(pReportsuggestions.getName());
         config.setCategoryPropertyOrder(CATEGORY_MWENh, propertyOrderMWWENh);
@@ -110,6 +113,7 @@ public class MWEnConfigHandler {
         /*sets the fields of this class to the fields in the properties*/
         if (readFieldsFromConfig) {
             APIKey = pAPIKey.getString();
+            strengthParticules = pstrengthParticules.getBoolean();
             shortencoinmessage = pShortencoinmessage.getBoolean();
             reportsuggestions = pReportsuggestions.getBoolean();
 
@@ -131,6 +135,7 @@ public class MWEnConfigHandler {
 
         if (saveFieldsToConfig) {
             pAPIKey.set(APIKey);
+            pstrengthParticules.set(strengthParticules);
             pShortencoinmessage.set(shortencoinmessage);
             pReportsuggestions.set(reportsuggestions);
 
@@ -179,7 +184,7 @@ public class MWEnConfigHandler {
         toggleicons = !toggleicons;
         if (toggleicons) {
             mc.theWorld.playerEntities.forEach(playerEntity -> {
-                NameUtil.updateNametag(playerEntity, true, false, false);
+                NameUtil.handlePlayer(playerEntity, true, false, false);
                 NameUtil.transformNameTablist(playerEntity.getName());
             });
         } else {

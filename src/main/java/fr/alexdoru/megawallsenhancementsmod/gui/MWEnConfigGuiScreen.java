@@ -28,6 +28,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
          */
         final int buttonsWidth = 210;
         final int sideButtonsWidth = 100;
+        this.buttonList.add(new GuiButton(16, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4) * 4, buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
         this.buttonList.add(new GuiButton(15, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4) * 3, buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
         this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4) * 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
         this.buttonList.add(new GuiButton(9, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
@@ -51,6 +52,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
 
     private String getButtonDisplayString(int id) {
         switch (id) {
+            case 16:
+                return "Strength particule HBR DRE : " + getSuffix(MWEnConfigHandler.strengthParticules);
             case 15:
                 return "Icons on names " + NameUtil.squadprefix + NameUtil.prefix + " : " + getSuffix(MWEnConfigHandler.toggleicons);
             case 0:
@@ -85,6 +88,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         switch (button.id) {
+            case 16:
+                MWEnConfigHandler.strengthParticules = !MWEnConfigHandler.strengthParticules;
+                break;
             case 15:
                 MWEnConfigHandler.toggleIcons();
                 break;
