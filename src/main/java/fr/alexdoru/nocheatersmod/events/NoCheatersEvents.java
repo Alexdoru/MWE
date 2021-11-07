@@ -1,8 +1,8 @@
 package fr.alexdoru.nocheatersmod.events;
 
+import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
-import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import net.minecraft.client.Minecraft;
@@ -35,7 +35,7 @@ public class NoCheatersEvents {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {  // scans your world 2 seconds avec joining
         // TODO ajouter un decompte pour pas que ca envoie toutes les commandes auto report en meme temps
-        if (!NoCheatersMod.areWarningsToggled() || !mc.inGameHasFocus) {
+        if (!MWEnConfigHandler.togglewarnings || !mc.inGameHasFocus) {
             return;
         }
         if (ticks == 39) {
@@ -54,7 +54,7 @@ public class NoCheatersEvents {
             return;
         }
         EntityPlayer player = (EntityPlayer) event.entity;
-        NameUtil.updateNametag(player, NoCheatersMod.areIconsToggled(), NoCheatersMod.areWarningsToggled(), NoCheatersMod.isAutoreportToggled());
+        NameUtil.updateNametag(player, MWEnConfigHandler.toggleicons, MWEnConfigHandler.togglewarnings, MWEnConfigHandler.toggleautoreport);
 
     }
 
@@ -120,7 +120,7 @@ public class NoCheatersEvents {
 
             String message = "[\"\",{\"text\":\"Warning : \",\"color\":\"red\"}" + formattedmessageArray[0] + ",{\"text\":\" joined,\",\"color\":\"gray\"}";
 
-            if (datenow - wdr.timestamp > NoCheatersMod.getTimebetweenreports()) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
+            if (datenow - wdr.timestamp > MWEnConfigHandler.timeBetweenReports) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
 
                 message = message + ",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain " + uuid + " " + playername + "\"}"
 
@@ -154,7 +154,7 @@ public class NoCheatersEvents {
 
                     + ",{\"text\":\" joined,\",\"color\":\"gray\"}");
 
-            if (datenow - wdr.timestamp > NoCheatersMod.getTimebetweenreports() && !(wdr.isOnlyStalking())) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
+            if (datenow - wdr.timestamp > MWEnConfigHandler.timeBetweenReports && !(wdr.isOnlyStalking())) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
 
                 message.append(",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain ").append(uuid).append(" ").append(playername).append("\"}").append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click here to report this player again\",\"color\":\"yellow\"}]}}");
 

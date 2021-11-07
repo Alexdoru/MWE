@@ -2,8 +2,8 @@ package fr.alexdoru.megawallsenhancementsmod.events;
 
 import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
+import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
-import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
@@ -21,7 +21,7 @@ public class SquadEvent {
 
     @SubscribeEvent
     public void onNameFormat(NameFormat event) {
-        if (NoCheatersMod.areIconsToggled()) {
+        if (MWEnConfigHandler.toggleicons) {
             String squadname = squadmap.get(event.username);
             if (squadname != null) {
                 event.displayname = squadname;
