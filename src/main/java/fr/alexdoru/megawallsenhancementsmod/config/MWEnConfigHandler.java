@@ -1,8 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.config;
 
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -12,6 +12,8 @@ import java.util.List;
 
 //https://github.com/CJMinecraft01/BitOfEverything/blob/6ab40135d1c4f9e97e898925d85a33334b13036e/src/main/java/cjminecraft/bitofeverything/config/BoeConfig.java
 public class MWEnConfigHandler {
+
+    private static final Minecraft mc = Minecraft.getMinecraft();
 
     public static Configuration config;
     private static final String CATEGORY_MWENh = "MegaWallsEnhancements";
@@ -25,13 +27,13 @@ public class MWEnConfigHandler {
 
     /*GUI config*/
     public static boolean show_killcooldownHUD;
-    public static final GuiPosition killcooldownHUDPosition = new GuiPosition(0d,0d);
+    public static final GuiPosition killcooldownHUDPosition = new GuiPosition(0d, 0d);
     public static boolean show_ArrowHitHUD;
-    public static final GuiPosition arrowHitHUDPosition = new GuiPosition(0d,0d);
+    public static final GuiPosition arrowHitHUDPosition = new GuiPosition(0d, 0d);
     public static boolean show_lastWitherHUD;
-    public static final GuiPosition lastWitherHUDPosition = new GuiPosition(0d,0d);
+    public static final GuiPosition lastWitherHUDPosition = new GuiPosition(0d, 0d);
     public static boolean hunterStrengthHUD;
-    public static final GuiPosition hunterStrengthHUDPosition = new GuiPosition(0d,0d);
+    public static final GuiPosition hunterStrengthHUDPosition = new GuiPosition(0d, 0d);
 
     /*NoCheaters Config*/
     public static boolean toggleicons;
@@ -174,13 +176,12 @@ public class MWEnConfigHandler {
     }
 
     public static void toggleIcons() {
-        // FIXME ca ne change pas les icones dans la tablist et sur les nametags
         toggleicons = !toggleicons;
-        refreshNametagsWorld();
-    }
-
-    private static void refreshNametagsWorld() {
-        Minecraft.getMinecraft().theWorld.playerEntities.forEach(EntityPlayer::refreshDisplayName);
+        if (toggleicons) {
+            mc.theWorld.playerEntities.forEach(player -> NameUtil.updateNametag(player, true, false, false));
+        } else {
+            mc.theWorld.playerEntities.forEach(NameUtil::removeNametagIcons);
+        }
     }
 
 }

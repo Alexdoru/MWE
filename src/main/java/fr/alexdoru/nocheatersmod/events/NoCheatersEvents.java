@@ -1,8 +1,7 @@
 package fr.alexdoru.nocheatersmod.events;
 
-import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
-import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
@@ -10,10 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiDownloadTerrain;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
-import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -28,10 +24,6 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage
 public class NoCheatersEvents {
 
     private static int ticks = 0;
-    public static final IChatComponent iprefix = new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + "\u26a0 ");
-    public static final String prefix = iprefix.getFormattedText();
-    public static final IChatComponent iprefix_bhop = new ChatComponentText(EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD + "\u26a0 ");
-    public static final String prefix_bhop = iprefix_bhop.getFormattedText();
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     @SubscribeEvent
@@ -60,58 +52,7 @@ public class NoCheatersEvents {
             return;
         }
         EntityPlayer player = (EntityPlayer) event.entity;
-        String playerName = player.getName();
-
-        if (SquadEvent.getSquad().get(playerName) != null) {
-            return;
-        }
-
-        String uuid = player.getUniqueID().toString().replace("-", "");
-        WDR wdr = WdredPlayers.getWdredMap().get(uuid);
-        boolean printmsg = false;
-        long datenow = (new Date()).getTime();
-
-        if (wdr == null) {
-            wdr = WdredPlayers.getWdredMap().get(playerName);
-            if (wdr != null) {
-                uuid = playerName;
-            }
-        }
-
-        if (wdr != null) { // player was reported
-
-            if (NoCheatersMod.isAutoreportToggled() && datenow - wdr.timestamp > NoCheatersMod.getTimebetweenreports() && datenow - wdr.timestamp < NoCheatersMod.getTimeautoreport()) {
-                ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + uuid + " " + playerName);
-            }
-
-            if (wdr.hacks.contains("bhop")) { // player bhops
-                if (NoCheatersMod.areIconsToggled()) {
-                    player.addPrefix(iprefix_bhop);
-                    player.refreshDisplayName();
-                }
-                printmsg = true;
-            } else if (!(wdr.isOnlyStalking())) { // player is cheating
-                if (NoCheatersMod.areIconsToggled()) {
-                    player.addPrefix(iprefix);
-                    player.refreshDisplayName();
-                }
-                printmsg = true;
-            }
-
-            if (NoCheatersMod.areWarningsToggled() && printmsg) {
-                String chatmessage = createwarningmessage(datenow, uuid, playerName, wdr);
-                mc.thePlayer.addChatComponentMessage(IChatComponent.Serializer.jsonToComponent(chatmessage));
-            }
-
-        } else if (NoCheatersMod.areIconsToggled()) { // check the scangame map
-
-            IChatComponent imsg = CommandScanGame.getScanmap().get(uuid);
-            if (imsg != null && !imsg.equals(CommandScanGame.nomatch)) {
-                player.addPrefix(CommandScanGame.iprefix);
-                player.refreshDisplayName();
-            }
-
-        }
+        NameUtil.updateNametag(player, NoCheatersMod.areIconsToggled(), NoCheatersMod.areWarningsToggled(), NoCheatersMod.isAutoreportToggled());
 
     }
 

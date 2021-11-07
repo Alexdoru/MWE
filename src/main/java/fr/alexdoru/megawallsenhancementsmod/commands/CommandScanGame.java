@@ -7,10 +7,10 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
-import fr.alexdoru.megawallsenhancementsmod.misc.NameModifier;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -35,8 +35,7 @@ public class CommandScanGame extends CommandBase {
 
     private static final HashMap<String, IChatComponent> scanmap = new HashMap<>();
     private static String scanGameId;
-    public static final IChatComponent iprefix = new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + "" + EnumChatFormatting.BOLD + "\u26a0 ");
-    public static final String prefix = iprefix.getFormattedText();
+
     /*
      * fills the hashmap with this instead if null when there is no match
      */
@@ -159,7 +158,7 @@ class ScanPlayerTask implements Callable<String> {
 
                 addChatMessage(msg);
                 CommandScanGame.getScanmap().put(uuid, msg);
-                this.networkPlayerInfo.setDisplayName(NameModifier.getTransformedDisplayName(this.networkPlayerInfo));
+                this.networkPlayerInfo.setDisplayName(NameUtil.getTransformedDisplayName(this.networkPlayerInfo));
                 return null;
             }
 
@@ -179,7 +178,7 @@ class ScanPlayerTask implements Callable<String> {
                         if (reportmsg != null) {
                             addChatMessage(reportmsg);
                             CommandScanGame.getScanmap().put(uuid, reportmsg);
-                            this.networkPlayerInfo.setDisplayName(NameModifier.getTransformedDisplayName(this.networkPlayerInfo));
+                            this.networkPlayerInfo.setDisplayName(NameUtil.getTransformedDisplayName(this.networkPlayerInfo));
                             return null;
                         }
                     }
@@ -204,7 +203,7 @@ class ScanPlayerTask implements Callable<String> {
                     if (!msg.equals(new ChatComponentText(""))) {
                         addChatMessage(msg);
                         CommandScanGame.getScanmap().put(uuid, msg);
-                        this.networkPlayerInfo.setDisplayName(NameModifier.getTransformedDisplayName(this.networkPlayerInfo));
+                        this.networkPlayerInfo.setDisplayName(NameUtil.getTransformedDisplayName(this.networkPlayerInfo));
                     }
 
                     return null;

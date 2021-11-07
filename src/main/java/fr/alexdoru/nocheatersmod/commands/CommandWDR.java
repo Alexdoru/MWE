@@ -5,9 +5,9 @@ import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
-import fr.alexdoru.megawallsenhancementsmod.misc.NameModifier;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import fr.alexdoru.nocheatersmod.data.TimeMark;
 import fr.alexdoru.nocheatersmod.data.WDR;
@@ -132,6 +132,7 @@ public class CommandWDR extends CommandBase {
                             addChatMessage(new ChatComponentText(getTagNoCheaters()
                                     + EnumChatFormatting.YELLOW + key + EnumChatFormatting.RED + " isn't a valid timestamp #"));
                             return;
+
                         } else {
 
                             timestamp = timemark.timestamp;
@@ -231,7 +232,6 @@ public class CommandWDR extends CommandBase {
                 argsinWDR.add(timerOnReplay);
                 argsinWDR.add(playername);
                 argsinWDR.add(Long.toString(timestamp));
-
                 argsinWDR.addAll(arraycheats);
 
                 WDR wdr = WdredPlayers.getWdredMap().get(uuid); // look if he was already reported and add the previous cheats without duplicates
@@ -251,7 +251,8 @@ public class CommandWDR extends CommandBase {
 
                 WDR newreport = new WDR(timestamp, argsinWDR);
                 WdredPlayers.getWdredMap().put(uuid, newreport);
-                NameModifier.transformDisplayName(playername);
+                NameUtil.transformNameTablist(playername);
+                NameUtil.updateNametag(playername);
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
                         EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : ""))
                         .appendSibling(IChatComponent.Serializer.jsonToComponent("[\"\"" + NoCheatersEvents.createPlayerTimestampedMsg(playername, newreport, "light_purple")[0] + "]"))
@@ -288,7 +289,8 @@ public class CommandWDR extends CommandBase {
                     argsinWDR.add("nick");
                 }
                 WdredPlayers.getWdredMap().put(uuid, new WDR((new Date()).getTime(), argsinWDR));
-                NameModifier.transformDisplayName(playername);
+                NameUtil.transformNameTablist(playername);
+                NameUtil.updateNametag(playername);
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
                         EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
                         + EnumChatFormatting.LIGHT_PURPLE + playername + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"

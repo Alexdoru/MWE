@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.mixin.mixins;
 
 import com.mojang.authlib.GameProfile;
-import fr.alexdoru.megawallsenhancementsmod.misc.NameModifier;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.network.play.server.S38PacketPlayerListItem;
 import net.minecraft.util.IChatComponent;
@@ -27,7 +27,7 @@ public class NetworkPlayerInfoMixin {
      */
     @Inject(method = "<init>(Lnet/minecraft/network/play/server/S38PacketPlayerListItem$AddPlayerData;)V", at = @At("RETURN"))
     public void NetworkPlayerInfo(S38PacketPlayerListItem.AddPlayerData p_i46295_1_, CallbackInfo ci) {
-        this.displayName = NameModifier.getTransformedDisplayName(this.gameProfile, this.displayName);
+        this.displayName = NameUtil.getTransformedDisplayName(this.gameProfile, this.displayName);
     }
 
 }
