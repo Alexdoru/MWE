@@ -64,4 +64,10 @@ public class MegaWallsEnhancementsMod {
 
     }
 
+    // TODO play a sound when low hp
+    // TODO make gui with squad HP
+    // TODO stalk ban command
+    // TODO hud with food in inventory
+    // TODO switch mixins to ASM
+
 }

@@ -154,7 +154,7 @@ public class KillCounter {
                 String[] split = FormattedText.split("\u00a7");
 
                 if (split.length >= 7) {
-
+                    // TODO use a different method that takes directly the color code before, in scorebaord parser too
                     String killedTeam = split[2].substring(0, 1);
                     String killerTeam = split[6].substring(0, 1);
 
