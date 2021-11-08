@@ -7,7 +7,7 @@ import com.google.gson.JsonParser;
 
 import java.io.*;
 
-public class ConfigHandler {
+public class ConfigHandler { // TODO merge with the other config file ?
 
     private final File configFile;
     private JsonObject configJson;
