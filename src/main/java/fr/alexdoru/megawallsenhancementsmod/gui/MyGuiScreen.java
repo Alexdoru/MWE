@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -37,6 +38,7 @@ public class MyGuiScreen extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
+        ConfigHandler.saveConfig();
         mc.entityRenderer.stopUseShader();
         super.onGuiClosed();
     }

@@ -39,7 +39,6 @@ public class DateUtil {
     public static String timeSince(long epoch) {
 
         long diff = (new Date()).getTime() - epoch;
-        String msg;
 
         if (diff < 1000 * 60) { // less than 60 sec
 

@@ -5,7 +5,7 @@ import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
-import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
@@ -81,34 +81,34 @@ public class CommandNocheaters extends CommandBase {
 
             if (args[1].equalsIgnoreCase("icons")) {
 
-                if (MWEnConfigHandler.toggleicons) {
+                if (ConfigHandler.toggleicons) {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Icons disabled"));
                 } else {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "Icons enabled"));
                 }
-                MWEnConfigHandler.toggleIcons();
-                MWEnConfigHandler.saveConfig();
+                ConfigHandler.toggleIcons();
+                ConfigHandler.saveConfig();
 
             } else if (args[1].equalsIgnoreCase("autoreport")) {
 
-                if (MWEnConfigHandler.toggleautoreport) {
+                if (ConfigHandler.toggleautoreport) {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Autoreports disabled"));
                 } else {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "Autoreports enabled"));
                 }
-                MWEnConfigHandler.toggleautoreport = !MWEnConfigHandler.toggleautoreport;
-                MWEnConfigHandler.saveConfig();
+                ConfigHandler.toggleautoreport = !ConfigHandler.toggleautoreport;
+                ConfigHandler.saveConfig();
 
             } else if (args[1].equalsIgnoreCase("warnings")) {
 
-                if (MWEnConfigHandler.togglewarnings) {
+                if (ConfigHandler.togglewarnings) {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Warnings disabled"));
                 } else {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "Warnings enabled"));
                     NoCheatersEvents.scanCurrentWorld();
                 }
-                MWEnConfigHandler.togglewarnings = !MWEnConfigHandler.togglewarnings;
-                MWEnConfigHandler.saveConfig();
+                ConfigHandler.togglewarnings = !ConfigHandler.togglewarnings;
+                ConfigHandler.saveConfig();
 
             }
 
@@ -308,7 +308,7 @@ public class CommandNocheaters extends CommandBase {
                 continue;
             }
 
-            if (timenow - wdr.timestamp > MWEnConfigHandler.timeBetweenReports && !(wdr.isOnlyStalking())) {
+            if (timenow - wdr.timestamp > ConfigHandler.timeBetweenReports && !(wdr.isOnlyStalking())) {
 
                 if (isaNick) {
 

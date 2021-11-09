@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.util.EnumChatFormatting;
 
 public class KillCooldownGui extends MyCachedGui {
@@ -14,7 +14,7 @@ public class KillCooldownGui extends MyCachedGui {
 
     public KillCooldownGui() {
         instance = this;
-        guiPosition = MWEnConfigHandler.killcooldownHUDPosition;
+        guiPosition = ConfigHandler.killcooldownHUDPosition;
     }
 
     @Override

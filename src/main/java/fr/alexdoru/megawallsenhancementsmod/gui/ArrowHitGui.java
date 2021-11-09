@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
-import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.regex.Matcher;
@@ -24,7 +24,7 @@ public class ArrowHitGui extends MyCachedGui {
 
     public ArrowHitGui() {
         instance = this;
-        guiPosition = MWEnConfigHandler.arrowHitHUDPosition;
+        guiPosition = ConfigHandler.arrowHitHUDPosition;
     }
 
     @Override

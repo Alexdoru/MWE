@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
-import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -22,17 +22,17 @@ public class HypixelApiKeyUtil {
 //			throw new ApiException("Exceeding the limit of " + NB_MAX_REQUESTS + " requests per minute allowed by Hypixel");
 //		}
 
-        return MWEnConfigHandler.APIKey;
+        return ConfigHandler.APIKey;
     }
 
     public static void setApiKey(String key) {
         addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.GREEN + "Api key set successfully"));
-        MWEnConfigHandler.APIKey = key;
-        MWEnConfigHandler.saveConfig();
+        ConfigHandler.APIKey = key;
+        ConfigHandler.saveConfig();
     }
 
     public static boolean apiKeyIsNotSetup() {
-        return MWEnConfigHandler.APIKey == null || MWEnConfigHandler.APIKey.equals("");
+        return ConfigHandler.APIKey == null || ConfigHandler.APIKey.equals("");
     }
 
 //	/*

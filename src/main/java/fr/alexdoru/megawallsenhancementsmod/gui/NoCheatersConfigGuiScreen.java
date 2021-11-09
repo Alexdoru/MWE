@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
-import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import net.minecraft.client.gui.GuiButton;
@@ -36,9 +36,9 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen {
     private String getButtonDisplayString(int id) {
         switch (id) {
             case 1:
-                return "Warning messages in chat : " + getSuffix(MWEnConfigHandler.togglewarnings);
+                return "Warning messages in chat : " + getSuffix(ConfigHandler.togglewarnings);
             case 2:
-                return "Autoreport cheaters : " + getSuffix(MWEnConfigHandler.toggleautoreport);
+                return "Autoreport cheaters : " + getSuffix(ConfigHandler.toggleautoreport);
             case 3:
                 return parent == null ? "Close" : "Done";
             default:
@@ -50,13 +50,13 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen {
     protected void actionPerformed(GuiButton button) throws IOException {
         switch (button.id) {
             case 1:
-                MWEnConfigHandler.togglewarnings = !MWEnConfigHandler.togglewarnings;
-                if (MWEnConfigHandler.togglewarnings) {
+                ConfigHandler.togglewarnings = !ConfigHandler.togglewarnings;
+                if (ConfigHandler.togglewarnings) {
                     NoCheatersEvents.scanCurrentWorld();
                 }
                 break;
             case 2:
-                MWEnConfigHandler.toggleautoreport = !MWEnConfigHandler.toggleautoreport;
+                ConfigHandler.toggleautoreport = !ConfigHandler.toggleautoreport;
                 break;
             case 3:
                 mc.displayGuiScreen(parent);
@@ -72,12 +72,6 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle("NoCheaters v" + NoCheatersMod.version, 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 6);
         super.drawScreen(mouseX, mouseY, partialTicks);
-    }
-
-    @Override
-    public void onGuiClosed() {
-        MWEnConfigHandler.saveConfig();
-        super.onGuiClosed();
     }
 
 }

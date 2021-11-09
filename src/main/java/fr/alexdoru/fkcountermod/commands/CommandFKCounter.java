@@ -38,7 +38,7 @@ public class CommandFKCounter extends CommandBase {
 
         if (args.length > 0 && args[0].equalsIgnoreCase("settings")) {
 
-            new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(new FKConfigGuiScreen()), 1);
+            new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(new FKConfigGuiScreen(null)), 1);
 
         } else if (args.length > 0 && (args[0].equalsIgnoreCase("players") || args[0].equalsIgnoreCase("player") || args[0].equalsIgnoreCase("p"))) {
 

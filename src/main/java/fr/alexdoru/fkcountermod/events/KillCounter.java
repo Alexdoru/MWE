@@ -4,7 +4,7 @@ import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.gui.FKCounterGui;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
-import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -148,7 +148,7 @@ public class KillCounter {
 
                 String killed = killMessageMatcher.group(1);
                 String killer = killMessageMatcher.group(2);
-                if (MWEnConfigHandler.strengthParticules) {
+                if (ConfigHandler.strengthParticules) {
                     spawnParticles(killer);
                 }
                 String[] split = FormattedText.split("\u00a7");

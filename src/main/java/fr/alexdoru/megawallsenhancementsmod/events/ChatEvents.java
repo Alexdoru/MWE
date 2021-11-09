@@ -3,7 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.events;
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
-import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.ArrowHitGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.HunterStrengthGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.KillCooldownGui;
@@ -71,7 +71,7 @@ public class ChatEvents {
             /*
              * shortens the coins messages removing the booster info
              */
-            if (MWEnConfigHandler.shortencoinmessage) {
+            if (ConfigHandler.shortencoinmessage) {
                 Matcher matchercoins = COINS_PATTERN.matcher(msg);
                 if (matchercoins.matches()) {
                     event.message = new ChatComponentText(fmsg.replace(matchercoins.group(1), ""));
@@ -82,10 +82,10 @@ public class ChatEvents {
             if (KillCounter.processMessage(fmsg, msg)) {
                 return;
             }
-            if (MWEnConfigHandler.show_ArrowHitHUD && ArrowHitGui.processMessage(msg)) {
+            if (ConfigHandler.show_ArrowHitHUD && ArrowHitGui.processMessage(msg)) {
                 return;
             }
-            if (MWEnConfigHandler.reportsuggestions && parseReportMessage(msg)) {
+            if (ConfigHandler.reportsuggestions && parseReportMessage(msg)) {
                 return;
             }
             if (MWGameStatsEvent.processMessage(msg)) {
@@ -96,7 +96,7 @@ public class ChatEvents {
             }
 
             /*Status messages*/
-        } else if (MWEnConfigHandler.hunterStrengthHUD && event.type == 2) {
+        } else if (ConfigHandler.hunterStrengthHUD && event.type == 2) {
             Matcher huntermatcher = HUNTER_STRENGTH_PATTERN.matcher(fmsg);
             if (huntermatcher.matches()) {
                 long time = System.currentTimeMillis();

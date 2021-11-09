@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
-import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
@@ -53,21 +53,21 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
     private String getButtonDisplayString(int id) {
         switch (id) {
             case 16:
-                return "Strength particule HBR DRE : " + getSuffix(MWEnConfigHandler.strengthParticules);
+                return "Strength particule HBR DRE : " + getSuffix(ConfigHandler.strengthParticules);
             case 15:
-                return "Icons on names " + NameUtil.squadprefix + NameUtil.prefix + " : " + getSuffix(MWEnConfigHandler.toggleicons);
+                return "Icons on names " + NameUtil.squadprefix + NameUtil.prefix + " : " + getSuffix(ConfigHandler.toggleicons);
             case 0:
-                return "Shorten coin messages : " + getSuffix(MWEnConfigHandler.shortencoinmessage);
+                return "Shorten coin messages : " + getSuffix(ConfigHandler.shortencoinmessage);
             case 9:
-                return "HUD before hunter strength : " + getSuffix(MWEnConfigHandler.hunterStrengthHUD);
+                return "HUD before hunter strength : " + getSuffix(ConfigHandler.hunterStrengthHUD);
             case 1:
-                return "Report suggestions in chat : " + getSuffix(MWEnConfigHandler.reportsuggestions);
+                return "Report suggestions in chat : " + getSuffix(ConfigHandler.reportsuggestions);
             case 2:
-                return "Show /kill cooldown HUD : " + getSuffix(MWEnConfigHandler.show_killcooldownHUD);
+                return "Show /kill cooldown HUD : " + getSuffix(ConfigHandler.show_killcooldownHUD);
             case 3:
-                return "Show Arrow Hit HUD : " + getSuffix(MWEnConfigHandler.show_ArrowHitHUD);
+                return "Show Arrow Hit HUD : " + getSuffix(ConfigHandler.show_ArrowHitHUD);
             case 11:
-                return "Show wither death time HUD : " + getSuffix(MWEnConfigHandler.show_lastWitherHUD);
+                return "Show wither death time HUD : " + getSuffix(ConfigHandler.show_lastWitherHUD);
             case 4:
                 return "Done";
             case 5:
@@ -89,34 +89,34 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
     protected void actionPerformed(GuiButton button) throws IOException {
         switch (button.id) {
             case 16:
-                MWEnConfigHandler.strengthParticules = !MWEnConfigHandler.strengthParticules;
+                ConfigHandler.strengthParticules = !ConfigHandler.strengthParticules;
                 break;
             case 15:
-                MWEnConfigHandler.toggleIcons();
+                ConfigHandler.toggleIcons();
                 break;
             case 0:
-                MWEnConfigHandler.shortencoinmessage = !MWEnConfigHandler.shortencoinmessage;
+                ConfigHandler.shortencoinmessage = !ConfigHandler.shortencoinmessage;
                 break;
             case 9:
-                if (!MWEnConfigHandler.hunterStrengthHUD) {
+                if (!ConfigHandler.hunterStrengthHUD) {
                     Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(ChatEvents.strengthSound, 0.0F));
                 }
-                MWEnConfigHandler.hunterStrengthHUD = !MWEnConfigHandler.hunterStrengthHUD;
+                ConfigHandler.hunterStrengthHUD = !ConfigHandler.hunterStrengthHUD;
                 break;
             case 1:
-                if (!MWEnConfigHandler.reportsuggestions) {
+                if (!ConfigHandler.reportsuggestions) {
                     Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(ChatEvents.reportSuggestionSound, 0.0F));
                 }
-                MWEnConfigHandler.reportsuggestions = !MWEnConfigHandler.reportsuggestions;
+                ConfigHandler.reportsuggestions = !ConfigHandler.reportsuggestions;
                 break;
             case 2:
-                MWEnConfigHandler.show_killcooldownHUD = !MWEnConfigHandler.show_killcooldownHUD;
+                ConfigHandler.show_killcooldownHUD = !ConfigHandler.show_killcooldownHUD;
                 break;
             case 3:
-                MWEnConfigHandler.show_ArrowHitHUD = !MWEnConfigHandler.show_ArrowHitHUD;
+                ConfigHandler.show_ArrowHitHUD = !ConfigHandler.show_ArrowHitHUD;
                 break;
             case 11:
-                MWEnConfigHandler.show_lastWitherHUD = !MWEnConfigHandler.show_lastWitherHUD;
+                ConfigHandler.show_lastWitherHUD = !ConfigHandler.show_lastWitherHUD;
                 break;
             case 4:
                 mc.displayGuiScreen(parent);
@@ -156,12 +156,6 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle("Mega Walls Enhancements v" + MegaWallsEnhancementsMod.version, 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 6);
         super.drawScreen(mouseX, mouseY, partialTicks);
-    }
-
-    @Override
-    public void onGuiClosed() {
-        MWEnConfigHandler.saveConfig();
-        super.onGuiClosed();
     }
 
 }

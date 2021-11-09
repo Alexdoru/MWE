@@ -10,15 +10,26 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-//https://github.com/CJMinecraft01/BitOfEverything/blob/6ab40135d1c4f9e97e898925d85a33334b13036e/src/main/java/cjminecraft/bitofeverything/config/BoeConfig.java
-public class MWEnConfigHandler {
+public class ConfigHandler {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     public static Configuration config;
+    private static final String CATEGORY_FKCounter = "Final Kill Counter";
     private static final String CATEGORY_MWENh = "MegaWallsEnhancements";
     private static final String CATEGORY_GUI = "GUI";
     private static final String CATEGORY_NOCHEATERS = "NoCheaters";
+
+    /* FKCounter config*/
+    public static final GuiPosition fkcounterPosition = new GuiPosition(0d, 0d);
+    public static boolean show_fkcHUD;
+    public static boolean compact_hud;
+    public static boolean show_players;
+    public static boolean draw_background;
+    public static boolean text_shadow;
+    // TODO add counter to sidebar
+    // TODO add the finals to the tablist
+    // TODO hud dilation, size
 
     /*MWEnhancements config*/
     public static String APIKey;
@@ -55,14 +66,22 @@ public class MWEnConfigHandler {
         }
 
         /*Reads the fiels in the config and stores them in the property objects, and defines a default value if the fields doesn't exist*/
+        Property pXpos_fkcHUD = config.get(CATEGORY_FKCounter, "Xpos FKCounter HUD", 0d, "The x position of the final kill counter HUD, value ranges from 0 to 1");
+        Property pYpos_fkcHUD = config.get(CATEGORY_FKCounter, "Ypos FKCounter HUD", 0.1d, "The y position of the final kill counter HUD, value ranges from 0 to 1");
+        Property pshow_fkcHUD = config.get(CATEGORY_FKCounter, "Show FKCounter HUD", true, "Displays the HUD of the final kill counter");
+        Property pcompactHUD = config.get(CATEGORY_FKCounter, "Compact FKCounter HUD", false, "Use a compact HUD for the final kill counter");
+        Property pshow_players = config.get(CATEGORY_FKCounter, "Show players", false, "Displays players with most finals in each team");
+        Property pdraw_background = config.get(CATEGORY_FKCounter, "Draw background", false, "Draws a box around the HUD of the final kill counter");
+        Property ptext_shadow = config.get(CATEGORY_FKCounter, "Text shadow", true, "Draws text shadow");
+
         Property pAPIKey = config.get(CATEGORY_MWENh, "APIKey", "", "Your Hypixel API Key");
         Property pstrengthParticules = config.get(CATEGORY_MWENh, "Strength particules", true, "Spawns strength particules when an herobrine or dreadlord get a final");
         Property pShortencoinmessage = config.get(CATEGORY_MWENh, "Shorten coin message", true, "Shorten the coins messages by removing the network booster info");
         Property pReportsuggestions = config.get(CATEGORY_MWENh, "Report suggestion", true, "Give report suggestions in the chat based on messages in shouts");
 
         Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
-        Property pXpos_killcooldownHUD = config.get(CATEGORY_GUI, "Xpos kill cooldown HUD", 0d, "The x position of the killcooldown GUI, value ranges from 0 to 1");
-        Property pYpos_killcooldownHUD = config.get(CATEGORY_GUI, "Ypos kill cooldown HUD", 0d, "The y position of the killcooldown GUI, value ranges from 0 to 1");
+        Property pXpos_killcooldownHUD = config.get(CATEGORY_GUI, "Xpos kill cooldown HUD", 0d, "The x position of the killcooldown HUD, value ranges from 0 to 1");
+        Property pYpos_killcooldownHUD = config.get(CATEGORY_GUI, "Ypos kill cooldown HUD", 0d, "The y position of the killcooldown HUD, value ranges from 0 to 1");
         Property pShow_ArrowHitHUD = config.get(CATEGORY_GUI, "Show Arrow Hit HUD", true, "Displays the HP of opponents on arrow hits");
         Property pXpos_ArrowHitHUD = config.get(CATEGORY_GUI, "Xpos Arrow Hit HUD", 0.5d, "The x position of the ArrowHitGui, value ranges from 0 to 1");
         Property pYpos_ArrowHitHUD = config.get(CATEGORY_GUI, "Ypos Arrow Hit HUD", 9d / 20d, "The y position of the ArrowHitGui, value ranges from 0 to 1");
@@ -80,38 +99,56 @@ public class MWEnConfigHandler {
         Property pTimeAutoReport = config.get(CATEGORY_NOCHEATERS, "Time for autoreports", 336, "It won't autoreport players whose last report is older than this (hours)");
 
         /*Set the Order in which the config entries appear in the config file */
-        List<String> propertyOrderMWWENh = new ArrayList<>();
-        propertyOrderMWWENh.add(pAPIKey.getName());
-        propertyOrderMWWENh.add(pstrengthParticules.getName());
-        propertyOrderMWWENh.add(pShortencoinmessage.getName());
-        propertyOrderMWWENh.add(pReportsuggestions.getName());
-        config.setCategoryPropertyOrder(CATEGORY_MWENh, propertyOrderMWWENh);
+        List<String> pOrderFKC = new ArrayList<>();
+        pOrderFKC.add(pXpos_fkcHUD.getName());
+        pOrderFKC.add(pYpos_fkcHUD.getName());
+        pOrderFKC.add(pshow_fkcHUD.getName());
+        pOrderFKC.add(pcompactHUD.getName());
+        pOrderFKC.add(pshow_players.getName());
+        pOrderFKC.add(pdraw_background.getName());
+        pOrderFKC.add(ptext_shadow.getName());
+        config.setCategoryPropertyOrder(CATEGORY_FKCounter, pOrderFKC);
 
-        List<String> propertyOrderGUI = new ArrayList<>();
-        propertyOrderGUI.add(pShow_killcooldownHUD.getName());
-        propertyOrderGUI.add(pXpos_killcooldownHUD.getName());
-        propertyOrderGUI.add(pYpos_killcooldownHUD.getName());
-        propertyOrderGUI.add(pShow_ArrowHitHUD.getName());
-        propertyOrderGUI.add(pXpos_ArrowHitHUD.getName());
-        propertyOrderGUI.add(pYpos_ArrowHitHUD.getName());
-        propertyOrderGUI.add(pShow_lastWitherHUD.getName());
-        propertyOrderGUI.add(pXpos_lastWitherHUD.getName());
-        propertyOrderGUI.add(pYpos_lastWitherHUD.getName());
-        propertyOrderGUI.add(pHunterStrengthHUD.getName());
-        propertyOrderGUI.add(pXpos_hunterHUD.getName());
-        propertyOrderGUI.add(pYpos_hunterHUD.getName());
-        config.setCategoryPropertyOrder(CATEGORY_GUI, propertyOrderGUI);
+        List<String> pOrderMWWENh = new ArrayList<>();
+        pOrderMWWENh.add(pAPIKey.getName());
+        pOrderMWWENh.add(pstrengthParticules.getName());
+        pOrderMWWENh.add(pShortencoinmessage.getName());
+        pOrderMWWENh.add(pReportsuggestions.getName());
+        config.setCategoryPropertyOrder(CATEGORY_MWENh, pOrderMWWENh);
 
-        List<String> propertyOrderNOCHEATERS = new ArrayList<>();
-        propertyOrderNOCHEATERS.add(pToggleicons.getName());
-        propertyOrderNOCHEATERS.add(pTogglewarnings.getName());
-        propertyOrderNOCHEATERS.add(pToggleautoreport.getName());
-        propertyOrderNOCHEATERS.add(pTimeBetweenReports.getName());
-        propertyOrderNOCHEATERS.add(pTimeAutoReport.getName());
-        config.setCategoryPropertyOrder(CATEGORY_NOCHEATERS, propertyOrderNOCHEATERS);
+        List<String> pOrderGUI = new ArrayList<>();
+        pOrderGUI.add(pShow_killcooldownHUD.getName());
+        pOrderGUI.add(pXpos_killcooldownHUD.getName());
+        pOrderGUI.add(pYpos_killcooldownHUD.getName());
+        pOrderGUI.add(pShow_ArrowHitHUD.getName());
+        pOrderGUI.add(pXpos_ArrowHitHUD.getName());
+        pOrderGUI.add(pYpos_ArrowHitHUD.getName());
+        pOrderGUI.add(pShow_lastWitherHUD.getName());
+        pOrderGUI.add(pXpos_lastWitherHUD.getName());
+        pOrderGUI.add(pYpos_lastWitherHUD.getName());
+        pOrderGUI.add(pHunterStrengthHUD.getName());
+        pOrderGUI.add(pXpos_hunterHUD.getName());
+        pOrderGUI.add(pYpos_hunterHUD.getName());
+        config.setCategoryPropertyOrder(CATEGORY_GUI, pOrderGUI);
+
+        List<String> pOrderNOCHEATERS = new ArrayList<>();
+        pOrderNOCHEATERS.add(pToggleicons.getName());
+        pOrderNOCHEATERS.add(pTogglewarnings.getName());
+        pOrderNOCHEATERS.add(pToggleautoreport.getName());
+        pOrderNOCHEATERS.add(pTimeBetweenReports.getName());
+        pOrderNOCHEATERS.add(pTimeAutoReport.getName());
+        config.setCategoryPropertyOrder(CATEGORY_NOCHEATERS, pOrderNOCHEATERS);
 
         /*sets the fields of this class to the fields in the properties*/
         if (readFieldsFromConfig) {
+
+            fkcounterPosition.setRelative(pXpos_fkcHUD.getDouble(), pYpos_fkcHUD.getDouble());
+            show_fkcHUD = pshow_fkcHUD.getBoolean();
+            compact_hud = pcompactHUD.getBoolean();
+            show_players = pshow_players.getBoolean();
+            draw_background = pdraw_background.getBoolean();
+            text_shadow = ptext_shadow.getBoolean();
+
             APIKey = pAPIKey.getString();
             strengthParticules = pstrengthParticules.getBoolean();
             shortencoinmessage = pShortencoinmessage.getBoolean();
@@ -134,6 +171,16 @@ public class MWEnConfigHandler {
         }
 
         if (saveFieldsToConfig) {
+
+            double[] fkcHUDarray = fkcounterPosition.getRelativePosition();
+            pXpos_fkcHUD.set(fkcHUDarray[0]);
+            pYpos_fkcHUD.set(fkcHUDarray[1]);
+            pshow_fkcHUD.set(show_fkcHUD);
+            pcompactHUD.set(compact_hud);
+            pshow_players.set(show_players);
+            pdraw_background.set(draw_background);
+            ptext_shadow.set(text_shadow);
+
             pAPIKey.set(APIKey);
             pstrengthParticules.set(strengthParticules);
             pShortencoinmessage.set(shortencoinmessage);

@@ -1,7 +1,7 @@
 package fr.alexdoru.fkcountermod.gui;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
-import fr.alexdoru.fkcountermod.config.EnumFKConfigSetting;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.MyCachedGui;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Tuple;
@@ -37,17 +37,12 @@ public class FKCounterGui extends MyCachedGui {
 
     public FKCounterGui() {
         instance = this;
-        guiPosition = EnumFKConfigSetting.FKCOUNTER_HUD.getHUDPosition();
-    }
-
-    @Override
-    public void save() {
-        FKCounterMod.getConfigHandler().saveConfig();
+        guiPosition = ConfigHandler.fkcounterPosition;
     }
 
     @Override
     public int getHeight() {
-        if (EnumFKConfigSetting.COMPACT_HUD.getValue()) {
+        if (ConfigHandler.compact_hud) {
             return frObj.FONT_HEIGHT;
         } else {
             return frObj.FONT_HEIGHT * 4;
@@ -57,9 +52,9 @@ public class FKCounterGui extends MyCachedGui {
     @Override
     public int getWidth() {
         if (isRenderingDummy) {
-            if (EnumFKConfigSetting.COMPACT_HUD.getValue()) {
+            if (ConfigHandler.compact_hud) {
                 return frObj.getStringWidth(DUMMY_TEXT_COMPACT);
-            } else if (EnumFKConfigSetting.SHOW_PLAYERS.getValue()) {
+            } else if (ConfigHandler.show_players) {
                 return getMultilineWidth(DUMMY_TEXT_PLAYERS);
             } else {
                 return getMultilineWidth(DUMMY_TEXT);
@@ -77,14 +72,14 @@ public class FKCounterGui extends MyCachedGui {
         int x = absolutePos[0];
         int y = absolutePos[1];
 
-        if (EnumFKConfigSetting.DRAW_BACKGROUND.getValue()) {
+        if (ConfigHandler.draw_background) {
             drawRect(x - 1, y - 1, x + getWidth(), y + getHeight(), BACKGROUND_COLOR);
         }
 
-        if (EnumFKConfigSetting.COMPACT_HUD.getValue()) {
-            frObj.drawString(getDisplayText(), x, y, 0, EnumFKConfigSetting.TEXT_SHADOW.getValue());
+        if (ConfigHandler.compact_hud) {
+            frObj.drawString(getDisplayText(), x, y, 0, ConfigHandler.text_shadow);
         } else {
-            drawMultilineString(getDisplayText(), x, y, EnumFKConfigSetting.TEXT_SHADOW.getValue());
+            drawMultilineString(getDisplayText(), x, y, ConfigHandler.text_shadow);
         }
 
     }
@@ -113,19 +108,19 @@ public class FKCounterGui extends MyCachedGui {
         drawVerticalLine(XtopLeft, YtopLeft, YbotLeft, Color.RED.getRGB());
         drawVerticalLine(XtopRight, YtopLeft, YbotLeft, Color.RED.getRGB());
 
-        if (EnumFKConfigSetting.COMPACT_HUD.getValue()) {
-            frObj.drawString(DUMMY_TEXT_COMPACT, x, y, 0, EnumFKConfigSetting.TEXT_SHADOW.getValue());
-        } else if (EnumFKConfigSetting.SHOW_PLAYERS.getValue()) {
-            drawMultilineString(DUMMY_TEXT_PLAYERS, x, y, EnumFKConfigSetting.TEXT_SHADOW.getValue());
+        if (ConfigHandler.compact_hud) {
+            frObj.drawString(DUMMY_TEXT_COMPACT, x, y, 0, ConfigHandler.text_shadow);
+        } else if (ConfigHandler.show_players) {
+            drawMultilineString(DUMMY_TEXT_PLAYERS, x, y, ConfigHandler.text_shadow);
         } else {
-            drawMultilineString(DUMMY_TEXT, x, y, EnumFKConfigSetting.TEXT_SHADOW.getValue());
+            drawMultilineString(DUMMY_TEXT, x, y, ConfigHandler.text_shadow);
         }
 
     }
 
     @Override
     public boolean isEnabled() {
-        return (EnumFKConfigSetting.FKCOUNTER_HUD.getValue() && FKCounterMod.isInMwGame() && getGameId() != null);
+        return (ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame() && getGameId() != null);
     }
 
     @Override
@@ -137,7 +132,7 @@ public class FKCounterGui extends MyCachedGui {
             StringBuilder strBuilder = new StringBuilder();
             int i = 0;
 
-            if (EnumFKConfigSetting.COMPACT_HUD.getValue()) {
+            if (ConfigHandler.compact_hud) {
 
                 for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
                     strBuilder.append(i == 0 ? "" : EnumChatFormatting.DARK_GRAY + " / ")
@@ -146,7 +141,7 @@ public class FKCounterGui extends MyCachedGui {
                     i++;
                 }
 
-            } else if (EnumFKConfigSetting.SHOW_PLAYERS.getValue()) {
+            } else if (ConfigHandler.show_players) {
 
                 for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
                     int team = entry.getKey();
