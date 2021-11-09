@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
-import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.ICachedHUDText;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.IRenderer;
@@ -52,7 +52,7 @@ public class MyCachedGui extends Gui implements IRenderer, ICachedHUDText {
 
     @Override
     public void save() {
-        MWEnConfigHandler.saveConfig();
+        ConfigHandler.saveConfig();
     }
 
     @Override

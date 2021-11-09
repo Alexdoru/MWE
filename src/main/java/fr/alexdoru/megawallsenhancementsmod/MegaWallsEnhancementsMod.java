@@ -2,7 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod;
 
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.commands.*;
-import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
 import fr.alexdoru.megawallsenhancementsmod.events.KeybindingsEvent;
 import fr.alexdoru.megawallsenhancementsmod.events.MWGameStatsEvent;
@@ -29,7 +29,7 @@ public class MegaWallsEnhancementsMod {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        MWEnConfigHandler.preinit(event.getSuggestedConfigurationFile());
+        ConfigHandler.preinit(event.getSuggestedConfigurationFile());
     }
 
     @EventHandler
@@ -69,5 +69,6 @@ public class MegaWallsEnhancementsMod {
     // TODO stalk ban command
     // TODO hud with food in inventory
     // TODO switch mixins to ASM
+    // TODO make just arrow hitbox
 
 }

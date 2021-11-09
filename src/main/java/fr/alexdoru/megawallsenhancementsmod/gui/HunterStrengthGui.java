@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
-import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.gui.ScaledResolution;
 
 public class HunterStrengthGui extends MyCachedGui {
@@ -14,7 +14,7 @@ public class HunterStrengthGui extends MyCachedGui {
 
     public HunterStrengthGui() {
         instance = this;
-        guiPosition = MWEnConfigHandler.hunterStrengthHUDPosition;
+        guiPosition = ConfigHandler.hunterStrengthHUDPosition;
     }
 
     @Override

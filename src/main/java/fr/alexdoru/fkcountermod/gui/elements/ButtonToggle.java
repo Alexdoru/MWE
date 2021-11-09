@@ -1,6 +1,5 @@
 package fr.alexdoru.fkcountermod.gui.elements;
 
-import fr.alexdoru.fkcountermod.config.EnumFKConfigSetting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
@@ -11,20 +10,22 @@ public class ButtonToggle extends GuiButton {
     private static final ResourceLocation TOGGLE_ON = new ResourceLocation("fkcounter", "toggleon.png");
     private static final ResourceLocation TOGGLE_OFF = new ResourceLocation("fkcounter", "toggleoff.png");
 
-    final EnumFKConfigSetting setting;
+    private final String buttonText;
+    public boolean setting;
 
-    public ButtonToggle(int x, int y, EnumFKConfigSetting setting) {
-        super(0, x, y, "");
-        this.setting = setting;
+    public ButtonToggle(boolean settingIn, int id, int x, int y, String buttonTextIn) {
+        super(id, x, y, "");
+        this.setting = settingIn;
         this.width = 24;
         this.height = 24;
+        this.buttonText = buttonTextIn;
     }
 
     @Override
     public void drawButton(Minecraft mc, int mouseX, int mouseY) {
         GlStateManager.pushMatrix();
         {
-            if (setting.getValue()) {
+            if (setting) {
                 mc.getTextureManager().bindTexture(TOGGLE_ON);
             } else {
                 mc.getTextureManager().bindTexture(TOGGLE_OFF);
@@ -38,13 +39,9 @@ public class ButtonToggle extends GuiButton {
             float dilatation = 0.5f;
             GlStateManager.translate(xPosition + (float) width / 2.0f, yPosition - 10f, 0);
             GlStateManager.scale(dilatation, dilatation, 1);
-            this.drawCenteredString(mc.fontRendererObj, setting.getTitle(), 0, 0, 0xFFFFFF);
+            this.drawCenteredString(mc.fontRendererObj, this.buttonText, 0, 0, 0xFFFFFF);
         }
         GlStateManager.popMatrix();
-    }
-
-    public EnumFKConfigSetting getSetting() {
-        return setting;
     }
 
 }

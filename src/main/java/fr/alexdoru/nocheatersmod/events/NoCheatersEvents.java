@@ -1,7 +1,7 @@
 package fr.alexdoru.nocheatersmod.events;
 
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
-import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
@@ -37,7 +37,7 @@ public class NoCheatersEvents {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        if (!MWEnConfigHandler.togglewarnings || !mc.inGameHasFocus) {
+        if (!ConfigHandler.togglewarnings || !mc.inGameHasFocus) {
             return;
         }
         if (ticks == 39) {
@@ -54,7 +54,7 @@ public class NoCheatersEvents {
             return;
         }
         EntityPlayer player = (EntityPlayer) event.entity;
-        NameUtil.handlePlayer(player, MWEnConfigHandler.toggleicons, MWEnConfigHandler.togglewarnings, MWEnConfigHandler.toggleautoreport);
+        NameUtil.handlePlayer(player, ConfigHandler.toggleicons, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
     }
 
     public static void scanCurrentWorld() {
@@ -76,7 +76,7 @@ public class NoCheatersEvents {
 
             if (wdr != null) {
                 addChatMessage(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr)));
-                if (MWEnConfigHandler.toggleautoreport && datenow - wdr.timestamp > MWEnConfigHandler.timeBetweenReports && datenow - wdr.timestamp < MWEnConfigHandler.timeAutoReport) {
+                if (ConfigHandler.toggleautoreport && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && datenow - wdr.timestamp < ConfigHandler.timeAutoReport) {
                     String finalUuid = uuid;
                     new DelayedTask(() -> {
                         ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
@@ -110,7 +110,7 @@ public class NoCheatersEvents {
 
             if (wdr != null) {
                 list.add(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr)));
-                if (MWEnConfigHandler.toggleautoreport && datenow - wdr.timestamp > MWEnConfigHandler.timeBetweenReports && datenow - wdr.timestamp < MWEnConfigHandler.timeAutoReport) {
+                if (ConfigHandler.toggleautoreport && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && datenow - wdr.timestamp < ConfigHandler.timeAutoReport) {
                     String finalUuid = uuid;
                     new DelayedTask(() -> {
                         ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
@@ -135,7 +135,7 @@ public class NoCheatersEvents {
 
             String message = "[\"\",{\"text\":\"Warning : \",\"color\":\"red\"}" + formattedmessageArray[0] + ",{\"text\":\" joined,\",\"color\":\"gray\"}";
 
-            if (datenow - wdr.timestamp > MWEnConfigHandler.timeBetweenReports) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
+            if (datenow - wdr.timestamp > ConfigHandler.timeBetweenReports) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
 
                 message = message + ",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain " + uuid + " " + playername + "\"}"
 
@@ -169,7 +169,7 @@ public class NoCheatersEvents {
 
                     + ",{\"text\":\" joined,\",\"color\":\"gray\"}");
 
-            if (datenow - wdr.timestamp > MWEnConfigHandler.timeBetweenReports && !(wdr.isOnlyStalking())) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
+            if (datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && !(wdr.isOnlyStalking())) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
 
                 message.append(",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain ").append(uuid).append(" ").append(playername).append("\"}").append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click here to report this player again\",\"color\":\"yellow\"}]}}");
 

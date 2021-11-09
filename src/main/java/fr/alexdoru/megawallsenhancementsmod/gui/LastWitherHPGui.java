@@ -3,7 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui;
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.events.MwGameEvent;
 import fr.alexdoru.fkcountermod.events.ScoreboardEvent;
-import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -18,7 +18,7 @@ public class LastWitherHPGui extends MyCachedGui {
 
     public LastWitherHPGui() {
         instance = this;
-        guiPosition = MWEnConfigHandler.lastWitherHUDPosition;
+        guiPosition = ConfigHandler.lastWitherHUDPosition;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class LastWitherHPGui extends MyCachedGui {
 
     @Override
     public boolean isEnabled() {
-        return MWEnConfigHandler.show_lastWitherHUD && FKCounterMod.isInMwGame() && ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive();
+        return ConfigHandler.show_lastWitherHUD && FKCounterMod.isInMwGame() && ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive();
     }
 
 }

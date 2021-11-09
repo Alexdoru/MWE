@@ -3,7 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.utils;
 import com.mojang.authlib.GameProfile;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
-import fr.alexdoru.megawallsenhancementsmod.config.MWEnConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
@@ -68,7 +68,7 @@ public class NameUtil {
 
         if (wdr != null) { // player was reported
 
-            if (isAutoreportToggled && datenow - wdr.timestamp > MWEnConfigHandler.timeBetweenReports && datenow - wdr.timestamp < MWEnConfigHandler.timeAutoReport) {
+            if (isAutoreportToggled && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && datenow - wdr.timestamp < ConfigHandler.timeAutoReport) {
                 String finalUuid = uuid;
                 new DelayedTask(() -> {
                     ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
@@ -155,7 +155,7 @@ public class NameUtil {
         String squadname = SquadEvent.getSquad().get(username);
         boolean isSquadMate = squadname != null;
 
-        if (MWEnConfigHandler.toggleicons) {
+        if (ConfigHandler.toggleicons) {
 
             if (isSquadMate) {
 
