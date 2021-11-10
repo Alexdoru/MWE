@@ -51,6 +51,7 @@ public class NameUtil {
 
         if (areIconsToggled && squadname != null) {
             player.addPrefix(isquadprefix);
+            player.refreshDisplayName();
             return;
         }
 
