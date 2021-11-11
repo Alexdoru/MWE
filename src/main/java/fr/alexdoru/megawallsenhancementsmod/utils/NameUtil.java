@@ -208,7 +208,7 @@ public class NameUtil {
             String formattedname = displayName.getFormattedText().replace(squadprefix, "").replace(prefix_bhop, "").replace(prefix, "").replace(prefix_scan, "");
 
             if (needtochange) {
-                return new ChatComponentText(extraprefix).appendSibling(new ChatComponentText((isSquadMate && ConfigHandler.nickHider ? formattedname.replace(username, squadname) : formattedname).replace("\u00a7k", "")));
+                return new ChatComponentText(extraprefix).appendSibling(new ChatComponentText((isSquadMate ? formattedname.replace(username, squadname) : formattedname).replace("\u00a7k", "")));
             } else {
                 return new ChatComponentText(formattedname.replace("\u00a7k", ""));
             }
@@ -222,7 +222,7 @@ public class NameUtil {
             String teamprefix = team.getColorPrefix();
 
             if (teamprefix.contains("\u00a7k") || needtochange) {
-                return new ChatComponentText(extraprefix + teamprefix.replace("\u00a7k", "").replace("O", "") + (isSquadMate && ConfigHandler.nickHider ? squadname : username) + team.getColorSuffix());
+                return new ChatComponentText(extraprefix + teamprefix.replace("\u00a7k", "").replace("O", "") + (isSquadMate ? squadname : username) + team.getColorSuffix());
             }
 
         }

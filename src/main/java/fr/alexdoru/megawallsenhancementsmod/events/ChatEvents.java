@@ -88,14 +88,12 @@ public class ChatEvents {
                 return;
             }
 
-            if (ConfigHandler.nickHider) {
-                Matcher matcher = MESSAGE_PATTERN.matcher(msg);
-                if (matcher.matches()) {
-                    String name = matcher.group(1);
-                    String squadmate = SquadEvent.getSquad().get(name);
-                    if (squadmate != null) {
-                        event.message = new ChatComponentText(fmsg.replace(name, squadmate));
-                    }
+            Matcher matcher = MESSAGE_PATTERN.matcher(msg);
+            if (matcher.matches()) {
+                String name = matcher.group(1);
+                String squadmate = SquadEvent.getSquad().get(name);
+                if (squadmate != null) {
+                    event.message = new ChatComponentText(fmsg.replace(name, squadmate));
                 }
             }
 

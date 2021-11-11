@@ -174,17 +174,15 @@ public class KillCounter {
                     spawnParticles(killer);
                 }
 
-                if (ConfigHandler.nickHider) {
-                    String squadmate = SquadEvent.getSquad().get(killer);
-                    if (squadmate != null) {
-                        ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killer, squadmate)));
-                        return true;
-                    }
-                    squadmate = SquadEvent.getSquad().get(killed);
-                    if (squadmate != null) {
-                        ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killed, squadmate)));
-                        return true;
-                    }
+                String squadmate = SquadEvent.getSquad().get(killer);
+                if (squadmate != null) {
+                    ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killer, squadmate)));
+                    return true;
+                }
+                squadmate = SquadEvent.getSquad().get(killed);
+                if (squadmate != null) {
+                    ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killed, squadmate)));
+                    return true;
                 }
 
                 ChatUtil.addChatMessage(new ChatComponentText(FormattedText));
