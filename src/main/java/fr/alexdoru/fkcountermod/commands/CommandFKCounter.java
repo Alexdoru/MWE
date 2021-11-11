@@ -2,6 +2,7 @@ package fr.alexdoru.fkcountermod.commands;
 
 import fr.alexdoru.fkcountermod.gui.FKConfigGuiScreen;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
+import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -10,7 +11,9 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static fr.alexdoru.fkcountermod.events.KillCounter.*;
@@ -48,20 +51,30 @@ public class CommandFKCounter extends CommandBase {
                 addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "This is not available right now"));
                 return;
             }
-            String msg = "";// TODO add support for nick hider
-            msg += getColorPrefixFromTeam(RED_TEAM) + getTeamNameFromTeam(RED_TEAM) + EnumChatFormatting.WHITE + ": " +
-                    (getPlayers(RED_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", "))) + "\n";
 
-            msg += getColorPrefixFromTeam(GREEN_TEAM) + getTeamNameFromTeam(GREEN_TEAM) + EnumChatFormatting.WHITE + ": " +
-                    (getPlayers(GREEN_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", "))) + "\n";
+            StringBuilder strBuilder = new StringBuilder();
+            for (int TEAM = RED_TEAM; TEAM <= BLUE_TEAM; TEAM++) {
+                strBuilder.append(getColorPrefixFromTeam(TEAM))
+                        .append(getTeamNameFromTeam(TEAM))
+                        .append(EnumChatFormatting.WHITE)
+                        .append(": ");
+                for (Iterator<Map.Entry<String, Integer>> iterator = getPlayers(TEAM).entrySet().iterator(); iterator.hasNext(); ) {
+                    Map.Entry<String, Integer> entry = iterator.next();
+                    String name = entry.getKey();
+                    String squadname = SquadEvent.getSquad().get(name);
+                    if (squadname != null) {
+                        strBuilder.append(squadname).append(" (").append(entry.getValue()).append(")");
+                    } else {
+                        strBuilder.append(name).append(" (").append(entry.getValue()).append(")");
+                    }
+                    if (iterator.hasNext()) {
+                        strBuilder.append(", ");
+                    }
+                }
+                strBuilder.append("\n");
+            }
 
-            msg += getColorPrefixFromTeam(YELLOW_TEAM) + getTeamNameFromTeam(YELLOW_TEAM) + EnumChatFormatting.WHITE + ": " +
-                    (getPlayers(YELLOW_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", "))) + "\n";
-
-            msg += getColorPrefixFromTeam(BLUE_TEAM) + getTeamNameFromTeam(BLUE_TEAM) + EnumChatFormatting.WHITE + ": " +
-                    (getPlayers(BLUE_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
-
-            addChatMessage(new ChatComponentText(msg));
+            addChatMessage(new ChatComponentText(strBuilder.toString()));
 
         } else if (args.length > 0 && args[0].equalsIgnoreCase("say")) {
 
