@@ -36,6 +36,7 @@ public class ConfigHandler {
     public static boolean strengthParticules;
     public static boolean shortencoinmessage;
     public static boolean reportsuggestions;
+    public static boolean nickHider;
 
     /*GUI config*/
     public static boolean show_killcooldownHUD;
@@ -78,6 +79,7 @@ public class ConfigHandler {
         Property pstrengthParticules = config.get(CATEGORY_MWENh, "Strength particules", true, "Spawns strength particules when an herobrine or dreadlord get a final");
         Property pShortencoinmessage = config.get(CATEGORY_MWENh, "Shorten coin message", true, "Shorten the coins messages by removing the network booster info");
         Property pReportsuggestions = config.get(CATEGORY_MWENh, "Report suggestion", true, "Give report suggestions in the chat based on messages in shouts");
+        Property pnickHider = config.get(CATEGORY_MWENh, "Nick hider", true, "Changes the nicks of your squad with the names of your choice");
 
         Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
         Property pXpos_killcooldownHUD = config.get(CATEGORY_GUI, "Xpos kill cooldown HUD", 0d, "The x position of the killcooldown HUD, value ranges from 0 to 1");
@@ -114,6 +116,7 @@ public class ConfigHandler {
         pOrderMWWENh.add(pstrengthParticules.getName());
         pOrderMWWENh.add(pShortencoinmessage.getName());
         pOrderMWWENh.add(pReportsuggestions.getName());
+        pOrderMWWENh.add(pnickHider.getName());
         config.setCategoryPropertyOrder(CATEGORY_MWENh, pOrderMWWENh);
 
         List<String> pOrderGUI = new ArrayList<>();
@@ -153,6 +156,7 @@ public class ConfigHandler {
             strengthParticules = pstrengthParticules.getBoolean();
             shortencoinmessage = pShortencoinmessage.getBoolean();
             reportsuggestions = pReportsuggestions.getBoolean();
+            nickHider = pnickHider.getBoolean();
 
             show_killcooldownHUD = pShow_killcooldownHUD.getBoolean();
             killcooldownHUDPosition.setRelative(pXpos_killcooldownHUD.getDouble(), pYpos_killcooldownHUD.getDouble());
@@ -185,6 +189,7 @@ public class ConfigHandler {
             pstrengthParticules.set(strengthParticules);
             pShortencoinmessage.set(shortencoinmessage);
             pReportsuggestions.set(reportsuggestions);
+            pnickHider.set(nickHider);
 
             pShow_killcooldownHUD.set(show_killcooldownHUD);
             double[] killcooldownHUDarray = killcooldownHUDPosition.getRelativePosition();

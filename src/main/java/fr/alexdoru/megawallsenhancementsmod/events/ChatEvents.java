@@ -32,8 +32,9 @@ public class ChatEvents {
     private static final Pattern HUNTER_STRENGTH_PATTERN = Pattern.compile(".*\u00a7a\u00a7lF\\.O\\.N\\. (\u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l[0-9]+).*");
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
-    private static final Pattern SHOUT_PATTERN1 = Pattern.compile("^\\[SHOUT\\].+?(\\w+) is b?hop?ping.*", Pattern.CASE_INSENSITIVE);
-    private static final Pattern SHOUT_PATTERN2 = Pattern.compile("^\\[SHOUT\\].+?(?:wdr|report) (\\w+) (\\w+).*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:|\\[SHOUT\\] )\\[[A-Z]+\\] (?:\\[(?:\\w|\\+)+\\] )?(\\w{1,16}):.*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern REPORT_PATTERN1 = Pattern.compile("^\\[SHOUT\\].+?(\\w+) (?:|is )b?hop?ping.*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern REPORT_PATTERN2 = Pattern.compile("^\\[SHOUT\\].+?(?:wdr|report) (\\w+) (\\w+).*", Pattern.CASE_INSENSITIVE);
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Active Booster, |)\\w+'s Network Booster\\)).*");
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
     public static final ResourceLocation reportSuggestionSound = new ResourceLocation("random.orb");
@@ -79,12 +80,25 @@ public class ChatEvents {
                 }
             }
 
-            if (KillCounter.processMessage(event.message, fmsg, msg)) {
+            if (KillCounter.processMessage(fmsg, msg)) {
+                event.setCanceled(true);
                 return;
             }
             if (ConfigHandler.show_ArrowHitHUD && ArrowHitGui.processMessage(msg)) {
                 return;
             }
+
+            if (ConfigHandler.nickHider) {
+                Matcher matcher = MESSAGE_PATTERN.matcher(msg);
+                if (matcher.matches()) {
+                    String name = matcher.group(1);
+                    String squadmate = SquadEvent.getSquad().get(name);
+                    if (squadmate != null) {
+                        event.message = new ChatComponentText(fmsg.replace(name, squadmate));
+                    }
+                }
+            }
+
             if (ConfigHandler.reportsuggestions && parseReportMessage(msg)) {
                 return;
             }
@@ -122,8 +136,7 @@ public class ChatEvents {
             if (!MinecraftUtils.isHypixel()) {
                 return false;
             }
-            String api_key = matcherapikey.group(1);
-            HypixelApiKeyUtil.setApiKey(api_key);
+            HypixelApiKeyUtil.setApiKey(matcherapikey.group(1));
             return true;
         }
         return false;
@@ -131,21 +144,20 @@ public class ChatEvents {
 
     private static boolean parseReportMessage(String msgIn) {
 
-        Matcher matcher1 = SHOUT_PATTERN1.matcher(msgIn);
-        Matcher matcher2 = SHOUT_PATTERN2.matcher(msgIn);
+        Matcher matcher1 = REPORT_PATTERN1.matcher(msgIn);
+        Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);
 
         if (matcher1.matches()) {
             String name = matcher1.group(1);
-            String cheat = "bhop";
             if (isAValidName(name)) {
-                new DelayedTask(() -> printReportSuggestion(name, cheat),0);
+                printReportSuggestion(name, "bhop");
             }
             return true;
         } else if (matcher2.matches()) {
             String name = matcher2.group(1);
             String cheat = matcher2.group(2);
             if (isAValidCheat(cheat) && isAValidName(name)) {
-                new DelayedTask(() -> printReportSuggestion(name, cheat),0);
+                printReportSuggestion(name, cheat);
             }
             return true;
         }
@@ -158,18 +170,15 @@ public class ChatEvents {
         Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(reportSuggestionSound, 1.0F));
         IChatComponent imsg = new ChatComponentText(getTagMW() + EnumChatFormatting.DARK_RED + "Command suggestion : ")
                 .appendSibling(makeReportButtons(playername, cheat, ClickEvent.Action.SUGGEST_COMMAND, ClickEvent.Action.SUGGEST_COMMAND));
-        addChatMessage(imsg);
+        new DelayedTask(() -> addChatMessage(imsg), 0);
     }
 
     private static boolean isAValidName(String playername) {
-
         for (NetworkPlayerInfo networkplayerinfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
-
             if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
                 return true;
             }
         }
-
         return false;
     }
 

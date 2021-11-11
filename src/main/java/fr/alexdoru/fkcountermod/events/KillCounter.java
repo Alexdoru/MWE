@@ -7,11 +7,14 @@ import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
-import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.util.*;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -123,7 +126,7 @@ public class KillCounter {
 
     }
 
-    public static boolean processMessage(IChatComponent eventMsg, String FormattedText, String UnformattedText) {
+    public static boolean processMessage(String FormattedText, String UnformattedText) {
 
         if (!FKCounterMod.isInMwGame()) {
             return false;
@@ -171,14 +174,20 @@ public class KillCounter {
                     spawnParticles(killer);
                 }
 
-                String squadmate = SquadEvent.getSquad().get(killer);
-                if (squadmate == null) {
+                if (ConfigHandler.nickHider) {
+                    String squadmate = SquadEvent.getSquad().get(killer);
+                    if (squadmate != null) {
+                        ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killer, squadmate)));
+                        return true;
+                    }
                     squadmate = SquadEvent.getSquad().get(killed);
-                }
-                if (squadmate != null) {
-                    eventMsg = new ChatComponentText(FormattedText.replace(killer, NameUtil.squadprefix + squadmate));
+                    if (squadmate != null) {
+                        ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killed, squadmate)));
+                        return true;
+                    }
                 }
 
+                ChatUtil.addChatMessage(new ChatComponentText(FormattedText));
                 return true;
 
             }

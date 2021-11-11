@@ -21,7 +21,7 @@ public class SquadEvent {
 
     @SubscribeEvent
     public void onNameFormat(NameFormat event) {
-        if (ConfigHandler.toggleicons) {
+        if (ConfigHandler.nickHider) {
             String squadname = squadmap.get(event.username);
             if (squadname != null) {
                 event.displayname = squadname;

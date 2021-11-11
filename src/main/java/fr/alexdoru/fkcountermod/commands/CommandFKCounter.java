@@ -18,6 +18,8 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage
 
 public class CommandFKCounter extends CommandBase {
 
+    private final Minecraft mc = Minecraft.getMinecraft();
+
     @Override
     public String getCommandName() {
         return "fks";
@@ -38,7 +40,7 @@ public class CommandFKCounter extends CommandBase {
 
         if (args.length > 0 && args[0].equalsIgnoreCase("settings")) {
 
-            new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(new FKConfigGuiScreen(null)), 1);
+            new DelayedTask(() -> mc.displayGuiScreen(new FKConfigGuiScreen(null)), 1);
 
         } else if (args.length > 0 && (args[0].equalsIgnoreCase("players") || args[0].equalsIgnoreCase("player") || args[0].equalsIgnoreCase("p"))) {
 
@@ -46,7 +48,7 @@ public class CommandFKCounter extends CommandBase {
                 addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "This is not available right now"));
                 return;
             }
-            String msg = "";
+            String msg = "";// TODO add support for nick hider
             msg += getColorPrefixFromTeam(RED_TEAM) + getTeamNameFromTeam(RED_TEAM) + EnumChatFormatting.WHITE + ": " +
                     (getPlayers(RED_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", "))) + "\n";
 
@@ -77,27 +79,27 @@ public class CommandFKCounter extends CommandBase {
                 msg += getTeamNameFromTeam(YELLOW_TEAM) + ": " + getKills(YELLOW_TEAM) + ", ";
                 msg += getTeamNameFromTeam(BLUE_TEAM) + ": " + getKills(BLUE_TEAM);
 
-                (Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg);
+                mc.thePlayer.sendChatMessage(msg);
 
             } else if (args.length == 2 && args[1].equalsIgnoreCase("red")) {
 
                 String msg = getTeamNameFromTeam(RED_TEAM) + ": " + (getPlayers(RED_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
-                (Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg);
+                mc.thePlayer.sendChatMessage(msg);
 
             } else if (args.length == 2 && args[1].equalsIgnoreCase("green")) {
 
                 String msg = getTeamNameFromTeam(GREEN_TEAM) + ": " + (getPlayers(GREEN_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
-                (Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg);
+                mc.thePlayer.sendChatMessage(msg);
 
             } else if (args.length == 2 && args[1].equalsIgnoreCase("yellow")) {
 
                 String msg = getTeamNameFromTeam(YELLOW_TEAM) + ": " + (getPlayers(YELLOW_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
-                (Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg);
+                mc.thePlayer.sendChatMessage(msg);
 
             } else if (args.length == 2 && args[1].equalsIgnoreCase("blue")) {
 
                 String msg = getTeamNameFromTeam(BLUE_TEAM) + ": " + (getPlayers(BLUE_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
-                (Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg);
+                mc.thePlayer.sendChatMessage(msg);
 
             }
 
