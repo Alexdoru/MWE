@@ -141,7 +141,7 @@ public class FKCounterGui extends MyCachedGui {
                     i++;
                 }
 
-            } else if (ConfigHandler.show_players) {
+            } else if (ConfigHandler.show_players) {// TODO add support for nick hider
 
                 for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
                     int team = entry.getKey();
