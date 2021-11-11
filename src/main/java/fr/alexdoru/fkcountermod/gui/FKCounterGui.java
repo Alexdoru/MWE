@@ -2,6 +2,7 @@ package fr.alexdoru.fkcountermod.gui;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.gui.MyCachedGui;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Tuple;
@@ -135,22 +136,33 @@ public class FKCounterGui extends MyCachedGui {
             if (ConfigHandler.compact_hud) {
 
                 for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
-                    strBuilder.append(i == 0 ? "" : EnumChatFormatting.DARK_GRAY + " / ")
-                            .append(getColorPrefixFromTeam(entry.getKey()))
+                    if (i != 0) {
+                        strBuilder.append(EnumChatFormatting.DARK_GRAY).append(" / ");
+                    }
+                    strBuilder.append(getColorPrefixFromTeam(entry.getKey()))
                             .append(entry.getValue());
                     i++;
                 }
 
-            } else if (ConfigHandler.show_players) {// TODO add support for nick hider
+            } else if (ConfigHandler.show_players) {
 
                 for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
                     int team = entry.getKey();
                     Tuple<String, Integer> tuple = getHighestFinalsPlayerOfTeam(team);
-                    strBuilder.append(i == 0 ? "" : "\n")
-                            .append(getColorPrefixFromTeam(team))
+                    if (i != 0) {
+                        strBuilder.append("\n");
+                    }
+                    strBuilder.append(getColorPrefixFromTeam(team))
                             .append(getTeamNameFromTeam(team)).append(EnumChatFormatting.WHITE)
-                            .append(": ").append(getKills(team))
-                            .append(tuple == null ? "" : " - " + tuple.getFirst() + " " + tuple.getSecond());
+                            .append(": ").append(getKills(team));
+                    if (tuple != null) {
+                        String squadname = SquadEvent.getSquad().get(tuple.getFirst());
+                        if (squadname != null) {
+                            strBuilder.append(" - ").append(squadname).append(" ").append(tuple.getSecond());
+                        } else {
+                            strBuilder.append(" - ").append(tuple.getFirst()).append(" ").append(tuple.getSecond());
+                        }
+                    }
                     i++;
                 }
 
@@ -158,8 +170,10 @@ public class FKCounterGui extends MyCachedGui {
 
                 for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
                     int team = entry.getKey();
-                    strBuilder.append(i == 0 ? "" : "\n")
-                            .append(getColorPrefixFromTeam(team))
+                    if (i != 0) {
+                        strBuilder.append("\n");
+                    }
+                    strBuilder.append(getColorPrefixFromTeam(team))
                             .append(getTeamNameFromTeam(team))
                             .append(EnumChatFormatting.WHITE).append(": ")
                             .append(getKills(team));

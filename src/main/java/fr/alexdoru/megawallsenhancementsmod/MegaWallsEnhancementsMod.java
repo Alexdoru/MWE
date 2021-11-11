@@ -69,6 +69,6 @@ public class MegaWallsEnhancementsMod {
     // TODO stalk ban command
     // TODO hud with food in inventory
     // TODO switch mixins to ASM
-    // TODO make just arrow hitbox
+    // TODO make f3 + b show just arrow hitbox
 
 }
