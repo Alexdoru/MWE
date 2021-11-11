@@ -2,7 +2,6 @@ package fr.alexdoru.megawallsenhancementsmod.events;
 
 import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
-import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.scoreboard.Scoreboard;
@@ -21,11 +20,9 @@ public class SquadEvent {
 
     @SubscribeEvent
     public void onNameFormat(NameFormat event) {
-        if (ConfigHandler.nickHider) {
-            String squadname = squadmap.get(event.username);
-            if (squadname != null) {
-                event.displayname = squadname;
-            }
+        String squadname = squadmap.get(event.username);
+        if (squadname != null) {
+            event.displayname = squadname;
         }
     }
 

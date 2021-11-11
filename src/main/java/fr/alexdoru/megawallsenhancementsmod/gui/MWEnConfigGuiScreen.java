@@ -36,8 +36,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
         this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
         this.buttonList.add(new GuiButton(3, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
         this.buttonList.add(new GuiButton(11, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 3, buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
-        //this.buttonList.add(new GuiButton(17, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 4, buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
-        this.buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 6, 150, ButtonsHeight, getButtonDisplayString(4)));
+        this.buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 5, 150, ButtonsHeight, getButtonDisplayString(4)));
 
         this.buttonList.add(new GuiButton(5, getxCenter() + buttonsWidth / 2 + 4, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(5)));
         this.buttonList.add(new GuiButton(6, getxCenter() + buttonsWidth / 2 + 4, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(6)));
@@ -69,8 +68,6 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
                 return "Show Arrow Hit HUD : " + getSuffix(ConfigHandler.show_ArrowHitHUD);
             case 11:
                 return "Show wither death time HUD : " + getSuffix(ConfigHandler.show_lastWitherHUD);
-            case 17:
-                return "Hide squadmate nicks : " + getSuffix(ConfigHandler.nickHider);
             case 4:
                 return "Done";
             case 5:
@@ -120,9 +117,6 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
                 break;
             case 11:
                 ConfigHandler.show_lastWitherHUD = !ConfigHandler.show_lastWitherHUD;
-                break;
-            case 17:
-                ConfigHandler.nickHider = !ConfigHandler.nickHider;
                 break;
             case 4:
                 mc.displayGuiScreen(parent);
