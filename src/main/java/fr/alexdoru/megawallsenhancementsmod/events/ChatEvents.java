@@ -118,7 +118,6 @@ public class ChatEvents {
                     HunterStrengthGui.instance.setRenderStart();
                 }
                 String fStrengthmsg = huntermatcher.group(1);
-                event.message = new ChatComponentText(fmsg.replace(fStrengthmsg, ""));
                 HunterStrengthGui.instance.setDisplayText(fStrengthmsg);
             }
         }
