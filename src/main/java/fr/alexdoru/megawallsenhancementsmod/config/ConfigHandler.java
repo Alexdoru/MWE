@@ -51,7 +51,8 @@ public class ConfigHandler {
     public static boolean toggleicons;
     public static boolean togglewarnings;
     public static boolean toggleautoreport;
-    public static long timeBetweenReports;// TODO config for those
+    /*those fields are in milliseconds*/
+    public static long timeBetweenReports;
     public static long timeAutoReport;
 
     public static void preinit(File file) {
@@ -213,8 +214,8 @@ public class ConfigHandler {
             pToggleicons.set(toggleicons);
             pTogglewarnings.set(togglewarnings);
             pToggleautoreport.set(toggleautoreport);
-            pTimeBetweenReports.set((int) timeBetweenReports / (3600 * 1000));
-            pTimeAutoReport.set((int) timeAutoReport / (3600 * 1000));
+            pTimeBetweenReports.set((int) timeBetweenReports / 3600000);
+            pTimeAutoReport.set((int) timeAutoReport / 3600000);
         }
 
         /*automatically saves the values to the config file if any of the values change*/
