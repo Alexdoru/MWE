@@ -10,8 +10,9 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.config.GuiSlider;
 
-public class FKConfigGuiScreen extends MyGuiScreen {
+public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
     private static final ResourceLocation BACKGROUND = new ResourceLocation("fkcounter", "background.png");
 
@@ -27,6 +28,7 @@ public class FKConfigGuiScreen extends MyGuiScreen {
 
     private ButtonToggle buttoncompacthud;
     private ButtonToggle buttonshowplayers;
+    private GuiSlider sliderSize;
 
     public FKConfigGuiScreen(GuiScreen parent) {
         this.parent = parent;
@@ -34,13 +36,16 @@ public class FKConfigGuiScreen extends MyGuiScreen {
 
     @Override
     public void initGui() {
-        buttonList.add(new ButtonFancy(100, width / 2 + 45, height / 2 - findMenuHeight() / 2 + 8, 30, 14, "Move HUD", 0.5));
-        buttonList.add(addSettingButton(ConfigHandler.show_fkcHUD, 0, 0, 0, "Show HUD"));
-        buttonList.add(buttoncompacthud = addSettingButton(ConfigHandler.compact_hud, 1, 0, 1, "Compact HUD"));
-        buttonList.add(buttonshowplayers = addSettingButton(ConfigHandler.show_players, 2, 0, 2, "Show Players"));
-        buttonList.add(addSettingButton(ConfigHandler.draw_background, 3, 1, 0, "HUD Background"));
-        buttonList.add(addSettingButton(ConfigHandler.text_shadow, 4, 1, 1, "Text Shadow"));
-        this.buttonList.add(new GuiButton(200, getxCenter() - 150 / 2, getyCenter() + 86, 150, 20, parent == null ? "Close" : "Done"));
+        this.buttonList.add(new ButtonFancy(100, width / 2 + 45, height / 2 - findMenuHeight() / 2 + 8, 30, 14, "Move HUD", 0.5));
+        this.buttonList.add(addSettingButton(ConfigHandler.show_fkcHUD, 0, 0, 0, "Show HUD"));
+        this.buttonList.add(buttoncompacthud = addSettingButton(ConfigHandler.compact_hud, 1, 0, 1, "Compact HUD"));
+        this.buttonList.add(buttonshowplayers = addSettingButton(ConfigHandler.show_players, 2, 0, 2, "Show Players"));
+        this.buttonList.add(addSettingButton(ConfigHandler.draw_background, 3, 1, 0, "HUD Background"));
+        this.buttonList.add(addSettingButton(ConfigHandler.text_shadow, 4, 1, 1, "Text Shadow"));
+        this.buttonList.add(sliderSize = new GuiSlider(5, getxCenter() - 150 / 2, getyCenter() + 86, "HUD Size : ", 0.1d, 4d, ConfigHandler.fkc_hud_size, this));
+        if (parent != null) {
+            this.buttonList.add(new GuiButton(200, getxCenter() - 150 / 2, getyCenter() + 110, 150, 20, "Done"));
+        }
         super.initGui();
     }
 
@@ -123,6 +128,16 @@ public class FKConfigGuiScreen extends MyGuiScreen {
 
     private int findMenuHeight() {
         return heightBetweenButtons + buttonSize * rows;
+    }
+
+    @Override
+    public void onChangeSliderValue(GuiSlider slider) {
+        if (slider.id == sliderSize.id) {
+            final double newvalue = Math.floor(sliderSize.getValue() / 0.05d) * 0.05d;
+            ConfigHandler.fkc_hud_size = newvalue;
+            sliderSize.setValue(newvalue);
+
+        }
     }
 
 }

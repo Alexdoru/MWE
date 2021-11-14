@@ -4,6 +4,7 @@ import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.gui.MyCachedGui;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Tuple;
 
@@ -44,9 +45,9 @@ public class FKCounterGui extends MyCachedGui {
     @Override
     public int getHeight() {
         if (ConfigHandler.compact_hud) {
-            return frObj.FONT_HEIGHT;
+            return (int) (frObj.FONT_HEIGHT * ConfigHandler.fkc_hud_size);
         } else {
-            return frObj.FONT_HEIGHT * 4;
+            return (int) (frObj.FONT_HEIGHT * 4 * ConfigHandler.fkc_hud_size);
         }
     }
 
@@ -54,14 +55,14 @@ public class FKCounterGui extends MyCachedGui {
     public int getWidth() {
         if (isRenderingDummy) {
             if (ConfigHandler.compact_hud) {
-                return frObj.getStringWidth(DUMMY_TEXT_COMPACT);
+                return (int) (frObj.getStringWidth(DUMMY_TEXT_COMPACT) * ConfigHandler.fkc_hud_size);
             } else if (ConfigHandler.show_players) {
-                return getMultilineWidth(DUMMY_TEXT_PLAYERS);
+                return (int) (getMultilineWidth(DUMMY_TEXT_PLAYERS) * ConfigHandler.fkc_hud_size);
             } else {
-                return getMultilineWidth(DUMMY_TEXT);
+                return (int) (getMultilineWidth(DUMMY_TEXT) * ConfigHandler.fkc_hud_size);
             }
         }
-        return getMultilineWidth(getDisplayText());
+        return (int) (getMultilineWidth(getDisplayText()) * ConfigHandler.fkc_hud_size);
     }
 
     @Override
@@ -77,11 +78,17 @@ public class FKCounterGui extends MyCachedGui {
             drawRect(x - 1, y - 1, x + getWidth(), y + getHeight(), BACKGROUND_COLOR);
         }
 
-        if (ConfigHandler.compact_hud) {
-            frObj.drawString(getDisplayText(), x, y, 0, ConfigHandler.text_shadow);
-        } else {
-            drawMultilineString(getDisplayText(), x, y, ConfigHandler.text_shadow);
+        GlStateManager.pushMatrix();
+        {
+            GlStateManager.translate(x, y, 0);
+            GlStateManager.scale(ConfigHandler.fkc_hud_size, ConfigHandler.fkc_hud_size, 0d);
+            if (ConfigHandler.compact_hud) {
+                frObj.drawString(getDisplayText(), 0, 0, 16777215, ConfigHandler.text_shadow);
+            } else {
+                drawMultilineString(getDisplayText(), 0, 0, ConfigHandler.text_shadow);
+            }
         }
+        GlStateManager.popMatrix();
 
     }
 
@@ -109,13 +116,19 @@ public class FKCounterGui extends MyCachedGui {
         drawVerticalLine(XtopLeft, YtopLeft, YbotLeft, Color.RED.getRGB());
         drawVerticalLine(XtopRight, YtopLeft, YbotLeft, Color.RED.getRGB());
 
-        if (ConfigHandler.compact_hud) {
-            frObj.drawString(DUMMY_TEXT_COMPACT, x, y, 0, ConfigHandler.text_shadow);
-        } else if (ConfigHandler.show_players) {
-            drawMultilineString(DUMMY_TEXT_PLAYERS, x, y, ConfigHandler.text_shadow);
-        } else {
-            drawMultilineString(DUMMY_TEXT, x, y, ConfigHandler.text_shadow);
+        GlStateManager.pushMatrix();
+        {
+            GlStateManager.translate(x, y, 0);
+            GlStateManager.scale(ConfigHandler.fkc_hud_size, ConfigHandler.fkc_hud_size, 0d);
+            if (ConfigHandler.compact_hud) {
+                frObj.drawString(DUMMY_TEXT_COMPACT, 0, 0, 16777215, ConfigHandler.text_shadow);
+            } else if (ConfigHandler.show_players) {
+                drawMultilineString(DUMMY_TEXT_PLAYERS, 0, 0, ConfigHandler.text_shadow);
+            } else {
+                drawMultilineString(DUMMY_TEXT, 0, 0, ConfigHandler.text_shadow);
+            }
         }
+        GlStateManager.popMatrix();
 
     }
 

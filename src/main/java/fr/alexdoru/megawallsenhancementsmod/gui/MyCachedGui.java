@@ -62,7 +62,7 @@ public class MyCachedGui extends Gui implements IRenderer, ICachedHUDText {
 
     public void drawMultilineString(String msg, int x, int y, boolean shadow) {
         for (String line : msg.split("\n")) {
-            frObj.drawString(line, x, y, 0, shadow);
+            frObj.drawString(line, x, y, 16777215, shadow);
             y += frObj.FONT_HEIGHT;
         }
     }

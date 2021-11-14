@@ -27,9 +27,9 @@ public class ConfigHandler {
     public static boolean show_players;
     public static boolean draw_background;
     public static boolean text_shadow;
+    public static double fkc_hud_size;
     // TODO add counter to sidebar
     // TODO add the finals to the tablist
-    // TODO hud dilation, size
 
     /*MWEnhancements config*/
     public static String APIKey;
@@ -73,6 +73,7 @@ public class ConfigHandler {
         Property pshow_players = config.get(CATEGORY_FKCounter, "Show players", false, "Displays players with most finals in each team");
         Property pdraw_background = config.get(CATEGORY_FKCounter, "Draw background", false, "Draws a box around the HUD of the final kill counter");
         Property ptext_shadow = config.get(CATEGORY_FKCounter, "Text shadow", true, "Draws text shadow");
+        Property pfkc_hud_size = config.get(CATEGORY_FKCounter, "HUD Size", 1.0f, "Size of the final kill counter HUD");
 
         Property pAPIKey = config.get(CATEGORY_MWENh, "APIKey", "", "Your Hypixel API Key");
         Property pstrengthParticules = config.get(CATEGORY_MWENh, "Strength particules", true, "Spawns strength particules when an herobrine or dreadlord get a final");
@@ -107,6 +108,7 @@ public class ConfigHandler {
         pOrderFKC.add(pshow_players.getName());
         pOrderFKC.add(pdraw_background.getName());
         pOrderFKC.add(ptext_shadow.getName());
+        pOrderFKC.add(pfkc_hud_size.getName());
         config.setCategoryPropertyOrder(CATEGORY_FKCounter, pOrderFKC);
 
         List<String> pOrderMWWENh = new ArrayList<>();
@@ -148,6 +150,7 @@ public class ConfigHandler {
             show_players = pshow_players.getBoolean();
             draw_background = pdraw_background.getBoolean();
             text_shadow = ptext_shadow.getBoolean();
+            fkc_hud_size = pfkc_hud_size.getDouble();
 
             APIKey = pAPIKey.getString();
             strengthParticules = pstrengthParticules.getBoolean();
@@ -180,6 +183,7 @@ public class ConfigHandler {
             pshow_players.set(show_players);
             pdraw_background.set(draw_background);
             ptext_shadow.set(text_shadow);
+            pfkc_hud_size.set(fkc_hud_size);
 
             pAPIKey.set(APIKey);
             pstrengthParticules.set(strengthParticules);
