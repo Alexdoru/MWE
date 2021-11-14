@@ -28,7 +28,6 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
 
     private ButtonToggle buttoncompacthud;
     private ButtonToggle buttonshowplayers;
-    private GuiSlider sliderSize;
 
     public FKConfigGuiScreen(GuiScreen parent) {
         this.parent = parent;
@@ -42,7 +41,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
         this.buttonList.add(buttonshowplayers = addSettingButton(ConfigHandler.show_players, 2, 0, 2, "Show Players"));
         this.buttonList.add(addSettingButton(ConfigHandler.draw_background, 3, 1, 0, "HUD Background"));
         this.buttonList.add(addSettingButton(ConfigHandler.text_shadow, 4, 1, 1, "Text Shadow"));
-        this.buttonList.add(sliderSize = new GuiSlider(5, getxCenter() - 150 / 2, getyCenter() + 86, "HUD Size : ", 0.1d, 4d, ConfigHandler.fkc_hud_size, this));
+        this.buttonList.add(new GuiSlider(5, getxCenter() - 150 / 2, getyCenter() + 86, "HUD Size : ", 0.1d, 4d, ConfigHandler.fkc_hud_size, this));
         if (parent != null) {
             this.buttonList.add(new GuiButton(200, getxCenter() - 150 / 2, getyCenter() + 110, 150, 20, "Done"));
         }
@@ -132,11 +131,10 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
 
     @Override
     public void onChangeSliderValue(GuiSlider slider) {
-        if (slider.id == sliderSize.id) {
-            final double newvalue = Math.floor(sliderSize.getValue() / 0.05d) * 0.05d;
+        if (slider.id == 5) {
+            final double newvalue = Math.floor(slider.getValue() / 0.05d) * 0.05d;
             ConfigHandler.fkc_hud_size = newvalue;
-            sliderSize.setValue(newvalue);
-
+            slider.setValue(newvalue);
         }
     }
 
