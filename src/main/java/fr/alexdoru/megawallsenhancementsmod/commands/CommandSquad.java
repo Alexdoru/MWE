@@ -93,7 +93,7 @@ public class CommandSquad extends CommandBase {
 
             HashMap<String, String> squad = SquadEvent.getSquad();
 
-            if (squad.size() == 0) {
+            if (squad.isEmpty()) {
                 addChatMessage(new ChatComponentText(getTagMW() +
                         EnumChatFormatting.RED + "No one in the squad right now."));
                 return;
