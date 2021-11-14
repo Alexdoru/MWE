@@ -31,30 +31,29 @@ public class GUIPlayerTabOverlayMixin extends Gui {
     @Shadow
     private long lastTimeOpened;
 
-    // replaced by Sk1er's Patcher 1.7.0
-    ///**
-    // * makes the tablist show up to 100 players instead of 80 in vanilla
-    // *
-    // * @author Alexdoru
-    // * @reason I want to see more people on the tablist
-    // */
-    //@SuppressWarnings("MethodReturnAlwaysConstant")
-    //@ModifyConstant(method = "renderPlayerlist", constant = @Constant(intValue = 80))
-    //private int changeMaxPlayers(int original) {
-    //    return 100;
-    //}
-    //
-    ///**
-    // * makes the columns show up to 25 players instead of 20 in vanilla
-    // *
-    // * @author Alexdoru
-    // * @reason I want to see more people on the tablist
-    // */
-    //@SuppressWarnings("MethodReturnAlwaysConstant")
-    //@ModifyConstant(method = "renderPlayerlist", constant = @Constant(intValue = 20))
-    //private int changeColumnLength(int original) {
-    //    return 25;
-    //}
+    /**
+     * makes the tablist show up to 100 players instead of 80 in vanilla
+     *
+     * @author Alexdoru
+     * @reason I want to see more people on the tablist
+     */
+    @SuppressWarnings("MethodReturnAlwaysConstant")
+    @ModifyConstant(method = "renderPlayerlist", constant = @Constant(intValue = 80))
+    private int changeMaxPlayers(int original) {
+        return 100;
+    }
+
+    /**
+     * makes the columns show up to 25 players instead of 20 in vanilla
+     *
+     * @author Alexdoru
+     * @reason I want to see more people on the tablist
+     */
+    @SuppressWarnings("MethodReturnAlwaysConstant")
+    @ModifyConstant(method = "renderPlayerlist", constant = @Constant(intValue = 20))
+    private int changeColumnLength(int original) {
+        return 25;
+    }
 
     /**
      * draws the scoreboard values with colors
