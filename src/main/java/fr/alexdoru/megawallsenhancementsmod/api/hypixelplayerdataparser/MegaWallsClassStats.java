@@ -210,7 +210,7 @@ public class MegaWallsClassStats {
         imsg.appendSibling(new ChatComponentText("\n" + "\n" + alignText(matrix1)))
                 .appendSibling(new ChatComponentText(centerLine(EnumChatFormatting.GREEN + "Arrows shot : " + EnumChatFormatting.GOLD + this.classname_arrows_fired
                         + EnumChatFormatting.GREEN + " Arrows hits : " + EnumChatFormatting.GOLD + this.classname_arrows_hit
-                        + EnumChatFormatting.GREEN + " Arrows accuracy : " + EnumChatFormatting.GOLD + arrowaccuracy + "%" + "\n")))
+                        + EnumChatFormatting.GREEN + " Arrows accuracy : " + EnumChatFormatting.GOLD + String.format("%.2f", arrowaccuracy) + "%" + "\n")))
                 .appendSibling(new ChatComponentText(EnumChatFormatting.BLUE + bar()));
         return imsg;
     }
