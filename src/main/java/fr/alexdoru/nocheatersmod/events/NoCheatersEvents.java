@@ -53,12 +53,11 @@ public class NoCheatersEvents {
         if (ticks < 39 || mc.thePlayer == null || !(event.entity instanceof EntityPlayer)) {
             return;
         }
-        EntityPlayer player = (EntityPlayer) event.entity;
-        NameUtil.handlePlayer(player, ConfigHandler.toggleicons, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
+        NameUtil.handlePlayer((EntityPlayer) event.entity, ConfigHandler.toggleicons, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
     }
 
     public static void scanCurrentWorld() {
-
+        // FIXME ca prend pas en compte la config warning msg et ca ajoute pas les icones au debut de la game
         long datenow = (new Date()).getTime();
 
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {

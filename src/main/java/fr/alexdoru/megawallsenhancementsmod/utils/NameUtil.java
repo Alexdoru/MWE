@@ -37,7 +37,7 @@ public class NameUtil {
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     public static void handlePlayer(String playername) {
-        EntityPlayer player = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(playername);
+        EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
         if (player != null) {
             NameUtil.removeNametagIcons(player);
             NameUtil.handlePlayer(player, true, false, false);
@@ -45,7 +45,7 @@ public class NameUtil {
     }
 
     public static void handlePlayer(EntityPlayer player, boolean areIconsToggled, boolean areWarningsToggled, boolean isAutoreportToggled) {
-
+        // FIXME it somehow doesn't add the icon on nametags sometimes and I don't know why, is it patcher ??
         String playerName = player.getName();
         String squadname = SquadEvent.getSquad().get(playerName);
 
@@ -93,8 +93,7 @@ public class NameUtil {
             }
 
             if (areWarningsToggled && printmsg) {
-                String chatmessage = NoCheatersEvents.createwarningmessage(datenow, uuid, playerName, wdr);
-                mc.thePlayer.addChatComponentMessage(IChatComponent.Serializer.jsonToComponent(chatmessage));
+                mc.thePlayer.addChatComponentMessage(IChatComponent.Serializer.jsonToComponent(NoCheatersEvents.createwarningmessage(datenow, uuid, playerName, wdr)));
             }
 
         } else if (areIconsToggled) { // check the scangame map
