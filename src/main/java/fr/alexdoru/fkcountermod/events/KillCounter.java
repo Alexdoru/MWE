@@ -355,7 +355,7 @@ public class KillCounter {
         return (team < 0 || team >= TEAMS);
     }
 
-    private static HashMap<String, Integer> sortByDecreasingValue1(HashMap<String, Integer> hashmapIn) {
+    public static HashMap<String, Integer> sortByDecreasingValue1(HashMap<String, Integer> hashmapIn) {
         List<Map.Entry<String, Integer>> list = new LinkedList<>(hashmapIn.entrySet());
         list.sort((o1, o2) -> (o2.getValue()).compareTo(o1.getValue()));
         HashMap<String, Integer> temp = new LinkedHashMap<>();
@@ -375,7 +375,7 @@ public class KillCounter {
         return temp;
     }
 
-    public static void spawnParticles(String killer) {
+    private static void spawnParticles(String killer) {
         EntityPlayer player = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(killer); // O(N)
         if (player == null) {
             return;

@@ -58,7 +58,7 @@ public class CommandFKCounter extends CommandBase {
                         .append(getTeamNameFromTeam(TEAM))
                         .append(EnumChatFormatting.WHITE)
                         .append(": ");
-                for (Iterator<Map.Entry<String, Integer>> iterator = getPlayers(TEAM).entrySet().iterator(); iterator.hasNext(); ) {
+                for (Iterator<Map.Entry<String, Integer>> iterator = sortByDecreasingValue1(getPlayers(TEAM)).entrySet().iterator(); iterator.hasNext(); ) {
                     Map.Entry<String, Integer> entry = iterator.next();
                     String name = entry.getKey();
                     String squadname = SquadEvent.getSquad().get(name);
@@ -83,38 +83,26 @@ public class CommandFKCounter extends CommandBase {
                 return;
             }
 
+            StringBuilder strBuilder = new StringBuilder();
+
             if (args.length == 1) {
 
-                String msg = "";
-
-                msg += getTeamNameFromTeam(RED_TEAM) + ": " + getKills(RED_TEAM) + ", ";
-                msg += getTeamNameFromTeam(GREEN_TEAM) + ": " + getKills(GREEN_TEAM) + ", ";
-                msg += getTeamNameFromTeam(YELLOW_TEAM) + ": " + getKills(YELLOW_TEAM) + ", ";
-                msg += getTeamNameFromTeam(BLUE_TEAM) + ": " + getKills(BLUE_TEAM);
-
-                mc.thePlayer.sendChatMessage(msg);
+                strBuilder.append(getTeamNameFromTeam(RED_TEAM)).append(": ").append(getKills(RED_TEAM)).append(", ")
+                        .append(getTeamNameFromTeam(GREEN_TEAM)).append(": ").append(getKills(GREEN_TEAM)).append(", ")
+                        .append(getTeamNameFromTeam(YELLOW_TEAM)).append(": ").append(getKills(YELLOW_TEAM)).append(", ")
+                        .append(getTeamNameFromTeam(BLUE_TEAM)).append(": ").append(getKills(BLUE_TEAM));
 
             } else if (args.length == 2 && args[1].equalsIgnoreCase("red")) {
-
-                String msg = getTeamNameFromTeam(RED_TEAM) + ": " + (getPlayers(RED_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
-                mc.thePlayer.sendChatMessage(msg);
-
+                strBuilder.append(getTeamNameFromTeam(RED_TEAM)).append(": ").append(sortByDecreasingValue1(getPlayers(RED_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
             } else if (args.length == 2 && args[1].equalsIgnoreCase("green")) {
-
-                String msg = getTeamNameFromTeam(GREEN_TEAM) + ": " + (getPlayers(GREEN_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
-                mc.thePlayer.sendChatMessage(msg);
-
+                strBuilder.append(getTeamNameFromTeam(GREEN_TEAM)).append(": ").append(sortByDecreasingValue1(getPlayers(GREEN_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
             } else if (args.length == 2 && args[1].equalsIgnoreCase("yellow")) {
-
-                String msg = getTeamNameFromTeam(YELLOW_TEAM) + ": " + (getPlayers(YELLOW_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
-                mc.thePlayer.sendChatMessage(msg);
-
+                strBuilder.append(getTeamNameFromTeam(YELLOW_TEAM)).append(": ").append(sortByDecreasingValue1(getPlayers(YELLOW_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
             } else if (args.length == 2 && args[1].equalsIgnoreCase("blue")) {
-
-                String msg = getTeamNameFromTeam(BLUE_TEAM) + ": " + (getPlayers(BLUE_TEAM).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
-                mc.thePlayer.sendChatMessage(msg);
-
+                strBuilder.append(getTeamNameFromTeam(BLUE_TEAM)).append(": ").append(sortByDecreasingValue1(getPlayers(BLUE_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
             }
+
+            mc.thePlayer.sendChatMessage(strBuilder.toString());
 
         } else if (args.length > 0 && args[0].equalsIgnoreCase("help")) {
 
@@ -129,12 +117,11 @@ public class CommandFKCounter extends CommandBase {
                 addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "This is not available right now"));
                 return;
             }
-            String msg = "";
-            msg += getColorPrefixFromTeam(RED_TEAM) + getTeamNameFromTeam(RED_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(RED_TEAM) + "\n";
-            msg += getColorPrefixFromTeam(GREEN_TEAM) + getTeamNameFromTeam(GREEN_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(GREEN_TEAM) + "\n";
-            msg += getColorPrefixFromTeam(YELLOW_TEAM) + getTeamNameFromTeam(YELLOW_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(YELLOW_TEAM) + "\n";
-            msg += getColorPrefixFromTeam(BLUE_TEAM) + getTeamNameFromTeam(BLUE_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(BLUE_TEAM);
-            addChatMessage(new ChatComponentText(msg));
+            String strBuilder = getColorPrefixFromTeam(RED_TEAM) + getTeamNameFromTeam(RED_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(RED_TEAM) + "\n" +
+                    getColorPrefixFromTeam(GREEN_TEAM) + getTeamNameFromTeam(GREEN_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(GREEN_TEAM) + "\n" +
+                    getColorPrefixFromTeam(YELLOW_TEAM) + getTeamNameFromTeam(YELLOW_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(YELLOW_TEAM) + "\n" +
+                    getColorPrefixFromTeam(BLUE_TEAM) + getTeamNameFromTeam(BLUE_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(BLUE_TEAM);
+            addChatMessage(new ChatComponentText(strBuilder));
 
         }
 
