@@ -101,20 +101,16 @@ public class FKCounterGui extends MyCachedGui {
         int x = absolutePos[0];
         int y = absolutePos[1];
 
-        int width = getWidth();
-        int height = getHeight();
+        int left = x - 2;
+        int top = y - 2;
+        int right = x + getWidth() + 1;
+        int bottom = y + getHeight();
 
-        int XtopLeft = x - 2;
-        int YtopLeft = y - 2;
-
-        int XtopRight = x + width + 1;
-        int YbotLeft = y + height;
-
-        drawRect(XtopLeft, YtopLeft, XtopRight, YbotLeft, DUMMY_BACKGROUND_COLOR);
-        drawHorizontalLine(XtopLeft, XtopRight, YtopLeft, Color.RED.getRGB());
-        drawHorizontalLine(XtopLeft, XtopRight, YbotLeft, Color.RED.getRGB());
-        drawVerticalLine(XtopLeft, YtopLeft, YbotLeft, Color.RED.getRGB());
-        drawVerticalLine(XtopRight, YtopLeft, YbotLeft, Color.RED.getRGB());
+        drawRect(left, top, right, bottom, DUMMY_BACKGROUND_COLOR);
+        drawHorizontalLine(left, right, top, Color.RED.getRGB());
+        drawHorizontalLine(left, right, bottom, Color.RED.getRGB());
+        drawVerticalLine(left, top, bottom, Color.RED.getRGB());
+        drawVerticalLine(right, top, bottom, Color.RED.getRGB());
 
         GlStateManager.pushMatrix();
         {
