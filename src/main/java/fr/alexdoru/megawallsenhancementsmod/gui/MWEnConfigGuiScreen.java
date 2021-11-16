@@ -3,16 +3,18 @@ package fr.alexdoru.megawallsenhancementsmod.gui;
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
+import fr.alexdoru.megawallsenhancementsmod.events.LowHPIndicator;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.io.IOException;
 
-public class MWEnConfigGuiScreen extends MyGuiScreen {
+public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
     private final int ButtonsHeight = 20;
     private final GuiScreen parent;
@@ -36,7 +38,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
         this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
         this.buttonList.add(new GuiButton(3, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
         this.buttonList.add(new GuiButton(11, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 3, buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
-        this.buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 5, 150, ButtonsHeight, getButtonDisplayString(4)));
+        this.buttonList.add(new GuiButton(17, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 4, buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
+        this.buttonList.add(new GuiSlider(18, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 5, buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
+        this.buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 7, 150, ButtonsHeight, getButtonDisplayString(4)));
 
         this.buttonList.add(new GuiButton(5, getxCenter() + buttonsWidth / 2 + 4, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(5)));
         this.buttonList.add(new GuiButton(6, getxCenter() + buttonsWidth / 2 + 4, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(6)));
@@ -68,13 +72,17 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
                 return "Show Arrow Hit HUD : " + getSuffix(ConfigHandler.show_ArrowHitHUD);
             case 11:
                 return "Show wither death time HUD : " + getSuffix(ConfigHandler.show_lastWitherHUD);
+            case 17:
+                return "Sound warning when low HP : " + getSuffix(ConfigHandler.playSoundLowHP);
             case 4:
                 return "Done";
+
             case 5:
             case 6:
             case 10:
             case 13:
                 return "Move HUD";
+
             case 7:
             case 8:
             case 12:
@@ -118,6 +126,12 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
             case 11:
                 ConfigHandler.show_lastWitherHUD = !ConfigHandler.show_lastWitherHUD;
                 break;
+            case 17:
+                ConfigHandler.playSoundLowHP = !ConfigHandler.playSoundLowHP;
+                if (ConfigHandler.playSoundLowHP) {
+                    mc.getSoundHandler().playSound(PositionedSoundRecord.create(LowHPIndicator.lowHPSound, 1.0F));
+                }
+                break;
             case 4:
                 mc.displayGuiScreen(parent);
                 break;
@@ -156,6 +170,13 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle("Mega Walls Enhancements v" + MegaWallsEnhancementsMod.version, 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 6);
         super.drawScreen(mouseX, mouseY, partialTicks);
+    }
+
+    @Override
+    public void onChangeSliderValue(GuiSlider slider) {
+        if (slider.id == 18) {
+            ConfigHandler.healthThreshold = slider.getValue() / 100d;
+        }
     }
 
 }
