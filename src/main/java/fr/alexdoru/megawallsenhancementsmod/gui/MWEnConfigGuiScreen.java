@@ -175,7 +175,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
     @Override
     public void onChangeSliderValue(GuiSlider slider) {
         if (slider.id == 18) {
-            ConfigHandler.healthThreshold = slider.getValue() / 100d;
+            ConfigHandler.healthThreshold = Math.floor(slider.getValue()) / 100d;
         }
     }
 
