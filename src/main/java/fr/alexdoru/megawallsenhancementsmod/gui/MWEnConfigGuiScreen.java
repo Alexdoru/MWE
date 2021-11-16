@@ -22,7 +22,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen {
     }
 
     @Override
-    public void initGui() {
+    public void initGui() { // TODO hover tooltips with explanations ?
         /*
          * Defines the button list
          */

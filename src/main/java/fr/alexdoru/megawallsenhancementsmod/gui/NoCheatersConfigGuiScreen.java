@@ -23,7 +23,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     }
 
     @Override
-    public void initGui() {
+    public void initGui() { // TODO hover tooltips with explanations ?
         /*
          * Defines the button list
          */
