@@ -3,10 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod;
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.commands.*;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
-import fr.alexdoru.megawallsenhancementsmod.events.KeybindingsEvent;
-import fr.alexdoru.megawallsenhancementsmod.events.MWGameStatsEvent;
-import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.events.*;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -43,6 +40,7 @@ public class MegaWallsEnhancementsMod {
         MinecraftForge.EVENT_BUS.register(new ChatEvents());
         MinecraftForge.EVENT_BUS.register(new SquadEvent());
         MinecraftForge.EVENT_BUS.register(new KillCounter());
+        MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
         MinecraftForge.EVENT_BUS.register(new KeybindingsEvent());
         MinecraftForge.EVENT_BUS.register(new MWGameStatsEvent());
 
@@ -64,7 +62,6 @@ public class MegaWallsEnhancementsMod {
 
     }
 
-    // TODO play a sound when low hp
     // TODO make gui with squad HP
     // TODO stalk ban command
     // TODO hud with food in inventory
