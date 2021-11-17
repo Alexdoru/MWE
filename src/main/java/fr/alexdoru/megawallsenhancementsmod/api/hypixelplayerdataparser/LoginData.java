@@ -49,10 +49,8 @@ public class LoginData {
         String monthlyRankColor = JsonUtil.getString(playerData, "monthlyRankColor");
 
         if (prefix != null) {
-            if ("\u00a7[OWNER]".equals(rank)) {
-                this.formattedname = EnumChatFormatting.RED + "[OWNER]" + " " + this.displayname;
-                return;
-            }
+            this.formattedname = prefix + " " + this.displayname;
+            return;
         }
 
         if (rank != null) {
@@ -71,6 +69,7 @@ public class LoginData {
                     return;
                 case "YOUTUBER":
                     this.formattedname = EnumChatFormatting.RED + "[" + EnumChatFormatting.WHITE + "YOUTUBE" + EnumChatFormatting.RED + "]" + " " + this.displayname;
+                    return;
                 case "NORMAL": // the player used to have a rank in the hypixel staff but got demoted
                     break;
                 default:
