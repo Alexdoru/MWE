@@ -29,10 +29,10 @@ public class FKCounterGui extends MyCachedGui {
             + EnumChatFormatting.YELLOW + "3" + EnumChatFormatting.DARK_GRAY + " / "
             + EnumChatFormatting.BLUE + "4";
     /*used as an example when in the settings*/
-    private static final String DUMMY_TEXT_PLAYERS = EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 5 - RedPlayer 1\n"
-            + EnumChatFormatting.GREEN + "Green" + EnumChatFormatting.WHITE + ": 12 - GreenPlayer 2\n"
-            + EnumChatFormatting.YELLOW + "Yellow" + EnumChatFormatting.WHITE + ": 6 - YellowPlayer 3\n"
-            + EnumChatFormatting.BLUE + "Blue" + EnumChatFormatting.WHITE + ": 9 - BluePlayer 4";
+    private static final String DUMMY_TEXT_PLAYERS = EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 12 " + EnumChatFormatting.GRAY + "- RedPlayer (5)\n"
+            + EnumChatFormatting.GREEN + "Green" + EnumChatFormatting.WHITE + ": 9 " + EnumChatFormatting.GRAY + "- GreenPlayer (4)\n"
+            + EnumChatFormatting.YELLOW + "Yellow" + EnumChatFormatting.WHITE + ": 5 " + EnumChatFormatting.GRAY + "- YellowPlayer (3)\n"
+            + EnumChatFormatting.BLUE + "Blue" + EnumChatFormatting.WHITE + ": 4 " + EnumChatFormatting.GRAY + "- BluePlayer (2)";
 
     private final int BACKGROUND_COLOR = new Color(0, 0, 0, 64).getRGB();
     private final int DUMMY_BACKGROUND_COLOR = new Color(255, 255, 255, 127).getRGB();
@@ -167,9 +167,9 @@ public class FKCounterGui extends MyCachedGui {
                     if (tuple != null) {
                         String squadname = SquadEvent.getSquad().get(tuple.getFirst());
                         if (squadname != null) {
-                            strBuilder.append(" - ").append(squadname).append(" ").append(tuple.getSecond());
+                            strBuilder.append(EnumChatFormatting.GRAY).append(" - ").append(squadname).append(" (").append(tuple.getSecond()).append(")");
                         } else {
-                            strBuilder.append(" - ").append(tuple.getFirst()).append(" ").append(tuple.getSecond());
+                            strBuilder.append(EnumChatFormatting.GRAY).append(" - ").append(tuple.getFirst()).append(" (").append(tuple.getSecond()).append(")");
                         }
                     }
                     i++;
