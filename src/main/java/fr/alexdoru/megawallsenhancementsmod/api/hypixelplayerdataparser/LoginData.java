@@ -49,7 +49,7 @@ public class LoginData {
         String monthlyRankColor = JsonUtil.getString(playerData, "monthlyRankColor");
 
         if (prefix != null) {
-            this.formattedname = prefix + " " + this.displayname;
+            this.formattedname = prefix.replace("§", "\u00a7") + " " + this.displayname;
             return;
         }
 
