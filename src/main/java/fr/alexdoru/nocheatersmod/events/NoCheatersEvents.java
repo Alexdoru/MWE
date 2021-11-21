@@ -57,7 +57,7 @@ public class NoCheatersEvents {
     }
 
     public static void scanCurrentWorld() {
-        // FIXME ca prend pas en compte la config warning msg et ca ajoute pas les icones au debut de la game
+
         long datenow = (new Date()).getTime();
 
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
@@ -74,7 +74,21 @@ public class NoCheatersEvents {
             }
 
             if (wdr != null) {
-                addChatMessage(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr)));
+
+                if (ConfigHandler.toggleicons) {
+                    EntityPlayer player = mc.theWorld.getPlayerEntityByName(playerName);
+                    if (wdr.hacks.contains("bhop")) { // player bhops
+                        player.addPrefix(NameUtil.iprefix_bhop);
+                    } else if (!(wdr.isOnlyStalking())) { // player is cheating
+                        player.addPrefix(NameUtil.iprefix);
+                    }
+                    player.refreshDisplayName();
+                }
+
+                if (ConfigHandler.togglewarnings) {
+                    addChatMessage(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr)));
+                }
+
                 if (ConfigHandler.toggleautoreport && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && datenow - wdr.timestamp < ConfigHandler.timeAutoReport) {
                     String finalUuid = uuid;
                     new DelayedTask(() -> {
@@ -83,6 +97,7 @@ public class NoCheatersEvents {
                     }, 20 * nbReport);
                     nbReport++;
                 }
+
             }
 
         }
