@@ -25,9 +25,9 @@ import static fr.alexdoru.nocheatersmod.events.NoCheatersEvents.nbReport;
 
 public class NameUtil {
 
-    private static final IChatComponent iprefix = new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + "\u26a0 ");
+    public static final IChatComponent iprefix = new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + "\u26a0 ");
     public static final String prefix = iprefix.getFormattedText();
-    private static final IChatComponent iprefix_bhop = new ChatComponentText(EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD + "\u26a0 ");
+    public static final IChatComponent iprefix_bhop = new ChatComponentText(EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD + "\u26a0 ");
     private static final String prefix_bhop = iprefix_bhop.getFormattedText();
     private static final IChatComponent iprefix_scan = new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + "" + EnumChatFormatting.BOLD + "\u26a0 ");
     private static final String prefix_scan = iprefix_scan.getFormattedText();
@@ -94,7 +94,7 @@ public class NameUtil {
 
             if (areWarningsToggled && printmsg) {
                 mc.thePlayer.addChatComponentMessage(IChatComponent.Serializer.jsonToComponent(NoCheatersEvents.createwarningmessage(datenow, uuid, playerName, wdr)));
-            }
+            }// TODO ca affiche le msg avec report again meme si ca viens de le auto report
 
         } else if (areIconsToggled) { // check the scangame map
 
