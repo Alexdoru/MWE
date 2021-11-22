@@ -14,7 +14,7 @@ public class ConfigHandler {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
 
-    public static Configuration config;
+    private static Configuration config;
     private static final String CATEGORY_FKCounter = "Final Kill Counter";
     private static final String CATEGORY_MWENh = "MegaWallsEnhancements";
     private static final String CATEGORY_GUI = "GUI";
@@ -57,6 +57,7 @@ public class ConfigHandler {
     public static long timeBetweenReports;
     public static long timeAutoReport;
 
+    // TODO ajouter un truc pour supprimer les reports qui sont plus vieux que x jours allant justqu'a 365 max
     public static void preinit(File file) {
         config = new Configuration(file);
         syncConfig(true, true, false);
@@ -101,8 +102,8 @@ public class ConfigHandler {
         Property pToggleicons = config.get(CATEGORY_NOCHEATERS, "Toggle Icons", true, "Display warning symbol on nametags of reported players");
         Property pTogglewarnings = config.get(CATEGORY_NOCHEATERS, "Toggle Warnings", true, "Gives warning messages in chat for reported players");
         Property pToggleautoreport = config.get(CATEGORY_NOCHEATERS, "Toggle Autoreport", false, "Automatically report previously reported players when they are in your lobby");
-        Property pTimeBetweenReports = config.get(CATEGORY_NOCHEATERS, "Time between reports", 6, "Time before the mod suggests to report the player again (hours)");
-        Property pTimeAutoReport = config.get(CATEGORY_NOCHEATERS, "Time for autoreports", 336, "It won't autoreport players whose last report is older than this (hours)");
+        Property pTimeBetweenReports = config.get(CATEGORY_NOCHEATERS, "Time between reports", 12, "Time before the mod suggests to report the player again (hours)");
+        Property pTimeAutoReport = config.get(CATEGORY_NOCHEATERS, "Time for autoreports", 14, "It won't autoreport players whose last report is older than this (days)");
 
         /*Set the Order in which the config entries appear in the config file */
         List<String> pOrderFKC = new ArrayList<>();
@@ -178,8 +179,8 @@ public class ConfigHandler {
             toggleicons = pToggleicons.getBoolean();
             togglewarnings = pTogglewarnings.getBoolean();
             toggleautoreport = pToggleautoreport.getBoolean();
-            timeBetweenReports = 3600L * 1000L * ((long) pTimeBetweenReports.getInt());
-            timeAutoReport = 3600L * 1000L * ((long) pTimeAutoReport.getInt());
+            timeBetweenReports = Math.max(6L * 3600L * 1000L, Math.min(3600L * 1000L * ((long) pTimeBetweenReports.getInt()), 48L * 3600L * 1000L));
+            timeAutoReport = Math.max(24L * 3600L * 1000L, Math.min(24L * 3600L * 1000L * ((long) pTimeAutoReport.getInt()), 30L * 24L * 3600L * 1000L));
         }
 
         if (saveFieldsToConfig) {
@@ -224,8 +225,8 @@ public class ConfigHandler {
             pToggleicons.set(toggleicons);
             pTogglewarnings.set(togglewarnings);
             pToggleautoreport.set(toggleautoreport);
-            pTimeBetweenReports.set((int) timeBetweenReports / 3600000);
-            pTimeAutoReport.set((int) timeAutoReport / 3600000);
+            pTimeBetweenReports.set((int) timeBetweenReports / (3600 * 1000));
+            pTimeAutoReport.set((int) timeAutoReport / (24 * 3600 * 1000));
         }
 
         /*automatically saves the values to the config file if any of the values change*/
