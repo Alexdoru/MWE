@@ -94,22 +94,22 @@ public class CommandSquad extends CommandBase {
             HashMap<String, String> squad = SquadEvent.getSquad();
 
             if (squad.isEmpty()) {
-                addChatMessage(new ChatComponentText(EnumChatFormatting.BLUE + "-----------------------------\n"
-                        + EnumChatFormatting.RED + "You are currently not in a squad.\n"
-                        + EnumChatFormatting.BLUE + "-----------------------------"));
+                addChatMessage(new ChatComponentText(getTagMW() +
+                        EnumChatFormatting.RED + "No one in the squad right now."));
                 return;
             }
 
-            IChatComponent imsg = new ChatComponentText(EnumChatFormatting.BLUE + "-----------------------------\n"
-                    + getTagMW() + EnumChatFormatting.DARK_GREEN + "Squad members (" + squad.size() + ")\n\n");
+            IChatComponent imsg = new ChatComponentText(getTagMW() + EnumChatFormatting.GREEN + "Players in your squad : \n");
 
             for (Entry<String, String> entry : squad.entrySet()) {
+
                 String displayname = entry.getKey();
                 String fakename = entry.getValue();
                 imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + "- " + EnumChatFormatting.GOLD + displayname
                         + (displayname.equals(fakename) ? "" : EnumChatFormatting.GREEN + " renamed as : " + EnumChatFormatting.GOLD + entry.getValue()) + "\n"));
+
             }
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.BLUE + "-----------------------------"));
+
             addChatMessage(imsg);
 
         } else if (args[0].equalsIgnoreCase("remove")) {
@@ -122,6 +122,7 @@ public class CommandSquad extends CommandBase {
             for (int i = 1; i < args.length; i++) {
 
                 if (SquadEvent.removePlayer(args[i])) {
+
                     addChatMessage(new ChatComponentText(getTagMW() +
                             EnumChatFormatting.GREEN + "Removed " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " from the squad."));
                 } else {
