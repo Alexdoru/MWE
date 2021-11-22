@@ -1,5 +1,7 @@
 package fr.alexdoru.nocheatersmod.data;
 
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,8 +38,9 @@ public class WdredPlayers {
     }
 
     public static void loadReportedPlayers() {
-        if (!wdrsFile.exists())
+        if (!wdrsFile.exists()) {
             return;
+        }
         try {
 
             long datenow = (new Date()).getTime();
@@ -52,6 +55,10 @@ public class WdredPlayers {
                         timestamp = Long.parseLong(split[1]);
                     } catch (Exception e) {
                         e.printStackTrace();
+                    }
+
+                    if (ConfigHandler.deleteReports && datenow > timestamp + ConfigHandler.timeDeleteReport) {
+                        continue;
                     }
 
                     ArrayList<String> hacks = transformOldReports(split, datenow);

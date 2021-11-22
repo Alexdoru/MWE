@@ -56,8 +56,9 @@ public class ConfigHandler {
     /*those fields are in milliseconds*/
     public static long timeBetweenReports;
     public static long timeAutoReport;
+    public static boolean deleteReports;
+    public static long timeDeleteReport;
 
-    // TODO ajouter un truc pour supprimer les reports qui sont plus vieux que x jours allant justqu'a 365 max
     public static void preinit(File file) {
         config = new Configuration(file);
         syncConfig(true, true, false);
@@ -104,6 +105,8 @@ public class ConfigHandler {
         Property pToggleautoreport = config.get(CATEGORY_NOCHEATERS, "Toggle Autoreport", false, "Automatically report previously reported players when they are in your lobby");
         Property pTimeBetweenReports = config.get(CATEGORY_NOCHEATERS, "Time between reports", 12, "Time before the mod suggests to report the player again (hours)");
         Property pTimeAutoReport = config.get(CATEGORY_NOCHEATERS, "Time for autoreports", 14, "It won't autoreport players whose last report is older than this (days)");
+        Property pdeleteReports = config.get(CATEGORY_NOCHEATERS, "Delete Old Report", false, "Deletes reports older than the specified value");
+        Property ptimeDeleteReport = config.get(CATEGORY_NOCHEATERS, "Time delete reports", 365, "Reports older than this will be deleted on game start (days)");
 
         /*Set the Order in which the config entries appear in the config file */
         List<String> pOrderFKC = new ArrayList<>();
@@ -147,6 +150,8 @@ public class ConfigHandler {
         pOrderNOCHEATERS.add(pToggleautoreport.getName());
         pOrderNOCHEATERS.add(pTimeBetweenReports.getName());
         pOrderNOCHEATERS.add(pTimeAutoReport.getName());
+        pOrderNOCHEATERS.add(pdeleteReports.getName());
+        pOrderNOCHEATERS.add(ptimeDeleteReport.getName());
         config.setCategoryPropertyOrder(CATEGORY_NOCHEATERS, pOrderNOCHEATERS);
 
         /*sets the fields of this class to the fields in the properties*/
@@ -181,6 +186,9 @@ public class ConfigHandler {
             toggleautoreport = pToggleautoreport.getBoolean();
             timeBetweenReports = Math.max(6L * 3600L * 1000L, Math.min(3600L * 1000L * ((long) pTimeBetweenReports.getInt()), 48L * 3600L * 1000L));
             timeAutoReport = Math.max(24L * 3600L * 1000L, Math.min(24L * 3600L * 1000L * ((long) pTimeAutoReport.getInt()), 30L * 24L * 3600L * 1000L));
+            deleteReports = pdeleteReports.getBoolean();
+            timeDeleteReport = 24L * 3600L * 1000L * ((long) ptimeDeleteReport.getInt());
+
         }
 
         if (saveFieldsToConfig) {
@@ -225,8 +233,11 @@ public class ConfigHandler {
             pToggleicons.set(toggleicons);
             pTogglewarnings.set(togglewarnings);
             pToggleautoreport.set(toggleautoreport);
-            pTimeBetweenReports.set((int) timeBetweenReports / (3600 * 1000));
-            pTimeAutoReport.set((int) timeAutoReport / (24 * 3600 * 1000));
+            pTimeBetweenReports.set((int) (timeBetweenReports / (3600L * 1000L)));
+            pTimeAutoReport.set((int) (timeAutoReport / (24L * 3600L * 1000L)));
+            pdeleteReports.set(deleteReports);
+            ptimeDeleteReport.set((int) (timeDeleteReport / (24L * 3600L * 1000L)));
+
         }
 
         /*automatically saves the values to the config file if any of the values change*/
