@@ -5,9 +5,12 @@ import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
@@ -23,7 +26,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     }
 
     @Override
-    public void initGui() { // TODO hover tooltips with explanations ?
+    public void initGui() {
         /*
          * Defines the button list
          */
@@ -51,6 +54,20 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
             default:
                 return "invalid button id";
         }
+    }
+
+    @Override
+    public List<String> getTooltipText(int id) {
+        List<String> textLines = new ArrayList<>();
+        switch (id) {
+            case 2:
+                textLines.add(EnumChatFormatting.GREEN + "Automatically reports cheaters whose last report is older than the time between report and more recent than the time max autoreport");
+                break;
+            case 6:
+                textLines.add(EnumChatFormatting.GREEN + "Deletes reports older than the specified value when the game starts");
+                break;
+        }
+        return textLines;
     }
 
     @Override
@@ -82,6 +99,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle("NoCheaters v" + NoCheatersMod.version, 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 6);
         super.drawScreen(mouseX, mouseY, partialTicks);
+        drawTooltips(mouseX, mouseY);
     }
 
     @Override
