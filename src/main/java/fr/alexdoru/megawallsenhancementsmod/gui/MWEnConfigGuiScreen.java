@@ -10,9 +10,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
@@ -24,7 +27,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
     }
 
     @Override
-    public void initGui() { // TODO hover tooltips with explanations ?
+    public void initGui() {
         /*
          * Defines the button list
          */
@@ -91,6 +94,39 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             default:
                 return "no display text for this button id";
         }
+    }
+
+    @Override
+    public List<String> getTooltipText(int id) {
+        List<String> textLines = new ArrayList<>();
+        switch (id) {
+            case 16:
+                textLines.add(EnumChatFormatting.GREEN + "Spawns angry villager particles when the player gets a final kill");
+                break;
+            case 15:
+                textLines.add(EnumChatFormatting.GREEN + "Toggles all icons on nametags and in the tablist");
+                break;
+            case 0:
+                textLines.add(EnumChatFormatting.GREEN + "Makes the coin messages shorter by removing the network booster info");
+                textLines.add("");
+                textLines.add(EnumChatFormatting.GOLD + "+100 coins! (Alexdoru's Network booster)" + EnumChatFormatting.AQUA + " FINAL KILL");
+                textLines.add("Will become : ");
+                textLines.add(EnumChatFormatting.GOLD + "+100 coins!" + EnumChatFormatting.AQUA + " FINAL KILL");
+                break;
+            case 9:
+                textLines.add(EnumChatFormatting.GREEN + "When you play the Hunter class it prints a HUD and plays a sound before getting strength");
+                break;
+            case 1:
+                textLines.add(EnumChatFormatting.GREEN + "When there is a shout that respects the following patterns it will print a report suggestion in chat");
+                textLines.add(EnumChatFormatting.GOLD + "[SHOUT] " + EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "Alexdoru is bhoping");
+                textLines.add(EnumChatFormatting.GOLD + "[SHOUT] " + EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "wdr playername cheat");
+                textLines.add(EnumChatFormatting.GOLD + "[SHOUT] " + EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "report playername cheat");
+                break;
+            case 11:
+                textLines.add(EnumChatFormatting.GREEN + "When there is one wither alive it draws a HUD with the time it takes for the last wither to die");
+                break;
+        }
+        return textLines;
     }
 
     @Override
@@ -170,6 +206,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle("Mega Walls Enhancements v" + MegaWallsEnhancementsMod.version, 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 6);
         super.drawScreen(mouseX, mouseY, partialTicks);
+        drawTooltips(mouseX, mouseY);
     }
 
     @Override
