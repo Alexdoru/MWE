@@ -28,9 +28,9 @@ public class NameUtil {
     public static final IChatComponent iprefix = new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + "\u26a0 ");
     public static final String prefix = iprefix.getFormattedText();
     public static final IChatComponent iprefix_bhop = new ChatComponentText(EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD + "\u26a0 ");
-    private static final String prefix_bhop = iprefix_bhop.getFormattedText();
+    public static final String prefix_bhop = iprefix_bhop.getFormattedText();
     private static final IChatComponent iprefix_scan = new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + "" + EnumChatFormatting.BOLD + "\u26a0 ");
-    private static final String prefix_scan = iprefix_scan.getFormattedText();
+    public static final String prefix_scan = iprefix_scan.getFormattedText();
     private static final IChatComponent isquadprefix = new ChatComponentText(EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] ");
     public static final String squadprefix = isquadprefix.getFormattedText();
     private static final List<IChatComponent> allPrefix = Arrays.asList(iprefix, iprefix_bhop, iprefix_scan, isquadprefix);
