@@ -49,6 +49,8 @@ public class NameUtil {
         String playerName = player.getName();
         String squadname = SquadEvent.getSquad().get(playerName);
 
+        //player.addSuffix(); // TODO add finals counts to nametags
+
         if (areIconsToggled && squadname != null) {
             player.addPrefix(isquadprefix);
             player.refreshDisplayName();
