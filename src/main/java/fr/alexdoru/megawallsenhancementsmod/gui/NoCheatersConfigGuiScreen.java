@@ -28,10 +28,12 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
          * Defines the button list
          */
         int buttonsWidth = 200;
-        this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4) * 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
-        this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
-        this.buttonList.add(new GuiSlider(4, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2, buttonsWidth, 20, "Time between reports : ", " hours", 6d, 48d, ConfigHandler.timeBetweenReports / 3600000f, false, true, this));
-        this.buttonList.add(new GuiSlider(5, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), buttonsWidth, 20, "Time max autoreport : ", " days", 1d, 30d, ConfigHandler.timeAutoReport / 86400000f, false, true, this));
+        this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4) * 3, buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
+        this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4) * 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
+        this.buttonList.add(new GuiSlider(4, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4), buttonsWidth, 20, "Time between reports : ", " hours", 6d, 48d, ConfigHandler.timeBetweenReports / 3600000f, false, true, this));
+        this.buttonList.add(new GuiSlider(5, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2, buttonsWidth, 20, "Time max autoreport : ", " days", 1d, 30d, ConfigHandler.timeAutoReport / (24f * 3600f * 1000f), false, true, this));
+        this.buttonList.add(new GuiButton(6, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(6)));
+        this.buttonList.add(new GuiSlider(7, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
         this.buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 4, 150, ButtonsHeight, getButtonDisplayString(3)));
         super.initGui();
     }
@@ -42,6 +44,8 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 return "Warning messages in chat : " + getSuffix(ConfigHandler.togglewarnings);
             case 2:
                 return "Autoreport cheaters : " + getSuffix(ConfigHandler.toggleautoreport);
+            case 6:
+                return "Delete old reports : " + getSuffix(ConfigHandler.deleteReports);
             case 3:
                 return parent == null ? "Close" : "Done";
             default:
@@ -64,6 +68,9 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
             case 3:
                 mc.displayGuiScreen(parent);
                 break;
+            case 6:
+                ConfigHandler.deleteReports = !ConfigHandler.deleteReports;
+                break;
             default:
                 break;
         }
@@ -85,6 +92,9 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 break;
             case 5:
                 ConfigHandler.timeAutoReport = Math.max(24L * 3600L * 1000L, Math.min(24L * 3600L * 1000L * ((long) slider.getValue()), 30L * 24L * 3600L * 1000L));
+                break;
+            case 7:
+                ConfigHandler.timeDeleteReport = 24L * 3600L * 1000L * ((long) slider.getValue());
                 break;
         }
     }
