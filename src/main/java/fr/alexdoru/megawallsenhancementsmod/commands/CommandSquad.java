@@ -67,7 +67,7 @@ public class CommandSquad extends CommandBase {
         } else if (args[0].equalsIgnoreCase("addmyself")) {
 
             if (args.length < 2) {
-                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : /squad <addmyself> <myNick>"));
+                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : /squad addmyself <myNick> <as(optional)> <NewName(optional)>"));
                 return;
             }
 
