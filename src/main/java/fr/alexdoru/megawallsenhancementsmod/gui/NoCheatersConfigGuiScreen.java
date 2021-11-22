@@ -64,7 +64,8 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 textLines.add(EnumChatFormatting.GREEN + "Automatically reports cheaters whose last report is older than the time between report and more recent than the time max autoreport");
                 break;
             case 6:
-                textLines.add(EnumChatFormatting.GREEN + "Deletes reports older than the specified value when the game starts");
+                textLines.add(EnumChatFormatting.GREEN + "Deletes reports older than the specified value");
+                textLines.add(EnumChatFormatting.GREEN + "The deletion occurs when you start minecraft");
                 break;
         }
         return textLines;

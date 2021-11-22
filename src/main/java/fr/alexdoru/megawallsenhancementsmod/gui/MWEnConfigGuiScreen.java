@@ -62,7 +62,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 16:
                 return "Strength particule HBR DRE : " + getSuffix(ConfigHandler.strengthParticules);
             case 15:
-                return "Icons on names " + NameUtil.squadprefix + NameUtil.prefix + " : " + getSuffix(ConfigHandler.toggleicons);
+                return "Icons on names : " + getSuffix(ConfigHandler.toggleicons);
             case 0:
                 return "Shorten coin messages : " + getSuffix(ConfigHandler.shortencoinmessage);
             case 9:
@@ -105,6 +105,11 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 15:
                 textLines.add(EnumChatFormatting.GREEN + "Toggles all icons on nametags and in the tablist");
+                textLines.add("");
+                textLines.add(NameUtil.squadprefix + EnumChatFormatting.YELLOW + "Players in your squad");
+                textLines.add(NameUtil.prefix_bhop + EnumChatFormatting.YELLOW + "Players reported for bhop");
+                textLines.add(NameUtil.prefix + EnumChatFormatting.YELLOW + "Players reported for other cheats");
+                textLines.add(NameUtil.prefix_scan + EnumChatFormatting.YELLOW + "Players flagged by the /scangame command");
                 break;
             case 0:
                 textLines.add(EnumChatFormatting.GREEN + "Makes the coin messages shorter by removing the network booster info");
@@ -122,8 +127,11 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.GOLD + "[SHOUT] " + EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "wdr playername cheat");
                 textLines.add(EnumChatFormatting.GOLD + "[SHOUT] " + EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "report playername cheat");
                 break;
+            case 2:
+                textLines.add(EnumChatFormatting.GREEN + "Displays a HUD with the cooldown of the /kill command in Mega Walls");
+                break;
             case 11:
-                textLines.add(EnumChatFormatting.GREEN + "When there is one wither alive it draws a HUD with the time it takes for the last wither to die");
+                textLines.add(EnumChatFormatting.GREEN + "Displays a HUD with the time it takes for the last wither to die");
                 break;
         }
         return textLines;
