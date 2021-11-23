@@ -114,7 +114,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 0:
                 textLines.add(EnumChatFormatting.GREEN + "Makes the coin messages shorter by removing the network booster info");
                 textLines.add("");
-                textLines.add(EnumChatFormatting.GOLD + "+100 coins! (Alexdoru's Network booster)" + EnumChatFormatting.AQUA + " FINAL KILL");
+                textLines.add(EnumChatFormatting.GOLD + "+100 coins! (hypixel's Network booster)" + EnumChatFormatting.AQUA + " FINAL KILL");
                 textLines.add("Will become : ");
                 textLines.add(EnumChatFormatting.GOLD + "+100 coins!" + EnumChatFormatting.AQUA + " FINAL KILL");
                 break;
