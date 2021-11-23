@@ -31,8 +31,9 @@ public class NoCheatersEvents {
 
     @SubscribeEvent
     public void onGui(GuiOpenEvent event) {
-        if (event.gui instanceof GuiDownloadTerrain)
+        if (event.gui instanceof GuiDownloadTerrain) {
             ticks = 0;
+        }
     }
 
     @SubscribeEvent
@@ -85,9 +86,7 @@ public class NoCheatersEvents {
                     player.refreshDisplayName();
                 }
 
-                if (ConfigHandler.togglewarnings) {
-                    addChatMessage(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr)));
-                }
+                boolean gotautoreported = false;
 
                 if (ConfigHandler.toggleautoreport && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && datenow - wdr.timestamp < ConfigHandler.timeAutoReport) {
                     String finalUuid = uuid;
@@ -96,6 +95,11 @@ public class NoCheatersEvents {
                         nbReport--;
                     }, 20 * nbReport);
                     nbReport++;
+                    gotautoreported = true;
+                }
+
+                if (ConfigHandler.togglewarnings) {
+                    addChatMessage(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr, gotautoreported)));
                 }
 
             }
@@ -123,7 +127,7 @@ public class NoCheatersEvents {
             }
 
             if (wdr != null) {
-                list.add(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr)));
+                list.add(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr, false)));
                 if (ConfigHandler.toggleautoreport && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && datenow - wdr.timestamp < ConfigHandler.timeAutoReport) {
                     String finalUuid = uuid;
                     new DelayedTask(() -> {
@@ -140,7 +144,7 @@ public class NoCheatersEvents {
 
     }
 
-    public static String createwarningmessage(long datenow, String uuid, String playername, WDR wdr) {
+    public static String createwarningmessage(long datenow, String uuid, String playername, WDR wdr, boolean forceNoReportAgain) {
         // format for timestamps reports : UUID timestamplastreport -serverID timeonreplay playernameduringgame timestampforcheat specialcheat cheat1 cheat2 cheat3 etc
         if (wdr.hacks.get(0).charAt(0) == '-') { // is a timestamped report
 
@@ -149,7 +153,7 @@ public class NoCheatersEvents {
 
             String message = "[\"\",{\"text\":\"Warning : \",\"color\":\"red\"}" + formattedmessageArray[0] + ",{\"text\":\" joined,\",\"color\":\"gray\"}";
 
-            if (datenow - wdr.timestamp > ConfigHandler.timeBetweenReports) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
+            if (!forceNoReportAgain && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
 
                 message = message + ",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain " + uuid + " " + playername + "\"}"
 

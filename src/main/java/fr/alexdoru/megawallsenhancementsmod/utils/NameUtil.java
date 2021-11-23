@@ -71,6 +71,8 @@ public class NameUtil {
 
         if (wdr != null) { // player was reported
 
+            boolean gotautoreported = false;
+
             if (isAutoreportToggled && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && datenow - wdr.timestamp < ConfigHandler.timeAutoReport) {
                 String finalUuid = uuid;
                 new DelayedTask(() -> {
@@ -78,6 +80,7 @@ public class NameUtil {
                     nbReport--;
                 }, 20 * nbReport);
                 nbReport++;
+                gotautoreported = true;
             }
 
             if (wdr.hacks.contains("bhop")) { // player bhops
@@ -95,8 +98,8 @@ public class NameUtil {
             }
 
             if (areWarningsToggled && printmsg) {
-                mc.thePlayer.addChatComponentMessage(IChatComponent.Serializer.jsonToComponent(NoCheatersEvents.createwarningmessage(datenow, uuid, playerName, wdr)));
-            }// TODO ca affiche le msg avec report again meme si ca viens de le auto report
+                mc.thePlayer.addChatComponentMessage(IChatComponent.Serializer.jsonToComponent(NoCheatersEvents.createwarningmessage(datenow, uuid, playerName, wdr, gotautoreported)));
+            }
 
         } else if (areIconsToggled) { // check the scangame map
 
