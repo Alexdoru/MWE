@@ -151,17 +151,15 @@ public class NoCheatersEvents {
             String[] formattedmessageArray = createPlayerTimestampedMsg(playername, wdr, "light_purple");
             String allCheats = formattedmessageArray[1];
 
-            String message = "[\"\",{\"text\":\"Warning : \",\"color\":\"red\"}" + formattedmessageArray[0] + ",{\"text\":\" joined,\",\"color\":\"gray\"}";
+            StringBuilder stringBuilder = new StringBuilder().append("[\"\",{\"text\":\"Warning : \",\"color\":\"red\"}").append(formattedmessageArray[0]).append(",{\"text\":\" joined,\",\"color\":\"gray\"}");
 
             if (!forceNoReportAgain && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
-
-                message = message + ",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain " + uuid + " " + playername + "\"}"
-
-                        + ",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click here to report this player again\",\"color\":\"yellow\"}]}}";
-
+                stringBuilder.append(",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain ")
+                        .append(uuid).append(" ").append(playername).append("\"}")
+                        .append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click here to report this player again\",\"color\":\"yellow\"}]}}");
             }
 
-            return message + ",{\"text\":\" Cheats : \",\"color\":\"gray\"},{\"text\":\"" + allCheats + "\",\"color\":\"dark_blue\"}]";
+            return stringBuilder.append(",{\"text\":\" Cheats : \",\"color\":\"gray\"},{\"text\":\"").append(allCheats).append("\",\"color\":\"dark_blue\"}]").toString();
 
         } else { // report not timestamped
 
@@ -171,45 +169,35 @@ public class NoCheatersEvents {
                 cheats.append(" ").append(hack);
             }
 
-            StringBuilder message = new StringBuilder("[\"\",{\"text\":\"Warning : \",\"color\":\"red\"},{\"text\":\"" + playername + "\",\"color\":\"light_purple\""
-
-                    + ",\"hoverEvent\":{\"action\":\"show_text\",\"value\":"
-
-                    + "[\"\",{\"text\":\"" + playername + "\",\"color\":\"light_purple\"},{\"text\":\"\\n\"},"
-
-                    + "{\"text\":\"Reported at : \",\"color\":\"green\"},{\"text\":\"" + DateUtil.localformatTimestamp(wdr.timestamp) + "\",\"color\":\"yellow\"},{\"text\":\"\\n\"},"
-
-                    + "{\"text\":\"Reported for :\",\"color\":\"green\"},{\"text\":\"" + cheats + "\",\"color\":\"gold\"},{\"text\":\"\\n\\n\"},"
-
-                    + "{\"text\":\"Click this message to stop receiving warnings for this player\",\"color\":\"yellow\"},{\"text\":\" \"}]}"
-
-                    + ",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/unwdr " + uuid + " " + playername + "\"}}"
-
-                    + ",{\"text\":\" joined,\",\"color\":\"gray\"}");
+            StringBuilder stringBuilder = new StringBuilder("[\"\",{\"text\":\"Warning : \",\"color\":\"red\"},{\"text\":\"").append(playername).append("\",\"color\":\"light_purple\"")
+                    .append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":").append("[\"\",{\"text\":\"").append(playername).append("\",\"color\":\"light_purple\"},{\"text\":\"\\n\"},")
+                    .append("{\"text\":\"Reported at : \",\"color\":\"green\"},{\"text\":\"").append(DateUtil.localformatTimestamp(wdr.timestamp)).append("\",\"color\":\"yellow\"},{\"text\":\"\\n\"},")
+                    .append("{\"text\":\"Reported for :\",\"color\":\"green\"},{\"text\":\"").append(cheats).append("\",\"color\":\"gold\"},{\"text\":\"\\n\\n\"},")
+                    .append("{\"text\":\"Click this message to stop receiving warnings for this player\",\"color\":\"yellow\"},{\"text\":\" \"}]}")
+                    .append(",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/unwdr ").append(uuid).append(" ").append(playername).append("\"}}")
+                    .append(",{\"text\":\" joined,\",\"color\":\"gray\"}");
 
             if (!forceNoReportAgain && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && !(wdr.isOnlyStalking())) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
-
-                message.append(",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain ")
+                stringBuilder.append(",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain ")
                         .append(uuid).append(" ").append(playername).append("\"}")
                         .append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click here to report this player again\",\"color\":\"yellow\"}]}}");
-
             }
 
-            message.append(",{\"text\":\" Cheats : \",\"color\":\"gray\"}");
+            stringBuilder.append(",{\"text\":\" Cheats : \",\"color\":\"gray\"}");
 
             for (String hack : wdr.hacks) {
                 if (hack.equalsIgnoreCase("bhop")) {
-                    message.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"dark_red\"}");
+                    stringBuilder.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"dark_red\"}");
                 } else if (hack.contains("stalk")) {
-                    message.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"dark_green\"}");
+                    stringBuilder.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"dark_green\"}");
                 } else if (hack.equalsIgnoreCase("nick")) {
-                    message.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"dark_purple\"}");
+                    stringBuilder.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"dark_purple\"}");
                 } else {
-                    message.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"gold\"}");
+                    stringBuilder.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"gold\"}");
                 }
             }
 
-            return message.append("]").toString();
+            return stringBuilder.append("]").toString();
 
         }
 
@@ -231,11 +219,9 @@ public class NoCheatersEvents {
         String oldname = "";
         long oldtimestamp = 0L;
         String oldgameID = "";
-        StringBuilder message = new StringBuilder(",{\"text\":\"" + playername + "\",\"color\":\"" + namecolor + "\""
-
-                + ",\"hoverEvent\":{\"action\":\"show_text\",\"value\":"
-
-                + "[\"\",{\"text\":\"" + playername + "\",\"color\":\"light_purple\"}");
+        StringBuilder stringBuilder = new StringBuilder(",{\"text\":\"").append(playername).append("\",\"color\":\"").append(namecolor)
+                .append("\"").append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":")
+                .append("[\"\",{\"text\":\"").append(playername).append("\",\"color\":\"light_purple\"}");
 
         int j = 0; // indice of timestamp
         for (int i = 0; i < wdr.hacks.size(); i++) {
@@ -249,11 +235,11 @@ public class NoCheatersEvents {
 
                 if (serverID.equals(oldgameID) && Math.abs(timestamphackreport - oldtimestamp) < 3000000 && playernamewhenreported.equals(oldname)) { // if it is same server ID and reports
 
-                    message.append(",{\"text\":\"\\n\"},{\"text\":\"Reported at (EST - server time) : \",\"color\":\"green\"},{\"text\":\"").append(DateUtil.ESTformatTimestamp(timestamphackreport)).append("\",\"color\":\"yellow\"},{\"text\":\"\\n\"},").append("{\"text\":\"Timer on replay (approx.) : \",\"color\":\"green\"},{\"text\":\"").append(timeronreplay).append("\",\"color\":\"gold\"},{\"text\":\"\\n\"},").append("{\"text\":\"Timestamp for : \",\"color\":\"green\"},{\"text\":\"").append(cheats).append("\",\"color\":\"gold\"}").append((i == wdr.hacks.size() - 1) ? "" : ",{\"text\":\"\\n\"}");
+                    stringBuilder.append(",{\"text\":\"\\n\"},{\"text\":\"Reported at (EST - server time) : \",\"color\":\"green\"},{\"text\":\"").append(DateUtil.ESTformatTimestamp(timestamphackreport)).append("\",\"color\":\"yellow\"},{\"text\":\"\\n\"},").append("{\"text\":\"Timer on replay (approx.) : \",\"color\":\"green\"},{\"text\":\"").append(timeronreplay).append("\",\"color\":\"gold\"},{\"text\":\"\\n\"},").append("{\"text\":\"Timestamp for : \",\"color\":\"green\"},{\"text\":\"").append(cheats).append("\",\"color\":\"gold\"}").append((i == wdr.hacks.size() - 1) ? "" : ",{\"text\":\"\\n\"}");
 
                 } else {
 
-                    message.append(",{\"text\":\"\\n\"},{\"text\":\"Reported at (EST - server time) : \",\"color\":\"green\"},{\"text\":\"").append(DateUtil.ESTformatTimestamp(timestamphackreport)).append("\",\"color\":\"yellow\"},{\"text\":\"\\n\"},").append("{\"text\":\"Playername at the moment of the report : \",\"color\":\"green\"},{\"text\":\"").append(playernamewhenreported).append("\",\"color\":\"red\"},{\"text\":\"\\n\"},").append("{\"text\":\"ServerID : \",\"color\":\"green\"},{\"text\":\"").append(serverID).append("\",\"color\":\"gold\"},").append("{\"text\":\" Timer on replay (approx.) : \",\"color\":\"green\"},{\"text\":\"").append(timeronreplay).append("\",\"color\":\"gold\"},{\"text\":\"\\n\"},").append("{\"text\":\"Timestamp for : \",\"color\":\"green\"},{\"text\":\"").append(cheats).append("\",\"color\":\"gold\"}").append((i == wdr.hacks.size() - 1) ? "" : ",{\"text\":\"\\n\"}");
+                    stringBuilder.append(",{\"text\":\"\\n\"},{\"text\":\"Reported at (EST - server time) : \",\"color\":\"green\"},{\"text\":\"").append(DateUtil.ESTformatTimestamp(timestamphackreport)).append("\",\"color\":\"yellow\"},{\"text\":\"\\n\"},").append("{\"text\":\"Playername at the moment of the report : \",\"color\":\"green\"},{\"text\":\"").append(playernamewhenreported).append("\",\"color\":\"red\"},{\"text\":\"\\n\"},").append("{\"text\":\"ServerID : \",\"color\":\"green\"},{\"text\":\"").append(serverID).append("\",\"color\":\"gold\"},").append("{\"text\":\" Timer on replay (approx.) : \",\"color\":\"green\"},{\"text\":\"").append(timeronreplay).append("\",\"color\":\"gold\"},{\"text\":\"\\n\"},").append("{\"text\":\"Timestamp for : \",\"color\":\"green\"},{\"text\":\"").append(cheats).append("\",\"color\":\"gold\"}").append((i == wdr.hacks.size() - 1) ? "" : ",{\"text\":\"\\n\"}");
 
                 }
 
@@ -289,9 +275,10 @@ public class NoCheatersEvents {
 
         }
 
-        message.append("]}}");
+        stringBuilder.append("]}}");
 
-        return new String[]{message.toString(), allCheats.toString()};
+        return new String[]{stringBuilder.toString(), allCheats.toString()};
+
     }
 
 }
