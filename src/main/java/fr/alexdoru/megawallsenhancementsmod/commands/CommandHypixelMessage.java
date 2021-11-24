@@ -23,7 +23,7 @@ public class CommandHypixelMessage extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        (Minecraft.getMinecraft()).thePlayer.sendChatMessage("/msg " + CommandBase.buildString(args, 0));
+        (Minecraft.getMinecraft()).thePlayer.sendChatMessage("/msg " + buildString(args, 0));
     }
 
     @Override
