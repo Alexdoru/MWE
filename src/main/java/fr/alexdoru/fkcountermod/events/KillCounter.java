@@ -9,6 +9,7 @@ import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
@@ -376,11 +377,15 @@ public class KillCounter {
     }
 
     private static void spawnParticles(String killer) {
-        EntityPlayer player = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(killer); // O(N)
+        WorldClient world = Minecraft.getMinecraft().theWorld;
+        if (world == null) {
+            return;
+        }
+        EntityPlayer player = world.getPlayerEntityByName(killer); // O(N)
         if (player == null) {
             return;
         }
-        ScorePlayerTeam team = Minecraft.getMinecraft().theWorld.getScoreboard().getPlayersTeam(killer); // O(1)
+        ScorePlayerTeam team = world.getScoreboard().getPlayersTeam(killer); // O(1)
         if (team == null) {
             return;
         }
@@ -408,7 +413,7 @@ public class KillCounter {
                     double d0 = rand.nextGaussian() * 0.02D;
                     double d1 = rand.nextGaussian() * 0.02D;
                     double d2 = rand.nextGaussian() * 0.02D;
-                    Minecraft.getMinecraft().theWorld.spawnParticle(
+                    world.spawnParticle(
                             EnumParticleTypes.VILLAGER_ANGRY,
                             player.posX + (double) (rand.nextFloat() * player.width * 2.0F) - (double) player.width,
                             player.posY + 1.0D + (double) (rand.nextFloat() * player.height),
