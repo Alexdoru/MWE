@@ -45,7 +45,7 @@ public class NameUtil {
     }
 
     public static void handlePlayer(EntityPlayer player, boolean areIconsToggled, boolean areWarningsToggled, boolean isAutoreportToggled) {
-        // FIXME it somehow doesn't add the icon on nametags sometimes and I don't know why, is it patcher ??
+
         String playerName = player.getName();
         String squadname = SquadEvent.getSquad().get(playerName);
 

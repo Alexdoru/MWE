@@ -38,14 +38,13 @@ public class NoCheatersEvents {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        if (!ConfigHandler.togglewarnings || !mc.inGameHasFocus) {
-            return;
-        }
-        if (ticks == 39) {
-            scanCurrentWorld();
-            ticks++;
-        } else if (ticks < 39) {
-            ticks++;
+        if (mc.inGameHasFocus) {
+            if (ticks == 39) {
+                scanCurrentWorld();
+                ticks++;
+            } else if (ticks < 39) {
+                ticks++;
+            }
         }
     }
 
