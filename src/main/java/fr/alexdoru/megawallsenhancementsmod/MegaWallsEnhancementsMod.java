@@ -63,10 +63,10 @@ public class MegaWallsEnhancementsMod {
 
     }
 
-    // TODO make gui with squad HP
     // TODO stalk ban command
     // TODO hud with food in inventory
     // TODO switch mixins to ASM
     // TODO make f3 + b show just arrow hitbox
+    // TODO HUD speed/sec pour voir en spec les mecs qui timer
 
 }
