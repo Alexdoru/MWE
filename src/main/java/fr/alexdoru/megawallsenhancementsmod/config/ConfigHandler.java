@@ -102,7 +102,7 @@ public class ConfigHandler {
         Property pYpos_hunterHUD = config.get(CATEGORY_GUI, "Ypos hunter Strength HUD", 8d / 20d, "The y position of the Hunter Strength HUD, value ranges from 0 to 1");
 
         Property pToggleicons = config.get(CATEGORY_NOCHEATERS, "Toggle Icons", true, "Display warning symbol on nametags of reported players");
-        Property pTogglewarnings = config.get(CATEGORY_NOCHEATERS, "Toggle Warnings", true, "Gives warning messages in chat for reported players");
+        Property pTogglewarnings = config.get(CATEGORY_NOCHEATERS, "Toggle Warnings", false, "Gives warning messages in chat for reported players");
         Property pToggleautoreport = config.get(CATEGORY_NOCHEATERS, "Toggle Autoreport", false, "Automatically report previously reported players when they are in your lobby");
         Property pTimeBetweenReports = config.get(CATEGORY_NOCHEATERS, "Time between reports", 12, "Time before the mod suggests to report the player again (hours)");
         Property pTimeAutoReport = config.get(CATEGORY_NOCHEATERS, "Time for autoreports", 14, "It won't autoreport players whose last report is older than this (days)");
