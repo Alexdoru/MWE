@@ -77,12 +77,14 @@ public class NoCheatersEvents {
 
                 if (ConfigHandler.toggleicons) {
                     EntityPlayer player = mc.theWorld.getPlayerEntityByName(playerName);
-                    if (wdr.hacks.contains("bhop")) { // player bhops
-                        player.addPrefix(NameUtil.iprefix_bhop);
-                    } else if (!(wdr.isOnlyStalking())) { // player is cheating
-                        player.addPrefix(NameUtil.iprefix);
+                    if (player != null) {
+                        if (wdr.hacks.contains("bhop")) { // player bhops
+                            player.addPrefix(NameUtil.iprefix_bhop);
+                        } else if (!(wdr.isOnlyStalking())) { // player is cheating
+                            player.addPrefix(NameUtil.iprefix);
+                        }
+                        player.refreshDisplayName();
                     }
-                    player.refreshDisplayName();
                 }
 
                 boolean gotautoreported = false;
