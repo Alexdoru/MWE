@@ -105,7 +105,6 @@ public class CommandNocheaters extends CommandBase {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Warnings disabled"));
                 } else {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "Warnings enabled"));
-                    NoCheatersEvents.scanCurrentWorld();
                 }
                 ConfigHandler.togglewarnings = !ConfigHandler.togglewarnings;
                 ConfigHandler.saveConfig();
