@@ -2,7 +2,6 @@ package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
-import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
@@ -76,9 +75,6 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         switch (button.id) {
             case 1:
                 ConfigHandler.togglewarnings = !ConfigHandler.togglewarnings;
-                if (ConfigHandler.togglewarnings) {
-                    NoCheatersEvents.scanCurrentWorld();
-                }
                 break;
             case 2:
                 ConfigHandler.toggleautoreport = !ConfigHandler.toggleautoreport;
