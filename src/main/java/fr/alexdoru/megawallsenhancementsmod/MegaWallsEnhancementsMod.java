@@ -5,10 +5,8 @@ import fr.alexdoru.megawallsenhancementsmod.commands.*;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.*;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -18,11 +16,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public class MegaWallsEnhancementsMod {
 
     public static final String modid = "mwenhancements";
-    public static final String version = "2.9.5";
-
-    public static final KeyBinding log_key_fast = new KeyBinding("Fast log glitch", 0, "MegaWallsEnhancements");
-    public static final KeyBinding log_key_normal = new KeyBinding("Log glitch", 0, "MegaWallsEnhancements");
-    public static final KeyBinding killkey = new KeyBinding("/Kill macro", 0, "MegaWallsEnhancements");
+    public static final String version = "1.3";
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -31,10 +25,6 @@ public class MegaWallsEnhancementsMod {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-
-        ClientRegistry.registerKeyBinding(log_key_fast);
-        ClientRegistry.registerKeyBinding(log_key_normal);
-        ClientRegistry.registerKeyBinding(killkey);
 
         MinecraftForge.EVENT_BUS.register(new GuiManager());
         MinecraftForge.EVENT_BUS.register(new ChatEvents());
@@ -51,7 +41,6 @@ public class MegaWallsEnhancementsMod {
         ClientCommandHandler.instance.registerCommand(new CommandPlancke());
         ClientCommandHandler.instance.registerCommand(new CommandPlayGame());
         ClientCommandHandler.instance.registerCommand(new CommandScanGame());
-        ClientCommandHandler.instance.registerCommand(new CommandStalkList());
         ClientCommandHandler.instance.registerCommand(new CommandSetupApiKey());
         ClientCommandHandler.instance.registerCommand(new CommandMWGameStats());
         //ClientCommandHandler.instance.registerCommand(new CommandAPIRequests());
