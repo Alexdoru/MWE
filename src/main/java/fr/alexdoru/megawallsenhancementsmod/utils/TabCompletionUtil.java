@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
+import fr.alexdoru.fkcountermod.FKCounterMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 
@@ -12,6 +13,11 @@ public class TabCompletionUtil {
     public static List<String> getOnlinePlayersByName() {
 
         ArrayList<String> players = new ArrayList<>();
+
+        if (FKCounterMod.isitPrepPhase()) {
+            return players;
+        }
+
         Collection<NetworkPlayerInfo> playerCollection = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
 
         for (NetworkPlayerInfo networkPlayerInfo : playerCollection) {
