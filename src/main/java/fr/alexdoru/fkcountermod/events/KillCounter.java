@@ -135,7 +135,6 @@ public class KillCounter {
 
         if (UnformattedText.equals(PREP_PHASE)) {
             MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.GAME_START));
-            setTeamPrefixes();
             return true;
         }
 
@@ -197,6 +196,18 @@ public class KillCounter {
     @SubscribeEvent
     public void onMwGame(MwGameEvent event) {
 
+        /*
+         * to fix the bug where the FKCounter doesn't work properly if you play two games in a row on a server with the same serverID
+         */
+        if (event.getType() == MwGameEvent.EventType.GAME_START) {
+            String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId();
+            if (currentGameId != null) {
+                ResetKillCounterTo(currentGameId);
+            }
+            setTeamPrefixes();
+            return;
+        }
+
         if (event.getType() == MwGameEvent.EventType.CONNECT) {
 
             String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId(); // this is not null due to how the event is defined/Posted
@@ -208,14 +219,6 @@ public class KillCounter {
              * or if you changed your colors for the teams in your MW settings and rejoined the game
              */
             setTeamPrefixes();
-            return;
-        }
-
-        /*
-         * to fix the bug where the FKCounter doesn't work properly if you play two games in a row on a server with the same serverID
-         */
-        if (event.getType() == MwGameEvent.EventType.GAME_END) {
-            ResetKillCounterTo(null);
         }
 
     }
