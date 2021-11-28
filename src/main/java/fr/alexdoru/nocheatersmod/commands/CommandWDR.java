@@ -15,7 +15,6 @@ import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.event.ClickEvent;
@@ -141,7 +140,7 @@ public class CommandWDR extends CommandBase {
 
                         }
 
-                    } else if (args[i].contains("stalk") || args[i].equals("test") || args[i].equals("fastbreak")) {
+                    } else if (args[i].equals("fastbreak")) {
 
                         arraycheats.add(args[i]);
 
@@ -180,13 +179,12 @@ public class CommandWDR extends CommandBase {
                 message.append(" ").append(timerOnReplay.equals("?") ? "" : timerOnReplay);
             }
 
-            if (!(args.length == 2 && (args[1].contains("stalk") || args[1].equals("test")))) {
+            if (!(args.length == 2)) {
                 (Minecraft.getMinecraft()).thePlayer.sendChatMessage(message.toString()); //sends command to server
             }
 
             CachedMojangUUID apireq;
             String uuid = null;
-            boolean isaNick = false;
 
             try {
                 apireq = new CachedMojangUUID(args[0]);
@@ -205,22 +203,8 @@ public class CommandWDR extends CommandBase {
             }
 
             if (uuid == null) {  // The playername doesn't exist or never joined hypixel
-
-                // search for the player's gameprofile in the tablist
-                for (NetworkPlayerInfo networkplayerinfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
-                    if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(args[0])) {
-                        uuid = networkplayerinfo.getGameProfile().getName();
-                        playername = args[0];
-                        isaNick = true;
-                    }
-                }
-
-                if (!isaNick) { // couldn't find the nicked player in the tab list
-                    addChatMessage(new ChatComponentText(getTagNoCheaters()
-                            + invalidplayernameMsg(playername) + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist"));
-                    return;
-                }
-
+                addChatMessage(new ChatComponentText(getTagNoCheaters() + invalidplayernameMsg(playername)));
+                return;
             }
 
             // save the player in the wdr map
@@ -245,20 +229,14 @@ public class CommandWDR extends CommandBase {
                     //}
                 }
 
-                if (isaNick) {
-                    argsinWDR.add("nick");
-                }
-
                 WDR newreport = new WDR(timestamp, argsinWDR);
                 WdredPlayers.getWdredMap().put(uuid, newreport);
                 NameUtil.transformNameTablist(playername);
                 NameUtil.handlePlayer(playername);
-                addChatMessage(new ChatComponentText(getTagNoCheaters() +
-                        EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : ""))
+                addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "You reported ")
                         .appendSibling(IChatComponent.Serializer.jsonToComponent("[\"\"" + NoCheatersEvents.createPlayerTimestampedMsg(playername, newreport, "light_purple")[0] + "]"))
                         .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " with a " + EnumChatFormatting.YELLOW +
-                                "timestamp" + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
-                                + EnumChatFormatting.GREEN + (isaNick ? " for the next 48 hours." : "."))));
+                                "timestamp" + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game.")));
 
             } else {  // isn't a timestamped report
 
@@ -285,17 +263,12 @@ public class CommandWDR extends CommandBase {
                     argsinWDR.addAll(arraycheats);
                 }
 
-                if (isaNick) {
-                    argsinWDR.add("nick");
-                }
                 WdredPlayers.getWdredMap().put(uuid, new WDR((new Date()).getTime(), argsinWDR));
                 NameUtil.transformNameTablist(playername);
                 NameUtil.handlePlayer(playername);
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
-                        EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
-                        + EnumChatFormatting.LIGHT_PURPLE + playername + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
-                        + EnumChatFormatting.GREEN + (isaNick ? " for the next 48 hours." : ".")));
-
+                        EnumChatFormatting.GREEN + "You reported "
+                        + EnumChatFormatting.LIGHT_PURPLE + playername + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game."));
             }
 
         })).start();

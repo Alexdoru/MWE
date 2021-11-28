@@ -66,13 +66,6 @@ public class NoCheatersEvents {
             String playerName = networkPlayerInfo.getGameProfile().getName();
             WDR wdr = WdredPlayers.getWdredMap().get(uuid);
 
-            if (wdr == null) {
-                wdr = WdredPlayers.getWdredMap().get(playerName);
-                if (wdr != null) {
-                    uuid = playerName;
-                }
-            }
-
             if (wdr != null) {
 
                 if (ConfigHandler.toggleicons) {
@@ -80,7 +73,7 @@ public class NoCheatersEvents {
                     if (player != null) {
                         if (wdr.hacks.contains("bhop")) { // player bhops
                             player.addPrefix(NameUtil.iprefix_bhop);
-                        } else if (!(wdr.isOnlyStalking())) { // player is cheating
+                        } else { // player is cheating
                             player.addPrefix(NameUtil.iprefix);
                         }
                         player.refreshDisplayName();
@@ -90,9 +83,8 @@ public class NoCheatersEvents {
                 boolean gotautoreported = false;
 
                 if (ConfigHandler.toggleautoreport && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && datenow - wdr.timestamp < ConfigHandler.timeAutoReport) {
-                    String finalUuid = uuid;
                     new DelayedTask(() -> {
-                        ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
+                        ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + uuid + " " + playerName);
                         nbReport--;
                     }, 20 * nbReport);
                     nbReport++;
@@ -120,19 +112,11 @@ public class NoCheatersEvents {
             String playerName = networkPlayerInfo.getGameProfile().getName();
             WDR wdr = WdredPlayers.getWdredMap().get(uuid);
 
-            if (wdr == null) {
-                wdr = WdredPlayers.getWdredMap().get(playerName);
-                if (wdr != null) {
-                    uuid = playerName;
-                }
-            }
-
             if (wdr != null) {
                 list.add(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr, false)));
                 if (ConfigHandler.toggleautoreport && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && datenow - wdr.timestamp < ConfigHandler.timeAutoReport) {
-                    String finalUuid = uuid;
                     new DelayedTask(() -> {
-                        ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
+                        ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + uuid + " " + playerName);
                         nbReport--;
                     }, 20 * nbReport);
                     nbReport++;
@@ -178,7 +162,7 @@ public class NoCheatersEvents {
                     .append(",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/unwdr ").append(uuid).append(" ").append(playername).append("\"}}")
                     .append(",{\"text\":\" joined,\",\"color\":\"gray\"}");
 
-            if (!forceNoReportAgain && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && !(wdr.isOnlyStalking())) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
+            if (!forceNoReportAgain && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
                 stringBuilder.append(",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain ")
                         .append(uuid).append(" ").append(playername).append("\"}")
                         .append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click here to report this player again\",\"color\":\"yellow\"}]}}");
@@ -189,10 +173,6 @@ public class NoCheatersEvents {
             for (String hack : wdr.hacks) {
                 if (hack.equalsIgnoreCase("bhop")) {
                     stringBuilder.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"dark_red\"}");
-                } else if (hack.contains("stalk")) {
-                    stringBuilder.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"dark_green\"}");
-                } else if (hack.equalsIgnoreCase("nick")) {
-                    stringBuilder.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"dark_purple\"}");
                 } else {
                     stringBuilder.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"gold\"}");
                 }

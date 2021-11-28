@@ -62,11 +62,6 @@ public class WdredPlayers {
                     }
 
                     ArrayList<String> hacks = transformOldReports(split, datenow);
-
-                    if (hacks.contains("nick") && (datenow > timestamp + 172800000L)) { // 48hours
-                        continue;
-                    }
-
                     wdred.put(split[0], new WDR(timestamp, hacks));
                 }
             }
