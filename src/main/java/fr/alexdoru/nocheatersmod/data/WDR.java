@@ -36,8 +36,4 @@ public class WDR {
         return compare(wdr, this);
     }
 
-    public boolean isOnlyStalking() {
-        return this.hacks.size() == 1 && this.hacks.get(0).contains("stalk");
-    }
-
 }

@@ -59,24 +59,15 @@ public class NameUtil {
 
         String uuid = player.getUniqueID().toString().replace("-", "");
         WDR wdr = WdredPlayers.getWdredMap().get(uuid);
-        boolean printmsg = false;
         long datenow = (new Date()).getTime();
-
-        if (wdr == null) {
-            wdr = WdredPlayers.getWdredMap().get(playerName);
-            if (wdr != null) {
-                uuid = playerName;
-            }
-        }
 
         if (wdr != null) { // player was reported
 
             boolean gotautoreported = false;
 
             if (isAutoreportToggled && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && datenow - wdr.timestamp < ConfigHandler.timeAutoReport) {
-                String finalUuid = uuid;
                 new DelayedTask(() -> {
-                    ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
+                    ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + uuid + " " + playerName);
                     nbReport--;
                 }, 20 * nbReport);
                 nbReport++;
@@ -88,16 +79,14 @@ public class NameUtil {
                     player.addPrefix(iprefix_bhop);
                     player.refreshDisplayName();
                 }
-                printmsg = true;
-            } else if (!(wdr.isOnlyStalking())) { // player is cheating
+            } else { // player is cheating
                 if (areIconsToggled) {
                     player.addPrefix(iprefix);
                     player.refreshDisplayName();
                 }
-                printmsg = true;
             }
 
-            if (areWarningsToggled && printmsg) {
+            if (areWarningsToggled) {
                 mc.thePlayer.addChatComponentMessage(IChatComponent.Serializer.jsonToComponent(NoCheatersEvents.createwarningmessage(datenow, uuid, playerName, wdr, gotautoreported)));
             }
 
@@ -171,23 +160,12 @@ public class NameUtil {
 
                 WDR wdr = WdredPlayers.getWdredMap().get(uuid);
 
-                if (wdr == null) {
-                    wdr = WdredPlayers.getWdredMap().get(username);
-                    if (wdr != null) {
-                        uuid = username;
-                    }
-                }
-
                 if (wdr != null) {
 
-                    if (!wdr.isOnlyStalking()) {
-
-                        if (wdr.hacks.contains("bhop")) {
-                            extraprefix = prefix_bhop;
-                        } else {
-                            extraprefix = prefix;
-                        }
-
+                    if (wdr.hacks.contains("bhop")) {
+                        extraprefix = prefix_bhop;
+                    } else {
+                        extraprefix = prefix;
                     }
 
                     needtochange = true;
@@ -209,12 +187,16 @@ public class NameUtil {
 
         if (displayName != null) {
 
+            if (displayName.getFormattedText().contains("\u00a7k")) {
+                return displayName;
+            }
+
             String formattedname = displayName.getFormattedText().replace(squadprefix, "").replace(prefix_bhop, "").replace(prefix, "").replace(prefix_scan, "");
 
             if (needtochange) {
-                return new ChatComponentText(extraprefix).appendSibling(new ChatComponentText((isSquadMate ? formattedname.replace(username, squadname) : formattedname).replace("\u00a7k", "")));
+                return new ChatComponentText(extraprefix).appendSibling(new ChatComponentText((isSquadMate ? formattedname.replace(username, squadname) : formattedname)));
             } else {
-                return new ChatComponentText(formattedname.replace("\u00a7k", ""));
+                return new ChatComponentText(formattedname);
             }
 
         }
@@ -225,8 +207,8 @@ public class NameUtil {
 
             String teamprefix = team.getColorPrefix();
 
-            if (teamprefix.contains("\u00a7k") || needtochange) {
-                return new ChatComponentText(extraprefix + teamprefix.replace("\u00a7k", "").replace("O", "") + (isSquadMate ? squadname : username) + team.getColorSuffix());
+            if (!teamprefix.contains("\u00a7k") && needtochange) {
+                return new ChatComponentText(extraprefix + teamprefix + (isSquadMate ? squadname : username) + team.getColorSuffix());
             }
 
         }

@@ -226,7 +226,6 @@ public class CommandNocheaters extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        //String[] arguments = {"help","toggle","getgameid","getstoreddata","isitprepphase","getscoreboard","reportlist","stalkreportlist"}; // debug
         String[] arguments = {"config", "help", "toggle", "reportlist", "reportworld"};
         String[] toggleargs = {"autoreport", "icons", "warnings"};
         return args.length == 1 ? getListOfStringsMatchingLastWord(args, arguments) : ((args.length == 2 && args[0].equals("toggle")) ? getListOfStringsMatchingLastWord(args, toggleargs) : null);
@@ -295,30 +294,10 @@ public class CommandNocheaters extends CommandBase {
             String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
             String playerName = networkPlayerInfo.getGameProfile().getName();
             WDR wdr = WdredPlayers.getWdredMap().get(uuid);
-            boolean isaNick = false;
 
-            if (wdr == null) {
-                wdr = WdredPlayers.getWdredMap().get(playerName);
-                if (wdr != null) {
-                    isaNick = true;
-                }
-            }
+            if (wdr != null) {
 
-            if (wdr == null) {
-                continue;
-            }
-
-            if (timenow - wdr.timestamp > ConfigHandler.timeBetweenReports && !(wdr.isOnlyStalking())) {
-
-                if (isaNick) {
-
-                    new DelayedTask(() -> {
-                        if (Minecraft.getMinecraft().thePlayer != null) {
-                            ClientCommandHandler.instance.executeCommand(Minecraft.getMinecraft().thePlayer, "/sendreportagain " + playerName + " " + playerName);
-                        }
-                    }, 1 + 10 * nbreport);
-
-                } else {
+                if (timenow - wdr.timestamp > ConfigHandler.timeBetweenReports) {
 
                     new DelayedTask(() -> {
                         if (Minecraft.getMinecraft().thePlayer != null) {
@@ -326,9 +305,9 @@ public class CommandNocheaters extends CommandBase {
                         }
                     }, 1 + 10 * nbreport);
 
+                    nbreport++;
                 }
 
-                nbreport++;
             }
 
         }
