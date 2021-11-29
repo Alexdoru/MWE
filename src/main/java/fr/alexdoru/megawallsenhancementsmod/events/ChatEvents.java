@@ -40,7 +40,7 @@ public class ChatEvents {
     public static final ResourceLocation reportSuggestionSound = new ResourceLocation("random.orb");
     public static final ResourceLocation strengthSound = new ResourceLocation("item.fireCharge.use"); // item.fireCharge.use  usefireworks.twinkle
     private static long lastStrength = 0;
-// TODO changer les report suggestion pas que sur les shouts ?, changer le tooltip dans le guiscreen
+
     @SubscribeEvent
     public void onChatMessage(ClientChatReceivedEvent event) {
 
