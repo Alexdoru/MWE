@@ -32,7 +32,7 @@ public class ChatEvents {
     private static final Pattern HUNTER_STRENGTH_PATTERN = Pattern.compile(".*\u00a7a\u00a7lF\\.O\\.N\\. (\u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l[0-9]+).*");
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
-    private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:|\\[SHOUT\\] )\\[[A-Z]+\\] (?:|\\[[a-zA-Z0-9_+]{1,5}\\] )?(\\w{1,16}):.*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:|\\[SHOUT\\] )(?:|\\[[A-Z]+\\] )(?:|\\[[a-zA-Z0-9_+]{1,5}\\] )?(\\w{1,16}):.*", Pattern.CASE_INSENSITIVE);
     private static final Pattern REPORT_PATTERN1 = Pattern.compile("^\\[SHOUT\\].+?(\\w+) (?:|is )b?hop?ping.*", Pattern.CASE_INSENSITIVE);
     private static final Pattern REPORT_PATTERN2 = Pattern.compile("^\\[SHOUT\\].+?(?:wdr|report) (\\w+) (\\w+).*", Pattern.CASE_INSENSITIVE);
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Active Booster, |)\\w+'s Network Booster\\)).*");
@@ -44,7 +44,7 @@ public class ChatEvents {
     @SubscribeEvent
     public void onChatMessage(ClientChatReceivedEvent event) {
 
-        String msg = event.message.getUnformattedText();
+        String msg = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
         String fmsg = event.message.getFormattedText();
 
         /*normal chat messages*/
