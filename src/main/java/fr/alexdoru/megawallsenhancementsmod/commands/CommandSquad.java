@@ -1,9 +1,13 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
+import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
+import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
@@ -35,6 +39,21 @@ public class CommandSquad extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
+
+        Minecraft mc = Minecraft.getMinecraft();
+        String title = null;
+
+        if (mc.theWorld != null && MinecraftUtils.isHypixel()) {
+            Scoreboard scoreboard = mc.theWorld.getScoreboard();
+            if (scoreboard != null) {
+                title = ScoreboardUtils.getUnformattedSidebarTitle(scoreboard);
+            }
+        }
+
+        if (title != null && title.contains("THE HYPIXEL PIT")) {
+            mc.thePlayer.sendChatMessage("/squad " + buildString(args, 0));
+            return;
+        }
 
         if (args.length < 1) {
             addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
