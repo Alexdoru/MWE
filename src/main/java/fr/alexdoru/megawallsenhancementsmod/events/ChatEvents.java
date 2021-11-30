@@ -93,7 +93,7 @@ public class ChatEvents {
                 String name = matcher.group(1);
                 String squadmate = SquadEvent.getSquad().get(name);
                 if (squadmate != null) {
-                    event.message = new ChatComponentText(fmsg.replace(name, squadmate));
+                    event.message = new ChatComponentText(fmsg.replaceFirst(name, squadmate));
                 }
             }
 
