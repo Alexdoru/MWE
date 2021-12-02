@@ -6,7 +6,7 @@ Link to the [Hypixel post](https://hypixel.net/threads/forge-1-8-9-mega-walls-en
 
 ## Final Kill Counter:
 
-### A mod to track final kills in Hypixel game Mega Walls
+A mod to track final kills in Hypixel game Mega Walls
 
 ## MWEnhancements:
 
