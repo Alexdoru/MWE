@@ -12,6 +12,6 @@ A mod to track final kills in Hypixel game Mega Walls
 
 A mod with various enhancements for Hypixel and Hypixel's Mega Walls
 
-## NOCHEATERS 2.0:
+## NoCheaters 2.0:
 
-A mod that saves the names of all the players you reports with `/wdr` (not /report), and gives you warning about those players when you come across them ingame
+A mod that saves the names of all the players you report with `/wdr` (not /report), and gives you warning about those players when you come across them ingame.
