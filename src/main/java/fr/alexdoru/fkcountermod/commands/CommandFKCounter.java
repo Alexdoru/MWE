@@ -85,7 +85,7 @@ public class CommandFKCounter extends CommandBase {
 
             StringBuilder strBuilder = new StringBuilder();
 
-            if (args.length == 1) {
+            if (args.length == 1) {// FIXME sort kills
 
                 strBuilder.append(getTeamNameFromTeam(RED_TEAM)).append(": ").append(getKills(RED_TEAM)).append(", ")
                         .append(getTeamNameFromTeam(GREEN_TEAM)).append(": ").append(getKills(GREEN_TEAM)).append(", ")
