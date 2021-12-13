@@ -58,7 +58,7 @@ public class PositionEditGuiScreen extends GuiScreen {
     @Override
     public void onGuiClosed() {
         renderer.save();
-        new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(parent), 0);
+        new DelayedTask(() -> mc.displayGuiScreen(parent), 0);
     }
 
     @Override
