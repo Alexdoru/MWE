@@ -198,7 +198,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 ArrowHitGui.instance.guiPosition.setRelative(0.5d, 9d / 20d);
                 break;
             case 12:
-                LastWitherHPGui.instance.guiPosition.setRelative(0.9d, 0.1d);
+                LastWitherHPGui.instance.guiPosition.setRelative(0.75d, 0.05d);
                 break;
             case 14:
                 HunterStrengthGui.instance.guiPosition.setRelative(0.5d, 8d / 20d);
