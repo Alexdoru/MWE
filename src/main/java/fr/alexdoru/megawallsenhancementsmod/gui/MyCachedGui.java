@@ -14,7 +14,6 @@ public class MyCachedGui extends Gui implements IRenderer, ICachedHUDText {
     public static final FontRenderer frObj = mc.fontRendererObj;
 
     public String displayText = "";
-    public boolean isRenderingDummy = false;
     public GuiPosition guiPosition;
 
     @Override
@@ -37,12 +36,10 @@ public class MyCachedGui extends Gui implements IRenderer, ICachedHUDText {
 
     @Override
     public void render() {
-        isRenderingDummy = false;
     }
 
     @Override
     public void renderDummy() {
-        isRenderingDummy = true;
     }
 
     @Override
