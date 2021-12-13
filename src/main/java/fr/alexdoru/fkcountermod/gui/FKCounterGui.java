@@ -53,22 +53,11 @@ public class FKCounterGui extends MyCachedGui {
 
     @Override
     public int getWidth() {
-        if (isRenderingDummy) {
-            if (ConfigHandler.compact_hud) {
-                return (int) (frObj.getStringWidth(DUMMY_TEXT_COMPACT) * ConfigHandler.fkc_hud_size);
-            } else if (ConfigHandler.show_players) {
-                return (int) (getMultilineWidth(DUMMY_TEXT_PLAYERS) * ConfigHandler.fkc_hud_size);
-            } else {
-                return (int) (getMultilineWidth(DUMMY_TEXT) * ConfigHandler.fkc_hud_size);
-            }
-        }
         return (int) (getMultilineWidth(getDisplayText()) * ConfigHandler.fkc_hud_size);
     }
 
     @Override
     public void render() {
-
-        super.render();
 
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
         int x = absolutePos[0];
@@ -95,15 +84,22 @@ public class FKCounterGui extends MyCachedGui {
     @Override
     public void renderDummy() {
 
-        super.renderDummy();
-
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
         int x = absolutePos[0];
         int y = absolutePos[1];
 
+        int width;
+        if (ConfigHandler.compact_hud) {
+            width = (int) (frObj.getStringWidth(DUMMY_TEXT_COMPACT) * ConfigHandler.fkc_hud_size);
+        } else if (ConfigHandler.show_players) {
+            width = (int) (getMultilineWidth(DUMMY_TEXT_PLAYERS) * ConfigHandler.fkc_hud_size);
+        } else {
+            width = (int) (getMultilineWidth(DUMMY_TEXT) * ConfigHandler.fkc_hud_size);
+        }
+
         int left = x - 2;
         int top = y - 2;
-        int right = x + getWidth() + 1;
+        int right = x + width + 1;
         int bottom = y + getHeight();
 
         drawRect(left, top, right, bottom, DUMMY_BACKGROUND_COLOR);
