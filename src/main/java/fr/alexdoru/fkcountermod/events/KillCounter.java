@@ -239,6 +239,9 @@ public class KillCounter {
         return kills;
     }
 
+    /**
+     * Returns a sorted hashmap where the Keys are the Team interger, and the values are the amounts of finals for that team
+     */
     public static HashMap<Integer, Integer> getSortedTeamKillsMap() {
         HashMap<Integer, Integer> hashmap = new HashMap<>();
         hashmap.put(RED_TEAM, getKills(RED_TEAM));
