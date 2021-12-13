@@ -10,10 +10,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static fr.alexdoru.fkcountermod.events.KillCounter.*;
@@ -85,12 +82,17 @@ public class CommandFKCounter extends CommandBase {
 
             StringBuilder strBuilder = new StringBuilder();
 
-            if (args.length == 1) {// FIXME sort kills
+            if (args.length == 1) {
 
-                strBuilder.append(getTeamNameFromTeam(RED_TEAM)).append(": ").append(getKills(RED_TEAM)).append(", ")
-                        .append(getTeamNameFromTeam(GREEN_TEAM)).append(": ").append(getKills(GREEN_TEAM)).append(", ")
-                        .append(getTeamNameFromTeam(YELLOW_TEAM)).append(": ").append(getKills(YELLOW_TEAM)).append(", ")
-                        .append(getTeamNameFromTeam(BLUE_TEAM)).append(": ").append(getKills(BLUE_TEAM));
+                HashMap<Integer, Integer> sortedmap = getSortedTeamKillsMap();
+                int i = 0;
+                for (Map.Entry<Integer, Integer> entry : sortedmap.entrySet()) {
+                    if (i != 0) {
+                        strBuilder.append(", ");
+                    }
+                    strBuilder.append(getTeamNameFromTeam(entry.getKey())).append(": ").append(entry.getValue());
+                    i++;
+                }
 
             } else if (args.length == 2 && args[1].equalsIgnoreCase("red")) {
                 strBuilder.append(getTeamNameFromTeam(RED_TEAM)).append(": ").append(sortByDecreasingValue1(getPlayers(RED_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
