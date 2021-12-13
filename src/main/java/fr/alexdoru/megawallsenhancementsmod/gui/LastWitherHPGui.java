@@ -37,7 +37,6 @@ public class LastWitherHPGui extends MyCachedGui {
 
     @Override
     public void render() {
-        super.render();
         final long time = System.currentTimeMillis();
         if (time - lastupdate >= 1000L) {
             updateDisplayText();
@@ -51,7 +50,6 @@ public class LastWitherHPGui extends MyCachedGui {
 
     @Override
     public void renderDummy() {
-        super.renderDummy();
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
         int x = absolutePos[0];
         int y = absolutePos[1];

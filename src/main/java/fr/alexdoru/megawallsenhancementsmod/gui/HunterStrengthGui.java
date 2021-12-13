@@ -16,7 +16,6 @@ public class HunterStrengthGui extends MyCachedGui {
 
     @Override
     public void render() {
-        super.render();
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
         int x = absolutePos[0];
         int y = absolutePos[1];
@@ -25,7 +24,6 @@ public class HunterStrengthGui extends MyCachedGui {
 
     @Override
     public void renderDummy() {
-        super.renderDummy();
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
         int x = absolutePos[0];
         int y = absolutePos[1];
