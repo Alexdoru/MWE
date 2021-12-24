@@ -9,10 +9,12 @@ import org.lwjgl.input.Keyboard;
 
 public class KeybindingsEvent {
 
+    private final Minecraft mc = Minecraft.getMinecraft();
+
     @SubscribeEvent
     public void key(KeyInputEvent e) {
 
-        if (Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null) {
+        if (mc.theWorld == null || mc.thePlayer == null) {
             return;
         }
 
