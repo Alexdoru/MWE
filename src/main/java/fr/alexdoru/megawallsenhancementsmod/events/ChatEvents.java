@@ -35,7 +35,7 @@ public class ChatEvents {
     private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:|\\[SHOUT\\] )(?:|\\[[A-Z]+\\] )(?:|\\[[a-zA-Z0-9_+]{1,5}\\] )?(\\w{1,16}):.*", Pattern.CASE_INSENSITIVE);
     private static final Pattern REPORT_PATTERN1 = Pattern.compile("^(?:|\\[SHOUT\\] ).+?(\\w+) (?:|is )b?hop?ping.*", Pattern.CASE_INSENSITIVE);
     private static final Pattern REPORT_PATTERN2 = Pattern.compile("^(?:|\\[SHOUT\\] ).+?(?:wdr|report) (\\w+) (\\w+).*", Pattern.CASE_INSENSITIVE);
-    private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Active Booster, |)(?:Triple Coins \\+ EXP, |)\\w+'s Network Booster\\)).*");
+    private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Triple Coins \\+ EXP, |)(?:Active Booster, |)\\w+'s Network Booster\\)).*");
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
     public static final ResourceLocation reportSuggestionSound = new ResourceLocation("random.orb");
     public static final ResourceLocation strengthSound = new ResourceLocation("item.fireCharge.use"); // item.fireCharge.use  usefireworks.twinkle
