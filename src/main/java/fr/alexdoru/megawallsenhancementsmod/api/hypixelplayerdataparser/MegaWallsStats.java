@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import net.minecraft.event.ClickEvent;
@@ -11,7 +11,7 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class MegaWallsStats {
@@ -45,7 +45,7 @@ public class MegaWallsStats {
 
     private int time_played = 0;
     private int nbprestiges = 0;
-    HashMap<String, Integer> classpointsMap = new HashMap<>();
+    LinkedHashMap<String, Integer> classpointsMap = new LinkedHashMap<>();
 
     private int games_played = 0;
     private float fkpergame = 0;
@@ -95,20 +95,34 @@ public class MegaWallsStats {
         // computes the number of prestiges
         this.classesdata = JsonUtil.getJsonObject(mwdata, "classes");
 
-        if (this.classesdata == null)
+        if (this.classesdata == null) {
             return;
-
-        for (Map.Entry<String, JsonElement> entry : classesdata.entrySet()) {
-            if (entry.getValue() != null && entry.getValue().isJsonObject()) {
-                String classname = entry.getKey();
-                JsonObject entryclassobj = entry.getValue().getAsJsonObject();
-                this.nbprestiges = this.nbprestiges + JsonUtil.getInt(entryclassobj, "prestige");
-                int classpoints = JsonUtil.getInt(mwdata, classname + "_final_kills_standard")
-                                + JsonUtil.getInt(mwdata, classname + "_final_assists_standard")
-                                + JsonUtil.getInt(mwdata, classname + "_wins_standard") * 10;
-                classpointsMap.put(classname,classpoints);
-            }
         }
+
+        for (MWClass mwclass : MWClass.values()) {
+            String classname = mwclass.className.toLowerCase();
+            JsonObject classeobj = JsonUtil.getJsonObject(classesdata, classname);
+            if (classeobj == null) {
+                continue;
+            }
+            this.nbprestiges = this.nbprestiges + JsonUtil.getInt(classeobj, "prestige");
+            int classpoints = JsonUtil.getInt(mwdata, classname + "_final_kills_standard")
+                    + JsonUtil.getInt(mwdata, classname + "_final_assists_standard")
+                    + JsonUtil.getInt(mwdata, classname + "_wins_standard") * 10;
+            classpointsMap.put(classname, classpoints);
+        }
+
+        //for (Map.Entry<String, JsonElement> entry : classesdata.entrySet()) {
+        //    if (entry.getValue() != null && entry.getValue().isJsonObject()) {
+        //        String classname = entry.getKey();
+        //        JsonObject entryclassobj = entry.getValue().getAsJsonObject();
+        //        this.nbprestiges = this.nbprestiges + JsonUtil.getInt(entryclassobj, "prestige");
+        //        int classpoints = JsonUtil.getInt(mwdata, classname + "_final_kills_standard")
+        //                        + JsonUtil.getInt(mwdata, classname + "_final_assists_standard")
+        //                        + JsonUtil.getInt(mwdata, classname + "_wins_standard") * 10;
+        //        classpointsMap.put(classname,classpoints);
+        //    }
+        //}
 
         this.games_played = this.wins + this.losses; // doesn't count the draws
         this.fkpergame = (float) this.final_kills / (this.games_played == 0 ? 1 : (float) this.games_played);
@@ -137,7 +151,7 @@ public class MegaWallsStats {
         return this.classesdata;
     }
 
-    public IChatComponent getClassPointsMessage(String formattedname, String playername) {
+    public IChatComponent getClassPointsMessage(String formattedname, String playername) { // TODO en afficher deux par ligne
         IChatComponent imsg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls Classpoints\n\n"));
         for (Map.Entry<String, Integer> entry : this.classpointsMap.entrySet()) {
