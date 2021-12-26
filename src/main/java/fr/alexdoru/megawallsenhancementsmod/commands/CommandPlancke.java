@@ -102,16 +102,25 @@ public class CommandPlancke extends CommandBase {
 
                     } else if (args.length == 3) {
 
-                        MWClass mwclass = MWClass.fromTagOrName(args[2]);
+                        if (args[2].equals("cp") || args[2].equals("classpoint") || args[2].equals("classpoints")) {
 
-                        if (mwclass == null) { // not a valid mw class
-                            addChatMessage(new ChatComponentText(getTagMW()
-                                    + EnumChatFormatting.YELLOW + args[2] + EnumChatFormatting.RED + " isn't a valid mega walls class name."));
-                            return;
-                        }    // print mw stats for a certain class
+                            MegaWallsStats mwstats = new MegaWallsStats(playerdata.getPlayerData());
+                            addChatMessage(mwstats.getClassPointsMessage(formattedname, apiname.getName()));
 
-                        MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwclass.className);
-                        addChatMessage(mwclassstats.getFormattedMessage(formattedname, apiname.getName()));
+                        } else {
+
+                            MWClass mwclass = MWClass.fromTagOrName(args[2]);
+
+                            if (mwclass == null) { // not a valid mw class
+                                addChatMessage(new ChatComponentText(getTagMW()
+                                        + EnumChatFormatting.YELLOW + args[2] + EnumChatFormatting.RED + " isn't a valid mega walls class name."));
+                                return;
+                            }    // print mw stats for a certain class
+
+                            MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwclass.className);
+                            addChatMessage(mwclassstats.getFormattedMessage(formattedname, apiname.getName()));
+
+                        }
 
                     }
 
@@ -149,7 +158,7 @@ public class CommandPlancke extends CommandBase {
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
 
         String[] games = {"megawalls"};
-        String[] mwargs = {"arcanist", "assassin", "automaton", "blaze", "creeper", "cow", "dreadlord", "enderman", "golem", "herobrine", "hunter", "moleman", "phoenix", "pirate", "renegade", "shaman", "shark", "skeleton", "snowman", "spider", "squid", "pigman", "werewolf", "zombie"};
+        String[] mwargs = {"arcanist", "assassin", "automaton", "blaze", "classpoint", "cow", "creeper", "dreadlord", "enderman", "golem", "herobrine", "hunter", "moleman", "phoenix", "pirate", "renegade", "shaman", "shark", "skeleton", "snowman", "spider", "squid", "pigman", "werewolf", "zombie"};
 
         if (args.length == 1)
             return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
