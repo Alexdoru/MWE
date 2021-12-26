@@ -44,27 +44,4 @@ public class HypixelApiKeyUtil {
 //		return request_times.size();	
 //	}
 
-//	public static void saveApiKey() {
-//		try {
-//			BufferedWriter writer = new BufferedWriter(new FileWriter(apiFile));
-//			writer.write(API_KEY);
-//			writer.close();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
-//
-//	public static void loadApiKey() {		
-//		if (!apiFile.exists()) {
-//			return; 
-//		}
-//		try {
-//			BufferedReader reader = new BufferedReader(new FileReader(apiFile));
-//			API_KEY = reader.readLine();
-//			reader.close();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		} 
-//	}
-
 }
