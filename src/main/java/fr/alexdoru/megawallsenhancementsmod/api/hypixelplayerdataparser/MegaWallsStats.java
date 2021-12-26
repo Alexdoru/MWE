@@ -11,6 +11,7 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class MegaWallsStats {
@@ -44,6 +45,7 @@ public class MegaWallsStats {
 
     private int time_played = 0;
     private int nbprestiges = 0;
+    HashMap<String, Integer> classpointsMap = new HashMap<>();
 
     private int games_played = 0;
     private float fkpergame = 0;
@@ -98,8 +100,13 @@ public class MegaWallsStats {
 
         for (Map.Entry<String, JsonElement> entry : classesdata.entrySet()) {
             if (entry.getValue() != null && entry.getValue().isJsonObject()) {
+                String classname = entry.getKey();
                 JsonObject entryclassobj = entry.getValue().getAsJsonObject();
                 this.nbprestiges = this.nbprestiges + JsonUtil.getInt(entryclassobj, "prestige");
+                int classpoints = JsonUtil.getInt(mwdata, classname + "_final_kills_standard")
+                                + JsonUtil.getInt(mwdata, classname + "_final_assists_standard")
+                                + JsonUtil.getInt(mwdata, classname + "_wins_standard") * 10;
+                classpointsMap.put(classname,classpoints);
             }
         }
 
@@ -128,6 +135,16 @@ public class MegaWallsStats {
 
     public JsonObject getClassesdata() {
         return this.classesdata;
+    }
+
+    public IChatComponent getClassPointsMessage(String formattedname, String playername) {
+        IChatComponent imsg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
+                .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls Classpoints\n\n"));
+        for (Map.Entry<String, Integer> entry : this.classpointsMap.entrySet()) {
+            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + ChatUtil.capitalizeFirstLetter(entry.getKey()) + " : " + (entry.getValue() > 2000 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + entry.getValue() + "\n"));
+        }
+        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
+        return imsg;
     }
 
     public IChatComponent getFormattedMessage(String formattedname, String playername) {
