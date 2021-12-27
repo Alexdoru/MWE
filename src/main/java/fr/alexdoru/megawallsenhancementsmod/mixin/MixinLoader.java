@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.mixin;
 
+import fr.alexdoru.megawallsenhancementsmod.ASM.ClassTransformer;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.MixinEnvironment;
@@ -8,7 +9,10 @@ import org.spongepowered.asm.mixin.Mixins;
 import java.util.Map;
 
 @IFMLLoadingPlugin.MCVersion("1.8.9")
+@IFMLLoadingPlugin.TransformerExclusions({"fr/alexdoru/"})
 public class MixinLoader implements IFMLLoadingPlugin {
+
+    public static Boolean isObf;
 
     public MixinLoader() {
         MixinBootstrap.init();
@@ -18,7 +22,7 @@ public class MixinLoader implements IFMLLoadingPlugin {
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[0];
+        return new String[]{ClassTransformer.class.getName()};
     }
 
     @Override
@@ -33,7 +37,7 @@ public class MixinLoader implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
-
+        isObf = (Boolean) data.get("runtimeDeobfuscationEnabled");
     }
 
     @Override
