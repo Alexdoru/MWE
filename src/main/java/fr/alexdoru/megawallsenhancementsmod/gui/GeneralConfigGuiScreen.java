@@ -8,18 +8,16 @@ import java.io.IOException;
 
 public class GeneralConfigGuiScreen extends MyGuiScreen {
 
-    private final int ButtonsHeight = 20;
-
     @Override
     public void initGui() {
         /*
          * Defines the button list
          */
         int buttonsWidth = 150;
-        this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "Final Kill Counter"));
-        this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2, buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "Mega Walls Enhancements"));
-        this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "No Cheaters"));
-        this.buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 4, 150, ButtonsHeight, "Close"));
+        this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getYposForButton(-1), buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "Final Kill Counter"));
+        this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getYposForButton(0), buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "Mega Walls Enhancements"));
+        this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getYposForButton(1), buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "No Cheaters"));
+        this.buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getYposForButton(4), 150, ButtonsHeight, "Close"));
         super.initGui();
     }
 

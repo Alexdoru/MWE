@@ -19,7 +19,6 @@ import java.util.List;
 
 public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
-    private final int ButtonsHeight = 20;
     private final GuiScreen parent;
 
     public MWEnConfigGuiScreen(GuiScreen parent) {
@@ -33,27 +32,32 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
          */
         final int buttonsWidth = 210;
         final int sideButtonsWidth = 100;
-        this.buttonList.add(new GuiButton(16, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4) * 4, buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
-        this.buttonList.add(new GuiButton(15, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4) * 3, buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
-        this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4) * 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
-        this.buttonList.add(new GuiButton(9, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
-        this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
-        this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
-        this.buttonList.add(new GuiButton(3, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
-        this.buttonList.add(new GuiButton(11, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 3, buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
-        this.buttonList.add(new GuiButton(17, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 4, buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
-        this.buttonList.add(new GuiSlider(18, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 5, buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
-        this.buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 7, 150, ButtonsHeight, getButtonDisplayString(4)));
 
-        this.buttonList.add(new GuiButton(5, getxCenter() + buttonsWidth / 2 + 4, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(5)));
-        this.buttonList.add(new GuiButton(6, getxCenter() + buttonsWidth / 2 + 4, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(6)));
-        this.buttonList.add(new GuiButton(10, getxCenter() + buttonsWidth / 2 + 4, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 3, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(10)));
-        this.buttonList.add(new GuiButton(13, getxCenter() + buttonsWidth / 2 + 4, getyCenter() - ButtonsHeight / 2, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(13)));
+        int XposLeftButton = getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth;
+        int XposCenterButton = getxCenter() - buttonsWidth / 2;
+        int XposRightButton = getxCenter() + buttonsWidth / 2 + 4;
 
-        this.buttonList.add(new GuiButton(7, getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(7)));
-        this.buttonList.add(new GuiButton(8, getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(8)));
-        this.buttonList.add(new GuiButton(12, getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 3, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(12)));
-        this.buttonList.add(new GuiButton(14, getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth, getyCenter() - ButtonsHeight / 2, sideButtonsWidth, ButtonsHeight, getButtonDisplayString(14)));
+        this.buttonList.add(new GuiButton(16, XposCenterButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
+        this.buttonList.add(new GuiButton(15, XposCenterButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
+        this.buttonList.add(new GuiButton(0, XposCenterButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
+        this.buttonList.add(new GuiButton(1, XposCenterButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
+        this.buttonList.add(new GuiButton(9, XposCenterButton, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
+        this.buttonList.add(new GuiButton(2, XposCenterButton, getYposForButton(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
+        this.buttonList.add(new GuiButton(3, XposCenterButton, getYposForButton(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
+        this.buttonList.add(new GuiButton(11, XposCenterButton, getYposForButton(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
+        this.buttonList.add(new GuiButton(17, XposCenterButton, getYposForButton(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
+        this.buttonList.add(new GuiSlider(18, XposCenterButton, getYposForButton(5), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
+        this.buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getYposForButton(7), 150, ButtonsHeight, getButtonDisplayString(4)));
+
+        this.buttonList.add(new GuiButton(5, XposRightButton, getYposForButton(1), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(5)));
+        this.buttonList.add(new GuiButton(6, XposRightButton, getYposForButton(2), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(6)));
+        this.buttonList.add(new GuiButton(10, XposRightButton, getYposForButton(3), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(10)));
+        this.buttonList.add(new GuiButton(13, XposRightButton, getYposForButton(0), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(13)));
+
+        this.buttonList.add(new GuiButton(7, XposLeftButton, getYposForButton(1), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(7)));
+        this.buttonList.add(new GuiButton(8, XposLeftButton, getYposForButton(2), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(8)));
+        this.buttonList.add(new GuiButton(12, XposLeftButton, getYposForButton(3), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(12)));
+        this.buttonList.add(new GuiButton(14, XposLeftButton, getYposForButton(0), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(14)));
         super.initGui();
     }
 

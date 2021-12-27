@@ -14,6 +14,7 @@ import java.util.List;
 
 public class MyGuiScreen extends GuiScreen {
 
+    public final int ButtonsHeight = 20;
     private static final ResourceLocation SHADER = new ResourceLocation("fkcounter", "shaders/blur.json");
 
     @Override
@@ -75,6 +76,10 @@ public class MyGuiScreen extends GuiScreen {
                 return;
             }
         }
+    }
+
+    public int getYposForButton(int relativePosition) {
+        return getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * relativePosition;
     }
 
     /**
