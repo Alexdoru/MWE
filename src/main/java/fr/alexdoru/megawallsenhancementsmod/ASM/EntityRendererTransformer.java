@@ -23,9 +23,9 @@ public class EntityRendererTransformer implements IClassTransformer {
                         || methodNode.name.equals(MixinLoader.isObf ? "i" : "updateFogColor") && methodNode.desc.equals("(F)V")) {
 
                     for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                        if (insnNode.getOpcode() == GETSTATIC && insnNode instanceof FieldInsnNode && ((FieldInsnNode) insnNode).name.equals(MixinLoader.isObf ? "field_76439_r" : "nightVision")) {
+                        if (insnNode.getOpcode() == GETSTATIC && insnNode instanceof FieldInsnNode && ((FieldInsnNode) insnNode).name.equals(MixinLoader.isObf ? "r" : "nightVision")) {
                             AbstractInsnNode nextNode = insnNode.getNext();
-                            if (nextNode.getOpcode() == INVOKEVIRTUAL && nextNode instanceof MethodInsnNode && ((MethodInsnNode) nextNode).name.equals("isPotionActive")) {
+                            if (nextNode.getOpcode() == INVOKEVIRTUAL && nextNode instanceof MethodInsnNode && ((MethodInsnNode) nextNode).name.equals(MixinLoader.isObf ? "a" : "isPotionActive")) {
                                 AbstractInsnNode secondNode = nextNode.getNext();
                                 if (secondNode.getOpcode() == IFEQ && secondNode instanceof JumpInsnNode) {
                                     LabelNode labelNode = ((JumpInsnNode) secondNode).label;
