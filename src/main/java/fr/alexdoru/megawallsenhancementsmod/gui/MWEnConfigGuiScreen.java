@@ -37,10 +37,11 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         int XposCenterButton = getxCenter() - buttonsWidth / 2;
         int XposRightButton = getxCenter() + buttonsWidth / 2 + 4;
 
-        this.buttonList.add(new GuiButton(16, XposCenterButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
-        this.buttonList.add(new GuiButton(15, XposCenterButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
-        this.buttonList.add(new GuiButton(0, XposCenterButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
-        this.buttonList.add(new GuiButton(1, XposCenterButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
+        this.buttonList.add(new GuiButton(16, XposCenterButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
+        this.buttonList.add(new GuiButton(15, XposCenterButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
+        this.buttonList.add(new GuiButton(0, XposCenterButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
+        this.buttonList.add(new GuiButton(1, XposCenterButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
+        this.buttonList.add(new GuiButton(18, XposCenterButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(18)));
         this.buttonList.add(new GuiButton(9, XposCenterButton, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
         this.buttonList.add(new GuiButton(2, XposCenterButton, getYposForButton(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
         this.buttonList.add(new GuiButton(3, XposCenterButton, getYposForButton(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
@@ -73,6 +74,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 return "HUD before hunter strength : " + getSuffix(ConfigHandler.hunterStrengthHUD);
             case 1:
                 return "Report suggestions in chat : " + getSuffix(ConfigHandler.reportsuggestions);
+            case 18:
+                return "Cancel night vision effect : " + getSuffix(!ConfigHandler.keepNightVisionEffect);
             case 2:
                 return "Show /kill cooldown HUD : " + getSuffix(ConfigHandler.show_killcooldownHUD);
             case 3:
@@ -165,6 +168,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 }
                 ConfigHandler.reportsuggestions = !ConfigHandler.reportsuggestions;
                 break;
+            case 18:
+                ConfigHandler.keepNightVisionEffect = !ConfigHandler.keepNightVisionEffect;
+                break;
             case 2:
                 ConfigHandler.show_killcooldownHUD = !ConfigHandler.show_killcooldownHUD;
                 break;
@@ -216,7 +222,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredTitle("Mega Walls Enhancements v" + MegaWallsEnhancementsMod.version, 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 6);
+        drawCenteredTitle("Mega Walls Enhancements v" + MegaWallsEnhancementsMod.version, 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 7);
         super.drawScreen(mouseX, mouseY, partialTicks);
         drawTooltips(mouseX, mouseY);
     }
