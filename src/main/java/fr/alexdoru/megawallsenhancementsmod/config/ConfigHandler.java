@@ -39,6 +39,7 @@ public class ConfigHandler {
     public static boolean reportsuggestions;
     public static boolean playSoundLowHP;
     public static double healthThreshold;
+    public static boolean keepNightVisionEffect = false; // TODO config option
 
     /*GUI config*/
     public static boolean show_killcooldownHUD;
