@@ -112,18 +112,6 @@ public class MegaWallsStats {
             classpointsMap.put(classname, classpoints);
         }
 
-        //for (Map.Entry<String, JsonElement> entry : classesdata.entrySet()) {
-        //    if (entry.getValue() != null && entry.getValue().isJsonObject()) {
-        //        String classname = entry.getKey();
-        //        JsonObject entryclassobj = entry.getValue().getAsJsonObject();
-        //        this.nbprestiges = this.nbprestiges + JsonUtil.getInt(entryclassobj, "prestige");
-        //        int classpoints = JsonUtil.getInt(mwdata, classname + "_final_kills_standard")
-        //                        + JsonUtil.getInt(mwdata, classname + "_final_assists_standard")
-        //                        + JsonUtil.getInt(mwdata, classname + "_wins_standard") * 10;
-        //        classpointsMap.put(classname,classpoints);
-        //    }
-        //}
-
         this.games_played = this.wins + this.losses; // doesn't count the draws
         this.fkpergame = (float) this.final_kills / (this.games_played == 0 ? 1 : (float) this.games_played);
         this.wither_damage_game = this.wither_damage / (this.games_played == 0 ? 1 : (float) this.games_played);
@@ -151,11 +139,15 @@ public class MegaWallsStats {
         return this.classesdata;
     }
 
-    public IChatComponent getClassPointsMessage(String formattedname, String playername) { // TODO en afficher deux par ligne
+    public IChatComponent getClassPointsMessage(String formattedname, String playername) {
         IChatComponent imsg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls Classpoints\n\n"));
         for (Map.Entry<String, Integer> entry : this.classpointsMap.entrySet()) {
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + ChatUtil.capitalizeFirstLetter(entry.getKey()) + " : " + (entry.getValue() > 2000 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + entry.getValue() + "\n"));
+            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + ChatUtil.capitalizeFirstLetter(entry.getKey()))
+                            .setChatStyle(new ChatStyle()
+                                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for " + entry.getKey() + " stats")))
+                                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + entry.getKey()))))
+                    .appendSibling(new ChatComponentText(" : " + (entry.getValue() > 2000 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + entry.getValue() + "\n"));
         }
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
         return imsg;
