@@ -13,7 +13,6 @@ import java.util.List;
 
 public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
-    private final int ButtonsHeight = 20;
     private final GuiScreen parent;
 
     public NoCheatersConfigGuiScreen() {
@@ -30,13 +29,13 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
          * Defines the button list
          */
         int buttonsWidth = 200;
-        this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4) * 3, buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
-        this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4) * 2, buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
-        this.buttonList.add(new GuiSlider(4, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 - (ButtonsHeight + 4), buttonsWidth, 20, "Time between reports : ", " hours", 6d, 48d, ConfigHandler.timeBetweenReports / 3600000f, false, true, this));
-        this.buttonList.add(new GuiSlider(5, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2, buttonsWidth, 20, "Time max autoreport : ", " days", 1d, 30d, ConfigHandler.timeAutoReport / (24f * 3600f * 1000f), false, true, this));
-        this.buttonList.add(new GuiButton(6, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4), buttonsWidth, ButtonsHeight, getButtonDisplayString(6)));
-        this.buttonList.add(new GuiSlider(7, getxCenter() - buttonsWidth / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 2, buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
-        this.buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * 4, 150, ButtonsHeight, getButtonDisplayString(3)));
+        this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
+        this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
+        this.buttonList.add(new GuiSlider(4, getxCenter() - buttonsWidth / 2, getYposForButton(-1), buttonsWidth, 20, "Time between reports : ", " hours", 6d, 48d, ConfigHandler.timeBetweenReports / 3600000f, false, true, this));
+        this.buttonList.add(new GuiSlider(5, getxCenter() - buttonsWidth / 2, getYposForButton(0), buttonsWidth, 20, "Time max autoreport : ", " days", 1d, 30d, ConfigHandler.timeAutoReport / (24f * 3600f * 1000f), false, true, this));
+        this.buttonList.add(new GuiButton(6, getxCenter() - buttonsWidth / 2, getYposForButton(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(6)));
+        this.buttonList.add(new GuiSlider(7, getxCenter() - buttonsWidth / 2, getYposForButton(2), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
+        this.buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getYposForButton(4), 150, ButtonsHeight, getButtonDisplayString(3)));
         super.initGui();
     }
 
