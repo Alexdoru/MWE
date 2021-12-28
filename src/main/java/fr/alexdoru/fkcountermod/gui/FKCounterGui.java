@@ -1,12 +1,12 @@
 package fr.alexdoru.fkcountermod.gui;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.gui.MyCachedGui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.Tuple;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -151,21 +151,29 @@ public class FKCounterGui extends MyCachedGui {
 
             } else if (ConfigHandler.show_players) {
 
-                for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
-                    int team = entry.getKey();
-                    Tuple<String, Integer> tuple = getHighestFinalsPlayerOfTeam(team);
+                for (Entry<Integer, Integer> teamEntry : sortedmap.entrySet()) {
+                    int team = teamEntry.getKey();
                     if (i != 0) {
                         strBuilder.append("\n");
                     }
                     strBuilder.append(getColorPrefixFromTeam(team))
                             .append(getTeamNameFromTeam(team)).append(EnumChatFormatting.WHITE)
                             .append(": ").append(getKills(team));
-                    if (tuple != null) {
-                        String squadname = SquadEvent.getSquad().get(tuple.getFirst());
-                        if (squadname != null) {
-                            strBuilder.append(EnumChatFormatting.GRAY).append(" - ").append(squadname).append(" (").append(tuple.getSecond()).append(")");
-                        } else {
-                            strBuilder.append(EnumChatFormatting.GRAY).append(" - ").append(tuple.getFirst()).append(" (").append(tuple.getSecond()).append(")");
+                    HashMap<String, Integer> teamkillsmap = KillCounter.getPlayers(team);
+                    if (!teamkillsmap.isEmpty()) {
+                        int playerAmount = 0;
+                        for (Entry<String, Integer> playerEntry : teamkillsmap.entrySet()) {
+                            String squadname = SquadEvent.getSquad().get(playerEntry.getKey());
+                            if (squadname != null) {
+                                strBuilder.append(EnumChatFormatting.GRAY).append(" - ").append(squadname).append(" (").append(playerEntry.getValue()).append(")");
+                            } else {
+                                strBuilder.append(EnumChatFormatting.GRAY).append(" - ").append(playerEntry.getKey()).append(" (").append(playerEntry.getValue()).append(")");
+                            }
+                            playerAmount++;
+                            if (playerAmount == ConfigHandler.playerAmount) {
+                                break;
+                            }
+                            strBuilder.append(" - ");
                         }
                     }
                     i++;

@@ -28,9 +28,10 @@ public class ConfigHandler {
     public static boolean draw_background;
     public static boolean text_shadow;
     public static double fkc_hud_size;
+    public static int playerAmount;
     // TODO add counter to sidebar
     // TODO add the finals to the tablist, on nametags
-    // TODO choose the size of the player list
+
 
     /*MWEnhancements config*/
     public static String APIKey;
@@ -81,6 +82,7 @@ public class ConfigHandler {
         Property pdraw_background = config.get(CATEGORY_FKCounter, "Draw background", false, "Draws a box around the HUD of the final kill counter");
         Property ptext_shadow = config.get(CATEGORY_FKCounter, "Text shadow", true, "Draws text shadow");
         Property pfkc_hud_size = config.get(CATEGORY_FKCounter, "HUD Size", 1.0f, "Size of the final kill counter HUD");
+        Property pPlayerAmount = config.get(CATEGORY_FKCounter, "Player amount", (int) 3.0, "Amount of players displayed on screen when you use the \"Show players\" setting");
 
         Property pAPIKey = config.get(CATEGORY_MWENh, "APIKey", "", "Your Hypixel API Key");
         Property pstrengthParticules = config.get(CATEGORY_MWENh, "Strength particules", true, "Spawns strength particules when an herobrine or dreadlord get a final");
@@ -121,6 +123,7 @@ public class ConfigHandler {
         pOrderFKC.add(pdraw_background.getName());
         pOrderFKC.add(ptext_shadow.getName());
         pOrderFKC.add(pfkc_hud_size.getName());
+        pOrderFKC.add(pPlayerAmount.getName());
         config.setCategoryPropertyOrder(CATEGORY_FKCounter, pOrderFKC);
 
         List<String> pOrderMWWENh = new ArrayList<>();
@@ -168,6 +171,7 @@ public class ConfigHandler {
             draw_background = pdraw_background.getBoolean();
             text_shadow = ptext_shadow.getBoolean();
             fkc_hud_size = pfkc_hud_size.getDouble();
+            playerAmount = pPlayerAmount.getInt();
 
             APIKey = pAPIKey.getString();
             strengthParticules = pstrengthParticules.getBoolean();
@@ -207,6 +211,7 @@ public class ConfigHandler {
             pdraw_background.set(draw_background);
             ptext_shadow.set(text_shadow);
             pfkc_hud_size.set(fkc_hud_size);
+            pPlayerAmount.set(playerAmount);
 
             pAPIKey.set(APIKey);
             pstrengthParticules.set(strengthParticules);

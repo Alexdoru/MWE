@@ -42,8 +42,9 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
         this.buttonList.add(addSettingButton(ConfigHandler.draw_background, 3, 1, 0, "HUD Background"));
         this.buttonList.add(addSettingButton(ConfigHandler.text_shadow, 4, 1, 1, "Text Shadow"));
         this.buttonList.add(new GuiSlider(5, getxCenter() - 150 / 2, getyCenter() + 70, "HUD Size : ", 0.1d, 4d, ConfigHandler.fkc_hud_size, this));
+        this.buttonList.add(new GuiSlider(6, getxCenter() - 150 / 2, getyCenter() + 94, 150, 20, "Player amount : ", "", 1d, 10d, ConfigHandler.playerAmount, false, true, this));
         if (parent != null) {
-            this.buttonList.add(new GuiButton(200, getxCenter() - 150 / 2, getyCenter() + 110, 150, 20, "Done"));
+            this.buttonList.add(new GuiButton(200, getxCenter() - 150 / 2, getyCenter() + 122, 150, 20, "Done"));
         }
         super.initGui();
     }
@@ -131,11 +132,18 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
 
     @Override
     public void onChangeSliderValue(GuiSlider slider) {
-        if (slider.id == 5) {
-            final double newvalue = Math.floor(slider.getValue() / 0.05d) * 0.05d;
-            ConfigHandler.fkc_hud_size = newvalue;
-            slider.setValue(newvalue);
+        switch (slider.id) {
+            case 5:
+                final double newvalue = Math.floor(slider.getValue() / 0.05d) * 0.05d;
+                ConfigHandler.fkc_hud_size = newvalue;
+                slider.setValue(newvalue);
+                break;
+            case 6:
+                ConfigHandler.playerAmount = (int) slider.getValue();
+                FKCounterGui.instance.updateDisplayText();
+                break;
         }
+
     }
 
 }
