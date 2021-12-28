@@ -15,7 +15,6 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.Tuple;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -162,8 +161,8 @@ public class KillCounter {
 
                     if (isWitherDead(killedTeam)) {
                         addKill(killer, killerTeam);
-                        sortTeamKills(killerTeam);
-                        sortTeamKills(killedTeam);
+                        //sortTeamKills(killerTeam);
+                        //sortTeamKills(killedTeam);
                     }
 
                     FKCounterGui.instance.updateDisplayText();
@@ -309,13 +308,13 @@ public class KillCounter {
         }
     }
 
-    private static void sortTeamKills(String color) {
-        int team = getTeamFromColor(color);
-        if (isNotValidTeam(team)) {
-            return;
-        }
-        teamKillsArray[team] = sortByDecreasingValue1(teamKillsArray[team]);
-    }
+    //private static void sortTeamKills(String color) {
+    //    int team = getTeamFromColor(color);
+    //    if (isNotValidTeam(team)) {
+    //        return;
+    //    }
+    //    teamKillsArray[team] = sortByDecreasingValue1(teamKillsArray[team]);
+    //}
 
     private static int getTeamFromColor(String color) {
         for (int team = 0; team < TEAMS; team++) {
@@ -348,15 +347,15 @@ public class KillCounter {
     /*
      * returns the name of the player from the team that has the highest finals
      */
-    public static Tuple<String, Integer> getHighestFinalsPlayerOfTeam(int team) {
-        HashMap<String, Integer> teamkills = teamKillsArray[team];
-        Iterator<Map.Entry<String, Integer>> iterator = teamkills.entrySet().iterator();
-        if (iterator.hasNext()) {
-            Map.Entry<String, Integer> entry = iterator.next();
-            return new Tuple<>(entry.getKey(), entry.getValue());
-        }
-        return null;
-    }
+    //public static Tuple<String, Integer> getHighestFinalsPlayerOfTeam(int team) {
+    //    HashMap<String, Integer> teamkills = teamKillsArray[team];
+    //    Iterator<Map.Entry<String, Integer>> iterator = teamkills.entrySet().iterator();
+    //    if (iterator.hasNext()) {
+    //        Map.Entry<String, Integer> entry = iterator.next();
+    //        return new Tuple<>(entry.getKey(), entry.getValue());
+    //    }
+    //    return null;
+    //}
 
     private static boolean isNotValidTeam(int team) {
         return (team < 0 || team >= TEAMS);

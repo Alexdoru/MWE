@@ -159,7 +159,7 @@ public class FKCounterGui extends MyCachedGui {
                     strBuilder.append(getColorPrefixFromTeam(team))
                             .append(getTeamNameFromTeam(team)).append(EnumChatFormatting.WHITE)
                             .append(": ").append(getKills(team));
-                    HashMap<String, Integer> teamkillsmap = KillCounter.getPlayers(team);
+                    HashMap<String, Integer> teamkillsmap = KillCounter.sortByDecreasingValue1(KillCounter.getPlayers(team));
                     if (!teamkillsmap.isEmpty()) {
                         int playerAmount = 0;
                         for (Entry<String, Integer> playerEntry : teamkillsmap.entrySet()) {
@@ -173,7 +173,6 @@ public class FKCounterGui extends MyCachedGui {
                             if (playerAmount == ConfigHandler.playerAmount) {
                                 break;
                             }
-                            strBuilder.append(" - ");
                         }
                     }
                     i++;
