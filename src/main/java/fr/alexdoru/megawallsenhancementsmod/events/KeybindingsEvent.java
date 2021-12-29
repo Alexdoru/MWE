@@ -5,7 +5,6 @@ import fr.alexdoru.nocheatersmod.commands.CommandWDR;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
-import org.lwjgl.input.Keyboard;
 
 public class KeybindingsEvent {
 
@@ -18,20 +17,10 @@ public class KeybindingsEvent {
             return;
         }
 
-        try {
-            if (Keyboard.isCreated()) {
-                if (Keyboard.getEventKeyState()) {
-                    int keycode = Keyboard.getEventKey();
-
-                    if (keycode == NoCheatersMod.addtimemark_key.getKeyCode()) {
-                        CommandWDR.addTimeMark();
-                    }
-
-                }
-            }
-        } catch (Exception q) {
-            q.printStackTrace();
+        if (NoCheatersMod.addtimemark_key.isPressed()) {
+            CommandWDR.addTimeMark();
         }
+
     }
 
 }
