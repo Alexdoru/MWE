@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.mixin.mixins;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiIngame;
@@ -133,35 +134,45 @@ public class GUIPlayerTabOverlayMixin extends Gui {
         } else {
             /* ***************** MODIFIED WITH MIXINS - START ******************/
 
-            float maxhealth;
-            float playerhealth = mc.thePlayer.getMaxHealth();
+            // TODO changer plutot que d'override toute la methode, ASM ou mixin
 
-            if (FKCounterMod.isInMwGame() && playerhealth == 20f) {
-                maxhealth = 40f;
+            String s1;
+
+            if (ConfigHandler.useColoredScores) {
+
+                float maxhealth;
+                float playerhealth = mc.thePlayer.getMaxHealth();
+
+                if (FKCounterMod.isInMwGame() && playerhealth == 20f) {
+                    maxhealth = 40f;
+                } else {
+                    maxhealth = playerhealth;
+                }
+
+                float ifloat = (float) i;
+
+                if (ifloat > maxhealth) {
+                    s1 = EnumChatFormatting.DARK_GREEN.toString();
+                } else if (ifloat > maxhealth * 3 / 4) {
+                    s1 = EnumChatFormatting.GREEN.toString();
+                } else if (ifloat > maxhealth / 2) {
+                    s1 = EnumChatFormatting.YELLOW.toString();
+                } else if (ifloat > maxhealth / 4) {
+                    s1 = EnumChatFormatting.RED.toString();
+                } else {
+                    s1 = EnumChatFormatting.DARK_RED.toString();
+                }
+
+                s1 += i;
+
             } else {
-                maxhealth = playerhealth;
+                s1 = EnumChatFormatting.YELLOW.toString() + i;
             }
-
-            float ifloat = (float) i;
-            String s1 = "";
-
-            if (ifloat > maxhealth) {
-                s1 += EnumChatFormatting.DARK_GREEN;
-            } else if (ifloat > maxhealth * 3 / 4) {
-                s1 += EnumChatFormatting.GREEN;
-            } else if (ifloat > maxhealth / 2) {
-                s1 += EnumChatFormatting.YELLOW;
-            } else if (ifloat > maxhealth / 4) {
-                s1 += EnumChatFormatting.RED;
-            } else {
-                s1 += EnumChatFormatting.DARK_RED;
-            }
-
-            s1 += "" + i;
 
             /* ***************** MODIFIED WITH MIXINS - END ********************/
             this.mc.fontRendererObj.drawStringWithShadow(s1, (float) (p_175247_5_ - this.mc.fontRendererObj.getStringWidth(s1)), (float) p_175247_2_, 16777215);
         }
+
     }
 
 }

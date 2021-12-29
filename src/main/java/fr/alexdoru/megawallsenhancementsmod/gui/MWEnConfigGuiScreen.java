@@ -46,9 +46,10 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         this.buttonList.add(new GuiButton(2, XposCenterButton, getYposForButton(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
         this.buttonList.add(new GuiButton(3, XposCenterButton, getYposForButton(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
         this.buttonList.add(new GuiButton(11, XposCenterButton, getYposForButton(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
-        this.buttonList.add(new GuiButton(17, XposCenterButton, getYposForButton(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
-        this.buttonList.add(new GuiSlider(18, XposCenterButton, getYposForButton(5), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
-        this.buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getYposForButton(7), 150, ButtonsHeight, getButtonDisplayString(4)));
+        this.buttonList.add(new GuiButton(19, XposCenterButton, getYposForButton(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(19)));
+        this.buttonList.add(new GuiButton(17, XposCenterButton, getYposForButton(5), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
+        this.buttonList.add(new GuiSlider(18, XposCenterButton, getYposForButton(6), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
+        this.buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getYposForButton(8), 150, ButtonsHeight, getButtonDisplayString(4)));
 
         this.buttonList.add(new GuiButton(5, XposRightButton, getYposForButton(1), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(5)));
         this.buttonList.add(new GuiButton(6, XposRightButton, getYposForButton(2), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(6)));
@@ -82,17 +83,17 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 return "Show Arrow Hit HUD : " + getSuffix(ConfigHandler.show_ArrowHitHUD);
             case 11:
                 return "Show wither death time HUD : " + getSuffix(ConfigHandler.show_lastWitherHUD);
+            case 19:
+                return "Colored Tablist Scores : " + getSuffix(ConfigHandler.useColoredScores);
             case 17:
                 return "Sound warning when low HP : " + getSuffix(ConfigHandler.playSoundLowHP);
             case 4:
                 return "Done";
-
             case 5:
             case 6:
             case 10:
             case 13:
                 return "Move HUD";
-
             case 7:
             case 8:
             case 12:
@@ -179,6 +180,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 11:
                 ConfigHandler.show_lastWitherHUD = !ConfigHandler.show_lastWitherHUD;
+                break;
+            case 19:
+                ConfigHandler.useColoredScores = !ConfigHandler.useColoredScores;
                 break;
             case 17:
                 ConfigHandler.playSoundLowHP = !ConfigHandler.playSoundLowHP;
