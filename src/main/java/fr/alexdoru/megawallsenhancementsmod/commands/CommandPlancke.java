@@ -33,7 +33,6 @@ public class CommandPlancke extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        // TODO faire les stats pour les autres jeux
 
         if (args.length < 1) {
             addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));

@@ -5,7 +5,7 @@
 //import java.awt.*;
 //
 //public class ColorUtil {
-//    // TODO the gradient colors are ugly
+//
 //    private static final Color DARK_GREEN = new Color(43520);
 //    private static final int r_dark_green = DARK_GREEN.getRed();
 //    private static final int g_dark_green = DARK_GREEN.getGreen();
