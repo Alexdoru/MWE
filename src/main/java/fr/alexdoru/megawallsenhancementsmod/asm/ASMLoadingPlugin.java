@@ -1,4 +1,4 @@
-//package fr.alexdoru.megawallsenhancementsmod.ASM;
+//package fr.alexdoru.megawallsenhancementsmod.asm;
 //
 //import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 //
