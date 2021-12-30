@@ -179,9 +179,7 @@ public class CommandWDR extends CommandBase {
                 message.append(" ").append(timerOnReplay.equals("?") ? "" : timerOnReplay);
             }
 
-            if (!(args.length == 2)) {
-                (Minecraft.getMinecraft()).thePlayer.sendChatMessage(message.toString()); //sends command to server
-            }
+            (Minecraft.getMinecraft()).thePlayer.sendChatMessage(message.toString()); //sends command to server
 
             CachedMojangUUID apireq;
             String uuid = null;
