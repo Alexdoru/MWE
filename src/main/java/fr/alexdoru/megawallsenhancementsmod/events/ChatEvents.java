@@ -37,7 +37,6 @@ public class ChatEvents {
     private static final Pattern REPORT_PATTERN1 = Pattern.compile("^(?:|\\[SHOUT\\] ).+?(\\w+) (?:|is )b?hop?ping.*", Pattern.CASE_INSENSITIVE);
     private static final Pattern REPORT_PATTERN2 = Pattern.compile("^(?:|\\[SHOUT\\] ).+?(?:wdr|report) (\\w+) (\\w+).*", Pattern.CASE_INSENSITIVE);
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Triple Coins \\+ EXP, |)(?:Active Booster, |)\\w+'s Network Booster\\)).*");
-    // FIXME ca marche pas si ya pas le network booster message
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
     public static final ResourceLocation reportSuggestionSound = new ResourceLocation("random.orb");
     public static final ResourceLocation strengthSound = new ResourceLocation("item.fireCharge.use"); // item.fireCharge.use  usefireworks.twinkle

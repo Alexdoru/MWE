@@ -38,6 +38,4 @@ public class NoCheatersMod {
 
     }
 
-    // TODO garder les reports sous forme de .json avec le time premier report, last time reported etc ?
-
 }

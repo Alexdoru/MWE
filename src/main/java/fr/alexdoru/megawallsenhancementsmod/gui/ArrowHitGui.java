@@ -64,7 +64,7 @@ public class ArrowHitGui extends MyCachedGui {
         if (matcherArrowHit.matches()) {
 
             HPvalue = matcherArrowHit.group(1);
-            if (HPvalue.equals("0")) { // FIXME it prints kill even if the guy is not dead but on 0 hp
+            if (HPvalue.equals("0")) {
                 HPvalue = "Kill";
                 Color = EnumChatFormatting.GOLD;
             } else {

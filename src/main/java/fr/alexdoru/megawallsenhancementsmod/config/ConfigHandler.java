@@ -29,9 +29,6 @@ public class ConfigHandler {
     public static boolean text_shadow;
     public static double fkc_hud_size;
     public static int playerAmount;
-    // TODO add counter to sidebar
-    // TODO add the finals to the tablist, on nametags
-
 
     /*MWEnhancements config*/
     public static String APIKey;
