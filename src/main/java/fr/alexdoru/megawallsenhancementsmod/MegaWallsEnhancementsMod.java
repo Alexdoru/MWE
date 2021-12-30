@@ -17,7 +17,6 @@ public class MegaWallsEnhancementsMod {
 
     public static final String modid = "mwenhancements";
     public static final String version = "1.3";
-    // TODO update le fkcounter à 2.6 et ca à 1.4
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -32,6 +31,7 @@ public class MegaWallsEnhancementsMod {
         MinecraftForge.EVENT_BUS.register(new SquadEvent());
         MinecraftForge.EVENT_BUS.register(new KillCounter());
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
+        MinecraftForge.EVENT_BUS.register(new UpdateNotifier());
         MinecraftForge.EVENT_BUS.register(new KeybindingsEvent());
         MinecraftForge.EVENT_BUS.register(new MWGameStatsEvent());
 
