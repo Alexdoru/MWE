@@ -8,6 +8,7 @@
   "mixins": [
     "GuiIngameMixin",
     "GUIPlayerTabOverlayMixin",
-    "NetworkPlayerInfoMixin"
+    "NetworkPlayerInfoMixin",
+    "ScoreboardMixin"
   ]
 }
