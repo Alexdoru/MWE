@@ -212,14 +212,7 @@ class ScanPlayerTask implements Callable<String> {
 
             }
 
-        } catch (ApiException e) {
-
-            if (e.getMessage().equals("This player never joined Hypixel")) {
-                addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.DARK_GRAY + "This player never joined Hypixel"));
-            } else {
-                addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + e.getMessage()));
-            }
-
+        } catch (ApiException ignored) {
         }
 
         return null;
