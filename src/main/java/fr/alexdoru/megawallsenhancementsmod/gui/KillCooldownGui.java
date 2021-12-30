@@ -31,17 +31,13 @@ public class KillCooldownGui extends MyCachedGui {
             lastupdate = time;
         }
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
-        int x = absolutePos[0];
-        int y = absolutePos[1];
-        frObj.drawStringWithShadow(displayText, x, y, 0);
+        frObj.drawStringWithShadow(displayText, absolutePos[0], absolutePos[1], 0);
     }
 
     @Override
     public void renderDummy() {
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
-        int x = absolutePos[0];
-        int y = absolutePos[1];
-        frObj.drawStringWithShadow(DUMMY_TEXT, x, y, 0);
+        frObj.drawStringWithShadow(DUMMY_TEXT, absolutePos[0], absolutePos[1], 0);
     }
 
     @Override

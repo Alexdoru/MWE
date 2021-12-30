@@ -40,17 +40,13 @@ public class ArrowHitGui extends MyCachedGui {
     @Override
     public void render() {
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
-        int x = absolutePos[0];
-        int y = absolutePos[1];
-        drawCenteredString(frObj, displayText, x, y - frObj.FONT_HEIGHT, 0);
+        drawCenteredString(frObj, displayText, absolutePos[0], absolutePos[1] - frObj.FONT_HEIGHT, 0);
     }
 
     @Override
     public void renderDummy() {
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
-        int x = absolutePos[0];
-        int y = absolutePos[1];
-        drawCenteredString(frObj, DUMMY_TEXT, x, y - frObj.FONT_HEIGHT, 0);
+        drawCenteredString(frObj, DUMMY_TEXT, absolutePos[0], absolutePos[1] - frObj.FONT_HEIGHT, 0);
     }
 
     @Override
