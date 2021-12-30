@@ -126,21 +126,6 @@ public class NameUtil {
      */
     public static IChatComponent getTransformedDisplayName(GameProfile gameProfile, IChatComponent displayName) {
 
-        // public void handleTeams(S3EPacketTeams packetIn) in NetHandlerPlayClient
-        // add a hook to transform the names
-        // 0 : create a team
-        // 1 : remove a team
-        // 2 : Set team displayname/prefix/suffix and/or whether friendly fire is enabled
-        // 3 : add players to team
-        // 4 : remove players from team
-
-        //***************************
-
-        // TODO transform les player name sur les paquets de team
-        // ca laisse des croix devant les pseudo quand qqu deco reco en mw
-        // ca conserve pas les couleurs des teams en miniwalls
-        // en miniwalls the display name est null pendant la game
-
         String username = gameProfile.getName();
         String uuid = gameProfile.getId().toString().replace("-", "");
         String extraprefix = "";
@@ -181,22 +166,6 @@ public class NameUtil {
 
                 }
 
-            }
-
-        }
-
-        if (displayName != null) {
-
-            if (displayName.getFormattedText().contains("\u00a7k")) {
-                return displayName;
-            }
-
-            String formattedname = displayName.getFormattedText().replace(squadprefix, "").replace(prefix_bhop, "").replace(prefix, "").replace(prefix_scan, "");
-
-            if (needtochange) {
-                return new ChatComponentText(extraprefix).appendSibling(new ChatComponentText((isSquadMate ? formattedname.replace(username, squadname) : formattedname)));
-            } else {
-                return new ChatComponentText(formattedname);
             }
 
         }
