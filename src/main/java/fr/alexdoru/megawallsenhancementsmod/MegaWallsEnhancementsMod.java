@@ -17,6 +17,7 @@ public class MegaWallsEnhancementsMod {
 
     public static final String modid = "mwenhancements";
     public static final String version = "1.3";
+    // TODO update le fkcounter à 2.6 et ca à 1.4
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -38,6 +39,7 @@ public class MegaWallsEnhancementsMod {
         ClientCommandHandler.instance.registerCommand(new CommandKill());
         ClientCommandHandler.instance.registerCommand(new CommandSquad());
         ClientCommandHandler.instance.registerCommand(new CommandStalk());
+        ClientCommandHandler.instance.registerCommand(new CommandPlancke());
         ClientCommandHandler.instance.registerCommand(new CommandScanGame());
         ClientCommandHandler.instance.registerCommand(new CommandSetupApiKey());
         ClientCommandHandler.instance.registerCommand(new CommandMWGameStats());
