@@ -272,12 +272,12 @@ public class ConfigHandler {
         if (toggleicons) {
             mc.theWorld.playerEntities.forEach(playerEntity -> {
                 NameUtil.handlePlayer(playerEntity, true, false, false);
-                NameUtil.transformNameTablist(playerEntity.getName());
+                NameUtil.transformNameTablist(playerEntity.getUniqueID());
             });
         } else {
             mc.theWorld.playerEntities.forEach(playerEntity -> {
                 NameUtil.removeNametagIcons(playerEntity);
-                NameUtil.transformNameTablist(playerEntity.getName());
+                NameUtil.transformNameTablist(playerEntity.getUniqueID());
             });
         }
     }
