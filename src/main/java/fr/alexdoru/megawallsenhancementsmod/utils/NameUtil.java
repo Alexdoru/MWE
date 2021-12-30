@@ -20,6 +20,7 @@ import net.minecraftforge.client.ClientCommandHandler;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import static fr.alexdoru.nocheatersmod.events.NoCheatersEvents.nbReport;
 
@@ -106,7 +107,18 @@ public class NameUtil {
     }
 
     public static void transformNameTablist(String playername) {
+        // TODO O(n) mais il y a une map <UUID, Networkplayerinfo>
+        // TODO faire une version miroir de la playerinfo map String name , networkplayerninfo ?
+        // TODO injecter le config check toggleIcons avant de call les fonctions
+
         NetworkPlayerInfo networkPlayerInfo = mc.getNetHandler().getPlayerInfo(playername);
+        if (networkPlayerInfo != null) {
+            networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo));
+        }
+    }
+
+    public static void transformNameTablist(UUID uuid) {
+        NetworkPlayerInfo networkPlayerInfo = mc.getNetHandler().getPlayerInfo(uuid);
         if (networkPlayerInfo != null) {
             networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo));
         }
