@@ -45,7 +45,7 @@ public class MegaWallsStats {
 
     private int time_played = 0;
     private int nbprestiges = 0;
-    LinkedHashMap<String, Integer> classpointsMap = new LinkedHashMap<>();
+    private final LinkedHashMap<String, Integer> classpointsMap = new LinkedHashMap<>();
 
     private int games_played = 0;
     private float fkpergame = 0;

@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.mixin;
 
-import fr.alexdoru.megawallsenhancementsmod.ASM.ClassTransformer;
+import fr.alexdoru.megawallsenhancementsmod.asm.ClassTransformer;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.MixinEnvironment;
