@@ -46,6 +46,7 @@ public class MegaWallsStats {
     private int time_played = 0;
     private int nbprestiges = 0;
     private final LinkedHashMap<String, Integer> classpointsMap = new LinkedHashMap<>();
+    private int total_classpoints = 0;
 
     private int games_played = 0;
     private float fkpergame = 0;
@@ -109,6 +110,7 @@ public class MegaWallsStats {
             int classpoints = JsonUtil.getInt(mwdata, classname + "_final_kills_standard")
                     + JsonUtil.getInt(mwdata, classname + "_final_assists_standard")
                     + JsonUtil.getInt(mwdata, classname + "_wins_standard") * 10;
+            total_classpoints += classpoints;
             classpointsMap.put(classname, classpoints);
         }
 
@@ -149,6 +151,7 @@ public class MegaWallsStats {
                                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + entry.getKey()))))
                     .appendSibling(new ChatComponentText(" : " + (entry.getValue() > 2000 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + entry.getValue() + "\n"));
         }
+        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "Total : " + EnumChatFormatting.GOLD + this.total_classpoints + "\n"));
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
         return imsg;
     }
