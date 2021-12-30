@@ -115,7 +115,7 @@ public class NameUtil {
     }
 
     public static IChatComponent getTransformedDisplayName(NetworkPlayerInfo networkPlayerInfo) {
-        return getTransformedDisplayName(networkPlayerInfo.getGameProfile(), networkPlayerInfo.getDisplayName());
+        return getTransformedDisplayName(networkPlayerInfo.getGameProfile());
     }
 
     /*
@@ -124,7 +124,7 @@ public class NameUtil {
      * adds a tag to reported players
      * unscrambles the tablist
      */
-    public static IChatComponent getTransformedDisplayName(GameProfile gameProfile, IChatComponent displayName) {
+    public static IChatComponent getTransformedDisplayName(GameProfile gameProfile) {
 
         String username = gameProfile.getName();
         String uuid = gameProfile.getId().toString().replace("-", "");
