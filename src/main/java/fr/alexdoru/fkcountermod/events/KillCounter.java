@@ -153,20 +153,13 @@ public class KillCounter {
                 String[] split = FormattedText.split("\u00a7");
 
                 if (split.length >= 7) {
-
                     String killedTeam = split[2].substring(0, 1);
                     String killerTeam = split[6].substring(0, 1);
-
                     removeKilledPlayer(killed, killedTeam);
-
                     if (isWitherDead(killedTeam)) {
                         addKill(killer, killerTeam);
-                        //sortTeamKills(killerTeam);
-                        //sortTeamKills(killedTeam);
                     }
-
                     FKCounterGui.instance.updateDisplayText();
-
                 }
 
                 if (ConfigHandler.strengthParticules) {
@@ -307,14 +300,6 @@ public class KillCounter {
             teamKillsArray[team].put(player, 1);
         }
     }
-
-    //private static void sortTeamKills(String color) {
-    //    int team = getTeamFromColor(color);
-    //    if (isNotValidTeam(team)) {
-    //        return;
-    //    }
-    //    teamKillsArray[team] = sortByDecreasingValue1(teamKillsArray[team]);
-    //}
 
     private static int getTeamFromColor(String color) {
         for (int team = 0; team < TEAMS; team++) {

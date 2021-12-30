@@ -38,12 +38,9 @@ public class MegaWallsEnhancementsMod {
         ClientCommandHandler.instance.registerCommand(new CommandKill());
         ClientCommandHandler.instance.registerCommand(new CommandSquad());
         ClientCommandHandler.instance.registerCommand(new CommandStalk());
-        ClientCommandHandler.instance.registerCommand(new CommandPlancke());
-        //ClientCommandHandler.instance.registerCommand(new CommandPlayGame());
         ClientCommandHandler.instance.registerCommand(new CommandScanGame());
         ClientCommandHandler.instance.registerCommand(new CommandSetupApiKey());
         ClientCommandHandler.instance.registerCommand(new CommandMWGameStats());
-        //ClientCommandHandler.instance.registerCommand(new CommandAPIRequests());
         ClientCommandHandler.instance.registerCommand(new CommandHypixelShout());
         ClientCommandHandler.instance.registerCommand(new CommandHypixelReply());
         ClientCommandHandler.instance.registerCommand(new CommandMWEnhancements());
