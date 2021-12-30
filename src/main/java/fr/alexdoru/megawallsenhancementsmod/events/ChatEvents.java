@@ -29,17 +29,20 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 public class ChatEvents {
 
     //private static final String HUNTER_STRENGTH_MESSAGE = "\u00a7a\u00a7lF.O.N. \u00a77(\u00a7l\u00a7c\u00a7lStrength\u00a77) \u00a7e\u00a7l10";
-    private static final Pattern HUNTER_STRENGTH_PATTERN = Pattern.compile(".*\u00a7a\u00a7lF\\.O\\.N\\. (\u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l[0-9]+).*");
+    private static final Pattern HUNTER_PRE_STRENGTH_PATTERN = Pattern.compile(".*\u00a7a\u00a7lF\\.O\\.N\\. \u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l([0-9]+).*");
+    private static final String HUNTER_STRENGTH_MESSAGE = "Your Force of Nature gave you a 5 second Strength I buff.";
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
     private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:|\\[SHOUT\\] )(?:|\\[[A-Z]+\\] )(?:|\\[[a-zA-Z0-9_+]{1,5}\\] )?(\\w{1,16}):.*", Pattern.CASE_INSENSITIVE);
     private static final Pattern REPORT_PATTERN1 = Pattern.compile("^(?:|\\[SHOUT\\] ).+?(\\w+) (?:|is )b?hop?ping.*", Pattern.CASE_INSENSITIVE);
     private static final Pattern REPORT_PATTERN2 = Pattern.compile("^(?:|\\[SHOUT\\] ).+?(?:wdr|report) (\\w+) (\\w+).*", Pattern.CASE_INSENSITIVE);
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Triple Coins \\+ EXP, |)(?:Active Booster, |)\\w+'s Network Booster\\)).*");
+    // FIXME ca marche pas si ya pas le network booster message
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
     public static final ResourceLocation reportSuggestionSound = new ResourceLocation("random.orb");
     public static final ResourceLocation strengthSound = new ResourceLocation("item.fireCharge.use"); // item.fireCharge.use  usefireworks.twinkle
     private static long lastStrength = 0;
+    public static final Minecraft mc = Minecraft.getMinecraft();
 
     @SubscribeEvent
     public void onChatMessage(ClientChatReceivedEvent event) {
@@ -103,22 +106,27 @@ public class ChatEvents {
             if (MWGameStatsEvent.processMessage(msg)) {
                 return;
             }
+
+            if (ConfigHandler.hunterStrengthHUD && msg.equals(HUNTER_STRENGTH_MESSAGE)) {
+                HunterStrengthGui.instance.setStrengthRenderStart();
+                return;
+            }
+
             if (parseAPIKey(msg)) {
                 return;
             }
 
             /*Status messages*/
         } else if (ConfigHandler.hunterStrengthHUD && event.type == 2) {
-            Matcher huntermatcher = HUNTER_STRENGTH_PATTERN.matcher(fmsg);
-            if (huntermatcher.matches()) {
-                long time = System.currentTimeMillis();
-                if (time - lastStrength > 15000L) {
-                    lastStrength = time;
-                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(strengthSound, 0.0F));
-                    HunterStrengthGui.instance.setRenderStart();
+            Matcher preStrengthMatcher = HUNTER_PRE_STRENGTH_PATTERN.matcher(fmsg);
+            if (preStrengthMatcher.matches()) {
+                long currentTime = System.currentTimeMillis();
+                if (currentTime - lastStrength > 11000L) {
+                    lastStrength = currentTime;
+                    mc.getSoundHandler().playSound(PositionedSoundRecord.create(strengthSound, 0.0F));
                 }
-                String fStrengthmsg = huntermatcher.group(1);
-                HunterStrengthGui.instance.setDisplayText(fStrengthmsg);
+                String preStrengthTimer = preStrengthMatcher.group(1);
+                HunterStrengthGui.instance.setPreStrengthTime(preStrengthTimer, currentTime);
             }
         }
 
@@ -164,14 +172,14 @@ public class ChatEvents {
     }
 
     private static void printReportSuggestion(String playername, String cheat) {
-        Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(reportSuggestionSound, 1.0F));
+        mc.getSoundHandler().playSound(PositionedSoundRecord.create(reportSuggestionSound, 1.0F));
         IChatComponent imsg = new ChatComponentText(getTagMW() + EnumChatFormatting.DARK_RED + "Command suggestion : ")
                 .appendSibling(makeReportButtons(playername, cheat, ClickEvent.Action.SUGGEST_COMMAND, ClickEvent.Action.SUGGEST_COMMAND));
         new DelayedTask(() -> addChatMessage(imsg), 0);
     }
 
     private static boolean isAValidName(String playername) {
-        for (NetworkPlayerInfo networkplayerinfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+        for (NetworkPlayerInfo networkplayerinfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
                 return true;
             }
