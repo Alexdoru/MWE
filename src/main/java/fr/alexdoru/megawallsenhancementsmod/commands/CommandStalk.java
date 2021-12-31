@@ -1,126 +1,184 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import java.util.List;
-
-import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
+import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassSkinData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerStatus;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangPlayernameToUUID;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class CommandStalk extends CommandBase {
 
-	@Override
-	public String getCommandName() {
-		return "stalk";
-	}
+    @Override
+    public String getCommandName() {
+        return "stalk";
+    }
 
-	@Override
-	public String getCommandUsage(ICommandSender sender) {
-		return "/stalk <playernames>";
-	}
+    @Override
+    public String getCommandUsage(ICommandSender sender) {
+        return "/stalk <playernames>";
+    }
 
-	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		return true;
-	}
+    @Override
+    public boolean canCommandSenderUseCommand(ICommandSender sender) {
+        return true;
+    }
 
-	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+    @Override
+    public void processCommand(ICommandSender sender, String[] args) {
 
-		if (args.length < 1) {
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
-			return;
-		} 
+        if (args.length < 1) {
+            addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
+            return;
+        }
 
-		if(!HypixelApiKeyUtil.isApiKeySetup()) { // api key not setup
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.apikeyMissingErrorMsg()));
-			return;
-		}
+        if (HypixelApiKeyUtil.apiKeyIsNotSetup()) { // api key not setup
+            addChatMessage(new ChatComponentText(apikeyMissingErrorMsg()));
+            return;
+        }
 
-		(new Thread(()->{
+        int nbcores = Math.min(args.length, Runtime.getRuntime().availableProcessors());
+        ExecutorService service = Executors.newFixedThreadPool(nbcores);
 
-			try {	
-				MojangPlayernameToUUID apiname = new MojangPlayernameToUUID(args[0]);
-				String uuid = apiname.getUuid();
+        for (String name : args) {
+            service.submit(new StalkTask(name));
+        }
 
-				// player found on mojang's api 
+    }
 
-				String playername = apiname.getName();
-				HypixelPlayerStatus apistatus = new HypixelPlayerStatus(uuid, HypixelApiKeyUtil.getApiKey());
+    @Override
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+        return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+    }
 
-				if(apistatus.getOnline()) { // player is online
+}
 
-					ChatUtil.addChatMessage((IChatComponent)new ChatComponentText( ChatUtil.getTag()
-							+ EnumChatFormatting.YELLOW + playername + EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + apistatus.getGamemode() + " " + apistatus.getMode() + 
-							( apistatus.getMap() == null ? "" : ( EnumChatFormatting.GREEN + " on " + EnumChatFormatting.YELLOW + apistatus.getMap()) )  ));
-					return;
+class StalkTask implements Callable<String> {
 
-				} else {                   // player is offline, stalk the playerdata info
+    final String name;
 
-					HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
-					LoginData logindata = new LoginData(playerdata.getPlayerData());
-					String formattedname = logindata.getFormattedName();
+    public StalkTask(String name) {
+        this.name = name;
+    }
 
-					if(playerdata.getPlayerData() == null) { // Failed to contact hypixel's API
+    @Override
+    public String call() {
 
-						ChatUtil.addChatMessage((IChatComponent)new ChatComponentText( ChatUtil.getTag()
-								+ EnumChatFormatting.RED + "Failed to retrieve information from Hypixel's api for : " + playername + EnumChatFormatting.RED + "."));
-						return;
+        try {
+            MojangPlayernameToUUID apiname = new MojangPlayernameToUUID(name);
+            String uuid = apiname.getUuid();
 
-					} else if(logindata.hasNeverJoinedHypixel()) { // player never joined hypixel
+            // player found on mojang's api
 
-						ChatUtil.addChatMessage((IChatComponent)new ChatComponentText( ChatUtil.getTag()
-								+ EnumChatFormatting.YELLOW + playername + EnumChatFormatting.RED + " has never joined Hypixel." ));
-						return;
+            String playername = apiname.getName();
+            HypixelPlayerStatus apistatus = new HypixelPlayerStatus(uuid, HypixelApiKeyUtil.getApiKey());
+            HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+            LoginData logindata = new LoginData(playerdata.getPlayerData());
 
-					} else if(logindata.isStaffonHypixel()) { // player is a a staff member
+            if (apistatus.isOnline()) { // player is online
 
-						ChatUtil.addChatMessage((IChatComponent)new ChatComponentText( ChatUtil.getTag()
-								+ formattedname + EnumChatFormatting.RED + " is completely hiding their online status from the API."
-								+ EnumChatFormatting.DARK_GRAY + " It happens for staff members."));
-						return;
+                if (apistatus.getGamemode().equals("Mega Walls")) { // player is in MW, display currrent class and skin
 
-					} else if(logindata.isOnline()) { // player is online but hiding their session
+                    MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
+                    addChatMessage(new ChatComponentText(getTagMW()
+                            + EnumChatFormatting.YELLOW + logindata.getFormattedName() + EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + apistatus.getGamemode() + " " + apistatus.getMode() +
+                            (apistatus.getMap() == null ? "" : (EnumChatFormatting.GREEN + " on " + EnumChatFormatting.YELLOW + apistatus.getMap()))
+                            + EnumChatFormatting.GREEN + " playing "
+                            + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass())
+                            + EnumChatFormatting.GREEN + " with the " + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwskin() == null ? (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass()) : mwclassskindata.getCurrentmwskin()) + EnumChatFormatting.GREEN + " skin."
+                    ));
 
-						ChatUtil.addChatMessage((IChatComponent)new ChatComponentText( ChatUtil.getTag()
-								+ formattedname + EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType() 
-								+ EnumChatFormatting.GREEN + "." +EnumChatFormatting.DARK_GRAY + " (This player hides their session.)"));
-						return;
+                } else { // player isn't in MW
+                    addChatMessage(new ChatComponentText(getTagMW()
+                            + EnumChatFormatting.YELLOW + logindata.getFormattedName() + EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + apistatus.getGamemode() + " " + apistatus.getMode() +
+                            (apistatus.getMap() == null ? "" : (EnumChatFormatting.GREEN + " on " + EnumChatFormatting.YELLOW + apistatus.getMap()))));
+                }
 
-					} else { // offline
+                return null;
 
-						String offlinesince = DateUtil.timeSince(logindata.getLastLogout());
-						ChatUtil.addChatMessage((IChatComponent)new ChatComponentText( ChatUtil.getTag()
-								+ formattedname + EnumChatFormatting.RED + " has been offline for " + EnumChatFormatting.YELLOW + offlinesince 
-								+ EnumChatFormatting.RED + "." + (logindata.getMostRecentGameType().equals("?") ? "" : EnumChatFormatting.RED + " Last seen in : " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType())));
-						return;
-					}
+            } else { // player is offline or blocking their API, stalk the playerdata info
 
-				}
-			} catch (ApiException e) {
-				ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTag() + EnumChatFormatting.RED + e.getMessage()));
-			}
+                String formattedname = logindata.getFormattedName();
 
-		})).start();
+                if (playerdata.getPlayerData() == null) { // Failed to contact hypixel's API
 
-	}
+                    addChatMessage(new ChatComponentText(getTagMW()
+                            + EnumChatFormatting.RED + "Failed to retrieve information from Hypixel's api for : " + playername + EnumChatFormatting.RED + "."));
+                    return null;
 
-	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-		return (FKCounterMod.isitPrepPhase() ? null : getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()));
-	}
+                } else if (logindata.hasNeverJoinedHypixel()) { // player never joined hypixel
+
+                    addChatMessage(new ChatComponentText(getTagMW()
+                            + EnumChatFormatting.YELLOW + playername + EnumChatFormatting.RED + " has never joined Hypixel."));
+                    return null;
+
+                } else if (logindata.isStaffonHypixel()) { // player is a staff member
+
+                    addChatMessage(new ChatComponentText(getTagMW()
+                            + formattedname + EnumChatFormatting.RED + " is completely hiding their online status from the API."
+                            + EnumChatFormatting.DARK_GRAY + " It happens for staff members."));
+                    return null;
+
+                } else if (logindata.isHidingFromAPI()) { // player is blocking their API
+                    MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
+                    addChatMessage(new ChatComponentText(getTagMW()
+                            + formattedname + EnumChatFormatting.RED + " is blocking their API."
+                            + EnumChatFormatting.GREEN + " Selected class : "
+                            + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass())
+                            + EnumChatFormatting.GREEN + " with the " + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwskin() == null ? (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass()) : mwclassskindata.getCurrentmwskin()) + EnumChatFormatting.GREEN + " skin."
+                    ));
+                    return null;
+
+                } else if (logindata.isOnline()) { // player is online but hiding their session, that doesn't work anymore
+
+                    if (logindata.getMostRecentGameType().equals("Mega Walls")) { // online and in MW
+
+                        MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
+                        addChatMessage(new ChatComponentText(getTagMW()
+                                + formattedname + EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType()
+                                + EnumChatFormatting.GREEN + " playing "
+                                + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass())
+                                + EnumChatFormatting.GREEN + " with the " + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwskin() == null ? (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass()) : mwclassskindata.getCurrentmwskin()) + EnumChatFormatting.GREEN + " skin."
+                                + EnumChatFormatting.DARK_GRAY + " (This player hides their session.)" + "\n"
+                        ));
+
+                    } else { // online not in MW
+                        addChatMessage(new ChatComponentText(getTagMW()
+                                + formattedname + EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType()
+                                + EnumChatFormatting.GREEN + "." + EnumChatFormatting.DARK_GRAY + " (This player hides their session.)"));
+                    }
+                    return null;
+
+                } else { // offline
+                    String offlinesince = DateUtil.timeSince(logindata.getLastLogout());
+                    addChatMessage(new ChatComponentText(getTagMW()
+                            + formattedname + EnumChatFormatting.RED + " has been offline for " + EnumChatFormatting.YELLOW + offlinesince
+                            + EnumChatFormatting.RED + "." + (logindata.getMostRecentGameType().equals("?") ? "" : EnumChatFormatting.RED + " Last seen in : " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType())));
+                    return null;
+                }
+
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+        }
+
+        return null;
+    }
 
 }

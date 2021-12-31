@@ -1,10 +1,10 @@
 package fr.alexdoru.fkcountermod.utils;
 
-import java.util.regex.Pattern;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraftforge.fml.client.FMLClientHandler;
+
+import java.util.regex.Pattern;
 
 public class MinecraftUtils {
     /* Regex made by Sk1er */
