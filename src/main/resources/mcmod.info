@@ -1,0 +1,54 @@
+[
+  {
+    "modid": "mwenhancements",
+    "name": "MegaWallsEnhancements",
+    "description": "Enhancements for Hypixel and Hypixel's Mega Walls",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://github.com/Alexdoru/MegaWallsEnhancements",
+    "updateUrl": "",
+    "authorList": [
+      "Alexdoru"
+    ],
+    "credits": "Alexdoru",
+    "logoFile": "MegaWalls-logo.png",
+    "screenshots": [],
+    "dependencies": []
+  },
+  {
+    "modid": "fkcounter",
+    "name": "FKCounter",
+    "description": "Final Kill Counter - tracks final kills in the Hypixel minigame Mega Walls",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "P0ke",
+      "BasicallyLouis",
+      "ziment",
+      "Alexdoru"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  },
+  {
+    "modid": "nocheaters",
+    "name": "No cheaters",
+    "description": "Tracks previously reported players",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "leduyquang753",
+      "Updated by Alexdoru"
+    ],
+    "credits": "Le Duy Quang ground his brain.",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
