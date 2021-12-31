@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public class MegaWallsEnhancementsMod {
 
     public static final String modid = "mwenhancements";
-    public static final String version = "1.3";
+    public static final String version = "1.4";
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
