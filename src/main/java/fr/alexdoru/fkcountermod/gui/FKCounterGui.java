@@ -1,163 +1,203 @@
 package fr.alexdoru.fkcountermod.gui;
 
-import java.awt.Color;
-
 import fr.alexdoru.fkcountermod.FKCounterMod;
-import fr.alexdoru.fkcountermod.config.ConfigSetting;
 import fr.alexdoru.fkcountermod.events.KillCounter;
-import fr.alexdoru.fkcountermod.hudproperty.IRenderer;
-import fr.alexdoru.fkcountermod.hudproperty.ScreenPosition;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.gui.MyCachedGui;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 
-public class FKCounterGui extends Gui implements IRenderer {
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
-	/**
-	 * used as an example when in the settings 
-	 */
-	private static final String DUMMY_TEXT = EnumChatFormatting.RED + "RED" + EnumChatFormatting.WHITE + ": 1\n"
-			+ EnumChatFormatting.GREEN + "GREEN" + EnumChatFormatting.WHITE + ": 2\n"
-			+ EnumChatFormatting.YELLOW + "YELLOW" + EnumChatFormatting.WHITE + ": 3\n"
-			+ EnumChatFormatting.BLUE + "BLUE" + EnumChatFormatting.WHITE + ": 4";
-	/**
-	 * used as an example when in the settings 
-	 */
-	private static final String DUMMY_TEXT_COMPACT = EnumChatFormatting.RED + "1" + EnumChatFormatting.GRAY + " / "
-			+ EnumChatFormatting.GREEN + "2" + EnumChatFormatting.GRAY + " / "
-			+ EnumChatFormatting.YELLOW + "3" + EnumChatFormatting.GRAY + " / "
-			+ EnumChatFormatting.BLUE + "4";
+import static fr.alexdoru.fkcountermod.events.KillCounter.*;
 
-	private boolean dummy = false;
+public class FKCounterGui extends MyCachedGui {
 
-	@Override
-	public void save(ScreenPosition pos) {
-		int x = pos.getAbsoluteX();
-		int y = pos.getAbsoluteY();
+    public static FKCounterGui instance;
 
-		ConfigSetting.FKCOUNTER_HUD.getData().setScreenPos(x, y);
-		FKCounterMod.getConfigHandler().saveConfig();
-	}
+    /*used as an example when in the settings*/
+    private static final String DUMMY_TEXT = EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 1\n"
+            + EnumChatFormatting.GREEN + "Green" + EnumChatFormatting.WHITE + ": 2\n"
+            + EnumChatFormatting.YELLOW + "Yellow" + EnumChatFormatting.WHITE + ": 3\n"
+            + EnumChatFormatting.BLUE + "Blue" + EnumChatFormatting.WHITE + ": 4";
+    /*used as an example when in the settings*/
+    private static final String DUMMY_TEXT_COMPACT = EnumChatFormatting.RED + "1" + EnumChatFormatting.DARK_GRAY + " / "
+            + EnumChatFormatting.GREEN + "2" + EnumChatFormatting.DARK_GRAY + " / "
+            + EnumChatFormatting.YELLOW + "3" + EnumChatFormatting.DARK_GRAY + " / "
+            + EnumChatFormatting.BLUE + "4";
+    /*used as an example when in the settings*/
+    private static final String DUMMY_TEXT_PLAYERS = EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 12 " + EnumChatFormatting.GRAY + "- RedPlayer (5)\n"
+            + EnumChatFormatting.GREEN + "Green" + EnumChatFormatting.WHITE + ": 9 " + EnumChatFormatting.GRAY + "- GreenPlayer (4)\n"
+            + EnumChatFormatting.YELLOW + "Yellow" + EnumChatFormatting.WHITE + ": 5 " + EnumChatFormatting.GRAY + "- YellowPlayer (3)\n"
+            + EnumChatFormatting.BLUE + "Blue" + EnumChatFormatting.WHITE + ": 4 " + EnumChatFormatting.GRAY + "- BluePlayer (2)";
 
-	@Override
-	public ScreenPosition load() {
-		return ConfigSetting.FKCOUNTER_HUD.getData().getScreenPos();
-	}
+    private final int BACKGROUND_COLOR = new Color(0, 0, 0, 64).getRGB();
+    private final int DUMMY_BACKGROUND_COLOR = new Color(255, 255, 255, 127).getRGB();
 
-	@Override
-	public int getHeight() {
-		if(ConfigSetting.COMPACT_HUD.getValue()) {
-			return Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT;
-		} else {
-			return Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT*4;
-		}
-	}
+    public FKCounterGui() {
+        instance = this;
+        guiPosition = ConfigHandler.fkcounterPosition;
+    }
 
-	@Override
-	public int getWidth() {
+    @Override
+    public int getHeight() {
+        if (ConfigHandler.compact_hud) {
+            return (int) (frObj.FONT_HEIGHT * ConfigHandler.fkc_hud_size);
+        } else {
+            return (int) (frObj.FONT_HEIGHT * 4 * ConfigHandler.fkc_hud_size);
+        }
+    }
 
-		if(dummy) {
-			if(ConfigSetting.COMPACT_HUD.getValue()) {
-				return Minecraft.getMinecraft().fontRendererObj.getStringWidth(DUMMY_TEXT_COMPACT);
-			}
-			else {
-				return Minecraft.getMinecraft().fontRendererObj.getStringWidth("YELLOW: 3");
-			}
-		}
+    @Override
+    public int getWidth() {
+        return (int) (getMultilineWidth(getDisplayText()) * ConfigHandler.fkc_hud_size);
+    }
 
-		int maxwidth = 0;
-		for(String line : getDisplayText().split("\n")) {
+    @Override
+    public void render() {
 
-			int width = Minecraft.getMinecraft().fontRendererObj.getStringWidth(line);
-			if(width > maxwidth) {
-				maxwidth = width;				
-			}
+        int[] absolutePos = this.guiPosition.getAbsolutePosition();
+        int x = absolutePos[0];
+        int y = absolutePos[1];
 
-		}
-		return maxwidth;
-	}
+        if (ConfigHandler.draw_background) {
+            drawRect(x - 1, y - 1, x + getWidth(), y + getHeight(), BACKGROUND_COLOR);
+        }
 
-	@Override
-	public void render(ScreenPosition position) { // TODO ca se décale pendant les games
-		dummy = false;
+        GlStateManager.pushMatrix();
+        {
+            GlStateManager.translate(x, y, 0);
+            GlStateManager.scale(ConfigHandler.fkc_hud_size, ConfigHandler.fkc_hud_size, 0d);
+            if (ConfigHandler.compact_hud) {
+                frObj.drawString(getDisplayText(), 0, 0, 16777215, ConfigHandler.text_shadow);
+            } else {
+                drawMultilineString(getDisplayText(), 0, 0, ConfigHandler.text_shadow);
+            }
+        }
+        GlStateManager.popMatrix();
 
-		int x = position.getAbsoluteX();
-		int y = position.getAbsoluteY();
+    }
 
-		if(ConfigSetting.DRAW_BACKGROUND.getValue()) {
-			drawRect(x - 1, y - 1, x + getWidth(), y + getHeight(), new Color(0, 0, 0, 64).getRGB());
-		}
+    @Override
+    public void renderDummy() {
 
-		drawMultilineString(getDisplayText(), x, y);
+        int[] absolutePos = this.guiPosition.getAbsolutePosition();
+        int x = absolutePos[0];
+        int y = absolutePos[1];
 
-	}
+        int width;
+        if (ConfigHandler.compact_hud) {
+            width = (int) (frObj.getStringWidth(DUMMY_TEXT_COMPACT) * ConfigHandler.fkc_hud_size);
+        } else if (ConfigHandler.show_players) {
+            width = (int) (getMultilineWidth(DUMMY_TEXT_PLAYERS) * ConfigHandler.fkc_hud_size);
+        } else {
+            width = (int) (getMultilineWidth(DUMMY_TEXT) * ConfigHandler.fkc_hud_size);
+        }
 
-	@Override
-	public void renderDummy(ScreenPosition position) {
-		dummy = true;
+        int left = x - 2;
+        int top = y - 2;
+        int right = x + width + 1;
+        int bottom = y + getHeight();
 
-		int x = position.getAbsoluteX();
-		int y = position.getAbsoluteY();
+        drawRect(left, top, right, bottom, DUMMY_BACKGROUND_COLOR);
+        drawHorizontalLine(left, right, top, Color.RED.getRGB());
+        drawHorizontalLine(left, right, bottom, Color.RED.getRGB());
+        drawVerticalLine(left, top, bottom, Color.RED.getRGB());
+        drawVerticalLine(right, top, bottom, Color.RED.getRGB());
 
-		int width = getWidth();
-		int height = getHeight();
+        GlStateManager.pushMatrix();
+        {
+            GlStateManager.translate(x, y, 0);
+            GlStateManager.scale(ConfigHandler.fkc_hud_size, ConfigHandler.fkc_hud_size, 0d);
+            if (ConfigHandler.compact_hud) {
+                frObj.drawString(DUMMY_TEXT_COMPACT, 0, 0, 16777215, ConfigHandler.text_shadow);
+            } else if (ConfigHandler.show_players) {
+                drawMultilineString(DUMMY_TEXT_PLAYERS, 0, 0, ConfigHandler.text_shadow);
+            } else {
+                drawMultilineString(DUMMY_TEXT, 0, 0, ConfigHandler.text_shadow);
+            }
+        }
+        GlStateManager.popMatrix();
 
-		drawRect(x - 1, y - 1, x + width + 1, y + height + 1, new Color(255, 255, 255, 127).getRGB());
-		drawHorizontalLine(x - 1, x + width + 1, y - 1, Color.RED.getRGB());
-		drawHorizontalLine(x - 1, x + width + 1, y + height + 1, Color.RED.getRGB());
-		drawVerticalLine(x - 1, y - 1, y + height + 1, Color.RED.getRGB());
-		drawVerticalLine(x + width + 1, y - 1, y + height + 1, Color.RED.getRGB());
+    }
 
+    @Override
+    public boolean isEnabled() {
+        return (ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame() && getGameId() != null);
+    }
 
-		if(ConfigSetting.COMPACT_HUD.getValue()) {
-			drawMultilineString(DUMMY_TEXT_COMPACT, x, y);
-		}
-		else {
-			drawMultilineString(DUMMY_TEXT, x, y);
-		}
-	}
+    @Override
+    public void updateDisplayText() {
 
-	@Override
-	public boolean isEnabled() {
-		return (ConfigSetting.FKCOUNTER_HUD.getValue() && FKCounterMod.isInMwGame() && FKCounterMod.getKillCounter().getGameId() != null);
-	}
+        if (getGameId() != null) {
 
-	private void drawMultilineString(String msg, int x, int y) {
-		
-		for(String line : msg.split("\n")) {
-			Minecraft.getMinecraft().fontRendererObj.drawString(line, x, y, 0xFFFFFF);
-			y += Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT;
-			
-		}
-	}
+            HashMap<Integer, Integer> sortedmap = getSortedTeamKillsMap();
+            StringBuilder strBuilder = new StringBuilder();
+            int i = 0;
 
-	private String getDisplayText() {
+            if (ConfigHandler.compact_hud) {
 
-		String msg = "";
-		KillCounter kc = FKCounterMod.getKillCounter();
+                for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
+                    if (i != 0) {
+                        strBuilder.append(EnumChatFormatting.DARK_GRAY).append(" / ");
+                    }
+                    strBuilder.append(getColorPrefixFromTeam(entry.getKey()))
+                            .append(entry.getValue());
+                    i++;
+                }
 
-		if(kc.getGameId()!= null) {
+            } else if (ConfigHandler.show_players) {
 
-			if(ConfigSetting.COMPACT_HUD.getValue()) {
+                for (Entry<Integer, Integer> teamEntry : sortedmap.entrySet()) {
+                    int team = teamEntry.getKey();
+                    if (i != 0) {
+                        strBuilder.append("\n");
+                    }
+                    strBuilder.append(getColorPrefixFromTeam(team))
+                            .append(getTeamNameFromTeam(team)).append(EnumChatFormatting.WHITE)
+                            .append(": ").append(getKills(team));
+                    HashMap<String, Integer> teamkillsmap = KillCounter.sortByDecreasingValue1(KillCounter.getPlayers(team));
+                    if (!teamkillsmap.isEmpty()) {
+                        int playerAmount = 0;
+                        for (Entry<String, Integer> playerEntry : teamkillsmap.entrySet()) {
+                            String squadname = SquadEvent.getSquad().get(playerEntry.getKey());
+                            if (squadname != null) {
+                                strBuilder.append(EnumChatFormatting.GRAY).append(" - ").append(squadname).append(" (").append(playerEntry.getValue()).append(")");
+                            } else {
+                                strBuilder.append(EnumChatFormatting.GRAY).append(" - ").append(playerEntry.getKey()).append(" (").append(playerEntry.getValue()).append(")");
+                            }
+                            playerAmount++;
+                            if (playerAmount == ConfigHandler.playerAmount) {
+                                break;
+                            }
+                        }
+                    }
+                    i++;
+                }
 
-				msg += "" + EnumChatFormatting.RED + kc.getKills(KillCounter.RED_TEAM) + EnumChatFormatting.GRAY + " / "
-						+ EnumChatFormatting.GREEN + kc.getKills(KillCounter.GREEN_TEAM) + EnumChatFormatting.GRAY + " / "
-						+ EnumChatFormatting.YELLOW + kc.getKills(KillCounter.YELLOW_TEAM) + EnumChatFormatting.GRAY + " / "
-						+ EnumChatFormatting.BLUE + kc.getKills(KillCounter.BLUE_TEAM);
+            } else {
 
-			} else {
+                for (Entry<Integer, Integer> entry : sortedmap.entrySet()) {
+                    int team = entry.getKey();
+                    if (i != 0) {
+                        strBuilder.append("\n");
+                    }
+                    strBuilder.append(getColorPrefixFromTeam(team))
+                            .append(getTeamNameFromTeam(team))
+                            .append(EnumChatFormatting.WHITE).append(": ")
+                            .append(getKills(team));
+                    i++;
+                }
 
-				msg += EnumChatFormatting.RED + "RED" + EnumChatFormatting.WHITE + ": " + kc.getKills(KillCounter.RED_TEAM) + "\n"
-						+ EnumChatFormatting.GREEN + "GREEN" + EnumChatFormatting.WHITE + ": " + kc.getKills(KillCounter.GREEN_TEAM) + "\n"
-						+ EnumChatFormatting.YELLOW + "YELLOW" + EnumChatFormatting.WHITE + ": " + kc.getKills(KillCounter.YELLOW_TEAM) + "\n"
-						+ EnumChatFormatting.BLUE + "BLUE" + EnumChatFormatting.WHITE + ": " + kc.getKills(KillCounter.BLUE_TEAM);
+            }
 
-			}
+            displayText = strBuilder.toString();
 
-		}
+        }
 
-		return msg;
-
-	}
+    }
 
 }
