@@ -11,62 +11,72 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 public class ScoreboardEvent {
 
-	private static ScoreboardParser mwScoreboardParser = new ScoreboardParser(null);
-	private static String prevGameId = null;
-	private static boolean prevHasGameEnded = false;
-	private static boolean isHypixel = false;
+    private static ScoreboardParser mwScoreboardParser = new ScoreboardParser(null);
+    private static String prevGameId = null;
+    private static boolean prevHasGameEnded = false;
+    private static boolean isHypixel = false;
+    private static int prevAmountWitherAlive = 4;
 
-	@SubscribeEvent
-	public void onTick(TickEvent.ClientTickEvent event) {
+    @SubscribeEvent
+    public void onTick(TickEvent.ClientTickEvent event) {
 
-		Minecraft mc = Minecraft.getMinecraft();
+        Minecraft mc = Minecraft.getMinecraft();
 
-		if (mc.theWorld == null || !isHypixel) { 
-			return;
-		}
-		
-		Scoreboard scoreboard = mc.theWorld.getScoreboard();
-		if (scoreboard == null) {
-			return;
-		}
+        if (mc.theWorld == null || !isHypixel) {
+            return;
+        }
 
-		mwScoreboardParser = new ScoreboardParser(scoreboard);
+        Scoreboard scoreboard = mc.theWorld.getScoreboard();
+        if (scoreboard == null) {
+            return;
+        }
 
-		String gameId = mwScoreboardParser.getGameId();
-		boolean hasgameended = mwScoreboardParser.hasGameEnded();
-		
-		if (gameId == null) {
+        mwScoreboardParser = new ScoreboardParser(scoreboard);
 
-			if (prevGameId != null) {
-				MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.DISCONNECT));
-			}
+        String gameId = mwScoreboardParser.getGameId();
+        boolean hasgameended = mwScoreboardParser.hasGameEnded();
+        int amountWitherAlive = mwScoreboardParser.getAliveWithers().size();
 
-		} else if (!gameId.equals(prevGameId)) {
-			MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.CONNECT));
-		}
-				
-		if(hasgameended) {
-			if(!prevHasGameEnded) {
-				MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.GAME_END));
-			}
-		}
+        if (gameId == null) { // not in a MW game
 
-		prevGameId = gameId;
-		prevHasGameEnded = hasgameended;
-	}
-	
-	@SubscribeEvent
-	public void onConnection(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-		isHypixel = MinecraftUtils.isHypixel();
-	}
-	
-	@SubscribeEvent
-	public void onDisconnection(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-		isHypixel = false;
-	}
+            if (prevGameId != null) {
+                MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.DISCONNECT));
+            }
 
-	public static ScoreboardParser getMwScoreboardParser() {
-		return mwScoreboardParser;
-	}
+        } else { // is in a MW game
+
+            if (amountWitherAlive == 1 && prevAmountWitherAlive > 1) {
+                MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.THIRD_WITHER_DEATH));
+            }
+
+            if (!gameId.equals(prevGameId)) {
+                MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.CONNECT));
+            }
+
+        }
+
+        if (hasgameended && !prevHasGameEnded) {
+            MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.GAME_END));
+        }
+
+        prevGameId = gameId;
+        prevHasGameEnded = hasgameended;
+        prevAmountWitherAlive = amountWitherAlive;
+
+    }
+
+    @SubscribeEvent
+    public void onConnection(FMLNetworkEvent.ClientConnectedToServerEvent event) {
+        isHypixel = MinecraftUtils.isHypixel();
+    }
+
+    @SubscribeEvent
+    public void onDisconnection(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
+        isHypixel = false;
+    }
+
+    public static ScoreboardParser getMwScoreboardParser() {
+        return mwScoreboardParser;
+    }
 
 }

@@ -1,5 +1,27 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
+import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
+import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
+import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
+import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.event.ClickEvent;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,208 +29,223 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
-import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
-import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
-import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
-import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
 
 public class CommandScanGame extends CommandBase {
 
-	private static HashMap<String, IChatComponent> scanmap = new HashMap<String, IChatComponent>();
-	private static String scanGameId;
-	public static final IChatComponent iprefix = (IChatComponent) new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + "" + EnumChatFormatting.BOLD + "\u26a0 ");
-	public static final String prefix = iprefix.getFormattedText();
-	/*
-	 * fills the hashmap with this instead if null when there is no match
-	 */
-	public static final IChatComponent nomatch = (IChatComponent) new ChatComponentText("none");
+    private static final HashMap<String, IChatComponent> scanmap = new HashMap<>();
+    private static String scanGameId;
 
-	@Override
-	public String getCommandName() {
-		return "scangame";
-	}
+    /*
+     * fills the hashmap with this instead if null when there is no match
+     */
+    public static final IChatComponent nomatch = new ChatComponentText("none");
 
-	@Override
-	public String getCommandUsage(ICommandSender sender) {
-		return "/scangame";
-	}
+    @Override
+    public String getCommandName() {
+        return "scangame";
+    }
 
-	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {	// TODO say
+    @Override
+    public String getCommandUsage(ICommandSender sender) {
+        return "/scangame";
+    }
 
-		if(!HypixelApiKeyUtil.isApiKeySetup()) { // api key not setup
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.apikeyMissingErrorMsg()));
-			return;
-		}
+    @Override
+    public void processCommand(ICommandSender sender, String[] args) {
 
-		String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
+        if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
+            addChatMessage(new ChatComponentText(ChatUtil.apikeyMissingErrorMsg()));
+            return;
+        }
 
-		Collection<NetworkPlayerInfo> playerCollection = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
+        String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
+        Collection<NetworkPlayerInfo> playerCollection = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
 
-		int nbcores = Runtime.getRuntime().availableProcessors();
-		ExecutorService service = Executors.newFixedThreadPool(nbcores);
+        int nbcores = Runtime.getRuntime().availableProcessors();
+        ExecutorService service = Executors.newFixedThreadPool(nbcores);
 
-		int i = 0;
+        int i = 0;
 
-		if(!currentGameId.equals("?") && scanGameId != null && currentGameId.equals(scanGameId)) {
+        if (!currentGameId.equals("?") && currentGameId.equals(scanGameId)) {
 
-			for (NetworkPlayerInfo networkPlayerInfo : playerCollection) {
+            for (NetworkPlayerInfo networkPlayerInfo : playerCollection) {
 
-				String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-				IChatComponent imsg = scanmap.get(uuid);
+                String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
+                IChatComponent imsg = scanmap.get(uuid);
 
-				if(imsg == null) {
-					i++;
-					service.submit(new ScanPlayerTask(networkPlayerInfo));
-				} else if (!imsg.equals(nomatch)) {
-					ChatUtil.addChatMessage(imsg);					
-				}
+                if (imsg == null) {
+                    i++;
+                    service.submit(new ScanPlayerTask(networkPlayerInfo));
+                } else if (!imsg.equals(nomatch)) {
+                    addChatMessage(imsg);
+                }
 
-			}
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTag() + EnumChatFormatting.GREEN + "Scanning " + i + " more players..."));
-			return;
+            }
+            addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " more players..."));
 
-		} else {
+        } else {
 
-			scanGameId = GameInfoGrabber.getGameIDfromscoreboard();
+            scanGameId = GameInfoGrabber.getGameIDfromscoreboard();
 
-			for (NetworkPlayerInfo networkPlayerInfo : playerCollection) {
-				i++;
-				service.submit(new ScanPlayerTask(networkPlayerInfo));
-			}
+            for (NetworkPlayerInfo networkPlayerInfo : playerCollection) {
+                i++;
+                service.submit(new ScanPlayerTask(networkPlayerInfo));
+            }
 
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTag() + EnumChatFormatting.GREEN + "Scanning " + i + " players..."));
+            addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " players..."));
 
-		}
+        }
 
-	}
+    }
 
-	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		return true;
-	}
+    @Override
+    public boolean canCommandSenderUseCommand(ICommandSender sender) {
+        return true;
+    }
 
-	public static void clearScanGameData() {
-		scanGameId = null;
-		scanmap.clear();
-	}
-	
-	public static void onGameStart() {
-		String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
-		if(!currentGameId.equals("?") && scanGameId != null && !scanGameId.equals(currentGameId)) {
-			clearScanGameData();
-		}
-		
-	}
+    public static void clearScanGameData() {
+        scanGameId = null;
+        scanmap.clear();
+    }
 
-	public static HashMap<String, IChatComponent> getScanmap(){
-		return scanmap;
-	}
+    public static void onGameStart() {
+        String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
+        if (!currentGameId.equals("?") && scanGameId != null && !scanGameId.equals(currentGameId)) {
+            clearScanGameData();
+        }
+
+    }
+
+    public static HashMap<String, IChatComponent> getScanmap() {
+        return scanmap;
+    }
 
 }
 
 class ScanPlayerTask implements Callable<String> {
 
-	NetworkPlayerInfo networkPlayerInfo;
+    final NetworkPlayerInfo networkPlayerInfo;
 
-	public ScanPlayerTask(NetworkPlayerInfo networkPlayerInfoIn) {
-		this.networkPlayerInfo = networkPlayerInfoIn;
-	}
+    public ScanPlayerTask(NetworkPlayerInfo networkPlayerInfoIn) {
+        this.networkPlayerInfo = networkPlayerInfoIn;
+    }
 
-	@Override
-	public String call() throws Exception {
+    @Override
+    public String call() {
 
-		try {
+        try {
 
-			String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-			String playername = networkPlayerInfo.getGameProfile().getName();
-			CommandScanGame.getScanmap().put(uuid, (IChatComponent) new ChatComponentText("none"));
+            String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
+            String playername = networkPlayerInfo.getGameProfile().getName();
+            CommandScanGame.getScanmap().put(uuid, new ChatComponentText("none"));
 
-			HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
-			MegaWallsStats megawallsstats = new MegaWallsStats(playerdata.getPlayerData());
+            HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+            MegaWallsStats megawallsstats = new MegaWallsStats(playerdata.getPlayerData());
 
-			if( (megawallsstats.getGames_played() <= 25 && megawallsstats.getFkdr() > 3f) || 
-					(megawallsstats.getGames_played() <= 250 && megawallsstats.getFkdr() > 5f)	||
-					(megawallsstats.getGames_played() <= 500 && megawallsstats.getFkdr() > 8f)) {
-				LoginData logindata = new LoginData(playerdata.getPlayerData());
-				String formattedname = logindata.getFormattedName();
-				IChatComponent msg = (IChatComponent) new ChatComponentText(ChatUtil.getTag())
-						.appendSibling(ChatUtil.makeReportButtons(playername, "", ClickEvent.Action.SUGGEST_COMMAND, ClickEvent.Action.SUGGEST_COMMAND))						
-						.appendSibling(new ChatComponentText(formattedname
-								+ EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played() 
-								+ EnumChatFormatting.GRAY + " games , fkd : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkdr()) 
-								+ EnumChatFormatting.GRAY + " FK/game : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkpergame())
-								+ EnumChatFormatting.GRAY + " W/L : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getWlr())));				
+            if ((megawallsstats.getGames_played() <= 25 && megawallsstats.getFkdr() > 3f) ||
+                    (megawallsstats.getGames_played() <= 250 && megawallsstats.getFkdr() > 5f) ||
+                    (megawallsstats.getGames_played() <= 500 && megawallsstats.getFkdr() > 8f) ||
+                    (megawallsstats.getFkdr() > 10f)) {
 
-				ChatUtil.addChatMessage(msg);
-				CommandScanGame.getScanmap().put(uuid, msg);
-				return null;
-			}
+                IChatComponent msg = new ChatComponentText(ChatUtil.getTagMW())
+                        .appendSibling(ChatUtil.makeReportButtons(playername, "bhop", ClickEvent.Action.RUN_COMMAND, ClickEvent.Action.SUGGEST_COMMAND))
+                        .appendSibling(new ChatComponentText(getFormattedName(networkPlayerInfo)
+                                + EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played()
+                                + EnumChatFormatting.GRAY + " games , fkd : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkdr())
+                                + EnumChatFormatting.GRAY + " FK/game : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkpergame())
+                                + EnumChatFormatting.GRAY + " W/L : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getWlr())));
 
-			if(megawallsstats.getGames_played() == 0) {
+                addChatMessage(msg);
+                CommandScanGame.getScanmap().put(uuid, msg);
+                this.networkPlayerInfo.setDisplayName(NameUtil.getTransformedDisplayName(this.networkPlayerInfo));
+                return null;
+            }
 
-				JsonObject classesdata = megawallsstats.getClassesdata();
-				IChatComponent msg = new ChatComponentText("");
+            if (megawallsstats.getGames_played() == 0) {
 
-				for(Map.Entry<String, JsonElement> entry : classesdata.entrySet()) {
-					if(entry.getValue() != null && entry.getValue().isJsonObject()) {
-						JsonObject entryclassobj = entry.getValue().getAsJsonObject();
+                JsonObject classesdata = megawallsstats.getClassesdata();
 
-						int skill_level_a = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_a"),1); //skill
-						int skill_level_b = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_b"),1); //passive1
-						int skill_level_c = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_c"),1); //passive2
-						int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"),1); //kit								
-						int skill_level_g = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_g"),1); //gathering
+                if (FKCounterMod.isInMwGame()) {
 
-						if(skill_level_a >= 4 || skill_level_d >= 4) {
-							LoginData logindata = new LoginData(playerdata.getPlayerData());
-							String formattedname = logindata.getFormattedName();
-							msg.appendSibling(new ChatComponentText(ChatUtil.getTag())
-									.appendSibling(ChatUtil.makeReportButtons(playername, "", ClickEvent.Action.SUGGEST_COMMAND, ClickEvent.Action.SUGGEST_COMMAND))
-									.appendSibling(new ChatComponentText(formattedname
-											+	EnumChatFormatting.GRAY + " never played and has : " + EnumChatFormatting.GOLD + entry.getKey() + " "							
-											+ (skill_level_d == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_d) + " "
-											+ (skill_level_a == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_a) + " "
-											+ (skill_level_b == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_b) + " "
-											+ (skill_level_c == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_c) + " "
-											+ (skill_level_g == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_g) + "\n")));
+                    ScorePlayerTeam team = Minecraft.getMinecraft().theWorld.getScoreboard().getPlayersTeam(playername);
+                    String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replace("[", "").replace("]", "").replace(" ", ""));
+                    MWClass mwClass = MWClass.fromTagOrName(classTag);
 
-						}							
+                    if (mwClass != null) {
+                        JsonObject entryclassobj = classesdata.getAsJsonObject(mwClass.className.toLowerCase());
+                        IChatComponent reportmsg = getReportMessageForClass(playername, mwClass.className, entryclassobj);
+                        if (reportmsg != null) {
+                            addChatMessage(reportmsg);
+                            CommandScanGame.getScanmap().put(uuid, reportmsg);
+                            this.networkPlayerInfo.setDisplayName(NameUtil.getTransformedDisplayName(this.networkPlayerInfo));
+                            return null;
+                        }
+                    }
 
-					}
+                } else {
 
-				}
+                    IChatComponent msg = new ChatComponentText("");
 
-				if(!msg.equals(new ChatComponentText(""))) {
-					ChatUtil.addChatMessage(msg);
-					CommandScanGame.getScanmap().put(uuid, msg);
-				}
-				return null;
-			}
+                    for (Map.Entry<String, JsonElement> entry : classesdata.entrySet()) {
+                        if (entry.getValue() != null && entry.getValue().isJsonObject()) {
+                            JsonObject entryclassobj = entry.getValue().getAsJsonObject();
 
-		} catch (ApiException e) {
-			ChatUtil.addChatMessage((IChatComponent)new ChatComponentText(ChatUtil.getTag() + EnumChatFormatting.RED + e.getMessage()));
-		}
+                            IChatComponent reportmsg = getReportMessageForClass(playername, entry.getKey(), entryclassobj);
+                            if (reportmsg != null) {
+                                msg.appendSibling(reportmsg);
+                            }
 
-		return null;
+                        }
 
-	}
+                    }
+
+                    if (!msg.equals(new ChatComponentText(""))) {
+                        addChatMessage(msg);
+                        CommandScanGame.getScanmap().put(uuid, msg);
+                        this.networkPlayerInfo.setDisplayName(NameUtil.getTransformedDisplayName(this.networkPlayerInfo));
+                    }
+
+                    return null;
+
+                }
+
+            }
+
+        } catch (ApiException ignored) {
+        }
+
+        return null;
+
+    }
+
+    private IChatComponent getReportMessageForClass(String playername, String className, JsonObject entryclassobj) {
+        int skill_level_a = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_a"), 1); //skill
+        int skill_level_b = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_b"), 1); //passive1
+        int skill_level_c = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_c"), 1); //passive2
+        int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"), 1); //kit
+        int skill_level_g = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_g"), 1); //gathering
+
+        if (skill_level_a >= 4 || skill_level_d >= 4) {
+            return new ChatComponentText(ChatUtil.getTagMW())
+                    .appendSibling(ChatUtil.makeReportButtons(playername, "bhop", ClickEvent.Action.RUN_COMMAND, ClickEvent.Action.SUGGEST_COMMAND))
+                    .appendSibling(new ChatComponentText(getFormattedName(networkPlayerInfo)
+                            + EnumChatFormatting.GRAY + " never played and has : " + EnumChatFormatting.GOLD + className + " "
+                            + (skill_level_d == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_d) + " "
+                            + (skill_level_a == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_a) + " "
+                            + (skill_level_b == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_b) + " "
+                            + (skill_level_c == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_c) + " "
+                            + (skill_level_g == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_g) + "\n"));
+
+        }
+
+        return null;
+
+    }
+
+    private String getFormattedName(NetworkPlayerInfo networkPlayerInfoIn) {
+        return networkPlayerInfoIn.getDisplayName() != null ? networkPlayerInfoIn.getDisplayName().getFormattedText() : ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.getPlayerTeam(), networkPlayerInfoIn.getGameProfile().getName());
+    }
 
 }
 
