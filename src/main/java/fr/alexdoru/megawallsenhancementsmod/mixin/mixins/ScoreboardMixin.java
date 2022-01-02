@@ -22,8 +22,6 @@ public class ScoreboardMixin {
         if (ci.getReturnValueZ()) NameUtil.transformNameTablist(player);
     }
 
-    // TODO ajouter des timing pour mesurer cb e temps ca prend et afficher la valeur moyenne, tester avec et sans la map miroir, aller tester sur minemen / dans les lobby bedwars
-
     @Inject(
             method = "removePlayerFromTeam",
             at = @At(
