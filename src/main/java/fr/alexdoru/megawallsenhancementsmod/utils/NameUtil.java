@@ -114,7 +114,6 @@ public class NameUtil {
     }
 
     public static void transformNameTablist(String playername) {
-        // TODO injecter le config check toggleIcons avant de call les fonctions
         NetworkPlayerInfo networkPlayerInfo = playerInfoMap.get(playername);
         if (networkPlayerInfo != null) {
             networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo));

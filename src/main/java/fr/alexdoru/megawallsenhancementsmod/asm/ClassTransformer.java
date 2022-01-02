@@ -1,6 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.asm;
 
-import fr.alexdoru.megawallsenhancementsmod.mixin.MixinLoader;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 public class ClassTransformer implements IClassTransformer {
@@ -12,7 +11,6 @@ public class ClassTransformer implements IClassTransformer {
         }
 
         if (transformedName.equals("net.minecraft.client.network.NetHandlerPlayClient")) {
-            MixinLoader.logger.info("------------ found class NetHandlerPlayClient");
             return (new NetHandlerPlayClientTransformer()).transform(name, transformedName, basicClass);
         }
 

@@ -33,7 +33,7 @@ public class EntityRendererTransformer implements IClassTransformer {
                                     list.add(new JumpInsnNode(IFEQ, labelNode));
                                     list.add(new FieldInsnNode(GETSTATIC, "fr/alexdoru/megawallsenhancementsmod/config/ConfigHandler", "keepNightVisionEffect", "Z"));
                                     methodNode.instructions.insertBefore(secondNode, list);
-
+                                    MixinLoader.logger.info("Injected Night Vision Removal Option");
                                 }
                             }
                         }
