@@ -113,8 +113,29 @@ public class NameUtil {
         player.refreshDisplayName();
     }
 
+    //private static final List<Long> timingsList = new ArrayList<>();
+    //private static int transformationsCounter = 0;
+
     public static void transformNameTablist(String playername) {
-        NetworkPlayerInfo networkPlayerInfo = playerInfoMap.get(playername);
+
+        //long i = System.nanoTime();
+
+        NetworkPlayerInfo networkPlayerInfo = playerInfoMap.get(playername); // 270 ns avg
+        //NetworkPlayerInfo networkPlayerInfo = mc.getNetHandler().getPlayerInfo(playername); // < 1500 ns avg
+
+        //timingsList.add(System.nanoTime() - i);
+        //transformationsCounter++;
+        //if (transformationsCounter == 100) {
+        //    long sum = 0;
+        //    for (long time : timingsList) {
+        //        sum += time;
+        //    }
+        //    long avg = sum / timingsList.size();
+        //    ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + ">>>> DEBUG : average transformation timing (nanosec) : " + avg + " for " + timingsList.size() + " transformations"));
+        //    timingsList.clear();
+        //    transformationsCounter = 0;
+        //}
+
         if (networkPlayerInfo != null) {
             networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo));
         }
