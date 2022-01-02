@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixins;
 import java.util.Map;
 
 @IFMLLoadingPlugin.MCVersion("1.8.9")
-@IFMLLoadingPlugin.TransformerExclusions({"fr/alexdoru/"})
+@IFMLLoadingPlugin.TransformerExclusions({"fr.alexdoru"})
 public class MixinLoader implements IFMLLoadingPlugin {
 
     public static Boolean isObf;
