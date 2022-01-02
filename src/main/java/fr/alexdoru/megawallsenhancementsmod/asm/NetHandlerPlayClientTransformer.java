@@ -23,49 +23,46 @@ public class NetHandlerPlayClientTransformer implements IClassTransformer {
 
                 if (methodNode.name.equals(MixinLoader.isObf ? "a" : "handlePlayerListItem") && methodNode.desc.equals(MixinLoader.isObf ? "(Lgz;)V" : "(Lnet/minecraft/network/play/server/S38PacketPlayerListItem;)V")) {
 
-                    MixinLoader.logger.info("------------ found method handlePlayerListItem");
+                    AbstractInsnNode targetNodeRemoveInjection = null;
+                    AbstractInsnNode targetNodePutInjection = null;
 
                     for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
                         if (insnNode.getOpcode() == INVOKEINTERFACE && insnNode instanceof MethodInsnNode && ((MethodInsnNode) insnNode).name.equals("remove") && ((MethodInsnNode) insnNode).desc.equals("(Ljava/lang/Object;)Ljava/lang/Object;")) {
                             AbstractInsnNode nextNode = insnNode.getNext();
                             if (nextNode.getOpcode() == POP) {
-                                AbstractInsnNode targetNode = nextNode.getNext();
-                                if (targetNode != null) {
-                                    MixinLoader.logger.info("------------ found remove call");
-                                    InsnList list = new InsnList();
-                                    list.add(new VarInsnNode(ALOAD, 3)); // TODO Add obfuscated names
-                                    list.add(new MethodInsnNode(INVOKEVIRTUAL, MixinLoader.isObf ? "gz$b" : "net/minecraft/network/play/server/S38PacketPlayerListItem$AddPlayerData", MixinLoader.isObf ? "a" : "getProfile", "()Lcom/mojang/authlib/GameProfile;", false));
-                                    list.add(new MethodInsnNode(INVOKEVIRTUAL, "com/mojang/authlib/GameProfile", "getName", "()Ljava/lang/String;", false));
-                                    list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/utils/NameUtil", "removePlayerFromMap", MixinLoader.isObf ? "(Ljava/lang/String;)Lbdc;" : "(Ljava/lang/String;)Lnet/minecraft/client/network/NetworkPlayerInfo;", false));
-                                    list.add(new InsnNode(POP));
-                                    methodNode.instructions.insertBefore(targetNode, list);
-                                    MixinLoader.logger.info("------------ injected remove call");
-                                    continue;
-                                }
+                                targetNodeRemoveInjection = nextNode.getNext();
                             }
                         }
 
                         if (insnNode.getOpcode() == INVOKEINTERFACE && insnNode instanceof MethodInsnNode && ((MethodInsnNode) insnNode).name.equals("put") && ((MethodInsnNode) insnNode).desc.equals("(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;")) {
                             AbstractInsnNode nextNode = insnNode.getNext();
                             if (nextNode.getOpcode() == POP) {
-                                AbstractInsnNode targetNode = nextNode.getNext();
-                                if (targetNode != null) {
-                                    MixinLoader.logger.info("------------ found put call");
-                                    InsnList list = new InsnList();
-                                    list.add(new VarInsnNode(ALOAD, 4)); // TODO Add obfuscated names
-                                    list.add(new MethodInsnNode(INVOKEVIRTUAL, MixinLoader.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", MixinLoader.isObf ? "a" : "getGameProfile", "()Lcom/mojang/authlib/GameProfile;", false));
-                                    list.add(new MethodInsnNode(INVOKEVIRTUAL, "com/mojang/authlib/GameProfile", "getName", "()Ljava/lang/String;", false));
-                                    list.add(new VarInsnNode(ALOAD, 4));
-                                    list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/utils/NameUtil", "putPlayerInMap", MixinLoader.isObf ? "(Ljava/lang/String;Lbdc;)V" : "(Ljava/lang/String;Lnet/minecraft/client/network/NetworkPlayerInfo;)V", false));
-                                    methodNode.instructions.insertBefore(targetNode, list);
-                                    MixinLoader.logger.info("------------ injected put call");
-                                }
+                                targetNodePutInjection = nextNode.getNext();
                             }
                         }
 
                     }
 
+                    if (targetNodeRemoveInjection != null && targetNodePutInjection != null) {
+                        InsnList listRemove = new InsnList();
+                        listRemove.add(new VarInsnNode(ALOAD, 3));
+                        listRemove.add(new MethodInsnNode(INVOKEVIRTUAL, MixinLoader.isObf ? "gz$b" : "net/minecraft/network/play/server/S38PacketPlayerListItem$AddPlayerData", MixinLoader.isObf ? "a" : "getProfile", "()Lcom/mojang/authlib/GameProfile;", false));
+                        listRemove.add(new MethodInsnNode(INVOKEVIRTUAL, "com/mojang/authlib/GameProfile", "getName", "()Ljava/lang/String;", false));
+                        listRemove.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/utils/NameUtil", "removePlayerFromMap", MixinLoader.isObf ? "(Ljava/lang/String;)Lbdc;" : "(Ljava/lang/String;)Lnet/minecraft/client/network/NetworkPlayerInfo;", false));
+                        listRemove.add(new InsnNode(POP));
+                        methodNode.instructions.insertBefore(targetNodeRemoveInjection, listRemove);
+
+                        InsnList listPut = new InsnList();
+                        listPut.add(new VarInsnNode(ALOAD, 4));
+                        listPut.add(new MethodInsnNode(INVOKEVIRTUAL, MixinLoader.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", MixinLoader.isObf ? "a" : "getGameProfile", "()Lcom/mojang/authlib/GameProfile;", false));
+                        listPut.add(new MethodInsnNode(INVOKEVIRTUAL, "com/mojang/authlib/GameProfile", "getName", "()Ljava/lang/String;", false));
+                        listPut.add(new VarInsnNode(ALOAD, 4));
+                        listPut.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/utils/NameUtil", "putPlayerInMap", MixinLoader.isObf ? "(Ljava/lang/String;Lbdc;)V" : "(Ljava/lang/String;Lnet/minecraft/client/network/NetworkPlayerInfo;)V", false));
+                        methodNode.instructions.insertBefore(targetNodePutInjection, listPut);
+
+                        MixinLoader.logger.info("Injected mirror playerInfoMap");
+                    }
                 }
 
             }
