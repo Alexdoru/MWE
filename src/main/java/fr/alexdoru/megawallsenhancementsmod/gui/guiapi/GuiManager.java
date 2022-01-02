@@ -8,7 +8,6 @@ import fr.alexdoru.megawallsenhancementsmod.gui.LastWitherHPGui;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
@@ -27,9 +26,7 @@ public final class GuiManager {
         this.registeredRenderers.add(new ArrowHitGui());
         this.registeredRenderers.add(new KillCooldownGui());
         this.registeredRenderers.add(new HunterStrengthGui());
-        LastWitherHPGui lastWitherHPGui = new LastWitherHPGui();
-        this.registeredRenderers.add(lastWitherHPGui);
-        MinecraftForge.EVENT_BUS.register(lastWitherHPGui);
+        this.registeredRenderers.add(new LastWitherHPGui());
         /*
         * FIXME java.lang.NoSuchMethodException: fr.alexdoru.fkcountermod.events.MwGameEvent.<init>()
 [04:52:32] [Client thread/INFO] [STDERR]: [net.minecraftforge.fml.common.eventhandler.EventBus:register:117]: 	at java.lang.Class.getConstructor0(Class.java:3082)
