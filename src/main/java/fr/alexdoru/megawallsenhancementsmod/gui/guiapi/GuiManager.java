@@ -27,15 +27,6 @@ public final class GuiManager {
         this.registeredRenderers.add(new KillCooldownGui());
         this.registeredRenderers.add(new HunterStrengthGui());
         this.registeredRenderers.add(new LastWitherHPGui());
-        /*
-        * FIXME java.lang.NoSuchMethodException: fr.alexdoru.fkcountermod.events.MwGameEvent.<init>()
-[04:52:32] [Client thread/INFO] [STDERR]: [net.minecraftforge.fml.common.eventhandler.EventBus:register:117]: 	at java.lang.Class.getConstructor0(Class.java:3082)
-[04:52:32] [Client thread/INFO] [STDERR]: [net.minecraftforge.fml.common.eventhandler.EventBus:register:117]: 	at java.lang.Class.getConstructor(Class.java:1825)
-[04:52:32] [Client thread/INFO] [STDERR]: [net.minecraftforge.fml.common.eventhandler.EventBus:register:117]: 	at net.minecraftforge.fml.common.eventhandler.EventBus.register(EventBus.java:101)
-[04:52:32] [Client thread/INFO] [STDERR]: [net.minecraftforge.fml.common.eventhandler.EventBus:register:117]: 	at net.minecraftforge.fml.common.eventhandler.EventBus.register(EventBus.java:85)
-[04:52:32] [Client thread/INFO] [STDERR]: [net.minecraftforge.fml.common.eventhandler.EventBus:register:117]: 	at fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager.<init>(GuiManager.java:32)
-[04:52:32] [Client thread/INFO] [STDERR]: [net.minecraftforge.fml.common.eventhandler.EventBus:register:117]: 	at fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod.init(MegaWallsEnhancementsMod.java:41)
-* */
     }
 
     @SubscribeEvent
