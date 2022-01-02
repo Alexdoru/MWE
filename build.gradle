@@ -38,7 +38,7 @@ targetCompatibility = 1.8
 minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"
     runDir = "run"
-    mappings = "stable_20"
+    mappings = "stable_22"
 
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
