@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.asm;
+package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.mixin.MixinLoader;
 import net.minecraft.launchwrapper.IClassTransformer;
