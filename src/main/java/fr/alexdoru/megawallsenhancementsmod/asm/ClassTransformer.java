@@ -14,6 +14,10 @@ public class ClassTransformer implements IClassTransformer {
             return (new NetHandlerPlayClientTransformer()).transform(name, transformedName, basicClass);
         }
 
+        if (transformedName.equals("net.minecraft.client.gui.GuiPlayerTabOverlay")) {
+            return (new GuiPlayerTabOverlayTransformer()).transform(name, transformedName, basicClass);
+        }
+
         return basicClass;
     }
 
