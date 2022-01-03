@@ -36,10 +36,16 @@ public class NameUtil {
 
     private static final HashMap<String, NetworkPlayerInfo> playerInfoMap = new HashMap<>();
 
+    /**
+     * Method call is inject by NetHandlerPlayClientTransformer
+     */
     public static void putPlayerInMap(String playerName, NetworkPlayerInfo networkplayerinfo) {
         playerInfoMap.put(playerName, networkplayerinfo);
     }
 
+    /**
+     * Method call is inject by NetHandlerPlayClientTransformer
+     */
     public static NetworkPlayerInfo removePlayerFromMap(String playerName) {
         return playerInfoMap.remove(playerName);
     }
