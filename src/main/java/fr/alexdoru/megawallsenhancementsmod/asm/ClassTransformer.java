@@ -1,9 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.asm;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.transformers.EntityRendererTransformer;
-import fr.alexdoru.megawallsenhancementsmod.asm.transformers.GuiPlayerTabOverlayTransformer;
-import fr.alexdoru.megawallsenhancementsmod.asm.transformers.NetHandlerPlayClientTransformer;
-import fr.alexdoru.megawallsenhancementsmod.asm.transformers.RenderManagerTransformer;
+import fr.alexdoru.megawallsenhancementsmod.asm.transformers.*;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -22,6 +19,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new EntityRendererTransformer());
         registerTransformer(new GuiPlayerTabOverlayTransformer());
         registerTransformer(new NetHandlerPlayClientTransformer());
+        registerTransformer(new NetworkPlayerInfoTransformer());
         registerTransformer(new RenderManagerTransformer());
     }
 
