@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class GuiIngameMixin extends Gui {
 
     @Inject(method = "displayTitle", at = @At("HEAD"), cancellable = true)
-    public void displayTitle(String p_175178_1_, String p_175178_2_, int p_175178_3_, int p_175178_4_, int p_175178_5_, CallbackInfo ci) {
-        if (p_175178_2_ != null && p_175178_2_.contains("Get to the middle to stop the hunger!")) {
+    public void displayTitle(String title, String subTitle, int timeFadeIn, int displayTime, int timeFadeOut, CallbackInfo ci) {
+        if (subTitle != null && subTitle.contains("Get to the middle to stop the hunger!")) {
             ci.cancel();
         }
     }
