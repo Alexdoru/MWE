@@ -29,8 +29,6 @@ public class EntityRendererTransformer implements IMyClassTransformer {
                                 list.add(new JumpInsnNode(IFEQ, labelNode));
                                 list.add(new FieldInsnNode(GETSTATIC, "fr/alexdoru/megawallsenhancementsmod/config/ConfigHandler", "keepNightVisionEffect", "Z"));
                                 methodNode.instructions.insertBefore(secondNode, list);
-                                MixinLoader.logger.info("Transformed EntityRenderer");
-                                return classNode;
                             }
                         }
                     }
