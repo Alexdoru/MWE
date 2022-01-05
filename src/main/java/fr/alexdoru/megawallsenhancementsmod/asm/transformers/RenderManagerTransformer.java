@@ -21,7 +21,9 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                 for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (insnNode instanceof LdcInsnNode && ((LdcInsnNode) insnNode).cst.equals(new Double("2.0"))) {
                         methodNode.instructions.insertBefore(insnNode, new LdcInsnNode(new Double("3.0")));
-                        methodNode.instructions.remove(insnNode); // TODO add config by calling a method instead of pushing a 3.0d ?
+                        methodNode.instructions.remove(insnNode);
+                        MixinLoader.logger.info("Transformed RenderManager");
+                        return classNode;
                     }
                 }
             }
