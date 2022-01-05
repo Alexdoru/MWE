@@ -5,28 +5,56 @@ import fr.alexdoru.megawallsenhancementsmod.asm.transformers.GuiPlayerTabOverlay
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.NetHandlerPlayClientTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.RenderManagerTransformer;
 import net.minecraft.launchwrapper.IClassTransformer;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.tree.ClassNode;
+
+import java.util.HashMap;
 
 public class ClassTransformer implements IClassTransformer {
 
+    private final HashMap<String, IMyClassTransformer> transformerHashMap = new HashMap<>();
+
+    /**
+     * Register the IMyClassTransformer(s) here
+     */
+    public ClassTransformer() {
+        registerTransformer(new EntityRendererTransformer());
+        registerTransformer(new GuiPlayerTabOverlayTransformer());
+        registerTransformer(new NetHandlerPlayClientTransformer());
+        registerTransformer(new RenderManagerTransformer());
+    }
+
+    private void registerTransformer(IMyClassTransformer classTransformer) {
+        transformerHashMap.put(classTransformer.getTargetClassName(), classTransformer);
+    }
+
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
-        if (transformedName.equals("net.minecraft.client.renderer.EntityRenderer")) {
-            return (new EntityRendererTransformer()).transform(name, transformedName, basicClass);
+
+        if (basicClass == null) {
+            return null;
         }
 
-        if (transformedName.equals("net.minecraft.client.network.NetHandlerPlayClient")) {
-            return (new NetHandlerPlayClientTransformer()).transform(name, transformedName, basicClass);
+        IMyClassTransformer classTransformer = transformerHashMap.get(transformedName);
+
+        if (classTransformer == null) {
+            return basicClass;
         }
 
-        if (transformedName.equals("net.minecraft.client.gui.GuiPlayerTabOverlay")) {
-            return (new GuiPlayerTabOverlayTransformer()).transform(name, transformedName, basicClass);
-        }
-
-        if (transformedName.equals("net.minecraft.client.renderer.entity.RenderManager")) {
-            return (new RenderManagerTransformer()).transform(name, transformedName, basicClass);
+        try {
+            ClassNode classNode = new ClassNode();
+            ClassReader classReader = new ClassReader(basicClass);
+            classReader.accept(classNode, 0);
+            ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+            classTransformer.transform(classNode).accept(classWriter);
+            return classWriter.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return basicClass;
+
     }
 
 }
