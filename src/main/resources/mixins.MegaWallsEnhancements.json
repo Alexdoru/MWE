@@ -7,7 +7,6 @@
   "refmap": "mixins.MegaWallsEnhancements.refmap.json",
   "mixins": [
     "GuiIngameMixin",
-    "NetworkPlayerInfoMixin",
     "ScoreboardMixin"
   ]
 }

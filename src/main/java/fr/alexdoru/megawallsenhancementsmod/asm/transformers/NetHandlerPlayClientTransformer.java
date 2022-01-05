@@ -6,7 +6,6 @@ import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
 
-
 public class NetHandlerPlayClientTransformer implements IMyClassTransformer {
 
     @Override
