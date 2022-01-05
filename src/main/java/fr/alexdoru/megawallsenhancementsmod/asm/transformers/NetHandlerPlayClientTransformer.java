@@ -58,7 +58,8 @@ public class NetHandlerPlayClientTransformer implements IMyClassTransformer {
                     listPut.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/utils/NameUtil", "putPlayerInMap", MixinLoader.isObf ? "(Ljava/lang/String;Lbdc;)V" : "(Ljava/lang/String;Lnet/minecraft/client/network/NetworkPlayerInfo;)V", false));
                     methodNode.instructions.insertBefore(targetNodePutInjection, listPut);
 
-                    MixinLoader.logger.info("Injected mirror playerInfoMap");
+                    MixinLoader.logger.info("Transformed NetHandlerPlayClient");
+                    return classNode;
                 }
             }
 

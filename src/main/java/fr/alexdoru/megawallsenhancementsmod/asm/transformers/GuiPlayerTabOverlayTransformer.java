@@ -28,7 +28,8 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/utils/ColorUtil", "getColoredHP", MixinLoader.isObf ? "(I)La;" : "(I)Lnet/minecraft/util/EnumChatFormatting;", false));
                         methodNode.instructions.insertBefore(insnNode, list);
                         methodNode.instructions.remove(insnNode);
-                        MixinLoader.logger.info("Injected Colored HP in Tablist");
+                        MixinLoader.logger.info("Transformed GuiPlayerTabOverlay");
+                        return classNode;
                     }
                 }
             }
