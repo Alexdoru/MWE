@@ -149,7 +149,7 @@ class ScanPlayerTask implements Callable<String> {
                     (megawallsstats.getFkdr() > 10f)) {
 
                 IChatComponent msg = new ChatComponentText(ChatUtil.getTagMW())
-                        .appendSibling(ChatUtil.makeReportButtons(playername, "bhop", ClickEvent.Action.RUN_COMMAND, ClickEvent.Action.SUGGEST_COMMAND))
+                        .appendSibling(ChatUtil.makeReportButtons(playername, "cheating", ClickEvent.Action.RUN_COMMAND, ClickEvent.Action.SUGGEST_COMMAND))
                         .appendSibling(new ChatComponentText(getFormattedName(networkPlayerInfo)
                                 + EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played()
                                 + EnumChatFormatting.GRAY + " games , fkd : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkdr())
@@ -228,7 +228,7 @@ class ScanPlayerTask implements Callable<String> {
 
         if (skill_level_a >= 4 || skill_level_d >= 4) {
             return new ChatComponentText(ChatUtil.getTagMW())
-                    .appendSibling(ChatUtil.makeReportButtons(playername, "bhop", ClickEvent.Action.RUN_COMMAND, ClickEvent.Action.SUGGEST_COMMAND))
+                    .appendSibling(ChatUtil.makeReportButtons(playername, "cheating", ClickEvent.Action.RUN_COMMAND, ClickEvent.Action.SUGGEST_COMMAND))
                     .appendSibling(new ChatComponentText(getFormattedName(networkPlayerInfo)
                             + EnumChatFormatting.GRAY + " never played and has : " + EnumChatFormatting.GOLD + className + " "
                             + (skill_level_d == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_d) + " "
