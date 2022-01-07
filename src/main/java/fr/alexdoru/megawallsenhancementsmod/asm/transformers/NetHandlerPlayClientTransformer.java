@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
-import fr.alexdoru.megawallsenhancementsmod.mixin.MixinLoader;
+import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -18,7 +18,7 @@ public class NetHandlerPlayClientTransformer implements IMyClassTransformer {
 
         for (MethodNode methodNode : classNode.methods) {
 
-            if (methodNode.name.equals(MixinLoader.isObf ? "a" : "handlePlayerListItem") && methodNode.desc.equals(MixinLoader.isObf ? "(Lgz;)V" : "(Lnet/minecraft/network/play/server/S38PacketPlayerListItem;)V")) {
+            if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "handlePlayerListItem") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lgz;)V" : "(Lnet/minecraft/network/play/server/S38PacketPlayerListItem;)V")) {
 
                 AbstractInsnNode targetNodeRemoveInjection = null;
                 AbstractInsnNode targetNodePutInjection = null;
@@ -44,21 +44,21 @@ public class NetHandlerPlayClientTransformer implements IMyClassTransformer {
                 if (targetNodeRemoveInjection != null && targetNodePutInjection != null) {
                     InsnList listRemove = new InsnList();
                     listRemove.add(new VarInsnNode(ALOAD, 3));
-                    listRemove.add(new MethodInsnNode(INVOKEVIRTUAL, MixinLoader.isObf ? "gz$b" : "net/minecraft/network/play/server/S38PacketPlayerListItem$AddPlayerData", MixinLoader.isObf ? "a" : "getProfile", "()Lcom/mojang/authlib/GameProfile;", false));
+                    listRemove.add(new MethodInsnNode(INVOKEVIRTUAL, ASMLoadingPlugin.isObf ? "gz$b" : "net/minecraft/network/play/server/S38PacketPlayerListItem$AddPlayerData", ASMLoadingPlugin.isObf ? "a" : "getProfile", "()Lcom/mojang/authlib/GameProfile;", false));
                     listRemove.add(new MethodInsnNode(INVOKEVIRTUAL, "com/mojang/authlib/GameProfile", "getName", "()Ljava/lang/String;", false));
-                    listRemove.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/utils/NameUtil", "removePlayerFromMap", MixinLoader.isObf ? "(Ljava/lang/String;)Lbdc;" : "(Ljava/lang/String;)Lnet/minecraft/client/network/NetworkPlayerInfo;", false));
+                    listRemove.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/utils/NameUtil", "removePlayerFromMap", ASMLoadingPlugin.isObf ? "(Ljava/lang/String;)Lbdc;" : "(Ljava/lang/String;)Lnet/minecraft/client/network/NetworkPlayerInfo;", false));
                     listRemove.add(new InsnNode(POP));
                     methodNode.instructions.insertBefore(targetNodeRemoveInjection, listRemove);
 
                     InsnList listPut = new InsnList();
                     listPut.add(new VarInsnNode(ALOAD, 4));
-                    listPut.add(new MethodInsnNode(INVOKEVIRTUAL, MixinLoader.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", MixinLoader.isObf ? "a" : "getGameProfile", "()Lcom/mojang/authlib/GameProfile;", false));
+                    listPut.add(new MethodInsnNode(INVOKEVIRTUAL, ASMLoadingPlugin.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", ASMLoadingPlugin.isObf ? "a" : "getGameProfile", "()Lcom/mojang/authlib/GameProfile;", false));
                     listPut.add(new MethodInsnNode(INVOKEVIRTUAL, "com/mojang/authlib/GameProfile", "getName", "()Ljava/lang/String;", false));
                     listPut.add(new VarInsnNode(ALOAD, 4));
-                    listPut.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/utils/NameUtil", "putPlayerInMap", MixinLoader.isObf ? "(Ljava/lang/String;Lbdc;)V" : "(Ljava/lang/String;Lnet/minecraft/client/network/NetworkPlayerInfo;)V", false));
+                    listPut.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/utils/NameUtil", "putPlayerInMap", ASMLoadingPlugin.isObf ? "(Ljava/lang/String;Lbdc;)V" : "(Ljava/lang/String;Lnet/minecraft/client/network/NetworkPlayerInfo;)V", false));
                     methodNode.instructions.insertBefore(targetNodePutInjection, listPut);
 
-                    MixinLoader.logger.info("Transformed NetHandlerPlayClient");
+                    ASMLoadingPlugin.logger.info("Transformed NetHandlerPlayClient");
                     return classNode;
                 }
             }

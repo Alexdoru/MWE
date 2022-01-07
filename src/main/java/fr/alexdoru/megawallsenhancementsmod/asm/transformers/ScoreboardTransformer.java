@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
-import fr.alexdoru.megawallsenhancementsmod.mixin.MixinLoader;
+import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -18,7 +18,7 @@ public class ScoreboardTransformer implements IMyClassTransformer {
         int injections = 0;
         for (MethodNode methodNode : classNode.methods) {
 
-            if (methodNode.name.equals(MixinLoader.isObf ? "a" : "addPlayerToTeam") && methodNode.desc.equals("(Ljava/lang/String;Ljava/lang/String;)Z")) {
+            if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "addPlayerToTeam") && methodNode.desc.equals("(Ljava/lang/String;Ljava/lang/String;)Z")) {
                 for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (insnNode.getOpcode() == ICONST_1 && insnNode instanceof InsnNode) {
                         AbstractInsnNode nextNode = insnNode.getNext();
@@ -30,7 +30,7 @@ public class ScoreboardTransformer implements IMyClassTransformer {
                 }
             }
 
-            if (methodNode.name.equals(MixinLoader.isObf ? "a" : "removePlayerFromTeam") && methodNode.desc.equals(MixinLoader.isObf ? "(Ljava/lang/String;Laul;)V" : "(Ljava/lang/String;Lnet/minecraft/scoreboard/ScorePlayerTeam;)V")) {
+            if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "removePlayerFromTeam") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Ljava/lang/String;Laul;)V" : "(Ljava/lang/String;Lnet/minecraft/scoreboard/ScorePlayerTeam;)V")) {
                 for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (insnNode.getOpcode() == INVOKEINTERFACE && insnNode instanceof MethodInsnNode
                             && ((MethodInsnNode) insnNode).owner.equals("java/util/Collection")
@@ -50,7 +50,7 @@ public class ScoreboardTransformer implements IMyClassTransformer {
 
         }
         if (injections == 2) {
-            MixinLoader.logger.info("Transformed Scoreboard");
+            ASMLoadingPlugin.logger.info("Transformed Scoreboard");
         }
         return classNode;
     }

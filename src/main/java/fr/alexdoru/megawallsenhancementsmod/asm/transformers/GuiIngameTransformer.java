@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
-import fr.alexdoru.megawallsenhancementsmod.mixin.MixinLoader;
+import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -16,13 +16,13 @@ public class GuiIngameTransformer implements IMyClassTransformer {
     @Override
     public ClassNode transform(ClassNode classNode) {
         for (MethodNode methodNode : classNode.methods) {
-            if (methodNode.name.equals(MixinLoader.isObf ? "a" : "displayTitle") && methodNode.desc.equals("(Ljava/lang/String;Ljava/lang/String;III)V")) {
+            if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "displayTitle") && methodNode.desc.equals("(Ljava/lang/String;Ljava/lang/String;III)V")) {
                 for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (insnNode.getOpcode() == ALOAD && insnNode instanceof VarInsnNode && ((VarInsnNode) insnNode).var == 2) {
                         AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode != null && nextNode.getOpcode() == PUTFIELD
-                                && ((FieldInsnNode) nextNode).owner.equals(MixinLoader.isObf ? "avo" : "net/minecraft/client/gui/GuiIngame")
-                                && ((FieldInsnNode) nextNode).name.equals(MixinLoader.isObf ? "y" : "displayedSubTitle")
+                                && ((FieldInsnNode) nextNode).owner.equals(ASMLoadingPlugin.isObf ? "avo" : "net/minecraft/client/gui/GuiIngame")
+                                && ((FieldInsnNode) nextNode).name.equals(ASMLoadingPlugin.isObf ? "y" : "displayedSubTitle")
                                 && ((FieldInsnNode) nextNode).desc.equals("Ljava/lang/String;")) {
                             methodNode.instructions.insertBefore(
                                     nextNode,
@@ -32,7 +32,7 @@ public class GuiIngameTransformer implements IMyClassTransformer {
                                             "(Ljava/lang/String;)Ljava/lang/String;",
                                             false
                                     ));
-                            MixinLoader.logger.info("Transformed GuiIngame");
+                            ASMLoadingPlugin.logger.info("Transformed GuiIngame");
                             return classNode;
                         }
                     }
