@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
-import fr.alexdoru.megawallsenhancementsmod.mixin.MixinLoader;
+import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LdcInsnNode;
@@ -17,12 +17,12 @@ public class RenderManagerTransformer implements IMyClassTransformer {
     @Override
     public ClassNode transform(ClassNode classNode) {
         for (MethodNode methodNode : classNode.methods) {
-            if (methodNode.name.equals(MixinLoader.isObf ? "b" : "renderDebugBoundingBox") && methodNode.desc.equals(MixinLoader.isObf ? "(Lpk;DDDFF)V" : "(Lnet/minecraft/entity/Entity;DDDFF)V")) {
+            if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "b" : "renderDebugBoundingBox") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lpk;DDDFF)V" : "(Lnet/minecraft/entity/Entity;DDDFF)V")) {
                 for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (insnNode instanceof LdcInsnNode && ((LdcInsnNode) insnNode).cst.equals(new Double("2.0"))) {
                         methodNode.instructions.insertBefore(insnNode, new LdcInsnNode(new Double("3.0")));
                         methodNode.instructions.remove(insnNode);
-                        MixinLoader.logger.info("Transformed RenderManager");
+                        ASMLoadingPlugin.logger.info("Transformed RenderManager");
                         return classNode;
                     }
                 }
