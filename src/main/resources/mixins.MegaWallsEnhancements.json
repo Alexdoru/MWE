@@ -6,7 +6,6 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "mixins.MegaWallsEnhancements.refmap.json",
   "mixins": [
-    "GuiIngameMixin",
     "ScoreboardMixin"
   ]
 }
