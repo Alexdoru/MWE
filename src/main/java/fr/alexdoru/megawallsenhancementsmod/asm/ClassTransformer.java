@@ -17,6 +17,7 @@ public class ClassTransformer implements IClassTransformer {
      */
     public ClassTransformer() {
         registerTransformer(new EntityRendererTransformer());
+        registerTransformer(new GuiIngameTransformer());
         registerTransformer(new GuiPlayerTabOverlayTransformer());
         registerTransformer(new NetHandlerPlayClientTransformer());
         registerTransformer(new NetworkPlayerInfoTransformer());
