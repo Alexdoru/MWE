@@ -22,6 +22,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new NetHandlerPlayClientTransformer());
         registerTransformer(new NetworkPlayerInfoTransformer());
         registerTransformer(new RenderManagerTransformer());
+        registerTransformer(new ScoreboardTransformer());
     }
 
     private void registerTransformer(IMyClassTransformer classTransformer) {
