@@ -25,7 +25,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                             && ((FieldInsnNode) insnNode).desc.equals(ASMLoadingPlugin.isObf ? "La;" : "Lnet/minecraft/util/EnumChatFormatting;")) {
                         InsnList list = new InsnList();
                         list.add(new VarInsnNode(ILOAD, 7));
-                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/utils/ColorUtil", "getColoredHP", ASMLoadingPlugin.isObf ? "(I)La;" : "(I)Lnet/minecraft/util/EnumChatFormatting;", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, "fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiPlayerTabOverlayHook", "getColoredHP", ASMLoadingPlugin.isObf ? "(I)La;" : "(I)Lnet/minecraft/util/EnumChatFormatting;", false));
                         methodNode.instructions.insertBefore(insnNode, list);
                         methodNode.instructions.remove(insnNode);
                         ASMLoadingPlugin.logger.info("Transformed GuiPlayerTabOverlay");
