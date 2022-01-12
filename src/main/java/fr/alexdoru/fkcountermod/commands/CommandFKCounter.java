@@ -159,22 +159,27 @@ public class CommandFKCounter extends CommandBase {
 
     private void removePlayer(String playerName) {
         HashMap<String, Integer>[] teamKillsArray = KillCounter.getTeamKillsArray();
-        for (int team = 0; team < KillCounter.TEAMS; team++) {
-            Integer kills = teamKillsArray[team].get(playerName);
-            if (kills != null) {
-                KillCounter.removeKilledPlayer(playerName, team);
-                FKCounterGui.instance.updateDisplayText();
-                ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Removed " + KillCounter.getColorPrefixFromTeam(team) + playerName
-                        + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + kills + EnumChatFormatting.GREEN + " from the " + KillCounter.getColorPrefixFromTeam(team) + KillCounter.getTeamNameFromTeam(team) + EnumChatFormatting.GREEN + " team."));
-                return;
+        if (teamKillsArray != null) {
+            for (int team = 0; team < KillCounter.TEAMS; team++) {
+                Integer kills = teamKillsArray[team].get(playerName);
+                if (kills != null) {
+                    KillCounter.removeKilledPlayer(playerName, team);
+                    FKCounterGui.instance.updateDisplayText();
+                    ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Removed " + KillCounter.getColorPrefixFromTeam(team) + playerName
+                            + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + kills + EnumChatFormatting.GREEN + " from the " + KillCounter.getColorPrefixFromTeam(team) + KillCounter.getTeamNameFromTeam(team) + EnumChatFormatting.GREEN + " team."));
+                    return;
+                }
             }
         }
         ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Cannot find " + playerName + "in the FKCounter."));
     }
 
     private ArrayList<String> getPlayerListinKillCounter() {
-        HashMap<String, Integer>[] teamKillsArray = KillCounter.getTeamKillsArray();
         ArrayList<String> playerList = new ArrayList<>();
+        HashMap<String, Integer>[] teamKillsArray = KillCounter.getTeamKillsArray();
+        if (teamKillsArray == null) {
+            return playerList;
+        }
         for (HashMap<String, Integer> teamMap : teamKillsArray) {
             for (Map.Entry<String, Integer> entry : teamMap.entrySet()) {
                 playerList.add(entry.getKey());
