@@ -1,7 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
+import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
+import net.minecraftforge.fml.common.Loader;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -15,6 +16,12 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
 
     @Override
     public ClassNode transform(ClassNode classNode) {
+        boolean isPatcherLoaded = true;
+        try {
+            isPatcherLoaded = Loader.isModLoaded("patcher");
+
+        } catch (Exception ignored) {
+        }
         for (MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "drawScoreboardValues") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lauk;ILjava/lang/String;IILbdc;)V" : "(Lnet/minecraft/scoreboard/ScoreObjective;ILjava/lang/String;IILnet/minecraft/client/network/NetworkPlayerInfo;)V")) {
                 for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
@@ -28,12 +35,25 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "getColoredHP", ASMLoadingPlugin.isObf ? "(I)La;" : "(I)Lnet/minecraft/util/EnumChatFormatting;", false));
                         methodNode.instructions.insertBefore(insnNode, list);
                         methodNode.instructions.remove(insnNode);
-                        ASMLoadingPlugin.logger.info("Transformed GuiPlayerTabOverlay");
-                        return classNode;
+                        break;
+                    }
+                }
+            }
+
+            if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "renderPlayerlist") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(ILauo;Lauk;)V" : "(ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V")) {
+                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                    if (insnNode.getOpcode() == BIPUSH && insnNode instanceof IntInsnNode && ((IntInsnNode) insnNode).operand == 20) {
+                        methodNode.instructions.insertBefore(insnNode, new IntInsnNode(BIPUSH, 25));
+                        methodNode.instructions.remove(insnNode);
+                    }
+                    if (!isPatcherLoaded && insnNode.getOpcode() == BIPUSH && insnNode instanceof IntInsnNode && ((IntInsnNode) insnNode).operand == 80) {
+                        methodNode.instructions.insertBefore(insnNode, new IntInsnNode(BIPUSH, 100));
+                        methodNode.instructions.remove(insnNode);
                     }
                 }
             }
         }
+        ASMLoadingPlugin.logger.info("Transformed GuiPlayerTabOverlay");
         return classNode;
     }
 
