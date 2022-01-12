@@ -219,6 +219,10 @@ public class KillCounter {
         return gameId;
     }
 
+    /**
+     * Can return null if the fkcounter isn't initialized yet
+     * @return
+     */
     public static HashMap<String, Integer>[] getTeamKillsArray() {
         return teamKillsArray;
     }
