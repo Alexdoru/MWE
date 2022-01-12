@@ -1,8 +1,11 @@
 package fr.alexdoru.fkcountermod.commands;
 
+import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.gui.FKConfigGuiScreen;
+import fr.alexdoru.fkcountermod.gui.FKCounterGui;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -73,6 +76,8 @@ public class CommandFKCounter extends CommandBase {
 
             addChatMessage(new ChatComponentText(strBuilder.toString()));
 
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("remove")) {
+            removePlayer(args[1]);
         } else if (args.length > 0 && args[0].equalsIgnoreCase("say")) {
 
             if (getGameId() == null) {
@@ -136,9 +141,46 @@ public class CommandFKCounter extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        String[] fksarguments = {"players", "say", "settings", "help"};
+        String[] fksarguments = {"players", "remove", "say", "settings", "help"};
         String[] colors = {"red", "green", "yellow", "blue"};
-        return args.length == 1 ? getListOfStringsMatchingLastWord(args, fksarguments) : args.length == 2 ? getListOfStringsMatchingLastWord(args, colors) : null;
+
+        if (args.length == 1) {
+            return getListOfStringsMatchingLastWord(args, fksarguments);
+        }
+        if (args.length == 2) {
+            if (args[0].equals("remove")) {
+                return getListOfStringsMatchingLastWord(args, getPlayerListinKillCounter());
+            } else {
+                return getListOfStringsMatchingLastWord(args, colors);
+            }
+        }
+        return null;
+    }
+
+    private void removePlayer(String playerName) {
+        HashMap<String, Integer>[] teamKillsArray = KillCounter.getTeamKillsArray();
+        for (int team = 0; team < KillCounter.TEAMS; team++) {
+            Integer kills = teamKillsArray[team].get(playerName);
+            if (kills != null) {
+                KillCounter.removeKilledPlayer(playerName, team);
+                FKCounterGui.instance.updateDisplayText();
+                ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Removed " + KillCounter.getColorPrefixFromTeam(team) + playerName
+                        + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + kills + EnumChatFormatting.GREEN + " from the " + KillCounter.getColorPrefixFromTeam(team) + KillCounter.getTeamNameFromTeam(team) + EnumChatFormatting.GREEN + " team."));
+                return;
+            }
+        }
+        ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Cannot find " + playerName + "in the FKCounter."));
+    }
+
+    private ArrayList<String> getPlayerListinKillCounter() {
+        HashMap<String, Integer>[] teamKillsArray = KillCounter.getTeamKillsArray();
+        ArrayList<String> playerList = new ArrayList<>();
+        for (HashMap<String, Integer> teamMap : teamKillsArray) {
+            for (Map.Entry<String, Integer> entry : teamMap.entrySet()) {
+                playerList.add(entry.getKey());
+            }
+        }
+        return playerList;
     }
 
 }

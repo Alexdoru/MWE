@@ -83,7 +83,7 @@ public class KillCounter {
     };
 
     private static Pattern[] KILL_PATTERNS;
-    private static final int TEAMS = 4;
+    public static final int TEAMS = 4;
     public static final int RED_TEAM = 0;
     public static final int GREEN_TEAM = 1;
     public static final int YELLOW_TEAM = 2;
@@ -219,6 +219,10 @@ public class KillCounter {
         return gameId;
     }
 
+    public static HashMap<String, Integer>[] getTeamKillsArray() {
+        return teamKillsArray;
+    }
+
     public static int getKills(int team) {
         if (isNotValidTeam(team)) {
             return 0;
@@ -272,17 +276,19 @@ public class KillCounter {
         FKCounterGui.instance.updateDisplayText();
     }
 
+    public static void removeKilledPlayer(String player, int team) {
+        removeKilledPlayer(player, getColorPrefixFromTeam(team).replace("\u00a7", ""));
+    }
+
     private static void removeKilledPlayer(String player, String color) {
         int team = getTeamFromColor(color);
         if (isNotValidTeam(team)) {
             return;
         }
-
         if (isWitherDead(color)) {
             teamKillsArray[team].remove(player);
             deadPlayers.add(player);
         }
-
     }
 
     private static void addKill(String player, String color) {
