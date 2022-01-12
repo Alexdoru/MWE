@@ -2,12 +2,13 @@ package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
-import net.minecraftforge.fml.common.Loader;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
 
 public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
+
+    private static final String PATCHER_CLASS = "club/sk1er/patcher/Patcher.class";
 
     @Override
     public String getTargetClassName() {
@@ -18,8 +19,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
     public ClassNode transform(ClassNode classNode) {
         boolean isPatcherLoaded = true;
         try {
-            isPatcherLoaded = Loader.isModLoaded("patcher");
-
+            isPatcherLoaded = this.getClass().getClassLoader().getResource(PATCHER_CLASS) != null;
         } catch (Exception ignored) {
         }
         for (MethodNode methodNode : classNode.methods) {
