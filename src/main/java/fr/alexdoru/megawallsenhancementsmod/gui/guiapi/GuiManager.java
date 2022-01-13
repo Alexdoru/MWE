@@ -31,7 +31,7 @@ public final class GuiManager {
 
     @SubscribeEvent
     public void onRenderGUI(RenderGameOverlayEvent.Post event) {
-        if (event.type == ElementType.EXPERIENCE && !(mc.currentScreen instanceof PositionEditGuiScreen)) {
+        if (event.type == ElementType.TEXT && !(mc.currentScreen instanceof PositionEditGuiScreen)) {
             registeredRenderers.forEach(this::callRenderer);
         }
     }
