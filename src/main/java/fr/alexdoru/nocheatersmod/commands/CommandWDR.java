@@ -190,9 +190,14 @@ public class CommandWDR extends CommandBase {
                 playername = apireq.getName();
 
                 if (uuid != null) {
-                    CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
-                    LoginData loginData = new LoginData(playerdata.getPlayerData());
-                    if (loginData.hasNeverJoinedHypixel()) {
+                    CachedHypixelPlayerData playerdata;
+                    try {
+                        playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                        LoginData loginData = new LoginData(playerdata.getPlayerData());
+                        if (loginData.hasNeverJoinedHypixel()) {
+                            uuid = null;
+                        }
+                    } catch (ApiException ignored) {
                         uuid = null;
                     }
                 }
