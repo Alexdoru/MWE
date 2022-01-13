@@ -166,7 +166,7 @@ public class CommandFKCounter extends CommandBase {
                     KillCounter.removeKilledPlayer(playerName, team);
                     FKCounterGui.instance.updateDisplayText();
                     ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Removed " + KillCounter.getColorPrefixFromTeam(team) + playerName
-                            + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + kills + EnumChatFormatting.GREEN + " finals from the " + KillCounter.getColorPrefixFromTeam(team) + KillCounter.getTeamNameFromTeam(team) + EnumChatFormatting.GREEN + " team."));
+                            + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + kills + EnumChatFormatting.GREEN + " final" + (kills > 1 ? "s" : "") + " from the " + KillCounter.getColorPrefixFromTeam(team) + KillCounter.getTeamNameFromTeam(team) + EnumChatFormatting.GREEN + " team."));
                     return;
                 }
             }
