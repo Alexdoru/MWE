@@ -77,13 +77,12 @@ public class FKCounterGui extends MyCachedGui {
         GlStateManager.popMatrix();
     }
 
-    private final int SIDEBAR_OFFSET = frObj.getStringWidth("[B] ");
     /**
      * Method call injected via ASM
      */
     public void renderinSidebar(int x, int y, boolean textShadow, int lineNumber) {
         if (lineNumber == 11 && ConfigHandler.inSidebar && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame() && getGameId() != null) {
-            frObj.drawString(getDisplayText(), x + SIDEBAR_OFFSET, y, 16777215, textShadow);
+            frObj.drawString(getDisplayText(), x, y, 16777215, textShadow);
         }
     }
 
