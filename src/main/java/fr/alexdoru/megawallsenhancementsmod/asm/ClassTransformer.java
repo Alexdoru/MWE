@@ -1,6 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.asm;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.*;
+import fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods.SidebarmodReloaded_CustomSidebar;
+import fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods.SidebarmodRevamp_GuiSidebar;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -23,6 +25,8 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new NetworkPlayerInfoTransformer());
         registerTransformer(new RenderManagerTransformer());
         registerTransformer(new ScoreboardTransformer());
+        registerTransformer(new SidebarmodReloaded_CustomSidebar());
+        registerTransformer(new SidebarmodRevamp_GuiSidebar());
     }
 
     private void registerTransformer(IMyClassTransformer classTransformer) {

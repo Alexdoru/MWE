@@ -58,15 +58,12 @@ public class FKCounterGui extends MyCachedGui {
 
     @Override
     public void render() {
-
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
         int x = absolutePos[0];
         int y = absolutePos[1];
-
         if (ConfigHandler.draw_background) {
             drawRect(x - 1, y - 1, x + getWidth(), y + getHeight(), BACKGROUND_COLOR);
         }
-
         GlStateManager.pushMatrix();
         {
             GlStateManager.translate(x, y, 0);
@@ -78,7 +75,16 @@ public class FKCounterGui extends MyCachedGui {
             }
         }
         GlStateManager.popMatrix();
+    }
 
+    private final int SIDEBAR_OFFSET = frObj.getStringWidth("[B] ");
+    /**
+     * Method call injected via ASM
+     */
+    public void renderinSidebar(int x, int y, boolean textShadow, int lineNumber) {
+        if (lineNumber == 11 && ConfigHandler.inSidebar && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame() && getGameId() != null) {
+            frObj.drawString(getDisplayText(), x + SIDEBAR_OFFSET, y, 16777215, textShadow);
+        }
     }
 
     @Override
@@ -126,7 +132,7 @@ public class FKCounterGui extends MyCachedGui {
 
     @Override
     public boolean isEnabled() {
-        return (ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame() && getGameId() != null);
+        return (!ConfigHandler.inSidebar && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame() && getGameId() != null);
     }
 
     @Override

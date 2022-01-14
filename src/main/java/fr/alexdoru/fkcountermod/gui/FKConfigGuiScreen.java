@@ -27,6 +27,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
     private final GuiScreen parent;
 
     private ButtonToggle buttoncompacthud;
+    private ButtonToggle buttonsidebar;
     private ButtonToggle buttonshowplayers;
 
     public FKConfigGuiScreen(GuiScreen parent) {
@@ -36,11 +37,13 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
     @Override
     public void initGui() {
         this.buttonList.add(new ButtonFancy(100, width / 2 + 45, height / 2 - findMenuHeight() / 2 + 8, 30, 14, "Move HUD", 0.5));
+
         this.buttonList.add(addSettingButton(ConfigHandler.show_fkcHUD, 0, 0, 0, "Show HUD"));
         this.buttonList.add(buttoncompacthud = addSettingButton(ConfigHandler.compact_hud, 1, 0, 1, "Compact HUD"));
-        this.buttonList.add(buttonshowplayers = addSettingButton(ConfigHandler.show_players, 2, 0, 2, "Show Players"));
+        this.buttonList.add(buttonsidebar = addSettingButton(ConfigHandler.inSidebar, 7, 0, 2, "HUD in Sidebar"));
         this.buttonList.add(addSettingButton(ConfigHandler.draw_background, 3, 1, 0, "HUD Background"));
         this.buttonList.add(addSettingButton(ConfigHandler.text_shadow, 4, 1, 1, "Text Shadow"));
+        this.buttonList.add(buttonshowplayers = addSettingButton(ConfigHandler.show_players, 2, 1, 2, "Show Players"));
         this.buttonList.add(new GuiSlider(5, getxCenter() - 150 / 2, getyCenter() + 70, "HUD Size : ", 0.1d, 4d, ConfigHandler.fkc_hud_size, this));
         this.buttonList.add(new GuiSlider(6, getxCenter() - 150 / 2, getyCenter() + 94, 150, 20, "Player amount : ", "", 1d, 10d, ConfigHandler.playerAmount, false, true, this));
         if (parent != null) {
@@ -66,17 +69,22 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
             case 1:
                 ConfigHandler.compact_hud = !ConfigHandler.compact_hud;
                 ((ButtonToggle) button).setting = ConfigHandler.compact_hud;
-                if (ConfigHandler.compact_hud && ConfigHandler.show_players) {
+                if (ConfigHandler.compact_hud) {
                     ConfigHandler.show_players = false;
                     buttonshowplayers.setting = false;
+                } else {
+                    ConfigHandler.inSidebar = false;
+                    buttonsidebar.setting = false;
                 }
                 break;
             case 2:
                 ConfigHandler.show_players = !ConfigHandler.show_players;
                 ((ButtonToggle) button).setting = ConfigHandler.show_players;
-                if (ConfigHandler.show_players && ConfigHandler.compact_hud) {
+                if (ConfigHandler.show_players) {
                     ConfigHandler.compact_hud = false;
                     buttoncompacthud.setting = false;
+                    ConfigHandler.inSidebar = false;
+                    buttonsidebar.setting = false;
                 }
                 break;
             case 3:
@@ -86,6 +94,16 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
             case 4:
                 ConfigHandler.text_shadow = !ConfigHandler.text_shadow;
                 ((ButtonToggle) button).setting = ConfigHandler.text_shadow;
+                break;
+            case 7:
+                ConfigHandler.inSidebar = !ConfigHandler.inSidebar;
+                ((ButtonToggle) button).setting = ConfigHandler.inSidebar;
+                if (ConfigHandler.inSidebar) {
+                    ConfigHandler.show_players = false;
+                    buttonshowplayers.setting = false;
+                    ConfigHandler.compact_hud = true;
+                    buttoncompacthud.setting = true;
+                }
                 break;
         }
 
