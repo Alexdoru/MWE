@@ -41,7 +41,7 @@ public class HypixelPlayerData {
         JsonElement playerdataElem = obj.get("player");
 
         if (playerdataElem == null || !playerdataElem.isJsonObject()) {
-            throw new ApiException("This player never joined Hypixel");
+            throw new ApiException("This player never joined Hypixel, it might be a nick.");
         }
 
         JsonObject playerdata = playerdataElem.getAsJsonObject();

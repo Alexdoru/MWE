@@ -89,7 +89,10 @@ class StalkTask implements Callable<String> {
             HypixelPlayerStatus apistatus = new HypixelPlayerStatus(uuid, HypixelApiKeyUtil.getApiKey());
             HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
             LoginData logindata = new LoginData(playerdata.getPlayerData());
-
+            if (!playername.equals(logindata.getdisplayname())) {
+                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + "This player never joined Hypixel, it might be a nick."));
+                return null;
+            }
             if (apistatus.isOnline()) { // player is online
 
                 if (apistatus.getGamemode().equals("Mega Walls")) { // player is in MW, display currrent class and skin

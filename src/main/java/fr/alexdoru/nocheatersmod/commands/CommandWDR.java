@@ -196,6 +196,8 @@ public class CommandWDR extends CommandBase {
                         LoginData loginData = new LoginData(playerdata.getPlayerData());
                         if (loginData.hasNeverJoinedHypixel()) {
                             uuid = null;
+                        } else if (!playername.equals(loginData.getdisplayname())) {
+                            uuid = null;
                         }
                     } catch (ApiException ignored) {
                         uuid = null;
