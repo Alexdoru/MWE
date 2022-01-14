@@ -25,10 +25,12 @@ public class ConfigHandler {
     public static boolean show_fkcHUD;
     public static boolean compact_hud;
     public static boolean show_players;
+    public static boolean inSidebar;
     public static boolean draw_background;
     public static boolean text_shadow;
     public static double fkc_hud_size;
     public static int playerAmount;
+    // TODO add the finals to the tablist, on nametags
 
     /*MWEnhancements config*/
     public static String APIKey;
@@ -55,7 +57,7 @@ public class ConfigHandler {
     public static boolean togglewarnings;
     public static boolean toggleautoreport;
     /*those fields are in milliseconds*/
-    public static long timeBetweenReports;
+    public static long timeBetweenReports; // TODO baisser ca de fou pour le faire toute les heures, que dans la private version, le faire que pour les mecs qui bhop ?
     public static long timeAutoReport;
     public static boolean deleteReports;
     public static long timeDeleteReport;
@@ -77,6 +79,7 @@ public class ConfigHandler {
         Property pshow_fkcHUD = config.get(CATEGORY_FKCounter, "Show FKCounter HUD", true, "Displays the HUD of the final kill counter");
         Property pcompactHUD = config.get(CATEGORY_FKCounter, "Compact FKCounter HUD", false, "Use a compact HUD for the final kill counter");
         Property pshow_players = config.get(CATEGORY_FKCounter, "Show players", false, "Displays players with most finals in each team");
+        Property pinSidebar = config.get(CATEGORY_FKCounter, "HUD in sidebar", false, "Places the fkcounter in the sidebar");
         Property pdraw_background = config.get(CATEGORY_FKCounter, "Draw background", false, "Draws a box around the HUD of the final kill counter");
         Property ptext_shadow = config.get(CATEGORY_FKCounter, "Text shadow", true, "Draws text shadow");
         Property pfkc_hud_size = config.get(CATEGORY_FKCounter, "HUD Size", 1.0f, "Size of the final kill counter HUD");
@@ -119,6 +122,7 @@ public class ConfigHandler {
         pOrderFKC.add(pshow_fkcHUD.getName());
         pOrderFKC.add(pcompactHUD.getName());
         pOrderFKC.add(pshow_players.getName());
+        pOrderFKC.add(pinSidebar.getName());
         pOrderFKC.add(pdraw_background.getName());
         pOrderFKC.add(ptext_shadow.getName());
         pOrderFKC.add(pfkc_hud_size.getName());
@@ -168,6 +172,7 @@ public class ConfigHandler {
             show_fkcHUD = pshow_fkcHUD.getBoolean();
             compact_hud = pcompactHUD.getBoolean();
             show_players = pshow_players.getBoolean();
+            inSidebar = pinSidebar.getBoolean();
             draw_background = pdraw_background.getBoolean();
             text_shadow = ptext_shadow.getBoolean();
             fkc_hud_size = pfkc_hud_size.getDouble();
@@ -209,6 +214,7 @@ public class ConfigHandler {
             pshow_fkcHUD.set(show_fkcHUD);
             pcompactHUD.set(compact_hud);
             pshow_players.set(show_players);
+            pinSidebar.set(inSidebar);
             pdraw_background.set(draw_background);
             ptext_shadow.set(text_shadow);
             pfkc_hud_size.set(fkc_hud_size);
