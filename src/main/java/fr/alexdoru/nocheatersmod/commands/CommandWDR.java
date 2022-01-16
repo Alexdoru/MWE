@@ -15,6 +15,7 @@ import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.event.ClickEvent;
@@ -140,30 +141,23 @@ public class CommandWDR extends CommandBase {
 
                         }
 
-                    } else if (args[i].equals("fastbreak")) {
-
+                    } else if (args[i].contains("stalk") || args[i].equals("test")) {
                         arraycheats.add(args[i]);
-
                     } else if (args[i].equalsIgnoreCase("bhop")) {
-
                         arraycheats.add(args[i]);
                         message.append(" bhop aura reach velocity speed antiknockback");
-
-                    } else if (args[i].equalsIgnoreCase("autoblock")) {
-
+                    } else if (args[i].equalsIgnoreCase("fastbreak")) {
+                        arraycheats.add(args[i]);
+                        message.append(" speed");
+                    } else if (args[i].equalsIgnoreCase("autoblock") || args[i].equalsIgnoreCase("multiaura")) {
                         arraycheats.add(args[i]);
                         message.append(" killaura");
-
                     } else if (args[i].equalsIgnoreCase("noslowdown") || args[i].equalsIgnoreCase("keepsprint")) {
-
                         arraycheats.add(args[i]);
                         message.append(" velocity");
-
                     } else {
-
                         arraycheats.add(args[i]);
                         message.append(" ").append(args[i]); //reconstructs the message to send it to the server
-
                     }
 
                 }
@@ -179,16 +173,18 @@ public class CommandWDR extends CommandBase {
                 message.append(" ").append(timerOnReplay.equals("?") ? "" : timerOnReplay);
             }
 
-            (Minecraft.getMinecraft()).thePlayer.sendChatMessage(message.toString()); //sends command to server
+            if (!(args.length == 2 && (args[1].contains("stalk") || args[1].equals("test")))) {
+                (Minecraft.getMinecraft()).thePlayer.sendChatMessage(message.toString()); //sends command to server
+            }
 
             CachedMojangUUID apireq;
             String uuid = null;
+            boolean isaNick = false;
 
             try {
                 apireq = new CachedMojangUUID(args[0]);
                 uuid = apireq.getUuid();
                 playername = apireq.getName();
-
                 if (uuid != null) {
                     CachedHypixelPlayerData playerdata;
                     try {
@@ -203,13 +199,26 @@ public class CommandWDR extends CommandBase {
                         uuid = null;
                     }
                 }
-
             } catch (ApiException ignored) {
             }
 
             if (uuid == null) {  // The playername doesn't exist or never joined hypixel
-                addChatMessage(new ChatComponentText(getTagNoCheaters() + invalidplayernameMsg(playername)));
-                return;
+
+                // search for the player's gameprofile in the tablist
+                for (NetworkPlayerInfo networkplayerinfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+                    if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(args[0])) {
+                        uuid = networkplayerinfo.getGameProfile().getName();
+                        playername = uuid;
+                        isaNick = true;
+                    }
+                }
+
+                if (!isaNick) { // couldn't find the nicked player in the tab list
+                    addChatMessage(new ChatComponentText(getTagNoCheaters()
+                            + invalidplayernameMsg(args[0]) + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist"));
+                    return;
+                }
+
             }
 
             // save the player in the wdr map
@@ -234,14 +243,20 @@ public class CommandWDR extends CommandBase {
                     //}
                 }
 
+                if (isaNick) {
+                    argsinWDR.add("nick");
+                }
+
                 WDR newreport = new WDR(timestamp, argsinWDR);
                 WdredPlayers.getWdredMap().put(uuid, newreport);
                 NameUtil.transformNameTablist(playername);
                 NameUtil.handlePlayer(playername);
-                addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "You reported ")
+                addChatMessage(new ChatComponentText(getTagNoCheaters() +
+                        EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : ""))
                         .appendSibling(IChatComponent.Serializer.jsonToComponent("[\"\"" + NoCheatersEvents.createPlayerTimestampedMsg(playername, newreport, "light_purple")[0] + "]"))
                         .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " with a " + EnumChatFormatting.YELLOW +
-                                "timestamp" + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game.")));
+                                "timestamp" + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
+                                + EnumChatFormatting.GREEN + (isaNick ? " for the next 48 hours." : "."))));
 
             } else {  // isn't a timestamped report
 
@@ -268,12 +283,16 @@ public class CommandWDR extends CommandBase {
                     argsinWDR.addAll(arraycheats);
                 }
 
+                if (isaNick) {
+                    argsinWDR.add("nick");
+                }
                 WdredPlayers.getWdredMap().put(uuid, new WDR((new Date()).getTime(), argsinWDR));
                 NameUtil.transformNameTablist(playername);
                 NameUtil.handlePlayer(playername);
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
-                        EnumChatFormatting.GREEN + "You reported "
-                        + EnumChatFormatting.LIGHT_PURPLE + playername + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game."));
+                        EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
+                        + EnumChatFormatting.LIGHT_PURPLE + playername + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
+                        + EnumChatFormatting.GREEN + (isaNick ? " for the next 48 hours." : ".")));
             }
 
         })).start();
@@ -305,19 +324,14 @@ public class CommandWDR extends CommandBase {
     }
 
     public static void addTimeMark() {
-
         nbTimeMarks++;
-
         String key = String.valueOf(nbTimeMarks);
         long timestamp = (new Date()).getTime();
         String serverID = GameInfoGrabber.getGameIDfromscoreboard();
         String timerOnReplay = GameInfoGrabber.getTimeSinceGameStart(timestamp, serverID, 0);
         TimeMarksMap.put(key, new TimeMark(timestamp, serverID, timerOnReplay));
-
         addChatMessage(new ChatComponentText(getTagNoCheaters()
-
                 + EnumChatFormatting.GREEN + "Added timestamp : " + EnumChatFormatting.GOLD + "#" + key + EnumChatFormatting.GREEN + ".")
-
                 .setChatStyle(new ChatStyle()
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                 new ChatComponentText(EnumChatFormatting.GREEN + "Key : " + EnumChatFormatting.GOLD + "#" + key + "\n" +
@@ -326,7 +340,6 @@ public class CommandWDR extends CommandBase {
                                         EnumChatFormatting.GREEN + "Timer on replay (approx.) : " + EnumChatFormatting.GOLD + timerOnReplay + "\n" +
                                         EnumChatFormatting.YELLOW + "Click to fill a report with this timestmap")))
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wdr  " + "#" + key))));
-
     }
 
 }
