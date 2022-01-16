@@ -50,13 +50,11 @@ public class GuiIngameTransformer implements IMyClassTransformer {
                         AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode != null) {
                             InsnList list = new InsnList();
-                            /*CALL FKCounterGui.instance.renderinSidebar(l1, k, ConfigHandler.text_shadow, j)*/
-                            list.add(new FieldInsnNode(GETSTATIC, "fr/alexdoru/fkcountermod/gui/FKCounterGui", "instance", "Lfr/alexdoru/fkcountermod/gui/FKCounterGui;"));
                             list.add(new VarInsnNode(ILOAD, 10)); //l1
                             list.add(new VarInsnNode(ILOAD, 17)); //k
                             list.add(new FieldInsnNode(GETSTATIC, "fr/alexdoru/megawallsenhancementsmod/config/ConfigHandler", "text_shadow", "Z"));
                             list.add(new VarInsnNode(ILOAD, 11));//j
-                            list.add(new MethodInsnNode(INVOKEVIRTUAL, "fr/alexdoru/fkcountermod/gui/FKCounterGui", "renderinSidebar", "(IIZI)V", false));
+                            list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiIngameHook", "renderSiderbarGui", "(IIZI)V", false));
                             methodNode.instructions.insertBefore(nextNode, list);
                         }
                         injections++;
