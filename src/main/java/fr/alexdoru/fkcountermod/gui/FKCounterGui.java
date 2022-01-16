@@ -77,11 +77,8 @@ public class FKCounterGui extends MyCachedGui {
         GlStateManager.popMatrix();
     }
 
-    /**
-     * Method call injected via ASM
-     */
-    public void renderinSidebar(int x, int y, boolean textShadow, int lineNumber) {
-        if (lineNumber == 11 && ConfigHandler.inSidebar && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame() && getGameId() != null) {
+    public void renderinSidebar(int x, int y, boolean textShadow) {
+        if (ConfigHandler.inSidebar && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame() && getGameId() != null) {
             frObj.drawString(getDisplayText(), x, y, 16777215, textShadow);
         }
     }

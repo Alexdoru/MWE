@@ -23,15 +23,13 @@ public class SidebarmodRevamp_GuiSidebar implements IMyClassTransformer {
                         AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode != null) {
                             InsnList list = new InsnList();
-                            /*CALL FKCounterGui.instance.renderinSidebar(this.sidebarX, scoreY, this.shadow, index)*/
-                            list.add(new FieldInsnNode(GETSTATIC, "fr/alexdoru/fkcountermod/gui/FKCounterGui", "instance", "Lfr/alexdoru/fkcountermod/gui/FKCounterGui;"));
                             list.add(new VarInsnNode(ALOAD, 0));
                             list.add(new FieldInsnNode(GETFIELD, "revamp/sidebarmod/gui/GuiSidebar", "sidebarX", "I"));
                             list.add(new VarInsnNode(ILOAD, 16));//scoreY
                             list.add(new VarInsnNode(ALOAD, 0));
                             list.add(new FieldInsnNode(GETFIELD, "revamp/sidebarmod/gui/GuiSidebar", "shadow", "Z"));
                             list.add(new VarInsnNode(ILOAD, 9));//index
-                            list.add(new MethodInsnNode(INVOKEVIRTUAL, "fr/alexdoru/fkcountermod/gui/FKCounterGui", "renderinSidebar", "(IIZI)V", false));
+                            list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiIngameHook", "renderSiderbarGui", "(IIZI)V", false));
                             methodNode.instructions.insertBefore(nextNode, list);
                         }
                         return classNode;
