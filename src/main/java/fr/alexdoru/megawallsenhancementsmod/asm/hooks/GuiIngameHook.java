@@ -1,6 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.fkcountermod.gui.FKCounterGui;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.gui.LastWitherHPGui;
 
 public class GuiIngameHook {
 
@@ -12,11 +14,11 @@ public class GuiIngameHook {
     }
 
     public static void renderSiderbarGui(int x, int y, boolean textShadow, int lineNumber) {
-        if (lineNumber == 6) {
-            //TODO call render wither hud
+        if (ConfigHandler.witherHUDinSiderbar && lineNumber == 6) {
+            LastWitherHPGui.instance.renderinSidebar(x, y, textShadow);
             return;
         }
-        if (lineNumber == 11) {
+        if (ConfigHandler.FKHUDinSidebar && lineNumber == 11) {
             FKCounterGui.instance.renderinSidebar(x, y, textShadow);
         }
     }

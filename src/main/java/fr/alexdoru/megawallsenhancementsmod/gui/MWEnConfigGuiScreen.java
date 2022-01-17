@@ -82,7 +82,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 3:
                 return "Show Arrow Hit HUD : " + getSuffix(ConfigHandler.show_ArrowHitHUD);
             case 11:
-                return "Show wither death time HUD : " + getSuffix(ConfigHandler.show_lastWitherHUD);
+                return "Show wither death time HUD : " + (ConfigHandler.witherHUDinSiderbar ? EnumChatFormatting.YELLOW + "in Sidebar" : getSuffix(ConfigHandler.show_lastWitherHUD));
             case 19:
                 return "Colored Tablist Scores : " + getSuffix(ConfigHandler.useColoredScores);
             case 17:
@@ -147,6 +147,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 11:
                 textLines.add(EnumChatFormatting.GREEN + "Displays a HUD with the time it takes for the last wither to die");
+                textLines.add(EnumChatFormatting.GREEN + "The HUD can be configured to appear in the Sidebar");
                 break;
             case 19:
                 textLines.add(EnumChatFormatting.GREEN + "Adds colors to the scores/health in the tablist depending on the value");
@@ -195,7 +196,18 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 ConfigHandler.show_ArrowHitHUD = !ConfigHandler.show_ArrowHitHUD;
                 break;
             case 11:
-                ConfigHandler.show_lastWitherHUD = !ConfigHandler.show_lastWitherHUD;
+                if (ConfigHandler.show_lastWitherHUD && !ConfigHandler.witherHUDinSiderbar) {
+                    ConfigHandler.witherHUDinSiderbar = true;
+                    break;
+                }
+                if (ConfigHandler.witherHUDinSiderbar && ConfigHandler.show_lastWitherHUD) {
+                    ConfigHandler.witherHUDinSiderbar = false;
+                    ConfigHandler.show_lastWitherHUD = false;
+                    break;
+                }
+                if (!ConfigHandler.show_lastWitherHUD && !ConfigHandler.witherHUDinSiderbar) {
+                    ConfigHandler.show_lastWitherHUD = true;
+                }
                 break;
             case 19:
                 ConfigHandler.useColoredScores = !ConfigHandler.useColoredScores;

@@ -40,7 +40,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
 
         this.buttonList.add(addSettingButton(ConfigHandler.show_fkcHUD, 0, 0, 0, "Show HUD"));
         this.buttonList.add(buttoncompacthud = addSettingButton(ConfigHandler.compact_hud, 1, 0, 1, "Compact HUD"));
-        this.buttonList.add(buttonsidebar = addSettingButton(ConfigHandler.inSidebar, 7, 0, 2, "HUD in Sidebar"));
+        this.buttonList.add(buttonsidebar = addSettingButton(ConfigHandler.FKHUDinSidebar, 7, 0, 2, "HUD in Sidebar"));
         this.buttonList.add(addSettingButton(ConfigHandler.draw_background, 3, 1, 0, "HUD Background"));
         this.buttonList.add(addSettingButton(ConfigHandler.text_shadow, 4, 1, 1, "Text Shadow"));
         this.buttonList.add(buttonshowplayers = addSettingButton(ConfigHandler.show_players, 2, 1, 2, "Show Players"));
@@ -73,7 +73,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                     ConfigHandler.show_players = false;
                     buttonshowplayers.setting = false;
                 } else {
-                    ConfigHandler.inSidebar = false;
+                    ConfigHandler.FKHUDinSidebar = false;
                     buttonsidebar.setting = false;
                 }
                 break;
@@ -83,7 +83,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                 if (ConfigHandler.show_players) {
                     ConfigHandler.compact_hud = false;
                     buttoncompacthud.setting = false;
-                    ConfigHandler.inSidebar = false;
+                    ConfigHandler.FKHUDinSidebar = false;
                     buttonsidebar.setting = false;
                 }
                 break;
@@ -96,9 +96,9 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                 ((ButtonToggle) button).setting = ConfigHandler.text_shadow;
                 break;
             case 7:
-                ConfigHandler.inSidebar = !ConfigHandler.inSidebar;
-                ((ButtonToggle) button).setting = ConfigHandler.inSidebar;
-                if (ConfigHandler.inSidebar) {
+                ConfigHandler.FKHUDinSidebar = !ConfigHandler.FKHUDinSidebar;
+                ((ButtonToggle) button).setting = ConfigHandler.FKHUDinSidebar;
+                if (ConfigHandler.FKHUDinSidebar) {
                     ConfigHandler.show_players = false;
                     buttonshowplayers.setting = false;
                     ConfigHandler.compact_hud = true;
