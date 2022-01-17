@@ -78,7 +78,7 @@ public class FKCounterGui extends MyCachedGui {
     }
 
     public void renderinSidebar(int x, int y, boolean textShadow) {
-        if (ConfigHandler.inSidebar && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame() && getGameId() != null) {
+        if (ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame() && getGameId() != null) {
             frObj.drawString(getDisplayText(), x, y, 16777215, textShadow);
         }
     }
@@ -128,7 +128,7 @@ public class FKCounterGui extends MyCachedGui {
 
     @Override
     public boolean isEnabled() {
-        return (!ConfigHandler.inSidebar && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame() && getGameId() != null);
+        return (!ConfigHandler.FKHUDinSidebar && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame() && getGameId() != null);
     }
 
     @Override

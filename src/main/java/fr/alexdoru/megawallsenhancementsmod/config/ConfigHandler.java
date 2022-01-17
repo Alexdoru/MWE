@@ -25,7 +25,7 @@ public class ConfigHandler {
     public static boolean show_fkcHUD;
     public static boolean compact_hud;
     public static boolean show_players;
-    public static boolean inSidebar;
+    public static boolean FKHUDinSidebar;
     public static boolean draw_background;
     public static boolean text_shadow;
     public static double fkc_hud_size;
@@ -48,6 +48,7 @@ public class ConfigHandler {
     public static boolean show_ArrowHitHUD;
     public static final GuiPosition arrowHitHUDPosition = new GuiPosition(0d, 0d);
     public static boolean show_lastWitherHUD;
+    public static boolean witherHUDinSiderbar;
     public static final GuiPosition lastWitherHUDPosition = new GuiPosition(0d, 0d);
     public static boolean hunterStrengthHUD;
     public static final GuiPosition hunterStrengthHUDPosition = new GuiPosition(0d, 0d);
@@ -101,6 +102,7 @@ public class ConfigHandler {
         Property pXpos_ArrowHitHUD = config.get(CATEGORY_GUI, "Xpos Arrow Hit HUD", 0.5d, "The x position of the ArrowHitGui, value ranges from 0 to 1");
         Property pYpos_ArrowHitHUD = config.get(CATEGORY_GUI, "Ypos Arrow Hit HUD", 9d / 20d, "The y position of the ArrowHitGui, value ranges from 0 to 1");
         Property pShow_lastWitherHUD = config.get(CATEGORY_GUI, "Show last wither HUD", true, "Displays the time it takes for the last wither to die");
+        Property pwitherHUDinSiderbar = config.get(CATEGORY_GUI, "Wiher HUD in sidebar", true, "Displays the time it takes for the last wither to die in the sidebar");
         Property pXpos_lastWitherHUD = config.get(CATEGORY_GUI, "Xpos last wither HUD", 0.75d, "The x position of the LastWitherHUD, value ranges from 0 to 1");
         Property pYpos_lastWitherHUD = config.get(CATEGORY_GUI, "Ypos last wither HUD", 0.05d, "The y position of the LastWitherHUD, value ranges from 0 to 1");
         Property pHunterStrengthHUD = config.get(CATEGORY_GUI, "Hunter Strength HUD", true, "Displays HUD and plays a sound 10 seconds before getting strength with hunter");
@@ -148,6 +150,7 @@ public class ConfigHandler {
         pOrderGUI.add(pXpos_ArrowHitHUD.getName());
         pOrderGUI.add(pYpos_ArrowHitHUD.getName());
         pOrderGUI.add(pShow_lastWitherHUD.getName());
+        pOrderGUI.add(pwitherHUDinSiderbar.getName());
         pOrderGUI.add(pXpos_lastWitherHUD.getName());
         pOrderGUI.add(pYpos_lastWitherHUD.getName());
         pOrderGUI.add(pHunterStrengthHUD.getName());
@@ -172,7 +175,7 @@ public class ConfigHandler {
             show_fkcHUD = pshow_fkcHUD.getBoolean();
             compact_hud = pcompactHUD.getBoolean();
             show_players = pshow_players.getBoolean();
-            inSidebar = pinSidebar.getBoolean();
+            FKHUDinSidebar = pinSidebar.getBoolean();
             draw_background = pdraw_background.getBoolean();
             text_shadow = ptext_shadow.getBoolean();
             fkc_hud_size = pfkc_hud_size.getDouble();
@@ -192,6 +195,7 @@ public class ConfigHandler {
             show_ArrowHitHUD = pShow_ArrowHitHUD.getBoolean();
             arrowHitHUDPosition.setRelative(pXpos_ArrowHitHUD.getDouble(), pYpos_ArrowHitHUD.getDouble());
             show_lastWitherHUD = pShow_lastWitherHUD.getBoolean();
+            witherHUDinSiderbar = pwitherHUDinSiderbar.getBoolean();
             lastWitherHUDPosition.setRelative(pXpos_lastWitherHUD.getDouble(), pYpos_lastWitherHUD.getDouble());
             hunterStrengthHUD = pHunterStrengthHUD.getBoolean();
             hunterStrengthHUDPosition.setRelative(pXpos_hunterHUD.getDouble(), pYpos_hunterHUD.getDouble());
@@ -214,7 +218,7 @@ public class ConfigHandler {
             pshow_fkcHUD.set(show_fkcHUD);
             pcompactHUD.set(compact_hud);
             pshow_players.set(show_players);
-            pinSidebar.set(inSidebar);
+            pinSidebar.set(FKHUDinSidebar);
             pdraw_background.set(draw_background);
             ptext_shadow.set(text_shadow);
             pfkc_hud_size.set(fkc_hud_size);
@@ -240,6 +244,7 @@ public class ConfigHandler {
             pYpos_ArrowHitHUD.set(ArrowHitHUDarray[1]);
 
             pShow_lastWitherHUD.set(show_lastWitherHUD);
+            pwitherHUDinSiderbar.set(witherHUDinSiderbar);
             double[] lastWitherHUDarray = lastWitherHUDPosition.getRelativePosition();
             pXpos_lastWitherHUD.set(lastWitherHUDarray[0]);
             pYpos_lastWitherHUD.set(lastWitherHUDarray[1]);
