@@ -173,7 +173,7 @@ public class ChatEvents {
     private static void printReportSuggestion(String playername, String cheat) {
         mc.getSoundHandler().playSound(PositionedSoundRecord.create(reportSuggestionSound, 1.0F));
         IChatComponent imsg = new ChatComponentText(getTagMW() + EnumChatFormatting.DARK_RED + "Command suggestion : ")
-                .appendSibling(makeReportButtons(playername, cheat, ClickEvent.Action.SUGGEST_COMMAND, ClickEvent.Action.SUGGEST_COMMAND));
+                .appendSibling(makeReportButtons(playername, cheat, cheat, ClickEvent.Action.SUGGEST_COMMAND, ClickEvent.Action.SUGGEST_COMMAND));
         new DelayedTask(() -> addChatMessage(imsg), 0);
     }
 
