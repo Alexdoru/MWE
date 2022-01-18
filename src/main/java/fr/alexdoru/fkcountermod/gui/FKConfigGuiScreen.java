@@ -17,7 +17,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
     private static final ResourceLocation BACKGROUND = new ResourceLocation("fkcounter", "background.png");
 
     @SuppressWarnings("FieldMayBeFinal")
-    private int columns = 3;
+    private int columns = 4;
     @SuppressWarnings("FieldMayBeFinal")
     private int rows = 2;
 
@@ -41,9 +41,12 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
         this.buttonList.add(addSettingButton(ConfigHandler.show_fkcHUD, 0, 0, 0, "Show HUD"));
         this.buttonList.add(buttoncompacthud = addSettingButton(ConfigHandler.compact_hud, 1, 0, 1, "Compact HUD"));
         this.buttonList.add(buttonsidebar = addSettingButton(ConfigHandler.FKHUDinSidebar, 7, 0, 2, "HUD in Sidebar"));
+        this.buttonList.add(addSettingButton(ConfigHandler.finalsInTablist, 8, 0, 3, "FK in tablist"));
+
         this.buttonList.add(addSettingButton(ConfigHandler.draw_background, 3, 1, 0, "HUD Background"));
         this.buttonList.add(addSettingButton(ConfigHandler.text_shadow, 4, 1, 1, "Text Shadow"));
         this.buttonList.add(buttonshowplayers = addSettingButton(ConfigHandler.show_players, 2, 1, 2, "Show Players"));
+
         this.buttonList.add(new GuiSlider(5, getxCenter() - 150 / 2, getyCenter() + 70, "HUD Size : ", 0.1d, 4d, ConfigHandler.fkc_hud_size, this));
         this.buttonList.add(new GuiSlider(6, getxCenter() - 150 / 2, getyCenter() + 94, 150, 20, "Player amount : ", "", 1d, 10d, ConfigHandler.playerAmount, false, true, this));
         if (parent != null) {
@@ -104,6 +107,10 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                     ConfigHandler.compact_hud = true;
                     buttoncompacthud.setting = true;
                 }
+                break;
+            case 8:
+                ConfigHandler.finalsInTablist = !ConfigHandler.finalsInTablist;
+                ((ButtonToggle) button).setting = ConfigHandler.finalsInTablist;
                 break;
         }
 

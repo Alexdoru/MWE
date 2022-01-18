@@ -50,6 +50,10 @@ public class NameUtil {
         return playerInfoMap.remove(playerName);
     }
 
+    public static NetworkPlayerInfo getPlayerInfo(String playerName){
+        return playerInfoMap.get(playerName);
+    }
+
     public static void handlePlayer(String playername) {
         EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
         if (player != null) {
