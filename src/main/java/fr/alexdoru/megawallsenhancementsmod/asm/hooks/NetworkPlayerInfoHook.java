@@ -13,4 +13,8 @@ public class NetworkPlayerInfoHook {
         return null;
     }
 
+    public static int getPlayersFinals(String playername) { // TODO make method
+        return 10;
+    }
+
 }
