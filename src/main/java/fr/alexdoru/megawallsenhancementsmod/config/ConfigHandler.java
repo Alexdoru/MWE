@@ -30,7 +30,8 @@ public class ConfigHandler {
     public static boolean text_shadow;
     public static double fkc_hud_size;
     public static int playerAmount;
-    // TODO add the finals to the tablist, on nametags
+    public static boolean finalsInTablist;
+    // TODO add the finals on nametags
 
     /*MWEnhancements config*/
     public static String APIKey;
@@ -85,6 +86,7 @@ public class ConfigHandler {
         Property ptext_shadow = config.get(CATEGORY_FKCounter, "Text shadow", true, "Draws text shadow");
         Property pfkc_hud_size = config.get(CATEGORY_FKCounter, "HUD Size", 1.0f, "Size of the final kill counter HUD");
         Property pPlayerAmount = config.get(CATEGORY_FKCounter, "Player amount", (int) 3.0, "Amount of players displayed on screen when you use the \"Show players\" setting");
+        Property pfinalsInTablist = config.get(CATEGORY_FKCounter, "Fks in tablist", true, "Draws the finals in the tablist");
 
         Property pAPIKey = config.get(CATEGORY_MWENh, "APIKey", "", "Your Hypixel API Key");
         Property pstrengthParticules = config.get(CATEGORY_MWENh, "Strength particules", true, "Spawns strength particules when an herobrine or dreadlord get a final");
@@ -129,6 +131,7 @@ public class ConfigHandler {
         pOrderFKC.add(ptext_shadow.getName());
         pOrderFKC.add(pfkc_hud_size.getName());
         pOrderFKC.add(pPlayerAmount.getName());
+        pOrderFKC.add(pfinalsInTablist.getName());
         config.setCategoryPropertyOrder(CATEGORY_FKCounter, pOrderFKC);
 
         List<String> pOrderMWWENh = new ArrayList<>();
@@ -180,6 +183,7 @@ public class ConfigHandler {
             text_shadow = ptext_shadow.getBoolean();
             fkc_hud_size = pfkc_hud_size.getDouble();
             playerAmount = pPlayerAmount.getInt();
+            finalsInTablist = pfinalsInTablist.getBoolean();
 
             APIKey = pAPIKey.getString();
             strengthParticules = pstrengthParticules.getBoolean();
@@ -223,6 +227,7 @@ public class ConfigHandler {
             ptext_shadow.set(text_shadow);
             pfkc_hud_size.set(fkc_hud_size);
             pPlayerAmount.set(playerAmount);
+            pfinalsInTablist.set(finalsInTablist);
 
             pAPIKey.set(APIKey);
             pstrengthParticules.set(strengthParticules);

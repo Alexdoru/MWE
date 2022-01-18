@@ -8,8 +8,10 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
@@ -94,6 +96,7 @@ public class KillCounter {
     private static String gameId;
     private static String[] prefixes; // color codes prefix that you are using in your hypixel mega walls settings
     private static HashMap<String, Integer>[] teamKillsArray;
+    public static HashMap<String, Integer> allPlayerKills = new HashMap<>();
     private static ArrayList<String> deadPlayers;
 
     private static Random rand;
@@ -116,6 +119,7 @@ public class KillCounter {
         gameId = gameIdIn;
         prefixes = new String[TEAMS];
         teamKillsArray = new HashMap[TEAMS];
+        allPlayerKills.clear();
         deadPlayers = new ArrayList<>();
 
         for (int i = 0; i < TEAMS; i++) {
@@ -221,7 +225,6 @@ public class KillCounter {
 
     /**
      * Can return null if the fkcounter isn't initialized yet
-     * @return
      */
     public static HashMap<String, Integer>[] getTeamKillsArray() {
         return teamKillsArray;
@@ -291,7 +294,9 @@ public class KillCounter {
         }
         if (isWitherDead(color)) {
             teamKillsArray[team].remove(player);
+            allPlayerKills.remove(player);
             deadPlayers.add(player);
+            updateNetworkPlayerinfo(player, 0);
         }
     }
 
@@ -303,11 +308,19 @@ public class KillCounter {
         if (deadPlayers.contains(player)) {
             return;
         }
+        Integer finals = teamKillsArray[team].merge(player, 1, Integer::sum);
+        allPlayerKills.merge(player, 1, Integer::sum);
+        updateNetworkPlayerinfo(player, finals);
+    }
 
-        if (teamKillsArray[team].containsKey(player)) {
-            teamKillsArray[team].put(player, teamKillsArray[team].get(player) + 1);
-        } else {
-            teamKillsArray[team].put(player, 1);
+    /**
+     * This method gets transformed via ASM to access a field that's added via ASM as well
+     */
+    private static void updateNetworkPlayerinfo(String playername, int finals) {
+        NetworkPlayerInfo networkPlayerInfo = NameUtil.getPlayerInfo(playername);
+        if (networkPlayerInfo != null) {
+            int i = finals;                              // This line gets removed via ASM
+            // networkPlayerInfo.playerFinalkills = finals; This line gets added via ASM
         }
     }
 
@@ -338,19 +351,6 @@ public class KillCounter {
                 return "?";
         }
     }
-
-    /*
-     * returns the name of the player from the team that has the highest finals
-     */
-    //public static Tuple<String, Integer> getHighestFinalsPlayerOfTeam(int team) {
-    //    HashMap<String, Integer> teamkills = teamKillsArray[team];
-    //    Iterator<Map.Entry<String, Integer>> iterator = teamkills.entrySet().iterator();
-    //    if (iterator.hasNext()) {
-    //        Map.Entry<String, Integer> entry = iterator.next();
-    //        return new Tuple<>(entry.getKey(), entry.getValue());
-    //    }
-    //    return null;
-    //}
 
     private static boolean isNotValidTeam(int team) {
         return (team < 0 || team >= TEAMS);
