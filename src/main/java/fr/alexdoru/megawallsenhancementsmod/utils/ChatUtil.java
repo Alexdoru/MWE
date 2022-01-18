@@ -296,22 +296,22 @@ public class ChatUtil {
                                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to open Plancke in browser")))));
     }
 
-    public static IChatComponent makeReportButtons(String playername, String cheat, ClickEvent.Action actionreport, ClickEvent.Action actionwdr) {
+    public static IChatComponent makeReportButtons(String playername, String cheatReport, String cheatWDR, ClickEvent.Action actionreport, ClickEvent.Action actionwdr) {
 
         return new ChatComponentText(EnumChatFormatting.DARK_GREEN + "Report")
                 .setChatStyle(new ChatStyle()
-                        .setChatClickEvent(new ClickEvent(actionreport, "/report " + playername + " " + cheat))
+                        .setChatClickEvent(new ClickEvent(actionreport, "/report " + playername + " " + cheatReport))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                 new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
-                                        + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " " + cheat + "\n"
+                                        + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " " + cheatReport + "\n"
                                         + EnumChatFormatting.GRAY + "Using the report option won't save the cheater's name in the mod NoCheaters"))))
 
                 .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_PURPLE + " WDR ")
                         .setChatStyle(new ChatStyle()
-                                .setChatClickEvent(new ClickEvent(actionwdr, "/wdr " + playername + " " + cheat))
+                                .setChatClickEvent(new ClickEvent(actionwdr, "/wdr " + playername + " " + cheatWDR))
                                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                         new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
-                                                + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/wdr " + playername + " " + cheat + "\n"
+                                                + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/wdr " + playername + " " + cheatWDR + "\n"
                                                 + EnumChatFormatting.GRAY + "Using the wdr option will give you warnings about this player ingame")))));
     }
 
