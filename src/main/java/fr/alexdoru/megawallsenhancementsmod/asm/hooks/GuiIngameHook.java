@@ -6,6 +6,8 @@ import fr.alexdoru.megawallsenhancementsmod.gui.LastWitherHPGui;
 
 public class GuiIngameHook {
 
+    // TODO delete la ligne Game End : 00:00 et mettre le wither dies in à la place
+
     public static String cancelHungerTitle(String subtitle) {
         if (subtitle.contains("Get to the middle to stop the hunger!")) {
             return "";
