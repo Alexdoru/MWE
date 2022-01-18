@@ -18,7 +18,7 @@ public class NetworkPlayerInfoTransformer implements IMyClassTransformer {
     public ClassNode transform(ClassNode classNode) {
 
         {
-            FieldVisitor fieldVisitor = classNode.visitField(ACC_PRIVATE, "playerFinalkills", "I", null, 0);
+            FieldVisitor fieldVisitor = classNode.visitField(ACC_PUBLIC, "playerFinalkills", "I", null, 0);
             fieldVisitor.visitEnd();
         }
 
