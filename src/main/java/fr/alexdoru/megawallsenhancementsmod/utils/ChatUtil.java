@@ -315,4 +315,13 @@ public class ChatUtil {
                                                 + EnumChatFormatting.GRAY + "Using the wdr option will give you warnings about this player ingame")))));
     }
 
+    public static IChatComponent formattedNameWithReportButton(String playername, String formattedName){
+        return new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
+                .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + playername + " cheating"))
+                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                        new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
+                                + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " cheating" + "\n"
+                                + EnumChatFormatting.GRAY + "Using the report option won't save the cheater's name in the mod NoCheaters"))));
+    }
+
 }
