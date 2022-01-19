@@ -77,13 +77,21 @@ public class NameUtil {
         WDR wdr = WdredPlayers.getWdredMap().get(uuid);
         long datenow = (new Date()).getTime();
 
+        if (wdr == null) {
+            wdr = WdredPlayers.getWdredMap().get(playerName);
+            if (wdr != null) {
+                uuid = playerName;
+            }
+        }
+
         if (wdr != null) { // player was reported
 
             boolean gotautoreported = false;
 
             if (isAutoreportToggled && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && datenow - wdr.timestamp < ConfigHandler.timeAutoReport) {
+                String finalUuid = uuid;
                 new DelayedTask(() -> {
-                    ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + uuid + " " + playerName);
+                    ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
                     nbReport--;
                 }, 20 * nbReport);
                 nbReport++;
@@ -166,7 +174,6 @@ public class NameUtil {
      * replaces the names of squadmates
      * adds a tag to squadmates
      * adds a tag to reported players
-     * unscrambles the tablist
      */
     public static IChatComponent getTransformedDisplayName(GameProfile gameProfile) {
 
@@ -188,6 +195,13 @@ public class NameUtil {
             } else {
 
                 WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+
+                if (wdr == null) {
+                    wdr = WdredPlayers.getWdredMap().get(username);
+                    if (wdr != null) {
+                        uuid = username;
+                    }
+                }
 
                 if (wdr != null) {
 

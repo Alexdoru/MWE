@@ -66,6 +66,13 @@ public class NoCheatersEvents {
             String playerName = networkPlayerInfo.getGameProfile().getName();
             WDR wdr = WdredPlayers.getWdredMap().get(uuid);
 
+            if (wdr == null) {
+                wdr = WdredPlayers.getWdredMap().get(playerName);
+                if (wdr != null) {
+                    uuid = playerName;
+                }
+            }
+
             if (wdr != null) {
 
                 if (ConfigHandler.toggleicons) {
@@ -83,8 +90,9 @@ public class NoCheatersEvents {
                 boolean gotautoreported = false;
 
                 if (ConfigHandler.toggleautoreport && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && datenow - wdr.timestamp < ConfigHandler.timeAutoReport) {
+                    String finalUuid = uuid;
                     new DelayedTask(() -> {
-                        ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + uuid + " " + playerName);
+                        ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
                         nbReport--;
                     }, 20 * nbReport);
                     nbReport++;
@@ -112,11 +120,19 @@ public class NoCheatersEvents {
             String playerName = networkPlayerInfo.getGameProfile().getName();
             WDR wdr = WdredPlayers.getWdredMap().get(uuid);
 
+            if (wdr == null) {
+                wdr = WdredPlayers.getWdredMap().get(playerName);
+                if (wdr != null) {
+                    uuid = playerName;
+                }
+            }
+
             if (wdr != null) {
                 list.add(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr, false)));
                 if (ConfigHandler.toggleautoreport && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && datenow - wdr.timestamp < ConfigHandler.timeAutoReport) {
+                    String finalUuid = uuid;
                     new DelayedTask(() -> {
-                        ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + uuid + " " + playerName);
+                        ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
                         nbReport--;
                     }, 20 * nbReport);
                     nbReport++;
@@ -173,6 +189,8 @@ public class NoCheatersEvents {
             for (String hack : wdr.hacks) {
                 if (hack.equalsIgnoreCase("bhop")) {
                     stringBuilder.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"dark_red\"}");
+                } else if (hack.equalsIgnoreCase("nick")) {
+                    stringBuilder.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"dark_purple\"}");
                 } else {
                     stringBuilder.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"gold\"}");
                 }
