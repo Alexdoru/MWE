@@ -9,14 +9,11 @@ import net.minecraft.util.IChatComponent;
 public class NetworkPlayerInfoHook {
 
     public static IChatComponent getDisplayName(IChatComponent displayNameIn, GameProfile gameProfileIn) {
-        if (displayNameIn == null) {
-            return NameUtil.getTransformedDisplayName(gameProfileIn);
-        }
-        return null;
+        return displayNameIn == null ? NameUtil.getTransformedDisplayName(gameProfileIn) : displayNameIn;
     }
 
     public static int getPlayersFinals(String playername) {
-        if(!FKCounterMod.isInMwGame()){
+        if (!FKCounterMod.isInMwGame()) {
             return 0;
         }
         Integer finals = KillCounter.allPlayerKills.get(playername);
