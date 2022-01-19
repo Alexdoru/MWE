@@ -77,12 +77,6 @@ public class FKCounterGui extends MyCachedGui {
         GlStateManager.popMatrix();
     }
 
-    public void renderinSidebar(int x, int y, boolean textShadow) {
-        if (ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame() && getGameId() != null) {
-            frObj.drawString(getDisplayText(), x, y, 16777215, textShadow);
-        }
-    }
-
     @Override
     public void renderDummy() {
 

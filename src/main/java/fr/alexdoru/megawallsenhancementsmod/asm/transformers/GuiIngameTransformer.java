@@ -41,7 +41,6 @@ public class GuiIngameTransformer implements IMyClassTransformer {
 
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "renderScoreboard") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lauk;Lavr;)V" : "(Lnet/minecraft/scoreboard/ScoreObjective;Lnet/minecraft/client/gui/ScaledResolution;)V")) {
                 for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-
                     if (insnNode.getOpcode() == INVOKESTATIC && insnNode instanceof MethodInsnNode
                             && ((MethodInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "aul" : "net/minecraft/scoreboard/ScorePlayerTeam")
                             && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "a" : "formatPlayerName")
@@ -59,28 +58,6 @@ public class GuiIngameTransformer implements IMyClassTransformer {
                             methodNode.instructions.insertBefore(nextNode, list);
                         }
                     }
-
-                    if (insnNode.getOpcode() == INVOKESTATIC && insnNode instanceof MethodInsnNode
-                            && ((MethodInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "avo" : "net/minecraft/client/gui/GuiIngame")
-                            && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "a" : "drawRect")
-                            && ((MethodInsnNode) insnNode).desc.equals("(IIIII)V")) {
-                        AbstractInsnNode nextNode = insnNode.getNext();
-                        if (nextNode != null) {
-                            /*
-                            Injects after line 583 :
-                            GuiIngameHook.renderSiderbarGui(l1, k, ConfigHandler.text_shadow, j);
-                             */
-                            InsnList list = new InsnList();
-                            list.add(new VarInsnNode(ILOAD, 10)); //l1
-                            list.add(new VarInsnNode(ILOAD, 17)); //k
-                            list.add(new FieldInsnNode(GETSTATIC, "fr/alexdoru/megawallsenhancementsmod/config/ConfigHandler", "text_shadow", "Z"));
-                            list.add(new VarInsnNode(ILOAD, 11));//j
-                            list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiIngameHook", "renderSiderbarGui", "(IIZI)V", false));
-                            methodNode.instructions.insertBefore(nextNode, list);
-                        }
-                        break;
-                    }
-
                 }
             }
 
