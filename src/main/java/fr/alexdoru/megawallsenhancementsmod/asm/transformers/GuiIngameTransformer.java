@@ -15,7 +15,6 @@ public class GuiIngameTransformer implements IMyClassTransformer {
 
     @Override
     public ClassNode transform(ClassNode classNode) {
-        int injections = 0;
         for (MethodNode methodNode : classNode.methods) {
 
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "displayTitle") && methodNode.desc.equals("(Ljava/lang/String;Ljava/lang/String;III)V")) {
@@ -34,7 +33,6 @@ public class GuiIngameTransformer implements IMyClassTransformer {
                                             "(Ljava/lang/String;)Ljava/lang/String;",
                                             false
                                     ));
-                            injections++;
                             break;
                         }
                     }
@@ -43,12 +41,35 @@ public class GuiIngameTransformer implements IMyClassTransformer {
 
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "renderScoreboard") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lauk;Lavr;)V" : "(Lnet/minecraft/scoreboard/ScoreObjective;Lnet/minecraft/client/gui/ScaledResolution;)V")) {
                 for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+
+                    if (insnNode.getOpcode() == INVOKESTATIC && insnNode instanceof MethodInsnNode
+                            && ((MethodInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "aul" : "net/minecraft/scoreboard/ScorePlayerTeam")
+                            && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "a" : "formatPlayerName")
+                            && ((MethodInsnNode) insnNode).desc.equals(ASMLoadingPlugin.isObf ? "(Lauq;Ljava/lang/String;)Ljava/lang/String;" : "(Lnet/minecraft/scoreboard/Team;Ljava/lang/String;)Ljava/lang/String;")) {
+                        AbstractInsnNode nextNode = insnNode.getNext();
+                        if (nextNode != null && nextNode.getOpcode() == ASTORE && nextNode instanceof VarInsnNode && ((VarInsnNode) nextNode).var == 15) {
+                            /*
+                            Transforms line 579 :
+                            Original line : String s1 = ScorePlayerTeam.formatPlayerName(scoreplayerteam1, score1.getPlayerName());
+                            After transformation : String s1 = GuiIngameHook.getSidebarTextLine(ScorePlayerTeam.formatPlayerName(scoreplayerteam1, score1.getPlayerName()), j);
+                             */
+                            InsnList list = new InsnList();
+                            list.add(new VarInsnNode(ILOAD, 11));
+                            list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiIngameHook", "getSidebarTextLine", "(Ljava/lang/String;I)Ljava/lang/String;", false));
+                            methodNode.instructions.insertBefore(nextNode, list);
+                        }
+                    }
+
                     if (insnNode.getOpcode() == INVOKESTATIC && insnNode instanceof MethodInsnNode
                             && ((MethodInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "avo" : "net/minecraft/client/gui/GuiIngame")
                             && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "a" : "drawRect")
                             && ((MethodInsnNode) insnNode).desc.equals("(IIIII)V")) {
                         AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode != null) {
+                            /*
+                            Injects after line 583 :
+                            GuiIngameHook.renderSiderbarGui(l1, k, ConfigHandler.text_shadow, j);
+                             */
                             InsnList list = new InsnList();
                             list.add(new VarInsnNode(ILOAD, 10)); //l1
                             list.add(new VarInsnNode(ILOAD, 17)); //k
@@ -57,16 +78,14 @@ public class GuiIngameTransformer implements IMyClassTransformer {
                             list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiIngameHook", "renderSiderbarGui", "(IIZI)V", false));
                             methodNode.instructions.insertBefore(nextNode, list);
                         }
-                        injections++;
                         break;
                     }
+
                 }
             }
 
         }
-        if (injections == 2) {
-            ASMLoadingPlugin.logger.info("Transformed GuiIngame");
-        }
+        ASMLoadingPlugin.logger.info("Transformed GuiIngame");
         return classNode;
     }
 

@@ -44,17 +44,11 @@ public class LastWitherHPGui extends MyCachedGui {
             updateDisplayText();
             lastupdate = time;
         }
-        if(ConfigHandler.witherHUDinSiderbar) {
+        if (ConfigHandler.witherHUDinSiderbar) {
             return;
         }
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
         frObj.drawStringWithShadow(displayText, absolutePos[0], absolutePos[1], 0);
-    }
-
-    public void renderinSidebar(int x, int y, boolean textShadow) {
-        if (isEnabled()) {
-            frObj.drawString(displayText, x, y, 0, textShadow);
-        }
     }
 
     @Override
