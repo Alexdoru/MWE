@@ -293,10 +293,30 @@ public class CommandNocheaters extends CommandBase {
             String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
             String playerName = networkPlayerInfo.getGameProfile().getName();
             WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+            boolean isaNick = false;
 
-            if (wdr != null) {
+            if (wdr == null) {
+                wdr = WdredPlayers.getWdredMap().get(playerName);
+                if (wdr != null) {
+                    isaNick = true;
+                }
+            }
 
-                if (timenow - wdr.timestamp > ConfigHandler.timeBetweenReports) {
+            if (wdr == null) {
+                continue;
+            }
+
+            if (timenow - wdr.timestamp > ConfigHandler.timeBetweenReports) {
+
+                if (isaNick) {
+
+                    new DelayedTask(() -> {
+                        if (Minecraft.getMinecraft().thePlayer != null) {
+                            ClientCommandHandler.instance.executeCommand(Minecraft.getMinecraft().thePlayer, "/sendreportagain " + playerName + " " + playerName);
+                        }
+                    }, 1 + 10 * nbreport);
+
+                } else {
 
                     new DelayedTask(() -> {
                         if (Minecraft.getMinecraft().thePlayer != null) {
@@ -304,9 +324,9 @@ public class CommandNocheaters extends CommandBase {
                         }
                     }, 1 + 10 * nbreport);
 
-                    nbreport++;
                 }
 
+                nbreport++;
             }
 
         }

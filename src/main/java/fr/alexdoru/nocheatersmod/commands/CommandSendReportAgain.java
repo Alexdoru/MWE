@@ -66,7 +66,7 @@ public class CommandSendReportAgain extends CommandBase {
                 cheatmessage.append(" ").append("aura");
             } else if (hack.equals("bhop")) {
                 cheatmessage.append(" bhop aura reach velocity speed antiknockback");
-            } else if (!(hack.equals("cheating") || hack.equals("fastbreak"))) {
+            } else if (!(hack.equals("cheating") || hack.equals("fastbreak") || hack.equals("nick"))) {
                 for (String offhack : CommandReport.recognizedcheats) {
                     if (hack.equals(offhack)) {
                         cheatmessage.append(" ").append(hack);
