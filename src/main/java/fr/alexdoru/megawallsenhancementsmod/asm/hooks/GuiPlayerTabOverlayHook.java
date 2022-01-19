@@ -3,30 +3,27 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.EnumChatFormatting;
 
 public class GuiPlayerTabOverlayHook {
 
-    private static final int FK_SCORE_WIDTH = Minecraft.getMinecraft().fontRendererObj.getStringWidth("00  ");
+    private static final FontRenderer fontRendererObj = Minecraft.getMinecraft().fontRendererObj;
+    private static final int FK_SCORE_WIDTH = fontRendererObj.getStringWidth("00  ");
 
     public static int getFKScoreWidth() {
         return ConfigHandler.finalsInTablist ? (FKCounterMod.isInMwGame() ? FK_SCORE_WIDTH : 0) : 0;
     }
 
-    // TODO le fks est pas aligné, injecter un deuxieme call pour draw le score ?
-    public static String getScoretoRender(int playersFinals, int hpIn) {
-        if(!ConfigHandler.finalsInTablist){
-            return "" + getColoredHP(hpIn);
+    public static void renderFinals(int playersFinals, int x, int y) {
+        if (!ConfigHandler.finalsInTablist || playersFinals == 0 || !FKCounterMod.isInMwGame()) {
+            return;
         }
-        if (playersFinals != 0) {
-            if (FKCounterMod.isInMwGame()) {
-                return EnumChatFormatting.GOLD.toString() + playersFinals + (hpIn < 10 ? "   " : "  ") + getColoredHP(hpIn);
-            }
-        }
-        return "" + getColoredHP(hpIn);
+        String s1 = EnumChatFormatting.GOLD + "" + playersFinals;
+        fontRendererObj.drawStringWithShadow(s1, (float) (x - fontRendererObj.getStringWidth(s1) - FK_SCORE_WIDTH), (float) y, 16777215);
     }
 
-    private static EnumChatFormatting getColoredHP(int healthPoints) {
+    public static EnumChatFormatting getColoredHP(int healthPoints) {
         if (ConfigHandler.useColoredScores) {
 
             float maxhealth;

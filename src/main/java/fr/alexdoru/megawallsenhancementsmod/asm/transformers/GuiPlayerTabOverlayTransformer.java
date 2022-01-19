@@ -52,8 +52,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
             }
 
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "drawScoreboardValues") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lauk;ILjava/lang/String;IILbdc;)V" : "(Lnet/minecraft/scoreboard/ScoreObjective;ILjava/lang/String;IILnet/minecraft/client/network/NetworkPlayerInfo;)V")) {
-                boolean injetedTransformation = false;
-                int removedInstructions = 0;
+                boolean sliceFlag = false;
                 for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
                     if (insnNode.getOpcode() == GETSTATIC
@@ -65,20 +64,29 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                         Original line :
                         String s1 = EnumChatFormatting.YELLOW + "" + i;
                         After transformation :
-                        String s1 = GuiPlayerTabOverlayHook.getScoretoRender(networkplayerinfo.playerFinalkills, i) + i;
+                        String s1 = GuiPlayerTabOverlayHook.getColoredHP(i) + "" + i;
                          */
                         InsnList list = new InsnList();
-                        list.add(new VarInsnNode(ALOAD, 6)); // load networkplayerinfo
-                        list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", "playerFinalkills", "I")); // get playerFinalkills field
-                        list.add(new VarInsnNode(ILOAD, 7)); // load i
-                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "getScoretoRender", "(II)Ljava/lang/String;", false));
+                        list.add(new VarInsnNode(ILOAD, 7));
+                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "getColoredHP", ASMLoadingPlugin.isObf ? "(I)La;" : "(I)Lnet/minecraft/util/EnumChatFormatting;", false));
                         methodNode.instructions.insertBefore(insnNode, list);
-                        injetedTransformation = true;
+                        methodNode.instructions.remove(insnNode);
+                        sliceFlag = true;
                     }
 
-                    if (injetedTransformation && removedInstructions < 3) {
-                        methodNode.instructions.remove(insnNode);
-                        removedInstructions++;
+                    if (sliceFlag && insnNode.getOpcode() == ALOAD && insnNode instanceof VarInsnNode && ((VarInsnNode) insnNode).var == 0) {
+                        /*
+                        Injects before line 365 :
+                        GuiPlayerTabOverlayHook.renderFinals(p_175247_6_.playerFinalkills, p_175247_5_, p_175247_2_);
+                         */
+                        InsnList list = new InsnList();
+                        list.add(new VarInsnNode(ALOAD, 6)); // load networkplayerinfo / p_175247_6_
+                        list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", "playerFinalkills", "I")); // get playerFinalkills field
+                        list.add(new VarInsnNode(ILOAD, 5));
+                        list.add(new VarInsnNode(ILOAD, 2));
+                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "renderFinals", "(III)V", false));
+                        methodNode.instructions.insertBefore(insnNode, list);
+                        break;
                     }
 
                 }
