@@ -16,7 +16,6 @@ public class SidebarmodRevamp_GuiSidebar implements IMyClassTransformer {
         for (MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals("drawSidebar")) {
                 for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-
                     if (insnNode.getOpcode() == INVOKESTATIC && insnNode instanceof MethodInsnNode
                             && ((MethodInsnNode) insnNode).owner.equals("net/minecraft/scoreboard/ScorePlayerTeam")
                             && ((MethodInsnNode) insnNode).name.equals("func_96667_a")
@@ -33,26 +32,6 @@ public class SidebarmodRevamp_GuiSidebar implements IMyClassTransformer {
                             methodNode.instructions.insertBefore(nextNode, list);
                         }
                     }
-
-                    if (insnNode.getOpcode() == INVOKESTATIC && insnNode instanceof MethodInsnNode
-                            && ((MethodInsnNode) insnNode).owner.equals("revamp/sidebarmod/gui/GuiSidebar")
-                            && ((MethodInsnNode) insnNode).name.equals("func_73734_a")
-                            && ((MethodInsnNode) insnNode).desc.equals("(IIIII)V")) {
-                        AbstractInsnNode nextNode = insnNode.getNext();
-                        if (nextNode != null) {
-                            InsnList list = new InsnList();
-                            list.add(new VarInsnNode(ALOAD, 0));
-                            list.add(new FieldInsnNode(GETFIELD, "revamp/sidebarmod/gui/GuiSidebar", "sidebarX", "I"));
-                            list.add(new VarInsnNode(ILOAD, 16));//scoreY
-                            list.add(new VarInsnNode(ALOAD, 0));
-                            list.add(new FieldInsnNode(GETFIELD, "revamp/sidebarmod/gui/GuiSidebar", "shadow", "Z"));
-                            list.add(new VarInsnNode(ILOAD, 9));//index
-                            list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiIngameHook", "renderSiderbarGui", "(IIZI)V", false));
-                            methodNode.instructions.insertBefore(nextNode, list);
-                        }
-                        return classNode;
-                    }
-
                 }
             }
         }
