@@ -31,7 +31,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         int buttonsWidth = 200;
         this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
         this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
-        this.buttonList.add(new GuiSlider(4, getxCenter() - buttonsWidth / 2, getYposForButton(-1), buttonsWidth, 20, "Time between reports : ", " hours", 6d, 48d, ConfigHandler.timeBetweenReports / 3600000f, false, true, this));
+        this.buttonList.add(new GuiSlider(4, getxCenter() - buttonsWidth / 2, getYposForButton(-1), buttonsWidth, 20, "Time between reports : ", " hours", 4d, 48d, ConfigHandler.timeBetweenReports / 3600000f, false, true, this));
         this.buttonList.add(new GuiSlider(5, getxCenter() - buttonsWidth / 2, getYposForButton(0), buttonsWidth, 20, "Time max autoreport : ", " days", 1d, 30d, ConfigHandler.timeAutoReport / (24f * 3600f * 1000f), false, true, this));
         this.buttonList.add(new GuiButton(6, getxCenter() - buttonsWidth / 2, getYposForButton(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(6)));
         this.buttonList.add(new GuiSlider(7, getxCenter() - buttonsWidth / 2, getYposForButton(2), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
@@ -102,7 +102,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     public void onChangeSliderValue(GuiSlider slider) {
         switch (slider.id) {
             case 4:
-                ConfigHandler.timeBetweenReports = Math.max(6L * 3600L * 1000L, Math.min(3600L * 1000L * ((long) slider.getValue()), 48L * 3600L * 1000L));
+                ConfigHandler.timeBetweenReports = Math.max(4L * 3600L * 1000L, Math.min(3600L * 1000L * ((long) slider.getValue()), 48L * 3600L * 1000L));
                 break;
             case 5:
                 ConfigHandler.timeAutoReport = Math.max(24L * 3600L * 1000L, Math.min(24L * 3600L * 1000L * ((long) slider.getValue()), 30L * 24L * 3600L * 1000L));

@@ -59,7 +59,7 @@ public class ConfigHandler {
     public static boolean togglewarnings;
     public static boolean toggleautoreport;
     /*those fields are in milliseconds*/
-    public static long timeBetweenReports; // TODO baisser ca de fou pour le faire toute les heures, que dans la private version, le faire que pour les mecs qui bhop ?
+    public static long timeBetweenReports;
     public static long timeAutoReport;
     public static boolean deleteReports;
     public static long timeDeleteReport;
@@ -207,7 +207,7 @@ public class ConfigHandler {
             toggleicons = pToggleicons.getBoolean();
             togglewarnings = pTogglewarnings.getBoolean();
             toggleautoreport = pToggleautoreport.getBoolean();
-            timeBetweenReports = Math.max(6L * 3600L * 1000L, Math.min(3600L * 1000L * ((long) pTimeBetweenReports.getInt()), 48L * 3600L * 1000L));
+            timeBetweenReports = Math.max(4L * 3600L * 1000L, Math.min(3600L * 1000L * ((long) pTimeBetweenReports.getInt()), 48L * 3600L * 1000L));
             timeAutoReport = Math.max(24L * 3600L * 1000L, Math.min(24L * 3600L * 1000L * ((long) pTimeAutoReport.getInt()), 30L * 24L * 3600L * 1000L));
             deleteReports = pdeleteReports.getBoolean();
             timeDeleteReport = 24L * 3600L * 1000L * ((long) ptimeDeleteReport.getInt());
