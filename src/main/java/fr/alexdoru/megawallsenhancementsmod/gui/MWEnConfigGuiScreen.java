@@ -48,7 +48,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         this.buttonList.add(new GuiButton(11, XposCenterButton, getYposForButton(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
         this.buttonList.add(new GuiButton(19, XposCenterButton, getYposForButton(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(19)));
         this.buttonList.add(new GuiButton(17, XposCenterButton, getYposForButton(5), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
-        this.buttonList.add(new GuiSlider(18, XposCenterButton, getYposForButton(6), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
+        this.buttonList.add(new GuiSlider(20, XposCenterButton, getYposForButton(6), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
         this.buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getYposForButton(8), 150, ButtonsHeight, getButtonDisplayString(4)));
 
         this.buttonList.add(new GuiButton(5, XposRightButton, getYposForButton(1), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(5)));
@@ -261,7 +261,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
 
     @Override
     public void onChangeSliderValue(GuiSlider slider) {
-        if (slider.id == 18) {
+        if (slider.id == 20) {
             ConfigHandler.healthThreshold = Math.floor(slider.getValue()) / 100d;
         }
     }
