@@ -256,7 +256,7 @@ public class CommandWDR extends CommandBase {
                         .appendSibling(IChatComponent.Serializer.jsonToComponent("[\"\"" + NoCheatersEvents.createPlayerTimestampedMsg(playername, newreport, "light_purple")[0] + "]"))
                         .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " with a " + EnumChatFormatting.YELLOW +
                                 "timestamp" + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
-                                + EnumChatFormatting.GREEN + (isaNick ? " for the next 48 hours." : "."))));
+                                + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : "."))));
 
             } else {  // isn't a timestamped report
 
@@ -292,7 +292,7 @@ public class CommandWDR extends CommandBase {
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
                         EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
                         + EnumChatFormatting.LIGHT_PURPLE + playername + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
-                        + EnumChatFormatting.GREEN + (isaNick ? " for the next 48 hours." : ".")));
+                        + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : ".")));
             }
 
         })).start();
