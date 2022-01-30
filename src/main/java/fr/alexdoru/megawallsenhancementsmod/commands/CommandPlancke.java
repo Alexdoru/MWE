@@ -105,7 +105,7 @@ public class CommandPlancke extends CommandBase {
                         MegaWallsStats mwstats = new MegaWallsStats(playerdata.getPlayerData());
                         addChatMessage(mwstats.getFormattedMessage(formattedname, apiname.getName()));
 
-                    } else if (args.length == 3) {
+                    } else {
 
                         if (args[2].equals("cp") || args[2].equals("classpoint") || args[2].equals("classpoints")) {
 
