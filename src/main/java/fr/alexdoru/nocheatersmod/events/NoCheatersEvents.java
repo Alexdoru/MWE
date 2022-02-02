@@ -94,7 +94,7 @@ public class NoCheatersEvents {
                     new DelayedTask(() -> {
                         ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
                         nbReport--;
-                    }, 20 * nbReport);
+                    }, 30 * nbReport);
                     nbReport++;
                     gotautoreported = true;
                 }
@@ -134,7 +134,7 @@ public class NoCheatersEvents {
                     new DelayedTask(() -> {
                         ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
                         nbReport--;
-                    }, 20 * nbReport);
+                    }, 30 * nbReport);
                     nbReport++;
                 }
             }
