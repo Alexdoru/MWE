@@ -35,6 +35,7 @@ public class MinecraftTransformer implements IMyClassTransformer {
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/MinecraftHook", "dropOneItem", ASMLoadingPlugin.isObf ? "(Lbew;)V" : "(Lnet/minecraft/client/entity/EntityPlayerSP;)V", false));
                         methodNode.instructions.insertBefore(insnNode, list);
                         methodNode.instructions.remove(insnNode);
+                        ASMLoadingPlugin.logger.info("Transformed Minecraft");
                     }
                 }
             }
