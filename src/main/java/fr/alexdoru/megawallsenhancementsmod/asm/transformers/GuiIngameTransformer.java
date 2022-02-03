@@ -62,7 +62,6 @@ public class GuiIngameTransformer implements IMyClassTransformer {
             }
 
         }
-        ASMLoadingPlugin.logger.info("Transformed GuiIngame");
         return classNode;
     }
 

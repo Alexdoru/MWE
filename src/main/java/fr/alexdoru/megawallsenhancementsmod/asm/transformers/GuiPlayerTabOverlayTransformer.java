@@ -93,7 +93,6 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
             }
 
         }
-        ASMLoadingPlugin.logger.info("Transformed GuiPlayerTabOverlay");
         return classNode;
     }
 

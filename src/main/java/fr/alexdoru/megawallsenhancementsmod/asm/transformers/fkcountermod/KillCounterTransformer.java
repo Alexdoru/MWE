@@ -24,7 +24,6 @@ public class KillCounterTransformer implements IMyClassTransformer {
                             // already there : ILOAD 1 // ILOAD finals
                             methodNode.instructions.insertBefore(nextNode, new FieldInsnNode(PUTFIELD, ASMLoadingPlugin.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", "playerFinalkills", "I"));
                             methodNode.instructions.remove(nextNode);
-                            ASMLoadingPlugin.logger.info("Transformed KillCounter");
                         }
                     }
                 }

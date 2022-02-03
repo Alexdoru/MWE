@@ -55,13 +55,20 @@ public class ClassTransformer implements IClassTransformer {
             classReader.accept(classNode, 0);
             ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
             classTransformer.transform(classNode).accept(classWriter);
-            return classWriter.toByteArray();
+            byte[] transformedByteArray = classWriter.toByteArray();
+            ASMLoadingPlugin.logger.info("Transformed " + getClassName(classTransformer.getTargetClassName()));
+            return transformedByteArray;
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return basicClass;
 
+    }
+
+    private String getClassName(String targetClassName) {
+        String[] split = targetClassName.split("\\.");
+        return split[split.length-1];
     }
 
 }

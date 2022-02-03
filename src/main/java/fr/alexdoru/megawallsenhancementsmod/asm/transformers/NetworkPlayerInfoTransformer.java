@@ -46,7 +46,7 @@ public class NetworkPlayerInfoTransformer implements IMyClassTransformer {
                             list2.add(new FieldInsnNode(PUTFIELD, ASMLoadingPlugin.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", "playerFinalkills", "I"));
                             methodNode.instructions.insertBefore(nextNode, list2);
                         }
-                        ASMLoadingPlugin.logger.info("Transformed NetworkPlayerInfo");
+
                         return classNode;
                     }
                 }

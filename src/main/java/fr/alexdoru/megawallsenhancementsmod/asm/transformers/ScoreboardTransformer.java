@@ -15,7 +15,6 @@ public class ScoreboardTransformer implements IMyClassTransformer {
 
     @Override
     public ClassNode transform(ClassNode classNode) {
-        int injections = 0;
         for (MethodNode methodNode : classNode.methods) {
 
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "addPlayerToTeam") && methodNode.desc.equals("(Ljava/lang/String;Ljava/lang/String;)Z")) {
@@ -24,7 +23,6 @@ public class ScoreboardTransformer implements IMyClassTransformer {
                         AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode != null && nextNode.getOpcode() == IRETURN) {
                             methodNode.instructions.insertBefore(insnNode, getInsnList());
-                            injections++;
                         }
                     }
                 }
@@ -41,16 +39,12 @@ public class ScoreboardTransformer implements IMyClassTransformer {
                             AbstractInsnNode thirdNode = secondNode.getNext();
                             if (thirdNode != null) {
                                 methodNode.instructions.insertBefore(thirdNode, getInsnList());
-                                injections++;
                             }
                         }
                     }
                 }
             }
 
-        }
-        if (injections == 2) {
-            ASMLoadingPlugin.logger.info("Transformed Scoreboard");
         }
         return classNode;
     }
