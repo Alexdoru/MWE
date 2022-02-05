@@ -134,7 +134,9 @@ public class CommandNocheaters extends CommandBase {
 
         } else if (args[0].equalsIgnoreCase("reportlist") || args[0].equalsIgnoreCase("stalkreportlist")) {
 
-            if (args[0].equalsIgnoreCase("stalkreportlist")) {
+            boolean doStalk = args[0].equalsIgnoreCase("stalkreportlist");
+
+            if (doStalk) {
 
                 if (HypixelApiKeyUtil.apiKeyIsNotSetup()) { //api key not setup
                     addChatMessage(new ChatComponentText(apikeyMissingErrorMsg()));
@@ -188,9 +190,8 @@ public class CommandNocheaters extends CommandBase {
 
                     if (nbpage == displaypage) {
                         try {
-                            messagebody.append(createReportLine(uuid, wdr, args[0].equalsIgnoreCase("stalkreportlist"))).append(",{\"text\":\"\\n\"}");
+                            messagebody.append(createReportLine(uuid, wdr, doStalk)).append(",{\"text\":\"\\n\"}");
                         } catch (ApiException e) {
-                            e.printStackTrace();
                             addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
                         }
                     }
@@ -200,14 +201,9 @@ public class CommandNocheaters extends CommandBase {
                 }
 
                 if (!messagebody.toString().equals("")) {
-
-                    addChatMessage(IChatComponent.Serializer.jsonToComponent(
-                            makeChatList("Timestamped Reports", messagebody.toString(), displaypage, nbpage, (args[0].equalsIgnoreCase("stalkreportlist") ? "/nocheaters stalkreportlist" : "/nocheaters reportlist"))));
-
+                    addChatMessage(IChatComponent.Serializer.jsonToComponent(makeChatList("Timestamped Reports", messagebody.toString(), displaypage, nbpage, (doStalk ? "/nocheaters stalkreportlist" : "/nocheaters reportlist"))));
                 } else {
-
                     addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "No reports to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available."));
-
                 }
 
             })).start();
@@ -238,9 +234,9 @@ public class CommandNocheaters extends CommandBase {
     /**
      * Builds a chat line with the name of the player, the date when you reported him and his online status
      *
-     * @param bool - do you want to stalk the reported player
+     * @param doStalk - do you want to stalk the reported player
      */
-    public static String createReportLine(String uuid, WDR wdr, boolean bool) throws ApiException {
+    public static String createReportLine(String uuid, WDR wdr, boolean doStalk) throws ApiException {
         // format for timestamps reports : UUID timestamplastreport -serverID timeonreplay playernameduringgame timestampforcheat specialcheat cheat1 cheat2 cheat3 etc
         String playername = wdr.hacks.get(2);
         String message = NoCheatersEvents.createPlayerTimestampedMsg(playername, wdr, "red")[0]
@@ -249,21 +245,31 @@ public class CommandNocheaters extends CommandBase {
 
                 + ",{\"text\":\"" + (new SimpleDateFormat("dd/MM")).format((Long.parseLong(wdr.hacks.get(3)))) + "\",\"color\":\"yellow\"}";
 
-        if (bool) {
+        if (doStalk) {
+            if (!wdr.hacks.contains("nick")) {
 
-            HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
-            LoginData logindata = new LoginData(playerdata.getPlayerData());
+                HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                LoginData logindata = new LoginData(playerdata.getPlayerData());
 
-            if (logindata.getLastLogin() > logindata.getLastLogout()) { // player is online
+                if (logindata.isHidingFromAPI()) {
 
-                message = message + ",{\"text\":\" Online\",\"color\":\"green\"}";
+                    message = message + ",{\"text\":\" API blocked\",\"color\":\"red\"}";
 
-            } else { // print lastlogout
+                } else if (logindata.isOnline()) { // player is online
 
-                message = message + ",{\"text\":\" Lastlogout \",\"color\":\"dark_gray\"}" + ",{\"text\":\"" + DateUtil.timeSince(logindata.getLastLogout()) + "\",\"color\":\"yellow\"}";
+                    message = message + ",{\"text\":\" Online\",\"color\":\"green\"}";
+
+                } else { // print lastlogout
+
+                    message = message + ",{\"text\":\" Lastlogout \",\"color\":\"dark_gray\"}" + ",{\"text\":\"" + DateUtil.timeSince(logindata.getLastLogout()) + "\",\"color\":\"yellow\"}";
+
+                }
+
+            } else {
+
+                message = message + ",{\"text\":\" Nick\",\"color\":\"dark_purple\"}";
 
             }
-
         }
 
         return message;
@@ -273,7 +279,7 @@ public class CommandNocheaters extends CommandBase {
     /**
      * Returns a sorted hashmap of timestamped reports from high to low
      */
-    public static HashMap<String, WDR> sortByValue(HashMap<String, WDR> hashmapIn) {
+    private static HashMap<String, WDR> sortByValue(HashMap<String, WDR> hashmapIn) {
         List<Map.Entry<String, WDR>> list = new LinkedList<>(hashmapIn.entrySet());
         list.sort((o1, o2) -> (o1.getValue()).compareToInvert(o2.getValue()));
         HashMap<String, WDR> temp = new LinkedHashMap<>();
