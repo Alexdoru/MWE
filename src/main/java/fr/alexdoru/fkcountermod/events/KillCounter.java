@@ -152,15 +152,14 @@ public class KillCounter {
             Matcher killMessageMatcher = kill_pattern.matcher(UnformattedText);
             if (killMessageMatcher.matches()) {
 
-                String killed = killMessageMatcher.group(1);
+                String killedPlayer = killMessageMatcher.group(1);
                 String killer = killMessageMatcher.group(2);
                 String[] split = FormattedText.split("\u00a7");
 
                 if (split.length >= 7) {
                     String killedTeam = split[2].substring(0, 1);
                     String killerTeam = split[6].substring(0, 1);
-                    removeKilledPlayer(killed, killedTeam);
-                    if (isWitherDead(killedTeam)) {
+                    if (removeKilledPlayer(killedPlayer, killedTeam)) {
                         addKill(killer, killerTeam);
                     }
                     FKCounterGui.instance.updateDisplayText();
@@ -175,9 +174,9 @@ public class KillCounter {
                     ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killer, squadmate)));
                     return true;
                 }
-                squadmate = SquadEvent.getSquad().get(killed);
+                squadmate = SquadEvent.getSquad().get(killedPlayer);
                 if (squadmate != null) {
-                    ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killed, squadmate)));
+                    ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killedPlayer, squadmate)));
                     return true;
                 }
 
@@ -287,30 +286,37 @@ public class KillCounter {
         removeKilledPlayer(player, getColorPrefixFromTeam(team).replace("\u00a7", ""));
     }
 
-    private static void removeKilledPlayer(String player, String color) {
+    /**
+     * Removes a player from the fkcounter and returns true when successfull
+     * aka if the players was in final kill and if the player wasn't already dead
+     * (happens when someone tries to lag and gets double tapped)
+     */
+    private static boolean removeKilledPlayer(String player, String color) {
         int team = getTeamFromColor(color);
-        if (isNotValidTeam(team)) {
-            return;
+        if (isNotValidTeam(team) || deadPlayers.contains(player)) {
+            return false;
         }
         if (isWitherDead(color)) {
             teamKillsArray[team].remove(player);
             allPlayerKills.remove(player);
             deadPlayers.add(player);
             updateNetworkPlayerinfo(player, 0);
+            return true;
         }
+        return false;
     }
 
-    private static void addKill(String player, String color) {
+    private static void addKill(String playerGettingTheKill, String color) {
         int team = getTeamFromColor(color);
         if (isNotValidTeam(team)) {
             return;
         }
-        if (deadPlayers.contains(player)) {
+        if (deadPlayers.contains(playerGettingTheKill)) {
             return;
         }
-        Integer finals = teamKillsArray[team].merge(player, 1, Integer::sum);
-        allPlayerKills.merge(player, 1, Integer::sum);
-        updateNetworkPlayerinfo(player, finals);
+        Integer finals = teamKillsArray[team].merge(playerGettingTheKill, 1, Integer::sum);
+        allPlayerKills.merge(playerGettingTheKill, 1, Integer::sum);
+        updateNetworkPlayerinfo(playerGettingTheKill, finals);
     }
 
     /**
