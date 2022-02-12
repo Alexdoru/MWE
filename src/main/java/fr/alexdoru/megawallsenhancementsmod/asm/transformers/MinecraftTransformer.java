@@ -24,7 +24,7 @@ public class MinecraftTransformer implements IMyClassTransformer {
                             && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "d" : "changeCurrentItem")
                             && ((MethodInsnNode) insnNode).desc.equals("(I)V")) {
                         /*
-                         * Inject before line 1869
+                         * Injects before line 1869
                          * MinecraftHook.updateCurrentSlot(this);
                          */
                         methodNode.instructions.insertBefore(insnNode, updateCurrentSlotInsnList());
@@ -89,7 +89,7 @@ public class MinecraftTransformer implements IMyClassTransformer {
                             && ((FieldInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "c" : "currentItem")
                             && ((FieldInsnNode) insnNode).desc.equals("I")) {
                         /*
-                         * Inject before line 2077
+                         * Injects before line 2077
                          * MinecraftHook.updateCurrentSlot(this);
                          */
                         methodNode.instructions.insertBefore(insnNode, updateCurrentSlotInsnList());
@@ -100,7 +100,7 @@ public class MinecraftTransformer implements IMyClassTransformer {
                             && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "a" : "dropOneItem")
                             && ((MethodInsnNode) insnNode).desc.equals(ASMLoadingPlugin.isObf ? "(Z)Luz;" : "(Z)Lnet/minecraft/entity/item/EntityItem;")) {
                         /*
-                         * Replace line 2101 :
+                         * Replaces line 2101 :
                          * this.thePlayer.dropOneItem(GuiScreen.isCtrlKeyDown());
                          * With :
                          * MinecraftHook.dropOneItem(this.thePlayer);
