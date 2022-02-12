@@ -4,9 +4,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemSword;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 
 public class MinecraftHook {
 
+    private static final Minecraft mc = Minecraft.getMinecraft();
     private static long lastSlotChangeFromSwordSlot;
 
     public static void dropOneItem(EntityPlayerSP thePlayer) {
@@ -19,6 +22,12 @@ public class MinecraftHook {
     public static void updateCurrentSlot(Minecraft mc) {
         if (checkIfHoldingSword(mc.thePlayer)) {
             lastSlotChangeFromSwordSlot = System.currentTimeMillis();
+        }
+    }
+
+    public static void ondebugBoundingBoxChange(boolean debugBoundingBoxIn) {
+        if (mc.theWorld != null && mc.thePlayer != null) {
+            mc.thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "[Debug]: " + EnumChatFormatting.WHITE + "Hitboxes " + (debugBoundingBoxIn ? EnumChatFormatting.GREEN + "On" : EnumChatFormatting.RED + "Off")));
         }
     }
 
