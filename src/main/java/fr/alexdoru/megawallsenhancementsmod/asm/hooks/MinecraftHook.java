@@ -25,9 +25,9 @@ public class MinecraftHook {
         }
     }
 
-    public static void ondebugBoundingBoxChange(boolean debugBoundingBoxIn) {
+    public static void onSettingChange(boolean debugBoundingBoxIn, String settingName) {
         if (mc.theWorld != null && mc.thePlayer != null) {
-            mc.thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "[Debug]: " + EnumChatFormatting.WHITE + "Hitboxes " + (debugBoundingBoxIn ? EnumChatFormatting.GREEN + "On" : EnumChatFormatting.RED + "Off")));
+            mc.thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "[Debug]: " + EnumChatFormatting.WHITE + settingName + (debugBoundingBoxIn ? EnumChatFormatting.GREEN + ": On" : EnumChatFormatting.RED + ": Off")));
         }
     }
 
