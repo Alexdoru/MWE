@@ -41,10 +41,11 @@ public class MinecraftTransformer implements IMyClassTransformer {
                          */
                         InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
+                        list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "ave" : "net/minecraft/client/Minecraft", ASMLoadingPlugin.isObf ? "t" : "gameSettings", ASMLoadingPlugin.isObf ? "Lavh;" : "Lnet/minecraft/client/settings/GameSettings;"));
                         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "avh" : "net/minecraft/client/settings/GameSettings", ASMLoadingPlugin.isObf ? "y" : "advancedItemTooltips", "Z"));
                         list.add(new LdcInsnNode("Advanced Item Tooltips"));
-                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/MinecraftHook", "onSettingChange", "(ZLjava/lang/String;)V", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/MinecraftHook", "onSettingChange", ASMLoadingPlugin.isObf ? "(Lave;ZLjava/lang/String;)V" : "(Lnet/minecraft/client/Minecraft;ZLjava/lang/String;)V", false));
                         methodNode.instructions.insertBefore(insnNode.getNext(), list);
                     }
 
@@ -59,10 +60,11 @@ public class MinecraftTransformer implements IMyClassTransformer {
                          */
                         InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
+                        list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "ave" : "net/minecraft/client/Minecraft", ASMLoadingPlugin.isObf ? "aa" : "renderManager", ASMLoadingPlugin.isObf ? "Lbiu;" : "Lnet/minecraft/client/renderer/entity/RenderManager;"));
                         list.add(new MethodInsnNode(INVOKEVIRTUAL, ASMLoadingPlugin.isObf ? "biu" : "net/minecraft/client/renderer/entity/RenderManager", ASMLoadingPlugin.isObf ? "b" : "isDebugBoundingBox", "()Z", false));
                         list.add(new LdcInsnNode("Hitboxes"));
-                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/MinecraftHook", "onSettingChange", "(ZLjava/lang/String;)V", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/MinecraftHook", "onSettingChange", ASMLoadingPlugin.isObf ? "(Lave;ZLjava/lang/String;)V" : "(Lnet/minecraft/client/Minecraft;ZLjava/lang/String;)V", false));
                         methodNode.instructions.insertBefore(insnNode.getNext(), list);
                     }
 
@@ -77,10 +79,11 @@ public class MinecraftTransformer implements IMyClassTransformer {
                          */
                         InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
+                        list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "ave" : "net/minecraft/client/Minecraft", ASMLoadingPlugin.isObf ? "t" : "gameSettings", ASMLoadingPlugin.isObf ? "Lavh;" : "Lnet/minecraft/client/settings/GameSettings;"));
                         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "avh" : "net/minecraft/client/settings/GameSettings", ASMLoadingPlugin.isObf ? "z" : "pauseOnLostFocus", "Z"));
                         list.add(new LdcInsnNode("Pause on lost focus"));
-                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/MinecraftHook", "onSettingChange", "(ZLjava/lang/String;)V", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/MinecraftHook", "onSettingChange", ASMLoadingPlugin.isObf ? "(Lave;ZLjava/lang/String;)V" : "(Lnet/minecraft/client/Minecraft;ZLjava/lang/String;)V", false));
                         methodNode.instructions.insertBefore(insnNode.getNext(), list);
                     }
 
