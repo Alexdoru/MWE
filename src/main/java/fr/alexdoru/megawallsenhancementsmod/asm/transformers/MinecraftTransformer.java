@@ -30,6 +30,23 @@ public class MinecraftTransformer implements IMyClassTransformer {
                         methodNode.instructions.insertBefore(insnNode, updateCurrentSlotInsnList());
                     }
 
+                    if (insnNode.getOpcode() == INVOKEVIRTUAL && insnNode instanceof MethodInsnNode
+                            && ((MethodInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "biu" : "net/minecraft/client/renderer/entity/RenderManager")
+                            && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "b" : "setDebugBoundingBox")
+                            && ((MethodInsnNode) insnNode).desc.equals("(Z)V")
+                            && insnNode.getNext() != null) {
+                        /*
+                         * Injects after line 2000 :
+                         * MinecraftHook.ondebugBoundingBoxChange(this.renderManager.isDebugBoundingBox());
+                         */
+                        InsnList list = new InsnList();
+                        list.add(new VarInsnNode(ALOAD, 0));
+                        list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "ave" : "net/minecraft/client/Minecraft", ASMLoadingPlugin.isObf ? "aa" : "renderManager", ASMLoadingPlugin.isObf ? "Lbiu;" : "Lnet/minecraft/client/renderer/entity/RenderManager;"));
+                        list.add(new MethodInsnNode(INVOKEVIRTUAL, ASMLoadingPlugin.isObf ? "biu" : "net/minecraft/client/renderer/entity/RenderManager", ASMLoadingPlugin.isObf ? "b" : "isDebugBoundingBox", "()Z", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/MinecraftHook", "ondebugBoundingBoxChange", "(Z)V", false));
+                        methodNode.instructions.insertBefore(insnNode.getNext(), list);
+                    }
+
                     if (insnNode.getOpcode() == PUTFIELD && insnNode instanceof FieldInsnNode
                             && ((FieldInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "wm" : "net/minecraft/entity/player/InventoryPlayer")
                             && ((FieldInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "c" : "currentItem")
