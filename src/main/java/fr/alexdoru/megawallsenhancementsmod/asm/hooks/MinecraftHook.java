@@ -9,7 +9,6 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class MinecraftHook {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
     private static long lastSlotChangeFromSwordSlot;
 
     public static void dropOneItem(EntityPlayerSP thePlayer) {
@@ -25,9 +24,9 @@ public class MinecraftHook {
         }
     }
 
-    public static void onSettingChange(boolean debugBoundingBoxIn, String settingName) {
+    public static void onSettingChange(Minecraft mc, boolean debugBoundingBoxIn, String settingName) {
         if (mc.theWorld != null && mc.thePlayer != null) {
-            mc.thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "[Debug]: " + EnumChatFormatting.WHITE + settingName + (debugBoundingBoxIn ? EnumChatFormatting.GREEN + ": On" : EnumChatFormatting.RED + ": Off")));
+            mc.thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "[Debug]: " + EnumChatFormatting.WHITE + settingName + ":" + (debugBoundingBoxIn ? EnumChatFormatting.GREEN + " On" : EnumChatFormatting.RED + " Off")));
         }
     }
 
