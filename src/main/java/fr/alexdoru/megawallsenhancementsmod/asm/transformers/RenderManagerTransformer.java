@@ -22,7 +22,6 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                     if (insnNode instanceof LdcInsnNode && ((LdcInsnNode) insnNode).cst.equals(new Double("2.0"))) {
                         methodNode.instructions.insertBefore(insnNode, new LdcInsnNode(new Double("3.0")));
                         methodNode.instructions.remove(insnNode);
-                        return classNode;
                     }
                 }
             }
