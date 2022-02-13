@@ -4,6 +4,7 @@ import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.gui.FKCounterGui;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessor.NetworkPlayerInfoAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
@@ -319,14 +320,10 @@ public class KillCounter {
         updateNetworkPlayerinfo(playerGettingTheKill, finals);
     }
 
-    /**
-     * This method gets transformed via ASM to access a field that's added via ASM as well
-     */
     private static void updateNetworkPlayerinfo(String playername, int finals) {
         NetworkPlayerInfo networkPlayerInfo = NameUtil.getPlayerInfo(playername);
-        if (networkPlayerInfo != null) {
-            int i = finals;                              // This line gets removed via ASM
-            // networkPlayerInfo.playerFinalkills = finals; This line gets added via ASM
+        if (networkPlayerInfo instanceof NetworkPlayerInfoAccessor) {
+            ((NetworkPlayerInfoAccessor) networkPlayerInfo).setPlayerFinalkills(finals);
         }
     }
 
