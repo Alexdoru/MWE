@@ -16,8 +16,17 @@ public class RenderManagerHook {
         if (entityIn instanceof AbstractClientPlayer) {
             return !ConfigHandler.drawHitboxForPlayers;
         }
-        if (entityIn instanceof EntityArrow) { // TODO check if pinned into a player
-            return !(entityIn instanceof EntityArrowAccessor) || !ConfigHandler.drawHitboxForFlyingArrows || ((EntityArrowAccessor) entityIn).getInGround();
+        if (entityIn instanceof EntityArrow) {
+            if (!(entityIn instanceof EntityArrowAccessor)) {
+                return false;
+            }
+            if (((EntityArrowAccessor) entityIn).getInGround()) {
+                return !ConfigHandler.drawHitboxForGroundedArrows;
+            }
+            if (((EntityArrowAccessor) entityIn).getIsPinnedToPlayer()) {
+                return !ConfigHandler.drawHitboxForPinnedArrows;
+            }
+            return false;
         }
         if (entityIn instanceof EntityItem) {
             return !ConfigHandler.drawHitboxForDroppedItems;

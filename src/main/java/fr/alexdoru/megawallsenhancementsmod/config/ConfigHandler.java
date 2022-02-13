@@ -77,14 +77,14 @@ public class ConfigHandler {
      */
 
     // TODO hitbox config
-    //  ne pas faire le trait bleu sur les fleches qui fly
     //  make hitbox their real size
     //  color the hitbox when the ennemy is hit VAPE KILL AURA !!!!
     //  color the hitbox when you hover over it
 
     public static boolean makeHitboxRealSize = true;
     public static boolean drawHitboxForPlayers = true;
-    public static boolean drawHitboxForFlyingArrows = true;
+    public static boolean drawHitboxForGroundedArrows = false;
+    public static boolean drawHitboxForPinnedArrows = false;
     public static boolean drawHitboxForDroppedItems = false;
     public static boolean drawHitboxForPassiveMobs = false;
     public static boolean drawHitboxForAggressiveMobs = false;
