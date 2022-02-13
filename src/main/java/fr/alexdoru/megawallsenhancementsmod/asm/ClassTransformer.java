@@ -3,7 +3,6 @@ package fr.alexdoru.megawallsenhancementsmod.asm;
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.*;
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods.SidebarmodReloaded_CustomSidebar;
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods.SidebarmodRevamp_GuiSidebar;
-import fr.alexdoru.megawallsenhancementsmod.asm.transformers.fkcountermod.KillCounterTransformer;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -31,7 +30,6 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new ScoreboardTransformer());
         registerTransformer(new SidebarmodReloaded_CustomSidebar());
         registerTransformer(new SidebarmodRevamp_GuiSidebar());
-        registerTransformer(new KillCounterTransformer());
     }
 
     private void registerTransformer(IMyClassTransformer classTransformer) {

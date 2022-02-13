@@ -3,6 +3,8 @@ package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -17,9 +19,30 @@ public class NetworkPlayerInfoTransformer implements IMyClassTransformer {
     @Override
     public ClassNode transform(ClassNode classNode) {
 
+        classNode.interfaces.add("fr/alexdoru/megawallsenhancementsmod/asm/accessor/NetworkPlayerInfoAccessor");
+
         {
             FieldVisitor fieldVisitor = classNode.visitField(ACC_PUBLIC, "playerFinalkills", "I", null, 0);
             fieldVisitor.visitEnd();
+        }
+
+        {
+            MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "setPlayerFinalkills", "(I)V", null, null);
+            mv.visitCode();
+            Label l0 = new Label();
+            mv.visitLabel(l0);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitVarInsn(ILOAD, 1);
+            mv.visitFieldInsn(PUTFIELD, ASMLoadingPlugin.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", "playerFinalkills", "I");
+            Label l1 = new Label();
+            mv.visitLabel(l1);
+            mv.visitInsn(RETURN);
+            Label l2 = new Label();
+            mv.visitLabel(l2);
+            mv.visitLocalVariable("this", ASMLoadingPlugin.isObf ? "Lbdc;" : "Lnet/minecraft/client/network/NetworkPlayerInfo;", null, l0, l2, 0);
+            mv.visitLocalVariable("playerFinalkillsIn", "I", null, l0, l2, 1);
+            mv.visitMaxs(2, 2);
+            mv.visitEnd();
         }
 
         for (MethodNode methodNode : classNode.methods) {
