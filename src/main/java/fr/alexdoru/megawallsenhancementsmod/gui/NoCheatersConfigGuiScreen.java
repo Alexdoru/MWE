@@ -13,8 +13,6 @@ import java.util.List;
 
 public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
-    private final GuiScreen parent;
-
     public NoCheatersConfigGuiScreen() {
         this.parent = null;
     }

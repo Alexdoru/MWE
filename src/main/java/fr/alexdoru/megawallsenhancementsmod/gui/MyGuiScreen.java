@@ -10,8 +10,9 @@ import net.minecraft.util.ResourceLocation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyGuiScreen extends GuiScreen {
+public abstract class MyGuiScreen extends GuiScreen {
 
+    public GuiScreen parent = null;
     public final int ButtonsHeight = 20;
     private static final ResourceLocation SHADER = new ResourceLocation("fkcounter", "shaders/blur.json");
 
