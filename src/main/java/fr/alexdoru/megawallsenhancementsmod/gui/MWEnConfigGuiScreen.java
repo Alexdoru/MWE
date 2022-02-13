@@ -19,8 +19,6 @@ import java.util.List;
 
 public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
-    private final GuiScreen parent;
-
     public MWEnConfigGuiScreen(GuiScreen parent) {
         this.parent = parent;
     }

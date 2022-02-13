@@ -24,7 +24,6 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
     private final int buttonSize = 50;
     private final int widthBetweenButtons = 10;
     private final int heightBetweenButtons = 30;
-    private final GuiScreen parent;
 
     private ButtonToggle buttoncompacthud;
     private ButtonToggle buttonsidebar;

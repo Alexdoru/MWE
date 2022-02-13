@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 
-public class MyCachedGui extends Gui implements IRenderer, ICachedHUDText {
+public abstract class MyCachedGui extends Gui implements IRenderer, ICachedHUDText {
 
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static final FontRenderer frObj = mc.fontRendererObj;
