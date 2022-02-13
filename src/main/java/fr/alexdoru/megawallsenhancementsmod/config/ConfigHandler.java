@@ -20,7 +20,9 @@ public class ConfigHandler {
     private static final String CATEGORY_GUI = "GUI";
     private static final String CATEGORY_NOCHEATERS = "NoCheaters";
 
-    /* FKCounter config*/
+    /**
+     * FKCounter config
+     */
     public static final GuiPosition fkcounterPosition = new GuiPosition(0d, 0d);
     public static boolean show_fkcHUD;
     public static boolean compact_hud;
@@ -32,7 +34,9 @@ public class ConfigHandler {
     public static int playerAmount;
     public static boolean finalsInTablist;
 
-    /*MWEnhancements config*/
+    /**
+     * MWEnhancements config
+     */
     public static String APIKey;
     public static boolean strengthParticules;
     public static boolean shortencoinmessage;
@@ -42,7 +46,9 @@ public class ConfigHandler {
     public static boolean keepNightVisionEffect;
     public static boolean useColoredScores;
 
-    /*GUI config*/
+    /**
+     * GUI config
+     */
     public static boolean show_killcooldownHUD;
     public static final GuiPosition killcooldownHUDPosition = new GuiPosition(0d, 0d);
     public static boolean show_ArrowHitHUD;
@@ -53,15 +59,41 @@ public class ConfigHandler {
     public static boolean hunterStrengthHUD;
     public static final GuiPosition hunterStrengthHUDPosition = new GuiPosition(0d, 0d);
 
-    /*NoCheaters Config*/
+    /**
+     * NoCheaters Config
+     */
     public static boolean toggleicons;
     public static boolean togglewarnings;
+    // TODO changer pour que ca report que quand on est dans une game et qu'elle est lancée, baisser le temps à un report par game
     public static boolean toggleautoreport;
     /*those fields are in milliseconds*/
     public static long timeBetweenReports;
     public static long timeAutoReport;
     public static boolean deleteReports;
     public static long timeDeleteReport;
+
+    /**
+     * Hitbox Config
+     */
+
+    // TODO hitbox config
+    //  ne pas faire le trait bleu sur les fleches qui fly
+    //  make hitbox their real size
+    //  color the hitbox when the ennemy is hit VAPE KILL AURA !!!!
+    //  color the hitbox when you hover over it
+
+    public static boolean makeHitboxRealSize = true;
+    public static boolean drawHitboxForPlayers = true;
+    public static boolean drawHitboxForFlyingArrows = true;
+    public static boolean drawHitboxForDroppedItems = false;
+    public static boolean drawHitboxForPassiveMobs = false;
+    public static boolean drawHitboxForAggressiveMobs = false;
+    public static boolean drawHitboxItemFrame = false;
+    public static boolean drawHitboxForOtherEntity = false;
+    public static boolean drawRedBox = false;
+    public static boolean HideBlueVect = false;
+    public static boolean drawBlueVectForPlayersOnly = true;
+    public static boolean makeBlueVect3Meters = true;
 
     public static void preinit(File file) {
         config = new Configuration(file);
