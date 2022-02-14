@@ -84,6 +84,7 @@ public class ConfigHandler {
     public static boolean drawHitboxForPlayers;
     public static boolean drawHitboxForGroundedArrows;
     public static boolean drawHitboxForPinnedArrows;
+    public static boolean drawHitboxForFlyingArrows;
     public static boolean drawHitboxForDroppedItems;
     public static boolean drawHitboxForPassiveMobs;
     public static boolean drawHitboxForAggressiveMobs;
@@ -153,6 +154,7 @@ public class ConfigHandler {
         Property pdrawHitboxForPlayers = config.get(CATEGORY_HITBOX, "Hitbox for players", true, "Hitbox for players");
         Property pdrawHitboxForGroundedArrows = config.get(CATEGORY_HITBOX, "Hitbox for grounded arrows", true, "Hitbox for grounded arrows");
         Property pdrawHitboxForPinnedArrows = config.get(CATEGORY_HITBOX, "Hitbox for pinned arrows", true, "Hitbox for pinned arrows");
+        Property pdrawHitboxForFlyingArrows = config.get(CATEGORY_HITBOX, "Hitbox for flying arrows", true, "Hitbox for flying arrows");
         Property pdrawHitboxForDroppedItems = config.get(CATEGORY_HITBOX, "Hitbox for dropped items", true, "Hitbox for dropped items");
         Property pdrawHitboxForPassiveMobs = config.get(CATEGORY_HITBOX, "Hitbox for passive mobs", true, "Hitbox for passive mobs");
         Property pdrawHitboxForAggressiveMobs = config.get(CATEGORY_HITBOX, "Hitbox for aggressive mobs", true, "Hitbox for aggressive mobs");
@@ -219,6 +221,7 @@ public class ConfigHandler {
         pOrderHitbox.add(pdrawHitboxForPlayers.getName());
         pOrderHitbox.add(pdrawHitboxForGroundedArrows.getName());
         pOrderHitbox.add(pdrawHitboxForPinnedArrows.getName());
+        pOrderHitbox.add(pdrawHitboxForFlyingArrows.getName());
         pOrderHitbox.add(pdrawHitboxForDroppedItems.getName());
         pOrderHitbox.add(pdrawHitboxForPassiveMobs.getName());
         pOrderHitbox.add(pdrawHitboxForAggressiveMobs.getName());
@@ -274,6 +277,7 @@ public class ConfigHandler {
             drawHitboxForPlayers = pdrawHitboxForPlayers.getBoolean();
             drawHitboxForGroundedArrows = pdrawHitboxForGroundedArrows.getBoolean();
             drawHitboxForPinnedArrows = pdrawHitboxForPinnedArrows.getBoolean();
+            drawHitboxForFlyingArrows = pdrawHitboxForFlyingArrows.getBoolean();
             drawHitboxForDroppedItems = pdrawHitboxForDroppedItems.getBoolean();
             drawHitboxForPassiveMobs = pdrawHitboxForPassiveMobs.getBoolean();
             drawHitboxForAggressiveMobs = pdrawHitboxForAggressiveMobs.getBoolean();
@@ -342,6 +346,7 @@ public class ConfigHandler {
             pdrawHitboxForPlayers.set(drawHitboxForPlayers);
             pdrawHitboxForGroundedArrows.set(drawHitboxForGroundedArrows);
             pdrawHitboxForPinnedArrows.set(drawHitboxForPinnedArrows);
+            pdrawHitboxForFlyingArrows.set(drawHitboxForFlyingArrows);
             pdrawHitboxForDroppedItems.set(drawHitboxForDroppedItems);
             pdrawHitboxForPassiveMobs.set(drawHitboxForPassiveMobs);
             pdrawHitboxForAggressiveMobs.set(drawHitboxForAggressiveMobs);
