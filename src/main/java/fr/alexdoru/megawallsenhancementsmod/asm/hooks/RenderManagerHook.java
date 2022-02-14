@@ -26,7 +26,7 @@ public class RenderManagerHook {
             if (((EntityArrowAccessor) entityIn).getIsPinnedToPlayer()) {
                 return !ConfigHandler.drawHitboxForPinnedArrows;
             }
-            return false;
+            return !ConfigHandler.drawHitboxForFlyingArrows;
         }
         if (entityIn instanceof EntityItem) {
             return !ConfigHandler.drawHitboxForDroppedItems;

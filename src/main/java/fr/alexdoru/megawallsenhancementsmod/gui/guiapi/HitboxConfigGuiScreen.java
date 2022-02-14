@@ -21,11 +21,12 @@ public class HitboxConfigGuiScreen extends MyGuiScreen {
         buttonList.add(new GuiButton(1, getxCenter() - buttonWidth - 10, getYposForButton(-4), buttonWidth, ButtonsHeight, getButtonDisplayString(1)));
         buttonList.add(new GuiButton(2, getxCenter() - buttonWidth - 10, getYposForButton(-3), buttonWidth, ButtonsHeight, getButtonDisplayString(2)));
         buttonList.add(new GuiButton(3, getxCenter() - buttonWidth - 10, getYposForButton(-2), buttonWidth, ButtonsHeight, getButtonDisplayString(3)));
-        buttonList.add(new GuiButton(4, getxCenter() - buttonWidth - 10, getYposForButton(-1), buttonWidth, ButtonsHeight, getButtonDisplayString(4)));
-        buttonList.add(new GuiButton(5, getxCenter() - buttonWidth - 10, getYposForButton(0), buttonWidth, ButtonsHeight, getButtonDisplayString(5)));
-        buttonList.add(new GuiButton(6, getxCenter() - buttonWidth - 10, getYposForButton(1), buttonWidth, ButtonsHeight, getButtonDisplayString(6)));
-        buttonList.add(new GuiButton(7, getxCenter() - buttonWidth - 10, getYposForButton(2), buttonWidth, ButtonsHeight, getButtonDisplayString(7)));
-        buttonList.add(new GuiButton(8, getxCenter() - buttonWidth - 10, getYposForButton(3), buttonWidth, ButtonsHeight, getButtonDisplayString(8)));
+        buttonList.add(new GuiButton(13, getxCenter() - buttonWidth - 10, getYposForButton(-1), buttonWidth, ButtonsHeight, getButtonDisplayString(13)));
+        buttonList.add(new GuiButton(4, getxCenter() - buttonWidth - 10, getYposForButton(0), buttonWidth, ButtonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(5, getxCenter() - buttonWidth - 10, getYposForButton(1), buttonWidth, ButtonsHeight, getButtonDisplayString(5)));
+        buttonList.add(new GuiButton(6, getxCenter() - buttonWidth - 10, getYposForButton(2), buttonWidth, ButtonsHeight, getButtonDisplayString(6)));
+        buttonList.add(new GuiButton(7, getxCenter() - buttonWidth - 10, getYposForButton(3), buttonWidth, ButtonsHeight, getButtonDisplayString(7)));
+        buttonList.add(new GuiButton(8, getxCenter() - buttonWidth - 10, getYposForButton(4), buttonWidth, ButtonsHeight, getButtonDisplayString(8)));
 
         buttonList.add(new GuiButton(9, getxCenter() + 10, getYposForButton(-2), buttonWidth, ButtonsHeight, getButtonDisplayString(9)));
         buttonList.add(new GuiButton(10, getxCenter() + 10, getYposForButton(-1), buttonWidth, ButtonsHeight, getButtonDisplayString(10)));
@@ -46,6 +47,8 @@ public class HitboxConfigGuiScreen extends MyGuiScreen {
                 return "Grounded arrows : " + getSuffix(ConfigHandler.drawHitboxForGroundedArrows);
             case 3:
                 return "Pinned arrows : " + getSuffix(ConfigHandler.drawHitboxForPinnedArrows);
+            case 13:
+                return "Flying arrows : " + getSuffix(ConfigHandler.drawHitboxForFlyingArrows);
             case 4:
                 return "Dropped items : " + getSuffix(ConfigHandler.drawHitboxForDroppedItems);
             case 5:
@@ -83,6 +86,9 @@ public class HitboxConfigGuiScreen extends MyGuiScreen {
                 break;
             case 3:
                 ConfigHandler.drawHitboxForPinnedArrows = !ConfigHandler.drawHitboxForPinnedArrows;
+                break;
+            case 13:
+                ConfigHandler.drawHitboxForFlyingArrows = !ConfigHandler.drawHitboxForFlyingArrows;
                 break;
             case 4:
                 ConfigHandler.drawHitboxForDroppedItems = !ConfigHandler.drawHitboxForDroppedItems;
