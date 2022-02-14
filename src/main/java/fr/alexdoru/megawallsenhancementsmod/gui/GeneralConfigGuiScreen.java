@@ -23,7 +23,7 @@ public class GeneralConfigGuiScreen extends MyGuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredTitle("Config", 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 6);
+        drawCenteredTitle("Config", 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 6, Integer.parseInt("55FF55", 16));
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
