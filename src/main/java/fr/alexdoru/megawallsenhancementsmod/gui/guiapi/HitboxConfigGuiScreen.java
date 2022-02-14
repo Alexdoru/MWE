@@ -1,0 +1,128 @@
+package fr.alexdoru.megawallsenhancementsmod.gui.guiapi;
+
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.gui.MyGuiScreen;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+
+import java.io.IOException;
+
+public class HitboxConfigGuiScreen extends MyGuiScreen {
+
+    private final int buttonWidth = 170;
+
+    public HitboxConfigGuiScreen(GuiScreen parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public void initGui() {
+
+        buttonList.add(new GuiButton(1, getxCenter() - buttonWidth - 10, getYposForButton(-4), buttonWidth, ButtonsHeight, getButtonDisplayString(1)));
+        buttonList.add(new GuiButton(2, getxCenter() - buttonWidth - 10, getYposForButton(-3), buttonWidth, ButtonsHeight, getButtonDisplayString(2)));
+        buttonList.add(new GuiButton(3, getxCenter() - buttonWidth - 10, getYposForButton(-2), buttonWidth, ButtonsHeight, getButtonDisplayString(3)));
+        buttonList.add(new GuiButton(4, getxCenter() - buttonWidth - 10, getYposForButton(-1), buttonWidth, ButtonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(5, getxCenter() - buttonWidth - 10, getYposForButton(0), buttonWidth, ButtonsHeight, getButtonDisplayString(5)));
+        buttonList.add(new GuiButton(6, getxCenter() - buttonWidth - 10, getYposForButton(1), buttonWidth, ButtonsHeight, getButtonDisplayString(6)));
+        buttonList.add(new GuiButton(7, getxCenter() - buttonWidth - 10, getYposForButton(2), buttonWidth, ButtonsHeight, getButtonDisplayString(7)));
+        buttonList.add(new GuiButton(8, getxCenter() - buttonWidth - 10, getYposForButton(3), buttonWidth, ButtonsHeight, getButtonDisplayString(8)));
+
+        buttonList.add(new GuiButton(9, getxCenter() + 10, getYposForButton(-2), buttonWidth, ButtonsHeight, getButtonDisplayString(9)));
+        buttonList.add(new GuiButton(10, getxCenter() + 10, getYposForButton(-1), buttonWidth, ButtonsHeight, getButtonDisplayString(10)));
+        buttonList.add(new GuiButton(11, getxCenter() + 10, getYposForButton(0), buttonWidth, ButtonsHeight, getButtonDisplayString(11)));
+        buttonList.add(new GuiButton(12, getxCenter() + 10, getYposForButton(1), buttonWidth, ButtonsHeight, getButtonDisplayString(12)));
+
+        buttonList.add(new GuiButton(0, getxCenter() - 150 / 2, getYposForButton(5), 150, ButtonsHeight, getButtonDisplayString(0)));
+        super.initGui();
+    }
+
+    private String getButtonDisplayString(int id) {
+        switch (id) {
+            case 0:
+                return parent == null ? "Close" : "Done";
+            case 1:
+                return "Players : " + getSuffix(ConfigHandler.drawHitboxForPlayers);
+            case 2:
+                return "Grounded arrows : " + getSuffix(ConfigHandler.drawHitboxForGroundedArrows);
+            case 3:
+                return "Pinned arrows : " + getSuffix(ConfigHandler.drawHitboxForPinnedArrows);
+            case 4:
+                return "Dropped items : " + getSuffix(ConfigHandler.drawHitboxForDroppedItems);
+            case 5:
+                return "Passive mobs : " + getSuffix(ConfigHandler.drawHitboxForPassiveMobs);
+            case 6:
+                return "Aggressive mobs : " + getSuffix(ConfigHandler.drawHitboxForAggressiveMobs);
+            case 7:
+                return "Item frame : " + getSuffix(ConfigHandler.drawHitboxItemFrame);
+            case 8:
+                return "Other entity : " + getSuffix(ConfigHandler.drawHitboxForOtherEntity);
+            case 9:
+                return "Red eyeline : " + getSuffix(ConfigHandler.drawRedBox);
+            case 10:
+                return "Draw blue vect : " + getSuffix(!ConfigHandler.HideBlueVect);
+            case 11:
+                return "For players only : " + getSuffix(ConfigHandler.drawBlueVectForPlayersOnly);
+            case 12:
+                return "Make vect 3 meters : " + getSuffix(ConfigHandler.makeBlueVect3Meters);
+            default:
+                return "";
+        }
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) throws IOException {
+        switch (button.id) {
+            case 0:
+                mc.displayGuiScreen(parent);
+                break;
+            case 1:
+                ConfigHandler.drawHitboxForPlayers = !ConfigHandler.drawHitboxForPlayers;
+                break;
+            case 2:
+                ConfigHandler.drawHitboxForGroundedArrows = !ConfigHandler.drawHitboxForGroundedArrows;
+                break;
+            case 3:
+                ConfigHandler.drawHitboxForPinnedArrows = !ConfigHandler.drawHitboxForPinnedArrows;
+                break;
+            case 4:
+                ConfigHandler.drawHitboxForDroppedItems = !ConfigHandler.drawHitboxForDroppedItems;
+                break;
+            case 5:
+                ConfigHandler.drawHitboxForPassiveMobs = !ConfigHandler.drawHitboxForPassiveMobs;
+                break;
+            case 6:
+                ConfigHandler.drawHitboxForAggressiveMobs = !ConfigHandler.drawHitboxForAggressiveMobs;
+                break;
+            case 7:
+                ConfigHandler.drawHitboxItemFrame = !ConfigHandler.drawHitboxItemFrame;
+                break;
+            case 8:
+                ConfigHandler.drawHitboxForOtherEntity = !ConfigHandler.drawHitboxForOtherEntity;
+                break;
+            case 9:
+                ConfigHandler.drawRedBox = !ConfigHandler.drawRedBox;
+                break;
+            case 10:
+                ConfigHandler.HideBlueVect = !ConfigHandler.HideBlueVect;
+                break;
+            case 11:
+                ConfigHandler.drawBlueVectForPlayersOnly = !ConfigHandler.drawBlueVectForPlayersOnly;
+                break;
+            case 12:
+                ConfigHandler.makeBlueVect3Meters = !ConfigHandler.makeBlueVect3Meters;
+                break;
+            default:
+                break;
+        }
+        button.displayString = getButtonDisplayString(button.id);
+        super.actionPerformed(button);
+    }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        drawCenteredTitle("Hitboxes", 2, getxCenter(), getYposForButton(-8) + ButtonsHeight / 2.0f, Integer.parseInt("5555FF", 16));
+        drawCenteredTitle("Draw Hitbox for :", 1, getxCenter() - buttonWidth / 2.0f - 10, getYposForButton(-5) + ButtonsHeight / 2.0f, Integer.parseInt("FFFFFF", 16));
+        super.drawScreen(mouseX, mouseY, partialTicks);
+    }
+
+}
