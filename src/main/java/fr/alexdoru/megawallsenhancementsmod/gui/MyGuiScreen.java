@@ -38,12 +38,12 @@ public abstract class MyGuiScreen extends GuiScreen {
         return enabled ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled";
     }
 
-    public void drawCenteredTitle(String title, int dilatation, float xPos, float yPos) {
+    public void drawCenteredTitle(String title, int dilatation, float xPos, float yPos, int color) {
         GlStateManager.pushMatrix();
         {
-            GlStateManager.translate(xPos - mc.fontRendererObj.getStringWidth(title), yPos, 0);
+            GlStateManager.translate(xPos - (mc.fontRendererObj.getStringWidth(title) * dilatation) / 2.0f, yPos, 0);
             GlStateManager.scale(dilatation, dilatation, dilatation);
-            mc.fontRendererObj.drawString(title, 0, 0, Integer.parseInt("55FF55", 16));
+            mc.fontRendererObj.drawStringWithShadow(title, 0, 0, color);
         }
         GlStateManager.popMatrix();
     }
