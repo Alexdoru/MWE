@@ -19,6 +19,7 @@ public class ConfigHandler {
     private static final String CATEGORY_MWENh = "MegaWallsEnhancements";
     private static final String CATEGORY_GUI = "GUI";
     private static final String CATEGORY_NOCHEATERS = "NoCheaters";
+    private static final String CATEGORY_HITBOX = "Hitbox";
 
     /**
      * FKCounter config
@@ -76,24 +77,23 @@ public class ConfigHandler {
      * Hitbox Config
      */
 
-    // TODO hitbox config
-    //  make hitbox their real size
-    //  color the hitbox when the ennemy is hit VAPE KILL AURA !!!!
-    //  color the hitbox when you hover over it
+    // TODO make hitbox their real size
+    //  color the hitbox when the ennemy is hit VAPE KILL AURA !!!
+    //  arrow hit as well ?
 
-    public static boolean makeHitboxRealSize = true;
-    public static boolean drawHitboxForPlayers = true;
-    public static boolean drawHitboxForGroundedArrows = false;
-    public static boolean drawHitboxForPinnedArrows = false;
-    public static boolean drawHitboxForDroppedItems = false;
-    public static boolean drawHitboxForPassiveMobs = false;
-    public static boolean drawHitboxForAggressiveMobs = false;
-    public static boolean drawHitboxItemFrame = false;
-    public static boolean drawHitboxForOtherEntity = false;
-    public static boolean drawRedBox = false;
-    public static boolean HideBlueVect = false;
-    public static boolean drawBlueVectForPlayersOnly = true;
-    public static boolean makeBlueVect3Meters = true;
+    public static boolean drawHitboxForPlayers;
+    public static boolean drawHitboxForGroundedArrows;
+    public static boolean drawHitboxForPinnedArrows;
+    public static boolean drawHitboxForDroppedItems;
+    public static boolean drawHitboxForPassiveMobs;
+    public static boolean drawHitboxForAggressiveMobs;
+    public static boolean drawHitboxItemFrame;
+    public static boolean drawHitboxForOtherEntity;
+    //public static boolean makeHitboxRealSize;
+    public static boolean drawRedBox;
+    public static boolean HideBlueVect;
+    public static boolean drawBlueVectForPlayersOnly;
+    public static boolean makeBlueVect3Meters;
 
     public static void preinit(File file) {
         config = new Configuration(file);
@@ -150,6 +150,19 @@ public class ConfigHandler {
         Property pdeleteReports = config.get(CATEGORY_NOCHEATERS, "Delete Old Report", false, "Deletes reports older than the specified value");
         Property ptimeDeleteReport = config.get(CATEGORY_NOCHEATERS, "Time delete reports", 365, "Reports older than this will be deleted on game start (days)");
 
+        Property pdrawHitboxForPlayers = config.get(CATEGORY_HITBOX, "Hitbox for players", true, "Hitbox for players");
+        Property pdrawHitboxForGroundedArrows = config.get(CATEGORY_HITBOX, "Hitbox for grounded arrows", true, "Hitbox for grounded arrows");
+        Property pdrawHitboxForPinnedArrows = config.get(CATEGORY_HITBOX, "Hitbox for pinned arrows", true, "Hitbox for pinned arrows");
+        Property pdrawHitboxForDroppedItems = config.get(CATEGORY_HITBOX, "Hitbox for dropped items", true, "Hitbox for dropped items");
+        Property pdrawHitboxForPassiveMobs = config.get(CATEGORY_HITBOX, "Hitbox for passive mobs", true, "Hitbox for passive mobs");
+        Property pdrawHitboxForAggressiveMobs = config.get(CATEGORY_HITBOX, "Hitbox for aggressive mobs", true, "Hitbox for aggressive mobs");
+        Property pdrawHitboxItemFrame = config.get(CATEGORY_HITBOX, "Hitbox for item frame", true, "Hitbox for item frame");
+        Property pdrawHitboxForOtherEntity = config.get(CATEGORY_HITBOX, "Hitbox for other entity", true, "Hitbox for other entity");
+        Property pdrawRedBox = config.get(CATEGORY_HITBOX, "Draw red box", true, "Draw red box");
+        Property pHideBlueVect = config.get(CATEGORY_HITBOX, "Hide blue vector", false, "Hide blue vector");
+        Property pdrawBlueVectForPlayersOnly = config.get(CATEGORY_HITBOX, "Blue vect for players only", false, "Blue vect for players only");
+        Property pmakeBlueVect3Meters = config.get(CATEGORY_HITBOX, "Make blue vector 3m long", false, "Make blue vector 3m long");
+
         /*Set the Order in which the config entries appear in the config file */
         List<String> pOrderFKC = new ArrayList<>();
         pOrderFKC.add(pXpos_fkcHUD.getName());
@@ -202,6 +215,21 @@ public class ConfigHandler {
         pOrderNOCHEATERS.add(ptimeDeleteReport.getName());
         config.setCategoryPropertyOrder(CATEGORY_NOCHEATERS, pOrderNOCHEATERS);
 
+        List<String> pOrderHitbox = new ArrayList<>();
+        pOrderHitbox.add(pdrawHitboxForPlayers.getName());
+        pOrderHitbox.add(pdrawHitboxForGroundedArrows.getName());
+        pOrderHitbox.add(pdrawHitboxForPinnedArrows.getName());
+        pOrderHitbox.add(pdrawHitboxForDroppedItems.getName());
+        pOrderHitbox.add(pdrawHitboxForPassiveMobs.getName());
+        pOrderHitbox.add(pdrawHitboxForAggressiveMobs.getName());
+        pOrderHitbox.add(pdrawHitboxItemFrame.getName());
+        pOrderHitbox.add(pdrawHitboxForOtherEntity.getName());
+        pOrderHitbox.add(pdrawRedBox.getName());
+        pOrderHitbox.add(pHideBlueVect.getName());
+        pOrderHitbox.add(pdrawBlueVectForPlayersOnly.getName());
+        pOrderHitbox.add(pmakeBlueVect3Meters.getName());
+        config.setCategoryPropertyOrder(CATEGORY_HITBOX, pOrderHitbox);
+
         /*sets the fields of this class to the fields in the properties*/
         if (readFieldsFromConfig) {
 
@@ -242,6 +270,19 @@ public class ConfigHandler {
             timeAutoReport = Math.max(24L * 3600L * 1000L, Math.min(24L * 3600L * 1000L * ((long) pTimeAutoReport.getInt()), 30L * 24L * 3600L * 1000L));
             deleteReports = pdeleteReports.getBoolean();
             timeDeleteReport = 24L * 3600L * 1000L * ((long) ptimeDeleteReport.getInt());
+
+            drawHitboxForPlayers = pdrawHitboxForPlayers.getBoolean();
+            drawHitboxForGroundedArrows = pdrawHitboxForGroundedArrows.getBoolean();
+            drawHitboxForPinnedArrows = pdrawHitboxForPinnedArrows.getBoolean();
+            drawHitboxForDroppedItems = pdrawHitboxForDroppedItems.getBoolean();
+            drawHitboxForPassiveMobs = pdrawHitboxForPassiveMobs.getBoolean();
+            drawHitboxForAggressiveMobs = pdrawHitboxForAggressiveMobs.getBoolean();
+            drawHitboxItemFrame = pdrawHitboxItemFrame.getBoolean();
+            drawHitboxForOtherEntity = pdrawHitboxForOtherEntity.getBoolean();
+            drawRedBox = pdrawRedBox.getBoolean();
+            HideBlueVect = pHideBlueVect.getBoolean();
+            drawBlueVectForPlayersOnly = pdrawBlueVectForPlayersOnly.getBoolean();
+            makeBlueVect3Meters = pmakeBlueVect3Meters.getBoolean();
 
         }
 
@@ -297,6 +338,19 @@ public class ConfigHandler {
             pTimeAutoReport.set((int) (timeAutoReport / (24L * 3600L * 1000L)));
             pdeleteReports.set(deleteReports);
             ptimeDeleteReport.set((int) (timeDeleteReport / (24L * 3600L * 1000L)));
+
+            pdrawHitboxForPlayers.set(drawHitboxForPlayers);
+            pdrawHitboxForGroundedArrows.set(drawHitboxForGroundedArrows);
+            pdrawHitboxForPinnedArrows.set(drawHitboxForPinnedArrows);
+            pdrawHitboxForDroppedItems.set(drawHitboxForDroppedItems);
+            pdrawHitboxForPassiveMobs.set(drawHitboxForPassiveMobs);
+            pdrawHitboxForAggressiveMobs.set(drawHitboxForAggressiveMobs);
+            pdrawHitboxItemFrame.set(drawHitboxItemFrame);
+            pdrawHitboxForOtherEntity.set(drawHitboxForOtherEntity);
+            pdrawRedBox.set(drawRedBox);
+            pHideBlueVect.set(HideBlueVect);
+            pdrawBlueVectForPlayersOnly.set(drawBlueVectForPlayersOnly);
+            pmakeBlueVect3Meters.set(makeBlueVect3Meters);
 
         }
 
