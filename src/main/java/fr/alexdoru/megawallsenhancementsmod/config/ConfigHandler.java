@@ -46,6 +46,7 @@ public class ConfigHandler {
     public static double healthThreshold;
     public static boolean keepNightVisionEffect;
     public static boolean useColoredScores;
+    public static boolean swordDropProtection;
 
     /**
      * GUI config
@@ -128,6 +129,7 @@ public class ConfigHandler {
         Property pHealthThreshold = config.get(CATEGORY_MWENh, "Health Threshold", 0.5d, "The health threshold at witch it will play a sound, value ranges from 0 to 1");
         Property pCancelNightVisionEffect = config.get(CATEGORY_MWENh, "Cancel Night Vision Effect", false, "Removes the visual effets of night vision");
         Property puseColoredScores = config.get(CATEGORY_MWENh, "Colored Tablist Scores", true, "Makes the scores in the tablist use a greend to red color gradient depending of the value");
+        Property pswordDropProtection = config.get(CATEGORY_MWENh, "Sword drop protection", true, "When enabled you can't drop the sword you are holding in your hotbar");
 
         Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
         Property pXpos_killcooldownHUD = config.get(CATEGORY_GUI, "Xpos kill cooldown HUD", 0d, "The x position of the killcooldown HUD, value ranges from 0 to 1");
@@ -189,6 +191,7 @@ public class ConfigHandler {
         pOrderMWWENh.add(pHealthThreshold.getName());
         pOrderMWWENh.add(pCancelNightVisionEffect.getName());
         pOrderMWWENh.add(puseColoredScores.getName());
+        pOrderMWWENh.add(pswordDropProtection.getName());
         config.setCategoryPropertyOrder(CATEGORY_MWENh, pOrderMWWENh);
 
         List<String> pOrderGUI = new ArrayList<>();
@@ -255,6 +258,7 @@ public class ConfigHandler {
             healthThreshold = pHealthThreshold.getDouble();
             keepNightVisionEffect = !pCancelNightVisionEffect.getBoolean();
             useColoredScores = puseColoredScores.getBoolean();
+            swordDropProtection = pswordDropProtection.getBoolean();
 
             show_killcooldownHUD = pShow_killcooldownHUD.getBoolean();
             killcooldownHUDPosition.setRelative(pXpos_killcooldownHUD.getDouble(), pYpos_killcooldownHUD.getDouble());
@@ -313,6 +317,7 @@ public class ConfigHandler {
             pHealthThreshold.set(healthThreshold);
             pCancelNightVisionEffect.set(!keepNightVisionEffect);
             puseColoredScores.set(useColoredScores);
+            pswordDropProtection.set(swordDropProtection);
 
             pShow_killcooldownHUD.set(show_killcooldownHUD);
             double[] killcooldownHUDarray = killcooldownHUDPosition.getRelativePosition();

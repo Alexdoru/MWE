@@ -35,6 +35,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         int XposCenterButton = getxCenter() - buttonsWidth / 2;
         int XposRightButton = getxCenter() + buttonsWidth / 2 + 4;
 
+        this.buttonList.add(new GuiButton(21, XposCenterButton, getYposForButton(-6), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
         this.buttonList.add(new GuiButton(16, XposCenterButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
         this.buttonList.add(new GuiButton(15, XposCenterButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
         this.buttonList.add(new GuiButton(0, XposCenterButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
@@ -63,6 +64,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
 
     private String getButtonDisplayString(int id) {
         switch (id) {
+            case 21:
+                return "Drop sword protection : " + getSuffix(ConfigHandler.swordDropProtection);
             case 16:
                 return "Strength particule HBR DRE : " + getSuffix(ConfigHandler.strengthParticules);
             case 15:
@@ -106,6 +109,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
     public List<String> getTooltipText(int id) {
         List<String> textLines = new ArrayList<>();
         switch (id) {
+            case 21:
+                textLines.add(EnumChatFormatting.GREEN + "When enabled you can't drop the sword you are holding in your hotbar");
+                break;
             case 16:
                 textLines.add(EnumChatFormatting.GREEN + "Spawns angry villager particles when the player gets a final kill");
                 break;
@@ -163,6 +169,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         switch (button.id) {
+            case 21:
+                ConfigHandler.swordDropProtection = !ConfigHandler.swordDropProtection;
+                break;
             case 16:
                 ConfigHandler.strengthParticules = !ConfigHandler.strengthParticules;
                 break;
@@ -252,7 +261,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredTitle("Mega Walls Enhancements v" + MegaWallsEnhancementsMod.version, 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 7, Integer.parseInt("55FF55", 16));
+        drawCenteredTitle("Mega Walls Enhancements v" + MegaWallsEnhancementsMod.version, 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 8, Integer.parseInt("55FF55", 16));
         super.drawScreen(mouseX, mouseY, partialTicks);
         drawTooltips(mouseX, mouseY);
     }
