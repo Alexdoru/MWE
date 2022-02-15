@@ -28,12 +28,12 @@ public class HitboxConfigGuiScreen extends MyGuiScreen {
         buttonList.add(new GuiButton(7, getxCenter() - buttonWidth - 10, getYposForButton(3), buttonWidth, ButtonsHeight, getButtonDisplayString(7)));
         buttonList.add(new GuiButton(8, getxCenter() - buttonWidth - 10, getYposForButton(4), buttonWidth, ButtonsHeight, getButtonDisplayString(8)));
 
-        buttonList.add(new GuiButton(9, getxCenter() + 10, getYposForButton(-2), buttonWidth, ButtonsHeight, getButtonDisplayString(9)));
-        buttonList.add(new GuiButton(10, getxCenter() + 10, getYposForButton(-1), buttonWidth, ButtonsHeight, getButtonDisplayString(10)));
-        buttonList.add(new GuiButton(11, getxCenter() + 10, getYposForButton(0), buttonWidth, ButtonsHeight, getButtonDisplayString(11)));
-        buttonList.add(new GuiButton(12, getxCenter() + 10, getYposForButton(1), buttonWidth, ButtonsHeight, getButtonDisplayString(12)));
+        buttonList.add(new GuiButton(9, getxCenter() + 10, getYposForButton(-3), buttonWidth, ButtonsHeight, getButtonDisplayString(9)));
+        buttonList.add(new GuiButton(10, getxCenter() + 10, getYposForButton(0), buttonWidth, ButtonsHeight, getButtonDisplayString(10)));
+        buttonList.add(new GuiButton(11, getxCenter() + 10, getYposForButton(1), buttonWidth, ButtonsHeight, getButtonDisplayString(11)));
+        buttonList.add(new GuiButton(12, getxCenter() + 10, getYposForButton(2), buttonWidth, ButtonsHeight, getButtonDisplayString(12)));
 
-        buttonList.add(new GuiButton(0, getxCenter() - 150 / 2, getYposForButton(5), 150, ButtonsHeight, getButtonDisplayString(0)));
+        buttonList.add(new GuiButton(0, getxCenter() - 150 / 2, getYposForButton(6), 150, ButtonsHeight, getButtonDisplayString(0)));
         super.initGui();
     }
 
@@ -58,7 +58,7 @@ public class HitboxConfigGuiScreen extends MyGuiScreen {
             case 7:
                 return "Item frame : " + getSuffix(ConfigHandler.drawHitboxItemFrame);
             case 8:
-                return "Other entity : " + getSuffix(ConfigHandler.drawHitboxForOtherEntity);
+                return "Other entities : " + getSuffix(ConfigHandler.drawHitboxForOtherEntity);
             case 9:
                 return "Red eyeline : " + getSuffix(ConfigHandler.drawRedBox);
             case 10:
@@ -127,7 +127,8 @@ public class HitboxConfigGuiScreen extends MyGuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle("Hitboxes", 2, getxCenter(), getYposForButton(-8) + ButtonsHeight / 2.0f, Integer.parseInt("5555FF", 16));
-        drawCenteredTitle("Draw Hitbox for :", 1, getxCenter() - buttonWidth / 2.0f - 10, getYposForButton(-5) + ButtonsHeight / 2.0f, Integer.parseInt("FFFFFF", 16));
+        drawCenteredTitle("Draw Hitbox for :", 1, getxCenter() - buttonWidth / 2.0f - 10, getYposForButton(-4) - ButtonsHeight / 2.0f, Integer.parseInt("FFFFFF", 16));
+        drawCenteredTitle("Blue vector :", 1, getxCenter() + buttonWidth / 2.0f + 10, getYposForButton(0) - ButtonsHeight / 2.0f, Integer.parseInt("FFFFFF", 16));
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
