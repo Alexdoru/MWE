@@ -26,7 +26,7 @@ public class EntityArrowTransformer implements IMyClassTransformer {
         }
 
         {
-            MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "getInGround", "()Z", null, null);
+            MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "isInGround", "()Z", null, null);
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel(l0);
