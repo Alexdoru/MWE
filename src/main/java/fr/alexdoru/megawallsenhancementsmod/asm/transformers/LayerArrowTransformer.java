@@ -19,6 +19,10 @@ public class LayerArrowTransformer implements IMyClassTransformer {
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "doRenderLayer") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lpr;FFFFFFF)V" : "(Lnet/minecraft/entity/EntityLivingBase;FFFFFFF)V")) {
                 for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (insnNode.getOpcode() == ASTORE && insnNode instanceof VarInsnNode && ((VarInsnNode) insnNode).var == 10) {
+                        /*
+                         * Injects after line 32 :
+                         * entity.isPinnedToPlayer = true;
+                         */
                         InsnList list = new InsnList();
                         list.add(new InsnNode(DUP));
                         list.add(new InsnNode(ICONST_1));
