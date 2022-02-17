@@ -47,6 +47,8 @@ public class ConfigHandler {
     public static boolean keepNightVisionEffect;
     public static boolean useColoredScores;
     public static boolean swordDropProtection;
+    public static boolean limitDroppedEntityRendered = true; // TODO make config
+    public static int maxDroppedEntityRendered = 50;
 
     /**
      * GUI config
@@ -66,7 +68,7 @@ public class ConfigHandler {
      */
     public static boolean toggleicons;
     public static boolean togglewarnings;
-    // TODO changer pour que ca report que quand on est dans une game et qu'elle est lancée, baisser le temps à un report par game
+    // TODO changer pour que ca report que quand on est dans une game et que les murs sont tombés, baisser le temps à un report par 45 min
     public static boolean toggleautoreport;
     /*those fields are in milliseconds*/
     public static long timeBetweenReports;

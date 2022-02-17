@@ -26,6 +26,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new MinecraftTransformer());
         registerTransformer(new NetHandlerPlayClientTransformer());
         registerTransformer(new NetworkPlayerInfoTransformer());
+        registerTransformer(new RenderGlobalTransformer());
         registerTransformer(new RenderManagerTransformer());
         registerTransformer(new ScoreboardTransformer());
         registerTransformer(new SidebarmodReloaded_CustomSidebar());
@@ -68,7 +69,7 @@ public class ClassTransformer implements IClassTransformer {
 
     private String getClassName(String targetClassName) {
         String[] split = targetClassName.split("\\.");
-        return split[split.length-1];
+        return split[split.length - 1];
     }
 
 }
