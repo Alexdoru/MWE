@@ -59,7 +59,7 @@ public class LastWitherHPGui extends MyCachedGui {
 
     @Override
     public boolean isEnabled() {
-        return ConfigHandler.show_lastWitherHUD && FKCounterMod.isInMwGame() && ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive();
+        return ConfigHandler.show_lastWitherHUD && FKCounterMod.isInMwGame && ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive();
     }
 
 }

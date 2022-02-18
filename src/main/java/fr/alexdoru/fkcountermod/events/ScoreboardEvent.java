@@ -1,5 +1,6 @@
 package fr.alexdoru.fkcountermod.events;
 
+import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.fkcountermod.utils.ScoreboardParser;
 import net.minecraft.client.Minecraft;
@@ -11,16 +12,15 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 public class ScoreboardEvent {
 
+    private static final Minecraft mc = Minecraft.getMinecraft();
     private static ScoreboardParser mwScoreboardParser = new ScoreboardParser(null);
     private static String prevGameId = null;
     private static boolean prevHasGameEnded = false;
-    private static boolean isHypixel = false;
     private static int prevAmountWitherAlive = 4;
+    private static boolean isHypixel = false;
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-
-        Minecraft mc = Minecraft.getMinecraft();
 
         if (mc.theWorld == null || !isHypixel) {
             return;
@@ -36,6 +36,8 @@ public class ScoreboardEvent {
         String gameId = mwScoreboardParser.getGameId();
         boolean hasgameended = mwScoreboardParser.hasGameEnded();
         int amountWitherAlive = mwScoreboardParser.getAliveWithers().size();
+        FKCounterMod.isInMwGame = mwScoreboardParser.isInMwGame();
+        FKCounterMod.isitPrepPhase = mwScoreboardParser.isitPrepPhase();
 
         if (gameId == null) { // not in a MW game
 

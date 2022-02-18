@@ -19,7 +19,7 @@ public class GuiIngameHook {
         if (ConfigHandler.witherHUDinSiderbar && lineNumber == 12 && LastWitherHPGui.instance.isEnabled()) {
             return LastWitherHPGui.instance.displayText;
         }
-        if (ConfigHandler.FKHUDinSidebar && lineNumber == 11 && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame() && KillCounter.getGameId() != null) {
+        if (ConfigHandler.FKHUDinSidebar && lineNumber == 11 && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame && KillCounter.getGameId() != null) {
             return FKCounterGui.instance.displayText;
         }
         return textIn;

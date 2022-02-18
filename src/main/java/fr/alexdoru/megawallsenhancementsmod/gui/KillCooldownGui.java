@@ -42,7 +42,7 @@ public class KillCooldownGui extends MyCachedGui {
 
     @Override
     public boolean isEnabled() {
-        return System.currentTimeMillis() - lastkilltime < 60000L && FKCounterMod.isInMwGame();
+        return System.currentTimeMillis() - lastkilltime < 60000L && FKCounterMod.isInMwGame;
     }
 
     /**
