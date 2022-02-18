@@ -29,36 +29,48 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
          * Defines the button list
          */
         final int buttonsWidth = 210;
+        final int XposLeftButton = getxCenter() - buttonsWidth - 10;
+        final int XposRightButton = getxCenter() + 10;
+
+        this.buttonList.add(new GuiButton(21, XposLeftButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
+        this.buttonList.add(new GuiButton(16, XposLeftButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
+        this.buttonList.add(new GuiButton(15, XposLeftButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
+        this.buttonList.add(new GuiButton(0, XposLeftButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
+        this.buttonList.add(new GuiButton(1, XposLeftButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
+        this.buttonList.add(new GuiButton(18, XposLeftButton, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(18)));
+
+        this.buttonList.add(new GuiButton(19, XposRightButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(19)));
+        this.buttonList.add(new GuiButton(17, XposRightButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
+        this.buttonList.add(new GuiSlider(20, XposRightButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
+        this.buttonList.add(new GuiButton(22, XposRightButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(22)));
+        this.buttonList.add(new GuiSlider(23, XposRightButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, "Maximum amount of item rendered : ", "", 40d, 1000d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
+
+        final int XposCenterButton = getxCenter() - buttonsWidth / 2;
+
+        /* HUD Buttons */
+        this.buttonList.add(new GuiButton(9, XposCenterButton, getYposForButton(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
+        this.buttonList.add(new GuiButton(2, XposCenterButton, getYposForButton(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
+        this.buttonList.add(new GuiButton(3, XposCenterButton, getYposForButton(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
+        this.buttonList.add(new GuiButton(11, XposCenterButton, getYposForButton(5), buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
+
         final int sideButtonsWidth = 100;
+        final int XposCenterLeftButton = getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth;
+        final int XposCenterRightButton = getxCenter() + buttonsWidth / 2 + 4;
 
-        int XposLeftButton = getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth;
-        int XposCenterButton = getxCenter() - buttonsWidth / 2;
-        int XposRightButton = getxCenter() + buttonsWidth / 2 + 4;
+        /* Buttons : Reset HUD position */
+        this.buttonList.add(new GuiButton(14, XposCenterLeftButton, getYposForButton(2), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(14)));
+        this.buttonList.add(new GuiButton(7, XposCenterLeftButton, getYposForButton(3), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(7)));
+        this.buttonList.add(new GuiButton(8, XposCenterLeftButton, getYposForButton(4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(8)));
+        this.buttonList.add(new GuiButton(12, XposCenterLeftButton, getYposForButton(5), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(12)));
 
-        this.buttonList.add(new GuiButton(21, XposCenterButton, getYposForButton(-6), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
-        this.buttonList.add(new GuiButton(16, XposCenterButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
-        this.buttonList.add(new GuiButton(15, XposCenterButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
-        this.buttonList.add(new GuiButton(0, XposCenterButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
-        this.buttonList.add(new GuiButton(1, XposCenterButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
-        this.buttonList.add(new GuiButton(18, XposCenterButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(18)));
-        this.buttonList.add(new GuiButton(9, XposCenterButton, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
-        this.buttonList.add(new GuiButton(2, XposCenterButton, getYposForButton(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
-        this.buttonList.add(new GuiButton(3, XposCenterButton, getYposForButton(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
-        this.buttonList.add(new GuiButton(11, XposCenterButton, getYposForButton(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
-        this.buttonList.add(new GuiButton(19, XposCenterButton, getYposForButton(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(19)));
-        this.buttonList.add(new GuiButton(17, XposCenterButton, getYposForButton(5), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
-        this.buttonList.add(new GuiSlider(20, XposCenterButton, getYposForButton(6), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
-        this.buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getYposForButton(8), 150, ButtonsHeight, getButtonDisplayString(4)));
+        /* Buttons : Move HUD */
+        this.buttonList.add(new GuiButton(13, XposCenterRightButton, getYposForButton(2), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(13)));
+        this.buttonList.add(new GuiButton(5, XposCenterRightButton, getYposForButton(3), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(5)));
+        this.buttonList.add(new GuiButton(6, XposCenterRightButton, getYposForButton(4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(6)));
+        this.buttonList.add(new GuiButton(10, XposCenterRightButton, getYposForButton(5), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(10)));
 
-        this.buttonList.add(new GuiButton(5, XposRightButton, getYposForButton(1), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(5)));
-        this.buttonList.add(new GuiButton(6, XposRightButton, getYposForButton(2), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(6)));
-        this.buttonList.add(new GuiButton(10, XposRightButton, getYposForButton(3), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(10)));
-        this.buttonList.add(new GuiButton(13, XposRightButton, getYposForButton(0), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(13)));
-
-        this.buttonList.add(new GuiButton(7, XposLeftButton, getYposForButton(1), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(7)));
-        this.buttonList.add(new GuiButton(8, XposLeftButton, getYposForButton(2), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(8)));
-        this.buttonList.add(new GuiButton(12, XposLeftButton, getYposForButton(3), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(12)));
-        this.buttonList.add(new GuiButton(14, XposLeftButton, getYposForButton(0), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(14)));
+        /* Exit button */
+        this.buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getYposForButton(7), 150, ButtonsHeight, getButtonDisplayString(4)));
         super.initGui();
     }
 
@@ -88,6 +100,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 return "Colored Tablist Scores : " + getSuffix(ConfigHandler.useColoredScores);
             case 17:
                 return "Sound warning when low HP : " + getSuffix(ConfigHandler.playSoundLowHP);
+            case 22:
+                return "Limit dropped item render : " + getSuffix(ConfigHandler.limitDroppedEntityRendered);
             case 4:
                 return "Done";
             case 5:
@@ -162,6 +176,10 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.RED + "OrangeMarshall " + EnumChatFormatting.GRAY + "[ZOM] " + EnumChatFormatting.RED + "15");
                 textLines.add(EnumChatFormatting.RED + "OrangeMarshall " + EnumChatFormatting.GRAY + "[ZOM]  " + EnumChatFormatting.DARK_RED + "5");
                 break;
+            case 22:
+                textLines.add(EnumChatFormatting.GREEN + "Dynamically changes the render distance for items on the ground to preserve performance");
+                textLines.add(EnumChatFormatting.GREEN + "The render distance depends on the limit set below");
+                break;
         }
         return textLines;
     }
@@ -219,6 +237,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 19:
                 ConfigHandler.useColoredScores = !ConfigHandler.useColoredScores;
                 break;
+            case 22:
+                ConfigHandler.limitDroppedEntityRendered = !ConfigHandler.limitDroppedEntityRendered;
+                break;
             case 17:
                 ConfigHandler.playSoundLowHP = !ConfigHandler.playSoundLowHP;
                 if (ConfigHandler.playSoundLowHP) {
@@ -260,17 +281,22 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
     }
 
     @Override
+    public void onChangeSliderValue(GuiSlider slider) {
+        switch (slider.id) {
+            case 20:
+                ConfigHandler.healthThreshold = Math.floor(slider.getValue()) / 100d;
+                break;
+            case 23:
+                ConfigHandler.maxDroppedEntityRendered = (int) slider.getValue();
+                break;
+        }
+    }
+
+    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle("Mega Walls Enhancements v" + MegaWallsEnhancementsMod.version, 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 8, Integer.parseInt("55FF55", 16));
         super.drawScreen(mouseX, mouseY, partialTicks);
         drawTooltips(mouseX, mouseY);
-    }
-
-    @Override
-    public void onChangeSliderValue(GuiSlider slider) {
-        if (slider.id == 20) {
-            ConfigHandler.healthThreshold = Math.floor(slider.getValue()) / 100d;
-        }
     }
 
 }

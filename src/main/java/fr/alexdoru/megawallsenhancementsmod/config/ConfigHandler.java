@@ -47,7 +47,7 @@ public class ConfigHandler {
     public static boolean keepNightVisionEffect;
     public static boolean useColoredScores;
     public static boolean swordDropProtection;
-    public static boolean limitDroppedEntityRendered = true; // TODO make config
+    public static boolean limitDroppedEntityRendered = true;
     public static int maxDroppedEntityRendered = 50;
 
     /**
@@ -132,6 +132,8 @@ public class ConfigHandler {
         Property pCancelNightVisionEffect = config.get(CATEGORY_MWENh, "Cancel Night Vision Effect", false, "Removes the visual effets of night vision");
         Property puseColoredScores = config.get(CATEGORY_MWENh, "Colored Tablist Scores", true, "Makes the scores in the tablist use a greend to red color gradient depending of the value");
         Property pswordDropProtection = config.get(CATEGORY_MWENh, "Sword drop protection", true, "When enabled you can't drop the sword you are holding in your hotbar");
+        Property plimitDroppedEntityRendered = config.get(CATEGORY_MWENh, "Limit dropped item rendered", true, "Limit dropped item rendered");
+        Property pmaxDroppedEntityRendered = config.get(CATEGORY_MWENh, "Max amount of item rendered", 300, "Max amount of item rendered");
 
         Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
         Property pXpos_killcooldownHUD = config.get(CATEGORY_GUI, "Xpos kill cooldown HUD", 0d, "The x position of the killcooldown HUD, value ranges from 0 to 1");
@@ -194,6 +196,8 @@ public class ConfigHandler {
         pOrderMWWENh.add(pCancelNightVisionEffect.getName());
         pOrderMWWENh.add(puseColoredScores.getName());
         pOrderMWWENh.add(pswordDropProtection.getName());
+        pOrderMWWENh.add(plimitDroppedEntityRendered.getName());
+        pOrderMWWENh.add(pmaxDroppedEntityRendered.getName());
         config.setCategoryPropertyOrder(CATEGORY_MWENh, pOrderMWWENh);
 
         List<String> pOrderGUI = new ArrayList<>();
@@ -261,6 +265,8 @@ public class ConfigHandler {
             keepNightVisionEffect = !pCancelNightVisionEffect.getBoolean();
             useColoredScores = puseColoredScores.getBoolean();
             swordDropProtection = pswordDropProtection.getBoolean();
+            limitDroppedEntityRendered = plimitDroppedEntityRendered.getBoolean();
+            maxDroppedEntityRendered = pmaxDroppedEntityRendered.getInt();
 
             show_killcooldownHUD = pShow_killcooldownHUD.getBoolean();
             killcooldownHUDPosition.setRelative(pXpos_killcooldownHUD.getDouble(), pYpos_killcooldownHUD.getDouble());
@@ -320,6 +326,8 @@ public class ConfigHandler {
             pCancelNightVisionEffect.set(!keepNightVisionEffect);
             puseColoredScores.set(useColoredScores);
             pswordDropProtection.set(swordDropProtection);
+            plimitDroppedEntityRendered.set(limitDroppedEntityRendered);
+            pmaxDroppedEntityRendered.set(maxDroppedEntityRendered);
 
             pShow_killcooldownHUD.set(show_killcooldownHUD);
             double[] killcooldownHUDarray = killcooldownHUDPosition.getRelativePosition();

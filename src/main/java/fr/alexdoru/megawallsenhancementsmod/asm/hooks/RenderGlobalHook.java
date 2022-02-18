@@ -1,18 +1,15 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.util.ChatComponentText;
 
 public class RenderGlobalHook {
 
-    private static int[] entityItemCount = new int[16];
-    private static int renderDistance = 16;
-
-    private static int DEBUG_prev_renderDistance = renderDistance;
+    private static int[] entityItemCount = new int[256];
+    private static int renderDistance = 256;
+    private static int prevRenderDistance = renderDistance;
 
     public static void resetEntityItemCount() {
         int entityCount = 0;
@@ -20,37 +17,27 @@ public class RenderGlobalHook {
             entityCount += entityItemCount[i];
             if (entityCount > ConfigHandler.maxDroppedEntityRendered) {
                 renderDistance = i == 0 ? 1 : i;
-                if (DEBUG_prev_renderDistance != renderDistance) {
-                    ChatUtil.addChatMessage(new ChatComponentText("Changed item render distance to : " + renderDistance));
-                }
-                DEBUG_prev_renderDistance = renderDistance;
-                entityItemCount = new int[16];
+                prevRenderDistance = renderDistance;
+                entityItemCount = new int[256];
                 return;
             }
         }
-        renderDistance = 16;
-        if (DEBUG_prev_renderDistance != renderDistance) {
-            ChatUtil.addChatMessage(new ChatComponentText("Changed item render distance to : " + renderDistance));
-        }
-        DEBUG_prev_renderDistance = renderDistance;
-        entityItemCount = new int[16];
+        renderDistance = 256;
+        prevRenderDistance = renderDistance;
+        entityItemCount = new int[256];
     }
 
     public static void renderEntitySimple(RenderManager renderManagerIn, Entity entityIn, float partialTicks, double viewerX, double viewerY, double viewerZ) {
         if (ConfigHandler.limitDroppedEntityRendered && entityIn instanceof EntityItem) {
-            if (shouldRender(entityIn, viewerX, viewerY, viewerZ)) {
+            double d = Math.min(entityIn.getDistanceSq(viewerX, viewerY, viewerZ), 255.9999d);
+            int i = (int) d;
+            entityItemCount[i]++;
+            if (d <= prevRenderDistance) {
                 renderManagerIn.renderEntitySimple(entityIn, partialTicks);
             }
             return;
         }
         renderManagerIn.renderEntitySimple(entityIn, partialTicks);
-    }
-
-    private static boolean shouldRender(Entity entityIn, double viewerX, double viewerY, double viewerZ) {
-        double d = Math.min(entityIn.getDistance(viewerX, viewerY, viewerZ), 15.9999d);
-        int i = (int) d;
-        entityItemCount[i]++;
-        return d <= renderDistance;
     }
 
 }
