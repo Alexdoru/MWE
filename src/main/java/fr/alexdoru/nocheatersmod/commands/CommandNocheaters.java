@@ -126,7 +126,7 @@ public class CommandNocheaters extends CommandBase {
         } else if (args.length == 1 && args[0].equalsIgnoreCase("isitprepphase")) {
 
             addChatMessage(new ChatComponentText(getTagNoCheaters() +
-                    EnumChatFormatting.GREEN + "Preparation phase : " + EnumChatFormatting.DARK_GRAY + (FKCounterMod.isitPrepPhase() ? "True" : "False")));
+                    EnumChatFormatting.GREEN + "Preparation phase : " + EnumChatFormatting.DARK_GRAY + (FKCounterMod.isitPrepPhase ? "True" : "False")));
 
         } else if (args.length == 1 && args[0].equalsIgnoreCase("getscoreboard")) {
 

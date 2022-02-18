@@ -82,7 +82,7 @@ public class ScoreboardParser {
                     String lineColor = scoresColor.get(i);
                     String colorCode = lineColor.split("\u00a7")[1].substring(0, 1);
                     aliveWithers.add(colorCode);
-                    witherHP = 2*Integer.parseInt(matcher2.group(1));
+                    witherHP = 2 * Integer.parseInt(matcher2.group(1));
 
                 }
             }
@@ -130,4 +130,9 @@ public class ScoreboardParser {
     public boolean isOnlyOneWitherAlive() {
         return aliveWithers.size() == 1;
     }
+
+    public boolean isInMwGame() {
+        return gameId != null;
+    }
+
 }

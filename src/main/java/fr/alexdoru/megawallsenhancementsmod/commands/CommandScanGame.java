@@ -166,7 +166,7 @@ class ScanPlayerTask implements Callable<String> {
 
                 JsonObject classesdata = megawallsstats.getClassesdata();
 
-                if (FKCounterMod.isInMwGame()) {
+                if (FKCounterMod.isInMwGame) {
 
                     ScorePlayerTeam team = Minecraft.getMinecraft().theWorld.getScoreboard().getPlayersTeam(playername);
                     String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replace("[", "").replace("]", "").replace(" ", ""));

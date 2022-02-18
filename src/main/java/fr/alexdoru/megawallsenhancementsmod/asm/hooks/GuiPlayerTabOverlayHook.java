@@ -12,11 +12,11 @@ public class GuiPlayerTabOverlayHook {
     private static final int FK_SCORE_WIDTH = fontRendererObj.getStringWidth("00  ");
 
     public static int getFKScoreWidth() {
-        return ConfigHandler.finalsInTablist ? (FKCounterMod.isInMwGame() ? FK_SCORE_WIDTH : 0) : 0;
+        return ConfigHandler.finalsInTablist ? (FKCounterMod.isInMwGame ? FK_SCORE_WIDTH : 0) : 0;
     }
 
     public static void renderFinals(int playersFinals, int x, int y) {
-        if (!ConfigHandler.finalsInTablist || playersFinals == 0 || !FKCounterMod.isInMwGame()) {
+        if (!ConfigHandler.finalsInTablist || playersFinals == 0 || !FKCounterMod.isInMwGame) {
             return;
         }
         String s1 = EnumChatFormatting.GOLD + "" + playersFinals;
@@ -29,7 +29,7 @@ public class GuiPlayerTabOverlayHook {
             float maxhealth;
             float playerhealth = Minecraft.getMinecraft().thePlayer.getMaxHealth();
 
-            if (FKCounterMod.isInMwGame() && playerhealth == 20f) {
+            if (FKCounterMod.isInMwGame && playerhealth == 20f) {
                 maxhealth = 40f;
             } else {
                 maxhealth = playerhealth;

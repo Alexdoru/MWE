@@ -133,7 +133,7 @@ public class KillCounter {
 
     public static boolean processMessage(String FormattedText, String UnformattedText) {
 
-        if (!FKCounterMod.isInMwGame()) {
+        if (!FKCounterMod.isInMwGame) {
             return false;
         }
 
