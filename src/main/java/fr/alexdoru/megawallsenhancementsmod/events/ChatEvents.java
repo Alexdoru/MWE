@@ -8,11 +8,11 @@ import fr.alexdoru.megawallsenhancementsmod.gui.ArrowHitGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.HunterStrengthGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.KillCooldownGui;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.commands.CommandReport;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
@@ -178,12 +178,7 @@ public class ChatEvents {
     }
 
     private static boolean isAValidName(String playername) {
-        for (NetworkPlayerInfo networkplayerinfo : mc.getNetHandler().getPlayerInfoMap()) {
-            if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
-                return true;
-            }
-        }
-        return false;
+        return NameUtil.getPlayerInfo(playername) != null;
     }
 
     private static boolean isAValidCheat(String cheat) {
