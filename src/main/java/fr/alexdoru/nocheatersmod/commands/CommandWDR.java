@@ -107,6 +107,7 @@ public class CommandWDR extends CommandBase {
                         timestamp = (new Date()).getTime() - longtimetosubtract * 1000; // Milliseconds
                         serverID = GameInfoGrabber.getGameIDfromscoreboard();
                         timerOnReplay = GameInfoGrabber.getTimeSinceGameStart(timestamp, serverID, (int) longtimetosubtract);
+                        message.append(" ").append(args[i]);
 
                     } else if (args[i].charAt(0) == timemarkedreportkey) { // process the command if you use a stored timestamp
 
