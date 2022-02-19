@@ -4,10 +4,11 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.MyGuiScreen;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.io.IOException;
 
-public class HitboxConfigGuiScreen extends MyGuiScreen {
+public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
     private final int buttonWidth = 170;
 
@@ -18,21 +19,26 @@ public class HitboxConfigGuiScreen extends MyGuiScreen {
     @Override
     public void initGui() {
 
-        buttonList.add(new GuiButton(1, getxCenter() - buttonWidth - 10, getYposForButton(-4), buttonWidth, ButtonsHeight, getButtonDisplayString(1)));
-        buttonList.add(new GuiButton(2, getxCenter() - buttonWidth - 10, getYposForButton(-3), buttonWidth, ButtonsHeight, getButtonDisplayString(2)));
-        buttonList.add(new GuiButton(3, getxCenter() - buttonWidth - 10, getYposForButton(-2), buttonWidth, ButtonsHeight, getButtonDisplayString(3)));
-        buttonList.add(new GuiButton(13, getxCenter() - buttonWidth - 10, getYposForButton(-1), buttonWidth, ButtonsHeight, getButtonDisplayString(13)));
-        buttonList.add(new GuiButton(4, getxCenter() - buttonWidth - 10, getYposForButton(0), buttonWidth, ButtonsHeight, getButtonDisplayString(4)));
-        buttonList.add(new GuiButton(5, getxCenter() - buttonWidth - 10, getYposForButton(1), buttonWidth, ButtonsHeight, getButtonDisplayString(5)));
-        buttonList.add(new GuiButton(6, getxCenter() - buttonWidth - 10, getYposForButton(2), buttonWidth, ButtonsHeight, getButtonDisplayString(6)));
-        buttonList.add(new GuiButton(7, getxCenter() - buttonWidth - 10, getYposForButton(3), buttonWidth, ButtonsHeight, getButtonDisplayString(7)));
-        buttonList.add(new GuiButton(8, getxCenter() - buttonWidth - 10, getYposForButton(4), buttonWidth, ButtonsHeight, getButtonDisplayString(8)));
+        int XleftColumn = getxCenter() - buttonWidth - 10;
+        int XrightColumn = getxCenter() + 10;
 
-        buttonList.add(new GuiButton(14, getxCenter() + 10, getYposForButton(-4), buttonWidth, ButtonsHeight, getButtonDisplayString(14)));
-        buttonList.add(new GuiButton(9, getxCenter() + 10, getYposForButton(-3), buttonWidth, ButtonsHeight, getButtonDisplayString(9)));
-        buttonList.add(new GuiButton(10, getxCenter() + 10, getYposForButton(0), buttonWidth, ButtonsHeight, getButtonDisplayString(10)));
-        buttonList.add(new GuiButton(11, getxCenter() + 10, getYposForButton(1), buttonWidth, ButtonsHeight, getButtonDisplayString(11)));
-        buttonList.add(new GuiButton(12, getxCenter() + 10, getYposForButton(2), buttonWidth, ButtonsHeight, getButtonDisplayString(12)));
+        buttonList.add(new GuiButton(1, XleftColumn, getYposForButton(-4), buttonWidth, ButtonsHeight, getButtonDisplayString(1)));
+        buttonList.add(new GuiButton(2, XleftColumn, getYposForButton(-3), buttonWidth, ButtonsHeight, getButtonDisplayString(2)));
+        buttonList.add(new GuiButton(3, XleftColumn, getYposForButton(-2), buttonWidth, ButtonsHeight, getButtonDisplayString(3)));
+        buttonList.add(new GuiButton(13, XleftColumn, getYposForButton(-1), buttonWidth, ButtonsHeight, getButtonDisplayString(13)));
+        buttonList.add(new GuiButton(4, XleftColumn, getYposForButton(0), buttonWidth, ButtonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(5, XleftColumn, getYposForButton(1), buttonWidth, ButtonsHeight, getButtonDisplayString(5)));
+        buttonList.add(new GuiButton(6, XleftColumn, getYposForButton(2), buttonWidth, ButtonsHeight, getButtonDisplayString(6)));
+        buttonList.add(new GuiButton(7, XleftColumn, getYposForButton(3), buttonWidth, ButtonsHeight, getButtonDisplayString(7)));
+        buttonList.add(new GuiButton(8, XleftColumn, getYposForButton(4), buttonWidth, ButtonsHeight, getButtonDisplayString(8)));
+
+        buttonList.add(new GuiButton(14, XrightColumn, getYposForButton(-4), buttonWidth, ButtonsHeight, getButtonDisplayString(14)));
+        buttonList.add(new GuiButton(9, XrightColumn, getYposForButton(-3), buttonWidth, ButtonsHeight, getButtonDisplayString(9)));
+        buttonList.add(new GuiButton(15, XrightColumn, getYposForButton(-2), buttonWidth, ButtonsHeight, getButtonDisplayString(15)));
+        buttonList.add(new GuiSlider(16, XrightColumn, getYposForButton(-1), buttonWidth, ButtonsHeight, "Range : ", " m", 0d, 64d, ConfigHandler.hitboxDrawRange, false, true, this));
+        buttonList.add(new GuiButton(10, XrightColumn, getYposForButton(2), buttonWidth, ButtonsHeight, getButtonDisplayString(10)));
+        buttonList.add(new GuiButton(11, XrightColumn, getYposForButton(3), buttonWidth, ButtonsHeight, getButtonDisplayString(11)));
+        buttonList.add(new GuiButton(12, XrightColumn, getYposForButton(4), buttonWidth, ButtonsHeight, getButtonDisplayString(12)));
 
         buttonList.add(new GuiButton(0, getxCenter() - 150 / 2, getYposForButton(6), 150, ButtonsHeight, getButtonDisplayString(0)));
         super.initGui();
@@ -63,13 +69,15 @@ public class HitboxConfigGuiScreen extends MyGuiScreen {
             case 9:
                 return "Red eyeline : " + getSuffix(ConfigHandler.drawRedBox);
             case 10:
-                return "Draw blue vect : " + getSuffix(!ConfigHandler.HideBlueVect);
+                return "Draw blue vector : " + getSuffix(!ConfigHandler.HideBlueVect);
             case 11:
                 return "For players only : " + getSuffix(ConfigHandler.drawBlueVectForPlayersOnly);
             case 12:
-                return "Make vect 3 meters : " + getSuffix(ConfigHandler.makeBlueVect3Meters);
+                return "Make vector 3 meters : " + getSuffix(ConfigHandler.makeBlueVect3Meters);
             case 14:
                 return "Real size hitbox : " + getSuffix(ConfigHandler.realSizeHitbox);
+            case 15:
+                return "Hide close hitbox : " + getSuffix(ConfigHandler.drawRangedHitbox);
             default:
                 return "";
         }
@@ -123,6 +131,9 @@ public class HitboxConfigGuiScreen extends MyGuiScreen {
             case 14:
                 ConfigHandler.realSizeHitbox = !ConfigHandler.realSizeHitbox;
                 break;
+            case 15:
+                ConfigHandler.drawRangedHitbox = !ConfigHandler.drawRangedHitbox;
+                break;
             default:
                 break;
         }
@@ -131,10 +142,17 @@ public class HitboxConfigGuiScreen extends MyGuiScreen {
     }
 
     @Override
+    public void onChangeSliderValue(GuiSlider slider) {
+        if (slider.id == 16) {
+            ConfigHandler.hitboxDrawRange = (float) slider.getValue();
+        }
+    }
+
+    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle("Hitboxes", 2, getxCenter(), getYposForButton(-8) + ButtonsHeight / 2.0f, Integer.parseInt("5555FF", 16));
         drawCenteredTitle("Draw Hitbox for :", 1, getxCenter() - buttonWidth / 2.0f - 10, getYposForButton(-4) - ButtonsHeight / 2.0f, Integer.parseInt("FFFFFF", 16));
-        drawCenteredTitle("Blue vector :", 1, getxCenter() + buttonWidth / 2.0f + 10, getYposForButton(0) - ButtonsHeight / 2.0f, Integer.parseInt("FFFFFF", 16));
+        drawCenteredTitle("Blue vector :", 1, getxCenter() + buttonWidth / 2.0f + 10, getYposForButton(2) - ButtonsHeight / 2.0f, Integer.parseInt("0000FF", 16));
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
