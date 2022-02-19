@@ -14,7 +14,7 @@ public class TabCompletionUtil {
 
         ArrayList<String> players = new ArrayList<>();
 
-        if (FKCounterMod.isitPrepPhase()) {
+        if (FKCounterMod.isitPrepPhase) {
             return players;
         }
 
