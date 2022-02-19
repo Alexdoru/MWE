@@ -32,60 +32,60 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         final int XposLeftButton = getxCenter() - buttonsWidth - 10;
         final int XposRightButton = getxCenter() + 10;
 
-        this.buttonList.add(new GuiButton(21, XposLeftButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
-        this.buttonList.add(new GuiButton(16, XposLeftButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
-        this.buttonList.add(new GuiButton(15, XposLeftButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
-        this.buttonList.add(new GuiButton(0, XposLeftButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
-        this.buttonList.add(new GuiButton(1, XposLeftButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
-        this.buttonList.add(new GuiButton(18, XposLeftButton, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(18)));
+        buttonList.add(new GuiButton(18, XposLeftButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(18)));
+        buttonList.add(new GuiButton(19, XposLeftButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(19)));
+        buttonList.add(new GuiButton(15, XposLeftButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
+        buttonList.add(new GuiButton(1, XposLeftButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
+        buttonList.add(new GuiButton(0, XposLeftButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
+        buttonList.add(new GuiButton(16, XposLeftButton, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
 
-        this.buttonList.add(new GuiButton(19, XposRightButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(19)));
-        this.buttonList.add(new GuiButton(17, XposRightButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
-        this.buttonList.add(new GuiSlider(20, XposRightButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
-        this.buttonList.add(new GuiButton(22, XposRightButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(22)));
-        this.buttonList.add(new GuiSlider(23, XposRightButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, "Maximum amount of item rendered : ", "", 40d, 1000d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
+        buttonList.add(new GuiButton(21, XposRightButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
+        buttonList.add(new GuiButton(17, XposRightButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
+        buttonList.add(new GuiSlider(20, XposRightButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
+        buttonList.add(new GuiButton(22, XposRightButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(22)));
+        buttonList.add(new GuiSlider(23, XposRightButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, "Maximum amount of item rendered : ", "", 40d, 1000d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
 
         final int XposCenterButton = getxCenter() - buttonsWidth / 2;
 
         /* HUD Buttons */
-        this.buttonList.add(new GuiButton(9, XposCenterButton, getYposForButton(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
-        this.buttonList.add(new GuiButton(2, XposCenterButton, getYposForButton(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
-        this.buttonList.add(new GuiButton(3, XposCenterButton, getYposForButton(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
-        this.buttonList.add(new GuiButton(11, XposCenterButton, getYposForButton(5), buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
+        buttonList.add(new GuiButton(9, XposCenterButton, getYposForButton(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
+        buttonList.add(new GuiButton(2, XposCenterButton, getYposForButton(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
+        buttonList.add(new GuiButton(3, XposCenterButton, getYposForButton(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
+        buttonList.add(new GuiButton(11, XposCenterButton, getYposForButton(5), buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
 
         final int sideButtonsWidth = 100;
         final int XposCenterLeftButton = getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth;
         final int XposCenterRightButton = getxCenter() + buttonsWidth / 2 + 4;
 
         /* Buttons : Reset HUD position */
-        this.buttonList.add(new GuiButton(14, XposCenterLeftButton, getYposForButton(2), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(14)));
-        this.buttonList.add(new GuiButton(7, XposCenterLeftButton, getYposForButton(3), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(7)));
-        this.buttonList.add(new GuiButton(8, XposCenterLeftButton, getYposForButton(4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(8)));
-        this.buttonList.add(new GuiButton(12, XposCenterLeftButton, getYposForButton(5), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(12)));
+        buttonList.add(new GuiButton(14, XposCenterLeftButton, getYposForButton(4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(14)));
+        buttonList.add(new GuiButton(7, XposCenterLeftButton, getYposForButton(3), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(7)));
+        buttonList.add(new GuiButton(8, XposCenterLeftButton, getYposForButton(2), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(8)));
+        buttonList.add(new GuiButton(12, XposCenterLeftButton, getYposForButton(5), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(12)));
 
         /* Buttons : Move HUD */
-        this.buttonList.add(new GuiButton(13, XposCenterRightButton, getYposForButton(2), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(13)));
-        this.buttonList.add(new GuiButton(5, XposCenterRightButton, getYposForButton(3), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(5)));
-        this.buttonList.add(new GuiButton(6, XposCenterRightButton, getYposForButton(4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(6)));
-        this.buttonList.add(new GuiButton(10, XposCenterRightButton, getYposForButton(5), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(10)));
+        buttonList.add(new GuiButton(13, XposCenterRightButton, getYposForButton(4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(13)));
+        buttonList.add(new GuiButton(5, XposCenterRightButton, getYposForButton(3), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(5)));
+        buttonList.add(new GuiButton(6, XposCenterRightButton, getYposForButton(2), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(6)));
+        buttonList.add(new GuiButton(10, XposCenterRightButton, getYposForButton(5), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(10)));
 
         /* Exit button */
-        this.buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getYposForButton(7), 150, ButtonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getYposForButton(7), 150, ButtonsHeight, getButtonDisplayString(4)));
         super.initGui();
     }
 
     private String getButtonDisplayString(int id) {
         switch (id) {
             case 21:
-                return "Drop sword protection : " + getSuffix(ConfigHandler.swordDropProtection);
+                return "Sword drop protection : " + getSuffix(ConfigHandler.swordDropProtection);
             case 16:
                 return "Strength particule HBR DRE : " + getSuffix(ConfigHandler.strengthParticules);
             case 15:
                 return "Icons on names : " + getSuffix(ConfigHandler.toggleicons);
             case 0:
-                return "Shorten coin messages : " + getSuffix(ConfigHandler.shortencoinmessage);
+                return "Short coin messages : " + getSuffix(ConfigHandler.shortencoinmessage);
             case 9:
-                return "HUD before hunter strength : " + getSuffix(ConfigHandler.hunterStrengthHUD);
+                return "Show hunter strength HUD : " + getSuffix(ConfigHandler.hunterStrengthHUD);
             case 1:
                 return "Report suggestions in chat : " + getSuffix(ConfigHandler.reportsuggestions);
             case 18:
@@ -93,15 +93,15 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 2:
                 return "Show /kill cooldown HUD : " + getSuffix(ConfigHandler.show_killcooldownHUD);
             case 3:
-                return "Show Arrow Hit HUD : " + getSuffix(ConfigHandler.show_ArrowHitHUD);
+                return "Show arrow Hit HUD : " + getSuffix(ConfigHandler.show_ArrowHitHUD);
             case 11:
                 return "Show wither death time HUD : " + (ConfigHandler.witherHUDinSiderbar ? EnumChatFormatting.YELLOW + "in Sidebar" : getSuffix(ConfigHandler.show_lastWitherHUD));
             case 19:
-                return "Colored Tablist Scores : " + getSuffix(ConfigHandler.useColoredScores);
+                return "Colored tablist health : " + getSuffix(ConfigHandler.useColoredScores);
             case 17:
                 return "Sound warning when low HP : " + getSuffix(ConfigHandler.playSoundLowHP);
             case 22:
-                return "Limit dropped item render : " + getSuffix(ConfigHandler.limitDroppedEntityRendered);
+                return "Limit dropped item rendered : " + getSuffix(ConfigHandler.limitDroppedEntityRendered);
             case 4:
                 return "Done";
             case 5:
@@ -178,7 +178,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 22:
                 textLines.add(EnumChatFormatting.GREEN + "Dynamically changes the render distance for items on the ground to preserve performance");
-                textLines.add(EnumChatFormatting.GREEN + "The render distance depends on the limit set below");
+                textLines.add(EnumChatFormatting.GREEN + "The render distance depends of the limit set below");
                 break;
         }
         return textLines;
