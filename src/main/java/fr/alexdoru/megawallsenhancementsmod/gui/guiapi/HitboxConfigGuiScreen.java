@@ -28,6 +28,7 @@ public class HitboxConfigGuiScreen extends MyGuiScreen {
         buttonList.add(new GuiButton(7, getxCenter() - buttonWidth - 10, getYposForButton(3), buttonWidth, ButtonsHeight, getButtonDisplayString(7)));
         buttonList.add(new GuiButton(8, getxCenter() - buttonWidth - 10, getYposForButton(4), buttonWidth, ButtonsHeight, getButtonDisplayString(8)));
 
+        buttonList.add(new GuiButton(14, getxCenter() + 10, getYposForButton(-4), buttonWidth, ButtonsHeight, getButtonDisplayString(14)));
         buttonList.add(new GuiButton(9, getxCenter() + 10, getYposForButton(-3), buttonWidth, ButtonsHeight, getButtonDisplayString(9)));
         buttonList.add(new GuiButton(10, getxCenter() + 10, getYposForButton(0), buttonWidth, ButtonsHeight, getButtonDisplayString(10)));
         buttonList.add(new GuiButton(11, getxCenter() + 10, getYposForButton(1), buttonWidth, ButtonsHeight, getButtonDisplayString(11)));
@@ -67,6 +68,8 @@ public class HitboxConfigGuiScreen extends MyGuiScreen {
                 return "For players only : " + getSuffix(ConfigHandler.drawBlueVectForPlayersOnly);
             case 12:
                 return "Make vect 3 meters : " + getSuffix(ConfigHandler.makeBlueVect3Meters);
+            case 14:
+                return "Real size hitbox : " + getSuffix(ConfigHandler.realSizeHitbox);
             default:
                 return "";
         }
@@ -116,6 +119,9 @@ public class HitboxConfigGuiScreen extends MyGuiScreen {
                 break;
             case 12:
                 ConfigHandler.makeBlueVect3Meters = !ConfigHandler.makeBlueVect3Meters;
+                break;
+            case 14:
+                ConfigHandler.realSizeHitbox = !ConfigHandler.realSizeHitbox;
                 break;
             default:
                 break;
