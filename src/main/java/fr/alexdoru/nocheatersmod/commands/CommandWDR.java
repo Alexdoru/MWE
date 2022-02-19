@@ -142,8 +142,6 @@ public class CommandWDR extends CommandBase {
 
                         }
 
-                    } else if (args[i].contains("stalk") || args[i].equals("test")) {
-                        arraycheats.add(args[i]);
                     } else if (args[i].equalsIgnoreCase("bhop")) {
                         arraycheats.add(args[i]);
                         message.append(" bhop aura reach velocity speed antiknockback");
@@ -174,9 +172,7 @@ public class CommandWDR extends CommandBase {
                 message.append(" ").append(timerOnReplay.equals("?") ? "" : timerOnReplay);
             }
 
-            if (!(args.length == 2 && (args[1].contains("stalk") || args[1].equals("test")))) {
-                (Minecraft.getMinecraft()).thePlayer.sendChatMessage(message.toString()); //sends command to server
-            }
+            (Minecraft.getMinecraft()).thePlayer.sendChatMessage(message.toString()); //sends command to server
 
             CachedMojangUUID apireq;
             String uuid = null;
