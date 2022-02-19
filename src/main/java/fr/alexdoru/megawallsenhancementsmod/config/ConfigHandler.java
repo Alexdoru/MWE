@@ -82,7 +82,6 @@ public class ConfigHandler {
 
     // TODO color the hitbox when the ennemy is hit VAPE KILL AURA !!!
     //  arrow hit as well ?
-    //  only render hitbox if they are plus loin que, 2 settings
 
     public static boolean drawHitboxForPlayers;
     public static boolean drawHitboxForGroundedArrows;
@@ -99,6 +98,8 @@ public class ConfigHandler {
     public static boolean drawBlueVectForPlayersOnly;
     public static boolean makeBlueVect3Meters;
     public static boolean realSizeHitbox;
+    public static boolean drawRangedHitbox;
+    public static float hitboxDrawRange;
 
     public static void preinit(File file) {
         config = new Configuration(file);
@@ -134,7 +135,7 @@ public class ConfigHandler {
         Property puseColoredScores = config.get(CATEGORY_MWENh, "Colored Tablist Scores", true, "Makes the scores in the tablist use a greend to red color gradient depending of the value");
         Property pswordDropProtection = config.get(CATEGORY_MWENh, "Sword drop protection", true, "When enabled you can't drop the sword you are holding in your hotbar");
         Property plimitDroppedEntityRendered = config.get(CATEGORY_MWENh, "Limit dropped item rendered", true, "Limit dropped item rendered");
-        Property pmaxDroppedEntityRendered = config.get(CATEGORY_MWENh, "Max amount of item rendered", 300, "Max amount of item rendered");
+        Property pmaxDroppedEntityRendered = config.get(CATEGORY_MWENh, "Max amount of item rendered", 320, "Max amount of item rendered");
 
         Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
         Property pXpos_killcooldownHUD = config.get(CATEGORY_GUI, "Xpos kill cooldown HUD", 0d, "The x position of the killcooldown HUD, value ranges from 0 to 1");
@@ -172,6 +173,8 @@ public class ConfigHandler {
         Property pdrawBlueVectForPlayersOnly = config.get(CATEGORY_HITBOX, "Blue vect for players only", false, "Blue vect for players only");
         Property pmakeBlueVect3Meters = config.get(CATEGORY_HITBOX, "Make blue vector 3m long", false, "Make blue vector 3m long");
         Property prealSizeHitbox = config.get(CATEGORY_HITBOX, "Real size hitbox", false, "Make hitbox their real size");
+        Property pdrawRangedHitbox = config.get(CATEGORY_HITBOX, "Don't render close hitbox", false, "Doesn't render the hitbox of entities close to you");
+        Property phitboxDrawRange = config.get(CATEGORY_HITBOX, "Hitbox render range", 6f, "Doesn't render the hitbox of entities closer than this");
 
         /*Set the Order in which the config entries appear in the config file */
         List<String> pOrderFKC = new ArrayList<>();
@@ -243,6 +246,8 @@ public class ConfigHandler {
         pOrderHitbox.add(pdrawBlueVectForPlayersOnly.getName());
         pOrderHitbox.add(pmakeBlueVect3Meters.getName());
         pOrderHitbox.add(prealSizeHitbox.getName());
+        pOrderHitbox.add(pdrawRangedHitbox.getName());
+        pOrderHitbox.add(phitboxDrawRange.getName());
         config.setCategoryPropertyOrder(CATEGORY_HITBOX, pOrderHitbox);
 
         /*sets the fields of this class to the fields in the properties*/
@@ -303,6 +308,8 @@ public class ConfigHandler {
             drawBlueVectForPlayersOnly = pdrawBlueVectForPlayersOnly.getBoolean();
             makeBlueVect3Meters = pmakeBlueVect3Meters.getBoolean();
             realSizeHitbox = prealSizeHitbox.getBoolean();
+            drawRangedHitbox = pdrawRangedHitbox.getBoolean();
+            hitboxDrawRange = (float) phitboxDrawRange.getDouble();
 
         }
 
@@ -376,6 +383,8 @@ public class ConfigHandler {
             pdrawBlueVectForPlayersOnly.set(drawBlueVectForPlayersOnly);
             pmakeBlueVect3Meters.set(makeBlueVect3Meters);
             prealSizeHitbox.set(realSizeHitbox);
+            pdrawRangedHitbox.set(drawRangedHitbox);
+            phitboxDrawRange.set(hitboxDrawRange);
 
         }
 

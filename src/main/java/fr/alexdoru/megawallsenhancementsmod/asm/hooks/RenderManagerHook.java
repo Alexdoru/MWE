@@ -2,7 +2,9 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityArrowAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -14,6 +16,12 @@ import net.minecraft.util.AxisAlignedBB;
 public class RenderManagerHook {
 
     public static boolean cancelHitboxRender(Entity entityIn) {
+        if (ConfigHandler.drawRangedHitbox) {
+            EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
+            if (thePlayer != null && entityIn.getDistanceToEntity(thePlayer) <= ConfigHandler.hitboxDrawRange) {
+                return true;
+            }
+        }
         if (entityIn instanceof AbstractClientPlayer) {
             return !ConfigHandler.drawHitboxForPlayers;
         }
