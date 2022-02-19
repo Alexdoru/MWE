@@ -9,6 +9,7 @@ import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.util.AxisAlignedBB;
 
 public class RenderManagerHook {
 
@@ -55,6 +56,14 @@ public class RenderManagerHook {
             }
         }
         return ConfigHandler.makeBlueVect3Meters ? 3.0d : 2.0d;
+    }
+
+    public static AxisAlignedBB getAxisAlignedBB(AxisAlignedBB axisAlignedBBIn, Entity entityIn) {
+        if (ConfigHandler.realSizeHitbox) {
+            float f = entityIn.getCollisionBorderSize();
+            return axisAlignedBBIn.expand(f, f, f);
+        }
+        return axisAlignedBBIn;
     }
 
 }

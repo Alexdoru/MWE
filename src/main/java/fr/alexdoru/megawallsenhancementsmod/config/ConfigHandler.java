@@ -80,9 +80,9 @@ public class ConfigHandler {
      * Hitbox Config
      */
 
-    // TODO make hitbox their real size
-    //  color the hitbox when the ennemy is hit VAPE KILL AURA !!!
+    // TODO color the hitbox when the ennemy is hit VAPE KILL AURA !!!
     //  arrow hit as well ?
+    //  only render hitbox if they are plus loin que, 2 settings
 
     public static boolean drawHitboxForPlayers;
     public static boolean drawHitboxForGroundedArrows;
@@ -98,6 +98,7 @@ public class ConfigHandler {
     public static boolean HideBlueVect;
     public static boolean drawBlueVectForPlayersOnly;
     public static boolean makeBlueVect3Meters;
+    public static boolean realSizeHitbox;
 
     public static void preinit(File file) {
         config = new Configuration(file);
@@ -170,6 +171,7 @@ public class ConfigHandler {
         Property pHideBlueVect = config.get(CATEGORY_HITBOX, "Hide blue vector", false, "Hide blue vector");
         Property pdrawBlueVectForPlayersOnly = config.get(CATEGORY_HITBOX, "Blue vect for players only", false, "Blue vect for players only");
         Property pmakeBlueVect3Meters = config.get(CATEGORY_HITBOX, "Make blue vector 3m long", false, "Make blue vector 3m long");
+        Property prealSizeHitbox = config.get(CATEGORY_HITBOX, "Real size hitbox", false, "Make hitbox their real size");
 
         /*Set the Order in which the config entries appear in the config file */
         List<String> pOrderFKC = new ArrayList<>();
@@ -240,6 +242,7 @@ public class ConfigHandler {
         pOrderHitbox.add(pHideBlueVect.getName());
         pOrderHitbox.add(pdrawBlueVectForPlayersOnly.getName());
         pOrderHitbox.add(pmakeBlueVect3Meters.getName());
+        pOrderHitbox.add(prealSizeHitbox.getName());
         config.setCategoryPropertyOrder(CATEGORY_HITBOX, pOrderHitbox);
 
         /*sets the fields of this class to the fields in the properties*/
@@ -299,6 +302,7 @@ public class ConfigHandler {
             HideBlueVect = pHideBlueVect.getBoolean();
             drawBlueVectForPlayersOnly = pdrawBlueVectForPlayersOnly.getBoolean();
             makeBlueVect3Meters = pmakeBlueVect3Meters.getBoolean();
+            realSizeHitbox = prealSizeHitbox.getBoolean();
 
         }
 
@@ -371,6 +375,7 @@ public class ConfigHandler {
             pHideBlueVect.set(HideBlueVect);
             pdrawBlueVectForPlayersOnly.set(drawBlueVectForPlayersOnly);
             pmakeBlueVect3Meters.set(makeBlueVect3Meters);
+            prealSizeHitbox.set(realSizeHitbox);
 
         }
 

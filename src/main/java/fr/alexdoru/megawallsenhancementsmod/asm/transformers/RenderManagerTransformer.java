@@ -28,6 +28,19 @@ public class RenderManagerTransformer implements IMyClassTransformer {
 
                 for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
+                    if (insnNode.getOpcode() == ALOAD && insnNode instanceof VarInsnNode && ((VarInsnNode) insnNode).var == 12) {
+                        /*
+                         * Replaces line 451 :
+                         * RenderGlobal.drawOutlinedBoundingBox(axisalignedbb1, 255, 255, 255, 255);
+                         * With :
+                         * RenderGlobal.drawOutlinedBoundingBox(RenderManagerHook.getAxisAlignedBB(axisalignedbb1, entityIn), 255, 255, 255, 255);
+                         */
+                        InsnList list = new InsnList();
+                        list.add(new VarInsnNode(ALOAD, 1));
+                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderManagerHook", "getAxisAlignedBB", ASMLoadingPlugin.isObf ? "(Laug;Lpk;)Lnet/minecraft/util/AxisAlignedBB;" : "(Lnet/minecraft/util/AxisAlignedBB;Lnet/minecraft/entity/Entity;)Lnet/minecraft/util/AxisAlignedBB;", false));
+                        methodNode.instructions.insertBefore(insnNode.getNext(), list);
+                    }
+
                     if (insnNode.getOpcode() == INSTANCEOF && insnNode instanceof TypeInsnNode && ((TypeInsnNode) insnNode).desc.equals(ASMLoadingPlugin.isObf ? "pr" : "net/minecraft/entity/EntityLivingBase")) {
                         AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode.getOpcode() == IFEQ && nextNode instanceof JumpInsnNode) {
