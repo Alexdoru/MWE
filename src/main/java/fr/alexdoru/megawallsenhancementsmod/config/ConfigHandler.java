@@ -31,7 +31,6 @@ public class ConfigHandler {
     public static double fkc_hud_size;
     public static int playerAmount;
     public static boolean finalsInTablist;
-    // TODO add the finals on nametags
 
     /*MWEnhancements config*/
     public static String APIKey;
