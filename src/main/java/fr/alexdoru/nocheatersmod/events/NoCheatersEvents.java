@@ -52,7 +52,11 @@ public class NoCheatersEvents {
         if (ticks < 39 || mc.thePlayer == null || !(event.entity instanceof EntityPlayer)) {
             return;
         }
-        NameUtil.transformNametag((EntityPlayer) event.entity, ConfigHandler.toggleicons, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
+        try {
+            NameUtil.transformNametag((EntityPlayer) event.entity, ConfigHandler.toggleicons, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
