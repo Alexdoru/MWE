@@ -1,6 +1,5 @@
 package fr.alexdoru.nocheatersmod.commands;
 
-import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
@@ -9,10 +8,8 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
-import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -47,6 +44,8 @@ public class CommandNocheaters extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
 
+        // TODO nocheaters say; shout
+
         if (args.length == 0) {
 
             List<IChatComponent> list = NoCheatersEvents.getReportMessagesforWorld();
@@ -77,61 +76,6 @@ public class CommandNocheaters extends CommandBase {
         } else if (args.length == 1 && args[0].equalsIgnoreCase("config")) {
 
             new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(new NoCheatersConfigGuiScreen()), 1);
-
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("toggle")) {
-
-            if (args[1].equalsIgnoreCase("icons")) {
-
-                if (ConfigHandler.toggleicons) {
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Icons disabled"));
-                } else {
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "Icons enabled"));
-                }
-                NameUtil.toggleIcons();
-                ConfigHandler.saveConfig();
-
-            } else if (args[1].equalsIgnoreCase("autoreport")) {
-
-                if (ConfigHandler.toggleautoreport) {
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Autoreports disabled"));
-                } else {
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "Autoreports enabled"));
-                }
-                ConfigHandler.toggleautoreport = !ConfigHandler.toggleautoreport;
-                ConfigHandler.saveConfig();
-
-            } else if (args[1].equalsIgnoreCase("warnings")) {
-
-                if (ConfigHandler.togglewarnings) {
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Warnings disabled"));
-                } else {
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "Warnings enabled"));
-                }
-                ConfigHandler.togglewarnings = !ConfigHandler.togglewarnings;
-                ConfigHandler.saveConfig();
-
-            }
-
-        } else if (args.length == 1 && args[0].equalsIgnoreCase("getgameid")) {
-
-            addChatMessage(new ChatComponentText(getTagNoCheaters() +
-                    EnumChatFormatting.GREEN + "Current server : " + EnumChatFormatting.DARK_GRAY + GameInfoGrabber.getGameIDfromscoreboard()));
-
-        } else if (args.length == 1 && args[0].equalsIgnoreCase("getstoreddata")) {
-
-            addChatMessage(new ChatComponentText(getTagNoCheaters() +
-                    EnumChatFormatting.GREEN + "ServerID stored : " + EnumChatFormatting.DARK_GRAY + GameInfoGrabber.getstoredGameID() + "\n"
-                    + EnumChatFormatting.GREEN + "Timestamp stored (local) : " + EnumChatFormatting.DARK_GRAY + DateUtil.localformatTimestamp(GameInfoGrabber.getstoredTimestamp()) + "\n"
-                    + EnumChatFormatting.GREEN + "Timestamp stored (EST) : " + EnumChatFormatting.DARK_GRAY + DateUtil.ESTformatTimestamp(GameInfoGrabber.getstoredTimestamp())));
-
-        } else if (args.length == 1 && args[0].equalsIgnoreCase("isitprepphase")) {
-
-            addChatMessage(new ChatComponentText(getTagNoCheaters() +
-                    EnumChatFormatting.GREEN + "Preparation phase : " + EnumChatFormatting.DARK_GRAY + (FKCounterMod.isitPrepPhase ? "True" : "False")));
-
-        } else if (args.length == 1 && args[0].equalsIgnoreCase("getscoreboard")) {
-
-            GameInfoGrabber.debugGetScoreboard();
 
         } else if (args[0].equalsIgnoreCase("reportlist") || args[0].equalsIgnoreCase("stalkreportlist")) {
 
@@ -209,22 +153,14 @@ public class CommandNocheaters extends CommandBase {
 
             })).start();
 
-        } else if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
-
-            addChatMessage(new ChatComponentText(
-                    EnumChatFormatting.RED + "/nocheaters : scans the world and warns you about previously reported players \n" +
-                            EnumChatFormatting.RED + "/nocheaters toggle warnings : toggles the warning messages on or off \n" +
-                            EnumChatFormatting.RED + "/nocheaters reportlist : prints the reports with timestamps"));
-
         }
 
     }
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        String[] arguments = {"config", "help", "toggle", "reportlist", "reportworld"};
-        String[] toggleargs = {"autoreport", "icons", "warnings"};
-        return args.length == 1 ? getListOfStringsMatchingLastWord(args, arguments) : ((args.length == 2 && args[0].equals("toggle")) ? getListOfStringsMatchingLastWord(args, toggleargs) : null);
+        String[] arguments = {"config", "reportlist", "reportworld"};
+        return getListOfStringsMatchingLastWord(args, arguments);
     }
 
     @Override
