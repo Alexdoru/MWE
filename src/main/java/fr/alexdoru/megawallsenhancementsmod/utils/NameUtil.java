@@ -82,7 +82,7 @@ public class NameUtil {
 
         if (wdr != null) { // player was reported
 
-            boolean gotautoreported = checkAutoreport && NoCheatersEvents.sendReport(datenow, uuid, playerName, wdr);
+            boolean gotautoreported = checkAutoreport && NoCheatersEvents.sendAutoReport(datenow, playerName, wdr);
 
             if (wdr.hacks.contains("bhop")) { // player bhops
                 if (areIconsToggled) {
@@ -121,7 +121,7 @@ public class NameUtil {
      * Method call is inject by Scoreboard
      */
     public static void transformNameTablist(String playername) {
-        NetworkPlayerInfo networkPlayerInfo = playerInfoMap.get(playername); // 270 ns avg
+        NetworkPlayerInfo networkPlayerInfo = playerInfoMap.get(playername);
         if (networkPlayerInfo != null) {
             networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo));
         }
@@ -157,6 +157,7 @@ public class NameUtil {
      * Replaces the names of squadmates
      * Adds a tag to squadmates
      * Adds a tag to reported players
+     * Unscrambles the tablist
      */
     public static IChatComponent getTransformedDisplayName(GameProfile gameProfile) {
 

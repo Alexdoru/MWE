@@ -15,6 +15,8 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage
 
 public class CommandSendReportAgain extends CommandBase {
 
+    private static final Minecraft mc = Minecraft.getMinecraft();
+
     @Override
     public String getCommandName() {
         return "sendreportagain";
@@ -78,10 +80,8 @@ public class CommandSendReportAgain extends CommandBase {
         }
 
         String message = "/wdr " + playername + cheatmessage;
-        (Minecraft.getMinecraft()).thePlayer.sendChatMessage(message);
-        long timestamp = (new Date()).getTime();
-        WdredPlayers.getWdredMap().put(uuid, new WDR(timestamp, wdr.hacks));
-
+        mc.thePlayer.sendChatMessage(message);
+        wdr.timestamp = (new Date()).getTime();
     }
 
     @Override

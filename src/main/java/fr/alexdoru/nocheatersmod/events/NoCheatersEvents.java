@@ -13,7 +13,6 @@ import net.minecraft.client.gui.GuiDownloadTerrain;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IChatComponent;
-import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -90,7 +89,7 @@ public class NoCheatersEvents {
                     }
                 }
 
-                boolean gotautoreported = sendReport(datenow, uuid, playerName, wdr);
+                boolean gotautoreported = sendAutoReport(datenow, playerName, wdr);
 
                 if (ConfigHandler.togglewarnings) {
                     ChatUtil.addChatMessage(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr, gotautoreported)));
@@ -106,20 +105,26 @@ public class NoCheatersEvents {
      * Handles the auto report feature
      * @return true if it sends a report
      */
-    public static boolean sendReport(long datenow, String uuid, String playerName, WDR wdr) {
+    public static boolean sendAutoReport(long datenow, String playerName, WDR wdr) {
         if (ConfigHandler.toggleautoreport
                 && (!FKCounterMod.isInMWEnvironnement || (FKCounterMod.isInMwGame && !FKCounterMod.isitPrepPhase))
                 && datenow - wdr.timestamp - ConfigHandler.timeBetweenReports > 0
                 && 0 < ConfigHandler.timeAutoReport - datenow + wdr.timestamp) {
             new DelayedTask(() -> {
-                // TODO mettre direct le code (call vers une fonction que j'utilise aussi dans sendreportagan) plutot que de passer par une commande
-                ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + uuid + " " + playerName);
+                sendReport(playerName, wdr);
                 nbReport--;
             }, 30 * nbReport);
             nbReport++;
             return true;
         }
         return false;
+    }
+
+    public static void sendReport(String playerName, WDR wdr) {
+        if (mc.thePlayer != null) {
+            mc.thePlayer.sendChatMessage("/wdr " + playerName + " cheating");
+            wdr.timestamp = (new Date()).getTime();
+        }
     }
 
     /**
@@ -144,7 +149,7 @@ public class NoCheatersEvents {
             }
 
             if (wdr != null) {
-                boolean gotautoreported = sendReport(datenow, uuid, playerName, wdr);
+                boolean gotautoreported = sendAutoReport(datenow, playerName, wdr);
                 list.add(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr, gotautoreported)));
             }
 

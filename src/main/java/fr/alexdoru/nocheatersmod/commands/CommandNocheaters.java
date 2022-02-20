@@ -19,7 +19,6 @@ import net.minecraft.command.NumberInvalidException;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.*;
-import net.minecraftforge.client.ClientCommandHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -30,6 +29,7 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 public class CommandNocheaters extends CommandBase {
 
     private static HashMap<String, WDR> sortedmap = new HashMap<>();
+    private static final Minecraft mc = Minecraft.getMinecraft();
 
     @Override
     public String getCommandName() {
@@ -75,7 +75,7 @@ public class CommandNocheaters extends CommandBase {
 
         } else if (args.length == 1 && args[0].equalsIgnoreCase("config")) {
 
-            new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(new NoCheatersConfigGuiScreen()), 1);
+            new DelayedTask(() -> mc.displayGuiScreen(new NoCheatersConfigGuiScreen()), 1);
 
         } else if (args[0].equalsIgnoreCase("reportlist") || args[0].equalsIgnoreCase("stalkreportlist")) {
 
@@ -234,18 +234,14 @@ public class CommandNocheaters extends CommandBase {
         long timenow = (new Date()).getTime();
         int nbreport = 0;
 
-        for (NetworkPlayerInfo networkPlayerInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+        for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
 
             String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
             String playerName = networkPlayerInfo.getGameProfile().getName();
             WDR wdr = WdredPlayers.getWdredMap().get(uuid);
-            boolean isaNick = false;
 
             if (wdr == null) {
                 wdr = WdredPlayers.getWdredMap().get(playerName);
-                if (wdr != null) {
-                    isaNick = true;
-                }
             }
 
             if (wdr == null) {
@@ -253,25 +249,8 @@ public class CommandNocheaters extends CommandBase {
             }
 
             if (timenow - wdr.timestamp > ConfigHandler.timeBetweenReports) {
-
-                if (isaNick) {
-
-                    new DelayedTask(() -> {
-                        if (Minecraft.getMinecraft().thePlayer != null) {
-                            ClientCommandHandler.instance.executeCommand(Minecraft.getMinecraft().thePlayer, "/sendreportagain " + playerName + " " + playerName);
-                        }
-                    }, 30 * nbreport);
-
-                } else {
-
-                    new DelayedTask(() -> {
-                        if (Minecraft.getMinecraft().thePlayer != null) {
-                            ClientCommandHandler.instance.executeCommand(Minecraft.getMinecraft().thePlayer, "/sendreportagain " + uuid + " " + playerName);
-                        }
-                    }, 30 * nbreport);
-
-                }
-
+                WDR finalWdr = wdr;
+                new DelayedTask(() -> NoCheatersEvents.sendReport(playerName, finalWdr), 30 * nbreport);
                 nbreport++;
             }
 
