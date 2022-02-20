@@ -1,8 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.config;
 
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
-import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -11,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigHandler {
-
-    private static final Minecraft mc = Minecraft.getMinecraft();
 
     private static Configuration config;
     private static final String CATEGORY_FKCounter = "Final Kill Counter";
@@ -400,21 +396,6 @@ public class ConfigHandler {
      */
     public static void saveConfig() {
         syncConfig(false, false, true);
-    }
-
-    public static void toggleIcons() {
-        toggleicons = !toggleicons;
-        if (toggleicons) {
-            mc.theWorld.playerEntities.forEach(playerEntity -> {
-                NameUtil.handlePlayer(playerEntity, true, false, false);
-                NameUtil.transformNameTablist(playerEntity.getUniqueID());
-            });
-        } else {
-            mc.theWorld.playerEntities.forEach(playerEntity -> {
-                NameUtil.removeNametagIcons(playerEntity);
-                NameUtil.transformNameTablist(playerEntity.getUniqueID());
-            });
-        }
     }
 
 }
