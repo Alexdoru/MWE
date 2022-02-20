@@ -64,7 +64,6 @@ public class ConfigHandler {
      */
     public static boolean toggleicons;
     public static boolean togglewarnings;
-    // TODO changer pour que ca report que quand on est dans une game et que les murs sont tombés, baisser le temps à un report par 45 min
     public static boolean toggleautoreport;
     /*those fields are in milliseconds*/
     public static long timeBetweenReports;
@@ -285,7 +284,7 @@ public class ConfigHandler {
             toggleicons = pToggleicons.getBoolean();
             togglewarnings = pTogglewarnings.getBoolean();
             toggleautoreport = pToggleautoreport.getBoolean();
-            timeBetweenReports = Math.max(4L * 3600L * 1000L, Math.min(3600L * 1000L * ((long) pTimeBetweenReports.getInt()), 48L * 3600L * 1000L));
+            timeBetweenReports = Math.max(2700000L, Math.min(3600L * 1000L * ((long) pTimeBetweenReports.getInt()), 24L * 3600L * 1000L));
             timeAutoReport = Math.max(24L * 3600L * 1000L, Math.min(24L * 3600L * 1000L * ((long) pTimeAutoReport.getInt()), 30L * 24L * 3600L * 1000L));
             deleteReports = pdeleteReports.getBoolean();
             timeDeleteReport = 24L * 3600L * 1000L * ((long) ptimeDeleteReport.getInt());
