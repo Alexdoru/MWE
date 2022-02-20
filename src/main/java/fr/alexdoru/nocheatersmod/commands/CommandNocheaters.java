@@ -290,6 +290,9 @@ public class CommandNocheaters extends CommandBase {
         return temp;
     }
 
+    /**
+     * This gets called after you typed /nocheaters if you click on the button Report World
+     */
     private void reportWorld() {
 
         long timenow = (new Date()).getTime();
@@ -321,7 +324,7 @@ public class CommandNocheaters extends CommandBase {
                         if (Minecraft.getMinecraft().thePlayer != null) {
                             ClientCommandHandler.instance.executeCommand(Minecraft.getMinecraft().thePlayer, "/sendreportagain " + playerName + " " + playerName);
                         }
-                    }, 1 + 10 * nbreport);
+                    }, 30 * nbreport);
 
                 } else {
 
@@ -329,7 +332,7 @@ public class CommandNocheaters extends CommandBase {
                         if (Minecraft.getMinecraft().thePlayer != null) {
                             ClientCommandHandler.instance.executeCommand(Minecraft.getMinecraft().thePlayer, "/sendreportagain " + uuid + " " + playerName);
                         }
-                    }, 1 + 10 * nbreport);
+                    }, 30 * nbreport);
 
                 }
 
