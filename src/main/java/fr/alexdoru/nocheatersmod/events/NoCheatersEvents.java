@@ -25,7 +25,7 @@ import java.util.List;
 public class NoCheatersEvents {
 
     private static int ticks = 0;
-    public static int nbReport = 0;
+    public static int nbReport = 1;
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     @SubscribeEvent
@@ -54,6 +54,9 @@ public class NoCheatersEvents {
         }
         try {
             NameUtil.transformNametag((EntityPlayer) event.entity, ConfigHandler.toggleicons, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
+            // TODO comme ca envoie un network player info juste avant de spawn le player, utiliser le pseudo transformé pour get le nametag tout de suite
+            //  ou stocker le suffix et prefix dans network player info et l'ajouter au nametag
+            //  ou meme stocker ca dans le gameprofile, c'est accessible depuis networkplayerinfo ou entity player
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -112,7 +115,8 @@ public class NoCheatersEvents {
      */
     public static boolean sendAutoReport(long datenow, String playerName, WDR wdr) {
         if (ConfigHandler.toggleautoreport
-                && (!FKCounterMod.isInMWEnvironnement || (FKCounterMod.isInMwGame && !FKCounterMod.isitPrepPhase))
+                && FKCounterMod.isInMwGame
+                && !FKCounterMod.isitPrepPhase
                 && wdr.canBeReported(datenow)
                 && 0 < ConfigHandler.timeAutoReport - datenow + wdr.timestamp) {
             new DelayedTask(() -> {
