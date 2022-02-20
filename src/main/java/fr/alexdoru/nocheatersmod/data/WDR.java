@@ -4,14 +4,12 @@ import java.util.ArrayList;
 
 public class WDR {
 
-    public final long timestamp;
+    public long timestamp;
     public final ArrayList<String> hacks;
 
     public WDR(long timestamp, ArrayList<String> hacks) {
-
         this.timestamp = timestamp;
         this.hacks = hacks;
-
     }
 
     /**
