@@ -19,8 +19,6 @@ import net.minecraftforge.client.ClientCommandHandler;
 
 import java.util.*;
 
-import static fr.alexdoru.nocheatersmod.events.NoCheatersEvents.nbReport;
-
 public class NameUtil {
 
     public static final IChatComponent iprefix = new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + "\u26a0 ");
@@ -92,9 +90,9 @@ public class NameUtil {
                 String finalUuid = uuid;
                 new DelayedTask(() -> {
                     ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
-                    nbReport--;
-                }, 30 * nbReport);
-                nbReport++;
+                    NoCheatersEvents.nbReport--;
+                }, 30 * NoCheatersEvents.nbReport);
+                NoCheatersEvents.nbReport++;
                 gotautoreported = true;
             }
 
@@ -150,6 +148,21 @@ public class NameUtil {
 
     public static IChatComponent getTransformedDisplayName(NetworkPlayerInfo networkPlayerInfo) {
         return getTransformedDisplayName(networkPlayerInfo.getGameProfile());
+    }
+
+    public static void toggleIcons() {
+        ConfigHandler.toggleicons = !ConfigHandler.toggleicons;
+        if (ConfigHandler.toggleicons) {
+            mc.theWorld.playerEntities.forEach(playerEntity -> {
+                NameUtil.handlePlayer(playerEntity, true, false, false);
+                NameUtil.transformNameTablist(playerEntity.getUniqueID());
+            });
+        } else {
+            mc.theWorld.playerEntities.forEach(playerEntity -> {
+                NameUtil.removeNametagIcons(playerEntity);
+                NameUtil.transformNameTablist(playerEntity.getUniqueID());
+            });
+        }
     }
 
     /**

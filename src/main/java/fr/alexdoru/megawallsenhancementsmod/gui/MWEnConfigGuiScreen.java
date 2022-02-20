@@ -194,7 +194,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 ConfigHandler.strengthParticules = !ConfigHandler.strengthParticules;
                 break;
             case 15:
-                ConfigHandler.toggleIcons();
+                NameUtil.toggleIcons();
                 break;
             case 0:
                 ConfigHandler.shortencoinmessage = !ConfigHandler.shortencoinmessage;
