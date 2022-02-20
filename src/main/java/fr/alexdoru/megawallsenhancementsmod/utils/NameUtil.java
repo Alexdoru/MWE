@@ -123,14 +123,14 @@ public class NameUtil {
     public static void transformNameTablist(String playername) {
         NetworkPlayerInfo networkPlayerInfo = playerInfoMap.get(playername);
         if (networkPlayerInfo != null) {
-            networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo));
+            networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
         }
     }
 
     public static void transformNameTablist(UUID uuid) {
         NetworkPlayerInfo networkPlayerInfo = mc.getNetHandler().getPlayerInfo(uuid);
         if (networkPlayerInfo != null) {
-            networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo));
+            networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
         }
     }
 
