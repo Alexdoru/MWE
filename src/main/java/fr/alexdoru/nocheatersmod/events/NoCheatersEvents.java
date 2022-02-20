@@ -2,6 +2,7 @@ package fr.alexdoru.nocheatersmod.events;
 
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
@@ -20,8 +21,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
 
 public class NoCheatersEvents {
 
@@ -53,9 +52,12 @@ public class NoCheatersEvents {
         if (ticks < 39 || mc.thePlayer == null || !(event.entity instanceof EntityPlayer)) {
             return;
         }
-        NameUtil.handlePlayer((EntityPlayer) event.entity, ConfigHandler.toggleicons, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
+        NameUtil.transformNametag((EntityPlayer) event.entity, ConfigHandler.toggleicons, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
     }
 
+    /**
+     * Called on world join avec 40 ticks
+     */
     public static void scanCurrentWorld() {
 
         long datenow = (new Date()).getTime();
@@ -87,20 +89,10 @@ public class NoCheatersEvents {
                     }
                 }
 
-                boolean gotautoreported = false;
-
-                if (ConfigHandler.toggleautoreport && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && datenow - wdr.timestamp < ConfigHandler.timeAutoReport) {
-                    String finalUuid = uuid;
-                    new DelayedTask(() -> {
-                        ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
-                        nbReport--;
-                    }, 30 * nbReport);
-                    nbReport++;
-                    gotautoreported = true;
-                }
+                boolean gotautoreported = sendReport(datenow, uuid, playerName, wdr);
 
                 if (ConfigHandler.togglewarnings) {
-                    addChatMessage(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr, gotautoreported)));
+                    ChatUtil.addChatMessage(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr, gotautoreported)));
                 }
 
             }
@@ -109,6 +101,26 @@ public class NoCheatersEvents {
 
     }
 
+    /**
+     * Handles the auto reports feature
+     * @return true if it sends a report
+     */
+    public static boolean sendReport(long datenow, String uuid, String playerName, WDR wdr) {// TODO ajouter un check si on est en game de MW ou pas
+        if (ConfigHandler.toggleautoreport && datenow - wdr.timestamp - ConfigHandler.timeBetweenReports > 0 && 0 < ConfigHandler.timeAutoReport - datenow + wdr.timestamp) {
+            new DelayedTask(() -> {
+                // TODO mettre direct le code (call vers une fonction que j'utilise aussi dans sendreportagan) plutot que de passer par une commande
+                ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + uuid + " " + playerName);
+                nbReport--;
+            }, 30 * nbReport);
+            nbReport++;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Called when you type /nocheaters
+     */
     public static List<IChatComponent> getReportMessagesforWorld() {
 
         List<IChatComponent> list = new ArrayList<>();
@@ -128,15 +140,8 @@ public class NoCheatersEvents {
             }
 
             if (wdr != null) {
-                list.add(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr, false)));
-                if (ConfigHandler.toggleautoreport && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && datenow - wdr.timestamp < ConfigHandler.timeAutoReport) {
-                    String finalUuid = uuid;
-                    new DelayedTask(() -> {
-                        ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
-                        nbReport--;
-                    }, 30 * nbReport);
-                    nbReport++;
-                }
+                boolean gotautoreported = sendReport(datenow, uuid, playerName, wdr);
+                list.add(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr, gotautoreported)));
             }
 
         }
@@ -145,7 +150,7 @@ public class NoCheatersEvents {
 
     }
 
-    public static String createwarningmessage(long datenow, String uuid, String playername, WDR wdr, boolean forceNoReportAgain) {
+    public static String createwarningmessage(long datenow, String uuid, String playername, WDR wdr, boolean disableReportButton) {
         // format for timestamps reports : UUID timestamplastreport -serverID timeonreplay playernameduringgame timestampforcheat specialcheat cheat1 cheat2 cheat3 etc
         if (wdr.hacks.get(0).charAt(0) == '-') { // is a timestamped report
 
@@ -154,7 +159,7 @@ public class NoCheatersEvents {
 
             StringBuilder stringBuilder = new StringBuilder().append("[\"\",{\"text\":\"Warning : \",\"color\":\"red\"}").append(formattedmessageArray[0]).append(",{\"text\":\" joined,\",\"color\":\"gray\"}");
 
-            if (!forceNoReportAgain && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
+            if (!disableReportButton && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
                 stringBuilder.append(",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain ")
                         .append(uuid).append(" ").append(playername).append("\"}")
                         .append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click here to report this player again\",\"color\":\"yellow\"}]}}");
@@ -178,7 +183,7 @@ public class NoCheatersEvents {
                     .append(",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/unwdr ").append(uuid).append(" ").append(playername).append("\"}}")
                     .append(",{\"text\":\" joined,\",\"color\":\"gray\"}");
 
-            if (!forceNoReportAgain && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
+            if (!disableReportButton && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
                 stringBuilder.append(",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain ")
                         .append(uuid).append(" ").append(playername).append("\"}")
                         .append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click here to report this player again\",\"color\":\"yellow\"}]}}");

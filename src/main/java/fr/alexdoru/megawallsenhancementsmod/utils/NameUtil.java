@@ -1,7 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
 import com.mojang.authlib.GameProfile;
-import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
@@ -15,7 +14,6 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
-import net.minecraftforge.client.ClientCommandHandler;
 
 import java.util.*;
 
@@ -52,15 +50,15 @@ public class NameUtil {
         return playerInfoMap.get(playerName);
     }
 
-    public static void handlePlayer(String playername) {
+    public static void transformNametag(String playername) {
         EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
         if (player != null) {
             NameUtil.removeNametagIcons(player);
-            NameUtil.handlePlayer(player, true, false, false);
+            NameUtil.transformNametag(player, true, false, false);
         }
     }
 
-    public static void handlePlayer(EntityPlayer player, boolean areIconsToggled, boolean areWarningsToggled, boolean isAutoreportToggled) {
+    public static void transformNametag(EntityPlayer player, boolean areIconsToggled, boolean areWarningsToggled, boolean checkAutoreport) {// TODO regarder les call, ca respecte pas la config
 
         String playerName = player.getName();
         String squadname = SquadEvent.getSquad().get(playerName);
@@ -84,17 +82,7 @@ public class NameUtil {
 
         if (wdr != null) { // player was reported
 
-            boolean gotautoreported = false;
-
-            if (isAutoreportToggled && datenow - wdr.timestamp > ConfigHandler.timeBetweenReports && datenow - wdr.timestamp < ConfigHandler.timeAutoReport) {
-                String finalUuid = uuid;
-                new DelayedTask(() -> {
-                    ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + finalUuid + " " + playerName);
-                    NoCheatersEvents.nbReport--;
-                }, 30 * NoCheatersEvents.nbReport);
-                NoCheatersEvents.nbReport++;
-                gotautoreported = true;
-            }
+            boolean gotautoreported = checkAutoreport && NoCheatersEvents.sendReport(datenow, uuid, playerName, wdr);
 
             if (wdr.hacks.contains("bhop")) { // player bhops
                 if (areIconsToggled) {
@@ -154,7 +142,7 @@ public class NameUtil {
         ConfigHandler.toggleicons = !ConfigHandler.toggleicons;
         if (ConfigHandler.toggleicons) {
             mc.theWorld.playerEntities.forEach(playerEntity -> {
-                NameUtil.handlePlayer(playerEntity, true, false, false);
+                NameUtil.transformNametag(playerEntity, true, false, false);
                 NameUtil.transformNameTablist(playerEntity.getUniqueID());
             });
         } else {
