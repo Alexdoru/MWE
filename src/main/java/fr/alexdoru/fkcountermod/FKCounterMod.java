@@ -15,10 +15,6 @@ public class FKCounterMod {
     public static final String VERSION = "2.6";
 
     /**
-     * Is true if you are in a Mega Walls lobby or game
-     */
-    public static boolean isInMWEnvironnement = false;
-    /**
      * Turns true from the moment the player gets tp to the cage to the end of the game
      * False in the pre game lobby
      */
