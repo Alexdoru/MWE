@@ -248,7 +248,7 @@ public class CommandNocheaters extends CommandBase {
                 continue;
             }
 
-            if (timenow - wdr.timestamp > ConfigHandler.timeBetweenReports) {
+            if (timenow - wdr.timestamp - ConfigHandler.timeBetweenReports > 0) {
                 WDR finalWdr = wdr;
                 new DelayedTask(() -> NoCheatersEvents.sendReport(playerName, finalWdr), 30 * nbreport);
                 nbreport++;
