@@ -97,7 +97,7 @@ public class KillCounter {
     private static String gameId;
     private static String[] prefixes; // color codes prefix that you are using in your hypixel mega walls settings
     private static HashMap<String, Integer>[] teamKillsArray;
-    public static HashMap<String, Integer> allPlayerKills = new HashMap<>();
+    public static final HashMap<String, Integer> allPlayerKills = new HashMap<>();
     private static ArrayList<String> deadPlayers;
 
     private static Random rand;
@@ -111,24 +111,21 @@ public class KillCounter {
         FKCounterGui.instance.updateDisplayText();
     }
 
-    /*
+    /**
      * Resets the Killcounter and assigns it to a new game ID
      */
     @SuppressWarnings("unchecked")
     public static void ResetKillCounterTo(String gameIdIn) {
-
         gameId = gameIdIn;
         prefixes = new String[TEAMS];
         teamKillsArray = new HashMap[TEAMS];
         allPlayerKills.clear();
         deadPlayers = new ArrayList<>();
-
         for (int i = 0; i < TEAMS; i++) {
             prefixes[i] = DEFAULT_PREFIXES[i];
             teamKillsArray[i] = new HashMap<>();
         }
         FKCounterGui.instance.updateDisplayText();
-
     }
 
     public static boolean processMessage(String FormattedText, String UnformattedText) {

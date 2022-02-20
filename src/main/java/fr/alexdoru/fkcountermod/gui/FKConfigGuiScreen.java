@@ -16,10 +16,9 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
 
     private static final ResourceLocation BACKGROUND = new ResourceLocation("fkcounter", "background.png");
 
-    @SuppressWarnings("FieldMayBeFinal")
-    private int columns = 4;
-    @SuppressWarnings("FieldMayBeFinal")
-    private int rows = 2;
+
+    private final int columns = 4;
+    private final int rows = 2;
 
     private final int buttonSize = 50;
     private final int widthBetweenButtons = 10;
