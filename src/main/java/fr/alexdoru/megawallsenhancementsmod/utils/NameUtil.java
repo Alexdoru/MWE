@@ -54,11 +54,11 @@ public class NameUtil {
         EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
         if (player != null) {
             NameUtil.removeNametagIcons(player);
-            NameUtil.transformNametag(player, true, false, false);
+            NameUtil.transformNametag(player, ConfigHandler.toggleicons, false, false);
         }
     }
 
-    public static void transformNametag(EntityPlayer player, boolean areIconsToggled, boolean areWarningsToggled, boolean checkAutoreport) {// TODO regarder les call, ca respecte pas la config
+    public static void transformNametag(EntityPlayer player, boolean areIconsToggled, boolean areWarningsToggled, boolean checkAutoreport) {
 
         String playerName = player.getName();
         String squadname = SquadEvent.getSquad().get(playerName);
