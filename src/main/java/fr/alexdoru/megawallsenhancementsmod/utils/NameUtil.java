@@ -138,21 +138,6 @@ public class NameUtil {
         return getTransformedDisplayName(networkPlayerInfo.getGameProfile());
     }
 
-    public static void toggleIcons() {
-        ConfigHandler.toggleicons = !ConfigHandler.toggleicons;
-        if (ConfigHandler.toggleicons) {
-            mc.theWorld.playerEntities.forEach(playerEntity -> {
-                NameUtil.transformNametag(playerEntity, true, false, false);
-                NameUtil.transformNameTablist(playerEntity.getUniqueID());
-            });
-        } else {
-            mc.theWorld.playerEntities.forEach(playerEntity -> {
-                NameUtil.removeNametagIcons(playerEntity);
-                NameUtil.transformNameTablist(playerEntity.getUniqueID());
-            });
-        }
-    }
-
     /**
      * Replaces the names of squadmates
      * Adds a tag to squadmates
@@ -226,6 +211,21 @@ public class NameUtil {
 
         return null;
 
+    }
+
+    public static void toggleIcons() {
+        ConfigHandler.toggleicons = !ConfigHandler.toggleicons;
+        if (ConfigHandler.toggleicons) {
+            mc.theWorld.playerEntities.forEach(playerEntity -> {
+                NameUtil.transformNametag(playerEntity, true, false, false);
+                NameUtil.transformNameTablist(playerEntity.getUniqueID());
+            });
+        } else {
+            mc.theWorld.playerEntities.forEach(playerEntity -> {
+                NameUtil.removeNametagIcons(playerEntity);
+                NameUtil.transformNameTablist(playerEntity.getUniqueID());
+            });
+        }
     }
 
 }
