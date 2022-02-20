@@ -4,7 +4,6 @@ import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
-import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
@@ -231,7 +230,7 @@ public class CommandNocheaters extends CommandBase {
      */
     private void reportWorld() {
 
-        long timenow = (new Date()).getTime();
+        long datenow = (new Date()).getTime();
         int nbreport = 0;
 
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
@@ -248,7 +247,7 @@ public class CommandNocheaters extends CommandBase {
                 continue;
             }
 
-            if (timenow - wdr.timestamp - ConfigHandler.timeBetweenReports > 0) {
+            if (wdr.canBeReported(datenow)) {
                 WDR finalWdr = wdr;
                 new DelayedTask(() -> NoCheatersEvents.sendReport(playerName, finalWdr), 30 * nbreport);
                 nbreport++;

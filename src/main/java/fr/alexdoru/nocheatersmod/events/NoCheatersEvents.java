@@ -108,7 +108,7 @@ public class NoCheatersEvents {
     public static boolean sendAutoReport(long datenow, String playerName, WDR wdr) {
         if (ConfigHandler.toggleautoreport
                 && (!FKCounterMod.isInMWEnvironnement || (FKCounterMod.isInMwGame && !FKCounterMod.isitPrepPhase))
-                && datenow - wdr.timestamp - ConfigHandler.timeBetweenReports > 0
+                && wdr.canBeReported(datenow)
                 && 0 < ConfigHandler.timeAutoReport - datenow + wdr.timestamp) {
             new DelayedTask(() -> {
                 sendReport(playerName, wdr);
@@ -168,7 +168,7 @@ public class NoCheatersEvents {
 
             StringBuilder stringBuilder = new StringBuilder().append("[\"\",{\"text\":\"Warning : \",\"color\":\"red\"}").append(formattedmessageArray[0]).append(",{\"text\":\" joined,\",\"color\":\"gray\"}");
 
-            if (!disableReportButton && datenow - wdr.timestamp - ConfigHandler.timeBetweenReports > 0) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
+            if (!disableReportButton && wdr.canBeReported(datenow)) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
                 stringBuilder.append(",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain ")
                         .append(uuid).append(" ").append(playername).append("\"}")
                         .append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click here to report this player again\",\"color\":\"yellow\"}]}}");
@@ -192,7 +192,7 @@ public class NoCheatersEvents {
                     .append(",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/unwdr ").append(uuid).append(" ").append(playername).append("\"}}")
                     .append(",{\"text\":\" joined,\",\"color\":\"gray\"}");
 
-            if (!disableReportButton && datenow - wdr.timestamp - ConfigHandler.timeBetweenReports > 0) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
+            if (!disableReportButton && wdr.canBeReported(datenow)) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
                 stringBuilder.append(",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain ")
                         .append(uuid).append(" ").append(playername).append("\"}")
                         .append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click here to report this player again\",\"color\":\"yellow\"}]}}");
