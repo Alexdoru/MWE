@@ -1,5 +1,7 @@
 package fr.alexdoru.nocheatersmod.data;
 
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+
 import java.util.ArrayList;
 
 public class WDR {
@@ -32,6 +34,10 @@ public class WDR {
 
     public int compareToInvert(WDR wdr) {
         return compare(wdr, this);
+    }
+
+    public boolean canBeReported(long datenow) {
+        return datenow - this.timestamp - ConfigHandler.timeBetweenReports > 0;
     }
 
 }
