@@ -54,7 +54,7 @@ public class NoCheatersEvents {
         }
         try {
             NameUtil.transformNametag((EntityPlayer) event.entity, ConfigHandler.toggleicons, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -107,6 +107,7 @@ public class NoCheatersEvents {
 
     /**
      * Handles the auto report feature
+     *
      * @return true if it sends a report
      */
     public static boolean sendAutoReport(long datenow, String playerName, WDR wdr) {
