@@ -22,6 +22,10 @@ public class ScoreboardTransformer implements IMyClassTransformer {
                     if (insnNode.getOpcode() == ICONST_1 && insnNode instanceof InsnNode) {
                         AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode != null && nextNode.getOpcode() == IRETURN) {
+                            /*
+                             * Injects before line 329 :
+                             * NameUtil.transformNameTablist(player);
+                             */
                             methodNode.instructions.insertBefore(insnNode, getInsnList());
                         }
                     }
@@ -38,6 +42,10 @@ public class ScoreboardTransformer implements IMyClassTransformer {
                         if (secondNode != null && secondNode.getOpcode() == POP) {
                             AbstractInsnNode thirdNode = secondNode.getNext();
                             if (thirdNode != null) {
+                                /*
+                                 * Injects after line 360 :
+                                 * NameUtil.transformNameTablist(player);
+                                 */
                                 methodNode.instructions.insertBefore(thirdNode, getInsnList());
                             }
                         }
