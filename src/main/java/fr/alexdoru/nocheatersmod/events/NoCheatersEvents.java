@@ -1,5 +1,6 @@
 package fr.alexdoru.nocheatersmod.events;
 
+import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
@@ -102,11 +103,14 @@ public class NoCheatersEvents {
     }
 
     /**
-     * Handles the auto reports feature
+     * Handles the auto report feature
      * @return true if it sends a report
      */
-    public static boolean sendReport(long datenow, String uuid, String playerName, WDR wdr) {// TODO ajouter un check si on est en game de MW ou pas
-        if (ConfigHandler.toggleautoreport && datenow - wdr.timestamp - ConfigHandler.timeBetweenReports > 0 && 0 < ConfigHandler.timeAutoReport - datenow + wdr.timestamp) {
+    public static boolean sendReport(long datenow, String uuid, String playerName, WDR wdr) {
+        if (ConfigHandler.toggleautoreport
+                && (!FKCounterMod.isInMWEnvironnement || (FKCounterMod.isInMwGame && !FKCounterMod.isitPrepPhase))
+                && datenow - wdr.timestamp - ConfigHandler.timeBetweenReports > 0
+                && 0 < ConfigHandler.timeAutoReport - datenow + wdr.timestamp) {
             new DelayedTask(() -> {
                 // TODO mettre direct le code (call vers une fonction que j'utilise aussi dans sendreportagan) plutot que de passer par une commande
                 ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/sendreportagain " + uuid + " " + playerName);

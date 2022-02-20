@@ -57,7 +57,9 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         List<String> textLines = new ArrayList<>();
         switch (id) {
             case 2:
-                textLines.add(EnumChatFormatting.GREEN + "Automatically reports cheaters whose last report is older than the time between report and more recent than the time max autoreport");
+                textLines.add(EnumChatFormatting.GREEN + "Automatically sends a report for players saved in NoCheaters");
+                textLines.add(EnumChatFormatting.GREEN + "In Mega Walls the reports are sent after the walls fall");
+                textLines.add(EnumChatFormatting.GREEN + "It sends a report for players whose last report is older than the time between report and more recent than the time max autoreport");
                 break;
             case 6:
                 textLines.add(EnumChatFormatting.GREEN + "Deletes reports older than the specified value");

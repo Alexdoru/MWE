@@ -18,6 +18,7 @@ public class ScoreboardParser {
     private final ArrayList<String> aliveWithers = new ArrayList<>();
     private String gameId = null;
     private boolean hasgameended = false;
+    private boolean isInMWEnvironnement = false;
     private boolean isitPrepPhase = false;
     private int witherHP = 1000;
 
@@ -31,6 +32,8 @@ public class ScoreboardParser {
         if (!MW_TITLE_PATTERN.matcher(title).matches()) {
             return;
         }
+
+        isInMWEnvironnement = true;
 
         List<String> scoresColor = ScoreboardUtils.getFormattedSidebarText(scoreboard);
         List<String> scoresRaw = ScoreboardUtils.stripControlCodes(scoresColor);
@@ -135,4 +138,7 @@ public class ScoreboardParser {
         return gameId != null;
     }
 
+    public boolean isInMWEnvironnement() {
+        return isInMWEnvironnement;
+    }
 }
