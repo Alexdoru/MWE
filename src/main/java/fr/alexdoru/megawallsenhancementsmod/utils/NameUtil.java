@@ -64,7 +64,7 @@ public class NameUtil {
             EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
                 NameUtil.removeNametagIcons(player);
-                NameUtil.transformNametag(player, ConfigHandler.toggleicons, false, false);
+                NameUtil.transformNametag(player, false, false);
             }
         }
     }
@@ -72,7 +72,7 @@ public class NameUtil {
     /**
      * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametags
      */
-    public static void updateGameProfileAndName(GameProfile gameProfile, boolean areIconsToggled) {
+    public static void updateGameProfileAndName(GameProfile gameProfile) {
         transformGameProfile(gameProfile);
         NetworkPlayerInfo networkPlayerInfo = mc.getNetHandler().getPlayerInfo(gameProfile.getId());
         if (networkPlayerInfo != null) {
@@ -81,21 +81,20 @@ public class NameUtil {
         EntityPlayer player = mc.theWorld.getPlayerEntityByName(gameProfile.getName());
         if (player != null) {
             NameUtil.removeNametagIcons(player);
-            NameUtil.transformNametag(player, areIconsToggled, false, false);
+            NameUtil.transformNametag(player, false, false);
         }
     }
 
     /**
      * Transforms the nametag of the player based on the infos storred in getGameProfile.MWPlayerData
      */
-    public static void transformNametag(EntityPlayer player, boolean areIconsToggled, boolean areWarningsToggled, boolean checkAutoreport) {
+    public static void transformNametag(EntityPlayer player, boolean areWarningsToggled, boolean checkAutoreport) {
 
         if (!(player.getGameProfile() instanceof GameProfileAccessor)) {
             return;
         }
 
         MWPlayerData mwPlayerData = ((GameProfileAccessor) player.getGameProfile()).getMWPlayerData();
-        // TODO est ce qu'il ya besoin de checker areIconsToggled, c'est deja compris dans le mwPlayerData
 
         // For mc.thePlayer this is null when the method is called
         if (mwPlayerData == null) {
@@ -233,7 +232,7 @@ public class NameUtil {
     public static void toggleIcons() {
         ConfigHandler.toggleicons = !ConfigHandler.toggleicons;
         if (ConfigHandler.toggleicons) {
-            mc.theWorld.playerEntities.forEach(playerEntity -> updateGameProfileAndName(playerEntity.getGameProfile(), true));
+            mc.theWorld.playerEntities.forEach(playerEntity -> updateGameProfileAndName(playerEntity.getGameProfile()));
         } else {
             mc.theWorld.playerEntities.forEach(playerEntity -> {
                 NameUtil.removeNametagIcons(playerEntity);

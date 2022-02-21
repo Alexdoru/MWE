@@ -58,7 +58,7 @@ public class NoCheatersEvents {
             //  - create new networkplayerifo
             //  - add networkplayerinfo to map
             //  - remove networkplayerinfo from map
-            NameUtil.transformNametag((EntityPlayer) event.entity, ConfigHandler.toggleicons, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
+            NameUtil.transformNametag((EntityPlayer) event.entity, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
         } catch (Exception e) {
             e.printStackTrace();
         }
