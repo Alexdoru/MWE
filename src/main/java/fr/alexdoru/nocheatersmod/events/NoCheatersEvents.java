@@ -172,7 +172,7 @@ public class NoCheatersEvents {
 
             StringBuilder stringBuilder = new StringBuilder().append("[\"\",{\"text\":\"Warning : \",\"color\":\"red\"}").append(formattedmessageArray[0]).append(",{\"text\":\" joined,\",\"color\":\"gray\"}");
 
-            if (!disableReportButton && wdr.canBeReported(datenow - 2700000)) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
+            if (!disableReportButton && wdr.canBeReported(datenow - 900000)) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
                 stringBuilder.append(",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain ")
                         .append(uuid).append(" ").append(playername).append("\"}")
                         .append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click here to report this player again\",\"color\":\"yellow\"}]}}");
@@ -196,7 +196,7 @@ public class NoCheatersEvents {
                     .append(",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/unwdr ").append(uuid).append(" ").append(playername).append("\"}}")
                     .append(",{\"text\":\" joined,\",\"color\":\"gray\"}");
 
-            if (!disableReportButton && wdr.canBeReported(datenow - 2700000)) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
+            if (!disableReportButton && wdr.canBeReported(datenow - 900000)) { // montre le bouton pour re-report si l'ancien report est plus vieux que X heures
                 stringBuilder.append(",{\"text\":\" Report again\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/sendreportagain ")
                         .append(uuid).append(" ").append(playername).append("\"}")
                         .append(",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click here to report this player again\",\"color\":\"yellow\"}]}}");

@@ -239,7 +239,7 @@ public class CommandNocheaters extends CommandBase {
                 if (wdr == null) {
                     continue;
                 }
-                if (wdr.canBeReported(datenow)) {
+                if (wdr.canBeReported(datenow - 900000)) {
                     new DelayedTask(() -> NoCheatersEvents.sendReport(playerName, wdr), 30 * nbreport);
                     nbreport++;
                 }
