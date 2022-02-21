@@ -246,8 +246,7 @@ public class CommandWDR extends CommandBase {
 
                 WDR newreport = new WDR(timestamp, argsinWDR);
                 WdredPlayers.getWdredMap().put(uuid, newreport);
-                NameUtil.transformNameTablist(playername);
-                NameUtil.transformNametag(playername);
+                NameUtil.updateGameProfileAndName(playername);
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
                         EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : ""))
                         .appendSibling(IChatComponent.Serializer.jsonToComponent("[\"\"" + NoCheatersEvents.createPlayerTimestampedMsg(playername, newreport, "light_purple")[0] + "]"))
@@ -284,8 +283,7 @@ public class CommandWDR extends CommandBase {
                     argsinWDR.add("nick");
                 }
                 WdredPlayers.getWdredMap().put(uuid, new WDR((new Date()).getTime(), argsinWDR));
-                NameUtil.transformNameTablist(playername);
-                NameUtil.transformNametag(playername);
+                NameUtil.updateGameProfileAndName(playername);
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
                         EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
                         + EnumChatFormatting.LIGHT_PURPLE + playername + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
