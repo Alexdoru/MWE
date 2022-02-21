@@ -12,15 +12,19 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
+import java.io.File;
+
 @Mod(modid = MegaWallsEnhancementsMod.modid, name = "MegaWallsEnhancements", version = MegaWallsEnhancementsMod.version, acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
 public class MegaWallsEnhancementsMod {
 
     public static final String modid = "mwenhancements";
     public static final String version = "1.5";
+    public static File configurationFile;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        ConfigHandler.preinit(event.getSuggestedConfigurationFile());
+        configurationFile = event.getSuggestedConfigurationFile();
+        ConfigHandler.preinit(configurationFile);
     }
 
     @EventHandler
