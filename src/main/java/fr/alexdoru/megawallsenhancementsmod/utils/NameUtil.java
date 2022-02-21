@@ -85,6 +85,9 @@ public class NameUtil {
         }
     }
 
+    /**
+     * Transforms the nametag of the player based on the infos storred in getGameProfile.MWPlayerData
+     */
     public static void transformNametag(EntityPlayer player, boolean areIconsToggled, boolean areWarningsToggled, boolean checkAutoreport) {
 
         if (!(player.getGameProfile() instanceof GameProfileAccessor)) {
@@ -93,7 +96,7 @@ public class NameUtil {
 
         MWPlayerData mwPlayerData = ((GameProfileAccessor) player.getGameProfile()).getMWPlayerData();
 
-        // For self it is null
+        // For mc.thePlayer this is null when the method is called
         if (mwPlayerData == null) {
             transformGameProfile(player.getGameProfile());
             mwPlayerData = ((GameProfileAccessor) player.getGameProfile()).getMWPlayerData();
@@ -169,7 +172,7 @@ public class NameUtil {
     }
 
     /**
-     * Called in constructor of NetworkPlayerInfo
+     * Transforms the infos storred in GameProfile.MWPlayerData
      */
     public static void transformGameProfile(GameProfile gameProfileIn) {
 
@@ -179,7 +182,7 @@ public class NameUtil {
 
         String username = gameProfileIn.getName();
         String uuid = gameProfileIn.getId().toString().replace("-", "");
-        String extraprefix = "";
+        String extraPrefix = "";
         WDR wdr = null;
         String squadname = SquadEvent.getSquad().get(username);
         boolean isSquadMate = squadname != null;
@@ -188,7 +191,7 @@ public class NameUtil {
 
             if (isSquadMate) {
 
-                extraprefix = squadprefix;
+                extraPrefix = squadprefix;
 
             } else {
 
@@ -204,9 +207,9 @@ public class NameUtil {
                 if (wdr != null) {
 
                     if (wdr.hacks.contains("bhop")) {
-                        extraprefix = prefix_bhop;
+                        extraPrefix = prefix_bhop;
                     } else {
-                        extraprefix = prefix;
+                        extraPrefix = prefix;
                     }
 
                 } else { //scangame
@@ -214,7 +217,7 @@ public class NameUtil {
                     IChatComponent imsg = CommandScanGame.getScanmap().get(uuid);
 
                     if (imsg != null && !imsg.equals(CommandScanGame.nomatch)) {
-                        extraprefix = prefix_scan;
+                        extraPrefix = prefix_scan;
                     }
 
                 }
@@ -223,22 +226,25 @@ public class NameUtil {
 
         }
 
-        ((GameProfileAccessor) gameProfileIn).setMWPlayerData(new MWPlayerData(wdr, extraprefix, squadname, KillCounter.getPlayersFinals(username)));
+        IChatComponent displayName = null;
+
+        ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
+        if (team != null) {
+            String teamprefix = team.getColorPrefix();
+            if (!teamprefix.contains("\u00a7k") && extraPrefix != null) {
+                displayName = new ChatComponentText(extraPrefix + teamprefix
+                        + (isSquadMate ? squadname : username)
+                        + team.getColorSuffix());
+            }
+        }
+
+        ((GameProfileAccessor) gameProfileIn).setMWPlayerData(new MWPlayerData(wdr, extraPrefix, squadname, displayName, KillCounter.getPlayersFinals(username)));
 
     }
 
     public static IChatComponent getTransformedDisplayName(GameProfile gameProfileIn) {
         if (gameProfileIn instanceof GameProfileAccessor) {
-            ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(gameProfileIn.getName());
-            if (team != null) {
-                String teamprefix = team.getColorPrefix();
-                MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfileIn).getMWPlayerData();
-                if (mwPlayerData != null && !(teamprefix.contains("\u00a7k") && mwPlayerData.extraPrefix != null)) {
-                    return new ChatComponentText(mwPlayerData.extraPrefix + teamprefix
-                            + (mwPlayerData.squadname != null ? mwPlayerData.squadname : gameProfileIn.getName())
-                            + team.getColorSuffix());
-                }
-            }
+            return ((GameProfileAccessor) gameProfileIn).getMWPlayerData().displayName;
         }
         return null;
     }
