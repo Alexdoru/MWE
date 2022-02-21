@@ -87,7 +87,6 @@ public class ConfigHandler {
     public static boolean drawHitboxForAggressiveMobs;
     public static boolean drawHitboxItemFrame;
     public static boolean drawHitboxForOtherEntity;
-    //public static boolean makeHitboxRealSize;
     public static boolean drawRedBox;
     public static boolean HideBlueVect;
     public static boolean drawBlueVectForPlayersOnly;
