@@ -4,6 +4,7 @@ import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
@@ -229,32 +230,21 @@ public class CommandNocheaters extends CommandBase {
      * This gets called after you typed /nocheaters if you click on the button Report World
      */
     private void reportWorld() {
-
         long datenow = (new Date()).getTime();
         int nbreport = 0;
-
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
-
-            String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-            String playerName = networkPlayerInfo.getGameProfile().getName();
-            WDR wdr = WdredPlayers.getWdredMap().get(uuid);
-
-            if (wdr == null) {
-                wdr = WdredPlayers.getWdredMap().get(playerName);
+            if (networkPlayerInfo.getGameProfile() instanceof GameProfileAccessor) {
+                String playerName = networkPlayerInfo.getGameProfile().getName();
+                WDR wdr = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData().wdr;
+                if (wdr == null) {
+                    continue;
+                }
+                if (wdr.canBeReported(datenow)) {
+                    new DelayedTask(() -> NoCheatersEvents.sendReport(playerName, wdr), 30 * nbreport);
+                    nbreport++;
+                }
             }
-
-            if (wdr == null) {
-                continue;
-            }
-
-            if (wdr.canBeReported(datenow)) {
-                WDR finalWdr = wdr;
-                new DelayedTask(() -> NoCheatersEvents.sendReport(playerName, finalWdr), 30 * nbreport);
-                nbreport++;
-            }
-
         }
-
     }
 
 }

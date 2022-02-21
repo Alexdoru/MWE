@@ -2,12 +2,12 @@ package fr.alexdoru.nocheatersmod.events;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
-import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiDownloadTerrain;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -73,25 +73,23 @@ public class NoCheatersEvents {
 
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
 
-            String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-            String playerName = networkPlayerInfo.getGameProfile().getName();
-            WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+            if (networkPlayerInfo.getGameProfile() instanceof GameProfileAccessor) {
 
-            if (wdr == null) {
-                wdr = WdredPlayers.getWdredMap().get(playerName);
-                if (wdr != null) {
-                    uuid = playerName;
+                WDR wdr = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData().wdr;
+                if (wdr == null) {
+                    continue;
                 }
-            }
 
-            if (wdr != null) {
+                String playerName = networkPlayerInfo.getGameProfile().getName();
+                String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
 
                 if (ConfigHandler.toggleicons) {
                     EntityPlayer player = mc.theWorld.getPlayerEntityByName(playerName);
                     if (player != null) {
+                        NameUtil.removeNametagIcons(player);
                         if (wdr.hacks.contains("bhop")) { // player bhops
                             player.addPrefix(NameUtil.iprefix_bhop);
-                        } else { // player is cheating
+                        } else {
                             player.addPrefix(NameUtil.iprefix);
                         }
                         player.refreshDisplayName();
@@ -148,18 +146,13 @@ public class NoCheatersEvents {
 
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
 
-            String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-            String playerName = networkPlayerInfo.getGameProfile().getName();
-            WDR wdr = WdredPlayers.getWdredMap().get(uuid);
-
-            if (wdr == null) {
-                wdr = WdredPlayers.getWdredMap().get(playerName);
-                if (wdr != null) {
-                    uuid = playerName;
+            if (networkPlayerInfo.getGameProfile() instanceof GameProfileAccessor) {
+                WDR wdr = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData().wdr;
+                if (wdr == null) {
+                    continue;
                 }
-            }
-
-            if (wdr != null) {
+                String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
+                String playerName = networkPlayerInfo.getGameProfile().getName();
                 boolean gotautoreported = sendAutoReport(datenow, playerName, wdr);
                 list.add(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr, gotautoreported)));
             }
