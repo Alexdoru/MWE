@@ -6,7 +6,7 @@ import net.minecraft.util.IChatComponent;
 public class MWPlayerData {
     // TODO faut update les fields quand on tape un nouveau WDR, update un WDR ou enleve un WDR, pareil pour scangame, squadname etc dans move player de la stalklist
     public WDR wdr;
-    public String extraPrefix;
+    public IChatComponent extraPrefix;
     public String squadname;
     public IChatComponent displayName;
     public int playerFinalkills;
@@ -14,7 +14,7 @@ public class MWPlayerData {
     // prestrige 5
     // suffix
 
-    public MWPlayerData(WDR wdr, String extraPrefix, String squadname, IChatComponent displayNameIn, int playerFinalkills) {
+    public MWPlayerData(WDR wdr, IChatComponent extraPrefix, String squadname, IChatComponent displayNameIn, int playerFinalkills) {
         this.wdr = wdr;
         this.extraPrefix = extraPrefix;
         this.squadname = squadname;

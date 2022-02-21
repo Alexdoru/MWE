@@ -95,6 +95,7 @@ public class NameUtil {
         }
 
         MWPlayerData mwPlayerData = ((GameProfileAccessor) player.getGameProfile()).getMWPlayerData();
+        // TODO est ce qu'il ya besoin de checker areIconsToggled, c'est deja compris dans le mwPlayerData
 
         // For mc.thePlayer this is null when the method is called
         if (mwPlayerData == null) {
@@ -105,9 +106,12 @@ public class NameUtil {
             }
         }
 
-        if (areIconsToggled && mwPlayerData.squadname != null) {
-            player.addPrefix(isquadprefix);
+        if (mwPlayerData.extraPrefix != null) {
+            player.addPrefix(mwPlayerData.extraPrefix);
             player.refreshDisplayName();
+        }
+
+        if (mwPlayerData.squadname != null) {
             return;
         }
 
@@ -116,33 +120,10 @@ public class NameUtil {
         long datenow = (new Date()).getTime();
 
         if (mwPlayerData.wdr != null) { // player was reported
-
-            boolean gotautoreported = checkAutoreport && NoCheatersEvents.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
-
-            if (mwPlayerData.wdr.hacks.contains("bhop")) { // player bhops
-                if (areIconsToggled) {
-                    player.addPrefix(iprefix_bhop);
-                    player.refreshDisplayName();
-                }
-            } else {
-                if (areIconsToggled) {
-                    player.addPrefix(iprefix);
-                    player.refreshDisplayName();
-                }
-            }
-
             if (areWarningsToggled) {
-                mc.thePlayer.addChatComponentMessage(IChatComponent.Serializer.jsonToComponent(NoCheatersEvents.createwarningmessage(datenow, uuid, playerName, mwPlayerData.wdr, gotautoreported)));
+                boolean gotautoreported = checkAutoreport && NoCheatersEvents.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
+                ChatUtil.addChatMessage(IChatComponent.Serializer.jsonToComponent(NoCheatersEvents.createwarningmessage(datenow, uuid, playerName, mwPlayerData.wdr, gotautoreported)));
             }
-
-        } else if (areIconsToggled) { // check the scangame map
-
-            IChatComponent imsg = CommandScanGame.getScanmap().get(uuid);
-            if (imsg != null && !imsg.equals(CommandScanGame.nomatch)) {
-                player.addPrefix(iprefix_scan);
-                player.refreshDisplayName();
-            }
-
         }
 
     }
@@ -182,16 +163,18 @@ public class NameUtil {
 
         String username = gameProfileIn.getName();
         String uuid = gameProfileIn.getId().toString().replace("-", "");
-        String extraPrefix = "";
         WDR wdr = null;
+        IChatComponent iExtraPrefix = null;
         String squadname = SquadEvent.getSquad().get(username);
+        IChatComponent displayName = null;
+
         boolean isSquadMate = squadname != null;
 
         if (ConfigHandler.toggleicons) {
 
             if (isSquadMate) {
 
-                extraPrefix = squadprefix;
+                iExtraPrefix = isquadprefix;
 
             } else {
 
@@ -207,17 +190,16 @@ public class NameUtil {
                 if (wdr != null) {
 
                     if (wdr.hacks.contains("bhop")) {
-                        extraPrefix = prefix_bhop;
+                        iExtraPrefix = iprefix_bhop;
                     } else {
-                        extraPrefix = prefix;
+                        iExtraPrefix = iprefix;
                     }
 
                 } else { //scangame
 
                     IChatComponent imsg = CommandScanGame.getScanmap().get(uuid);
-
                     if (imsg != null && !imsg.equals(CommandScanGame.nomatch)) {
-                        extraPrefix = prefix_scan;
+                        iExtraPrefix = iprefix_scan;
                     }
 
                 }
@@ -226,19 +208,18 @@ public class NameUtil {
 
         }
 
-        IChatComponent displayName = null;
-
         ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
         if (team != null) {
             String teamprefix = team.getColorPrefix();
-            if (!teamprefix.contains("\u00a7k") && extraPrefix != null) {
-                displayName = new ChatComponentText(extraPrefix + teamprefix
+            if (!teamprefix.contains("\u00a7k") && iExtraPrefix != null) {
+                ChatComponentText name = new ChatComponentText(teamprefix
                         + (isSquadMate ? squadname : username)
                         + team.getColorSuffix());
+                displayName = iExtraPrefix == null ? name : iExtraPrefix.appendSibling(name);
             }
         }
 
-        ((GameProfileAccessor) gameProfileIn).setMWPlayerData(new MWPlayerData(wdr, extraPrefix, squadname, displayName, KillCounter.getPlayersFinals(username)));
+        ((GameProfileAccessor) gameProfileIn).setMWPlayerData(new MWPlayerData(wdr, iExtraPrefix, squadname, displayName, KillCounter.getPlayersFinals(username)));
 
     }
 
