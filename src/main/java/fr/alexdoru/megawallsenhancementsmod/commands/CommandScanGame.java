@@ -158,7 +158,8 @@ class ScanPlayerTask implements Callable<String> {
 
                 addChatMessage(msg);
                 CommandScanGame.getScanmap().put(uuid, msg);
-                this.networkPlayerInfo.setDisplayName(NameUtil.getTransformedDisplayName(this.networkPlayerInfo.getGameProfile()));
+                NameUtil.transformGameProfile(networkPlayerInfo.getGameProfile());
+                networkPlayerInfo.setDisplayName(NameUtil.getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
                 return null;
             }
 
@@ -178,7 +179,8 @@ class ScanPlayerTask implements Callable<String> {
                         if (reportmsg != null) {
                             addChatMessage(reportmsg);
                             CommandScanGame.getScanmap().put(uuid, reportmsg);
-                            this.networkPlayerInfo.setDisplayName(NameUtil.getTransformedDisplayName(this.networkPlayerInfo.getGameProfile()));
+                            NameUtil.transformGameProfile(networkPlayerInfo.getGameProfile());
+                            networkPlayerInfo.setDisplayName(NameUtil.getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
                             return null;
                         }
                     }
@@ -203,6 +205,7 @@ class ScanPlayerTask implements Callable<String> {
                     if (!msg.equals(new ChatComponentText(""))) {
                         addChatMessage(msg);
                         CommandScanGame.getScanmap().put(uuid, msg);
+                        NameUtil.transformGameProfile(networkPlayerInfo.getGameProfile());
                         this.networkPlayerInfo.setDisplayName(NameUtil.getTransformedDisplayName(this.networkPlayerInfo.getGameProfile()));
                     }
 

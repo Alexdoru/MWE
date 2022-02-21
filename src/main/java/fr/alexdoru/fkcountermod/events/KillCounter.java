@@ -1,10 +1,11 @@
 package fr.alexdoru.fkcountermod.events;
 
+import com.mojang.authlib.GameProfile;
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.gui.FKCounterGui;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
-import fr.alexdoru.megawallsenhancementsmod.asm.accessor.NetworkPlayerInfoAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
@@ -12,7 +13,6 @@ import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
@@ -97,7 +97,7 @@ public class KillCounter {
     private static String gameId;
     private static String[] prefixes; // color codes prefix that you are using in your hypixel mega walls settings
     private static HashMap<String, Integer>[] teamKillsArray;
-    public static final HashMap<String, Integer> allPlayerKills = new HashMap<>();
+    private static final HashMap<String, Integer> allPlayerKills = new HashMap<>();
     private static ArrayList<String> deadPlayers;
 
     private static Random rand;
@@ -317,10 +317,15 @@ public class KillCounter {
         updateNetworkPlayerinfo(playerGettingTheKill, finals);
     }
 
+    public static int getPlayersFinals(String playername) {
+        Integer finals = allPlayerKills.get(playername);
+        return finals == null ? 0 : finals;
+    }
+
     private static void updateNetworkPlayerinfo(String playername, int finals) {
-        NetworkPlayerInfo networkPlayerInfo = NameUtil.getPlayerInfo(playername);
-        if (networkPlayerInfo instanceof NetworkPlayerInfoAccessor) {
-            ((NetworkPlayerInfoAccessor) networkPlayerInfo).setPlayerFinalkills(finals);
+        GameProfile gameProfile = NameUtil.getPlayerInfo(playername).getGameProfile();
+        if (gameProfile instanceof GameProfileAccessor) {
+            ((GameProfileAccessor) gameProfile).getMWPlayerData().playerFinalkills = finals;
         }
     }
 

@@ -53,10 +53,12 @@ public class NoCheatersEvents {
             return;
         }
         try {
+            // TODO on playerjoin ca envoie un networkplayerinfo à chaque fois, faire une map uuid, MWPlayerInfo ?
+            //  mettre messages debug :
+            //  - create new networkplayerifo
+            //  - add networkplayerinfo to map
+            //  - remove networkplayerinfo from map
             NameUtil.transformNametag((EntityPlayer) event.entity, ConfigHandler.toggleicons, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
-            // TODO comme ca envoie un network player info juste avant de spawn le player, utiliser le pseudo transformé pour get le nametag tout de suite
-            //  ou stocker le suffix et prefix dans network player info et l'ajouter au nametag
-            //  ou meme stocker ca dans le gameprofile, c'est accessible depuis networkplayerinfo ou entity player
         } catch (Exception e) {
             e.printStackTrace();
         }
