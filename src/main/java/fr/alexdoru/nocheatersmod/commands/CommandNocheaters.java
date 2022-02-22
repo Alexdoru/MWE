@@ -5,6 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
+import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
@@ -235,7 +236,11 @@ public class CommandNocheaters extends CommandBase {
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (networkPlayerInfo.getGameProfile() instanceof GameProfileAccessor) {
                 String playerName = networkPlayerInfo.getGameProfile().getName();
-                WDR wdr = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData().wdr;
+                MWPlayerData mwPlayerData = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData();
+                if (mwPlayerData == null) {
+                    continue;
+                }
+                WDR wdr = mwPlayerData.wdr;
                 if (wdr == null) {
                     continue;
                 }
