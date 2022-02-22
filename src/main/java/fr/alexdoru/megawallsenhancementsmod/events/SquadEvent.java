@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.events;
 import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
+import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,9 +25,12 @@ public class SquadEvent {
     public void onNameFormat(NameFormat event) {
         if (event.entity instanceof EntityPlayer) {
             if (((EntityPlayer) event.entity).getGameProfile() instanceof GameProfileAccessor) {
-                String squadname = ((GameProfileAccessor) ((EntityPlayer) event.entity).getGameProfile()).getMWPlayerData().squadname;
-                if (squadname != null) {
-                    event.displayname = squadname;
+                MWPlayerData mwPlayerData = ((GameProfileAccessor) ((EntityPlayer) event.entity).getGameProfile()).getMWPlayerData();
+                if (mwPlayerData != null) {
+                    String squadname = mwPlayerData.squadname;
+                    if (squadname != null) {
+                        event.displayname = squadname;
+                    }
                 }
             }
         }
