@@ -223,7 +223,7 @@ public class NameUtil {
     }
 
     public static IChatComponent getTransformedDisplayName(GameProfile gameProfileIn) {
-        if (gameProfileIn instanceof GameProfileAccessor) {
+        if (gameProfileIn instanceof GameProfileAccessor && ((GameProfileAccessor) gameProfileIn).getMWPlayerData() != null) {
             return ((GameProfileAccessor) gameProfileIn).getMWPlayerData().displayName;
         }
         return null;

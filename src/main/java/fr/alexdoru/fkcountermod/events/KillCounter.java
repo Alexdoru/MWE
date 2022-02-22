@@ -324,7 +324,7 @@ public class KillCounter {
 
     private static void updateNetworkPlayerinfo(String playername, int finals) {
         GameProfile gameProfile = NameUtil.getPlayerInfo(playername).getGameProfile();
-        if (gameProfile instanceof GameProfileAccessor) {
+        if (gameProfile instanceof GameProfileAccessor && ((GameProfileAccessor) gameProfile).getMWPlayerData() != null) {
             ((GameProfileAccessor) gameProfile).getMWPlayerData().playerFinalkills = finals;
         }
     }

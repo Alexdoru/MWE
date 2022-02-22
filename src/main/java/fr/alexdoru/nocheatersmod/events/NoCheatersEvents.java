@@ -73,7 +73,7 @@ public class NoCheatersEvents {
 
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
 
-            if (networkPlayerInfo.getGameProfile() instanceof GameProfileAccessor) {
+            if (networkPlayerInfo.getGameProfile() instanceof GameProfileAccessor && ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData() != null) {
 
                 WDR wdr = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData().wdr;
                 if (wdr == null) {
@@ -113,6 +113,8 @@ public class NoCheatersEvents {
      *
      * @return true if it sends a report
      */
+    // TODO est ce que si ca transforme deux fois le pseudo, si ca met une commande dans le queue,
+    //  ca rentre dans le if une deuxieme fois puisque le timestamp n'as pas encore été changé
     public static boolean sendAutoReport(long datenow, String playerName, WDR wdr) {
         if (ConfigHandler.toggleautoreport
                 && FKCounterMod.isInMwGame
@@ -129,6 +131,7 @@ public class NoCheatersEvents {
         return false;
     }
 
+    // TODO meme probleme au niveau du call de cette fonction
     public static void sendReport(String playerName, WDR wdr) {
         if (mc.thePlayer != null) {
             mc.thePlayer.sendChatMessage("/wdr " + playerName + " cheating");
@@ -146,7 +149,7 @@ public class NoCheatersEvents {
 
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
 
-            if (networkPlayerInfo.getGameProfile() instanceof GameProfileAccessor) {
+            if (networkPlayerInfo.getGameProfile() instanceof GameProfileAccessor && ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData() != null) {
                 WDR wdr = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData().wdr;
                 if (wdr == null) {
                     continue;
