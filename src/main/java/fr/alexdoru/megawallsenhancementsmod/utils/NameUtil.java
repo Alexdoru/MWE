@@ -163,7 +163,8 @@ public class NameUtil {
         String username = gameProfileIn.getName();
         String uuid = gameProfileIn.getId().toString().replace("-", "");
         WDR wdr = null;
-        IChatComponent iExtraPrefix = null;
+        String extraPrefix = null;
+        ChatComponentText iExtraPrefix = null;
         String squadname = SquadEvent.getSquad().get(username);
         IChatComponent displayName = null;
 
@@ -173,7 +174,7 @@ public class NameUtil {
 
             if (isSquadMate) {
 
-                iExtraPrefix = isquadprefix;
+                extraPrefix = squadprefix;
 
             } else {
 
@@ -189,16 +190,16 @@ public class NameUtil {
                 if (wdr != null) {
 
                     if (wdr.hacks.contains("bhop")) {
-                        iExtraPrefix = iprefix_bhop;
+                        extraPrefix = prefix_bhop;
                     } else {
-                        iExtraPrefix = iprefix;
+                        extraPrefix = prefix;
                     }
 
                 } else { //scangame
 
                     IChatComponent imsg = CommandScanGame.getScanmap().get(uuid);
                     if (imsg != null && !imsg.equals(CommandScanGame.nomatch)) {
-                        iExtraPrefix = iprefix_scan;
+                        extraPrefix = prefix_scan;
                     }
 
                 }
@@ -210,11 +211,12 @@ public class NameUtil {
         ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
         if (team != null) {
             String teamprefix = team.getColorPrefix();
-            if (!teamprefix.contains("\u00a7k") && iExtraPrefix != null) {
+            if (!teamprefix.contains("\u00a7k") && extraPrefix != null) {
                 ChatComponentText name = new ChatComponentText(teamprefix
                         + (isSquadMate ? squadname : username)
                         + team.getColorSuffix());
-                displayName = iExtraPrefix == null ? name : iExtraPrefix.appendSibling(name);
+                iExtraPrefix = new ChatComponentText(extraPrefix);
+                displayName = extraPrefix == null ? name : iExtraPrefix.appendSibling(name);
             }
         }
 
