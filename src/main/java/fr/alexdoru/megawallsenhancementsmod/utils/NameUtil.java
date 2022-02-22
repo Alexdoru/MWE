@@ -164,7 +164,7 @@ public class NameUtil {
         String uuid = gameProfileIn.getId().toString().replace("-", "");
         WDR wdr = null;
         String extraPrefix = "";
-        boolean needtochange = false;
+        IChatComponent iExtraPrefix = null;
         String squadname = SquadEvent.getSquad().get(username);
 
         boolean isSquadMate = squadname != null;
@@ -174,7 +174,7 @@ public class NameUtil {
             if (isSquadMate) {
 
                 extraPrefix = squadprefix;
-                needtochange = true;
+                iExtraPrefix = isquadprefix;
 
             } else {
 
@@ -188,18 +188,19 @@ public class NameUtil {
                 }
 
                 if (wdr != null) {
-                        if (wdr.hacks.contains("bhop")) {
-                            extraPrefix = prefix_bhop;
-                        } else {
-                            extraPrefix = prefix;
-                        }
-                        needtochange = true;
+                    if (wdr.hacks.contains("bhop")) {
+                        extraPrefix = prefix_bhop;
+                        iExtraPrefix = iprefix_bhop;
+                    } else {
+                        extraPrefix = prefix;
+                        iExtraPrefix = iprefix;
+                    }
                 } else { //scangame
 
                     IChatComponent imsg = CommandScanGame.getScanmap().get(uuid);
                     if (imsg != null && !imsg.equals(CommandScanGame.nomatch)) {
                         extraPrefix = prefix_scan;
-                        needtochange = true;
+                        iExtraPrefix = iprefix_scan;
                     }
 
                 }
@@ -212,7 +213,7 @@ public class NameUtil {
         ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
         if (team != null) {
             String teamprefix = team.getColorPrefix();
-            if (!teamprefix.contains("\u00a7k") && needtochange) {
+            if (!teamprefix.contains("\u00a7k") && iExtraPrefix != null) {
                 displayName = new ChatComponentText(
                         extraPrefix
                                 + teamprefix
@@ -221,7 +222,7 @@ public class NameUtil {
             }
         }
 
-        ((GameProfileAccessor) gameProfileIn).setMWPlayerData(new MWPlayerData(wdr, new ChatComponentText(extraPrefix), squadname, displayName, KillCounter.getPlayersFinals(username)));
+        ((GameProfileAccessor) gameProfileIn).setMWPlayerData(new MWPlayerData(wdr, iExtraPrefix, squadname, displayName, KillCounter.getPlayersFinals(username)));
 
     }
 
