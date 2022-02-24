@@ -141,11 +141,6 @@ public class NameUtil {
 
     }
 
-    public static void removeNametagIcons(EntityPlayer player) {
-        player.getPrefixes().removeAll(allPrefix);
-        player.refreshDisplayName();
-    }
-
     /**
      * Method call is inject by Scoreboard
      */
@@ -268,14 +263,7 @@ public class NameUtil {
 
     public static void toggleIcons() {
         ConfigHandler.toggleicons = !ConfigHandler.toggleicons;
-        if (ConfigHandler.toggleicons) {
-            mc.theWorld.playerEntities.forEach(playerEntity -> updateGameProfileAndName(playerEntity.getGameProfile()));
-        } else {
-            mc.theWorld.playerEntities.forEach(playerEntity -> {
-                NameUtil.removeNametagIcons(playerEntity);
-                NameUtil.transformNameTablist(playerEntity.getUniqueID());
-            });
-        }
+        mc.theWorld.playerEntities.forEach(playerEntity -> updateGameProfileAndName(playerEntity.getGameProfile()));
     }
 
 }
