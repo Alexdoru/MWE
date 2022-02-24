@@ -264,4 +264,11 @@ public class NameUtil {
         mc.theWorld.playerEntities.forEach(playerEntity -> updateGameProfileAndName(playerEntity.getGameProfile()));
     }
 
+    /**
+     * Returns true if it's the uuid of an NPC
+     */
+    public static boolean filterNPC(UUID uuid) {
+        return uuid.version() != 4;
+    }
+
 }
