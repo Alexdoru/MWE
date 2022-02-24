@@ -59,24 +59,32 @@ public class NoCheatersEvents {
             //  - create new networkplayerifo
             //  - add networkplayerinfo to map
             //  - remove networkplayerinfo from map
-            NameUtil.transformNametag((EntityPlayer) event.entity, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
+            //  regarder si on peut pas filter les PNJ des joueurs, Npcs are not uuid version 4, print la class sur le nametag, faire ca dans l'autre point d'entree aussi sur le networklpayerinfohook
+            NameUtil.transformNametag((EntityPlayer) event.entity, false, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     /**
      * Called on world join avec 40 ticks
+     * This scans the world you are currently in for reported players, this way it prints messages for players out of your render distance
      */
+    // TODO est ce qu'elle sert vraiment à quelque chose cette methode ?
     public static void scanCurrentWorld() {
 
         long datenow = (new Date()).getTime();
 
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
 
-            if (networkPlayerInfo.getGameProfile() instanceof GameProfileAccessor && ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData() != null) {
+            if (networkPlayerInfo.getGameProfile() instanceof GameProfileAccessor) {
 
-                WDR wdr = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData().wdr;
+                MWPlayerData mwPlayerData = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData();
+                if (mwPlayerData == null) {
+                    continue;
+                }
+                WDR wdr = mwPlayerData.wdr;
                 if (wdr == null) {
                     continue;
                 }
@@ -89,7 +97,7 @@ public class NoCheatersEvents {
                     if (player != null) {
                         NameUtil.removeNametagIcons(player);
                         if (wdr.hacks.contains("bhop")) { // player bhops
-                            player.addPrefix(NameUtil.iprefix_bhop);
+                            player.addPrefix(NameUtil.iprefix_bhop);// TODO faut changer ca
                         } else {
                             player.addPrefix(NameUtil.iprefix);
                         }
@@ -114,7 +122,7 @@ public class NoCheatersEvents {
      *
      * @return true if it sends a report
      */
-    // TODO est ce que si ca transforme deux fois le pseudo, si ca met une commande dans le queue,
+    // TODO est ce que si ca transforme deux fois le pseudo (on entity join ca check la map network playerinfo et ensuite avec l'entity), si ca met une commande dans le queue,
     //  ca rentre dans le if une deuxieme fois puisque le timestamp n'as pas encore été changé
     public static boolean sendAutoReport(long datenow, String playerName, WDR wdr) {
         if (ConfigHandler.toggleautoreport
