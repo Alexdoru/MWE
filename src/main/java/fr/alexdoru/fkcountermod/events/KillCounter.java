@@ -7,6 +7,7 @@ import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
@@ -324,8 +325,11 @@ public class KillCounter {
 
     private static void updateNetworkPlayerinfo(String playername, int finals) {
         GameProfile gameProfile = NameUtil.getPlayerInfo(playername).getGameProfile();
-        if (gameProfile instanceof GameProfileAccessor && ((GameProfileAccessor) gameProfile).getMWPlayerData() != null) {
-            ((GameProfileAccessor) gameProfile).getMWPlayerData().playerFinalkills = finals;
+        if (gameProfile instanceof GameProfileAccessor) {
+            MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfile).getMWPlayerData();
+            if (mwPlayerData != null) {
+                mwPlayerData.playerFinalkills = finals;
+            }
         }
     }
 
