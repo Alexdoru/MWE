@@ -30,12 +30,11 @@ public class CommandUnWDR extends CommandBase {
             return;
         }
 
-
         if (args.length == 1) { // if you use /unwdr <playername>
 
             new Thread(() -> {
 
-                CachedMojangUUID apireq;
+                CachedMojangUUID apireq;// TODO il se passe quoi si j'ai pas d'API key ?
                 String playername = args[0];
                 try {
                     apireq = (new CachedMojangUUID(playername));
