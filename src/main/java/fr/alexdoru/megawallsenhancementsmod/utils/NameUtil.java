@@ -54,7 +54,7 @@ public class NameUtil {
     }
 
     /**
-     * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametags
+     * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
      */
     public static void updateGameProfileAndName(String playername) {
         NetworkPlayerInfo networkPlayerInfo = playerInfoMap.get(playername);
@@ -75,7 +75,7 @@ public class NameUtil {
     }
 
     /**
-     * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametags
+     * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
      */
     public static void updateGameProfileAndName(GameProfile gameProfile) {
         transformGameProfile(gameProfile, true);
@@ -90,7 +90,8 @@ public class NameUtil {
     }
 
     /**
-     * Transforms the nametag of the player based on the infos storred in getGameProfile.MWPlayerData
+     * Transforms the nametag of the player based on the infos stored in getGameProfile.MWPlayerData
+     * to save performance instead of redoing the hashmap access
      */
     public static void transformNametag(EntityPlayer player, boolean clearNametagIcons, boolean areWarningsToggled, boolean checkAutoreport) {
 
@@ -112,10 +113,8 @@ public class NameUtil {
                 return;
             }
             transformGameProfile(playerInfo.getGameProfile(), true);
-            ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_GREEN + "Dirty transform for player : " + player.getName()));
             mwPlayerData = ((GameProfileAccessor) playerInfo.getGameProfile()).getMWPlayerData();
             if (mwPlayerData == null) {
-                ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_RED + "MWData info is null for player : " + player.getName()));
                 return;
             }
         }
@@ -142,7 +141,7 @@ public class NameUtil {
     }
 
     /**
-     * Method call is inject by Scoreboard
+     * Method call is inject in Scoreboard
      */
     public static void transformNameTablist(String playername) {
         NetworkPlayerInfo networkPlayerInfo = playerInfoMap.get(playername);
@@ -162,11 +161,10 @@ public class NameUtil {
 
     /**
      * Transforms the infos storred in GameProfile.MWPlayerData
+     * For each new player spawned in the world it will create a new networkplayerinfo instance a rerun all the code in the method
+     * to generate the field MWPlayerData, however it will reuse the field to display the nametag
      */
-    // TODO checker si le field mwplayerdata est deja different de null ou pas
-    //  en effet, on player join ca envoie un paquet networkplayerinfo alors qu'on l'as deja et ensuite ca spawn l'entity
-    //  ajouter un boolean pour force update
-    //  mettre un message debug pour voir si ca economise des operations onPlayerJoin
+    // TODO ajouter une map qui stocke les UUID, MWPlayerData et se vide en ?
     public static void transformGameProfile(GameProfile gameProfileIn, boolean forceRefresh) {
 
         if (!(gameProfileIn instanceof GameProfileAccessor)) {
