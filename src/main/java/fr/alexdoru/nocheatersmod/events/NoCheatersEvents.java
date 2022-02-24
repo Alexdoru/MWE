@@ -5,19 +5,15 @@ import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiDownloadTerrain;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IChatComponent;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,32 +21,12 @@ import java.util.List;
 
 public class NoCheatersEvents {
 
-    private static int ticks = 0;
     public static int nbReport = 1;
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     @SubscribeEvent
-    public void onGui(GuiOpenEvent event) {
-        if (event.gui instanceof GuiDownloadTerrain) {
-            ticks = 0;
-        }
-    }
-
-    @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {
-        if (mc.inGameHasFocus) {
-            if (ticks == 39) {
-                scanCurrentWorld();
-                ticks++;
-            } else if (ticks < 39) {
-                ticks++;
-            }
-        }
-    }
-
-    @SubscribeEvent
     public void onPlayerJoin(EntityJoinWorldEvent event) {
-        if (ticks < 39 || mc.thePlayer == null || !(event.entity instanceof EntityPlayer)) {
+        if (mc.thePlayer == null || !(event.entity instanceof EntityPlayer)) {
             return;
         }
         try {
@@ -64,57 +40,6 @@ public class NoCheatersEvents {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-    }
-
-    /**
-     * Called on world join avec 40 ticks
-     * This scans the world you are currently in for reported players, this way it prints messages for players out of your render distance
-     */
-    // TODO est ce qu'elle sert vraiment à quelque chose cette methode ?
-    public static void scanCurrentWorld() {
-
-        long datenow = (new Date()).getTime();
-
-        for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
-
-            if (networkPlayerInfo.getGameProfile() instanceof GameProfileAccessor) {
-
-                MWPlayerData mwPlayerData = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData();
-                if (mwPlayerData == null) {
-                    continue;
-                }
-                WDR wdr = mwPlayerData.wdr;
-                if (wdr == null) {
-                    continue;
-                }
-
-                String playerName = networkPlayerInfo.getGameProfile().getName();
-                String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-
-                if (ConfigHandler.toggleicons) {
-                    EntityPlayer player = mc.theWorld.getPlayerEntityByName(playerName);
-                    if (player != null) {
-                        NameUtil.removeNametagIcons(player);
-                        if (wdr.hacks.contains("bhop")) { // player bhops
-                            player.addPrefix(NameUtil.iprefix_bhop);// TODO faut changer ca
-                        } else {
-                            player.addPrefix(NameUtil.iprefix);
-                        }
-                        player.refreshDisplayName();
-                    }
-                }
-
-                boolean gotautoreported = sendAutoReport(datenow, playerName, wdr);
-
-                if (ConfigHandler.togglewarnings) {
-                    ChatUtil.addChatMessage(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr, gotautoreported)));
-                }
-
-            }
-
-        }
-
     }
 
     /**
@@ -222,6 +147,8 @@ public class NoCheatersEvents {
             for (String hack : wdr.hacks) {
                 if (hack.equalsIgnoreCase("bhop")) {
                     stringBuilder.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"dark_red\"}");
+                } else if (hack.contains("stalk")) {
+                    stringBuilder.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"dark_green\"}");
                 } else if (hack.equalsIgnoreCase("nick")) {
                     stringBuilder.append(",{\"text\":\"").append(hack).append(" ").append("\",\"color\":\"dark_purple\"}");
                 } else {
