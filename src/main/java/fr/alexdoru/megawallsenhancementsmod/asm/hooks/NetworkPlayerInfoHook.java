@@ -7,7 +7,7 @@ import net.minecraft.util.IChatComponent;
 public class NetworkPlayerInfoHook {
 
     public static IChatComponent getDisplayName(IChatComponent displayNameIn, GameProfile gameProfileIn) {
-        NameUtil.transformGameProfile(gameProfileIn);
+        NameUtil.transformGameProfile(gameProfileIn, false);
         return displayNameIn == null ? NameUtil.getTransformedDisplayName(gameProfileIn) : displayNameIn;
     }
 

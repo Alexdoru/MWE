@@ -21,4 +21,13 @@ public class MWPlayerData {
         this.displayName = displayNameIn;
         this.playerFinalkills = playerFinalkills;
     }
+
+    public void setData(WDR wdr, IChatComponent extraPrefix, String squadname, IChatComponent displayNameIn, int playerFinalkills) {
+        this.wdr = wdr;
+        this.extraPrefix = extraPrefix;
+        this.squadname = squadname;
+        this.displayName = displayNameIn;
+        this.playerFinalkills = playerFinalkills;
+    }
+
 }

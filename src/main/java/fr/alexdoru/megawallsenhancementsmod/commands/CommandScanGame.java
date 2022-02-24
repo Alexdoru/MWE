@@ -37,7 +37,7 @@ public class CommandScanGame extends CommandBase {
     private static String scanGameId;
 
     /*
-     * fills the hashmap with this instead if null when there is no match
+     * fills the hashmap with this instead of null when there is no match
      */
     public static final IChatComponent nomatch = new ChatComponentText("none");
 
@@ -158,7 +158,7 @@ class ScanPlayerTask implements Callable<String> {
 
                 addChatMessage(msg);
                 CommandScanGame.getScanmap().put(uuid, msg);
-                NameUtil.transformGameProfile(networkPlayerInfo.getGameProfile());
+                NameUtil.transformGameProfile(networkPlayerInfo.getGameProfile(), true);
                 networkPlayerInfo.setDisplayName(NameUtil.getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
                 return null;
             }
@@ -179,7 +179,7 @@ class ScanPlayerTask implements Callable<String> {
                         if (reportmsg != null) {
                             addChatMessage(reportmsg);
                             CommandScanGame.getScanmap().put(uuid, reportmsg);
-                            NameUtil.transformGameProfile(networkPlayerInfo.getGameProfile());
+                            NameUtil.transformGameProfile(networkPlayerInfo.getGameProfile(), true);
                             networkPlayerInfo.setDisplayName(NameUtil.getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
                             return null;
                         }
@@ -205,7 +205,7 @@ class ScanPlayerTask implements Callable<String> {
                     if (!msg.equals(new ChatComponentText(""))) {
                         addChatMessage(msg);
                         CommandScanGame.getScanmap().put(uuid, msg);
-                        NameUtil.transformGameProfile(networkPlayerInfo.getGameProfile());
+                        NameUtil.transformGameProfile(networkPlayerInfo.getGameProfile(), true);
                         this.networkPlayerInfo.setDisplayName(NameUtil.getTransformedDisplayName(this.networkPlayerInfo.getGameProfile()));
                     }
 
