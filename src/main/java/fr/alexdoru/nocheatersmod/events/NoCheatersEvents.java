@@ -9,6 +9,7 @@ import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IChatComponent;
@@ -26,7 +27,14 @@ public class NoCheatersEvents {
 
     @SubscribeEvent
     public void onPlayerJoin(EntityJoinWorldEvent event) {
+        /*
+         * mc.thePlayer is passing in here and is instance of EntityPlayerSp
+         * other players are instance of EntityOtherPlayerMP
+         */
         if (mc.thePlayer == null || !(event.entity instanceof EntityPlayer)) {
+            return;
+        }
+        if (event.entity instanceof EntityOtherPlayerMP && NameUtil.filterNPC(event.entity.getUniqueID())) {
             return;
         }
         try {
@@ -35,7 +43,6 @@ public class NoCheatersEvents {
             //  - create new networkplayerifo
             //  - add networkplayerinfo to map
             //  - remove networkplayerinfo from map
-            //  regarder si on peut pas filter les PNJ des joueurs, Npcs are not uuid version 4, print la class sur le nametag, faire ca dans l'autre point d'entree aussi sur le networklpayerinfohook
             NameUtil.transformNametag((EntityPlayer) event.entity, false, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
         } catch (Exception e) {
             e.printStackTrace();
