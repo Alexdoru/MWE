@@ -234,25 +234,23 @@ public class CommandNocheaters extends CommandBase {
         long datenow = (new Date()).getTime();
         int nbreport = 0;
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            if (networkPlayerInfo.getGameProfile() instanceof GameProfileAccessor) {
-                String playerName = networkPlayerInfo.getGameProfile().getName();
-                MWPlayerData mwPlayerData = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData();
-                if (mwPlayerData == null) {
-                    continue;
-                }
-                WDR wdr = mwPlayerData.wdr;
-                if (wdr == null) {
-                    continue;
-                }
-                if (wdr.canBeReported(datenow - 900000)) {
-                    wdr.timestamp = datenow;
-                    new DelayedTask(() -> {
-                        if (mc.thePlayer != null) {
-                            mc.thePlayer.sendChatMessage("/wdr " + playerName + " cheating");
-                        }
-                    }, 30 * nbreport);
-                    nbreport++;
-                }
+            String playerName = networkPlayerInfo.getGameProfile().getName();
+            MWPlayerData mwPlayerData = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData();
+            if (mwPlayerData == null) {
+                continue;
+            }
+            WDR wdr = mwPlayerData.wdr;
+            if (wdr == null) {
+                continue;
+            }
+            if (wdr.canBeReported(datenow - 900000)) {
+                wdr.timestamp = datenow;
+                new DelayedTask(() -> {
+                    if (mc.thePlayer != null) {
+                        mc.thePlayer.sendChatMessage("/wdr " + playerName + " cheating");
+                    }
+                }, 30 * nbreport);
+                nbreport++;
             }
         }
     }

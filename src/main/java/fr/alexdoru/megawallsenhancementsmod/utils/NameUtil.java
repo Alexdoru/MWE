@@ -85,10 +85,6 @@ public class NameUtil {
             player.refreshDisplayName();
         }
 
-        if (!(player.getGameProfile() instanceof GameProfileAccessor)) {
-            return;
-        }
-
         MWPlayerData mwPlayerData = ((GameProfileAccessor) player.getGameProfile()).getMWPlayerData();
 
         /*For mc.thePlayer, mwPlayerData is null when the method is called*/
@@ -140,10 +136,6 @@ public class NameUtil {
      * to generate the field MWPlayerData, however it will reuse the field to display the nametag
      */
     public static void transformGameProfile(GameProfile gameProfileIn, boolean forceRefresh) {
-
-        if (!(gameProfileIn instanceof GameProfileAccessor)) {
-            return;
-        }
 
         GameProfileAccessor gameProfileAccessor = (GameProfileAccessor) gameProfileIn;
         MWPlayerData mwPlayerData = gameProfileAccessor.getMWPlayerData();
@@ -233,11 +225,9 @@ public class NameUtil {
     }
 
     public static IChatComponent getTransformedDisplayName(GameProfile gameProfileIn) {
-        if (gameProfileIn instanceof GameProfileAccessor) {
-            MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfileIn).getMWPlayerData();
-            if (mwPlayerData != null) {
-                return mwPlayerData.displayName;
-            }
+        MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfileIn).getMWPlayerData();
+        if (mwPlayerData != null) {
+            return mwPlayerData.displayName;
         }
         return null;
     }

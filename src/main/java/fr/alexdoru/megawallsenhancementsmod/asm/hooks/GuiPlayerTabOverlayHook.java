@@ -21,9 +21,6 @@ public class GuiPlayerTabOverlayHook {
 
     public static void renderFinals(NetworkPlayerInfo networkPlayerInfo, int x, int y) {
         GameProfile gameProfile = networkPlayerInfo.getGameProfile();
-        if (!(gameProfile instanceof GameProfileAccessor)) {
-            return;
-        }
         MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfile).getMWPlayerData();
         if (mwPlayerData == null) {
             return;
