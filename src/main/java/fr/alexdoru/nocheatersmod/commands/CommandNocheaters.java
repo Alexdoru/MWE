@@ -245,7 +245,12 @@ public class CommandNocheaters extends CommandBase {
                     continue;
                 }
                 if (wdr.canBeReported(datenow - 900000)) {
-                    new DelayedTask(() -> NoCheatersEvents.sendReport(playerName, wdr), 30 * nbreport);
+                    wdr.timestamp = datenow;
+                    new DelayedTask(() -> {
+                        if (mc.thePlayer != null) {
+                            mc.thePlayer.sendChatMessage("/wdr " + playerName + " cheating");
+                        }
+                    }, 30 * nbreport);
                     nbreport++;
                 }
             }

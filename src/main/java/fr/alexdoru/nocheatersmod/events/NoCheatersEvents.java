@@ -43,30 +43,23 @@ public class NoCheatersEvents {
      *
      * @return true if it sends a report
      */
-    // TODO est ce que si ca transforme deux fois le pseudo (on entity join ca check la map network playerinfo et ensuite avec l'entity), si ca met une commande dans le queue,
-    //  ca rentre dans le if une deuxieme fois puisque le timestamp n'as pas encore été changé
     public static boolean sendAutoReport(long datenow, String playerName, WDR wdr) {
         if (ConfigHandler.toggleautoreport
                 && FKCounterMod.isInMwGame
                 && !FKCounterMod.isitPrepPhase
                 && wdr.canBeReported(datenow)
                 && 0 < ConfigHandler.timeAutoReport - datenow + wdr.timestamp) {
+            wdr.timestamp = (new Date()).getTime();
             new DelayedTask(() -> {
-                sendReport(playerName, wdr);
+                if (mc.thePlayer != null) {
+                    mc.thePlayer.sendChatMessage("/wdr " + playerName + " cheating");
+                }
                 nbReport--;
             }, 30 * nbReport);
             nbReport++;
             return true;
         }
         return false;
-    }
-
-    // TODO meme probleme au niveau du call de cette fonction
-    public static void sendReport(String playerName, WDR wdr) {
-        if (mc.thePlayer != null) {
-            mc.thePlayer.sendChatMessage("/wdr " + playerName + " cheating");
-            wdr.timestamp = (new Date()).getTime();
-        }
     }
 
     /**
