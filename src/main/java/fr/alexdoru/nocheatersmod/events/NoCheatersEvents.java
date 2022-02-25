@@ -9,7 +9,6 @@ import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IChatComponent;
@@ -27,22 +26,12 @@ public class NoCheatersEvents {
 
     @SubscribeEvent
     public void onPlayerJoin(EntityJoinWorldEvent event) {
-        /*
-         * mc.thePlayer is passing in here and is instance of EntityPlayerSp
-         * other players are instance of EntityOtherPlayerMP
-         */
-        if (mc.thePlayer == null || !(event.entity instanceof EntityPlayer)) {
-            return;
-        }
-        if (event.entity instanceof EntityOtherPlayerMP && NameUtil.filterNPC(event.entity.getUniqueID())) {
+        /* mc.thePlayer is passing in here and is instance of EntityPlayerSp
+         * other players are instance of EntityOtherPlayerMP */
+        if (mc.thePlayer == null || !(event.entity instanceof EntityPlayer) || NameUtil.filterNPC(event.entity.getUniqueID())) {
             return;
         }
         try {
-            // TODO on playerjoin ca envoie un networkplayerinfo à chaque fois, faire une map uuid, MWPlayerInfo ?
-            //  mettre messages debug :
-            //  - create new networkplayerifo
-            //  - add networkplayerinfo to map
-            //  - remove networkplayerinfo from map
             NameUtil.transformNametag((EntityPlayer) event.entity, false, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
         } catch (Exception e) {
             e.printStackTrace();
