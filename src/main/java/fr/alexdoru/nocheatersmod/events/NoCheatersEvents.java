@@ -21,20 +21,19 @@ import java.util.List;
 
 public class NoCheatersEvents {
 
-    public static int nbReport = 1;
+    private static int reportQueue = 1;
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     @SubscribeEvent
     public void onPlayerJoin(EntityJoinWorldEvent event) {
         /* mc.thePlayer is passing in here and is instance of EntityPlayerSp
          * other players are instance of EntityOtherPlayerMP */
-        if (mc.thePlayer == null || !(event.entity instanceof EntityPlayer) || NameUtil.filterNPC(event.entity.getUniqueID())) {
-            return;
-        }
-        try {
-            NameUtil.transformNametag((EntityPlayer) event.entity, false, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (mc.thePlayer != null && event.entity instanceof EntityPlayer && !NameUtil.filterNPC(event.entity.getUniqueID())) {
+            try {
+                NameUtil.transformNametag((EntityPlayer) event.entity, false, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -54,9 +53,9 @@ public class NoCheatersEvents {
                 if (mc.thePlayer != null) {
                     mc.thePlayer.sendChatMessage("/wdr " + playerName + " cheating");
                 }
-                nbReport--;
-            }, 30 * nbReport);
-            nbReport++;
+                reportQueue--;
+            }, 30 * reportQueue);
+            reportQueue++;
             return true;
         }
         return false;

@@ -11,6 +11,7 @@ import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
@@ -106,17 +107,18 @@ public class NameUtil {
 
         MWPlayerData mwPlayerData = ((GameProfileAccessor) player.getGameProfile()).getMWPlayerData();
 
-        // For mc.thePlayer this is null when the method is called
-        if (mwPlayerData == null) {
+        /*For mc.thePlayer, mwPlayerData is null when the method is called*/
+        if (player instanceof EntityPlayerSP) {
             NetworkPlayerInfo playerInfo = mc.getNetHandler().getPlayerInfo(player.getGameProfile().getId());
             if (playerInfo == null) {
                 return;
             }
             transformGameProfile(playerInfo.getGameProfile(), true);
             mwPlayerData = ((GameProfileAccessor) playerInfo.getGameProfile()).getMWPlayerData();
-            if (mwPlayerData == null) {
-                return;
-            }
+        }
+
+        if (mwPlayerData == null) {
+            return;
         }
 
         if (mwPlayerData.extraPrefix != null) {
