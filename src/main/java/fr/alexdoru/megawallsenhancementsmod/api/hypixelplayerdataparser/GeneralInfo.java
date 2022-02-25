@@ -23,7 +23,7 @@ public class GeneralInfo extends LoginData {
     private final int karma;
     private final String mcVersionRp;
 
-    private int completedQuests = 0;
+    public int completedQuests = 0;
 
     private String DISCORD;
     private String TWITCH;
@@ -88,7 +88,7 @@ public class GeneralInfo extends LoginData {
 
                 .appendSibling(new ChatComponentText("\n" + "\n"
 
-                        + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Network level : " + EnumChatFormatting.GOLD + String.format("%.2f", (float) ILeveling.getExactLevel((double) networkExp))) + "\n"
+                        + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Network level : " + EnumChatFormatting.GOLD + String.format("%.2f", getNetworkLevel())) + "\n"
 
                         + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Karma : " + EnumChatFormatting.LIGHT_PURPLE + ChatUtil.formatInt(this.karma)) + "\n"
 
@@ -152,6 +152,10 @@ public class GeneralInfo extends LoginData {
 
 
         return msg;
+    }
+
+    public float getNetworkLevel() {
+        return (float) ILeveling.getExactLevel((double) networkExp);
     }
 
 }
