@@ -6,12 +6,12 @@ import fr.alexdoru.fkcountermod.gui.FKCounterGui;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
@@ -324,7 +324,7 @@ public class KillCounter {
     }
 
     private static void updateNetworkPlayerinfo(String playername, int finals) {
-        GameProfile gameProfile = NameUtil.getPlayerInfo(playername).getGameProfile();
+        GameProfile gameProfile = NetHandlerPlayClientHook.playerInfoMap.get(playername).getGameProfile();
         if (gameProfile instanceof GameProfileAccessor) {
             MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfile).getMWPlayerData();
             if (mwPlayerData != null) {

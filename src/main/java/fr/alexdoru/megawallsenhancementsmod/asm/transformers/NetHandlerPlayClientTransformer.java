@@ -24,7 +24,7 @@ public class NetHandlerPlayClientTransformer implements IMyClassTransformer {
                             && ((FieldInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "bcy" : "net/minecraft/client/network/NetHandlerPlayClient")
                             && ((FieldInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "i" : "playerInfoMap")
                             && ((FieldInsnNode) insnNode).desc.equals("Ljava/util/Map;")) {
-                        methodNode.instructions.insertBefore(insnNode.getNext(), new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/utils/NameUtil", "clearPlayerMap", "()V", false));
+                        methodNode.instructions.insertBefore(insnNode.getNext(), new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/NetHandlerPlayClientHook", "clearPlayerMap", "()V", false));
                     }
                 }
             }
@@ -57,22 +57,22 @@ public class NetHandlerPlayClientTransformer implements IMyClassTransformer {
                      * Replace line 1628 :
                      * this.playerInfoMap.remove(s38packetplayerlistitem$addplayerdata.getProfile().getId());
                      * With :
-                     * NameUtil.removePlayerFromMap(this.playerInfoMap.remove(s38packetplayerlistitem$addplayerdata.getProfile().getId()));
+                     * NetHandlerPlayClientHook.removePlayerFromMap(this.playerInfoMap.remove(s38packetplayerlistitem$addplayerdata.getProfile().getId()));
                      */
                     InsnList listRemove = new InsnList();
-                    listRemove.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/utils/NameUtil", "removePlayerFromMap", "(Ljava/lang/Object;)V", false));
+                    listRemove.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/NetHandlerPlayClientHook", "removePlayerFromMap", "(Ljava/lang/Object;)V", false));
                     methodNode.instructions.insertBefore(targetNodeRemoveInjection, listRemove);
                     methodNode.instructions.remove(targetNodeRemoveInjection);
                     /*
                      * Injects after line 1637 :
-                     * NameUtil.putPlayerInMap(networkplayerinfo.getGameProfile().getName(), networkplayerinfo);
+                     * NetHandlerPlayClientHook.putPlayerInMap(networkplayerinfo.getGameProfile().getName(), networkplayerinfo);
                      */
                     InsnList listPut = new InsnList();
                     listPut.add(new VarInsnNode(ALOAD, 4));
                     listPut.add(new MethodInsnNode(INVOKEVIRTUAL, ASMLoadingPlugin.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", ASMLoadingPlugin.isObf ? "a" : "getGameProfile", "()Lcom/mojang/authlib/GameProfile;", false));
                     listPut.add(new MethodInsnNode(INVOKEVIRTUAL, "com/mojang/authlib/GameProfile", "getName", "()Ljava/lang/String;", false));
                     listPut.add(new VarInsnNode(ALOAD, 4));
-                    listPut.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/utils/NameUtil", "putPlayerInMap", ASMLoadingPlugin.isObf ? "(Ljava/lang/String;Lbdc;)V" : "(Ljava/lang/String;Lnet/minecraft/client/network/NetworkPlayerInfo;)V", false));
+                    listPut.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/NetHandlerPlayClientHook", "putPlayerInMap", ASMLoadingPlugin.isObf ? "(Ljava/lang/String;Lbdc;)V" : "(Ljava/lang/String;Lnet/minecraft/client/network/NetworkPlayerInfo;)V", false));
                     methodNode.instructions.insertBefore(targetNodePutInjection, listPut);
                     return classNode;
                 }
