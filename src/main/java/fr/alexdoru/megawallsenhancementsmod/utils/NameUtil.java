@@ -139,7 +139,6 @@ public class NameUtil {
      * For each new player spawned in the world it will create a new networkplayerinfo instance a rerun all the code in the method
      * to generate the field MWPlayerData, however it will reuse the field to display the nametag
      */
-    // TODO ajouter une map statique dans la class MWPLayerData qui stocke les UUID, MWPlayerData et se vide en ?
     public static void transformGameProfile(GameProfile gameProfileIn, boolean forceRefresh) {
 
         if (!(gameProfileIn instanceof GameProfileAccessor)) {
@@ -148,10 +147,17 @@ public class NameUtil {
 
         GameProfileAccessor gameProfileAccessor = (GameProfileAccessor) gameProfileIn;
         MWPlayerData mwPlayerData = gameProfileAccessor.getMWPlayerData();
+        UUID id = gameProfileIn.getId();
+
+        if (mwPlayerData == null && !forceRefresh) {
+            MWPlayerData cachedMWPlayerData = MWPlayerData.dataCache.get(id);
+            if (cachedMWPlayerData != null) {
+                gameProfileAccessor.setMWPlayerData(cachedMWPlayerData);
+                return;
+            }
+        }
 
         if (mwPlayerData == null || forceRefresh) {
-
-            //long l = System.nanoTime();
 
             String username = gameProfileIn.getName();
             String uuid = gameProfileIn.getId().toString().replace("-", "");
@@ -217,13 +223,10 @@ public class NameUtil {
         }
 
             if (mwPlayerData == null) {
-                gameProfileAccessor.setMWPlayerData(new MWPlayerData(wdr, iExtraPrefix, squadname, displayName, KillCounter.getPlayersFinals(username)));
+                gameProfileAccessor.setMWPlayerData(new MWPlayerData(id, wdr, iExtraPrefix, squadname, displayName, KillCounter.getPlayersFinals(username)));
             } else {
-                mwPlayerData.setData(wdr, iExtraPrefix, squadname, displayName, KillCounter.getPlayersFinals(username));
+                mwPlayerData.setData(id, wdr, iExtraPrefix, squadname, displayName, KillCounter.getPlayersFinals(username));
             }
-
-            //long j = System.nanoTime() - l;
-            //ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + "Transformed gameprofile of : " + EnumChatFormatting.GREEN + gameProfileIn.getName() + EnumChatFormatting.AQUA + " in " + j + " ns"));
 
         }
 

@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
+import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.network.NetworkPlayerInfo;
 
@@ -21,11 +22,13 @@ public class NetHandlerPlayClientHook {
             if (playerName != null) {
                 playerInfoMap.remove(playerName);
             }
+            MWPlayerData.dataCache.remove(((NetworkPlayerInfo) o).getGameProfile().getId());
         }
     }
 
     public static void clearPlayerMap() {
         playerInfoMap.clear();
+        MWPlayerData.dataCache.clear();
     }
 
 }
