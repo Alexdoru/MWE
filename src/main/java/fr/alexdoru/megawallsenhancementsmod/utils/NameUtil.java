@@ -266,9 +266,10 @@ public class NameUtil {
 
     /**
      * Returns true if it's the uuid of an NPC
+     * from experimentation, nicks are v1 and real players v4
      */
     public static boolean filterNPC(UUID uuid) {
-        return uuid.version() != 4;
+        return uuid.version() == 2;
     }
 
 }
