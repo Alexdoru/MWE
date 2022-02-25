@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.utils;
 import com.mojang.authlib.GameProfile;
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
@@ -19,7 +20,10 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 public class NameUtil {
 
@@ -34,45 +38,11 @@ public class NameUtil {
     private static final List<IChatComponent> allPrefix = Arrays.asList(iprefix, iprefix_bhop, iprefix_scan, isquadprefix);
     private static final Minecraft mc = Minecraft.getMinecraft();
 
-    public static final HashMap<String, NetworkPlayerInfo> playerInfoMap = new HashMap<>();
-
-    /**
-     * Method call is inject by NetHandlerPlayClientTransformer
-     */
-    public static void putPlayerInMap(String playerName, NetworkPlayerInfo networkplayerinfo) {
-        if (playerName != null && !filterNPC(networkplayerinfo.getGameProfile().getId())) {
-            playerInfoMap.put(playerName, networkplayerinfo);
-        }
-    }
-
-    /**
-     * Method call is inject by NetHandlerPlayClientTransformer
-     */
-    public static void removePlayerFromMap(Object o) {
-        if (o instanceof NetworkPlayerInfo) {
-            String playerName = ((NetworkPlayerInfo) o).getGameProfile().getName();
-            if (playerName != null) {
-                playerInfoMap.remove(playerName);
-            }
-        }
-    }
-
-    /**
-     * Method call is inject by NetHandlerPlayClientTransformer
-     */
-    public static void clearPlayerMap() {
-        playerInfoMap.clear();
-    }
-
-    public static NetworkPlayerInfo getPlayerInfo(String playerName) {
-        return playerInfoMap.get(playerName);
-    }
-
     /**
      * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
      */
     public static void updateGameProfileAndName(String playername) {
-        NetworkPlayerInfo networkPlayerInfo = playerInfoMap.get(playername);
+        NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
         if (networkPlayerInfo != null) {
             transformGameProfile(networkPlayerInfo.getGameProfile(), true);
             networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
@@ -160,7 +130,7 @@ public class NameUtil {
      * Method call is inject in Scoreboard
      */
     public static void transformNameTablist(String playername) {
-        NetworkPlayerInfo networkPlayerInfo = playerInfoMap.get(playername);
+        NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
         if (networkPlayerInfo != null) {
             transformGameProfile(networkPlayerInfo.getGameProfile(), true);
             networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
@@ -191,6 +161,8 @@ public class NameUtil {
         MWPlayerData mwPlayerData = gameProfileAccessor.getMWPlayerData();
 
         if (mwPlayerData == null || forceRefresh) {
+
+            //long l = System.nanoTime();
 
             String username = gameProfileIn.getName();
             String uuid = gameProfileIn.getId().toString().replace("-", "");
@@ -260,6 +232,9 @@ public class NameUtil {
             } else {
                 mwPlayerData.setData(wdr, iExtraPrefix, squadname, displayName, KillCounter.getPlayersFinals(username));
             }
+
+            //long j = System.nanoTime() - l;
+            //ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + "Transformed gameprofile of : " + EnumChatFormatting.GREEN + gameProfileIn.getName() + EnumChatFormatting.AQUA + " in " + j + " ns"));
 
         }
 

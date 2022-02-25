@@ -3,12 +3,12 @@ package fr.alexdoru.megawallsenhancementsmod.events;
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.ArrowHitGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.HunterStrengthGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.KillCooldownGui;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.commands.CommandReport;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import net.minecraft.client.Minecraft;
@@ -178,7 +178,7 @@ public class ChatEvents {
     }
 
     private static boolean isAValidName(String playername) {
-        return NameUtil.getPlayerInfo(playername) != null;
+        return NetHandlerPlayClientHook.playerInfoMap.get(playername) != null;
     }
 
     private static boolean isAValidCheat(String cheat) {
