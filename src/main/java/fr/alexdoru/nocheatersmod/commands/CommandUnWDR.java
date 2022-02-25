@@ -34,7 +34,7 @@ public class CommandUnWDR extends CommandBase {
 
             new Thread(() -> {
 
-                CachedMojangUUID apireq;// TODO il se passe quoi si j'ai pas d'API key ?
+                CachedMojangUUID apireq;
                 String playername = args[0];
                 try {
                     apireq = (new CachedMojangUUID(playername));

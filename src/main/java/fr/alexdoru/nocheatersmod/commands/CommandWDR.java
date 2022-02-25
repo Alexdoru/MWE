@@ -182,8 +182,8 @@ public class CommandWDR extends CommandBase {
                 apireq = new CachedMojangUUID(args[0]);
                 uuid = apireq.getUuid();
                 playername = apireq.getName();
-                if (uuid != null) {
-                    CachedHypixelPlayerData playerdata;// TODO il se passe quoi si j'ai pas d'API key ?
+                if (uuid != null && !HypixelApiKeyUtil.apiKeyIsNotSetup()) {
+                    CachedHypixelPlayerData playerdata;
                     try {
                         playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
                         LoginData loginData = new LoginData(playerdata.getPlayerData());
