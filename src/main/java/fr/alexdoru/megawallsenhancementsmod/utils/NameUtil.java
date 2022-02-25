@@ -34,20 +34,34 @@ public class NameUtil {
     private static final List<IChatComponent> allPrefix = Arrays.asList(iprefix, iprefix_bhop, iprefix_scan, isquadprefix);
     private static final Minecraft mc = Minecraft.getMinecraft();
 
-    private static final HashMap<String, NetworkPlayerInfo> playerInfoMap = new HashMap<>();
+    public static final HashMap<String, NetworkPlayerInfo> playerInfoMap = new HashMap<>();
 
     /**
      * Method call is inject by NetHandlerPlayClientTransformer
      */
     public static void putPlayerInMap(String playerName, NetworkPlayerInfo networkplayerinfo) {
-        playerInfoMap.put(playerName, networkplayerinfo);
+        if (playerName != null && !filterNPC(networkplayerinfo.getGameProfile().getId())) {
+            playerInfoMap.put(playerName, networkplayerinfo);
+        }
     }
 
     /**
      * Method call is inject by NetHandlerPlayClientTransformer
      */
-    public static NetworkPlayerInfo removePlayerFromMap(String playerName) {
-        return playerInfoMap.remove(playerName);
+    public static void removePlayerFromMap(Object o) {
+        if (o instanceof NetworkPlayerInfo) {
+            String playerName = ((NetworkPlayerInfo) o).getGameProfile().getName();
+            if (playerName != null) {
+                playerInfoMap.remove(playerName);
+            }
+        }
+    }
+
+    /**
+     * Method call is inject by NetHandlerPlayClientTransformer
+     */
+    public static void clearPlayerMap() {
+        playerInfoMap.clear();
     }
 
     public static NetworkPlayerInfo getPlayerInfo(String playerName) {
@@ -166,7 +180,7 @@ public class NameUtil {
      * For each new player spawned in the world it will create a new networkplayerinfo instance a rerun all the code in the method
      * to generate the field MWPlayerData, however it will reuse the field to display the nametag
      */
-    // TODO ajouter une map qui stocke les UUID, MWPlayerData et se vide en ?
+    // TODO ajouter une map statique dans la class MWPLayerData qui stocke les UUID, MWPlayerData et se vide en ?
     public static void transformGameProfile(GameProfile gameProfileIn, boolean forceRefresh) {
 
         if (!(gameProfileIn instanceof GameProfileAccessor)) {
