@@ -1,9 +1,13 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
+import com.mojang.authlib.GameProfile;
 import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.EnumChatFormatting;
 
 public class GuiPlayerTabOverlayHook {
@@ -15,11 +19,20 @@ public class GuiPlayerTabOverlayHook {
         return ConfigHandler.finalsInTablist ? (FKCounterMod.isInMwGame ? FK_SCORE_WIDTH : 0) : 0;
     }
 
-    public static void renderFinals(int playersFinals, int x, int y) {
-        if (!ConfigHandler.finalsInTablist || playersFinals == 0 || !FKCounterMod.isInMwGame) {
+    public static void renderFinals(NetworkPlayerInfo networkPlayerInfo, int x, int y) {
+        GameProfile gameProfile = networkPlayerInfo.getGameProfile();
+        if (!(gameProfile instanceof GameProfileAccessor)) {
             return;
         }
-        String s1 = EnumChatFormatting.GOLD + "" + playersFinals;
+        MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfile).getMWPlayerData();
+        if (mwPlayerData == null) {
+            return;
+        }
+        int playerFinalkills = mwPlayerData.playerFinalkills;
+        if (!ConfigHandler.finalsInTablist || playerFinalkills == 0 || !FKCounterMod.isInMwGame) {
+            return;
+        }
+        String s1 = EnumChatFormatting.GOLD + "" + playerFinalkills;
         fontRendererObj.drawStringWithShadow(s1, (float) (x - fontRendererObj.getStringWidth(s1) - FK_SCORE_WIDTH), (float) y, 16777215);
     }
 
