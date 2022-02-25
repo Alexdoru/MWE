@@ -126,17 +126,6 @@ public class NameUtil {
 
     }
 
-    /**
-     * Method call is inject in Scoreboard
-     */
-    public static void transformNameTablist(String playername) {
-        NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
-        if (networkPlayerInfo != null) {
-            transformGameProfile(networkPlayerInfo.getGameProfile(), true);
-            networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
-        }
-    }
-
     public static void transformNameTablist(UUID uuid) {
         NetworkPlayerInfo networkPlayerInfo = mc.getNetHandler().getPlayerInfo(uuid);
         if (networkPlayerInfo != null) {

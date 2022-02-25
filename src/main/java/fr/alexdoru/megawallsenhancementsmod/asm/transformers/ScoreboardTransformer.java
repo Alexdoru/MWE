@@ -24,7 +24,7 @@ public class ScoreboardTransformer implements IMyClassTransformer {
                         if (nextNode != null && nextNode.getOpcode() == IRETURN) {
                             /*
                              * Injects before line 329 :
-                             * NameUtil.transformNameTablist(player);
+                             * ScoreboardHook.transformNameTablist(player);
                              */
                             methodNode.instructions.insertBefore(insnNode, getInsnList());
                         }
@@ -44,7 +44,7 @@ public class ScoreboardTransformer implements IMyClassTransformer {
                             if (thirdNode != null) {
                                 /*
                                  * Injects after line 360 :
-                                 * NameUtil.transformNameTablist(player);
+                                 * ScoreboardHook.transformNameTablist(player);
                                  */
                                 methodNode.instructions.insertBefore(thirdNode, getInsnList());
                             }
@@ -62,7 +62,7 @@ public class ScoreboardTransformer implements IMyClassTransformer {
         list.add(new VarInsnNode(ALOAD, 1));
         list.add(new MethodInsnNode(
                 INVOKESTATIC,
-                "fr/alexdoru/megawallsenhancementsmod/utils/NameUtil",
+                "fr/alexdoru/megawallsenhancementsmod/asm/hooks/ScoreboardHook",
                 "transformNameTablist",
                 "(Ljava/lang/String;)V",
                 false
