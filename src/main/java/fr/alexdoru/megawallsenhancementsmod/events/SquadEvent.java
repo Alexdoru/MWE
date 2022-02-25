@@ -2,11 +2,8 @@ package fr.alexdoru.megawallsenhancementsmod.events;
 
 import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
-import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
-import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -23,16 +20,9 @@ public class SquadEvent {
 
     @SubscribeEvent
     public void onNameFormat(NameFormat event) {
-        if (event.entity instanceof EntityPlayer) {
-            if (((EntityPlayer) event.entity).getGameProfile() instanceof GameProfileAccessor) {
-                MWPlayerData mwPlayerData = ((GameProfileAccessor) ((EntityPlayer) event.entity).getGameProfile()).getMWPlayerData();
-                if (mwPlayerData != null) {
-                    String squadname = mwPlayerData.squadname;
-                    if (squadname != null) {
-                        event.displayname = squadname;
-                    }
-                }
-            }
+        String squadname = squadmap.get(event.username);
+        if (squadname != null) {
+            event.displayname = squadname;
         }
     }
 
