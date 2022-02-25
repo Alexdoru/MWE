@@ -26,9 +26,6 @@ public class RenderManagerHook {
             return !ConfigHandler.drawHitboxForPlayers;
         }
         if (entityIn instanceof EntityArrow) {
-            if (!(entityIn instanceof EntityArrowAccessor)) {
-                return false;
-            }
             if (((EntityArrowAccessor) entityIn).isInGround()) {
                 return !ConfigHandler.drawHitboxForGroundedArrows;
             }
