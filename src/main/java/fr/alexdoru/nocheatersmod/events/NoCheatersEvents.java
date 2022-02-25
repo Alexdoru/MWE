@@ -71,18 +71,16 @@ public class NoCheatersEvents {
 
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
 
-            if (networkPlayerInfo.getGameProfile() instanceof GameProfileAccessor) {
-                MWPlayerData mwPlayerData = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData();
-                if (mwPlayerData != null) {
-                    WDR wdr = mwPlayerData.wdr;
-                    if (wdr == null) {
-                        continue;
-                    }
-                    String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-                    String playerName = networkPlayerInfo.getGameProfile().getName();
-                    boolean gotautoreported = sendAutoReport(datenow, playerName, wdr);
-                    list.add(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr, gotautoreported)));
+            MWPlayerData mwPlayerData = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData();
+            if (mwPlayerData != null) {
+                WDR wdr = mwPlayerData.wdr;
+                if (wdr == null) {
+                    continue;
                 }
+                String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
+                String playerName = networkPlayerInfo.getGameProfile().getName();
+                boolean gotautoreported = sendAutoReport(datenow, playerName, wdr);
+                list.add(IChatComponent.Serializer.jsonToComponent(createwarningmessage(datenow, uuid, playerName, wdr, gotautoreported)));
             }
 
         }

@@ -325,11 +325,9 @@ public class KillCounter {
 
     private static void updateNetworkPlayerinfo(String playername, int finals) {
         GameProfile gameProfile = NetHandlerPlayClientHook.playerInfoMap.get(playername).getGameProfile();
-        if (gameProfile instanceof GameProfileAccessor) {
-            MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfile).getMWPlayerData();
-            if (mwPlayerData != null) {
-                mwPlayerData.playerFinalkills = finals;
-            }
+        MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfile).getMWPlayerData();
+        if (mwPlayerData != null) {
+            mwPlayerData.playerFinalkills = finals;
         }
     }
 
