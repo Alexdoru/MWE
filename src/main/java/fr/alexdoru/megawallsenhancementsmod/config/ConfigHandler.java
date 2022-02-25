@@ -67,7 +67,7 @@ public class ConfigHandler {
     public static boolean toggleautoreport;
     /*those fields are in milliseconds*/
     public static long timeBetweenReports;
-    public static long timeAutoReport;
+    public static long timeAutoReport;// TODO enlever la limite max ?
     public static boolean deleteReports;
     public static long timeDeleteReport;
 

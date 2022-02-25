@@ -107,6 +107,7 @@ public class CommandName extends CommandBase {
             }
 
             if (!messagebody.toString().equals("")) {
+                // TODO changer la maniere de faire le message et ajouter un click event pour ouvir namesmc https://namemc.com/search?q=Alexdoru
 
                 addChatMessage(IChatComponent.Serializer.jsonToComponent(makeChatList("Name History", messagebody.toString(), displaypage, nbpage, "/name " + args[0])));
 
