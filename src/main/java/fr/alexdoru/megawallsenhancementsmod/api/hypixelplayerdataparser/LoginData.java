@@ -190,8 +190,8 @@ public class LoginData {
         return rank != null && lastLogout == 0 && lastLogin == 0;
     }
 
-    public boolean isMVPPlusPlus() {
-        return monthlyPackageRank != null && monthlyPackageRank.equals("SUPERSTAR");
+    public boolean isnotMVPPlusPlus() {
+        return monthlyPackageRank == null || !monthlyPackageRank.equals("SUPERSTAR");
     }
 
     public long getFirstLogin() {
