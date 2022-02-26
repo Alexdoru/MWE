@@ -217,7 +217,7 @@ class ScanPlayerTask implements Callable<String> {
             } else if (megawallsstats.getGames_played() < 15) {
 
                 GeneralInfo generalInfo = new GeneralInfo(playerdata.getPlayerData());
-                if (generalInfo.completedQuests < 20 && generalInfo.getNetworkLevel() > 45f) {
+                if (generalInfo.getCompletedQuests() < 20 && generalInfo.getNetworkLevel() > 45f) {
 
                     JsonObject classesdata = megawallsstats.getClassesdata();
 
@@ -229,7 +229,7 @@ class ScanPlayerTask implements Callable<String> {
 
                         if (mwClass != null) {
                             JsonObject entryclassobj = classesdata.getAsJsonObject(mwClass.className.toLowerCase());
-                            IChatComponent reportmsg = getReportMessageForClass2(playername, mwClass.className, entryclassobj, generalInfo.completedQuests, (int) generalInfo.getNetworkLevel(), megawallsstats.getGames_played());
+                            IChatComponent reportmsg = getReportMessageForClass2(playername, mwClass.className, entryclassobj, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megawallsstats.getGames_played());
                             if (reportmsg != null) {
                                 addChatMessage(reportmsg);
                                 CommandScanGame.getScanmap().put(uuid, reportmsg);
@@ -247,7 +247,7 @@ class ScanPlayerTask implements Callable<String> {
                             if (entry.getValue() != null && entry.getValue().isJsonObject()) {
                                 JsonObject entryclassobj = entry.getValue().getAsJsonObject();
 
-                                IChatComponent reportmsg = getReportMessageForClass2(playername, entry.getKey(), entryclassobj, generalInfo.completedQuests, (int) generalInfo.getNetworkLevel(), megawallsstats.getGames_played());
+                                IChatComponent reportmsg = getReportMessageForClass2(playername, entry.getKey(), entryclassobj, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megawallsstats.getGames_played());
                                 if (reportmsg != null) {
                                     msg.appendSibling(reportmsg);
                                 }

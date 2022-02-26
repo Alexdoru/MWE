@@ -23,7 +23,7 @@ public class GeneralInfo extends LoginData {
     private final int karma;
     private final String mcVersionRp;
 
-    public int completedQuests = 0;
+    private int completedQuests = 0;
 
     private String DISCORD;
     private String TWITCH;
@@ -156,6 +156,10 @@ public class GeneralInfo extends LoginData {
 
     public float getNetworkLevel() {
         return (float) ILeveling.getExactLevel((double) networkExp);
+    }
+
+    public int getCompletedQuests() {
+        return completedQuests;
     }
 
 }
