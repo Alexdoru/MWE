@@ -15,6 +15,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -144,14 +145,27 @@ class StalkTask implements Callable<String> {
                     return null;
 
                 } else if (logindata.isHidingFromAPI()) { // player is blocking their API
+
+                    logindata.parseLatestActivity(playerdata.getPlayerData());
+                    long latestActivityTime = logindata.getLatestActivityTime();
+                    String latestActivity = logindata.getLatestActivity();
+
                     MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
-                    addChatMessage(new ChatComponentText(getTagMW())
+                    IChatComponent imsg = new ChatComponentText(getTagMW())
                             .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
-                            .appendSibling(new ChatComponentText(EnumChatFormatting.RED + " is blocking their API."
-                                    + EnumChatFormatting.GREEN + " Selected class : "
+                            .appendSibling(new ChatComponentText(EnumChatFormatting.RED + " is blocking their API."));
+
+                    if (latestActivityTime != 0 && latestActivity != null) {
+                        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.RED + " Latest activity : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(latestActivityTime) + " " + EnumChatFormatting.RED + latestActivity + "."));
+                    }
+
+                    imsg.appendSibling(new ChatComponentText(
+                            EnumChatFormatting.GREEN + " Selected class : "
                                     + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass())
                                     + EnumChatFormatting.GREEN + " with the " + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwskin() == null ? (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass()) : mwclassskindata.getCurrentmwskin()) + EnumChatFormatting.GREEN + " skin."
-                            )));
+                    ));
+
+                    addChatMessage(imsg);
                     return null;
 
                 } else if (logindata.isOnline()) { // player is online but hiding their session, that doesn't work anymore
