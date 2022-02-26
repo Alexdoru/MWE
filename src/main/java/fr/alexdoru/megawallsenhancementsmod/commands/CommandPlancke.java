@@ -4,7 +4,6 @@ import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.GeneralInfo;
-import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassStats;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
@@ -58,10 +57,11 @@ public class CommandPlancke extends CommandBase {
             String uuid = apiname.getUuid();
             String playername = apiname.getName();
             CachedHypixelPlayerData playerdata;
+            GeneralInfo generalstats;
             try {
                 playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
-                LoginData loginData = new LoginData(playerdata.getPlayerData());
-                if (!playername.equals(loginData.getdisplayname())) {
+                generalstats = new GeneralInfo(playerdata.getPlayerData());
+                if (!playername.equals(generalstats.getdisplayname())) {
                     addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + "This player never joined Hypixel, it might be a nick."));
                     return;
                 }
@@ -70,7 +70,6 @@ public class CommandPlancke extends CommandBase {
                 return;
             }
 
-            GeneralInfo generalstats = new GeneralInfo(playerdata.getPlayerData());
             String formattedname = generalstats.getFormattedName();
 
             if (generalstats.hasNeverJoinedHypixel()) { // player never joined hypixel
