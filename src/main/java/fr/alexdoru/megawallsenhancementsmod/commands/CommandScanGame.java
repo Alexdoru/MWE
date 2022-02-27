@@ -312,9 +312,9 @@ class ScanPlayerTask implements Callable<String> {
             return new ChatComponentText(ChatUtil.getTagMW())
                     .appendSibling(ChatUtil.makeReportButtons(playername, "cheating", "", ClickEvent.Action.RUN_COMMAND, ClickEvent.Action.SUGGEST_COMMAND))
                     .appendSibling(new ChatComponentText(getFormattedName(networkPlayerInfo)
-                            + EnumChatFormatting.GRAY + " played " + EnumChatFormatting.GOLD + gameplayed
+                            + EnumChatFormatting.GRAY + " played " + EnumChatFormatting.GOLD + gameplayed + EnumChatFormatting.GRAY + " games"
                             + EnumChatFormatting.GRAY + " ,network lvl " + EnumChatFormatting.GOLD + networklevel
-                            + EnumChatFormatting.GRAY + " with " + EnumChatFormatting.GOLD + quests
+                            + EnumChatFormatting.GRAY + " ,with " + EnumChatFormatting.GOLD + quests + EnumChatFormatting.GRAY + " quests"
                             + EnumChatFormatting.GRAY + " and has : " + EnumChatFormatting.GOLD + className + " "
                             + EnumChatFormatting.GOLD + ChatUtil.intToRoman(skill_level_d) + " "
                             + EnumChatFormatting.GOLD + ChatUtil.intToRoman(skill_level_a) + " "
