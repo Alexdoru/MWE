@@ -85,17 +85,11 @@ public class NameUtil {
             player.refreshDisplayName();
         }
 
-        MWPlayerData mwPlayerData = ((GameProfileAccessor) player.getGameProfile()).getMWPlayerData();
-
-        /*For mc.thePlayer, mwPlayerData is null when the method is called*/
         if (player instanceof EntityPlayerSP) {
-            NetworkPlayerInfo playerInfo = mc.getNetHandler().getPlayerInfo(player.getGameProfile().getId());
-            if (playerInfo == null) {
-                return;
-            }
-            transformGameProfile(playerInfo.getGameProfile(), true);
-            mwPlayerData = ((GameProfileAccessor) playerInfo.getGameProfile()).getMWPlayerData();
+            transformGameProfile(player.getGameProfile(), true);
         }
+
+        MWPlayerData mwPlayerData = ((GameProfileAccessor) player.getGameProfile()).getMWPlayerData();
 
         if (mwPlayerData == null) {
             return;
