@@ -116,19 +116,17 @@ public class ChatEvents {
                 return;
             }
 
-            // TODO get the real ban message
-            if (msg.contains("A player has been removed from your game.")) {
+            if (msg.equals("A player has been removed from your game.")) {
                 new DelayedTask(() -> {
                     String recentlyDisconnectedPlayers = NetHandlerPlayClientHook.getRecentlyDisconnectedPlayers();
                     if (!recentlyDisconnectedPlayers.equals("")) {
-                        ChatUtil.addChatMessage(
-                                new ChatComponentText(
-                                        ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Player(s) removed : " + recentlyDisconnectedPlayers)
-                                        .setChatStyle(new ChatStyle()
-                                                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
-                                                        EnumChatFormatting.GREEN + "Players removed in the last 2 seconds, click to run : \n\n"
-                                                                + EnumChatFormatting.YELLOW + "/stalk " + recentlyDisconnectedPlayers)))
-                                                .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk " + recentlyDisconnectedPlayers)))
+                        ChatUtil.addChatMessage(new ChatComponentText(
+                                ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Player(s) recently disconnected : " + EnumChatFormatting.YELLOW + recentlyDisconnectedPlayers)
+                                .setChatStyle(new ChatStyle()
+                                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
+                                                EnumChatFormatting.GREEN + "Those are the players disconnected in the last 2 seconds, click this message to run : \n\n"
+                                                        + EnumChatFormatting.YELLOW + "/stalk " + recentlyDisconnectedPlayers)))
+                                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk " + recentlyDisconnectedPlayers)))
                         );
                     }
                 }, 20);
