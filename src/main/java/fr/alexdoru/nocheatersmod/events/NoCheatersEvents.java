@@ -28,7 +28,7 @@ public class NoCheatersEvents {
     public void onPlayerJoin(EntityJoinWorldEvent event) {
         /* mc.thePlayer is passing in here and is instance of EntityPlayerSp
          * other players are instance of EntityOtherPlayerMP */
-        if (mc.thePlayer != null && event.entity instanceof EntityPlayer && !NameUtil.filterNPC(event.entity.getUniqueID())) {
+        if (event.entity instanceof EntityPlayer) {
             try {
                 NameUtil.transformNametag((EntityPlayer) event.entity, false, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
             } catch (Exception e) {
