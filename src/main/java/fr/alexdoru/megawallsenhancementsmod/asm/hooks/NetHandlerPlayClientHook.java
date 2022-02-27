@@ -19,6 +19,7 @@ public class NetHandlerPlayClientHook {
         }
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     public static void removePlayerFromMap(Object o) {
         if (o instanceof NetworkPlayerInfo) {
             String playerName = ((NetworkPlayerInfo) o).getGameProfile().getName();
