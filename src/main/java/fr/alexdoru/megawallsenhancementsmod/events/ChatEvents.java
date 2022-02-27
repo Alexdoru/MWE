@@ -8,16 +8,15 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.ArrowHitGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.HunterStrengthGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.KillCooldownGui;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.nocheatersmod.commands.CommandReport;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.event.ClickEvent;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.event.HoverEvent;
+import net.minecraft.util.*;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -86,6 +85,7 @@ public class ChatEvents {
                 event.setCanceled(true);
                 return;
             }
+
             if (ConfigHandler.show_ArrowHitHUD && ArrowHitGui.processMessage(msg)) {
                 return;
             }
@@ -102,6 +102,7 @@ public class ChatEvents {
             if (ConfigHandler.reportsuggestions && parseReportMessage(msg)) {
                 return;
             }
+
             if (MWGameStatsEvent.processMessage(msg)) {
                 return;
             }
@@ -113,6 +114,25 @@ public class ChatEvents {
 
             if (parseAPIKey(msg)) {
                 return;
+            }
+
+            // TODO get the real ban message
+            if (msg.contains("A player has been removed from your game.")) {
+                new DelayedTask(() -> {
+                    String recentlyDisconnectedPlayers = NetHandlerPlayClientHook.getRecentlyDisconnectedPlayers();
+                    if (!recentlyDisconnectedPlayers.equals("")) {
+                        ChatUtil.addChatMessage(
+                                new ChatComponentText(
+                                        ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Player(s) removed : " + recentlyDisconnectedPlayers)
+                                        .setChatStyle(new ChatStyle()
+                                                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
+                                                        EnumChatFormatting.GREEN + "Players removed in the last 2 seconds, click to run : \n\n"
+                                                                + EnumChatFormatting.YELLOW + "/stalk " + recentlyDisconnectedPlayers)))
+                                                .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk " + recentlyDisconnectedPlayers)))
+                        );
+                    }
+                }, 20);
+                //return;
             }
 
             /*Status messages*/
