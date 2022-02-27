@@ -3,7 +3,6 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 import com.google.common.collect.EvictingQueue;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
-import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.network.NetworkPlayerInfo;
 
 import java.util.HashMap;
@@ -15,7 +14,7 @@ public class NetHandlerPlayClientHook {
     private static final EvictingQueue<StringLong> latestDisconnected = EvictingQueue.create(10);
 
     public static void putPlayerInMap(String playerName, NetworkPlayerInfo networkplayerinfo) {
-        if (playerName != null && !NameUtil.filterNPC(networkplayerinfo.getGameProfile().getId())) {
+        if (playerName != null) {
             playerInfoMap.put(playerName, networkplayerinfo);
         }
     }
