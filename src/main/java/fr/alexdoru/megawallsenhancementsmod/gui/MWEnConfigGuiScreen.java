@@ -35,11 +35,10 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(18, XposLeftButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(18)));
         buttonList.add(new GuiButton(19, XposLeftButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(19)));
         buttonList.add(new GuiButton(15, XposLeftButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
-        buttonList.add(new GuiButton(1, XposLeftButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
-        buttonList.add(new GuiButton(0, XposLeftButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
-        buttonList.add(new GuiButton(16, XposLeftButton, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
+        buttonList.add(new GuiButton(0, XposLeftButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
+        buttonList.add(new GuiButton(16, XposLeftButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
+        buttonList.add(new GuiButton(21, XposLeftButton, getYposForButton(-0), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
 
-        buttonList.add(new GuiButton(21, XposRightButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
         buttonList.add(new GuiButton(17, XposRightButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
         buttonList.add(new GuiSlider(20, XposRightButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
         buttonList.add(new GuiButton(22, XposRightButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(22)));
@@ -86,8 +85,6 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 return "Short coin messages : " + getSuffix(ConfigHandler.shortencoinmessage);
             case 9:
                 return "Show hunter strength HUD : " + getSuffix(ConfigHandler.hunterStrengthHUD);
-            case 1:
-                return "Report suggestions in chat : " + getSuffix(ConfigHandler.reportsuggestions);
             case 18:
                 return "Cancel night vision effect : " + getSuffix(!ConfigHandler.keepNightVisionEffect);
             case 2:
@@ -148,12 +145,6 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 9:
                 textLines.add(EnumChatFormatting.GREEN + "When you play the Hunter class it prints a HUD and plays a sound before getting strength");
                 break;
-            case 1:
-                textLines.add(EnumChatFormatting.GREEN + "When there is a message that respects the following patterns it will print a report suggestion in chat");
-                textLines.add(EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "playername is bhoping");
-                textLines.add(EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "wdr playername cheat");
-                textLines.add(EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "report playername cheat");
-                break;
             case 18:
                 textLines.add(EnumChatFormatting.GREEN + "Removes the visual effect of night vision");
                 break;
@@ -204,12 +195,6 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                     Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(ChatEvents.strengthSound, 0.0F));
                 }
                 ConfigHandler.hunterStrengthHUD = !ConfigHandler.hunterStrengthHUD;
-                break;
-            case 1:
-                if (!ConfigHandler.reportsuggestions) {
-                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(ChatEvents.reportSuggestionSound, 1.0F));
-                }
-                ConfigHandler.reportsuggestions = !ConfigHandler.reportsuggestions;
                 break;
             case 18:
                 ConfigHandler.keepNightVisionEffect = !ConfigHandler.keepNightVisionEffect;
@@ -294,7 +279,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredTitle("Mega Walls Enhancements v" + MegaWallsEnhancementsMod.version, 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 8, Integer.parseInt("55FF55", 16));
+        drawCenteredTitle("Mega Walls Enhancements v" + MegaWallsEnhancementsMod.version, 2, (width / 2.0f), getYposForButton(-7), Integer.parseInt("55FF55", 16));
         super.drawScreen(mouseX, mouseY, partialTicks);
         drawTooltips(mouseX, mouseY);
     }
