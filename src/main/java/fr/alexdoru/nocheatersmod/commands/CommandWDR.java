@@ -5,10 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
-import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import fr.alexdoru.nocheatersmod.data.TimeMark;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
@@ -55,7 +52,7 @@ public class CommandWDR extends CommandBase {
             return;
         }
 
-        (new Thread(() -> {
+        Multithreading.addTaskToQueue(() -> {
             boolean isaTimestampedReport = false;
             boolean usesTimeMark = false;
             ArrayList<String> arraycheats = new ArrayList<>();    // for WDR object
@@ -76,13 +73,13 @@ public class CommandWDR extends CommandBase {
                         if (isaTimestampedReport) {
                             addChatMessage(new ChatComponentText(getTagNoCheaters()
                                     + EnumChatFormatting.RED + "You can't have more than one timestamp in the arguments."));
-                            return;
+                            return null;
                         }
 
                         if (usesTimeMark) {
                             addChatMessage(new ChatComponentText(getTagNoCheaters()
                                     + EnumChatFormatting.RED + "You can't use both special arguments in the same reports!"));
-                            return;
+                            return null;
                         }
 
                         isaTimestampedReport = true;
@@ -117,13 +114,13 @@ public class CommandWDR extends CommandBase {
                         if (usesTimeMark) {
                             addChatMessage(new ChatComponentText(getTagNoCheaters()
                                     + EnumChatFormatting.RED + "You can't use more than one #timestamp in the arguments."));
-                            return;
+                            return null;
                         }
 
                         if (isaTimestampedReport) {
                             addChatMessage(new ChatComponentText(getTagNoCheaters()
                                     + EnumChatFormatting.RED + "You can't use both special arguments in the same reports!"));
-                            return;
+                            return null;
                         }
 
                         usesTimeMark = true;
@@ -135,7 +132,7 @@ public class CommandWDR extends CommandBase {
 
                             addChatMessage(new ChatComponentText(getTagNoCheaters()
                                     + EnumChatFormatting.YELLOW + key + EnumChatFormatting.RED + " isn't a valid timestamp #"));
-                            return;
+                            return null;
 
                         } else {
 
@@ -168,7 +165,7 @@ public class CommandWDR extends CommandBase {
 
             if ((isaTimestampedReport || usesTimeMark) && args.length == 2) {
                 addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
-                return;
+                return null;
             }
 
             if ((isaTimestampedReport || usesTimeMark)) { // adds the timestamp to the report
@@ -216,7 +213,7 @@ public class CommandWDR extends CommandBase {
                 if (!isaNick) { // couldn't find the nicked player in the tab list
                     addChatMessage(new ChatComponentText(getTagNoCheaters()
                             + invalidplayernameMsg(args[0]) + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist"));
-                    return;
+                    return null;
                 }
 
             }
@@ -293,7 +290,9 @@ public class CommandWDR extends CommandBase {
                         + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : ".")));
             }
 
-        })).start();
+            return null;
+
+        });
 
     }
 

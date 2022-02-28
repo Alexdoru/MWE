@@ -9,6 +9,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWall
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
 import net.minecraft.client.Minecraft;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.util.ChatComponentText;
@@ -54,7 +55,8 @@ public class MWGameStatsEvent {
             return;
         }
 
-        (new Thread(() -> {
+        Multithreading.addTaskToQueue(() -> {
+
             String uuid = Minecraft.getMinecraft().thePlayer.getUniqueID().toString().replace("-", "");
             try {
                 HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
@@ -72,7 +74,11 @@ public class MWGameStatsEvent {
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
             }
             isRandom = false;
-        })).start();
+
+            return null;
+
+        });
+
     }
 
     private static void onGameEnd() {
@@ -80,13 +86,13 @@ public class MWGameStatsEvent {
             return;
         }
 
-        (new Thread(() -> {
+        Multithreading.addTaskToQueue(() -> {
             String uuid = Minecraft.getMinecraft().thePlayer.getUniqueID().toString().replace("-", "");
             try {
                 HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
                 gameStats = new MegaWallsClassStats(playerdata.getPlayerData(), chosen_class);
                 if (MWclassStats == null) {
-                    return;
+                    return null;
                 }
                 gameStats.minus(MWclassStats);
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.YELLOW + "Click to view the stats of your " + EnumChatFormatting.AQUA + "Mega Walls " + EnumChatFormatting.YELLOW + "game!")
@@ -97,7 +103,10 @@ public class MWGameStatsEvent {
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 e.printStackTrace();
             }
-        })).start();
+
+            return null;
+
+        });
     }
 
     public static MegaWallsClassStats getGameStats() {
