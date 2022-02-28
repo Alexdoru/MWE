@@ -149,8 +149,8 @@ public class ConfigHandler {
         Property pToggleicons = config.get(CATEGORY_NOCHEATERS, "Toggle Icons", true, "Display warning symbol on nametags of reported players");
         Property pTogglewarnings = config.get(CATEGORY_NOCHEATERS, "Toggle Warnings", false, "Gives warning messages in chat for reported players");
         Property pautoreportSuggestions = config.get(CATEGORY_NOCHEATERS, "Send report suggestions", true, "Send report suggestions");
-        Property pToggleautoreport = config.get(CATEGORY_NOCHEATERS, "Toggle Autoreport", false, "Automatically report previously reported players when they are in your lobby");
-        Property pTimeBetweenReports = config.get(CATEGORY_NOCHEATERS, "Time between reports", 4, "Time before the mod suggests to report the player again (hours)");
+        Property pToggleautoreport = config.get(CATEGORY_NOCHEATERS, "Toggle Autoreport", true, "Automatically report previously reported players when they are in your lobby");
+        Property pTimeBetweenReports = config.get(CATEGORY_NOCHEATERS, "Time between reports", 1, "Time before the mod suggests to report the player again (hours)");
         Property pTimeAutoReport = config.get(CATEGORY_NOCHEATERS, "Time for autoreports", 14, "It won't autoreport players whose last report is older than this (days)");
         Property pdeleteReports = config.get(CATEGORY_NOCHEATERS, "Delete Old Report", false, "Deletes reports older than the specified value");
         Property ptimeDeleteReport = config.get(CATEGORY_NOCHEATERS, "Time delete reports", 365, "Reports older than this will be deleted on game start (days)");
