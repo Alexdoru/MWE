@@ -6,10 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWall
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerStatus;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangPlayernameToUUID;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
@@ -19,8 +16,6 @@ import net.minecraft.util.IChatComponent;
 
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
@@ -54,11 +49,8 @@ public class CommandStalk extends CommandBase {
             return;
         }
 
-        int nbcores = Math.min(args.length, Runtime.getRuntime().availableProcessors());
-        ExecutorService service = Executors.newFixedThreadPool(nbcores);
-
         for (String name : args) {
-            service.submit(new StalkTask(name));
+            Multithreading.addTaskToQueue(new StalkTask(name));
         }
 
     }

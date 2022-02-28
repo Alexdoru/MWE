@@ -8,10 +8,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.GeneralI
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -27,8 +24,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
 
@@ -63,9 +58,6 @@ public class CommandScanGame extends CommandBase {
         String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
         Collection<NetworkPlayerInfo> playerCollection = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
 
-        int nbcores = Runtime.getRuntime().availableProcessors();
-        ExecutorService service = Executors.newFixedThreadPool(nbcores);
-
         int i = 0;
 
         if (!currentGameId.equals("?") && currentGameId.equals(scanGameId)) {
@@ -77,7 +69,7 @@ public class CommandScanGame extends CommandBase {
 
                 if (imsg == null) {
                     i++;
-                    service.submit(new ScanPlayerTask(networkPlayerInfo));
+                    Multithreading.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
                 } else if (!imsg.equals(nomatch)) {
                     addChatMessage(imsg);
                 }
@@ -91,7 +83,7 @@ public class CommandScanGame extends CommandBase {
 
             for (NetworkPlayerInfo networkPlayerInfo : playerCollection) {
                 i++;
-                service.submit(new ScanPlayerTask(networkPlayerInfo));
+                Multithreading.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
             }
 
             addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " players..."));

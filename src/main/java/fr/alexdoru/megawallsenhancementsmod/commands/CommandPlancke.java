@@ -8,6 +8,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWall
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -44,14 +45,14 @@ public class CommandPlancke extends CommandBase {
             return;
         }
 
-        (new Thread(() -> {
+        Multithreading.addTaskToQueue(() -> {
 
             CachedMojangUUID apiname;
             try {
                 apiname = new CachedMojangUUID(args[0]);
             } catch (ApiException e) {
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
-                return;
+                return null;
             }
 
             String uuid = apiname.getUuid();
@@ -63,11 +64,11 @@ public class CommandPlancke extends CommandBase {
                 generalstats = new GeneralInfo(playerdata.getPlayerData());
                 if (!playername.equals(generalstats.getdisplayname())) {
                     addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + "This player never joined Hypixel, it might be a nick."));
-                    return;
+                    return null;
                 }
             } catch (ApiException e) {
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
-                return;
+                return null;
             }
 
             String formattedname = generalstats.getFormattedName();
@@ -76,7 +77,7 @@ public class CommandPlancke extends CommandBase {
 
                 addChatMessage(new ChatComponentText(getTagMW()
                         + EnumChatFormatting.YELLOW + args[0] + EnumChatFormatting.RED + " has never joined Hypixel."));
-                return;
+                return null;
             }
 
             if (args.length == 1) {
@@ -118,7 +119,7 @@ public class CommandPlancke extends CommandBase {
                             if (mwclass == null) { // not a valid mw class
                                 addChatMessage(new ChatComponentText(getTagMW()
                                         + EnumChatFormatting.YELLOW + args[2] + EnumChatFormatting.RED + " isn't a valid mega walls class name."));
-                                return;
+                                return null;
                             }    // print mw stats for a certain class
 
                             MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwclass.className);
@@ -149,7 +150,9 @@ public class CommandPlancke extends CommandBase {
 
             }
 
-        })).start();
+            return null;
+
+        });
 
     }
 

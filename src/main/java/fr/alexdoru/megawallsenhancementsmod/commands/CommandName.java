@@ -5,6 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangNameHistory;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -42,14 +43,14 @@ public class CommandName extends CommandBase {
             return;
         }
 
-        (new Thread(() -> {
+        Multithreading.addTaskToQueue(() -> {
 
             CachedMojangUUID apiname;
             try {
                 apiname = new CachedMojangUUID(args[0]);
             } catch (ApiException e1) {
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e1.getMessage()));
-                return;
+                return null;
             }
             String uuid = apiname.getUuid();
 
@@ -58,7 +59,7 @@ public class CommandName extends CommandBase {
                 apinamehistory = new MojangNameHistory(uuid);
             } catch (ApiException e1) {
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e1.getMessage()));
-                return;
+                return null;
             }
 
             int displaypage = 1;
@@ -70,7 +71,7 @@ public class CommandName extends CommandBase {
                     displaypage = parseInt(args[1]);
                 } catch (NumberInvalidException e) {
                     addChatMessage(new ChatComponentText(EnumChatFormatting.RED + args[1] + " isn't a valid number."));
-                    return;
+                    return null;
                 }
             }
 
@@ -133,7 +134,9 @@ public class CommandName extends CommandBase {
                 addChatMessage(imsg);
             }
 
-        })).start();
+            return null;
+
+        });
 
     }
 
