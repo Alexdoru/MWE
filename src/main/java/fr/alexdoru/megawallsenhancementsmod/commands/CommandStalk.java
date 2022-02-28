@@ -156,7 +156,7 @@ class StalkTask implements Callable<String> {
                             .appendSibling(new ChatComponentText(EnumChatFormatting.RED + " is blocking their API."));
 
                     if (latestActivityTime != 0 && latestActivity != null) {
-                        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.RED + " Latest activity : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(latestActivityTime) + " " + EnumChatFormatting.GRAY + latestActivity + EnumChatFormatting.RED + "."));
+                        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.RED + " Latest activity : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(latestActivityTime) + EnumChatFormatting.GRAY + " ago " + latestActivity + EnumChatFormatting.RED + "."));
                     }
 
                     imsg.appendSibling(new ChatComponentText(
