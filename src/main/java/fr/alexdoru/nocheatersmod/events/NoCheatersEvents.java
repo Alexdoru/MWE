@@ -1,5 +1,6 @@
 package fr.alexdoru.nocheatersmod.events;
 
+import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
@@ -87,26 +88,17 @@ public class NoCheatersEvents {
 
     }
 
-    // TODO mettre le bouton report again avec la meme condition que l'autoreport
-    //  faire que le message des cheats soit cliquable pour envoyer un report n'importe quand
     public static IChatComponent createwarningmessage(long datenow, String uuid, String playername, WDR wdr, boolean disableReportButton) {
+
+        IChatComponent imsg;
+        IChatComponent allCheats;
 
         if (wdr.hacks.get(0).charAt(0) == '-') {
             // format for timestamps reports : UUID timestamplastreport -serverID timeonreplay playernameduringgame timestampforcheat specialcheat cheat1 cheat2 cheat3 etc
             IChatComponent[] formattedmessageArray = createPlayerTimestampedMsg(playername, wdr, EnumChatFormatting.LIGHT_PURPLE);
-            IChatComponent allCheats = formattedmessageArray[1];
+            allCheats = formattedmessageArray[1];
 
-            IChatComponent imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ").appendSibling(formattedmessageArray[0]).appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " joined,"));
-
-            if (!disableReportButton && wdr.canBeReported(datenow - 900000)) {
-                imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " Report again").setChatStyle(new ChatStyle()
-                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report this player again")))
-                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + uuid + " " + playername))));
-            }
-
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Cheats : ")).appendSibling(allCheats);
-
-            return imsg;
+            imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ").appendSibling(formattedmessageArray[0]).appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " joined,"));
 
         } else {
 
@@ -116,7 +108,7 @@ public class NoCheatersEvents {
                 cheats.append(" ").append(hack);
             }
 
-            IChatComponent imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ")
+            imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ")
                     .appendSibling(new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + playername).setChatStyle(new ChatStyle()
                             .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + uuid + " " + playername))
                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
@@ -127,29 +119,35 @@ public class NoCheatersEvents {
 
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " joined,"));
 
-            if (!disableReportButton && wdr.canBeReported(datenow - 900000)) {
-                imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " Report again").setChatStyle(new ChatStyle()
-                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report this player again")))
-                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + uuid + " " + playername))));
-            }
-
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Cheats : "));
+            allCheats = new ChatComponentText("");
 
             for (String hack : wdr.hacks) {
                 if (hack.equalsIgnoreCase("bhop")) {
-                    imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_RED + hack));
+                    allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_RED + hack + " "));
                 } else if (hack.contains("stalk")) {
-                    imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + hack));
+                    allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + hack + " "));
                 } else if (hack.equalsIgnoreCase("nick")) {
-                    imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_PURPLE + hack));
+                    allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_PURPLE + hack + " "));
                 } else {
-                    imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + hack));
+                    allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + hack + " "));
                 }
             }
 
-            return imsg;
-
         }
+
+        if (!disableReportButton && FKCounterMod.isInMwGame && !FKCounterMod.isitPrepPhase && wdr.canBeReported(datenow)) {
+            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " Report again").setChatStyle(new ChatStyle()
+                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report this player again")))
+                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + uuid + " " + playername))));
+        }
+
+        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Cheats : "))
+                .appendSibling(allCheats.setChatStyle(new ChatStyle()
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
+                                + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " cheating")))
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + playername + " cheating"))));
+
+        return imsg;
 
     }
 
