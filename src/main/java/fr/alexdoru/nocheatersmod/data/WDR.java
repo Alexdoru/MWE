@@ -1,5 +1,6 @@
 package fr.alexdoru.nocheatersmod.data;
 
+import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 
 import java.util.ArrayList;
@@ -38,6 +39,14 @@ public class WDR {
 
     public boolean canBeReported(long datenow) {
         return datenow - this.timestamp - ConfigHandler.timeBetweenReports > 0;
+    }
+
+    public boolean canBeAutoreported(long datenow) {
+        return ConfigHandler.toggleautoreport
+                && FKCounterMod.isInMwGame
+                && !FKCounterMod.isitPrepPhase
+                && this.canBeReported(datenow)
+                && 0 < ConfigHandler.timeAutoReport - datenow + this.timestamp;
     }
 
 }

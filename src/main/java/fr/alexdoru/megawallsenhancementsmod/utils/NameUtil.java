@@ -110,7 +110,7 @@ public class NameUtil {
                 String playerName = player.getName();
                 long datenow = (new Date()).getTime();
                 boolean gotautoreported = checkAutoreport && NoCheatersEvents.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
-                ChatUtil.addChatMessage(IChatComponent.Serializer.jsonToComponent(NoCheatersEvents.createwarningmessage(datenow, uuid, playerName, mwPlayerData.wdr, gotautoreported)));
+                ChatUtil.addChatMessage(NoCheatersEvents.createwarningmessage(datenow, uuid, playerName, mwPlayerData.wdr, gotautoreported));
             }
         }
 

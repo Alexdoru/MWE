@@ -177,7 +177,7 @@ public class CommandNocheaters extends CommandBase {
     public static String createReportLine(String uuid, WDR wdr, boolean doStalk) throws ApiException {
         // format for timestamps reports : UUID timestamplastreport -serverID timeonreplay playernameduringgame timestampforcheat specialcheat cheat1 cheat2 cheat3 etc
         String playername = wdr.hacks.get(2);
-        String message = NoCheatersEvents.createPlayerTimestampedMsg(playername, wdr, "red")[0]
+        String message = NoCheatersEvents.createPlayerTimestampedMsg2(playername, wdr, "red")[0]
 
                 + ",{\"text\":\" reported on : \",\"color\":\"dark_gray\"}"
 
