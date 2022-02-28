@@ -33,7 +33,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         int xPos = getxCenter() - buttonsWidth / 2;
         buttonList.add(new GuiButton(1, xPos, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
         buttonList.add(new GuiButton(8, xPos, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(8)));
-
+        buttonList.add(new GuiButton(9, xPos, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
         buttonList.add(new GuiButton(2, xPos, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
         buttonList.add(new GuiSlider(4, xPos, getYposForButton(0), buttonsWidth, 20, "Time between reports : ", " hours", 0.75d, 24d, ConfigHandler.timeBetweenReports / 3600000f, false, true, this));
         buttonList.add(new GuiSlider(5, xPos, getYposForButton(1), buttonsWidth, 20, "Time max autoreport : ", " days", 1d, 30d, ConfigHandler.timeAutoReport / (24f * 3600f * 1000f), false, true, this));
@@ -49,6 +49,8 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 return "Warning messages in chat : " + getSuffix(ConfigHandler.togglewarnings);
             case 8:
                 return "Report suggestions in chat : " + getSuffix(ConfigHandler.reportsuggestions);
+            case 9:
+                return "Auto-send suggestions : " + getSuffix(ConfigHandler.autoreportSuggestions);
             case 2:
                 return "Autoreport cheaters : " + getSuffix(ConfigHandler.toggleautoreport);
             case 6:
@@ -79,6 +81,9 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 textLines.add(EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "wdr playername cheat");
                 textLines.add(EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "report playername cheat");
                 break;
+            case 9:
+                textLines.add(EnumChatFormatting.GREEN + "Automatically sends the report command to the server when there is a report suggestion in chat");
+                break;
         }
         return textLines;
     }
@@ -94,6 +99,9 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                     Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(ChatEvents.reportSuggestionSound, 1.0F));
                 }
                 ConfigHandler.reportsuggestions = !ConfigHandler.reportsuggestions;
+                break;
+            case 9:
+                ConfigHandler.autoreportSuggestions = !ConfigHandler.autoreportSuggestions;
                 break;
             case 2:
                 ConfigHandler.toggleautoreport = !ConfigHandler.toggleautoreport;

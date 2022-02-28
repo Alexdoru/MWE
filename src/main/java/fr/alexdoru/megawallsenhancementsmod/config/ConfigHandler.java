@@ -65,9 +65,10 @@ public class ConfigHandler {
     public static boolean toggleicons;
     public static boolean togglewarnings;
     public static boolean toggleautoreport;
+    public static boolean autoreportSuggestions;
     /*those fields are in milliseconds*/
     public static long timeBetweenReports;
-    public static long timeAutoReport;// TODO enlever la limite max ?
+    public static long timeAutoReport;
     public static boolean deleteReports;
     public static long timeDeleteReport;
 
@@ -147,6 +148,7 @@ public class ConfigHandler {
 
         Property pToggleicons = config.get(CATEGORY_NOCHEATERS, "Toggle Icons", true, "Display warning symbol on nametags of reported players");
         Property pTogglewarnings = config.get(CATEGORY_NOCHEATERS, "Toggle Warnings", false, "Gives warning messages in chat for reported players");
+        Property pautoreportSuggestions = config.get(CATEGORY_NOCHEATERS, "Send report suggestions", true, "Send report suggestions");
         Property pToggleautoreport = config.get(CATEGORY_NOCHEATERS, "Toggle Autoreport", false, "Automatically report previously reported players when they are in your lobby");
         Property pTimeBetweenReports = config.get(CATEGORY_NOCHEATERS, "Time between reports", 4, "Time before the mod suggests to report the player again (hours)");
         Property pTimeAutoReport = config.get(CATEGORY_NOCHEATERS, "Time for autoreports", 14, "It won't autoreport players whose last report is older than this (days)");
@@ -219,6 +221,7 @@ public class ConfigHandler {
         pOrderNOCHEATERS.add(pToggleicons.getName());
         pOrderNOCHEATERS.add(pTogglewarnings.getName());
         pOrderNOCHEATERS.add(pToggleautoreport.getName());
+        pOrderNOCHEATERS.add(pautoreportSuggestions.getName());
         pOrderNOCHEATERS.add(pTimeBetweenReports.getName());
         pOrderNOCHEATERS.add(pTimeAutoReport.getName());
         pOrderNOCHEATERS.add(pdeleteReports.getName());
@@ -283,6 +286,7 @@ public class ConfigHandler {
             toggleicons = pToggleicons.getBoolean();
             togglewarnings = pTogglewarnings.getBoolean();
             toggleautoreport = pToggleautoreport.getBoolean();
+            autoreportSuggestions = pautoreportSuggestions.getBoolean();
             timeBetweenReports = Math.max(2700000L, Math.min(3600L * 1000L * ((long) pTimeBetweenReports.getInt()), 24L * 3600L * 1000L));
             timeAutoReport = Math.max(24L * 3600L * 1000L, Math.min(24L * 3600L * 1000L * ((long) pTimeAutoReport.getInt()), 30L * 24L * 3600L * 1000L));
             deleteReports = pdeleteReports.getBoolean();
@@ -358,6 +362,7 @@ public class ConfigHandler {
             pToggleicons.set(toggleicons);
             pTogglewarnings.set(togglewarnings);
             pToggleautoreport.set(toggleautoreport);
+            pautoreportSuggestions.set(autoreportSuggestions);
             pTimeBetweenReports.set((int) (timeBetweenReports / (3600L * 1000L)));
             pTimeAutoReport.set((int) (timeAutoReport / (24L * 3600L * 1000L)));
             pdeleteReports.set(deleteReports);
