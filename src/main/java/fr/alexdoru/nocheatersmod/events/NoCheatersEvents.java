@@ -158,7 +158,7 @@ public class NoCheatersEvents {
      */
     public static IChatComponent[] createPlayerTimestampedMsg(String playername, WDR wdr, EnumChatFormatting namecolor) {
 
-        String cheats = "";
+        StringBuilder cheats = new StringBuilder();
         long timestamphackreport = 0L;
         StringBuilder allCheats = new StringBuilder();
         String serverID = "";
@@ -175,7 +175,7 @@ public class NoCheatersEvents {
             if ((wdr.hacks.get(i).charAt(0) == '-' && i != 0) || i == wdr.hacks.size() - 1) {
 
                 if (i == wdr.hacks.size() - 1) {
-                    cheats = cheats + " " + wdr.hacks.get(i);
+                    cheats.append(" ").append(wdr.hacks.get(i));
                     allCheats.append(allCheats.toString().contains(wdr.hacks.get(i)) ? "" : " " + wdr.hacks.get(i));
                 }
 
@@ -203,7 +203,7 @@ public class NoCheatersEvents {
                 j = i;
                 oldgameID = serverID;
                 serverID = wdr.hacks.get(i).substring(1);
-                cheats = "";
+                cheats = new StringBuilder();
 
             } else if (i == j + 1) { // timer on replay
 
@@ -221,7 +221,7 @@ public class NoCheatersEvents {
 
             } else if (i > j + 3 && i != wdr.hacks.size() - 1) { // cheats
 
-                cheats = cheats + " " + wdr.hacks.get(i);
+                cheats.append(" ").append(wdr.hacks.get(i));
                 allCheats.append(allCheats.toString().contains(wdr.hacks.get(i)) ? "" : " " + wdr.hacks.get(i));
 
             }
