@@ -20,7 +20,10 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -249,7 +252,7 @@ public class CommandWDR extends CommandBase {
                 NameUtil.updateGameProfileAndName(playername);
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
                         EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : ""))
-                        .appendSibling(IChatComponent.Serializer.jsonToComponent("[\"\"" + NoCheatersEvents.createPlayerTimestampedMsg(playername, newreport, "light_purple")[0] + "]"))
+                        .appendSibling(NoCheatersEvents.createPlayerTimestampedMsg(playername, newreport, EnumChatFormatting.LIGHT_PURPLE)[0])
                         .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " with a " + EnumChatFormatting.YELLOW +
                                 "timestamp" + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
                                 + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : "."))));
