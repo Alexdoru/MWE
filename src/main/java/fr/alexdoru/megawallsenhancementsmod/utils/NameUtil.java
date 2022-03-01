@@ -75,6 +75,18 @@ public class NameUtil {
     }
 
     /**
+     * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
+     */
+    public static void updateGameProfileAndName(NetworkPlayerInfo networkPlayerInfo) {
+        transformGameProfile(networkPlayerInfo.getGameProfile(), true);
+        networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
+        EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
+        if (player != null) {
+            NameUtil.transformNametag(player, true, false, false);
+        }
+    }
+
+    /**
      * Transforms the nametag of the player based on the infos stored in getGameProfile.MWPlayerData
      * to save performance instead of redoing the hashmap access
      */
