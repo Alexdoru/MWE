@@ -9,6 +9,7 @@ import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
@@ -141,7 +142,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
         GlStateManager.color(1, 1, 1, 0.7F);
         mc.getTextureManager().bindTexture(BACKGROUND);
         drawModalRectWithCustomSizedTexture(width / 2 - rectWidth / 2, height / 2 - rectHeight / 2, 0, 0, rectWidth, rectHeight, rectWidth, rectHeight);
-        drawCenteredString(fontRendererObj, "FKCounter v" + FKCounterMod.VERSION, width / 2, height / 2 - rectHeight / 2 + 10, 0xFFFFFF);
+        drawCenteredString(fontRendererObj, EnumChatFormatting.AQUA + "FKCounter v" + FKCounterMod.VERSION, width / 2, height / 2 - rectHeight / 2 + 10, 0xFFFFFF);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
