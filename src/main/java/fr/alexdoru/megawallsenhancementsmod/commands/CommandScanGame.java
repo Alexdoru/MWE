@@ -147,13 +147,11 @@ class ScanPlayerTask implements Callable<String> {
                     (megawallsstats.getGames_played() <= 500 && megawallsstats.getFkdr() > 8f) ||
                     (megawallsstats.getFkdr() > 10f)) {
 
-                imsg = new ChatComponentText(ChatUtil.getTagMW())
-                        .appendSibling(ChatUtil.makeReportButtons(playername, "cheating", "", ClickEvent.Action.RUN_COMMAND, ClickEvent.Action.SUGGEST_COMMAND))
-                        .appendSibling(new ChatComponentText(getFormattedName(networkPlayerInfo)
+                imsg = new ChatComponentText(getFormattedName(networkPlayerInfo)
                                 + EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played()
                                 + EnumChatFormatting.GRAY + " games , fkd : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkdr())
                                 + EnumChatFormatting.GRAY + " FK/game : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkpergame())
-                                + EnumChatFormatting.GRAY + " W/L : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getWlr())));
+                                + EnumChatFormatting.GRAY + " W/L : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getWlr()));
 
             } else if (megawallsstats.getGames_played() < 15) {
 
@@ -180,17 +178,16 @@ class ScanPlayerTask implements Callable<String> {
                     for (Map.Entry<String, JsonElement> entry : classesdata.entrySet()) {
                         if (entry.getValue() != null && entry.getValue().isJsonObject()) {
                             JsonObject entryclassobj = entry.getValue().getAsJsonObject();
-                            IChatComponent reportmsg;
-                            if (firstGame) {
-                                reportmsg = getMsgFirstGame(entry.getKey(), entryclassobj);
-                            } else {
-                                reportmsg = getMsg(entry.getKey(), entryclassobj, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megawallsstats.getGames_played());
-                            }
-                            if (reportmsg != null) {
-                                if (imsg == null) {
-                                    imsg = reportmsg;
+                            if (imsg == null) {
+                                if (firstGame) {
+                                    imsg = getMsgFirstGame(entry.getKey(), entryclassobj);
                                 } else {
-                                    imsg.appendSibling(reportmsg);
+                                    imsg = getMsg(entry.getKey(), entryclassobj, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megawallsstats.getGames_played());
+                                }
+                            } else {
+                                IChatComponent classMsg = getFormattedClassMsg(entry.getKey(), entryclassobj, firstGame);
+                                if (classMsg != null) {
+                                    imsg.appendSibling(classMsg);
                                 }
                             }
                         }
@@ -216,26 +213,13 @@ class ScanPlayerTask implements Callable<String> {
 
     }
 
-    private IChatComponent getMsgFirstGame(String className, JsonObject entryclassobj) { // TODO faire que le message pour la classe soit mis a la suite des autres et que ce soit pas un nouveau message
+    private IChatComponent getMsgFirstGame(String className, JsonObject entryclassobj) {
         int skill_level_a = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_a"), 1); //skill
-        int skill_level_b = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_b"), 1); //passive1
-        int skill_level_c = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_c"), 1); //passive2
         int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"), 1); //kit
-        int skill_level_g = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_g"), 1); //gathering
-
         if (skill_level_a >= 4 || skill_level_d >= 4) {
-            return new ChatComponentText(getFormattedName(networkPlayerInfo)
-                    + EnumChatFormatting.GRAY + " never played and has : " + EnumChatFormatting.GOLD + className + " "
-                    + (skill_level_d == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_d) + " "
-                    + (skill_level_a == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_a) + " "
-                    + (skill_level_b == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_b) + " "
-                    + (skill_level_c == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_c) + " "
-                    + (skill_level_g == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_g) + "\n");
-
+            return new ChatComponentText(getFormattedName(networkPlayerInfo) + EnumChatFormatting.GRAY + " never played and has :").appendSibling(getFormattedClassMsg(className, entryclassobj, true));
         }
-
         return null;
-
     }
 
     private IChatComponent getMsg(String className, JsonObject entryclassobj, int quests, int networklevel, int gameplayed) {
@@ -243,24 +227,31 @@ class ScanPlayerTask implements Callable<String> {
         int skill_level_b = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_b"), 1); //passive1
         int skill_level_c = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_c"), 1); //passive2
         int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"), 1); //kit
-        int skill_level_g = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_g"), 1); //gathering
-
         if (skill_level_a == 5 && skill_level_b == 3 && skill_level_c == 3 && skill_level_d == 5) {
             return new ChatComponentText(getFormattedName(networkPlayerInfo)
                     + EnumChatFormatting.GRAY + " played " + EnumChatFormatting.GOLD + gameplayed + EnumChatFormatting.GRAY + " games"
                     + EnumChatFormatting.GRAY + ", network lvl " + EnumChatFormatting.GOLD + networklevel
                     + EnumChatFormatting.GRAY + ", with " + EnumChatFormatting.GOLD + quests + EnumChatFormatting.GRAY + " quests"
-                    + EnumChatFormatting.GRAY + " and has : " + EnumChatFormatting.GOLD + className + " "
-                    + EnumChatFormatting.GOLD + ChatUtil.intToRoman(skill_level_d) + " "
-                    + EnumChatFormatting.GOLD + ChatUtil.intToRoman(skill_level_a) + " "
-                    + EnumChatFormatting.GOLD + ChatUtil.intToRoman(skill_level_b) + " "
-                    + EnumChatFormatting.GOLD + ChatUtil.intToRoman(skill_level_c) + " "
-                    + (skill_level_g == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_g) + "\n");
-
+                    + EnumChatFormatting.GRAY + " and has :").appendSibling(getFormattedClassMsg(className, entryclassobj, false));
         }
-
         return null;
+    }
 
+    private IChatComponent getFormattedClassMsg(String className, JsonObject entryclassobj, boolean firstgame) {
+        int skill_level_a = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_a"), 1); //skill
+        int skill_level_b = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_b"), 1); //passive1
+        int skill_level_c = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_c"), 1); //passive2
+        int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"), 1); //kit
+        int skill_level_g = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_g"), 1); //gathering
+        if (firstgame ? skill_level_a >= 4 || skill_level_d >= 4 : skill_level_a == 5 && skill_level_b == 3 && skill_level_c == 3 && skill_level_d == 5) {
+            return new ChatComponentText(" " + EnumChatFormatting.GOLD + className + " "
+                    + (skill_level_d == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_d) + " "
+                    + (skill_level_a == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_a) + " "
+                    + (skill_level_b == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_b) + " "
+                    + (skill_level_c == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_c) + " "
+                    + (skill_level_g == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_g));
+        }
+        return null;
     }
 
     private String getFormattedName(NetworkPlayerInfo networkPlayerInfoIn) {
