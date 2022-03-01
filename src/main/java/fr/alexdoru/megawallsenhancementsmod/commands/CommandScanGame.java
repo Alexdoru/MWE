@@ -149,8 +149,10 @@ class ScanPlayerTask implements Callable<String> {
                                 + EnumChatFormatting.GRAY + " FK/game : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkpergame())
                                 + EnumChatFormatting.GRAY + " W/L : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getWlr())));
 
-            } else if (megawallsstats.getGames_played() == 0) {
+            } else if (megawallsstats.getGames_played() < 15) {
 
+                GeneralInfo generalInfo = new GeneralInfo(playerdata.getPlayerData());
+                boolean firstGame = megawallsstats.getGames_played() == 0;
                 JsonObject classesdata = megawallsstats.getClassesdata();
 
                 if (FKCounterMod.isInMwGame) {
@@ -160,7 +162,11 @@ class ScanPlayerTask implements Callable<String> {
                     MWClass mwClass = MWClass.fromTagOrName(classTag);
                     if (mwClass != null) {
                         JsonObject entryclassobj = classesdata.getAsJsonObject(mwClass.className.toLowerCase());
-                        imsg = getReportMessageForClass(playername, mwClass.className, entryclassobj);
+                        if (firstGame) {
+                            imsg = getMsgFirstGame(playername, mwClass.className, entryclassobj);
+                        } else {
+                            imsg = getMsg(playername, mwClass.className, entryclassobj, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megawallsstats.getGames_played());
+                        }
                     }
 
                 } else {
@@ -168,7 +174,12 @@ class ScanPlayerTask implements Callable<String> {
                     for (Map.Entry<String, JsonElement> entry : classesdata.entrySet()) {
                         if (entry.getValue() != null && entry.getValue().isJsonObject()) {
                             JsonObject entryclassobj = entry.getValue().getAsJsonObject();
-                            IChatComponent reportmsg = getReportMessageForClass(playername, entry.getKey(), entryclassobj);
+                            IChatComponent reportmsg;
+                            if (firstGame) {
+                                reportmsg = getMsgFirstGame(playername, entry.getKey(), entryclassobj);
+                            } else {
+                                reportmsg = getMsg(playername, entry.getKey(), entryclassobj, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megawallsstats.getGames_played());
+                            }
                             if (reportmsg != null) {
                                 if (imsg == null) {
                                     imsg = reportmsg;
@@ -177,43 +188,6 @@ class ScanPlayerTask implements Callable<String> {
                                 }
                             }
                         }
-                    }
-
-                }
-
-            } else if (megawallsstats.getGames_played() < 15) {
-
-                GeneralInfo generalInfo = new GeneralInfo(playerdata.getPlayerData());
-                if (generalInfo.getCompletedQuests() < 20 && generalInfo.getNetworkLevel() > 42f) {
-
-                    JsonObject classesdata = megawallsstats.getClassesdata();
-
-                    if (FKCounterMod.isInMwGame) {
-
-                        ScorePlayerTeam team = Minecraft.getMinecraft().theWorld.getScoreboard().getPlayersTeam(playername);
-                        String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replace("[", "").replace("]", "").replace(" ", ""));
-                        MWClass mwClass = MWClass.fromTagOrName(classTag);
-                        if (mwClass != null) {
-                            JsonObject entryclassobj = classesdata.getAsJsonObject(mwClass.className.toLowerCase());
-                            imsg = getReportMessageForClass2(playername, mwClass.className, entryclassobj, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megawallsstats.getGames_played());
-                        }
-
-                    } else {
-
-                        for (Map.Entry<String, JsonElement> entry : classesdata.entrySet()) {
-                            if (entry.getValue() != null && entry.getValue().isJsonObject()) {
-                                JsonObject entryclassobj = entry.getValue().getAsJsonObject();
-                                IChatComponent reportmsg = getReportMessageForClass2(playername, entry.getKey(), entryclassobj, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megawallsstats.getGames_played());
-                                if (reportmsg != null) {
-                                    if (imsg == null) {
-                                        imsg = reportmsg;
-                                    } else {
-                                        imsg.appendSibling(reportmsg);
-                                    }
-                                }
-                            }
-                        }
-
                     }
 
                 }
@@ -238,7 +212,7 @@ class ScanPlayerTask implements Callable<String> {
 
     // TODO ne pas mettre les boutons pour report si on est pas en game
 
-    private IChatComponent getReportMessageForClass(String playername, String className, JsonObject entryclassobj) { // TODO faire que le message pour la classe soit mis a la suite des autres et que ce soit pas un nouveau message
+    private IChatComponent getMsgFirstGame(String playername, String className, JsonObject entryclassobj) { // TODO faire que le message pour la classe soit mis a la suite des autres et que ce soit pas un nouveau message
         int skill_level_a = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_a"), 1); //skill
         int skill_level_b = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_b"), 1); //passive1
         int skill_level_c = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_c"), 1); //passive2
@@ -262,7 +236,7 @@ class ScanPlayerTask implements Callable<String> {
 
     }
 
-    private IChatComponent getReportMessageForClass2(String playername, String className, JsonObject entryclassobj, int quests, int networklevel, int gameplayed) {
+    private IChatComponent getMsg(String playername, String className, JsonObject entryclassobj, int quests, int networklevel, int gameplayed) {
         int skill_level_a = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_a"), 1); //skill
         int skill_level_b = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_b"), 1); //passive1
         int skill_level_c = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_c"), 1); //passive2
