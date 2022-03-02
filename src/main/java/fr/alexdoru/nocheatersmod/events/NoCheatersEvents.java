@@ -124,8 +124,6 @@ public class NoCheatersEvents {
             for (String hack : wdr.hacks) {
                 if (hack.equalsIgnoreCase("bhop")) {
                     allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_RED + hack + " "));
-                } else if (hack.contains("stalk")) {
-                    allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + hack + " "));
                 } else if (hack.equalsIgnoreCase("nick")) {
                     allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_PURPLE + hack + " "));
                 } else {
