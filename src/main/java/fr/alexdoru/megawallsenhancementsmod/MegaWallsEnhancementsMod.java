@@ -14,10 +14,11 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
 
-@Mod(modid = MegaWallsEnhancementsMod.modid, name = "MegaWallsEnhancements", version = MegaWallsEnhancementsMod.version, acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
+@Mod(modid = MegaWallsEnhancementsMod.modid, name = MegaWallsEnhancementsMod.modName, version = MegaWallsEnhancementsMod.version, acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
 public class MegaWallsEnhancementsMod {
 
     public static final String modid = "mwenhancements";
+    public static final String modName = "MegaWallsEnhancements";
     public static final String version = "1.5";
     public static File configurationFile;
 

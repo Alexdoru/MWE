@@ -101,7 +101,7 @@ public class CommandNocheaters extends CommandBase {
             if (wdr == null) {
                 continue;
             }
-            if (wdr.canBeReported(datenow - 900000)) {
+            if (wdr.canBeReported(datenow)) {
                 wdr.timestamp = datenow;
                 new DelayedTask(() -> {
                     if (mc.thePlayer != null) {
