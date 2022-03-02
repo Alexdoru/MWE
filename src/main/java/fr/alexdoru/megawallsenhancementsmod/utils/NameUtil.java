@@ -215,11 +215,7 @@ public class NameUtil {
         if (team != null) {
             String teamprefix = team.getColorPrefix();
             if (!teamprefix.contains("\u00a7k") && iExtraPrefix != null) {
-                displayName = new ChatComponentText(
-                        extraPrefix
-                                + teamprefix
-                                + (isSquadMate ? squadname : username)
-                                + team.getColorSuffix());
+                displayName = new ChatComponentText(extraPrefix + teamprefix + (isSquadMate ? squadname : username) + team.getColorSuffix());
             }
         }
 
