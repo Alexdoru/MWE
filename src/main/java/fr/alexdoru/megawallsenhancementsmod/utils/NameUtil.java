@@ -145,15 +145,18 @@ public class NameUtil {
 
         GameProfileAccessor gameProfileAccessor = (GameProfileAccessor) gameProfileIn;
         MWPlayerData mwPlayerData = gameProfileAccessor.getMWPlayerData();
-        UUID id = gameProfileIn.getId();
+        UUID id;
 
         if (mwPlayerData == null && !forceRefresh) {
+            id = gameProfileIn.getId();
             MWPlayerData cachedMWPlayerData = MWPlayerData.dataCache.get(id);
             if (cachedMWPlayerData != null) {
                 gameProfileAccessor.setMWPlayerData(cachedMWPlayerData);
                 return;
             }
         }
+
+        id = gameProfileIn.getId();
 
         if (mwPlayerData == null || forceRefresh) {
 
