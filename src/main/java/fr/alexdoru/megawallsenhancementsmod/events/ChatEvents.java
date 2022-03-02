@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.events;
 
+import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
@@ -196,7 +197,7 @@ public class ChatEvents {
     }
 
     private static void handleReportSuggestion(String playername, String cheat) {
-        if (ConfigHandler.autoreportSuggestions && mc.thePlayer != null && !mc.thePlayer.getName().equals(playername) && canReportSuggestionPlayer(playername)) {
+        if (ConfigHandler.autoreportSuggestions && !FKCounterMod.preGameLobby && mc.thePlayer != null && !mc.thePlayer.getName().equals(playername) && canReportSuggestionPlayer(playername)) {
             mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
         }
         if (ConfigHandler.reportsuggestions) {
