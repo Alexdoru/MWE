@@ -20,6 +20,10 @@ public class FKCounterMod {
      */
     public static boolean isInMwGame = false;
     /**
+     * True in the pre game lobby in mega walls
+     */
+    public static boolean preGameLobby = false;
+    /**
      * True during the preparation phase of a mega walls game
      */
     public static boolean isitPrepPhase = false;
