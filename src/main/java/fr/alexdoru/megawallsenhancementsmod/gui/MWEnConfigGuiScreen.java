@@ -121,13 +121,13 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         List<String> textLines = new ArrayList<>();
         switch (id) {
             case 21:
-                textLines.add(EnumChatFormatting.GREEN + "When enabled you can't drop the sword you are holding in your hotbar");
+                textLines.add(EnumChatFormatting.YELLOW + "When enabled you can't drop the sword you are holding in your hotbar");
                 break;
             case 16:
-                textLines.add(EnumChatFormatting.GREEN + "Spawns angry villager particles when the player gets a final kill");
+                textLines.add(EnumChatFormatting.YELLOW + "Spawns angry villager particles when the player gets a final kill");
                 break;
             case 15:
-                textLines.add(EnumChatFormatting.GREEN + "Toggles all icons on nametags and in the tablist");
+                textLines.add(EnumChatFormatting.YELLOW + "Toggles all icons on nametags and in the tablist");
                 textLines.add("");
                 textLines.add(NameUtil.squadprefix + EnumChatFormatting.YELLOW + "Players in your squad");
                 textLines.add(NameUtil.prefix_bhop + EnumChatFormatting.YELLOW + "Players reported for bhop");
@@ -135,31 +135,34 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(NameUtil.prefix_scan + EnumChatFormatting.YELLOW + "Players flagged by the /scangame command");
                 break;
             case 0:
-                textLines.add(EnumChatFormatting.GREEN + "Makes the coin messages shorter by removing the network booster info");
-                textLines.add(EnumChatFormatting.GREEN + "It makes the assists messages in mega walls fit on one line instead of two");
+                textLines.add(EnumChatFormatting.YELLOW + "Makes the coin messages shorter by removing the network booster info");
+                textLines.add(EnumChatFormatting.YELLOW + "It makes the assists messages in mega walls fit on one line instead of two");
                 textLines.add("");
                 textLines.add(EnumChatFormatting.GOLD + "+100 coins! (hypixel's Network booster)" + EnumChatFormatting.AQUA + " FINAL KILL");
                 textLines.add("Will become : ");
                 textLines.add(EnumChatFormatting.GOLD + "+100 coins!" + EnumChatFormatting.AQUA + " FINAL KILL");
                 break;
             case 9:
-                textLines.add(EnumChatFormatting.GREEN + "When you play the Hunter class it prints a HUD and plays a sound before getting strength");
+                textLines.add(EnumChatFormatting.YELLOW + "When you play the Hunter class it prints a HUD and plays a sound before getting strength");
                 break;
             case 18:
-                textLines.add(EnumChatFormatting.GREEN + "Removes the visual effect of night vision");
+                textLines.add(EnumChatFormatting.YELLOW + "Removes the visual effect of night vision");
                 break;
             case 2:
-                textLines.add(EnumChatFormatting.GREEN + "Displays a HUD with the cooldown of the /kill command in Mega Walls");
+                textLines.add(EnumChatFormatting.YELLOW + "Displays a HUD with the cooldown of the /kill command in Mega Walls");
                 break;
             case 3:
-                textLines.add(EnumChatFormatting.GREEN + "Displays a HUD with the health of your opponent on arrow hits");
+                textLines.add(EnumChatFormatting.YELLOW + "Displays a HUD with the health of your opponent on arrow hits");
                 break;
             case 11:
-                textLines.add(EnumChatFormatting.GREEN + "Displays a HUD with the time it takes for the last wither to die");
-                textLines.add(EnumChatFormatting.GREEN + "The HUD can be configured to appear in the Sidebar");
+                textLines.add(EnumChatFormatting.YELLOW + "Displays a HUD with the time it takes for the last wither to die");
+                textLines.add(EnumChatFormatting.YELLOW + "The HUD can be configured to appear in the Sidebar");
+                break;
+            case 17:
+                textLines.add(EnumChatFormatting.YELLOW + "Plays a sound when your health drops below the threshold defined below");
                 break;
             case 19:
-                textLines.add(EnumChatFormatting.GREEN + "Adds colors to the scores/health in the tablist depending on the value");
+                textLines.add(EnumChatFormatting.YELLOW + "Adds colors to the scores/health in the tablist depending on the value");
                 textLines.add("");
                 textLines.add(EnumChatFormatting.RED + "OrangeMarshall " + EnumChatFormatting.GRAY + "[ZOM] " + EnumChatFormatting.DARK_GREEN + "44");
                 textLines.add(EnumChatFormatting.RED + "OrangeMarshall " + EnumChatFormatting.GRAY + "[ZOM] " + EnumChatFormatting.GREEN + "35");
@@ -168,8 +171,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.RED + "OrangeMarshall " + EnumChatFormatting.GRAY + "[ZOM]  " + EnumChatFormatting.DARK_RED + "5");
                 break;
             case 22:
-                textLines.add(EnumChatFormatting.GREEN + "Dynamically changes the render distance for items on the ground to preserve performance");
-                textLines.add(EnumChatFormatting.GREEN + "The render distance depends of the limit set below");
+                textLines.add(EnumChatFormatting.YELLOW + "Dynamically changes the render distance for items on the ground to preserve performance");
+                textLines.add(EnumChatFormatting.YELLOW + "The render distance depends of the limit set below");
                 break;
         }
         return textLines;
