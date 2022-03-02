@@ -141,13 +141,14 @@ public class NoCheatersEvents {
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + uuid + " " + playername))));
         }
 
-        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Cheats : "))
-                .appendSibling(allCheats.setChatStyle(new ChatStyle()
-                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
-                                + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " cheating")))
-                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + playername + " cheating"))));
+        if (!FKCounterMod.preGameLobby) {
+            allCheats.setChatStyle(new ChatStyle()
+                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
+                            + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " cheating")))
+                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + playername + " cheating")));
+        }
 
-        return imsg;
+        return imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Cheats : ")).appendSibling(allCheats);
 
     }
 
