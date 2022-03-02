@@ -18,8 +18,9 @@ public class ScoreboardParser {
 
     private final ArrayList<String> aliveWithers = new ArrayList<>();
     private String gameId = null;
-    private boolean hasgameended = false;
+    private boolean preGameLobby = false;
     private boolean isitPrepPhase = false;
+    private boolean hasgameended = false;
 
     /* This is run on every tick to parse the scoreboard data */
     public ScoreboardParser(Scoreboard scoreboard) {
@@ -49,6 +50,7 @@ public class ScoreboardParser {
         for (String line : scoresRaw) {
             if (PREGAME_LOBBY_PATTERN.matcher(line).matches()) {
                 gameId = null;
+                preGameLobby = true;
                 return;
             }
         }
@@ -98,7 +100,7 @@ public class ScoreboardParser {
             hasgameended = true;
         }
 
-        if(isOnlyOneWitherAlive()) {
+        if (isOnlyOneWitherAlive()) {
             LastWitherHPGui.instance.updateWitherHP(witherHP);
         }
 
@@ -136,4 +138,7 @@ public class ScoreboardParser {
         return gameId != null;
     }
 
+    public boolean isPreGameLobby() {
+        return preGameLobby;
+    }
 }
