@@ -73,9 +73,9 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 break;
             case 2:
                 textLines.add(EnumChatFormatting.YELLOW + "Automatically sends a report for players saved in NoCheaters.");
-                textLines.add(EnumChatFormatting.YELLOW + "Only works in Mega Walls, the reports are sent after the walls fall.");
                 textLines.add(EnumChatFormatting.YELLOW + "It sends a report for players whose last report is older than the time between report");
                 textLines.add(EnumChatFormatting.YELLOW + "and more recent than the time max autoreport");
+                textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls, the reports are sent after the walls fall.");
                 break;
             case 6:
                 textLines.add(EnumChatFormatting.YELLOW + "Deletes reports older than the specified value");
@@ -90,7 +90,9 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 textLines.add(EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "report playername cheat");
                 break;
             case 9:
-                textLines.add(EnumChatFormatting.YELLOW + "Automatically sends the report command to the server when there is a report suggestion in chat");
+                textLines.add(EnumChatFormatting.YELLOW + "Automatically sends the report command to the server");
+                textLines.add(EnumChatFormatting.YELLOW + "when there is a report suggestion in chat");
+                textLines.add(EnumChatFormatting.GRAY + "This doesn't work in the pre-game lobby");
                 break;
         }
         return textLines;
