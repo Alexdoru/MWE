@@ -72,13 +72,17 @@ public class ConfigHandler {
     public static boolean deleteReports;
     public static long timeDeleteReport;
 
+    /* values for config */
+    public static final long MIN_TIME_BETWEEN_REPORTS = 2700000L;
+    public static final long MAX_TIME_BETWEEN_REPORTS = 24L * 3600L * 1000L;
+    public static final long MIN_TIME_AUTO_REPORTS = 24L * 3600L * 1000L;
+    public static final long MAX_TIME_AUTO_REPORTS = 30L * 24L * 3600L * 1000L;
+
     /**
      * Hitbox Config
      */
-
     // TODO color the hitbox when the ennemy is hit VAPE KILL AURA !!!
     //  arrow hit as well ?
-
     public static boolean drawHitboxForPlayers;
     public static boolean drawHitboxForGroundedArrows;
     public static boolean drawHitboxForPinnedArrows;
@@ -150,7 +154,7 @@ public class ConfigHandler {
         Property pTogglewarnings = config.get(CATEGORY_NOCHEATERS, "Toggle Warnings", false, "Gives warning messages in chat for reported players");
         Property pautoreportSuggestions = config.get(CATEGORY_NOCHEATERS, "Send report suggestions", true, "Send report suggestions");
         Property pToggleautoreport = config.get(CATEGORY_NOCHEATERS, "Toggle Autoreport", true, "Automatically report previously reported players when they are in your lobby");
-        Property pTimeBetweenReports = config.get(CATEGORY_NOCHEATERS, "Time between reports", 1, "Time before the mod suggests to report the player again (hours)");
+        Property pTimeBetweenReports = config.get(CATEGORY_NOCHEATERS, "Time between reports", 0.75d, "Time before the mod suggests to report the player again (hours)");
         Property pTimeAutoReport = config.get(CATEGORY_NOCHEATERS, "Time for autoreports", 14, "It won't autoreport players whose last report is older than this (days)");
         Property pdeleteReports = config.get(CATEGORY_NOCHEATERS, "Delete Old Report", false, "Deletes reports older than the specified value");
         Property ptimeDeleteReport = config.get(CATEGORY_NOCHEATERS, "Time delete reports", 365, "Reports older than this will be deleted on game start (days)");
@@ -287,8 +291,8 @@ public class ConfigHandler {
             togglewarnings = pTogglewarnings.getBoolean();
             toggleautoreport = pToggleautoreport.getBoolean();
             autoreportSuggestions = pautoreportSuggestions.getBoolean();
-            timeBetweenReports = Math.max(2700000L, Math.min(3600L * 1000L * ((long) pTimeBetweenReports.getInt()), 24L * 3600L * 1000L));
-            timeAutoReport = Math.max(24L * 3600L * 1000L, Math.min(24L * 3600L * 1000L * ((long) pTimeAutoReport.getInt()), 30L * 24L * 3600L * 1000L));
+            timeBetweenReports = Math.max(MIN_TIME_BETWEEN_REPORTS, Math.min(3600L * 1000L * ((long) pTimeBetweenReports.getDouble()), MAX_TIME_BETWEEN_REPORTS));
+            timeAutoReport = Math.max(MIN_TIME_AUTO_REPORTS, Math.min(24L * 3600L * 1000L * ((long) pTimeAutoReport.getInt()), MAX_TIME_AUTO_REPORTS));
             deleteReports = pdeleteReports.getBoolean();
             timeDeleteReport = 24L * 3600L * 1000L * ((long) ptimeDeleteReport.getInt());
 
@@ -363,7 +367,7 @@ public class ConfigHandler {
             pTogglewarnings.set(togglewarnings);
             pToggleautoreport.set(toggleautoreport);
             pautoreportSuggestions.set(autoreportSuggestions);
-            pTimeBetweenReports.set((int) (timeBetweenReports / (3600L * 1000L)));
+            pTimeBetweenReports.set((double) (timeBetweenReports / (3600L * 1000L)));
             pTimeAutoReport.set((int) (timeAutoReport / (24L * 3600L * 1000L)));
             pdeleteReports.set(deleteReports);
             ptimeDeleteReport.set((int) (timeDeleteReport / (24L * 3600L * 1000L)));
