@@ -1,5 +1,6 @@
 package fr.alexdoru.fkcountermod.utils;
 
+import fr.alexdoru.megawallsenhancementsmod.gui.LastWitherHPGui;
 import net.minecraft.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
@@ -19,7 +20,6 @@ public class ScoreboardParser {
     private String gameId = null;
     private boolean hasgameended = false;
     private boolean isitPrepPhase = false;
-    private int witherHP = 1000;
 
     /* This is run on every tick to parse the scoreboard data */
     public ScoreboardParser(Scoreboard scoreboard) {
@@ -62,6 +62,7 @@ public class ScoreboardParser {
         }
 
         int eliminated_teams = 0;
+        int witherHP = 1000;
 
         for (int i = 3; i < Math.min(scoresRaw.size(), 7); i++) {
 
@@ -97,6 +98,10 @@ public class ScoreboardParser {
             hasgameended = true;
         }
 
+        if(isOnlyOneWitherAlive()) {
+            LastWitherHPGui.instance.updateWitherHP(witherHP);
+        }
+
     }
 
     public boolean isWitherAlive(String colorCode) {
@@ -121,10 +126,6 @@ public class ScoreboardParser {
 
     public boolean isitPrepPhase() {
         return isitPrepPhase;
-    }
-
-    public int getWitherHP() {
-        return witherHP;
     }
 
     public boolean isOnlyOneWitherAlive() {
