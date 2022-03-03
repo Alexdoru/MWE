@@ -163,7 +163,7 @@ class ScanPlayerTask implements Callable<String> {
 
                     ScorePlayerTeam team = Minecraft.getMinecraft().theWorld.getScoreboard().getPlayersTeam(playername);
                     String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replace("[", "").replace("]", "").replace(" ", ""));
-                    MWClass mwClass = MWClass.fromTagOrName(classTag);
+                    MWClass mwClass = MWClass.fromTag(classTag);
                     if (mwClass != null) {
                         JsonObject entryclassobj = classesdata.getAsJsonObject(mwClass.className.toLowerCase());
                         if (firstGame) {

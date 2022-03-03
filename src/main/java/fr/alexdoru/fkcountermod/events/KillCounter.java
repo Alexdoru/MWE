@@ -397,7 +397,7 @@ public class KillCounter {
             return;
         }
         String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replace("[", "").replace("]", "").replace(" ", ""));
-        MWClass mwClass = MWClass.fromTagOrName(classTag);
+        MWClass mwClass = MWClass.fromTag(classTag);
         if (mwClass == null) {
             return;
         }
