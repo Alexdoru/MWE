@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.config;
 
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
+import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -45,6 +46,7 @@ public class ConfigHandler {
     public static boolean swordDropProtection;
     public static boolean limitDroppedEntityRendered;
     public static int maxDroppedEntityRendered;
+    public static boolean prestigeV;
 
     /**
      * GUI config
@@ -135,6 +137,7 @@ public class ConfigHandler {
         Property pswordDropProtection = config.get(CATEGORY_MWENh, "Sword drop protection", true, "When enabled you can't drop the sword you are holding in your hotbar");
         Property plimitDroppedEntityRendered = config.get(CATEGORY_MWENh, "Limit dropped item rendered", true, "Limit dropped item rendered");
         Property pmaxDroppedEntityRendered = config.get(CATEGORY_MWENh, "Max amount of item rendered", 320, "Max amount of item rendered");
+        Property pprestigeV = config.get(CATEGORY_MWENh, "Prestige V colored Tag", false, "Prestige V colored Tag");
 
         Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
         Property pXpos_killcooldownHUD = config.get(CATEGORY_GUI, "Xpos kill cooldown HUD", 0d, "The x position of the killcooldown HUD, value ranges from 0 to 1");
@@ -203,6 +206,7 @@ public class ConfigHandler {
         pOrderMWWENh.add(pswordDropProtection.getName());
         pOrderMWWENh.add(plimitDroppedEntityRendered.getName());
         pOrderMWWENh.add(pmaxDroppedEntityRendered.getName());
+        pOrderMWWENh.add(pprestigeV.getName());
         config.setCategoryPropertyOrder(CATEGORY_MWENh, pOrderMWWENh);
 
         List<String> pOrderGUI = new ArrayList<>();
@@ -276,6 +280,7 @@ public class ConfigHandler {
             swordDropProtection = pswordDropProtection.getBoolean();
             limitDroppedEntityRendered = plimitDroppedEntityRendered.getBoolean();
             maxDroppedEntityRendered = pmaxDroppedEntityRendered.getInt();
+            prestigeV = !HypixelApiKeyUtil.apiKeyIsNotSetup() && pprestigeV.getBoolean();
 
             show_killcooldownHUD = pShow_killcooldownHUD.getBoolean();
             killcooldownHUDPosition.setRelative(pXpos_killcooldownHUD.getDouble(), pYpos_killcooldownHUD.getDouble());
@@ -341,6 +346,7 @@ public class ConfigHandler {
             pswordDropProtection.set(swordDropProtection);
             plimitDroppedEntityRendered.set(limitDroppedEntityRendered);
             pmaxDroppedEntityRendered.set(maxDroppedEntityRendered);
+            pprestigeV.set(prestigeV);
 
             pShow_killcooldownHUD.set(show_killcooldownHUD);
             double[] killcooldownHUDarray = killcooldownHUDPosition.getRelativePosition();

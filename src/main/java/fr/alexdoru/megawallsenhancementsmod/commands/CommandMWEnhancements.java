@@ -2,10 +2,12 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
+import fr.alexdoru.megawallsenhancementsmod.api.cache.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.GeneralConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -34,7 +36,7 @@ public class CommandMWEnhancements extends CommandBase {
             ConfigHandler.preinit(MegaWallsEnhancementsMod.configurationFile);
             ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Reloaded values from the config file."));
             return;
-        } else if(args.length >= 1 && args[0].equalsIgnoreCase("setapikey")) {
+        } else if (args.length >= 1 && args[0].equalsIgnoreCase("setapikey")) {
             if (args.length != 2) {
                 ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + " setapikey <key>" + "\n"
                         + EnumChatFormatting.RED + "Connect on Hypixel and type \"/api new\" to get an Api key"));
@@ -42,13 +44,18 @@ public class CommandMWEnhancements extends CommandBase {
                 HypixelApiKeyUtil.setApiKey(args[1]);
             }
             return;
+        } else if (args.length >= 1 && args[0].equalsIgnoreCase("clearcache")) {
+            PrestigeVCache.clearCache();
+            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Cleared " + EnumChatFormatting.GOLD + "Prestige V" + EnumChatFormatting.GREEN + " data Cache"));
+            NameUtil.refreshAllNamesInWorld();
+            return;
         }
         new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(new GeneralConfigGuiScreen()), 1);
     }
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        String[] possibilities = {"refreshconfig" , "setapikey"};
+        String[] possibilities = {"clearcache", "refreshconfig", "setapikey"};
         return getListOfStringsMatchingLastWord(args, possibilities);
     }
 
