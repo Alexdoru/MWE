@@ -27,13 +27,37 @@ import java.util.concurrent.Callable;
 
 public class CommandScanGame extends CommandBase {
 
-    private static final HashMap<String, IChatComponent> scanmap = new HashMap<>();
-    private static String scanGameId;
-
     /*
      * fills the hashmap with this instead of null when there is no match
      */
     public static final IChatComponent nomatch = new ChatComponentText("none");
+    private static final HashMap<String, IChatComponent> scanmap = new HashMap<>();
+    private static String scanGameId;
+
+    public static void clearScanGameData() {
+        scanGameId = null;
+        scanmap.clear();
+    }
+
+    public static void onGameStart() {
+        String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
+        if (!currentGameId.equals("?") && scanGameId != null && !scanGameId.equals(currentGameId)) {
+            clearScanGameData();
+        }
+
+    }
+
+    public static HashMap<String, IChatComponent> getScanmap() {
+        return scanmap;
+    }
+
+    protected static IChatComponent getMessageStart(String playername) {
+        IChatComponent imsg = new ChatComponentText(ChatUtil.getTagMW());
+        if (FKCounterMod.isInMwGame) {
+            imsg.appendSibling(ChatUtil.makeReportButtons(playername, "cheating", "", ClickEvent.Action.RUN_COMMAND, ClickEvent.Action.SUGGEST_COMMAND));
+        }
+        return imsg;
+    }
 
     @Override
     public String getCommandName() {
@@ -95,31 +119,6 @@ public class CommandScanGame extends CommandBase {
         return true;
     }
 
-    public static void clearScanGameData() {
-        scanGameId = null;
-        scanmap.clear();
-    }
-
-    public static void onGameStart() {
-        String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
-        if (!currentGameId.equals("?") && scanGameId != null && !scanGameId.equals(currentGameId)) {
-            clearScanGameData();
-        }
-
-    }
-
-    public static HashMap<String, IChatComponent> getScanmap() {
-        return scanmap;
-    }
-
-    protected static IChatComponent getMessageStart(String playername) {
-        IChatComponent imsg = new ChatComponentText(ChatUtil.getTagMW());
-        if (FKCounterMod.isInMwGame) {
-            imsg.appendSibling(ChatUtil.makeReportButtons(playername, "cheating", "", ClickEvent.Action.RUN_COMMAND, ClickEvent.Action.SUGGEST_COMMAND));
-        }
-        return imsg;
-    }
-
 }
 
 class ScanPlayerTask implements Callable<String> {
@@ -148,10 +147,10 @@ class ScanPlayerTask implements Callable<String> {
                     (megawallsstats.getFkdr() > 10f)) {
 
                 imsg = new ChatComponentText(getFormattedName(networkPlayerInfo)
-                                + EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played()
-                                + EnumChatFormatting.GRAY + " games , fkd : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkdr())
-                                + EnumChatFormatting.GRAY + " FK/game : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkpergame())
-                                + EnumChatFormatting.GRAY + " W/L : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getWlr()));
+                        + EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played()
+                        + EnumChatFormatting.GRAY + " games , fkd : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkdr())
+                        + EnumChatFormatting.GRAY + " FK/game : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkpergame())
+                        + EnumChatFormatting.GRAY + " W/L : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getWlr()));
 
             } else if (megawallsstats.getGames_played() < 15) {
 

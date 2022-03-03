@@ -8,50 +8,21 @@ import java.util.regex.Pattern;
 
 public class ArrowHitGui extends MyCachedGui {
 
-    public static ArrowHitGui instance;
-
     private static final String DUMMY_TEXT = EnumChatFormatting.GREEN + "20.0";
+    private static final Pattern PATTERN_ARROW_HIT = Pattern.compile("^\\w+ is on ([0-9]*[.]?[0-9]+) HP!");
+    private static final Pattern PATTERN_RENEGADE_HIT = Pattern.compile("^\\w+ is on ([0-9]*[.]?[0-9]+) HP, pinned by (\\d+) arrows.*");
+    private static final Pattern PATTERN_LEAP_HIT = Pattern.compile("^You took ([0-9]*[.]?[0-9]+) recoil damage after traveling \\d+.\\d+ blocks!");
+    private static final Pattern PATTERN_LEAP_DIRECT_HIT = Pattern.compile("^You landed a direct hit against \\w+, taking ([0-9]*[.]?[0-9]+) recoil damage after traveling [0-9]*[.]?[0-9]+ blocks!");
+    public static ArrowHitGui instance;
     private static String HPvalue;
     private static long hittime;
     private static boolean normalhit = true;
     private static EnumChatFormatting Color;
     private static String arrowspinned;
 
-    private static final Pattern PATTERN_ARROW_HIT = Pattern.compile("^\\w+ is on ([0-9]*[.]?[0-9]+) HP!");
-    private static final Pattern PATTERN_RENEGADE_HIT = Pattern.compile("^\\w+ is on ([0-9]*[.]?[0-9]+) HP, pinned by (\\d+) arrows.*");
-    private static final Pattern PATTERN_LEAP_HIT = Pattern.compile("^You took ([0-9]*[.]?[0-9]+) recoil damage after traveling \\d+.\\d+ blocks!");
-    private static final Pattern PATTERN_LEAP_DIRECT_HIT = Pattern.compile("^You landed a direct hit against \\w+, taking ([0-9]*[.]?[0-9]+) recoil damage after traveling [0-9]*[.]?[0-9]+ blocks!");
-
     public ArrowHitGui() {
         instance = this;
         guiPosition = ConfigHandler.arrowHitHUDPosition;
-    }
-
-    @Override
-    public void updateDisplayText() {
-        if (normalhit) {
-            displayText = Color + HPvalue;
-        } else {
-            boolean bool = Float.parseFloat(HPvalue) > (Float.parseFloat(arrowspinned)) * 2.0f;
-            displayText = Color + HPvalue + EnumChatFormatting.GRAY + " (" + (bool ? EnumChatFormatting.GREEN : EnumChatFormatting.GOLD) + arrowspinned + EnumChatFormatting.GRAY + ")";
-        }
-    }
-
-    @Override
-    public void render() {
-        int[] absolutePos = this.guiPosition.getAbsolutePosition();
-        drawCenteredString(frObj, displayText, absolutePos[0], absolutePos[1] - frObj.FONT_HEIGHT, 0);
-    }
-
-    @Override
-    public void renderDummy() {
-        int[] absolutePos = this.guiPosition.getAbsolutePosition();
-        drawCenteredString(frObj, DUMMY_TEXT, absolutePos[0], absolutePos[1] - frObj.FONT_HEIGHT, 0);
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return System.currentTimeMillis() - hittime < 1000L;
     }
 
     public static boolean processMessage(String rawMessage) {
@@ -129,6 +100,33 @@ public class ArrowHitGui extends MyCachedGui {
             Color = EnumChatFormatting.DARK_RED;
         }
 
+    }
+
+    @Override
+    public void updateDisplayText() {
+        if (normalhit) {
+            displayText = Color + HPvalue;
+        } else {
+            boolean bool = Float.parseFloat(HPvalue) > (Float.parseFloat(arrowspinned)) * 2.0f;
+            displayText = Color + HPvalue + EnumChatFormatting.GRAY + " (" + (bool ? EnumChatFormatting.GREEN : EnumChatFormatting.GOLD) + arrowspinned + EnumChatFormatting.GRAY + ")";
+        }
+    }
+
+    @Override
+    public void render() {
+        int[] absolutePos = this.guiPosition.getAbsolutePosition();
+        drawCenteredString(frObj, displayText, absolutePos[0], absolutePos[1] - frObj.FONT_HEIGHT, 0);
+    }
+
+    @Override
+    public void renderDummy() {
+        int[] absolutePos = this.guiPosition.getAbsolutePosition();
+        drawCenteredString(frObj, DUMMY_TEXT, absolutePos[0], absolutePos[1] - frObj.FONT_HEIGHT, 0);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return System.currentTimeMillis() - hittime < 1000L;
     }
 
 }

@@ -16,9 +16,9 @@ import java.util.Map;
 
 public class MegaWallsStats {
 
+    private final LinkedHashMap<String, Integer> classpointsMap = new LinkedHashMap<>();
     private String chosen_class;
     private String chosen_skin_class;
-
     private int coins = 0;
     private int mythic_favor = 0;
     private int wither_damage = 0;
@@ -35,17 +35,13 @@ public class MegaWallsStats {
     //private int final_assists = 0; // useless
     //private int final_assists_standard = 0; // useless
     private int final_deaths = 0;
-
     private float kdr = 0;
     private float fkdr = 0;
     private float wlr = 0;
-
     private float wither_damage_game = 0;
     private float def_kill_game = 0;
-
     private int time_played = 0;
     private int nbprestiges = 0;
-    private final LinkedHashMap<String, Integer> classpointsMap = new LinkedHashMap<>();
     private int total_classpoints = 0;
 
     private int games_played = 0;

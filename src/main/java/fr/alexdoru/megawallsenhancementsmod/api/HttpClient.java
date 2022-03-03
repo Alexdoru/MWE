@@ -11,8 +11,8 @@ import java.net.URL;
 
 public class HttpClient {
 
-    private URL url;
     private final String urlstr;
+    private URL url;
 
     public HttpClient(String urlstr) {
 

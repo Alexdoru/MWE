@@ -4,11 +4,10 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 
 public class HunterStrengthGui extends MyCachedGui {
 
-    public static HunterStrengthGui instance;
-
     private static final String DUMMY_TEXT = "\u00a77(\u00a7l\u00a7c\u00a7lStrength\u00a77) \u00a7e\u00a7l in 10";
     private static final String PRE_STRENGTH_TEXT = "\u00a77(\u00a7l\u00a7c\u00a7lStrength\u00a77) \u00a7e\u00a7l in ";
     private static final String STRENGTH_TEXT = "\u00a7l\u00a7c\u00a7lStrength \u00a7e\u00a7l";
+    public static HunterStrengthGui instance;
     private static long timeStartRender;
     private static long renderDuration;
     private static boolean isStrengthRender;

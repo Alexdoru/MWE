@@ -28,6 +28,11 @@ import java.util.regex.Pattern;
 
 public class KillCounter {
 
+    public static final int TEAMS = 4;
+    public static final int RED_TEAM = 0;
+    public static final int GREEN_TEAM = 1;
+    public static final int YELLOW_TEAM = 2;
+    public static final int BLUE_TEAM = 3;
     private static final String PREP_PHASE = "Prepare your defenses!";
     private static final String[] KILL_MESSAGES = {
             "(\\w+) was shot and killed by (\\w+).*",
@@ -85,20 +90,13 @@ public class KillCounter {
             "(\\w+) was magically squeaked by (\\w+).*",
             "(\\w+) was corrupted by (\\w+).*"
     };
-
-    private static Pattern[] KILL_PATTERNS;
-    public static final int TEAMS = 4;
-    public static final int RED_TEAM = 0;
-    public static final int GREEN_TEAM = 1;
-    public static final int YELLOW_TEAM = 2;
-    public static final int BLUE_TEAM = 3;
     private static final String[] SCOREBOARD_PREFIXES = {"[R]", "[G]", "[Y]", "[B]"};
     private static final String[] DEFAULT_PREFIXES = {"c", "a", "e", "9"}; // RED GREEN YELLOW BLUE
-
+    private static final HashMap<String, Integer> allPlayerKills = new HashMap<>();
+    private static Pattern[] KILL_PATTERNS;
     private static String gameId;
     private static String[] prefixes; // color codes prefix that you are using in your hypixel mega walls settings
     private static HashMap<String, Integer>[] teamKillsArray;
-    private static final HashMap<String, Integer> allPlayerKills = new HashMap<>();
     private static ArrayList<String> deadPlayers;
 
     private static Random rand;
@@ -185,36 +183,6 @@ public class KillCounter {
             }
         }
         return false;
-    }
-
-    @SubscribeEvent
-    public void onMwGame(MwGameEvent event) {
-
-        /*
-         * to fix the bug where the FKCounter doesn't work properly if you play two games in a row on a server with the same serverID
-         */
-        if (event.getType() == MwGameEvent.EventType.GAME_START) {
-            String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId();
-            if (currentGameId != null) {
-                ResetKillCounterTo(currentGameId);
-            }
-            setTeamPrefixes();
-            return;
-        }
-
-        if (event.getType() == MwGameEvent.EventType.CONNECT) {
-
-            String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId(); // this is not null due to how the event is defined/Posted
-            if (gameId == null || !gameId.equals(currentGameId)) {
-                ResetKillCounterTo(currentGameId);
-            }
-            /*
-             * this is here to fix the bug where the killcounter doesn't work if you re-start your minecraft during a game of MW
-             * or if you changed your colors for the teams in your MW settings and rejoined the game
-             */
-            setTeamPrefixes();
-        }
-
     }
 
     public static String getGameId() {
@@ -432,6 +400,36 @@ public class KillCounter {
                 }
             }, i * 10);
 
+        }
+
+    }
+
+    @SubscribeEvent
+    public void onMwGame(MwGameEvent event) {
+
+        /*
+         * to fix the bug where the FKCounter doesn't work properly if you play two games in a row on a server with the same serverID
+         */
+        if (event.getType() == MwGameEvent.EventType.GAME_START) {
+            String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId();
+            if (currentGameId != null) {
+                ResetKillCounterTo(currentGameId);
+            }
+            setTeamPrefixes();
+            return;
+        }
+
+        if (event.getType() == MwGameEvent.EventType.CONNECT) {
+
+            String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId(); // this is not null due to how the event is defined/Posted
+            if (gameId == null || !gameId.equals(currentGameId)) {
+                ResetKillCounterTo(currentGameId);
+            }
+            /*
+             * this is here to fix the bug where the killcounter doesn't work if you re-start your minecraft during a game of MW
+             * or if you changed your colors for the teams in your MW settings and rejoined the game
+             */
+            setTeamPrefixes();
         }
 
     }

@@ -6,15 +6,28 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class KillCooldownGui extends MyCachedGui {
 
-    public static KillCooldownGui instance;
-
     private static final String DUMMY_TEXT = EnumChatFormatting.DARK_RED + "/kill cooldown : 60s";
+    public static KillCooldownGui instance;
     private static long lastkilltime = 0;
     private static long lastupdate = 0;
 
     public KillCooldownGui() {
         instance = this;
         guiPosition = ConfigHandler.killcooldownHUDPosition;
+    }
+
+    /**
+     * Called to draw the gui, when you use /kill
+     */
+    public static void drawCooldownGui() {
+        final long time = System.currentTimeMillis();
+        if (!(time - lastkilltime < 60000L)) { // doesn't update the cooldown if you used /kill in the last 60 seconds
+            lastkilltime = time;
+        }
+    }
+
+    public static void hideGUI() {
+        lastkilltime = 0;
     }
 
     @Override
@@ -43,20 +56,6 @@ public class KillCooldownGui extends MyCachedGui {
     @Override
     public boolean isEnabled() {
         return System.currentTimeMillis() - lastkilltime < 60000L && FKCounterMod.isInMwGame;
-    }
-
-    /**
-     * Called to draw the gui, when you use /kill
-     */
-    public static void drawCooldownGui() {
-        final long time = System.currentTimeMillis();
-        if (!(time - lastkilltime < 60000L)) { // doesn't update the cooldown if you used /kill in the last 60 seconds
-            lastkilltime = time;
-        }
-    }
-
-    public static void hideGUI() {
-        lastkilltime = 0;
     }
 
 }
