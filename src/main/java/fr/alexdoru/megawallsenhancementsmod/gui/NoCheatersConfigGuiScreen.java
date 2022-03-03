@@ -35,7 +35,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         buttonList.add(new GuiButton(8, xPos, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(8)));
         buttonList.add(new GuiButton(9, xPos, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
         buttonList.add(new GuiButton(2, xPos, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
-        buttonList.add(new GuiSlider(4, xPos, getYposForButton(0), buttonsWidth, 20, "Time between reports : ", " hours", 0.75d, 24d, ConfigHandler.timeBetweenReports / 3600f * 1000f, false, true, this));
+        buttonList.add(new GuiSlider(4, xPos, getYposForButton(0), buttonsWidth, 20, "Time between reports : ", " hours", 0.75d, 24d, ConfigHandler.timeBetweenReports / (3600f * 1000f), false, true, this));
         buttonList.add(new GuiSlider(5, xPos, getYposForButton(1), buttonsWidth, 20, "Time max autoreport : ", " days", 1d, 30d, ConfigHandler.timeAutoReport / (24f * 3600f * 1000f), false, true, this));
         buttonList.add(new GuiButton(6, xPos, getYposForButton(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(6)));
         buttonList.add(new GuiSlider(7, xPos, getYposForButton(3), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
