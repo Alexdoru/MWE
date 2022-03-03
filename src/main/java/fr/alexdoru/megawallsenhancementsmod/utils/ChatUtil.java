@@ -228,8 +228,8 @@ public class ChatUtil {
 
     }
 
-    public static String capitalizeFirstLetter(String string){
-        if(string == null) {
+    public static String capitalizeFirstLetter(String string) {
+        if (string == null) {
             return null;
         }
         return string.substring(0, 1).toUpperCase() + string.substring(1);
@@ -315,7 +315,7 @@ public class ChatUtil {
                                                 + EnumChatFormatting.GRAY + "Using the wdr option will give you warnings about this player ingame")))));
     }
 
-    public static IChatComponent formattedNameWithReportButton(String playername, String formattedName){
+    public static IChatComponent formattedNameWithReportButton(String playername, String formattedName) {
         return new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + playername + " cheating"))
                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,

@@ -25,6 +25,7 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.getTagMW;
 
 public class MWGameStatsEvent {
 
+    private static final Pattern RANDOM_CLASS_PATTERN = Pattern.compile("^Random class: (\\w+)*");
     private static String chosen_class;
     private static boolean isRandom = false;
     /*Data downloaded at the start of the game*/
@@ -32,23 +33,6 @@ public class MWGameStatsEvent {
     /*Stats of the last game*/
     private static MegaWallsClassStats gameStats;
     private static String formattedname;
-
-    private static final Pattern RANDOM_CLASS_PATTERN = Pattern.compile("^Random class: (\\w+)*");
-
-    @SubscribeEvent
-    public void onMwGame(MwGameEvent event) {
-
-        if (event.getType() == MwGameEvent.EventType.GAME_START) {
-            CommandScanGame.onGameStart();
-            onGameStart();
-        }
-
-        if (event.getType() == MwGameEvent.EventType.GAME_END) {
-            CommandScanGame.clearScanGameData();
-            new DelayedTask(MWGameStatsEvent::onGameEnd, 300);
-        }
-
-    }
 
     private static void onGameStart() {
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
@@ -125,5 +109,20 @@ public class MWGameStatsEvent {
             return true;
         }
         return false;
+    }
+
+    @SubscribeEvent
+    public void onMwGame(MwGameEvent event) {
+
+        if (event.getType() == MwGameEvent.EventType.GAME_START) {
+            CommandScanGame.onGameStart();
+            onGameStart();
+        }
+
+        if (event.getType() == MwGameEvent.EventType.GAME_END) {
+            CommandScanGame.clearScanGameData();
+            new DelayedTask(MWGameStatsEvent::onGameEnd, 300);
+        }
+
     }
 }

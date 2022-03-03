@@ -31,6 +31,9 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class ChatEvents {
 
+    public static final ResourceLocation reportSuggestionSound = new ResourceLocation("random.orb");
+    public static final ResourceLocation strengthSound = new ResourceLocation("item.fireCharge.use"); // item.fireCharge.use  usefireworks.twinkle
+    public static final Minecraft mc = Minecraft.getMinecraft();
     //private static final String HUNTER_STRENGTH_MESSAGE = "\u00a7a\u00a7lF.O.N. \u00a77(\u00a7l\u00a7c\u00a7lStrength\u00a77) \u00a7e\u00a7l10";
     private static final Pattern HUNTER_PRE_STRENGTH_PATTERN = Pattern.compile(".*\u00a7a\u00a7lF\\.O\\.N\\. \u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l([0-9]+).*");
     private static final String HUNTER_STRENGTH_MESSAGE = "Your Force of Nature gave you a 5 second Strength I buff.";
@@ -41,11 +44,67 @@ public class ChatEvents {
     private static final Pattern REPORT_PATTERN2 = Pattern.compile("^(?:|\\[SHOUT\\] ).+?(?:wdr|report) (\\w+) (\\w+).*", Pattern.CASE_INSENSITIVE);
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Triple Coins \\+ EXP, |)(?:Active Booster, |)\\w+'s Network Booster\\)).*");
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
-    public static final ResourceLocation reportSuggestionSound = new ResourceLocation("random.orb");
-    public static final ResourceLocation strengthSound = new ResourceLocation("item.fireCharge.use"); // item.fireCharge.use  usefireworks.twinkle
-    private static long lastStrength = 0;
-    public static final Minecraft mc = Minecraft.getMinecraft();
     private static final List<StringLong> reportSuggestionList = new ArrayList<>();
+    private static long lastStrength = 0;
+
+    private static boolean parseReportMessage(String msgIn) {
+
+        if (ConfigHandler.reportsuggestions || ConfigHandler.autoreportSuggestions) {
+
+            Matcher matcher1 = REPORT_PATTERN1.matcher(msgIn);
+            Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);
+
+            if (matcher1.matches()) {
+                String name = matcher1.group(1);
+                if (isAValidName(name)) {
+                    handleReportSuggestion(name, "bhop");
+                }
+                return true;
+            } else if (matcher2.matches()) {
+                String name = matcher2.group(1);
+                String cheat = matcher2.group(2);
+                if (isAValidCheat(cheat) && isAValidName(name)) {
+                    handleReportSuggestion(name, cheat);
+                }
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    private static void handleReportSuggestion(String playername, String cheat) {
+        if (ConfigHandler.autoreportSuggestions && !FKCounterMod.preGameLobby && mc.thePlayer != null && !mc.thePlayer.getName().equals(playername) && canReportSuggestionPlayer(playername)) {
+            mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
+        }
+        if (ConfigHandler.reportsuggestions) {
+            mc.getSoundHandler().playSound(PositionedSoundRecord.create(reportSuggestionSound, 1.0F));
+            IChatComponent imsg = new ChatComponentText(getTagMW() + EnumChatFormatting.DARK_RED + "Command suggestion : ")
+                    .appendSibling(makeReportButtons(playername, "cheating", cheat, ClickEvent.Action.SUGGEST_COMMAND, ClickEvent.Action.SUGGEST_COMMAND));
+            new DelayedTask(() -> addChatMessage(imsg), 0);
+        }
+    }
+
+    private static boolean canReportSuggestionPlayer(String playername) {
+        long timestamp = System.currentTimeMillis();
+        reportSuggestionList.removeIf(o -> (o.timestamp + 600000L < timestamp));
+        for (StringLong stringLong : reportSuggestionList) {
+            if (stringLong.message.equals(playername)) {
+                return false;
+            }
+        }
+        reportSuggestionList.add(new StringLong(timestamp, playername));
+        return true;
+    }
+
+    private static boolean isAValidName(String playername) {
+        return NetHandlerPlayClientHook.playerInfoMap.get(playername) != null;
+    }
+
+    private static boolean isAValidCheat(String cheat) {
+        return CommandReport.cheatsList.contains(cheat);
+    }
 
     @SubscribeEvent
     public void onChatMessage(ClientChatReceivedEvent event) {
@@ -167,65 +226,6 @@ public class ChatEvents {
             return true;
         }
         return false;
-    }
-
-    private static boolean parseReportMessage(String msgIn) {
-
-        if (ConfigHandler.reportsuggestions || ConfigHandler.autoreportSuggestions) {
-
-            Matcher matcher1 = REPORT_PATTERN1.matcher(msgIn);
-            Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);
-
-            if (matcher1.matches()) {
-                String name = matcher1.group(1);
-                if (isAValidName(name)) {
-                    handleReportSuggestion(name, "bhop");
-                }
-                return true;
-            } else if (matcher2.matches()) {
-                String name = matcher2.group(1);
-                String cheat = matcher2.group(2);
-                if (isAValidCheat(cheat) && isAValidName(name)) {
-                    handleReportSuggestion(name, cheat);
-                }
-                return true;
-            }
-        }
-
-        return false;
-
-    }
-
-    private static void handleReportSuggestion(String playername, String cheat) {
-        if (ConfigHandler.autoreportSuggestions && !FKCounterMod.preGameLobby && mc.thePlayer != null && !mc.thePlayer.getName().equals(playername) && canReportSuggestionPlayer(playername)) {
-            mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
-        }
-        if (ConfigHandler.reportsuggestions) {
-            mc.getSoundHandler().playSound(PositionedSoundRecord.create(reportSuggestionSound, 1.0F));
-            IChatComponent imsg = new ChatComponentText(getTagMW() + EnumChatFormatting.DARK_RED + "Command suggestion : ")
-                    .appendSibling(makeReportButtons(playername, "cheating", cheat, ClickEvent.Action.SUGGEST_COMMAND, ClickEvent.Action.SUGGEST_COMMAND));
-            new DelayedTask(() -> addChatMessage(imsg), 0);
-        }
-    }
-
-    private static boolean canReportSuggestionPlayer(String playername) {
-        long timestamp = System.currentTimeMillis();
-        reportSuggestionList.removeIf(o -> (o.timestamp + 600000L < timestamp));
-        for (StringLong stringLong : reportSuggestionList) {
-            if (stringLong.message.equals(playername)) {
-                return false;
-            }
-        }
-        reportSuggestionList.add(new StringLong(timestamp, playername));
-        return true;
-    }
-
-    private static boolean isAValidName(String playername) {
-        return NetHandlerPlayClientHook.playerInfoMap.get(playername) != null;
-    }
-
-    private static boolean isAValidCheat(String cheat) {
-        return CommandReport.cheatsList.contains(cheat);
     }
 
 }

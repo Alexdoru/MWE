@@ -7,9 +7,8 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class LastWitherHPGui extends MyCachedGui {
 
-    public static LastWitherHPGui instance;
-
     private static final String DUMMY_TEXT = EnumChatFormatting.GREEN + "Wither dies in 148s";
+    public static LastWitherHPGui instance;
     private static String color;
     private static long lastTextUpdate = 0;
     private static long lastWitherHPUpdate = 0;

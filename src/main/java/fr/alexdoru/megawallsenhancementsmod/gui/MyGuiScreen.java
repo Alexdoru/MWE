@@ -12,9 +12,9 @@ import java.util.List;
 
 public abstract class MyGuiScreen extends GuiScreen {
 
-    public GuiScreen parent = null;
-    public final int ButtonsHeight = 20;
     private static final ResourceLocation SHADER = new ResourceLocation("fkcounter", "shaders/blur.json");
+    public final int ButtonsHeight = 20;
+    public GuiScreen parent = null;
 
     @Override
     public void initGui() {

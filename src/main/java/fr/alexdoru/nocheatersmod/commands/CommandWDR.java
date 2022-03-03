@@ -33,11 +33,29 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class CommandWDR extends CommandBase {
 
-    private static int nbTimeMarks = 0;
     private static final HashMap<String, TimeMark> TimeMarksMap = new HashMap<>();
-
     private static final char timestampreportkey = '-';
     private static final char timemarkedreportkey = '#';
+    private static int nbTimeMarks = 0;
+
+    public static void addTimeMark() {
+        nbTimeMarks++;
+        String key = String.valueOf(nbTimeMarks);
+        long timestamp = (new Date()).getTime();
+        String serverID = GameInfoGrabber.getGameIDfromscoreboard();
+        String timerOnReplay = GameInfoGrabber.getTimeSinceGameStart(timestamp, serverID, 0);
+        TimeMarksMap.put(key, new TimeMark(timestamp, serverID, timerOnReplay));
+        addChatMessage(new ChatComponentText(getTagNoCheaters()
+                + EnumChatFormatting.GREEN + "Added timestamp : " + EnumChatFormatting.GOLD + "#" + key + EnumChatFormatting.GREEN + ".")
+                .setChatStyle(new ChatStyle()
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                new ChatComponentText(EnumChatFormatting.GREEN + "Key : " + EnumChatFormatting.GOLD + "#" + key + "\n" +
+                                        EnumChatFormatting.GREEN + "Timestamp : " + EnumChatFormatting.GOLD + DateUtil.ESTformatTimestamp(timestamp) + "\n" +
+                                        EnumChatFormatting.GREEN + "ServerID : " + EnumChatFormatting.GOLD + serverID + "\n" +
+                                        EnumChatFormatting.GREEN + "Timer on replay (approx.) : " + EnumChatFormatting.GOLD + timerOnReplay + "\n" +
+                                        EnumChatFormatting.YELLOW + "Click to fill a report with this timestmap")))
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wdr  " + "#" + key))));
+    }
 
     @Override
     public String getCommandName() {
@@ -318,25 +336,6 @@ public class CommandWDR extends CommandBase {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         return args.length == 1 ? (FKCounterMod.isInMwGame && FKCounterMod.isitPrepPhase ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null) : (args.length > 1 ? getListOfStringsMatchingLastWord(args, CommandReport.cheatsArray) : null);
-    }
-
-    public static void addTimeMark() {
-        nbTimeMarks++;
-        String key = String.valueOf(nbTimeMarks);
-        long timestamp = (new Date()).getTime();
-        String serverID = GameInfoGrabber.getGameIDfromscoreboard();
-        String timerOnReplay = GameInfoGrabber.getTimeSinceGameStart(timestamp, serverID, 0);
-        TimeMarksMap.put(key, new TimeMark(timestamp, serverID, timerOnReplay));
-        addChatMessage(new ChatComponentText(getTagNoCheaters()
-                + EnumChatFormatting.GREEN + "Added timestamp : " + EnumChatFormatting.GOLD + "#" + key + EnumChatFormatting.GREEN + ".")
-                .setChatStyle(new ChatStyle()
-                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                new ChatComponentText(EnumChatFormatting.GREEN + "Key : " + EnumChatFormatting.GOLD + "#" + key + "\n" +
-                                        EnumChatFormatting.GREEN + "Timestamp : " + EnumChatFormatting.GOLD + DateUtil.ESTformatTimestamp(timestamp) + "\n" +
-                                        EnumChatFormatting.GREEN + "ServerID : " + EnumChatFormatting.GOLD + serverID + "\n" +
-                                        EnumChatFormatting.GREEN + "Timer on replay (approx.) : " + EnumChatFormatting.GOLD + timerOnReplay + "\n" +
-                                        EnumChatFormatting.YELLOW + "Click to fill a report with this timestmap")))
-                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wdr  " + "#" + key))));
     }
 
 }

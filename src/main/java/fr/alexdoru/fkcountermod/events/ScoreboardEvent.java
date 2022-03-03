@@ -19,6 +19,10 @@ public class ScoreboardEvent {
     private static int prevAmountWitherAlive = 4;
     private static boolean isHypixel = false;
 
+    public static ScoreboardParser getMwScoreboardParser() {
+        return mwScoreboardParser;
+    }
+
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
 
@@ -76,10 +80,6 @@ public class ScoreboardEvent {
     @SubscribeEvent
     public void onDisconnection(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         isHypixel = false;
-    }
-
-    public static ScoreboardParser getMwScoreboardParser() {
-        return mwScoreboardParser;
     }
 
 }

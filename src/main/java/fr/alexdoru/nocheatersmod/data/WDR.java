@@ -7,19 +7,12 @@ import java.util.ArrayList;
 
 public class WDR {
 
-    public long timestamp;
     public final ArrayList<String> hacks;
+    public long timestamp;
 
     public WDR(long timestamp, ArrayList<String> hacks) {
         this.timestamp = timestamp;
         this.hacks = hacks;
-    }
-
-    /**
-     * Compares the timestamp of timestamped reports
-     */
-    public int compareTo(WDR wdr) {
-        return compare(this, wdr);
     }
 
     /**
@@ -31,6 +24,13 @@ public class WDR {
         long y = Long.parseLong(wdr2.hacks.get(3));
 
         return Long.compare(x, y);
+    }
+
+    /**
+     * Compares the timestamp of timestamped reports
+     */
+    public int compareTo(WDR wdr) {
+        return compare(this, wdr);
     }
 
     public int compareToInvert(WDR wdr) {

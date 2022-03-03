@@ -9,9 +9,9 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class LowHPIndicator {
 
+    public static final ResourceLocation lowHPSound = new ResourceLocation("note.pling");
     private static boolean playedSound = false;
     private final Minecraft mc = Minecraft.getMinecraft();
-    public static final ResourceLocation lowHPSound = new ResourceLocation("note.pling");
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {

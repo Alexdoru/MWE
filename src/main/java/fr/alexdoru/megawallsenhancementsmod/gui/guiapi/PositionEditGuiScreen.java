@@ -8,10 +8,10 @@ import net.minecraft.client.gui.ScaledResolution;
 public class PositionEditGuiScreen extends GuiScreen {
 
     private final Minecraft mc = Minecraft.getMinecraft();
-    private int prevX, prevY;
     private final IRenderer renderer;
     private final GuiPosition guiPosition;
     private final GuiScreen parent;
+    private int prevX, prevY;
 
     public PositionEditGuiScreen(IRenderer renderer, GuiScreen parent) {
 

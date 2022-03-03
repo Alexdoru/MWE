@@ -69,7 +69,7 @@ public class CommandReport extends CommandBase {
                 msg.append(" bhop aura reach velocity speed antiknockback");
             } else if (args[i].equalsIgnoreCase("fastbreak")) {
                 msg.append(" speed");
-            }else if (args[i].equalsIgnoreCase("autoblock") || args[i].equalsIgnoreCase("multiaura")) {
+            } else if (args[i].equalsIgnoreCase("autoblock") || args[i].equalsIgnoreCase("multiaura")) {
                 msg.append(" killaura");
             } else if (args[i].equalsIgnoreCase("noslowdown") || args[i].equalsIgnoreCase("keepsprint")) {
                 msg.append(" velocity");

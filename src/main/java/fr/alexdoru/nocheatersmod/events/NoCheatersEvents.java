@@ -27,8 +27,8 @@ import java.util.List;
 
 public class NoCheatersEvents {
 
-    private static int reportQueue = 1;
     private static final Minecraft mc = Minecraft.getMinecraft();
+    private static int reportQueue = 1;
 
     @SubscribeEvent
     public void onPlayerJoin(EntityJoinWorldEvent event) {
