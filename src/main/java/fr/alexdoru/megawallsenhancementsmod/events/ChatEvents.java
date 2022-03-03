@@ -40,8 +40,8 @@ public class ChatEvents {
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
     private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:|\\[SHOUT\\] )(?:|\\[[A-Z]+\\] )(?:|\\[[a-zA-Z0-9_+]{1,5}\\] )?(\\w{1,16}):.*", Pattern.CASE_INSENSITIVE);
-    private static final Pattern REPORT_PATTERN1 = Pattern.compile("^(?:|\\[SHOUT\\] ).+?(\\w+) (?:|is )b?hop?ping.*", Pattern.CASE_INSENSITIVE);
-    private static final Pattern REPORT_PATTERN2 = Pattern.compile("^(?:|\\[SHOUT\\] ).+?(?:wdr|report) (\\w+) (\\w+).*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern REPORT_PATTERN1 = Pattern.compile("^.+?(\\w+) (?:|is )b?hop?ping.*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern REPORT_PATTERN2 = Pattern.compile("^.+?(?:wdr|report) (\\w+) (\\w+).*", Pattern.CASE_INSENSITIVE);
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Triple Coins \\+ EXP, |)(?:Active Booster, |)\\w+'s Network Booster\\)).*");
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
     private static final List<StringLong> reportSuggestionList = new ArrayList<>();
