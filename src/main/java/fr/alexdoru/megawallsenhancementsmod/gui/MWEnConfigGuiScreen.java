@@ -5,11 +5,14 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
 import fr.alexdoru.megawallsenhancementsmod.events.LowHPIndicator;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
@@ -35,14 +38,15 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(18, XposLeftButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(18)));
         buttonList.add(new GuiButton(19, XposLeftButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(19)));
         buttonList.add(new GuiButton(15, XposLeftButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
-        buttonList.add(new GuiButton(0, XposLeftButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
-        buttonList.add(new GuiButton(16, XposLeftButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
-        buttonList.add(new GuiButton(21, XposLeftButton, getYposForButton(-0), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
+        buttonList.add(new GuiButton(24, XposLeftButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(24)));
+        buttonList.add(new GuiButton(0, XposLeftButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
+        buttonList.add(new GuiButton(16, XposLeftButton, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
 
-        buttonList.add(new GuiButton(17, XposRightButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
-        buttonList.add(new GuiSlider(20, XposRightButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
-        buttonList.add(new GuiButton(22, XposRightButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(22)));
-        buttonList.add(new GuiSlider(23, XposRightButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, "Maximum amount of item rendered : ", "", 40d, 1000d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
+        buttonList.add(new GuiButton(21, XposRightButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
+        buttonList.add(new GuiButton(17, XposRightButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
+        buttonList.add(new GuiSlider(20, XposRightButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
+        buttonList.add(new GuiButton(22, XposRightButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(22)));
+        buttonList.add(new GuiSlider(23, XposRightButton, getYposForButton(0), buttonsWidth, ButtonsHeight, "Maximum amount of item rendered : ", "", 40d, 1000d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
 
         final int XposCenterButton = getxCenter() - buttonsWidth / 2;
 
@@ -83,6 +87,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 return "Icons on names : " + getSuffix(ConfigHandler.toggleicons);
             case 0:
                 return "Short coin messages : " + getSuffix(ConfigHandler.shortencoinmessage);
+            case 24:
+                return "Prestige V tags : " + getSuffix(ConfigHandler.prestigeV);
             case 9:
                 return "Show hunter strength HUD : " + getSuffix(ConfigHandler.hunterStrengthHUD);
             case 18:
@@ -142,6 +148,20 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add("Will become : ");
                 textLines.add(EnumChatFormatting.GOLD + "+100 coins!" + EnumChatFormatting.AQUA + " FINAL KILL");
                 break;
+            case 24:
+                textLines.add(EnumChatFormatting.GREEN + "Adds the prestige V colored tags in mega walls");
+                textLines.add(EnumChatFormatting.GREEN + "You need at least" + EnumChatFormatting.GOLD + " 1 000 000 coins" + EnumChatFormatting.GREEN + ", " + EnumChatFormatting.GOLD + " 7500 classpoints" + EnumChatFormatting.GREEN + ",");
+                textLines.add(EnumChatFormatting.GREEN + "and a " + EnumChatFormatting.DARK_RED + "valid API Key" + EnumChatFormatting.GREEN + ". This will send api requests and store the data");
+                textLines.add(EnumChatFormatting.GREEN + "in a cache until you close your game.");
+                textLines.add(EnumChatFormatting.GREEN + "Type " + EnumChatFormatting.YELLOW + "/mwenhancements clearcache" + EnumChatFormatting.GREEN + " to update the data in the cache");
+                textLines.add("");
+                textLines.add(EnumChatFormatting.GOLD + "Prestige Colors :");
+                textLines.add(EnumChatFormatting.GOLD + "7500 classpoints : " + EnumChatFormatting.DARK_BLUE + "[TAG]");
+                textLines.add(EnumChatFormatting.GOLD + "10000 classpoints : " + EnumChatFormatting.DARK_GRAY + "[TAG]");
+                textLines.add(EnumChatFormatting.GOLD + "15000 classpoints : " + EnumChatFormatting.DARK_PURPLE + "[TAG]");
+                textLines.add(EnumChatFormatting.GOLD + "25000 classpoints : " + EnumChatFormatting.DARK_GREEN + "[TAG]");
+                textLines.add(EnumChatFormatting.GOLD + "50000 classpoints : " + EnumChatFormatting.DARK_RED + "[TAG]");
+                break;
             case 9:
                 textLines.add(EnumChatFormatting.GREEN + "When you play the Hunter class it prints a HUD");
                 textLines.add(EnumChatFormatting.GREEN + "and plays a sound before getting strength");
@@ -191,6 +211,19 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 15:
                 ConfigHandler.toggleicons = !ConfigHandler.toggleicons;
                 NameUtil.refreshAllNamesInWorld();
+                break;
+            case 24:
+                if (ConfigHandler.prestigeV) {
+                    ConfigHandler.prestigeV = false;
+                    NameUtil.refreshAllNamesInWorld();
+                } else {
+                    if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
+                        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.apikeyMissingErrorMsg()));
+                    } else {
+                        ConfigHandler.prestigeV = true;
+                        NameUtil.refreshAllNamesInWorld();
+                    }
+                }
                 break;
             case 0:
                 ConfigHandler.shortencoinmessage = !ConfigHandler.shortencoinmessage;

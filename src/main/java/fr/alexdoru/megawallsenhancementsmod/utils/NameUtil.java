@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.utils;
 
 import com.mojang.authlib.GameProfile;
 import fr.alexdoru.fkcountermod.events.KillCounter;
+import fr.alexdoru.megawallsenhancementsmod.api.cache.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
@@ -24,6 +25,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NameUtil {
 
@@ -37,6 +40,7 @@ public class NameUtil {
     public static final String squadprefix = isquadprefix.getFormattedText();
     private static final List<IChatComponent> allPrefix = Arrays.asList(iprefix, iprefix_bhop, iprefix_scan, isquadprefix);
     private static final Minecraft mc = Minecraft.getMinecraft();
+    private static final Pattern PATTERN_CLASS_TAG = Pattern.compile("\\[([A-Z]{3})\\]");
 
     /**
      * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
@@ -94,6 +98,7 @@ public class NameUtil {
 
         if (clearNametagIcons) {
             player.getPrefixes().removeAll(allPrefix);
+            player.getSuffixes().clear();
             player.refreshDisplayName();
         }
 
@@ -107,8 +112,19 @@ public class NameUtil {
             return;
         }
 
+        boolean needRefresh = false;
+
         if (mwPlayerData.extraPrefix != null) {
             player.addPrefix(mwPlayerData.extraPrefix);
+            needRefresh = true;
+        }
+
+        if (mwPlayerData.PrestigeVTag != null) {
+            player.addSuffix(mwPlayerData.PrestigeVTag);
+            needRefresh = true;
+        }
+
+        if (needRefresh) {
             player.refreshDisplayName();
         }
 
@@ -210,19 +226,41 @@ public class NameUtil {
 
             }
 
-        IChatComponent displayName = null;
-        ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
-        if (team != null) {
-            String teamprefix = team.getColorPrefix();
-            if (!teamprefix.contains("\u00a7k") && iExtraPrefix != null) {
-                displayName = new ChatComponentText(extraPrefix + teamprefix + (isSquadMate ? squadname : username) + team.getColorSuffix());
+            IChatComponent displayName = null;
+            EnumChatFormatting prestigeVcolor = null;
+            IChatComponent prestigeVTag = null;
+            if (mc.theWorld != null) {
+                ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
+                if (team != null) {
+                    String teamprefix = team.getColorPrefix();
+                    String colorSuffix = team.getColorSuffix();
+                    if (ConfigHandler.prestigeV && colorSuffix != null && colorSuffix.contains(EnumChatFormatting.GOLD.toString())) {
+                        Matcher matcher = PATTERN_CLASS_TAG.matcher(colorSuffix);
+                        if (matcher.find()) {
+                            String tag = matcher.group(1);
+                            prestigeVcolor = PrestigeVCache.checkCacheAndUpdate(uuid, gameProfileIn.getName(), tag);
+                            if (prestigeVcolor != null) {
+                                prestigeVTag = new ChatComponentText(" " + prestigeVcolor + "[" + tag + "]");
+                            }
+                        }
+                    }
+
+                    boolean isobf = teamprefix.contains("\u00a7k");
+                    if (iExtraPrefix != null || prestigeVcolor != null) {
+                        displayName = new ChatComponentText(
+                                (isobf ? "" : extraPrefix)
+                                        + teamprefix
+                                        + (isSquadMate ? squadname : username)
+                                        + (prestigeVcolor != null ? colorSuffix.replace("\u00a7e", prestigeVcolor.toString()) : colorSuffix
+                                ));
+                    }
+                }
             }
-        }
 
             if (mwPlayerData == null) {
-                gameProfileAccessor.setMWPlayerData(new MWPlayerData(id, wdr, iExtraPrefix, squadname, displayName, KillCounter.getPlayersFinals(username)));
+                gameProfileAccessor.setMWPlayerData(new MWPlayerData(id, wdr, iExtraPrefix, squadname, displayName, KillCounter.getPlayersFinals(username), prestigeVTag));
             } else {
-                mwPlayerData.setData(id, wdr, iExtraPrefix, squadname, displayName, KillCounter.getPlayersFinals(username));
+                mwPlayerData.setData(id, wdr, iExtraPrefix, squadname, displayName, KillCounter.getPlayersFinals(username), prestigeVTag);
             }
 
         }

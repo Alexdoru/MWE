@@ -19,22 +19,25 @@ public class MWPlayerData {
     public String squadname;
     public IChatComponent displayName;
     public int playerFinalkills;
+    public IChatComponent PrestigeVTag;
 
-    public MWPlayerData(UUID id, WDR wdr, IChatComponent extraPrefix, String squadname, IChatComponent displayNameIn, int playerFinalkills) {
+    public MWPlayerData(UUID id, WDR wdr, IChatComponent extraPrefix, String squadname, IChatComponent displayNameIn, int playerFinalkills, IChatComponent PrestigeVTag) {
         this.wdr = wdr;
         this.extraPrefix = extraPrefix;
         this.squadname = squadname;
         this.displayName = displayNameIn;
         this.playerFinalkills = playerFinalkills;
+        this.PrestigeVTag = PrestigeVTag;
         dataCache.put(id, this);
     }
 
-    public void setData(UUID id, WDR wdr, IChatComponent extraPrefix, String squadname, IChatComponent displayNameIn, int playerFinalkills) {
+    public void setData(UUID id, WDR wdr, IChatComponent extraPrefix, String squadname, IChatComponent displayNameIn, int playerFinalkills, IChatComponent PrestigeVTag) {
         this.wdr = wdr;
         this.extraPrefix = extraPrefix;
         this.squadname = squadname;
         this.displayName = displayNameIn;
         this.playerFinalkills = playerFinalkills;
+        this.PrestigeVTag = PrestigeVTag;
         dataCache.put(id, this);
     }
 
