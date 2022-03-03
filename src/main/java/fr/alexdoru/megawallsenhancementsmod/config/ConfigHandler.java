@@ -43,8 +43,8 @@ public class ConfigHandler {
     public static boolean keepNightVisionEffect;
     public static boolean useColoredScores;
     public static boolean swordDropProtection;
-    public static boolean limitDroppedEntityRendered = true;
-    public static int maxDroppedEntityRendered = 50;
+    public static boolean limitDroppedEntityRendered;
+    public static int maxDroppedEntityRendered;
 
     /**
      * GUI config
