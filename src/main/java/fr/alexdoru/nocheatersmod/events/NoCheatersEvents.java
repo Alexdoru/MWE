@@ -9,6 +9,7 @@ import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.event.ClickEvent;
@@ -33,7 +34,12 @@ public class NoCheatersEvents {
     public void onPlayerJoin(EntityJoinWorldEvent event) {
         if (event.entity instanceof EntityPlayer) {
             try {
-                NameUtil.transformNametag((EntityPlayer) event.entity, false, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
+                if (event.entity instanceof EntityPlayerSP) {
+                    /*Delaying the transformation for self because certain fields such as mc.theWorld.getScoreboard().getPlayersTeam(username) are null when you just joined the world*/
+                    new DelayedTask(() -> NameUtil.transformNametag((EntityPlayer) event.entity, false, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport), 1);
+                } else {
+                    NameUtil.transformNametag((EntityPlayer) event.entity, false, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
