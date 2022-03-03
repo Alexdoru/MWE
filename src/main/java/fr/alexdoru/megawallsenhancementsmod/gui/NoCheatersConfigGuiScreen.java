@@ -67,31 +67,31 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         List<String> textLines = new ArrayList<>();
         switch (id) {
             case 1:
-                textLines.add(EnumChatFormatting.YELLOW + "Prints a warning message in chat when a reported player joins your world");
-                textLines.add(EnumChatFormatting.YELLOW + "");
+                textLines.add(EnumChatFormatting.GREEN + "Prints a warning message in chat when a reported player joins your world");
+                textLines.add(EnumChatFormatting.GREEN + "");
                 textLines.add(EnumChatFormatting.RED + "Warning : " + EnumChatFormatting.LIGHT_PURPLE + "player" + EnumChatFormatting.GRAY + " joined, Cheats : " + EnumChatFormatting.GOLD + "cheat");
                 break;
             case 2:
-                textLines.add(EnumChatFormatting.YELLOW + "Automatically sends a report for players saved in NoCheaters.");
-                textLines.add(EnumChatFormatting.YELLOW + "It sends a report for players whose last report is older than the time between report");
-                textLines.add(EnumChatFormatting.YELLOW + "and more recent than the time max autoreport");
+                textLines.add(EnumChatFormatting.GREEN + "Automatically sends a report for players saved in NoCheaters.");
+                textLines.add(EnumChatFormatting.GREEN + "It sends a report for players whose last report is older than the time between report");
+                textLines.add(EnumChatFormatting.GREEN + "and more recent than the time max autoreport");
                 textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls, the reports are sent after the walls fall.");
                 break;
             case 6:
-                textLines.add(EnumChatFormatting.YELLOW + "Deletes reports older than the specified value");
-                textLines.add(EnumChatFormatting.YELLOW + "The deletion occurs when you start minecraft");
+                textLines.add(EnumChatFormatting.GREEN + "Deletes reports older than the specified value");
+                textLines.add(EnumChatFormatting.GREEN + "The deletion occurs when you start minecraft");
                 break;
             case 8:
-                textLines.add(EnumChatFormatting.YELLOW + "When there is a message that respects the following patterns,");
-                textLines.add(EnumChatFormatting.YELLOW + "it will print a report suggestion in chat");
+                textLines.add(EnumChatFormatting.GREEN + "When there is a message that respects the following patterns,");
+                textLines.add(EnumChatFormatting.GREEN + "it will print a report suggestion in chat");
                 textLines.add("");
                 textLines.add(EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "playername is bhoping");
                 textLines.add(EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "wdr playername cheat");
                 textLines.add(EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "report playername cheat");
                 break;
             case 9:
-                textLines.add(EnumChatFormatting.YELLOW + "Automatically sends the report command to the server");
-                textLines.add(EnumChatFormatting.YELLOW + "when there is a report suggestion in chat");
+                textLines.add(EnumChatFormatting.GREEN + "Automatically sends the report command to the server");
+                textLines.add(EnumChatFormatting.GREEN + "when there is a report suggestion in chat");
                 textLines.add(EnumChatFormatting.GRAY + "This doesn't work in the pre-game lobby");
                 break;
         }
