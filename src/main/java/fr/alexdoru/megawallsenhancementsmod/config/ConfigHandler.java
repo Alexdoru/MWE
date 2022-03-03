@@ -291,7 +291,7 @@ public class ConfigHandler {
             togglewarnings = pTogglewarnings.getBoolean();
             toggleautoreport = pToggleautoreport.getBoolean();
             autoreportSuggestions = pautoreportSuggestions.getBoolean();
-            timeBetweenReports = Math.max(MIN_TIME_BETWEEN_REPORTS, Math.min(3600L * 1000L * ((long) pTimeBetweenReports.getDouble()), MAX_TIME_BETWEEN_REPORTS));
+            timeBetweenReports = (long) Math.max(MIN_TIME_BETWEEN_REPORTS, Math.min(3600L * 1000L * pTimeBetweenReports.getDouble(), MAX_TIME_BETWEEN_REPORTS));
             timeAutoReport = Math.max(MIN_TIME_AUTO_REPORTS, Math.min(24L * 3600L * 1000L * ((long) pTimeAutoReport.getInt()), MAX_TIME_AUTO_REPORTS));
             deleteReports = pdeleteReports.getBoolean();
             timeDeleteReport = 24L * 3600L * 1000L * ((long) ptimeDeleteReport.getInt());
@@ -367,7 +367,7 @@ public class ConfigHandler {
             pTogglewarnings.set(togglewarnings);
             pToggleautoreport.set(toggleautoreport);
             pautoreportSuggestions.set(autoreportSuggestions);
-            pTimeBetweenReports.set((double) (timeBetweenReports / (3600L * 1000L)));
+            pTimeBetweenReports.set(((double) timeBetweenReports / (3600d * 1000d)));
             pTimeAutoReport.set((int) (timeAutoReport / (24L * 3600L * 1000L)));
             pdeleteReports.set(deleteReports);
             ptimeDeleteReport.set((int) (timeDeleteReport / (24L * 3600L * 1000L)));
