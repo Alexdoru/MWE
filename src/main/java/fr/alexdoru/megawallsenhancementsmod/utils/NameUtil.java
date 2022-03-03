@@ -237,8 +237,7 @@ public class NameUtil {
         return null;
     }
 
-    public static void toggleIcons() {
-        ConfigHandler.toggleicons = !ConfigHandler.toggleicons;
+    public static void refreshAllNamesInWorld() {
         mc.theWorld.playerEntities.forEach(playerEntity -> updateGameProfileAndName(playerEntity.getGameProfile()));
     }
 
