@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.GeneralInfo;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassStats;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
+import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelGuild;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
@@ -82,7 +83,9 @@ public class CommandPlancke extends CommandBase {
 
             if (args.length == 1) {
 
-                addChatMessage(generalstats.getFormattedMessage(formattedname));
+                HypixelGuild hypixelGuild = new HypixelGuild(uuid, HypixelApiKeyUtil.getApiKey());
+                String guildTag = hypixelGuild.getFormattedGuildTag();
+                addChatMessage(generalstats.getFormattedMessage(formattedname + (guildTag == null ? "" : guildTag), hypixelGuild.getGuildName()));
 
             } else {
 

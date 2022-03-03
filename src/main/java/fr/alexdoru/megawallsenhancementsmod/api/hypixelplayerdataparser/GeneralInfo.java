@@ -80,13 +80,15 @@ public class GeneralInfo extends LoginData {
 
     }
 
-    public IChatComponent getFormattedMessage(String formattedname) {
+    public IChatComponent getFormattedMessage(String formattedname, String guildname) {
 
         IChatComponent msg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
 
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, this.getdisplayname(), " - General info"))
 
                 .appendSibling(new ChatComponentText("\n" + "\n"
+
+                        + (guildname == null ? "" : ChatUtil.centerLine(EnumChatFormatting.GREEN + "Guild : " + EnumChatFormatting.GOLD + guildname) + "\n")
 
                         + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Network level : " + EnumChatFormatting.GOLD + String.format("%.2f", getNetworkLevel())) + "\n"
 
