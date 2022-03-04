@@ -156,11 +156,11 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.GREEN + "Type " + EnumChatFormatting.YELLOW + "/mwenhancements clearcache" + EnumChatFormatting.GREEN + " to update the data in the cache");
                 textLines.add("");
                 textLines.add(EnumChatFormatting.GOLD + "Prestige Colors :");
-                textLines.add(EnumChatFormatting.GOLD + "7500 classpoints : " + EnumChatFormatting.DARK_BLUE + "[TAG]");
-                textLines.add(EnumChatFormatting.GOLD + "10000 classpoints : " + EnumChatFormatting.DARK_GRAY + "[TAG]");
-                textLines.add(EnumChatFormatting.GOLD + "15000 classpoints : " + EnumChatFormatting.DARK_PURPLE + "[TAG]");
-                textLines.add(EnumChatFormatting.GOLD + "25000 classpoints : " + EnumChatFormatting.DARK_GREEN + "[TAG]");
-                textLines.add(EnumChatFormatting.GOLD + "50000 classpoints : " + EnumChatFormatting.DARK_RED + "[TAG]");
+                textLines.add(EnumChatFormatting.GOLD + "10000 classpoints : " + EnumChatFormatting.DARK_PURPLE + "[TAG]");
+                textLines.add(EnumChatFormatting.GOLD + "13000 classpoints : " + EnumChatFormatting.DARK_BLUE + "[TAG]");
+                textLines.add(EnumChatFormatting.GOLD + "19000 classpoints : " + EnumChatFormatting.DARK_AQUA + "[TAG]");
+                textLines.add(EnumChatFormatting.GOLD + "28000 classpoints : " + EnumChatFormatting.DARK_GREEN + "[TAG]");
+                textLines.add(EnumChatFormatting.GOLD + "40000 classpoints : " + EnumChatFormatting.DARK_RED + "[TAG]");
                 break;
             case 9:
                 textLines.add(EnumChatFormatting.GREEN + "When you play the Hunter class it prints a HUD");
