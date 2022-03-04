@@ -92,15 +92,15 @@ class PlayerPrestigeData {
     public final HashMap<MWClass, EnumChatFormatting> playersPrestigeColors = new HashMap<>();
 
     public void addClass(MWClass mwClass, int classpoints, int coins) {
-        if (coins < 1000000 || classpoints < 7500) {
+        if (coins < 1000000 || classpoints < 10000) {
             playersPrestigeColors.put(mwClass, EnumChatFormatting.GOLD);
-        } else if (classpoints < 10000) {
-            playersPrestigeColors.put(mwClass, EnumChatFormatting.DARK_BLUE);
-        } else if (classpoints < 15000) {
-            playersPrestigeColors.put(mwClass, EnumChatFormatting.DARK_GRAY);
-        } else if (classpoints < 25000) {
+        } else if (classpoints < 13000) {
             playersPrestigeColors.put(mwClass, EnumChatFormatting.DARK_PURPLE);
-        } else if (classpoints < 50000) {
+        } else if (classpoints < 19000) {
+            playersPrestigeColors.put(mwClass, EnumChatFormatting.DARK_BLUE);
+        } else if (classpoints < 28000) {
+            playersPrestigeColors.put(mwClass, EnumChatFormatting.DARK_AQUA);
+        } else if (classpoints < 40000) {
             playersPrestigeColors.put(mwClass, EnumChatFormatting.DARK_GREEN);
         } else {
             playersPrestigeColors.put(mwClass, EnumChatFormatting.DARK_RED);
