@@ -91,7 +91,7 @@ public class LoginData {
 
     private void parseFormattedName(String prefix, String rankPlusColor, String packageRank, String newPackageRank, String monthlyRankColor) {
         if (prefix != null) {
-            this.formattedname = prefix.replace("§", "\u00a7") + " " + this.displayname;
+            this.formattedname = prefix + " " + this.displayname;
             return;
         }
 
