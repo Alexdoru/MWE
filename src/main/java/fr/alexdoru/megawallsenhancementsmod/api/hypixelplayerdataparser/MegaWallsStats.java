@@ -170,7 +170,7 @@ public class MegaWallsStats {
                 {
                         EnumChatFormatting.AQUA + "Wins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.wins) + " ",
                         EnumChatFormatting.AQUA + "Losses : " + EnumChatFormatting.RED + ChatUtil.formatInt(this.losses) + " ",
-                        EnumChatFormatting.AQUA + "W/L Ratio : " + (this.wlr > 0.25f ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", this.wlr) + "\n"
+                        EnumChatFormatting.AQUA + "W/L Ratio : " + (this.wlr > 0.25f ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", this.wlr)
                 }};
 
         String[][] matrix2 = {
