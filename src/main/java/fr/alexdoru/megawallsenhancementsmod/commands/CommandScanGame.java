@@ -156,6 +156,7 @@ class ScanPlayerTask implements Callable<String> {
 
                 GeneralInfo generalInfo = new GeneralInfo(playerdata.getPlayerData());
                 boolean firstGame = megawallsstats.getGames_played() == 0;
+                boolean secondFlag = generalInfo.getCompletedQuests() < 20 && generalInfo.getNetworkLevel() > 42f;
                 JsonObject classesdata = megawallsstats.getClassesdata();
 
                 if (FKCounterMod.isInMwGame) {
@@ -167,7 +168,7 @@ class ScanPlayerTask implements Callable<String> {
                         JsonObject entryclassobj = classesdata.getAsJsonObject(mwClass.className.toLowerCase());
                         if (firstGame) {
                             imsg = getMsgFirstGame(mwClass.className, entryclassobj);
-                        } else {
+                        } else if (secondFlag) {
                             imsg = getMsg(mwClass.className, entryclassobj, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megawallsstats.getGames_played());
                         }
                     }
@@ -180,7 +181,7 @@ class ScanPlayerTask implements Callable<String> {
                             if (imsg == null) {
                                 if (firstGame) {
                                     imsg = getMsgFirstGame(entry.getKey(), entryclassobj);
-                                } else {
+                                } else if (secondFlag) {
                                     imsg = getMsg(entry.getKey(), entryclassobj, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megawallsstats.getGames_played());
                                 }
                             } else {
