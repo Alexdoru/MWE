@@ -267,7 +267,6 @@ public class KillCounter {
             teamKillsArray[team].remove(player);
             allPlayerKills.remove(player);
             deadPlayers.add(player);
-            updateNetworkPlayerinfo(player, 0);
             return true;
         }
         return false;
