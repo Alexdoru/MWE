@@ -1,6 +1,5 @@
 package fr.alexdoru.fkcountermod.events;
 
-import com.mojang.authlib.GameProfile;
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.gui.FKCounterGui;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
@@ -14,6 +13,7 @@ import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
@@ -292,8 +292,11 @@ public class KillCounter {
     }
 
     private static void updateNetworkPlayerinfo(String playername, int finals) {
-        GameProfile gameProfile = NetHandlerPlayClientHook.playerInfoMap.get(playername).getGameProfile();
-        MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfile).getMWPlayerData();
+        NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+        if (networkPlayerInfo == null) {
+            return;
+        }
+        MWPlayerData mwPlayerData = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData();
         if (mwPlayerData != null) {
             mwPlayerData.playerFinalkills = finals;
         }
