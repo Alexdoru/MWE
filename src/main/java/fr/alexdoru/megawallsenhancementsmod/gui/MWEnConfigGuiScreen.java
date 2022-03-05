@@ -153,7 +153,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.GREEN + "You need at least" + EnumChatFormatting.GOLD + " 1 000 000 coins" + EnumChatFormatting.GREEN + ", " + EnumChatFormatting.GOLD + " 7500 classpoints" + EnumChatFormatting.GREEN + ",");
                 textLines.add(EnumChatFormatting.GREEN + "and a " + EnumChatFormatting.DARK_RED + "valid API Key" + EnumChatFormatting.GREEN + ". This will send api requests and store the data");
                 textLines.add(EnumChatFormatting.GREEN + "in a cache until you close your game.");
-                textLines.add(EnumChatFormatting.GREEN + "Type " + EnumChatFormatting.YELLOW + "/mwenhancements clearcache" + EnumChatFormatting.GREEN + " to update the data in the cache");
+                textLines.add(EnumChatFormatting.GREEN + "Type " + EnumChatFormatting.YELLOW + "/mwenhancements clearcache" + EnumChatFormatting.GREEN + " to force update the data");
                 textLines.add("");
                 textLines.add(EnumChatFormatting.GOLD + "Prestige Colors :");
                 textLines.add(EnumChatFormatting.GOLD + "10000 classpoints : " + EnumChatFormatting.DARK_PURPLE + "[TAG]");
