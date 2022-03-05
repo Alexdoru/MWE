@@ -185,7 +185,7 @@ public class ChatEvents {
                     String recentlyDisconnectedPlayers = NetHandlerPlayClientHook.getRecentlyDisconnectedPlayers();
                     if (!recentlyDisconnectedPlayers.equals("")) {
                         ChatUtil.addChatMessage(new ChatComponentText(
-                                ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Player(s) recently disconnected : " + EnumChatFormatting.RED + recentlyDisconnectedPlayers)
+                                ChatUtil.getTagMW() + EnumChatFormatting.RED + "Player(s) recently disconnected : " + EnumChatFormatting.YELLOW + recentlyDisconnectedPlayers)
                                 .setChatStyle(new ChatStyle()
                                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
                                                 EnumChatFormatting.GREEN + "Those are the players disconnected in the last 2 seconds, click this message to run : \n\n"
