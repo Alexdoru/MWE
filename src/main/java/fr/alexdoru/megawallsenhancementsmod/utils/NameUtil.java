@@ -276,7 +276,7 @@ public class NameUtil {
     }
 
     public static void refreshAllNamesInWorld() {
-        mc.theWorld.playerEntities.forEach(playerEntity -> updateGameProfileAndName(playerEntity.getGameProfile()));
+        mc.getNetHandler().getPlayerInfoMap().forEach(NameUtil::updateGameProfileAndName);
     }
 
     /**
