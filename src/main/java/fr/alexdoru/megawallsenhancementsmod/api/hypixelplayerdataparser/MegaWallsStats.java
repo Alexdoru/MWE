@@ -145,11 +145,29 @@ public class MegaWallsStats {
                             .setChatStyle(new ChatStyle()
                                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for " + entry.getKey() + " stats")))
                                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + entry.getKey()))))
-                    .appendSibling(new ChatComponentText(" : " + (entry.getValue() > 2000 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + entry.getValue() + "\n"));
+                    .appendSibling(new ChatComponentText(" : " + formatClasspoint(entry.getValue()) + "\n"));
         }
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "Total : " + EnumChatFormatting.GOLD + this.total_classpoints + "\n"));
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
         return imsg;
+    }
+
+    private String formatClasspoint(int classpoints) {
+        if (classpoints < 2000) {
+            return EnumChatFormatting.DARK_GRAY.toString() + classpoints;
+        } else if (classpoints < 10000) {
+            return EnumChatFormatting.GOLD.toString() + classpoints;
+        } else if (classpoints < 13000) {
+            return EnumChatFormatting.DARK_PURPLE.toString() + classpoints;
+        } else if (classpoints < 19000) {
+            return EnumChatFormatting.DARK_BLUE.toString() + classpoints;
+        } else if (classpoints < 28000) {
+            return EnumChatFormatting.DARK_AQUA.toString() + classpoints;
+        } else if (classpoints < 40000) {
+            return EnumChatFormatting.DARK_GREEN.toString() + classpoints;
+        } else {
+            return EnumChatFormatting.DARK_RED.toString() + classpoints;
+        }
     }
 
     public IChatComponent getFormattedMessage(String formattedname, String playername) {
