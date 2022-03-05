@@ -2,12 +2,15 @@ package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
+import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.io.IOException;
@@ -103,6 +106,14 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         switch (button.id) {
             case 1:
                 ConfigHandler.togglewarnings = !ConfigHandler.togglewarnings;
+                if (ConfigHandler.togglewarnings) {
+                    List<IChatComponent> list = NoCheatersEvents.getReportMessagesforWorld();
+                    if (!list.isEmpty()) {
+                        for (IChatComponent report : list) {
+                            ChatUtil.addChatMessage(report);
+                        }
+                    }
+                }
                 break;
             case 8:
                 if (!ConfigHandler.reportsuggestions) {
