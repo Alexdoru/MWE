@@ -22,6 +22,12 @@ public class EntityPlayerTransformer implements IMyClassTransformer {
                             && ((MethodInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "aul" : "net/minecraft/scoreboard/ScorePlayerTeam")
                             && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "a" : "formatPlayerName")
                             && ((MethodInsnNode) insnNode).desc.equals(ASMLoadingPlugin.isObf ? "(Lauq;Ljava/lang/String;)Ljava/lang/String;" : "(Lnet/minecraft/scoreboard/Team;Ljava/lang/String;)Ljava/lang/String;")) {
+                        /*
+                         * Replaces line 1422 :
+                         * ichatcomponent.appendSibling(new ChatComponentText(ScorePlayerTeam.formatPlayerName(this.getTeam(), this.getDisplayNameString())));
+                         * With :
+                         * ichatcomponent.appendSibling(new ChatComponentText(EntityPlayerHook.getTransformedDisplayName(ScorePlayerTeam.formatPlayerName(this.getTeam(), this.getDisplayNameString()), this.gameProfile)));
+                         */
                         InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "wn" : "net/minecraft/entity/player/EntityPlayer", ASMLoadingPlugin.isObf ? "bH" : "gameProfile", "Lcom/mojang/authlib/GameProfile;"));
