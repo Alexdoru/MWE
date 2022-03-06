@@ -1,6 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
-import com.mojang.authlib.GameProfile;
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
@@ -20,13 +19,15 @@ public class GuiPlayerTabOverlayHook {
     }
 
     public static void renderFinals(NetworkPlayerInfo networkPlayerInfo, int x, int y) {
-        GameProfile gameProfile = networkPlayerInfo.getGameProfile();
-        MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfile).getMWPlayerData();
+        if (!ConfigHandler.finalsInTablist || !FKCounterMod.isInMwGame) {
+            return;
+        }
+        MWPlayerData mwPlayerData = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData();
         if (mwPlayerData == null) {
             return;
         }
         int playerFinalkills = mwPlayerData.playerFinalkills;
-        if (!ConfigHandler.finalsInTablist || playerFinalkills == 0 || !FKCounterMod.isInMwGame) {
+        if (playerFinalkills == 0) {
             return;
         }
         String s1 = EnumChatFormatting.GOLD + "" + playerFinalkills;
