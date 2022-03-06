@@ -24,6 +24,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,6 +46,7 @@ public class ChatEvents {
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Triple Coins \\+ EXP, |)(?:Active Booster, |)\\w+'s Network Booster\\)).*");
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
     private static final List<StringLong> reportSuggestionList = new ArrayList<>();
+    private static final Random random = new Random();
     private static long lastStrength = 0;
 
     private static boolean parseReportMessage(String msgIn) {
@@ -75,8 +77,10 @@ public class ChatEvents {
     }
 
     private static void handleReportSuggestion(String playername, String cheat) {
-        if (ConfigHandler.autoreportSuggestions && !FKCounterMod.preGameLobby && mc.thePlayer != null && !mc.thePlayer.getName().equals(playername) && canReportSuggestionPlayer(playername)) {
-            mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
+        if (ConfigHandler.autoreportSuggestions && FKCounterMod.isInMwGame && mc.thePlayer != null && !mc.thePlayer.getName().equals(playername) && canReportSuggestionPlayer(playername)) {
+            new DelayedTask(() -> {
+                if (mc.thePlayer != null) mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
+            }, 15 + random.nextInt(80));
         }
         if (ConfigHandler.reportsuggestions) {
             mc.getSoundHandler().playSound(PositionedSoundRecord.create(reportSuggestionSound, 1.0F));
