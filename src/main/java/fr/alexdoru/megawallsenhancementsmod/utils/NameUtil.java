@@ -149,10 +149,9 @@ public class NameUtil {
 
         GameProfileAccessor gameProfileAccessor = (GameProfileAccessor) gameProfileIn;
         MWPlayerData mwPlayerData = gameProfileAccessor.getMWPlayerData();
-        UUID id;
+        UUID id = gameProfileIn.getId();
 
         if (mwPlayerData == null && !forceRefresh) {
-            id = gameProfileIn.getId();
             MWPlayerData cachedMWPlayerData = MWPlayerData.dataCache.get(id);
             if (cachedMWPlayerData != null) {
                 gameProfileAccessor.setMWPlayerData(cachedMWPlayerData);
@@ -160,12 +159,10 @@ public class NameUtil {
             }
         }
 
-        id = gameProfileIn.getId();
-
         if (mwPlayerData == null || forceRefresh) {
 
             String username = gameProfileIn.getName();
-            String uuid = gameProfileIn.getId().toString().replace("-", "");
+            String uuid = id.toString().replace("-", "");
             WDR wdr = null;
             String extraPrefix = "";
             IChatComponent iExtraPrefix = null;
