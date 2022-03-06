@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 
 public class ScoreboardUtils {
 
+    private static final Minecraft mc = Minecraft.getMinecraft();
+
     /**
      * Returns a list of formatted strings containing each line of the scoreboard/sidebar
      * Item at index 0 is the first line etc
@@ -24,8 +26,6 @@ public class ScoreboardUtils {
     public static List<String> getFormattedSidebarText() {
 
         List<String> lines = new ArrayList<>();
-
-        Minecraft mc = Minecraft.getMinecraft();
 
         if (mc.theWorld == null || !MinecraftUtils.isHypixel()) {
             return lines;
@@ -123,6 +123,13 @@ public class ScoreboardUtils {
      */
     public static String getUnformattedSidebarTitle(Scoreboard scoreboard) {
         return StringUtils.stripControlCodes(getSidebarTitle(scoreboard));
+    }
+
+    public static String getUnformattedSidebarTitle() {
+        if (mc.theWorld == null || !MinecraftUtils.isHypixel()) {
+            return null;
+        }
+        return getUnformattedSidebarTitle(mc.theWorld.getScoreboard());
     }
 
 }
