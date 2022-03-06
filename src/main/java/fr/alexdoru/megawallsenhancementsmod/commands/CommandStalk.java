@@ -193,7 +193,6 @@ class StalkTask implements Callable<String> {
 
             }
         } catch (ApiException e) {
-            e.printStackTrace();
             addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
         }
 

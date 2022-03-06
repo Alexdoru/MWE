@@ -54,7 +54,6 @@ public class MWGameStatsEvent {
                 }
                 MWclassStats = new MegaWallsClassStats(playerdata.getPlayerData(), chosen_class);
             } catch (ApiException e) {
-                e.printStackTrace();
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
             }
             isRandom = false;
@@ -82,7 +81,6 @@ public class MWGameStatsEvent {
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.YELLOW + "Click to view the stats of your " + EnumChatFormatting.AQUA + "Mega Walls " + EnumChatFormatting.YELLOW + "game!")
                         .setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gamestatsmw"))));
             } catch (ApiException e) {
-                e.printStackTrace();
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 e.printStackTrace();
