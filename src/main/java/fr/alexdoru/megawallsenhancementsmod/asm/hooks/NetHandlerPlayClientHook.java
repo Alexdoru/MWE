@@ -14,19 +14,15 @@ public class NetHandlerPlayClientHook {
     private static final EvictingQueue<StringLong> latestDisconnected = EvictingQueue.create(10);
 
     public static void putPlayerInMap(String playerName, NetworkPlayerInfo networkplayerinfo) {
-        if (playerName != null) {
-            playerInfoMap.put(playerName, networkplayerinfo);
-        }
+        playerInfoMap.put(playerName, networkplayerinfo);
     }
 
     @SuppressWarnings("UnstableApiUsage")
     public static void removePlayerFromMap(Object o) {
         if (o instanceof NetworkPlayerInfo) {
             String playerName = ((NetworkPlayerInfo) o).getGameProfile().getName();
-            if (playerName != null) {
-                playerInfoMap.remove(playerName);
-                latestDisconnected.add(new StringLong(System.currentTimeMillis(), playerName));
-            }
+            playerInfoMap.remove(playerName);
+            latestDisconnected.add(new StringLong(System.currentTimeMillis(), playerName));
             MWPlayerData.dataCache.remove(((NetworkPlayerInfo) o).getGameProfile().getId());
         }
     }
@@ -38,14 +34,14 @@ public class NetHandlerPlayClientHook {
     }
 
     public static String getRecentlyDisconnectedPlayers() {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         long timenow = System.currentTimeMillis();
         for (StringLong stringLong : latestDisconnected) {
-            if (timenow - stringLong.timestamp <= 2000) {
-                str = str + " " + stringLong.message;
+            if (stringLong.message != null && timenow - stringLong.timestamp <= 2000) {
+                str.append(" ").append(stringLong.message);
             }
         }
-        return str;
+        return str.toString();
     }
 
 }
