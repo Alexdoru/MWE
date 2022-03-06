@@ -1,7 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
 import com.mojang.authlib.GameProfile;
-import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
@@ -243,9 +242,9 @@ public class NameUtil {
             }
 
             if (mwPlayerData == null) {
-                gameProfileAccessor.setMWPlayerData(new MWPlayerData(id, wdr, iExtraPrefix, squadname, displayName, KillCounter.getPlayersFinals(username), colorSuffix, formattedPrestigeVstring));
+                gameProfileAccessor.setMWPlayerData(new MWPlayerData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring));
             } else {
-                mwPlayerData.setData(id, wdr, iExtraPrefix, squadname, displayName, KillCounter.getPlayersFinals(username), colorSuffix, formattedPrestigeVstring);
+                mwPlayerData.setData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring);
             }
 
         }

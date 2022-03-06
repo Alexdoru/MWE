@@ -77,13 +77,14 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                     if (sliceFlag && insnNode.getOpcode() == ALOAD && insnNode instanceof VarInsnNode && ((VarInsnNode) insnNode).var == 0) {
                         /*
                         Injects before line 365 :
-                        GuiPlayerTabOverlayHook.renderFinals(p_175247_6_, p_175247_5_, p_175247_2_);
+                        GuiPlayerTabOverlayHook.renderFinals(p_175247_6_.playerFinalkills, p_175247_5_, p_175247_2_);
                          */
                         InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 6)); // load networkplayerinfo / p_175247_6_
+                        list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", "playerFinalkills", "I")); // get playerFinalkills field
                         list.add(new VarInsnNode(ILOAD, 5));
                         list.add(new VarInsnNode(ILOAD, 2));
-                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "renderFinals", ASMLoadingPlugin.isObf ? "(Lbdc;II)V" : "(Lnet/minecraft/client/network/NetworkPlayerInfo;II)V", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "renderFinals", "(III)V", false));
                         methodNode.instructions.insertBefore(insnNode, list);
                         break;
                     }
