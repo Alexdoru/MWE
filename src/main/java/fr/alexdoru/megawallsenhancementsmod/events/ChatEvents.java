@@ -94,7 +94,7 @@ public class ChatEvents {
         long timestamp = System.currentTimeMillis();
         reportSuggestionList.removeIf(o -> (o.timestamp + 600000L < timestamp));
         for (StringLong stringLong : reportSuggestionList) {
-            if (stringLong.message.equals(playername)) {
+            if (stringLong.message != null && stringLong.message.equals(playername)) {
                 return false;
             }
         }
