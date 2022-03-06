@@ -121,11 +121,11 @@ public class NameUtil {
         }
 
         if (mwPlayerData.wdr != null) { // player was reported
+            String playerName = player.getName();
+            long datenow = (new Date()).getTime();
+            boolean gotautoreported = checkAutoreport && NoCheatersEvents.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
             if (areWarningsToggled) {
                 String uuid = player.getUniqueID().toString().replace("-", "");
-                String playerName = player.getName();
-                long datenow = (new Date()).getTime();
-                boolean gotautoreported = checkAutoreport && NoCheatersEvents.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
                 ChatUtil.addChatMessage(NoCheatersEvents.createwarningmessage(datenow, uuid, playerName, mwPlayerData.wdr, gotautoreported));
             }
         }
