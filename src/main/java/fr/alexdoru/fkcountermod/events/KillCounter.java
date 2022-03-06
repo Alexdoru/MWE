@@ -4,10 +4,9 @@ import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.gui.FKCounterGui;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
-import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessor.NetworkPlayerInfoAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
@@ -292,12 +291,8 @@ public class KillCounter {
 
     private static void updateNetworkPlayerinfo(String playername, int finals) {
         NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
-        if (networkPlayerInfo == null) {
-            return;
-        }
-        MWPlayerData mwPlayerData = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData();
-        if (mwPlayerData != null) {
-            mwPlayerData.playerFinalkills = finals;
+        if (networkPlayerInfo instanceof NetworkPlayerInfoAccessor) {
+            ((NetworkPlayerInfoAccessor) networkPlayerInfo).setPlayerFinalkills(finals);
         }
     }
 
