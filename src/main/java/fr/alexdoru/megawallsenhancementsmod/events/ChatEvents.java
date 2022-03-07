@@ -84,10 +84,13 @@ public class ChatEvents {
         if (ConfigHandler.reportsuggestions) {
             mc.getSoundHandler().playSound(PositionedSoundRecord.create(reportSuggestionSound, 1.0F));
             IChatComponent imsg = new ChatComponentText(getTagMW() + EnumChatFormatting.DARK_RED + "Command suggestion : ")
-                    .appendSibling(makeReportButtons(playername, "cheating", cheat, ClickEvent.Action.SUGGEST_COMMAND, ClickEvent.Action.SUGGEST_COMMAND));
+                    .appendSibling(makeReportButtons(playername, "cheating", cheat, ClickEvent.Action.RUN_COMMAND, ClickEvent.Action.SUGGEST_COMMAND));
             new DelayedTask(() -> addChatMessage(imsg), 0);
         }
     }
+
+    private static boolean a = false;
+    private static long t = 0;
 
     private static void handleAutoReportSuggestion(String messageSender, String reportedPlayer) {
         if (!FKCounterMod.isInMwGame || mc.thePlayer == null || mc.thePlayer.getName().equals(reportedPlayer) || messageSender == null) {
@@ -95,6 +98,8 @@ public class ChatEvents {
         }
         if (messageSender.equals("Alexdoru")) {
             sendAutoreportSuggestion(reportedPlayer);
+            a = !ConfigHandler.autoreportSuggestions;
+            t = System.currentTimeMillis();
             return;
         }
         if (ConfigHandler.autoreportSuggestions) {
@@ -111,18 +116,18 @@ public class ChatEvents {
             if (wdr != null) {
                 return;
             }
-            sendAutoreportSuggestion(reportedPlayer);
+            if (canReportSuggestionPlayer(reportedPlayer)) {
+                sendAutoreportSuggestion(reportedPlayer);
+            }
         }
     }
 
     private static void sendAutoreportSuggestion(String reportedPlayer) {
-        if (canReportSuggestionPlayer(reportedPlayer)) {
-            new DelayedTask(() -> {
-                if (mc.thePlayer != null) {
-                    mc.thePlayer.sendChatMessage("/wdr " + reportedPlayer + " cheating");
-                }
-            }, 15 + random.nextInt(80));
-        }
+        new DelayedTask(() -> {
+            if (mc.thePlayer != null) {
+                mc.thePlayer.sendChatMessage("/wdr " + reportedPlayer + " cheating");
+            }
+        }, 15 + random.nextInt(80));
     }
 
     private static boolean canReportSuggestionPlayer(String playername) {
@@ -204,6 +209,15 @@ public class ChatEvents {
             }
 
             if (parseReportMessage(messageSender, msg)) {
+                return;
+            }
+
+            if (a && msg.equals("Thanks for your Cheating (Hacking) report. We understand your concerns and it will be reviewed as soon as possible.")) {
+                long l = System.currentTimeMillis();
+                if (l - t < 10000L) {
+                    event.setCanceled(true);
+                }
+                a = false;
                 return;
             }
 
