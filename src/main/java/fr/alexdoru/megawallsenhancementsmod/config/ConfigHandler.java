@@ -136,7 +136,7 @@ public class ConfigHandler {
         Property puseColoredScores = config.get(CATEGORY_MWENh, "Colored Tablist Scores", true, "Makes the scores in the tablist use a greend to red color gradient depending of the value");
         Property pswordDropProtection = config.get(CATEGORY_MWENh, "Sword drop protection", true, "When enabled you can't drop the sword you are holding in your hotbar");
         Property plimitDroppedEntityRendered = config.get(CATEGORY_MWENh, "Limit dropped item rendered", true, "Limit dropped item rendered");
-        Property pmaxDroppedEntityRendered = config.get(CATEGORY_MWENh, "Max amount of item rendered", 320, "Max amount of item rendered");
+        Property pmaxDroppedEntityRendered = config.get(CATEGORY_MWENh, "Max amount of item rendered", 120, "Max amount of item rendered");
         Property pprestigeV = config.get(CATEGORY_MWENh, "Prestige V colored Tag", false, "Prestige V colored Tag");
 
         Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
