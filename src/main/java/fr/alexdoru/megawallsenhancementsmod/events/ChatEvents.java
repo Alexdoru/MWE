@@ -104,7 +104,7 @@ public class ChatEvents {
             }
             String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
             WDR wdr = WdredPlayers.getWdredMap().get(uuid);
-            if (wdr != null && !wdr.isOnlyStalking()) {
+            if (wdr != null) {
                 return;
             }
             wdr = WdredPlayers.getWdredMap().get(messageSender);
