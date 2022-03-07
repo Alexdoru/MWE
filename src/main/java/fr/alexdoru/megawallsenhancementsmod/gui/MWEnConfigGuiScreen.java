@@ -181,6 +181,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 17:
                 textLines.add(EnumChatFormatting.GREEN + "Plays a sound when your health drops below the threshold defined below");
+                textLines.add(EnumChatFormatting.GRAY + "The sound used is \"note.pling\" check your sound settings to see if it's enabled !");
                 break;
             case 19:
                 textLines.add(EnumChatFormatting.GREEN + "Adds colors to the scores/health in the tablist depending on the value");
@@ -266,7 +267,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 17:
                 ConfigHandler.playSoundLowHP = !ConfigHandler.playSoundLowHP;
                 if (ConfigHandler.playSoundLowHP) {
-                    mc.getSoundHandler().playSound(PositionedSoundRecord.create(LowHPIndicator.lowHPSound, 1.0F));
+                    LowHPIndicator.playSound();
                 }
                 break;
             case 4:
