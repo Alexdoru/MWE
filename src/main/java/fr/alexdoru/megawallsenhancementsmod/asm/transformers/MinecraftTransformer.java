@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
+import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -13,7 +14,8 @@ public class MinecraftTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode) {
+    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+        status.setInjectionPoints(6);
 
         for (MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "s" : "runTick") && methodNode.desc.equals("()V")) {
@@ -28,6 +30,7 @@ public class MinecraftTransformer implements IMyClassTransformer {
                          * MinecraftHook.updateCurrentSlot(this);
                          */
                         methodNode.instructions.insertBefore(insnNode, updateCurrentSlotInsnList());
+                        status.addInjection();
                     }
 
                     if (insnNode.getOpcode() == PUTFIELD && insnNode instanceof FieldInsnNode
@@ -47,6 +50,7 @@ public class MinecraftTransformer implements IMyClassTransformer {
                         list.add(new LdcInsnNode("Advanced Item Tooltips"));
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/MinecraftHook", "onSettingChange", ASMLoadingPlugin.isObf ? "(Lave;ZLjava/lang/String;)V" : "(Lnet/minecraft/client/Minecraft;ZLjava/lang/String;)V", false));
                         methodNode.instructions.insertBefore(insnNode.getNext(), list);
+                        status.addInjection();
                     }
 
                     if (insnNode.getOpcode() == INVOKEVIRTUAL && insnNode instanceof MethodInsnNode
@@ -66,6 +70,7 @@ public class MinecraftTransformer implements IMyClassTransformer {
                         list.add(new LdcInsnNode("Hitboxes"));
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/MinecraftHook", "onSettingChange", ASMLoadingPlugin.isObf ? "(Lave;ZLjava/lang/String;)V" : "(Lnet/minecraft/client/Minecraft;ZLjava/lang/String;)V", false));
                         methodNode.instructions.insertBefore(insnNode.getNext(), list);
+                        status.addInjection();
                     }
 
                     if (insnNode.getOpcode() == PUTFIELD && insnNode instanceof FieldInsnNode
@@ -85,6 +90,7 @@ public class MinecraftTransformer implements IMyClassTransformer {
                         list.add(new LdcInsnNode("Pause on lost focus"));
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/MinecraftHook", "onSettingChange", ASMLoadingPlugin.isObf ? "(Lave;ZLjava/lang/String;)V" : "(Lnet/minecraft/client/Minecraft;ZLjava/lang/String;)V", false));
                         methodNode.instructions.insertBefore(insnNode.getNext(), list);
+                        status.addInjection();
                     }
 
                     if (insnNode.getOpcode() == PUTFIELD && insnNode instanceof FieldInsnNode
@@ -96,6 +102,7 @@ public class MinecraftTransformer implements IMyClassTransformer {
                          * MinecraftHook.updateCurrentSlot(this);
                          */
                         methodNode.instructions.insertBefore(insnNode, updateCurrentSlotInsnList());
+                        status.addInjection();
                     }
 
                     if (insnNode.getOpcode() == INVOKEVIRTUAL && insnNode instanceof MethodInsnNode
@@ -114,6 +121,7 @@ public class MinecraftTransformer implements IMyClassTransformer {
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/MinecraftHook", "dropOneItem", ASMLoadingPlugin.isObf ? "(Lbew;)V" : "(Lnet/minecraft/client/entity/EntityPlayerSP;)V", false));
                         methodNode.instructions.insertBefore(insnNode, list);
                         methodNode.instructions.remove(insnNode);
+                        status.addInjection();
                     }
 
                 }

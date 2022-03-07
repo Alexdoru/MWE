@@ -57,11 +57,15 @@ public class ClassTransformer implements IClassTransformer {
             ClassReader classReader = new ClassReader(basicClass);
             classReader.accept(classNode, 0);
             ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-            classTransformer.transform(classNode).accept(classWriter);
+            InjectionStatus status = new InjectionStatus();
+            classTransformer.transform(classNode, status).accept(classWriter);
             byte[] transformedByteArray = classWriter.toByteArray();
-            ASMLoadingPlugin.logger.info("Transformed " + getClassName(classTransformer.getTargetClassName()));
+            if (!status.isTransformationSuccessfull()) {
+                ASMLoadingPlugin.logger.error("Class transformation incomplete : " + getClassName(classTransformer.getTargetClassName()) + " missing " + status.getAmount_of_injection() + " injections");
+            }
             return transformedByteArray;
         } catch (Exception e) {
+            ASMLoadingPlugin.logger.error("Failed to transform " + classTransformer.getTargetClassName());
             e.printStackTrace();
         }
 

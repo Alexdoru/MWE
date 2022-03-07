@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
+import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -14,7 +15,8 @@ public class GuiIngameTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode) {
+    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+        status.setInjectionPoints(2);
         for (MethodNode methodNode : classNode.methods) {
 
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "displayTitle") && methodNode.desc.equals("(Ljava/lang/String;Ljava/lang/String;III)V")) {
@@ -33,6 +35,7 @@ public class GuiIngameTransformer implements IMyClassTransformer {
                                             "(Ljava/lang/String;)Ljava/lang/String;",
                                             false
                                     ));
+                            status.addInjection();
                             break;
                         }
                     }
@@ -56,6 +59,7 @@ public class GuiIngameTransformer implements IMyClassTransformer {
                             list.add(new VarInsnNode(ILOAD, 11));
                             list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiIngameHook", "getSidebarTextLine", "(Ljava/lang/String;I)Ljava/lang/String;", false));
                             methodNode.instructions.insertBefore(nextNode, list);
+                            status.addInjection();
                         }
                     }
                 }

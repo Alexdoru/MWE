@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
+import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -14,7 +15,10 @@ public class ScoreboardTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode) {
+    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+
+        status.setInjectionPoints(2);
+
         for (MethodNode methodNode : classNode.methods) {
 
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "addPlayerToTeam") && methodNode.desc.equals("(Ljava/lang/String;Ljava/lang/String;)Z")) {
@@ -27,6 +31,7 @@ public class ScoreboardTransformer implements IMyClassTransformer {
                              * ScoreboardHook.transformNameTablist(player);
                              */
                             methodNode.instructions.insertBefore(insnNode, getInsnList());
+                            status.addInjection();
                         }
                     }
                 }
@@ -47,6 +52,7 @@ public class ScoreboardTransformer implements IMyClassTransformer {
                                  * ScoreboardHook.transformNameTablist(player);
                                  */
                                 methodNode.instructions.insertBefore(thirdNode, getInsnList());
+                                status.addInjection();
                             }
                         }
                     }
