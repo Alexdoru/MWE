@@ -10,12 +10,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class LastWitherHPGui extends MyCachedGui {
 
-    public static LastWitherHPGui instance;
-
     private static final String DUMMY_TEXT = EnumChatFormatting.GREEN + "Wither dies in 148s";
-    private static long lastupdate = 0;
-    private static long thirdWitherDeathTime = 0;
+    public static LastWitherHPGui instance;
     private static String color;
+    private static long lastWitherHPUpdate = 0;
+    private static long thirdWitherDeathTime = 0;
+    private static int witherHp = 0;
 
     public LastWitherHPGui() {
         instance = this;
@@ -23,27 +23,31 @@ public class LastWitherHPGui extends MyCachedGui {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    @Override
-    public void updateDisplayText() {
-        int timeToDie = ScoreboardEvent.getMwScoreboardParser().getWitherHP() * 5 / 8 + (int) Math.max(0, (thirdWitherDeathTime + 60000L - System.currentTimeMillis()) / 1000L);
-        displayText = color + "Wither dies in " + timeToDie + "s";
+    public void updateWitherHP(int witherHPIn) {
+        if (witherHp != witherHPIn) {
+            lastWitherHPUpdate = System.currentTimeMillis();
+        }
+        witherHp = witherHPIn;
+        color = "\u00a7" + ScoreboardEvent.getMwScoreboardParser().getAliveWithers().get(0);
+        updateDisplayText();
     }
 
     @SubscribeEvent
     public void onMWEvent(MwGameEvent event) {
         if (event.getType() == MwGameEvent.EventType.THIRD_WITHER_DEATH) {
             thirdWitherDeathTime = System.currentTimeMillis();
-            color = "\u00a7" + ScoreboardEvent.getMwScoreboardParser().getAliveWithers().get(0);
         }
     }
 
     @Override
+    public void updateDisplayText() {
+        long time = System.currentTimeMillis();
+        int timeToDie = (witherHp / 8) * 5 + (thirdWitherDeathTime + 55000L - time > 0 ? (int) ((thirdWitherDeathTime + 55000L - time) / 1000L) - 4 : (int) ((lastWitherHPUpdate - time) / 1000L) + 3);
+        displayText = color + "Wither dies in " + Math.max(0, timeToDie) + "s";
+    }
+
+    @Override
     public void render() {
-        final long time = System.currentTimeMillis();
-        if (time - lastupdate >= 1000L) {
-            updateDisplayText();
-            lastupdate = time;
-        }
         if (ConfigHandler.witherHUDinSiderbar) {
             return;
         }
@@ -59,7 +63,7 @@ public class LastWitherHPGui extends MyCachedGui {
 
     @Override
     public boolean isEnabled() {
-        return ConfigHandler.show_lastWitherHUD && FKCounterMod.isInMwGame() && ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive();
+        return ConfigHandler.show_lastWitherHUD && FKCounterMod.isInMwGame && ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive();
     }
 
 }

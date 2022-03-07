@@ -19,6 +19,7 @@ public class MegaWallsClassStats {
     private String classnameuppercase;
     private String chosen_skin_class;
     // in the mwdata
+    private int coins;
     private int classname_kills = 0;
     private int classname_deaths = 0;
     private int classname_wins = 0;
@@ -86,6 +87,8 @@ public class MegaWallsClassStats {
         this.classname = classname.toLowerCase();
         this.classnameuppercase = classname;
         this.chosen_skin_class = JsonUtil.getString(mwdata, "chosen_skin_" + this.classnameuppercase);
+
+        this.coins = JsonUtil.getInt(mwdata, "coins");
 
         this.classname_kills = JsonUtil.getInt(mwdata, this.classname + "_kills");
         this.classname_deaths = JsonUtil.getInt(mwdata, this.classname + "_deaths");
@@ -294,6 +297,14 @@ public class MegaWallsClassStats {
 
         return msg;
 
+    }
+
+    public int getClasspoints() {
+        return classpoints;
+    }
+
+    public int getCoins() {
+        return coins;
     }
 
 }

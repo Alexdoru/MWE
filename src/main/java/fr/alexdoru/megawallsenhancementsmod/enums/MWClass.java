@@ -2,42 +2,53 @@ package fr.alexdoru.megawallsenhancementsmod.enums;
 
 public enum MWClass {
 
-    ARCANIST("arc", "Arcanist"),
-    ASSASSIN("asn", "Assassin"),
-    AUTOMATON("atn", "Automaton"),
-    BLAZE("bla", "Blaze"),
-    CREEPER("cre", "Creeper"),
-    COW("cow", "Cow"),
-    DREADLORD("dre", "Dreadlord"),
-    ENDERMAN("end", "Enderman"),
-    GOLEM("gol", "Golem"),
-    HEROBRINE("hbr", "Herobrine"),
-    HUNTER("hun", "Hunter"),
-    MOLEMAN("mol", "Moleman"),
-    PHOENIX("phx", "Phoenix"),
-    PIRATE("pir", "Pirate"),
-    RENEGADE("ren", "Renegade"),
-    SHAMAN("sha", "Shaman"),
-    SHARK("srk", "Shark"),
-    SKELETON("ske", "Skeleton"),
-    SNOWMAN("sno", "Snowman"),
-    SPIDER("spi", "Spider"),
-    SQUID("squ", "Squid"),
-    PIGMAN("pig", "Pigman"),
-    WEREWOLF("wer", "Werewolf"),
-    ZOMBIE("zom", "Zombie");
+    ARCANIST("ARC", "arc", "Arcanist"),
+    ASSASSIN("ASN", "asn", "Assassin"),
+    AUTOMATON("ATN", "atn", "Automaton"),
+    BLAZE("BLA", "bla", "Blaze"),
+    CREEPER("CRE", "cre", "Creeper"),
+    COW("COW", "cow", "Cow"),
+    DREADLORD("DRE", "dre", "Dreadlord"),
+    ENDERMAN("END", "end", "Enderman"),
+    GOLEM("GOL", "gol", "Golem"),
+    HEROBRINE("HBR", "hbr", "Herobrine"),
+    HUNTER("HUN", "hun", "Hunter"),
+    MOLEMAN("MOL", "mol", "Moleman"),
+    PHOENIX("PHX", "phx", "Phoenix"),
+    PIRATE("PIR", "pir", "Pirate"),
+    RENEGADE("REN", "ren", "Renegade"),
+    SHAMAN("SHA", "sha", "Shaman"),
+    SHARK("SRK", "srk", "Shark"),
+    SKELETON("SKE", "ske", "Skeleton"),
+    SNOWMAN("SNO", "sno", "Snowman"),
+    SPIDER("SPI", "spi", "Spider"),
+    SQUID("SQU", "squ", "Squid"),
+    PIGMAN("PIG", "pig", "Pigman"),
+    WEREWOLF("WER", "wer", "Werewolf"),
+    ZOMBIE("ZOM", "zom", "Zombie");
 
-    public final String tag;
+    public final String TAG;
+    public final String tagLowerCase;
     public final String className;
 
-    MWClass(String tag, String className) {
-        this.tag = tag;
+    MWClass(String TAG, String tagLowerCase, String className) {
+        this.TAG = TAG;
+        this.tagLowerCase = tagLowerCase;
         this.className = className;
     }
 
     public static MWClass fromTagOrName(String nameIn) {
         for (MWClass mwClass : values()) {
-            if (nameIn.equalsIgnoreCase(mwClass.tag) || nameIn.equalsIgnoreCase(mwClass.className)) {
+            if (nameIn.equalsIgnoreCase(mwClass.tagLowerCase) || nameIn.equalsIgnoreCase(mwClass.className)) {
+                return mwClass;
+            }
+        }
+        return null;
+    }
+
+    public static MWClass fromTag(String TAG) {
+        for (MWClass mwClass : values()) {
+            if (TAG.equals(mwClass.TAG)) {
                 return mwClass;
             }
         }

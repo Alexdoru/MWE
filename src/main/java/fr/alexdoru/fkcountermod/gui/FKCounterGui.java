@@ -16,8 +16,6 @@ import static fr.alexdoru.fkcountermod.events.KillCounter.*;
 
 public class FKCounterGui extends MyCachedGui {
 
-    public static FKCounterGui instance;
-
     /*used as an example when in the settings*/
     private static final String DUMMY_TEXT = EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 1\n"
             + EnumChatFormatting.GREEN + "Green" + EnumChatFormatting.WHITE + ": 2\n"
@@ -33,7 +31,7 @@ public class FKCounterGui extends MyCachedGui {
             + EnumChatFormatting.GREEN + "Green" + EnumChatFormatting.WHITE + ": 9 " + EnumChatFormatting.GRAY + "- GreenPlayer (4)\n"
             + EnumChatFormatting.YELLOW + "Yellow" + EnumChatFormatting.WHITE + ": 5 " + EnumChatFormatting.GRAY + "- YellowPlayer (3)\n"
             + EnumChatFormatting.BLUE + "Blue" + EnumChatFormatting.WHITE + ": 4 " + EnumChatFormatting.GRAY + "- BluePlayer (2)";
-
+    public static FKCounterGui instance;
     private final int BACKGROUND_COLOR = new Color(0, 0, 0, 64).getRGB();
     private final int DUMMY_BACKGROUND_COLOR = new Color(255, 255, 255, 127).getRGB();
 
@@ -122,7 +120,7 @@ public class FKCounterGui extends MyCachedGui {
 
     @Override
     public boolean isEnabled() {
-        return (!ConfigHandler.FKHUDinSidebar && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame() && getGameId() != null);
+        return (!ConfigHandler.FKHUDinSidebar && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame && getGameId() != null);
     }
 
     @Override

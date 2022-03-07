@@ -9,6 +9,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWall
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
 import net.minecraft.client.Minecraft;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.util.ChatComponentText;
@@ -24,6 +25,7 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.getTagMW;
 
 public class MWGameStatsEvent {
 
+    private static final Pattern RANDOM_CLASS_PATTERN = Pattern.compile("^Random class: (\\w+)*");
     private static String chosen_class;
     private static boolean isRandom = false;
     /*Data downloaded at the start of the game*/
@@ -32,29 +34,13 @@ public class MWGameStatsEvent {
     private static MegaWallsClassStats gameStats;
     private static String formattedname;
 
-    private static final Pattern RANDOM_CLASS_PATTERN = Pattern.compile("^Random class: (\\w+)*");
-
-    @SubscribeEvent
-    public void onMwGame(MwGameEvent event) {
-
-        if (event.getType() == MwGameEvent.EventType.GAME_START) {
-            CommandScanGame.onGameStart();
-            onGameStart();
-        }
-
-        if (event.getType() == MwGameEvent.EventType.GAME_END) {
-            CommandScanGame.clearScanGameData();
-            new DelayedTask(MWGameStatsEvent::onGameEnd, 300);
-        }
-
-    }
-
     private static void onGameStart() {
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
             return;
         }
 
-        (new Thread(() -> {
+        Multithreading.addTaskToQueue(() -> {
+
             String uuid = Minecraft.getMinecraft().thePlayer.getUniqueID().toString().replace("-", "");
             try {
                 HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
@@ -68,11 +54,14 @@ public class MWGameStatsEvent {
                 }
                 MWclassStats = new MegaWallsClassStats(playerdata.getPlayerData(), chosen_class);
             } catch (ApiException e) {
-                e.printStackTrace();
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
             }
             isRandom = false;
-        })).start();
+
+            return null;
+
+        });
+
     }
 
     private static void onGameEnd() {
@@ -80,24 +69,26 @@ public class MWGameStatsEvent {
             return;
         }
 
-        (new Thread(() -> {
+        Multithreading.addTaskToQueue(() -> {
             String uuid = Minecraft.getMinecraft().thePlayer.getUniqueID().toString().replace("-", "");
             try {
                 HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
                 gameStats = new MegaWallsClassStats(playerdata.getPlayerData(), chosen_class);
                 if (MWclassStats == null) {
-                    return;
+                    return null;
                 }
                 gameStats.minus(MWclassStats);
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.YELLOW + "Click to view the stats of your " + EnumChatFormatting.AQUA + "Mega Walls " + EnumChatFormatting.YELLOW + "game!")
                         .setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gamestatsmw"))));
             } catch (ApiException e) {
-                e.printStackTrace();
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 e.printStackTrace();
             }
-        })).start();
+
+            return null;
+
+        });
     }
 
     public static MegaWallsClassStats getGameStats() {
@@ -116,5 +107,20 @@ public class MWGameStatsEvent {
             return true;
         }
         return false;
+    }
+
+    @SubscribeEvent
+    public void onMwGame(MwGameEvent event) {
+
+        if (event.getType() == MwGameEvent.EventType.GAME_START) {
+            CommandScanGame.onGameStart();
+            onGameStart();
+        }
+
+        if (event.getType() == MwGameEvent.EventType.GAME_END) {
+            CommandScanGame.clearScanGameData();
+            new DelayedTask(MWGameStatsEvent::onGameEnd, 300);
+        }
+
     }
 }

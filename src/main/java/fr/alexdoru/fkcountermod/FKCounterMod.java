@@ -12,26 +12,26 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 public class FKCounterMod {
 
     public static final String MODID = "fkcounter";
-    public static final String VERSION = "2.6";
+    public static final String VERSION = "2.7";
+
+    /**
+     * Turns true from the moment the player gets tp to the cage to the end of the game
+     * False in the pre game lobby
+     */
+    public static boolean isInMwGame = false;
+    /**
+     * True in the pre game lobby in mega walls
+     */
+    public static boolean preGameLobby = false;
+    /**
+     * True during the preparation phase of a mega walls game
+     */
+    public static boolean isitPrepPhase = false;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new ScoreboardEvent());
         ClientCommandHandler.instance.registerCommand(new CommandFKCounter());
-    }
-
-    /**
-     * Returns true during a mega walls game
-     */
-    public static boolean isInMwGame() {
-        return (ScoreboardEvent.getMwScoreboardParser().getGameId() != null);
-    }
-
-    /**
-     * Returns true during the preparation phase of a mega walls game
-     */
-    public static boolean isitPrepPhase() {
-        return (ScoreboardEvent.getMwScoreboardParser().isitPrepPhase());
     }
 
 }

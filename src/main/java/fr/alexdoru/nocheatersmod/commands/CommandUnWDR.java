@@ -2,6 +2,7 @@ package fr.alexdoru.nocheatersmod.commands;
 
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
+import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
@@ -30,10 +31,9 @@ public class CommandUnWDR extends CommandBase {
             return;
         }
 
-
         if (args.length == 1) { // if you use /unwdr <playername>
 
-            new Thread(() -> {
+            Multithreading.addTaskToQueue(() -> {
 
                 CachedMojangUUID apireq;
                 String playername = args[0];
@@ -43,7 +43,7 @@ public class CommandUnWDR extends CommandBase {
                 } catch (ApiException e) {
                     addChatMessage(new ChatComponentText(getTagNoCheaters()
                             + EnumChatFormatting.RED + e.getMessage()));
-                    return;
+                    return null;
                 }
 
                 String uuid = apireq.getUuid();
@@ -54,13 +54,14 @@ public class CommandUnWDR extends CommandBase {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() +
                             EnumChatFormatting.RED + "Player not found in your report list."));
                 } else {
-                    NameUtil.transformNameTablist(playername);
-                    NameUtil.handlePlayer(playername);
+                    NameUtil.updateGameProfileAndName(playername);
                     addChatMessage(new ChatComponentText(getTagNoCheaters() +
                             EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.LIGHT_PURPLE + playername + EnumChatFormatting.GREEN + "."));
                 }
 
-            }).start();
+                return null;
+
+            });
 
         } else if (args.length == 2) { // when you click the message it does /unwdr <UUID> <playername>
 
@@ -70,8 +71,7 @@ public class CommandUnWDR extends CommandBase {
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
                         EnumChatFormatting.RED + "Player not found in your report list."));
             } else {
-                NameUtil.transformNameTablist(args[1]);
-                NameUtil.handlePlayer(args[1]);
+                NameUtil.updateGameProfileAndName(args[1]);
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
                         EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.LIGHT_PURPLE + args[1] + EnumChatFormatting.GREEN + "."));
             }

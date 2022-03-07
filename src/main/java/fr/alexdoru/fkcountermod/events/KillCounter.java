@@ -4,11 +4,12 @@ import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.gui.FKCounterGui;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessor.NetworkPlayerInfoAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -26,6 +27,11 @@ import java.util.regex.Pattern;
 
 public class KillCounter {
 
+    public static final int TEAMS = 4;
+    public static final int RED_TEAM = 0;
+    public static final int GREEN_TEAM = 1;
+    public static final int YELLOW_TEAM = 2;
+    public static final int BLUE_TEAM = 3;
     private static final String PREP_PHASE = "Prepare your defenses!";
     private static final String[] KILL_MESSAGES = {
             "(\\w+) was shot and killed by (\\w+).*",
@@ -83,20 +89,13 @@ public class KillCounter {
             "(\\w+) was magically squeaked by (\\w+).*",
             "(\\w+) was corrupted by (\\w+).*"
     };
-
-    private static Pattern[] KILL_PATTERNS;
-    public static final int TEAMS = 4;
-    public static final int RED_TEAM = 0;
-    public static final int GREEN_TEAM = 1;
-    public static final int YELLOW_TEAM = 2;
-    public static final int BLUE_TEAM = 3;
     private static final String[] SCOREBOARD_PREFIXES = {"[R]", "[G]", "[Y]", "[B]"};
     private static final String[] DEFAULT_PREFIXES = {"c", "a", "e", "9"}; // RED GREEN YELLOW BLUE
-
+    private static final HashMap<String, Integer> allPlayerKills = new HashMap<>();
+    private static Pattern[] KILL_PATTERNS;
     private static String gameId;
     private static String[] prefixes; // color codes prefix that you are using in your hypixel mega walls settings
     private static HashMap<String, Integer>[] teamKillsArray;
-    public static HashMap<String, Integer> allPlayerKills = new HashMap<>();
     private static ArrayList<String> deadPlayers;
 
     private static Random rand;
@@ -110,29 +109,26 @@ public class KillCounter {
         FKCounterGui.instance.updateDisplayText();
     }
 
-    /*
+    /**
      * Resets the Killcounter and assigns it to a new game ID
      */
     @SuppressWarnings("unchecked")
     public static void ResetKillCounterTo(String gameIdIn) {
-
         gameId = gameIdIn;
         prefixes = new String[TEAMS];
         teamKillsArray = new HashMap[TEAMS];
         allPlayerKills.clear();
         deadPlayers = new ArrayList<>();
-
         for (int i = 0; i < TEAMS; i++) {
             prefixes[i] = DEFAULT_PREFIXES[i];
             teamKillsArray[i] = new HashMap<>();
         }
         FKCounterGui.instance.updateDisplayText();
-
     }
 
     public static boolean processMessage(String FormattedText, String UnformattedText) {
 
-        if (!FKCounterMod.isInMwGame()) {
+        if (!FKCounterMod.isInMwGame) {
             return false;
         }
 
@@ -152,15 +148,14 @@ public class KillCounter {
             Matcher killMessageMatcher = kill_pattern.matcher(UnformattedText);
             if (killMessageMatcher.matches()) {
 
-                String killed = killMessageMatcher.group(1);
+                String killedPlayer = killMessageMatcher.group(1);
                 String killer = killMessageMatcher.group(2);
                 String[] split = FormattedText.split("\u00a7");
 
                 if (split.length >= 7) {
                     String killedTeam = split[2].substring(0, 1);
                     String killerTeam = split[6].substring(0, 1);
-                    removeKilledPlayer(killed, killedTeam);
-                    if (isWitherDead(killedTeam)) {
+                    if (removeKilledPlayer(killedPlayer, killedTeam)) {
                         addKill(killer, killerTeam);
                     }
                     FKCounterGui.instance.updateDisplayText();
@@ -175,9 +170,9 @@ public class KillCounter {
                     ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killer, squadmate)));
                     return true;
                 }
-                squadmate = SquadEvent.getSquad().get(killed);
+                squadmate = SquadEvent.getSquad().get(killedPlayer);
                 if (squadmate != null) {
-                    ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killed, squadmate)));
+                    ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killedPlayer, squadmate)));
                     return true;
                 }
 
@@ -187,36 +182,6 @@ public class KillCounter {
             }
         }
         return false;
-    }
-
-    @SubscribeEvent
-    public void onMwGame(MwGameEvent event) {
-
-        /*
-         * to fix the bug where the FKCounter doesn't work properly if you play two games in a row on a server with the same serverID
-         */
-        if (event.getType() == MwGameEvent.EventType.GAME_START) {
-            String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId();
-            if (currentGameId != null) {
-                ResetKillCounterTo(currentGameId);
-            }
-            setTeamPrefixes();
-            return;
-        }
-
-        if (event.getType() == MwGameEvent.EventType.CONNECT) {
-
-            String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId(); // this is not null due to how the event is defined/Posted
-            if (gameId == null || !gameId.equals(currentGameId)) {
-                ResetKillCounterTo(currentGameId);
-            }
-            /*
-             * this is here to fix the bug where the killcounter doesn't work if you re-start your minecraft during a game of MW
-             * or if you changed your colors for the teams in your MW settings and rejoined the game
-             */
-            setTeamPrefixes();
-        }
-
     }
 
     public static String getGameId() {
@@ -287,40 +252,47 @@ public class KillCounter {
         removeKilledPlayer(player, getColorPrefixFromTeam(team).replace("\u00a7", ""));
     }
 
-    private static void removeKilledPlayer(String player, String color) {
+    /**
+     * Removes a player from the fkcounter and returns true when successfull
+     * aka if the players was in final kill and if the player wasn't already dead
+     * (happens when someone tries to lag and gets double tapped)
+     */
+    private static boolean removeKilledPlayer(String player, String color) {
         int team = getTeamFromColor(color);
-        if (isNotValidTeam(team)) {
-            return;
+        if (isNotValidTeam(team) || deadPlayers.contains(player)) {
+            return false;
         }
         if (isWitherDead(color)) {
             teamKillsArray[team].remove(player);
             allPlayerKills.remove(player);
             deadPlayers.add(player);
-            updateNetworkPlayerinfo(player, 0);
+            return true;
         }
+        return false;
     }
 
-    private static void addKill(String player, String color) {
+    private static void addKill(String playerGettingTheKill, String color) {
         int team = getTeamFromColor(color);
         if (isNotValidTeam(team)) {
             return;
         }
-        if (deadPlayers.contains(player)) {
+        if (deadPlayers.contains(playerGettingTheKill)) {
             return;
         }
-        Integer finals = teamKillsArray[team].merge(player, 1, Integer::sum);
-        allPlayerKills.merge(player, 1, Integer::sum);
-        updateNetworkPlayerinfo(player, finals);
+        Integer finals = teamKillsArray[team].merge(playerGettingTheKill, 1, Integer::sum);
+        allPlayerKills.merge(playerGettingTheKill, 1, Integer::sum);
+        updateNetworkPlayerinfo(playerGettingTheKill, finals);
     }
 
-    /**
-     * This method gets transformed via ASM to access a field that's added via ASM as well
-     */
+    public static int getPlayersFinals(String playername) {
+        Integer finals = allPlayerKills.get(playername);
+        return finals == null ? 0 : finals;
+    }
+
     private static void updateNetworkPlayerinfo(String playername, int finals) {
-        NetworkPlayerInfo networkPlayerInfo = NameUtil.getPlayerInfo(playername);
-        if (networkPlayerInfo != null) {
-            int i = finals;                              // This line gets removed via ASM
-            // networkPlayerInfo.playerFinalkills = finals; This line gets added via ASM
+        NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+        if (networkPlayerInfo instanceof NetworkPlayerInfoAccessor) {
+            ((NetworkPlayerInfoAccessor) networkPlayerInfo).setPlayerFinalkills(finals);
         }
     }
 
@@ -390,7 +362,7 @@ public class KillCounter {
             return;
         }
         String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replace("[", "").replace("]", "").replace(" ", ""));
-        MWClass mwClass = MWClass.fromTagOrName(classTag);
+        MWClass mwClass = MWClass.fromTag(classTag);
         if (mwClass == null) {
             return;
         }
@@ -425,6 +397,36 @@ public class KillCounter {
                 }
             }, i * 10);
 
+        }
+
+    }
+
+    @SubscribeEvent
+    public void onMwGame(MwGameEvent event) {
+
+        /*
+         * to fix the bug where the FKCounter doesn't work properly if you play two games in a row on a server with the same serverID
+         */
+        if (event.getType() == MwGameEvent.EventType.GAME_START) {
+            String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId();
+            if (currentGameId != null) {
+                ResetKillCounterTo(currentGameId);
+            }
+            setTeamPrefixes();
+            return;
+        }
+
+        if (event.getType() == MwGameEvent.EventType.CONNECT) {
+
+            String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId(); // this is not null due to how the event is defined/Posted
+            if (gameId == null || !gameId.equals(currentGameId)) {
+                ResetKillCounterTo(currentGameId);
+            }
+            /*
+             * this is here to fix the bug where the killcounter doesn't work if you re-start your minecraft during a game of MW
+             * or if you changed your colors for the teams in your MW settings and rejoined the game
+             */
+            setTeamPrefixes();
         }
 
     }

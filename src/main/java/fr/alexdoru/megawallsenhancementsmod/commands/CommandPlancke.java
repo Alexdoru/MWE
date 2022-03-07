@@ -4,11 +4,13 @@ import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.GeneralInfo;
-import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassStats;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
+import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.SkywarsStats;
+import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelGuild;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -45,44 +47,46 @@ public class CommandPlancke extends CommandBase {
             return;
         }
 
-        (new Thread(() -> {
+        Multithreading.addTaskToQueue(() -> {
 
             CachedMojangUUID apiname;
             try {
                 apiname = new CachedMojangUUID(args[0]);
             } catch (ApiException e) {
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
-                return;
+                return null;
             }
 
             String uuid = apiname.getUuid();
             String playername = apiname.getName();
             CachedHypixelPlayerData playerdata;
+            GeneralInfo generalstats;
             try {
                 playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
-                LoginData loginData = new LoginData(playerdata.getPlayerData());
-                if (!playername.equals(loginData.getdisplayname())) {
+                generalstats = new GeneralInfo(playerdata.getPlayerData());
+                if (!playername.equals(generalstats.getdisplayname())) {
                     addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + "This player never joined Hypixel, it might be a nick."));
-                    return;
+                    return null;
                 }
             } catch (ApiException e) {
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
-                return;
+                return null;
             }
 
-            GeneralInfo generalstats = new GeneralInfo(playerdata.getPlayerData());
             String formattedname = generalstats.getFormattedName();
 
             if (generalstats.hasNeverJoinedHypixel()) { // player never joined hypixel
 
                 addChatMessage(new ChatComponentText(getTagMW()
                         + EnumChatFormatting.YELLOW + args[0] + EnumChatFormatting.RED + " has never joined Hypixel."));
-                return;
+                return null;
             }
 
             if (args.length == 1) {
 
-                addChatMessage(generalstats.getFormattedMessage(formattedname));
+                HypixelGuild hypixelGuild = new HypixelGuild(uuid, HypixelApiKeyUtil.getApiKey());
+                String guildTag = hypixelGuild.getFormattedGuildTag();
+                addChatMessage(generalstats.getFormattedMessage(formattedname + (guildTag == null ? "" : guildTag), hypixelGuild.getGuildName()));
 
             } else {
 
@@ -103,27 +107,24 @@ public class CommandPlancke extends CommandBase {
                     if (args.length == 2) {
 
                         MegaWallsStats mwstats = new MegaWallsStats(playerdata.getPlayerData());
-                        addChatMessage(mwstats.getFormattedMessage(formattedname, apiname.getName()));
+                        addChatMessage(mwstats.getFormattedMessage(formattedname, playername));
 
-                    } else if (args.length == 3) {
+                    } else {
 
                         if (args[2].equals("cp") || args[2].equals("classpoint") || args[2].equals("classpoints")) {
 
                             MegaWallsStats mwstats = new MegaWallsStats(playerdata.getPlayerData());
-                            addChatMessage(mwstats.getClassPointsMessage(formattedname, apiname.getName()));
+                            addChatMessage(mwstats.getClassPointsMessage(formattedname, playername));
 
                         } else {
 
                             MWClass mwclass = MWClass.fromTagOrName(args[2]);
-
-                            if (mwclass == null) { // not a valid mw class
-                                addChatMessage(new ChatComponentText(getTagMW()
-                                        + EnumChatFormatting.YELLOW + args[2] + EnumChatFormatting.RED + " isn't a valid mega walls class name."));
-                                return;
-                            }    // print mw stats for a certain class
-
+                            if (mwclass == null) {
+                                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.YELLOW + args[2] + EnumChatFormatting.RED + " isn't a valid mega walls class name."));
+                                return null;
+                            }
                             MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwclass.className);
-                            addChatMessage(mwclassstats.getFormattedMessage(formattedname, apiname.getName()));
+                            addChatMessage(mwclassstats.getFormattedMessage(formattedname, playername));
 
                         }
 
@@ -131,7 +132,8 @@ public class CommandPlancke extends CommandBase {
 
                 } else if (args[1].equalsIgnoreCase("sw") || args[1].equalsIgnoreCase("skywars")) { // general stats for skywars
 
-                    addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP skywars"));
+                    SkywarsStats skywarsStats = new SkywarsStats(playerdata.getPlayerData());
+                    addChatMessage(skywarsStats.getFormattedMessage(formattedname, playername));
 
                 } else if (args[1].equalsIgnoreCase("tnt") || args[1].equalsIgnoreCase("tntgames")) { // general stats for tnt games
 
@@ -150,7 +152,9 @@ public class CommandPlancke extends CommandBase {
 
             }
 
-        })).start();
+            return null;
+
+        });
 
     }
 
@@ -162,7 +166,7 @@ public class CommandPlancke extends CommandBase {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
 
-        String[] games = {"megawalls"};
+        String[] games = {"megawalls", "skywars"};
         String[] mwargs = {"arcanist", "assassin", "automaton", "blaze", "classpoint", "cow", "creeper", "dreadlord", "enderman", "golem", "herobrine", "hunter", "moleman", "phoenix", "pirate", "renegade", "shaman", "shark", "skeleton", "snowman", "spider", "squid", "pigman", "werewolf", "zombie"};
 
         if (args.length == 1)

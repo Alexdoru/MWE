@@ -1,24 +1,18 @@
 package fr.alexdoru.nocheatersmod.data;
 
+import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+
 import java.util.ArrayList;
 
 public class WDR {
 
-    public final long timestamp;
     public final ArrayList<String> hacks;
+    public long timestamp;
 
     public WDR(long timestamp, ArrayList<String> hacks) {
-
         this.timestamp = timestamp;
         this.hacks = hacks;
-
-    }
-
-    /**
-     * Compares the timestamp of timestamped reports
-     */
-    public int compareTo(WDR wdr) {
-        return compare(this, wdr);
     }
 
     /**
@@ -32,8 +26,27 @@ public class WDR {
         return Long.compare(x, y);
     }
 
+    /**
+     * Compares the timestamp of timestamped reports
+     */
+    public int compareTo(WDR wdr) {
+        return compare(this, wdr);
+    }
+
     public int compareToInvert(WDR wdr) {
         return compare(wdr, this);
+    }
+
+    public boolean canBeReported(long datenow) {
+        return datenow - this.timestamp - ConfigHandler.timeBetweenReports > 0;
+    }
+
+    public boolean canBeAutoreported(long datenow) {
+        return ConfigHandler.toggleautoreport
+                && FKCounterMod.isInMwGame
+                && !FKCounterMod.isitPrepPhase
+                && this.canBeReported(datenow)
+                && 0 < ConfigHandler.timeAutoReport - datenow + this.timestamp;
     }
 
 }

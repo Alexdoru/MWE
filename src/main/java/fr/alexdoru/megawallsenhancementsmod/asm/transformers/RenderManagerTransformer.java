@@ -1,11 +1,11 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.LdcInsnNode;
-import org.objectweb.asm.tree.MethodNode;
+import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
+import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
+import org.objectweb.asm.tree.*;
+
+import static org.objectweb.asm.Opcodes.*;
 
 public class RenderManagerTransformer implements IMyClassTransformer {
 
@@ -15,20 +15,85 @@ public class RenderManagerTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode) {
+    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+
+        status.setInjectionPoints(6);
+
         for (MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "b" : "renderDebugBoundingBox") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lpk;DDDFF)V" : "(Lnet/minecraft/entity/Entity;DDDFF)V")) {
+
+                /*
+                 * Injects at head :
+                 * if(RenderManagerHook.cancelHitboxRender(entityIn)) {
+                 *     return;
+                 * }
+                 */
+                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), getCancelRenderInsnList());
+                status.addInjection();
+
                 for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+
+                    if (insnNode.getOpcode() == ALOAD && insnNode instanceof VarInsnNode && ((VarInsnNode) insnNode).var == 12) {
+                        /*
+                         * Replaces line 451 :
+                         * RenderGlobal.drawOutlinedBoundingBox(axisalignedbb1, 255, 255, 255, 255);
+                         * With :
+                         * RenderGlobal.drawOutlinedBoundingBox(RenderManagerHook.getAxisAlignedBB(axisalignedbb1, entityIn), 255, 255, 255, 255);
+                         */
+                        InsnList list = new InsnList();
+                        list.add(new VarInsnNode(ALOAD, 1));
+                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderManagerHook", "getAxisAlignedBB", ASMLoadingPlugin.isObf ? "(Laug;Lpk;)Lnet/minecraft/util/AxisAlignedBB;" : "(Lnet/minecraft/util/AxisAlignedBB;Lnet/minecraft/entity/Entity;)Lnet/minecraft/util/AxisAlignedBB;", false));
+                        methodNode.instructions.insertBefore(insnNode.getNext(), list);
+                        status.addInjection();
+                    }
+
+                    if (insnNode.getOpcode() == INSTANCEOF && insnNode instanceof TypeInsnNode && ((TypeInsnNode) insnNode).desc.equals(ASMLoadingPlugin.isObf ? "pr" : "net/minecraft/entity/EntityLivingBase")) {
+                        AbstractInsnNode nextNode = insnNode.getNext();
+                        if (nextNode.getOpcode() == IFEQ && nextNode instanceof JumpInsnNode) {
+                            LabelNode labelNode = ((JumpInsnNode) nextNode).label;
+                            /*
+                             * Transforms line 453 :
+                             * if (entityIn instanceof EntityLivingBase)
+                             * Becomes :
+                             * if (entityIn instanceof EntityLivingBase && ConfigHandler.drawRedBox)
+                             */
+                            InsnList list = new InsnList();
+                            list.add(new JumpInsnNode(IFEQ, labelNode));
+                            list.add(new FieldInsnNode(GETSTATIC, "fr/alexdoru/megawallsenhancementsmod/config/ConfigHandler", "drawRedBox", "Z"));
+                            methodNode.instructions.insertBefore(nextNode, list);
+                            status.addInjection();
+                        }
+
+                    }
+
                     if (insnNode instanceof LdcInsnNode && ((LdcInsnNode) insnNode).cst.equals(new Double("2.0"))) {
-                        methodNode.instructions.insertBefore(insnNode, new LdcInsnNode(new Double("3.0")));
+                        /*
+                         * Line 464
+                         * Replaces the 2.0D with RenderManagerHook.getBlueVectLength(entityIn);
+                         */
+                        InsnList list = new InsnList();
+                        list.add(new VarInsnNode(ALOAD, 1)); // load entity
+                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderManagerHook", "getBlueVectLength", ASMLoadingPlugin.isObf ? "(Lpk;)D" : "(Lnet/minecraft/entity/Entity;)D", false));
+                        methodNode.instructions.insertBefore(insnNode, list);
                         methodNode.instructions.remove(insnNode);
-                        ASMLoadingPlugin.logger.info("Transformed RenderManager");
-                        return classNode;
+                        status.addInjection();
                     }
                 }
+
             }
         }
         return classNode;
+    }
+
+    private InsnList getCancelRenderInsnList() {
+        InsnList list = new InsnList();
+        LabelNode notCancelled = new LabelNode();
+        list.add(new VarInsnNode(ALOAD, 1)); // load entity
+        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderManagerHook", "cancelHitboxRender", ASMLoadingPlugin.isObf ? "(Lpk;)Z" : "(Lnet/minecraft/entity/Entity;)Z", false)); // load the boolean
+        list.add(new JumpInsnNode(IFEQ, notCancelled)); // if (true) { return;} else {jump to notCancelled label}
+        list.add(new InsnNode(RETURN)); // return;
+        list.add(notCancelled);
+        return list;
     }
 
 }

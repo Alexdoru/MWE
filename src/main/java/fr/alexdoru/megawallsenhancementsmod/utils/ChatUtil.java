@@ -114,9 +114,9 @@ public class ChatUtil {
     }
 
     public static String apikeyMissingErrorMsg() {
-        return EnumChatFormatting.RED + "You didn't set up your Api key. \n"
-                + EnumChatFormatting.RED + "Connect on Hypixel and type \"/api new\" to get an Api key, the mod should automatically detect the key and save it. \n"
-                + EnumChatFormatting.RED + "If it doesn't, type \"/setapikey <key>\" to setup the key.";
+        return EnumChatFormatting.DARK_RED + "You didn't set up your Api key. \n"
+                + EnumChatFormatting.DARK_RED + "Connect to Hypixel and type \"/api new\" to get an Api key, the mod should automatically detect the key and save it. \n"
+                + EnumChatFormatting.DARK_RED + "If you want to use a key that you already have, type \"/mwenhancements setapikey <key>\".";
     }
 
     public static String invalidplayernameMsg(String playername) {
@@ -228,8 +228,8 @@ public class ChatUtil {
 
     }
 
-    public static String capitalizeFirstLetter(String string){
-        if(string == null) {
+    public static String capitalizeFirstLetter(String string) {
+        if (string == null) {
             return null;
         }
         return string.substring(0, 1).toUpperCase() + string.substring(1);
@@ -315,7 +315,7 @@ public class ChatUtil {
                                                 + EnumChatFormatting.GRAY + "Using the wdr option will give you warnings about this player ingame")))));
     }
 
-    public static IChatComponent formattedNameWithReportButton(String playername, String formattedName){
+    public static IChatComponent formattedNameWithReportButton(String playername, String formattedName) {
         return new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + playername + " cheating"))
                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,

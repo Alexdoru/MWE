@@ -1,5 +1,6 @@
 package fr.alexdoru.fkcountermod.utils;
 
+import fr.alexdoru.megawallsenhancementsmod.gui.LastWitherHPGui;
 import net.minecraft.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
@@ -17,9 +18,9 @@ public class ScoreboardParser {
 
     private final ArrayList<String> aliveWithers = new ArrayList<>();
     private String gameId = null;
-    private boolean hasgameended = false;
+    private boolean preGameLobby = false;
     private boolean isitPrepPhase = false;
-    private int witherHP = 1000;
+    private boolean hasgameended = false;
 
     /* This is run on every tick to parse the scoreboard data */
     public ScoreboardParser(Scoreboard scoreboard) {
@@ -49,6 +50,7 @@ public class ScoreboardParser {
         for (String line : scoresRaw) {
             if (PREGAME_LOBBY_PATTERN.matcher(line).matches()) {
                 gameId = null;
+                preGameLobby = true;
                 return;
             }
         }
@@ -62,6 +64,7 @@ public class ScoreboardParser {
         }
 
         int eliminated_teams = 0;
+        int witherHP = 1000;
 
         for (int i = 3; i < Math.min(scoresRaw.size(), 7); i++) {
 
@@ -82,7 +85,7 @@ public class ScoreboardParser {
                     String lineColor = scoresColor.get(i);
                     String colorCode = lineColor.split("\u00a7")[1].substring(0, 1);
                     aliveWithers.add(colorCode);
-                    witherHP = 2*Integer.parseInt(matcher2.group(1));
+                    witherHP = 2 * Integer.parseInt(matcher2.group(1));
 
                 }
             }
@@ -95,6 +98,10 @@ public class ScoreboardParser {
 
         if (eliminated_teams == 3 || scoresRaw.get(1).contains("None!:")) {
             hasgameended = true;
+        }
+
+        if (isOnlyOneWitherAlive()) {
+            LastWitherHPGui.instance.updateWitherHP(witherHP);
         }
 
     }
@@ -123,11 +130,15 @@ public class ScoreboardParser {
         return isitPrepPhase;
     }
 
-    public int getWitherHP() {
-        return witherHP;
-    }
-
     public boolean isOnlyOneWitherAlive() {
         return aliveWithers.size() == 1;
+    }
+
+    public boolean isInMwGame() {
+        return gameId != null;
+    }
+
+    public boolean isPreGameLobby() {
+        return preGameLobby;
     }
 }

@@ -3,7 +3,6 @@ package fr.alexdoru.megawallsenhancementsmod.asm;
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.*;
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods.SidebarmodReloaded_CustomSidebar;
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods.SidebarmodRevamp_GuiSidebar;
-import fr.alexdoru.megawallsenhancementsmod.asm.transformers.fkcountermod.KillCounterTransformer;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -19,16 +18,21 @@ public class ClassTransformer implements IClassTransformer {
      * Register the IMyClassTransformer(s) here
      */
     public ClassTransformer() {
+        registerTransformer(new EntityArrowTransformer());
+        registerTransformer(new EntityPlayerTransformer());
         registerTransformer(new EntityRendererTransformer());
+        registerTransformer(new GameProfileTransformer());
         registerTransformer(new GuiIngameTransformer());
         registerTransformer(new GuiPlayerTabOverlayTransformer());
+        registerTransformer(new LayerArrowTransformer());
+        registerTransformer(new MinecraftTransformer());
         registerTransformer(new NetHandlerPlayClientTransformer());
         registerTransformer(new NetworkPlayerInfoTransformer());
+        registerTransformer(new RenderGlobalTransformer());
         registerTransformer(new RenderManagerTransformer());
         registerTransformer(new ScoreboardTransformer());
         registerTransformer(new SidebarmodReloaded_CustomSidebar());
         registerTransformer(new SidebarmodRevamp_GuiSidebar());
-        registerTransformer(new KillCounterTransformer());
     }
 
     private void registerTransformer(IMyClassTransformer classTransformer) {
@@ -53,14 +57,25 @@ public class ClassTransformer implements IClassTransformer {
             ClassReader classReader = new ClassReader(basicClass);
             classReader.accept(classNode, 0);
             ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-            classTransformer.transform(classNode).accept(classWriter);
-            return classWriter.toByteArray();
+            InjectionStatus status = new InjectionStatus();
+            classTransformer.transform(classNode, status).accept(classWriter);
+            byte[] transformedByteArray = classWriter.toByteArray();
+            if (!status.isTransformationSuccessfull()) {
+                ASMLoadingPlugin.logger.error("Class transformation incomplete : " + getClassName(classTransformer.getTargetClassName()) + " missing " + status.getAmount_of_injection() + " injections");
+            }
+            return transformedByteArray;
         } catch (Exception e) {
+            ASMLoadingPlugin.logger.error("Failed to transform " + classTransformer.getTargetClassName());
             e.printStackTrace();
         }
 
         return basicClass;
 
+    }
+
+    private String getClassName(String targetClassName) {
+        String[] split = targetClassName.split("\\.");
+        return split[split.length - 1];
     }
 
 }

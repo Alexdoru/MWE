@@ -1,10 +1,16 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
+import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.io.IOException;
@@ -12,8 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
-
-    private final GuiScreen parent;
 
     public NoCheatersConfigGuiScreen() {
         this.parent = null;
@@ -29,13 +33,16 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
          * Defines the button list
          */
         int buttonsWidth = 200;
-        this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
-        this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
-        this.buttonList.add(new GuiSlider(4, getxCenter() - buttonsWidth / 2, getYposForButton(-1), buttonsWidth, 20, "Time between reports : ", " hours", 4d, 48d, ConfigHandler.timeBetweenReports / 3600000f, false, true, this));
-        this.buttonList.add(new GuiSlider(5, getxCenter() - buttonsWidth / 2, getYposForButton(0), buttonsWidth, 20, "Time max autoreport : ", " days", 1d, 30d, ConfigHandler.timeAutoReport / (24f * 3600f * 1000f), false, true, this));
-        this.buttonList.add(new GuiButton(6, getxCenter() - buttonsWidth / 2, getYposForButton(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(6)));
-        this.buttonList.add(new GuiSlider(7, getxCenter() - buttonsWidth / 2, getYposForButton(2), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
-        this.buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getYposForButton(4), 150, ButtonsHeight, getButtonDisplayString(3)));
+        int xPos = getxCenter() - buttonsWidth / 2;
+        buttonList.add(new GuiButton(1, xPos, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
+        buttonList.add(new GuiButton(8, xPos, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(8)));
+        buttonList.add(new GuiButton(9, xPos, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
+        buttonList.add(new GuiButton(2, xPos, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
+        buttonList.add(new GuiSlider(4, xPos, getYposForButton(0), buttonsWidth, 20, "Time between reports : ", " hours", 0.75d, 24d, ConfigHandler.timeBetweenReports / (3600f * 1000f), false, true, this));
+        buttonList.add(new GuiSlider(5, xPos, getYposForButton(1), buttonsWidth, 20, "Time max autoreport : ", " days", 1d, 30d, ConfigHandler.timeAutoReport / (24f * 3600f * 1000f), false, true, this));
+        buttonList.add(new GuiButton(6, xPos, getYposForButton(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(6)));
+        buttonList.add(new GuiSlider(7, xPos, getYposForButton(3), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
+        buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getYposForButton(5), 150, ButtonsHeight, getButtonDisplayString(3)));
         super.initGui();
     }
 
@@ -43,6 +50,10 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         switch (id) {
             case 1:
                 return "Warning messages in chat : " + getSuffix(ConfigHandler.togglewarnings);
+            case 8:
+                return "Report suggestions in chat : " + getSuffix(ConfigHandler.reportsuggestions);
+            case 9:
+                return "Auto-send suggestions : " + getSuffix(ConfigHandler.autoreportSuggestions);
             case 2:
                 return "Autoreport cheaters : " + getSuffix(ConfigHandler.toggleautoreport);
             case 6:
@@ -58,12 +69,37 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     public List<String> getTooltipText(int id) {
         List<String> textLines = new ArrayList<>();
         switch (id) {
+            case 1:
+                textLines.add(EnumChatFormatting.GREEN + "Prints a warning message in chat when a reported player joins your world");
+                textLines.add(EnumChatFormatting.GREEN + "");
+                textLines.add(EnumChatFormatting.RED + "Warning : " + EnumChatFormatting.LIGHT_PURPLE + "player" + EnumChatFormatting.GRAY + " joined, Cheats : " + EnumChatFormatting.GOLD + "cheat");
+                break;
             case 2:
-                textLines.add(EnumChatFormatting.GREEN + "Automatically reports cheaters whose last report is older than the time between report and more recent than the time max autoreport");
+                textLines.add(EnumChatFormatting.GREEN + "Automatically sends a report for players saved in NoCheaters.");
+                textLines.add(EnumChatFormatting.GREEN + "It sends a report for players whose last report is older than the time between report");
+                textLines.add(EnumChatFormatting.GREEN + "and more recent than the time max autoreport");
+                textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls, the reports are sent after the walls fall.");
+                textLines.add("");
+                textLines.add(EnumChatFormatting.DARK_RED + "Don't keep players that don't cheat anymore in your report list");
+                textLines.add(EnumChatFormatting.GREEN + "Use : " + EnumChatFormatting.YELLOW + "/unwdr playername" + EnumChatFormatting.GREEN + " to remove them from your report list");
                 break;
             case 6:
                 textLines.add(EnumChatFormatting.GREEN + "Deletes reports older than the specified value");
                 textLines.add(EnumChatFormatting.GREEN + "The deletion occurs when you start minecraft");
+                break;
+            case 8:
+                textLines.add(EnumChatFormatting.GREEN + "When there is a message that respects the following patterns,");
+                textLines.add(EnumChatFormatting.GREEN + "it will print a report suggestion in chat");
+                textLines.add("");
+                textLines.add(EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "playername is bhoping");
+                textLines.add(EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "wdr playername cheat");
+                textLines.add(EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "report playername cheat");
+                break;
+            case 9:
+                textLines.add(EnumChatFormatting.GREEN + "Automatically sends the report command to the server");
+                textLines.add(EnumChatFormatting.GREEN + "when there is a report suggestion in chat");
+                textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls");
+                textLines.add(EnumChatFormatting.GRAY + "Ignores command suggestions sent by players you have reported");
                 break;
         }
         return textLines;
@@ -74,6 +110,23 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         switch (button.id) {
             case 1:
                 ConfigHandler.togglewarnings = !ConfigHandler.togglewarnings;
+                if (ConfigHandler.togglewarnings) {
+                    List<IChatComponent> list = NoCheatersEvents.getReportMessagesforWorld();
+                    if (!list.isEmpty()) {
+                        for (IChatComponent report : list) {
+                            ChatUtil.addChatMessage(report);
+                        }
+                    }
+                }
+                break;
+            case 8:
+                if (!ConfigHandler.reportsuggestions) {
+                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(ChatEvents.reportSuggestionSound, 1.0F));
+                }
+                ConfigHandler.reportsuggestions = !ConfigHandler.reportsuggestions;
+                break;
+            case 9:
+                ConfigHandler.autoreportSuggestions = !ConfigHandler.autoreportSuggestions;
                 break;
             case 2:
                 ConfigHandler.toggleautoreport = !ConfigHandler.toggleautoreport;
@@ -93,7 +146,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredTitle("NoCheaters v" + NoCheatersMod.version, 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 6);
+        drawCenteredTitle("NoCheaters v" + NoCheatersMod.version, 2, (width / 2.0f), getYposForButton(-6), Integer.parseInt("FF5555", 16));
         super.drawScreen(mouseX, mouseY, partialTicks);
         drawTooltips(mouseX, mouseY);
     }
@@ -102,10 +155,10 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     public void onChangeSliderValue(GuiSlider slider) {
         switch (slider.id) {
             case 4:
-                ConfigHandler.timeBetweenReports = Math.max(4L * 3600L * 1000L, Math.min(3600L * 1000L * ((long) slider.getValue()), 48L * 3600L * 1000L));
+                ConfigHandler.timeBetweenReports = (long) Math.max(ConfigHandler.MIN_TIME_BETWEEN_REPORTS, Math.min(3600L * 1000L * (slider.getValue()), ConfigHandler.MAX_TIME_BETWEEN_REPORTS));
                 break;
             case 5:
-                ConfigHandler.timeAutoReport = Math.max(24L * 3600L * 1000L, Math.min(24L * 3600L * 1000L * ((long) slider.getValue()), 30L * 24L * 3600L * 1000L));
+                ConfigHandler.timeAutoReport = (long) Math.max(ConfigHandler.MIN_TIME_AUTO_REPORTS, Math.min(24L * 3600L * 1000L * (slider.getValue()), ConfigHandler.MAX_TIME_AUTO_REPORTS));
                 break;
             case 7:
                 ConfigHandler.timeDeleteReport = 24L * 3600L * 1000L * ((long) slider.getValue());

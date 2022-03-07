@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
+import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -12,7 +13,8 @@ public class SidebarmodReloaded_CustomSidebar implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode) {
+    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+        status.setInjectionPoints(1);
         for (MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals("drawSidebar")) {
                 for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
@@ -30,6 +32,7 @@ public class SidebarmodReloaded_CustomSidebar implements IMyClassTransformer {
                             list.add(new VarInsnNode(ILOAD, 9));
                             list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiIngameHook", "getSidebarTextLine", "(Ljava/lang/String;I)Ljava/lang/String;", false));
                             methodNode.instructions.insertBefore(nextNode, list);
+                            status.addInjection();
                         }
                     }
                 }
