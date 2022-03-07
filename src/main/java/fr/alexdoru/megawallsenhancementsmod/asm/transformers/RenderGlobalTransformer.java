@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
+import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -14,7 +15,10 @@ public class RenderGlobalTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode) {
+    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+
+        status.setInjectionPoints(2);
+
         for (MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "renderEntities") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lpk;Lbia;F)V" : "(Lnet/minecraft/entity/Entity;Lnet/minecraft/client/renderer/culling/ICamera;F)V")) {
                 int ordinal = 0;
@@ -31,6 +35,7 @@ public class RenderGlobalTransformer implements IMyClassTransformer {
                              * RenderGlobalHook.resetEntityItemCount();
                              */
                             methodNode.instructions.insertBefore(nextNode.getNext(), new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderGlobalHook", "resetEntityItemCount", "()V", false));
+                            status.addInjection();
                         }
                     }
 
@@ -53,6 +58,7 @@ public class RenderGlobalTransformer implements IMyClassTransformer {
                             methodNode.instructions.insertBefore(insnNode, list);
                             methodNode.instructions.remove(insnNode.getNext()); // remove POP
                             methodNode.instructions.remove(insnNode); // remove INVOKEVIRTUAL RenderManager.renderEntitySimple (Lnet/minecraft/entity/Entity;F)Z
+                            status.addInjection();
                         }
                     }
 

@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
+import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -14,7 +15,8 @@ public class NetHandlerPlayClientTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode) {
+    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+        status.setInjectionPoints(3);
 
         for (MethodNode methodNode : classNode.methods) {
 
@@ -25,6 +27,7 @@ public class NetHandlerPlayClientTransformer implements IMyClassTransformer {
                             && ((FieldInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "i" : "playerInfoMap")
                             && ((FieldInsnNode) insnNode).desc.equals("Ljava/util/Map;")) {
                         methodNode.instructions.insertBefore(insnNode.getNext(), new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/NetHandlerPlayClientHook", "clearPlayerMap", "()V", false));
+                        status.addInjection();
                     }
                 }
             }
@@ -63,6 +66,7 @@ public class NetHandlerPlayClientTransformer implements IMyClassTransformer {
                     listRemove.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/NetHandlerPlayClientHook", "removePlayerFromMap", "(Ljava/lang/Object;)V", false));
                     methodNode.instructions.insertBefore(targetNodeRemoveInjection, listRemove);
                     methodNode.instructions.remove(targetNodeRemoveInjection);
+                    status.addInjection();
                     /*
                      * Injects after line 1637 :
                      * NetHandlerPlayClientHook.putPlayerInMap(networkplayerinfo.getGameProfile().getName(), networkplayerinfo);
@@ -74,6 +78,7 @@ public class NetHandlerPlayClientTransformer implements IMyClassTransformer {
                     listPut.add(new VarInsnNode(ALOAD, 4));
                     listPut.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/NetHandlerPlayClientHook", "putPlayerInMap", ASMLoadingPlugin.isObf ? "(Ljava/lang/String;Lbdc;)V" : "(Ljava/lang/String;Lnet/minecraft/client/network/NetworkPlayerInfo;)V", false));
                     methodNode.instructions.insertBefore(targetNodePutInjection, listPut);
+                    status.addInjection();
                     return classNode;
                 }
             }

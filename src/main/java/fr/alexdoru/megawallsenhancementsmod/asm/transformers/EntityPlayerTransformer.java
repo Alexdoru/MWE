@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
+import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -14,7 +15,8 @@ public class EntityPlayerTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode) {
+    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+        status.setInjectionPoints(1);
         for (MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "f_" : "getDisplayName") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "()Leu;" : "()Lnet/minecraft/util/IChatComponent;")) {
                 for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
@@ -33,6 +35,7 @@ public class EntityPlayerTransformer implements IMyClassTransformer {
                         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "wn" : "net/minecraft/entity/player/EntityPlayer", ASMLoadingPlugin.isObf ? "bH" : "gameProfile", "Lcom/mojang/authlib/GameProfile;"));
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/EntityPlayerHook", "getTransformedDisplayName", "(Ljava/lang/String;Lcom/mojang/authlib/GameProfile;)Ljava/lang/String;", false));
                         methodNode.instructions.insertBefore(insnNode.getNext(), list);
+                        status.addInjection();
                     }
                 }
             }

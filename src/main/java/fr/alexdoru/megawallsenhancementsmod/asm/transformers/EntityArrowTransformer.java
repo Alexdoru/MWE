@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
+import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -17,7 +18,7 @@ public class EntityArrowTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode) {
+    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
         classNode.interfaces.add("fr/alexdoru/megawallsenhancementsmod/asm/accessor/EntityArrowAccessor");
 
         {

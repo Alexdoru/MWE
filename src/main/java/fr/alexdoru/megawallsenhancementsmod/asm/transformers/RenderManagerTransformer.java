@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
+import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -14,7 +15,10 @@ public class RenderManagerTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode) {
+    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+
+        status.setInjectionPoints(6);
+
         for (MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "b" : "renderDebugBoundingBox") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lpk;DDDFF)V" : "(Lnet/minecraft/entity/Entity;DDDFF)V")) {
 
@@ -25,6 +29,7 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                  * }
                  */
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), getCancelRenderInsnList());
+                status.addInjection();
 
                 for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
@@ -39,6 +44,7 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                         list.add(new VarInsnNode(ALOAD, 1));
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderManagerHook", "getAxisAlignedBB", ASMLoadingPlugin.isObf ? "(Laug;Lpk;)Lnet/minecraft/util/AxisAlignedBB;" : "(Lnet/minecraft/util/AxisAlignedBB;Lnet/minecraft/entity/Entity;)Lnet/minecraft/util/AxisAlignedBB;", false));
                         methodNode.instructions.insertBefore(insnNode.getNext(), list);
+                        status.addInjection();
                     }
 
                     if (insnNode.getOpcode() == INSTANCEOF && insnNode instanceof TypeInsnNode && ((TypeInsnNode) insnNode).desc.equals(ASMLoadingPlugin.isObf ? "pr" : "net/minecraft/entity/EntityLivingBase")) {
@@ -55,6 +61,7 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                             list.add(new JumpInsnNode(IFEQ, labelNode));
                             list.add(new FieldInsnNode(GETSTATIC, "fr/alexdoru/megawallsenhancementsmod/config/ConfigHandler", "drawRedBox", "Z"));
                             methodNode.instructions.insertBefore(nextNode, list);
+                            status.addInjection();
                         }
 
                     }
@@ -69,6 +76,7 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderManagerHook", "getBlueVectLength", ASMLoadingPlugin.isObf ? "(Lpk;)D" : "(Lnet/minecraft/entity/Entity;)D", false));
                         methodNode.instructions.insertBefore(insnNode, list);
                         methodNode.instructions.remove(insnNode);
+                        status.addInjection();
                     }
                 }
 

@@ -12,6 +12,6 @@ public interface IMyClassTransformer {
     /**
      * Should return the transformed ClassNode
      */
-    ClassNode transform(ClassNode classNode);
+    ClassNode transform(ClassNode classNode, InjectionStatus status);
 
 }
