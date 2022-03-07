@@ -19,7 +19,7 @@ public class MegaWallsEnhancementsMod {
 
     public static final String modid = "mwenhancements";
     public static final String modName = "MegaWallsEnhancements";
-    public static final String version = "1.5";
+    public static final String version = "1.6";
     public static File configurationFile;
 
     @EventHandler
