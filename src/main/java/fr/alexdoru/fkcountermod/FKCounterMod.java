@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 public class FKCounterMod {
 
     public static final String MODID = "fkcounter";
-    public static final String VERSION = "2.6";
+    public static final String VERSION = "2.7";
 
     /**
      * Turns true from the moment the player gets tp to the cage to the end of the game
