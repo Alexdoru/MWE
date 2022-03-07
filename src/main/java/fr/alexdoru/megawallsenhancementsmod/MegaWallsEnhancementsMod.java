@@ -12,15 +12,20 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = MegaWallsEnhancementsMod.modid, name = "MegaWallsEnhancements", version = MegaWallsEnhancementsMod.version, acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
+import java.io.File;
+
+@Mod(modid = MegaWallsEnhancementsMod.modid, name = MegaWallsEnhancementsMod.modName, version = MegaWallsEnhancementsMod.version, acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
 public class MegaWallsEnhancementsMod {
 
     public static final String modid = "mwenhancements";
-    public static final String version = "1.5";
+    public static final String modName = "MegaWallsEnhancements";
+    public static final String version = "1.6";
+    public static File configurationFile;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        ConfigHandler.preinit(event.getSuggestedConfigurationFile());
+        configurationFile = event.getSuggestedConfigurationFile();
+        ConfigHandler.preinit(configurationFile);
     }
 
     @EventHandler
@@ -41,7 +46,7 @@ public class MegaWallsEnhancementsMod {
         ClientCommandHandler.instance.registerCommand(new CommandStalk());
         ClientCommandHandler.instance.registerCommand(new CommandPlancke());
         ClientCommandHandler.instance.registerCommand(new CommandScanGame());
-        ClientCommandHandler.instance.registerCommand(new CommandSetupApiKey());
+        ClientCommandHandler.instance.registerCommand(new CommandHowPlayGame());
         ClientCommandHandler.instance.registerCommand(new CommandMWGameStats());
         ClientCommandHandler.instance.registerCommand(new CommandHypixelShout());
         ClientCommandHandler.instance.registerCommand(new CommandHypixelReply());

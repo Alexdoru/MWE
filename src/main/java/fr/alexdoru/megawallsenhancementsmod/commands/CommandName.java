@@ -3,20 +3,22 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangNameHistory;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.event.ClickEvent;
+import net.minecraft.event.HoverEvent;
+import net.minecraft.util.*;
 
 import java.util.Collections;
 import java.util.List;
 
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.getTagMW;
 
 public class CommandName extends CommandBase {
 
@@ -41,14 +43,14 @@ public class CommandName extends CommandBase {
             return;
         }
 
-        (new Thread(() -> {
+        Multithreading.addTaskToQueue(() -> {
 
             CachedMojangUUID apiname;
             try {
                 apiname = new CachedMojangUUID(args[0]);
             } catch (ApiException e1) {
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e1.getMessage()));
-                return;
+                return null;
             }
             String uuid = apiname.getUuid();
 
@@ -57,26 +59,25 @@ public class CommandName extends CommandBase {
                 apinamehistory = new MojangNameHistory(uuid);
             } catch (ApiException e1) {
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e1.getMessage()));
-                return;
+                return null;
             }
 
             int displaypage = 1;
             int nbnames = 1;
             int nbpage = 1;
 
-            StringBuilder messagebody = new StringBuilder();
-
             if (args.length > 1) {
                 try {
                     displaypage = parseInt(args[1]);
                 } catch (NumberInvalidException e) {
                     addChatMessage(new ChatComponentText(EnumChatFormatting.RED + args[1] + " isn't a valid number."));
-                    e.printStackTrace();
-                    return;
+                    return null;
                 }
             }
 
             int n = apinamehistory.getNames().size();
+            IChatComponent imsgbody = new ChatComponentText("");
+            boolean warning = true;
 
             for (int i = n - 1; i >= 0; i--) {
 
@@ -86,37 +87,56 @@ public class CommandName extends CommandBase {
                 }
 
                 if (nbpage == displaypage) {
-
                     if (i == 0) { // original name
-
-                        messagebody.append(",{\"text\":\"").append(apinamehistory.getNames().get(i)).append("  \",\"color\":\"gold\"}").append(",{\"text\":\"Original name\",\"color\":\"dark_gray\"}").append(",{\"text\":\"\\n\"}");
-
+                        imsgbody.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + apinamehistory.getNames().get(i) + EnumChatFormatting.DARK_GRAY + " Original name\n"));
                     } else if (i == n - 1) {
-
-                        messagebody.append(",{\"text\":\"").append(apinamehistory.getNames().get(i)).append("  \",\"color\":\"gold\"}").append(",{\"text\":\"since ").append(DateUtil.localformatTimestampday(apinamehistory.getTimestamps().get(i))).append("\",\"color\":\"dark_gray\"}").append(",{\"text\":\"\\n\"}");
-
+                        imsgbody.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + apinamehistory.getNames().get(i) + EnumChatFormatting.DARK_GRAY + " since " + DateUtil.localformatTimestampday(apinamehistory.getTimestamps().get(i)) + "\n"));
                     } else {
-
-                        messagebody.append(",{\"text\":\"").append(apinamehistory.getNames().get(i)).append("  \",\"color\":\"gold\"}").append(",{\"text\":\"").append(DateUtil.localformatTimestampday(apinamehistory.getTimestamps().get(i))).append("\",\"color\":\"dark_gray\"}").append(",{\"text\":\"\\n\"}");
-
+                        imsgbody.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + apinamehistory.getNames().get(i) + EnumChatFormatting.DARK_GRAY + " " + DateUtil.localformatTimestampday(apinamehistory.getTimestamps().get(i)) + "\n"));
                     }
-
+                    warning = false;
                 }
 
                 nbnames++;
             }
 
-            if (!messagebody.toString().equals("")) {
-
-                addChatMessage(IChatComponent.Serializer.jsonToComponent(makeChatList("Name History", messagebody.toString(), displaypage, nbpage, "/name " + args[0])));
-
+            if (warning) {
+                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "No names to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available."));
             } else {
 
-                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "No names to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available."));
+                IChatComponent imsg = new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar() + "\n" + "             ");
 
+                if (displaypage > 1) {
+                    imsg.appendSibling(new ChatComponentText("" + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + " <<")
+                            .setChatStyle(new ChatStyle()
+                                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to view page " + (displaypage - 1))))
+                                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/name " + args[0] + " " + (displaypage - 1)))));
+                } else {
+                    imsg.appendSibling(new ChatComponentText("   "));
+                }
+
+                imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + " Name History (Page " + displaypage + " of " + nbpage + ")")
+                        .setChatStyle(new ChatStyle()
+                                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to open " + EnumChatFormatting.BLUE + "NamesMC" + EnumChatFormatting.YELLOW + " in browser")))
+                                .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://namemc.com/search?q=" + args[0]))));
+
+                if (displaypage < nbpage) {
+                    imsg.appendSibling(new ChatComponentText("" + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + " >>")
+                            .setChatStyle(new ChatStyle()
+                                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to view page " + (displaypage + 1))))
+                                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/name " + args[0] + " " + (displaypage + 1)))));
+                }
+
+                imsg.appendSibling(new ChatComponentText("\n"))
+                        .appendSibling(imsgbody)
+                        .appendSibling(new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar()));
+
+                addChatMessage(imsg);
             }
 
-        })).start();
+            return null;
+
+        });
 
     }
 

@@ -7,11 +7,11 @@ public interface IMyClassTransformer {
     /**
      * Should return the de-obfuscated name of the targeted class. Example : "net.minecraft.client.Minecraft"
      */
-    public String getTargetClassName();
+    String getTargetClassName();
 
     /**
      * Should return the transformed ClassNode
      */
-    public ClassNode transform(ClassNode classNode);
+    ClassNode transform(ClassNode classNode, InjectionStatus status);
 
 }

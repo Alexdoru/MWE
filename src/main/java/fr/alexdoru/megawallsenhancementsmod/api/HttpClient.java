@@ -8,11 +8,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class HttpClient {
 
-    private URL url;
     private final String urlstr;
+    private URL url;
 
     public HttpClient(String urlstr) {
 
@@ -43,7 +44,7 @@ public class HttpClient {
 
             if (status == 200) { //connection successfull
 
-                reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
 
                 while ((line = reader.readLine()) != null) {
                     responsecontent.append(line);

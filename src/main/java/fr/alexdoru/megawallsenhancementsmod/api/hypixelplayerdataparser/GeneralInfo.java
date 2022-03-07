@@ -80,7 +80,7 @@ public class GeneralInfo extends LoginData {
 
     }
 
-    public IChatComponent getFormattedMessage(String formattedname) {
+    public IChatComponent getFormattedMessage(String formattedname, String guildname) {
 
         IChatComponent msg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
 
@@ -88,7 +88,9 @@ public class GeneralInfo extends LoginData {
 
                 .appendSibling(new ChatComponentText("\n" + "\n"
 
-                        + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Network level : " + EnumChatFormatting.GOLD + String.format("%.2f", (float) ILeveling.getExactLevel((double) networkExp))) + "\n"
+                        + (guildname == null ? "" : ChatUtil.centerLine(EnumChatFormatting.GREEN + "Guild : " + EnumChatFormatting.GOLD + guildname) + "\n")
+
+                        + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Network level : " + EnumChatFormatting.GOLD + String.format("%.2f", getNetworkLevel())) + "\n"
 
                         + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Karma : " + EnumChatFormatting.LIGHT_PURPLE + ChatUtil.formatInt(this.karma)) + "\n"
 
@@ -152,6 +154,14 @@ public class GeneralInfo extends LoginData {
 
 
         return msg;
+    }
+
+    public float getNetworkLevel() {
+        return (float) ILeveling.getExactLevel((double) networkExp);
+    }
+
+    public int getCompletedQuests() {
+        return completedQuests;
     }
 
 }

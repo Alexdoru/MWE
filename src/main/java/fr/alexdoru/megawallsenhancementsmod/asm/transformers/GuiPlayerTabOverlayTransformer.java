@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
+import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -16,10 +17,14 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode) {
+    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
         boolean isPatcherLoaded = true;
+        status.setInjectionPoints(5);
         try {
             isPatcherLoaded = this.getClass().getClassLoader().getResource(PATCHER_CLASS) != null;
+            if (isPatcherLoaded) {
+                status.setInjectionPoints(4);
+            }
         } catch (Exception ignored) {
         }
         for (MethodNode methodNode : classNode.methods) {
@@ -30,11 +35,13 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                     if (insnNode.getOpcode() == BIPUSH && insnNode instanceof IntInsnNode && ((IntInsnNode) insnNode).operand == 20) {
                         methodNode.instructions.insertBefore(insnNode, new IntInsnNode(BIPUSH, 25));
                         methodNode.instructions.remove(insnNode);
+                        status.addInjection();
                     }
 
                     if (!isPatcherLoaded && insnNode.getOpcode() == BIPUSH && insnNode instanceof IntInsnNode && ((IntInsnNode) insnNode).operand == 80) {
                         methodNode.instructions.insertBefore(insnNode, new IntInsnNode(BIPUSH, 100));
                         methodNode.instructions.remove(insnNode);
+                        status.addInjection();
                     }
 
                     if (insnNode.getOpcode() == ILOAD && insnNode instanceof VarInsnNode && ((VarInsnNode) insnNode).var == 7) {
@@ -45,6 +52,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                             list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "getFKScoreWidth", "()I", false));
                             list.add(new InsnNode(IADD));
                             methodNode.instructions.insertBefore(nextNode, list);
+                            status.addInjection();
                         }
                     }
 
@@ -72,6 +80,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                         methodNode.instructions.insertBefore(insnNode, list);
                         methodNode.instructions.remove(insnNode);
                         sliceFlag = true;
+                        status.addInjection();
                     }
 
                     if (sliceFlag && insnNode.getOpcode() == ALOAD && insnNode instanceof VarInsnNode && ((VarInsnNode) insnNode).var == 0) {
@@ -86,6 +95,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                         list.add(new VarInsnNode(ILOAD, 2));
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "renderFinals", "(III)V", false));
                         methodNode.instructions.insertBefore(insnNode, list);
+                        status.addInjection();
                         break;
                     }
 
@@ -93,7 +103,6 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
             }
 
         }
-        ASMLoadingPlugin.logger.info("Transformed GuiPlayerTabOverlay");
         return classNode;
     }
 

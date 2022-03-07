@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.fkcountermod.gui.FKConfigGuiScreen;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.HitboxConfigGuiScreen;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -14,16 +15,17 @@ public class GeneralConfigGuiScreen extends MyGuiScreen {
          * Defines the button list
          */
         int buttonsWidth = 150;
-        this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getYposForButton(-1), buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "Final Kill Counter"));
-        this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getYposForButton(0), buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "Mega Walls Enhancements"));
-        this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getYposForButton(1), buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "No Cheaters"));
+        this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getYposForButton(-2), buttonsWidth, ButtonsHeight, EnumChatFormatting.AQUA + "Final Kill Counter"));
+        this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getYposForButton(-1), buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "Mega Walls Enhancements"));
+        this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getYposForButton(0), buttonsWidth, ButtonsHeight, EnumChatFormatting.RED + "No Cheaters"));
+        this.buttonList.add(new GuiButton(4, getxCenter() - buttonsWidth / 2, getYposForButton(1), buttonsWidth, ButtonsHeight, EnumChatFormatting.BLUE + "Hitboxes, better F3+b"));
         this.buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getYposForButton(4), 150, ButtonsHeight, "Close"));
         super.initGui();
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredTitle("Config", 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 6);
+        drawCenteredTitle("Config", 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 6, Integer.parseInt("55FF55", 16));
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -42,6 +44,9 @@ public class GeneralConfigGuiScreen extends MyGuiScreen {
                 break;
             case 3:
                 mc.displayGuiScreen(null);
+                break;
+            case 4:
+                mc.displayGuiScreen(new HitboxConfigGuiScreen(this));
                 break;
         }
         super.actionPerformed(button);

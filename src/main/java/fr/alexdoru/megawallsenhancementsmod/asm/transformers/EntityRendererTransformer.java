@@ -1,7 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
+import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
+import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -14,8 +15,8 @@ public class EntityRendererTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode) {
-        int injections = 0;
+    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+        status.setInjectionPoints(2);
         for (MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "g" : "updateLightmap") && methodNode.desc.equals("(F)V")
                     || methodNode.name.equals(ASMLoadingPlugin.isObf ? "i" : "updateFogColor") && methodNode.desc.equals("(F)V")) {
@@ -30,15 +31,12 @@ public class EntityRendererTransformer implements IMyClassTransformer {
                                 list.add(new JumpInsnNode(IFEQ, labelNode));
                                 list.add(new FieldInsnNode(GETSTATIC, "fr/alexdoru/megawallsenhancementsmod/config/ConfigHandler", "keepNightVisionEffect", "Z"));
                                 methodNode.instructions.insertBefore(secondNode, list);
-                                injections++;
+                                status.addInjection();
                             }
                         }
                     }
                 }
             }
-        }
-        if (injections == 2) {
-            ASMLoadingPlugin.logger.info("Transformed EntityRenderer");
         }
         return classNode;
     }

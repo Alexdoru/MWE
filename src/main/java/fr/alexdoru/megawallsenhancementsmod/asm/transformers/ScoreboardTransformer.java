@@ -1,7 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
+import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
+import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -14,8 +15,10 @@ public class ScoreboardTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode) {
-        int injections = 0;
+    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+
+        status.setInjectionPoints(2);
+
         for (MethodNode methodNode : classNode.methods) {
 
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "addPlayerToTeam") && methodNode.desc.equals("(Ljava/lang/String;Ljava/lang/String;)Z")) {
@@ -23,8 +26,12 @@ public class ScoreboardTransformer implements IMyClassTransformer {
                     if (insnNode.getOpcode() == ICONST_1 && insnNode instanceof InsnNode) {
                         AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode != null && nextNode.getOpcode() == IRETURN) {
+                            /*
+                             * Injects before line 329 :
+                             * ScoreboardHook.transformNameTablist(player);
+                             */
                             methodNode.instructions.insertBefore(insnNode, getInsnList());
-                            injections++;
+                            status.addInjection();
                         }
                     }
                 }
@@ -40,17 +47,18 @@ public class ScoreboardTransformer implements IMyClassTransformer {
                         if (secondNode != null && secondNode.getOpcode() == POP) {
                             AbstractInsnNode thirdNode = secondNode.getNext();
                             if (thirdNode != null) {
+                                /*
+                                 * Injects after line 360 :
+                                 * ScoreboardHook.transformNameTablist(player);
+                                 */
                                 methodNode.instructions.insertBefore(thirdNode, getInsnList());
-                                injections++;
+                                status.addInjection();
                             }
                         }
                     }
                 }
             }
 
-        }
-        if (injections == 2) {
-            ASMLoadingPlugin.logger.info("Transformed Scoreboard");
         }
         return classNode;
     }
@@ -60,7 +68,7 @@ public class ScoreboardTransformer implements IMyClassTransformer {
         list.add(new VarInsnNode(ALOAD, 1));
         list.add(new MethodInsnNode(
                 INVOKESTATIC,
-                "fr/alexdoru/megawallsenhancementsmod/utils/NameUtil",
+                "fr/alexdoru/megawallsenhancementsmod/asm/hooks/ScoreboardHook",
                 "transformNameTablist",
                 "(Ljava/lang/String;)V",
                 false

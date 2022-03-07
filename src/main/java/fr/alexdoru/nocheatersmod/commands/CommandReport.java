@@ -45,7 +45,7 @@ public class CommandReport extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        return args.length == 1 ? (FKCounterMod.isInMwGame() && FKCounterMod.isitPrepPhase() ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null) : (args.length > 1 ? getListOfStringsMatchingLastWord(args, cheatsArray) : null);
+        return args.length == 1 ? (FKCounterMod.isInMwGame && FKCounterMod.isitPrepPhase ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null) : (args.length > 1 ? getListOfStringsMatchingLastWord(args, cheatsArray) : null);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class CommandReport extends CommandBase {
                 msg.append(" bhop aura reach velocity speed antiknockback");
             } else if (args[i].equalsIgnoreCase("fastbreak")) {
                 msg.append(" speed");
-            }else if (args[i].equalsIgnoreCase("autoblock") || args[i].equalsIgnoreCase("multiaura")) {
+            } else if (args[i].equalsIgnoreCase("autoblock") || args[i].equalsIgnoreCase("multiaura")) {
                 msg.append(" killaura");
             } else if (args[i].equalsIgnoreCase("noslowdown") || args[i].equalsIgnoreCase("keepsprint")) {
                 msg.append(" velocity");

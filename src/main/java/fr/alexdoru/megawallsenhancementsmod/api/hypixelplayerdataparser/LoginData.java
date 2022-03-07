@@ -1,15 +1,21 @@
 package fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.alexdoru.megawallsenhancementsmod.enums.GameType;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import net.minecraft.util.EnumChatFormatting;
+
+import java.util.Map;
 
 public class LoginData {
 
     private long firstLogin;
     private long lastLogin;
     private long lastLogout;
+    private long latestActivityTime;
+    private String latestActivity;
     private String mostRecentGameType;
     private String rank;
     private String displayname;
@@ -21,8 +27,9 @@ public class LoginData {
      */
     public LoginData(JsonObject playerData) {
 
-        if (playerData == null)
+        if (playerData == null) {
             return;
+        }
 
         /*
          * the 8 first characters on the _id entry of the API happen to be the amount of seconds since 1st jan 1970 in hexadecimal
@@ -48,8 +55,43 @@ public class LoginData {
         String newPackageRank = JsonUtil.getString(playerData, "newPackageRank");
         String monthlyRankColor = JsonUtil.getString(playerData, "monthlyRankColor");
 
+        parseFormattedName(prefix, rankPlusColor, packageRank, newPackageRank, monthlyRankColor);
+
+    }
+
+    public void parseLatestActivity(JsonObject playerData) {
+
+        this.latestActivityTime = JsonUtil.getLong(playerData, "lastClaimedReward");
+        this.latestActivity = "Claimed Daily Reward";
+
+        JsonElement questElem = playerData.get("quests");
+        if (questElem.isJsonObject()) {
+            JsonObject questobj = questElem.getAsJsonObject();
+            for (Map.Entry<String, JsonElement> questEntry : questobj.entrySet()) {
+                if (questEntry.getValue().isJsonObject()) {
+                    JsonObject gameObj = questEntry.getValue().getAsJsonObject();
+                    JsonElement completionsElem = gameObj.get("completions");
+                    if (completionsElem != null && completionsElem.isJsonArray()) {
+                        JsonArray completionsArray = completionsElem.getAsJsonArray();
+                        for (JsonElement element : completionsArray) {
+                            if (element.isJsonObject()) {
+                                long l = JsonUtil.getLong(element.getAsJsonObject(), "time");
+                                if (l > latestActivityTime) {
+                                    latestActivityTime = l;
+                                    latestActivity = "Quest " + questEntry.getKey();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void parseFormattedName(String prefix, String rankPlusColor, String packageRank, String newPackageRank, String monthlyRankColor) {
         if (prefix != null) {
-            this.formattedname = prefix.replace("§", "\u00a7") + " " + this.displayname;
+            this.formattedname = prefix + " " + this.displayname;
             return;
         }
 
@@ -126,7 +168,6 @@ public class LoginData {
         }
 
         this.formattedname = EnumChatFormatting.GRAY + " " + this.displayname;
-
     }
 
     public String getdisplayname() {
@@ -149,8 +190,8 @@ public class LoginData {
         return rank != null && lastLogout == 0 && lastLogin == 0;
     }
 
-    public boolean isMVPPlusPlus() {
-        return monthlyPackageRank != null && monthlyPackageRank.equals("SUPERSTAR");
+    public boolean isnotMVPPlusPlus() {
+        return monthlyPackageRank == null || !monthlyPackageRank.equals("SUPERSTAR");
     }
 
     public long getFirstLogin() {
@@ -163,6 +204,14 @@ public class LoginData {
 
     public long getLastLogout() {
         return this.lastLogout;
+    }
+
+    public long getLatestActivityTime() {
+        return latestActivityTime;
+    }
+
+    public String getLatestActivity() {
+        return latestActivity;
     }
 
     public boolean isOnline() {

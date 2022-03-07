@@ -67,17 +67,20 @@ public class CommandSquad extends CommandBase {
                 return;
             }
 
-            if (args.length == 4 && args[2].equalsIgnoreCase("as")) {
-
-                SquadEvent.addPlayer(args[1], args[3]);
+            if (args.length >= 4 && args[2].equalsIgnoreCase("as")) {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i = 3; i < args.length; i++) {
+                    stringBuilder.append(args[i]).append((i == args.length - 1) ? "" : " ");
+                }
+                String alias = stringBuilder.toString();
+                SquadEvent.addPlayer(args[1], alias);
                 addChatMessage(new ChatComponentText(getTagMW() +
                         EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[1] + EnumChatFormatting.GREEN + " as " +
-                        EnumChatFormatting.GOLD + args[3] + EnumChatFormatting.GREEN + " to the squad."));
+                        EnumChatFormatting.GOLD + alias + EnumChatFormatting.GREEN + " to the squad."));
                 return;
             }
 
             for (int i = 1; i < args.length; i++) {
-
                 SquadEvent.addPlayer(args[i]);
                 addChatMessage(new ChatComponentText(getTagMW() +
                         EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " to the squad."));
@@ -90,12 +93,16 @@ public class CommandSquad extends CommandBase {
                 return;
             }
 
-            if (args.length == 4 && args[2].equalsIgnoreCase("as")) {
-                SquadEvent.addMyself(args[1], args[3]);
+            if (args.length >= 4 && args[2].equalsIgnoreCase("as")) {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i = 3; i < args.length; i++) {
+                    stringBuilder.append(args[i]).append((i == args.length - 1) ? "" : " ");
+                }
+                String alias = stringBuilder.toString();
+                SquadEvent.addMyself(args[1], alias);
                 addChatMessage(new ChatComponentText(getTagMW() +
                         EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[1] + EnumChatFormatting.GREEN + " as " +
-                        EnumChatFormatting.GOLD + args[3] + EnumChatFormatting.GREEN + " to the squad."));
-
+                        EnumChatFormatting.GOLD + alias + EnumChatFormatting.GREEN + " to the squad."));
                 return;
             }
 

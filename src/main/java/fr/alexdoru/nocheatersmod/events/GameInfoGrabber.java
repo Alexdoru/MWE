@@ -71,7 +71,7 @@ public class GameInfoGrabber {
      */
     public static String getTimeSinceGameStart(long timestamp, String serverID, int delay) {
 
-        if (FKCounterMod.isInMwGame()) {
+        if (FKCounterMod.isInMwGame) {
 
             List<String> scoresRaw = ScoreboardUtils.getUnformattedSidebarText();
 

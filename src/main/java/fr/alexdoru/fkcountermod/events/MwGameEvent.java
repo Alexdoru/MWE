@@ -19,7 +19,7 @@ public class MwGameEvent extends Event {
      * DISCONNECT is fired when you leave a game of MW
      * GAME_START is fired when the gates at spawn open
      * GAME_END is fired when the game ends
-     * THIRD_WITHER_DIED is fired when the thrid wither dies
+     * THIRD_WITHER_DIED is fired when the third wither dies
      */
     public MwGameEvent(EventType type) {
         this.type = type;
