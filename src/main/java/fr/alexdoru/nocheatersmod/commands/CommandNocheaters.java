@@ -37,8 +37,6 @@ public class CommandNocheaters extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
 
-        // TODO nocheaters say; shout
-
         if (args.length == 0) {
 
             List<IChatComponent> list = NoCheatersEvents.getReportMessagesforWorld();
