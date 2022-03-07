@@ -83,8 +83,6 @@ public class ConfigHandler {
     /**
      * Hitbox Config
      */
-    // TODO color the hitbox when the ennemy is hit VAPE KILL AURA !!!
-    //  arrow hit as well ?
     public static boolean drawHitboxForPlayers;
     public static boolean drawHitboxForGroundedArrows;
     public static boolean drawHitboxForPinnedArrows;
