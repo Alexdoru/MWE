@@ -97,7 +97,7 @@ public class ChatEvents {
             sendAutoreportSuggestion(reportedPlayer);
             return;
         }
-        if (ConfigHandler.autoreportSuggestions && canReportSuggestionPlayer(reportedPlayer)) {
+        if (ConfigHandler.autoreportSuggestions) {
             NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(messageSender);
             if (networkPlayerInfo == null) {
                 return;
@@ -116,11 +116,13 @@ public class ChatEvents {
     }
 
     private static void sendAutoreportSuggestion(String reportedPlayer) {
-        new DelayedTask(() -> {
-            if (mc.thePlayer != null) {
-                mc.thePlayer.sendChatMessage("/wdr " + reportedPlayer + " cheating");
-            }
-        }, 15 + random.nextInt(80));
+        if (canReportSuggestionPlayer(reportedPlayer)) {
+            new DelayedTask(() -> {
+                if (mc.thePlayer != null) {
+                    mc.thePlayer.sendChatMessage("/wdr " + reportedPlayer + " cheating");
+                }
+            }, 15 + random.nextInt(80));
+        }
     }
 
     private static boolean canReportSuggestionPlayer(String playername) {
