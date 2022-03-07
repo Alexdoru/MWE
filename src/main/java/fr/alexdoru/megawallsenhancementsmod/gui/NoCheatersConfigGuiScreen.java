@@ -79,6 +79,9 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 textLines.add(EnumChatFormatting.GREEN + "It sends a report for players whose last report is older than the time between report");
                 textLines.add(EnumChatFormatting.GREEN + "and more recent than the time max autoreport");
                 textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls, the reports are sent after the walls fall.");
+                textLines.add("");
+                textLines.add(EnumChatFormatting.DARK_RED + "Don't keep players that don't cheat anymore in your report list");
+                textLines.add(EnumChatFormatting.GREEN + "Use : " + EnumChatFormatting.YELLOW + "/unwdr playername" + EnumChatFormatting.GREEN + " to remove them from your report list");
                 break;
             case 6:
                 textLines.add(EnumChatFormatting.GREEN + "Deletes reports older than the specified value");
@@ -96,6 +99,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 textLines.add(EnumChatFormatting.GREEN + "Automatically sends the report command to the server");
                 textLines.add(EnumChatFormatting.GREEN + "when there is a report suggestion in chat");
                 textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls");
+                textLines.add(EnumChatFormatting.GRAY + "Ignores command suggestions sent by players you have reported");
                 break;
         }
         return textLines;
