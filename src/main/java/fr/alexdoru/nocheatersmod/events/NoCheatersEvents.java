@@ -148,7 +148,9 @@ public class NoCheatersEvents {
         if (!FKCounterMod.preGameLobby) {
             allCheats.setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
-                            + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " cheating")))
+                            + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " cheating" + "\n\n"
+                            + EnumChatFormatting.GRAY + "Be sure to report cheaters when your are ingame and not in the lobby\n"
+                            + EnumChatFormatting.GRAY + "that makes reporting more effective")))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + playername + " cheating")));
         }
 
