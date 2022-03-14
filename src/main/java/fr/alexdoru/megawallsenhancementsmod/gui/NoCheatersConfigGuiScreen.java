@@ -147,6 +147,10 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle("NoCheaters v" + NoCheatersMod.version, 2, (width / 2.0f), getYposForButton(-6), Integer.parseInt("FF5555", 16));
+        String msg1 = "If you want to remove a player from your report list";
+        mc.fontRendererObj.drawStringWithShadow(msg1, (width / 2.0f) - fontRendererObj.getStringWidth(msg1) / 2.0f, getYposForButton(-5), Integer.parseInt("FFFFFF", 16));
+        String msg2 = "use : " + EnumChatFormatting.YELLOW + "/unwdr playername";
+        mc.fontRendererObj.drawStringWithShadow(msg2, (width / 2.0f) - fontRendererObj.getStringWidth(msg2) / 2.0f, getYposForButton(-5) + fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
         super.drawScreen(mouseX, mouseY, partialTicks);
         drawTooltips(mouseX, mouseY);
     }
