@@ -16,18 +16,14 @@ public class WDR {
     }
 
     /**
-     * Compares the timestamp of timestamped reports
+     * Compares the timestamp
      */
     private static int compare(WDR wdr1, WDR wdr2) {
-
-        long x = Long.parseLong(wdr1.hacks.get(3));
-        long y = Long.parseLong(wdr2.hacks.get(3));
-
-        return Long.compare(x, y);
+        return Long.compare(wdr1.timestamp, wdr2.timestamp);
     }
 
     /**
-     * Compares the timestamp of timestamped reports
+     * Compares the timestamp
      */
     public int compareTo(WDR wdr) {
         return compare(this, wdr);
