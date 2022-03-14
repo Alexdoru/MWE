@@ -150,7 +150,7 @@ public class CommandNocheaters extends CommandBase {
                         imsg.appendSibling(new ChatComponentText("   "));
                     }
 
-                    imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + " Timestamped Reports (Page " + displaypage + " of " + nbpage + ")"));
+                    imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + " Report list (Page " + displaypage + " of " + nbpage + ")"));
 
                     if (displaypage < nbpage) {
                         imsg.appendSibling(new ChatComponentText("" + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + " >>")
@@ -237,7 +237,9 @@ public class CommandNocheaters extends CommandBase {
 
                 HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
                 LoginData logindata = new LoginData(playerdata.getPlayerData());
-                imsg.appendSibling(new ChatComponentText(logindata.getFormattedName()));
+                imsg.appendSibling(new ChatComponentText(logindata.getFormattedName()).setChatStyle(new ChatStyle()
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to run : /stalk " + logindata.getdisplayname())))
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk " + logindata.getdisplayname()))));
 
                 if (logindata.isHidingFromAPI()) {
 
