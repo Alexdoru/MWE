@@ -192,6 +192,10 @@ public class CommandWDR extends CommandBase {
 
             (Minecraft.getMinecraft()).thePlayer.sendChatMessage(message.toString()); //sends command to server
 
+            if (FKCounterMod.preGameLobby) {
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + ChatUtil.getChatReportingAdvice()));
+            }
+
             CachedMojangUUID apireq;
             String uuid = null;
             boolean isaNick = false;
