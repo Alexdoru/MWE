@@ -39,15 +39,15 @@ public class WDR {
     }
 
     public boolean canBeReported(long datenow) {
-        return datenow - this.timestamp - TIME_BETWEEN_AUTOREPORT > 0;
+        return datenow - timestamp - TIME_BETWEEN_AUTOREPORT > 0;
     }
 
     public boolean canBeAutoreported(long datenow) {
         return ConfigHandler.toggleautoreport
                 && FKCounterMod.isInMwGame
                 && !FKCounterMod.isitPrepPhase
-                && this.canBeReported(datenow)
-                && 0 < TIME_MAX_AUTOREPORT - datenow + this.timestamp;
+                && canBeReported(datenow)
+                && 0 < TIME_MAX_AUTOREPORT - datenow + timestamp;
     }
 
 }

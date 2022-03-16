@@ -3,7 +3,6 @@ package fr.alexdoru.nocheatersmod.events;
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
-import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
@@ -38,9 +37,9 @@ public class NoCheatersEvents {
             try {
                 if (event.entity instanceof EntityPlayerSP) {
                     /*Delaying the transformation for self because certain fields such as mc.theWorld.getScoreboard().getPlayersTeam(username) are null when you just joined the world*/
-                    new DelayedTask(() -> NameUtil.transformNametag((EntityPlayer) event.entity, false, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport), 1);
+                    new DelayedTask(() -> NameUtil.transformNametag((EntityPlayer) event.entity, true), 1);
                 } else {
-                    NameUtil.transformNametag((EntityPlayer) event.entity, false, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
+                    NameUtil.transformNametag((EntityPlayer) event.entity, true);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
