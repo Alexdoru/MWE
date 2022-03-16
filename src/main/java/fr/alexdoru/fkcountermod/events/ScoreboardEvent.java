@@ -26,6 +26,10 @@ public class ScoreboardEvent {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
 
+        if (event.phase == TickEvent.Phase.START) {
+            return;
+        }
+
         if (mc.theWorld == null || !isHypixel) {
             return;
         }

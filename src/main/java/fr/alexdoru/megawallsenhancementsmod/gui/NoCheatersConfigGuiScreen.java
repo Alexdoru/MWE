@@ -34,15 +34,13 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
          */
         int buttonsWidth = 200;
         int xPos = getxCenter() - buttonsWidth / 2;
-        buttonList.add(new GuiButton(1, xPos, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
-        buttonList.add(new GuiButton(8, xPos, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(8)));
-        buttonList.add(new GuiButton(9, xPos, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
-        buttonList.add(new GuiButton(2, xPos, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
-        buttonList.add(new GuiSlider(4, xPos, getYposForButton(0), buttonsWidth, 20, "Time between reports : ", " hours", 0.75d, 24d, ConfigHandler.timeBetweenReports / (3600f * 1000f), false, true, this));
-        buttonList.add(new GuiSlider(5, xPos, getYposForButton(1), buttonsWidth, 20, "Time max autoreport : ", " days", 1d, 30d, ConfigHandler.timeAutoReport / (24f * 3600f * 1000f), false, true, this));
-        buttonList.add(new GuiButton(6, xPos, getYposForButton(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(6)));
-        buttonList.add(new GuiSlider(7, xPos, getYposForButton(3), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
-        buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getYposForButton(5), 150, ButtonsHeight, getButtonDisplayString(3)));
+        buttonList.add(new GuiButton(1, xPos, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
+        buttonList.add(new GuiButton(8, xPos, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(8)));
+        buttonList.add(new GuiButton(9, xPos, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
+        buttonList.add(new GuiButton(2, xPos, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
+        buttonList.add(new GuiButton(6, xPos, getYposForButton(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(6)));
+        buttonList.add(new GuiSlider(7, xPos, getYposForButton(2), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
+        buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getYposForButton(4), 150, ButtonsHeight, getButtonDisplayString(3)));
         super.initGui();
     }
 
@@ -75,9 +73,8 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 textLines.add(EnumChatFormatting.RED + "Warning : " + EnumChatFormatting.LIGHT_PURPLE + "player" + EnumChatFormatting.GRAY + " joined, Cheats : " + EnumChatFormatting.GOLD + "cheat");
                 break;
             case 2:
-                textLines.add(EnumChatFormatting.GREEN + "Automatically sends a report for players saved in NoCheaters.");
-                textLines.add(EnumChatFormatting.GREEN + "It sends a report for players whose last report is older than the time between report");
-                textLines.add(EnumChatFormatting.GREEN + "and more recent than the time max autoreport");
+                textLines.add(EnumChatFormatting.GREEN + "Every game it automatically reports players saved in NoCheaters");
+                textLines.add(EnumChatFormatting.GREEN + "It does it for a week before asking you if they are still cheating or not");
                 textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls, the reports are sent after the walls fall.");
                 textLines.add("");
                 textLines.add(EnumChatFormatting.DARK_RED + "Don't keep players that don't cheat anymore in your report list");
@@ -85,7 +82,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 break;
             case 6:
                 textLines.add(EnumChatFormatting.GREEN + "Deletes reports older than the specified value");
-                textLines.add(EnumChatFormatting.GREEN + "The deletion occurs when you start minecraft");
+                textLines.add(EnumChatFormatting.GRAY + "The deletion occurs when you start minecraft");
                 break;
             case 8:
                 textLines.add(EnumChatFormatting.GREEN + "When there is a message that respects the following patterns,");
@@ -147,22 +144,18 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle("NoCheaters v" + NoCheatersMod.version, 2, (width / 2.0f), getYposForButton(-6), Integer.parseInt("FF5555", 16));
+        String msg1 = "If you want to remove a player from your report list use :";
+        mc.fontRendererObj.drawStringWithShadow(msg1, (width / 2.0f) - fontRendererObj.getStringWidth(msg1) / 2.0f, getYposForButton(-5) + fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
+        String msg2 = EnumChatFormatting.YELLOW + "/unwdr playername" + EnumChatFormatting.WHITE + " or click the name on the warning message";
+        mc.fontRendererObj.drawStringWithShadow(msg2, (width / 2.0f) - fontRendererObj.getStringWidth(msg2) / 2.0f, getYposForButton(-5) + 2 * fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
         super.drawScreen(mouseX, mouseY, partialTicks);
         drawTooltips(mouseX, mouseY);
     }
 
     @Override
     public void onChangeSliderValue(GuiSlider slider) {
-        switch (slider.id) {
-            case 4:
-                ConfigHandler.timeBetweenReports = (long) Math.max(ConfigHandler.MIN_TIME_BETWEEN_REPORTS, Math.min(3600L * 1000L * (slider.getValue()), ConfigHandler.MAX_TIME_BETWEEN_REPORTS));
-                break;
-            case 5:
-                ConfigHandler.timeAutoReport = (long) Math.max(ConfigHandler.MIN_TIME_AUTO_REPORTS, Math.min(24L * 3600L * 1000L * (slider.getValue()), ConfigHandler.MAX_TIME_AUTO_REPORTS));
-                break;
-            case 7:
-                ConfigHandler.timeDeleteReport = 24L * 3600L * 1000L * ((long) slider.getValue());
-                break;
+        if (slider.id == 7) {
+            ConfigHandler.timeDeleteReport = 24L * 3600L * 1000L * ((long) slider.getValue());
         }
     }
 

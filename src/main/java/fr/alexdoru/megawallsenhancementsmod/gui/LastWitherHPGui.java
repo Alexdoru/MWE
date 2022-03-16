@@ -12,7 +12,7 @@ public class LastWitherHPGui extends MyCachedGui {
 
     private static final String DUMMY_TEXT = EnumChatFormatting.GREEN + "Wither dies in 148s";
     public static LastWitherHPGui instance;
-    private static String color;
+    private static String color = "";
     private static long lastWitherHPUpdate = 0;
     private static long thirdWitherDeathTime = 0;
     private static int witherHp = 0;
@@ -28,7 +28,9 @@ public class LastWitherHPGui extends MyCachedGui {
             lastWitherHPUpdate = System.currentTimeMillis();
         }
         witherHp = witherHPIn;
-        color = "\u00a7" + ScoreboardEvent.getMwScoreboardParser().getAliveWithers().get(0);
+        if (ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive()) {
+            color = "\u00a7" + ScoreboardEvent.getMwScoreboardParser().getAliveWithers().get(0);
+        }
         updateDisplayText();
     }
 
@@ -36,6 +38,7 @@ public class LastWitherHPGui extends MyCachedGui {
     public void onMWEvent(MwGameEvent event) {
         if (event.getType() == MwGameEvent.EventType.THIRD_WITHER_DEATH) {
             thirdWitherDeathTime = System.currentTimeMillis();
+            color = "\u00a7" + ScoreboardEvent.getMwScoreboardParser().getAliveWithers().get(0);
         }
     }
 

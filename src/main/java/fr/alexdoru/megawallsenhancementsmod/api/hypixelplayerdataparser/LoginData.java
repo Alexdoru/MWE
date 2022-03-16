@@ -162,12 +162,12 @@ public class LoginData {
                     this.formattedname = EnumChatFormatting.AQUA + "[MVP" + EnumChatFormatting.getValueByName(rankPlusColor) + "+" + EnumChatFormatting.AQUA + "]" + " " + this.displayname;
                     return;
                 default:
-                    this.formattedname = EnumChatFormatting.GRAY + " " + this.displayname;
+                    this.formattedname = EnumChatFormatting.GRAY + this.displayname;
                     return;
             }
         }
 
-        this.formattedname = EnumChatFormatting.GRAY + " " + this.displayname;
+        this.formattedname = EnumChatFormatting.GRAY + this.displayname;
     }
 
     public String getdisplayname() {
