@@ -304,7 +304,8 @@ public class ChatUtil {
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                 new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
                                         + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " " + cheatReport + "\n"
-                                        + EnumChatFormatting.GRAY + "Using the report option won't save the cheater's name in the mod NoCheaters"))))
+                                        + EnumChatFormatting.GRAY + "Using the report option won't save the cheater's name in the mod NoCheaters\n\n"
+                                        + getReportingAdvice()))))
 
                 .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_PURPLE + " WDR ")
                         .setChatStyle(new ChatStyle()
@@ -312,7 +313,14 @@ public class ChatUtil {
                                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                         new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
                                                 + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/wdr " + playername + " " + cheatWDR + "\n"
-                                                + EnumChatFormatting.GRAY + "Using the wdr option will give you warnings about this player ingame")))));
+                                                + EnumChatFormatting.GRAY + "Using the wdr option will give you warnings about this player ingame\n\n"
+                                                + getReportingAdvice())))));
+    }
+
+    public static String getReportingAdvice() {
+        return EnumChatFormatting.RED + "To make reporting efficient, be sure to report\n"
+                + EnumChatFormatting.DARK_RED + EnumChatFormatting.BOLD + "when you are ingame with the cheater\n"
+                + EnumChatFormatting.RED + "and not before the game starts or in the lobby.";
     }
 
     public static IChatComponent formattedNameWithReportButton(String playername, String formattedName) {
