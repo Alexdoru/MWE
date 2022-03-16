@@ -162,11 +162,18 @@ public class NameUtil {
 
             String username = gameProfileIn.getName();
             String uuid = id.toString().replace("-", "");
-            WDR wdr = null;
+            WDR wdr = WdredPlayers.getWdredMap().get(uuid);
             String extraPrefix = "";
             IChatComponent iExtraPrefix = null;
             String squadname = SquadEvent.getSquad().get(username);
             boolean isSquadMate = squadname != null;
+
+            if (wdr == null) {
+                wdr = WdredPlayers.getWdredMap().get(username);
+                if (wdr != null) {
+                    uuid = username;
+                }
+            }
 
             if (ConfigHandler.toggleicons) {
 
@@ -176,15 +183,6 @@ public class NameUtil {
                     iExtraPrefix = isquadprefix;
 
                 } else {
-
-                    wdr = WdredPlayers.getWdredMap().get(uuid);
-
-                    if (wdr == null) {
-                        wdr = WdredPlayers.getWdredMap().get(username);
-                        if (wdr != null) {
-                            uuid = username;
-                        }
-                    }
 
                     if (wdr != null) {
 
