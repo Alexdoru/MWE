@@ -325,7 +325,7 @@ public class ChatUtil {
 
     public static String getChatReportingAdvice() {
         return EnumChatFormatting.RED + "To make reporting efficient, be sure to report"
-                + EnumChatFormatting.DARK_RED + EnumChatFormatting.BOLD + "when you are ingame with the cheater"
+                + EnumChatFormatting.DARK_RED + EnumChatFormatting.BOLD + " when you are ingame with the cheater "
                 + EnumChatFormatting.RED + "and not before the game starts or in the lobby.";
     }
 
