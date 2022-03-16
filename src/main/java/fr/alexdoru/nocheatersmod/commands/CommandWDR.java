@@ -12,15 +12,13 @@ import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,6 +31,7 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class CommandWDR extends CommandBase {
 
+    private static final ResourceLocation reportDeniedSound = new ResourceLocation("mob.villager.no");
     private static final HashMap<String, TimeMark> TimeMarksMap = new HashMap<>();
     private static final char timestampreportkey = '-';
     private static final char timemarkedreportkey = '#';
@@ -196,13 +195,20 @@ public class CommandWDR extends CommandBase {
 
             long l = System.currentTimeMillis();
             commandUsageTimeList.removeIf(o -> (o + 2 * 60 * 1000L < l));
+            boolean playSound = false;
             if (commandUsageTimeList.size() >= 5) {
                 ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Don't report too many players at once or Hypixel will ignore your reports thinking you are a bot trying to flood their system"));
+                playSound = true;
             }
             commandUsageTimeList.add(l);
 
             if (FKCounterMod.preGameLobby) {
                 ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + ChatUtil.getChatReportingAdvice()));
+                playSound = true;
+            }
+
+            if (playSound) {
+                Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(reportDeniedSound, 1.0F));
             }
 
             CachedMojangUUID apireq;
