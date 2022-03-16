@@ -37,6 +37,7 @@ public class CommandWDR extends CommandBase {
     private static final char timestampreportkey = '-';
     private static final char timemarkedreportkey = '#';
     private static int nbTimeMarks = 0;
+    private static final List<Long> commandUsageTimeList = new ArrayList<>();
 
     public static void addTimeMark() {
         nbTimeMarks++;
@@ -80,6 +81,7 @@ public class CommandWDR extends CommandBase {
             String timerOnReplay = "?";
             long longtimetosubtract = 0;
             long timestamp = 0;
+            long time = (new Date()).getTime();
 
             if (args.length == 1) {
                 arraycheats.add("cheating");
@@ -122,7 +124,7 @@ public class CommandWDR extends CommandBase {
 
                         }
 
-                        timestamp = (new Date()).getTime() - longtimetosubtract * 1000; // Milliseconds
+                        timestamp = time - longtimetosubtract * 1000; // Milliseconds
                         serverID = GameInfoGrabber.getGameIDfromscoreboard();
                         timerOnReplay = GameInfoGrabber.getTimeSinceGameStart(timestamp, serverID, (int) longtimetosubtract);
                         message.append(" ").append(args[i]);
@@ -191,6 +193,17 @@ public class CommandWDR extends CommandBase {
             }
 
             (Minecraft.getMinecraft()).thePlayer.sendChatMessage(message.toString()); //sends command to server
+
+            long l = System.currentTimeMillis();
+            commandUsageTimeList.removeIf(o -> (o + 2 * 60 * 1000L < l));
+            if (commandUsageTimeList.size() >= 5) {
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Don't report too many players at once or Hypixel will ignore your reports thinking you are a bot trying to flood their system"));
+            }
+            commandUsageTimeList.add(l);
+
+            if (FKCounterMod.preGameLobby) {
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + ChatUtil.getChatReportingAdvice()));
+            }
 
             CachedMojangUUID apireq;
             String uuid = null;
@@ -262,7 +275,7 @@ public class CommandWDR extends CommandBase {
                     argsinWDR.add("nick");
                 }
 
-                WDR newreport = new WDR(timestamp, argsinWDR);
+                WDR newreport = new WDR(timestamp, timestamp, argsinWDR);
                 WdredPlayers.getWdredMap().put(uuid, newreport);
                 NameUtil.updateGameProfileAndName(playername);
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
@@ -300,7 +313,7 @@ public class CommandWDR extends CommandBase {
                 if (isaNick) {
                     argsinWDR.add("nick");
                 }
-                WdredPlayers.getWdredMap().put(uuid, new WDR((new Date()).getTime(), argsinWDR));
+                WdredPlayers.getWdredMap().put(uuid, new WDR(time, time, argsinWDR));
                 NameUtil.updateGameProfileAndName(playername);
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
                         EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")

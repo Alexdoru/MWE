@@ -16,6 +16,7 @@ import fr.alexdoru.nocheatersmod.commands.CommandReport;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
+import fr.alexdoru.nocheatersmod.events.ReportQueue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -123,11 +124,7 @@ public class ChatEvents {
     }
 
     private static void sendAutoreportSuggestion(String reportedPlayer) {
-        new DelayedTask(() -> {
-            if (mc.thePlayer != null) {
-                mc.thePlayer.sendChatMessage("/wdr " + reportedPlayer + " cheating");
-            }
-        }, 15 + random.nextInt(80));
+        ReportQueue.INSTANCE.addPlayerToQueue(reportedPlayer, 20 + random.nextInt(180));
     }
 
     private static boolean canReportSuggestionPlayer(String playername) {

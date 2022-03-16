@@ -51,13 +51,13 @@ public class NameUtil {
             networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
             EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
-                NameUtil.transformNametag(player, true, false, false);
+                NameUtil.transformNametag(player, false);
             }
         } else {
             EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
                 transformGameProfile(player.getGameProfile(), true);
-                NameUtil.transformNametag(player, true, false, false);
+                NameUtil.transformNametag(player, false);
             }
         }
     }
@@ -73,7 +73,7 @@ public class NameUtil {
         }
         EntityPlayer player = mc.theWorld.getPlayerEntityByName(gameProfile.getName());
         if (player != null) {
-            NameUtil.transformNametag(player, true, false, false);
+            NameUtil.transformNametag(player, false);
         }
     }
 
@@ -85,7 +85,7 @@ public class NameUtil {
         networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
         EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
         if (player != null) {
-            NameUtil.transformNametag(player, true, false, false);
+            NameUtil.transformNametag(player, false);
         }
     }
 
@@ -93,9 +93,9 @@ public class NameUtil {
      * Transforms the nametag of the player based on the infos stored in getGameProfile.MWPlayerData
      * to save performance instead of redoing the hashmap access
      */
-    public static void transformNametag(EntityPlayer player, boolean clearNametagIcons, boolean areWarningsToggled, boolean checkAutoreport) {
+    public static void transformNametag(EntityPlayer player, boolean onPlayerJoin) {
 
-        if (clearNametagIcons) {
+        if (!onPlayerJoin) {
             player.getPrefixes().removeAll(allPrefix);
             player.refreshDisplayName();
         }
@@ -119,11 +119,11 @@ public class NameUtil {
             return;
         }
 
-        if (mwPlayerData.wdr != null) { // player was reported
+        if (mwPlayerData.wdr != null) { // player was reported // FIXME for some players it will be null all the time, it will never report them
             String playerName = player.getName();
             long datenow = (new Date()).getTime();
-            boolean gotautoreported = checkAutoreport && NoCheatersEvents.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
-            if (areWarningsToggled) {
+            boolean gotautoreported = NoCheatersEvents.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
+            if (ConfigHandler.togglewarnings || mwPlayerData.wdr.isOlderThanMaxAutoreport(datenow)) {
                 String uuid = player.getUniqueID().toString().replace("-", "");
                 ChatUtil.addChatMessage(NoCheatersEvents.createwarningmessage(datenow, uuid, playerName, mwPlayerData.wdr, gotautoreported));
             }
@@ -162,11 +162,18 @@ public class NameUtil {
 
             String username = gameProfileIn.getName();
             String uuid = id.toString().replace("-", "");
-            WDR wdr = null;
+            WDR wdr = WdredPlayers.getWdredMap().get(uuid);
             String extraPrefix = "";
             IChatComponent iExtraPrefix = null;
             String squadname = SquadEvent.getSquad().get(username);
             boolean isSquadMate = squadname != null;
+
+            if (wdr == null) {
+                wdr = WdredPlayers.getWdredMap().get(username);
+                if (wdr != null) {
+                    uuid = username;
+                }
+            }
 
             if (ConfigHandler.toggleicons) {
 
@@ -176,15 +183,6 @@ public class NameUtil {
                     iExtraPrefix = isquadprefix;
 
                 } else {
-
-                    wdr = WdredPlayers.getWdredMap().get(uuid);
-
-                    if (wdr == null) {
-                        wdr = WdredPlayers.getWdredMap().get(username);
-                        if (wdr != null) {
-                            uuid = username;
-                        }
-                    }
 
                     if (wdr != null) {
 

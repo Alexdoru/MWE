@@ -3,8 +3,8 @@ package fr.alexdoru.nocheatersmod.events;
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
-import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
@@ -28,17 +28,18 @@ import java.util.List;
 public class NoCheatersEvents {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
-    private static int reportQueue = 1;
 
     @SubscribeEvent
     public void onPlayerJoin(EntityJoinWorldEvent event) {
         if (event.entity instanceof EntityPlayer) {
+            // TODO tester l'impact sur les performances du try/catch block
+            //  Placing code inside a try-catch block inhibits certain optimizations that modern JVM implementations might otherwise perform.
             try {
                 if (event.entity instanceof EntityPlayerSP) {
                     /*Delaying the transformation for self because certain fields such as mc.theWorld.getScoreboard().getPlayersTeam(username) are null when you just joined the world*/
-                    new DelayedTask(() -> NameUtil.transformNametag((EntityPlayer) event.entity, false, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport), 1);
+                    new DelayedTask(() -> NameUtil.transformNametag((EntityPlayer) event.entity, true), 1);
                 } else {
-                    NameUtil.transformNametag((EntityPlayer) event.entity, false, ConfigHandler.togglewarnings, ConfigHandler.toggleautoreport);
+                    NameUtil.transformNametag((EntityPlayer) event.entity, true);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -54,13 +55,7 @@ public class NoCheatersEvents {
     public static boolean sendAutoReport(long datenow, String playerName, WDR wdr) {
         if (wdr.canBeAutoreported(datenow)) {
             wdr.timestamp = datenow;
-            new DelayedTask(() -> {
-                if (mc.thePlayer != null) {
-                    mc.thePlayer.sendChatMessage("/wdr " + playerName + " cheating");
-                }
-                reportQueue--;
-            }, 30 * reportQueue);
-            reportQueue++;
+            ReportQueue.INSTANCE.addPlayerToQueue(playerName);
             return true;
         }
         return false;
@@ -121,7 +116,7 @@ public class NoCheatersEvents {
                                     EnumChatFormatting.LIGHT_PURPLE + playername + "\n"
                                             + EnumChatFormatting.GREEN + "Reported at : " + EnumChatFormatting.YELLOW + DateUtil.localformatTimestamp(wdr.timestamp) + "\n"
                                             + EnumChatFormatting.GREEN + "Reported for :" + EnumChatFormatting.GOLD + cheats + "\n\n"
-                                            + EnumChatFormatting.YELLOW + "Click this message to stop receiving warnings for this player")))));
+                                            + EnumChatFormatting.YELLOW + "Click here to remove this player from your report list")))));
 
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " joined,"));
 
@@ -143,12 +138,21 @@ public class NoCheatersEvents {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " Report again").setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report this player again")))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + uuid + " " + playername))));
+        } else if ((FKCounterMod.isInMwGame || FKCounterMod.preGameLobby) && wdr.isOlderThanMaxAutoreport(datenow)) {
+            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " [Report Player]").setChatStyle(new ChatStyle()
+                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report this player again")))
+                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + uuid + " " + playername))));
+            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.YELLOW + " [Remove Player]").setChatStyle(new ChatStyle()
+                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to remove this player from your report list")))
+                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + uuid + " " + playername))));
+            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.RED + " It's been more than a week since you last manually reported that player, are you sure they are still cheating ? Report them again or Remove them from your report list."));
         }
 
         if (!FKCounterMod.preGameLobby) {
             allCheats.setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
-                            + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " cheating")))
+                            + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " cheating" + "\n\n"
+                            + ChatUtil.getReportingAdvice())))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + playername + " cheating")));
         }
 

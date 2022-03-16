@@ -20,6 +20,10 @@ public class LowHPIndicator {
             return;
         }
 
+        if (event.phase == TickEvent.Phase.START) {
+            return;
+        }
+
         if (mc.theWorld == null || mc.thePlayer == null) {
             return;
         }
