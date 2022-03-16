@@ -116,7 +116,7 @@ public class NoCheatersEvents {
                                     EnumChatFormatting.LIGHT_PURPLE + playername + "\n"
                                             + EnumChatFormatting.GREEN + "Reported at : " + EnumChatFormatting.YELLOW + DateUtil.localformatTimestamp(wdr.timestamp) + "\n"
                                             + EnumChatFormatting.GREEN + "Reported for :" + EnumChatFormatting.GOLD + cheats + "\n\n"
-                                            + EnumChatFormatting.YELLOW + "Click this message to stop receiving warnings for this player")))));
+                                            + EnumChatFormatting.YELLOW + "Click here to remove this player from your report list")))));
 
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " joined,"));
 
@@ -138,6 +138,14 @@ public class NoCheatersEvents {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " Report again").setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report this player again")))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + uuid + " " + playername))));
+        } else if ((FKCounterMod.isInMwGame || FKCounterMod.preGameLobby) && wdr.isOlderThanMaxAutoreport(datenow)) {
+            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " [Report Player]").setChatStyle(new ChatStyle()
+                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report this player again")))
+                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + uuid + " " + playername))));
+            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.YELLOW + " [Remove Player]").setChatStyle(new ChatStyle()
+                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to remove this player from your report list")))
+                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + uuid + " " + playername))));
+            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.RED + " It's been more than a week since you last manually reported that player, are you sure they are still cheating ? Report them again or Remove them from your report list."));
         }
 
         if (!FKCounterMod.preGameLobby) {
