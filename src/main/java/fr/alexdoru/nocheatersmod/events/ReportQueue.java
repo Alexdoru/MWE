@@ -24,10 +24,10 @@ public class ReportQueue {
         if (counter <= 0 && !reportQueue.isEmpty() && mc.thePlayer != null) {
             String playername = reportQueue.remove(0);
             mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
-            counter = 400;
+            counter = 500;
         }
 
-        if (reportQueue.isEmpty()) {
+        if (isReportQueueInactive()) {
             MinecraftForge.EVENT_BUS.unregister(this);
         }
 
@@ -36,7 +36,7 @@ public class ReportQueue {
     }
 
     public void addPlayerToQueue(String playername) {
-        if (reportQueue.isEmpty()) {
+        if (isReportQueueInactive()) {
             MinecraftForge.EVENT_BUS.register(this);
             counter = 0;
         }
@@ -44,11 +44,15 @@ public class ReportQueue {
     }
 
     public void addPlayerToQueue(String playername, int tickDelay) {
-        if (reportQueue.isEmpty()) {
+        if (isReportQueueInactive()) {
             MinecraftForge.EVENT_BUS.register(this);
             counter = tickDelay;
         }
         reportQueue.add(playername);
+    }
+
+    private boolean isReportQueueInactive() {
+        return counter <= 0 && reportQueue.isEmpty();
     }
 
 }
