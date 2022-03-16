@@ -209,7 +209,7 @@ public class CommandNocheaters extends CommandBase {
 
                 } else if (logindata.isOnline()) { // player is online
 
-                    imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " Online"));
+                    imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "    Online"));
 
                 } else { // print lastlogout
 
