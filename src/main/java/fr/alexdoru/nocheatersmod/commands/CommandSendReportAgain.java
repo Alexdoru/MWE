@@ -1,5 +1,8 @@
 package fr.alexdoru.nocheatersmod.commands;
 
+import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import net.minecraft.client.Minecraft;
@@ -36,10 +39,16 @@ public class CommandSendReportAgain extends CommandBase {
         String playername = args[1];
         WDR wdr = WdredPlayers.getWdredMap().get(uuid);
         if (wdr != null) {
-            mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
             long time = (new Date()).getTime();
-            wdr.timestamp = time;
-            wdr.timeLastManualReport = time;
+            if (FKCounterMod.preGameLobby && ConfigHandler.toggleautoreport) {
+                wdr.timeLastManualReport = time - WDR.TIME_BETWEEN_AUTOREPORT;
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Your cheating report against " + EnumChatFormatting.LIGHT_PURPLE + playername
+                        + EnumChatFormatting.GREEN + " will be sent during the game."));
+            } else {
+                mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
+                wdr.timestamp = time;
+                wdr.timeLastManualReport = time;
+            }
         }
     }
 
