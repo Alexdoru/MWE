@@ -10,11 +10,13 @@ public class WDR {
     private static final long TIME_BETWEEN_AUTOREPORT = 40L * 60L * 1000L; //40 minutes
     private static final long TIME_MAX_AUTOREPORT = 7L * 24L * 60L * 60L * 1000L; //1 week
 
-    public final ArrayList<String> hacks;
     public long timestamp;
+    public long timeLastManualReport;
+    public final ArrayList<String> hacks;
 
-    public WDR(long timestamp, ArrayList<String> hacks) {
+    public WDR(long timestamp, long timeLastManualReport, ArrayList<String> hacks) {
         this.timestamp = timestamp;
+        this.timeLastManualReport = timeLastManualReport;
         this.hacks = hacks;
     }
 
