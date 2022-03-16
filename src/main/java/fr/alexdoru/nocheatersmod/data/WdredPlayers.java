@@ -1,6 +1,7 @@
 package fr.alexdoru.nocheatersmod.data;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.nocheatersmod.NoCheatersMod;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,6 +14,10 @@ public class WdredPlayers {
 
     private static final long TIME_TRANSFORM_TIMESTAMPED_REPORT = 14L * 24L * 60L * 60L * 1000L;//14 days
     private static final HashMap<String, WDR> wdred = new HashMap<>();
+    /**
+     * In the wdred file the data is saved with the following pattern
+     * uuid timestamp timeLastManualReport hack1 hack2 hack3 hack4 hack5
+     */
     public static File wdrsFile;
 
     public static HashMap<String, WDR> getWdredMap() {
@@ -26,7 +31,7 @@ public class WdredPlayers {
 
                 String uuid = entry.getKey();
                 WDR wdr = entry.getValue();
-                writer.write(uuid + " " + wdr.timestamp);
+                writer.write(uuid + " " + wdr.timestamp + " " + wdr.timeLastManualReport);
                 for (String hack : wdr.hacks) {
                     writer.write(" " + hack);
                 }
@@ -34,47 +39,65 @@ public class WdredPlayers {
             }
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            NoCheatersMod.logger.error("Failed to write date to the wdr file");
         }
     }
 
     public static void loadReportedPlayers() {
         if (!wdrsFile.exists()) {
+            NoCheatersMod.logger.info("Couldn't find existing wdr file");
             return;
         }
         try {
 
             long datenow = (new Date()).getTime();
-
             BufferedReader reader = new BufferedReader(new FileReader(wdrsFile));
+
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 String[] split = line.split(" ");
                 if (split.length >= 3) {
 
+                    boolean oldDataFormat = false;
+                    String uuid = split[0];
                     long timestamp = 0L;
+                    long timeManualReport = 0L;
+
                     try {
                         timestamp = Long.parseLong(split[1]);
+                        try {
+                            timeManualReport = Long.parseLong(split[2]);
+                        } catch (Exception e) {
+                            timeManualReport = timestamp;
+                            oldDataFormat = true;
+                        }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        NoCheatersMod.logger.error("Failed to parse timestamp for : " + uuid);
                     }
 
                     if (ConfigHandler.deleteReports && datenow > timestamp + ConfigHandler.timeDeleteReport) {
                         continue;
                     }
 
-                    ArrayList<String> hacks = transformOldReports(split, datenow);
+                    ArrayList<String> hacks = transformOldReports(
+                            Arrays.copyOfRange(split, oldDataFormat ? 2 : 3, split.length),
+                            datenow
+                    );
 
                     if (hacks.contains("nick") && (datenow > timestamp + 86400000L)) { // 24hours
                         continue;
                     }
 
-                    wdred.put(split[0], new WDR(timestamp, hacks));
+                    wdred.put(uuid, new WDR(timestamp, timeManualReport, hacks));
+
                 }
             }
+
             reader.close();
+
         } catch (Exception e) {
-            e.printStackTrace();
+            NoCheatersMod.logger.error("Failed to read the wdr file");
         }
+
     }
 
     /**
@@ -84,10 +107,10 @@ public class WdredPlayers {
 
         ArrayList<String> hacks = new ArrayList<>();
 
-        if (split[2].charAt(0) == '-' && datenow - Long.parseLong(split[5]) - TIME_TRANSFORM_TIMESTAMPED_REPORT > 0) {
+        if (split[0].charAt(0) == '-' && datenow - Long.parseLong(split[3]) - TIME_TRANSFORM_TIMESTAMPED_REPORT > 0) {
 
             int j = 0; // indice of timestamp
-            for (int i = 2; i < split.length; i++) {
+            for (int i = 0; i < split.length; i++) {
 
                 if (split[i].charAt(0) == '-') { // serverID
                     j = i;
@@ -101,7 +124,7 @@ public class WdredPlayers {
 
         } else {
 
-            hacks.addAll(Arrays.asList(split).subList(2, split.length));
+            hacks.addAll(Arrays.asList(split));
             return hacks;
 
         }
