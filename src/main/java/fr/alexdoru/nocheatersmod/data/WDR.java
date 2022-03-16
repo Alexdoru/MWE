@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 public class WDR {
 
+    private static final long TIME_BETWEEN_AUTOREPORT = 40L * 60L * 1000L; //40 minutes
+    private static final long TIME_MAX_AUTOREPORT = 7L * 24L * 60L * 60L * 1000L; //1 week
+
     public final ArrayList<String> hacks;
     public long timestamp;
 
@@ -34,7 +37,7 @@ public class WDR {
     }
 
     public boolean canBeReported(long datenow) {
-        return datenow - this.timestamp - ConfigHandler.timeBetweenReports > 0;
+        return datenow - this.timestamp - TIME_BETWEEN_AUTOREPORT > 0;
     }
 
     public boolean canBeAutoreported(long datenow) {
@@ -42,7 +45,7 @@ public class WDR {
                 && FKCounterMod.isInMwGame
                 && !FKCounterMod.isitPrepPhase
                 && this.canBeReported(datenow)
-                && 0 < ConfigHandler.timeAutoReport - datenow + this.timestamp;
+                && 0 < TIME_MAX_AUTOREPORT - datenow + this.timestamp;
     }
 
 }
