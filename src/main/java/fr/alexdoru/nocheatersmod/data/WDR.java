@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class WDR {
 
-    private static final long TIME_BETWEEN_AUTOREPORT = 40L * 60L * 1000L; //40 minutes
+    public static final long TIME_BETWEEN_AUTOREPORT = 40L * 60L * 1000L; //40 minutes
     private static final long TIME_MAX_AUTOREPORT = 7L * 24L * 60L * 60L * 1000L; //1 week
 
     public long timestamp;
