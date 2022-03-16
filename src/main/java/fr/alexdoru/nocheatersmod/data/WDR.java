@@ -42,12 +42,16 @@ public class WDR {
         return datenow - timestamp - TIME_BETWEEN_AUTOREPORT > 0;
     }
 
+    public boolean isOlderThanMaxAutoreport(long datenow) {
+        return datenow - timeLastManualReport - TIME_MAX_AUTOREPORT > 0;
+    }
+
     public boolean canBeAutoreported(long datenow) {
         return ConfigHandler.toggleautoreport
                 && FKCounterMod.isInMwGame
                 && !FKCounterMod.isitPrepPhase
                 && canBeReported(datenow)
-                && 0 < TIME_MAX_AUTOREPORT - datenow + timestamp;
+                && !isOlderThanMaxAutoreport(datenow);
     }
 
 }

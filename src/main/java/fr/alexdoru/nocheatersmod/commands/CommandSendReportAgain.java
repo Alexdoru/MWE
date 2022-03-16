@@ -37,7 +37,9 @@ public class CommandSendReportAgain extends CommandBase {
         WDR wdr = WdredPlayers.getWdredMap().get(uuid);
         if (wdr != null) {
             mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
-            wdr.timestamp = (new Date()).getTime();
+            long time = (new Date()).getTime();
+            wdr.timestamp = time;
+            wdr.timeLastManualReport = time;
         }
     }
 
