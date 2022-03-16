@@ -323,6 +323,12 @@ public class ChatUtil {
                 + EnumChatFormatting.RED + "and not before the game starts or in the lobby.";
     }
 
+    public static String getChatReportingAdvice() {
+        return EnumChatFormatting.RED + "To make reporting efficient, be sure to report"
+                + EnumChatFormatting.DARK_RED + EnumChatFormatting.BOLD + "when you are ingame with the cheater"
+                + EnumChatFormatting.RED + "and not before the game starts or in the lobby.";
+    }
+
     public static IChatComponent formattedNameWithReportButton(String playername, String formattedName) {
         return new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + playername + " cheating"))
