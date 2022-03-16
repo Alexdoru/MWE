@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 
 public class WdredPlayers {
 
+    private static final long TIME_TRANSFORM_TIMESTAMPED_REPORT = 14L * 24L * 60L * 60L * 1000L;//14 days
     private static final HashMap<String, WDR> wdred = new HashMap<>();
     public static File wdrsFile;
 
@@ -77,13 +78,13 @@ public class WdredPlayers {
     }
 
     /**
-     * Transforms the timestamped reports older than a month into normal reports
+     * Transforms the timestamped reports older into normal reports
      */
     private static ArrayList<String> transformOldReports(String[] split, long datenow) {
 
         ArrayList<String> hacks = new ArrayList<>();
 
-        if (split[2].charAt(0) == '-' && datenow > Long.parseLong(split[5]) + 2592000000L) {
+        if (split[2].charAt(0) == '-' && datenow - Long.parseLong(split[5]) - TIME_TRANSFORM_TIMESTAMPED_REPORT > 0) {
 
             int j = 0; // indice of timestamp
             for (int i = 2; i < split.length; i++) {
@@ -102,6 +103,7 @@ public class WdredPlayers {
 
             hacks.addAll(Arrays.asList(split).subList(2, split.length));
             return hacks;
+
         }
 
     }
