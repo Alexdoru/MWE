@@ -73,8 +73,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 textLines.add(EnumChatFormatting.RED + "Warning : " + EnumChatFormatting.LIGHT_PURPLE + "player" + EnumChatFormatting.GRAY + " joined, Cheats : " + EnumChatFormatting.GOLD + "cheat");
                 break;
             case 2:
-                textLines.add(EnumChatFormatting.GREEN + "Automatically sends a report for players saved in NoCheaters");
-                textLines.add(EnumChatFormatting.GREEN + "It sends a report every game for cheaters present in your game");
+                textLines.add(EnumChatFormatting.GREEN + "Every game it automatically reports players saved in NoCheaters");
                 textLines.add(EnumChatFormatting.GREEN + "It does it for a week before asking you if they are still cheating or not");
                 textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls, the reports are sent after the walls fall.");
                 textLines.add("");
