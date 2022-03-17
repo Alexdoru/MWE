@@ -37,6 +37,7 @@ public class CommandWDR extends CommandBase {
     private static final char timemarkedreportkey = '#';
     private static int nbTimeMarks = 0;
     private static final List<Long> commandUsageTimeList = new ArrayList<>();
+    private static final Minecraft mc = Minecraft.getMinecraft();
 
     public static void addTimeMark() {
         nbTimeMarks++;
@@ -191,7 +192,7 @@ public class CommandWDR extends CommandBase {
                 message.append(" ").append(timerOnReplay.equals("?") ? "" : timerOnReplay);
             }
 
-            (Minecraft.getMinecraft()).thePlayer.sendChatMessage(message.toString()); //sends command to server
+            mc.thePlayer.sendChatMessage(message.toString()); //sends command to server
 
             long l = System.currentTimeMillis();
             commandUsageTimeList.removeIf(o -> (o + 2 * 60 * 1000L < l));
@@ -208,7 +209,7 @@ public class CommandWDR extends CommandBase {
             }
 
             if (playSound) {
-                Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(reportDeniedSound, 1.0F));
+                mc.getSoundHandler().playSound(PositionedSoundRecord.create(reportDeniedSound, 1.0F));
             }
 
             CachedMojangUUID apireq;
@@ -239,7 +240,7 @@ public class CommandWDR extends CommandBase {
             if (uuid == null) {  // The playername doesn't exist or never joined hypixel
 
                 // search for the player's gameprofile in the tablist
-                for (NetworkPlayerInfo networkplayerinfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+                for (NetworkPlayerInfo networkplayerinfo : mc.getNetHandler().getPlayerInfoMap()) {
                     if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(args[0])) {
                         uuid = networkplayerinfo.getGameProfile().getName();
                         playername = uuid;
