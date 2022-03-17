@@ -11,6 +11,7 @@ import java.util.List;
 public class ReportQueue {
 
     public static final ReportQueue INSTANCE = new ReportQueue();
+    private static final int TIME_BETWEEN_REPORTS = 30 * 20; // ticks
     private final Minecraft mc = Minecraft.getMinecraft();
     private int counter;
     private final List<String> reportQueue = new ArrayList<>();
@@ -24,7 +25,7 @@ public class ReportQueue {
         if (counter <= 0 && !reportQueue.isEmpty() && mc.thePlayer != null) {
             String playername = reportQueue.remove(0);
             mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
-            counter = 500;
+            counter = TIME_BETWEEN_REPORTS;
         }
 
         if (isReportQueueInactive()) {
