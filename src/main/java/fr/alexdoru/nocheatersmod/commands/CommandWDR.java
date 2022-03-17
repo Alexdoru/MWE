@@ -279,7 +279,7 @@ public class CommandWDR extends CommandBase {
                 }
 
                 if (isaNick) {
-                    argsinWDR.add("nick");
+                    argsinWDR.add(WDR.NICK);
                 }
 
                 WDR newreport = new WDR(timestamp, timestamp, argsinWDR);
@@ -318,7 +318,7 @@ public class CommandWDR extends CommandBase {
                 }
 
                 if (isaNick) {
-                    argsinWDR.add("nick");
+                    argsinWDR.add(WDR.NICK);
                 }
                 WdredPlayers.getWdredMap().put(uuid, new WDR(time, time, argsinWDR));
                 NameUtil.updateGameProfileAndName(playername);
