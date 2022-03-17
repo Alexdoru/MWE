@@ -12,7 +12,8 @@ import java.util.Map.Entry;
 
 public class WdredPlayers {
 
-    private static final long TIME_TRANSFORM_TIMESTAMPED_REPORT = 14L * 24L * 60L * 60L * 1000L;//14 days
+    private static final long TIME_TRANSFORM_NICKED_REPORT = 86400000L; // 24hours
+    private static final long TIME_TRANSFORM_TIMESTAMPED_REPORT = 14L * 24L * 60L * 60L * 1000L; //14 days
     private static final HashMap<String, WDR> wdred = new HashMap<>();
     /**
      * In the wdred file the data is saved with the following pattern
@@ -83,7 +84,7 @@ public class WdredPlayers {
                             datenow
                     );
 
-                    if (hacks.contains("nick") && (datenow > timestamp + 86400000L)) { // 24hours
+                    if (hacks.contains(WDR.NICK) && (datenow > timestamp + TIME_TRANSFORM_NICKED_REPORT)) {
                         continue;
                     }
 
