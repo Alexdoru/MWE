@@ -29,6 +29,10 @@ public class MinecraftHook {
         if (mc.theWorld != null && mc.thePlayer != null) {
             mc.thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "[Debug]: " + EnumChatFormatting.WHITE + settingName + ":" + (settingIn ? EnumChatFormatting.GREEN + " On" : EnumChatFormatting.RED + " Off")));
         }
+        if ("Hitboxes".equals(settingName)) {
+            ConfigHandler.isDebugHitboxOn = settingIn;
+            ConfigHandler.saveConfig();
+        }
     }
 
     private static boolean checkIfHoldingSword(EntityPlayerSP thePlayer) {
