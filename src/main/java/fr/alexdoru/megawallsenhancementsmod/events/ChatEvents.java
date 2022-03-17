@@ -54,27 +54,24 @@ public class ChatEvents {
 
     private static boolean parseReportMessage(String messageSender, String msgIn) {
 
-        if (ConfigHandler.reportsuggestions || ConfigHandler.autoreportSuggestions) {
+        Matcher matcher1 = REPORT_PATTERN1.matcher(msgIn);
+        Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);
 
-            Matcher matcher1 = REPORT_PATTERN1.matcher(msgIn);
-            Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);
-
-            if (matcher1.matches()) {
-                String name = matcher1.group(1);
-                if (isAValidName(name)) {
-                    handleReportSuggestion(name, "bhop");
-                    handleAutoReportSuggestion(messageSender, name);
-                }
-                return true;
-            } else if (matcher2.matches()) {
-                String name = matcher2.group(1);
-                String cheat = matcher2.group(2);
-                if (isAValidCheat(cheat) && isAValidName(name)) {
-                    handleReportSuggestion(name, cheat);
-                    handleAutoReportSuggestion(messageSender, name);
-                }
-                return true;
+        if (matcher1.matches()) {
+            String name = matcher1.group(1);
+            if (isAValidName(name)) {
+                handleReportSuggestion(name, "bhop");
+                handleAutoReportSuggestion(messageSender, name);
             }
+            return true;
+        } else if (matcher2.matches()) {
+            String name = matcher2.group(1);
+            String cheat = matcher2.group(2);
+            if (isAValidCheat(cheat) && isAValidName(name)) {
+                handleReportSuggestion(name, cheat);
+                handleAutoReportSuggestion(messageSender, name);
+            }
+            return true;
         }
 
         return false;
@@ -211,7 +208,7 @@ public class ChatEvents {
 
             if (a && msg.equals("Thanks for your Cheating (Hacking) report. We understand your concerns and it will be reviewed as soon as possible.")) {
                 long l = System.currentTimeMillis();
-                if (l - t < 10000L) {
+                if (l - t < 20000L) {
                     event.setCanceled(true);
                 }
                 a = false;
