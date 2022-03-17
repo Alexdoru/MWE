@@ -13,7 +13,7 @@ import java.util.Random;
 public class ReportQueue {
 
     public static final ReportQueue INSTANCE = new ReportQueue();
-    private static final int TIME_BETWEEN_REPORTS = 90 * 20; // ticks
+    private static final int TIME_BETWEEN_REPORTS = 60 * 20; // ticks
     private final Minecraft mc = Minecraft.getMinecraft();
     private int counter;
     private final List<ReportInQueue> queueList = new ArrayList<>();
