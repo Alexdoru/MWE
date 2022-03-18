@@ -114,7 +114,8 @@ public class NoCheatersEvents {
                             .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + uuid + " " + playername))
                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
                                     EnumChatFormatting.LIGHT_PURPLE + playername + "\n"
-                                            + EnumChatFormatting.GREEN + "Reported at : " + EnumChatFormatting.YELLOW + DateUtil.localformatTimestamp(wdr.timestamp) + "\n"
+                                            + EnumChatFormatting.GREEN + "Last report : " + EnumChatFormatting.YELLOW + DateUtil.localformatTimestamp(wdr.timestamp) + "\n"
+                                            + EnumChatFormatting.GREEN + "Last manual report : " + EnumChatFormatting.YELLOW + DateUtil.localformatTimestamp(wdr.timeLastManualReport) + "\n"
                                             + EnumChatFormatting.GREEN + "Reported for :" + EnumChatFormatting.GOLD + cheats + "\n\n"
                                             + EnumChatFormatting.YELLOW + "Click here to remove this player from your report list")))));
 
