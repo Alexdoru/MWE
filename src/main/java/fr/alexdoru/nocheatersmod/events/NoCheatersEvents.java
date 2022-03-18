@@ -79,7 +79,7 @@ public class NoCheatersEvents {
                 }
                 String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
                 String playerName = networkPlayerInfo.getGameProfile().getName();
-                boolean gotautoreported = sendAutoReport(datenow, playerName, wdr);
+                boolean gotautoreported = !wdr.isCheating() || sendAutoReport(datenow, playerName, wdr);
                 list.add(createwarningmessage(datenow, uuid, playerName, wdr, gotautoreported));
             }
 
@@ -126,7 +126,9 @@ public class NoCheatersEvents {
             for (String hack : wdr.hacks) {
                 if (hack.equalsIgnoreCase("bhop")) {
                     allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_RED + hack + " "));
-                } else if (hack.equalsIgnoreCase(WDR.NICK)) {
+                } else if (hack.contains(WDR.IGNORED)) {
+                    allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + hack + " "));
+                }else if (hack.equalsIgnoreCase(WDR.NICK)) {
                     allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_PURPLE + hack + " "));
                 } else {
                     allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + hack + " "));

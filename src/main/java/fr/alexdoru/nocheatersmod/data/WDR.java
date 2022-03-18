@@ -40,6 +40,10 @@ public class WDR {
         return compare(wdr, this);
     }
 
+    public boolean isCheating() {
+        return !(hacks.size() == 1 && hacks.contains(IGNORED));
+    }
+
     public boolean isNicked() {
         return hacks.contains(NICK);
     }
