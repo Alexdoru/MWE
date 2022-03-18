@@ -58,6 +58,8 @@ public class ScoreboardEvent {
 
             if (amountWitherAlive == 1 && prevAmountWitherAlive > 1) {
                 MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.THIRD_WITHER_DEATH));
+            } else if (amountWitherAlive == 0 && prevAmountWitherAlive > 0) {
+                MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.DEATHMATCH_START));
             }
 
             if (!gameId.equals(prevGameId)) {

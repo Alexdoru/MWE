@@ -148,7 +148,7 @@ public class ChatEvents {
 
     @SubscribeEvent
     public void onMWGameStart(MwGameEvent event) {
-        if (event.getType() == MwGameEvent.EventType.GAME_START) {
+        if (event.getType() == MwGameEvent.EventType.DEATHMATCH_START) {
             reportSuggestionList.clear();
         }
     }
