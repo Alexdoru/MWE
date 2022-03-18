@@ -219,7 +219,7 @@ public class CommandNocheaters extends CommandBase {
 
             } else {
 
-                imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_PURPLE + " Nick"));
+                imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + "uuid" + EnumChatFormatting.DARK_PURPLE + " Nick"));
 
             }
 
