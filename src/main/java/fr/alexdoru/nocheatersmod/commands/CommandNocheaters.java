@@ -394,7 +394,13 @@ public class CommandNocheaters extends CommandBase {
 
     private IChatComponent createIgnoreLine(String uuid, WDR wdr) throws ApiException {
 
-        if (!wdr.isNicked()) {
+        if (wdr.isNicked()) {
+
+            return new ChatComponentText(EnumChatFormatting.GOLD + "uuid").setChatStyle(new ChatStyle()
+                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to un-ignore that player")))
+                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, getCommandUsage(null) + " ignoreremove " + uuid + " " + uuid)));
+
+        } else {
 
             HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
             LoginData logindata = new LoginData(playerdata.getPlayerData());
@@ -402,50 +408,51 @@ public class CommandNocheaters extends CommandBase {
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to un-ignore that player")))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, getCommandUsage(null) + " ignoreremove " + uuid + " " + logindata.getdisplayname())));
 
-        } else {
-
-            return new ChatComponentText(EnumChatFormatting.GOLD + "uuid").setChatStyle(new ChatStyle()
-                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to un-ignore that player")))
-                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, getCommandUsage(null) + " ignoreremove " + uuid + " " + uuid)));
-
         }
 
     }
 
-    private IChatComponent createReportLine(String uuid, WDR wdr, boolean doStalk) throws ApiException {// TODO make the playername over event show the warning hover text ? and make the time thing show the stalk command
+    private IChatComponent createReportLine(String uuid, WDR wdr, boolean doStalk) throws ApiException {
 
         IChatComponent imsg = new ChatComponentText("");
 
         if (doStalk) {
 
-            if (!wdr.isNicked()) {
+            if (wdr.isNicked()) {
+
+                imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + "[MVP" + EnumChatFormatting.RED + "++" + EnumChatFormatting.GOLD + "]" + " "
+                        + EnumChatFormatting.GOLD + uuid + EnumChatFormatting.DARK_PURPLE + " Nick"));
+
+            } else {
 
                 HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
                 LoginData logindata = new LoginData(playerdata.getPlayerData());
-                imsg.appendSibling(new ChatComponentText(logindata.getFormattedName()).setChatStyle(new ChatStyle()
-                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to run : /stalk " + logindata.getdisplayname())))
-                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk " + logindata.getdisplayname()))));
+                imsg.appendSibling(NoCheatersEvents.createPlayerNameWithHoverText(logindata.getFormattedName(), uuid, wdr, EnumChatFormatting.WHITE)[0]);
+
+                IChatComponent ismgStatus = new ChatComponentText("");
 
                 if (logindata.isHidingFromAPI()) {
 
                     logindata.parseLatestActivity(playerdata.getPlayerData());
                     long latestActivityTime = logindata.getLatestActivityTime();
                     String latestActivity = logindata.getLatestActivity();
-                    imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + " " + latestActivity + " " + EnumChatFormatting.YELLOW + DateUtil.timeSince(latestActivityTime)));
+                    ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + " " + latestActivity + " " + EnumChatFormatting.YELLOW + DateUtil.timeSince(latestActivityTime)));
 
                 } else if (logindata.isOnline()) { // player is online
 
-                    imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "    Online"));
+                    ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "    Online"));
 
                 } else { // print lastlogout
 
-                    imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + " Lastlogout " + EnumChatFormatting.YELLOW + DateUtil.timeSince(logindata.getLastLogout())));
+                    ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + " Lastlogout " + EnumChatFormatting.YELLOW + DateUtil.timeSince(logindata.getLastLogout())));
 
                 }
 
-            } else {
+                ismgStatus.setChatStyle(new ChatStyle()
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to run : /stalk " + logindata.getdisplayname())))
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk " + logindata.getdisplayname())));
 
-                imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + "uuid" + EnumChatFormatting.DARK_PURPLE + " Nick"));
+                imsg.appendSibling(ismgStatus);
 
             }
 
