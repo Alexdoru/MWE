@@ -119,7 +119,7 @@ public class NameUtil {
             return;
         }
 
-        if (mwPlayerData.wdr != null) { // player was reported // FIXME for some players it will be null all the time, it will never report them
+        if (mwPlayerData.wdr != null && mwPlayerData.wdr.isCheating()) { // player was reported // FIXME for some players it will be null all the time, it will never report them
             String playerName = player.getName();
             long datenow = (new Date()).getTime();
             boolean gotautoreported = NoCheatersEvents.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
@@ -186,12 +186,16 @@ public class NameUtil {
 
                     if (wdr != null) {
 
-                        if (wdr.hacks.contains("bhop")) {
-                            extraPrefix = prefix_bhop;
-                            iExtraPrefix = iprefix_bhop;
-                        } else {
-                            extraPrefix = prefix;
-                            iExtraPrefix = iprefix;
+                        if (wdr.isCheating()) {
+
+                            if (wdr.hacks.contains("bhop")) {
+                                extraPrefix = prefix_bhop;
+                                iExtraPrefix = iprefix_bhop;
+                            } else {
+                                extraPrefix = prefix;
+                                iExtraPrefix = iprefix;
+                            }
+
                         }
 
                     } else { //scangame
