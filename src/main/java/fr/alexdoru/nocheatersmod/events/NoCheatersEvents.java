@@ -97,11 +97,7 @@ public class NoCheatersEvents {
 
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " joined,"));
 
-        if (!disableReportButton && FKCounterMod.isInMwGame && !FKCounterMod.isitPrepPhase && wdr.canBeReported(datenow)) {
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " Report again").setChatStyle(new ChatStyle()
-                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report this player again")))
-                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + uuid + " " + playername))));
-        } else if ((FKCounterMod.isInMwGame || FKCounterMod.preGameLobby) && wdr.isOlderThanMaxAutoreport(datenow)) {
+        if ((FKCounterMod.isInMwGame || FKCounterMod.preGameLobby) && wdr.isOlderThanMaxAutoreport(datenow)) {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " [Report Player]").setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report this player again")))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + uuid + " " + playername))));
@@ -109,6 +105,10 @@ public class NoCheatersEvents {
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to remove this player from your report list")))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + uuid + " " + playername))));
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.RED + " It's been more than a week since you last manually reported that player, are you sure they are still cheating ? Report them again or Remove them from your report list."));
+        } else if (!disableReportButton && FKCounterMod.isInMwGame && !FKCounterMod.isitPrepPhase && wdr.canBeReported(datenow)) {
+            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " Report again").setChatStyle(new ChatStyle()
+                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report this player again")))
+                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + uuid + " " + playername))));
         }
 
         if (!FKCounterMod.preGameLobby) {
