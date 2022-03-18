@@ -1,18 +1,18 @@
 package fr.alexdoru.nocheatersmod.commands;
 
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
+import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
+import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
+import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
@@ -158,14 +158,220 @@ public class CommandNocheaters extends CommandBase {
 
             });
 
+        } else if (args[0].equalsIgnoreCase("ignore")) {
+
+            if (args.length == 1) {
+                addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + getCommandUsage(sender) + " ignore <playername>"));
+            } else {
+
+                Multithreading.addTaskToQueue(() -> {
+
+                    CachedMojangUUID apireq;
+                    String uuid = null;
+                    String playername = args[1];
+                    boolean isaNick = false;
+
+                    try {
+                        apireq = new CachedMojangUUID(playername);
+                        uuid = apireq.getUuid();
+                        playername = apireq.getName();
+                        if (uuid != null && !HypixelApiKeyUtil.apiKeyIsNotSetup()) {
+                            CachedHypixelPlayerData playerdata;
+                            try {
+                                playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                                LoginData loginData = new LoginData(playerdata.getPlayerData());
+                                if (loginData.hasNeverJoinedHypixel()) {
+                                    uuid = null;
+                                } else if (!playername.equals(loginData.getdisplayname())) {
+                                    uuid = null;
+                                }
+                            } catch (ApiException ignored) {
+                                uuid = null;
+                            }
+                        }
+                    } catch (ApiException ignored) {
+                    }
+
+                    if (uuid == null) {  // The playername doesn't exist or never joined hypixel
+
+                        // search for the player's gameprofile in the tablist
+                        for (NetworkPlayerInfo networkplayerinfo : mc.getNetHandler().getPlayerInfoMap()) {
+                            if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(args[0])) {
+                                uuid = networkplayerinfo.getGameProfile().getName();
+                                playername = uuid;
+                                isaNick = true;
+                            }
+                        }
+
+                        if (!isaNick) { // couldn't find the nicked player in the tab list
+                            addChatMessage(new ChatComponentText(getTagNoCheaters()
+                                    + invalidplayernameMsg(args[0]) + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist"));
+                            return null;
+                        }
+
+                    }
+
+                    WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+
+                    if (wdr != null) { // the player was already reported before
+
+                        if (!wdr.isIgnored()) {
+                            wdr.hacks.add(WDR.IGNORED);
+                        }
+
+                    } else { // the player wasn't reported before
+                        long time = (new Date()).getTime();
+                        ArrayList<String> hacks = new ArrayList<>();
+                        hacks.add(WDR.IGNORED);
+                        WdredPlayers.getWdredMap().put(uuid, new WDR(time, time, hacks));
+                    }
+
+                    addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You added " + EnumChatFormatting.RED + playername
+                            + EnumChatFormatting.GREEN + " to your ignore list, it will ignore all report suggestions from that player. Use : "
+                            + EnumChatFormatting.YELLOW + getCommandUsage(sender) + " ignorelist" + EnumChatFormatting.GREEN + " to list and remove poeple from the list."));
+                    return null;
+
+                });
+
+            }
+
+        } else if (args[0].equalsIgnoreCase("ignorelist")) {
+
+            if (HypixelApiKeyUtil.apiKeyIsNotSetup()) { //api key not setup
+                addChatMessage(new ChatComponentText(apikeyMissingErrorMsg()));
+                return;
+            }
+            addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Processing command..."));
+
+            Multithreading.addTaskToQueue(() -> {
+
+                int displaypage = 1;
+                int nbreport = 1; // pour compter le nb de report et en afficher que 8 par page
+                int nbpage = 1;
+
+                if (args.length > 1) {
+                    try {
+                        displaypage = parseInt(args[1]);
+                    } catch (NumberInvalidException e) {
+                        addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Not a valid number"));
+                        return null;
+                    }
+                }
+
+                IChatComponent imsgbody = new ChatComponentText("");
+                boolean warning = true;
+
+                for (Map.Entry<String, WDR> entry : WdredPlayers.getWdredMap().entrySet()) {
+
+                    if (entry.getValue().isIgnored()) {
+
+                        String uuid = entry.getKey();
+                        WDR wdr = entry.getValue();
+
+                        if (nbreport == 9) {
+                            nbreport = 1;
+                            nbpage++;
+                        }
+
+                        if (nbpage == displaypage) {
+                            try {
+                                imsgbody.appendSibling((createIgnoreLine(uuid, wdr))).appendSibling(new ChatComponentText("\n"));
+                                warning = false;
+                            } catch (ApiException e) {
+                                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+                            }
+                        }
+
+                        nbreport++;
+
+                    }
+
+                }
+
+                if (warning && nbreport == 1) {
+                    addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "No one in your ignore list"));
+                } else if (warning) {
+                    addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "No ignored players to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available."));
+                } else {
+
+                    IChatComponent imsg = new ChatComponentText(EnumChatFormatting.DARK_GRAY + ChatUtil.bar() + "\n" + "             ");
+                    String command = "/nocheaters ignorelist";
+
+                    if (displaypage > 1) {
+                        imsg.appendSibling(new ChatComponentText("" + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + " <<")
+                                .setChatStyle(new ChatStyle()
+                                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to view page " + (displaypage - 1))))
+                                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command + " " + (displaypage - 1)))));
+                    } else {
+                        imsg.appendSibling(new ChatComponentText("   "));
+                    }
+
+                    imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + " Ignore list (Page " + displaypage + " of " + nbpage + ") " + EnumChatFormatting.GOLD + "Click a name to un-ignore"));
+
+                    if (displaypage < nbpage) {
+                        imsg.appendSibling(new ChatComponentText("" + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + " >>")
+                                .setChatStyle(new ChatStyle()
+                                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to view page " + (displaypage + 1))))
+                                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command + " " + (displaypage + 1)))));
+                    }
+
+                    imsg.appendSibling(new ChatComponentText("\n"))
+                            .appendSibling(imsgbody)
+                            .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + ChatUtil.bar()));
+
+                    addChatMessage(imsg);
+
+                }
+
+                return null;
+
+            });
+
+        } else if (args[0].equals("ignoreremove")) {
+
+            if (args.length == 3) {
+
+                String uuid = args[1];
+                String playername = args[2];
+                WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+
+                if (wdr == null) {
+
+                    addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GOLD + playername + EnumChatFormatting.RED + " wasn't found in your ignore list"));
+
+                } else {
+
+                    if (wdr.isOnlyIgnored()) {
+                        WdredPlayers.getWdredMap().remove(uuid);
+                    } else {
+                        wdr.hacks.remove(WDR.IGNORED);
+                    }
+
+                    addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GOLD + playername
+                            + EnumChatFormatting.GREEN + " has been removed from your ignore list, you will now receive report suggestions from that player."));
+
+                }
+
+            } else {
+
+                addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_RED + "This shouldn't happen"));
+
+            }
+
         }
 
     }
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        String[] arguments = {"config", "reportlist", "stalkreportlist"};
-        return getListOfStringsMatchingLastWord(args, arguments);
+        String[] arguments = {"config", "ignore", "ignorelist", "reportlist", "stalkreportlist"};
+        if (args.length == 1) {
+            return getListOfStringsMatchingLastWord(args, arguments);
+        }
+        if (args.length == 2 && args[0].equals("ignore")) {
+            return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+        }
+        return null;
     }
 
     @Override
@@ -186,7 +392,27 @@ public class CommandNocheaters extends CommandBase {
         return temp;
     }
 
-    private IChatComponent createReportLine(String uuid, WDR wdr, boolean doStalk) throws ApiException {
+    private IChatComponent createIgnoreLine(String uuid, WDR wdr) throws ApiException {
+
+        if (!wdr.isNicked()) {
+
+            HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+            LoginData logindata = new LoginData(playerdata.getPlayerData());
+            return new ChatComponentText(logindata.getFormattedName()).setChatStyle(new ChatStyle()
+                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to un-ignore that player")))
+                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, getCommandUsage(null) + " ignoreremove " + uuid + " " + logindata.getdisplayname())));
+
+        } else {
+
+            return new ChatComponentText(EnumChatFormatting.GOLD + "uuid").setChatStyle(new ChatStyle()
+                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to un-ignore that player")))
+                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, getCommandUsage(null) + " ignoreremove " + uuid + " " + uuid)));
+
+        }
+
+    }
+
+    private IChatComponent createReportLine(String uuid, WDR wdr, boolean doStalk) throws ApiException {// TODO make the playername over event show the warning hover text ? and make the time thing show the stalk command
 
         IChatComponent imsg = new ChatComponentText("");
 

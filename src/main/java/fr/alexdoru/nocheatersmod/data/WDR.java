@@ -44,6 +44,10 @@ public class WDR {
         return !(hacks.size() == 1 && hacks.contains(IGNORED));
     }
 
+    public boolean isOnlyIgnored() {
+        return hacks.size() == 1 && hacks.contains(IGNORED);
+    }
+
     public boolean isNicked() {
         return hacks.contains(NICK);
     }
