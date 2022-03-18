@@ -4,10 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 import java.util.Map.Entry;
 
 public class WdredPlayers {
@@ -76,10 +73,13 @@ public class WdredPlayers {
                     }
 
                     if (ConfigHandler.deleteReports && datenow > timestamp + ConfigHandler.timeDeleteReport) {
-                        continue;
+                        ArrayList<String> hacks = transformOldReports(Arrays.copyOfRange(split, oldDataFormat ? 2 : 3, split.length));
+                        if (hacks.isEmpty()) {
+                            continue;
+                        }
                     }
 
-                    ArrayList<String> hacks = transformOldReports(
+                    ArrayList<String> hacks = filterTimestampedReports(
                             Arrays.copyOfRange(split, oldDataFormat ? 2 : 3, split.length),
                             datenow
                     );
@@ -102,9 +102,21 @@ public class WdredPlayers {
     }
 
     /**
+     * Deletes old reports exept if they are ignored players
+     */
+    private static ArrayList<String> transformOldReports(String[] split) {
+        ArrayList<String> hacks = new ArrayList<>();
+        List<String> splitList = Arrays.asList(split);
+        if (splitList.contains(WDR.IGNORED)) {
+            hacks.add(WDR.IGNORED);
+        }
+        return hacks;
+    }
+
+    /**
      * Transforms the timestamped reports older into normal reports
      */
-    private static ArrayList<String> transformOldReports(String[] split, long datenow) {
+    private static ArrayList<String> filterTimestampedReports(String[] split, long datenow) {
 
         ArrayList<String> hacks = new ArrayList<>();
 
