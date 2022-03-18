@@ -91,15 +91,14 @@ public class NoCheatersEvents {
 
     public static IChatComponent createwarningmessage(long datenow, String uuid, String playername, WDR wdr, boolean disableReportButton) {
 
-        IChatComponent imsg;
+        IChatComponent imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ");
         IChatComponent allCheats;
 
         if (wdr.hacks.get(0).charAt(0) == '-') {
             // format for timestamps reports : UUID timestamplastreport -serverID timeonreplay playernameduringgame timestampforcheat specialcheat cheat1 cheat2 cheat3 etc
             IChatComponent[] formattedmessageArray = createPlayerTimestampedMsg(playername, wdr, EnumChatFormatting.LIGHT_PURPLE);
             allCheats = formattedmessageArray[1];
-
-            imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ").appendSibling(formattedmessageArray[0]).appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " joined,"));
+            imsg.appendSibling(formattedmessageArray[0]);
 
         } else {
 
@@ -109,17 +108,14 @@ public class NoCheatersEvents {
                 cheats.append(" ").append(hack);
             }
 
-            imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ")
-                    .appendSibling(new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + playername).setChatStyle(new ChatStyle()
-                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + uuid + " " + playername))
-                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
-                                    EnumChatFormatting.LIGHT_PURPLE + playername + "\n"
-                                            + EnumChatFormatting.GREEN + "Last report : " + EnumChatFormatting.YELLOW + DateUtil.localformatTimestamp(wdr.timestamp) + "\n"
-                                            + EnumChatFormatting.GREEN + "Last manual report : " + EnumChatFormatting.YELLOW + DateUtil.localformatTimestamp(wdr.timeLastManualReport) + "\n"
-                                            + EnumChatFormatting.GREEN + "Reported for :" + EnumChatFormatting.GOLD + cheats + "\n\n"
-                                            + EnumChatFormatting.YELLOW + "Click here to remove this player from your report list")))));
-
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " joined,"));
+            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + playername).setChatStyle(new ChatStyle()
+                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + uuid + " " + playername))
+                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
+                            EnumChatFormatting.LIGHT_PURPLE + playername + "\n"
+                                    + EnumChatFormatting.GREEN + "Last report : " + EnumChatFormatting.YELLOW + DateUtil.localformatTimestamp(wdr.timestamp) + "\n"
+                                    + EnumChatFormatting.GREEN + "Last manual report : " + EnumChatFormatting.YELLOW + DateUtil.localformatTimestamp(wdr.timeLastManualReport) + "\n"
+                                    + EnumChatFormatting.GREEN + "Reported for :" + EnumChatFormatting.GOLD + cheats + "\n\n"
+                                    + EnumChatFormatting.YELLOW + "Click here to remove this player from your report list")))));
 
             allCheats = new ChatComponentText("");
 
@@ -128,7 +124,7 @@ public class NoCheatersEvents {
                     allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_RED + hack + " "));
                 } else if (hack.contains(WDR.IGNORED)) {
                     allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + hack + " "));
-                }else if (hack.equalsIgnoreCase(WDR.NICK)) {
+                } else if (hack.equalsIgnoreCase(WDR.NICK)) {
                     allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_PURPLE + hack + " "));
                 } else {
                     allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + hack + " "));
@@ -136,6 +132,8 @@ public class NoCheatersEvents {
             }
 
         }
+
+        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " joined,"));
 
         if (!disableReportButton && FKCounterMod.isInMwGame && !FKCounterMod.isitPrepPhase && wdr.canBeReported(datenow)) {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " Report again").setChatStyle(new ChatStyle()
