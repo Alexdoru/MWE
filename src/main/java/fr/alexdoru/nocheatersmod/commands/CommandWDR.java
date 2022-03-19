@@ -280,7 +280,7 @@ public class CommandWDR extends CommandBase {
                     //}
                 }
 
-                if (isaNick) {
+                if (isaNick && !argsinWDR.contains(WDR.NICK)) {
                     argsinWDR.add(WDR.NICK);
                 }
 
@@ -319,7 +319,7 @@ public class CommandWDR extends CommandBase {
                     argsinWDR.addAll(arraycheats);
                 }
 
-                if (isaNick) {
+                if (isaNick && !argsinWDR.contains(WDR.NICK)) {
                     argsinWDR.add(WDR.NICK);
                 }
                 WdredPlayers.getWdredMap().put(uuid, new WDR(time, time, argsinWDR));
