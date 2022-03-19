@@ -119,7 +119,7 @@ public class NoCheatersEvents {
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + playername + " cheating")));
         }
 
-        if (olderThanMaxAutoreport) {
+        if (!olderThanMaxAutoreport) {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Cheats : ")).appendSibling(allCheats);
         }
 
