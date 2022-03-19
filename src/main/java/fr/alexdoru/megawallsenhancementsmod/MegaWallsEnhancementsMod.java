@@ -5,8 +5,10 @@ import fr.alexdoru.megawallsenhancementsmod.commands.*;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.*;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -21,6 +23,7 @@ public class MegaWallsEnhancementsMod {
     public static final String modName = "MegaWallsEnhancements";
     public static final String version = "1.6";
     public static File configurationFile;
+    public static final KeyBinding toggleDroppedItemLimit = new KeyBinding("Toggle dropped item limit", 0, "MegaWallsEnhancements");
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -30,6 +33,8 @@ public class MegaWallsEnhancementsMod {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
+
+        ClientRegistry.registerKeyBinding(toggleDroppedItemLimit);
 
         MinecraftForge.EVENT_BUS.register(new GuiManager());
         MinecraftForge.EVENT_BUS.register(new ChatEvents());
@@ -55,7 +60,5 @@ public class MegaWallsEnhancementsMod {
         ClientCommandHandler.instance.registerCommand(new CommandCopyToClipboard());
 
     }
-
-    // why the fuck do I need to commit no changes to be able to cherry pick
 
 }
