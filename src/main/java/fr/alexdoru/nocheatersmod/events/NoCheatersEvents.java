@@ -94,10 +94,10 @@ public class NoCheatersEvents {
         IChatComponent[] imsgArray = createPlayerNameWithHoverText(playername, uuid, wdr, EnumChatFormatting.RED);
         IChatComponent imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ").appendSibling(imsgArray[0]);
         IChatComponent allCheats = imsgArray[1];
-
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " joined,"));
+        boolean olderThanMaxAutoreport = wdr.isOlderThanMaxAutoreport(datenow);
 
-        if ((FKCounterMod.isInMwGame || FKCounterMod.preGameLobby) && wdr.isOlderThanMaxAutoreport(datenow)) {
+        if (olderThanMaxAutoreport) {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " [Report Player]").setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report this player again")))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + uuid + " " + playername))));
@@ -119,7 +119,11 @@ public class NoCheatersEvents {
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + playername + " cheating")));
         }
 
-        return imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Cheats : ")).appendSibling(allCheats);
+        if (olderThanMaxAutoreport) {
+            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Cheats : ")).appendSibling(allCheats);
+        }
+
+        return imsg;
 
     }
 
