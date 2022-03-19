@@ -91,7 +91,7 @@ public class NoCheatersEvents {
 
     public static IChatComponent createwarningmessage(long datenow, String uuid, String playername, WDR wdr, boolean disableReportButton) {
 
-        IChatComponent[] imsgArray = createPlayerNameWithHoverText(playername, uuid, wdr, EnumChatFormatting.LIGHT_PURPLE);
+        IChatComponent[] imsgArray = createPlayerNameWithHoverText(playername, uuid, wdr, EnumChatFormatting.RED);
         IChatComponent imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ").appendSibling(imsgArray[0]);
         IChatComponent allCheats = imsgArray[1];
 
@@ -141,7 +141,7 @@ public class NoCheatersEvents {
             String oldname = "";
             long oldtimestamp = 0L;
             String oldgameID = "";
-            IChatComponent hoverText = new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + playername);
+            IChatComponent hoverText = new ChatComponentText(namecolor + playername);
 
             int j = 0;
             for (int i = 0; i < wdr.hacks.size(); i++) {
@@ -215,10 +215,10 @@ public class NoCheatersEvents {
                 cheats.append(" ").append(hack);
             }
 
-            IChatComponent imsg = new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + playername).setChatStyle(new ChatStyle()
+            IChatComponent imsg = new ChatComponentText(namecolor + playername).setChatStyle(new ChatStyle()
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + uuid + " " + playername))
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
-                            EnumChatFormatting.LIGHT_PURPLE + playername + "\n"
+                            namecolor + playername + "\n"
                                     + EnumChatFormatting.GREEN + "Last report : " + EnumChatFormatting.YELLOW + DateUtil.localformatTimestamp(wdr.timestamp) + "\n"
                                     + EnumChatFormatting.GREEN + "Last manual report : " + EnumChatFormatting.YELLOW + DateUtil.localformatTimestamp(wdr.timeLastManualReport) + "\n"
                                     + EnumChatFormatting.GREEN + "Reported for :" + EnumChatFormatting.GOLD + cheats + "\n\n"

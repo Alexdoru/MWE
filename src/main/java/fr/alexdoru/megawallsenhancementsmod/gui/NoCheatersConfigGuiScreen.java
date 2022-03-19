@@ -70,7 +70,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
             case 1:
                 textLines.add(EnumChatFormatting.GREEN + "Prints a warning message in chat when a reported player joins your world");
                 textLines.add(EnumChatFormatting.GREEN + "");
-                textLines.add(EnumChatFormatting.RED + "Warning : " + EnumChatFormatting.LIGHT_PURPLE + "player" + EnumChatFormatting.GRAY + " joined, Cheats : " + EnumChatFormatting.GOLD + "cheat");
+                textLines.add(EnumChatFormatting.RED + "Warning : " + EnumChatFormatting.RED + "player" + EnumChatFormatting.GRAY + " joined, Cheats : " + EnumChatFormatting.GOLD + "cheat");
                 break;
             case 2:
                 textLines.add(EnumChatFormatting.GREEN + "Every game it automatically reports players saved in NoCheaters");

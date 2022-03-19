@@ -65,7 +65,7 @@ public class CommandUnWDR extends CommandBase {
                 } else {
                     NameUtil.updateGameProfileAndName(playername);
                     addChatMessage(new ChatComponentText(getTagNoCheaters() +
-                            EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.LIGHT_PURPLE + playername + EnumChatFormatting.GREEN + "."));
+                            EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + "."));
                 }
 
                 return null;
@@ -82,7 +82,7 @@ public class CommandUnWDR extends CommandBase {
             } else {
                 NameUtil.updateGameProfileAndName(args[1]);
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
-                        EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.LIGHT_PURPLE + args[1] + EnumChatFormatting.GREEN + "."));
+                        EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + args[1] + EnumChatFormatting.GREEN + "."));
             }
 
         }

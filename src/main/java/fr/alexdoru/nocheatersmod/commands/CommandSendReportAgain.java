@@ -42,7 +42,7 @@ public class CommandSendReportAgain extends CommandBase {
             long time = (new Date()).getTime();
             if (FKCounterMod.preGameLobby && ConfigHandler.toggleautoreport) {
                 wdr.timeLastManualReport = time - WDR.TIME_BETWEEN_AUTOREPORT;
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Your cheating report against " + EnumChatFormatting.LIGHT_PURPLE + playername
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Your cheating report against " + EnumChatFormatting.RED + playername
                         + EnumChatFormatting.GREEN + " will be sent during the game."));
             } else {
                 mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
