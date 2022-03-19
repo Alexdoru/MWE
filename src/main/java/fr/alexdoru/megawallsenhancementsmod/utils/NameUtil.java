@@ -51,6 +51,7 @@ public class NameUtil {
             networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
             EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
+                transformGameProfile(player.getGameProfile(), true);
                 NameUtil.transformNametag(player, false);
             }
         } else {
