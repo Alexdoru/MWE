@@ -287,7 +287,7 @@ public class CommandWDR extends CommandBase {
                 NameUtil.updateGameProfileAndName(playername);
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
                         EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : ""))
-                        .appendSibling(NoCheatersEvents.createPlayerNameWithHoverText(playername, uuid, newreport, EnumChatFormatting.LIGHT_PURPLE)[0])
+                        .appendSibling(NoCheatersEvents.createPlayerNameWithHoverText(playername, uuid, newreport, EnumChatFormatting.RED)[0])
                         .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " with a " + EnumChatFormatting.YELLOW +
                                 "timestamp" + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
                                 + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : "."))));
@@ -324,7 +324,7 @@ public class CommandWDR extends CommandBase {
                 NameUtil.updateGameProfileAndName(playername);
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
                         EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
-                        + EnumChatFormatting.LIGHT_PURPLE + playername + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
+                        + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
                         + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : ".")));
             }
 
