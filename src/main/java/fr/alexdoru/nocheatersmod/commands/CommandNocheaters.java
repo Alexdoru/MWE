@@ -420,8 +420,7 @@ public class CommandNocheaters extends CommandBase {
 
             if (wdr.isNicked()) {
 
-                imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + "[MVP" + EnumChatFormatting.RED + "++" + EnumChatFormatting.GOLD + "]" + " "
-                        + EnumChatFormatting.GOLD + uuid + EnumChatFormatting.DARK_PURPLE + " Nick"));
+                imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_PURPLE + "[Nick] " + EnumChatFormatting.GOLD + uuid));
 
             } else {
 
