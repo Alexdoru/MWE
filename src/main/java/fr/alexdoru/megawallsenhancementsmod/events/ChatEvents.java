@@ -24,6 +24,7 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.*;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -56,24 +57,27 @@ public class ChatEvents {
 
     private static boolean parseReportMessage(String messageSender, String msgIn) {
 
-        Matcher matcher1 = REPORT_PATTERN1.matcher(msgIn);
-        Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);
+        if (ConfigHandler.reportsuggestions || ConfigHandler.autoreportSuggestions) {
 
-        if (matcher1.matches()) {
-            String name = matcher1.group(1);
-            if (isAValidName(name)) {
-                handleReportSuggestion(name, "bhop");
-                handleAutoReportSuggestion(messageSender, name);
+            Matcher matcher1 = REPORT_PATTERN1.matcher(msgIn);
+            Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);
+
+            if (matcher1.matches()) {
+                String name = matcher1.group(1);
+                if (isAValidName(name)) {
+                    handleReportSuggestion(name, "bhop");
+                    handleAutoReportSuggestion(messageSender, name, "bhop");
+                }
+                return true;
+            } else if (matcher2.matches()) {
+                String name = matcher2.group(1);
+                String cheat = matcher2.group(2);
+                if (isAValidCheat(cheat) && isAValidName(name)) {
+                    handleReportSuggestion(name, cheat);
+                    handleAutoReportSuggestion(messageSender, name, cheat);
+                }
+                return true;
             }
-            return true;
-        } else if (matcher2.matches()) {
-            String name = matcher2.group(1);
-            String cheat = matcher2.group(2);
-            if (isAValidCheat(cheat) && isAValidName(name)) {
-                handleReportSuggestion(name, cheat);
-                handleAutoReportSuggestion(messageSender, name);
-            }
-            return true;
         }
 
         return false;
@@ -89,36 +93,29 @@ public class ChatEvents {
         }
     }
 
-    private static boolean a = false;
-    private static long t = 0;
-
-    private static void handleAutoReportSuggestion(String messageSender, String reportedPlayer) {
-        if (!FKCounterMod.isInMwGame || mc.thePlayer == null || mc.thePlayer.getName().equals(reportedPlayer) || messageSender == null) {
+    private static void handleAutoReportSuggestion(String messageSender, String reportedPlayer, String cheat) {
+        if (!FKCounterMod.isInMwGame || FKCounterMod.isitPrepPhase || !ConfigHandler.autoreportSuggestions || mc.thePlayer == null || mc.thePlayer.getName().equals(reportedPlayer) || messageSender == null) {
             return;
         }
-        if (messageSender.equals("Alexdoru")) {
+        if (mc.thePlayer.getName().equals(messageSender)) {
+            ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/wdr " + reportedPlayer + " " + cheat);
+            return;
+        }
+        NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(messageSender);
+        if (networkPlayerInfo == null) {
+            return;
+        }
+        String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
+        WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+        if (wdr != null) {
+            return;
+        }
+        wdr = WdredPlayers.getWdredMap().get(messageSender);
+        if (wdr != null) {
+            return;
+        }
+        if (canReportSuggestionPlayer(reportedPlayer)) {
             sendAutoreportSuggestion(reportedPlayer);
-            a = !ConfigHandler.autoreportSuggestions;
-            t = System.currentTimeMillis();
-            return;
-        }
-        if (!FKCounterMod.isitPrepPhase) {
-            NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(messageSender);
-            if (networkPlayerInfo == null) {
-                return;
-            }
-            String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-            WDR wdr = WdredPlayers.getWdredMap().get(uuid);
-            if (wdr != null) {
-                return;
-            }
-            wdr = WdredPlayers.getWdredMap().get(messageSender);
-            if (wdr != null) {
-                return;
-            }
-            if (canReportSuggestionPlayer(reportedPlayer)) {
-                sendAutoreportSuggestion(reportedPlayer);
-            }
         }
     }
 
@@ -212,15 +209,6 @@ public class ChatEvents {
             }
 
             if (parseReportMessage(messageSender, msg)) {
-                return;
-            }
-
-            if (a && msg.equals("Thanks for your Cheating (Hacking) report. We understand your concerns and it will be reviewed as soon as possible.")) {
-                long l = System.currentTimeMillis();
-                if (l - t < 20000L) {
-                    event.setCanceled(true);
-                }
-                a = false;
                 return;
             }
 
