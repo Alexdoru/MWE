@@ -313,7 +313,8 @@ public class ChatUtil {
                                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                         new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
                                                 + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/wdr " + playername + " " + cheatWDR + "\n"
-                                                + EnumChatFormatting.GRAY + "Using the wdr option will give you warnings about this player ingame\n\n"
+                                                + EnumChatFormatting.GRAY + "Using the wdr option will give you warnings about this player ingame\n"
+                                                + EnumChatFormatting.GRAY + "You can use " + EnumChatFormatting.YELLOW + "/unwdr " + playername + EnumChatFormatting.GRAY + "to remove them from your report list\n\n"
                                                 + getReportingAdvice())))));
     }
 
