@@ -119,7 +119,7 @@ public class NameUtil {
             return;
         }
 
-        if (mwPlayerData.wdr != null && mwPlayerData.wdr.isCheating()) { // player was reported // FIXME for some players it will be null all the time, it will never report them
+        if (onPlayerJoin && mwPlayerData.wdr != null && mwPlayerData.wdr.isCheating()) { // player was reported // FIXME for some players it will be null all the time, it will never report them
             String playerName = player.getName();
             long datenow = (new Date()).getTime();
             boolean gotautoreported = NoCheatersEvents.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
