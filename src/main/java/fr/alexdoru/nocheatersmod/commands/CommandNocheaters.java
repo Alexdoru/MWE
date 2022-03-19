@@ -63,9 +63,9 @@ public class CommandNocheaters extends CommandBase {
 
             new DelayedTask(() -> mc.displayGuiScreen(new NoCheatersConfigGuiScreen()), 1);
 
-        } else if (args[0].equalsIgnoreCase("reportlist") || args[0].equalsIgnoreCase("stalkreportlist")) {
+        } else if (args[0].equalsIgnoreCase("reportlist") || args[0].equalsIgnoreCase("debugreportlist")) {
 
-            boolean doStalk = args[0].equalsIgnoreCase("stalkreportlist");
+            boolean doStalk = args[0].equalsIgnoreCase("reportlist");
 
             if (doStalk) {
                 if (HypixelApiKeyUtil.apiKeyIsNotSetup()) { //api key not setup
@@ -126,7 +126,7 @@ public class CommandNocheaters extends CommandBase {
                 } else {
 
                     IChatComponent imsg = new ChatComponentText(EnumChatFormatting.RED + ChatUtil.bar() + "\n" + "             ");
-                    String command = doStalk ? "/nocheaters stalkreportlist" : "/nocheaters reportlist";
+                    String command = doStalk ? getCommandUsage(null) + " reportlist" : getCommandUsage(null) + " debugreportlist";
 
                     if (displaypage > 1) {
                         imsg.appendSibling(new ChatComponentText("" + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + " <<")
@@ -295,7 +295,7 @@ public class CommandNocheaters extends CommandBase {
                 } else {
 
                     IChatComponent imsg = new ChatComponentText(EnumChatFormatting.DARK_GRAY + ChatUtil.bar() + "\n" + "             ");
-                    String command = "/nocheaters ignorelist";
+                    String command = getCommandUsage(null) + " ignorelist";
 
                     if (displaypage > 1) {
                         imsg.appendSibling(new ChatComponentText("" + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + " <<")
@@ -364,7 +364,7 @@ public class CommandNocheaters extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        String[] arguments = {"config", "ignore", "ignorelist", "reportlist", "stalkreportlist"};
+        String[] arguments = {"config", "ignore", "ignorelist", "reportlist"};
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, arguments);
         }
