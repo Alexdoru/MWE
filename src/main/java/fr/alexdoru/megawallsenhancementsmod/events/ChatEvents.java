@@ -26,6 +26,7 @@ import net.minecraft.event.HoverEvent;
 import net.minecraft.util.*;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class ChatEvents {
     private static final String HUNTER_STRENGTH_MESSAGE = "Your Force of Nature gave you a 5 second Strength I buff.";
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
+    private static final String PREP_PHASE = "Prepare your defenses!";
     private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:|\\[SHOUT\\] |\\[SPECTATOR\\] )(?:|\\[[A-Z]{3,6}\\] )(?:|\\[(?:MV|VI)P\\+?\\+?\\] )(\\w{2,16}):.*", Pattern.CASE_INSENSITIVE);
     private static final Pattern REPORT_PATTERN1 = Pattern.compile("(\\w{2,16}) (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE);
     private static final Pattern REPORT_PATTERN2 = Pattern.compile("\\/?(?:wdr|report) (\\w{2,16}) (\\w+)", Pattern.CASE_INSENSITIVE);
@@ -195,6 +197,11 @@ public class ChatEvents {
                     event.message = new ChatComponentText(fmsg.replace(matchercoins.group(1), ""));
                     return;
                 }
+            }
+
+            if (msg.equals(PREP_PHASE)) {
+                MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.GAME_START));
+                return;
             }
 
             if (KillCounter.processMessage(fmsg, msg)) {
