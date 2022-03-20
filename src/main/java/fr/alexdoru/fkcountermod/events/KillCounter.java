@@ -18,7 +18,6 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.*;
@@ -32,7 +31,6 @@ public class KillCounter {
     public static final int GREEN_TEAM = 1;
     public static final int YELLOW_TEAM = 2;
     public static final int BLUE_TEAM = 3;
-    private static final String PREP_PHASE = "Prepare your defenses!";
     private static final String[] KILL_MESSAGES = {
             "(\\w{2,16}) was shot and killed by (\\w{2,16}).*",
             "(\\w{2,16}) was snowballed to death by (\\w{2,16}).*",
@@ -128,16 +126,7 @@ public class KillCounter {
 
     public static boolean processMessage(String FormattedText, String UnformattedText) {
 
-        if (!FKCounterMod.isInMwGame) {
-            return false;
-        }
-
-        if (UnformattedText.equals(PREP_PHASE)) {
-            MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.GAME_START));
-            return true;
-        }
-
-        if (areAllWithersAlive()) {
+        if (!FKCounterMod.isInMwGame || areAllWithersAlive()) {
             return false;
         }
 
