@@ -42,6 +42,8 @@ public class ChatEvents {
     public static final ResourceLocation strengthSound = new ResourceLocation("item.fireCharge.use"); // item.fireCharge.use  usefireworks.twinkle
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static final Pattern HUNTER_PRE_STRENGTH_PATTERN = Pattern.compile(".*\u00a7a\u00a7lF\\.O\\.N\\. \u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l([0-9]+).*");
+    private static final String BAN_MESSAGE = "A player has been removed from your game.";
+    private static final String HUNGER_MESSAGE = "Get to the middle to stop the hunger!";
     private static final String HUNTER_STRENGTH_MESSAGE = "Your Force of Nature gave you a 5 second Strength I buff.";
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
@@ -167,7 +169,7 @@ public class ChatEvents {
             /*
              *  cancels hunger message in mega walls
              */
-            if (msg.equals("Get to the middle to stop the hunger!")) {
+            if (msg.equals(HUNGER_MESSAGE)) {
                 event.setCanceled(true);
                 return;
             }
@@ -230,7 +232,7 @@ public class ChatEvents {
                 return;
             }
 
-            if (msg.equals("A player has been removed from your game.")) {
+            if (msg.equals(BAN_MESSAGE)) {
                 new DelayedTask(() -> {
                     String recentlyDisconnectedPlayers = NetHandlerPlayClientHook.getRecentlyDisconnectedPlayers();
                     if (!recentlyDisconnectedPlayers.equals("")) {
