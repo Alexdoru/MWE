@@ -52,7 +52,7 @@ public class ChatEvents {
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
     private static final List<StringLong> reportSuggestionList = new ArrayList<>();
     private static final Random random = new Random();
-    private static final long TIME_BETWEEN_REPORT_SUGGESTION_PLAYER = 15L * 60L * 1000L;
+    private static final long TIME_BETWEEN_REPORT_SUGGESTION_PLAYER = 20L * 60L * 1000L;
     private static long lastStrength = 0;
 
     private static boolean parseReportMessage(String messageSender, String msgIn) {
