@@ -120,11 +120,11 @@ public class NameUtil {
             return;
         }
 
-        if (onPlayerJoin && mwPlayerData.wdr != null && mwPlayerData.wdr.isCheating()) { // player was reported // FIXME for some players it will be null all the time, it will never report them
+        if (onPlayerJoin && mwPlayerData.wdr != null && mwPlayerData.wdr.isCheating()) { // player was reported
             String playerName = player.getName();
             long datenow = (new Date()).getTime();
             boolean gotautoreported = NoCheatersEvents.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
-            if (ConfigHandler.togglewarnings || mwPlayerData.wdr.isOlderThanMaxAutoreport(datenow)) {
+            if (ConfigHandler.togglewarnings || (ConfigHandler.toggleautoreport && mwPlayerData.wdr.isOlderThanMaxAutoreport(datenow))) {
                 String uuid = player.getUniqueID().toString().replace("-", "");
                 ChatUtil.addChatMessage(NoCheatersEvents.createwarningmessage(datenow, uuid, playerName, mwPlayerData.wdr, gotautoreported));
             }
