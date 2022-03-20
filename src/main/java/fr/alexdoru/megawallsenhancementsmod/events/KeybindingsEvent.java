@@ -27,9 +27,9 @@ public class KeybindingsEvent {
         } else if (MegaWallsEnhancementsMod.toggleDroppedItemLimit.isPressed()) {
             ConfigHandler.limitDroppedEntityRendered = !ConfigHandler.limitDroppedEntityRendered;
             if (ConfigHandler.limitDroppedEntityRendered) {
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Dropped item entity render limit On"));
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.WHITE + "Limiting dropped items rendered : " + EnumChatFormatting.GREEN + "On"));
             } else {
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + "Dropped item entity render limit Off"));
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.WHITE + "Limiting dropped items rendered : " + EnumChatFormatting.RED + "Off"));
             }
         }
 
