@@ -94,28 +94,33 @@ public class ChatEvents {
     }
 
     private static void handleAutoReportSuggestion(String messageSender, String reportedPlayer, String cheat) {
-        if (!FKCounterMod.isInMwGame || FKCounterMod.isitPrepPhase || !ConfigHandler.autoreportSuggestions || mc.thePlayer == null || mc.thePlayer.getName().equals(reportedPlayer) || messageSender == null) {
+        if (!FKCounterMod.isInMwGame || !ConfigHandler.autoreportSuggestions || mc.thePlayer == null || mc.thePlayer.getName().equals(reportedPlayer) || messageSender == null) {
             return;
         }
         if (mc.thePlayer.getName().equals(messageSender)) {
+            if(FKCounterMod.isitPrepPhase) {
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Report suggestions don't work before the walls fall."));
+            }
             ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/wdr " + reportedPlayer + " " + cheat);
             return;
         }
-        NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(messageSender);
-        if (networkPlayerInfo == null) {
-            return;
-        }
-        String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-        WDR wdr = WdredPlayers.getWdredMap().get(uuid);
-        if (wdr != null) {
-            return;
-        }
-        wdr = WdredPlayers.getWdredMap().get(messageSender);
-        if (wdr != null) {
-            return;
-        }
-        if (canReportSuggestionPlayer(reportedPlayer)) {
-            sendAutoreportSuggestion(reportedPlayer);
+        if (!FKCounterMod.isitPrepPhase) {
+            NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(messageSender);
+            if (networkPlayerInfo == null) {
+                return;
+            }
+            String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
+            WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+            if (wdr != null) {
+                return;
+            }
+            wdr = WdredPlayers.getWdredMap().get(messageSender);
+            if (wdr != null) {
+                return;
+            }
+            if (canReportSuggestionPlayer(reportedPlayer)) {
+                sendAutoreportSuggestion(reportedPlayer);
+            }
         }
     }
 
