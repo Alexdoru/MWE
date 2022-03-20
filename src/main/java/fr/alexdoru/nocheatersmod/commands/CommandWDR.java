@@ -204,7 +204,7 @@ public class CommandWDR extends CommandBase {
             commandUsageTimeList.add(l);
 
             if (FKCounterMod.preGameLobby) {
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + ChatUtil.getChatReportingAdvice()));
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getChatReportingAdvice()));
                 playSound = true;
             }
 
