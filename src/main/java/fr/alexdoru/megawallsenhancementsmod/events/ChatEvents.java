@@ -158,11 +158,11 @@ public class ChatEvents {
     @SubscribeEvent
     public void onChatMessage(ClientChatReceivedEvent event) {
 
-        String msg = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
-        String fmsg = event.message.getFormattedText();
-
         /*normal chat messages*/
         if (event.type == 0) {
+
+            String msg = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
+            String fmsg = event.message.getFormattedText();
 
             /*
              *  cancels hunger message in mega walls
@@ -244,6 +244,7 @@ public class ChatEvents {
 
             /*Status messages*/
         } else if (ConfigHandler.hunterStrengthHUD && event.type == 2) {
+            String fmsg = event.message.getFormattedText();
             Matcher preStrengthMatcher = HUNTER_PRE_STRENGTH_PATTERN.matcher(fmsg);
             if (preStrengthMatcher.matches()) {
                 long currentTime = System.currentTimeMillis();
