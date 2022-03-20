@@ -6,6 +6,7 @@ import fr.alexdoru.fkcountermod.events.MwGameEvent;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
+import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.gui.ArrowHitGui;
@@ -115,6 +116,10 @@ public class ChatEvents {
                 return;
             }
             String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
+            IChatComponent imsg = CommandScanGame.get(uuid);
+            if (imsg != null) {
+                return;
+            }
             WDR wdr = WdredPlayers.getWdredMap().get(uuid);
             if (wdr != null) {
                 return;
