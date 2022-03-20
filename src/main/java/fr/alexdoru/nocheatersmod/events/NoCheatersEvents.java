@@ -87,7 +87,8 @@ public class NoCheatersEvents {
 
     public static IChatComponent createwarningmessage(long datenow, String uuid, String playername, WDR wdr, boolean disableReportButton) {
 
-        IChatComponent[] imsgArray = createPlayerNameWithHoverText(playername, uuid, wdr, EnumChatFormatting.RED);
+        String wdrmapKey = wdr.isNicked() ? playername : uuid;
+        IChatComponent[] imsgArray = createPlayerNameWithHoverText(null, playername, wdrmapKey, wdr, EnumChatFormatting.RED);
         IChatComponent imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ").appendSibling(imsgArray[0]);
         IChatComponent allCheats = imsgArray[1];
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " joined,"));
@@ -96,15 +97,15 @@ public class NoCheatersEvents {
         if (olderThanMaxAutoreport) {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " [Report Player]").setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report this player again")))
-                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + uuid + " " + playername))));
+                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + wdrmapKey + " " + playername))));
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.YELLOW + " [Remove Player]").setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to remove this player from your report list")))
-                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + uuid + " " + playername))));
+                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + wdrmapKey + " " + playername))));
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.RED + " It's been more than a week since you last manually reported that player, are you sure they are still cheating ? Report them again or Remove them from your report list."));
         } else if (!disableReportButton && FKCounterMod.isInMwGame && !FKCounterMod.isitPrepPhase && wdr.canBeReported(datenow)) {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " Report again").setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report this player again")))
-                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + uuid + " " + playername))));
+                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + wdrmapKey + " " + playername))));
         }
 
         if (!FKCounterMod.preGameLobby) {
@@ -128,11 +129,12 @@ public class NoCheatersEvents {
      * "playernameWithHoverText" is a message with the player name and a hover event on top with the report info
      * "allCheats" is a list of all the hacks for this player
      */
-    public static IChatComponent[] createPlayerNameWithHoverText(String playername, String uuid, WDR wdr, EnumChatFormatting namecolor) {
+    public static IChatComponent[] createPlayerNameWithHoverText(String formattedNameIn, String playername, String wdrmapKey, WDR wdr, EnumChatFormatting namecolor) {
 
+        String formattedName = formattedNameIn == null ? namecolor.toString() + playername : formattedNameIn;
+        StringBuilder cheats = new StringBuilder();
         if (wdr.hacks.get(0).charAt(0) == '-') {
 
-            StringBuilder cheats = new StringBuilder();
             long timestamphackreport = 0L;
             StringBuilder allCheats = new StringBuilder();
             String serverID = "";
@@ -141,7 +143,7 @@ public class NoCheatersEvents {
             String oldname = "";
             long oldtimestamp = 0L;
             String oldgameID = "";
-            IChatComponent hoverText = new ChatComponentText(namecolor + playername);
+            IChatComponent hoverText = new ChatComponentText(formattedName);
 
             int j = 0;
             for (int i = 0; i < wdr.hacks.size(); i++) {
@@ -202,23 +204,21 @@ public class NoCheatersEvents {
 
             }
 
-            IChatComponent imsg = new ChatComponentText(namecolor + playername).setChatStyle(new ChatStyle()
+            IChatComponent imsg = new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText)));
 
             return new IChatComponent[]{imsg, new ChatComponentText(EnumChatFormatting.DARK_BLUE + allCheats.toString())};
 
         } else {
 
-            StringBuilder cheats = new StringBuilder();
-
             for (String hack : wdr.hacks) {
                 cheats.append(" ").append(hack);
             }
 
-            IChatComponent imsg = new ChatComponentText(namecolor + playername).setChatStyle(new ChatStyle()
-                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + uuid + " " + playername))
+            IChatComponent imsg = new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
+                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + wdrmapKey + " " + playername))
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
-                            namecolor + playername + "\n"
+                            formattedName + "\n"
                                     + EnumChatFormatting.GREEN + "Last report : " + EnumChatFormatting.YELLOW + DateUtil.localformatTimestamp(wdr.timestamp) + "\n"
                                     + EnumChatFormatting.GREEN + "Last manual report : " + EnumChatFormatting.YELLOW + DateUtil.localformatTimestamp(wdr.timeLastManualReport) + "\n"
                                     + EnumChatFormatting.GREEN + "Reported for :" + EnumChatFormatting.GOLD + cheats + "\n\n"

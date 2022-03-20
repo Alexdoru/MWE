@@ -414,19 +414,19 @@ public class CommandNocheaters extends CommandBase {
 
     private IChatComponent createReportLine(String uuid, WDR wdr, boolean doStalk) throws ApiException {
 
-        IChatComponent imsg = new ChatComponentText("");
+        IChatComponent imsg;
 
         if (doStalk) {
 
             if (wdr.isNicked()) {
 
-                imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_PURPLE + "[Nick] " + EnumChatFormatting.GOLD + uuid));
+                imsg = NoCheatersEvents.createPlayerNameWithHoverText(EnumChatFormatting.DARK_PURPLE + "[Nick] " + EnumChatFormatting.GOLD + uuid, uuid, uuid, wdr, EnumChatFormatting.WHITE)[0];
 
             } else {
 
                 HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
                 LoginData logindata = new LoginData(playerdata.getPlayerData());
-                imsg.appendSibling(NoCheatersEvents.createPlayerNameWithHoverText(logindata.getFormattedName(), uuid, wdr, EnumChatFormatting.WHITE)[0]);
+                imsg = NoCheatersEvents.createPlayerNameWithHoverText(logindata.getFormattedName(), logindata.getdisplayname(), uuid, wdr, EnumChatFormatting.WHITE)[0];
 
                 IChatComponent ismgStatus = new ChatComponentText("");
 
@@ -457,7 +457,7 @@ public class CommandNocheaters extends CommandBase {
 
         } else {
 
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.RED + uuid + EnumChatFormatting.GRAY + " reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.timestamp)));
+            imsg = new ChatComponentText(EnumChatFormatting.RED + uuid + EnumChatFormatting.GRAY + " reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.timestamp));
 
         }
 
