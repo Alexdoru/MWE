@@ -114,7 +114,7 @@ public class ConfigHandler {
         Property pdraw_background = config.get(CATEGORY_FKCounter, "Draw background", false, "Draws a box around the HUD of the final kill counter");
         Property ptext_shadow = config.get(CATEGORY_FKCounter, "Text shadow", true, "Draws text shadow");
         Property pfkc_hud_size = config.get(CATEGORY_FKCounter, "HUD Size", 1.0f, "Size of the final kill counter HUD");
-        Property pPlayerAmount = config.get(CATEGORY_FKCounter, "Player amount", (int) 3.0, "Amount of players displayed on screen when you use the \"Show players\" setting");
+        Property pPlayerAmount = config.get(CATEGORY_FKCounter, "Player amount", 3, "Amount of players displayed on screen when you use the \"Show players\" setting");
         Property pfinalsInTablist = config.get(CATEGORY_FKCounter, "Fks in tablist", true, "Draws the finals in the tablist");
 
         Property pAPIKey = config.get(CATEGORY_MWENh, "APIKey", "", "Your Hypixel API Key");
