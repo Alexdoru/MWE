@@ -320,14 +320,12 @@ public class ChatUtil {
 
     public static String getReportingAdvice() {
         return EnumChatFormatting.RED + "To make reporting efficient, be sure to report\n"
-                + EnumChatFormatting.DARK_RED + EnumChatFormatting.BOLD + "when you are ingame with the cheater\n"
+                + EnumChatFormatting.DARK_RED + "when you are ingame with the cheater\n"
                 + EnumChatFormatting.RED + "and not before the game starts or in the lobby.";
     }
 
     public static String getChatReportingAdvice() {
-        return EnumChatFormatting.RED + "To make reporting efficient, be sure to report"
-                + EnumChatFormatting.DARK_RED + EnumChatFormatting.BOLD + " when you are ingame with the cheater "
-                + EnumChatFormatting.RED + "and not before the game starts or in the lobby.";
+        return EnumChatFormatting.RED + "To make reporting efficient, be sure to report" + EnumChatFormatting.DARK_RED + " when you are ingame with the cheater " + EnumChatFormatting.RED + "and not before the game starts or in the lobby. This way a replay can be attached to the report and it will have a higher chance to be reviewed.";
     }
 
     public static IChatComponent formattedNameWithReportButton(String playername, String formattedName) {
