@@ -99,7 +99,7 @@ public class ChatEvents {
         }
         if (mc.thePlayer.getName().equals(messageSender)) {
             if(FKCounterMod.isitPrepPhase) {
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Report suggestions don't work before the walls fall."));
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Report suggestions aren't working before the walls fall."));
             }
             ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/wdr " + reportedPlayer + " " + cheat);
             return;
