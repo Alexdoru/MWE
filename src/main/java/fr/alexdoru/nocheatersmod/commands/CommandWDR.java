@@ -209,7 +209,7 @@ public class CommandWDR extends CommandBase {
             }
 
             if (playSound) {
-                mc.getSoundHandler().playSound(PositionedSoundRecord.create(reportDeniedSound, 1.0F));
+                mc.addScheduledTask(() -> mc.getSoundHandler().playSound(PositionedSoundRecord.create(reportDeniedSound, 1.0F)));
             }
 
             CachedMojangUUID apireq;
