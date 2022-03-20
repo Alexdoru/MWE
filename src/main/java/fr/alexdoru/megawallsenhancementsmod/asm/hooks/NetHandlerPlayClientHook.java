@@ -36,9 +36,15 @@ public class NetHandlerPlayClientHook {
     public static String getRecentlyDisconnectedPlayers() {
         StringBuilder str = new StringBuilder();
         long timenow = System.currentTimeMillis();
+        boolean first = true;
         for (StringLong stringLong : latestDisconnected) {
             if (stringLong.message != null && timenow - stringLong.timestamp <= 2000) {
-                str.append(" ").append(stringLong.message);
+                if (first) {
+                    str.append(stringLong.message);
+                    first = false;
+                } else {
+                    str.append(" ").append(stringLong.message);
+                }
             }
         }
         return str.toString();
