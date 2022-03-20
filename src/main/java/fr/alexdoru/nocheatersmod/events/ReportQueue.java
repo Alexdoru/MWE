@@ -11,7 +11,7 @@ import java.util.List;
 public class ReportQueue {
 
     public static final ReportQueue INSTANCE = new ReportQueue();
-    private static final int TIME_BETWEEN_REPORTS = 30 * 20; // ticks
+    private static final int TIME_BETWEEN_REPORTS = 45 * 20; // ticks
     private final Minecraft mc = Minecraft.getMinecraft();
     private int counter;
     private final List<String> reportQueue = new ArrayList<>();
