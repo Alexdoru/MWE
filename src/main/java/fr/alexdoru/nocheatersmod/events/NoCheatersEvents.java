@@ -2,12 +2,11 @@ package fr.alexdoru.nocheatersmod.events;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
-import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
-import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
+import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -65,28 +64,25 @@ public class NoCheatersEvents {
      * Called when you type /nocheaters
      */
     public static List<IChatComponent> getReportMessagesforWorld() {
-
         List<IChatComponent> list = new ArrayList<>();
         long datenow = (new Date()).getTime();
-
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
-
-            MWPlayerData mwPlayerData = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData();
-            if (mwPlayerData != null) {
-                WDR wdr = mwPlayerData.wdr;
-                if (wdr == null) {
-                    continue;
+            String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
+            String playerName = networkPlayerInfo.getGameProfile().getName();
+            WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+            if (wdr == null) {
+                wdr = WdredPlayers.getWdredMap().get(playerName);
+                if (wdr != null) {
+                    uuid = playerName;
                 }
-                String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-                String playerName = networkPlayerInfo.getGameProfile().getName();
-                boolean gotautoreported = !wdr.isCheating() || sendAutoReport(datenow, playerName, wdr);
-                list.add(createwarningmessage(datenow, uuid, playerName, wdr, gotautoreported));
             }
-
+            if (wdr == null) {
+                continue;
+            }
+            boolean gotautoreported = !wdr.isCheating() || sendAutoReport(datenow, playerName, wdr);
+            list.add(createwarningmessage(datenow, uuid, playerName, wdr, gotautoreported));
         }
-
         return list;
-
     }
 
     public static IChatComponent createwarningmessage(long datenow, String uuid, String playername, WDR wdr, boolean disableReportButton) {
