@@ -44,11 +44,18 @@ public class CommandScanGame extends CommandBase {
         if (!currentGameId.equals("?") && scanGameId != null && !scanGameId.equals(currentGameId)) {
             clearScanGameData();
         }
-
     }
 
-    public static HashMap<String, IChatComponent> getScanmap() {
-        return scanmap;
+    public static IChatComponent get(String uuid) {
+        IChatComponent imsg = scanmap.get(uuid);
+        if (imsg != null && !imsg.equals(CommandScanGame.nomatch)) {
+            return imsg;
+        }
+        return null;
+    }
+
+    public static void put(String uuid, IChatComponent msg) {
+        scanmap.put(uuid, msg);
     }
 
     protected static IChatComponent getMessageStart(String playername) {
@@ -199,14 +206,14 @@ class ScanPlayerTask implements Callable<String> {
 
             if (imsg != null) {
                 ChatUtil.addChatMessage(CommandScanGame.getMessageStart(playername).appendSibling(imsg));
-                CommandScanGame.getScanmap().put(uuid, imsg);
+                CommandScanGame.put(uuid, imsg);
                 NameUtil.updateGameProfileAndName(networkPlayerInfo);
             } else {
-                CommandScanGame.getScanmap().put(uuid, CommandScanGame.nomatch);
+                CommandScanGame.put(uuid, CommandScanGame.nomatch);
             }
 
         } catch (ApiException ignored) {
-            CommandScanGame.getScanmap().put(uuid, CommandScanGame.nomatch);
+            CommandScanGame.put(uuid, CommandScanGame.nomatch);
         }
 
         return null;
