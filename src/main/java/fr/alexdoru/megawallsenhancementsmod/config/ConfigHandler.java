@@ -41,7 +41,6 @@ public class ConfigHandler {
     public static String APIKey;
     public static boolean strengthParticules;
     public static boolean shortencoinmessage;
-    public static boolean reportsuggestions;
     public static boolean playSoundLowHP;
     public static double healthThreshold;
     public static boolean keepNightVisionEffect;
@@ -70,6 +69,8 @@ public class ConfigHandler {
     public static boolean toggleicons;
     public static boolean togglewarnings;
     public static boolean toggleautoreport;
+    public static boolean reportsuggestions;
+    public static boolean suggestionsSound;
     public static boolean autoreportSuggestions;
     public static boolean deleteReports;
     public static long timeDeleteReport;
@@ -128,7 +129,6 @@ public class ConfigHandler {
         Property pAPIKey = config.get(CATEGORY_MWENh, "APIKey", "", "Your Hypixel API Key");
         Property pstrengthParticules = config.get(CATEGORY_MWENh, "Strength particules", true, "Spawns strength particules when an herobrine or dreadlord get a final");
         Property pShortencoinmessage = config.get(CATEGORY_MWENh, "Shorten coin message", false, "Shorten the coins messages by removing the network booster info");
-        Property pReportsuggestions = config.get(CATEGORY_MWENh, "Report suggestion", true, "Give report suggestions in the chat based on messages in shouts");
         Property pPlaySoundLowHP = config.get(CATEGORY_MWENh, "Sound low HP", false, "Plays a sound when your health falls below a certain threshold");
         Property pHealthThreshold = config.get(CATEGORY_MWENh, "Health Threshold", 0.5d, "The health threshold at witch it will play a sound, value ranges from 0 to 1");
         Property pCancelNightVisionEffect = config.get(CATEGORY_MWENh, "Cancel Night Vision Effect", false, "Removes the visual effets of night vision");
@@ -154,6 +154,8 @@ public class ConfigHandler {
 
         Property pToggleicons = config.get(CATEGORY_NOCHEATERS, "Toggle Icons", true, "Display warning symbol on nametags of reported players");
         Property pTogglewarnings = config.get(CATEGORY_NOCHEATERS, "Toggle Warnings", true, "Gives warning messages in chat for reported players");
+        Property preportsuggestions = config.get(CATEGORY_NOCHEATERS, "Report suggestion", true, "Give report suggestions in the chat based on messages in shouts");
+        Property psuggestionsSound = config.get(CATEGORY_NOCHEATERS, "Suggestion sound", true, "Plays a sound when there is a report suggestions in the chat");
         Property pautoreportSuggestions = config.get(CATEGORY_NOCHEATERS, "Send report suggestions", true, "Send report suggestions");
         Property pToggleautoreport = config.get(CATEGORY_NOCHEATERS, "Autoreport saved cheaters", true, "Automatically report previously reported players when they are in your lobby");
         Property pdeleteReports = config.get(CATEGORY_NOCHEATERS, "Delete Old Report", false, "Deletes reports older than the specified value");
@@ -196,7 +198,6 @@ public class ConfigHandler {
         pOrderMWWENh.add(pAPIKey.getName());
         pOrderMWWENh.add(pstrengthParticules.getName());
         pOrderMWWENh.add(pShortencoinmessage.getName());
-        pOrderMWWENh.add(pReportsuggestions.getName());
         pOrderMWWENh.add(pPlaySoundLowHP.getName());
         pOrderMWWENh.add(pHealthThreshold.getName());
         pOrderMWWENh.add(pCancelNightVisionEffect.getName());
@@ -226,6 +227,8 @@ public class ConfigHandler {
         List<String> pOrderNOCHEATERS = new ArrayList<>();
         pOrderNOCHEATERS.add(pToggleicons.getName());
         pOrderNOCHEATERS.add(pTogglewarnings.getName());
+        pOrderNOCHEATERS.add(preportsuggestions.getName());
+        pOrderNOCHEATERS.add(psuggestionsSound.getName());
         pOrderNOCHEATERS.add(pToggleautoreport.getName());
         pOrderNOCHEATERS.add(pautoreportSuggestions.getName());
         pOrderNOCHEATERS.add(pdeleteReports.getName());
@@ -269,7 +272,6 @@ public class ConfigHandler {
             APIKey = pAPIKey.getString();
             strengthParticules = pstrengthParticules.getBoolean();
             shortencoinmessage = pShortencoinmessage.getBoolean();
-            reportsuggestions = pReportsuggestions.getBoolean();
             playSoundLowHP = pPlaySoundLowHP.getBoolean();
             healthThreshold = pHealthThreshold.getDouble();
             keepNightVisionEffect = !pCancelNightVisionEffect.getBoolean();
@@ -292,6 +294,8 @@ public class ConfigHandler {
             toggleicons = pToggleicons.getBoolean();
             togglewarnings = pTogglewarnings.getBoolean();
             toggleautoreport = pToggleautoreport.getBoolean();
+            reportsuggestions = preportsuggestions.getBoolean();
+            suggestionsSound = psuggestionsSound.getBoolean();
             autoreportSuggestions = pautoreportSuggestions.getBoolean();
             deleteReports = pdeleteReports.getBoolean();
             timeDeleteReport = 24L * 3600L * 1000L * ((long) ptimeDeleteReport.getInt());
@@ -334,7 +338,6 @@ public class ConfigHandler {
             pAPIKey.set(APIKey);
             pstrengthParticules.set(strengthParticules);
             pShortencoinmessage.set(shortencoinmessage);
-            pReportsuggestions.set(reportsuggestions);
             pPlaySoundLowHP.set(playSoundLowHP);
             pHealthThreshold.set(healthThreshold);
             pCancelNightVisionEffect.set(!keepNightVisionEffect);
@@ -368,6 +371,8 @@ public class ConfigHandler {
             pToggleicons.set(toggleicons);
             pTogglewarnings.set(togglewarnings);
             pToggleautoreport.set(toggleautoreport);
+            preportsuggestions.set(reportsuggestions);
+            psuggestionsSound.set(suggestionsSound);
             pautoreportSuggestions.set(autoreportSuggestions);
             pdeleteReports.set(deleteReports);
             ptimeDeleteReport.set((int) (timeDeleteReport / (24L * 3600L * 1000L)));
