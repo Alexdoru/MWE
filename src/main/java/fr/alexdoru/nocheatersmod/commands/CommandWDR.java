@@ -18,6 +18,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
+import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.*;
 
 import java.util.ArrayList;
@@ -241,18 +242,17 @@ public class CommandWDR extends CommandBase {
 
             if (uuid == null) {  // The playername doesn't exist or never joined hypixel
 
-                // search for the player's gameprofile in the tablist
-                for (NetworkPlayerInfo networkplayerinfo : mc.getNetHandler().getPlayerInfoMap()) {
+                for (NetworkPlayerInfo networkplayerinfo : mc.getNetHandler().getPlayerInfoMap()) { // search for the player's gameprofile in the tablist
                     if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(args[0])) {
                         uuid = networkplayerinfo.getGameProfile().getName();
+                        formattedPlayername = ScorePlayerTeam.formatPlayerName(networkplayerinfo.getPlayerTeam(), networkplayerinfo.getGameProfile().getName());
                         playername = uuid;
                         isaNick = true;
                     }
                 }
 
                 if (!isaNick) { // couldn't find the nicked player in the tab list
-                    addChatMessage(new ChatComponentText(getTagNoCheaters()
-                            + invalidplayernameMsg(args[0]) + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist"));
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() + invalidplayernameMsg(args[0]) + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist"));
                     return null;
                 }
 
