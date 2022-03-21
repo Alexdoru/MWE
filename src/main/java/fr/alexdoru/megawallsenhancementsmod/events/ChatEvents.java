@@ -262,7 +262,7 @@ public class ChatEvents {
                     if (!recentlyDisconnectedPlayers.equals("")) {
                         ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player(s) recently disconnected :\n" + ChatUtil.getTagNoCheaters() + EnumChatFormatting.AQUA + recentlyDisconnectedPlayers).setChatStyle(new ChatStyle()
                                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Those are the players disconnected in the last 2 seconds, click this message to run : \n\n" + EnumChatFormatting.YELLOW + "/stalk" + recentlyDisconnectedPlayers)))
-                                .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk" + recentlyDisconnectedPlayers))));
+                                .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk " + recentlyDisconnectedPlayers))));
                     }
                 }, 20);
                 //return;
