@@ -201,8 +201,7 @@ public class NameUtil {
 
                     } else { //scangame
 
-                        IChatComponent imsg = CommandScanGame.get(uuid);
-                        if (imsg != null) {
+                        if (CommandScanGame.doesPlayerFlag(uuid)) {
                             extraPrefix = prefix_scan;
                             iExtraPrefix = iprefix_scan;
                         }

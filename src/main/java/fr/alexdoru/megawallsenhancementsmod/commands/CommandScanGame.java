@@ -46,12 +46,9 @@ public class CommandScanGame extends CommandBase {
         }
     }
 
-    public static IChatComponent get(String uuid) {
+    public static boolean doesPlayerFlag(String uuid) {
         IChatComponent imsg = scanmap.get(uuid);
-        if (imsg != null && !imsg.equals(CommandScanGame.nomatch)) {
-            return imsg;
-        }
-        return null;
+        return imsg != null && !imsg.equals(CommandScanGame.nomatch);
     }
 
     public static void put(String uuid, IChatComponent msg) {
