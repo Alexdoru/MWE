@@ -273,4 +273,8 @@ public class NameUtil {
         return uuid.version() == 2;
     }
 
+    public static boolean isRealPlayer(UUID uuid) {
+        return uuid.version() == 4;
+    }
+
 }

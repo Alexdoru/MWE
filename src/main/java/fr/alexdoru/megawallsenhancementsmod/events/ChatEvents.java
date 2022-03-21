@@ -14,6 +14,7 @@ import fr.alexdoru.megawallsenhancementsmod.gui.HunterStrengthGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.KillCooldownGui;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.commands.CommandReport;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
@@ -33,6 +34,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -115,7 +117,11 @@ public class ChatEvents {
             if (networkPlayerInfo == null) {
                 return;
             }
-            String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
+            UUID id = networkPlayerInfo.getGameProfile().getId();
+            if (!NameUtil.isRealPlayer(id)) {
+                return;
+            }
+            String uuid = id.toString().replace("-", "");
             if (CommandScanGame.doesPlayerFlag(uuid)) {
                 return;
             }
