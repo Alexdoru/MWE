@@ -96,7 +96,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 textLines.add(EnumChatFormatting.GREEN + "Automatically sends the report command to the server");
                 textLines.add(EnumChatFormatting.GREEN + "when there is a report suggestion in chat");
                 textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls after the walls fall");
-                textLines.add(EnumChatFormatting.GRAY + "Ignores command suggestion sent by players you have reported or ignored");
+                textLines.add(EnumChatFormatting.GRAY + "Ignores command suggestions sent by ignored players, reported players, scangame players and nicked players");
                 textLines.add(EnumChatFormatting.GRAY + "You can ignore players by using " + EnumChatFormatting.YELLOW + "/nocheaters ignore <playername>");
                 break;
         }
