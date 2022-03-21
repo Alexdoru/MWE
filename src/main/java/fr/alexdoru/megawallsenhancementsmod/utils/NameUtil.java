@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
 import com.mojang.authlib.GameProfile;
+import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
@@ -126,7 +127,14 @@ public class NameUtil {
             boolean gotautoreported = NoCheatersEvents.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
             if (ConfigHandler.togglewarnings || (ConfigHandler.toggleautoreport && mwPlayerData.wdr.isOlderThanMaxAutoreport(datenow))) {
                 String uuid = player.getUniqueID().toString().replace("-", "");
-                ChatUtil.addChatMessage(NoCheatersEvents.createwarningmessage(datenow, uuid, playerName, mwPlayerData.wdr, gotautoreported));
+                ChatUtil.addChatMessage(NoCheatersEvents.createwarningmessage(
+                        datenow,
+                        uuid,
+                        (!FKCounterMod.isInMwGame || FKCounterMod.isitPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(player.getTeam(), playerName),
+                        playerName,
+                        mwPlayerData.wdr,
+                        gotautoreported
+                ));
             }
         }
 

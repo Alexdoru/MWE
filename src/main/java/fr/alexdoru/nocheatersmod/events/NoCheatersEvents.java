@@ -13,6 +13,7 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
+import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
@@ -80,15 +81,22 @@ public class NoCheatersEvents {
                 continue;
             }
             boolean gotautoreported = !wdr.isCheating() || sendAutoReport(datenow, playerName, wdr);
-            list.add(createwarningmessage(datenow, uuid, playerName, wdr, gotautoreported));
+            list.add(createwarningmessage(
+                    datenow,
+                    uuid,
+                    (!FKCounterMod.isInMwGame || FKCounterMod.isitPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playerName),
+                    playerName,
+                    wdr,
+                    gotautoreported
+            ));
         }
         return list;
     }
 
-    public static IChatComponent createwarningmessage(long datenow, String uuid, String playername, WDR wdr, boolean disableReportButton) {
+    public static IChatComponent createwarningmessage(long datenow, String uuid, String formattedName, String playername, WDR wdr, boolean disableReportButton) {
 
         String wdrmapKey = wdr.isNicked() ? playername : uuid;
-        IChatComponent[] imsgArray = createPlayerNameWithHoverText(null, playername, wdrmapKey, wdr, EnumChatFormatting.RED);
+        IChatComponent[] imsgArray = createPlayerNameWithHoverText(formattedName, playername, wdrmapKey, wdr, EnumChatFormatting.LIGHT_PURPLE);
         IChatComponent imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ").appendSibling(imsgArray[0]);
         IChatComponent allCheats = imsgArray[1];
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " joined,"));
