@@ -5,6 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import net.minecraft.client.network.NetworkPlayerInfo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class NetHandlerPlayClientHook {
@@ -37,13 +38,17 @@ public class NetHandlerPlayClientHook {
         StringBuilder str = new StringBuilder();
         long timenow = System.currentTimeMillis();
         boolean first = true;
+        ArrayList<String> duplicateTest = new ArrayList<>();
         for (StringLong stringLong : latestDisconnected) {
             if (stringLong.message != null && timenow - stringLong.timestamp <= 2000) {
-                if (first) {
-                    str.append(stringLong.message);
-                    first = false;
-                } else {
-                    str.append(" ").append(stringLong.message);
+                if (!duplicateTest.contains(stringLong.message)) {
+                    if (first) {
+                        str.append(stringLong.message);
+                        first = false;
+                    } else {
+                        str.append(" ").append(stringLong.message);
+                    }
+                    duplicateTest.add(stringLong.message);
                 }
             }
         }
