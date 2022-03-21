@@ -104,7 +104,7 @@ public class ChatEvents {
             return;
         }
         if (mc.thePlayer.getName().equals(messageSender)) {
-            if(FKCounterMod.isitPrepPhase) {
+            if (FKCounterMod.isitPrepPhase) {
                 ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Report suggestions aren't working before the walls fall."));
             }
             ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/wdr " + reportedPlayer + " " + cheat);
@@ -116,8 +116,7 @@ public class ChatEvents {
                 return;
             }
             String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-            IChatComponent imsg = CommandScanGame.get(uuid);
-            if (imsg != null) {
+            if (CommandScanGame.doesPlayerFlag(uuid)) {
                 return;
             }
             WDR wdr = WdredPlayers.getWdredMap().get(uuid);
