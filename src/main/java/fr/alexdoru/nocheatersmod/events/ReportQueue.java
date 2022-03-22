@@ -64,14 +64,8 @@ public class ReportQueue {
         return counter <= 0 && reportQueue.isEmpty();
     }
 
-    /**
-     * Sends reports with minimum of 3sec after the msg, on average 15sec after the message
-     * After 27sec 99% of reports are sent
-     */
     public void addPlayerToQueueRandom(String reportedPlayer) {
-        final double average = 12d * 20d;
-        final double sigma = average / 3d;
-        addPlayerToQueue(reportedPlayer, (int) (60d + Math.abs(sigma * random.nextGaussian() + average)));
+        addPlayerToQueue(reportedPlayer, (int) (20d + Math.abs(100d * random.nextGaussian() + 240d)));
     }
 
     /**
