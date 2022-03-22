@@ -43,7 +43,7 @@ public class NoCheatersMessages {
             if (wdr == null) {
                 continue;
             }
-            boolean gotautoreported = !wdr.isCheating() || ReportQueue.INSTANCE.sendAutoReport(datenow, playerName, wdr);// TODO mettre le check is cheating dans le send auto report
+            boolean gotautoreported = ReportQueue.INSTANCE.sendAutoReport(datenow, playerName, wdr);
             list.add(createwarningmessage(
                     datenow,
                     uuid,

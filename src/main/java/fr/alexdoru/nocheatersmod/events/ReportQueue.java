@@ -80,7 +80,7 @@ public class ReportQueue {
      * @return true if it sends a report
      */
     public boolean sendAutoReport(long datenow, String playerName, WDR wdr) {
-        if (wdr.canBeAutoreported(datenow)) {
+        if (wdr.canBeAutoreported(datenow) && wdr.hasValidCheats()) {
             wdr.timestamp = datenow;
             addPlayerToQueue(playerName);
             return true;

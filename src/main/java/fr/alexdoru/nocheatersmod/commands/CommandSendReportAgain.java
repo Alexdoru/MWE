@@ -39,15 +39,20 @@ public class CommandSendReportAgain extends CommandBase {
         String playername = args[1];
         WDR wdr = WdredPlayers.getWdredMap().get(uuid);
         if (wdr != null) {
-            long time = (new Date()).getTime();
-            if (FKCounterMod.preGameLobby && ConfigHandler.toggleautoreport) {
-                wdr.timeLastManualReport = time - WDR.TIME_BETWEEN_AUTOREPORT;
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Your cheating report against " + EnumChatFormatting.RED + playername
-                        + EnumChatFormatting.GREEN + " will be sent during the game."));
+            if (wdr.hasValidCheats()) {
+                long time = (new Date()).getTime();
+                if (FKCounterMod.preGameLobby && ConfigHandler.toggleautoreport) {
+                    wdr.timeLastManualReport = time - WDR.TIME_BETWEEN_AUTOREPORT;
+                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Your cheating report against " + EnumChatFormatting.RED + playername
+                            + EnumChatFormatting.GREEN + " will be sent during the game."));
+                } else {
+                    mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
+                    wdr.timestamp = time;
+                    wdr.timeLastManualReport = time;
+                }
             } else {
-                mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
-                wdr.timestamp = time;
-                wdr.timeLastManualReport = time;
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Those cheats aren't recognized by the mod :"
+                        + EnumChatFormatting.GOLD + wdr.hacksToString() + EnumChatFormatting.RED + ", use valid cheats to use the reporting features."));
             }
         }
     }
