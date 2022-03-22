@@ -27,6 +27,7 @@ public class FKCounterMod {
      * True during the preparation phase of a mega walls game
      */
     public static boolean isitPrepPhase = false;
+    public static boolean isHypixel = false;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {

@@ -17,7 +17,6 @@ public class ScoreboardEvent {
     private static String prevGameId = null;
     private static boolean prevHasGameEnded = false;
     private static int prevAmountWitherAlive = 4;
-    private static boolean isHypixel = false;
 
     public static ScoreboardParser getMwScoreboardParser() {
         return mwScoreboardParser;
@@ -30,7 +29,7 @@ public class ScoreboardEvent {
             return;
         }
 
-        if (mc.theWorld == null || !isHypixel) {
+        if (mc.theWorld == null || !FKCounterMod.isHypixel) {
             return;
         }
 
@@ -80,12 +79,12 @@ public class ScoreboardEvent {
 
     @SubscribeEvent
     public void onConnection(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-        isHypixel = MinecraftUtils.isHypixel();
+        FKCounterMod.isHypixel = MinecraftUtils.isHypixel();
     }
 
     @SubscribeEvent
     public void onDisconnection(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-        isHypixel = false;
+        FKCounterMod.isHypixel = false;
     }
 
 }
