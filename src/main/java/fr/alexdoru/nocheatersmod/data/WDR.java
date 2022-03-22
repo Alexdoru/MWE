@@ -72,4 +72,12 @@ public class WDR {
                 && !isOlderThanMaxAutoreport(datenow);
     }
 
+    public String hacksToString() {
+        StringBuilder cheats = new StringBuilder();
+        for (String hack : hacks) {
+            cheats.append(" ").append(hack);
+        }
+        return cheats.toString();
+    }
+
 }

@@ -105,9 +105,9 @@ public class NoCheatersMessages {
     public static IChatComponent[] createPlayerNameWithHoverText(String formattedNameIn, String playername, String wdrmapKey, WDR wdr, EnumChatFormatting namecolor) {
 
         String formattedName = formattedNameIn == null ? namecolor.toString() + playername : formattedNameIn;
-        StringBuilder cheats = new StringBuilder();
-        if (wdr.hacks.get(0).charAt(0) == '-') {
 
+        if (wdr.hacks.get(0).charAt(0) == '-') {
+            StringBuilder cheats = new StringBuilder();
             long timestamphackreport = 0L;
             StringBuilder allCheats = new StringBuilder();
             String serverID = "";
@@ -184,17 +184,13 @@ public class NoCheatersMessages {
 
         } else {
 
-            for (String hack : wdr.hacks) {
-                cheats.append(" ").append(hack);
-            }
-
             IChatComponent imsg = new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + wdrmapKey + " " + playername))
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
                             formattedName + "\n"
                                     + EnumChatFormatting.GREEN + "Last auto report : " + EnumChatFormatting.YELLOW + DateUtil.localformatTimestamp(wdr.timestamp) + "\n"
                                     + EnumChatFormatting.GREEN + "Last manual report : " + EnumChatFormatting.YELLOW + DateUtil.localformatTimestamp(wdr.timeLastManualReport) + "\n"
-                                    + EnumChatFormatting.GREEN + "Reported for :" + EnumChatFormatting.GOLD + cheats + "\n\n"
+                                    + EnumChatFormatting.GREEN + "Reported for :" + EnumChatFormatting.GOLD + wdr.hacksToString() + "\n\n"
                                     + EnumChatFormatting.YELLOW + "Click here to remove this player from your report list"))));
 
             IChatComponent allCheats = new ChatComponentText("");
