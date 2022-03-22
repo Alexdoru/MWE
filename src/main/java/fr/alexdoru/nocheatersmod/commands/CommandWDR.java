@@ -11,6 +11,7 @@ import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
+import fr.alexdoru.nocheatersmod.events.ReportQueue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -66,18 +67,20 @@ public class CommandWDR extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-
         if (args.length == 0) {
             addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
             return;
         }
+        handleWDRCommand(args, false);
+    }
 
+    public static void handleWDRCommand(String[] args, boolean delayReport) {
         Multithreading.addTaskToQueue(() -> {
             boolean isaTimestampedReport = false;
             boolean usesTimeMark = false;
             ArrayList<String> arraycheats = new ArrayList<>();    // for WDR object
-            StringBuilder message = new StringBuilder("/wdr " + args[0]);
             String playername = args[0];
+            StringBuilder message = new StringBuilder("/wdr " + playername);
             String serverID = "?";
             String timerOnReplay = "?";
             long longtimetosubtract = 0;
@@ -185,7 +188,7 @@ public class CommandWDR extends CommandBase {
             }
 
             if ((isaTimestampedReport || usesTimeMark) && args.length == 2) {
-                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
+                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : /wdr <player> <cheats(optional)> <timestamp(optional)>"));
                 return null;
             }
 
@@ -193,7 +196,13 @@ public class CommandWDR extends CommandBase {
                 message.append(" ").append(timerOnReplay.equals("?") ? "" : timerOnReplay);
             }
 
-            mc.thePlayer.sendChatMessage(message.toString()); //sends command to server
+            if (delayReport) {
+                ReportQueue.INSTANCE.addPlayerToQueueRandom(playername);
+            } else {
+                if (mc.thePlayer != null) {
+                    mc.thePlayer.sendChatMessage(message.toString()); //sends command to server
+                }
+            }
 
             long l = System.currentTimeMillis();
             commandUsageTimeList.removeIf(o -> (o + 2 * 60 * 1000L < l));
@@ -219,7 +228,7 @@ public class CommandWDR extends CommandBase {
             String formattedPlayername = null;
 
             try {
-                apireq = new CachedMojangUUID(args[0]);
+                apireq = new CachedMojangUUID(playername);
                 uuid = apireq.getUuid();
                 playername = apireq.getName();
                 if (uuid != null && !HypixelApiKeyUtil.apiKeyIsNotSetup()) {
@@ -333,7 +342,6 @@ public class CommandWDR extends CommandBase {
             return null;
 
         });
-
     }
 
     @Override
