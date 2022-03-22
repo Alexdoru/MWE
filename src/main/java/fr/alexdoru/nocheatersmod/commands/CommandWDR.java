@@ -10,8 +10,8 @@ import fr.alexdoru.nocheatersmod.data.TimeMark;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
-import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import fr.alexdoru.nocheatersmod.events.ReportQueue;
+import fr.alexdoru.nocheatersmod.util.NoCheatersMessages;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -298,7 +298,7 @@ public class CommandWDR extends CommandBase {
                 NameUtil.updateGameProfileAndName(playername);
                 addChatMessage(new ChatComponentText(getTagNoCheaters() +
                         EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : ""))
-                        .appendSibling(NoCheatersEvents.createPlayerNameWithHoverText(formattedPlayername, playername, uuid, newreport, EnumChatFormatting.RED)[0])
+                        .appendSibling(NoCheatersMessages.createPlayerNameWithHoverText(formattedPlayername, playername, uuid, newreport, EnumChatFormatting.RED)[0])
                         .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " with a " + EnumChatFormatting.YELLOW +
                                 "timestamp" + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
                                 + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : "."))));

@@ -4,7 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
-import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
+import fr.alexdoru.nocheatersmod.util.NoCheatersMessages;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
@@ -113,7 +113,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
             case 1:
                 ConfigHandler.togglewarnings = !ConfigHandler.togglewarnings;
                 if (ConfigHandler.togglewarnings) {
-                    List<IChatComponent> list = NoCheatersEvents.getReportMessagesforWorld();
+                    List<IChatComponent> list = NoCheatersMessages.getReportMessagesforWorld();
                     if (!list.isEmpty()) {
                         for (IChatComponent report : list) {
                             ChatUtil.addChatMessage(report);

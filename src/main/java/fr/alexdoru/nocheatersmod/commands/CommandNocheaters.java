@@ -10,7 +10,7 @@ import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
-import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
+import fr.alexdoru.nocheatersmod.util.NoCheatersMessages;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.CommandBase;
@@ -44,7 +44,7 @@ public class CommandNocheaters extends CommandBase {
 
         if (args.length == 0) {
 
-            List<IChatComponent> list = NoCheatersEvents.getReportMessagesforWorld();
+            List<IChatComponent> list = NoCheatersMessages.getReportMessagesforWorld();
 
             if (list.isEmpty()) {
                 addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "No reported player here !"));
@@ -420,13 +420,13 @@ public class CommandNocheaters extends CommandBase {
 
             if (wdr.isNicked()) {
 
-                imsg = NoCheatersEvents.createPlayerNameWithHoverText(EnumChatFormatting.DARK_PURPLE + "[Nick] " + EnumChatFormatting.GOLD + uuid, uuid, uuid, wdr, EnumChatFormatting.WHITE)[0];
+                imsg = NoCheatersMessages.createPlayerNameWithHoverText(EnumChatFormatting.DARK_PURPLE + "[Nick] " + EnumChatFormatting.GOLD + uuid, uuid, uuid, wdr, EnumChatFormatting.WHITE)[0];
 
             } else {
 
                 HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
                 LoginData logindata = new LoginData(playerdata.getPlayerData());
-                imsg = NoCheatersEvents.createPlayerNameWithHoverText(logindata.getFormattedName(), logindata.getdisplayname(), uuid, wdr, EnumChatFormatting.WHITE)[0];
+                imsg = NoCheatersMessages.createPlayerNameWithHoverText(logindata.getFormattedName(), logindata.getdisplayname(), uuid, wdr, EnumChatFormatting.WHITE)[0];
 
                 IChatComponent ismgStatus = new ChatComponentText("");
 
