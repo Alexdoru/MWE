@@ -11,8 +11,8 @@ import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
-import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import fr.alexdoru.nocheatersmod.events.ReportQueue;
+import fr.alexdoru.nocheatersmod.util.NoCheatersMessages;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -128,7 +128,7 @@ public class NameUtil {
             boolean gotautoreported = ReportQueue.INSTANCE.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
             if (ConfigHandler.togglewarnings || (ConfigHandler.toggleautoreport && mwPlayerData.wdr.isOlderThanMaxAutoreport(datenow))) {
                 String uuid = player.getUniqueID().toString().replace("-", "");
-                ChatUtil.addChatMessage(NoCheatersEvents.createwarningmessage(
+                ChatUtil.addChatMessage(NoCheatersMessages.createwarningmessage(
                         datenow,
                         uuid,
                         (!FKCounterMod.isInMwGame || FKCounterMod.isitPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(player.getTeam(), playerName),
