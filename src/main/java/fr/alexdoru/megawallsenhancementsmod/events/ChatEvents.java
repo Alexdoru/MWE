@@ -16,6 +16,7 @@ import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.commands.CommandReport;
+import fr.alexdoru.nocheatersmod.commands.CommandWDR;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
@@ -26,14 +27,12 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.*;
-import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,7 +57,6 @@ public class ChatEvents {
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Triple Coins \\+ EXP, |)(?:Active Booster, |)\\w+'s Network Booster\\)).*");
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
     private static final List<StringLong> reportSuggestionList = new ArrayList<>();
-    private static final Random random = new Random();
     private static final long TIME_BETWEEN_REPORT_SUGGESTION_PLAYER = 20L * 60L * 1000L;
     private static long lastStrength = 0;
 
@@ -110,7 +108,8 @@ public class ChatEvents {
             if (FKCounterMod.isitPrepPhase) {
                 ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Report suggestions aren't working before the walls fall."));
             }
-            ClientCommandHandler.instance.executeCommand(mc.thePlayer, "/wdr " + reportedPlayer + " " + cheat);
+            String[] args = new String[]{reportedPlayer, cheat};
+            CommandWDR.handleWDRCommand(args, true);
             return;
         }
         if (!FKCounterMod.isitPrepPhase) {
@@ -135,19 +134,9 @@ public class ChatEvents {
                 return;
             }
             if (canReportSuggestionPlayer(reportedPlayer)) {
-                sendAutoreportSuggestion(reportedPlayer);
+                ReportQueue.INSTANCE.addPlayerToQueueRandom(reportedPlayer);
             }
         }
-    }
-
-    /**
-     * Sends reports with minimum of 3sec after the msg, on average 15sec after the message
-     * After 27sec 99% of reports are sent
-     */
-    private static void sendAutoreportSuggestion(String reportedPlayer) {
-        final double average = 12d * 20d;
-        final double sigma = average / 3d;
-        ReportQueue.INSTANCE.addPlayerToQueue(reportedPlayer, (int) (60d + Math.abs(sigma * random.nextGaussian() + average)));
     }
 
     private static boolean canReportSuggestionPlayer(String playername) {
