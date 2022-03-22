@@ -152,11 +152,11 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle("NoCheaters v" + NoCheatersMod.version, 2, (width / 2.0f), getYposForButton(-6), Integer.parseInt("FF5555", 16));
         String msg = "NoCheaters saves players reported via " + EnumChatFormatting.YELLOW + "/wdr playername" + EnumChatFormatting.WHITE + " (not /report)";
-        mc.fontRendererObj.drawStringWithShadow(msg, (width / 2.0f) - fontRendererObj.getStringWidth(msg) / 2.0f, getYposForButton(-5) + fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
+        drawCenteredString(fontRendererObj, msg, getxCenter(), getYposForButton(-5) + fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
         String msg1 = "If you want to remove a player from your report list use :";
-        mc.fontRendererObj.drawStringWithShadow(msg1, (width / 2.0f) - fontRendererObj.getStringWidth(msg1) / 2.0f, getYposForButton(-5) + 2 * fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
+        drawCenteredString(fontRendererObj, msg1, getxCenter(), getYposForButton(-5) + 2 * fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
         String msg2 = EnumChatFormatting.YELLOW + "/unwdr playername" + EnumChatFormatting.WHITE + " or click the name on the warning message";
-        mc.fontRendererObj.drawStringWithShadow(msg2, (width / 2.0f) - fontRendererObj.getStringWidth(msg2) / 2.0f, getYposForButton(-5) + 3 * fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
+        drawCenteredString(fontRendererObj, msg2, getxCenter(), getYposForButton(-5) + 3 * fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
         super.drawScreen(mouseX, mouseY, partialTicks);
         drawTooltips(mouseX, mouseY);
     }
