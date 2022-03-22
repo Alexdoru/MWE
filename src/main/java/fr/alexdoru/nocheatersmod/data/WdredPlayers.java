@@ -26,14 +26,9 @@ public class WdredPlayers {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(wdrsFile));
             for (Entry<String, WDR> entry : wdred.entrySet()) {
-
                 String uuid = entry.getKey();
                 WDR wdr = entry.getValue();
-                writer.write(uuid + " " + wdr.timestamp + " " + wdr.timeLastManualReport);
-                for (String hack : wdr.hacks) {
-                    writer.write(" " + hack);
-                }
-                writer.write("\n");
+                writer.write(uuid + " " + wdr.timestamp + " " + wdr.timeLastManualReport + wdr.hacksToString() + "\n");
             }
             writer.close();
         } catch (IOException e) {
