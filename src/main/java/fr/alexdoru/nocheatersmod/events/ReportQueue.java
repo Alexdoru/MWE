@@ -1,7 +1,10 @@
 package fr.alexdoru.nocheatersmod.events;
 
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -54,6 +57,7 @@ public class ReportQueue {
             counter = tickDelay;
         }
         reportQueue.add(playername);
+        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GRAY + "Sending report command with a delay..."));
     }
 
     private boolean isReportQueueInactive() {
