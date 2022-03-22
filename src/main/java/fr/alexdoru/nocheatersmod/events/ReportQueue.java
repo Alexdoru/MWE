@@ -1,5 +1,6 @@
 package fr.alexdoru.nocheatersmod.events;
 
+import fr.alexdoru.nocheatersmod.data.WDR;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -67,6 +68,20 @@ public class ReportQueue {
         final double average = 12d * 20d;
         final double sigma = average / 3d;
         addPlayerToQueue(reportedPlayer, (int) (60d + Math.abs(sigma * random.nextGaussian() + average)));
+    }
+
+    /**
+     * Handles the auto report feature
+     *
+     * @return true if it sends a report
+     */
+    public boolean sendAutoReport(long datenow, String playerName, WDR wdr) {
+        if (wdr.canBeAutoreported(datenow)) {
+            wdr.timestamp = datenow;
+            addPlayerToQueue(playerName);
+            return true;
+        }
+        return false;
     }
 
 }

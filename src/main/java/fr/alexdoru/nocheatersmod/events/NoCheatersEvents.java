@@ -48,20 +48,6 @@ public class NoCheatersEvents {
     }
 
     /**
-     * Handles the auto report feature
-     *
-     * @return true if it sends a report
-     */
-    public static boolean sendAutoReport(long datenow, String playerName, WDR wdr) {
-        if (wdr.canBeAutoreported(datenow)) {
-            wdr.timestamp = datenow;
-            ReportQueue.INSTANCE.addPlayerToQueue(playerName);
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Called when you type /nocheaters
      */
     public static List<IChatComponent> getReportMessagesforWorld() {
@@ -80,7 +66,7 @@ public class NoCheatersEvents {
             if (wdr == null) {
                 continue;
             }
-            boolean gotautoreported = !wdr.isCheating() || sendAutoReport(datenow, playerName, wdr);
+            boolean gotautoreported = !wdr.isCheating() || ReportQueue.INSTANCE.sendAutoReport(datenow, playerName, wdr);
             list.add(createwarningmessage(
                     datenow,
                     uuid,
