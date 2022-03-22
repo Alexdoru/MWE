@@ -12,6 +12,7 @@ import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
+import fr.alexdoru.nocheatersmod.events.ReportQueue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -122,9 +123,9 @@ public class NameUtil {
         }
 
         if (onPlayerJoin && mwPlayerData.wdr != null && mwPlayerData.wdr.isCheating()) { // player was reported
-            String playerName = player.getName();
             long datenow = (new Date()).getTime();
-            boolean gotautoreported = NoCheatersEvents.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
+            String playerName = player.getName();
+            boolean gotautoreported = ReportQueue.INSTANCE.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
             if (ConfigHandler.togglewarnings || (ConfigHandler.toggleautoreport && mwPlayerData.wdr.isOlderThanMaxAutoreport(datenow))) {
                 String uuid = player.getUniqueID().toString().replace("-", "");
                 ChatUtil.addChatMessage(NoCheatersEvents.createwarningmessage(
