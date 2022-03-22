@@ -122,7 +122,7 @@ public class NameUtil {
             return;
         }
 
-        if (onPlayerJoin && mwPlayerData.wdr != null && mwPlayerData.wdr.isCheating()) { // player was reported
+        if (onPlayerJoin && mwPlayerData.wdr != null && mwPlayerData.wdr.transformName()) { // player was reported
             long datenow = (new Date()).getTime();
             String playerName = player.getName();
             boolean gotautoreported = ReportQueue.INSTANCE.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
@@ -196,7 +196,7 @@ public class NameUtil {
 
                     if (wdr != null) {
 
-                        if (wdr.isCheating()) {
+                        if (wdr.transformName()) {
 
                             if (wdr.hacks.contains("bhop")) {
                                 extraPrefix = prefix_bhop;
