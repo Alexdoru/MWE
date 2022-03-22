@@ -140,8 +140,14 @@ public class ChatEvents {
         }
     }
 
+    /**
+     * Sends reports with minimum of 3sec after the msg, on average 15sec after the message
+     * After 27sec 99% of reports are sent
+     */
     private static void sendAutoreportSuggestion(String reportedPlayer) {
-        ReportQueue.INSTANCE.addPlayerToQueue(reportedPlayer, 20 + random.nextInt(180));
+        final double average = 12d * 20d;
+        final double sigma = average / 3d;
+        ReportQueue.INSTANCE.addPlayerToQueue(reportedPlayer, (int) (60d + Math.abs(sigma * random.nextGaussian() + average)));
     }
 
     private static boolean canReportSuggestionPlayer(String playername) {
