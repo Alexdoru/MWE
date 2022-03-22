@@ -10,6 +10,7 @@ import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
+import fr.alexdoru.nocheatersmod.events.ReportQueue;
 import fr.alexdoru.nocheatersmod.util.NoCheatersMessages;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -163,6 +164,11 @@ public class CommandNocheaters extends CommandBase {
             if (args.length == 1) {
                 addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + getCommandUsage(sender) + " ignore <playername>"));
             } else {
+
+                String removedFromQueue = ReportQueue.INSTANCE.clearReportsSentBy(args[1]);
+                if(!removedFromQueue.equals("")) {
+                    addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Won't send reports for : " + EnumChatFormatting.GOLD + removedFromQueue));
+                }
 
                 Multithreading.addTaskToQueue(() -> {
 
@@ -327,7 +333,7 @@ public class CommandNocheaters extends CommandBase {
 
             });
 
-        } else if (args[0].equals("ignoreremove")) {
+        } else if (args[0].equalsIgnoreCase("ignoreremove")) {
 
             if (args.length == 3) {
 
