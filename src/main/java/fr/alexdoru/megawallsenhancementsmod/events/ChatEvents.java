@@ -70,18 +70,16 @@ public class ChatEvents {
             Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);
 
             if (matcher1.find()) {
-                String name = matcher1.group(1);
-                if (isAValidName(name)) {
-                    handleReportSuggestion(name, "bhop");
-                    handleAutoReportSuggestion(messageSender, name, "bhop");
+                String reportedPlayer = matcher1.group(1);
+                if (isAValidName(reportedPlayer)) {
+                    handleReportSuggestion(messageSender, reportedPlayer, "bhop");
                 }
                 return true;
             } else if (matcher2.find()) {
-                String name = matcher2.group(1);
+                String reportedPlayer = matcher2.group(1);
                 String cheat = matcher2.group(2);
-                if (isAValidCheat(cheat) && isAValidName(name)) {
-                    handleReportSuggestion(name, cheat);
-                    handleAutoReportSuggestion(messageSender, name, cheat);
+                if (isAValidCheat(cheat) && isAValidName(reportedPlayer)) {
+                    handleReportSuggestion(messageSender, reportedPlayer, cheat);
                 }
                 return true;
             }
@@ -92,22 +90,19 @@ public class ChatEvents {
 
     }
 
-    private static void handleReportSuggestion(String playername, String cheat) {
-        if (ConfigHandler.reportsuggestions) {
-            playReportSuggestionSound(ConfigHandler.suggestionsSound);
-            IChatComponent imsg = new ChatComponentText(getTagMW() + EnumChatFormatting.DARK_RED + "Command suggestion : ")
-                    .appendSibling(makeReportButtons(playername, "cheating", cheat, ClickEvent.Action.RUN_COMMAND, ClickEvent.Action.SUGGEST_COMMAND));
-            new DelayedTask(() -> addChatMessage(imsg), 0);
-        }
-    }
-
     public static void playReportSuggestionSound(boolean playSound) {
-        if(playSound) {
+        if (playSound) {
             mc.getSoundHandler().playSound(PositionedSoundRecord.create(reportSuggestionSound, 1.0F));
         }
     }
 
-    private static void handleAutoReportSuggestion(String messageSender, String reportedPlayer, String cheat) {
+    private static void handleReportSuggestion(String messageSender, String reportedPlayer, String cheat) {
+        if (ConfigHandler.reportsuggestions) {
+            playReportSuggestionSound(ConfigHandler.suggestionsSound);
+            IChatComponent imsg = new ChatComponentText(getTagMW() + EnumChatFormatting.DARK_RED + "Command suggestion : ")
+                    .appendSibling(makeReportButtons(reportedPlayer, "cheating", cheat, ClickEvent.Action.RUN_COMMAND, ClickEvent.Action.SUGGEST_COMMAND));
+            new DelayedTask(() -> addChatMessage(imsg), 0);
+        }
         if (!FKCounterMod.isInMwGame || !ConfigHandler.autoreportSuggestions || mc.thePlayer == null || mc.thePlayer.getName().equals(reportedPlayer) || messageSender == null) {
             return;
         }
