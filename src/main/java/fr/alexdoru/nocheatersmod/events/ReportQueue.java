@@ -65,7 +65,7 @@ public class ReportQueue {
     }
 
     public void addPlayerToQueueRandom(String reportedPlayer) {
-        addPlayerToQueue(reportedPlayer, (int) (20d + Math.abs(100d * random.nextGaussian() + 240d)));
+        addPlayerToQueue(reportedPlayer, (int) (100d + Math.abs(100d * random.nextGaussian() + 240d)));
     }
 
     /**
