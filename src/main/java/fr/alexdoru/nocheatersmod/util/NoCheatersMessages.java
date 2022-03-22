@@ -44,14 +44,16 @@ public class NoCheatersMessages {
                 continue;
             }
             boolean gotautoreported = ReportQueue.INSTANCE.sendAutoReport(datenow, playerName, wdr);
-            list.add(createwarningmessage(
-                    datenow,
-                    uuid,
-                    (!FKCounterMod.isInMwGame || FKCounterMod.isitPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playerName),
-                    playerName,
-                    wdr,
-                    gotautoreported
-            ));
+            if (wdr.transformName()) {
+                list.add(createwarningmessage(
+                        datenow,
+                        uuid,
+                        (!FKCounterMod.isInMwGame || FKCounterMod.isitPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playerName),
+                        playerName,
+                        wdr,
+                        gotautoreported
+                ));
+            }
         }
         return list;
     }
@@ -198,11 +200,9 @@ public class NoCheatersMessages {
             for (String hack : wdr.hacks) {
                 if (hack.equalsIgnoreCase("bhop")) {
                     allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_RED + hack + " "));
-                } else if (hack.contains(WDR.IGNORED)) {
-                    allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + hack + " "));
                 } else if (hack.equalsIgnoreCase(WDR.NICK)) {
                     allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_PURPLE + hack + " "));
-                } else {
+                } else if (!hack.contains(WDR.IGNORED)) {
                     allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + hack + " "));
                 }
             }
