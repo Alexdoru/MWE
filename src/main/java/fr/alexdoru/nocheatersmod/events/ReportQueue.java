@@ -19,7 +19,7 @@ public class ReportQueue {
     private static final int TIME_BETWEEN_REPORTS = 40 * 20; // ticks
     private final Minecraft mc = Minecraft.getMinecraft();
     private int counter;
-    private final List<String> reportQueue = new ArrayList<>();
+    private final List<ReportInQueue> queueList = new ArrayList<>();
     private static final Random random = new Random();
 
     @SubscribeEvent
@@ -29,8 +29,8 @@ public class ReportQueue {
             return;
         }
 
-        if (counter <= 0 && !reportQueue.isEmpty() && mc.thePlayer != null) {
-            String playername = reportQueue.remove(0);
+        if (counter <= 0 && !queueList.isEmpty() && mc.thePlayer != null) {
+            String playername = queueList.remove(0).reportedPlayer;
             mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
             counter = (int) (TIME_BETWEEN_REPORTS + (10d * random.nextGaussian() / 6d));
         }
@@ -48,7 +48,7 @@ public class ReportQueue {
             MinecraftForge.EVENT_BUS.register(this);
             counter = 0;
         }
-        reportQueue.add(playername);
+        queueList.add(new ReportInQueue(null, playername));
     }
 
     public void addPlayerToQueue(String playername, int tickDelay) {
@@ -56,12 +56,12 @@ public class ReportQueue {
             MinecraftForge.EVENT_BUS.register(this);
             counter = tickDelay;
         }
-        reportQueue.add(playername);
+        queueList.add(new ReportInQueue(null, playername));
         ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GRAY + "Sending report command with a delay..."));
     }
 
     private boolean isReportQueueInactive() {
-        return counter <= 0 && reportQueue.isEmpty();
+        return counter <= 0 && queueList.isEmpty();
     }
 
     public void addPlayerToQueueRandom(String reportedPlayer) {
@@ -80,6 +80,28 @@ public class ReportQueue {
             return true;
         }
         return false;
+    }
+
+    public String clearReportsSentBy(String playername) {
+        StringBuilder msg = new StringBuilder();
+        for (ReportInQueue reportInQueue : queueList) {
+            if(reportInQueue.messageSender!= null && reportInQueue.messageSender.equals(playername)) {
+                msg.append(reportInQueue.messageSender).append(" ");
+            }
+        }
+        return msg.toString();
+    }
+
+}
+
+class ReportInQueue {
+
+    public String messageSender;
+    public String reportedPlayer;
+
+    public ReportInQueue(String messageSender, String reportedPlayer) {
+        this.messageSender = messageSender;
+        this.reportedPlayer = reportedPlayer;
     }
 
 }
