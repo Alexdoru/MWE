@@ -28,7 +28,7 @@ public class ReportQueue {
         if (counter <= 0 && !reportQueue.isEmpty() && mc.thePlayer != null) {
             String playername = reportQueue.remove(0);
             mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
-            counter = TIME_BETWEEN_REPORTS;
+            counter = (int) (TIME_BETWEEN_REPORTS + (10d * random.nextGaussian() / 6d));
         }
 
         if (isReportQueueInactive()) {
