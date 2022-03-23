@@ -44,6 +44,7 @@ public class ScoreboardEvent {
         boolean hasgameended = mwScoreboardParser.hasGameEnded();
         int amountWitherAlive = mwScoreboardParser.getAliveWithers().size();
         FKCounterMod.isInMwGame = mwScoreboardParser.isInMwGame();
+        FKCounterMod.isMWEnvironement = mwScoreboardParser.isMWEnvironement();
         FKCounterMod.preGameLobby = mwScoreboardParser.isPreGameLobby();
         FKCounterMod.isitPrepPhase = mwScoreboardParser.isitPrepPhase();
 

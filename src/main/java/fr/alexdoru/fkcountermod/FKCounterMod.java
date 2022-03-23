@@ -28,6 +28,7 @@ public class FKCounterMod {
      */
     public static boolean isitPrepPhase = false;
     public static boolean isHypixel = false;
+    public static boolean isMWEnvironement = false;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {

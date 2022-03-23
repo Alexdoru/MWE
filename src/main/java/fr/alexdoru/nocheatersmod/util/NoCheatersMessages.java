@@ -65,7 +65,7 @@ public class NoCheatersMessages {
         IChatComponent imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ").appendSibling(imsgArray[0]);
         IChatComponent allCheats = imsgArray[1];
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " joined,"));
-        boolean olderThanMaxAutoreport = wdr.isOlderThanMaxAutoreport(datenow);
+        boolean olderThanMaxAutoreport = wdr.shouldPrintBigText(datenow);
 
         if (olderThanMaxAutoreport) {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " [Report Player]").setChatStyle(new ChatStyle()
