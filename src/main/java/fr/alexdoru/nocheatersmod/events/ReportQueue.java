@@ -85,11 +85,15 @@ public class ReportQueue {
     public String clearReportsSentBy(String playername) {
         StringBuilder msg = new StringBuilder();
         for (ReportInQueue reportInQueue : queueList) {
-            if(reportInQueue.messageSender!= null && reportInQueue.messageSender.equals(playername)) {
+            if (reportInQueue.messageSender != null && reportInQueue.messageSender.equals(playername)) {
                 msg.append(reportInQueue.messageSender).append(" ");
             }
         }
         return msg.toString();
+    }
+
+    public void clearReportsQueue() {
+        queueList.clear();
     }
 
 }

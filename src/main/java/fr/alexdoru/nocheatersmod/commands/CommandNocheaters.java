@@ -364,13 +364,18 @@ public class CommandNocheaters extends CommandBase {
 
             }
 
+        } else if (args[0].equalsIgnoreCase("clearreportqueue")) {
+
+            ReportQueue.INSTANCE.clearReportsQueue();
+            addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed all reports waiting to be sent."));
+
         }
 
     }
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        String[] arguments = {"config", "ignore", "ignorelist", "reportlist"};
+        String[] arguments = {"clearreportqueue", "config", "ignore", "ignorelist", "reportlist"};
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, arguments);
         }
