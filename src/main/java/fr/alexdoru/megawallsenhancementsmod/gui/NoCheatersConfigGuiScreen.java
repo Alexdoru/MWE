@@ -4,6 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
+import fr.alexdoru.nocheatersmod.events.ReportQueue;
 import fr.alexdoru.nocheatersmod.util.NoCheatersMessages;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -127,6 +128,9 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 break;
             case 9:
                 ConfigHandler.autoreportSuggestions = !ConfigHandler.autoreportSuggestions;
+                if(!ConfigHandler.autoreportSuggestions) {
+                    ReportQueue.INSTANCE.clearReportsQueue();
+                }
                 break;
             case 10:
                 ConfigHandler.suggestionsSound = !ConfigHandler.suggestionsSound;
