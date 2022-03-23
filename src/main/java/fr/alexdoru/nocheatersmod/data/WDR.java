@@ -73,6 +73,10 @@ public class WDR {
                 && !isOlderThanMaxAutoreport(datenow);
     }
 
+    public boolean shouldPrintBigText(long datenow) {
+        return FKCounterMod.isMWEnvironement && ConfigHandler.toggleautoreport && isOlderThanMaxAutoreport(datenow);
+    }
+
     public boolean hasValidCheats() {
         for (String cheat : hacks) {
             if (CommandReport.cheatsList.contains(cheat)) {

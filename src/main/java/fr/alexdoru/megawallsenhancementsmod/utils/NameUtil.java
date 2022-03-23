@@ -126,7 +126,7 @@ public class NameUtil {
             long datenow = (new Date()).getTime();
             String playerName = player.getName();
             boolean gotautoreported = ReportQueue.INSTANCE.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
-            if (ConfigHandler.togglewarnings || (ConfigHandler.toggleautoreport && mwPlayerData.wdr.isOlderThanMaxAutoreport(datenow))) {
+            if (ConfigHandler.togglewarnings || mwPlayerData.wdr.shouldPrintBigText(datenow)) {
                 String uuid = player.getUniqueID().toString().replace("-", "");
                 ChatUtil.addChatMessage(NoCheatersMessages.createwarningmessage(
                         datenow,
