@@ -57,7 +57,7 @@ public class ReportQueue {
             counter = tickDelay;
         }
         queueList.add(new ReportInQueue(null, playername));
-        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GRAY + "Sending report command with a delay..."));
+        ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Sending report with a delay..."));
     }
 
     private boolean isReportQueueInactive() {
