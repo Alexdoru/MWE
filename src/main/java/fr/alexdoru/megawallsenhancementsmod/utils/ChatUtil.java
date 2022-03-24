@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
+import fr.alexdoru.fkcountermod.FKCounterMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.event.ClickEvent;
@@ -307,7 +308,7 @@ public class ChatUtil {
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                 new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
                                         + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " " + cheatReport + "\n"
-                                        + EnumChatFormatting.GRAY + "Using the report option won't save the cheater's name in the mod NoCheaters\n\n"
+                                        + EnumChatFormatting.GRAY + "Using the report option won't save the cheater's name in the mod NoCheaters"
                                         + getReportingAdvice()))));
     }
 
@@ -319,7 +320,7 @@ public class ChatUtil {
                                 new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
                                         + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/wdr " + playername + " " + cheatWDR + "\n"
                                         + EnumChatFormatting.GRAY + "Using the wdr option will give you warnings about this player ingame\n"
-                                        + EnumChatFormatting.GRAY + "You can use " + EnumChatFormatting.YELLOW + "/unwdr " + playername + EnumChatFormatting.GRAY + "to remove them from your report list\n\n"
+                                        + EnumChatFormatting.GRAY + "You can use " + EnumChatFormatting.YELLOW + "/unwdr " + playername + EnumChatFormatting.GRAY + "to remove them from your report list"
                                         + getReportingAdvice()))));
     }
 
@@ -336,9 +337,10 @@ public class ChatUtil {
     }
 
     public static String getReportingAdvice() {
-        return EnumChatFormatting.RED + "To make reporting efficient, be sure to report\n"
+        final String s = "\n\n" + EnumChatFormatting.RED + "To make reporting efficient, be sure to report\n"
                 + EnumChatFormatting.DARK_RED + "when you are ingame with the cheater\n"
                 + EnumChatFormatting.RED + "and not before the game starts or in the lobby.";
+        return FKCounterMod.preGameLobby ? s : "";
     }
 
     public static String getChatReportingAdvice() {
