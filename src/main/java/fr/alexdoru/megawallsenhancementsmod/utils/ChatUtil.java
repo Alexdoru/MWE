@@ -297,25 +297,42 @@ public class ChatUtil {
     }
 
     public static IChatComponent makeReportButtons(String playername, String cheatReport, String cheatWDR, ClickEvent.Action actionreport, ClickEvent.Action actionwdr) {
+        return getReportButton(playername, cheatReport, actionreport).appendSibling(getWDRButton(playername, cheatWDR, actionwdr));
+    }
 
-        return new ChatComponentText(EnumChatFormatting.DARK_GREEN + "Report")
+    public static IChatComponent getReportButton(String playername, String cheatReport, ClickEvent.Action actionreport) {
+        return new ChatComponentText(EnumChatFormatting.DARK_GREEN + "Report ")
                 .setChatStyle(new ChatStyle()
                         .setChatClickEvent(new ClickEvent(actionreport, "/report " + playername + " " + cheatReport))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                 new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
                                         + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " " + cheatReport + "\n"
                                         + EnumChatFormatting.GRAY + "Using the report option won't save the cheater's name in the mod NoCheaters\n\n"
-                                        + getReportingAdvice()))))
+                                        + getReportingAdvice()))));
+    }
 
-                .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_PURPLE + " WDR ")
-                        .setChatStyle(new ChatStyle()
-                                .setChatClickEvent(new ClickEvent(actionwdr, "/wdr " + playername + " " + cheatWDR))
-                                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                        new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
-                                                + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/wdr " + playername + " " + cheatWDR + "\n"
-                                                + EnumChatFormatting.GRAY + "Using the wdr option will give you warnings about this player ingame\n"
-                                                + EnumChatFormatting.GRAY + "You can use " + EnumChatFormatting.YELLOW + "/unwdr " + playername + EnumChatFormatting.GRAY + "to remove them from your report list\n\n"
-                                                + getReportingAdvice())))));
+    private static IChatComponent getWDRButton(String playername, String cheatWDR, ClickEvent.Action actionwdr) {
+        return new ChatComponentText(EnumChatFormatting.DARK_PURPLE + "WDR ")
+                .setChatStyle(new ChatStyle()
+                        .setChatClickEvent(new ClickEvent(actionwdr, "/wdr " + playername + " " + cheatWDR))
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
+                                        + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/wdr " + playername + " " + cheatWDR + "\n"
+                                        + EnumChatFormatting.GRAY + "Using the wdr option will give you warnings about this player ingame\n"
+                                        + EnumChatFormatting.GRAY + "You can use " + EnumChatFormatting.YELLOW + "/unwdr " + playername + EnumChatFormatting.GRAY + "to remove them from your report list\n\n"
+                                        + getReportingAdvice()))));
+    }
+
+    public static IChatComponent getIgnoreButton(String playername) {
+        return new ChatComponentText(EnumChatFormatting.YELLOW + "Ignore ")
+                .setChatStyle(new ChatStyle()
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nocheaters ignore " + playername))
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to cancel the report from this player\n"
+                                        + EnumChatFormatting.GREEN + "and ignore all future report suggestions comming from them\n"
+                                        + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/nocheaters ignore " + playername + "\n"
+                                        + EnumChatFormatting.GRAY + "You can un-ignore them by opening the ignore list with\n"
+                                        + EnumChatFormatting.YELLOW + "/nocheaters ignorelist"))));
     }
 
     public static String getReportingAdvice() {
