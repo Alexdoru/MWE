@@ -232,7 +232,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 9:
                 if (!ConfigHandler.hunterStrengthHUD) {
-                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(ChatEvents.strengthSound, 0.0F));
+                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(ChatEvents.STRENGTH_SOUND, 0.0F));
                 }
                 ConfigHandler.hunterStrengthHUD = !ConfigHandler.hunterStrengthHUD;
                 break;

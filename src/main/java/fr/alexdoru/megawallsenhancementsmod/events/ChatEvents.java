@@ -41,8 +41,8 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class ChatEvents {
 
-    public static final ResourceLocation reportSuggestionSound = new ResourceLocation("random.orb");
-    public static final ResourceLocation strengthSound = new ResourceLocation("item.fireCharge.use"); // item.fireCharge.use  usefireworks.twinkle
+    public static final ResourceLocation REPORT_SUGGESTION_SOUND = new ResourceLocation("random.orb");
+    public static final ResourceLocation STRENGTH_SOUND = new ResourceLocation("item.fireCharge.use"); // item.fireCharge.use  usefireworks.twinkle
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static final String BAN_MESSAGE = "A player has been removed from your game.";
     private static final String HUNGER_MESSAGE = "Get to the middle to stop the hunger!";
@@ -90,7 +90,7 @@ public class ChatEvents {
 
     public static void playReportSuggestionSound(boolean playSound) {
         if (playSound) {
-            mc.getSoundHandler().playSound(PositionedSoundRecord.create(reportSuggestionSound, 1.0F));
+            mc.getSoundHandler().playSound(PositionedSoundRecord.create(REPORT_SUGGESTION_SOUND, 1.0F));
         }
     }
 
