@@ -36,12 +36,11 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         int xPos = getxCenter() - buttonsWidth / 2;
         buttonList.add(new GuiButton(1, xPos, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
         buttonList.add(new GuiButton(8, xPos, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(8)));
-        buttonList.add(new GuiButton(10, xPos, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(10)));
-        buttonList.add(new GuiButton(9, xPos, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
-        buttonList.add(new GuiButton(2, xPos, getYposForButton(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
-        buttonList.add(new GuiButton(6, xPos, getYposForButton(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(6)));
-        buttonList.add(new GuiSlider(7, xPos, getYposForButton(3), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
-        buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getYposForButton(5), 150, ButtonsHeight, getButtonDisplayString(3)));
+        buttonList.add(new GuiButton(9, xPos, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
+        buttonList.add(new GuiButton(2, xPos, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
+        buttonList.add(new GuiButton(6, xPos, getYposForButton(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(6)));
+        buttonList.add(new GuiSlider(7, xPos, getYposForButton(2), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
+        buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getYposForButton(4), 150, ButtonsHeight, getButtonDisplayString(3)));
         super.initGui();
     }
 
@@ -51,12 +50,10 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 return "Warning messages in chat : " + getSuffix(ConfigHandler.togglewarnings);
             case 8:
                 return "Report suggestions in chat : " + getSuffix(ConfigHandler.reportsuggestions);
-            case 10:
-                return "Play suggestion sound : " + getSuffix(ConfigHandler.suggestionsSound);
             case 9:
-                return "Auto-send suggestions : " + getSuffix(ConfigHandler.autoreportSuggestions);
+                return "Auto-report suggestions : " + getSuffix(ConfigHandler.autoreportSuggestions);
             case 2:
-                return "Autoreport cheaters : " + getSuffix(ConfigHandler.toggleautoreport);
+                return "Auto-report cheaters : " + getSuffix(ConfigHandler.toggleautoreport);
             case 6:
                 return "Delete old reports : " + getSuffix(ConfigHandler.deleteReports);
             case 3:
@@ -132,10 +129,6 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 if(!ConfigHandler.autoreportSuggestions) {
                     ReportQueue.INSTANCE.clearReportsQueue();
                 }
-                break;
-            case 10:
-                ConfigHandler.suggestionsSound = !ConfigHandler.suggestionsSound;
-                ReportSuggestionHandler.playReportSuggestionSound(ConfigHandler.suggestionsSound);
                 break;
             case 2:
                 ConfigHandler.toggleautoreport = !ConfigHandler.toggleautoreport;

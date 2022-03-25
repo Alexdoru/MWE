@@ -143,7 +143,7 @@ public class ReportSuggestionHandler {
 
         if (ConfigHandler.reportsuggestions) {
 
-            playReportSuggestionSound(ConfigHandler.suggestionsSound && !isSenderIgnored && !isSenderCheating && !isSenderFlaging);
+            playReportSuggestionSound(!isSenderIgnored && !isSenderCheating && !isSenderFlaging);
 
             if (isSenderInTablist && messageSender != null) {
 
