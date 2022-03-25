@@ -71,7 +71,6 @@ public class ConfigHandler {
     public static boolean togglewarnings;
     public static boolean toggleautoreport;
     public static boolean reportsuggestions;
-    public static boolean suggestionsSound;
     public static boolean autoreportSuggestions;
     public static boolean deleteReports;
     public static long timeDeleteReport;
@@ -157,7 +156,6 @@ public class ConfigHandler {
         final Property pToggleicons = config.get(CATEGORY_NOCHEATERS, "Toggle Icons", true, "Display warning symbol on nametags of reported players");
         final Property pTogglewarnings = config.get(CATEGORY_NOCHEATERS, "Toggle Warnings", false, "Gives warning messages in chat for reported players");
         final Property preportsuggestions = config.get(CATEGORY_NOCHEATERS, "Report suggestion", true, "Give report suggestions in the chat based on messages in shouts");
-        final Property psuggestionsSound = config.get(CATEGORY_NOCHEATERS, "Suggestion sound", true, "Plays a sound when there is a report suggestions in the chat");
         final Property pautoreportSuggestions = config.get(CATEGORY_NOCHEATERS, "Send report suggestions", true, "Send report suggestions");
         final Property pToggleautoreport = config.get(CATEGORY_NOCHEATERS, "Autoreport saved cheaters", true, "Automatically report previously reported players when they are in your lobby");
         final Property pdeleteReports = config.get(CATEGORY_NOCHEATERS, "Delete Old Report", false, "Deletes reports older than the specified value");
@@ -231,7 +229,6 @@ public class ConfigHandler {
         pOrderNOCHEATERS.add(pToggleicons.getName());
         pOrderNOCHEATERS.add(pTogglewarnings.getName());
         pOrderNOCHEATERS.add(preportsuggestions.getName());
-        pOrderNOCHEATERS.add(psuggestionsSound.getName());
         pOrderNOCHEATERS.add(pToggleautoreport.getName());
         pOrderNOCHEATERS.add(pautoreportSuggestions.getName());
         pOrderNOCHEATERS.add(pdeleteReports.getName());
@@ -299,7 +296,6 @@ public class ConfigHandler {
             togglewarnings = pTogglewarnings.getBoolean();
             toggleautoreport = pToggleautoreport.getBoolean();
             reportsuggestions = preportsuggestions.getBoolean();
-            suggestionsSound = psuggestionsSound.getBoolean();
             autoreportSuggestions = pautoreportSuggestions.getBoolean();
             deleteReports = pdeleteReports.getBoolean();
             timeDeleteReport = 24L * 3600L * 1000L * ((long) ptimeDeleteReport.getInt());
@@ -377,7 +373,6 @@ public class ConfigHandler {
             pTogglewarnings.set(togglewarnings);
             pToggleautoreport.set(toggleautoreport);
             preportsuggestions.set(reportsuggestions);
-            psuggestionsSound.set(suggestionsSound);
             pautoreportSuggestions.set(autoreportSuggestions);
             pdeleteReports.set(deleteReports);
             ptimeDeleteReport.set((int) (timeDeleteReport / (24L * 3600L * 1000L)));
