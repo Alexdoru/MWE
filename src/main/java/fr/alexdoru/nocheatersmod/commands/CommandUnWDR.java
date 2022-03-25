@@ -60,7 +60,7 @@ public class CommandUnWDR extends CommandBase {
                     addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list."));
                 } else {
                     removeOrUpdateWDR(wdr, uuid);
-                    NameUtil.updateGameProfileAndName(playername);
+                    NameUtil.updateGameProfileAndName(playername, false);
                     addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + "."));
                 }
 
@@ -77,7 +77,7 @@ public class CommandUnWDR extends CommandBase {
                 addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list."));
             } else {
                 removeOrUpdateWDR(wdr, uuid);
-                NameUtil.updateGameProfileAndName(args[1]);
+                NameUtil.updateGameProfileAndName(args[1], false);
                 addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + args[1] + EnumChatFormatting.GREEN + "."));
             }
 

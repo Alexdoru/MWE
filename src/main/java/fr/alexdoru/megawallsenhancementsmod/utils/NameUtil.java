@@ -44,9 +44,12 @@ public class NameUtil {
     private static final Pattern PATTERN_CLASS_TAG = Pattern.compile("\\[([A-Z]{3})\\]");
 
     /**
-     * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
+     * This updates the infos storred in GameProfile.MWPlayerData for the player : playername
+     * and refreshes the name in the tablist and the nametag
+     * set refreshDisplayName to true to update the name of the player in case you change it via a command
+     * for example : /squad add player as aliasname
      */
-    public static void updateGameProfileAndName(String playername) {
+    public static void updateGameProfileAndName(String playername, boolean refreshDisplayName) {
         NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
         if (networkPlayerInfo != null) {
             transformGameProfile(networkPlayerInfo.getGameProfile(), true);
@@ -55,12 +58,18 @@ public class NameUtil {
             if (player != null) {
                 transformGameProfile(player.getGameProfile(), true);
                 NameUtil.transformNametag(player, false);
+                if (refreshDisplayName) {
+                    player.refreshDisplayName();
+                }
             }
         } else {
             EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
                 transformGameProfile(player.getGameProfile(), true);
                 NameUtil.transformNametag(player, false);
+                if (refreshDisplayName) {
+                    player.refreshDisplayName();
+                }
             }
         }
     }
@@ -100,7 +109,6 @@ public class NameUtil {
 
         if (!onPlayerJoin) {
             player.getPrefixes().removeAll(allPrefix);
-            player.refreshDisplayName();
         }
 
         if (player instanceof EntityPlayerSP) {
@@ -115,7 +123,6 @@ public class NameUtil {
 
         if (mwPlayerData.extraPrefix != null) {
             player.addPrefix(mwPlayerData.extraPrefix);
-            player.refreshDisplayName();
         }
 
         if (mwPlayerData.squadname != null) {
