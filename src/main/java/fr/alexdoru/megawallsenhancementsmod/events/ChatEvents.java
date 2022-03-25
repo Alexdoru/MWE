@@ -251,7 +251,7 @@ public class ChatEvents {
                     String recentlyDisconnectedPlayers = NetHandlerPlayClientHook.getRecentlyDisconnectedPlayers();
                     if (!recentlyDisconnectedPlayers.equals("")) {
                         addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Player(s) disconnected : " + EnumChatFormatting.AQUA + recentlyDisconnectedPlayers).setChatStyle(new ChatStyle()
-                                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Players disconnected in the last 2 seconds, click this message to run : \n\n" + EnumChatFormatting.YELLOW + "/stalk" + recentlyDisconnectedPlayers)))
+                                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Players disconnected in the last 2 seconds, click this message to run : \n\n" + EnumChatFormatting.YELLOW + "/stalk " + recentlyDisconnectedPlayers)))
                                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk " + recentlyDisconnectedPlayers))));
                     }
                 }, 20);
