@@ -404,23 +404,20 @@ public class CommandNocheaters extends CommandBase {
     }
 
     private IChatComponent createIgnoreLine(String uuid, WDR wdr) throws ApiException {
-
+        final String formattedName;
         if (wdr.isNicked()) {
-
-            return new ChatComponentText(EnumChatFormatting.GOLD + "uuid").setChatStyle(new ChatStyle()
-                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to un-ignore that player")))
+            formattedName = EnumChatFormatting.GOLD + "uuid";
+            return new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
+                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to un-ignore " + formattedName)))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, getCommandUsage(null) + " ignoreremove " + uuid + " " + uuid)));
-
         } else {
-
             HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
             LoginData logindata = new LoginData(playerdata.getPlayerData());
-            return new ChatComponentText(logindata.getFormattedName()).setChatStyle(new ChatStyle()
-                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to un-ignore that player")))
+            formattedName = logindata.getFormattedName();
+            return new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
+                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to un-ignore " + formattedName)))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, getCommandUsage(null) + " ignoreremove " + uuid + " " + logindata.getdisplayname())));
-
         }
-
     }
 
     private IChatComponent createReportLine(String uuid, WDR wdr, boolean doStalk) throws ApiException {
