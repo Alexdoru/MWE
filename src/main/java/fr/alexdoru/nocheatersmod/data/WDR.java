@@ -5,6 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.nocheatersmod.commands.CommandReport;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class WDR {
 
@@ -45,6 +46,10 @@ public class WDR {
         return !(hacks.size() == 1 && hacks.contains(IGNORED));
     }
 
+    public boolean shouldPutGrayIcon() {
+        return ConfigHandler.toggleautoreport && isOlderThanMaxAutoreport((new Date()).getTime());
+    }
+
     public boolean isOnlyIgnored() {
         return hacks.size() == 1 && hacks.contains(IGNORED);
     }
@@ -73,8 +78,12 @@ public class WDR {
                 && !isOlderThanMaxAutoreport(datenow);
     }
 
+    /**
+     * Only prints the big text when you are in a mw environement but not in game
+     * to prevent chat spam while playing
+     */
     public boolean shouldPrintBigText(long datenow) {
-        return FKCounterMod.isMWEnvironement && ConfigHandler.toggleautoreport && isOlderThanMaxAutoreport(datenow);
+        return FKCounterMod.isMWEnvironement && !FKCounterMod.isInMwGame && ConfigHandler.toggleautoreport && isOlderThanMaxAutoreport(datenow);
     }
 
     public boolean hasValidCheats() {

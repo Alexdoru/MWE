@@ -31,6 +31,8 @@ import java.util.regex.Pattern;
 
 public class NameUtil {
 
+    private static final IChatComponent iprefix_old_report = new ChatComponentText(EnumChatFormatting.GRAY + "" + EnumChatFormatting.BOLD + "\u26a0 ");
+    public static final String prefix_old_report = iprefix_old_report.getFormattedText();
     private static final IChatComponent iprefix = new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + "\u26a0 ");
     public static final String prefix = iprefix.getFormattedText();
     private static final IChatComponent iprefix_bhop = new ChatComponentText(EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD + "\u26a0 ");
@@ -39,7 +41,7 @@ public class NameUtil {
     public static final String prefix_scan = iprefix_scan.getFormattedText();
     private static final IChatComponent isquadprefix = new ChatComponentText(EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] ");
     public static final String squadprefix = isquadprefix.getFormattedText();
-    private static final List<IChatComponent> allPrefix = Arrays.asList(iprefix, iprefix_bhop, iprefix_scan, isquadprefix);
+    private static final List<IChatComponent> allPrefix = Arrays.asList(iprefix_old_report, iprefix, iprefix_bhop, iprefix_scan, isquadprefix);
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static final Pattern PATTERN_CLASS_TAG = Pattern.compile("\\[([A-Z]{3})\\]");
 
@@ -205,12 +207,17 @@ public class NameUtil {
 
                         if (wdr.transformName()) {
 
-                            if (wdr.hacks.contains("bhop")) {
-                                extraPrefix = prefix_bhop;
-                                iExtraPrefix = iprefix_bhop;
+                            if (wdr.shouldPutGrayIcon()) {
+                                extraPrefix = prefix_old_report;
+                                iExtraPrefix = iprefix_old_report;
                             } else {
-                                extraPrefix = prefix;
-                                iExtraPrefix = iprefix;
+                                if (wdr.hacks.contains("bhop")) {
+                                    extraPrefix = prefix_bhop;
+                                    iExtraPrefix = iprefix_bhop;
+                                } else {
+                                    extraPrefix = prefix;
+                                    iExtraPrefix = iprefix;
+                                }
                             }
 
                         }
