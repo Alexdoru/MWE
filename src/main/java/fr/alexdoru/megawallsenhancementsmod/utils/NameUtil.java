@@ -278,7 +278,11 @@ public class NameUtil {
     }
 
     public static void refreshAllNamesInWorld() {
-        mc.getNetHandler().getPlayerInfoMap().forEach(NameUtil::updateGameProfileAndName);
+        mc.getNetHandler().getPlayerInfoMap().forEach(p -> {
+            if (p != null) {
+                NameUtil.updateGameProfileAndName(p.getGameProfile().getName(), true);
+            }
+        });
     }
 
     /**
