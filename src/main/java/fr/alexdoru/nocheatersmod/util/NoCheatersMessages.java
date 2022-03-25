@@ -69,17 +69,18 @@ public class NoCheatersMessages {
 
         if (olderThanMaxAutoreport) {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " [Report Player]").setChatStyle(new ChatStyle()
-                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report this player again")))
+                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click here to continue auto-reporting that player every game")))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + wdrmapKey + " " + playername))));
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.YELLOW + " [Remove Player]").setChatStyle(new ChatStyle()
-                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to remove this player from your report list")))
+                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click here to remove this player from your report list\n"
+                            +EnumChatFormatting.YELLOW + "and stop auto-reporting them every game")))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + wdrmapKey + " " + playername))));
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.RED + " It's been " + EnumChatFormatting.GRAY + DateUtil.timeSince(wdr.timeLastManualReport) + EnumChatFormatting.RED + " since you last manually reported that player for : "))
                     .appendSibling(allCheats)
                     .appendSibling(new ChatComponentText(EnumChatFormatting.RED + ", either remove them from your report list or report them again."));
         } else if (!disableReportButton && FKCounterMod.isInMwGame && !FKCounterMod.isitPrepPhase && wdr.canBeReported(datenow)) {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " [Report again]").setChatStyle(new ChatStyle()
-                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report this player again")))
+                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click here to report this player again")))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + wdrmapKey + " " + playername))));
         }
 

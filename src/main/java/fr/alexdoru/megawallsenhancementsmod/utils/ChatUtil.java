@@ -312,7 +312,7 @@ public class ChatUtil {
                                         + getReportingAdvice()))));
     }
 
-    private static IChatComponent getWDRButton(String playername, String cheatWDR, ClickEvent.Action actionwdr) {
+    public static IChatComponent getWDRButton(String playername, String cheatWDR, ClickEvent.Action actionwdr) {
         return new ChatComponentText(EnumChatFormatting.DARK_PURPLE + "[WDR] ")
                 .setChatStyle(new ChatStyle()
                         .setChatClickEvent(new ClickEvent(actionwdr, "/wdr " + playername + " " + cheatWDR))
@@ -337,9 +337,8 @@ public class ChatUtil {
     }
 
     public static String getReportingAdvice() {
-        final String s = "\n\n" + EnumChatFormatting.RED + "To make reporting efficient, be sure to report\n"
-                + EnumChatFormatting.DARK_RED + "when you are ingame with the cheater\n"
-                + EnumChatFormatting.RED + "and not before the game starts or in the lobby.";
+        final String s = "\n\n" + EnumChatFormatting.RED + "To make reporting efficient, be sure to report" + EnumChatFormatting.DARK_RED + " when you are ingame with\n"
+                + EnumChatFormatting.DARK_RED + "the cheater" + EnumChatFormatting.RED + " and not before the game starts or in the lobby.";
         return FKCounterMod.preGameLobby ? s : "";
     }
 
@@ -354,6 +353,11 @@ public class ChatUtil {
                         new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
                                 + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " cheating" + "\n"
                                 + EnumChatFormatting.GRAY + "Using the report option won't save the cheater's name in the mod NoCheaters"))));
+    }
+
+    // TODO Delete all method calls
+    public static void debug(String msg) {
+        addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + "[Debug]: " + EnumChatFormatting.RESET + msg));
     }
 
 }
