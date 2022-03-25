@@ -37,12 +37,13 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
 
         buttonList.add(new GuiButton(18, XposLeftButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(18)));
         buttonList.add(new GuiButton(19, XposLeftButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(19)));
-        buttonList.add(new GuiButton(15, XposLeftButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
-        buttonList.add(new GuiButton(24, XposLeftButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(24)));
-        buttonList.add(new GuiButton(0, XposLeftButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
-        buttonList.add(new GuiButton(16, XposLeftButton, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
+        buttonList.add(new GuiButton(25, XposLeftButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(25)));
+        buttonList.add(new GuiButton(15, XposLeftButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
+        buttonList.add(new GuiButton(24, XposLeftButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(24)));
+        buttonList.add(new GuiButton(0, XposLeftButton, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
 
-        buttonList.add(new GuiButton(21, XposRightButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
+        buttonList.add(new GuiButton(16, XposRightButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
+        buttonList.add(new GuiButton(21, XposRightButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
         buttonList.add(new GuiButton(17, XposRightButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
         buttonList.add(new GuiSlider(20, XposRightButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
         buttonList.add(new GuiButton(22, XposRightButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(22)));
@@ -89,6 +90,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 return "Short coin messages : " + getSuffix(ConfigHandler.shortencoinmessage);
             case 24:
                 return "Prestige V tags : " + getSuffix(ConfigHandler.prestigeV);
+            case 25:
+                return "Hide repetitive MW msg : " + getSuffix(ConfigHandler.hideRepetitiveMWChatMsg);
             case 9:
                 return "Show hunter strength HUD : " + getSuffix(ConfigHandler.hunterStrengthHUD);
             case 18:
@@ -163,6 +166,15 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.GOLD + "28000 classpoints : " + EnumChatFormatting.DARK_GREEN + "[TAG]");
                 textLines.add(EnumChatFormatting.GOLD + "40000 classpoints : " + EnumChatFormatting.DARK_RED + "[TAG]");
                 break;
+            case 25:
+                textLines.add(EnumChatFormatting.GREEN + "Hides the following messages in mega walls");
+                textLines.add("");
+                textLines.add(EnumChatFormatting.RED + ChatEvents.HUNGER_MESSAGE);
+                textLines.add(EnumChatFormatting.GREEN + ChatEvents.BREAK_CHEST);
+                textLines.add(EnumChatFormatting.GREEN + ChatEvents.BREAK_PROTECTED_CHEST);
+                textLines.add(EnumChatFormatting.YELLOW + ChatEvents.SKELETON_GATHERING);
+                textLines.add(EnumChatFormatting.YELLOW + ChatEvents.SKELETON_ARROW);
+                break;
             case 9:
                 textLines.add(EnumChatFormatting.GREEN + "When you play the Hunter class it prints a HUD");
                 textLines.add(EnumChatFormatting.GREEN + "and plays a sound before getting strength");
@@ -227,6 +239,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                         NameUtil.refreshAllNamesInWorld();
                     }
                 }
+                break;
+            case 25:
+                ConfigHandler.hideRepetitiveMWChatMsg = !ConfigHandler.hideRepetitiveMWChatMsg;
                 break;
             case 0:
                 ConfigHandler.shortencoinmessage = !ConfigHandler.shortencoinmessage;

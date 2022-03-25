@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.events;
 
+import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.events.MwGameEvent;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
@@ -16,7 +17,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
-import net.minecraft.util.*;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -24,18 +28,23 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.getTagNoCheaters;
 
 public class ChatEvents {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
     public static final ResourceLocation STRENGTH_SOUND = new ResourceLocation("item.fireCharge.use"); // item.fireCharge.use  usefireworks.twinkle
     private static final String BAN_MESSAGE = "A player has been removed from your game.";
-    private static final String HUNGER_MESSAGE = "Get to the middle to stop the hunger!";
+    public static final String BREAK_CHEST = "You broke your protected chest";
+    public static final String BREAK_PROTECTED_CHEST = "You broke your protected trapped chest";
+    public static final String HUNGER_MESSAGE = "Get to the middle to stop the hunger!";
     private static final String HUNTER_STRENGTH_MESSAGE = "Your Force of Nature gave you a 5 second Strength I buff.";
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
     private static final String PREP_PHASE = "Prepare your defenses!";
+    public static final String SKELETON_ARROW = "Your Salvaging skill returned your arrow to you!";
+    public static final String SKELETON_GATHERING = "Your Efficiency skill got you an extra drop!";
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Triple Coins \\+ EXP, |)(?:Active Booster, |)\\w+'s Network Booster\\)).*");
     private static final Pattern HUNTER_PRE_STRENGTH_PATTERN = Pattern.compile("\u00a7a\u00a7lF\\.O\\.N\\. \u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l([0-9]+)");
@@ -58,10 +67,7 @@ public class ChatEvents {
             String msg = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
             String fmsg = event.message.getFormattedText();
 
-            /*
-             *  cancels hunger message in mega walls
-             */
-            if (msg.equals(HUNGER_MESSAGE)) {
+            if (FKCounterMod.isInMwGame && (msg.equals(HUNGER_MESSAGE) || msg.equals(BREAK_CHEST) || msg.equals(BREAK_PROTECTED_CHEST) || msg.equals(SKELETON_ARROW) || msg.equals(SKELETON_GATHERING))) {
                 event.setCanceled(true);
                 return;
             }
