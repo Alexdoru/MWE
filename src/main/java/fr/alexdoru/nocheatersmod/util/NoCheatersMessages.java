@@ -203,7 +203,7 @@ public class NoCheatersMessages {
                     allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_RED + hack + " "));
                 } else if (hack.equalsIgnoreCase(WDR.NICK)) {
                     allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_PURPLE + hack + " "));
-                } else if (!hack.contains(WDR.IGNORED)) {
+                } else if (!hack.equals(WDR.IGNORED)) {
                     allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + hack + " "));
                 }
             }
