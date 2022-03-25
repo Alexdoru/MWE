@@ -12,7 +12,7 @@ public class NetHandlerPlayClientHook {
 
     public static final HashMap<String, NetworkPlayerInfo> playerInfoMap = new HashMap<>();
     @SuppressWarnings("UnstableApiUsage")
-    private static final EvictingQueue<StringLong> latestDisconnected = EvictingQueue.create(10);
+    private static final EvictingQueue<StringLong> latestDisconnected = EvictingQueue.create(20);
 
     public static void putPlayerInMap(String playerName, NetworkPlayerInfo networkplayerinfo) {
         playerInfoMap.put(playerName, networkplayerinfo);
@@ -41,6 +41,9 @@ public class NetHandlerPlayClientHook {
         ArrayList<String> duplicateTest = new ArrayList<>();
         for (StringLong stringLong : latestDisconnected) {
             if (stringLong.message != null && timenow - stringLong.timestamp <= 2000) {
+                if (playerInfoMap.get(stringLong.message) != null) {
+                    continue;
+                }
                 if (!duplicateTest.contains(stringLong.message)) {
                     if (first) {
                         str.append(stringLong.message);
