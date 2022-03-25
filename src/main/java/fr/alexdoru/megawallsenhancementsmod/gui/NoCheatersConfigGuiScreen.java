@@ -1,12 +1,12 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import fr.alexdoru.nocheatersmod.events.ReportQueue;
 import fr.alexdoru.nocheatersmod.util.NoCheatersMessages;
+import fr.alexdoru.nocheatersmod.util.ReportSuggestionHandler;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
@@ -125,7 +125,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 break;
             case 8:
                 ConfigHandler.reportsuggestions = !ConfigHandler.reportsuggestions;
-                ChatEvents.playReportSuggestionSound(ConfigHandler.reportsuggestions);
+                ReportSuggestionHandler.playReportSuggestionSound(ConfigHandler.reportsuggestions);
                 break;
             case 9:
                 ConfigHandler.autoreportSuggestions = !ConfigHandler.autoreportSuggestions;
@@ -135,7 +135,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 break;
             case 10:
                 ConfigHandler.suggestionsSound = !ConfigHandler.suggestionsSound;
-                ChatEvents.playReportSuggestionSound(ConfigHandler.suggestionsSound);
+                ReportSuggestionHandler.playReportSuggestionSound(ConfigHandler.suggestionsSound);
                 break;
             case 2:
                 ConfigHandler.toggleautoreport = !ConfigHandler.toggleautoreport;
