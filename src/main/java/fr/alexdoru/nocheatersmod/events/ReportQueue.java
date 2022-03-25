@@ -57,7 +57,8 @@ public class ReportQueue {
             counter = tickDelay;
         }
         queueList.add(new ReportInQueue(null, playername));
-        ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Sending report with a delay..."));
+        // TODO ca va faire quoi ce messages avec les autres messages de l'autoreport ?
+        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GRAY + "Sending report in a moment..."));
     }
 
     private boolean isReportQueueInactive() {
