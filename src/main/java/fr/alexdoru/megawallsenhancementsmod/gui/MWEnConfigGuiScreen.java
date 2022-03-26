@@ -174,6 +174,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.GREEN + "You broke your protected trapped chest");
                 textLines.add(EnumChatFormatting.YELLOW + "Your Salvaging skill returned your arrow to you!");
                 textLines.add(EnumChatFormatting.YELLOW + "Your Efficiency skill got you an extra drop!");
+                textLines.add(EnumChatFormatting.GREEN + "Your " + EnumChatFormatting.AQUA + "Ability name " + EnumChatFormatting.GREEN + "skill is ready!");
+                textLines.add(EnumChatFormatting.GREEN + "Click your sword or bow to activate your skill!");
                 break;
             case 9:
                 textLines.add(EnumChatFormatting.GREEN + "When you play the Hunter class it prints a HUD");
