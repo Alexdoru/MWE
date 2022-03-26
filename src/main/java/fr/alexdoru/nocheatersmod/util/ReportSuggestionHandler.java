@@ -5,6 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import fr.alexdoru.nocheatersmod.commands.CommandReport;
@@ -101,6 +102,8 @@ public class ReportSuggestionHandler {
         /*Only accepts MVP, MVP+, MVP++*/
         boolean isSenderRankValid = false;
 
+        String senderUUID = null;
+
         if (isSenderMyself) {
 
             isSenderInTablist = true;
@@ -113,9 +116,9 @@ public class ReportSuggestionHandler {
                 isSenderInTablist = true;
                 final UUID id = networkPlayerInfo.getGameProfile().getId();
                 isSenderNicked = !NameUtil.isRealPlayer(id);
-                final String uuid = id.toString().replace("-", "");
-                isSenderFlaging = CommandScanGame.doesPlayerFlag(uuid);
-                WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+                senderUUID = id.toString().replace("-", "");
+                isSenderFlaging = CommandScanGame.doesPlayerFlag(senderUUID);
+                WDR wdr = WdredPlayers.getWdredMap().get(senderUUID);
                 if (wdr != null) {
                     isSenderIgnored = wdr.isIgnored();
                     isSenderCheating = wdr.hasValidCheats();
@@ -134,11 +137,11 @@ public class ReportSuggestionHandler {
             isSenderRankValid = true;
         }
 
-        printCustomReportSuggestionChatText(fmsg, messageSender, reportedPlayer, cheat, reportText, squadname, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, isSenderNicked);
+        printCustomReportSuggestionChatText(fmsg, messageSender, reportedPlayer, cheat, reportText, squadname, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, isSenderNicked, senderUUID);
 
     }
 
-    private static void printCustomReportSuggestionChatText(String fmsg, @Nullable String messageSender, String reportedPlayer, String cheat, String reportText, @Nullable String squadname, boolean isSenderMyself, boolean isTargetMyself, boolean isSenderInTablist, boolean isSenderIgnored, boolean isSenderCheating, boolean isSenderFlaging, boolean isSenderNicked) {
+    private static void printCustomReportSuggestionChatText(String fmsg, @Nullable String messageSender, String reportedPlayer, String cheat, String reportText, @Nullable String squadname, boolean isSenderMyself, boolean isTargetMyself, boolean isSenderInTablist, boolean isSenderIgnored, boolean isSenderCheating, boolean isSenderFlaging, boolean isSenderNicked, String senderUUID) {
 
         if (!ConfigHandler.reportsuggestions) {
             addChatMessage(getIChatComponentWithSquadnameAsSender(fmsg, messageSender, squadname));
@@ -156,8 +159,9 @@ public class ReportSuggestionHandler {
         }
 
         if (isSenderIgnored) {
-            // TODO bouton un-ignore ?
-            addChatMessage(new ChatComponentText(StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.GRAY + " (Ignored)", EnumChatFormatting.GRAY + EnumChatFormatting.STRIKETHROUGH.toString(), true)));
+            final IChatComponent imsg = new ChatComponentText(StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.GRAY + " (Ignored)", EnumChatFormatting.GRAY + EnumChatFormatting.STRIKETHROUGH.toString(), true));
+            imsg.appendSibling(ChatUtil.getUnIgnoreButton(senderUUID, messageSender));
+            addChatMessage(imsg);
             return;
         }
 
