@@ -53,6 +53,11 @@ public class ChatEvents {
         MW_REPETITVE_MSG.add("Get to the middle to stop the hunger!");
         MW_REPETITVE_MSG.add("Your Salvaging skill returned your arrow to you!");
         MW_REPETITVE_MSG.add("Your Efficiency skill got you an extra drop!");
+        MW_REPETITVE_MSG.add("Your Soothing Moo Skill is ready!");
+        MW_REPETITVE_MSG.add("Click your sword or bow to activate your skill!");
+        MW_REPETITVE_MSG.add("Your Eagles Eye Skill is ready!");
+        MW_REPETITVE_MSG.add("Left Click with any bow to activate your skill!");
+        MW_REPETITVE_MSG.add("Your From the Depths Skill is ready!");
     }
 
     @SubscribeEvent
