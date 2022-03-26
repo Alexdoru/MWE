@@ -324,6 +324,15 @@ public class ChatUtil {
                                         + getReportingAdvice()))));
     }
 
+    public static IChatComponent getUnIgnoreButton(String uuid, String playername) {
+        return new ChatComponentText(EnumChatFormatting.YELLOW + "[Un-Ignore] ")
+                .setChatStyle(new ChatStyle()
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nocheaters ignoreremove " + uuid + " " + playername))
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to remove that player from your ignore list,\n"
+                                        + EnumChatFormatting.GREEN + "you will receive all future report suggestions comming from them"))));
+    }
+
     public static IChatComponent getIgnoreButton(String playername) {
         return new ChatComponentText(EnumChatFormatting.YELLOW + "[Ignore] ")
                 .setChatStyle(new ChatStyle()
