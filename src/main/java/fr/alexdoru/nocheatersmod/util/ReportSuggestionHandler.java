@@ -35,6 +35,7 @@ public class ReportSuggestionHandler {
     // TODO mettre symbole petit check vert si le player peu envoyer un report
     //  petite croix rouge si il peut pas
     //  faire qu'on accepte qu'un seul reportSender par game ? so use it wiselly !
+    // TODO add support for multiple reports in the same shout ? that would allow for a lot of spam
 
     private static final Minecraft mc = Minecraft.getMinecraft();
     public static final ResourceLocation REPORT_SUGGESTION_SOUND = new ResourceLocation("random.orb");
@@ -129,81 +130,75 @@ public class ReportSuggestionHandler {
 
         }
 
-        // TODO accepter les VIP+ aussi ?
-        if (senderRank != null && (senderRank.equals("MVP") || senderRank.equals("MVP+") || senderRank.equals("MVP++"))) {
+        if (senderRank != null && (senderRank.equals("VIP+") || senderRank.equals("MVP") || senderRank.equals("MVP+") || senderRank.equals("MVP++"))) {
             isSenderRankValid = true;
         }
 
-        final boolean gotReported = sendReportSuggestion(messageSender, reportedPlayer, cheat, isSenderInTablist, isSenderNicked, isSenderFlaging, isSenderIgnored, isSenderCheating, isSenderRankValid);
-        printCustomReportSuggestionChatText(fmsg, messageSender, reportedPlayer, cheat, reportText, squadname, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, isSenderNicked, gotReported);
+        printCustomReportSuggestionChatText(fmsg, messageSender, reportedPlayer, cheat, reportText, squadname, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, isSenderNicked);
 
     }
 
-    private static void printCustomReportSuggestionChatText(String fmsg, @Nullable String messageSender, String reportedPlayer, String cheat, String reportText, @Nullable String squadname, boolean isSenderMyself, boolean isTargetMyself, boolean isSenderInTablist, boolean isSenderIgnored, boolean isSenderCheating, boolean isSenderFlaging, boolean isSenderNicked, boolean gotautoreported) {
+    private static void printCustomReportSuggestionChatText(String fmsg, @Nullable String messageSender, String reportedPlayer, String cheat, String reportText, @Nullable String squadname, boolean isSenderMyself, boolean isTargetMyself, boolean isSenderInTablist, boolean isSenderIgnored, boolean isSenderCheating, boolean isSenderFlaging, boolean isSenderNicked) {
 
-        if (ConfigHandler.reportsuggestions) {
-
-            playReportSuggestionSound(!isSenderIgnored && !isSenderCheating && !isSenderFlaging);
-
-            if (isSenderInTablist && messageSender != null) {
-
-                if (isSenderIgnored) {
-                    // TODO bouton un-ignore ?
-                    addChatMessage(new ChatComponentText(StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.GRAY + " (Ignored)", EnumChatFormatting.GRAY + EnumChatFormatting.STRIKETHROUGH.toString(), true)));
-                    return;
-                }
-
-                if (isSenderCheating) {
-                    addChatMessage(new ChatComponentText(StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.YELLOW + " (Cheater)", EnumChatFormatting.GRAY + EnumChatFormatting.STRIKETHROUGH.toString(), true)));
-                    return;
-                }
-
-                if (isSenderFlaging) {
-                    final String newFmsg = StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.LIGHT_PURPLE + " (Scangame)", "", true);
-                    final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
-                    if (FKCounterMod.isMWEnvironement && !isSenderMyself) {
-                        imsg.appendSibling(getIgnoreButton(messageSender));
-                    }
-                    addReportButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotautoreported);
-                    addChatMessage(imsg);
-                    return;
-                }
-
-                if (isSenderNicked) {
-                    final String s1 = StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.DARK_PURPLE + " (Nick)", "", false);
-                    final String newFmsg = StringUtil.changeColorOf(s1, reportText, EnumChatFormatting.DARK_RED) + " ";
-                    final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
-                    addReportButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotautoreported);
-                    addChatMessage(imsg);
-                    return;
-                }
-
-                final String newFmsg = StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED) + " ";
-                final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
-                if (FKCounterMod.isMWEnvironement && !isSenderMyself) {
-                    imsg.appendSibling(getIgnoreButton(messageSender));
-                }
-                addReportButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotautoreported);
-                addChatMessage(imsg);
-
-            } else {
-
-                final String newFmsg = StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED) + " ";
-                final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
-                addReportButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotautoreported);
-                addChatMessage(imsg);
-
-            }
-
+        if (!ConfigHandler.reportsuggestions) {
+            addChatMessage(getIChatComponentWithSquadnameAsSender(fmsg, messageSender, squadname));
             return;
-
         }
 
-        addChatMessage(getIChatComponentWithSquadnameAsSender(fmsg, messageSender, squadname));
+        playReportSuggestionSound(!isSenderIgnored && !isSenderCheating && !isSenderFlaging);
+
+        if (!isSenderInTablist || messageSender == null) {
+            final String newFmsg = StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED) + " ";
+            final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
+            addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, false);
+            addChatMessage(imsg);
+            return;
+        }
+
+        if (isSenderIgnored) {
+            // TODO bouton un-ignore ?
+            addChatMessage(new ChatComponentText(StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.GRAY + " (Ignored)", EnumChatFormatting.GRAY + EnumChatFormatting.STRIKETHROUGH.toString(), true)));
+            return;
+        }
+
+        if (isSenderCheating) {
+            addChatMessage(new ChatComponentText(StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.YELLOW + " (Cheater)", EnumChatFormatting.GRAY + EnumChatFormatting.STRIKETHROUGH.toString(), true)));
+            return;
+        }
+
+        if (isSenderFlaging) {
+            final String newFmsg = StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.LIGHT_PURPLE + " (Scangame)", "", true);
+            final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
+            if (FKCounterMod.isMWEnvironement && !isSenderMyself) {
+                imsg.appendSibling(getIgnoreButton(messageSender));
+            }
+            addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, false);
+            addChatMessage(imsg);
+            return;
+        }
+
+        if (isSenderNicked) {
+            final String s1 = StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.DARK_PURPLE + " (Nick)", "", false);
+            final String newFmsg = StringUtil.changeColorOf(s1, reportText, EnumChatFormatting.DARK_RED) + " ";
+            final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
+            addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, false);
+            addChatMessage(imsg);
+            return;
+        }
+
+        final String newFmsg = StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED) + " ";
+        final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
+        if (FKCounterMod.isMWEnvironement && !isSenderMyself) {
+            imsg.appendSibling(getIgnoreButton(messageSender));
+        }
+        // TODO autoreport ici
+        final boolean gotautoreported = true;
+        addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotautoreported);
+        addChatMessage(imsg);
 
     }
 
-    private static void addReportButtons(IChatComponent imsg, String reportedPlayer, String cheat, boolean isSenderMyself, boolean isTargetMyself, boolean gotautoreported) {
+    private static void addButtons(IChatComponent imsg, String reportedPlayer, String cheat, boolean isSenderMyself, boolean isTargetMyself, boolean gotautoreported) {
         if (isTargetMyself) {
             return;
         }
