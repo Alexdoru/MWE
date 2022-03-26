@@ -41,9 +41,6 @@ public class NetHandlerPlayClientHook {
         ArrayList<String> duplicateTest = new ArrayList<>();
         for (StringLong stringLong : latestDisconnected) {
             if (stringLong.message != null && timenow - stringLong.timestamp <= 2000) {
-                if (playerInfoMap.get(stringLong.message) != null) {
-                    continue;
-                }
                 if (!duplicateTest.contains(stringLong.message)) {
                     if (first) {
                         str.append(stringLong.message);
