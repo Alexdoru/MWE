@@ -16,7 +16,7 @@ import java.util.Random;
 public class ReportQueue {
 
     public static final ReportQueue INSTANCE = new ReportQueue();
-    private static final int TIME_BETWEEN_REPORTS = 40 * 20; // ticks
+    private static final int TIME_BETWEEN_REPORTS = 60 * 20; // ticks
     private final Minecraft mc = Minecraft.getMinecraft();
     private int counter;
     private final List<ReportInQueue> queueList = new ArrayList<>();
@@ -30,7 +30,7 @@ public class ReportQueue {
         }
 
         if (counter <= 0 && !queueList.isEmpty() && mc.thePlayer != null) {
-            String playername = queueList.remove(0).reportedPlayer;
+            String playername = queueList.remove(queueList.size() - 1).reportedPlayer;
             mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
             counter = (int) (TIME_BETWEEN_REPORTS + (10d * random.nextGaussian() / 6d));
         }
