@@ -98,6 +98,7 @@ public class CommandNocheaters extends CommandBase {
 
                 IChatComponent imsgbody = new ChatComponentText("");
                 boolean warning = true;
+                long timeNow = (new Date()).getTime();
 
                 for (Map.Entry<String, WDR> entry : sortedmap.entrySet()) {
 
@@ -115,7 +116,7 @@ public class CommandNocheaters extends CommandBase {
 
                     if (nbpage == displaypage) {
                         try {
-                            imsgbody.appendSibling((createReportLine(uuid, wdr, doStalk))).appendSibling(new ChatComponentText("\n"));
+                            imsgbody.appendSibling((createReportLine(uuid, wdr, doStalk, timeNow))).appendSibling(new ChatComponentText("\n"));
                             warning = false;
                         } catch (ApiException e) {
                             addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
@@ -424,7 +425,7 @@ public class CommandNocheaters extends CommandBase {
         }
     }
 
-    private IChatComponent createReportLine(String uuid, WDR wdr, boolean doStalk) throws ApiException {
+    private IChatComponent createReportLine(String uuid, WDR wdr, boolean doStalk, long timeNow) throws ApiException {
 
         IChatComponent imsg;
 
@@ -447,7 +448,8 @@ public class CommandNocheaters extends CommandBase {
                     logindata.parseLatestActivity(playerdata.getPlayerData());
                     long latestActivityTime = logindata.getLatestActivityTime();
                     String latestActivity = logindata.getLatestActivity();
-                    ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + " " + latestActivity + " " + EnumChatFormatting.YELLOW + DateUtil.timeSince(latestActivityTime)));
+                    boolean isProbBanned = Math.abs(latestActivityTime - wdr.timestamp) < 16L * 60L * 60L * 1000L && Math.abs(timeNow - wdr.timestamp) > 3L * 24L * 60L * 60L * 1000L;
+                    ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " " + latestActivity + " " + (isProbBanned ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.YELLOW) + DateUtil.timeSince(latestActivityTime)));
 
                 } else if (logindata.isOnline()) { // player is online
 
@@ -455,7 +457,8 @@ public class CommandNocheaters extends CommandBase {
 
                 } else { // print lastlogout
 
-                    ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + " Lastlogout " + EnumChatFormatting.YELLOW + DateUtil.timeSince(logindata.getLastLogout())));
+                    boolean isProbBanned = Math.abs(logindata.getLastLogout() - wdr.timestamp) < 16L * 60L * 60L * 1000L && Math.abs(timeNow - wdr.timestamp) > 3L * 24L * 60L * 60L * 1000L;
+                    ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Lastlogout " + (isProbBanned ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.YELLOW) + DateUtil.timeSince(logindata.getLastLogout())));
 
                 }
 
