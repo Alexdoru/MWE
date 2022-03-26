@@ -104,6 +104,10 @@ public class CommandNocheaters extends CommandBase {
                     String uuid = entry.getKey();
                     WDR wdr = entry.getValue();
 
+                    if(wdr.isOnlyIgnored()) {
+                        continue;
+                    }
+
                     if (nbreport == 9) {
                         nbreport = 1;
                         nbpage++;
