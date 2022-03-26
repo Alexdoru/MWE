@@ -12,7 +12,7 @@ public class ScoreboardParser {
 
     private static final Pattern GAME_ID_PATTERN = Pattern.compile("\\s*\\d+/\\d+/\\d+\\s+([\\d\\w]+)\\s*", Pattern.CASE_INSENSITIVE);
     private static final Pattern MW_TITLE_PATTERN = Pattern.compile("\\s*MEGA\\sWALLS\\s*", Pattern.CASE_INSENSITIVE);
-    private static final Pattern MW_INGAME_PATTERN = Pattern.compile("[0-9]+\\sFinals\\s[0-9]+\\sF\\.\\sAssists");
+    private static final Pattern MW_INGAME_PATTERN = Pattern.compile("[0-9]+\\sFinals?\\s[0-9]+\\sF\\.\\sAssists?");
     private static final Pattern PREGAME_LOBBY_PATTERN = Pattern.compile(".+[0-9]+/[0-9]+\\s*");
     private static final Pattern WITHER_ALIVE_PATTERN = Pattern.compile("\\s*\\[.\\] Wither HP: ?(\\d+).*", Pattern.CASE_INSENSITIVE);
     private static final Pattern WITHER_ALIVE_HEART_PATTERN = Pattern.compile("\\s*\\[.\\] Wither [\u2764\u2665]: ?(\\d+).*", Pattern.CASE_INSENSITIVE);
