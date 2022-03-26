@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
+import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassSkinData;
@@ -90,7 +91,7 @@ class StalkTask implements Callable<String> {
             String formattedName = logindata.getFormattedName();
             if (apistatus.isOnline()) { // player is online
 
-                if (apistatus.getGamemode().equals("Mega Walls")) { // player is in MW, display currrent class and skin
+                if (apistatus.getGamemode().equals("Mega Walls")) { // stalked player is in MW, display currrent class and skin
 
                     MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
                     addChatMessage(
@@ -151,18 +152,20 @@ class StalkTask implements Callable<String> {
                         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.RED + " Latest activity : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(latestActivityTime) + EnumChatFormatting.GRAY + " ago " + latestActivity + EnumChatFormatting.RED + "."));
                     }
 
-                    imsg.appendSibling(new ChatComponentText(
-                            EnumChatFormatting.GREEN + " Selected class : "
-                                    + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass())
-                                    + EnumChatFormatting.GREEN + " with the " + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwskin() == null ? (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass()) : mwclassskindata.getCurrentmwskin()) + EnumChatFormatting.GREEN + " skin."
-                    ));
+                    if (FKCounterMod.isMWEnvironement) {
+                        imsg.appendSibling(new ChatComponentText(
+                                EnumChatFormatting.GREEN + " Selected class : "
+                                        + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass())
+                                        + EnumChatFormatting.GREEN + " with the " + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwskin() == null ? (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass()) : mwclassskindata.getCurrentmwskin()) + EnumChatFormatting.GREEN + " skin."
+                        ));
+                    }
 
                     addChatMessage(imsg);
                     return null;
 
                 } else if (logindata.isOnline()) { // player is online but hiding their session, that doesn't work anymore
 
-                    if (logindata.getMostRecentGameType().equals("Mega Walls")) { // online and in MW
+                    if (FKCounterMod.isMWEnvironement && logindata.getMostRecentGameType().equals("Mega Walls")) { // online and in MW
 
                         MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
                         addChatMessage(new ChatComponentText(getTagMW())
@@ -192,6 +195,7 @@ class StalkTask implements Callable<String> {
                 }
 
             }
+
         } catch (ApiException e) {
             addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
         }
