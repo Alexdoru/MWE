@@ -169,11 +169,11 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 25:
                 textLines.add(EnumChatFormatting.GREEN + "Hides the following messages in mega walls");
                 textLines.add("");
-                textLines.add(EnumChatFormatting.RED + ChatEvents.HUNGER_MESSAGE);
-                textLines.add(EnumChatFormatting.GREEN + ChatEvents.BREAK_CHEST);
-                textLines.add(EnumChatFormatting.GREEN + ChatEvents.BREAK_PROTECTED_CHEST);
-                textLines.add(EnumChatFormatting.YELLOW + ChatEvents.SKELETON_GATHERING);
-                textLines.add(EnumChatFormatting.YELLOW + ChatEvents.SKELETON_ARROW);
+                textLines.add(EnumChatFormatting.RED + "Get to the middle to stop the hunger!");
+                textLines.add(EnumChatFormatting.GREEN + "You broke your protected chest");
+                textLines.add(EnumChatFormatting.GREEN + "You broke your protected trapped chest");
+                textLines.add(EnumChatFormatting.YELLOW + "Your Salvaging skill returned your arrow to you!");
+                textLines.add(EnumChatFormatting.YELLOW + "Your Efficiency skill got you an extra drop!");
                 break;
             case 9:
                 textLines.add(EnumChatFormatting.GREEN + "When you play the Hunter class it prints a HUD");

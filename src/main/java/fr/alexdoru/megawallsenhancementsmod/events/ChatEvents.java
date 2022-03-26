@@ -25,6 +25,7 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,20 +37,23 @@ public class ChatEvents {
     private static final Minecraft mc = Minecraft.getMinecraft();
     public static final ResourceLocation STRENGTH_SOUND = new ResourceLocation("item.fireCharge.use"); // item.fireCharge.use  usefireworks.twinkle
     private static final String BAN_MESSAGE = "A player has been removed from your game.";
-    public static final String BREAK_CHEST = "You broke your protected chest";
-    public static final String BREAK_PROTECTED_CHEST = "You broke your protected trapped chest";
-    public static final String HUNGER_MESSAGE = "Get to the middle to stop the hunger!";
     private static final String HUNTER_STRENGTH_MESSAGE = "Your Force of Nature gave you a 5 second Strength I buff.";
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
     private static final String PREP_PHASE = "Prepare your defenses!";
-    public static final String SKELETON_ARROW = "Your Salvaging skill returned your arrow to you!";
-    public static final String SKELETON_GATHERING = "Your Efficiency skill got you an extra drop!";
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Triple Coins \\+ EXP, |)(?:Active Booster, |)\\w+'s Network Booster\\)).*");
     private static final Pattern HUNTER_PRE_STRENGTH_PATTERN = Pattern.compile("\u00a7a\u00a7lF\\.O\\.N\\. \u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l([0-9]+)");
     private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:|\\[SHOUT\\] |\\[SPECTATOR\\] )(?:|\\[[A-Z]{3,6}\\] )(?:|\\[((?:MV|VI)P\\+?\\+?)\\] )(\\w{2,16}):.*");
     private static long lastStrength = 0;
+    private static final HashSet<String> MW_REPETITVE_MSG = new HashSet<>();
+    static {
+        MW_REPETITVE_MSG.add("You broke your protected chest");
+        MW_REPETITVE_MSG.add("You broke your protected trapped chest");
+        MW_REPETITVE_MSG.add("Get to the middle to stop the hunger!");
+        MW_REPETITVE_MSG.add("Your Salvaging skill returned your arrow to you!");
+        MW_REPETITVE_MSG.add("Your Efficiency skill got you an extra drop!");
+    }
 
     @SubscribeEvent
     public void onMWGameStart(MwGameEvent event) {
@@ -67,7 +71,7 @@ public class ChatEvents {
             String msg = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
             String fmsg = event.message.getFormattedText();
 
-            if (FKCounterMod.isInMwGame && (msg.equals(HUNGER_MESSAGE) || msg.equals(BREAK_CHEST) || msg.equals(BREAK_PROTECTED_CHEST) || msg.equals(SKELETON_ARROW) || msg.equals(SKELETON_GATHERING))) {
+            if (FKCounterMod.isInMwGame && ConfigHandler.hideRepetitiveMWChatMsg && MW_REPETITVE_MSG.contains(msg)) {
                 event.setCanceled(true);
                 return;
             }
