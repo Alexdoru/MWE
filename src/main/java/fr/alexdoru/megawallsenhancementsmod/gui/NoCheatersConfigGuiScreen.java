@@ -19,6 +19,9 @@ import java.util.List;
 
 public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
+    private GuiButton reportSuggestionButton;
+    private GuiButton autoreportSuggestionButton;
+
     public NoCheatersConfigGuiScreen() {
         this.parent = null;
     }
@@ -35,8 +38,8 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         int buttonsWidth = 200;
         int xPos = getxCenter() - buttonsWidth / 2;
         buttonList.add(new GuiButton(1, xPos, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
-        buttonList.add(new GuiButton(8, xPos, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(8)));
-        buttonList.add(new GuiButton(9, xPos, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
+        buttonList.add(reportSuggestionButton = new GuiButton(8, xPos, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(8)));
+        buttonList.add(autoreportSuggestionButton = new GuiButton(9, xPos, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
         buttonList.add(new GuiButton(2, xPos, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
         buttonList.add(new GuiButton(6, xPos, getYposForButton(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(6)));
         buttonList.add(new GuiSlider(7, xPos, getYposForButton(2), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
@@ -123,10 +126,17 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
             case 8:
                 ConfigHandler.reportsuggestions = !ConfigHandler.reportsuggestions;
                 ReportSuggestionHandler.playReportSuggestionSound(ConfigHandler.reportsuggestions);
+                if (!ConfigHandler.reportsuggestions) {
+                    ConfigHandler.autoreportSuggestions = false;
+                    autoreportSuggestionButton.displayString = getButtonDisplayString(9);
+                }
                 break;
             case 9:
                 ConfigHandler.autoreportSuggestions = !ConfigHandler.autoreportSuggestions;
-                if(!ConfigHandler.autoreportSuggestions) {
+                if (ConfigHandler.autoreportSuggestions) {
+                    ConfigHandler.reportsuggestions = true;
+                    reportSuggestionButton.displayString = getButtonDisplayString(8);
+                } else {
                     ReportQueue.INSTANCE.clearReportsQueue();
                 }
                 break;
