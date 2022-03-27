@@ -1,6 +1,7 @@
 package fr.alexdoru.nocheatersmod.util;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
@@ -137,11 +138,75 @@ public class ReportSuggestionHandler {
             isSenderRankValid = true;
         }
 
-        printCustomReportSuggestionChatText(fmsg, messageSender, reportedPlayer, cheat, reportText, squadname, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, isSenderNicked, senderUUID);
+        boolean gotAutoreported = checkAndSendReportSuggestion(messageSender, reportedPlayer, cheat, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, isSenderNicked, isSenderRankValid, senderUUID);
+        printCustomReportSuggestionChatText(fmsg, messageSender, reportedPlayer, cheat, reportText, squadname, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, isSenderNicked, isSenderRankValid, gotAutoreported, senderUUID);
 
     }
 
-    private static void printCustomReportSuggestionChatText(String fmsg, @Nullable String messageSender, String reportedPlayer, String cheat, String reportText, @Nullable String squadname, boolean isSenderMyself, boolean isTargetMyself, boolean isSenderInTablist, boolean isSenderIgnored, boolean isSenderCheating, boolean isSenderFlaging, boolean isSenderNicked, String senderUUID) {
+    private static boolean checkAndSendReportSuggestion(@Nullable String messageSender, String reportedPlayer, String cheat, boolean isSenderMyself, boolean isTargetMyself, boolean isSenderInTablist, boolean isSenderIgnored, boolean isSenderCheating, boolean isSenderFlaging, boolean isSenderNicked, boolean isSenderRankValid, String senderUUID) {
+
+        if (!ConfigHandler.autoreportSuggestions || !isSenderInTablist || messageSender == null || isSenderIgnored || isSenderCheating || !FKCounterMod.isInMwGame || isTargetMyself) {
+            return false;
+        }
+
+        if (FKCounterMod.isitPrepPhase) {
+            if (isSenderMyself) {
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " Cannot share a report before the walls fall!")), 0);
+                String[] args = new String[]{reportedPlayer, cheat};
+                CommandWDR.handleWDRCommand(args, true);
+                return true;
+            }
+            return false;
+        }
+
+        if (isSenderFlaging) {
+            if (isSenderMyself) {
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You cannot share a report since you flag in /scangame!")), 0);
+                String[] args = new String[]{reportedPlayer, cheat};
+                CommandWDR.handleWDRCommand(args, true);
+                return true;
+            }
+            return false;
+        }
+
+        if (isSenderNicked) {
+            if (isSenderMyself) {
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You cannot share a report when you are nicked!")), 0);
+                String[] args = new String[]{reportedPlayer, cheat};
+                CommandWDR.handleWDRCommand(args, true);
+                return true;
+            }
+            return false;
+        }
+
+        if (!isSenderRankValid) {
+            if (isSenderMyself) {
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You need to be at least " + EnumChatFormatting.GREEN + "VIP" + EnumChatFormatting.GOLD + "+" + EnumChatFormatting.GRAY + " to share a report with others")), 0);
+                String[] args = new String[]{reportedPlayer, cheat};
+                CommandWDR.handleWDRCommand(args, true);
+                return true;
+            }
+            return false;
+        }
+
+        if (canReportSuggestionPlayer(reportedPlayer)) {
+            if (isSenderMyself) {
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You report will be shared with other players in the game.")), 0);
+                String[] args = new String[]{reportedPlayer, cheat};
+                CommandWDR.handleWDRCommand(args, true);
+                return true;
+            }
+            // TODO ajouter un bouton cancel
+            new DelayedTask(() -> addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment...")), 0);
+            ReportQueue.INSTANCE.addPlayerToQueueRandom(reportedPlayer);
+            return true;
+        }
+
+        return false;
+
+    }
+
+    private static void printCustomReportSuggestionChatText(String fmsg, @Nullable String messageSender, String reportedPlayer, String cheat, String reportText, @Nullable String squadname, boolean isSenderMyself, boolean isTargetMyself, boolean isSenderInTablist, boolean isSenderIgnored, boolean isSenderCheating, boolean isSenderFlaging, boolean isSenderNicked, boolean isSenderRankValid, boolean gotAutoreported, String senderUUID) {
 
         if (!ConfigHandler.reportsuggestions) {
             addChatMessage(getIChatComponentWithSquadnameAsSender(fmsg, messageSender, squadname));
@@ -153,7 +218,7 @@ public class ReportSuggestionHandler {
         if (!isSenderInTablist || messageSender == null) {
             final String newFmsg = StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED) + " ";
             final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
-            addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, false);
+            addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
             addChatMessage(imsg);
             return;
         }
@@ -176,7 +241,7 @@ public class ReportSuggestionHandler {
             if (FKCounterMod.isMWEnvironement && !isSenderMyself) {
                 imsg.appendSibling(getIgnoreButton(messageSender));
             }
-            addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, false);
+            addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
             addChatMessage(imsg);
             return;
         }
@@ -185,7 +250,7 @@ public class ReportSuggestionHandler {
             final String s1 = StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.DARK_PURPLE + " (Nick)", "", false);
             final String newFmsg = StringUtil.changeColorOf(s1, reportText, EnumChatFormatting.DARK_RED) + " ";
             final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
-            addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, false);
+            addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
             addChatMessage(imsg);
             return;
         }
@@ -195,11 +260,21 @@ public class ReportSuggestionHandler {
         if (FKCounterMod.isMWEnvironement && !isSenderMyself) {
             imsg.appendSibling(getIgnoreButton(messageSender));
         }
-        // TODO autoreport ici
-        final boolean gotautoreported = true;
-        addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotautoreported);
+        addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
         addChatMessage(imsg);
 
+    }
+
+    private static boolean canReportSuggestionPlayer(String playername) {
+        long timestamp = System.currentTimeMillis();
+        reportSuggestionList.removeIf(o -> (o.timestamp + TIME_BETWEEN_REPORT_SUGGESTION_PLAYER < timestamp));
+        for (StringLong stringLong : reportSuggestionList) {
+            if (stringLong.message != null && stringLong.message.equals(playername)) {
+                return false;
+            }
+        }
+        reportSuggestionList.add(new StringLong(timestamp, playername));
+        return true;
     }
 
     private static void addButtons(IChatComponent imsg, String reportedPlayer, String cheat, boolean isSenderMyself, boolean isTargetMyself, boolean gotautoreported) {
@@ -216,44 +291,6 @@ public class ReportSuggestionHandler {
 
     private static IChatComponent getIChatComponentWithSquadnameAsSender(String fmsg, @Nullable String messageSender, @Nullable String squadname) {
         return new ChatComponentText(messageSender != null && squadname != null ? fmsg.replaceFirst(messageSender, squadname) : fmsg);
-    }
-
-    // TODO return un objet avec un boolean et un text message qu'on va afficher dans le chat des joueurs
-    private static boolean sendReportSuggestion(@Nullable String messageSender, String reportedPlayer, String cheat, boolean isSenderInTablist, boolean isSenderNicked, boolean isSenderFlaging, boolean isSenderIgnored, boolean isSenderCheating, boolean isSenderRankValid) {
-        if (ConfigHandler.autoreportSuggestions) { // TODO autoreport suggestion
-
-            if (FKCounterMod.isInMwGame && !FKCounterMod.isitPrepPhase && mc.thePlayer != null && !isPlayerMyself(reportedPlayer) && messageSender != null) {
-
-                if (isPlayerMyself(messageSender)) {
-                    if (FKCounterMod.isitPrepPhase) {
-                        addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Report suggestions aren't working before the walls fall."));
-                    }
-                    String[] args = new String[]{reportedPlayer, cheat};
-                    CommandWDR.handleWDRCommand(args, true);
-                    return true;
-                }
-                if (!FKCounterMod.isitPrepPhase) {
-                    if (canReportSuggestionPlayer(reportedPlayer)) {
-                        ReportQueue.INSTANCE.addPlayerToQueueRandom(reportedPlayer);
-                        return true;
-                    }
-                }
-
-            }
-        }
-        return false;
-    }
-
-    private static boolean canReportSuggestionPlayer(String playername) {
-        long timestamp = System.currentTimeMillis();
-        reportSuggestionList.removeIf(o -> (o.timestamp + TIME_BETWEEN_REPORT_SUGGESTION_PLAYER < timestamp));
-        for (StringLong stringLong : reportSuggestionList) {
-            if (stringLong.message != null && stringLong.message.equals(playername)) {
-                return false;
-            }
-        }
-        reportSuggestionList.add(new StringLong(timestamp, playername));
-        return true;
     }
 
     private static boolean isAValidCheat(String cheat) {
