@@ -34,17 +34,12 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class ReportSuggestionHandler {
 
-    // TODO mettre symbole petit check vert si le player peu envoyer un report
-    //  petite croix rouge si il peut pas
-    //  faire qu'on accepte qu'un seul reportSender par game ? so use it wiselly !
-    // TODO add support for multiple reports in the same shout ? that would allow for a lot of spam
-
     private static final Minecraft mc = Minecraft.getMinecraft();
     public static final ResourceLocation REPORT_SUGGESTION_SOUND = new ResourceLocation("random.orb");
     private static final Pattern REPORT_PATTERN1 = Pattern.compile("(\\w{2,16}) (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE);
     private static final Pattern REPORT_PATTERN2 = Pattern.compile("\\/?(?:wdr|report) (\\w{2,16}) (\\w+)", Pattern.CASE_INSENSITIVE);
     public static final List<StringLong> reportSuggestionList = new ArrayList<>();
-    private static final long TIME_BETWEEN_REPORT_SUGGESTION_PLAYER = 40L * 60L * 1000L;
+    private static final long TIME_BETWEEN_REPORT_SUGGESTION_PLAYER = 20L * 60L * 1000L;
 
     public static boolean parseReportMessage(@Nullable String senderRank, @Nullable String messageSender, @Nullable String squadname, String msgIn, String fmsgIn) {
 
@@ -199,6 +194,13 @@ public class ReportSuggestionHandler {
             new DelayedTask(() -> addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment...").appendSibling(ChatUtil.getCancelButton(reportedPlayer))), 0);
             ReportQueue.INSTANCE.addPlayerToQueueRandom(reportedPlayer);
             return true;
+        } else {
+            if (isSenderMyself) {
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "\u2716" + EnumChatFormatting.GRAY + " That player has already been reported recently, try again later.")), 0);
+                String[] args = new String[]{reportedPlayer, cheat};
+                CommandWDR.handleWDRCommand(args, true);
+                return true;
+            }
         }
 
         return false;
