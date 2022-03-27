@@ -115,9 +115,9 @@ public class ChatUtil {
     }
 
     public static String apikeyMissingErrorMsg() {
-        return EnumChatFormatting.DARK_RED + "You didn't set up your Api key. \n"
-                + EnumChatFormatting.DARK_RED + "Connect to Hypixel and type \"/api new\" to get an Api key, the mod should automatically detect the key and save it. \n"
-                + EnumChatFormatting.DARK_RED + "If you want to use a key that you already have, type \"/mwenhancements setapikey <key>\".";
+        return getTagMW() + EnumChatFormatting.DARK_RED + "You didn't set up your Api key. "
+                + EnumChatFormatting.DARK_RED + "Connect to Hypixel and type " + EnumChatFormatting.YELLOW + "\"/api new\"" + " to get an Api key, the mod should automatically detect the key and save it. "
+                + EnumChatFormatting.DARK_RED + "If you want to use a key that you already have, type " + EnumChatFormatting.YELLOW + "\"/mwenhancements setapikey <key>\"";
     }
 
     public static String invalidplayernameMsg(String playername) {
