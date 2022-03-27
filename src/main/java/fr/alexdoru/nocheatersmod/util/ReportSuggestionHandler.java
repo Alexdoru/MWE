@@ -138,12 +138,12 @@ public class ReportSuggestionHandler {
             isSenderRankValid = true;
         }
 
-        boolean gotAutoreported = checkAndSendReportSuggestion(messageSender, reportedPlayer, cheat, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, isSenderNicked, isSenderRankValid, senderUUID);
+        boolean gotAutoreported = checkAndSendReportSuggestion(messageSender, reportedPlayer, cheat, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, isSenderNicked, isSenderRankValid);
         printCustomReportSuggestionChatText(fmsg, messageSender, reportedPlayer, cheat, reportText, squadname, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, isSenderNicked, isSenderRankValid, gotAutoreported, senderUUID);
 
     }
 
-    private static boolean checkAndSendReportSuggestion(@Nullable String messageSender, String reportedPlayer, String cheat, boolean isSenderMyself, boolean isTargetMyself, boolean isSenderInTablist, boolean isSenderIgnored, boolean isSenderCheating, boolean isSenderFlaging, boolean isSenderNicked, boolean isSenderRankValid, String senderUUID) {
+    private static boolean checkAndSendReportSuggestion(@Nullable String messageSender, String reportedPlayer, String cheat, boolean isSenderMyself, boolean isTargetMyself, boolean isSenderInTablist, boolean isSenderIgnored, boolean isSenderCheating, boolean isSenderFlaging, boolean isSenderNicked, boolean isSenderRankValid) {
 
         if (!ConfigHandler.autoreportSuggestions || !isSenderInTablist || messageSender == null || isSenderIgnored || isSenderCheating || !FKCounterMod.isInMwGame || isTargetMyself) {
             return false;
@@ -196,8 +196,7 @@ public class ReportSuggestionHandler {
                 CommandWDR.handleWDRCommand(args, true);
                 return true;
             }
-            // TODO ajouter un bouton cancel
-            new DelayedTask(() -> addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment...")), 0);
+            new DelayedTask(() -> addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment...").appendSibling(ChatUtil.getCancelButton(reportedPlayer))), 0);
             ReportQueue.INSTANCE.addPlayerToQueueRandom(reportedPlayer);
             return true;
         }

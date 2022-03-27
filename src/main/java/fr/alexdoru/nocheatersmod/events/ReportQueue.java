@@ -93,6 +93,17 @@ public class ReportQueue {
         queueList.clear();
     }
 
+    public String clearReportsFor(String reportedPlayer) {
+        StringBuilder msg = new StringBuilder();
+        for (ReportInQueue reportInQueue : queueList) {
+            if (reportInQueue.reportedPlayer != null && reportInQueue.reportedPlayer.equals(reportedPlayer)) {
+                msg.append(reportInQueue.reportedPlayer).append(" ");
+                queueList.remove(reportInQueue);
+            }
+        }
+        return msg.toString();
+    }
+
 }
 
 class ReportInQueue {
