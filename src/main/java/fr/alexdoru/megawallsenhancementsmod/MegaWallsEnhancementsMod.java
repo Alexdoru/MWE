@@ -1,10 +1,12 @@
 package fr.alexdoru.megawallsenhancementsmod;
 
+import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.commands.*;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.*;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
+import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
@@ -34,6 +36,8 @@ public class MegaWallsEnhancementsMod {
     @EventHandler
     public void init(FMLInitializationEvent event) {
 
+        FKCounterMod.init();
+
         ClientRegistry.registerKeyBinding(toggleDroppedItemLimit);
 
         MinecraftForge.EVENT_BUS.register(new GuiManager());
@@ -58,6 +62,8 @@ public class MegaWallsEnhancementsMod {
         ClientCommandHandler.instance.registerCommand(new CommandMWEnhancements());
         ClientCommandHandler.instance.registerCommand(new CommandHypixelMessage());
         ClientCommandHandler.instance.registerCommand(new CommandCopyToClipboard());
+
+        NoCheatersMod.init();
 
     }
 
