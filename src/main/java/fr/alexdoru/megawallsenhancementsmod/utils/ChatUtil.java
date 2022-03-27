@@ -345,6 +345,14 @@ public class ChatUtil {
                                         + EnumChatFormatting.YELLOW + "/nocheaters ignorelist"))));
     }
 
+    public static IChatComponent getCancelButton(String playername) {
+        return new ChatComponentText(EnumChatFormatting.RED + "[Cancel] ")
+                .setChatStyle(new ChatStyle()
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nocheaters cancelreport " + playername))
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to cancel the report for this player"))));
+    }
+
     public static String getReportingAdvice() {
         final String s = "\n\n" + EnumChatFormatting.RED + "To make reporting efficient, be sure to report" + EnumChatFormatting.DARK_RED + " when you are ingame with\n"
                 + EnumChatFormatting.DARK_RED + "the cheater" + EnumChatFormatting.RED + " and not before the game starts or in the lobby.";

@@ -374,6 +374,15 @@ public class CommandNocheaters extends CommandBase {
             ReportQueue.INSTANCE.clearReportsQueue();
             addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed all reports waiting to be sent."));
 
+        } else if (args[0].equalsIgnoreCase("cancelreport")) {
+
+            if (args.length == 2) {
+                final String s = ReportQueue.INSTANCE.clearReportsFor(args[1]);
+                if (!s.equals("")) {
+                    addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed all reports targeting : " + s));
+                }
+            }
+
         }
 
     }
