@@ -146,7 +146,7 @@ public class ReportSuggestionHandler {
 
         if (FKCounterMod.isitPrepPhase) {
             if (isSenderMyself) {
-                new DelayedTask(() -> addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " Cannot share a report before the walls fall!")), 0);
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " Cannot share a report before the walls fall!")), 0);
                 String[] args = new String[]{reportedPlayer, cheat};
                 CommandWDR.handleWDRCommand(args, true);
                 return true;
@@ -156,7 +156,7 @@ public class ReportSuggestionHandler {
 
         if (isSenderFlaging) {
             if (isSenderMyself) {
-                new DelayedTask(() -> addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You cannot share a report since you flag in /scangame!")), 0);
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You cannot share a report since you flag in /scangame!")), 0);
                 String[] args = new String[]{reportedPlayer, cheat};
                 CommandWDR.handleWDRCommand(args, true);
                 return true;
@@ -166,7 +166,7 @@ public class ReportSuggestionHandler {
 
         if (isSenderNicked) {
             if (isSenderMyself) {
-                new DelayedTask(() -> addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You cannot share a report when you are nicked!")), 0);
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You cannot share a report when you are nicked!")), 0);
                 String[] args = new String[]{reportedPlayer, cheat};
                 CommandWDR.handleWDRCommand(args, true);
                 return true;
@@ -176,7 +176,7 @@ public class ReportSuggestionHandler {
 
         if (!isSenderRankValid) {
             if (isSenderMyself) {
-                new DelayedTask(() -> addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You need to be at least " + EnumChatFormatting.GREEN + "VIP" + EnumChatFormatting.GOLD + "+" + EnumChatFormatting.GRAY + " to share a report with others")), 0);
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You need to be at least " + EnumChatFormatting.GREEN + "VIP" + EnumChatFormatting.GOLD + "+" + EnumChatFormatting.GRAY + " to share a report with others")), 0);
                 String[] args = new String[]{reportedPlayer, cheat};
                 CommandWDR.handleWDRCommand(args, true);
                 return true;
@@ -186,17 +186,17 @@ public class ReportSuggestionHandler {
 
         if (canReportSuggestionPlayer(reportedPlayer)) {
             if (isSenderMyself) {
-                new DelayedTask(() -> addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You report will be shared with other players in the game.")), 0);
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You report will be shared with other players in the game.")), 0);
                 String[] args = new String[]{reportedPlayer, cheat};
                 CommandWDR.handleWDRCommand(args, true);
                 return true;
             }
-            new DelayedTask(() -> addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment...").appendSibling(ChatUtil.getCancelButton(reportedPlayer))), 0);
+            new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment... ").appendSibling(ChatUtil.getCancelButton(reportedPlayer))), 0);
             ReportQueue.INSTANCE.addPlayerToQueueRandom(reportedPlayer);
             return true;
         } else {
             if (isSenderMyself) {
-                new DelayedTask(() -> addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "\u2716" + EnumChatFormatting.GRAY + " That player has already been reported recently, try again later.")), 0);
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2716" + EnumChatFormatting.GRAY + " That player has already been reported recently, try again later.")), 0);
                 String[] args = new String[]{reportedPlayer, cheat};
                 CommandWDR.handleWDRCommand(args, true);
                 return true;
