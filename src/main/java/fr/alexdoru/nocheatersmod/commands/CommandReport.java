@@ -106,9 +106,7 @@ public class CommandReport extends CommandBase {
 
         for (int i = 1; i < args.length; i++) {
 
-            if (args[i].equalsIgnoreCase("bhop")) {// TODO revoir ca et dans le command WDR aussi
-                msg.append(" bhop aura reach velocity speed antiknockback");
-            } else if (args[i].equalsIgnoreCase("fastbreak")) {
+            if (args[i].equalsIgnoreCase("fastbreak")) {
                 msg.append(" speed");
             } else if (args[i].equalsIgnoreCase("autoblock") || args[i].equalsIgnoreCase("multiaura")) {
                 msg.append(" killaura");

@@ -166,9 +166,6 @@ public class CommandWDR extends CommandBase {
 
                         }
 
-                    } else if (args[i].equalsIgnoreCase("bhop")) {
-                        arraycheats.add(args[i]);
-                        message.append(" bhop aura reach velocity speed antiknockback");
                     } else if (args[i].equalsIgnoreCase("fastbreak")) {
                         arraycheats.add(args[i]);
                         message.append(" speed");
