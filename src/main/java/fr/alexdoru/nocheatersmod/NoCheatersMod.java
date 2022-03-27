@@ -8,15 +8,11 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-@Mod(name = "No cheaters", modid = NoCheatersMod.modid, version = NoCheatersMod.version, acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
 public class NoCheatersMod {
 
     public static final String modid = "nocheaters";
@@ -25,8 +21,7 @@ public class NoCheatersMod {
     public static final Logger logger = LogManager.getLogger("NoCheaters");
     public static final KeyBinding addtimemark_key = new KeyBinding("Add Timestamp", 0, "NoCheaters");
 
-    @EventHandler
-    public void init(FMLInitializationEvent event) {
+    public static void init() {
 
         ClientRegistry.registerKeyBinding(addtimemark_key);
         MinecraftForge.EVENT_BUS.register(new NoCheatersEvents());
