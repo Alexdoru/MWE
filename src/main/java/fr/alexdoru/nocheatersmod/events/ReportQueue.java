@@ -83,6 +83,7 @@ public class ReportQueue {
         for (ReportInQueue reportInQueue : queueList) {
             if (reportInQueue.messageSender != null && reportInQueue.messageSender.equals(playername)) {
                 msg.append(reportInQueue.messageSender).append(" ");
+                queueList.remove(reportInQueue);
             }
         }
         return msg.toString();
