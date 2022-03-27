@@ -1,10 +1,7 @@
 package fr.alexdoru.nocheatersmod.events;
 
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -57,8 +54,6 @@ public class ReportQueue {
             counter = tickDelay;
         }
         queueList.add(new ReportInQueue(null, playername));
-        // TODO ca va faire quoi ce messages avec les autres messages de l'autoreport ?
-        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GRAY + "Sending report in a moment..."));
     }
 
     private boolean isReportQueueInactive() {
