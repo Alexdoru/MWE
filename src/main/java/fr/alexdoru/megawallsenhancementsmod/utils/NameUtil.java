@@ -127,10 +127,6 @@ public class NameUtil {
             player.addPrefix(mwPlayerData.extraPrefix);
         }
 
-        if (mwPlayerData.squadname != null) {
-            return;
-        }
-
         if (onPlayerJoin && mwPlayerData.wdr != null && mwPlayerData.wdr.transformName()) { // player was reported
             long datenow = (new Date()).getTime();
             String playerName = player.getName();
