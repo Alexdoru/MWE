@@ -383,13 +383,32 @@ public class CommandNocheaters extends CommandBase {
                 }
             }
 
+        } else {
+
+            addChatMessage(getCommandHelp());
+
         }
+
+    }
+
+    private IChatComponent getCommandHelp() {
+
+        return new ChatComponentText(EnumChatFormatting.RED + bar() + "\n"
+                + centerLine(EnumChatFormatting.GOLD + "NoCheaters Help\n\n")
+                + EnumChatFormatting.RED + getCommandUsage(null) + " - " + EnumChatFormatting.GRAY + "prints the list of reported players in your current world\n"
+                + EnumChatFormatting.RED + getCommandUsage(null) + " config - " + EnumChatFormatting.GRAY + "opens the config gui\n"
+                + EnumChatFormatting.RED + getCommandUsage(null) + " ignore playername - " + EnumChatFormatting.GRAY + "ignores all future report suggestions from that player\n"
+                + EnumChatFormatting.RED + getCommandUsage(null) + " ignorelist - " + EnumChatFormatting.GRAY + "prints the list of ignored players\n"
+                + EnumChatFormatting.RED + getCommandUsage(null) + " reportlist - " + EnumChatFormatting.GRAY + "prints the list of reported players\n"
+                + EnumChatFormatting.RED + getCommandUsage(null) + " clearreportqueue - " + EnumChatFormatting.GRAY + "cancels all reports about to be sent\n"
+                + EnumChatFormatting.RED + bar()
+        );
 
     }
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        String[] arguments = {"clearreportqueue", "config", "ignore", "ignorelist", "reportlist"};
+        String[] arguments = {"clearreportqueue", "config", "help", "ignore", "ignorelist", "reportlist"};
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, arguments);
         }
