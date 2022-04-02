@@ -17,6 +17,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class CommandPlancke extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length < 1) {
-            addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
+            addChatMessage(getCommandHelp());
             return;
         }
 
@@ -179,6 +180,20 @@ public class CommandPlancke extends CommandBase {
             return getListOfStringsMatchingLastWord(args, mwargs);
 
         return null;
+
+    }
+
+    private IChatComponent getCommandHelp() {
+
+        return new ChatComponentText(EnumChatFormatting.AQUA + bar() + "\n"
+                + centerLine(EnumChatFormatting.GOLD + "Plancke Help\n\n")
+                + EnumChatFormatting.AQUA + "/plancke playername - " + EnumChatFormatting.GRAY + "General Hypixel stats\n"
+                + EnumChatFormatting.AQUA + "/plancke playername sw - " + EnumChatFormatting.GRAY + "Skywars stats\n"
+                + EnumChatFormatting.AQUA + "/plancke playername mw - " + EnumChatFormatting.GRAY + "General Mega Walls stats\n"
+                + EnumChatFormatting.AQUA + "/plancke playername mw classname - " + EnumChatFormatting.GRAY + "Class specific Mega Walls stats\n"
+                + EnumChatFormatting.AQUA + "/plancke playername mw cp - " + EnumChatFormatting.GRAY + "Mega Walls classpoints\n"
+                + EnumChatFormatting.AQUA + bar()
+        );
 
     }
 
