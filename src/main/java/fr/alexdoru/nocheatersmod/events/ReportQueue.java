@@ -1,7 +1,10 @@
 package fr.alexdoru.nocheatersmod.events;
 
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -40,10 +43,12 @@ public class ReportQueue {
 
     }
 
-    public void addPlayerToQueue(String playername) {
+    public void addPlayerToQueue(String playername, boolean printDelayMsg) {
         if (isReportQueueInactive()) {
             MinecraftForge.EVENT_BUS.register(this);
             counter = 0;
+        } else if (printDelayMsg) {
+            ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Sending report in a moment..."));
         }
         queueList.add(new ReportInQueue(null, playername));
     }
@@ -72,7 +77,7 @@ public class ReportQueue {
     public boolean sendAutoReport(long datenow, String playerName, WDR wdr) {
         if (wdr.canBeAutoreported(datenow) && wdr.hasValidCheats()) {
             wdr.timestamp = datenow;
-            addPlayerToQueue(playerName);
+            addPlayerToQueue(playerName, false);
             return true;
         }
         return false;
