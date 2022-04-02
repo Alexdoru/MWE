@@ -8,7 +8,6 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -57,14 +56,8 @@ public class CommandHypixelShout extends CommandBase {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
 
-        List<String> reportargs = new ArrayList<>();
-        reportargs.add("report");
-        reportargs.add("wdr");
-
         if (FKCounterMod.isitPrepPhase) {
-            final List<String> onlinePlayersByName = TabCompletionUtil.getOnlinePlayersByName();
-            onlinePlayersByName.addAll(reportargs);
-            return getListOfStringsMatchingLastWord(args, onlinePlayersByName);
+            return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
         }
 
         if (args.length >= 2 && (args[args.length - 2].equalsIgnoreCase("report") || args[args.length - 2].equalsIgnoreCase("wdr"))) {
@@ -75,7 +68,7 @@ public class CommandHypixelShout extends CommandBase {
             return getListOfStringsMatchingLastWord(args, CommandReport.cheatsArray);
         }
 
-        return reportargs;
+        return null;
 
     }
 
