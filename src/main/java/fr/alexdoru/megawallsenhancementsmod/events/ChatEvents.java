@@ -15,10 +15,7 @@ import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import fr.alexdoru.nocheatersmod.util.ReportSuggestionHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -28,9 +25,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.getTagNoCheaters;
 
 public class ChatEvents {
 
@@ -150,14 +144,7 @@ public class ChatEvents {
             }
 
             if (msg.equals(BAN_MESSAGE)) {
-                new DelayedTask(() -> {
-                    String recentlyDisconnectedPlayers = NetHandlerPlayClientHook.getRecentlyDisconnectedPlayers();
-                    if (!recentlyDisconnectedPlayers.equals("")) {
-                        addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "Player(s) disconnected : " + EnumChatFormatting.AQUA + recentlyDisconnectedPlayers).setChatStyle(new ChatStyle()
-                                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Players disconnected in the last 2 seconds, click this message to run : \n\n" + EnumChatFormatting.YELLOW + "/stalk " + recentlyDisconnectedPlayers)))
-                                .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk " + recentlyDisconnectedPlayers))));
-                    }
-                }, 20);
+                new DelayedTask(NetHandlerPlayClientHook::printDisconnectedPlayers, 20);
                 //return;
             }
 
