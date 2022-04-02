@@ -26,6 +26,7 @@ public class KeybindingsEvent {
             CommandWDR.addTimeMark();
         } else if (MegaWallsEnhancementsMod.toggleDroppedItemLimit.isPressed()) {
             ConfigHandler.limitDroppedEntityRendered = !ConfigHandler.limitDroppedEntityRendered;
+            ConfigHandler.saveConfig();
             if (ConfigHandler.limitDroppedEntityRendered) {
                 ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.WHITE + "Limiting dropped items rendered : " + EnumChatFormatting.GREEN + "On"));
             } else {
