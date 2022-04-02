@@ -126,7 +126,7 @@ public class KillCounter {
 
     public static boolean processMessage(String FormattedText, String UnformattedText) {
 
-        if (!FKCounterMod.isInMwGame || areAllWithersAlive()) {
+        if (!FKCounterMod.isInMwGame) {
             return false;
         }
 
@@ -134,7 +134,9 @@ public class KillCounter {
          * Kill message detection
          */
         for (Pattern kill_pattern : KILL_PATTERNS) {
+
             Matcher killMessageMatcher = kill_pattern.matcher(UnformattedText);
+
             if (killMessageMatcher.matches()) {
 
                 String killedPlayer = killMessageMatcher.group(1);
@@ -169,8 +171,11 @@ public class KillCounter {
                 return true;
 
             }
+
         }
+
         return false;
+
     }
 
     public static String getGameId() {
