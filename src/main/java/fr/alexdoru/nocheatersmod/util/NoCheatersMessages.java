@@ -33,13 +33,7 @@ public class NoCheatersMessages {
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
             String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
             String playerName = networkPlayerInfo.getGameProfile().getName();
-            WDR wdr = WdredPlayers.getWdredMap().get(uuid);
-            if (wdr == null) {
-                wdr = WdredPlayers.getWdredMap().get(playerName);
-                if (wdr != null) {
-                    uuid = playerName;
-                }
-            }
+            WDR wdr = WdredPlayers.getPlayer(uuid, playerName);
             if (wdr == null) {
                 continue;
             }
