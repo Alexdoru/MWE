@@ -49,7 +49,7 @@ public class CommandSendReportAgain extends CommandBase {
                     ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Your cheating report against " + EnumChatFormatting.RED + playername
                             + EnumChatFormatting.GREEN + " will be sent during the game."));
                 } else {
-                    ReportQueue.INSTANCE.addPlayerToQueue(playername);
+                    ReportQueue.INSTANCE.addPlayerToQueue(playername, true);
                     wdr.timestamp = time;
                     wdr.timeLastManualReport = time;
                 }
