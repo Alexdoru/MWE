@@ -56,16 +56,20 @@ public class CommandHypixelShout extends CommandBase {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
 
-        if (FKCounterMod.isitPrepPhase) {
-            return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
-        }
-
         if (args.length >= 2 && (args[args.length - 2].equalsIgnoreCase("report") || args[args.length - 2].equalsIgnoreCase("wdr"))) {
-            return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+            if (FKCounterMod.isitPrepPhase) {
+                return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+            } else {
+                return null;
+            }
         }
 
         if (args.length >= 3 && (args[args.length - 3].equalsIgnoreCase("report") || args[args.length - 3].equalsIgnoreCase("wdr"))) {
             return getListOfStringsMatchingLastWord(args, CommandReport.cheatsArray);
+        }
+
+        if (FKCounterMod.isitPrepPhase) {
+            return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
         }
 
         return null;
