@@ -134,7 +134,7 @@ public class ReportSuggestionHandler {
         }
 
         boolean gotAutoreported = checkAndSendReportSuggestion(messageSender, reportedPlayer, cheat, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, isSenderNicked, isSenderRankValid);
-        printCustomReportSuggestionChatText(fmsg, messageSender, reportedPlayer, cheat, reportText, squadname, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, isSenderNicked, isSenderRankValid, gotAutoreported, senderUUID);
+        printCustomReportSuggestionChatText(fmsg, messageSender, reportedPlayer, cheat, reportText, squadname, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, isSenderNicked, gotAutoreported, senderUUID);
 
     }
 
@@ -207,7 +207,7 @@ public class ReportSuggestionHandler {
 
     }
 
-    private static void printCustomReportSuggestionChatText(String fmsg, @Nullable String messageSender, String reportedPlayer, String cheat, String reportText, @Nullable String squadname, boolean isSenderMyself, boolean isTargetMyself, boolean isSenderInTablist, boolean isSenderIgnored, boolean isSenderCheating, boolean isSenderFlaging, boolean isSenderNicked, boolean isSenderRankValid, boolean gotAutoreported, String senderUUID) {
+    private static void printCustomReportSuggestionChatText(String fmsg, @Nullable String messageSender, String reportedPlayer, String cheat, String reportText, @Nullable String squadname, boolean isSenderMyself, boolean isTargetMyself, boolean isSenderInTablist, boolean isSenderIgnored, boolean isSenderCheating, boolean isSenderFlaging, boolean isSenderNicked, boolean gotAutoreported, @Nullable String senderUUID) {
 
         if (!ConfigHandler.reportsuggestions) {
             addChatMessage(getIChatComponentWithSquadnameAsSender(fmsg, messageSender, squadname));
@@ -226,7 +226,9 @@ public class ReportSuggestionHandler {
 
         if (isSenderIgnored) {
             final IChatComponent imsg = new ChatComponentText(StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.GRAY + " (Ignored)", EnumChatFormatting.GRAY + EnumChatFormatting.STRIKETHROUGH.toString(), true));
-            imsg.appendSibling(ChatUtil.getUnIgnoreButton(senderUUID, messageSender));
+            if (senderUUID != null) {
+                imsg.appendSibling(ChatUtil.getUnIgnoreButton(senderUUID, messageSender));
+            }
             addChatMessage(imsg);
             return;
         }
