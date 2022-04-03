@@ -28,9 +28,9 @@ public class KeybindingsEvent {
             ConfigHandler.limitDroppedEntityRendered = !ConfigHandler.limitDroppedEntityRendered;
             ConfigHandler.saveConfig();
             if (ConfigHandler.limitDroppedEntityRendered) {
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.WHITE + "Limiting dropped items rendered : " + EnumChatFormatting.GREEN + "On"));
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.WHITE + "Limit dropped items rendered: " + EnumChatFormatting.GREEN + "On"));
             } else {
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.WHITE + "Limiting dropped items rendered : " + EnumChatFormatting.RED + "Off"));
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.WHITE + "Limit dropped items rendered: " + EnumChatFormatting.RED + "Off"));
             }
         }
 

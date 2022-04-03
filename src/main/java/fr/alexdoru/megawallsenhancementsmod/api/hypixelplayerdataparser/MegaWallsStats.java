@@ -154,7 +154,7 @@ public class MegaWallsStats {
 
     private String formatClasspoint(int classpoints) {
         if (classpoints < 2000) {
-            return EnumChatFormatting.DARK_GRAY.toString() + classpoints;
+            return EnumChatFormatting.GRAY.toString() + classpoints;
         } else if (classpoints < 10000) {
             return EnumChatFormatting.GOLD.toString() + classpoints;
         } else if (classpoints < 13000) {
