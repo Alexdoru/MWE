@@ -39,7 +39,6 @@ public class CommandWDR extends CommandBase {
     private static final char timestampreportkey = '-';
     private static final char timemarkedreportkey = '#';
     private static int nbTimeMarks = 0;
-    private static final List<Long> commandUsageTimeList = new ArrayList<>();
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     public static void addTimeMark() {
@@ -202,14 +201,7 @@ public class CommandWDR extends CommandBase {
                 }
             }
 
-            long l = System.currentTimeMillis();
-            commandUsageTimeList.removeIf(o -> (o + 2 * 60 * 1000L < l));
-
-            if (commandUsageTimeList.size() >= 5) {
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Don't report too many players at once or Hypixel will ignore your reports thinking you are a bot trying to flood their system"));
-            }
-
-            commandUsageTimeList.add(l);
+            ReportQueue.INSTANCE.addReportTimestamp();
 
             if (FKCounterMod.preGameLobby) {
                 ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getChatReportingAdvice()));
