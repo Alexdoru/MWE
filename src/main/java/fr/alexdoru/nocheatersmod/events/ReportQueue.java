@@ -10,13 +10,16 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
 
 public class ReportQueue {
 
     public static final ReportQueue INSTANCE = new ReportQueue();
-    private static final int TIME_BETWEEN_REPORTS = 80 * 20; // ticks
+    private static final int TIME_BETWEEN_REPORTS = 90 * 20; // ticks
     private final Minecraft mc = Minecraft.getMinecraft();
     private int counter;
     private final List<ReportInQueue> queueList = new ArrayList<>();
@@ -85,30 +88,40 @@ public class ReportQueue {
         return false;
     }
 
-    public String clearReportsSentBy(String playername) {
+    public void clearReportsSentBy(String playername) {
         StringBuilder msg = new StringBuilder();
-        for (ReportInQueue reportInQueue : queueList) {
+        final Iterator<ReportInQueue> iterator = queueList.iterator();
+        while (iterator.hasNext()) {
+            final ReportInQueue reportInQueue = iterator.next();
             if (reportInQueue.messageSender != null && reportInQueue.messageSender.equals(playername)) {
-                msg.append(reportInQueue.messageSender).append(" ");
-                queueList.remove(reportInQueue);
+                msg.append(" ").append(reportInQueue.messageSender);
+                iterator.remove();
             }
         }
-        return msg.toString();
+        final String s = msg.toString();
+        if (!s.equals("")) {
+            addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Won't send reports targeting :" + EnumChatFormatting.GOLD + s));
+        }
     }
 
     public void clearReportsQueue() {
         queueList.clear();
     }
 
-    public String clearReportsFor(String reportedPlayer) {
+    public void clearReportsFor(String reportedPlayer) {
         StringBuilder msg = new StringBuilder();
-        for (ReportInQueue reportInQueue : queueList) {
+        final Iterator<ReportInQueue> iterator = queueList.iterator();
+        while (iterator.hasNext()) {
+            final ReportInQueue reportInQueue = iterator.next();
             if (reportInQueue.reportedPlayer != null && reportInQueue.reportedPlayer.equals(reportedPlayer)) {
-                msg.append(reportInQueue.reportedPlayer).append(" ");
-                queueList.remove(reportInQueue);
+                msg.append(" ").append(reportInQueue.reportedPlayer);
+                iterator.remove();
             }
         }
-        return msg.toString();
+        final String s = msg.toString();
+        if (!s.equals("")) {
+            addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed all reports targeting :" + s));
+        }
     }
 
     /**

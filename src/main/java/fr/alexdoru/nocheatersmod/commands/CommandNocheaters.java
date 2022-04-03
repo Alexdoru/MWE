@@ -170,10 +170,7 @@ public class CommandNocheaters extends CommandBase {
                 addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + getCommandUsage(sender) + " ignore <playername>"));
             } else {
 
-                String removedFromQueue = ReportQueue.INSTANCE.clearReportsSentBy(args[1]);
-                if (!removedFromQueue.equals("")) {
-                    addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Won't send reports for : " + EnumChatFormatting.GOLD + removedFromQueue));
-                }
+                ReportQueue.INSTANCE.clearReportsSentBy(args[1]);
 
                 Multithreading.addTaskToQueue(() -> {
 
@@ -377,10 +374,7 @@ public class CommandNocheaters extends CommandBase {
         } else if (args[0].equalsIgnoreCase("cancelreport")) {
 
             if (args.length == 2) {
-                final String s = ReportQueue.INSTANCE.clearReportsFor(args[1]);
-                if (!s.equals("")) {
-                    addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed all reports targeting : " + s));
-                }
+                ReportQueue.INSTANCE.clearReportsFor(args[1]);
             }
 
         } else {
