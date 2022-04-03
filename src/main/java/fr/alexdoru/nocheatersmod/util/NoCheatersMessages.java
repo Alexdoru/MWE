@@ -67,9 +67,9 @@ public class NoCheatersMessages {
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + wdrmapKey + " " + playername))));
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.YELLOW + " [Remove Player]").setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click here to remove this player from your report list\n"
-                            +EnumChatFormatting.YELLOW + "and stop auto-reporting them every game")))
+                            + EnumChatFormatting.YELLOW + "and stop auto-reporting them every game")))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + wdrmapKey + " " + playername))));
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.RED + " It's been " + EnumChatFormatting.GRAY + DateUtil.timeSince(wdr.timeLastManualReport) + EnumChatFormatting.RED + " since you last manually reported that player for : "))
+            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.RED + " It's been " + EnumChatFormatting.GRAY + DateUtil.timeSince(wdr.timeLastManualReport) + EnumChatFormatting.RED + " since you last manually reported that player for :"))
                     .appendSibling(allCheats)
                     .appendSibling(new ChatComponentText(EnumChatFormatting.RED + ", either remove them from your report list or report them again."));
         } else if (!disableReportButton && FKCounterMod.isInMwGame && !FKCounterMod.isitPrepPhase && wdr.canBeReported(datenow)) {
@@ -81,13 +81,12 @@ public class NoCheatersMessages {
         if (!FKCounterMod.preGameLobby) {
             allCheats.setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
-                            + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " cheating"
-                            + ChatUtil.getReportingAdvice())))
+                            + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " cheating" + ChatUtil.getReportingAdvice())))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + playername + " cheating")));
         }
 
         if (!olderThanMaxAutoreport) {
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Cheats : ")).appendSibling(allCheats);
+            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Cheats :")).appendSibling(allCheats);
         }
 
         return imsg;
@@ -194,11 +193,11 @@ public class NoCheatersMessages {
 
             for (String hack : wdr.hacks) {
                 if (hack.equalsIgnoreCase("bhop")) {
-                    allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_RED + hack + " "));
+                    allCheats.appendSibling(new ChatComponentText(" " + EnumChatFormatting.DARK_RED + hack));
                 } else if (hack.equalsIgnoreCase(WDR.NICK)) {
-                    allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_PURPLE + hack + " "));
+                    allCheats.appendSibling(new ChatComponentText(" " + EnumChatFormatting.DARK_PURPLE + hack));
                 } else if (!hack.equals(WDR.IGNORED)) {
-                    allCheats.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + hack + " "));
+                    allCheats.appendSibling(new ChatComponentText(" " + EnumChatFormatting.GOLD + hack));
                 }
             }
 
