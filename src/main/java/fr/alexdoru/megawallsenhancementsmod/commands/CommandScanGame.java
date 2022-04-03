@@ -145,7 +145,7 @@ class ScanPlayerTask implements Callable<String> {
             MegaWallsStats megawallsstats = new MegaWallsStats(playerdata.getPlayerData());
             IChatComponent imsg = null;
 
-            if ((megawallsstats.getGames_played() <= 25 && megawallsstats.getFkdr() > 3f) ||
+            if ((megawallsstats.getGames_played() <= 25 && megawallsstats.getFkdr() > 3.5f) ||
                     (megawallsstats.getGames_played() <= 250 && megawallsstats.getFkdr() > 5f) ||
                     (megawallsstats.getGames_played() <= 500 && megawallsstats.getFkdr() > 8f) ||
                     (megawallsstats.getFkdr() > 10f)) {
