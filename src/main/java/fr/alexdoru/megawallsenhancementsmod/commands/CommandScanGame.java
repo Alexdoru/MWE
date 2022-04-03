@@ -259,14 +259,9 @@ class ScanPlayerTask implements Callable<String> {
     }
 
     private String getFormattedName(NetworkPlayerInfo networkPlayerInfoIn) {
-        if (networkPlayerInfoIn.getDisplayName() != null) {
-            return networkPlayerInfoIn.getDisplayName().getFormattedText();
-        }
-
         if (networkPlayerInfoIn.getPlayerTeam() == null) {
             return networkPlayerInfoIn.getGameProfile().getName();
         }
-
         ScorePlayerTeam team = networkPlayerInfoIn.getPlayerTeam();
         return team.getColorPrefix().replace("\u00a7k", "").replace("O", "") + networkPlayerInfoIn.getGameProfile().getName() + team.getColorSuffix();
     }
