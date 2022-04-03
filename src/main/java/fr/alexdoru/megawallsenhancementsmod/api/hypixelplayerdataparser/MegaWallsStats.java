@@ -204,7 +204,7 @@ public class MegaWallsStats {
 
                 {
                         EnumChatFormatting.AQUA + "Wither dmg/game : " + EnumChatFormatting.GOLD + ((int) this.wither_damage_game) + "     ",
-                        EnumChatFormatting.AQUA + "Def Kills /game : " + EnumChatFormatting.GOLD + String.format("%.3f", this.def_kill_game)
+                        EnumChatFormatting.AQUA + "Def Kills/game : " + EnumChatFormatting.GOLD + String.format("%.3f", this.def_kill_game)
                 },
 
                 {
