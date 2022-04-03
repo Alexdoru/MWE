@@ -56,7 +56,7 @@ public class CommandHypixelShout extends CommandBase {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
 
-        if (args.length >= 2 && (args[args.length - 2].equalsIgnoreCase("report") || args[args.length - 2].equalsIgnoreCase("wdr"))) {
+        if (args.length >= 2 && isKeywordreport(2, args)) {
             if (FKCounterMod.isitPrepPhase) {
                 return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
             } else {
@@ -64,7 +64,7 @@ public class CommandHypixelShout extends CommandBase {
             }
         }
 
-        if (args.length >= 3 && (args[args.length - 3].equalsIgnoreCase("report") || args[args.length - 3].equalsIgnoreCase("wdr"))) {
+        if (args.length >= 3 && (isKeywordreport(3, args))) {
             return getListOfStringsMatchingLastWord(args, CommandReport.cheatsArray);
         }
 
@@ -74,6 +74,10 @@ public class CommandHypixelShout extends CommandBase {
 
         return null;
 
+    }
+
+    private boolean isKeywordreport(int i, String[] args) {
+        return args[args.length - i].equalsIgnoreCase("report") || args[args.length - i].equalsIgnoreCase("wdr") || args[args.length - i].equalsIgnoreCase("/report") || args[args.length - i].equalsIgnoreCase("/wdr");
     }
 
 }
