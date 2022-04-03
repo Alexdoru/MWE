@@ -12,15 +12,13 @@ import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,11 +31,13 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class CommandWDR extends CommandBase {
 
+    private static final ResourceLocation reportDeniedSound = new ResourceLocation("mob.villager.no");
     private static final HashMap<String, TimeMark> TimeMarksMap = new HashMap<>();
     private static final char timestampreportkey = '-';
     private static final char timemarkedreportkey = '#';
     private static int nbTimeMarks = 0;
     private static final List<Long> commandUsageTimeList = new ArrayList<>();
+    private static final Minecraft mc = Minecraft.getMinecraft();
 
     public static void addTimeMark() {
         nbTimeMarks++;
@@ -192,17 +192,24 @@ public class CommandWDR extends CommandBase {
                 message.append(" ").append(timerOnReplay.equals("?") ? "" : timerOnReplay);
             }
 
-            (Minecraft.getMinecraft()).thePlayer.sendChatMessage(message.toString()); //sends command to server
+            mc.thePlayer.sendChatMessage(message.toString()); //sends command to server
 
             long l = System.currentTimeMillis();
             commandUsageTimeList.removeIf(o -> (o + 2 * 60 * 1000L < l));
+            boolean playSound = false;
             if (commandUsageTimeList.size() >= 5) {
                 ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Don't report too many players at once or Hypixel will ignore your reports thinking you are a bot trying to flood their system"));
+                playSound = true;
             }
             commandUsageTimeList.add(l);
 
             if (FKCounterMod.preGameLobby) {
                 ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + ChatUtil.getChatReportingAdvice()));
+                playSound = true;
+            }
+
+            if (playSound) {
+                mc.getSoundHandler().playSound(PositionedSoundRecord.create(reportDeniedSound, 1.0F));
             }
 
             CachedMojangUUID apireq;
@@ -233,7 +240,7 @@ public class CommandWDR extends CommandBase {
             if (uuid == null) {  // The playername doesn't exist or never joined hypixel
 
                 // search for the player's gameprofile in the tablist
-                for (NetworkPlayerInfo networkplayerinfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+                for (NetworkPlayerInfo networkplayerinfo : mc.getNetHandler().getPlayerInfoMap()) {
                     if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(args[0])) {
                         uuid = networkplayerinfo.getGameProfile().getName();
                         playername = uuid;
@@ -272,7 +279,7 @@ public class CommandWDR extends CommandBase {
                 }
 
                 if (isaNick) {
-                    argsinWDR.add("nick");
+                    argsinWDR.add(WDR.NICK);
                 }
 
                 WDR newreport = new WDR(timestamp, timestamp, argsinWDR);
@@ -311,7 +318,7 @@ public class CommandWDR extends CommandBase {
                 }
 
                 if (isaNick) {
-                    argsinWDR.add("nick");
+                    argsinWDR.add(WDR.NICK);
                 }
                 WdredPlayers.getWdredMap().put(uuid, new WDR(time, time, argsinWDR));
                 NameUtil.updateGameProfileAndName(playername);

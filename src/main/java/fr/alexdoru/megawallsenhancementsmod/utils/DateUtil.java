@@ -8,7 +8,7 @@ public class DateUtil {
 
     public static String localformatTimestamp(long epoch) {
 
-        SimpleDateFormat Df = new SimpleDateFormat("dd/MM/yyyy 'at' HH:mm:ss 'local'");
+        SimpleDateFormat Df = new SimpleDateFormat("dd/MM/yyyy 'at' HH:mm:ss");
         //SimpleDateFormat Df = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
         //Calendar currentTime = Calendar.getInstance();
         return Df.format(epoch);

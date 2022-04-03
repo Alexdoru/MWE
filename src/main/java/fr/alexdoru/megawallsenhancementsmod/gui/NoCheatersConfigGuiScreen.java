@@ -95,7 +95,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
             case 9:
                 textLines.add(EnumChatFormatting.GREEN + "Automatically sends the report command to the server");
                 textLines.add(EnumChatFormatting.GREEN + "when there is a report suggestion in chat");
-                textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls");
+                textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls after the walls fall");
                 textLines.add(EnumChatFormatting.GRAY + "Ignores command suggestions sent by players you have reported");
                 break;
         }
