@@ -192,7 +192,7 @@ public class CommandNocheaters extends CommandBase {
 
         if (doStalk) {
 
-            if (!wdr.hacks.contains("nick")) {
+            if (!wdr.isNicked()) {
 
                 HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
                 LoginData logindata = new LoginData(playerdata.getPlayerData());

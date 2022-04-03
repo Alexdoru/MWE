@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.events;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.events.KillCounter;
+import fr.alexdoru.fkcountermod.events.MwGameEvent;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
@@ -50,31 +51,29 @@ public class ChatEvents {
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
     private static final List<StringLong> reportSuggestionList = new ArrayList<>();
     private static final Random random = new Random();
+    private static final long TIME_BETWEEN_REPORT_SUGGESTION_PLAYER = 15L * 60L * 1000L;
     private static long lastStrength = 0;
 
     private static boolean parseReportMessage(String messageSender, String msgIn) {
 
-        if (ConfigHandler.reportsuggestions || ConfigHandler.autoreportSuggestions) {
+        Matcher matcher1 = REPORT_PATTERN1.matcher(msgIn);
+        Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);
 
-            Matcher matcher1 = REPORT_PATTERN1.matcher(msgIn);
-            Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);
-
-            if (matcher1.matches()) {
-                String name = matcher1.group(1);
-                if (isAValidName(name)) {
-                    handleReportSuggestion(name, "bhop");
-                    handleAutoReportSuggestion(messageSender, name);
-                }
-                return true;
-            } else if (matcher2.matches()) {
-                String name = matcher2.group(1);
-                String cheat = matcher2.group(2);
-                if (isAValidCheat(cheat) && isAValidName(name)) {
-                    handleReportSuggestion(name, cheat);
-                    handleAutoReportSuggestion(messageSender, name);
-                }
-                return true;
+        if (matcher1.matches()) {
+            String name = matcher1.group(1);
+            if (isAValidName(name)) {
+                handleReportSuggestion(name, "bhop");
+                handleAutoReportSuggestion(messageSender, name);
             }
+            return true;
+        } else if (matcher2.matches()) {
+            String name = matcher2.group(1);
+            String cheat = matcher2.group(2);
+            if (isAValidCheat(cheat) && isAValidName(name)) {
+                handleReportSuggestion(name, cheat);
+                handleAutoReportSuggestion(messageSender, name);
+            }
+            return true;
         }
 
         return false;
@@ -103,7 +102,7 @@ public class ChatEvents {
             t = System.currentTimeMillis();
             return;
         }
-        if (ConfigHandler.autoreportSuggestions) {
+        if (!FKCounterMod.isitPrepPhase) {
             NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(messageSender);
             if (networkPlayerInfo == null) {
                 return;
@@ -129,7 +128,7 @@ public class ChatEvents {
 
     private static boolean canReportSuggestionPlayer(String playername) {
         long timestamp = System.currentTimeMillis();
-        reportSuggestionList.removeIf(o -> (o.timestamp + 600000L < timestamp));
+        reportSuggestionList.removeIf(o -> (o.timestamp + TIME_BETWEEN_REPORT_SUGGESTION_PLAYER < timestamp));
         for (StringLong stringLong : reportSuggestionList) {
             if (stringLong.message != null && stringLong.message.equals(playername)) {
                 return false;
@@ -145,6 +144,13 @@ public class ChatEvents {
 
     private static boolean isAValidCheat(String cheat) {
         return CommandReport.cheatsList.contains(cheat);
+    }
+
+    @SubscribeEvent
+    public void onMWGameStart(MwGameEvent event) {
+        if (event.getType() == MwGameEvent.EventType.GAME_START) {
+            reportSuggestionList.clear();
+        }
     }
 
     @SubscribeEvent
@@ -211,7 +217,7 @@ public class ChatEvents {
 
             if (a && msg.equals("Thanks for your Cheating (Hacking) report. We understand your concerns and it will be reviewed as soon as possible.")) {
                 long l = System.currentTimeMillis();
-                if (l - t < 10000L) {
+                if (l - t < 20000L) {
                     event.setCanceled(true);
                 }
                 a = false;

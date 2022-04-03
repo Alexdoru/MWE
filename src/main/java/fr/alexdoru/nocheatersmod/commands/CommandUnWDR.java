@@ -20,11 +20,20 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.getTagNoCheate
 
 public class CommandUnWDR extends CommandBase {
 
+    @Override
     public String getCommandName() {
         return "unwdr";
     }
 
+    @Override
+    public String getCommandUsage(ICommandSender sender) {
+        return "/unwdr <playername>";
+    }
+
+    @Override
     public void processCommand(ICommandSender sender, String[] args) {
+
+        // TODO attention si on UNWDR un mec avec des cheats ou un mecs ignored
 
         if (args.length < 1 || args.length > 3) {
             addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
@@ -80,10 +89,7 @@ public class CommandUnWDR extends CommandBase {
 
     }
 
-    public String getCommandUsage(ICommandSender sender) {
-        return "/unwdr <playername>";
-    }
-
+    @Override
     public boolean canCommandSenderUseCommand(ICommandSender sender) {
         return true;
     }
@@ -92,4 +98,5 @@ public class CommandUnWDR extends CommandBase {
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
     }
+
 }

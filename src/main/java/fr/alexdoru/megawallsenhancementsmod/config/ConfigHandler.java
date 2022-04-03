@@ -74,6 +74,8 @@ public class ConfigHandler {
     /**
      * Hitbox Config
      */
+    /*Used to remember if it was toggled after restarting the game*/
+    public static boolean isDebugHitboxOn;
     public static boolean drawHitboxForPlayers;
     public static boolean drawHitboxForGroundedArrows;
     public static boolean drawHitboxForPinnedArrows;
@@ -149,6 +151,7 @@ public class ConfigHandler {
         Property pdeleteReports = config.get(CATEGORY_NOCHEATERS, "Delete Old Report", false, "Deletes reports older than the specified value");
         Property ptimeDeleteReport = config.get(CATEGORY_NOCHEATERS, "Time delete reports", 365, "Reports older than this will be deleted on game start (days)");
 
+        Property pisDebugHitboxOn =  config.get(CATEGORY_HITBOX, "Toggle hitbox", false, "Toggle hitbox");
         Property pdrawHitboxForPlayers = config.get(CATEGORY_HITBOX, "Hitbox for players", true, "Hitbox for players");
         Property pdrawHitboxForGroundedArrows = config.get(CATEGORY_HITBOX, "Hitbox for grounded arrows", true, "Hitbox for grounded arrows");
         Property pdrawHitboxForPinnedArrows = config.get(CATEGORY_HITBOX, "Hitbox for pinned arrows", true, "Hitbox for pinned arrows");
@@ -222,6 +225,7 @@ public class ConfigHandler {
         config.setCategoryPropertyOrder(CATEGORY_NOCHEATERS, pOrderNOCHEATERS);
 
         List<String> pOrderHitbox = new ArrayList<>();
+        pOrderHitbox.add(pisDebugHitboxOn.getName());
         pOrderHitbox.add(pdrawHitboxForPlayers.getName());
         pOrderHitbox.add(pdrawHitboxForGroundedArrows.getName());
         pOrderHitbox.add(pdrawHitboxForPinnedArrows.getName());
@@ -284,6 +288,7 @@ public class ConfigHandler {
             deleteReports = pdeleteReports.getBoolean();
             timeDeleteReport = 24L * 3600L * 1000L * ((long) ptimeDeleteReport.getInt());
 
+            isDebugHitboxOn = pisDebugHitboxOn.getBoolean();
             drawHitboxForPlayers = pdrawHitboxForPlayers.getBoolean();
             drawHitboxForGroundedArrows = pdrawHitboxForGroundedArrows.getBoolean();
             drawHitboxForPinnedArrows = pdrawHitboxForPinnedArrows.getBoolean();
@@ -359,6 +364,7 @@ public class ConfigHandler {
             pdeleteReports.set(deleteReports);
             ptimeDeleteReport.set((int) (timeDeleteReport / (24L * 3600L * 1000L)));
 
+            pisDebugHitboxOn.set(isDebugHitboxOn);
             pdrawHitboxForPlayers.set(drawHitboxForPlayers);
             pdrawHitboxForGroundedArrows.set(drawHitboxForGroundedArrows);
             pdrawHitboxForPinnedArrows.set(drawHitboxForPinnedArrows);

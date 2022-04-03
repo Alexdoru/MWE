@@ -17,9 +17,32 @@ public class RenderManagerTransformer implements IMyClassTransformer {
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
 
-        status.setInjectionPoints(6);
+        status.setInjectionPoints(7);
 
         for (MethodNode methodNode : classNode.methods) {
+
+            if (methodNode.name.equals("<init>") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lbmj;Lbjh;)V" : "(Lnet/minecraft/client/renderer/texture/TextureManager;Lnet/minecraft/client/renderer/entity/RenderItem;)V")) {
+                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                    if (insnNode.getOpcode() == ICONST_0) {
+                        AbstractInsnNode nextNode = insnNode.getNext();
+                        if (nextNode instanceof FieldInsnNode && nextNode.getOpcode() == PUTFIELD
+                                && ((FieldInsnNode) nextNode).owner.equals(ASMLoadingPlugin.isObf ? "biu" : "net/minecraft/client/renderer/entity/RenderManager")
+                                && ((FieldInsnNode) nextNode).name.equals(ASMLoadingPlugin.isObf ? "t" : "debugBoundingBox")
+                                && ((FieldInsnNode) nextNode).desc.equals("Z")) {
+                            /*
+                             * Replaces in the constructor :
+                             * this.debugBoundingBox = false;
+                             * With :
+                             * this.debugBoundingBox = ConfigHandler.isDebugHitboxOn;
+                             */
+                            methodNode.instructions.insertBefore(nextNode, new FieldInsnNode(GETSTATIC, "fr/alexdoru/megawallsenhancementsmod/config/ConfigHandler", "isDebugHitboxOn", "Z"));
+                            methodNode.instructions.remove(insnNode);
+                            status.addInjection();
+                        }
+                    }
+                }
+            }
+
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "b" : "renderDebugBoundingBox") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lpk;DDDFF)V" : "(Lnet/minecraft/entity/Entity;DDDFF)V")) {
 
                 /*
