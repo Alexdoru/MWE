@@ -128,12 +128,10 @@ public class ChatUtil {
      * Draws a bar that takes the width of the chat window
      */
     public static String bar() {
-
         char separator = '-';
         int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
         int separatorWidth = frObj.getCharWidth(separator);
-
-        return new String(new char[chatWidth / separatorWidth]).replace("\0", "-");
+        return EnumChatFormatting.STRIKETHROUGH + new String(new char[chatWidth / separatorWidth]).replace("\0", "-");
     }
 
     /**
