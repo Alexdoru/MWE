@@ -171,7 +171,7 @@ public class CommandNocheaters extends CommandBase {
             } else {
 
                 String removedFromQueue = ReportQueue.INSTANCE.clearReportsSentBy(args[1]);
-                if(!removedFromQueue.equals("")) {
+                if (!removedFromQueue.equals("")) {
                     addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Won't send reports for : " + EnumChatFormatting.GOLD + removedFromQueue));
                 }
 
