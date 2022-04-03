@@ -187,11 +187,11 @@ public class CommandPlancke extends CommandBase {
 
         return new ChatComponentText(EnumChatFormatting.AQUA + bar() + "\n"
                 + centerLine(EnumChatFormatting.GOLD + "Plancke Help\n\n")
-                + EnumChatFormatting.AQUA + "/plancke playername - " + EnumChatFormatting.GRAY + "General Hypixel stats\n"
-                + EnumChatFormatting.AQUA + "/plancke playername sw - " + EnumChatFormatting.GRAY + "Skywars stats\n"
-                + EnumChatFormatting.AQUA + "/plancke playername mw - " + EnumChatFormatting.GRAY + "General Mega Walls stats\n"
-                + EnumChatFormatting.AQUA + "/plancke playername mw classname - " + EnumChatFormatting.GRAY + "Class specific Mega Walls stats\n"
-                + EnumChatFormatting.AQUA + "/plancke playername mw cp - " + EnumChatFormatting.GRAY + "Mega Walls classpoints\n"
+                + EnumChatFormatting.YELLOW + "/plancke <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "General Hypixel stats\n"
+                + EnumChatFormatting.YELLOW + "/plancke <player> sw" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Skywars stats\n"
+                + EnumChatFormatting.YELLOW + "/plancke <player> mw" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "General Mega Walls stats\n"
+                + EnumChatFormatting.YELLOW + "/plancke <player> mw classname" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Class specific Mega Walls stats\n"
+                + EnumChatFormatting.YELLOW + "/plancke <player> mw cp" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Mega Walls classpoints\n"
                 + EnumChatFormatting.AQUA + bar()
         );
 

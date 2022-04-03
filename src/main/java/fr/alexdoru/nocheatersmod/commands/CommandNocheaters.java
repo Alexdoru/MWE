@@ -395,12 +395,12 @@ public class CommandNocheaters extends CommandBase {
 
         return new ChatComponentText(EnumChatFormatting.RED + bar() + "\n"
                 + centerLine(EnumChatFormatting.GOLD + "NoCheaters Help\n\n")
-                + EnumChatFormatting.RED + getCommandUsage(null) + " - " + EnumChatFormatting.GRAY + "prints the list of reported players in your current world\n"
-                + EnumChatFormatting.RED + getCommandUsage(null) + " config - " + EnumChatFormatting.GRAY + "opens the config gui\n"
-                + EnumChatFormatting.RED + getCommandUsage(null) + " ignore playername - " + EnumChatFormatting.GRAY + "ignores all future report suggestions from that player\n"
-                + EnumChatFormatting.RED + getCommandUsage(null) + " ignorelist - " + EnumChatFormatting.GRAY + "prints the list of ignored players\n"
-                + EnumChatFormatting.RED + getCommandUsage(null) + " reportlist - " + EnumChatFormatting.GRAY + "prints the list of reported players\n"
-                + EnumChatFormatting.RED + getCommandUsage(null) + " clearreportqueue - " + EnumChatFormatting.GRAY + "cancels all reports about to be sent\n"
+                + EnumChatFormatting.YELLOW + getCommandUsage(null) + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the list of reported players in your current world\n"
+                + EnumChatFormatting.YELLOW + getCommandUsage(null) + " config" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "opens the config gui\n"
+                + EnumChatFormatting.YELLOW + getCommandUsage(null) + " ignore <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "ignores all future report suggestions from that player\n"
+                + EnumChatFormatting.YELLOW + getCommandUsage(null) + " ignorelist" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the list of ignored players\n"
+                + EnumChatFormatting.YELLOW + getCommandUsage(null) + " reportlist" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the list of reported players\n"
+                + EnumChatFormatting.YELLOW + getCommandUsage(null) + " clearreportqueue" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "cancels all reports about to be sent\n"
                 + EnumChatFormatting.RED + bar()
         );
 
@@ -476,7 +476,7 @@ public class CommandNocheaters extends CommandBase {
                     logindata.parseLatestActivity(playerdata.getPlayerData());
                     long latestActivityTime = logindata.getLatestActivityTime();
                     String latestActivity = logindata.getLatestActivity();
-                    boolean isProbBanned = Math.abs(latestActivityTime - wdr.timestamp) < 16L * 60L * 60L * 1000L && Math.abs(timeNow - wdr.timestamp) > 3L * 24L * 60L * 60L * 1000L;
+                    boolean isProbBanned = Math.abs(latestActivityTime - wdr.timestamp) < 24L * 60L * 60L * 1000L && Math.abs(timeNow - wdr.timestamp) > 3L * 24L * 60L * 60L * 1000L;
                     ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " " + latestActivity + " " + (isProbBanned ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.YELLOW) + DateUtil.timeSince(latestActivityTime)));
 
                 } else if (logindata.isOnline()) { // player is online
@@ -485,7 +485,7 @@ public class CommandNocheaters extends CommandBase {
 
                 } else { // print lastlogout
 
-                    boolean isProbBanned = Math.abs(logindata.getLastLogout() - wdr.timestamp) < 16L * 60L * 60L * 1000L && Math.abs(timeNow - wdr.timestamp) > 3L * 24L * 60L * 60L * 1000L;
+                    boolean isProbBanned = Math.abs(logindata.getLastLogout() - wdr.timestamp) < 24L * 60L * 60L * 1000L && Math.abs(timeNow - wdr.timestamp) > 3L * 24L * 60L * 60L * 1000L;
                     ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Lastlogout " + (isProbBanned ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.YELLOW) + DateUtil.timeSince(logindata.getLastLogout())));
 
                 }
