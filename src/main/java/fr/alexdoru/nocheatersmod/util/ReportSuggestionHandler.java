@@ -39,7 +39,7 @@ public class ReportSuggestionHandler {
     private static final Pattern REPORT_PATTERN1 = Pattern.compile("(\\w{2,16}) (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE);
     private static final Pattern REPORT_PATTERN2 = Pattern.compile("\\/?(?:wdr|report) (\\w{2,16}) (\\w+)", Pattern.CASE_INSENSITIVE);
     public static final List<StringLong> reportSuggestionList = new ArrayList<>();
-    private static final long TIME_BETWEEN_REPORT_SUGGESTION_PLAYER = 20L * 60L * 1000L;
+    private static final long TIME_BETWEEN_REPORT_SUGGESTION_PLAYER = 40L * 60L * 1000L;
 
     public static boolean parseReportMessage(@Nullable String senderRank, @Nullable String messageSender, @Nullable String squadname, String msgIn, String fmsgIn) {
 
@@ -196,7 +196,7 @@ public class ReportSuggestionHandler {
             return true;
         } else {
             if (isSenderMyself) {
-                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2716" + EnumChatFormatting.GRAY + " That player has already been reported recently, try again later.")), 0);
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2716" + EnumChatFormatting.GRAY + " That player has already been reported during this game, try again later.")), 0);
                 String[] args = new String[]{reportedPlayer, cheat};
                 CommandWDR.handleWDRCommand(args, true);
                 return true;
