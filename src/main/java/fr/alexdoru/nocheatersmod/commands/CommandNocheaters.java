@@ -474,7 +474,7 @@ class CreateReportLineTask implements Callable<IChatComponent> {
                         logindata.parseLatestActivity(playerdata.getPlayerData());
                         long latestActivityTime = logindata.getLatestActivityTime();
                         String latestActivity = logindata.getLatestActivity();
-                        boolean isProbBanned = Math.abs(latestActivityTime - wdr.timestamp) < 24L * 60L * 60L * 1000L && Math.abs(timeNow - wdr.timestamp) > 3L * 24L * 60L * 60L * 1000L;
+                        boolean isProbBanned = isProbBanned(latestActivityTime);
                         ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " " + latestActivity + " " + (isProbBanned ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.YELLOW) + DateUtil.timeSince(latestActivityTime)));
 
                     } else if (logindata.isOnline()) { // player is online
@@ -483,7 +483,7 @@ class CreateReportLineTask implements Callable<IChatComponent> {
 
                     } else { // print lastlogout
 
-                        boolean isProbBanned = Math.abs(logindata.getLastLogout() - wdr.timestamp) < 24L * 60L * 60L * 1000L && Math.abs(timeNow - wdr.timestamp) > 3L * 24L * 60L * 60L * 1000L;
+                        boolean isProbBanned = isProbBanned(logindata.getLastLogout());
                         ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Lastlogout " + (isProbBanned ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.YELLOW) + DateUtil.timeSince(logindata.getLastLogout())));
 
                     }
@@ -508,6 +508,10 @@ class CreateReportLineTask implements Callable<IChatComponent> {
             return new ChatComponentText(EnumChatFormatting.RED + e.getMessage() + "\n");
         }
 
+    }
+
+    private boolean isProbBanned(long latestActivityTime) {
+        return (Math.abs(latestActivityTime - wdr.timestamp) < 24L * 60L * 60L * 1000L && Math.abs(timeNow - wdr.timestamp) > 3L * 24L * 60L * 60L * 1000L) || Math.abs(timeNow - wdr.timestamp) > 14L * 24L * 60L * 60L * 1000L;
     }
 
 }
