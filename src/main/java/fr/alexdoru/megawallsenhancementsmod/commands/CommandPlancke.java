@@ -54,7 +54,7 @@ public class CommandPlancke extends CommandBase {
             try {
                 apiname = new CachedMojangUUID(args[0]);
             } catch (ApiException e) {
-                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + e.getMessage()));
                 return null;
             }
 
@@ -70,7 +70,7 @@ public class CommandPlancke extends CommandBase {
                     return null;
                 }
             } catch (ApiException e) {
-                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + e.getMessage()));
                 return null;
             }
 

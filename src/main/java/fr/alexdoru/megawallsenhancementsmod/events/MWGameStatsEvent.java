@@ -53,8 +53,7 @@ public class MWGameStatsEvent {
                     chosen_class = mwclassskindata.getCurrentmwclass().toLowerCase();
                 }
                 MWclassStats = new MegaWallsClassStats(playerdata.getPlayerData(), chosen_class);
-            } catch (ApiException e) {
-                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+            } catch (ApiException ignored) {
             }
             isRandom = false;
 
@@ -80,14 +79,8 @@ public class MWGameStatsEvent {
                 gameStats.minus(MWclassStats);
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.YELLOW + "Click to view the stats of your " + EnumChatFormatting.AQUA + "Mega Walls " + EnumChatFormatting.YELLOW + "game!")
                         .setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gamestatsmw"))));
-            } catch (ApiException e) {
-                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-
+            } catch (ApiException | IllegalArgumentException | IllegalAccessException ignored) {}
             return null;
-
         });
     }
 

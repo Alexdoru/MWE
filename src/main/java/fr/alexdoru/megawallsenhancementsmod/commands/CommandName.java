@@ -49,7 +49,7 @@ public class CommandName extends CommandBase {
             try {
                 apiname = new CachedMojangUUID(args[0]);
             } catch (ApiException e1) {
-                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e1.getMessage()));
+                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + e1.getMessage()));
                 return null;
             }
             String uuid = apiname.getUuid();
@@ -58,7 +58,7 @@ public class CommandName extends CommandBase {
             try {
                 apinamehistory = new MojangNameHistory(uuid);
             } catch (ApiException e1) {
-                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e1.getMessage()));
+                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + e1.getMessage()));
                 return null;
             }
 

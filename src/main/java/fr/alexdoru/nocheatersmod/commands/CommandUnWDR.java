@@ -48,8 +48,7 @@ public class CommandUnWDR extends CommandBase {
                     apireq = (new CachedMojangUUID(playername));
                     playername = apireq.getName();
                 } catch (ApiException e) {
-                    addChatMessage(new ChatComponentText(getTagNoCheaters()
-                            + EnumChatFormatting.RED + e.getMessage()));
+                    addChatMessage(new ChatComponentText(EnumChatFormatting.RED + e.getMessage()));
                     return null;
                 }
 
