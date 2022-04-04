@@ -70,54 +70,11 @@ public class ChatUtil {
         return imsgstart.appendSibling(imessagebody).appendSibling(imsgend);
     }
 
-    public static String makeChatList(String listtitle, String messagebody, int displaypage, int nbpage, String command) {
-
-        String messagestart;
-
-        if (displaypage > 1) { // put previous page arrow
-
-            messagestart = "[\"\",{\"text\":\"" + bar() + "\",\"color\":\"blue\"},{\"text\":\"\\n\"}"
-
-                    + ",{\"text\":\"             \",\"color\":\"white\"}"
-
-                    + ",{\"text\":\" <<\",\"bold\":true,\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + command + " " + (displaypage - 1)
-
-                    + "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click to view page " + (displaypage - 1) + "\",\"color\":\"yellow\"}]}}"
-
-                    + ",{\"text\":\" " + listtitle + " (Page " + displaypage + " of " + nbpage + ")\",\"color\":\"gold\"}"; // ajouter des boutons if c pas la premiere page etc,
-
-        } else { // don't put previous page arrow
-
-            messagestart = "[\"\",{\"text\":\"" + bar() + "\",\"color\":\"blue\"},{\"text\":\"\\n\"}"
-
-                    + ",{\"text\":\"                " + listtitle + " (Page " + displaypage + " of " + nbpage + ")\",\"color\":\"gold\"}";
-
-        }
-
-        if (displaypage < nbpage) {
-
-            messagestart = messagestart + ",{\"text\":\" >>\",\"bold\":true,\"color\":\"yellow\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"" + command + " " + (displaypage + 1)
-
-                    + "\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":[\"\",{\"text\":\"Click to view page " + (displaypage + 1) + "\",\"color\":\"yellow\"}]}}"
-
-                    + ",{\"text\":\"\\n\"}";
-
-        } else {
-
-            messagestart = messagestart + ",{\"text\":\"\\n\"}";
-
-        }
-
-        String messageend = ",{\"text\":\"" + bar() + "\",\"color\":\"blue\"}]";
-
-        return messagestart + messagebody + messageend;
-
-    }
-
     public static String apikeyMissingErrorMsg() {
-        return getTagMW() + EnumChatFormatting.DARK_RED + "You didn't set up your Api key. "
-                + EnumChatFormatting.DARK_RED + "Connect to Hypixel and type " + EnumChatFormatting.YELLOW + "\"/api new\"" + " to get an Api key, the mod should automatically detect the key and save it. "
-                + EnumChatFormatting.DARK_RED + "If you want to use a key that you already have, type " + EnumChatFormatting.YELLOW + "\"/mwenhancements setapikey <key>\"";
+        return getTagMW() + EnumChatFormatting.RED + "You didn't set up your Api key. Connect to Hypixel and type "
+                + EnumChatFormatting.YELLOW + "\"/api new\""
+                + EnumChatFormatting.RED + " to get an Api key, the mod should automatically detect the key and save it. If you want to use a key that you already have, type "
+                + EnumChatFormatting.YELLOW + "\"/mwenhancements setapikey <key>\"";
     }
 
     public static String invalidplayernameMsg(String playername) {
