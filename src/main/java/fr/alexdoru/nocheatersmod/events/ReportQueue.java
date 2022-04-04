@@ -1,5 +1,6 @@
 package fr.alexdoru.nocheatersmod.events;
 
+import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import net.minecraft.client.Minecraft;
@@ -19,12 +20,14 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage
 public class ReportQueue {
 
     public static final ReportQueue INSTANCE = new ReportQueue();
-    private static final int TIME_BETWEEN_REPORTS = 90 * 20; // ticks
-    private final Minecraft mc = Minecraft.getMinecraft();
+    private static final Minecraft mc = Minecraft.getMinecraft();
+    private static final int TIME_BETWEEN_REPORTS = 2 * 60 * 20; // ticks
+
     private int counter;
     private final List<ReportInQueue> queueList = new ArrayList<>();
-    private static final List<Long> commandUsageTimeList = new ArrayList<>();
-    private static final Random random = new Random();
+    private final List<Long> timestampsLastReports = new ArrayList<>();
+    private final List<StringLong> playersReportedThisGame = new ArrayList<>();
+    private final Random random = new Random();
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
@@ -37,7 +40,7 @@ public class ReportQueue {
             String playername = queueList.remove(queueList.size() - 1).reportedPlayer;
             mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
             counter = (int) (TIME_BETWEEN_REPORTS + (10d * random.nextGaussian() / 6d));
-            addReportTimestamp();
+            addReportTimestamp(false);
         }
 
         if (isReportQueueInactive()) {
@@ -58,7 +61,16 @@ public class ReportQueue {
         queueList.add(new ReportInQueue(null, playername));
     }
 
-    public void addPlayerToQueue(String playername, int tickDelay) {
+    /**
+     * Called from the auto-report suggestions
+     */
+    public void addPlayerToQueueRandom(String reportedPlayer) {
+        if (canReportPlayerThisGame(reportedPlayer)) {
+            addPlayerToQueue(reportedPlayer, (int) (100d + Math.abs(100d * random.nextGaussian() + 240d)));
+        }
+    }
+
+    private void addPlayerToQueue(String playername, int tickDelay) {
         if (isReportQueueInactive()) {
             MinecraftForge.EVENT_BUS.register(this);
             counter = tickDelay;
@@ -70,10 +82,6 @@ public class ReportQueue {
         return counter <= 0 && queueList.isEmpty();
     }
 
-    public void addPlayerToQueueRandom(String reportedPlayer) {
-        addPlayerToQueue(reportedPlayer, (int) (100d + Math.abs(100d * random.nextGaussian() + 240d)));
-    }
-
     /**
      * Handles the auto report feature
      *
@@ -82,7 +90,9 @@ public class ReportQueue {
     public boolean sendAutoReport(long datenow, String playerName, WDR wdr) {
         if (wdr.canBeAutoreported(datenow) && wdr.hasValidCheats()) {
             wdr.timestamp = datenow;
-            addPlayerToQueue(playerName, false);
+            if (canReportPlayerThisGame(playerName)) {
+                addPlayerToQueue(playerName, false);
+            }
             return true;
         }
         return false;
@@ -125,16 +135,33 @@ public class ReportQueue {
     }
 
     /**
-     * Called everytime a report is sent to check that the player doesn't send to many reports in a short time
+     * Called everytime a report is sent to check that the player doesn't send too many reports in a short time
      */
-    public void addReportTimestamp() {
+    public void addReportTimestamp(boolean manualReport) {
         long l = System.currentTimeMillis();
-        commandUsageTimeList.removeIf(o -> (o + 2 * 60 * 1000L < l));
-        if (commandUsageTimeList.size() >= 5) {
+        timestampsLastReports.removeIf(o -> (o + 2 * 60 * 1000L < l));
+        if (manualReport && timestampsLastReports.size() > 4) {
             ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Don't report too many players at once or Hypixel will ignore your reports thinking you are a bot trying to flood their system"));
         }
-        commandUsageTimeList.add(l);
+        timestampsLastReports.add(l);
     }
+
+    public void clearPlayersReportedThisGame() {
+        playersReportedThisGame.clear();
+    }
+
+    private boolean canReportPlayerThisGame(String playername) {
+        long timestamp = System.currentTimeMillis();
+        playersReportedThisGame.removeIf(o -> (o.timestamp + 40L * 60L * 1000L < timestamp));
+        for (StringLong stringLong : playersReportedThisGame) {
+            if (stringLong.message != null && stringLong.message.equals(playername)) {
+                return false;
+            }
+        }
+        playersReportedThisGame.add(new StringLong(timestamp, playername));
+        return true;
+    }
+
 }
 
 class ReportInQueue {

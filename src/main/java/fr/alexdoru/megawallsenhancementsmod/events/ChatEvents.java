@@ -12,6 +12,7 @@ import fr.alexdoru.megawallsenhancementsmod.gui.HunterStrengthGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.KillCooldownGui;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
+import fr.alexdoru.nocheatersmod.events.ReportQueue;
 import fr.alexdoru.nocheatersmod.util.ReportSuggestionHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -56,8 +57,9 @@ public class ChatEvents {
 
     @SubscribeEvent
     public void onMWGameStart(MwGameEvent event) {
-        if (event.getType() == MwGameEvent.EventType.GAME_START) {
-            ReportSuggestionHandler.reportSuggestionList.clear();
+        if (event.getType() == MwGameEvent.EventType.GAME_START || event.getType() == MwGameEvent.EventType.GAME_END ) {
+            ReportSuggestionHandler.clearReportSuggestionHistory();
+            ReportQueue.INSTANCE.clearPlayersReportedThisGame();
         }
     }
 

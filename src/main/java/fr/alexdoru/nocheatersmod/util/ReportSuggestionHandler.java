@@ -38,7 +38,7 @@ public class ReportSuggestionHandler {
     public static final ResourceLocation REPORT_SUGGESTION_SOUND = new ResourceLocation("random.orb");
     private static final Pattern REPORT_PATTERN1 = Pattern.compile("(\\w{2,16}) (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE);
     private static final Pattern REPORT_PATTERN2 = Pattern.compile("\\/?(?:wdr|report) (\\w{2,16}) (\\w+)", Pattern.CASE_INSENSITIVE);
-    public static final List<StringLong> reportSuggestionList = new ArrayList<>();
+    private static final List<StringLong> reportSuggestionHistory = new ArrayList<>();
     private static final long TIME_BETWEEN_REPORT_SUGGESTION_PLAYER = 40L * 60L * 1000L;
 
     public static boolean parseReportMessage(@Nullable String senderRank, @Nullable String messageSender, @Nullable String squadname, String msgIn, String fmsgIn) {
@@ -270,13 +270,13 @@ public class ReportSuggestionHandler {
 
     private static boolean canReportSuggestionPlayer(String playername) {
         long timestamp = System.currentTimeMillis();
-        reportSuggestionList.removeIf(o -> (o.timestamp + TIME_BETWEEN_REPORT_SUGGESTION_PLAYER < timestamp));
-        for (StringLong stringLong : reportSuggestionList) {
+        reportSuggestionHistory.removeIf(o -> (o.timestamp + TIME_BETWEEN_REPORT_SUGGESTION_PLAYER < timestamp));
+        for (StringLong stringLong : reportSuggestionHistory) {
             if (stringLong.message != null && stringLong.message.equals(playername)) {
                 return false;
             }
         }
-        reportSuggestionList.add(new StringLong(timestamp, playername));
+        reportSuggestionHistory.add(new StringLong(timestamp, playername));
         return true;
     }
 
@@ -307,6 +307,10 @@ public class ReportSuggestionHandler {
     //TODO add support for own nick
     private static boolean isPlayerMyself(@Nullable String name) {
         return mc.thePlayer != null && mc.thePlayer.getName().equals(name);
+    }
+
+    public static void clearReportSuggestionHistory() {
+        reportSuggestionHistory.clear();
     }
 
 }
