@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class NetHandlerPlayClientHook {
 
     public static final HashMap<String, NetworkPlayerInfo> playerInfoMap = new HashMap<>();

@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.EnumChatFormatting;
 
+@SuppressWarnings("unused")
 public class GuiPlayerTabOverlayHook {
 
     private static final FontRenderer fontRendererObj = Minecraft.getMinecraft().fontRendererObj;

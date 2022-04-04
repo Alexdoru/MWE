@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 
+@SuppressWarnings("unused")
 public class RenderGlobalHook {
 
     private static int[] entityItemCount = new int[256];

@@ -6,6 +6,7 @@ import fr.alexdoru.fkcountermod.gui.FKCounterGui;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.LastWitherHPGui;
 
+@SuppressWarnings("unused")
 public class GuiIngameHook {
 
     public static String cancelHungerTitle(String subtitle) {
