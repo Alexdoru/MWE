@@ -16,9 +16,7 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class NoCheatersMessages {
 
@@ -27,8 +25,8 @@ public class NoCheatersMessages {
     /**
      * Called when you type /nocheaters
      */
-    public static List<IChatComponent> getReportMessagesforWorld() {
-        List<IChatComponent> list = new ArrayList<>();
+    public static void printReportMessagesForWorld(boolean callFromCommand) {
+        boolean foundReport = false;
         long datenow = (new Date()).getTime();
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
             String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
@@ -37,22 +35,28 @@ public class NoCheatersMessages {
             if (wdr == null) {
                 continue;
             }
+            if (callFromCommand && !foundReport) {
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.YELLOW + "Reported players : "));
+            }
+            foundReport = true;
             boolean gotautoreported = ReportQueue.INSTANCE.sendAutoReport(datenow, playerName, wdr);
             if (wdr.transformName()) {
-                list.add(createwarningmessage(
+                printWarningMessage(
                         datenow,
                         uuid,
                         (!FKCounterMod.isInMwGame || FKCounterMod.isitPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playerName),
                         playerName,
                         wdr,
                         gotautoreported
-                ));
+                );
             }
         }
-        return list;
+        if (callFromCommand && !foundReport) {
+            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "No reported player here !"));
+        }
     }
 
-    public static IChatComponent createwarningmessage(long datenow, String uuid, String formattedName, String playername, WDR wdr, boolean disableReportButton) {
+    public static void printWarningMessage(long datenow, String uuid, String formattedName, String playername, WDR wdr, boolean disableReportButton) {
 
         String wdrmapKey = wdr.isNicked() ? playername : uuid;
         IChatComponent[] imsgArray = createPlayerNameWithHoverText(formattedName, playername, wdrmapKey, wdr, EnumChatFormatting.LIGHT_PURPLE);
@@ -89,7 +93,7 @@ public class NoCheatersMessages {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Cheats :")).appendSibling(allCheats);
         }
 
-        return imsg;
+        ChatUtil.addChatMessage(imsg);
 
     }
 

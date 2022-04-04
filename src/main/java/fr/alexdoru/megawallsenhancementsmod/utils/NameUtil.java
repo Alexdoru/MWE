@@ -133,14 +133,14 @@ public class NameUtil {
             boolean gotautoreported = ReportQueue.INSTANCE.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
             if (ConfigHandler.togglewarnings || mwPlayerData.wdr.shouldPrintBigText(datenow)) {
                 String uuid = player.getUniqueID().toString().replace("-", "");
-                ChatUtil.addChatMessage(NoCheatersMessages.createwarningmessage(
+                NoCheatersMessages.printWarningMessage(
                         datenow,
                         uuid,
                         (!FKCounterMod.isInMwGame || FKCounterMod.isitPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(player.getTeam(), playerName),
                         playerName,
                         mwPlayerData.wdr,
                         gotautoreported
-                ));
+                );
             }
         }
 

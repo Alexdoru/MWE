@@ -46,20 +46,8 @@ public class CommandNocheaters extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length == 0) {
-
-            List<IChatComponent> list = NoCheatersMessages.getReportMessagesforWorld();
-
-            if (list.isEmpty()) {
-                addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "No reported player here !"));
-            } else {
-                addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.YELLOW + "Reported players : "));
-                for (IChatComponent report : list) {
-                    addChatMessage(report);
-                }
-            }
-
+            NoCheatersMessages.printReportMessagesForWorld(true);
             return;
-
         }
 
         if (args.length == 1 && args[0].equalsIgnoreCase("config")) {
