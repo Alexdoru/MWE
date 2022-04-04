@@ -22,6 +22,8 @@ import net.minecraft.event.HoverEvent;
 import net.minecraft.util.*;
 
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
@@ -99,6 +101,7 @@ public class CommandNocheaters extends CommandBase {
                 IChatComponent imsgbody = new ChatComponentText("");
                 boolean warning = true;
                 long timeNow = (new Date()).getTime();
+                List<Future<IChatComponent>> futureList = new ArrayList<>();
 
                 for (Map.Entry<String, WDR> entry : sortedmap.entrySet()) {
 
@@ -115,16 +118,16 @@ public class CommandNocheaters extends CommandBase {
                     }
 
                     if (nbpage == displaypage) {
-                        try {
-                            imsgbody.appendSibling((createReportLine(uuid, wdr, doStalk, timeNow))).appendSibling(new ChatComponentText("\n"));
-                            warning = false;
-                        } catch (ApiException e) {
-                            addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
-                        }
+                        warning = false;
+                        futureList.add(Multithreading.addTaskToQueueAndGetFuture(new CreateReportLineTask(uuid, wdr, doStalk, timeNow)));
                     }
 
                     nbreport++;
 
+                }
+
+                for (Future<IChatComponent> iChatComponentFuture : futureList) {
+                    imsgbody.appendSibling(iChatComponentFuture.get());
                 }
 
                 if (warning) {
@@ -447,58 +450,81 @@ public class CommandNocheaters extends CommandBase {
         }
     }
 
-    private IChatComponent createReportLine(String uuid, WDR wdr, boolean doStalk, long timeNow) throws ApiException {
+}
 
-        IChatComponent imsg;
+class CreateReportLineTask implements Callable<IChatComponent> {
 
-        if (doStalk) {
+    private final String uuid;
+    private final WDR wdr;
+    private final boolean doStalk;
+    private final long timeNow;
 
-            if (wdr.isNicked()) {
+    public CreateReportLineTask(String uuid, WDR wdr, boolean doStalk, long timeNow) {
+        this.uuid = uuid;
+        this.wdr = wdr;
+        this.doStalk = doStalk;
+        this.timeNow = timeNow;
+    }
 
-                imsg = NoCheatersMessages.createPlayerNameWithHoverText(EnumChatFormatting.DARK_PURPLE + "[Nick] " + EnumChatFormatting.GOLD + uuid, uuid, uuid, wdr, EnumChatFormatting.WHITE)[0];
+    @Override
+    public IChatComponent call() {
 
-            } else {
+        try {
 
-                HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
-                LoginData logindata = new LoginData(playerdata.getPlayerData());
-                imsg = NoCheatersMessages.createPlayerNameWithHoverText(logindata.getFormattedName(), logindata.getdisplayname(), uuid, wdr, EnumChatFormatting.WHITE)[0];
+            IChatComponent imsg;
 
-                IChatComponent ismgStatus = new ChatComponentText("");
+            if (doStalk) {
 
-                if (logindata.isHidingFromAPI()) {
+                if (wdr.isNicked()) {
 
-                    logindata.parseLatestActivity(playerdata.getPlayerData());
-                    long latestActivityTime = logindata.getLatestActivityTime();
-                    String latestActivity = logindata.getLatestActivity();
-                    boolean isProbBanned = Math.abs(latestActivityTime - wdr.timestamp) < 24L * 60L * 60L * 1000L && Math.abs(timeNow - wdr.timestamp) > 3L * 24L * 60L * 60L * 1000L;
-                    ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " " + latestActivity + " " + (isProbBanned ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.YELLOW) + DateUtil.timeSince(latestActivityTime)));
+                    imsg = NoCheatersMessages.createPlayerNameWithHoverText(EnumChatFormatting.DARK_PURPLE + "[Nick] " + EnumChatFormatting.GOLD + uuid, uuid, uuid, wdr, EnumChatFormatting.WHITE)[0];
 
-                } else if (logindata.isOnline()) { // player is online
+                } else {
 
-                    ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "    Online"));
+                    HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                    LoginData logindata = new LoginData(playerdata.getPlayerData());
+                    imsg = NoCheatersMessages.createPlayerNameWithHoverText(logindata.getFormattedName(), logindata.getdisplayname(), uuid, wdr, EnumChatFormatting.WHITE)[0];
 
-                } else { // print lastlogout
+                    IChatComponent ismgStatus = new ChatComponentText("");
 
-                    boolean isProbBanned = Math.abs(logindata.getLastLogout() - wdr.timestamp) < 24L * 60L * 60L * 1000L && Math.abs(timeNow - wdr.timestamp) > 3L * 24L * 60L * 60L * 1000L;
-                    ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Lastlogout " + (isProbBanned ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.YELLOW) + DateUtil.timeSince(logindata.getLastLogout())));
+                    if (logindata.isHidingFromAPI()) {
+
+                        logindata.parseLatestActivity(playerdata.getPlayerData());
+                        long latestActivityTime = logindata.getLatestActivityTime();
+                        String latestActivity = logindata.getLatestActivity();
+                        boolean isProbBanned = Math.abs(latestActivityTime - wdr.timestamp) < 24L * 60L * 60L * 1000L && Math.abs(timeNow - wdr.timestamp) > 3L * 24L * 60L * 60L * 1000L;
+                        ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " " + latestActivity + " " + (isProbBanned ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.YELLOW) + DateUtil.timeSince(latestActivityTime)));
+
+                    } else if (logindata.isOnline()) { // player is online
+
+                        ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "    Online"));
+
+                    } else { // print lastlogout
+
+                        boolean isProbBanned = Math.abs(logindata.getLastLogout() - wdr.timestamp) < 24L * 60L * 60L * 1000L && Math.abs(timeNow - wdr.timestamp) > 3L * 24L * 60L * 60L * 1000L;
+                        ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Lastlogout " + (isProbBanned ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.YELLOW) + DateUtil.timeSince(logindata.getLastLogout())));
+
+                    }
+
+                    ismgStatus.setChatStyle(new ChatStyle()
+                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to run : /stalk " + logindata.getdisplayname())))
+                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk " + logindata.getdisplayname())));
+
+                    imsg.appendSibling(ismgStatus);
 
                 }
 
-                ismgStatus.setChatStyle(new ChatStyle()
-                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to run : /stalk " + logindata.getdisplayname())))
-                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk " + logindata.getdisplayname())));
+            } else {
 
-                imsg.appendSibling(ismgStatus);
+                imsg = new ChatComponentText(EnumChatFormatting.RED + uuid + EnumChatFormatting.GRAY + " reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.timestamp));
 
             }
 
-        } else {
+            return imsg.appendSibling(new ChatComponentText("\n"));
 
-            imsg = new ChatComponentText(EnumChatFormatting.RED + uuid + EnumChatFormatting.GRAY + " reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.timestamp));
-
+        } catch (ApiException e) {
+            return new ChatComponentText(EnumChatFormatting.RED + e.getMessage() + "\n");
         }
-
-        return imsg;
 
     }
 
