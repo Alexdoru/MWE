@@ -130,7 +130,7 @@ public class ReportQueue {
         }
         final String s = msg.toString();
         if (!s.equals("")) {
-            addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed all reports targeting :" + s));
+            addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed all reports targeting :" + EnumChatFormatting.GOLD + s));
         }
     }
 
