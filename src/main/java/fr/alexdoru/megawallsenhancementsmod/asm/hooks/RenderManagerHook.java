@@ -13,6 +13,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.util.AxisAlignedBB;
 
+@SuppressWarnings("unused")
 public class RenderManagerHook {
 
     public static boolean cancelHitboxRender(Entity entityIn) {

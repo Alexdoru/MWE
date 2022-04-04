@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 
+@SuppressWarnings("unused")
 public class EntityPlayerHook {
 
     public static String getTransformedDisplayName(String displayNameIn, GameProfile gameProfile) {
