@@ -511,7 +511,7 @@ class CreateReportLineTask implements Callable<IChatComponent> {
     }
 
     private boolean isProbBanned(long latestActivityTime) {
-        return (Math.abs(latestActivityTime - wdr.timestamp) < 24L * 60L * 60L * 1000L && Math.abs(timeNow - wdr.timestamp) > 3L * 24L * 60L * 60L * 1000L) || Math.abs(timeNow - wdr.timestamp) > 14L * 24L * 60L * 60L * 1000L;
+        return (Math.abs(latestActivityTime - wdr.timestamp) < 24L * 60L * 60L * 1000L && Math.abs(timeNow - wdr.timestamp) > 3L * 24L * 60L * 60L * 1000L) || Math.abs(timeNow - latestActivityTime) > 14L * 24L * 60L * 60L * 1000L;
     }
 
 }
