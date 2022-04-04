@@ -271,6 +271,7 @@ public class CommandNocheaters extends CommandBase {
 
                 IChatComponent imsgbody = new ChatComponentText("");
                 boolean warning = true;
+                List<Future<IChatComponent>> futureList = new ArrayList<>();
 
                 for (Map.Entry<String, WDR> entry : WdredPlayers.getWdredMap().entrySet()) {
 
@@ -285,12 +286,8 @@ public class CommandNocheaters extends CommandBase {
                         }
 
                         if (nbpage == displaypage) {
-                            try {
-                                imsgbody.appendSibling((createIgnoreLine(uuid, wdr))).appendSibling(new ChatComponentText("\n"));
-                                warning = false;
-                            } catch (ApiException e) {
-                                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
-                            }
+                            futureList.add(Multithreading.addTaskToQueueAndGetFuture(new IgnoreLineTask(uuid, wdr)));
+                            warning = false;
                         }
 
                         nbreport++;
@@ -299,13 +296,17 @@ public class CommandNocheaters extends CommandBase {
 
                 }
 
+                for (Future<IChatComponent> iChatComponentFuture : futureList) {
+                    imsgbody.appendSibling(iChatComponentFuture.get());
+                }
+
                 if (warning && nbreport == 1) {
                     addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "No one in your ignore list"));
                 } else if (warning) {
                     addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "No ignored players to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available."));
                 } else {
 
-                    IChatComponent imsg = new ChatComponentText(EnumChatFormatting.DARK_GRAY + ChatUtil.bar() + "\n" + "             ");
+                    IChatComponent imsg = new ChatComponentText(EnumChatFormatting.DARK_GRAY + ChatUtil.bar() + "\n" + "     ");
                     String command = getCommandUsage(null) + " ignorelist";
 
                     if (displaypage > 1) {
@@ -433,23 +434,6 @@ public class CommandNocheaters extends CommandBase {
         return temp;
     }
 
-    private IChatComponent createIgnoreLine(String uuid, WDR wdr) throws ApiException {
-        final String formattedName;
-        if (wdr.isNicked()) {
-            formattedName = EnumChatFormatting.GOLD + "uuid";
-            return new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
-                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to un-ignore " + formattedName)))
-                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, getCommandUsage(null) + " ignoreremove " + uuid + " " + uuid)));
-        } else {
-            HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
-            LoginData logindata = new LoginData(playerdata.getPlayerData());
-            formattedName = logindata.getFormattedName();
-            return new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
-                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to un-ignore " + formattedName)))
-                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, getCommandUsage(null) + " ignoreremove " + uuid + " " + logindata.getdisplayname())));
-        }
-    }
-
 }
 
 class CreateReportLineTask implements Callable<IChatComponent> {
@@ -521,6 +505,44 @@ class CreateReportLineTask implements Callable<IChatComponent> {
             }
 
             return imsg.appendSibling(new ChatComponentText("\n"));
+
+        } catch (ApiException e) {
+            return new ChatComponentText(EnumChatFormatting.RED + e.getMessage() + "\n");
+        }
+
+    }
+
+}
+
+class IgnoreLineTask implements Callable<IChatComponent> {
+
+    private final String uuid;
+    private final WDR wdr;
+
+    public IgnoreLineTask(String uuid, WDR wdr) {
+        this.uuid = uuid;
+        this.wdr = wdr;
+    }
+
+    @Override
+    public IChatComponent call() {
+
+        try {
+
+            final String formattedName;
+            if (wdr.isNicked()) {
+                formattedName = EnumChatFormatting.GOLD + "uuid";
+                return new ChatComponentText(formattedName + "\n").setChatStyle(new ChatStyle()
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to un-ignore " + formattedName)))
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nocheaters ignoreremove " + uuid + " " + uuid)));
+            } else {
+                HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                LoginData logindata = new LoginData(playerdata.getPlayerData());
+                formattedName = logindata.getFormattedName();
+                return new ChatComponentText(formattedName + "\n").setChatStyle(new ChatStyle()
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to un-ignore " + formattedName)))
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nocheaters ignoreremove " + uuid + " " + logindata.getdisplayname())));
+            }
 
         } catch (ApiException e) {
             return new ChatComponentText(EnumChatFormatting.RED + e.getMessage() + "\n");
