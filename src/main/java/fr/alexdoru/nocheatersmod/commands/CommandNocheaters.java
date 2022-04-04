@@ -75,7 +75,6 @@ public class CommandNocheaters extends CommandBase {
                     addChatMessage(new ChatComponentText(apikeyMissingErrorMsg()));
                     return;
                 }
-                addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Processing command..."));
             }
 
             Multithreading.addTaskToQueue(() -> {
@@ -112,7 +111,7 @@ public class CommandNocheaters extends CommandBase {
                         continue;
                     }
 
-                    if (nbreport == 9) {
+                    if (nbreport == 11) {
                         nbreport = 1;
                         nbpage++;
                     }
@@ -252,7 +251,6 @@ public class CommandNocheaters extends CommandBase {
                 addChatMessage(new ChatComponentText(apikeyMissingErrorMsg()));
                 return;
             }
-            addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Processing command..."));
 
             Multithreading.addTaskToQueue(() -> {
 
@@ -280,7 +278,7 @@ public class CommandNocheaters extends CommandBase {
                         String uuid = entry.getKey();
                         WDR wdr = entry.getValue();
 
-                        if (nbreport == 9) {
+                        if (nbreport == 11) {
                             nbreport = 1;
                             nbpage++;
                         }
