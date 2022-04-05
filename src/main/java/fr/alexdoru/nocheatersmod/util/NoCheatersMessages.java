@@ -76,7 +76,7 @@ public class NoCheatersMessages {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.RED + " It's been " + EnumChatFormatting.GRAY + DateUtil.timeSince(wdr.timeLastManualReport) + EnumChatFormatting.RED + " since you last manually reported that player for :"))
                     .appendSibling(allCheats)
                     .appendSibling(new ChatComponentText(EnumChatFormatting.RED + ", either remove them from your report list or report them again."));
-        } else if (!disableReportButton && FKCounterMod.isInMwGame && wdr.canBeReported(datenow)) {
+        } else if (!disableReportButton && FKCounterMod.isInMwGame && !FKCounterMod.isitPrepPhase && wdr.canBeReported(datenow)) {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " [Report again]").setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click here to report this player again")))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sendreportagain " + wdrmapKey + " " + playername))));
