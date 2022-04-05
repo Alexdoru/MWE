@@ -191,9 +191,11 @@ public class ReportSuggestionHandler {
                 CommandWDR.handleWDRCommand(args, true);
                 return true;
             }
-            new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment... ").appendSibling(ChatUtil.getCancelButton(reportedPlayer))), 0);
-            ReportQueue.INSTANCE.addPlayerToQueueRandom(reportedPlayer);
-            return true;
+            if(ReportQueue.INSTANCE.addPlayerToQueueRandom(reportedPlayer)) {
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment... ").appendSibling(ChatUtil.getCancelButton(reportedPlayer))), 0);
+                return true;
+            }
+            return false;
         } else {
             if (isSenderMyself) {
                 new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " This player has already been reported during this game")), 0);

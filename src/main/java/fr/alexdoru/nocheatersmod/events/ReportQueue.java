@@ -63,11 +63,14 @@ public class ReportQueue {
 
     /**
      * Called from the auto-report suggestions
+     * Returns true if it adds the players to the report queue
      */
-    public void addPlayerToQueueRandom(String reportedPlayer) {
+    public boolean addPlayerToQueueRandom(String reportedPlayer) {
         if (canReportPlayerThisGame(reportedPlayer)) {
             addPlayerToQueue(reportedPlayer, (int) (100d + Math.abs(100d * random.nextGaussian() + 240d)));
+            return true;
         }
+        return false;
     }
 
     private void addPlayerToQueue(String playername, int tickDelay) {
