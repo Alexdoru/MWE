@@ -186,7 +186,7 @@ public class ReportSuggestionHandler {
 
         if (canReportSuggestionPlayer(reportedPlayer)) {
             if (isSenderMyself) {
-                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You report will be shared with other players in the game.")), 0);
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You report will be shared with other players in the game")), 0);
                 String[] args = new String[]{reportedPlayer, cheat};
                 CommandWDR.handleWDRCommand(args, true);
                 return true;
@@ -196,7 +196,7 @@ public class ReportSuggestionHandler {
             return true;
         } else {
             if (isSenderMyself) {
-                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " That player has already been reported during this game, try again later.")), 0);
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " This player has already been reported during this game")), 0);
                 String[] args = new String[]{reportedPlayer, cheat};
                 CommandWDR.handleWDRCommand(args, true);
                 return true;
