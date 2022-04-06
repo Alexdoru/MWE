@@ -16,7 +16,7 @@ import java.io.File;
 public class NoCheatersMod {
 
     public static final String modid = "nocheaters";
-    public static final String version = "2.2";
+    public static final String version = "2.3";
 
     public static final Logger logger = LogManager.getLogger("NoCheaters");
     public static final KeyBinding addtimemark_key = new KeyBinding("Add Timestamp", 0, "NoCheaters");
