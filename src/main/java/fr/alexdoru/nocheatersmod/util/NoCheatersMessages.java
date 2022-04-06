@@ -1,6 +1,7 @@
 package fr.alexdoru.nocheatersmod.util;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GuiNewChatAccessor;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
@@ -34,9 +35,6 @@ public class NoCheatersMessages {
             WDR wdr = WdredPlayers.getPlayer(uuid, playerName);
             if (wdr == null) {
                 continue;
-            }
-            if (callFromCommand && !foundReport) {
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.YELLOW + "Reported players : "));
             }
             foundReport = true;
             boolean gotautoreported = ReportQueue.INSTANCE.sendAutoReport(datenow, playerName, wdr);
@@ -93,7 +91,7 @@ public class NoCheatersMessages {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Cheats :")).appendSibling(allCheats);
         }
 
-        ChatUtil.addChatMessage(imsg);
+        printWarningMessageAndDeletePrevious(imsg, playername);
 
     }
 
@@ -209,6 +207,11 @@ public class NoCheatersMessages {
 
         }
 
+    }
+
+    private static void printWarningMessageAndDeletePrevious(IChatComponent imsg, String playername) {
+        ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).deleteWarningMessagesFor(playername);
+        ChatUtil.addChatMessage(imsg);
     }
 
 }
