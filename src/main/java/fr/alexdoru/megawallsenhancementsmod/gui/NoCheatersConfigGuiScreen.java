@@ -132,7 +132,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                     ConfigHandler.reportsuggestions = true;
                     reportSuggestionButton.displayString = getButtonDisplayString(8);
                 } else {
-                    ReportQueue.INSTANCE.clearReportsQueue();
+                    ReportQueue.INSTANCE.clearSuggestionsInReportQueue();
                 }
                 break;
             case 2:
