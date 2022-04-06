@@ -87,8 +87,6 @@ public class ReportSuggestionHandler {
      */
     private static void handleReportSuggestion(String reportedPlayer, @Nullable String senderRank, @Nullable String messageSender, @Nullable String squadname, String reportText, String cheat, String fmsg) {
 
-        // TODO ca fait quoi si le message sender est null ?
-        // TODO check if target is myself, mynick included
         boolean isSenderMyself = isPlayerMyself(messageSender);
         boolean isTargetMyself = isPlayerMyself(reportedPlayer);
         boolean isSenderInTablist = false;
@@ -317,7 +315,6 @@ public class ReportSuggestionHandler {
         return NetHandlerPlayClientHook.playerInfoMap.get(playername) != null || isPlayerMyself(playername);
     }
 
-    //TODO add support for own nick
     private static boolean isPlayerMyself(@Nullable String name) {
         return mc.thePlayer != null && mc.thePlayer.getName().equals(name);
     }

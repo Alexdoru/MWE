@@ -320,7 +320,6 @@ public class ChatUtil {
                                 + EnumChatFormatting.GRAY + "Using the report option won't save the cheater's name in the mod NoCheaters"))));
     }
 
-    // TODO Delete all method calls
     public static void debug(String msg) {
         addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + "[Debug]: " + EnumChatFormatting.RESET + msg));
     }
