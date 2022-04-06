@@ -189,13 +189,12 @@ public class CommandWDR extends CommandBase {
             }
 
             if (sentFromAutoReport) {
-                ReportQueue.INSTANCE.addPlayerToQueueRandom(playername);
+                ReportQueue.INSTANCE.addPlayerToQueueRandom(null, playername);
             } else {
                 if (mc.thePlayer != null) {
                     mc.thePlayer.sendChatMessage(message.toString()); //sends command to server
                 }
             }
-
 
             ReportQueue.INSTANCE.addReportTimestamp(true);
 

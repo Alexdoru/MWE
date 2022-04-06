@@ -39,6 +39,7 @@ public class ReportSuggestionHandler {
     private static final Pattern REPORT_PATTERN1 = Pattern.compile("(\\w{2,16}) (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE);
     private static final Pattern REPORT_PATTERN2 = Pattern.compile("\\/?(?:wdr|report) (\\w{2,16}) (\\w+)", Pattern.CASE_INSENSITIVE);
     private static final List<StringLong> reportSuggestionHistory = new ArrayList<>();
+    private static final List<Long> reportSpamCheck = new ArrayList<>();
     private static final long TIME_BETWEEN_REPORT_SUGGESTION_PLAYER = 40L * 60L * 1000L;
 
     public static boolean parseReportMessage(@Nullable String senderRank, @Nullable String messageSender, @Nullable String squadname, String msgIn, String fmsgIn) {
@@ -191,7 +192,8 @@ public class ReportSuggestionHandler {
                 CommandWDR.handleWDRCommand(args, true);
                 return true;
             }
-            if(ReportQueue.INSTANCE.addPlayerToQueueRandom(reportedPlayer)) {
+            checkReportSpam();
+            if(ReportQueue.INSTANCE.addPlayerToQueueRandom(messageSender, reportedPlayer)) {
                 new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment... ").appendSibling(ChatUtil.getCancelButton(reportedPlayer))), 0);
                 return true;
             }
@@ -207,6 +209,15 @@ public class ReportSuggestionHandler {
 
         return false;
 
+    }
+
+    private static void checkReportSpam() {
+        long l = System.currentTimeMillis();
+        reportSpamCheck.add(l);
+        reportSpamCheck.removeIf(time -> (time + 30L * 1000L < l));
+        if (reportSpamCheck.size() >= 4) {
+            addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.YELLOW + "Is someone trying to spam the reporting system ? ").appendSibling(ChatUtil.getCancelAllReportsButton()));
+        }
     }
 
     private static void printCustomReportSuggestionChatText(String fmsg, @Nullable String messageSender, String reportedPlayer, String cheat, String reportText, @Nullable String squadname, boolean isSenderMyself, boolean isTargetMyself, boolean isSenderInTablist, boolean isSenderIgnored, boolean isSenderCheating, boolean isSenderFlaging, boolean isSenderNicked, boolean gotAutoreported, @Nullable String senderUUID) {

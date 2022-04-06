@@ -358,8 +358,7 @@ public class CommandNocheaters extends CommandBase {
 
         } else if (args[0].equalsIgnoreCase("clearreportqueue")) {
 
-            ReportQueue.INSTANCE.clearReportsQueue();
-            addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed all reports waiting to be sent."));
+            ReportQueue.INSTANCE.clearSuggestionsInReportQueue();
 
         } else if (args[0].equalsIgnoreCase("cancelreport")) {
 
@@ -384,7 +383,7 @@ public class CommandNocheaters extends CommandBase {
                 + EnumChatFormatting.YELLOW + getCommandUsage(null) + " ignore <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "ignores all future report suggestions from that player\n"
                 + EnumChatFormatting.YELLOW + getCommandUsage(null) + " ignorelist" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the list of ignored players\n"
                 + EnumChatFormatting.YELLOW + getCommandUsage(null) + " reportlist" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the list of reported players\n"
-                + EnumChatFormatting.YELLOW + getCommandUsage(null) + " clearreportqueue" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "cancels all reports about to be sent\n"
+                + EnumChatFormatting.YELLOW + getCommandUsage(null) + " clearreportqueue" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "cancels all reports suggestions about to be sent\n"
                 + EnumChatFormatting.RED + bar()
         );
 

@@ -65,20 +65,20 @@ public class ReportQueue {
      * Called from the auto-report suggestions
      * Returns true if it adds the players to the report queue
      */
-    public boolean addPlayerToQueueRandom(String reportedPlayer) {
+    public boolean addPlayerToQueueRandom(String suggestionSender, String reportedPlayer) {
         if (canReportPlayerThisGame(reportedPlayer)) {
-            addPlayerToQueue(reportedPlayer, (int) (100d + Math.abs(100d * random.nextGaussian() + 240d)));
+            addPlayerToQueue(suggestionSender, reportedPlayer, (int) (100d + Math.abs(100d * random.nextGaussian() + 240d)));
             return true;
         }
         return false;
     }
 
-    private void addPlayerToQueue(String playername, int tickDelay) {
+    private void addPlayerToQueue(String suggestionSender, String playername, int tickDelay) {
         if (isReportQueueInactive()) {
             MinecraftForge.EVENT_BUS.register(this);
             counter = tickDelay;
         }
-        queueList.add(new ReportInQueue(null, playername));
+        queueList.add(new ReportInQueue(suggestionSender, playername));
     }
 
     private boolean isReportQueueInactive() {
@@ -102,38 +102,50 @@ public class ReportQueue {
     }
 
     public void clearReportsSentBy(String playername) {
-        StringBuilder msg = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         final Iterator<ReportInQueue> iterator = queueList.iterator();
         while (iterator.hasNext()) {
             final ReportInQueue reportInQueue = iterator.next();
             if (reportInQueue.messageSender != null && reportInQueue.messageSender.equals(playername)) {
-                msg.append(" ").append(reportInQueue.messageSender);
+                stringBuilder.append(" ").append(reportInQueue.reportedPlayer);
                 iterator.remove();
             }
         }
-        final String s = msg.toString();
-        if (!s.equals("")) {
-            addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Won't send reports targeting :" + EnumChatFormatting.GOLD + s));
+        final String msg = stringBuilder.toString();
+        if (!msg.equals("")) {
+            addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed reports targeting :" + EnumChatFormatting.GOLD + msg));
         }
     }
 
-    public void clearReportsQueue() {
-        queueList.clear();
+    public void clearSuggestionsInReportQueue() {
+        StringBuilder stringBuilder = new StringBuilder();
+        final Iterator<ReportInQueue> iterator = queueList.iterator();
+        while (iterator.hasNext()) {
+            final ReportInQueue reportInQueue = iterator.next();
+            if (reportInQueue.messageSender != null) {
+                stringBuilder.append(" ").append(reportInQueue.reportedPlayer);
+                iterator.remove();
+            }
+        }
+        final String msg = stringBuilder.toString();
+        if (!msg.equals("")) {
+            addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed reports targeting :" + EnumChatFormatting.GOLD + msg));
+        }
     }
 
     public void clearReportsFor(String reportedPlayer) {
-        StringBuilder msg = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         final Iterator<ReportInQueue> iterator = queueList.iterator();
         while (iterator.hasNext()) {
             final ReportInQueue reportInQueue = iterator.next();
             if (reportInQueue.reportedPlayer != null && reportInQueue.reportedPlayer.equals(reportedPlayer)) {
-                msg.append(" ").append(reportInQueue.reportedPlayer);
+                stringBuilder.append(" ").append(reportInQueue.reportedPlayer);
                 iterator.remove();
             }
         }
-        final String s = msg.toString();
-        if (!s.equals("")) {
-            addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed all reports targeting :" + EnumChatFormatting.GOLD + s));
+        final String msg = stringBuilder.toString();
+        if (!msg.equals("")) {
+            addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed all reports targeting :" + EnumChatFormatting.GOLD + msg));
         }
     }
 
