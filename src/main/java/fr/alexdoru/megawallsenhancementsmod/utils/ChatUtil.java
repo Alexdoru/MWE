@@ -24,11 +24,9 @@ public class ChatUtil {
     }
 
     public static void addChatMessage(IChatComponent msg) {
-
         if (mc.theWorld != null && mc.thePlayer != null) {
             mc.thePlayer.addChatMessage(msg);
         }
-
     }
 
     public static IChatComponent makeiChatList(String listtitle, IChatComponent imessagebody, int displaypage, int nbpage, String command) {
@@ -95,17 +93,14 @@ public class ChatUtil {
      * Returns the message with spaces at the start to make the message centered in the chat box
      */
     public static String centerLine(String message) {
-
         char space = ' ';
         int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
         int separatorWidth = frObj.getCharWidth(space);
         int messageWidth = frObj.getStringWidth(message);
-
-        if (messageWidth >= chatWidth)
+        if (messageWidth >= chatWidth) {
             return message;
-
+        }
         String separatorText = new String(new char[(chatWidth - messageWidth) / (2 * separatorWidth)]).replace("\0", " ");
-
         return separatorText + message;
     }
 
@@ -113,15 +108,13 @@ public class ChatUtil {
      * Returns the amounts of spaces needed to make a message centered
      */
     public static String getSeparatorToCenter(String message) {
-
         char space = ' ';
         int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
         int separatorWidth = frObj.getCharWidth(space);
         int messageWidth = frObj.getStringWidth(message);
-
-        if (messageWidth >= chatWidth)
+        if (messageWidth >= chatWidth) {
             return "";
-
+        }
         return new String(new char[(chatWidth - messageWidth) / (2 * separatorWidth)]).replace("\0", " ");
     }
 
@@ -199,19 +192,14 @@ public class ChatUtil {
         char separator = ' ';
         int iterator = 1;
         StringBuilder msg = new StringBuilder();
-
         for (int i = str.length() - 1; i >= 0; i--) {
-
             msg.insert(0, ((iterator == 3 && i != 0) ? String.valueOf(separator) : "") + str.charAt(i));
-
             if (iterator == 3) {
                 iterator = 1;
             } else {
                 iterator++;
             }
-
         }
-
         return msg.toString();
     }
 
@@ -219,7 +207,6 @@ public class ChatUtil {
      * Converts int from 1 to 5 to roman
      */
     public static String intToRoman(int number) {
-
         switch (number) {
             case (1):
                 return "I";
@@ -235,11 +222,9 @@ public class ChatUtil {
                 return String.valueOf(number);
 
         }
-
     }
 
     public static IChatComponent PlanckeHeaderText(String formattedname, String playername, String titletext) {
-
         return new ChatComponentText(getSeparatorToCenter(formattedname + EnumChatFormatting.GOLD + titletext))
                 .appendSibling(new ChatComponentText(formattedname)
                         .setChatStyle(new ChatStyle()
