@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
 import com.mojang.authlib.GameProfile;
+import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
@@ -10,7 +11,8 @@ import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
-import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
+import fr.alexdoru.nocheatersmod.events.ReportQueue;
+import fr.alexdoru.nocheatersmod.util.NoCheatersMessages;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -29,6 +31,8 @@ import java.util.regex.Pattern;
 
 public class NameUtil {
 
+    private static final IChatComponent iprefix_old_report = new ChatComponentText(EnumChatFormatting.GRAY + "" + EnumChatFormatting.BOLD + "\u26a0 ");
+    public static final String prefix_old_report = iprefix_old_report.getFormattedText();
     private static final IChatComponent iprefix = new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + "\u26a0 ");
     public static final String prefix = iprefix.getFormattedText();
     private static final IChatComponent iprefix_bhop = new ChatComponentText(EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD + "\u26a0 ");
@@ -37,27 +41,37 @@ public class NameUtil {
     public static final String prefix_scan = iprefix_scan.getFormattedText();
     private static final IChatComponent isquadprefix = new ChatComponentText(EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] ");
     public static final String squadprefix = isquadprefix.getFormattedText();
-    private static final List<IChatComponent> allPrefix = Arrays.asList(iprefix, iprefix_bhop, iprefix_scan, isquadprefix);
+    private static final List<IChatComponent> allPrefix = Arrays.asList(iprefix_old_report, iprefix, iprefix_bhop, iprefix_scan, isquadprefix);
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static final Pattern PATTERN_CLASS_TAG = Pattern.compile("\\[([A-Z]{3})\\]");
 
     /**
-     * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
+     * This updates the infos storred in GameProfile.MWPlayerData for the player : playername
+     * and refreshes the name in the tablist and the nametag
+     * set refreshDisplayName to true to update the name of the player in case you change it via a command
+     * for example : /squad add player as aliasname
      */
-    public static void updateGameProfileAndName(String playername) {
+    public static void updateGameProfileAndName(String playername, boolean refreshDisplayName) {
         NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
         if (networkPlayerInfo != null) {
             transformGameProfile(networkPlayerInfo.getGameProfile(), true);
             networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
             EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
+                transformGameProfile(player.getGameProfile(), true);
                 NameUtil.transformNametag(player, false);
+                if (refreshDisplayName) {
+                    player.refreshDisplayName();
+                }
             }
         } else {
             EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
                 transformGameProfile(player.getGameProfile(), true);
                 NameUtil.transformNametag(player, false);
+                if (refreshDisplayName) {
+                    player.refreshDisplayName();
+                }
             }
         }
     }
@@ -97,7 +111,6 @@ public class NameUtil {
 
         if (!onPlayerJoin) {
             player.getPrefixes().removeAll(allPrefix);
-            player.refreshDisplayName();
         }
 
         if (player instanceof EntityPlayerSP) {
@@ -112,20 +125,22 @@ public class NameUtil {
 
         if (mwPlayerData.extraPrefix != null) {
             player.addPrefix(mwPlayerData.extraPrefix);
-            player.refreshDisplayName();
         }
 
-        if (mwPlayerData.squadname != null) {
-            return;
-        }
-
-        if (mwPlayerData.wdr != null && mwPlayerData.wdr.isCheating()) { // player was reported // FIXME for some players it will be null all the time, it will never report them
-            String playerName = player.getName();
+        if (onPlayerJoin && mwPlayerData.wdr != null && mwPlayerData.wdr.transformName()) { // player was reported
             long datenow = (new Date()).getTime();
-            boolean gotautoreported = NoCheatersEvents.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
-            if (ConfigHandler.togglewarnings || mwPlayerData.wdr.isOlderThanMaxAutoreport(datenow)) {
+            String playerName = player.getName();
+            boolean gotautoreported = ReportQueue.INSTANCE.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
+            if (ConfigHandler.togglewarnings || mwPlayerData.wdr.shouldPrintBigText(datenow)) {
                 String uuid = player.getUniqueID().toString().replace("-", "");
-                ChatUtil.addChatMessage(NoCheatersEvents.createwarningmessage(datenow, uuid, playerName, mwPlayerData.wdr, gotautoreported));
+                NoCheatersMessages.printWarningMessage(
+                        datenow,
+                        uuid,
+                        (!FKCounterMod.isInMwGame || FKCounterMod.isitPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(player.getTeam(), playerName),
+                        playerName,
+                        mwPlayerData.wdr,
+                        gotautoreported
+                );
             }
         }
 
@@ -162,18 +177,11 @@ public class NameUtil {
 
             String username = gameProfileIn.getName();
             String uuid = id.toString().replace("-", "");
-            WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+            WDR wdr = WdredPlayers.getPlayer(uuid, username);
             String extraPrefix = "";
             IChatComponent iExtraPrefix = null;
             String squadname = SquadEvent.getSquad().get(username);
             boolean isSquadMate = squadname != null;
-
-            if (wdr == null) {
-                wdr = WdredPlayers.getWdredMap().get(username);
-                if (wdr != null) {
-                    uuid = username;
-                }
-            }
 
             if (ConfigHandler.toggleicons) {
 
@@ -186,22 +194,26 @@ public class NameUtil {
 
                     if (wdr != null) {
 
-                        if (wdr.isCheating()) {
+                        if (wdr.transformName()) {
 
-                            if (wdr.hacks.contains("bhop")) {
-                                extraPrefix = prefix_bhop;
-                                iExtraPrefix = iprefix_bhop;
+                            if (wdr.shouldPutGrayIcon()) {
+                                extraPrefix = prefix_old_report;
+                                iExtraPrefix = iprefix_old_report;
                             } else {
-                                extraPrefix = prefix;
-                                iExtraPrefix = iprefix;
+                                if (wdr.hacks.contains("bhop")) {
+                                    extraPrefix = prefix_bhop;
+                                    iExtraPrefix = iprefix_bhop;
+                                } else {
+                                    extraPrefix = prefix;
+                                    iExtraPrefix = iprefix;
+                                }
                             }
 
                         }
 
                     } else { //scangame
 
-                        IChatComponent imsg = CommandScanGame.getScanmap().get(uuid);
-                        if (imsg != null && !imsg.equals(CommandScanGame.nomatch)) {
+                        if (CommandScanGame.doesPlayerFlag(uuid)) {
                             extraPrefix = prefix_scan;
                             iExtraPrefix = iprefix_scan;
                         }
@@ -262,7 +274,11 @@ public class NameUtil {
     }
 
     public static void refreshAllNamesInWorld() {
-        mc.getNetHandler().getPlayerInfoMap().forEach(NameUtil::updateGameProfileAndName);
+        mc.getNetHandler().getPlayerInfoMap().forEach(p -> {
+            if (p != null) {
+                NameUtil.updateGameProfileAndName(p.getGameProfile().getName(), true);
+            }
+        });
     }
 
     /**
@@ -271,6 +287,10 @@ public class NameUtil {
      */
     public static boolean filterNPC(UUID uuid) {
         return uuid.version() == 2;
+    }
+
+    public static boolean isRealPlayer(UUID uuid) {
+        return uuid.version() == 4;
     }
 
 }

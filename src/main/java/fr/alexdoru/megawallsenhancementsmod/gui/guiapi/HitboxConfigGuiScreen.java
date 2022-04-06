@@ -4,6 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.MyGuiScreen;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.io.IOException;
@@ -51,9 +52,9 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
             case 1:
                 return "Players : " + getSuffix(ConfigHandler.drawHitboxForPlayers);
             case 2:
-                return "Grounded arrows : " + getSuffix(ConfigHandler.drawHitboxForGroundedArrows);
+                return "Arrows on ground : " + getSuffix(ConfigHandler.drawHitboxForGroundedArrows);
             case 3:
-                return "Pinned arrows : " + getSuffix(ConfigHandler.drawHitboxForPinnedArrows);
+                return "Arrows in players : " + getSuffix(ConfigHandler.drawHitboxForPinnedArrows);
             case 13:
                 return "Flying arrows : " + getSuffix(ConfigHandler.drawHitboxForFlyingArrows);
             case 4:
@@ -151,6 +152,8 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle("Hitboxes", 2, getxCenter(), getYposForButton(-8) + ButtonsHeight / 2.0f, Integer.parseInt("5555FF", 16));
+        String msg = EnumChatFormatting.GRAY + "You obviously need to press f3+b to enable hitboxes";
+        drawCenteredString(fontRendererObj, msg, getxCenter(), getYposForButton(-6) + fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
         drawCenteredTitle("Draw Hitbox for :", 1, getxCenter() - buttonWidth / 2.0f - 10, getYposForButton(-4) - ButtonsHeight / 2.0f, Integer.parseInt("FFFFFF", 16));
         drawCenteredTitle("Blue vector :", 1, getxCenter() + buttonWidth / 2.0f + 10, getYposForButton(2) - ButtonsHeight / 2.0f, Integer.parseInt("0000FF", 16));
         super.drawScreen(mouseX, mouseY, partialTicks);

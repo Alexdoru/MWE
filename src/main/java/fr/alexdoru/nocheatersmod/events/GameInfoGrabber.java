@@ -14,48 +14,37 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage
 public class GameInfoGrabber {
 
     private static final Pattern GAME_ID_PATTERN = Pattern.compile("\\s*\\d+/\\d+/\\d+\\s+([\\d\\w]+)\\s*", Pattern.CASE_INSENSITIVE);
-
     private static final String TIME_WALLS_FALL = "Walls Fall"; // finish 6min after replay starts
     private static final String TIME_ENRAGE_OFF = "Enrage Off"; // lasts for 8mins
     private static final String TIME_DEATHMATCH = "Deathmatch"; // lasts for 31min
     private static final String TIME_GAME_END = "Game End"; // at the end it makes 45min total
-
     private static long gamestarttimestamp = 0;
     private static String gameID = "?";
 
     public static String getGameIDfromscoreboard() {
-
         List<String> scoresRaw = ScoreboardUtils.getUnformattedSidebarText();
-
         if (scoresRaw.size() == 0) {
             return "?";
         }
-
         Matcher matcher = GAME_ID_PATTERN.matcher(scoresRaw.get(0));
         if (!matcher.matches()) {
             return "?";
         }
-
         return matcher.group(1);
-
     }
 
     /**
      * Prints scoreboard in chat
      */
     public static void debugGetScoreboard() {
-
         List<String> scoresColor = ScoreboardUtils.getFormattedSidebarText();
-
         if (scoresColor.size() == 0) {
             addChatMessage(new ChatComponentText("There are no active scoreboards in this world."));
             return;
         }
-
         for (String sidebarScore : scoresColor) {
             addChatMessage(new ChatComponentText(sidebarScore));
         }
-
     }
 
     public static void saveinfoOnGameStart() {
@@ -116,6 +105,7 @@ public class GameInfoGrabber {
         }
 
         return "?";
+
     }
 
     public static String getstoredGameID() {

@@ -171,7 +171,7 @@ public class CommandFKCounter extends CommandBase {
                 }
             }
         }
-        ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Cannot find " + playerName + "in the FKCounter."));
+        ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Cannot find " + playerName + " in the FKCounter."));
     }
 
     private ArrayList<String> getPlayerListinKillCounter() {

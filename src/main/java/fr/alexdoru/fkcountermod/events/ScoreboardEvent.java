@@ -17,7 +17,6 @@ public class ScoreboardEvent {
     private static String prevGameId = null;
     private static boolean prevHasGameEnded = false;
     private static int prevAmountWitherAlive = 4;
-    private static boolean isHypixel = false;
 
     public static ScoreboardParser getMwScoreboardParser() {
         return mwScoreboardParser;
@@ -30,7 +29,7 @@ public class ScoreboardEvent {
             return;
         }
 
-        if (mc.theWorld == null || !isHypixel) {
+        if (mc.theWorld == null || !FKCounterMod.isHypixel) {
             return;
         }
 
@@ -45,6 +44,7 @@ public class ScoreboardEvent {
         boolean hasgameended = mwScoreboardParser.hasGameEnded();
         int amountWitherAlive = mwScoreboardParser.getAliveWithers().size();
         FKCounterMod.isInMwGame = mwScoreboardParser.isInMwGame();
+        FKCounterMod.isMWEnvironement = mwScoreboardParser.isMWEnvironement();
         FKCounterMod.preGameLobby = mwScoreboardParser.isPreGameLobby();
         FKCounterMod.isitPrepPhase = mwScoreboardParser.isitPrepPhase();
 
@@ -58,6 +58,8 @@ public class ScoreboardEvent {
 
             if (amountWitherAlive == 1 && prevAmountWitherAlive > 1) {
                 MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.THIRD_WITHER_DEATH));
+            } else if (amountWitherAlive == 0 && prevAmountWitherAlive > 0) {
+                MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.DEATHMATCH_START));
             }
 
             if (!gameId.equals(prevGameId)) {
@@ -78,12 +80,12 @@ public class ScoreboardEvent {
 
     @SubscribeEvent
     public void onConnection(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-        isHypixel = MinecraftUtils.isHypixel();
+        FKCounterMod.isHypixel = MinecraftUtils.isHypixel();
     }
 
     @SubscribeEvent
     public void onDisconnection(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-        isHypixel = false;
+        FKCounterMod.isHypixel = false;
     }
 
 }

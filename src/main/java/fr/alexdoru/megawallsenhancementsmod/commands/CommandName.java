@@ -49,7 +49,7 @@ public class CommandName extends CommandBase {
             try {
                 apiname = new CachedMojangUUID(args[0]);
             } catch (ApiException e1) {
-                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e1.getMessage()));
+                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + e1.getMessage()));
                 return null;
             }
             String uuid = apiname.getUuid();
@@ -58,7 +58,7 @@ public class CommandName extends CommandBase {
             try {
                 apinamehistory = new MojangNameHistory(uuid);
             } catch (ApiException e1) {
-                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e1.getMessage()));
+                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + e1.getMessage()));
                 return null;
             }
 
@@ -88,11 +88,11 @@ public class CommandName extends CommandBase {
 
                 if (nbpage == displaypage) {
                     if (i == 0) { // original name
-                        imsgbody.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + apinamehistory.getNames().get(i) + EnumChatFormatting.DARK_GRAY + " Original name\n"));
+                        imsgbody.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + apinamehistory.getNames().get(i) + EnumChatFormatting.GRAY + " Original name\n"));
                     } else if (i == n - 1) {
-                        imsgbody.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + apinamehistory.getNames().get(i) + EnumChatFormatting.DARK_GRAY + " since " + DateUtil.localformatTimestampday(apinamehistory.getTimestamps().get(i)) + "\n"));
+                        imsgbody.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + apinamehistory.getNames().get(i) + EnumChatFormatting.GRAY + " since " + DateUtil.localformatTimestampday(apinamehistory.getTimestamps().get(i)) + "\n"));
                     } else {
-                        imsgbody.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + apinamehistory.getNames().get(i) + EnumChatFormatting.DARK_GRAY + " " + DateUtil.localformatTimestampday(apinamehistory.getTimestamps().get(i)) + "\n"));
+                        imsgbody.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + apinamehistory.getNames().get(i) + EnumChatFormatting.GRAY + " " + DateUtil.localformatTimestampday(apinamehistory.getTimestamps().get(i)) + "\n"));
                     }
                     warning = false;
                 }

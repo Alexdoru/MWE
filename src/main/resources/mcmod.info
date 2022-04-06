@@ -38,7 +38,7 @@
     "modid": "nocheaters",
     "name": "No cheaters",
     "description": "Tracks previously reported players",
-    "version": "2.2",
+    "version": "2.3",
     "mcversion": "${mcversion}",
     "url": "",
     "updateUrl": "",

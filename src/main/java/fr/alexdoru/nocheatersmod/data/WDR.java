@@ -2,8 +2,10 @@ package fr.alexdoru.nocheatersmod.data;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.nocheatersmod.commands.CommandReport;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class WDR {
 
@@ -40,8 +42,16 @@ public class WDR {
         return compare(wdr, this);
     }
 
-    public boolean isCheating() {
+    public boolean transformName() {
         return !(hacks.size() == 1 && hacks.contains(IGNORED));
+    }
+
+    public boolean shouldPutGrayIcon() {
+        return ConfigHandler.toggleautoreport && isOlderThanMaxAutoreport((new Date()).getTime());
+    }
+
+    public boolean isOnlyIgnored() {
+        return hacks.size() == 1 && hacks.contains(IGNORED);
     }
 
     public boolean isNicked() {
@@ -66,6 +76,31 @@ public class WDR {
                 && !FKCounterMod.isitPrepPhase
                 && canBeReported(datenow)
                 && !isOlderThanMaxAutoreport(datenow);
+    }
+
+    /**
+     * Only prints the big text when you are in a mw environement but not in game
+     * to prevent chat spam while playing
+     */
+    public boolean shouldPrintBigText(long datenow) {
+        return FKCounterMod.isMWEnvironement && !FKCounterMod.isInMwGame && ConfigHandler.toggleautoreport && isOlderThanMaxAutoreport(datenow);
+    }
+
+    public boolean hasValidCheats() {
+        for (String cheat : hacks) {
+            if (CommandReport.cheatsList.contains(cheat)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String hacksToString() {
+        StringBuilder cheats = new StringBuilder();
+        for (String hack : hacks) {
+            cheats.append(" ").append(hack);
+        }
+        return cheats.toString();
     }
 
 }

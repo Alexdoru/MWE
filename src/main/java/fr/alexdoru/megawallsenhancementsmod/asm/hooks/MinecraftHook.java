@@ -8,6 +8,7 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
+@SuppressWarnings("unused")
 public class MinecraftHook {
 
     private static long lastSlotChangeFromSwordSlot;

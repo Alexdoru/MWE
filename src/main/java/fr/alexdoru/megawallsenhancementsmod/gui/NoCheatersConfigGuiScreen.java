@@ -1,16 +1,14 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
-import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
+import fr.alexdoru.nocheatersmod.events.ReportQueue;
+import fr.alexdoru.nocheatersmod.util.NoCheatersMessages;
+import fr.alexdoru.nocheatersmod.util.ReportSuggestionHandler;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.io.IOException;
@@ -18,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
+
+    private GuiButton reportSuggestionButton;
+    private GuiButton autoreportSuggestionButton;
 
     public NoCheatersConfigGuiScreen() {
         this.parent = null;
@@ -35,8 +36,8 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         int buttonsWidth = 200;
         int xPos = getxCenter() - buttonsWidth / 2;
         buttonList.add(new GuiButton(1, xPos, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
-        buttonList.add(new GuiButton(8, xPos, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(8)));
-        buttonList.add(new GuiButton(9, xPos, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
+        buttonList.add(reportSuggestionButton = new GuiButton(8, xPos, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(8)));
+        buttonList.add(autoreportSuggestionButton = new GuiButton(9, xPos, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
         buttonList.add(new GuiButton(2, xPos, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
         buttonList.add(new GuiButton(6, xPos, getYposForButton(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(6)));
         buttonList.add(new GuiSlider(7, xPos, getYposForButton(2), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
@@ -51,9 +52,9 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
             case 8:
                 return "Report suggestions in chat : " + getSuffix(ConfigHandler.reportsuggestions);
             case 9:
-                return "Auto-send suggestions : " + getSuffix(ConfigHandler.autoreportSuggestions);
+                return "Auto-report suggestions : " + getSuffix(ConfigHandler.autoreportSuggestions);
             case 2:
-                return "Autoreport cheaters : " + getSuffix(ConfigHandler.toggleautoreport);
+                return "Auto-report cheaters : " + getSuffix(ConfigHandler.toggleautoreport);
             case 6:
                 return "Delete old reports : " + getSuffix(ConfigHandler.deleteReports);
             case 3:
@@ -69,8 +70,10 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         switch (id) {
             case 1:
                 textLines.add(EnumChatFormatting.GREEN + "Prints a warning message in chat when a reported player joins your world");
-                textLines.add(EnumChatFormatting.GREEN + "");
+                textLines.add("");
                 textLines.add(EnumChatFormatting.RED + "Warning : " + EnumChatFormatting.LIGHT_PURPLE + "player" + EnumChatFormatting.GRAY + " joined, Cheats : " + EnumChatFormatting.GOLD + "cheat");
+                textLines.add("");
+                textLines.add(EnumChatFormatting.GRAY + "Those messages have built in Compact Chat");
                 break;
             case 2:
                 textLines.add(EnumChatFormatting.GREEN + "Every game it automatically reports players saved in NoCheaters");
@@ -96,7 +99,11 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 textLines.add(EnumChatFormatting.GREEN + "Automatically sends the report command to the server");
                 textLines.add(EnumChatFormatting.GREEN + "when there is a report suggestion in chat");
                 textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls after the walls fall");
-                textLines.add(EnumChatFormatting.GRAY + "Ignores command suggestions sent by players you have reported");
+                textLines.add(EnumChatFormatting.GRAY + "Ignores command suggestions sent by ignored players, reported players, scangame players and nicked players");
+                textLines.add(EnumChatFormatting.GRAY + "You can ignore players by using " + EnumChatFormatting.YELLOW + "/nocheaters ignore <playername>");
+                break;
+            case 10:
+                textLines.add(EnumChatFormatting.GREEN + "Plays a sound when there is a report suggestions in the chat");
                 break;
         }
         return textLines;
@@ -108,25 +115,29 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
             case 1:
                 ConfigHandler.togglewarnings = !ConfigHandler.togglewarnings;
                 if (ConfigHandler.togglewarnings) {
-                    List<IChatComponent> list = NoCheatersEvents.getReportMessagesforWorld();
-                    if (!list.isEmpty()) {
-                        for (IChatComponent report : list) {
-                            ChatUtil.addChatMessage(report);
-                        }
-                    }
+                    NoCheatersMessages.printReportMessagesForWorld(false);
                 }
                 break;
             case 8:
-                if (!ConfigHandler.reportsuggestions) {
-                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(ChatEvents.reportSuggestionSound, 1.0F));
-                }
                 ConfigHandler.reportsuggestions = !ConfigHandler.reportsuggestions;
+                ReportSuggestionHandler.playReportSuggestionSound(ConfigHandler.reportsuggestions);
+                if (!ConfigHandler.reportsuggestions) {
+                    ConfigHandler.autoreportSuggestions = false;
+                    autoreportSuggestionButton.displayString = getButtonDisplayString(9);
+                }
                 break;
             case 9:
                 ConfigHandler.autoreportSuggestions = !ConfigHandler.autoreportSuggestions;
+                if (ConfigHandler.autoreportSuggestions) {
+                    ConfigHandler.reportsuggestions = true;
+                    reportSuggestionButton.displayString = getButtonDisplayString(8);
+                } else {
+                    ReportQueue.INSTANCE.clearSuggestionsInReportQueue();
+                }
                 break;
             case 2:
                 ConfigHandler.toggleautoreport = !ConfigHandler.toggleautoreport;
+                NameUtil.refreshAllNamesInWorld();
                 break;
             case 3:
                 mc.displayGuiScreen(parent);
@@ -144,10 +155,12 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle("NoCheaters v" + NoCheatersMod.version, 2, (width / 2.0f), getYposForButton(-6), Integer.parseInt("FF5555", 16));
+        String msg = "NoCheaters saves players reported via " + EnumChatFormatting.YELLOW + "/wdr playername" + EnumChatFormatting.WHITE + " (not /report)";
+        drawCenteredString(fontRendererObj, msg, getxCenter(), getYposForButton(-5) + fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
         String msg1 = "If you want to remove a player from your report list use :";
-        mc.fontRendererObj.drawStringWithShadow(msg1, (width / 2.0f) - fontRendererObj.getStringWidth(msg1) / 2.0f, getYposForButton(-5) + fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
+        drawCenteredString(fontRendererObj, msg1, getxCenter(), getYposForButton(-5) + 2 * fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
         String msg2 = EnumChatFormatting.YELLOW + "/unwdr playername" + EnumChatFormatting.WHITE + " or click the name on the warning message";
-        mc.fontRendererObj.drawStringWithShadow(msg2, (width / 2.0f) - fontRendererObj.getStringWidth(msg2) / 2.0f, getYposForButton(-5) + 2 * fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
+        drawCenteredString(fontRendererObj, msg2, getxCenter(), getYposForButton(-5) + 3 * fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
         super.drawScreen(mouseX, mouseY, partialTicks);
         drawTooltips(mouseX, mouseY);
     }

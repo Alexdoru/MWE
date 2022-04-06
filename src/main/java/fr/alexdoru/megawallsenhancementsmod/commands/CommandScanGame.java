@@ -44,11 +44,15 @@ public class CommandScanGame extends CommandBase {
         if (!currentGameId.equals("?") && scanGameId != null && !scanGameId.equals(currentGameId)) {
             clearScanGameData();
         }
-
     }
 
-    public static HashMap<String, IChatComponent> getScanmap() {
-        return scanmap;
+    public static boolean doesPlayerFlag(String uuid) {
+        IChatComponent imsg = scanmap.get(uuid);
+        return imsg != null && !imsg.equals(CommandScanGame.nomatch);
+    }
+
+    public static void put(String uuid, IChatComponent msg) {
+        scanmap.put(uuid, msg);
     }
 
     protected static IChatComponent getMessageStart(String playername) {
@@ -141,7 +145,7 @@ class ScanPlayerTask implements Callable<String> {
             MegaWallsStats megawallsstats = new MegaWallsStats(playerdata.getPlayerData());
             IChatComponent imsg = null;
 
-            if ((megawallsstats.getGames_played() <= 25 && megawallsstats.getFkdr() > 3f) ||
+            if ((megawallsstats.getGames_played() <= 25 && megawallsstats.getFkdr() > 3.5f) ||
                     (megawallsstats.getGames_played() <= 250 && megawallsstats.getFkdr() > 5f) ||
                     (megawallsstats.getGames_played() <= 500 && megawallsstats.getFkdr() > 8f) ||
                     (megawallsstats.getFkdr() > 10f)) {
@@ -199,14 +203,14 @@ class ScanPlayerTask implements Callable<String> {
 
             if (imsg != null) {
                 ChatUtil.addChatMessage(CommandScanGame.getMessageStart(playername).appendSibling(imsg));
-                CommandScanGame.getScanmap().put(uuid, imsg);
+                CommandScanGame.put(uuid, imsg);
                 NameUtil.updateGameProfileAndName(networkPlayerInfo);
             } else {
-                CommandScanGame.getScanmap().put(uuid, CommandScanGame.nomatch);
+                CommandScanGame.put(uuid, CommandScanGame.nomatch);
             }
 
         } catch (ApiException ignored) {
-            CommandScanGame.getScanmap().put(uuid, CommandScanGame.nomatch);
+            CommandScanGame.put(uuid, CommandScanGame.nomatch);
         }
 
         return null;
@@ -255,14 +259,9 @@ class ScanPlayerTask implements Callable<String> {
     }
 
     private String getFormattedName(NetworkPlayerInfo networkPlayerInfoIn) {
-        if (networkPlayerInfoIn.getDisplayName() != null) {
-            return networkPlayerInfoIn.getDisplayName().getFormattedText();
-        }
-
         if (networkPlayerInfoIn.getPlayerTeam() == null) {
             return networkPlayerInfoIn.getGameProfile().getName();
         }
-
         ScorePlayerTeam team = networkPlayerInfoIn.getPlayerTeam();
         return team.getColorPrefix().replace("\u00a7k", "").replace("O", "") + networkPlayerInfoIn.getGameProfile().getName() + team.getColorSuffix();
     }

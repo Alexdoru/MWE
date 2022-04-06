@@ -9,21 +9,17 @@ import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
 public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
     private static final ResourceLocation BACKGROUND = new ResourceLocation("fkcounter", "background.png");
-
-
-    private final int columns = 4;
-    private final int rows = 2;
-
-    private final int buttonSize = 50;
-    private final int widthBetweenButtons = 10;
-    private final int heightBetweenButtons = 30;
+    private static final int columns = 4;
+    private static final int rows = 2;
+    private static final int buttonSize = 50;
+    private static final int widthBetweenButtons = 10;
+    private static final int heightBetweenButtons = 30;
 
     private ButtonToggle buttoncompacthud;
     private ButtonToggle buttonsidebar;
@@ -35,21 +31,21 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
 
     @Override
     public void initGui() {
-        this.buttonList.add(new ButtonFancy(100, width / 2 + 45, height / 2 - findMenuHeight() / 2 + 8, 30, 14, "Move HUD", 0.5));
+        buttonList.add(new ButtonFancy(100, getxCenter() + widthBetweenButtons / 2 + (widthBetweenButtons + buttonSize) + 10, getyCenter() - findMenuHeight() / 2 + heightBetweenButtons + buttonSize + 10, 30, 14, "Move HUD", 0.5));
 
-        this.buttonList.add(addSettingButton(ConfigHandler.show_fkcHUD, 0, 0, 0, "Show HUD"));
-        this.buttonList.add(buttoncompacthud = addSettingButton(ConfigHandler.compact_hud, 1, 0, 1, "Compact HUD"));
-        this.buttonList.add(buttonsidebar = addSettingButton(ConfigHandler.FKHUDinSidebar, 7, 0, 2, "HUD in Sidebar"));
-        this.buttonList.add(addSettingButton(ConfigHandler.finalsInTablist, 8, 0, 3, "FK in tablist"));
+        buttonList.add(addSettingButton(ConfigHandler.show_fkcHUD, 0, 0, 0, "Show HUD"));
+        buttonList.add(buttoncompacthud = addSettingButton(ConfigHandler.compact_hud, 1, 0, 1, "Compact HUD"));
+        buttonList.add(buttonsidebar = addSettingButton(ConfigHandler.FKHUDinSidebar, 7, 0, 2, "HUD in Sidebar"));
+        buttonList.add(addSettingButton(ConfigHandler.finalsInTablist, 8, 0, 3, "FK in tablist"));
 
-        this.buttonList.add(addSettingButton(ConfigHandler.draw_background, 3, 1, 0, "HUD Background"));
-        this.buttonList.add(addSettingButton(ConfigHandler.text_shadow, 4, 1, 1, "Text Shadow"));
-        this.buttonList.add(buttonshowplayers = addSettingButton(ConfigHandler.show_players, 2, 1, 2, "Show Players"));
+        buttonList.add(addSettingButton(ConfigHandler.draw_background, 3, 1, 0, "HUD Background"));
+        buttonList.add(addSettingButton(ConfigHandler.text_shadow, 4, 1, 1, "Text Shadow"));
+        buttonList.add(buttonshowplayers = addSettingButton(ConfigHandler.show_players, 2, 1, 2, "Show Players"));
 
-        this.buttonList.add(new GuiSlider(5, getxCenter() - 150 / 2, getyCenter() + 70, "HUD Size : ", 0.1d, 4d, ConfigHandler.fkc_hud_size, this));
-        this.buttonList.add(new GuiSlider(6, getxCenter() - 150 / 2, getyCenter() + 94, 150, 20, "Player amount : ", "", 1d, 10d, ConfigHandler.playerAmount, false, true, this));
+        buttonList.add(new GuiSlider(5, getxCenter() - 150 / 2, getyCenter() + 70, "HUD Size : ", 0.1d, 4d, ConfigHandler.fkc_hud_size, this));
+        buttonList.add(new GuiSlider(6, getxCenter() - 150 / 2, getyCenter() + 94, 150, 20, "Player amount : ", "", 1d, 10d, ConfigHandler.playerAmount, false, true, this));
         if (parent != null) {
-            this.buttonList.add(new GuiButton(200, getxCenter() - 150 / 2, getyCenter() + 122, 150, 20, "Done"));
+            buttonList.add(new GuiButton(200, getxCenter() - 150 / 2, getyCenter() + 122, 150, 20, "Done"));
         }
         super.initGui();
     }
@@ -120,18 +116,15 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
     }
 
     private ButtonToggle addSettingButton(boolean setting, int buttonid, int row, int column, String buttonText) {
-
         int x;
         final int i = (widthBetweenButtons + buttonSize) * (column - columns / 2);
-
         if (columns % 2 == 0) { // even
             x = getxCenter() + widthBetweenButtons / 2 + i;
         } else { // odd
             x = getxCenter() - buttonSize / 2 + i;
         }
-
         int y = getyCenter() - findMenuHeight() / 2 + heightBetweenButtons + row * buttonSize;
-        return new ButtonToggle(setting, buttonid, x + 13, y + 20, buttonText);
+        return new ButtonToggle(setting, buttonid, x + 10, y + 10, buttonText);
     }
 
     @Override
@@ -141,8 +134,10 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
         GlStateManager.enableBlend();
         GlStateManager.color(1, 1, 1, 0.7F);
         mc.getTextureManager().bindTexture(BACKGROUND);
-        drawModalRectWithCustomSizedTexture(width / 2 - rectWidth / 2, height / 2 - rectHeight / 2, 0, 0, rectWidth, rectHeight, rectWidth, rectHeight);
-        drawCenteredString(fontRendererObj, EnumChatFormatting.AQUA + "FKCounter v" + FKCounterMod.VERSION, width / 2, height / 2 - rectHeight / 2 + 10, 0xFFFFFF);
+        drawModalRectWithCustomSizedTexture(getxCenter() - rectWidth / 2, getyCenter() - rectHeight / 2, 0, 0, rectWidth, rectHeight, rectWidth, rectHeight);
+        drawCenteredTitle("Final Kill Counter v" + FKCounterMod.VERSION, 2, (width / 2.0f), getYposForButton(-5), Integer.parseInt("55FFFF", 16));
+        String msg = "for Mega Walls";
+        drawCenteredString(fontRendererObj, msg, getxCenter() + fontRendererObj.getStringWidth(msg), getYposForButton(-5) + 2 * fontRendererObj.FONT_HEIGHT, Integer.parseInt("AAAAAA", 16));
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

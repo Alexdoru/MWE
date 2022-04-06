@@ -1,32 +1,35 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
-import fr.alexdoru.fkcountermod.FKCounterMod;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.scoreboard.ScorePlayerTeam;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class TabCompletionUtil {
 
+    private static final Minecraft mc = Minecraft.getMinecraft();
+
     public static List<String> getOnlinePlayersByName() {
-
-        ArrayList<String> players = new ArrayList<>();
-
-        if (FKCounterMod.isitPrepPhase) {
-            return players;
-        }
-
-        Collection<NetworkPlayerInfo> playerCollection = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
-
-        for (NetworkPlayerInfo networkPlayerInfo : playerCollection) {
-            String playerName = networkPlayerInfo.getGameProfile().getName();
-            if (playerName != null) {
-                players.add(playerName);
+        List<String> players = new ArrayList<>();
+        final NetHandlerPlayClient netHandler = mc.getNetHandler();
+        if (netHandler != null) {
+            for (NetworkPlayerInfo networkPlayerInfo : netHandler.getPlayerInfoMap()) {
+                String playerName = networkPlayerInfo.getGameProfile().getName();
+                ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(playerName);
+                if (team == null) {
+                    if (playerName != null) {
+                        players.add(playerName);
+                    }
+                } else {
+                    if (playerName != null && !team.getColorPrefix().contains("\u00a7k")) {
+                        players.add(playerName);
+                    }
+                }
             }
         }
-
         return players;
     }
 

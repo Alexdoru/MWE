@@ -11,7 +11,7 @@ public class WdredPlayers {
 
     private static final long TIME_TRANSFORM_NICKED_REPORT = 86400000L; // 24hours
     private static final long TIME_TRANSFORM_TIMESTAMPED_REPORT = 14L * 24L * 60L * 60L * 1000L; //14 days
-    private static final HashMap<String, WDR> wdred = new HashMap<>();
+    private static final HashMap<String, WDR> WDR_HASH_MAP = new HashMap<>();
     /**
      * In the wdred file the data is saved with the following pattern
      * uuid timestamp timeLastManualReport hack1 hack2 hack3 hack4 hack5
@@ -19,21 +19,25 @@ public class WdredPlayers {
     public static File wdrsFile;
 
     public static HashMap<String, WDR> getWdredMap() {
-        return wdred;
+        return WDR_HASH_MAP;
+    }
+
+    public static WDR getPlayer(String uuid, String playername) {
+        WDR wdr = WDR_HASH_MAP.get(uuid);
+        if (wdr != null) {
+            return wdr;
+        }
+        wdr = WDR_HASH_MAP.get(playername);
+        return wdr;
     }
 
     public static void saveReportedPlayers() {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(wdrsFile));
-            for (Entry<String, WDR> entry : wdred.entrySet()) {
-
+            for (Entry<String, WDR> entry : WDR_HASH_MAP.entrySet()) {
                 String uuid = entry.getKey();
                 WDR wdr = entry.getValue();
-                writer.write(uuid + " " + wdr.timestamp + " " + wdr.timeLastManualReport);
-                for (String hack : wdr.hacks) {
-                    writer.write(" " + hack);
-                }
-                writer.write("\n");
+                writer.write(uuid + " " + wdr.timestamp + " " + wdr.timeLastManualReport + wdr.hacksToString() + "\n");
             }
             writer.close();
         } catch (IOException e) {
@@ -88,7 +92,7 @@ public class WdredPlayers {
                         continue;
                     }
 
-                    wdred.put(uuid, new WDR(timestamp, timeManualReport, hacks));
+                    WDR_HASH_MAP.put(uuid, new WDR(timestamp, timeManualReport, hacks));
 
                 }
             }
