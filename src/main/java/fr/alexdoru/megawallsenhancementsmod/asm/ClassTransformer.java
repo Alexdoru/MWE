@@ -23,6 +23,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new EntityRendererTransformer());
         registerTransformer(new GameProfileTransformer());
         registerTransformer(new GuiIngameTransformer());
+        registerTransformer(new GuiNewChatTransformer());
         registerTransformer(new GuiPlayerTabOverlayTransformer());
         registerTransformer(new LayerArrowTransformer());
         registerTransformer(new MinecraftTransformer());
