@@ -21,7 +21,8 @@ public class ReportQueue {
 
     public static final ReportQueue INSTANCE = new ReportQueue();
     private static final Minecraft mc = Minecraft.getMinecraft();
-    private static final int TIME_BETWEEN_REPORTS = 2 * 60 * 20; // ticks
+    private static final int TIME_BETWEEN_REPORTS_MAX = 4 * 60 * 20;
+    private static final int TIME_BETWEEN_REPORTS_MIN = 2 * 60 * 20;
 
     private int counter;
     private final List<ReportInQueue> queueList = new ArrayList<>();
@@ -39,7 +40,8 @@ public class ReportQueue {
         if (counter <= 0 && !queueList.isEmpty() && mc.thePlayer != null) {
             String playername = queueList.remove(queueList.size() - 1).reportedPlayer;
             mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
-            counter = (int) (TIME_BETWEEN_REPORTS + (10d * random.nextGaussian() / 6d));
+            final int i = TIME_BETWEEN_REPORTS_MAX - 12 * 20 * (queueList.isEmpty() ? 0 : queueList.size() - 1);
+            counter = (int) ((10d * random.nextGaussian() / 6d) + Math.max(i, TIME_BETWEEN_REPORTS_MIN));
             addReportTimestamp(false);
         }
 
