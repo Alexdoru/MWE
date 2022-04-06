@@ -23,10 +23,9 @@ public class GuiNewChatHook {
      * drawnChatLines : contains the messages printed in the chat according to the width off the chat, each item in the list is one line of chat and not necessarily one message
      * as a result drawnChatLines.size() >= chatLines.size()
      */
-
     public static void deleteWarningMessagesFor(GuiNewChat guiNewChat, String playername, List<ChatLine> drawnChatLines, List<ChatLine> chatLines) {
 
-        final Pattern pattern = Pattern.compile("^\u00a7cWarning : " + ANY_FORMATTING_CODE + playername + "(?:|" + ANY_FORMATTING_CODE + " \\[[A-Z]{3}\\])" + "\u00a77 joined,.*");
+        final Pattern pattern = Pattern.compile("^\u00a7cWarning : (?:|\u00a77\u2716 )" + ANY_FORMATTING_CODE + playername + "(?:|" + ANY_FORMATTING_CODE + " \\[[A-Z]{3}\\])\u00a77 joined,.*");
         IChatComponent targetedChatComponent = null;
         final int chatSearchLength = 100;
         final int drawnChatSearchLength = 300;
