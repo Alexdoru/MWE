@@ -24,3 +24,7 @@ eclipse
 backup
 run
 MWEnhancement-Changelog.txt
+
+# idea shelves files
+*.xml
+*.patch
