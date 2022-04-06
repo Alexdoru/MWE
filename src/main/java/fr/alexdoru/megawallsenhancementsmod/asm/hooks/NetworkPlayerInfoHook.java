@@ -5,6 +5,7 @@ import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.util.IChatComponent;
 
+@SuppressWarnings("unused")
 public class NetworkPlayerInfoHook {
 
     public static IChatComponent getDisplayName(IChatComponent displayNameIn, GameProfile gameProfileIn) {

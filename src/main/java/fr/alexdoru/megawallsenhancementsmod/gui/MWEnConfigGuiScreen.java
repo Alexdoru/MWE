@@ -37,16 +37,17 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
 
         buttonList.add(new GuiButton(18, XposLeftButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(18)));
         buttonList.add(new GuiButton(19, XposLeftButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(19)));
-        buttonList.add(new GuiButton(15, XposLeftButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
-        buttonList.add(new GuiButton(24, XposLeftButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(24)));
-        buttonList.add(new GuiButton(0, XposLeftButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
-        buttonList.add(new GuiButton(16, XposLeftButton, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
+        buttonList.add(new GuiButton(25, XposLeftButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(25)));
+        buttonList.add(new GuiButton(15, XposLeftButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
+        buttonList.add(new GuiButton(24, XposLeftButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(24)));
+        buttonList.add(new GuiButton(0, XposLeftButton, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
 
-        buttonList.add(new GuiButton(21, XposRightButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
+        buttonList.add(new GuiButton(16, XposRightButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
+        buttonList.add(new GuiButton(21, XposRightButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
         buttonList.add(new GuiButton(17, XposRightButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
         buttonList.add(new GuiSlider(20, XposRightButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
         buttonList.add(new GuiButton(22, XposRightButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(22)));
-        buttonList.add(new GuiSlider(23, XposRightButton, getYposForButton(0), buttonsWidth, ButtonsHeight, "Maximum amount of item rendered : ", "", 40d, 1000d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
+        buttonList.add(new GuiSlider(23, XposRightButton, getYposForButton(0), buttonsWidth, ButtonsHeight, "Maximum dropped item entities : ", "", 40d, 1000d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
 
         final int XposCenterButton = getxCenter() - buttonsWidth / 2;
 
@@ -89,6 +90,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 return "Short coin messages : " + getSuffix(ConfigHandler.shortencoinmessage);
             case 24:
                 return "Prestige V tags : " + getSuffix(ConfigHandler.prestigeV);
+            case 25:
+                return "Hide repetitive MW msg : " + getSuffix(ConfigHandler.hideRepetitiveMWChatMsg);
             case 9:
                 return "Show hunter strength HUD : " + getSuffix(ConfigHandler.hunterStrengthHUD);
             case 18:
@@ -139,6 +142,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(NameUtil.prefix_bhop + EnumChatFormatting.YELLOW + "Players reported for bhop");
                 textLines.add(NameUtil.prefix + EnumChatFormatting.YELLOW + "Players reported for other cheats");
                 textLines.add(NameUtil.prefix_scan + EnumChatFormatting.YELLOW + "Players flagged by the /scangame command");
+                textLines.add(NameUtil.prefix_old_report + EnumChatFormatting.YELLOW + "Players no longer getting auto-reported");
                 break;
             case 0:
                 textLines.add(EnumChatFormatting.GREEN + "Makes the coin messages shorter by removing the network booster info");
@@ -161,6 +165,17 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.GOLD + "19000 classpoints : " + EnumChatFormatting.DARK_AQUA + "[TAG]");
                 textLines.add(EnumChatFormatting.GOLD + "28000 classpoints : " + EnumChatFormatting.DARK_GREEN + "[TAG]");
                 textLines.add(EnumChatFormatting.GOLD + "40000 classpoints : " + EnumChatFormatting.DARK_RED + "[TAG]");
+                break;
+            case 25:
+                textLines.add(EnumChatFormatting.GREEN + "Hides the following messages in mega walls");
+                textLines.add("");
+                textLines.add(EnumChatFormatting.RED + "Get to the middle to stop the hunger!");
+                textLines.add(EnumChatFormatting.GREEN + "You broke your protected chest");
+                textLines.add(EnumChatFormatting.GREEN + "You broke your protected trapped chest");
+                textLines.add(EnumChatFormatting.YELLOW + "Your Salvaging skill returned your arrow to you!");
+                textLines.add(EnumChatFormatting.YELLOW + "Your Efficiency skill got you an extra drop!");
+                textLines.add(EnumChatFormatting.GREEN + "Your " + EnumChatFormatting.AQUA + "Ability name " + EnumChatFormatting.GREEN + "skill is ready!");
+                textLines.add(EnumChatFormatting.GREEN + "Click your sword or bow to activate your skill!");
                 break;
             case 9:
                 textLines.add(EnumChatFormatting.GREEN + "When you play the Hunter class it prints a HUD");
@@ -193,8 +208,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.RED + "OrangeMarshall " + EnumChatFormatting.GRAY + "[ZOM]  " + EnumChatFormatting.DARK_RED + "5");
                 break;
             case 22:
-                textLines.add(EnumChatFormatting.GREEN + "Dynamically changes the render distance for items on the ground to preserve performance");
-                textLines.add(EnumChatFormatting.GREEN + "The render distance depends of the limit set below");
+                textLines.add(EnumChatFormatting.GREEN + "Dynamically modifies the render distance for dropped items entities to preserve performance");
+                textLines.add(EnumChatFormatting.GREEN + "It starts reducing the render distance when exceeding the threshold set below");
+                textLines.add(EnumChatFormatting.GRAY + "There is a keybind (ESC -> options -> controls -> MegaWallsEnhancements) to toggle it on the fly");
                 break;
         }
         return textLines;
@@ -226,12 +242,15 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                     }
                 }
                 break;
+            case 25:
+                ConfigHandler.hideRepetitiveMWChatMsg = !ConfigHandler.hideRepetitiveMWChatMsg;
+                break;
             case 0:
                 ConfigHandler.shortencoinmessage = !ConfigHandler.shortencoinmessage;
                 break;
             case 9:
                 if (!ConfigHandler.hunterStrengthHUD) {
-                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(ChatEvents.strengthSound, 0.0F));
+                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(ChatEvents.STRENGTH_SOUND, 0.0F));
                 }
                 ConfigHandler.hunterStrengthHUD = !ConfigHandler.hunterStrengthHUD;
                 break;

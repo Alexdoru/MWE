@@ -154,7 +154,7 @@ public class MegaWallsStats {
 
     private String formatClasspoint(int classpoints) {
         if (classpoints < 2000) {
-            return EnumChatFormatting.DARK_GRAY.toString() + classpoints;
+            return EnumChatFormatting.GRAY.toString() + classpoints;
         } else if (classpoints < 10000) {
             return EnumChatFormatting.GOLD.toString() + classpoints;
         } else if (classpoints < 13000) {
@@ -204,7 +204,7 @@ public class MegaWallsStats {
 
                 {
                         EnumChatFormatting.AQUA + "Wither dmg/game : " + EnumChatFormatting.GOLD + ((int) this.wither_damage_game) + "     ",
-                        EnumChatFormatting.AQUA + "Def Kills /game : " + EnumChatFormatting.GOLD + String.format("%.3f", this.def_kill_game)
+                        EnumChatFormatting.AQUA + "Def Kills/game : " + EnumChatFormatting.GOLD + String.format("%.3f", this.def_kill_game)
                 },
 
                 {

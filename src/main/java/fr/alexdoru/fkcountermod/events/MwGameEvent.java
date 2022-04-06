@@ -9,7 +9,8 @@ public class MwGameEvent extends Event {
         DISCONNECT,
         GAME_START,
         GAME_END,
-        THIRD_WITHER_DEATH
+        THIRD_WITHER_DEATH,
+        DEATHMATCH_START
     }
 
     private final EventType type;
@@ -20,6 +21,7 @@ public class MwGameEvent extends Event {
      * GAME_START is fired when the gates at spawn open
      * GAME_END is fired when the game ends
      * THIRD_WITHER_DIED is fired when the third wither dies
+     * DEATHMATCH_START is fired when the last wither dies
      */
     public MwGameEvent(EventType type) {
         this.type = type;

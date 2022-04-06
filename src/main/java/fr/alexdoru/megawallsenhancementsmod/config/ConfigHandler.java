@@ -1,7 +1,10 @@
 package fr.alexdoru.megawallsenhancementsmod.config;
 
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -38,7 +41,6 @@ public class ConfigHandler {
     public static String APIKey;
     public static boolean strengthParticules;
     public static boolean shortencoinmessage;
-    public static boolean reportsuggestions;
     public static boolean playSoundLowHP;
     public static double healthThreshold;
     public static boolean keepNightVisionEffect;
@@ -47,6 +49,7 @@ public class ConfigHandler {
     public static boolean limitDroppedEntityRendered;
     public static int maxDroppedEntityRendered;
     public static boolean prestigeV;
+    public static boolean hideRepetitiveMWChatMsg;
 
     /**
      * GUI config
@@ -67,6 +70,7 @@ public class ConfigHandler {
     public static boolean toggleicons;
     public static boolean togglewarnings;
     public static boolean toggleautoreport;
+    public static boolean reportsuggestions;
     public static boolean autoreportSuggestions;
     public static boolean deleteReports;
     public static long timeDeleteReport;
@@ -100,74 +104,80 @@ public class ConfigHandler {
 
     private static void syncConfig(boolean loadFromConfigFile, boolean readFieldsFromConfig, boolean saveFieldsToConfig) {
 
+        if (config == null) {
+            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.DARK_RED + "Config didn't load when the game started, this shouldn't happen !"));
+            return;
+        }
+
         if (loadFromConfigFile) {
             config.load();
         }
 
         /*Reads the fiels in the config and stores them in the property objects, and defines a default value if the fields doesn't exist*/
-        Property pXpos_fkcHUD = config.get(CATEGORY_FKCounter, "Xpos FKCounter HUD", 0d, "The x position of the final kill counter HUD, value ranges from 0 to 1");
-        Property pYpos_fkcHUD = config.get(CATEGORY_FKCounter, "Ypos FKCounter HUD", 0.1d, "The y position of the final kill counter HUD, value ranges from 0 to 1");
-        Property pshow_fkcHUD = config.get(CATEGORY_FKCounter, "Show FKCounter HUD", true, "Displays the HUD of the final kill counter");
-        Property pcompactHUD = config.get(CATEGORY_FKCounter, "Compact FKCounter HUD", false, "Use a compact HUD for the final kill counter");
-        Property pshow_players = config.get(CATEGORY_FKCounter, "Show players", false, "Displays players with most finals in each team");
-        Property pinSidebar = config.get(CATEGORY_FKCounter, "HUD in sidebar", false, "Places the fkcounter in the sidebar");
-        Property pdraw_background = config.get(CATEGORY_FKCounter, "Draw background", false, "Draws a box around the HUD of the final kill counter");
-        Property ptext_shadow = config.get(CATEGORY_FKCounter, "Text shadow", true, "Draws text shadow");
-        Property pfkc_hud_size = config.get(CATEGORY_FKCounter, "HUD Size", 1.0f, "Size of the final kill counter HUD");
-        Property pPlayerAmount = config.get(CATEGORY_FKCounter, "Player amount", (int) 3.0, "Amount of players displayed on screen when you use the \"Show players\" setting");
-        Property pfinalsInTablist = config.get(CATEGORY_FKCounter, "Fks in tablist", true, "Draws the finals in the tablist");
+        final Property pXpos_fkcHUD = config.get(CATEGORY_FKCounter, "Xpos FKCounter HUD", 0d, "The x position of the final kill counter HUD, value ranges from 0 to 1");
+        final Property pYpos_fkcHUD = config.get(CATEGORY_FKCounter, "Ypos FKCounter HUD", 0.1d, "The y position of the final kill counter HUD, value ranges from 0 to 1");
+        final Property pshow_fkcHUD = config.get(CATEGORY_FKCounter, "Show FKCounter HUD", true, "Displays the HUD of the final kill counter");
+        final Property pcompactHUD = config.get(CATEGORY_FKCounter, "Compact FKCounter HUD", false, "Use a compact HUD for the final kill counter");
+        final Property pshow_players = config.get(CATEGORY_FKCounter, "Show players", false, "Displays players with most finals in each team");
+        final Property pinSidebar = config.get(CATEGORY_FKCounter, "HUD in sidebar", false, "Places the fkcounter in the sidebar");
+        final Property pdraw_background = config.get(CATEGORY_FKCounter, "Draw background", false, "Draws a box around the HUD of the final kill counter");
+        final Property ptext_shadow = config.get(CATEGORY_FKCounter, "Text shadow", true, "Draws text shadow");
+        final Property pfkc_hud_size = config.get(CATEGORY_FKCounter, "HUD Size", 1.0f, "Size of the final kill counter HUD");
+        final Property pPlayerAmount = config.get(CATEGORY_FKCounter, "Player amount", 3, "Amount of players displayed on screen when you use the \"Show players\" setting");
+        final Property pfinalsInTablist = config.get(CATEGORY_FKCounter, "Fks in tablist", true, "Draws the finals in the tablist");
 
-        Property pAPIKey = config.get(CATEGORY_MWENh, "APIKey", "", "Your Hypixel API Key");
-        Property pstrengthParticules = config.get(CATEGORY_MWENh, "Strength particules", true, "Spawns strength particules when an herobrine or dreadlord get a final");
-        Property pShortencoinmessage = config.get(CATEGORY_MWENh, "Shorten coin message", false, "Shorten the coins messages by removing the network booster info");
-        Property pReportsuggestions = config.get(CATEGORY_MWENh, "Report suggestion", true, "Give report suggestions in the chat based on messages in shouts");
-        Property pPlaySoundLowHP = config.get(CATEGORY_MWENh, "Sound low HP", false, "Plays a sound when your health falls below a certain threshold");
-        Property pHealthThreshold = config.get(CATEGORY_MWENh, "Health Threshold", 0.5d, "The health threshold at witch it will play a sound, value ranges from 0 to 1");
-        Property pCancelNightVisionEffect = config.get(CATEGORY_MWENh, "Cancel Night Vision Effect", false, "Removes the visual effets of night vision");
-        Property puseColoredScores = config.get(CATEGORY_MWENh, "Colored Tablist Scores", true, "Makes the scores in the tablist use a greend to red color gradient depending of the value");
-        Property pswordDropProtection = config.get(CATEGORY_MWENh, "Sword drop protection", true, "When enabled you can't drop the sword you are holding in your hotbar");
-        Property plimitDroppedEntityRendered = config.get(CATEGORY_MWENh, "Limit dropped item rendered", true, "Limit dropped item rendered");
-        Property pmaxDroppedEntityRendered = config.get(CATEGORY_MWENh, "Max amount of item rendered", 120, "Max amount of item rendered");
-        Property pprestigeV = config.get(CATEGORY_MWENh, "Prestige V colored Tag", false, "Prestige V colored Tag");
+        final Property pAPIKey = config.get(CATEGORY_MWENh, "APIKey", "", "Your Hypixel API Key");
+        final Property pstrengthParticules = config.get(CATEGORY_MWENh, "Strength particules", true, "Spawns strength particules when an herobrine or dreadlord get a final");
+        final Property pShortencoinmessage = config.get(CATEGORY_MWENh, "Shorten coin message", false, "Shorten the coins messages by removing the network booster info");
+        final Property pPlaySoundLowHP = config.get(CATEGORY_MWENh, "Sound low HP", false, "Plays a sound when your health falls below a certain threshold");
+        final Property pHealthThreshold = config.get(CATEGORY_MWENh, "Health Threshold", 0.5d, "The health threshold at witch it will play a sound, value ranges from 0 to 1");
+        final Property pCancelNightVisionEffect = config.get(CATEGORY_MWENh, "Cancel Night Vision Effect", false, "Removes the visual effets of night vision");
+        final Property puseColoredScores = config.get(CATEGORY_MWENh, "Colored Tablist Scores", true, "Makes the scores in the tablist use a greend to red color gradient depending of the value");
+        final Property pswordDropProtection = config.get(CATEGORY_MWENh, "Sword drop protection", true, "When enabled you can't drop the sword you are holding in your hotbar");
+        final Property plimitDroppedEntityRendered = config.get(CATEGORY_MWENh, "Limit dropped item rendered", true, "Limit dropped item rendered");
+        final Property pmaxDroppedEntityRendered = config.get(CATEGORY_MWENh, "Max amount of item rendered", 120, "Max amount of item rendered");
+        final Property pprestigeV = config.get(CATEGORY_MWENh, "Prestige V colored Tag", false, "Prestige V colored Tag");
+        final Property phideRepetitiveMWChatMsg = config.get(CATEGORY_MWENh, "Delete repetitive chat messagdes in mw", true, "Delete repetitive chat messagdes in mw");
 
-        Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
-        Property pXpos_killcooldownHUD = config.get(CATEGORY_GUI, "Xpos kill cooldown HUD", 0d, "The x position of the killcooldown HUD, value ranges from 0 to 1");
-        Property pYpos_killcooldownHUD = config.get(CATEGORY_GUI, "Ypos kill cooldown HUD", 0d, "The y position of the killcooldown HUD, value ranges from 0 to 1");
-        Property pShow_ArrowHitHUD = config.get(CATEGORY_GUI, "Show Arrow Hit HUD", true, "Displays the HP of opponents on arrow hits");
-        Property pXpos_ArrowHitHUD = config.get(CATEGORY_GUI, "Xpos Arrow Hit HUD", 0.5d, "The x position of the ArrowHitGui, value ranges from 0 to 1");
-        Property pYpos_ArrowHitHUD = config.get(CATEGORY_GUI, "Ypos Arrow Hit HUD", 9d / 20d, "The y position of the ArrowHitGui, value ranges from 0 to 1");
-        Property pShow_lastWitherHUD = config.get(CATEGORY_GUI, "Show last wither HUD", true, "Displays the time it takes for the last wither to die");
-        Property pwitherHUDinSiderbar = config.get(CATEGORY_GUI, "Wiher HUD in sidebar", true, "Displays the time it takes for the last wither to die in the sidebar");
-        Property pXpos_lastWitherHUD = config.get(CATEGORY_GUI, "Xpos last wither HUD", 0.75d, "The x position of the LastWitherHUD, value ranges from 0 to 1");
-        Property pYpos_lastWitherHUD = config.get(CATEGORY_GUI, "Ypos last wither HUD", 0.05d, "The y position of the LastWitherHUD, value ranges from 0 to 1");
-        Property pHunterStrengthHUD = config.get(CATEGORY_GUI, "Hunter Strength HUD", true, "Displays HUD and plays a sound 10 seconds before getting strength with hunter");
-        Property pXpos_hunterHUD = config.get(CATEGORY_GUI, "Xpos hunter Strength HUD", 0.5d, "The x position of the Hunter Strength HUD, value ranges from 0 to 1");
-        Property pYpos_hunterHUD = config.get(CATEGORY_GUI, "Ypos hunter Strength HUD", 8d / 20d, "The y position of the Hunter Strength HUD, value ranges from 0 to 1");
+        final Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
+        final Property pXpos_killcooldownHUD = config.get(CATEGORY_GUI, "Xpos kill cooldown HUD", 0d, "The x position of the killcooldown HUD, value ranges from 0 to 1");
+        final Property pYpos_killcooldownHUD = config.get(CATEGORY_GUI, "Ypos kill cooldown HUD", 0d, "The y position of the killcooldown HUD, value ranges from 0 to 1");
+        final Property pShow_ArrowHitHUD = config.get(CATEGORY_GUI, "Show Arrow Hit HUD", true, "Displays the HP of opponents on arrow hits");
+        final Property pXpos_ArrowHitHUD = config.get(CATEGORY_GUI, "Xpos Arrow Hit HUD", 0.5d, "The x position of the ArrowHitGui, value ranges from 0 to 1");
+        final Property pYpos_ArrowHitHUD = config.get(CATEGORY_GUI, "Ypos Arrow Hit HUD", 9d / 20d, "The y position of the ArrowHitGui, value ranges from 0 to 1");
+        final Property pShow_lastWitherHUD = config.get(CATEGORY_GUI, "Show last wither HUD", true, "Displays the time it takes for the last wither to die");
+        final Property pwitherHUDinSiderbar = config.get(CATEGORY_GUI, "Wiher HUD in sidebar", true, "Displays the time it takes for the last wither to die in the sidebar");
+        final Property pXpos_lastWitherHUD = config.get(CATEGORY_GUI, "Xpos last wither HUD", 0.75d, "The x position of the LastWitherHUD, value ranges from 0 to 1");
+        final Property pYpos_lastWitherHUD = config.get(CATEGORY_GUI, "Ypos last wither HUD", 0.05d, "The y position of the LastWitherHUD, value ranges from 0 to 1");
+        final Property pHunterStrengthHUD = config.get(CATEGORY_GUI, "Hunter Strength HUD", true, "Displays HUD and plays a sound 10 seconds before getting strength with hunter");
+        final Property pXpos_hunterHUD = config.get(CATEGORY_GUI, "Xpos hunter Strength HUD", 0.5d, "The x position of the Hunter Strength HUD, value ranges from 0 to 1");
+        final Property pYpos_hunterHUD = config.get(CATEGORY_GUI, "Ypos hunter Strength HUD", 8d / 20d, "The y position of the Hunter Strength HUD, value ranges from 0 to 1");
 
-        Property pToggleicons = config.get(CATEGORY_NOCHEATERS, "Toggle Icons", true, "Display warning symbol on nametags of reported players");
-        Property pTogglewarnings = config.get(CATEGORY_NOCHEATERS, "Toggle Warnings", true, "Gives warning messages in chat for reported players");
-        Property pautoreportSuggestions = config.get(CATEGORY_NOCHEATERS, "Send report suggestions", true, "Send report suggestions");
-        Property pToggleautoreport = config.get(CATEGORY_NOCHEATERS, "Toggle Autoreport", true, "Automatically report previously reported players when they are in your lobby");
-        Property pdeleteReports = config.get(CATEGORY_NOCHEATERS, "Delete Old Report", false, "Deletes reports older than the specified value");
-        Property ptimeDeleteReport = config.get(CATEGORY_NOCHEATERS, "Time delete reports", 365, "Reports older than this will be deleted on game start (days)");
+        final Property pToggleicons = config.get(CATEGORY_NOCHEATERS, "Toggle Icons", true, "Display warning symbol on nametags of reported players");
+        final Property pTogglewarnings = config.get(CATEGORY_NOCHEATERS, "Toggle Warnings", false, "Gives warning messages in chat for reported players");
+        final Property preportsuggestions = config.get(CATEGORY_NOCHEATERS, "Report suggestion", true, "Give report suggestions in the chat based on messages in shouts");
+        final Property pautoreportSuggestions = config.get(CATEGORY_NOCHEATERS, "Send report suggestions", true, "Send report suggestions");
+        final Property pToggleautoreport = config.get(CATEGORY_NOCHEATERS, "Autoreport saved cheaters", true, "Automatically report previously reported players when they are in your lobby");
+        final Property pdeleteReports = config.get(CATEGORY_NOCHEATERS, "Delete Old Report", false, "Deletes reports older than the specified value");
+        final Property ptimeDeleteReport = config.get(CATEGORY_NOCHEATERS, "Time delete reports", 365, "Reports older than this will be deleted on game start (days)");
 
-        Property pisDebugHitboxOn =  config.get(CATEGORY_HITBOX, "Toggle hitbox", false, "Toggle hitbox");
-        Property pdrawHitboxForPlayers = config.get(CATEGORY_HITBOX, "Hitbox for players", true, "Hitbox for players");
-        Property pdrawHitboxForGroundedArrows = config.get(CATEGORY_HITBOX, "Hitbox for grounded arrows", true, "Hitbox for grounded arrows");
-        Property pdrawHitboxForPinnedArrows = config.get(CATEGORY_HITBOX, "Hitbox for pinned arrows", true, "Hitbox for pinned arrows");
-        Property pdrawHitboxForFlyingArrows = config.get(CATEGORY_HITBOX, "Hitbox for flying arrows", true, "Hitbox for flying arrows");
-        Property pdrawHitboxForDroppedItems = config.get(CATEGORY_HITBOX, "Hitbox for dropped items", true, "Hitbox for dropped items");
-        Property pdrawHitboxForPassiveMobs = config.get(CATEGORY_HITBOX, "Hitbox for passive mobs", true, "Hitbox for passive mobs");
-        Property pdrawHitboxForAggressiveMobs = config.get(CATEGORY_HITBOX, "Hitbox for aggressive mobs", true, "Hitbox for aggressive mobs");
-        Property pdrawHitboxItemFrame = config.get(CATEGORY_HITBOX, "Hitbox for item frame", true, "Hitbox for item frame");
-        Property pdrawHitboxForOtherEntity = config.get(CATEGORY_HITBOX, "Hitbox for other entity", true, "Hitbox for other entity");
-        Property pdrawRedBox = config.get(CATEGORY_HITBOX, "Draw red box", true, "Draw red box");
-        Property pHideBlueVect = config.get(CATEGORY_HITBOX, "Hide blue vector", false, "Hide blue vector");
-        Property pdrawBlueVectForPlayersOnly = config.get(CATEGORY_HITBOX, "Blue vect for players only", false, "Blue vect for players only");
-        Property pmakeBlueVect3Meters = config.get(CATEGORY_HITBOX, "Make blue vector 3m long", false, "Make blue vector 3m long");
-        Property prealSizeHitbox = config.get(CATEGORY_HITBOX, "Real size hitbox", false, "Make hitbox their real size");
-        Property pdrawRangedHitbox = config.get(CATEGORY_HITBOX, "Don't render close hitbox", false, "Doesn't render the hitbox of entities close to you");
-        Property phitboxDrawRange = config.get(CATEGORY_HITBOX, "Hitbox render range", 6f, "Doesn't render the hitbox of entities closer than this");
+        final Property pisDebugHitboxOn = config.get(CATEGORY_HITBOX, "Toggle hitbox", false, "Toggle hitbox");
+        final Property pdrawHitboxForPlayers = config.get(CATEGORY_HITBOX, "Hitbox for players", true, "Hitbox for players");
+        final Property pdrawHitboxForGroundedArrows = config.get(CATEGORY_HITBOX, "Hitbox for grounded arrows", true, "Hitbox for grounded arrows");
+        final Property pdrawHitboxForPinnedArrows = config.get(CATEGORY_HITBOX, "Hitbox for pinned arrows", true, "Hitbox for pinned arrows");
+        final Property pdrawHitboxForFlyingArrows = config.get(CATEGORY_HITBOX, "Hitbox for flying arrows", true, "Hitbox for flying arrows");
+        final Property pdrawHitboxForDroppedItems = config.get(CATEGORY_HITBOX, "Hitbox for dropped items", true, "Hitbox for dropped items");
+        final Property pdrawHitboxForPassiveMobs = config.get(CATEGORY_HITBOX, "Hitbox for passive mobs", true, "Hitbox for passive mobs");
+        final Property pdrawHitboxForAggressiveMobs = config.get(CATEGORY_HITBOX, "Hitbox for aggressive mobs", true, "Hitbox for aggressive mobs");
+        final Property pdrawHitboxItemFrame = config.get(CATEGORY_HITBOX, "Hitbox for item frame", true, "Hitbox for item frame");
+        final Property pdrawHitboxForOtherEntity = config.get(CATEGORY_HITBOX, "Hitbox for other entity", true, "Hitbox for other entity");
+        final Property pdrawRedBox = config.get(CATEGORY_HITBOX, "Draw red box", true, "Draw red box");
+        final Property pHideBlueVect = config.get(CATEGORY_HITBOX, "Hide blue vector", false, "Hide blue vector");
+        final Property pdrawBlueVectForPlayersOnly = config.get(CATEGORY_HITBOX, "Blue vect for players only", false, "Blue vect for players only");
+        final Property pmakeBlueVect3Meters = config.get(CATEGORY_HITBOX, "Make blue vector 3m long", false, "Make blue vector 3m long");
+        final Property prealSizeHitbox = config.get(CATEGORY_HITBOX, "Real size hitbox", false, "Make hitbox their real size");
+        final Property pdrawRangedHitbox = config.get(CATEGORY_HITBOX, "Don't render close hitbox", false, "Doesn't render the hitbox of entities close to you");
+        final Property phitboxDrawRange = config.get(CATEGORY_HITBOX, "Hitbox render range", 6f, "Doesn't render the hitbox of entities closer than this");
 
         /*Set the Order in which the config entries appear in the config file */
         List<String> pOrderFKC = new ArrayList<>();
@@ -188,7 +198,6 @@ public class ConfigHandler {
         pOrderMWWENh.add(pAPIKey.getName());
         pOrderMWWENh.add(pstrengthParticules.getName());
         pOrderMWWENh.add(pShortencoinmessage.getName());
-        pOrderMWWENh.add(pReportsuggestions.getName());
         pOrderMWWENh.add(pPlaySoundLowHP.getName());
         pOrderMWWENh.add(pHealthThreshold.getName());
         pOrderMWWENh.add(pCancelNightVisionEffect.getName());
@@ -197,6 +206,7 @@ public class ConfigHandler {
         pOrderMWWENh.add(plimitDroppedEntityRendered.getName());
         pOrderMWWENh.add(pmaxDroppedEntityRendered.getName());
         pOrderMWWENh.add(pprestigeV.getName());
+        pOrderMWWENh.add(phideRepetitiveMWChatMsg.getName());
         config.setCategoryPropertyOrder(CATEGORY_MWENh, pOrderMWWENh);
 
         List<String> pOrderGUI = new ArrayList<>();
@@ -218,6 +228,7 @@ public class ConfigHandler {
         List<String> pOrderNOCHEATERS = new ArrayList<>();
         pOrderNOCHEATERS.add(pToggleicons.getName());
         pOrderNOCHEATERS.add(pTogglewarnings.getName());
+        pOrderNOCHEATERS.add(preportsuggestions.getName());
         pOrderNOCHEATERS.add(pToggleautoreport.getName());
         pOrderNOCHEATERS.add(pautoreportSuggestions.getName());
         pOrderNOCHEATERS.add(pdeleteReports.getName());
@@ -261,7 +272,6 @@ public class ConfigHandler {
             APIKey = pAPIKey.getString();
             strengthParticules = pstrengthParticules.getBoolean();
             shortencoinmessage = pShortencoinmessage.getBoolean();
-            reportsuggestions = pReportsuggestions.getBoolean();
             playSoundLowHP = pPlaySoundLowHP.getBoolean();
             healthThreshold = pHealthThreshold.getDouble();
             keepNightVisionEffect = !pCancelNightVisionEffect.getBoolean();
@@ -270,6 +280,7 @@ public class ConfigHandler {
             limitDroppedEntityRendered = plimitDroppedEntityRendered.getBoolean();
             maxDroppedEntityRendered = pmaxDroppedEntityRendered.getInt();
             prestigeV = !HypixelApiKeyUtil.apiKeyIsNotSetup() && pprestigeV.getBoolean();
+            hideRepetitiveMWChatMsg = phideRepetitiveMWChatMsg.getBoolean();
 
             show_killcooldownHUD = pShow_killcooldownHUD.getBoolean();
             killcooldownHUDPosition.setRelative(pXpos_killcooldownHUD.getDouble(), pYpos_killcooldownHUD.getDouble());
@@ -284,6 +295,7 @@ public class ConfigHandler {
             toggleicons = pToggleicons.getBoolean();
             togglewarnings = pTogglewarnings.getBoolean();
             toggleautoreport = pToggleautoreport.getBoolean();
+            reportsuggestions = preportsuggestions.getBoolean();
             autoreportSuggestions = pautoreportSuggestions.getBoolean();
             deleteReports = pdeleteReports.getBoolean();
             timeDeleteReport = 24L * 3600L * 1000L * ((long) ptimeDeleteReport.getInt());
@@ -326,7 +338,6 @@ public class ConfigHandler {
             pAPIKey.set(APIKey);
             pstrengthParticules.set(strengthParticules);
             pShortencoinmessage.set(shortencoinmessage);
-            pReportsuggestions.set(reportsuggestions);
             pPlaySoundLowHP.set(playSoundLowHP);
             pHealthThreshold.set(healthThreshold);
             pCancelNightVisionEffect.set(!keepNightVisionEffect);
@@ -335,6 +346,7 @@ public class ConfigHandler {
             plimitDroppedEntityRendered.set(limitDroppedEntityRendered);
             pmaxDroppedEntityRendered.set(maxDroppedEntityRendered);
             pprestigeV.set(prestigeV);
+            phideRepetitiveMWChatMsg.set(hideRepetitiveMWChatMsg);
 
             pShow_killcooldownHUD.set(show_killcooldownHUD);
             double[] killcooldownHUDarray = killcooldownHUDPosition.getRelativePosition();
@@ -360,6 +372,7 @@ public class ConfigHandler {
             pToggleicons.set(toggleicons);
             pTogglewarnings.set(togglewarnings);
             pToggleautoreport.set(toggleautoreport);
+            preportsuggestions.set(reportsuggestions);
             pautoreportSuggestions.set(autoreportSuggestions);
             pdeleteReports.set(deleteReports);
             ptimeDeleteReport.set((int) (timeDeleteReport / (24L * 3600L * 1000L)));

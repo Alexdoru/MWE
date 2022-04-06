@@ -3,8 +3,10 @@ package fr.alexdoru.nocheatersmod.commands;
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
+import fr.alexdoru.nocheatersmod.events.ReportQueue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -39,15 +41,22 @@ public class CommandSendReportAgain extends CommandBase {
         String playername = args[1];
         WDR wdr = WdredPlayers.getWdredMap().get(uuid);
         if (wdr != null) {
-            long time = (new Date()).getTime();
-            if (FKCounterMod.preGameLobby && ConfigHandler.toggleautoreport) {
-                wdr.timeLastManualReport = time - WDR.TIME_BETWEEN_AUTOREPORT;
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Your cheating report against " + EnumChatFormatting.LIGHT_PURPLE + playername
-                        + EnumChatFormatting.GREEN + " will be sent during the game."));
+            if (wdr.hasValidCheats()) {
+                long time = (new Date()).getTime();
+                if (FKCounterMod.preGameLobby && ConfigHandler.toggleautoreport) {
+                    wdr.timestamp = time - WDR.TIME_BETWEEN_AUTOREPORT;
+                    wdr.timeLastManualReport = time - WDR.TIME_BETWEEN_AUTOREPORT;
+                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Your cheating report against " + EnumChatFormatting.RED + playername
+                            + EnumChatFormatting.GREEN + " will be sent during the game."));
+                } else {
+                    ReportQueue.INSTANCE.addPlayerToQueue(playername, true);
+                    wdr.timestamp = time;
+                    wdr.timeLastManualReport = time;
+                }
+                NameUtil.updateGameProfileAndName(playername, false);
             } else {
-                mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
-                wdr.timestamp = time;
-                wdr.timeLastManualReport = time;
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Those cheats aren't recognized by the mod :"
+                        + EnumChatFormatting.GOLD + wdr.hacksToString() + EnumChatFormatting.RED + ", use valid cheats to use the reporting features."));
             }
         }
     }

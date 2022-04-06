@@ -4,11 +4,7 @@ import fr.alexdoru.fkcountermod.commands.CommandFKCounter;
 import fr.alexdoru.fkcountermod.events.ScoreboardEvent;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
-@Mod(modid = FKCounterMod.MODID, version = FKCounterMod.VERSION, acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
 public class FKCounterMod {
 
     public static final String MODID = "fkcounter";
@@ -27,9 +23,10 @@ public class FKCounterMod {
      * True during the preparation phase of a mega walls game
      */
     public static boolean isitPrepPhase = false;
+    public static boolean isHypixel = false;
+    public static boolean isMWEnvironement = false;
 
-    @EventHandler
-    public void init(FMLInitializationEvent event) {
+    public static void init() {
         MinecraftForge.EVENT_BUS.register(new ScoreboardEvent());
         ClientCommandHandler.instance.registerCommand(new CommandFKCounter());
     }

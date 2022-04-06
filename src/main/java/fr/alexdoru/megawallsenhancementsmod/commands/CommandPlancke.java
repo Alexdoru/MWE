@@ -17,6 +17,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class CommandPlancke extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length < 1) {
-            addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
+            addChatMessage(getCommandHelp());
             return;
         }
 
@@ -53,7 +54,7 @@ public class CommandPlancke extends CommandBase {
             try {
                 apiname = new CachedMojangUUID(args[0]);
             } catch (ApiException e) {
-                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + e.getMessage()));
                 return null;
             }
 
@@ -69,7 +70,7 @@ public class CommandPlancke extends CommandBase {
                     return null;
                 }
             } catch (ApiException e) {
-                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + e.getMessage()));
+                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + e.getMessage()));
                 return null;
             }
 
@@ -179,6 +180,20 @@ public class CommandPlancke extends CommandBase {
             return getListOfStringsMatchingLastWord(args, mwargs);
 
         return null;
+
+    }
+
+    private IChatComponent getCommandHelp() {
+
+        return new ChatComponentText(EnumChatFormatting.AQUA + bar() + "\n"
+                + centerLine(EnumChatFormatting.GOLD + "Plancke Help\n\n")
+                + EnumChatFormatting.YELLOW + "/plancke <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "General Hypixel stats\n"
+                + EnumChatFormatting.YELLOW + "/plancke <player> sw" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Skywars stats\n"
+                + EnumChatFormatting.YELLOW + "/plancke <player> mw" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "General Mega Walls stats\n"
+                + EnumChatFormatting.YELLOW + "/plancke <player> mw classname" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Class specific Mega Walls stats\n"
+                + EnumChatFormatting.YELLOW + "/plancke <player> mw cp" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Mega Walls classpoints\n"
+                + EnumChatFormatting.AQUA + bar()
+        );
 
     }
 

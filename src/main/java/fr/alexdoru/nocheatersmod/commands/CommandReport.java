@@ -18,9 +18,47 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage
 public class CommandReport extends CommandBase {
 
     /* cheats recognized by hypixel*/
-    public static final String[] recognizedcheats = {"aura", "aimbot", "bhop", "velocity", "reach", "speed", "ka", "killaura", "forcefield", "antiknockback", "autoclicker", "fly", "dolphin", "jesus"};
+    public static final String[] recognizedcheats = {
+            "aura",
+            "aimbot",
+            "bhop",
+            "velocity",
+            "reach",
+            "speed",
+            "ka",
+            "killaura",
+            "forcefield",
+            "antiknockback",
+            "autoclicker",
+            "ac",
+            "fly",
+            "dolphin",
+            "jesus"};
     /* cheats for the tabcompletion*/
-    public static final String[] cheatsArray = {"aura", "aimbot", "bhop", "velocity", "reach", "speed", "ka", "killaura", "multiaura", "forcefield", "autoblock", "antiknockback", "autoclicker", "fly", "dolphin", "jesus", "keepsprint", "noslowdown", "fastbreak", "cheating"};
+    public static final String[] cheatsArray = {
+            "aura",
+            "aimbot",
+            "bhop",
+            "velocity",
+            "reach",
+            "speed",
+            "ka",
+            "killaura",
+            "multiaura",
+            "forcefield",
+            "autoblock",
+            "antiknockback",
+            "antikb",
+            "autoclicker",
+            "ac",
+            "fly",
+            "dolphin",
+            "jesus",
+            "keepsprint",
+            "noslowdown",
+            "fastbreak",
+            "cheating"
+    };
     public static final List<String> cheatsList = Arrays.asList(cheatsArray);
 
     @Override
@@ -65,9 +103,7 @@ public class CommandReport extends CommandBase {
 
         for (int i = 1; i < args.length; i++) {
 
-            if (args[i].equalsIgnoreCase("bhop")) {
-                msg.append(" bhop aura reach velocity speed antiknockback");
-            } else if (args[i].equalsIgnoreCase("fastbreak")) {
+            if (args[i].equalsIgnoreCase("fastbreak")) {
                 msg.append(" speed");
             } else if (args[i].equalsIgnoreCase("autoblock") || args[i].equalsIgnoreCase("multiaura")) {
                 msg.append(" killaura");

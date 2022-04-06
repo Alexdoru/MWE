@@ -18,7 +18,6 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.*;
@@ -32,62 +31,61 @@ public class KillCounter {
     public static final int GREEN_TEAM = 1;
     public static final int YELLOW_TEAM = 2;
     public static final int BLUE_TEAM = 3;
-    private static final String PREP_PHASE = "Prepare your defenses!";
     private static final String[] KILL_MESSAGES = {
-            "(\\w+) was shot and killed by (\\w+).*",
-            "(\\w+) was snowballed to death by (\\w+).*",
-            "(\\w+) was killed by (\\w+).*",
-            "(\\w+) was killed with a potion by (\\w+).*",
-            "(\\w+) was killed with an explosion by (\\w+).*",
-            "(\\w+) was killed with magic by (\\w+).*",
-            "(\\w+) was filled full of lead by (\\w+).*",
-            "(\\w+) was iced by (\\w+).*",
-            "(\\w+) met their end by (\\w+).*",
-            "(\\w+) lost a drinking contest with (\\w+).*",
-            "(\\w+) was killed with dynamite by (\\w+).*",
-            "(\\w+) lost the draw to (\\w+).*",
-            "(\\w+) was struck down by (\\w+).*",
-            "(\\w+) was turned to dust by (\\w+).*",
-            "(\\w+) was turned to ash by (\\w+).*",
-            "(\\w+) was melted by (\\w+).*",
-            "(\\w+) was incinerated by (\\w+).*",
-            "(\\w+) was vaporized by (\\w+).*",
-            "(\\w+) was struck with Cupid's arrow by (\\w+).*",
-            "(\\w+) was given the cold shoulder by (\\w+).*",
-            "(\\w+) was hugged too hard by (\\w+).*",
-            "(\\w+) drank a love potion from (\\w+).*",
-            "(\\w+) was hit by a love bomb from (\\w+).*",
-            "(\\w+) was no match for (\\w+).*",
-            "(\\w+) was smote from afar by (\\w+).*",
-            "(\\w+) was justly ended by (\\w+).*",
-            "(\\w+) was purified by (\\w+).*",
-            "(\\w+) was killed with holy water by (\\w+).*",
-            "(\\w+) was dealt vengeful justice by (\\w+).*",
-            "(\\w+) was returned to dust by (\\w+).*",
-            "(\\w+) be shot and killed by (\\w+).*",
-            "(\\w+) be snowballed to death by (\\w+).*",
-            "(\\w+) be sent to Davy Jones' locker by (\\w+).*",
-            "(\\w+) be killed with rum by (\\w+).*",
-            "(\\w+) be shot with cannon by (\\w+).*",
-            "(\\w+) be killed with magic by (\\w+).*",
-            "(\\w+) was glazed in BBQ sauce by (\\w+).*",
-            "(\\w+) was sprinked in chilli poweder by (\\w+).*",
-            "(\\w+) was sliced up by (\\w+).*",
-            "(\\w+) was overcooked by (\\w+).*",
-            "(\\w+) was deep fried by (\\w+).*",
-            "(\\w+) was boiled by (\\w+).*",
-            "(\\w+) was injected with malware by (\\w+).*",
-            "(\\w+) was DDoS'd by (\\w+).*",
-            "(\\w+) was deleted by (\\w+).*",
-            "(\\w+) was purged by an antivirus owned by (\\w+).*",
-            "(\\w+) was fragmented by (\\w+).*",
-            "(\\w+) was squeaked from a distance by (\\w+).*",
-            "(\\w+) was hit by frozen cheese from (\\w+).*",
-            "(\\w+) was chewed up by (\\w+).*",
-            "(\\w+) was chemically cheesed by (\\w+).*",
-            "(\\w+) was turned into cheese wiz by (\\w+).*",
-            "(\\w+) was magically squeaked by (\\w+).*",
-            "(\\w+) was corrupted by (\\w+).*"
+            "(\\w{2,16}) was shot and killed by (\\w{2,16}).*",
+            "(\\w{2,16}) was snowballed to death by (\\w{2,16}).*",
+            "(\\w{2,16}) was killed by (\\w{2,16}).*",
+            "(\\w{2,16}) was killed with a potion by (\\w{2,16}).*",
+            "(\\w{2,16}) was killed with an explosion by (\\w{2,16}).*",
+            "(\\w{2,16}) was killed with magic by (\\w{2,16}).*",
+            "(\\w{2,16}) was filled full of lead by (\\w{2,16}).*",
+            "(\\w{2,16}) was iced by (\\w{2,16}).*",
+            "(\\w{2,16}) met their end by (\\w{2,16}).*",
+            "(\\w{2,16}) lost a drinking contest with (\\w{2,16}).*",
+            "(\\w{2,16}) was killed with dynamite by (\\w{2,16}).*",
+            "(\\w{2,16}) lost the draw to (\\w{2,16}).*",
+            "(\\w{2,16}) was struck down by (\\w{2,16}).*",
+            "(\\w{2,16}) was turned to dust by (\\w{2,16}).*",
+            "(\\w{2,16}) was turned to ash by (\\w{2,16}).*",
+            "(\\w{2,16}) was melted by (\\w{2,16}).*",
+            "(\\w{2,16}) was incinerated by (\\w{2,16}).*",
+            "(\\w{2,16}) was vaporized by (\\w{2,16}).*",
+            "(\\w{2,16}) was struck with Cupid's arrow by (\\w{2,16}).*",
+            "(\\w{2,16}) was given the cold shoulder by (\\w{2,16}).*",
+            "(\\w{2,16}) was hugged too hard by (\\w{2,16}).*",
+            "(\\w{2,16}) drank a love potion from (\\w{2,16}).*",
+            "(\\w{2,16}) was hit by a love bomb from (\\w{2,16}).*",
+            "(\\w{2,16}) was no match for (\\w{2,16}).*",
+            "(\\w{2,16}) was smote from afar by (\\w{2,16}).*",
+            "(\\w{2,16}) was justly ended by (\\w{2,16}).*",
+            "(\\w{2,16}) was purified by (\\w{2,16}).*",
+            "(\\w{2,16}) was killed with holy water by (\\w{2,16}).*",
+            "(\\w{2,16}) was dealt vengeful justice by (\\w{2,16}).*",
+            "(\\w{2,16}) was returned to dust by (\\w{2,16}).*",
+            "(\\w{2,16}) be shot and killed by (\\w{2,16}).*",
+            "(\\w{2,16}) be snowballed to death by (\\w{2,16}).*",
+            "(\\w{2,16}) be sent to Davy Jones' locker by (\\w{2,16}).*",
+            "(\\w{2,16}) be killed with rum by (\\w{2,16}).*",
+            "(\\w{2,16}) be shot with cannon by (\\w{2,16}).*",
+            "(\\w{2,16}) be killed with magic by (\\w{2,16}).*",
+            "(\\w{2,16}) was glazed in BBQ sauce by (\\w{2,16}).*",
+            "(\\w{2,16}) was sprinked in chilli poweder by (\\w{2,16}).*",
+            "(\\w{2,16}) was sliced up by (\\w{2,16}).*",
+            "(\\w{2,16}) was overcooked by (\\w{2,16}).*",
+            "(\\w{2,16}) was deep fried by (\\w{2,16}).*",
+            "(\\w{2,16}) was boiled by (\\w{2,16}).*",
+            "(\\w{2,16}) was injected with malware by (\\w{2,16}).*",
+            "(\\w{2,16}) was DDoS'd by (\\w{2,16}).*",
+            "(\\w{2,16}) was deleted by (\\w{2,16}).*",
+            "(\\w{2,16}) was purged by an antivirus owned by (\\w{2,16}).*",
+            "(\\w{2,16}) was fragmented by (\\w{2,16}).*",
+            "(\\w{2,16}) was squeaked from a distance by (\\w{2,16}).*",
+            "(\\w{2,16}) was hit by frozen cheese from (\\w{2,16}).*",
+            "(\\w{2,16}) was chewed up by (\\w{2,16}).*",
+            "(\\w{2,16}) was chemically cheesed by (\\w{2,16}).*",
+            "(\\w{2,16}) was turned into cheese wiz by (\\w{2,16}).*",
+            "(\\w{2,16}) was magically squeaked by (\\w{2,16}).*",
+            "(\\w{2,16}) was corrupted by (\\w{2,16}).*"
     };
     private static final String[] SCOREBOARD_PREFIXES = {"[R]", "[G]", "[Y]", "[B]"};
     private static final String[] DEFAULT_PREFIXES = {"c", "a", "e", "9"}; // RED GREEN YELLOW BLUE
@@ -132,20 +130,13 @@ public class KillCounter {
             return false;
         }
 
-        if (UnformattedText.equals(PREP_PHASE)) {
-            MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.GAME_START));
-            return true;
-        }
-
-        if (areAllWithersAlive()) {
-            return false;
-        }
-
         /*
          * Kill message detection
          */
         for (Pattern kill_pattern : KILL_PATTERNS) {
+
             Matcher killMessageMatcher = kill_pattern.matcher(UnformattedText);
+
             if (killMessageMatcher.matches()) {
 
                 String killedPlayer = killMessageMatcher.group(1);
@@ -180,8 +171,11 @@ public class KillCounter {
                 return true;
 
             }
+
         }
+
         return false;
+
     }
 
     public static String getGameId() {

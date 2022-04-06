@@ -18,15 +18,19 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
 
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+
         boolean isPatcherLoaded = true;
-        status.setInjectionPoints(5);
+        int injectionPoints = 5;
+        status.setInjectionPoints(injectionPoints);
+
         try {
             isPatcherLoaded = this.getClass().getClassLoader().getResource(PATCHER_CLASS) != null;
             if (isPatcherLoaded) {
-                status.setInjectionPoints(4);
+                status.setInjectionPoints(injectionPoints - 1);
             }
         } catch (Exception ignored) {
         }
+
         for (MethodNode methodNode : classNode.methods) {
 
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "renderPlayerlist") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(ILauo;Lauk;)V" : "(ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V")) {
@@ -47,7 +51,12 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                     if (insnNode.getOpcode() == ILOAD && insnNode instanceof VarInsnNode && ((VarInsnNode) insnNode).var == 7) {
                         AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode.getOpcode() == ISTORE && nextNode instanceof VarInsnNode && ((VarInsnNode) nextNode).var == 12) {
-                            /*transformes line 109 to be : l = j + GuiPlayerTabOverlayHook.getFKScoreWidth();*/
+                            /*
+                             * Replaces line 109 :
+                             * l = j;
+                             * With :
+                             * l = j + GuiPlayerTabOverlayHook.getFKScoreWidth();
+                             */
                             InsnList list = new InsnList();
                             list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "getFKScoreWidth", "()I", false));
                             list.add(new InsnNode(IADD));
@@ -103,7 +112,9 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
             }
 
         }
+
         return classNode;
+
     }
 
 }

@@ -54,7 +54,7 @@ public class PrestigeVCache {
                 PlayerPrestigeData playerPrestigeData = new PlayerPrestigeData();
                 playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints(), mwclassstats.getCoins());
                 prestigeDataMap.put(uuid, playerPrestigeData);
-                NameUtil.updateGameProfileAndName(playername);
+                NameUtil.updateGameProfileAndName(playername, false);
             } catch (ApiException e) {
                 prestigeDataMap.put(uuid, new PlayerPrestigeData());
             }
@@ -74,7 +74,7 @@ public class PrestigeVCache {
                 playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
                 MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwClass.className);
                 playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints(), mwclassstats.getCoins());
-                NameUtil.updateGameProfileAndName(playername);
+                NameUtil.updateGameProfileAndName(playername, false);
             } catch (ApiException e) {
                 playerPrestigeData.addClass(mwClass, 0, 0);
             }

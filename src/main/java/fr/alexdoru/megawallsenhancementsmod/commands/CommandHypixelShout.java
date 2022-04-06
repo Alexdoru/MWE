@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
+import fr.alexdoru.nocheatersmod.commands.CommandReport;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -54,7 +55,29 @@ public class CommandHypixelShout extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        return FKCounterMod.isitPrepPhase ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null;
+
+        if (args.length >= 2 && isKeywordreport(2, args)) {
+            if (FKCounterMod.isitPrepPhase) {
+                return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+            } else {
+                return null;
+            }
+        }
+
+        if (args.length >= 3 && (isKeywordreport(3, args))) {
+            return getListOfStringsMatchingLastWord(args, CommandReport.cheatsArray);
+        }
+
+        if (FKCounterMod.isitPrepPhase) {
+            return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+        }
+
+        return null;
+
+    }
+
+    private boolean isKeywordreport(int i, String[] args) {
+        return args[args.length - i].equalsIgnoreCase("report") || args[args.length - i].equalsIgnoreCase("wdr") || args[args.length - i].equalsIgnoreCase("/report") || args[args.length - i].equalsIgnoreCase("/wdr");
     }
 
 }
