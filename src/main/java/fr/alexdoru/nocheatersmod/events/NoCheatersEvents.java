@@ -12,8 +12,6 @@ public class NoCheatersEvents {
     @SubscribeEvent
     public void onPlayerJoin(EntityJoinWorldEvent event) {
         if (event.entity instanceof EntityPlayer) {
-            // TODO tester l'impact sur les performances du try/catch block
-            //  Placing code inside a try-catch block inhibits certain optimizations that modern JVM implementations might otherwise perform.
             try {
                 if (event.entity instanceof EntityPlayerSP) {
                     /*Delaying the transformation for self because certain fields such as mc.theWorld.getScoreboard().getPlayersTeam(username) are null when you just joined the world*/
