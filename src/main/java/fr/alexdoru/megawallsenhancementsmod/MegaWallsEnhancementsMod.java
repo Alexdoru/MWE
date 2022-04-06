@@ -23,7 +23,7 @@ public class MegaWallsEnhancementsMod {
 
     public static final String modid = "mwenhancements";
     public static final String modName = "MegaWallsEnhancements";
-    public static final String version = "1.6";
+    public static final String version = "1.7";
     public static final KeyBinding toggleDroppedItemLimit = new KeyBinding("Toggle dropped item limit", 0, "MegaWallsEnhancements");
     public static File configurationFile;
 
