@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiScreenHook;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.ILeveling;
@@ -115,7 +116,7 @@ public class GeneralInfo extends LoginData {
             msg.appendSibling(new ChatComponentText(EnumChatFormatting.BLUE + "Discord ")
                     .setChatStyle(new ChatStyle()
                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to copy " + EnumChatFormatting.BLUE + this.DISCORD)))
-                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/copytoclipboard " + this.DISCORD))
+                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.COPY_TO_CLIPBOARD_COMMAND + this.DISCORD))
                     ));
 
         }

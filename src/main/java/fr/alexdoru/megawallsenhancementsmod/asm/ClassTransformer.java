@@ -25,6 +25,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new GuiIngameTransformer());
         registerTransformer(new GuiNewChatTransformer());
         registerTransformer(new GuiPlayerTabOverlayTransformer());
+        registerTransformer(new GuiScreenTransformer());
         registerTransformer(new LayerArrowTransformer());
         registerTransformer(new MinecraftTransformer());
         registerTransformer(new NetHandlerPlayClientTransformer());
