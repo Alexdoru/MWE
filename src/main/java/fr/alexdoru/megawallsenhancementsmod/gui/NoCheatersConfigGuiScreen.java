@@ -143,14 +143,12 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                     ConfigHandler.deleteCheaterChatMsg = true;
                     break;
                 }
-                if (ConfigHandler.deleteCheaterChatMsg && ConfigHandler.censorCheaterChatMsg) {
-                    ConfigHandler.deleteCheaterChatMsg = false;
-                    ConfigHandler.censorCheaterChatMsg = false;
-                    break;
-                }
                 if (!ConfigHandler.censorCheaterChatMsg && !ConfigHandler.deleteCheaterChatMsg) {
                     ConfigHandler.censorCheaterChatMsg = true;
+                    break;
                 }
+                ConfigHandler.deleteCheaterChatMsg = false;
+                ConfigHandler.censorCheaterChatMsg = false;
                 break;
             case 2:
                 ConfigHandler.toggleautoreport = !ConfigHandler.toggleautoreport;
