@@ -1,6 +1,10 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
+import net.minecraft.event.HoverEvent;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 
 import javax.annotation.Nonnull;
 import java.util.regex.Matcher;
@@ -58,6 +62,20 @@ public class StringUtil {
             s = matcher.group();
         }
         return s;
+    }
+
+    public static IChatComponent censorChatMessage(String message, String messageSender) {
+        String[] split = message.split(messageSender, 2);
+        if (split.length != 2) {
+            return new ChatComponentText(message);
+        }
+        String[] secondSplit = split[1].split(": ", 2);
+        if (secondSplit.length != 2) {
+            return new ChatComponentText(message);
+        }
+        return (new ChatComponentText(split[0] + messageSender + secondSplit[0] + ": "))
+                .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + "Censored")
+                        .setChatStyle(new ChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(secondSplit[1])))));
     }
 
     //private static final Pattern FORMATTING_CODE_END_OF_STRING_PATTERN = Pattern.compile('\u00a7' + "[0-9A-FK-OR]$");
