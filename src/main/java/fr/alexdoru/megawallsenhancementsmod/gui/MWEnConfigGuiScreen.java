@@ -268,14 +268,12 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                     ConfigHandler.witherHUDinSiderbar = true;
                     break;
                 }
-                if (ConfigHandler.witherHUDinSiderbar && ConfigHandler.show_lastWitherHUD) {
-                    ConfigHandler.witherHUDinSiderbar = false;
-                    ConfigHandler.show_lastWitherHUD = false;
-                    break;
-                }
                 if (!ConfigHandler.show_lastWitherHUD && !ConfigHandler.witherHUDinSiderbar) {
                     ConfigHandler.show_lastWitherHUD = true;
+                    break;
                 }
+                ConfigHandler.witherHUDinSiderbar = false;
+                ConfigHandler.show_lastWitherHUD = false;
                 break;
             case 19:
                 ConfigHandler.useColoredScores = !ConfigHandler.useColoredScores;
