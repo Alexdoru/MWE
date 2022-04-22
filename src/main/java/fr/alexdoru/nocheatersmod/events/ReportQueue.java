@@ -60,7 +60,7 @@ public class ReportQueue {
         } else if (printDelayMsg) {
             ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Sending report in a moment..."));
         }
-        queueList.add(new ReportInQueue(null, playername));
+        queueList.add(0, new ReportInQueue(null, playername));
     }
 
     /**
