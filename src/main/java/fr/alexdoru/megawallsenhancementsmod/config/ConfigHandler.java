@@ -45,7 +45,7 @@ public class ConfigHandler {
     public static double healthThreshold;
     public static boolean keepNightVisionEffect;
     public static boolean useColoredScores;
-    public static boolean swordDropProtection;
+    public static boolean safeInventory;
     public static boolean limitDroppedEntityRendered;
     public static int maxDroppedEntityRendered;
     public static boolean prestigeV;
@@ -135,7 +135,7 @@ public class ConfigHandler {
         final Property pHealthThreshold = config.get(CATEGORY_MWENh, "Health Threshold", 0.5d, "The health threshold at witch it will play a sound, value ranges from 0 to 1");
         final Property pCancelNightVisionEffect = config.get(CATEGORY_MWENh, "Cancel Night Vision Effect", false, "Removes the visual effets of night vision");
         final Property puseColoredScores = config.get(CATEGORY_MWENh, "Colored Tablist Scores", true, "Makes the scores in the tablist use a greend to red color gradient depending of the value");
-        final Property pswordDropProtection = config.get(CATEGORY_MWENh, "Sword drop protection", true, "When enabled you can't drop the sword you are holding in your hotbar");
+        final Property psafeInventory = config.get(CATEGORY_MWENh, "Safe Inventory", true, "Prevents sword dropping and hotkeying kit items");
         final Property plimitDroppedEntityRendered = config.get(CATEGORY_MWENh, "Limit dropped item rendered", true, "Limit dropped item rendered");
         final Property pmaxDroppedEntityRendered = config.get(CATEGORY_MWENh, "Max amount of item rendered", 120, "Max amount of item rendered");
         final Property pprestigeV = config.get(CATEGORY_MWENh, "Prestige V colored Tag", false, "Prestige V colored Tag");
@@ -206,7 +206,7 @@ public class ConfigHandler {
         pOrderMWWENh.add(pHealthThreshold.getName());
         pOrderMWWENh.add(pCancelNightVisionEffect.getName());
         pOrderMWWENh.add(puseColoredScores.getName());
-        pOrderMWWENh.add(pswordDropProtection.getName());
+        pOrderMWWENh.add(psafeInventory.getName());
         pOrderMWWENh.add(plimitDroppedEntityRendered.getName());
         pOrderMWWENh.add(pmaxDroppedEntityRendered.getName());
         pOrderMWWENh.add(pprestigeV.getName());
@@ -282,7 +282,7 @@ public class ConfigHandler {
             healthThreshold = pHealthThreshold.getDouble();
             keepNightVisionEffect = !pCancelNightVisionEffect.getBoolean();
             useColoredScores = puseColoredScores.getBoolean();
-            swordDropProtection = pswordDropProtection.getBoolean();
+            safeInventory = psafeInventory.getBoolean();
             limitDroppedEntityRendered = plimitDroppedEntityRendered.getBoolean();
             maxDroppedEntityRendered = pmaxDroppedEntityRendered.getInt();
             prestigeV = !HypixelApiKeyUtil.apiKeyIsNotSetup() && pprestigeV.getBoolean();
@@ -350,7 +350,7 @@ public class ConfigHandler {
             pHealthThreshold.set(healthThreshold);
             pCancelNightVisionEffect.set(!keepNightVisionEffect);
             puseColoredScores.set(useColoredScores);
-            pswordDropProtection.set(swordDropProtection);
+            psafeInventory.set(safeInventory);
             plimitDroppedEntityRendered.set(limitDroppedEntityRendered);
             pmaxDroppedEntityRendered.set(maxDroppedEntityRendered);
             pprestigeV.set(prestigeV);

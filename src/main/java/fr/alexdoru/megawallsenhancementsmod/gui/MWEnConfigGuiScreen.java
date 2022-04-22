@@ -81,7 +81,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
     private String getButtonDisplayString(int id) {
         switch (id) {
             case 21:
-                return "Sword drop protection : " + getSuffix(ConfigHandler.swordDropProtection);
+                return "Safe inventory : " + getSuffix(ConfigHandler.safeInventory);
             case 16:
                 return "Strength particule HBR DRE : " + getSuffix(ConfigHandler.strengthParticules);
             case 15:
@@ -130,7 +130,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         List<String> textLines = new ArrayList<>();
         switch (id) {
             case 21:
-                textLines.add(EnumChatFormatting.GREEN + "When enabled you can't drop the sword you are holding in your hotbar");
+                textLines.add(EnumChatFormatting.GREEN + "Prevents dropping the sword you are holding in your hotbar");
+                textLines.add(EnumChatFormatting.GREEN + "Prevents hotkeying important kit items out of your inventory");
+                textLines.add(EnumChatFormatting.GRAY + "The later only works in Mega Walls");
                 break;
             case 16:
                 textLines.add(EnumChatFormatting.GREEN + "Spawns angry villager particles when the player gets a final kill");
@@ -220,7 +222,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
     protected void actionPerformed(GuiButton button) throws IOException {
         switch (button.id) {
             case 21:
-                ConfigHandler.swordDropProtection = !ConfigHandler.swordDropProtection;
+                ConfigHandler.safeInventory = !ConfigHandler.safeInventory;
                 break;
             case 16:
                 ConfigHandler.strengthParticules = !ConfigHandler.strengthParticules;

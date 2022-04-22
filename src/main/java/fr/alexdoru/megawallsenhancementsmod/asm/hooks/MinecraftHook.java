@@ -14,14 +14,14 @@ public class MinecraftHook {
     private static long lastSlotChangeFromSwordSlot;
 
     public static void dropOneItem(EntityPlayerSP thePlayer) {
-        if (ConfigHandler.swordDropProtection && (System.currentTimeMillis() < lastSlotChangeFromSwordSlot + 100 || checkIfHoldingSword(thePlayer))) {
+        if (ConfigHandler.safeInventory && (System.currentTimeMillis() < lastSlotChangeFromSwordSlot + 100 || checkIfHoldingSword(thePlayer))) {
             return;
         }
         thePlayer.dropOneItem(GuiScreen.isCtrlKeyDown());
     }
 
     public static void updateCurrentSlot(Minecraft mc) {
-        if (ConfigHandler.swordDropProtection && checkIfHoldingSword(mc.thePlayer)) {
+        if (ConfigHandler.safeInventory && checkIfHoldingSword(mc.thePlayer)) {
             lastSlotChangeFromSwordSlot = System.currentTimeMillis();
         }
     }
