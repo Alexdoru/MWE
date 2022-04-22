@@ -90,12 +90,15 @@ public class KillCounter {
     private static final String[] SCOREBOARD_PREFIXES = {"[R]", "[G]", "[Y]", "[B]"};
     private static final String[] DEFAULT_PREFIXES = {"c", "a", "e", "9"}; // RED GREEN YELLOW BLUE
     private static final HashMap<String, Integer> allPlayerKills = new HashMap<>();
+    private static final ArrayList<String> deadPlayers = new ArrayList<>();
+    /**
+     * Used to check if a player is in the game for the reporting suggestions
+     */
+    private static final Set<String> playersPresentInGame = new HashSet<>();
     private static Pattern[] KILL_PATTERNS;
     private static String gameId;
     private static String[] prefixes; // color codes prefix that you are using in your hypixel mega walls settings
     private static HashMap<String, Integer>[] teamKillsArray;
-    private static ArrayList<String> deadPlayers;
-
     private static Random rand;
 
     public KillCounter() {
@@ -112,11 +115,12 @@ public class KillCounter {
      */
     @SuppressWarnings("unchecked")
     public static void ResetKillCounterTo(String gameIdIn) {
+        playersPresentInGame.clear();
         gameId = gameIdIn;
         prefixes = new String[TEAMS];
         teamKillsArray = new HashMap[TEAMS];
         allPlayerKills.clear();
-        deadPlayers = new ArrayList<>();
+        deadPlayers.clear();
         for (int i = 0; i < TEAMS; i++) {
             prefixes[i] = DEFAULT_PREFIXES[i];
             teamKillsArray[i] = new HashMap<>();
@@ -148,6 +152,8 @@ public class KillCounter {
                     String killerTeam = split[6].substring(0, 1);
                     if (removeKilledPlayer(killedPlayer, killedTeam)) {
                         addKill(killer, killerTeam);
+                        playersPresentInGame.add(killedPlayer.toLowerCase());
+                        playersPresentInGame.add(killer.toLowerCase());
                     }
                     FKCounterGui.instance.updateDisplayText();
                 }
@@ -316,6 +322,13 @@ public class KillCounter {
             default:
                 return "?";
         }
+    }
+
+    /**
+     * Used by the report suggestion system
+     */
+    public static boolean wasPlayerInThisGame(String playername) {
+        return playersPresentInGame.contains(playername.toLowerCase());
     }
 
     private static boolean isNotValidTeam(int team) {

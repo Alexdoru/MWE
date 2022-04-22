@@ -1,6 +1,7 @@
 package fr.alexdoru.nocheatersmod.util;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
@@ -312,7 +313,7 @@ public class ReportSuggestionHandler {
     }
 
     private static boolean isAValidName(String playername) {
-        return NetHandlerPlayClientHook.playerInfoMap.get(playername) != null || isPlayerMyself(playername);
+        return NetHandlerPlayClientHook.playerInfoMap.get(playername) != null || isPlayerMyself(playername) || KillCounter.wasPlayerInThisGame(playername);
     }
 
     private static boolean isPlayerMyself(@Nullable String name) {
