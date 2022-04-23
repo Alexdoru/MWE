@@ -19,6 +19,7 @@ public class ClassTransformer implements IClassTransformer {
      */
     public ClassTransformer() {
         registerTransformer(new EntityArrowTransformer());
+        registerTransformer(new EntityFXTransformer());
         registerTransformer(new EntityPlayerTransformer());
         registerTransformer(new EntityRendererTransformer());
         registerTransformer(new GameProfileTransformer());
