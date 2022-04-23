@@ -53,6 +53,36 @@ public class GuiNewChatTransformer implements IMyClassTransformer {
             mv.visitEnd();
         }
 
+        {
+            /*
+             * Adds method :
+             *
+             * public void deleteAllWarningMessages() {
+             *     GuiNewChatHook.deleteAllWarningMessages(this, this.drawnChatLines, this.chatLines);
+             * }
+             *
+             */
+            MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "deleteAllWarningMessages", "()V", null, null);
+            mv.visitCode();
+            Label l0 = new Label();
+            mv.visitLabel(l0);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, ASMLoadingPlugin.isObf ? "avt" : "net/minecraft/client/gui/GuiNewChat", ASMLoadingPlugin.isObf ? "i" : "drawnChatLines", "Ljava/util/List;");
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, ASMLoadingPlugin.isObf ? "avt" : "net/minecraft/client/gui/GuiNewChat", ASMLoadingPlugin.isObf ? "h" : "chatLines", "Ljava/util/List;");
+            mv.visitMethodInsn(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiNewChatHook", "deleteAllWarningMessages", ASMLoadingPlugin.isObf ? "(Lavt;Ljava/util/List;Ljava/util/List;)V" : "(Lnet/minecraft/client/gui/GuiNewChat;Ljava/util/List;Ljava/util/List;)V", false);
+            Label l1 = new Label();
+            mv.visitLabel(l1);
+            mv.visitInsn(RETURN);
+            Label l2 = new Label();
+            mv.visitLabel(l2);
+            mv.visitLocalVariable("this", ASMLoadingPlugin.isObf ? "Lavt;" : "Lnet/minecraft/client/gui/GuiNewChat;", null, l0, l2, 0);
+            mv.visitMaxs(4, 1);
+            mv.visitEnd();
+        }
+
         return classNode;
 
     }

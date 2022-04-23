@@ -28,6 +28,7 @@ public class NoCheatersMessages {
      * Called when you type /nocheaters
      */
     public static void printReportMessagesForWorld(boolean callFromCommand) {
+        ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).deleteAllWarningMessages();
         boolean foundReport = false;
         long datenow = (new Date()).getTime();
         for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
@@ -92,7 +93,7 @@ public class NoCheatersMessages {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Cheats :")).appendSibling(allCheats);
         }
 
-        printWarningMessageAndDeletePrevious(imsg, playername);
+        ChatUtil.addChatMessage(imsg);
 
     }
 
@@ -208,11 +209,6 @@ public class NoCheatersMessages {
 
         }
 
-    }
-
-    private static void printWarningMessageAndDeletePrevious(IChatComponent imsg, String playername) {
-        ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).deleteWarningMessagesFor(playername);
-        ChatUtil.addChatMessage(imsg);
     }
 
 }
