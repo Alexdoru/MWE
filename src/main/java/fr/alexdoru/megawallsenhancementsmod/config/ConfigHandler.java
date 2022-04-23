@@ -76,6 +76,7 @@ public class ConfigHandler {
     public static long timeDeleteReport;
     public static boolean censorCheaterChatMsg;
     public static boolean deleteCheaterChatMsg;
+    public static boolean safeReportingMode;
 
     /**
      * Hitbox Config
@@ -164,6 +165,7 @@ public class ConfigHandler {
         final Property ptimeDeleteReport = config.get(CATEGORY_NOCHEATERS, "Time delete reports", 365, "Reports older than this will be deleted on game start (days)");
         final Property pcensorCheaterChatMsg = config.get(CATEGORY_NOCHEATERS, "Censor Cheater Chat", false, "Censors chat messages sent by reported cheaters");
         final Property pdeleteCheaterChatMsg = config.get(CATEGORY_NOCHEATERS, "Delete Cheater Chat", false, "Deletes chat messages sent by reported cheaters");
+        final Property psafeReportingMode = config.get(CATEGORY_NOCHEATERS, "Safe reporting", false, "Registers your wdr commands and sends them over time to prevent spam");
 
         final Property pisDebugHitboxOn = config.get(CATEGORY_HITBOX, "Toggle hitbox", false, "Toggle hitbox");
         final Property pdrawHitboxForPlayers = config.get(CATEGORY_HITBOX, "Hitbox for players", true, "Hitbox for players");
@@ -239,6 +241,7 @@ public class ConfigHandler {
         pOrderNOCHEATERS.add(ptimeDeleteReport.getName());
         pOrderNOCHEATERS.add(pcensorCheaterChatMsg.getName());
         pOrderNOCHEATERS.add(pdeleteCheaterChatMsg.getName());
+        pOrderNOCHEATERS.add(psafeReportingMode.getName());
         config.setCategoryPropertyOrder(CATEGORY_NOCHEATERS, pOrderNOCHEATERS);
 
         List<String> pOrderHitbox = new ArrayList<>();
@@ -307,6 +310,7 @@ public class ConfigHandler {
             timeDeleteReport = 24L * 3600L * 1000L * ((long) ptimeDeleteReport.getInt());
             censorCheaterChatMsg = pcensorCheaterChatMsg.getBoolean();
             deleteCheaterChatMsg = pdeleteCheaterChatMsg.getBoolean();
+            safeReportingMode = psafeReportingMode.getBoolean();
 
             isDebugHitboxOn = pisDebugHitboxOn.getBoolean();
             drawHitboxForPlayers = pdrawHitboxForPlayers.getBoolean();
@@ -386,6 +390,7 @@ public class ConfigHandler {
             ptimeDeleteReport.set((int) (timeDeleteReport / (24L * 3600L * 1000L)));
             pcensorCheaterChatMsg.set(censorCheaterChatMsg);
             pdeleteCheaterChatMsg.set(deleteCheaterChatMsg);
+            psafeReportingMode.set(safeReportingMode);
 
             pisDebugHitboxOn.set(isDebugHitboxOn);
             pdrawHitboxForPlayers.set(drawHitboxForPlayers);

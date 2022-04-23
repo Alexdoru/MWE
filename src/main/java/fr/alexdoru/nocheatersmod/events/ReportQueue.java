@@ -1,9 +1,11 @@
 package fr.alexdoru.nocheatersmod.events;
 
+import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
@@ -54,13 +56,15 @@ public class ReportQueue {
     }
 
     public void addPlayerToQueue(String playername, boolean printDelayMsg) {
-        if (isReportQueueInactive()) {
-            MinecraftForge.EVENT_BUS.register(this);
-            counter = 0;
-        } else if (printDelayMsg) {
-            ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Sending report in a moment..."));
+        if (canReportPlayerThisGame(playername)) {
+            if (isReportQueueInactive()) {
+                MinecraftForge.EVENT_BUS.register(this);
+                counter = 0;
+            } else if (printDelayMsg) {
+                ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Sending report in a moment..."));
+            }
+            queueList.add(0, new ReportInQueue(null, playername));
         }
-        queueList.add(0, new ReportInQueue(null, playername));
     }
 
     /**
@@ -95,9 +99,7 @@ public class ReportQueue {
     public boolean sendAutoReport(long datenow, String playerName, WDR wdr) {
         if (wdr.canBeAutoreported(datenow) && wdr.hasValidCheats()) {
             wdr.timestamp = datenow;
-            if (canReportPlayerThisGame(playerName)) {
-                addPlayerToQueue(playerName, false);
-            }
+            addPlayerToQueue(playerName, false);
             return true;
         }
         return false;
@@ -157,8 +159,9 @@ public class ReportQueue {
     public void addReportTimestamp(boolean manualReport) {
         long l = System.currentTimeMillis();
         timestampsLastReports.removeIf(o -> (o + 2 * 60 * 1000L < l));
-        if (manualReport && timestampsLastReports.size() > 4) {
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Don't report too many players at once or Hypixel will ignore your reports thinking you are a bot trying to flood their system"));
+        if (manualReport && timestampsLastReports.size() > 3) {
+            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Don't report too many players at once or Hypixel will ignore your reports thinking you are a bot trying to flood their system."
+                    + (FKCounterMod.isInMwGame ? EnumChatFormatting.GOLD + " You can turn on NoCheaters' safe reporting mode to prevent this." : "")));
         }
         timestampsLastReports.add(l);
     }
