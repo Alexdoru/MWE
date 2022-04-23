@@ -183,7 +183,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.GREEN + "Click your sword or bow to activate your skill!");
                 break;
             case 26:
-                textLines.add(EnumChatFormatting.GREEN + "Stops rendering particles that are too close (50cm)");
+                textLines.add(EnumChatFormatting.GREEN + "Stops rendering particles that are too close (75cm)");
                 textLines.add(EnumChatFormatting.GREEN + "to the camera for a better visibility");
                 break;
             case 9:
