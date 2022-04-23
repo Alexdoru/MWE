@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 public class EntityFXHook {
 
     public static boolean shouldHideParticle(EntityFX entityFXIn, Entity entityIn) {
-        return ConfigHandler.clearVision && entityFXIn.getDistanceSq(entityIn.posX, entityIn.posY + entityIn.getEyeHeight(), entityIn.posZ) < 0.25d;
+        return ConfigHandler.clearVision && entityFXIn.getDistanceSq(entityIn.posX, entityIn.posY + entityIn.getEyeHeight(), entityIn.posZ) < 0.5625d;
     }
 
 }
