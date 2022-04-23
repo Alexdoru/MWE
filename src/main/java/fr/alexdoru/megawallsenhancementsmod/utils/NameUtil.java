@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GuiNewChatAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
@@ -133,6 +134,7 @@ public class NameUtil {
             boolean gotautoreported = ReportQueue.INSTANCE.sendAutoReport(datenow, playerName, mwPlayerData.wdr);
             if (ConfigHandler.togglewarnings || mwPlayerData.wdr.shouldPrintBigText(datenow)) {
                 String uuid = player.getUniqueID().toString().replace("-", "");
+                ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).deleteWarningMessagesFor(playerName);
                 NoCheatersMessages.printWarningMessage(
                         datenow,
                         uuid,
