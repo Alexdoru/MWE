@@ -50,6 +50,7 @@ public class ConfigHandler {
     public static int maxDroppedEntityRendered;
     public static boolean prestigeV;
     public static boolean hideRepetitiveMWChatMsg;
+    public static boolean clearVision;
 
     /**
      * GUI config
@@ -141,6 +142,7 @@ public class ConfigHandler {
         final Property pmaxDroppedEntityRendered = config.get(CATEGORY_MWENh, "Max amount of item rendered", 120, "Max amount of item rendered");
         final Property pprestigeV = config.get(CATEGORY_MWENh, "Prestige V colored Tag", false, "Prestige V colored Tag");
         final Property phideRepetitiveMWChatMsg = config.get(CATEGORY_MWENh, "Delete repetitive chat messages in mw", true, "Delete repetitive chat messages in mw");
+        final Property pclearVision = config.get(CATEGORY_MWENh, "Clear Vision", true, "Hides particles too close to the camera");
 
         final Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
         final Property pXpos_killcooldownHUD = config.get(CATEGORY_GUI, "Xpos kill cooldown HUD", 0d, "The x position of the killcooldown HUD, value ranges from 0 to 1");
@@ -213,6 +215,7 @@ public class ConfigHandler {
         pOrderMWWENh.add(pmaxDroppedEntityRendered.getName());
         pOrderMWWENh.add(pprestigeV.getName());
         pOrderMWWENh.add(phideRepetitiveMWChatMsg.getName());
+        pOrderMWWENh.add(pclearVision.getName());
         config.setCategoryPropertyOrder(CATEGORY_MWENh, pOrderMWWENh);
 
         List<String> pOrderGUI = new ArrayList<>();
@@ -290,6 +293,7 @@ public class ConfigHandler {
             maxDroppedEntityRendered = pmaxDroppedEntityRendered.getInt();
             prestigeV = !HypixelApiKeyUtil.apiKeyIsNotSetup() && pprestigeV.getBoolean();
             hideRepetitiveMWChatMsg = phideRepetitiveMWChatMsg.getBoolean();
+            clearVision = pclearVision.getBoolean();
 
             show_killcooldownHUD = pShow_killcooldownHUD.getBoolean();
             killcooldownHUDPosition.setRelative(pXpos_killcooldownHUD.getDouble(), pYpos_killcooldownHUD.getDouble());
@@ -359,6 +363,7 @@ public class ConfigHandler {
             pmaxDroppedEntityRendered.set(maxDroppedEntityRendered);
             pprestigeV.set(prestigeV);
             phideRepetitiveMWChatMsg.set(hideRepetitiveMWChatMsg);
+            pclearVision.set(clearVision);
 
             pShow_killcooldownHUD.set(show_killcooldownHUD);
             double[] killcooldownHUDarray = killcooldownHUDPosition.getRelativePosition();
