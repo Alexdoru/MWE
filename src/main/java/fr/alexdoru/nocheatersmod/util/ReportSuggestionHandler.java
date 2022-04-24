@@ -8,7 +8,6 @@ import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import fr.alexdoru.nocheatersmod.commands.CommandReport;
 import fr.alexdoru.nocheatersmod.commands.CommandWDR;
@@ -111,7 +110,7 @@ public class ReportSuggestionHandler {
 
                 isSenderInTablist = true;
                 final UUID id = networkPlayerInfo.getGameProfile().getId();
-                isSenderNicked = !NameUtil.isRealPlayer(id);
+                isSenderNicked = false;
                 senderUUID = id.toString().replace("-", "");
                 isSenderFlaging = CommandScanGame.doesPlayerFlag(senderUUID);
                 WDR wdr = WdredPlayers.getWdredMap().get(senderUUID);
