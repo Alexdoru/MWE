@@ -152,8 +152,8 @@ public class KillCounter {
                     String killerTeam = split[6].substring(0, 1);
                     if (removeKilledPlayer(killedPlayer, killedTeam)) {
                         addKill(killer, killerTeam);
-                        playersPresentInGame.add(killedPlayer.toLowerCase());
-                        playersPresentInGame.add(killer.toLowerCase());
+                        playersPresentInGame.add(killedPlayer);
+                        playersPresentInGame.add(killer);
                     }
                     FKCounterGui.instance.updateDisplayText();
                 }
@@ -328,7 +328,15 @@ public class KillCounter {
      * Used by the report suggestion system
      */
     public static boolean wasPlayerInThisGame(String playername) {
-        return playersPresentInGame.contains(playername.toLowerCase());
+        for (String name : playersPresentInGame) {
+            if (name.equalsIgnoreCase(playername))
+                return true;
+        }
+        return false;
+    }
+
+    public static List<String> getPlayersInThisGame() {
+        return new ArrayList<>(playersPresentInGame);
     }
 
     private static boolean isNotValidTeam(int team) {
