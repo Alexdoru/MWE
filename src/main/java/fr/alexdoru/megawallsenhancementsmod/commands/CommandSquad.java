@@ -107,8 +107,7 @@ public class CommandSquad extends CommandBase {
             }
 
             SquadEvent.addMyself(args[1]);
-            addChatMessage(new ChatComponentText(getTagMW() +
-                    EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[1] + EnumChatFormatting.GREEN + " to the squad."));
+            addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[1] + EnumChatFormatting.GREEN + " to the squad."));
 
         } else if (args[0].equalsIgnoreCase("disband")) {
 
@@ -120,20 +119,17 @@ public class CommandSquad extends CommandBase {
             HashMap<String, String> squad = SquadEvent.getSquad();
 
             if (squad.isEmpty()) {
-                addChatMessage(new ChatComponentText(getTagMW() +
-                        EnumChatFormatting.RED + "No one in the squad right now."));
+                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + "No one in the squad right now."));
                 return;
             }
 
             IChatComponent imsg = new ChatComponentText(getTagMW() + EnumChatFormatting.GREEN + "Players in your squad : \n");
 
             for (Entry<String, String> entry : squad.entrySet()) {
-
                 String displayname = entry.getKey();
                 String fakename = entry.getValue();
                 imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + "- " + EnumChatFormatting.GOLD + displayname
                         + (displayname.equals(fakename) ? "" : EnumChatFormatting.GREEN + " renamed as : " + EnumChatFormatting.GOLD + entry.getValue()) + "\n"));
-
             }
 
             addChatMessage(imsg);
@@ -146,16 +142,13 @@ public class CommandSquad extends CommandBase {
             }
 
             for (int i = 1; i < args.length; i++) {
-
                 if (SquadEvent.removePlayer(args[i])) {
-
                     addChatMessage(new ChatComponentText(getTagMW() +
                             EnumChatFormatting.GREEN + "Removed " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " from the squad."));
                 } else {
                     addChatMessage(new ChatComponentText(getTagMW() +
                             EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.RED + " isn't in the squad."));
                 }
-
             }
 
         }
