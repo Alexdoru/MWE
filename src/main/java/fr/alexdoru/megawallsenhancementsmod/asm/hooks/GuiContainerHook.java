@@ -86,15 +86,15 @@ public class GuiContainerHook {
                     final int metadata = itemStack.getMetadata();
                     final boolean isSplash = ItemPotion.isSplash(metadata);
                     final List<PotionEffect> potionEffects = ((ItemPotion) item).getEffects(metadata);
-                    /*Speed potions*/
+                    /*Kit Speed potions*/
                     if (potionEffects.size() == 1 && potionEffects.get(0).getPotionID() == Potion.moveSpeed.id) {
                         return false;
                     }
+                    /*Squid Pots*/
+                    if (potionEffects.size() == 1 && potionEffects.get(0).getPotionID() == Potion.absorption.id) {
+                        return false;
+                    }
                     for (PotionEffect effect : potionEffects) {
-                        /*Squid Pots*/
-                        if (effect.getPotionID() == Potion.absorption.id && !isSplash) {
-                            return false;
-                        }
                         /*Phoenix & Renegade Pots*/
                         if (effect.getPotionID() == Potion.regeneration.id && isSplash) {
                             return false;
