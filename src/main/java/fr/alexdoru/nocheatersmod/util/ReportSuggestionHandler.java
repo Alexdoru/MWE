@@ -319,7 +319,7 @@ public class ReportSuggestionHandler {
     }
 
     private static boolean isPlayerMyself(@Nullable String name) {
-        return mc.thePlayer != null && mc.thePlayer.getName().equals(name);
+        return mc.thePlayer != null && mc.thePlayer.getName().equalsIgnoreCase(name);
     }
 
     public static void clearReportSuggestionHistory() {
