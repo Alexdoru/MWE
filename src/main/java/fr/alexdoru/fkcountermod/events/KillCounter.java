@@ -268,7 +268,7 @@ public class KillCounter {
      */
     private static boolean removeKilledPlayer(String player, String color) {
         int team = getTeamFromColor(color);
-        if (isNotValidTeam(team) || deadPlayers.contains(player)) {
+        if (isNotValidTeam(team)) {
             return false;
         }
         if (isWitherDead(color)) {
