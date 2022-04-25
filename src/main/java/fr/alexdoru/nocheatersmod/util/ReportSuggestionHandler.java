@@ -110,7 +110,6 @@ public class ReportSuggestionHandler {
 
                 isSenderInTablist = true;
                 final UUID id = networkPlayerInfo.getGameProfile().getId();
-                isSenderNicked = false;
                 senderUUID = id.toString().replace("-", "");
                 isSenderFlaging = CommandScanGame.doesPlayerFlag(senderUUID);
                 WDR wdr = WdredPlayers.getWdredMap().get(senderUUID);
@@ -195,7 +194,7 @@ public class ReportSuggestionHandler {
                 new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment... ").appendSibling(ChatUtil.getCancelButton(reportedPlayer))), 0);
                 return true;
             } else {
-                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You already reported that player during this game")), 0);
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You already reported this player during this game")), 0);
             }
             return false;
         } else {
