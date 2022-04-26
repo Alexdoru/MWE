@@ -39,6 +39,7 @@ public class ConfigHandler {
      * MWEnhancements config
      */
     public static String APIKey;
+    public static String hypixelNick;
     public static boolean strengthParticules;
     public static boolean shortencoinmessage;
     public static boolean playSoundLowHP;
@@ -131,6 +132,7 @@ public class ConfigHandler {
         final Property pfinalsInTablist = config.get(CATEGORY_FKCounter, "Fks in tablist", true, "Draws the finals in the tablist");
 
         final Property pAPIKey = config.get(CATEGORY_MWENh, "APIKey", "", "Your Hypixel API Key");
+        final Property phypixelNick = config.get(CATEGORY_MWENh, "Hypixel Nick", "", "Your nick on Hypixel");
         final Property pstrengthParticules = config.get(CATEGORY_MWENh, "Strength particules", true, "Spawns strength particules when an herobrine or dreadlord get a final");
         final Property pShortencoinmessage = config.get(CATEGORY_MWENh, "Shorten coin message", false, "Shorten the coins messages by removing the network booster info");
         final Property pPlaySoundLowHP = config.get(CATEGORY_MWENh, "Sound low HP", false, "Plays a sound when your health falls below a certain threshold");
@@ -204,6 +206,7 @@ public class ConfigHandler {
 
         List<String> pOrderMWWENh = new ArrayList<>();
         pOrderMWWENh.add(pAPIKey.getName());
+        pOrderMWWENh.add(phypixelNick.getName());
         pOrderMWWENh.add(pstrengthParticules.getName());
         pOrderMWWENh.add(pShortencoinmessage.getName());
         pOrderMWWENh.add(pPlaySoundLowHP.getName());
@@ -282,6 +285,7 @@ public class ConfigHandler {
             finalsInTablist = pfinalsInTablist.getBoolean();
 
             APIKey = pAPIKey.getString();
+            hypixelNick = phypixelNick.getString();
             strengthParticules = pstrengthParticules.getBoolean();
             shortencoinmessage = pShortencoinmessage.getBoolean();
             playSoundLowHP = pPlaySoundLowHP.getBoolean();
@@ -352,6 +356,7 @@ public class ConfigHandler {
             pfinalsInTablist.set(finalsInTablist);
 
             pAPIKey.set(APIKey);
+            phypixelNick.set(hypixelNick);
             pstrengthParticules.set(strengthParticules);
             pShortencoinmessage.set(shortencoinmessage);
             pPlaySoundLowHP.set(playSoundLowHP);

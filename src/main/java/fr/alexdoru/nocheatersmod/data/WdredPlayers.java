@@ -111,7 +111,7 @@ public class WdredPlayers {
     private static ArrayList<String> transformOldReports(String[] split) {
         ArrayList<String> hacks = new ArrayList<>();
         List<String> splitList = Arrays.asList(split);
-        if (splitList.contains(WDR.IGNORED)) {
+        if (splitList.contains(WDR.IGNORED) && !splitList.contains(WDR.NICK)) {
             hacks.add(WDR.IGNORED);
         }
         return hacks;
