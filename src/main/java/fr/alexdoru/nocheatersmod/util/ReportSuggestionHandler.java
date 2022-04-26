@@ -1,13 +1,13 @@
 package fr.alexdoru.nocheatersmod.util;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import fr.alexdoru.nocheatersmod.commands.CommandReport;
 import fr.alexdoru.nocheatersmod.commands.CommandWDR;
@@ -103,27 +103,19 @@ public class ReportSuggestionHandler {
 
             isSenderInTablist = true;
 
-        } else {
+        } else if (messageSender != null) {
 
             NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(messageSender);
             if (networkPlayerInfo != null) {
-
                 isSenderInTablist = true;
                 final UUID id = networkPlayerInfo.getGameProfile().getId();
-                isSenderNicked = !NameUtil.isRealPlayer(id);
                 senderUUID = id.toString().replace("-", "");
                 isSenderFlaging = CommandScanGame.doesPlayerFlag(senderUUID);
-                WDR wdr = WdredPlayers.getWdredMap().get(senderUUID);
+                WDR wdr = WdredPlayers.getPlayer(senderUUID, messageSender);
                 if (wdr != null) {
                     isSenderIgnored = wdr.isIgnored();
                     isSenderCheating = wdr.hasValidCheats();
-                } else if (messageSender != null) {
-                    wdr = WdredPlayers.getWdredMap().get(messageSender);
-                    if (wdr != null) {
-                        isSenderCheating = wdr.hasValidCheats();
-                    }
                 }
-
             }
 
         }
@@ -143,11 +135,14 @@ public class ReportSuggestionHandler {
             return false;
         }
 
+        if (isSenderMyself) {
+            String[] args = new String[]{reportedPlayer, cheat};
+            CommandWDR.handleWDRCommand(args, true);
+        }
+
         if (FKCounterMod.isitPrepPhase) {
             if (isSenderMyself) {
                 new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " Cannot share a report before the walls fall!")), 0);
-                String[] args = new String[]{reportedPlayer, cheat};
-                CommandWDR.handleWDRCommand(args, true);
                 return true;
             }
             return false;
@@ -156,8 +151,6 @@ public class ReportSuggestionHandler {
         if (isSenderFlaging) {
             if (isSenderMyself) {
                 new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You cannot share a report since you flag in /scangame!")), 0);
-                String[] args = new String[]{reportedPlayer, cheat};
-                CommandWDR.handleWDRCommand(args, true);
                 return true;
             }
             return false;
@@ -166,8 +159,6 @@ public class ReportSuggestionHandler {
         if (isSenderNicked) {
             if (isSenderMyself) {
                 new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You cannot share a report when you are nicked!")), 0);
-                String[] args = new String[]{reportedPlayer, cheat};
-                CommandWDR.handleWDRCommand(args, true);
                 return true;
             }
             return false;
@@ -176,8 +167,6 @@ public class ReportSuggestionHandler {
         if (!isSenderRankValid) {
             if (isSenderMyself) {
                 new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You need to be at least " + EnumChatFormatting.GREEN + "VIP" + EnumChatFormatting.GOLD + "+" + EnumChatFormatting.GRAY + " to share a report with others")), 0);
-                String[] args = new String[]{reportedPlayer, cheat};
-                CommandWDR.handleWDRCommand(args, true);
                 return true;
             }
             return false;
@@ -186,21 +175,19 @@ public class ReportSuggestionHandler {
         if (canReportSuggestionPlayer(reportedPlayer)) {
             if (isSenderMyself) {
                 new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You report will be shared with other players in the game")), 0);
-                String[] args = new String[]{reportedPlayer, cheat};
-                CommandWDR.handleWDRCommand(args, true);
                 return true;
             }
             checkReportSpam();
             if(ReportQueue.INSTANCE.addPlayerToQueueRandom(messageSender, reportedPlayer)) {
                 new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment... ").appendSibling(ChatUtil.getCancelButton(reportedPlayer))), 0);
                 return true;
+            } else {
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You already reported this player during this game")), 0);
             }
             return false;
         } else {
             if (isSenderMyself) {
                 new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " This player has already been reported during this game")), 0);
-                String[] args = new String[]{reportedPlayer, cheat};
-                CommandWDR.handleWDRCommand(args, true);
                 return true;
             }
         }
@@ -312,11 +299,11 @@ public class ReportSuggestionHandler {
     }
 
     private static boolean isAValidName(String playername) {
-        return NetHandlerPlayClientHook.playerInfoMap.get(playername) != null || isPlayerMyself(playername);
+        return NetHandlerPlayClientHook.playerInfoMap.get(playername) != null || isPlayerMyself(playername) || KillCounter.wasPlayerInThisGame(playername);
     }
 
     private static boolean isPlayerMyself(@Nullable String name) {
-        return mc.thePlayer != null && mc.thePlayer.getName().equals(name);
+        return (mc.thePlayer != null && mc.thePlayer.getName().equalsIgnoreCase(name)) || (!ConfigHandler.hypixelNick.equals("") && ConfigHandler.hypixelNick.equals(name));
     }
 
     public static void clearReportSuggestionHistory() {

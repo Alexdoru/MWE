@@ -28,7 +28,6 @@ public class GuiNewChatHook {
         final Pattern pattern = Pattern.compile("^\u00a7cWarning : (?:|\u00a77\u2716 )" + ANY_FORMATTING_CODE + playername + "(?:|" + ANY_FORMATTING_CODE + " \\[[A-Z]{3}\\])\u00a77 joined,.*");
         IChatComponent targetedChatComponent = null;
         final int chatSearchLength = 100;
-        final int drawnChatSearchLength = 300;
 
         Iterator<ChatLine> iterator = chatLines.iterator();
         int i = 0;
@@ -47,10 +46,33 @@ public class GuiNewChatHook {
             return;
         }
 
+        deleteFromDrawnChatLines(guiNewChat, drawnChatLines, targetedChatComponent, chatSearchLength * 3);
+
+    }
+
+    public static void deleteAllWarningMessages(GuiNewChat guiNewChat, List<ChatLine> drawnChatLines, List<ChatLine> chatLines) {
+
+        final Pattern pattern = Pattern.compile("^\u00a7cWarning : (?:|\u00a77\u2716 )" + ANY_FORMATTING_CODE + "\\w{2,16}" + "(?:|" + ANY_FORMATTING_CODE + " \\[[A-Z]{3}\\])\u00a77 joined,.*");
+        final int chatSearchLength = 300;
+
+        Iterator<ChatLine> iterator = chatLines.iterator();
+        int i = 0;
+        while (iterator.hasNext() && i < chatSearchLength) {
+            final IChatComponent chatComponent = iterator.next().getChatComponent();
+            final String text = chatComponent.getUnformattedText();
+            if (pattern.matcher(text).matches()) {
+                iterator.remove();
+                deleteFromDrawnChatLines(guiNewChat, drawnChatLines, chatComponent, chatSearchLength * 3);
+            }
+            i++;
+        }
+
+    }
+
+    private static void deleteFromDrawnChatLines(GuiNewChat guiNewChat, List<ChatLine> drawnChatLines, IChatComponent targetedChatComponent, int drawnChatSearchLength) {
         final int j = MathHelper.floor_float((float) guiNewChat.getChatWidth() / guiNewChat.getChatScale());
         final List<IChatComponent> todeleteList = GuiUtilRenderComponents.splitText(targetedChatComponent, j, Minecraft.getMinecraft().fontRendererObj, false, false);
         String textToDelete = todeleteList.get(0).getUnformattedText();
-
         /*
          * This for loop finds the first line of the warning message : "Warning : playername joined, ..."
          * and then backtracks to delete the rest of the message if it fits on more than one line
@@ -72,7 +94,6 @@ public class GuiNewChatHook {
                 break;
             }
         }
-
     }
 
 }

@@ -32,70 +32,82 @@ public class KillCounter {
     public static final int YELLOW_TEAM = 2;
     public static final int BLUE_TEAM = 3;
     private static final String[] KILL_MESSAGES = {
-            "(\\w{2,16}) was shot and killed by (\\w{2,16}).*",
-            "(\\w{2,16}) was snowballed to death by (\\w{2,16}).*",
-            "(\\w{2,16}) was killed by (\\w{2,16}).*",
-            "(\\w{2,16}) was killed with a potion by (\\w{2,16}).*",
-            "(\\w{2,16}) was killed with an explosion by (\\w{2,16}).*",
-            "(\\w{2,16}) was killed with magic by (\\w{2,16}).*",
-            "(\\w{2,16}) was filled full of lead by (\\w{2,16}).*",
-            "(\\w{2,16}) was iced by (\\w{2,16}).*",
-            "(\\w{2,16}) met their end by (\\w{2,16}).*",
-            "(\\w{2,16}) lost a drinking contest with (\\w{2,16}).*",
-            "(\\w{2,16}) was killed with dynamite by (\\w{2,16}).*",
-            "(\\w{2,16}) lost the draw to (\\w{2,16}).*",
-            "(\\w{2,16}) was struck down by (\\w{2,16}).*",
-            "(\\w{2,16}) was turned to dust by (\\w{2,16}).*",
-            "(\\w{2,16}) was turned to ash by (\\w{2,16}).*",
-            "(\\w{2,16}) was melted by (\\w{2,16}).*",
-            "(\\w{2,16}) was incinerated by (\\w{2,16}).*",
-            "(\\w{2,16}) was vaporized by (\\w{2,16}).*",
-            "(\\w{2,16}) was struck with Cupid's arrow by (\\w{2,16}).*",
-            "(\\w{2,16}) was given the cold shoulder by (\\w{2,16}).*",
-            "(\\w{2,16}) was hugged too hard by (\\w{2,16}).*",
-            "(\\w{2,16}) drank a love potion from (\\w{2,16}).*",
-            "(\\w{2,16}) was hit by a love bomb from (\\w{2,16}).*",
-            "(\\w{2,16}) was no match for (\\w{2,16}).*",
-            "(\\w{2,16}) was smote from afar by (\\w{2,16}).*",
-            "(\\w{2,16}) was justly ended by (\\w{2,16}).*",
-            "(\\w{2,16}) was purified by (\\w{2,16}).*",
-            "(\\w{2,16}) was killed with holy water by (\\w{2,16}).*",
-            "(\\w{2,16}) was dealt vengeful justice by (\\w{2,16}).*",
-            "(\\w{2,16}) was returned to dust by (\\w{2,16}).*",
-            "(\\w{2,16}) be shot and killed by (\\w{2,16}).*",
-            "(\\w{2,16}) be snowballed to death by (\\w{2,16}).*",
-            "(\\w{2,16}) be sent to Davy Jones' locker by (\\w{2,16}).*",
-            "(\\w{2,16}) be killed with rum by (\\w{2,16}).*",
-            "(\\w{2,16}) be shot with cannon by (\\w{2,16}).*",
-            "(\\w{2,16}) be killed with magic by (\\w{2,16}).*",
-            "(\\w{2,16}) was glazed in BBQ sauce by (\\w{2,16}).*",
-            "(\\w{2,16}) was sprinked in chilli poweder by (\\w{2,16}).*",
-            "(\\w{2,16}) was sliced up by (\\w{2,16}).*",
-            "(\\w{2,16}) was overcooked by (\\w{2,16}).*",
-            "(\\w{2,16}) was deep fried by (\\w{2,16}).*",
-            "(\\w{2,16}) was boiled by (\\w{2,16}).*",
-            "(\\w{2,16}) was injected with malware by (\\w{2,16}).*",
-            "(\\w{2,16}) was DDoS'd by (\\w{2,16}).*",
-            "(\\w{2,16}) was deleted by (\\w{2,16}).*",
-            "(\\w{2,16}) was purged by an antivirus owned by (\\w{2,16}).*",
-            "(\\w{2,16}) was fragmented by (\\w{2,16}).*",
-            "(\\w{2,16}) was squeaked from a distance by (\\w{2,16}).*",
-            "(\\w{2,16}) was hit by frozen cheese from (\\w{2,16}).*",
-            "(\\w{2,16}) was chewed up by (\\w{2,16}).*",
-            "(\\w{2,16}) was chemically cheesed by (\\w{2,16}).*",
-            "(\\w{2,16}) was turned into cheese wiz by (\\w{2,16}).*",
-            "(\\w{2,16}) was magically squeaked by (\\w{2,16}).*",
-            "(\\w{2,16}) was corrupted by (\\w{2,16}).*"
+            /*Default messages*/
+            "(\\w{1,16}) was shot and killed by (\\w{1,16}).*",
+            "(\\w{1,16}) was snowballed to death by (\\w{1,16}).*",
+            "(\\w{1,16}) was killed by (\\w{1,16}).*",
+            "(\\w{1,16}) was killed with a potion by (\\w{1,16}).*",
+            "(\\w{1,16}) was killed with an explosion by (\\w{1,16}).*",
+            "(\\w{1,16}) was killed with magic by (\\w{1,16}).*",
+            /*Western messages*/
+            "(\\w{1,16}) was filled full of lead by (\\w{1,16}).*",
+            "(\\w{1,16}) was iced by (\\w{1,16}).*",
+            "(\\w{1,16}) met their end by (\\w{1,16}).*",
+            "(\\w{1,16}) lost a drinking contest with (\\w{1,16}).*",
+            "(\\w{1,16}) was killed with dynamite by (\\w{1,16}).*",
+            "(\\w{1,16}) lost the draw to (\\w{1,16}).*",
+            /*Fire messages*/
+            "(\\w{1,16}) was struck down by (\\w{1,16}).*",
+            "(\\w{1,16}) was turned to dust by (\\w{1,16}).*",
+            "(\\w{1,16}) was turned to ash by (\\w{1,16}).*",
+            "(\\w{1,16}) was melted by (\\w{1,16}).*",
+            "(\\w{1,16}) was incinerated by (\\w{1,16}).*",
+            "(\\w{1,16}) was vaporized by (\\w{1,16}).*",
+            /*Love messages*/
+            "(\\w{1,16}) was struck with Cupid's arrow by (\\w{1,16}).*",
+            "(\\w{1,16}) was given the cold shoulder by (\\w{1,16}).*",
+            "(\\w{1,16}) was hugged too hard by (\\w{1,16}).*",
+            "(\\w{1,16}) drank a love potion from (\\w{1,16}).*",
+            "(\\w{1,16}) was hit by a love bomb from (\\w{1,16}).*",
+            "(\\w{1,16}) was no match for (\\w{1,16}).*",
+            /*Paladin messages*/
+            "(\\w{1,16}) was smote from afar by (\\w{1,16}).*",
+            "(\\w{1,16}) was justly ended by (\\w{1,16}).*",
+            "(\\w{1,16}) was purified by (\\w{1,16}).*",
+            "(\\w{1,16}) was killed with holy water by (\\w{1,16}).*",
+            "(\\w{1,16}) was dealt vengeful justice by (\\w{1,16}).*",
+            "(\\w{1,16}) was returned to dust by (\\w{1,16}).*",
+            /*Pirate messages*/
+            "(\\w{1,16}) be shot and killed by (\\w{1,16}).*",
+            "(\\w{1,16}) be snowballed to death by (\\w{1,16}).*",
+            "(\\w{1,16}) be sent to Davy Jones' locker by (\\w{1,16}).*",
+            "(\\w{1,16}) be killed with rum by (\\w{1,16}).*",
+            "(\\w{1,16}) be shot with cannon by (\\w{1,16}).*",
+            "(\\w{1,16}) be killed with magic by (\\w{1,16}).*",
+            /*BBQ messages*/
+            "(\\w{1,16}) was glazed in BBQ sauce by (\\w{1,16}).*",
+            "(\\w{1,16}) was sprinkled with chilli powder by (\\w{1,16}).*",
+            "(\\w{1,16}) was sliced up by (\\w{1,16}).*",
+            "(\\w{1,16}) was overcooked by (\\w{1,16}).*",
+            "(\\w{1,16}) was deep fried by (\\w{1,16}).*",
+            "(\\w{1,16}) was boiled by (\\w{1,16}).*",
+            /*Digital messages*/
+            "(\\w{1,16}) was injected with malware by (\\w{1,16}).*",
+            "(\\w{1,16}) was DDoS'd by (\\w{1,16}).*",
+            "(\\w{1,16}) was deleted by (\\w{1,16}).*",
+            "(\\w{1,16}) was purged by an antivirus owned by (\\w{1,16}).*",
+            "(\\w{1,16}) was fragmented by (\\w{1,16}).*",
+            "(\\w{1,16}) was corrupted by (\\w{1,16}).*",
+            /*Squeak messages*/
+            "(\\w{1,16}) was squeaked from a distance by (\\w{1,16}).*",
+            "(\\w{1,16}) was hit by frozen cheese from (\\w{1,16}).*",
+            "(\\w{1,16}) was chewed up by (\\w{1,16}).*",
+            "(\\w{1,16}) was chemically cheesed by (\\w{1,16}).*",
+            "(\\w{1,16}) was turned into cheese whiz by (\\w{1,16}).*",
+            "(\\w{1,16}) was magically squeaked by (\\w{1,16}).*"
     };
     private static final String[] SCOREBOARD_PREFIXES = {"[R]", "[G]", "[Y]", "[B]"};
     private static final String[] DEFAULT_PREFIXES = {"c", "a", "e", "9"}; // RED GREEN YELLOW BLUE
     private static final HashMap<String, Integer> allPlayerKills = new HashMap<>();
+    private static final ArrayList<String> deadPlayers = new ArrayList<>();
+    /**
+     * Used to check if a player is in the game for the reporting suggestions
+     */
+    private static final Set<String> playersPresentInGame = new HashSet<>();
     private static Pattern[] KILL_PATTERNS;
     private static String gameId;
     private static String[] prefixes; // color codes prefix that you are using in your hypixel mega walls settings
     private static HashMap<String, Integer>[] teamKillsArray;
-    private static ArrayList<String> deadPlayers;
-
     private static Random rand;
 
     public KillCounter() {
@@ -112,11 +124,12 @@ public class KillCounter {
      */
     @SuppressWarnings("unchecked")
     public static void ResetKillCounterTo(String gameIdIn) {
+        playersPresentInGame.clear();
         gameId = gameIdIn;
         prefixes = new String[TEAMS];
         teamKillsArray = new HashMap[TEAMS];
         allPlayerKills.clear();
-        deadPlayers = new ArrayList<>();
+        deadPlayers.clear();
         for (int i = 0; i < TEAMS; i++) {
             prefixes[i] = DEFAULT_PREFIXES[i];
             teamKillsArray[i] = new HashMap<>();
@@ -148,6 +161,8 @@ public class KillCounter {
                     String killerTeam = split[6].substring(0, 1);
                     if (removeKilledPlayer(killedPlayer, killedTeam)) {
                         addKill(killer, killerTeam);
+                        playersPresentInGame.add(killedPlayer);
+                        playersPresentInGame.add(killer);
                     }
                     FKCounterGui.instance.updateDisplayText();
                 }
@@ -253,7 +268,7 @@ public class KillCounter {
      */
     private static boolean removeKilledPlayer(String player, String color) {
         int team = getTeamFromColor(color);
-        if (isNotValidTeam(team) || deadPlayers.contains(player)) {
+        if (isNotValidTeam(team)) {
             return false;
         }
         if (isWitherDead(color)) {
@@ -316,6 +331,21 @@ public class KillCounter {
             default:
                 return "?";
         }
+    }
+
+    /**
+     * Used by the report suggestion system
+     */
+    public static boolean wasPlayerInThisGame(String playername) {
+        for (String name : playersPresentInGame) {
+            if (name.equalsIgnoreCase(playername))
+                return true;
+        }
+        return false;
+    }
+
+    public static List<String> getPlayersInThisGame() {
+        return new ArrayList<>(playersPresentInGame);
     }
 
     private static boolean isNotValidTeam(int team) {

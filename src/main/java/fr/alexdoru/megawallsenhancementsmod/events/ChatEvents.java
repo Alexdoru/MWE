@@ -10,12 +10,17 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.ArrowHitGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.HunterStrengthGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.KillCooldownGui;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
+import fr.alexdoru.nocheatersmod.data.WDR;
+import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import fr.alexdoru.nocheatersmod.events.ReportQueue;
 import fr.alexdoru.nocheatersmod.util.ReportSuggestionHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
@@ -128,7 +133,23 @@ public class ChatEvents {
                 return;
             }
 
-            if (squadname != null) {
+            // Chat Censoring
+            if (ConfigHandler.censorCheaterChatMsg && messageSender != null) {
+                final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(messageSender);
+                if (networkPlayerInfo != null) {
+                    final String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
+                    final WDR wdr = WdredPlayers.getPlayer(uuid, messageSender);
+                    if (wdr != null && wdr.hasValidCheats()) {
+                        if (!ConfigHandler.deleteCheaterChatMsg) {
+                            ChatUtil.addChatMessage(StringUtil.censorChatMessage(fmsg, messageSender));
+                        }
+                        event.setCanceled(true);
+                        return;
+                    }
+                }
+            }
+
+            if (squadname != null && messageSender != null) {
                 event.message = new ChatComponentText(fmsg.replaceFirst(messageSender, squadname));
             }
 

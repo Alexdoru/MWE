@@ -86,30 +86,6 @@ public class CommandSquad extends CommandBase {
                         EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " to the squad."));
             }
 
-        } else if (args[0].equalsIgnoreCase("addmyself")) {
-
-            if (args.length < 2) {
-                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : /squad addmyself <myNick> <as(optional)> <NewName(optional)>"));
-                return;
-            }
-
-            if (args.length >= 4 && args[2].equalsIgnoreCase("as")) {
-                StringBuilder stringBuilder = new StringBuilder();
-                for (int i = 3; i < args.length; i++) {
-                    stringBuilder.append(args[i]).append((i == args.length - 1) ? "" : " ");
-                }
-                String alias = stringBuilder.toString();
-                SquadEvent.addMyself(args[1], alias);
-                addChatMessage(new ChatComponentText(getTagMW() +
-                        EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[1] + EnumChatFormatting.GREEN + " as " +
-                        EnumChatFormatting.GOLD + alias + EnumChatFormatting.GREEN + " to the squad."));
-                return;
-            }
-
-            SquadEvent.addMyself(args[1]);
-            addChatMessage(new ChatComponentText(getTagMW() +
-                    EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[1] + EnumChatFormatting.GREEN + " to the squad."));
-
         } else if (args[0].equalsIgnoreCase("disband")) {
 
             SquadEvent.clearSquad();
@@ -120,20 +96,17 @@ public class CommandSquad extends CommandBase {
             HashMap<String, String> squad = SquadEvent.getSquad();
 
             if (squad.isEmpty()) {
-                addChatMessage(new ChatComponentText(getTagMW() +
-                        EnumChatFormatting.RED + "No one in the squad right now."));
+                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + "No one in the squad right now."));
                 return;
             }
 
             IChatComponent imsg = new ChatComponentText(getTagMW() + EnumChatFormatting.GREEN + "Players in your squad : \n");
 
             for (Entry<String, String> entry : squad.entrySet()) {
-
                 String displayname = entry.getKey();
                 String fakename = entry.getValue();
                 imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + "- " + EnumChatFormatting.GOLD + displayname
                         + (displayname.equals(fakename) ? "" : EnumChatFormatting.GREEN + " renamed as : " + EnumChatFormatting.GOLD + entry.getValue()) + "\n"));
-
             }
 
             addChatMessage(imsg);
@@ -146,16 +119,13 @@ public class CommandSquad extends CommandBase {
             }
 
             for (int i = 1; i < args.length; i++) {
-
                 if (SquadEvent.removePlayer(args[i])) {
-
                     addChatMessage(new ChatComponentText(getTagMW() +
                             EnumChatFormatting.GREEN + "Removed " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " from the squad."));
                 } else {
                     addChatMessage(new ChatComponentText(getTagMW() +
                             EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.RED + " isn't in the squad."));
                 }
-
             }
 
         }
@@ -164,7 +134,7 @@ public class CommandSquad extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        String[] args1 = {"add", "addmyself", "disband", "list", "remove"};
+        String[] args1 = {"add", "disband", "list", "remove"};
         return args.length == 1 ? getListOfStringsMatchingLastWord(args, args1) : args.length >= 2 ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null;
     }
 
