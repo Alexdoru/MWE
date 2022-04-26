@@ -86,29 +86,6 @@ public class CommandSquad extends CommandBase {
                         EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " to the squad."));
             }
 
-        } else if (args[0].equalsIgnoreCase("addmyself")) {
-
-            if (args.length < 2) {
-                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : /squad addmyself <myNick> <as(optional)> <NewName(optional)>"));
-                return;
-            }
-
-            if (args.length >= 4 && args[2].equalsIgnoreCase("as")) {
-                StringBuilder stringBuilder = new StringBuilder();
-                for (int i = 3; i < args.length; i++) {
-                    stringBuilder.append(args[i]).append((i == args.length - 1) ? "" : " ");
-                }
-                String alias = stringBuilder.toString();
-                SquadEvent.addMyself(args[1], alias);
-                addChatMessage(new ChatComponentText(getTagMW() +
-                        EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[1] + EnumChatFormatting.GREEN + " as " +
-                        EnumChatFormatting.GOLD + alias + EnumChatFormatting.GREEN + " to the squad."));
-                return;
-            }
-
-            SquadEvent.addMyself(args[1]);
-            addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[1] + EnumChatFormatting.GREEN + " to the squad."));
-
         } else if (args[0].equalsIgnoreCase("disband")) {
 
             SquadEvent.clearSquad();
@@ -157,7 +134,7 @@ public class CommandSquad extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        String[] args1 = {"add", "addmyself", "disband", "list", "remove"};
+        String[] args1 = {"add", "disband", "list", "remove"};
         return args.length == 1 ? getListOfStringsMatchingLastWord(args, args1) : args.length >= 2 ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null;
     }
 

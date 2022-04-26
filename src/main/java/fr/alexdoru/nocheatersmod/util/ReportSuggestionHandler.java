@@ -103,26 +103,19 @@ public class ReportSuggestionHandler {
 
             isSenderInTablist = true;
 
-        } else {
+        } else if (messageSender != null) {
 
             NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(messageSender);
             if (networkPlayerInfo != null) {
-
                 isSenderInTablist = true;
                 final UUID id = networkPlayerInfo.getGameProfile().getId();
                 senderUUID = id.toString().replace("-", "");
                 isSenderFlaging = CommandScanGame.doesPlayerFlag(senderUUID);
-                WDR wdr = WdredPlayers.getWdredMap().get(senderUUID);
+                WDR wdr = WdredPlayers.getPlayer(senderUUID, messageSender);
                 if (wdr != null) {
                     isSenderIgnored = wdr.isIgnored();
                     isSenderCheating = wdr.hasValidCheats();
-                } else if (messageSender != null) {
-                    wdr = WdredPlayers.getWdredMap().get(messageSender);
-                    if (wdr != null) {
-                        isSenderCheating = wdr.hasValidCheats();
-                    }
                 }
-
             }
 
         }
@@ -310,7 +303,7 @@ public class ReportSuggestionHandler {
     }
 
     private static boolean isPlayerMyself(@Nullable String name) {
-        return mc.thePlayer != null && mc.thePlayer.getName().equalsIgnoreCase(name);
+        return (mc.thePlayer != null && mc.thePlayer.getName().equalsIgnoreCase(name)) || (!ConfigHandler.hypixelNick.equals("") && ConfigHandler.hypixelNick.equals(name));
     }
 
     public static void clearReportSuggestionHistory() {
