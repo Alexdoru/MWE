@@ -41,7 +41,9 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         buttonList.add(new GuiButton(2, xPos, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
         buttonList.add(new GuiButton(6, xPos, getYposForButton(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(6)));
         buttonList.add(new GuiSlider(7, xPos, getYposForButton(2), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
-        buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getYposForButton(4), 150, ButtonsHeight, getButtonDisplayString(3)));
+        buttonList.add(new GuiButton(10, xPos, getYposForButton(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(10)));
+        buttonList.add(new GuiButton(11, xPos, getYposForButton(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
+        buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getYposForButton(6), 150, ButtonsHeight, getButtonDisplayString(3)));
         super.initGui();
     }
 
@@ -57,6 +59,10 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 return "Auto-report cheaters : " + getSuffix(ConfigHandler.toggleautoreport);
             case 6:
                 return "Delete old reports : " + getSuffix(ConfigHandler.deleteReports);
+            case 10:
+                return "Censor cheaters in chat : " + (ConfigHandler.deleteCheaterChatMsg ? EnumChatFormatting.GREEN + "Delete" : (ConfigHandler.censorCheaterChatMsg ? EnumChatFormatting.YELLOW + "Censor" : EnumChatFormatting.RED + "Disabled"));
+            case 11:
+                return "Safe reporting mode : " + getSuffix(ConfigHandler.safeReportingMode);
             case 3:
                 return parent == null ? "Close" : "Done";
             default:
@@ -103,7 +109,13 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 textLines.add(EnumChatFormatting.GRAY + "You can ignore players by using " + EnumChatFormatting.YELLOW + "/nocheaters ignore <playername>");
                 break;
             case 10:
-                textLines.add(EnumChatFormatting.GREEN + "Plays a sound when there is a report suggestions in the chat");
+                textLines.add(EnumChatFormatting.GREEN + "Deletes or censors chat messages sent by reported players");
+                break;
+            case 11:
+                textLines.add(EnumChatFormatting.GREEN + "Hypixel ignores your reports if you send too many in a short time period");
+                textLines.add(EnumChatFormatting.GREEN + "With this setting ON, it will save your " + EnumChatFormatting.YELLOW + "/wdr" + EnumChatFormatting.GREEN + " commands and send them over time");
+                textLines.add(EnumChatFormatting.GREEN + "It also limits to one command per player per game, in case you type the command several times for the same player");
+                textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls");
                 break;
         }
         return textLines;
@@ -134,6 +146,21 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 } else {
                     ReportQueue.INSTANCE.clearSuggestionsInReportQueue();
                 }
+                break;
+            case 10:
+                if (ConfigHandler.censorCheaterChatMsg && !ConfigHandler.deleteCheaterChatMsg) {
+                    ConfigHandler.deleteCheaterChatMsg = true;
+                    break;
+                }
+                if (!ConfigHandler.censorCheaterChatMsg && !ConfigHandler.deleteCheaterChatMsg) {
+                    ConfigHandler.censorCheaterChatMsg = true;
+                    break;
+                }
+                ConfigHandler.deleteCheaterChatMsg = false;
+                ConfigHandler.censorCheaterChatMsg = false;
+                break;
+            case 11:
+                ConfigHandler.safeReportingMode = !ConfigHandler.safeReportingMode;
                 break;
             case 2:
                 ConfigHandler.toggleautoreport = !ConfigHandler.toggleautoreport;

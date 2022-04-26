@@ -55,13 +55,10 @@ public class MegaWallsEnhancementsMod {
         ClientCommandHandler.instance.registerCommand(new CommandStalk());
         ClientCommandHandler.instance.registerCommand(new CommandPlancke());
         ClientCommandHandler.instance.registerCommand(new CommandScanGame());
-        ClientCommandHandler.instance.registerCommand(new CommandHowPlayGame());
-        ClientCommandHandler.instance.registerCommand(new CommandMWGameStats());
         ClientCommandHandler.instance.registerCommand(new CommandHypixelShout());
         ClientCommandHandler.instance.registerCommand(new CommandHypixelReply());
         ClientCommandHandler.instance.registerCommand(new CommandMWEnhancements());
         ClientCommandHandler.instance.registerCommand(new CommandHypixelMessage());
-        ClientCommandHandler.instance.registerCommand(new CommandCopyToClipboard());
 
         NoCheatersMod.init();
 

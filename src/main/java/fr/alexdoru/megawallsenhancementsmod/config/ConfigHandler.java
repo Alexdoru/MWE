@@ -39,17 +39,19 @@ public class ConfigHandler {
      * MWEnhancements config
      */
     public static String APIKey;
+    public static String hypixelNick;
     public static boolean strengthParticules;
     public static boolean shortencoinmessage;
     public static boolean playSoundLowHP;
     public static double healthThreshold;
     public static boolean keepNightVisionEffect;
     public static boolean useColoredScores;
-    public static boolean swordDropProtection;
+    public static boolean safeInventory;
     public static boolean limitDroppedEntityRendered;
     public static int maxDroppedEntityRendered;
     public static boolean prestigeV;
     public static boolean hideRepetitiveMWChatMsg;
+    public static boolean clearVision;
 
     /**
      * GUI config
@@ -74,6 +76,9 @@ public class ConfigHandler {
     public static boolean autoreportSuggestions;
     public static boolean deleteReports;
     public static long timeDeleteReport;
+    public static boolean censorCheaterChatMsg;
+    public static boolean deleteCheaterChatMsg;
+    public static boolean safeReportingMode;
 
     /**
      * Hitbox Config
@@ -127,17 +132,19 @@ public class ConfigHandler {
         final Property pfinalsInTablist = config.get(CATEGORY_FKCounter, "Fks in tablist", true, "Draws the finals in the tablist");
 
         final Property pAPIKey = config.get(CATEGORY_MWENh, "APIKey", "", "Your Hypixel API Key");
+        final Property phypixelNick = config.get(CATEGORY_MWENh, "Hypixel Nick", "", "Your nick on Hypixel");
         final Property pstrengthParticules = config.get(CATEGORY_MWENh, "Strength particules", true, "Spawns strength particules when an herobrine or dreadlord get a final");
         final Property pShortencoinmessage = config.get(CATEGORY_MWENh, "Shorten coin message", false, "Shorten the coins messages by removing the network booster info");
         final Property pPlaySoundLowHP = config.get(CATEGORY_MWENh, "Sound low HP", false, "Plays a sound when your health falls below a certain threshold");
         final Property pHealthThreshold = config.get(CATEGORY_MWENh, "Health Threshold", 0.5d, "The health threshold at witch it will play a sound, value ranges from 0 to 1");
         final Property pCancelNightVisionEffect = config.get(CATEGORY_MWENh, "Cancel Night Vision Effect", false, "Removes the visual effets of night vision");
         final Property puseColoredScores = config.get(CATEGORY_MWENh, "Colored Tablist Scores", true, "Makes the scores in the tablist use a greend to red color gradient depending of the value");
-        final Property pswordDropProtection = config.get(CATEGORY_MWENh, "Sword drop protection", true, "When enabled you can't drop the sword you are holding in your hotbar");
+        final Property psafeInventory = config.get(CATEGORY_MWENh, "Safe Inventory", true, "Prevents sword dropping and hotkeying kit items");
         final Property plimitDroppedEntityRendered = config.get(CATEGORY_MWENh, "Limit dropped item rendered", true, "Limit dropped item rendered");
         final Property pmaxDroppedEntityRendered = config.get(CATEGORY_MWENh, "Max amount of item rendered", 120, "Max amount of item rendered");
         final Property pprestigeV = config.get(CATEGORY_MWENh, "Prestige V colored Tag", false, "Prestige V colored Tag");
-        final Property phideRepetitiveMWChatMsg = config.get(CATEGORY_MWENh, "Delete repetitive chat messagdes in mw", true, "Delete repetitive chat messagdes in mw");
+        final Property phideRepetitiveMWChatMsg = config.get(CATEGORY_MWENh, "Delete repetitive chat messages in mw", true, "Delete repetitive chat messages in mw");
+        final Property pclearVision = config.get(CATEGORY_MWENh, "Clear Vision", true, "Hides particles too close to the camera");
 
         final Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
         final Property pXpos_killcooldownHUD = config.get(CATEGORY_GUI, "Xpos kill cooldown HUD", 0d, "The x position of the killcooldown HUD, value ranges from 0 to 1");
@@ -157,9 +164,12 @@ public class ConfigHandler {
         final Property pTogglewarnings = config.get(CATEGORY_NOCHEATERS, "Toggle Warnings", false, "Gives warning messages in chat for reported players");
         final Property preportsuggestions = config.get(CATEGORY_NOCHEATERS, "Report suggestion", true, "Give report suggestions in the chat based on messages in shouts");
         final Property pautoreportSuggestions = config.get(CATEGORY_NOCHEATERS, "Send report suggestions", true, "Send report suggestions");
-        final Property pToggleautoreport = config.get(CATEGORY_NOCHEATERS, "Autoreport saved cheaters", true, "Automatically report previously reported players when they are in your lobby");
+        final Property pToggleautoreport = config.get(CATEGORY_NOCHEATERS, "Autoreport saved cheaters", true, "Automatically reports previously reported players when they are in your game");
         final Property pdeleteReports = config.get(CATEGORY_NOCHEATERS, "Delete Old Report", false, "Deletes reports older than the specified value");
         final Property ptimeDeleteReport = config.get(CATEGORY_NOCHEATERS, "Time delete reports", 365, "Reports older than this will be deleted on game start (days)");
+        final Property pcensorCheaterChatMsg = config.get(CATEGORY_NOCHEATERS, "Censor Cheater Chat", false, "Censors chat messages sent by reported cheaters");
+        final Property pdeleteCheaterChatMsg = config.get(CATEGORY_NOCHEATERS, "Delete Cheater Chat", false, "Deletes chat messages sent by reported cheaters");
+        final Property psafeReportingMode = config.get(CATEGORY_NOCHEATERS, "Safe reporting", false, "Registers your wdr commands and sends them over time to prevent spam");
 
         final Property pisDebugHitboxOn = config.get(CATEGORY_HITBOX, "Toggle hitbox", false, "Toggle hitbox");
         final Property pdrawHitboxForPlayers = config.get(CATEGORY_HITBOX, "Hitbox for players", true, "Hitbox for players");
@@ -196,17 +206,19 @@ public class ConfigHandler {
 
         List<String> pOrderMWWENh = new ArrayList<>();
         pOrderMWWENh.add(pAPIKey.getName());
+        pOrderMWWENh.add(phypixelNick.getName());
         pOrderMWWENh.add(pstrengthParticules.getName());
         pOrderMWWENh.add(pShortencoinmessage.getName());
         pOrderMWWENh.add(pPlaySoundLowHP.getName());
         pOrderMWWENh.add(pHealthThreshold.getName());
         pOrderMWWENh.add(pCancelNightVisionEffect.getName());
         pOrderMWWENh.add(puseColoredScores.getName());
-        pOrderMWWENh.add(pswordDropProtection.getName());
+        pOrderMWWENh.add(psafeInventory.getName());
         pOrderMWWENh.add(plimitDroppedEntityRendered.getName());
         pOrderMWWENh.add(pmaxDroppedEntityRendered.getName());
         pOrderMWWENh.add(pprestigeV.getName());
         pOrderMWWENh.add(phideRepetitiveMWChatMsg.getName());
+        pOrderMWWENh.add(pclearVision.getName());
         config.setCategoryPropertyOrder(CATEGORY_MWENh, pOrderMWWENh);
 
         List<String> pOrderGUI = new ArrayList<>();
@@ -233,6 +245,9 @@ public class ConfigHandler {
         pOrderNOCHEATERS.add(pautoreportSuggestions.getName());
         pOrderNOCHEATERS.add(pdeleteReports.getName());
         pOrderNOCHEATERS.add(ptimeDeleteReport.getName());
+        pOrderNOCHEATERS.add(pcensorCheaterChatMsg.getName());
+        pOrderNOCHEATERS.add(pdeleteCheaterChatMsg.getName());
+        pOrderNOCHEATERS.add(psafeReportingMode.getName());
         config.setCategoryPropertyOrder(CATEGORY_NOCHEATERS, pOrderNOCHEATERS);
 
         List<String> pOrderHitbox = new ArrayList<>();
@@ -270,17 +285,19 @@ public class ConfigHandler {
             finalsInTablist = pfinalsInTablist.getBoolean();
 
             APIKey = pAPIKey.getString();
+            hypixelNick = phypixelNick.getString();
             strengthParticules = pstrengthParticules.getBoolean();
             shortencoinmessage = pShortencoinmessage.getBoolean();
             playSoundLowHP = pPlaySoundLowHP.getBoolean();
             healthThreshold = pHealthThreshold.getDouble();
             keepNightVisionEffect = !pCancelNightVisionEffect.getBoolean();
             useColoredScores = puseColoredScores.getBoolean();
-            swordDropProtection = pswordDropProtection.getBoolean();
+            safeInventory = psafeInventory.getBoolean();
             limitDroppedEntityRendered = plimitDroppedEntityRendered.getBoolean();
             maxDroppedEntityRendered = pmaxDroppedEntityRendered.getInt();
             prestigeV = !HypixelApiKeyUtil.apiKeyIsNotSetup() && pprestigeV.getBoolean();
             hideRepetitiveMWChatMsg = phideRepetitiveMWChatMsg.getBoolean();
+            clearVision = pclearVision.getBoolean();
 
             show_killcooldownHUD = pShow_killcooldownHUD.getBoolean();
             killcooldownHUDPosition.setRelative(pXpos_killcooldownHUD.getDouble(), pYpos_killcooldownHUD.getDouble());
@@ -299,6 +316,9 @@ public class ConfigHandler {
             autoreportSuggestions = pautoreportSuggestions.getBoolean();
             deleteReports = pdeleteReports.getBoolean();
             timeDeleteReport = 24L * 3600L * 1000L * ((long) ptimeDeleteReport.getInt());
+            censorCheaterChatMsg = pcensorCheaterChatMsg.getBoolean();
+            deleteCheaterChatMsg = pdeleteCheaterChatMsg.getBoolean();
+            safeReportingMode = psafeReportingMode.getBoolean();
 
             isDebugHitboxOn = pisDebugHitboxOn.getBoolean();
             drawHitboxForPlayers = pdrawHitboxForPlayers.getBoolean();
@@ -336,17 +356,19 @@ public class ConfigHandler {
             pfinalsInTablist.set(finalsInTablist);
 
             pAPIKey.set(APIKey);
+            phypixelNick.set(hypixelNick);
             pstrengthParticules.set(strengthParticules);
             pShortencoinmessage.set(shortencoinmessage);
             pPlaySoundLowHP.set(playSoundLowHP);
             pHealthThreshold.set(healthThreshold);
             pCancelNightVisionEffect.set(!keepNightVisionEffect);
             puseColoredScores.set(useColoredScores);
-            pswordDropProtection.set(swordDropProtection);
+            psafeInventory.set(safeInventory);
             plimitDroppedEntityRendered.set(limitDroppedEntityRendered);
             pmaxDroppedEntityRendered.set(maxDroppedEntityRendered);
             pprestigeV.set(prestigeV);
             phideRepetitiveMWChatMsg.set(hideRepetitiveMWChatMsg);
+            pclearVision.set(clearVision);
 
             pShow_killcooldownHUD.set(show_killcooldownHUD);
             double[] killcooldownHUDarray = killcooldownHUDPosition.getRelativePosition();
@@ -376,6 +398,9 @@ public class ConfigHandler {
             pautoreportSuggestions.set(autoreportSuggestions);
             pdeleteReports.set(deleteReports);
             ptimeDeleteReport.set((int) (timeDeleteReport / (24L * 3600L * 1000L)));
+            pcensorCheaterChatMsg.set(censorCheaterChatMsg);
+            pdeleteCheaterChatMsg.set(deleteCheaterChatMsg);
+            psafeReportingMode.set(safeReportingMode);
 
             pisDebugHitboxOn.set(isDebugHitboxOn);
             pdrawHitboxForPlayers.set(drawHitboxForPlayers);

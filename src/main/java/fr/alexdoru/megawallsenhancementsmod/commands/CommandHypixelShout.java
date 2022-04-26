@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import fr.alexdoru.nocheatersmod.commands.CommandReport;
 import net.minecraft.client.Minecraft;
@@ -27,19 +28,14 @@ public class CommandHypixelShout extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-
         StringBuilder msg = new StringBuilder("/shout");
-
         for (String arg : args) {
-
             if (arg.equalsIgnoreCase("/guide")) {
                 msg.append(" " + guide_url);
             } else {
                 msg.append(" ").append(arg);
             }
-
         }
-
         (Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg.toString());
     }
 
@@ -59,8 +55,10 @@ public class CommandHypixelShout extends CommandBase {
         if (args.length >= 2 && isKeywordreport(2, args)) {
             if (FKCounterMod.isitPrepPhase) {
                 return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
-            } else {
-                return null;
+            } else if (FKCounterMod.isInMwGame) {
+                final List<String> playersInThisGame = KillCounter.getPlayersInThisGame();
+                playersInThisGame.removeAll(TabCompletionUtil.getOnlinePlayersByName());
+                return getListOfStringsMatchingLastWord(args, playersInThisGame);
             }
         }
 

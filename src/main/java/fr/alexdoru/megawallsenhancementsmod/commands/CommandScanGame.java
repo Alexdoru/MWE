@@ -15,8 +15,10 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.event.ClickEvent;
+import net.minecraft.event.HoverEvent;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
@@ -150,11 +152,11 @@ class ScanPlayerTask implements Callable<String> {
                     (megawallsstats.getGames_played() <= 500 && megawallsstats.getFkdr() > 8f) ||
                     (megawallsstats.getFkdr() > 10f)) {
 
-                imsg = new ChatComponentText(getFormattedName(networkPlayerInfo)
-                        + EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played()
-                        + EnumChatFormatting.GRAY + " games , fkd : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkdr())
-                        + EnumChatFormatting.GRAY + " FK/game : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkpergame())
-                        + EnumChatFormatting.GRAY + " W/L : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getWlr()));
+                imsg = getFormattedNameWithPlanckeClickEvent(networkPlayerInfo).appendSibling(new ChatComponentText(
+                        EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played()
+                                + EnumChatFormatting.GRAY + " games , fkd : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkdr())
+                                + EnumChatFormatting.GRAY + " FK/game : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkpergame())
+                                + EnumChatFormatting.GRAY + " W/L : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getWlr())));
 
             } else if (megawallsstats.getGames_played() < 15) {
 
@@ -221,7 +223,7 @@ class ScanPlayerTask implements Callable<String> {
         int skill_level_a = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_a"), 1); //skill
         int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"), 1); //kit
         if (skill_level_a >= 4 || skill_level_d >= 4) {
-            return new ChatComponentText(getFormattedName(networkPlayerInfo) + EnumChatFormatting.GRAY + " never played and has :").appendSibling(getFormattedClassMsg(className, entryclassobj, true));
+            return getFormattedNameWithPlanckeClickEvent(networkPlayerInfo).appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " never played and has :").appendSibling(getFormattedClassMsg(className, entryclassobj, true)));
         }
         return null;
     }
@@ -232,11 +234,11 @@ class ScanPlayerTask implements Callable<String> {
         int skill_level_c = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_c"), 1); //passive2
         int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"), 1); //kit
         if (skill_level_a == 5 && skill_level_b == 3 && skill_level_c == 3 && skill_level_d == 5) {
-            return new ChatComponentText(getFormattedName(networkPlayerInfo)
-                    + EnumChatFormatting.GRAY + " played " + EnumChatFormatting.GOLD + gameplayed + EnumChatFormatting.GRAY + " games"
-                    + EnumChatFormatting.GRAY + ", network lvl " + EnumChatFormatting.GOLD + networklevel
-                    + EnumChatFormatting.GRAY + ", with " + EnumChatFormatting.GOLD + quests + EnumChatFormatting.GRAY + " quests"
-                    + EnumChatFormatting.GRAY + " and has :").appendSibling(getFormattedClassMsg(className, entryclassobj, false));
+            return getFormattedNameWithPlanckeClickEvent(networkPlayerInfo).appendSibling(new ChatComponentText(
+                    EnumChatFormatting.GRAY + " played " + EnumChatFormatting.GOLD + gameplayed + EnumChatFormatting.GRAY + " games"
+                            + EnumChatFormatting.GRAY + ", network lvl " + EnumChatFormatting.GOLD + networklevel
+                            + EnumChatFormatting.GRAY + ", with " + EnumChatFormatting.GOLD + quests + EnumChatFormatting.GRAY + " quests"
+                            + EnumChatFormatting.GRAY + " and has :")).appendSibling(getFormattedClassMsg(className, entryclassobj, false));
         }
         return null;
     }
@@ -256,6 +258,13 @@ class ScanPlayerTask implements Callable<String> {
                     + (skill_level_g == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_g));
         }
         return null;
+    }
+
+    private IChatComponent getFormattedNameWithPlanckeClickEvent(NetworkPlayerInfo networkPlayerInfoIn) {
+        return new ChatComponentText(getFormattedName(networkPlayerInfoIn))
+                .setChatStyle(new ChatStyle()
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to see the mega walls stats of that player")))
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + networkPlayerInfoIn.getGameProfile().getName() + " mw")));
     }
 
     private String getFormattedName(NetworkPlayerInfo networkPlayerInfoIn) {

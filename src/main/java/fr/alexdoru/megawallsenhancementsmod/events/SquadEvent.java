@@ -2,9 +2,11 @@ package fr.alexdoru.megawallsenhancementsmod.events;
 
 import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -15,8 +17,6 @@ import java.util.List;
 public class SquadEvent {
 
     private static final HashMap<String, String> squadmap = new HashMap<>();
-    private static String myNick;
-    private static String myFriendlyName;
 
     @SubscribeEvent
     public void onNameFormat(NameFormat event) {
@@ -24,17 +24,6 @@ public class SquadEvent {
         if (squadname != null) {
             event.displayname = squadname;
         }
-    }
-
-    public static void addMyself(String myNickIn) {
-        myNick = myNickIn;
-        addPlayer(myNickIn);
-    }
-
-    public static void addMyself(String myNickIn, String myFriendlyNameIn) {
-        myNick = myNickIn;
-        myFriendlyName = myFriendlyNameIn;
-        addPlayer(myNickIn, myFriendlyNameIn);
     }
 
     public static void addPlayer(String playername) {
@@ -51,10 +40,6 @@ public class SquadEvent {
         if (success) {
             NameUtil.updateGameProfileAndName(playername, true);
         }
-        if (squadmap.isEmpty()) {
-            myNick = null;
-            myFriendlyName = null;
-        }
         return success;
     }
 
@@ -62,13 +47,9 @@ public class SquadEvent {
         List<String> playerlist = new ArrayList<>();
         squadmap.forEach((key, value) -> playerlist.add(key));
         squadmap.clear();
-        myNick = null;
-        myFriendlyName = null;
-
         for (String playername : playerlist) {
             NameUtil.updateGameProfileAndName(playername, true);
         }
-
     }
 
     public static HashMap<String, String> getSquad() {
@@ -134,19 +115,10 @@ public class SquadEvent {
         squadmap.putAll(newsquad);
 
         if (!squadmap.isEmpty()) {
-
-            if (myNick == null) {
-                addPlayer(Minecraft.getMinecraft().thePlayer.getName());
-            } else {
-
-                if (myFriendlyName == null) {
-                    addPlayer(myNick, myNick);
-                } else {
-                    addPlayer(myNick, myFriendlyName);
-                }
-
+            addPlayer(Minecraft.getMinecraft().thePlayer.getName());
+            if (!ConfigHandler.hypixelNick.equals("")) {
+                addPlayer(ConfigHandler.hypixelNick, EnumChatFormatting.ITALIC + Minecraft.getMinecraft().thePlayer.getName());
             }
-
         }
 
     }

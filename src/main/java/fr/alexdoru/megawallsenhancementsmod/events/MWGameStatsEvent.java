@@ -7,6 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginDat
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassSkinData;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassStats;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiScreenHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
@@ -78,7 +79,7 @@ public class MWGameStatsEvent {
                 }
                 gameStats.minus(MWclassStats);
                 addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.YELLOW + "Click to view the stats of your " + EnumChatFormatting.AQUA + "Mega Walls " + EnumChatFormatting.YELLOW + "game!")
-                        .setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gamestatsmw"))));
+                        .setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.MW_GAME_END_STATS))));
             } catch (ApiException | IllegalArgumentException | IllegalAccessException ignored) {}
             return null;
         });
