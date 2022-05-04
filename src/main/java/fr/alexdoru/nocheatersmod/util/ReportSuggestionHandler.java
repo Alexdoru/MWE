@@ -189,6 +189,8 @@ public class ReportSuggestionHandler {
             if (isSenderMyself) {
                 new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " This player has already been reported during this game")), 0);
                 return true;
+            } else {
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You already reported this player during this game")), 0);
             }
         }
 
