@@ -20,7 +20,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
 
         boolean isPatcherLoaded = true;
-        int injectionPoints = 5;
+        int injectionPoints = 6;
         status.setInjectionPoints(injectionPoints);
 
         try {
@@ -34,6 +34,9 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
         for (MethodNode methodNode : classNode.methods) {
 
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "renderPlayerlist") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(ILauo;Lauk;)V" : "(ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V")) {
+
+                boolean foundListFormattedStringToWidth = false;
+
                 for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
                     if (insnNode.getOpcode() == BIPUSH && insnNode instanceof IntInsnNode && ((IntInsnNode) insnNode).operand == 20) {
@@ -63,6 +66,15 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                             methodNode.instructions.insertBefore(nextNode, list);
                             status.addInjection();
                         }
+                    }
+
+                    if (!foundListFormattedStringToWidth && insnNode instanceof MethodInsnNode && insnNode.getOpcode() == INVOKEVIRTUAL &&
+                            ((MethodInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "avn" : "net/minecraft/client/gui/FontRenderer")
+                            && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "c" : "listFormattedStringToWidth")
+                            && ((MethodInsnNode) insnNode).desc.equals("(Ljava/lang/String;I)Ljava/util/List;")) {
+                        foundListFormattedStringToWidth = true;
+                        methodNode.instructions.insertBefore(insnNode.getNext(), new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "addPlayerCountinHeader", "(Ljava/util/List;)Ljava/util/List;", false));
+                        status.addInjection();
                     }
 
                 }

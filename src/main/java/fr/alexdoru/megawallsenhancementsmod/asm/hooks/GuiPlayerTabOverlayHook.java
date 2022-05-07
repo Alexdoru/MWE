@@ -6,6 +6,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("unused")
 public class GuiPlayerTabOverlayHook {
 
@@ -22,6 +25,16 @@ public class GuiPlayerTabOverlayHook {
         }
         String s1 = EnumChatFormatting.GOLD + "" + playersFinals;
         fontRendererObj.drawStringWithShadow(s1, (float) (x - fontRendererObj.getStringWidth(s1) - FK_SCORE_WIDTH), (float) y, 16777215);
+    }
+
+    public static List<String> addPlayerCountinHeader(List<String> listIn) {
+        if (listIn != null) {
+            final ArrayList<String> list = new ArrayList<>(listIn);
+            int i = Minecraft.getMinecraft().thePlayer.sendQueue.getPlayerInfoMap().size();
+            list.add(0, EnumChatFormatting.GREEN + "Player" + (i < 2 ? "" : "s") + ": " + EnumChatFormatting.GOLD + i);
+            return list;
+        }
+        return null;
     }
 
     public static EnumChatFormatting getColoredHP(int healthPoints) {
