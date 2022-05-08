@@ -69,6 +69,11 @@ public class GuiContainerHook {
             if (theSlot.inventory instanceof InventoryPlayer) {
                 return false;
             }
+            final ItemStack itemstackInSlot = theSlot.inventory.getStackInSlot(theSlot.slotNumber);
+            /*If the targeted slot for the hotkey has an item, it won't hotkey the item in hotbar in the inventory in vanilla*/
+            if (itemstackInSlot != null) {
+                return false;
+            }
             final EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
             final ItemStack itemStack = thePlayer.inventory.mainInventory[i];
             if (itemStack != null && itemStackHasCustomDisplayName(itemStack)) {
