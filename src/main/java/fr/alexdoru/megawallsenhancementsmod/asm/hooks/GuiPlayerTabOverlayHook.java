@@ -29,9 +29,12 @@ public class GuiPlayerTabOverlayHook {
 
     public static List<String> addPlayerCountinHeader(List<String> listIn) {
         if (listIn != null) {
-            final ArrayList<String> list = new ArrayList<>(listIn);
             int i = Minecraft.getMinecraft().thePlayer.sendQueue.getPlayerInfoMap().size();
-            list.add(0, EnumChatFormatting.GREEN + "Player" + (i < 2 ? "" : "s") + ": " + EnumChatFormatting.GOLD + i);
+            if (i < 2) {
+                return listIn;
+            }
+            final ArrayList<String> list = new ArrayList<>(listIn);
+            list.add(0, EnumChatFormatting.GREEN + "Players: " + EnumChatFormatting.GOLD + i);
             return list;
         }
         return null;
