@@ -174,7 +174,7 @@ public class ReportSuggestionHandler {
 
         if (canReportSuggestionPlayer(reportedPlayer)) {
             if (isSenderMyself) {
-                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You report will be shared with other players in the game")), 0);
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Your report will be shared with other players in the game")), 0);
                 return true;
             }
             checkReportSpam();
