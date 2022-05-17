@@ -61,7 +61,7 @@ public class GuiContainerHook {
      * iron sword w sharpness
      * diamond sword except quantum sword check silk touch
      * potions / exept phx/ren splash & squid abs
-     * bow except if you have enchanted bows on you (pirate bows)
+     * kit bow except if you have enchanted bows on you (pirate bows)
      */
     private static boolean isItemImportant(Slot theSlot, int i) {
         if (FKCounterMod.isInMwGame && ConfigHandler.safeInventory) {
@@ -109,7 +109,7 @@ public class GuiContainerHook {
                 }
                 if (item == Items.bow) {
                     if (itemStack.isItemEnchanted()) {
-                        return true;
+                        return !isSpecialPirateBow(itemStack);
                     }
                     return !hasAnotherBowThatsEnchanted(thePlayer.inventory.mainInventory);
                 }
@@ -121,8 +121,8 @@ public class GuiContainerHook {
     private static boolean itemStackHasCustomDisplayName(ItemStack itemStack) {
         final NBTTagCompound tagCompound = itemStack.getTagCompound();
         if (tagCompound != null && tagCompound.hasKey("display", 10)) {
-            NBTTagCompound nbttagcompound = tagCompound.getCompoundTag("display");
-            return nbttagcompound.hasKey("Name", 8);
+            NBTTagCompound displayTag = tagCompound.getCompoundTag("display");
+            return displayTag.hasKey("Name", 8);
         }
         return false;
     }
@@ -133,6 +133,13 @@ public class GuiContainerHook {
 
     private static boolean isEnchantedWithSilkTouch(ItemStack itemStack) {
         return EnchantmentHelper.getEnchantments(itemStack).containsKey(Enchantment.silkTouch.effectId);
+    }
+
+    private static boolean isSpecialPirateBow(ItemStack itemStack) {
+        final NBTTagCompound tagCompound = itemStack.getTagCompound();
+        final NBTTagCompound displayTag = tagCompound.getCompoundTag("display");
+        final String itemName = displayTag.getString("Name");
+        return itemName != null && (itemName.contains("Matey Coconut Bow") || itemName.contains("Matey Voodoo Bow"));
     }
 
     private static boolean hasAnotherBowThatsEnchanted(ItemStack[] mainInventory) {
