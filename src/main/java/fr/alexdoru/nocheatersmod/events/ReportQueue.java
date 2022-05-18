@@ -5,8 +5,10 @@ import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -20,8 +22,10 @@ import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage
 
 public class ReportQueue {
 
+    public static boolean isDebugMode = false;
     public static final ReportQueue INSTANCE = new ReportQueue();
     private static final Minecraft mc = Minecraft.getMinecraft();
+    private static final FontRenderer frObj = mc.fontRendererObj;
     private static final int TIME_BETWEEN_REPORTS_MAX = 4 * 60 * 20;
     private static final int TIME_BETWEEN_REPORTS_MIN = 2 * 60 * 20;
 
@@ -40,7 +44,7 @@ public class ReportQueue {
 
         if (counter <= 0 && !queueList.isEmpty() && mc.thePlayer != null) {
             String playername = queueList.remove(queueList.size() - 1).reportedPlayer;
-            mc.thePlayer.sendChatMessage("/wdr " + playername + " cheating");
+            mc.thePlayer.sendChatMessage("/wdr " + playername);
             final int i = TIME_BETWEEN_REPORTS_MAX - 12 * 20 * (queueList.isEmpty() ? 0 : queueList.size() - 1);
             counter = (int) ((10d * random.nextGaussian() / 6d) + Math.max(i, TIME_BETWEEN_REPORTS_MIN));
             addReportTimestamp(false);
@@ -52,6 +56,26 @@ public class ReportQueue {
 
         counter--;
 
+    }
+
+    @SubscribeEvent
+    public void onRender(RenderGameOverlayEvent.Post event) {
+        if (isDebugMode && event.type == RenderGameOverlayEvent.ElementType.TEXT) {
+            int x = 0;
+            int y = frObj.FONT_HEIGHT * 4;
+            frObj.drawString(EnumChatFormatting.DARK_GREEN + "REPORT QUEUE", x, y, 0, true);
+            y += frObj.FONT_HEIGHT;
+            boolean first = true;
+            for (int i = queueList.size() - 1; i >= 0; i--) {
+                final ReportInQueue reportInQueue = queueList.get(i);
+                frObj.drawString(EnumChatFormatting.RED + reportInQueue.reportedPlayer, x, y, 0, true);
+                if (first) {
+                    frObj.drawString(EnumChatFormatting.GOLD + " " + counter / 20 + "s", x + frObj.getStringWidth(reportInQueue.reportedPlayer), y, 0, true);
+                }
+                y += frObj.FONT_HEIGHT;
+                first = false;
+            }
+        }
     }
 
     public void addPlayerToQueue(String playername, boolean printDelayMsg) {
@@ -66,6 +90,14 @@ public class ReportQueue {
         }
     }
 
+    private void addPlayerToQueue(String suggestionSender, String playername, int tickDelay) {
+        if (isReportQueueInactive()) {
+            MinecraftForge.EVENT_BUS.register(this);
+            counter = tickDelay;
+        }
+        queueList.add(new ReportInQueue(suggestionSender, playername));
+    }
+
     /**
      * Called from the auto-report suggestions
      * Returns true if it adds the players to the report queue
@@ -78,30 +110,22 @@ public class ReportQueue {
         return false;
     }
 
-    private void addPlayerToQueue(String suggestionSender, String playername, int tickDelay) {
-        if (isReportQueueInactive()) {
-            MinecraftForge.EVENT_BUS.register(this);
-            counter = tickDelay;
-        }
-        queueList.add(new ReportInQueue(suggestionSender, playername));
-    }
-
-    private boolean isReportQueueInactive() {
-        return counter <= 0 && queueList.isEmpty();
-    }
-
     /**
      * Handles the auto report feature
      *
      * @return true if it sends a report
      */
-    public boolean sendAutoReport(long datenow, String playerName, WDR wdr) {
+    public boolean addAutoReportToQueue(long datenow, String playerName, WDR wdr) {
         if (wdr.canBeAutoreported(datenow) && wdr.hasValidCheats()) {
             wdr.timestamp = datenow;
             addPlayerToQueue(playerName, false);
             return true;
         }
         return false;
+    }
+
+    private boolean isReportQueueInactive() {
+        return counter <= 0 && queueList.isEmpty();
     }
 
     public void clearReportsSentBy(String playername) {
