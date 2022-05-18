@@ -15,11 +15,6 @@ import java.util.List;
 public class ConfigHandler {
 
     private static Configuration config;
-    private static final String CATEGORY_FKCounter = "Final Kill Counter";
-    private static final String CATEGORY_MWENh = "MegaWallsEnhancements";
-    private static final String CATEGORY_GUI = "GUI";
-    private static final String CATEGORY_NOCHEATERS = "NoCheaters";
-    private static final String CATEGORY_HITBOX = "Hitbox";
 
     /**
      * FKCounter config
@@ -119,6 +114,7 @@ public class ConfigHandler {
         }
 
         /*Reads the fiels in the config and stores them in the property objects, and defines a default value if the fields doesn't exist*/
+        final String CATEGORY_FKCounter = "Final Kill Counter";
         final Property pXpos_fkcHUD = config.get(CATEGORY_FKCounter, "Xpos FKCounter HUD", 0d, "The x position of the final kill counter HUD, value ranges from 0 to 1");
         final Property pYpos_fkcHUD = config.get(CATEGORY_FKCounter, "Ypos FKCounter HUD", 0.1d, "The y position of the final kill counter HUD, value ranges from 0 to 1");
         final Property pshow_fkcHUD = config.get(CATEGORY_FKCounter, "Show FKCounter HUD", true, "Displays the HUD of the final kill counter");
@@ -131,6 +127,7 @@ public class ConfigHandler {
         final Property pPlayerAmount = config.get(CATEGORY_FKCounter, "Player amount", 3, "Amount of players displayed on screen when you use the \"Show players\" setting");
         final Property pfinalsInTablist = config.get(CATEGORY_FKCounter, "Fks in tablist", true, "Draws the finals in the tablist");
 
+        final String CATEGORY_MWENh = "MegaWallsEnhancements";
         final Property pAPIKey = config.get(CATEGORY_MWENh, "APIKey", "", "Your Hypixel API Key");
         final Property phypixelNick = config.get(CATEGORY_MWENh, "Hypixel Nick", "", "Your nick on Hypixel");
         final Property pstrengthParticules = config.get(CATEGORY_MWENh, "Strength particules", true, "Spawns strength particules when an herobrine or dreadlord get a final");
@@ -146,6 +143,7 @@ public class ConfigHandler {
         final Property phideRepetitiveMWChatMsg = config.get(CATEGORY_MWENh, "Delete repetitive chat messages in mw", true, "Delete repetitive chat messages in mw");
         final Property pclearVision = config.get(CATEGORY_MWENh, "Clear Vision", true, "Hides particles too close to the camera");
 
+        final String CATEGORY_GUI = "GUI";
         final Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
         final Property pXpos_killcooldownHUD = config.get(CATEGORY_GUI, "Xpos kill cooldown HUD", 0d, "The x position of the killcooldown HUD, value ranges from 0 to 1");
         final Property pYpos_killcooldownHUD = config.get(CATEGORY_GUI, "Ypos kill cooldown HUD", 0d, "The y position of the killcooldown HUD, value ranges from 0 to 1");
@@ -160,6 +158,7 @@ public class ConfigHandler {
         final Property pXpos_hunterHUD = config.get(CATEGORY_GUI, "Xpos hunter Strength HUD", 0.5d, "The x position of the Hunter Strength HUD, value ranges from 0 to 1");
         final Property pYpos_hunterHUD = config.get(CATEGORY_GUI, "Ypos hunter Strength HUD", 8d / 20d, "The y position of the Hunter Strength HUD, value ranges from 0 to 1");
 
+        final String CATEGORY_NOCHEATERS = "NoCheaters";
         final Property pToggleicons = config.get(CATEGORY_NOCHEATERS, "Toggle Icons", true, "Display warning symbol on nametags of reported players");
         final Property pTogglewarnings = config.get(CATEGORY_NOCHEATERS, "Toggle Warnings", false, "Gives warning messages in chat for reported players");
         final Property preportsuggestions = config.get(CATEGORY_NOCHEATERS, "Report suggestion", true, "Give report suggestions in the chat based on messages in shouts");
@@ -171,6 +170,7 @@ public class ConfigHandler {
         final Property pdeleteCheaterChatMsg = config.get(CATEGORY_NOCHEATERS, "Delete Cheater Chat", false, "Deletes chat messages sent by reported cheaters");
         final Property psafeReportingMode = config.get(CATEGORY_NOCHEATERS, "Safe reporting", false, "Registers your wdr commands and sends them over time to prevent spam");
 
+        final String CATEGORY_HITBOX = "Hitbox";
         final Property pisDebugHitboxOn = config.get(CATEGORY_HITBOX, "Toggle hitbox", false, "Toggle hitbox");
         final Property pdrawHitboxForPlayers = config.get(CATEGORY_HITBOX, "Hitbox for players", true, "Hitbox for players");
         final Property pdrawHitboxForGroundedArrows = config.get(CATEGORY_HITBOX, "Hitbox for grounded arrows", true, "Hitbox for grounded arrows");
