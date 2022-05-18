@@ -43,11 +43,16 @@ public class ReportQueue {
         }
 
         if (counter <= 0 && !queueList.isEmpty() && mc.thePlayer != null) {
-            String playername = queueList.remove(queueList.size() - 1).reportedPlayer;
+            int index = getIndexOffFirstReportSuggestion();
+            String playername = queueList.remove(index == -1 ? 0 : index).reportedPlayer;
             mc.thePlayer.sendChatMessage("/wdr " + playername);
-            final int i = TIME_BETWEEN_REPORTS_MAX - 12 * 20 * (queueList.isEmpty() ? 0 : queueList.size() - 1);
-            counter = (int) ((10d * random.nextGaussian() / 6d) + Math.max(i, TIME_BETWEEN_REPORTS_MIN));
             addReportTimestamp(false);
+            if (doesQueueHaveReportSuggestion()) {
+                counter = getTickDelay() + 10 * 20;
+            } else {
+                final int i = TIME_BETWEEN_REPORTS_MAX - 12 * 20 * (queueList.isEmpty() ? 0 : queueList.size() - 1);
+                counter = (int) ((10d * random.nextGaussian() / 6d) + Math.max(i, TIME_BETWEEN_REPORTS_MIN));
+            }
         }
 
         if (isReportQueueInactive()) {
@@ -58,6 +63,24 @@ public class ReportQueue {
 
     }
 
+    private int getIndexOffFirstReportSuggestion() {
+        for (int i = 0; i < queueList.size(); i++) {
+            if (queueList.get(i).isReportSuggestion) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private boolean doesQueueHaveReportSuggestion() {
+        for (ReportInQueue reportInQueue : queueList) {
+            if (reportInQueue.isReportSuggestion) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
         if (isDebugMode && event.type == RenderGameOverlayEvent.ElementType.TEXT) {
@@ -66,9 +89,8 @@ public class ReportQueue {
             frObj.drawString(EnumChatFormatting.DARK_GREEN + "REPORT QUEUE", x, y, 0, true);
             y += frObj.FONT_HEIGHT;
             boolean first = true;
-            for (int i = queueList.size() - 1; i >= 0; i--) {
-                final ReportInQueue reportInQueue = queueList.get(i);
-                frObj.drawString(EnumChatFormatting.RED + reportInQueue.reportedPlayer, x, y, 0, true);
+            for (final ReportInQueue reportInQueue : queueList) {
+                frObj.drawString((reportInQueue.isReportSuggestion ? EnumChatFormatting.RED : EnumChatFormatting.GREEN) + reportInQueue.reportedPlayer, x, y, 0, true);
                 if (first) {
                     frObj.drawString(EnumChatFormatting.GOLD + " " + counter / 20 + "s", x + frObj.getStringWidth(reportInQueue.reportedPlayer), y, 0, true);
                 }
@@ -86,16 +108,16 @@ public class ReportQueue {
             } else if (printDelayMsg) {
                 ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Sending report in a moment..."));
             }
-            queueList.add(0, new ReportInQueue(null, playername));
+            queueList.add(new ReportInQueue(null, playername, false));
         }
     }
 
     private void addPlayerToQueue(String suggestionSender, String playername, int tickDelay) {
         if (isReportQueueInactive()) {
             MinecraftForge.EVENT_BUS.register(this);
-            counter = tickDelay;
         }
-        queueList.add(new ReportInQueue(suggestionSender, playername));
+        counter = tickDelay;
+        queueList.add(new ReportInQueue(suggestionSender, playername, true));
     }
 
     /**
@@ -104,10 +126,19 @@ public class ReportQueue {
      */
     public boolean addPlayerToQueueRandom(String suggestionSender, String reportedPlayer) {
         if (canReportPlayerThisGame(reportedPlayer)) {
-            addPlayerToQueue(suggestionSender, reportedPlayer, (int) (100d + Math.abs(100d * random.nextGaussian() + 240d)));
+            addPlayerToQueue(suggestionSender, reportedPlayer, getTickDelay());
             return true;
         }
         return false;
+    }
+
+    /**
+     * Gaussian
+     * Min value : 5 seconds
+     * Avg value : 17 seconds
+     */
+    private int getTickDelay() {
+        return (int) (100d + Math.abs(100d * random.nextGaussian() + 240d));
     }
 
     /**
@@ -211,10 +242,12 @@ class ReportInQueue {
 
     public String messageSender;
     public String reportedPlayer;
+    public boolean isReportSuggestion;
 
-    public ReportInQueue(String messageSender, String reportedPlayer) {
+    public ReportInQueue(String messageSender, String reportedPlayer, boolean isReportSuggestion) {
         this.messageSender = messageSender;
         this.reportedPlayer = reportedPlayer;
+        this.isReportSuggestion = isReportSuggestion;
     }
 
 }
