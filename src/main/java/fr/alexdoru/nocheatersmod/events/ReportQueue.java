@@ -228,7 +228,7 @@ public class ReportQueue {
         long timestamp = System.currentTimeMillis();
         playersReportedThisGame.removeIf(o -> (o.timestamp + 40L * 60L * 1000L < timestamp));
         for (StringLong stringLong : playersReportedThisGame) {
-            if (stringLong.message != null && stringLong.message.equals(playername)) {
+            if (stringLong.message != null && stringLong.message.equalsIgnoreCase(playername)) {
                 return false;
             }
         }
