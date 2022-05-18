@@ -46,6 +46,9 @@ public class ReportQueue {
             int index = getIndexOffFirstReportSuggestion();
             String playername = queueList.remove(index == -1 ? 0 : index).reportedPlayer;
             mc.thePlayer.sendChatMessage("/wdr " + playername);
+            if (isDebugMode) {
+                ChatUtil.debug("sent report for " + playername);
+            }
             addReportTimestamp(false);
             if (doesQueueHaveReportSuggestion()) {
                 counter = getTickDelay() + 10 * 20;
@@ -122,12 +125,18 @@ public class ReportQueue {
 
     /**
      * Called from the auto-report suggestions
+     * if an auto-report for that player is already in the queue, it prioritizes it
      * Returns true if it adds the players to the report queue
      */
     public boolean addPlayerToQueueRandom(String suggestionSender, String reportedPlayer) {
         if (canReportPlayerThisGame(reportedPlayer)) {
             addPlayerToQueue(suggestionSender, reportedPlayer, getTickDelay());
             return true;
+        } else {
+            if (queueList.removeIf(reportInQueue -> (reportInQueue.reportedPlayer.equalsIgnoreCase(reportedPlayer) && !reportInQueue.isReportSuggestion))) {
+                addPlayerToQueue(suggestionSender, reportedPlayer, getTickDelay());
+                return true;
+            }
         }
         return false;
     }
