@@ -129,16 +129,9 @@ public class ReportQueue {
      * Returns true if it adds the players to the report queue
      */
     public boolean addPlayerToQueueRandom(String suggestionSender, String reportedPlayer) {
-        if (canReportPlayerThisGame(reportedPlayer)) {
-            addPlayerToQueue(suggestionSender, reportedPlayer, getTickDelay());
-            return true;
-        } else {
-            if (queueList.removeIf(reportInQueue -> (reportInQueue.reportedPlayer.equalsIgnoreCase(reportedPlayer) && !reportInQueue.isReportSuggestion))) {
-                addPlayerToQueue(suggestionSender, reportedPlayer, getTickDelay());
-                return true;
-            }
-        }
-        return false;
+        queueList.removeIf(reportInQueue -> (reportInQueue.reportedPlayer.equalsIgnoreCase(reportedPlayer)));
+        addPlayerToQueue(suggestionSender, reportedPlayer, getTickDelay());
+        return true;
     }
 
     /**
