@@ -1,6 +1,7 @@
 package fr.alexdoru.nocheatersmod.events;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.fkcountermod.events.MwGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
@@ -26,8 +27,8 @@ public class ReportQueue {
     public static final ReportQueue INSTANCE = new ReportQueue();
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static final FontRenderer frObj = mc.fontRendererObj;
-    private static final int TIME_BETWEEN_REPORTS_MAX = 4 * 60 * 20;
-    private static final int TIME_BETWEEN_REPORTS_MIN = 2 * 60 * 20;
+    private static final int TIME_BETWEEN_REPORTS_MAX = 5 * 60 * 20;
+    private static final int TIME_BETWEEN_REPORTS_MIN = 3 * 60 * 20;
 
     private int counter;
     private final List<ReportInQueue> queueList = new ArrayList<>();
@@ -43,13 +44,16 @@ public class ReportQueue {
         }
 
         if (counter <= 0 && !queueList.isEmpty() && mc.thePlayer != null) {
-            int index = getIndexOffFirstReportSuggestion();
-            String playername = queueList.remove(index == -1 ? 0 : index).reportedPlayer;
-            mc.thePlayer.sendChatMessage("/wdr " + playername);
-            if (isDebugMode) {
-                ChatUtil.debug("sent report for " + playername);
+            final int index = getIndexOffFirstReportSuggestion();
+            final ReportInQueue reportInQueue = queueList.remove(index == -1 ? 0 : index);
+            final String playername = reportInQueue.reportedPlayer;
+            if (reportInQueue.isReportSuggestion || FKCounterMod.isInMwGame) {
+                mc.thePlayer.sendChatMessage("/wdr " + playername);
+                addReportTimestamp(false);
+                if (isDebugMode) {
+                    ChatUtil.debug("sent report for " + playername);
+                }
             }
-            addReportTimestamp(false);
             if (doesQueueHaveReportSuggestion()) {
                 counter = getTickDelay() + 10 * 20;
             } else {
@@ -100,6 +104,13 @@ public class ReportQueue {
                 y += frObj.FONT_HEIGHT;
                 first = false;
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onGameEnd(MwGameEvent event) {
+        if (event.getType() == MwGameEvent.EventType.GAME_END) {
+            queueList.removeIf(reportInQueue -> !reportInQueue.isReportSuggestion);
         }
     }
 
