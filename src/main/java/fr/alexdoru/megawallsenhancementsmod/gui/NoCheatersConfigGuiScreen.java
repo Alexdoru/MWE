@@ -106,7 +106,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 textLines.add(EnumChatFormatting.GRAY + "You can ignore players by using " + EnumChatFormatting.YELLOW + "/nocheaters ignore <playername>");
                 break;
             case 10:
-                textLines.add(EnumChatFormatting.GREEN + "Deletes or censors chat messages sent by repoted players");
+                textLines.add(EnumChatFormatting.GREEN + "Deletes or censors chat messages sent by reported players");
                 break;
         }
         return textLines;
