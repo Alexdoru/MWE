@@ -5,7 +5,6 @@ import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
-import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import fr.alexdoru.nocheatersmod.data.TimeMark;
 import fr.alexdoru.nocheatersmod.data.WDR;
@@ -192,15 +191,10 @@ public class CommandWDR extends CommandBase {
             if (sentFromAutoReport) {
                 ReportQueue.INSTANCE.addPlayerToQueueRandom(null, playername);
             } else {
-                if (ConfigHandler.safeReportingMode && FKCounterMod.isInMwGame) {
-                    ReportQueue.INSTANCE.addPlayerToQueue(playername, true);
-                } else {
-                    if (mc.thePlayer != null) {
-                        mc.thePlayer.sendChatMessage(message.toString());
-                    }
+                if (mc.thePlayer != null) {
+                    mc.thePlayer.sendChatMessage(message.toString());
                 }
             }
-
 
             ReportQueue.INSTANCE.addReportTimestamp(true);
 

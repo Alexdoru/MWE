@@ -222,9 +222,8 @@ public class ReportQueue {
     public void addReportTimestamp(boolean manualReport) {
         long l = System.currentTimeMillis();
         timestampsLastReports.removeIf(o -> (o + 2 * 60 * 1000L < l));
-        if (manualReport && timestampsLastReports.size() > 3) {
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Don't report too many players at once or Hypixel will ignore your reports thinking you are a bot trying to flood their system."
-                    + (FKCounterMod.isInMwGame ? EnumChatFormatting.GOLD + " You can turn on NoCheaters' safe reporting mode to prevent this." : "")));
+        if (manualReport && timestampsLastReports.size() > 4) {
+            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Don't report too many players at once or Hypixel will ignore your reports thinking you are a bot trying to flood their system"));
         }
         timestampsLastReports.add(l);
     }
