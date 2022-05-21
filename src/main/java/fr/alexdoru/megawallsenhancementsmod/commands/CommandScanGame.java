@@ -57,14 +57,6 @@ public class CommandScanGame extends CommandBase {
         scanmap.put(uuid, msg);
     }
 
-    protected static IChatComponent getMessageStart(String playername) {
-        IChatComponent imsg = new ChatComponentText(ChatUtil.getTagMW());
-        if (FKCounterMod.isInMwGame) {
-            imsg.appendSibling(ChatUtil.makeReportButtons(playername, "cheating", "", ClickEvent.Action.RUN_COMMAND, ClickEvent.Action.SUGGEST_COMMAND));
-        }
-        return imsg;
-    }
-
     @Override
     public String getCommandName() {
         return "scangame";
@@ -99,7 +91,7 @@ public class CommandScanGame extends CommandBase {
                     i++;
                     Multithreading.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
                 } else if (!imsg.equals(nomatch)) {
-                    ChatUtil.addChatMessage(getMessageStart(networkPlayerInfo.getGameProfile().getName()).appendSibling(imsg));
+                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(imsg));
                 }
 
             }
@@ -203,7 +195,7 @@ class ScanPlayerTask implements Callable<String> {
             }
 
             if (imsg != null) {
-                ChatUtil.addChatMessage(CommandScanGame.getMessageStart(playername).appendSibling(imsg));
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(imsg));
                 CommandScanGame.put(uuid, imsg);
                 NameUtil.updateGameProfileAndName(networkPlayerInfo);
             } else {
