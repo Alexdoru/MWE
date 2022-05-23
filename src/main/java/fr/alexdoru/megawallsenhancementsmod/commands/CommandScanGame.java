@@ -153,7 +153,7 @@ class ScanPlayerTask implements Callable<String> {
 
                 GeneralInfo generalInfo = new GeneralInfo(playerdata.getPlayerData());
                 boolean firstGame = megawallsstats.getGames_played() == 0;
-                boolean secondFlag = generalInfo.getCompletedQuests() < 20 && generalInfo.getNetworkLevel() > 42f;
+                boolean secondFlag = generalInfo.getCompletedQuests() < 20 && generalInfo.getNetworkLevel() > 30f;
                 JsonObject classesdata = megawallsstats.getClassesdata();
 
                 if (FKCounterMod.isInMwGame) {
