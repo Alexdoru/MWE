@@ -111,13 +111,18 @@ public class SquadEvent {
 
         }
 
+        final String myName = Minecraft.getMinecraft().thePlayer.getName();
+        final String myCustomName = squadmap.get(myName);
+
         squadmap.clear();
         squadmap.putAll(newsquad);
 
-        if (!squadmap.isEmpty()) {
-            addPlayer(Minecraft.getMinecraft().thePlayer.getName());
+        if (myCustomName != null) {
+            addPlayer(myName, myCustomName);
+        } else if (!squadmap.isEmpty()) {
+            addPlayer(myName);
             if (!ConfigHandler.hypixelNick.equals("")) {
-                addPlayer(ConfigHandler.hypixelNick, EnumChatFormatting.ITALIC + Minecraft.getMinecraft().thePlayer.getName());
+                addPlayer(ConfigHandler.hypixelNick, EnumChatFormatting.ITALIC + myName);
             }
         }
 
