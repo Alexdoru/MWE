@@ -18,14 +18,20 @@ public abstract class MyGuiScreen extends GuiScreen {
 
     @Override
     public void initGui() {
-        mc.entityRenderer.loadShader(SHADER);
+        try {
+            mc.entityRenderer.loadShader(SHADER);
+        } catch (Exception ignored) {
+        }
         super.initGui();
     }
 
     @Override
     public void onGuiClosed() {
         ConfigHandler.saveConfig();
-        mc.entityRenderer.stopUseShader();
+        try {
+            mc.entityRenderer.stopUseShader();
+        } catch (Exception ignored) {
+        }
         super.onGuiClosed();
     }
 
