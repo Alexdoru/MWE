@@ -119,7 +119,7 @@ public class ReportQueue {
         if (canReportPlayerThisGame(playername)) {
             if (isReportQueueInactive()) {
                 MinecraftForge.EVENT_BUS.register(this);
-                counter = 0;
+                counter = random.nextInt(TIME_BETWEEN_REPORTS_MAX);
             } else if (printDelayMsg) {
                 ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Sending report in a moment..."));
             }
