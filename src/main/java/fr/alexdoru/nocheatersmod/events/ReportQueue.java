@@ -31,6 +31,7 @@ public class ReportQueue {
     private static final int TIME_BETWEEN_REPORTS_MIN = 3 * 60 * 20;
 
     private int counter;
+    private int autoReportSent;
     private final List<ReportInQueue> queueList = new ArrayList<>();
     private final List<Long> timestampsLastReports = new ArrayList<>();
     private final List<StringLong> playersReportedThisGame = new ArrayList<>();
@@ -160,9 +161,10 @@ public class ReportQueue {
      * @return true if it sends a report
      */
     public boolean addAutoReportToQueue(long datenow, String playerName, WDR wdr) {
-        if (wdr.canBeAutoreported(datenow) && wdr.hasValidCheats()) {
+        if (autoReportSent < 3 && wdr.canBeAutoreported(datenow) && wdr.hasValidCheats()) {
             wdr.timestamp = datenow;
             addPlayerToQueue(playerName, false);
+            autoReportSent++;
             return true;
         }
         return false;
@@ -234,6 +236,7 @@ public class ReportQueue {
 
     public void clearPlayersReportedThisGame() {
         playersReportedThisGame.clear();
+        autoReportSent = 0;
     }
 
     private boolean canReportPlayerThisGame(String playername) {
