@@ -29,7 +29,7 @@ public class ReportQueue {
     private static final FontRenderer frObj = mc.fontRendererObj;
     private static final int TIME_BETWEEN_REPORTS_MAX = 5 * 60 * 20;
     private static final int TIME_BETWEEN_REPORTS_MIN = 3 * 60 * 20;
-    private static final int AUTOREPORT_PER_GAME = 3;
+    private static final int AUTOREPORT_PER_GAME = 2;
 
     private int counter;
     private int autoReportSent;
