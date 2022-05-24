@@ -29,6 +29,7 @@ public class ReportQueue {
     private static final FontRenderer frObj = mc.fontRendererObj;
     private static final int TIME_BETWEEN_REPORTS_MAX = 5 * 60 * 20;
     private static final int TIME_BETWEEN_REPORTS_MIN = 3 * 60 * 20;
+    private static final int AUTOREPORT_PER_GAME = 3;
 
     private int counter;
     private int autoReportSent;
@@ -56,7 +57,7 @@ public class ReportQueue {
                 }
             }
             if (doesQueueHaveReportSuggestion()) {
-                counter = getTickDelay() + 10 * 20;
+                counter = getTickDelay() + 20 * 20;
             } else {
                 final int i = TIME_BETWEEN_REPORTS_MAX - 12 * 20 * (queueList.isEmpty() ? 0 : queueList.size() - 1);
                 counter = (int) ((10d * random.nextGaussian() / 6d) + Math.max(i, TIME_BETWEEN_REPORTS_MIN));
@@ -161,7 +162,7 @@ public class ReportQueue {
      * @return true if it sends a report
      */
     public boolean addAutoReportToQueue(long datenow, String playerName, WDR wdr) {
-        if (autoReportSent < 3 && wdr.canBeAutoreported(datenow) && wdr.hasValidCheats()) {
+        if (autoReportSent < AUTOREPORT_PER_GAME && wdr.canBeAutoreported(datenow) && wdr.hasValidCheats()) {
             wdr.timestamp = datenow;
             addPlayerToQueue(playerName, false);
             autoReportSent++;
