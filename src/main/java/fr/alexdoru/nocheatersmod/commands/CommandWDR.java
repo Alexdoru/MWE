@@ -71,10 +71,10 @@ public class CommandWDR extends CommandBase {
             addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
             return;
         }
-        handleWDRCommand(args, false);
+        handleWDRCommand(args, false, false);
     }
 
-    public static void handleWDRCommand(String[] args, boolean sentFromAutoReport) {
+    public static void handleWDRCommand(String[] args, boolean sentFromAutoReport, boolean canWDRPlayer) {
         Multithreading.addTaskToQueue(() -> {
             boolean isaTimestampedReport = false;
             boolean usesTimeMark = false;
@@ -189,7 +189,9 @@ public class CommandWDR extends CommandBase {
             }
 
             if (sentFromAutoReport) {
-                ReportQueue.INSTANCE.addPlayerToQueueRandom(null, playername);
+                if (canWDRPlayer) {
+                    ReportQueue.INSTANCE.addPlayerToQueueRandom(null, playername);
+                }
             } else {
                 if (mc.thePlayer != null) {
                     mc.thePlayer.sendChatMessage(message.toString());

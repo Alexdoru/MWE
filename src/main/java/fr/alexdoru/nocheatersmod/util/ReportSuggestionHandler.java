@@ -137,7 +137,7 @@ public class ReportSuggestionHandler {
 
         if (isSenderMyself) {
             String[] args = new String[]{reportedPlayer, cheat};
-            CommandWDR.handleWDRCommand(args, true);
+            CommandWDR.handleWDRCommand(args, true, canWDRPlayer(reportedPlayer));
         }
 
         if (FKCounterMod.isitPrepPhase) {
@@ -277,6 +277,17 @@ public class ReportSuggestionHandler {
             }
         }
         reportSuggestionHistory.add(new StringLong(timestamp, playername));
+        return true;
+    }
+
+    private static boolean canWDRPlayer(String playername) {
+        long timestamp = System.currentTimeMillis();
+        reportSuggestionHistory.removeIf(o -> (o.timestamp + TIME_BETWEEN_REPORT_SUGGESTION_PLAYER < timestamp));
+        for (StringLong stringLong : reportSuggestionHistory) {
+            if (stringLong.message != null && stringLong.message.equalsIgnoreCase(playername)) {
+                return false;
+            }
+        }
         return true;
     }
 
