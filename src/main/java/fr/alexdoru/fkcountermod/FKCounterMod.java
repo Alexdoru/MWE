@@ -23,7 +23,6 @@ public class FKCounterMod {
      * True during the preparation phase of a mega walls game
      */
     public static boolean isitPrepPhase = false;
-    public static boolean isHypixel = false;
     public static boolean isMWEnvironement = false;
 
     public static void init() {
