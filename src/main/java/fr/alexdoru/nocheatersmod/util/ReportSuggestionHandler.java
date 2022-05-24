@@ -272,7 +272,7 @@ public class ReportSuggestionHandler {
         long timestamp = System.currentTimeMillis();
         reportSuggestionHistory.removeIf(o -> (o.timestamp + TIME_BETWEEN_REPORT_SUGGESTION_PLAYER < timestamp));
         for (StringLong stringLong : reportSuggestionHistory) {
-            if (stringLong.message != null && stringLong.message.equals(playername)) {
+            if (stringLong.message != null && stringLong.message.equalsIgnoreCase(playername)) {
                 return false;
             }
         }
