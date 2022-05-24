@@ -8,16 +8,40 @@ import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
+import net.minecraft.client.Minecraft;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class ModUpdater {
 
     private static final String GITHUB_API_URL = "https://api.github.com/repos/Alexdoru/MegaWallsEnhancements/releases";
     private static final String GITHUB_URL = "https://github.com/Alexdoru/MegaWallsEnhancements/releases";
+    public static boolean isUpTodate = false;
+    private final Minecraft mc = Minecraft.getMinecraft();
+    private boolean hasTriggered = false;
+
+    @SubscribeEvent
+    public void onTick(TickEvent.ClientTickEvent event) {
+        if (mc.theWorld != null && mc.thePlayer != null && !hasTriggered) {
+            hasTriggered = true;
+            Multithreading.addTaskToQueue(() -> {
+                try {
+                    checkForUpdate();
+                } catch (ApiException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            });
+            MinecraftForge.EVENT_BUS.unregister(this);
+        }
+    }
 
     public static void checkForUpdate() throws ApiException {
 
@@ -53,12 +77,12 @@ public class ModUpdater {
 
         if (Integer.parseInt(MegaWallsEnhancementsMod.version.replace(".", "")) < latestVersion) {
             ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements "
-                    + EnumChatFormatting.GOLD + "version v" + version + EnumChatFormatting.GREEN + " is available for download, click this message to see the changelog and download page.")
+                    + EnumChatFormatting.GOLD + "version v" + version + EnumChatFormatting.GREEN + " is available, click this message to see the changelog and download page.")
                     .setChatStyle(new ChatStyle()
                             .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, GITHUB_URL))
-                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + GITHUB_URL)))
-                    )
-            );
+                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + GITHUB_URL)))));
+        } else {
+            isUpTodate = true;
         }
 
     }

@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.commands.*;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.*;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
+import fr.alexdoru.megawallsenhancementsmod.updater.ModUpdater;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -47,7 +48,7 @@ public class MegaWallsEnhancementsMod {
         MinecraftForge.EVENT_BUS.register(new SquadEvent());
         MinecraftForge.EVENT_BUS.register(new KillCounter());
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
-        MinecraftForge.EVENT_BUS.register(new UpdateNotifier());
+        MinecraftForge.EVENT_BUS.register(new ModUpdater());
         MinecraftForge.EVENT_BUS.register(new KeybindingsEvent());
         MinecraftForge.EVENT_BUS.register(new MWGameStatsEvent());
 
