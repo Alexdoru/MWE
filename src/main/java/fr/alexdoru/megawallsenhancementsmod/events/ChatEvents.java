@@ -4,7 +4,6 @@ import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.events.MwGameEvent;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
-import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.ArrowHitGui;
@@ -194,9 +193,6 @@ public class ChatEvents {
     private boolean parseAPIKey(String msg) {
         Matcher matcherapikey = API_KEY_PATTERN.matcher(msg);
         if (matcherapikey.matches()) {
-            if (!MinecraftUtils.isHypixel()) {
-                return false;
-            }
             HypixelApiKeyUtil.setApiKey(matcherapikey.group(1));
             return true;
         }

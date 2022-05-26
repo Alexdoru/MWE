@@ -24,18 +24,14 @@ public class ScoreboardUtils {
      * Item at index 0 is the first line etc
      */
     public static List<String> getFormattedSidebarText() {
-
         List<String> lines = new ArrayList<>();
-
-        if (mc.theWorld == null || !MinecraftUtils.isHypixel()) {
+        if (mc.theWorld == null) {
             return lines;
         }
-
         Scoreboard scoreboard = mc.theWorld.getScoreboard();
         if (scoreboard == null) {
             return lines;
         }
-
         return getFormattedSidebarText(scoreboard);
     }
 
@@ -126,10 +122,7 @@ public class ScoreboardUtils {
     }
 
     public static String getUnformattedSidebarTitle() {
-        if (mc.theWorld == null || !MinecraftUtils.isHypixel()) {
-            return null;
-        }
-        return getUnformattedSidebarTitle(mc.theWorld.getScoreboard());
+        return mc.theWorld == null ? null : getUnformattedSidebarTitle(mc.theWorld.getScoreboard());
     }
 
 }
