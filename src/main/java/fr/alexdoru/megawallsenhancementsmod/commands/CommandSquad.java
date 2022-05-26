@@ -1,6 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
@@ -42,7 +41,7 @@ public class CommandSquad extends CommandBase {
         Minecraft mc = Minecraft.getMinecraft();
         String title = null;
 
-        if (mc.theWorld != null && MinecraftUtils.isHypixel()) {
+        if (mc.theWorld != null) {
             Scoreboard scoreboard = mc.theWorld.getScoreboard();
             if (scoreboard != null) {
                 title = ScoreboardUtils.getUnformattedSidebarTitle(scoreboard);

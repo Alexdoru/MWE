@@ -1,6 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.events;
 
-import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
@@ -64,7 +63,7 @@ public class SquadEvent {
 
         Minecraft mc = Minecraft.getMinecraft();
 
-        if (mc.theWorld == null || !MinecraftUtils.isHypixel()) {
+        if (mc.theWorld == null) {
             return;
         }
 
