@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.commands.*;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.*;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
+import fr.alexdoru.megawallsenhancementsmod.updater.ModUpdater;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -23,14 +24,17 @@ public class MegaWallsEnhancementsMod {
 
     public static final String modid = "mwenhancements";
     public static final String modName = "MegaWallsEnhancements";
-    public static final String version = "1.8";
+    public static final String version = "1.9";
     public static final KeyBinding toggleDroppedItemLimit = new KeyBinding("Toggle dropped item limit", 0, "MegaWallsEnhancements");
+    public static final KeyBinding newNickKey = new KeyBinding("New Random Nick", 0, "MegaWallsEnhancements");
     public static File configurationFile;
+    public static File jarFile;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         configurationFile = event.getSuggestedConfigurationFile();
         ConfigHandler.preinit(configurationFile);
+        jarFile = event.getSourceFile();
     }
 
     @EventHandler
@@ -39,13 +43,14 @@ public class MegaWallsEnhancementsMod {
         FKCounterMod.init();
 
         ClientRegistry.registerKeyBinding(toggleDroppedItemLimit);
+        ClientRegistry.registerKeyBinding(newNickKey);
 
         MinecraftForge.EVENT_BUS.register(new GuiManager());
         MinecraftForge.EVENT_BUS.register(new ChatEvents());
         MinecraftForge.EVENT_BUS.register(new SquadEvent());
         MinecraftForge.EVENT_BUS.register(new KillCounter());
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
-        MinecraftForge.EVENT_BUS.register(new UpdateNotifier());
+        MinecraftForge.EVENT_BUS.register(new ModUpdater());
         MinecraftForge.EVENT_BUS.register(new KeybindingsEvent());
         MinecraftForge.EVENT_BUS.register(new MWGameStatsEvent());
 

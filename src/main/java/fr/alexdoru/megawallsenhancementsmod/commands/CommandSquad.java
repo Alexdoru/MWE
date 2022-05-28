@@ -1,6 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
@@ -17,8 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.getTagMW;
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class CommandSquad extends CommandBase {
 
@@ -43,7 +41,7 @@ public class CommandSquad extends CommandBase {
         Minecraft mc = Minecraft.getMinecraft();
         String title = null;
 
-        if (mc.theWorld != null && MinecraftUtils.isHypixel()) {
+        if (mc.theWorld != null) {
             Scoreboard scoreboard = mc.theWorld.getScoreboard();
             if (scoreboard != null) {
                 title = ScoreboardUtils.getUnformattedSidebarTitle(scoreboard);
@@ -56,7 +54,7 @@ public class CommandSquad extends CommandBase {
         }
 
         if (args.length < 1) {
-            addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
+            addChatMessage(getCommandHelp());
             return;
         }
 
@@ -128,6 +126,8 @@ public class CommandSquad extends CommandBase {
                 }
             }
 
+        } else {
+            addChatMessage(getCommandHelp());
         }
 
     }
@@ -136,6 +136,20 @@ public class CommandSquad extends CommandBase {
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         String[] args1 = {"add", "disband", "list", "remove"};
         return args.length == 1 ? getListOfStringsMatchingLastWord(args, args1) : args.length >= 2 ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null;
+    }
+
+    private IChatComponent getCommandHelp() {
+
+        return new ChatComponentText(EnumChatFormatting.GREEN + bar() + "\n"
+                + centerLine(EnumChatFormatting.GOLD + "Squad Help\n\n")
+                + EnumChatFormatting.YELLOW + "/squad add <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "add a player to the squad\n"
+                + EnumChatFormatting.YELLOW + "/squad add <player> as Nickname" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "add a player to the squad and change their name\n"
+                + EnumChatFormatting.YELLOW + "/squad remove <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "remove a player from the squad\n"
+                + EnumChatFormatting.YELLOW + "/squad list" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "list players in the squad\n"
+                + EnumChatFormatting.YELLOW + "/squad disband" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "disband the squad\n"
+                + EnumChatFormatting.GREEN + bar()
+        );
+
     }
 
 }

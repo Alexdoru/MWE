@@ -57,14 +57,6 @@ public class CommandScanGame extends CommandBase {
         scanmap.put(uuid, msg);
     }
 
-    protected static IChatComponent getMessageStart(String playername) {
-        IChatComponent imsg = new ChatComponentText(ChatUtil.getTagMW());
-        if (FKCounterMod.isInMwGame) {
-            imsg.appendSibling(ChatUtil.makeReportButtons(playername, "cheating", "", ClickEvent.Action.RUN_COMMAND, ClickEvent.Action.SUGGEST_COMMAND));
-        }
-        return imsg;
-    }
-
     @Override
     public String getCommandName() {
         return "scangame";
@@ -99,7 +91,7 @@ public class CommandScanGame extends CommandBase {
                     i++;
                     Multithreading.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
                 } else if (!imsg.equals(nomatch)) {
-                    ChatUtil.addChatMessage(getMessageStart(networkPlayerInfo.getGameProfile().getName()).appendSibling(imsg));
+                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(imsg));
                 }
 
             }
@@ -149,8 +141,7 @@ class ScanPlayerTask implements Callable<String> {
 
             if ((megawallsstats.getGames_played() <= 25 && megawallsstats.getFkdr() > 3.5f) ||
                     (megawallsstats.getGames_played() <= 250 && megawallsstats.getFkdr() > 5f) ||
-                    (megawallsstats.getGames_played() <= 500 && megawallsstats.getFkdr() > 8f) ||
-                    (megawallsstats.getFkdr() > 10f)) {
+                    (megawallsstats.getGames_played() <= 500 && megawallsstats.getFkdr() > 8f)) {
 
                 imsg = getFormattedNameWithPlanckeClickEvent(networkPlayerInfo).appendSibling(new ChatComponentText(
                         EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played()
@@ -162,7 +153,7 @@ class ScanPlayerTask implements Callable<String> {
 
                 GeneralInfo generalInfo = new GeneralInfo(playerdata.getPlayerData());
                 boolean firstGame = megawallsstats.getGames_played() == 0;
-                boolean secondFlag = generalInfo.getCompletedQuests() < 20 && generalInfo.getNetworkLevel() > 42f;
+                boolean secondFlag = generalInfo.getCompletedQuests() < 20 && generalInfo.getNetworkLevel() > 30f;
                 JsonObject classesdata = megawallsstats.getClassesdata();
 
                 if (FKCounterMod.isInMwGame) {
@@ -204,7 +195,7 @@ class ScanPlayerTask implements Callable<String> {
             }
 
             if (imsg != null) {
-                ChatUtil.addChatMessage(CommandScanGame.getMessageStart(playername).appendSibling(imsg));
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(imsg));
                 CommandScanGame.put(uuid, imsg);
                 NameUtil.updateGameProfileAndName(networkPlayerInfo);
             } else {

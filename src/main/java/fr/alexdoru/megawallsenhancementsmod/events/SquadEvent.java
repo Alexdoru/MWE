@@ -1,6 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.events;
 
-import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
@@ -64,7 +63,7 @@ public class SquadEvent {
 
         Minecraft mc = Minecraft.getMinecraft();
 
-        if (mc.theWorld == null || !MinecraftUtils.isHypixel()) {
+        if (mc.theWorld == null) {
             return;
         }
 
@@ -111,13 +110,18 @@ public class SquadEvent {
 
         }
 
+        final String myName = Minecraft.getMinecraft().thePlayer.getName();
+        final String myCustomName = squadmap.get(myName);
+
         squadmap.clear();
         squadmap.putAll(newsquad);
 
-        if (!squadmap.isEmpty()) {
-            addPlayer(Minecraft.getMinecraft().thePlayer.getName());
+        if (myCustomName != null) {
+            addPlayer(myName, myCustomName);
+        } else if (!squadmap.isEmpty()) {
+            addPlayer(myName);
             if (!ConfigHandler.hypixelNick.equals("")) {
-                addPlayer(ConfigHandler.hypixelNick, EnumChatFormatting.ITALIC + Minecraft.getMinecraft().thePlayer.getName());
+                addPlayer(ConfigHandler.hypixelNick, EnumChatFormatting.ITALIC + myName);
             }
         }
 

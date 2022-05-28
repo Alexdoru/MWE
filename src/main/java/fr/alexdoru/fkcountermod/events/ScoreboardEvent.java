@@ -1,14 +1,12 @@
 package fr.alexdoru.fkcountermod.events;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
-import fr.alexdoru.fkcountermod.utils.MinecraftUtils;
 import fr.alexdoru.fkcountermod.utils.ScoreboardParser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 public class ScoreboardEvent {
 
@@ -29,12 +27,20 @@ public class ScoreboardEvent {
             return;
         }
 
-        if (mc.theWorld == null || !FKCounterMod.isHypixel) {
+        if (mc.theWorld == null) {
+            FKCounterMod.isInMwGame = false;
+            FKCounterMod.isMWEnvironement = false;
+            FKCounterMod.preGameLobby = false;
+            FKCounterMod.isitPrepPhase = false;
             return;
         }
 
         Scoreboard scoreboard = mc.theWorld.getScoreboard();
         if (scoreboard == null) {
+            FKCounterMod.isInMwGame = false;
+            FKCounterMod.isMWEnvironement = false;
+            FKCounterMod.preGameLobby = false;
+            FKCounterMod.isitPrepPhase = false;
             return;
         }
 
@@ -48,13 +54,13 @@ public class ScoreboardEvent {
         FKCounterMod.preGameLobby = mwScoreboardParser.isPreGameLobby();
         FKCounterMod.isitPrepPhase = mwScoreboardParser.isitPrepPhase();
 
-        if (gameId == null) { // not in a MW game
+        if (gameId == null) { // not in MW game
 
             if (prevGameId != null) {
                 MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.DISCONNECT));
             }
 
-        } else { // is in a MW game
+        } else { // is in MW game
 
             if (amountWitherAlive == 1 && prevAmountWitherAlive > 1) {
                 MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.THIRD_WITHER_DEATH));
@@ -76,16 +82,6 @@ public class ScoreboardEvent {
         prevHasGameEnded = hasgameended;
         prevAmountWitherAlive = amountWitherAlive;
 
-    }
-
-    @SubscribeEvent
-    public void onConnection(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-        FKCounterMod.isHypixel = MinecraftUtils.isHypixel();
-    }
-
-    @SubscribeEvent
-    public void onDisconnection(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-        FKCounterMod.isHypixel = false;
     }
 
 }

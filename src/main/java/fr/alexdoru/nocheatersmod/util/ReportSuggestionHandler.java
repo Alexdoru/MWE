@@ -137,7 +137,7 @@ public class ReportSuggestionHandler {
 
         if (isSenderMyself) {
             String[] args = new String[]{reportedPlayer, cheat};
-            CommandWDR.handleWDRCommand(args, true);
+            CommandWDR.handleWDRCommand(args, true, canWDRPlayer(reportedPlayer));
         }
 
         if (FKCounterMod.isitPrepPhase) {
@@ -174,7 +174,7 @@ public class ReportSuggestionHandler {
 
         if (canReportSuggestionPlayer(reportedPlayer)) {
             if (isSenderMyself) {
-                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You report will be shared with other players in the game")), 0);
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Your report will be shared with other players in the game")), 0);
                 return true;
             }
             checkReportSpam();
@@ -189,6 +189,8 @@ public class ReportSuggestionHandler {
             if (isSenderMyself) {
                 new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " This player has already been reported during this game")), 0);
                 return true;
+            } else {
+                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You already reported this player during this game")), 0);
             }
         }
 
@@ -270,11 +272,22 @@ public class ReportSuggestionHandler {
         long timestamp = System.currentTimeMillis();
         reportSuggestionHistory.removeIf(o -> (o.timestamp + TIME_BETWEEN_REPORT_SUGGESTION_PLAYER < timestamp));
         for (StringLong stringLong : reportSuggestionHistory) {
-            if (stringLong.message != null && stringLong.message.equals(playername)) {
+            if (stringLong.message != null && stringLong.message.equalsIgnoreCase(playername)) {
                 return false;
             }
         }
         reportSuggestionHistory.add(new StringLong(timestamp, playername));
+        return true;
+    }
+
+    private static boolean canWDRPlayer(String playername) {
+        long timestamp = System.currentTimeMillis();
+        reportSuggestionHistory.removeIf(o -> (o.timestamp + TIME_BETWEEN_REPORT_SUGGESTION_PLAYER < timestamp));
+        for (StringLong stringLong : reportSuggestionHistory) {
+            if (stringLong.message != null && stringLong.message.equalsIgnoreCase(playername)) {
+                return false;
+            }
+        }
         return true;
     }
 
