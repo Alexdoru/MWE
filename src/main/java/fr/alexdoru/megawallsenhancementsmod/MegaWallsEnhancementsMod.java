@@ -28,11 +28,13 @@ public class MegaWallsEnhancementsMod {
     public static final KeyBinding toggleDroppedItemLimit = new KeyBinding("Toggle dropped item limit", 0, "MegaWallsEnhancements");
     public static final KeyBinding newNickKey = new KeyBinding("New Random Nick", 0, "MegaWallsEnhancements");
     public static File configurationFile;
+    public static File jarFile;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         configurationFile = event.getSuggestedConfigurationFile();
         ConfigHandler.preinit(configurationFile);
+        jarFile = event.getSourceFile();
     }
 
     @EventHandler

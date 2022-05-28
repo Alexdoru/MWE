@@ -47,6 +47,7 @@ public class ConfigHandler {
     public static boolean prestigeV;
     public static boolean hideRepetitiveMWChatMsg;
     public static boolean clearVision;
+    public static boolean automaticUpdate;
 
     /**
      * GUI config
@@ -141,6 +142,7 @@ public class ConfigHandler {
         final Property pprestigeV = config.get(CATEGORY_MWENh, "Prestige V colored Tag", false, "Prestige V colored Tag");
         final Property phideRepetitiveMWChatMsg = config.get(CATEGORY_MWENh, "Delete repetitive chat messages in mw", true, "Delete repetitive chat messages in mw");
         final Property pclearVision = config.get(CATEGORY_MWENh, "Clear Vision", true, "Hides particles too close to the camera");
+        final Property pautomaticUpdate = config.get(CATEGORY_MWENh, "Automatic Update", true, "Updates the mod automatically");
 
         final String CATEGORY_GUI = "GUI";
         final Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
@@ -217,6 +219,7 @@ public class ConfigHandler {
         pOrderMWWENh.add(pprestigeV.getName());
         pOrderMWWENh.add(phideRepetitiveMWChatMsg.getName());
         pOrderMWWENh.add(pclearVision.getName());
+        pOrderMWWENh.add(pautomaticUpdate.getName());
         config.setCategoryPropertyOrder(CATEGORY_MWENh, pOrderMWWENh);
 
         List<String> pOrderGUI = new ArrayList<>();
@@ -295,6 +298,7 @@ public class ConfigHandler {
             prestigeV = !HypixelApiKeyUtil.apiKeyIsNotSetup() && pprestigeV.getBoolean();
             hideRepetitiveMWChatMsg = phideRepetitiveMWChatMsg.getBoolean();
             clearVision = pclearVision.getBoolean();
+            automaticUpdate = pautomaticUpdate.getBoolean();
 
             show_killcooldownHUD = pShow_killcooldownHUD.getBoolean();
             killcooldownHUDPosition.setRelative(pXpos_killcooldownHUD.getDouble(), pYpos_killcooldownHUD.getDouble());
@@ -365,6 +369,7 @@ public class ConfigHandler {
             pprestigeV.set(prestigeV);
             phideRepetitiveMWChatMsg.set(hideRepetitiveMWChatMsg);
             pclearVision.set(clearVision);
+            pautomaticUpdate.set(automaticUpdate);
 
             pShow_killcooldownHUD.set(show_killcooldownHUD);
             double[] killcooldownHUDarray = killcooldownHUDPosition.getRelativePosition();
