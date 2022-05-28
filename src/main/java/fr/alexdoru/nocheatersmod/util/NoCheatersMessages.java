@@ -39,7 +39,7 @@ public class NoCheatersMessages {
                 continue;
             }
             foundReport = true;
-            boolean gotautoreported = ReportQueue.INSTANCE.sendAutoReport(datenow, playerName, wdr);
+            boolean gotautoreported = ReportQueue.INSTANCE.addAutoReportToQueue(datenow, playerName, wdr);
             if (wdr.transformName()) {
                 printWarningMessage(
                         datenow,

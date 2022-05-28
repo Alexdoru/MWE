@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.fkcountermod.gui.FKConfigGuiScreen;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.HitboxConfigGuiScreen;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.EnumChatFormatting;
@@ -18,6 +19,7 @@ public class GeneralConfigGuiScreen extends MyGuiScreen {
         this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getYposForButton(-2), buttonsWidth, ButtonsHeight, EnumChatFormatting.AQUA + "Final Kill Counter"));
         this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getYposForButton(-1), buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "Mega Walls Enhancements"));
         this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getYposForButton(0), buttonsWidth, ButtonsHeight, EnumChatFormatting.RED + "No Cheaters"));
+        this.buttonList.add(new GuiButton(5, getxCenter() + buttonsWidth, getYposForButton(0), buttonsWidth, ButtonsHeight, EnumChatFormatting.WHITE + "Automatic Updates : " + getSuffix(ConfigHandler.automaticUpdate)));
         this.buttonList.add(new GuiButton(4, getxCenter() - buttonsWidth / 2, getYposForButton(1), buttonsWidth, ButtonsHeight, EnumChatFormatting.BLUE + "Hitboxes, better F3+b"));
         this.buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getYposForButton(4), 150, ButtonsHeight, "Close"));
         super.initGui();
@@ -47,6 +49,10 @@ public class GeneralConfigGuiScreen extends MyGuiScreen {
                 break;
             case 4:
                 mc.displayGuiScreen(new HitboxConfigGuiScreen(this));
+                break;
+            case 5:
+                ConfigHandler.automaticUpdate = !ConfigHandler.automaticUpdate;
+                button.displayString = EnumChatFormatting.WHITE + "Automatic Updates : " + getSuffix(ConfigHandler.automaticUpdate);
                 break;
         }
         super.actionPerformed(button);

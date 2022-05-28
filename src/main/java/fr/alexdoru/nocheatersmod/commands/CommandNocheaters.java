@@ -366,6 +366,15 @@ public class CommandNocheaters extends CommandBase {
                 ReportQueue.INSTANCE.clearReportsFor(args[1]);
             }
 
+        } else if (args[0].equalsIgnoreCase("debugreportqueue")) {
+
+            ReportQueue.isDebugMode = !ReportQueue.isDebugMode;
+            if(ReportQueue.isDebugMode) {
+                debug("enabled debug report queue");
+            } else {
+                debug("disabled debug report queue");
+            }
+
         } else {
 
             addChatMessage(getCommandHelp());

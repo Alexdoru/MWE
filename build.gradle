@@ -12,9 +12,9 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.8"
+version = "1.9"
 group = "fr.alexdoru"
-archivesBaseName = "[1.8.9] MegaWallsEnhancements"
+archivesBaseName = "[1.8.9]MegaWallsEnhancements"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
