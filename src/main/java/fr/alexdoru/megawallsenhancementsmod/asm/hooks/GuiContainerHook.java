@@ -91,21 +91,25 @@ public class GuiContainerHook {
                     final int metadata = itemStack.getMetadata();
                     final boolean isSplash = ItemPotion.isSplash(metadata);
                     final List<PotionEffect> potionEffects = ((ItemPotion) item).getEffects(metadata);
-                    /*Kit Speed potions*/
-                    if (potionEffects.size() == 1 && potionEffects.get(0).getPotionID() == Potion.moveSpeed.id) {
-                        return false;
-                    }
-                    /*Squid Pots*/
-                    if (potionEffects.size() == 1 && potionEffects.get(0).getPotionID() == Potion.absorption.id) {
-                        return false;
-                    }
-                    for (PotionEffect effect : potionEffects) {
-                        /*Phoenix & Renegade Pots*/
-                        if (effect.getPotionID() == Potion.regeneration.id && isSplash) {
+                    if (potionEffects != null) {
+                        /*Kit Speed potions*/
+                        if (potionEffects.size() == 1 && potionEffects.get(0).getPotionID() == Potion.moveSpeed.id) {
                             return false;
                         }
+                        /*Squid Pots*/
+                        if (potionEffects.size() == 1 && potionEffects.get(0).getPotionID() == Potion.absorption.id) {
+                            return false;
+                        }
+                        for (PotionEffect effect : potionEffects) {
+                            /*Phoenix & Renegade Pots*/
+                            if (effect.getPotionID() == Potion.regeneration.id && isSplash) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    } else {
+                        return false;
                     }
-                    return true;
                 }
                 if (item == Items.bow) {
                     if (itemStack.isItemEnchanted()) {
