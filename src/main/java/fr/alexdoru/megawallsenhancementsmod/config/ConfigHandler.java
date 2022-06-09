@@ -113,7 +113,7 @@ public class ConfigHandler {
             config.load();
         }
 
-        /*Reads the fiels in the config and stores them in the property objects, and defines a default value if the fields doesn't exist*/
+        /*Reads the fields in the config and stores them in the property objects, and defines a default value if the fields doesn't exist*/
         final String CATEGORY_FKCounter = "Final Kill Counter";
         final Property pXpos_fkcHUD = config.get(CATEGORY_FKCounter, "Xpos FKCounter HUD", 0d, "The x position of the final kill counter HUD, value ranges from 0 to 1");
         final Property pYpos_fkcHUD = config.get(CATEGORY_FKCounter, "Ypos FKCounter HUD", 0.1d, "The y position of the final kill counter HUD, value ranges from 0 to 1");
