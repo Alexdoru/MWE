@@ -19,6 +19,7 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Util;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -107,6 +108,11 @@ public class ModUpdater {
                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + GITHUB_URL)))));
 
             if (ConfigHandler.automaticUpdate && browser_download_url != null && browser_download_url.endsWith(".jar")) {
+
+                if (Loader.isModLoaded("feather")) {
+                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + "The automatic updater is disabled on Feather."));
+                    return;
+                }
 
                 File cacheDir = new File("config/updatecache");
                 if (!cacheDir.exists() && !cacheDir.mkdir()) {
