@@ -8,7 +8,7 @@ import fr.alexdoru.megawallsenhancementsmod.utils.ClipboardUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
-import fr.alexdoru.nocheatersmod.events.ReportQueue;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -63,9 +63,11 @@ public class GuiScreenHook {
                     wdr.timeLastManualReport = time - WDR.TIME_BETWEEN_AUTOREPORT;
                     ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Your cheating report against " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + " will be sent during the game."));
                 } else {
-                    ReportQueue.INSTANCE.addPlayerToQueue(playername, true);
                     wdr.timestamp = time;
                     wdr.timeLastManualReport = time;
+                    if (Minecraft.getMinecraft().thePlayer != null) {
+                        Minecraft.getMinecraft().thePlayer.sendChatMessage("/wdr " + playername);
+                    }
                 }
                 NameUtil.updateGameProfileAndName(playername, false);
             } else {
