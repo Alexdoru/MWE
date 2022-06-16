@@ -184,6 +184,11 @@ public class MegaWallsClassStats {
                 },
 
                 {
+                        EnumChatFormatting.GREEN + "Deaths : " + EnumChatFormatting.GOLD + formatInt(this.classname_deaths) + " ",
+                        EnumChatFormatting.GREEN + "Final Death : " + EnumChatFormatting.GOLD + formatInt(this.classname_final_deaths),
+                },
+
+                {
                         EnumChatFormatting.GREEN + "Ability activations : " + EnumChatFormatting.GOLD + formatInt(this.classname_a_activations) + " ",
                         EnumChatFormatting.GREEN + "Ability Damage : " + EnumChatFormatting.GOLD + formatInt(this.classname_a_damage_dealt / 2) + EnumChatFormatting.RED + "\u2764",
                 },
