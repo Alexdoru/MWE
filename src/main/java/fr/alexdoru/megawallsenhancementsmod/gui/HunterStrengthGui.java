@@ -45,10 +45,10 @@ public class HunterStrengthGui extends MyCachedGui {
         }
     }
 
-    public void setStrengthRenderStart() {
+    public void setStrengthRenderStart(long duration) {
         isStrengthRender = true;
         timeStartRender = System.currentTimeMillis();
-        renderDuration = 5000L;
+        renderDuration = duration;
     }
 
 }
