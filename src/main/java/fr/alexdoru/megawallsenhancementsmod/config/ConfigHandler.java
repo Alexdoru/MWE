@@ -59,7 +59,7 @@ public class ConfigHandler {
     public static boolean show_lastWitherHUD;
     public static boolean witherHUDinSiderbar;
     public static final GuiPosition lastWitherHUDPosition = new GuiPosition(0d, 0d);
-    public static boolean hunterStrengthHUD;
+    public static boolean strengthHUD;
     public static final GuiPosition hunterStrengthHUDPosition = new GuiPosition(0d, 0d);
 
     /**
@@ -307,7 +307,7 @@ public class ConfigHandler {
             show_lastWitherHUD = pShow_lastWitherHUD.getBoolean();
             witherHUDinSiderbar = pwitherHUDinSiderbar.getBoolean();
             lastWitherHUDPosition.setRelative(pXpos_lastWitherHUD.getDouble(), pYpos_lastWitherHUD.getDouble());
-            hunterStrengthHUD = pHunterStrengthHUD.getBoolean();
+            strengthHUD = pHunterStrengthHUD.getBoolean();
             hunterStrengthHUDPosition.setRelative(pXpos_hunterHUD.getDouble(), pYpos_hunterHUD.getDouble());
 
             toggleicons = pToggleicons.getBoolean();
@@ -387,7 +387,7 @@ public class ConfigHandler {
             pXpos_lastWitherHUD.set(lastWitherHUDarray[0]);
             pYpos_lastWitherHUD.set(lastWitherHUDarray[1]);
 
-            pHunterStrengthHUD.set(hunterStrengthHUD);
+            pHunterStrengthHUD.set(strengthHUD);
             double[] hunterStrengtharray = hunterStrengthHUDPosition.getRelativePosition();
             pXpos_hunterHUD.set(hunterStrengtharray[0]);
             pYpos_hunterHUD.set(hunterStrengtharray[1]);

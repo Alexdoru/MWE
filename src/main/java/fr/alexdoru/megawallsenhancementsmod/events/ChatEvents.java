@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
 public class ChatEvents {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
-    public static final ResourceLocation STRENGTH_SOUND = new ResourceLocation("item.fireCharge.use"); // item.fireCharge.use  usefireworks.twinkle
+    public static final ResourceLocation STRENGTH_SOUND = new ResourceLocation("item.fireCharge.use");
     private static final String BAN_MESSAGE = "A player has been removed from your game.";
     private static final String HUNTER_STRENGTH_MESSAGE = "Your Force of Nature gave you a 5 second Strength I buff.";
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
@@ -42,10 +42,14 @@ public class ChatEvents {
     private static final String PREP_PHASE = "Prepare your defenses!";
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Triple Coins \\+ EXP, |)(?:Active Booster, |)\\w+'s Network Booster\\)).*");
+    private static final Pattern DREADLORD_STRENGTH_PATTERN = Pattern.compile("\u00a74\u00a7lSOUL SIPHON \u00a7c\u00a7l85% ([0-9])s");
+    private static final Pattern HEROBRINE_STRENGTH_PATTERN = Pattern.compile("\u00a7e\u00a7lPOWER \u00a7c\u00a7l85% ([0-9])s");
     private static final Pattern HUNTER_PRE_STRENGTH_PATTERN = Pattern.compile("\u00a7a\u00a7lF\\.O\\.N\\. \u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l([0-9]+)");
+    private static final Pattern ZOMBIE_STRENGTH_PATTERN = Pattern.compile("\u00a72\u00a7lBERSERK \u00a7c\u00a7l75% ([0-9])s");
     private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:|\\[SHOUT\\] |\\[SPECTATOR\\] )(?:|\\[[A-Z]{3,6}\\] )(?:|\\[((?:MV|VI)P\\+?\\+?)\\] )(\\w{2,16}):.*");
     private static long lastStrength = 0;
     private static final HashSet<String> MW_REPETITVE_MSG = new HashSet<>();
+
     static {
         MW_REPETITVE_MSG.add("You broke your protected chest");
         MW_REPETITVE_MSG.add("You broke your protected trapped chest");
@@ -156,8 +160,8 @@ public class ChatEvents {
                 return;
             }
 
-            if (ConfigHandler.hunterStrengthHUD && msg.equals(HUNTER_STRENGTH_MESSAGE)) {
-                HunterStrengthGui.instance.setStrengthRenderStart();
+            if (ConfigHandler.strengthHUD && msg.equals(HUNTER_STRENGTH_MESSAGE)) {
+                HunterStrengthGui.instance.setStrengthRenderStart(5000L);
                 return;
             }
 
@@ -171,8 +175,16 @@ public class ChatEvents {
             }
 
             /*Status messages*/
-        } else if (ConfigHandler.hunterStrengthHUD && event.type == 2) {
+        } else if (ConfigHandler.strengthHUD && event.type == 2) {
+
             String fmsg = event.message.getFormattedText();
+
+            Matcher dreadStrenghtMatcher = DREADLORD_STRENGTH_PATTERN.matcher(fmsg);
+            if (dreadStrenghtMatcher.find()) {
+                HunterStrengthGui.instance.setStrengthRenderStart(Long.parseLong(dreadStrenghtMatcher.group(1)) * 1000L);
+                return;
+            }
+
             Matcher preStrengthMatcher = HUNTER_PRE_STRENGTH_PATTERN.matcher(fmsg);
             if (preStrengthMatcher.find()) {
                 long currentTime = System.currentTimeMillis();
@@ -182,7 +194,20 @@ public class ChatEvents {
                 }
                 String preStrengthTimer = preStrengthMatcher.group(1);
                 HunterStrengthGui.instance.setPreStrengthTime(preStrengthTimer, currentTime);
+                return;
             }
+
+            Matcher herobrineStrenghtMatcher = HEROBRINE_STRENGTH_PATTERN.matcher(fmsg);
+            if (herobrineStrenghtMatcher.find()) {
+                HunterStrengthGui.instance.setStrengthRenderStart(Long.parseLong(herobrineStrenghtMatcher.group(1)) * 1000L);
+                return;
+            }
+
+            Matcher zombieStrenghtMatcher = ZOMBIE_STRENGTH_PATTERN.matcher(fmsg);
+            if (zombieStrenghtMatcher.find()) {
+                HunterStrengthGui.instance.setStrengthRenderStart(Long.parseLong(zombieStrenghtMatcher.group(1)) * 1000L);
+            }
+
         }
 
     }
