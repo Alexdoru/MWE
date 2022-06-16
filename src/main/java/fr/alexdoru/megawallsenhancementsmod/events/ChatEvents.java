@@ -117,7 +117,8 @@ public class ChatEvents {
                 return;
             }
 
-            if (ConfigHandler.show_ArrowHitHUD && ArrowHitGui.processMessage(msg)) {
+            if (ConfigHandler.show_ArrowHitHUD && ArrowHitGui.processMessage(msg, fmsg)) {
+                event.setCanceled(true);
                 return;
             }
 

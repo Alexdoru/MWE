@@ -275,6 +275,23 @@ public class NameUtil {
         return null;
     }
 
+    /**
+     * Returns name formatted with teaml format, has prestige 5 tag but not icons at the start
+     */
+    public static String getFormattedName(String playername) {
+        if (FKCounterMod.isInMwGame) {
+            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+            if (networkPlayerInfo != null) {
+                final MWPlayerData mwPlayerData = ((GameProfileAccessor) networkPlayerInfo.getGameProfile()).getMWPlayerData();
+                if (mwPlayerData != null && mwPlayerData.P5Tag != null && mwPlayerData.originalP4Tag != null) {
+                    return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername).replace(mwPlayerData.originalP4Tag, mwPlayerData.P5Tag);
+                }
+                return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername);
+            }
+        }
+        return playername;
+    }
+
     public static void refreshAllNamesInWorld() {
         mc.getNetHandler().getPlayerInfoMap().forEach(p -> {
             if (p != null) {
