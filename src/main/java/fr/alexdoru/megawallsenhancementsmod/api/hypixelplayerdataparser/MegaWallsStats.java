@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
@@ -22,6 +23,7 @@ public class MegaWallsStats {
     private int coins = 0;
     private int mythic_favor = 0;
     private int wither_damage = 0;
+    private int wither_kills = 0;
     private int wins = 0;
     private int wins_face_off = 0;
     private int wins_practice = 0;
@@ -43,6 +45,7 @@ public class MegaWallsStats {
     private int time_played = 0;
     private int nbprestiges = 0;
     private int total_classpoints = 0;
+    private int legendary_skins = 0;
 
     private int games_played = 0;
     private float fkpergame = 0;
@@ -51,48 +54,56 @@ public class MegaWallsStats {
 
     public MegaWallsStats(JsonObject playerData) {
 
-        if (playerData == null)
+        if (playerData == null) {
             return;
+        }
 
         JsonObject statsdata = playerData.get("stats").getAsJsonObject();
 
-        if (statsdata == null)
+        if (statsdata == null) {
             return;
+        }
 
         JsonObject mwdata = JsonUtil.getJsonObject(statsdata, "Walls3");
 
-        if (mwdata == null)
+        if (mwdata == null) {
             return;
+        }
 
-        this.chosen_class = JsonUtil.getString(mwdata, "chosen_class");
-        this.chosen_skin_class = JsonUtil.getString(mwdata, "chosen_skin_" + this.chosen_class);
-        this.coins = JsonUtil.getInt(mwdata, "coins");
-        this.mythic_favor = JsonUtil.getInt(mwdata, "mythic_favor");
-        this.wither_damage = JsonUtil.getInt(mwdata, "wither_damage") + JsonUtil.getInt(mwdata, "witherDamage"); // add both to get wither damage
-        this.wins = JsonUtil.getInt(mwdata, "wins");
-        this.wins_face_off = JsonUtil.getInt(mwdata, "wins_face_off");
-        this.wins_practice = JsonUtil.getInt(mwdata, "wins_practice");
-        this.losses = JsonUtil.getInt(mwdata, "losses");
-        this.kills = JsonUtil.getInt(mwdata, "kills");
-        this.defender_kills = JsonUtil.getInt(mwdata, "defender_kills");
-        //this.assists = JsonUtil.getInt(mwdata,"assists");
-        this.deaths = JsonUtil.getInt(mwdata, "deaths");
-        this.final_kills = JsonUtil.getInt(mwdata, "final_kills");
-        //this.final_kills_standard = JsonUtil.getInt(mwdata,"final_kills_standard");
-        //this.final_assists = JsonUtil.getInt(mwdata,"final_assists");
-        //this.final_assists_standard = JsonUtil.getInt(mwdata,"final_assists_standard");
-        this.final_deaths = JsonUtil.getInt(mwdata, "final_deaths") + JsonUtil.getInt(mwdata, "finalDeaths");
+        chosen_class = JsonUtil.getString(mwdata, "chosen_class");
+        chosen_skin_class = JsonUtil.getString(mwdata, "chosen_skin_" + chosen_class);
+        coins = JsonUtil.getInt(mwdata, "coins");
+        mythic_favor = JsonUtil.getInt(mwdata, "mythic_favor");
+        wither_damage = JsonUtil.getInt(mwdata, "wither_damage") + JsonUtil.getInt(mwdata, "witherDamage"); // add both to get wither damage
+        wither_kills = JsonUtil.getInt(mwdata, "wither_kills");
+        wins = JsonUtil.getInt(mwdata, "wins");
+        wins_face_off = JsonUtil.getInt(mwdata, "wins_face_off");
+        wins_practice = JsonUtil.getInt(mwdata, "wins_practice");
+        losses = JsonUtil.getInt(mwdata, "losses");
+        kills = JsonUtil.getInt(mwdata, "kills");
+        defender_kills = JsonUtil.getInt(mwdata, "defender_kills");
+        //assists = JsonUtil.getInt(mwdata,"assists");
+        deaths = JsonUtil.getInt(mwdata, "deaths");
+        final_kills = JsonUtil.getInt(mwdata, "final_kills");
+        //final_kills_standard = JsonUtil.getInt(mwdata,"final_kills_standard");
+        //final_assists = JsonUtil.getInt(mwdata,"final_assists");
+        //final_assists_standard = JsonUtil.getInt(mwdata,"final_assists_standard");
+        final_deaths = JsonUtil.getInt(mwdata, "final_deaths") + JsonUtil.getInt(mwdata, "finalDeaths");
 
-        this.kdr = (float) this.kills / (this.deaths == 0 ? 1 : (float) this.deaths);
-        this.fkdr = (float) this.final_kills / (this.final_deaths == 0 ? 1 : (float) this.final_deaths);
-        this.wlr = (float) this.wins / (this.losses == 0 ? 1 : (float) this.losses);
+        kdr = (float) kills / (deaths == 0 ? 1 : (float) deaths);
+        fkdr = (float) final_kills / (final_deaths == 0 ? 1 : (float) final_deaths);
+        wlr = (float) wins / (losses == 0 ? 1 : (float) losses);
 
-        this.time_played = JsonUtil.getInt(mwdata, "time_played") + JsonUtil.getInt(mwdata, "time_played_standard"); // additionner les deux / en minutes
+        time_played = JsonUtil.getInt(mwdata, "time_played") + JsonUtil.getInt(mwdata, "time_played_standard"); // additionner les deux / en minutes
+        games_played = wins + losses; // doesn't count the draws
+        fkpergame = (float) final_kills / (games_played == 0 ? 1 : (float) games_played);
+        wither_damage_game = wither_damage / (games_played == 0 ? 1 : (float) games_played);
+        def_kill_game = defender_kills / (games_played == 0 ? 1 : (float) games_played);
 
         // computes the number of prestiges
-        this.classesdata = JsonUtil.getJsonObject(mwdata, "classes");
+        classesdata = JsonUtil.getJsonObject(mwdata, "classes");
 
-        if (this.classesdata == null) {
+        if (classesdata == null) {
             return;
         }
 
@@ -102,7 +113,7 @@ public class MegaWallsStats {
             if (classeobj == null) {
                 continue;
             }
-            this.nbprestiges = this.nbprestiges + JsonUtil.getInt(classeobj, "prestige");
+            nbprestiges = nbprestiges + JsonUtil.getInt(classeobj, "prestige");
             int classpoints = JsonUtil.getInt(mwdata, classname + "_final_kills_standard")
                     + JsonUtil.getInt(mwdata, classname + "_final_assists_standard")
                     + JsonUtil.getInt(mwdata, classname + "_wins_standard") * 10;
@@ -110,44 +121,54 @@ public class MegaWallsStats {
             classpointsMap.put(classname, classpoints);
         }
 
-        this.games_played = this.wins + this.losses; // doesn't count the draws
-        this.fkpergame = (float) this.final_kills / (this.games_played == 0 ? 1 : (float) this.games_played);
-        this.wither_damage_game = this.wither_damage / (this.games_played == 0 ? 1 : (float) this.games_played);
-        this.def_kill_game = this.defender_kills / (this.games_played == 0 ? 1 : (float) this.games_played);
+        final JsonElement achievementsOneTime = playerData.get("achievementsOneTime");
+
+        if (achievementsOneTime != null && achievementsOneTime.isJsonArray()) {
+            for (JsonElement jsonElement : achievementsOneTime.getAsJsonArray()) {
+                final String achievementName = jsonElement.getAsString();
+                if (achievementName != null && achievementName.startsWith("walls3_legendary_")) {
+                    legendary_skins++;
+                }
+            }
+        }
 
     }
 
     public float getFkdr() {
-        return this.fkdr;
+        return fkdr;
     }
 
     public float getWlr() {
-        return this.wlr;
+        return wlr;
     }
 
     public float getFkpergame() {
-        return this.fkpergame;
+        return fkpergame;
     }
 
     public int getGames_played() {
-        return this.games_played;
+        return games_played;
+    }
+
+    public int getLegSkins() {
+        return legendary_skins;
     }
 
     public JsonObject getClassesdata() {
-        return this.classesdata;
+        return classesdata;
     }
 
     public IChatComponent getClassPointsMessage(String formattedname, String playername) {
         IChatComponent imsg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls Classpoints\n\n"));
-        for (Map.Entry<String, Integer> entry : this.classpointsMap.entrySet()) {
+        for (Map.Entry<String, Integer> entry : classpointsMap.entrySet()) {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + ChatUtil.capitalizeFirstLetter(entry.getKey()))
                             .setChatStyle(new ChatStyle()
                                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for " + entry.getKey() + " stats")))
                                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + entry.getKey()))))
                     .appendSibling(new ChatComponentText(" : " + formatClasspoint(entry.getValue()) + "\n"));
         }
-        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "Total : " + EnumChatFormatting.GOLD + this.total_classpoints + "\n"));
+        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "Total : " + EnumChatFormatting.GOLD + total_classpoints + "\n"));
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
         return imsg;
     }
@@ -174,47 +195,52 @@ public class MegaWallsStats {
 
         String[][] matrix1 = {
                 {
-                        EnumChatFormatting.AQUA + "Kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.kills) + " ",
-                        EnumChatFormatting.AQUA + "Deaths : " + EnumChatFormatting.RED + ChatUtil.formatInt(this.deaths) + " ",
-                        EnumChatFormatting.AQUA + "K/D Ratio : " + (this.kdr > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", this.kdr)
+                        EnumChatFormatting.AQUA + "Kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(kills) + " ",
+                        EnumChatFormatting.AQUA + "Deaths : " + EnumChatFormatting.RED + ChatUtil.formatInt(deaths) + " ",
+                        EnumChatFormatting.AQUA + "K/D Ratio : " + (kdr > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", kdr)
                 },
 
                 {
-                        EnumChatFormatting.AQUA + "Final Kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.final_kills) + " ",
-                        EnumChatFormatting.AQUA + "Final Deaths : " + EnumChatFormatting.RED + ChatUtil.formatInt(this.final_deaths) + " ",
-                        EnumChatFormatting.AQUA + "FK/D Ratio : " + (this.fkdr > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", this.fkdr)
+                        EnumChatFormatting.AQUA + "Final Kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(final_kills) + " ",
+                        EnumChatFormatting.AQUA + "Final Deaths : " + EnumChatFormatting.RED + ChatUtil.formatInt(final_deaths) + " ",
+                        EnumChatFormatting.AQUA + "FK/D Ratio : " + (fkdr > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", fkdr)
                 },
 
                 {
-                        EnumChatFormatting.AQUA + "Wins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.wins) + " ",
-                        EnumChatFormatting.AQUA + "Losses : " + EnumChatFormatting.RED + ChatUtil.formatInt(this.losses) + " ",
-                        EnumChatFormatting.AQUA + "W/L Ratio : " + (this.wlr > 0.25f ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", this.wlr)
+                        EnumChatFormatting.AQUA + "Wins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wins) + " ",
+                        EnumChatFormatting.AQUA + "Losses : " + EnumChatFormatting.RED + ChatUtil.formatInt(losses) + " ",
+                        EnumChatFormatting.AQUA + "W/L Ratio : " + (wlr > 0.25f ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", wlr)
                 }};
 
         String[][] matrix2 = {
                 {
-                        EnumChatFormatting.AQUA + "Games played : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.games_played) + "     ",
-                        EnumChatFormatting.AQUA + "FK/game : " + (this.fkpergame > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", this.fkpergame)
+                        EnumChatFormatting.AQUA + "Games played : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(games_played) + "     ",
+                        EnumChatFormatting.AQUA + "FK/game : " + (fkpergame > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", fkpergame)
                 },
 
                 {
-                        EnumChatFormatting.AQUA + "Wither damage : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.wither_damage) + "     ",
-                        EnumChatFormatting.AQUA + "Defending Kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.defender_kills)
+                        EnumChatFormatting.AQUA + "Wither damage : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wither_damage) + "     ",
+                        EnumChatFormatting.AQUA + "Defending Kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(defender_kills)
                 },
 
                 {
-                        EnumChatFormatting.AQUA + "Wither dmg/game : " + EnumChatFormatting.GOLD + ((int) this.wither_damage_game) + "     ",
-                        EnumChatFormatting.AQUA + "Def Kills/game : " + EnumChatFormatting.GOLD + String.format("%.3f", this.def_kill_game)
+                        EnumChatFormatting.AQUA + "Wither dmg/game : " + EnumChatFormatting.GOLD + ((int) wither_damage_game) + "     ",
+                        EnumChatFormatting.AQUA + "Def Kills/game : " + EnumChatFormatting.GOLD + String.format("%.3f", def_kill_game)
                 },
 
                 {
-                        EnumChatFormatting.AQUA + "Faceoff wins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.wins_face_off) + "     ",
-                        EnumChatFormatting.AQUA + "Practice wins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.wins_practice)
+                        EnumChatFormatting.AQUA + "Wither kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wither_kills) + "     ",
+                        EnumChatFormatting.AQUA + "Leg skins : " + (legendary_skins == 24 ? EnumChatFormatting.GOLD : EnumChatFormatting.GREEN) + legendary_skins + EnumChatFormatting.GOLD + "/24"
                 },
 
                 {
-                        EnumChatFormatting.AQUA + "Coins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.coins) + "     ",
-                        EnumChatFormatting.AQUA + "Mythic favors : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.mythic_favor) + "\n"
+                        EnumChatFormatting.AQUA + "Faceoff wins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wins_face_off) + "     ",
+                        EnumChatFormatting.AQUA + "Practice wins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wins_practice)
+                },
+
+                {
+                        EnumChatFormatting.AQUA + "Coins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(coins) + "     ",
+                        EnumChatFormatting.AQUA + "Mythic favors : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(mythic_favor) + "\n"
                 }};
 
         return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
@@ -222,15 +248,15 @@ public class MegaWallsStats {
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls stats"))
 
                 .appendSibling(new ChatComponentText("\n" + "\n" +
-                        ChatUtil.centerLine(EnumChatFormatting.GREEN + "Prestiges : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.nbprestiges) + " "
-                                + EnumChatFormatting.GREEN + " Playtime (approx.) : " + EnumChatFormatting.GOLD + String.format("%.2f", this.time_played / 60f) + "h") + "\n"))
+                        ChatUtil.centerLine(EnumChatFormatting.GREEN + "Prestiges : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(nbprestiges) + " "
+                                + EnumChatFormatting.GREEN + " Playtime (approx.) : " + EnumChatFormatting.GOLD + String.format("%.2f", time_played / 60f) + "h") + "\n"))
 
                 .appendSibling(new ChatComponentText(
-                        ChatUtil.centerLine(EnumChatFormatting.GREEN + "Selected class : " + EnumChatFormatting.GOLD + (this.chosen_class == null ? "None" : this.chosen_class) + " "
-                                + EnumChatFormatting.GREEN + " Selected skin : " + EnumChatFormatting.GOLD + (this.chosen_skin_class == null ? (this.chosen_class == null ? "None" : this.chosen_class) : this.chosen_skin_class)) + "\n" + "\n")
+                        ChatUtil.centerLine(EnumChatFormatting.GREEN + "Selected class : " + EnumChatFormatting.GOLD + (chosen_class == null ? "None" : chosen_class) + " "
+                                + EnumChatFormatting.GREEN + " Selected skin : " + EnumChatFormatting.GOLD + (chosen_skin_class == null ? (chosen_class == null ? "None" : chosen_class) : chosen_skin_class)) + "\n" + "\n")
                         .setChatStyle(new ChatStyle()
                                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for this class' stats")))
-                                .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + (this.chosen_class == null ? "None" : this.chosen_class)))))
+                                .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + (chosen_class == null ? "None" : chosen_class)))))
 
                 .appendSibling(new ChatComponentText(ChatUtil.alignText(matrix2) + ChatUtil.alignText(matrix1)))
 
