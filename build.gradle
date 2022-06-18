@@ -31,7 +31,6 @@ dependencies {
 }
 
 jar {
-    appendix = minecraft.version
     manifest.attributes(
             "FMLCorePlugin": 'fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin',
             'FMLCorePluginContainsFMLMod': 'Yes, yes it does'
