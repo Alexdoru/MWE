@@ -112,15 +112,24 @@ public class SquadEvent {
 
         final String myName = Minecraft.getMinecraft().thePlayer.getName();
         final String myCustomName = squadmap.get(myName);
+        final String myCustomNick = ConfigHandler.hypixelNick.equals("") ? null : squadmap.get(ConfigHandler.hypixelNick);
 
         squadmap.clear();
         squadmap.putAll(newsquad);
 
         if (myCustomName != null) {
             addPlayer(myName, myCustomName);
-        } else if (!squadmap.isEmpty()) {
-            addPlayer(myName);
-            if (!ConfigHandler.hypixelNick.equals("")) {
+        }
+
+        if (myCustomNick != null) {
+            addPlayer(ConfigHandler.hypixelNick, myCustomNick);
+        }
+
+        if (!squadmap.isEmpty()) {
+            if (myCustomName == null) {
+                addPlayer(myName);
+            }
+            if (myCustomNick == null && !ConfigHandler.hypixelNick.equals("")) {
                 addPlayer(ConfigHandler.hypixelNick, EnumChatFormatting.ITALIC + myName);
             }
         }
