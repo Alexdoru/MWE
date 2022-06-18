@@ -64,6 +64,14 @@ public class StringUtil {
         return s;
     }
 
+    public static String getLastFormattingCodeBefore(String message, String target) {
+        String[] split = message.split(target, 2);
+        if (split.length != 2) {
+            return "";
+        }
+        return getLastFormattingCodeOf(split[0]);
+    }
+
     public static IChatComponent censorChatMessage(String message, String messageSender) {
         String[] split = message.split(messageSender, 2);
         if (split.length != 2) {
