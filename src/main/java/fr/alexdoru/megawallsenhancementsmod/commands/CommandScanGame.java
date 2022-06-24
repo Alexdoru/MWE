@@ -194,6 +194,17 @@ class ScanPlayerTask implements Callable<String> {
 
             }
 
+            if (imsg == null) {
+                float ratio = megawallsstats.getLegSkins() * 12f / (megawallsstats.getGames_played() == 0 ? 1 : megawallsstats.getGames_played());
+                if (ratio >= 1) {
+                    imsg = getFormattedNameWithPlanckeClickEvent(networkPlayerInfo).appendSibling(new ChatComponentText(
+                            EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played()
+                                    + EnumChatFormatting.GRAY + " and has : " + EnumChatFormatting.GOLD + megawallsstats.getLegSkins()
+                                    + EnumChatFormatting.GRAY + " legendary skin" + (megawallsstats.getLegSkins() > 1 ? "s" : "")
+                    ));
+                }
+            }
+
             if (imsg != null) {
                 ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(imsg));
                 CommandScanGame.put(uuid, imsg);
