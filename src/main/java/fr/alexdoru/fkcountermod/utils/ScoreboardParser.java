@@ -13,7 +13,7 @@ public class ScoreboardParser {
     private static final Pattern GAME_ID_PATTERN = Pattern.compile("\\s*\\d+/\\d+/\\d+\\s+([\\d\\w]+)\\s*", Pattern.CASE_INSENSITIVE);
     private static final Pattern MW_TITLE_PATTERN = Pattern.compile("\\s*MEGA\\sWALLS\\s*", Pattern.CASE_INSENSITIVE);
     private static final Pattern MW_INGAME_PATTERN = Pattern.compile("[0-9]+\\sFinals?\\s[0-9]+\\sF\\.\\sAssists?");
-    private static final Pattern PREGAME_LOBBY_PATTERN = Pattern.compile("\\s*Players:\\s*[0-9]+/[0-9]+\\s*");
+    private static final Pattern PREGAME_LOBBY_PATTERN = Pattern.compile("Players:\\s*[0-9]+/[0-9]+");
     private static final Pattern WITHER_ALIVE_PATTERN = Pattern.compile("\\s*\\[.\\] Wither HP: ?(\\d+).*", Pattern.CASE_INSENSITIVE);
     private static final Pattern WITHER_ALIVE_HEART_PATTERN = Pattern.compile("\\s*\\[.\\] Wither [\u2764\u2665]: ?(\\d+).*", Pattern.CASE_INSENSITIVE);
 
@@ -45,6 +45,14 @@ public class ScoreboardParser {
 
         Matcher matcher = GAME_ID_PATTERN.matcher(scoresRaw.get(0));
         if (!matcher.matches()) {
+            for (String line : scoresRaw) {
+                if (PREGAME_LOBBY_PATTERN.matcher(line).find()) {
+                    gameId = null;
+                    preGameLobby = true;
+                    isInMwGame = false;
+                    return;
+                }
+            }
             return;
         }
 
@@ -55,7 +63,7 @@ public class ScoreboardParser {
                 isInMwGame = true;
                 continue;
             }
-            if (PREGAME_LOBBY_PATTERN.matcher(line).matches()) {
+            if (PREGAME_LOBBY_PATTERN.matcher(line).find()) {
                 gameId = null;
                 preGameLobby = true;
                 isInMwGame = false;
