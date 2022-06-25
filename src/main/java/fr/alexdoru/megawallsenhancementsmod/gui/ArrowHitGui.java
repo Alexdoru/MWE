@@ -91,7 +91,7 @@ public class ArrowHitGui extends MyCachedGui {
         Matcher matcherRend = PATTERN_REND.matcher(msg);
 
         if (matcherRend.matches()) {
-            HPvalue = "-" + Float.parseFloat(matcherRend.group(2));
+            HPvalue = "-" + Float.parseFloat(matcherRend.group(1));
             hittime = System.currentTimeMillis() + 1000L;
             normalhit = true;
             Color = EnumChatFormatting.GREEN;
