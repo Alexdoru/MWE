@@ -1,8 +1,12 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
+import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
+import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -45,7 +49,7 @@ public class ArrowHitGui extends MyCachedGui {
             hittime = System.currentTimeMillis();
             instance.updateDisplayText();
             String playername = matcherArrowHit.group(1);
-            ChatUtil.addChatMessage(new ChatComponentText(fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername))));
+            ChatUtil.addChatMessage(new ChatComponentText(fmsg.replaceFirst(playername, getFormattedName(playername))));
             return true;
         }
 
@@ -59,7 +63,7 @@ public class ArrowHitGui extends MyCachedGui {
             setColor(HPvalue);
             instance.updateDisplayText();
             String playername = matcherRenegadeHit.group(1);
-            ChatUtil.addChatMessage(new ChatComponentText(fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername))));
+            ChatUtil.addChatMessage(new ChatComponentText(fmsg.replaceFirst(playername, getFormattedName(playername))));
             return true;
         }
 
@@ -84,7 +88,7 @@ public class ArrowHitGui extends MyCachedGui {
             Color = EnumChatFormatting.GREEN;
             instance.updateDisplayText();
             String playername = matcherLeapDirectHit.group(1);
-            ChatUtil.addChatMessage(new ChatComponentText(fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername))));
+            ChatUtil.addChatMessage(new ChatComponentText(fmsg.replaceFirst(playername, getFormattedName(playername))));
             return true;
         }
 
@@ -151,6 +155,20 @@ public class ArrowHitGui extends MyCachedGui {
     @Override
     public boolean isEnabled() {
         return System.currentTimeMillis() - hittime < 1000L;
+    }
+
+    private static String getFormattedName(String playername) {
+        if (FKCounterMod.isInMwGame) {
+            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+            if (networkPlayerInfo != null) {
+                final MWPlayerData mwPlayerData = MWPlayerData.dataCache.get(networkPlayerInfo.getGameProfile().getId());
+                if (mwPlayerData != null && mwPlayerData.P5Tag != null && mwPlayerData.originalP4Tag != null) {
+                    return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername).replace(mwPlayerData.originalP4Tag, mwPlayerData.P5Tag);
+                }
+                return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername);
+            }
+        }
+        return playername;
     }
 
 }
