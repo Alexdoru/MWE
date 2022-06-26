@@ -27,12 +27,12 @@ public class FKCounterGui extends MyCachedGui {
             + EnumChatFormatting.YELLOW + "3" + EnumChatFormatting.DARK_GRAY + " / "
             + EnumChatFormatting.BLUE + "4";
     /*used as an example when in the settings*/
-    private static final String DUMMY_TEXT_PLAYERS = EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 12 " + EnumChatFormatting.GRAY + "- RedPlayer (5)\n"
-            + EnumChatFormatting.GREEN + "Green" + EnumChatFormatting.WHITE + ": 9 " + EnumChatFormatting.GRAY + "- GreenPlayer (4)\n"
-            + EnumChatFormatting.YELLOW + "Yellow" + EnumChatFormatting.WHITE + ": 5 " + EnumChatFormatting.GRAY + "- YellowPlayer (3)\n"
-            + EnumChatFormatting.BLUE + "Blue" + EnumChatFormatting.WHITE + ": 4 " + EnumChatFormatting.GRAY + "- BluePlayer (2)";
+    private static final String DUMMY_TEXT_PLAYERS = EnumChatFormatting.RED + "R" + EnumChatFormatting.WHITE + " 12 :" + EnumChatFormatting.WHITE + " RedPlayer (5)\n"
+            + EnumChatFormatting.GREEN + "G" + EnumChatFormatting.WHITE + " 9 :" + EnumChatFormatting.WHITE + " GreenPlayer (4)\n"
+            + EnumChatFormatting.YELLOW + "Y" + EnumChatFormatting.WHITE + " 5 :" + EnumChatFormatting.WHITE + " YellowPlayer (3)\n"
+            + EnumChatFormatting.BLUE + "B" + EnumChatFormatting.WHITE + " 4 :" + EnumChatFormatting.WHITE + " BluePlayer (2)";
     public static FKCounterGui instance;
-    private final int BACKGROUND_COLOR = new Color(0, 0, 0, 64).getRGB();
+    private final int BACKGROUND_COLOR = new Color(0, 0, 0, 96).getRGB();
     private final int DUMMY_BACKGROUND_COLOR = new Color(255, 255, 255, 127).getRGB();
 
     public FKCounterGui() {
@@ -60,7 +60,7 @@ public class FKCounterGui extends MyCachedGui {
         int x = absolutePos[0];
         int y = absolutePos[1];
         if (ConfigHandler.draw_background) {
-            drawRect(x - 1, y - 1, x + getWidth(), y + getHeight(), BACKGROUND_COLOR);
+            drawRect(x - 2, y - 2, x + getWidth() + 1, y + getHeight(), BACKGROUND_COLOR);
         }
         GlStateManager.pushMatrix();
         {
@@ -150,23 +150,28 @@ public class FKCounterGui extends MyCachedGui {
                     if (i != 0) {
                         strBuilder.append("\n");
                     }
-                    strBuilder.append(getColorPrefixFromTeam(team))
-                            .append(getTeamNameFromTeam(team)).append(EnumChatFormatting.WHITE)
-                            .append(": ").append(getKills(team));
+                    strBuilder.append(getColorPrefixFromTeam(team)).append(getTeamNameFromTeam(team).charAt(0)).append(EnumChatFormatting.WHITE).append(" ").append(getKills(team));
                     HashMap<String, Integer> teamkillsmap = KillCounter.sortByDecreasingValue1(KillCounter.getPlayers(team));
                     if (!teamkillsmap.isEmpty()) {
                         int playerAmount = 0;
+                        boolean isFirst = true;
                         for (Entry<String, Integer> playerEntry : teamkillsmap.entrySet()) {
+                            if (isFirst) {
+                                strBuilder.append(" : ");
+                            } else {
+                                strBuilder.append(" - ");
+                            }
                             String squadname = SquadEvent.getSquad().get(playerEntry.getKey());
                             if (squadname != null) {
-                                strBuilder.append(EnumChatFormatting.GRAY).append(" - ").append(squadname).append(" (").append(playerEntry.getValue()).append(")");
+                                strBuilder.append(squadname).append(" (").append(playerEntry.getValue()).append(")");
                             } else {
-                                strBuilder.append(EnumChatFormatting.GRAY).append(" - ").append(playerEntry.getKey()).append(" (").append(playerEntry.getValue()).append(")");
+                                strBuilder.append(playerEntry.getKey()).append(" (").append(playerEntry.getValue()).append(")");
                             }
                             playerAmount++;
                             if (playerAmount == ConfigHandler.playerAmount) {
                                 break;
                             }
+                            isFirst = false;
                         }
                     }
                     i++;
