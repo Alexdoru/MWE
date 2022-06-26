@@ -105,7 +105,9 @@ public class KillCounter {
             "(\\w{1,16}) went up in flames\\.",
             "(\\w{1,16}) burned to death\\.",
             "(\\w{1,16}) suffocated in a wall\\.",
-            "(\\w{1,16}) fell out of the world\\."
+            "(\\w{1,16}) fell out of the world\\.",
+            "(\\w{1,16}) had a block fall on them\\.",
+            "(\\w{1,16}) drowned\\."
     };
     private static final String[] SCOREBOARD_PREFIXES = {"[R]", "[G]", "[Y]", "[B]"};
     private static final String[] DEFAULT_PREFIXES = {"c", "a", "e", "9"}; // RED GREEN YELLOW BLUE
