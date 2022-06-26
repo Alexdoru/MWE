@@ -201,7 +201,7 @@ public class CommandWDR extends CommandBase {
             ReportQueue.INSTANCE.addReportTimestamp(true);
 
             if (FKCounterMod.preGameLobby) {
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getChatReportingAdvice()));
+                addChatMessage(new ChatComponentText(getChatReportingAdvice()));
             }
 
             CachedMojangUUID apireq;
