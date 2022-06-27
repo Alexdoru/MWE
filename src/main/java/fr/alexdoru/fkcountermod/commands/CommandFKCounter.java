@@ -60,13 +60,7 @@ public class CommandFKCounter extends CommandBase {
                         .append(": ");
                 for (Iterator<Map.Entry<String, Integer>> iterator = sortByDecreasingValue1(getPlayers(TEAM)).entrySet().iterator(); iterator.hasNext(); ) {
                     Map.Entry<String, Integer> entry = iterator.next();
-                    String name = entry.getKey();
-                    String squadname = SquadEvent.getSquad().get(name);
-                    if (squadname != null) {
-                        strBuilder.append(squadname).append(" (").append(entry.getValue()).append(")");
-                    } else {
-                        strBuilder.append(name).append(" (").append(entry.getValue()).append(")");
-                    }
+                    strBuilder.append(SquadEvent.getSquadname(entry.getKey())).append(" (").append(entry.getValue()).append(")");
                     if (iterator.hasNext()) {
                         strBuilder.append(", ");
                     }

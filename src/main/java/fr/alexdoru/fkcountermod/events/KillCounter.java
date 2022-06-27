@@ -167,7 +167,6 @@ public class KillCounter {
                     String killer = matcher.group(2);
                     String killedTeamColor = StringUtil.getLastFormattingCodeBefore(FormattedText, killedPlayer).replace("\u00a7","");
                     String killerTeamColor = StringUtil.getLastFormattingCodeBefore(FormattedText, killer).replace("\u00a7","");
-
                     if (!killedTeamColor.equals("") && !killerTeamColor.equals("")) {
                         if (removeKilledPlayer(killedPlayer, killedTeamColor)) {
                             addKill(killer, killerTeamColor);
@@ -176,23 +175,10 @@ public class KillCounter {
                         }
                         FKCounterGui.instance.updateDisplayText();
                     }
-
                     if (ConfigHandler.strengthParticules) {
                         spawnParticles(killer);
                     }
-
-                    String squadmate = SquadEvent.getSquad().get(killer);
-                    if (squadmate != null) {
-                        ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killer, squadmate)));
-                        return true;
-                    }
-                    squadmate = SquadEvent.getSquad().get(killedPlayer);
-                    if (squadmate != null) {
-                        ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killedPlayer, squadmate)));
-                        return true;
-                    }
-
-                    ChatUtil.addChatMessage(new ChatComponentText(FormattedText));
+                    ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killer, SquadEvent.getSquadname(killer)).replace(killedPlayer, SquadEvent.getSquadname(killedPlayer))));
                     return true;
                 }
 
@@ -205,12 +191,7 @@ public class KillCounter {
                         }
                         FKCounterGui.instance.updateDisplayText();
                     }
-                    String squadmate = SquadEvent.getSquad().get(killedPlayer);
-                    if (squadmate != null) {
-                        ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killedPlayer, squadmate)));
-                        return true;
-                    }
-                    ChatUtil.addChatMessage(new ChatComponentText(FormattedText));
+                    ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killedPlayer, SquadEvent.getSquadname(killedPlayer))));
                     return true;
                 }
 
