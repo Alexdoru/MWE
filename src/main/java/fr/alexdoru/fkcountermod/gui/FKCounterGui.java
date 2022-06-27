@@ -161,12 +161,7 @@ public class FKCounterGui extends MyCachedGui {
                             } else {
                                 strBuilder.append(" - ");
                             }
-                            String squadname = SquadEvent.getSquad().get(playerEntry.getKey());
-                            if (squadname != null) {
-                                strBuilder.append(squadname).append(" (").append(playerEntry.getValue()).append(")");
-                            } else {
-                                strBuilder.append(playerEntry.getKey()).append(" (").append(playerEntry.getValue()).append(")");
-                            }
+                            strBuilder.append(SquadEvent.getSquadname(playerEntry.getKey())).append(" (").append(playerEntry.getValue()).append(")");
                             playerAmount++;
                             if (playerAmount == ConfigHandler.playerAmount) {
                                 break;

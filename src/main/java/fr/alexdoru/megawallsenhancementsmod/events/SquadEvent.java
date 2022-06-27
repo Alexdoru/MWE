@@ -56,6 +56,18 @@ public class SquadEvent {
     }
 
     /**
+     * Returns the input name if the player is not in the squad
+     * Returns the alias if the player is in the squad
+     */
+    public static String getSquadname(String playername) {
+        final String squadname = squadmap.get(playername);
+        if (squadname == null) {
+            return playername;
+        }
+        return squadname;
+    }
+
+    /**
      * At the start of any game it checks the scoreboard for teamates and adds them to the team
      * if you have the same teamates it keeps the nicks you gave them
      */

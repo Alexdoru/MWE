@@ -102,9 +102,9 @@ public class CommandSquad extends CommandBase {
 
             for (Entry<String, String> entry : squad.entrySet()) {
                 String displayname = entry.getKey();
-                String fakename = entry.getValue();
+                String squadname = entry.getValue();
                 imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + "- " + EnumChatFormatting.GOLD + displayname
-                        + (displayname.equals(fakename) ? "" : EnumChatFormatting.GREEN + " renamed as : " + EnumChatFormatting.GOLD + entry.getValue()) + "\n"));
+                        + (displayname.equals(squadname) ? "" : EnumChatFormatting.GREEN + " renamed as : " + EnumChatFormatting.GOLD + entry.getValue()) + "\n"));
             }
 
             addChatMessage(imsg);
