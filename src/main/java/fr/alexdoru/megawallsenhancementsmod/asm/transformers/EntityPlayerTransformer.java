@@ -25,7 +25,7 @@ public class EntityPlayerTransformer implements IMyClassTransformer {
                             && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "a" : "formatPlayerName")
                             && ((MethodInsnNode) insnNode).desc.equals(ASMLoadingPlugin.isObf ? "(Lauq;Ljava/lang/String;)Ljava/lang/String;" : "(Lnet/minecraft/scoreboard/Team;Ljava/lang/String;)Ljava/lang/String;")) {
                         /*
-                         * Replaces line 1422 :
+                         * Replaces line 2422 :
                          * ichatcomponent.appendSibling(new ChatComponentText(ScorePlayerTeam.formatPlayerName(this.getTeam(), this.getDisplayNameString())));
                          * With :
                          * ichatcomponent.appendSibling(new ChatComponentText(EntityPlayerHook.getTransformedDisplayName(ScorePlayerTeam.formatPlayerName(this.getTeam(), this.getDisplayNameString()), this.gameProfile)));
