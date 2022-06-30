@@ -105,6 +105,7 @@ public class KillCounter {
             "(\\w{1,16}) went up in flames\\.",
             "(\\w{1,16}) burned to death\\.",
             "(\\w{1,16}) suffocated in a wall\\.",
+            "(\\w{1,16}) suffocated\\.",
             "(\\w{1,16}) fell out of the world\\.",
             "(\\w{1,16}) had a block fall on them\\.",
             "(\\w{1,16}) drowned\\."
