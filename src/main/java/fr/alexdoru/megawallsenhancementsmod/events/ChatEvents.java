@@ -11,6 +11,7 @@ import fr.alexdoru.megawallsenhancementsmod.gui.HunterStrengthGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.KillCooldownGui;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
@@ -45,6 +46,7 @@ public class ChatEvents {
     private static final Pattern DREADLORD_STRENGTH_PATTERN = Pattern.compile("\u00a74\u00a7lSOUL SIPHON \u00a7c\u00a7l85% ([0-9])s");
     private static final Pattern HEROBRINE_STRENGTH_PATTERN = Pattern.compile("\u00a7e\u00a7lPOWER \u00a7c\u00a7l85% ([0-9])s");
     private static final Pattern HUNTER_PRE_STRENGTH_PATTERN = Pattern.compile("\u00a7a\u00a7lF\\.O\\.N\\. \u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l([0-9]+)");
+    private static final Pattern PLAYER_JOIN_PATTERN = Pattern.compile("^(\\w{1,16}) has joined \\([0-9]{1,3}/[0-9]{1,3}\\)!");
     private static final Pattern ZOMBIE_STRENGTH_PATTERN = Pattern.compile("\u00a72\u00a7lBERSERK \u00a7c\u00a7l75% ([0-9])s");
     private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:|\\[SHOUT\\] |\\[SPECTATOR\\] )(?:|\\[[A-Z]{3,6}\\] )(?:|\\[((?:MV|VI)P\\+?\\+?)\\] )(\\w{2,16}):.*");
     private static long lastStrength = 0;
@@ -168,6 +170,14 @@ public class ChatEvents {
 
             if (parseAPIKey(msg)) {
                 return;
+            }
+
+            if (FKCounterMod.preGameLobby) {
+                Matcher playerJoinMatcher = PLAYER_JOIN_PATTERN.matcher(msg);
+                if (playerJoinMatcher.matches()) {
+                    PartyDetection.onPlayerJoin(playerJoinMatcher.group(1), System.currentTimeMillis());
+                    return;
+                }
             }
 
             if (msg.equals(BAN_MESSAGE)) {

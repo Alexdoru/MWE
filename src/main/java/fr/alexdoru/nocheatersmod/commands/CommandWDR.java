@@ -198,6 +198,9 @@ public class CommandWDR extends CommandBase {
                 }
             }
 
+            if (arraycheats.contains("bhop")) {
+                PartyDetection.printBoostingReportAdvice(playername);
+            }
             ReportQueue.INSTANCE.addReportTimestamp(true);
 
             if (FKCounterMod.preGameLobby) {
