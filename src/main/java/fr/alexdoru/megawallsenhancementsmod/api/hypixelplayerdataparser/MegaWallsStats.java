@@ -17,7 +17,10 @@ import java.util.Map;
 
 public class MegaWallsStats {
 
-    private final LinkedHashMap<String, Integer> classpointsMap = new LinkedHashMap<>();
+    /**
+     * First element of the array is the prestige level, second element is the amount of classpoints
+     */
+    private final LinkedHashMap<String, Integer[]> classpointsMap = new LinkedHashMap<>();
     private String chosen_class;
     private String chosen_skin_class;
     private int coins = 0;
@@ -113,12 +116,13 @@ public class MegaWallsStats {
             if (classeobj == null) {
                 continue;
             }
-            nbprestiges = nbprestiges + JsonUtil.getInt(classeobj, "prestige");
-            int classpoints = JsonUtil.getInt(mwdata, classname + "_final_kills_standard")
+            final int prestige = JsonUtil.getInt(classeobj, "prestige");
+            nbprestiges = nbprestiges + prestige;
+            final int classpoints = JsonUtil.getInt(mwdata, classname + "_final_kills_standard")
                     + JsonUtil.getInt(mwdata, classname + "_final_assists_standard")
                     + JsonUtil.getInt(mwdata, classname + "_wins_standard") * 10;
             total_classpoints += classpoints;
-            classpointsMap.put(classname, classpoints);
+            classpointsMap.put(classname, new Integer[]{prestige, classpoints});
         }
 
         final JsonElement achievementsOneTime = playerData.get("achievementsOneTime");
@@ -161,12 +165,15 @@ public class MegaWallsStats {
     public IChatComponent getClassPointsMessage(String formattedname, String playername) {
         IChatComponent imsg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls Classpoints\n\n"));
-        for (Map.Entry<String, Integer> entry : classpointsMap.entrySet()) {
+        for (Map.Entry<String, Integer[]> entry : classpointsMap.entrySet()) {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + ChatUtil.capitalizeFirstLetter(entry.getKey()))
-                            .setChatStyle(new ChatStyle()
-                                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for " + entry.getKey() + " stats")))
-                                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + entry.getKey()))))
-                    .appendSibling(new ChatComponentText(" : " + formatClasspoint(entry.getValue()) + "\n"));
+                    .setChatStyle(new ChatStyle()
+                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for " + entry.getKey() + " stats")))
+                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + entry.getKey()))));
+            if (entry.getValue()[0] != 0) {
+                imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + " P" + ChatUtil.intToRoman(entry.getValue()[0])));
+            }
+            imsg.appendSibling(new ChatComponentText(" : " + formatClasspoint(entry.getValue()[1]) + "\n"));
         }
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "Total : " + EnumChatFormatting.GOLD + total_classpoints + "\n"));
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));

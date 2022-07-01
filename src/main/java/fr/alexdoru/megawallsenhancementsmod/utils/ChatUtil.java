@@ -227,7 +227,6 @@ public class ChatUtil {
                 return "V";
             default:
                 return String.valueOf(number);
-
         }
     }
 
