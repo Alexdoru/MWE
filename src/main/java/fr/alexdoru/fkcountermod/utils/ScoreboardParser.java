@@ -91,14 +91,14 @@ public class ScoreboardParser {
             String colorCode;
             if (matcher1.matches()) {
                 String formattedLine = formattedSidebarLines.get(i);
-                colorCode = StringUtil.getLastColorCodeBefore(formattedLine, "[");
+                colorCode = StringUtil.getLastColorCodeBefore(formattedLine, "\\[").replace("\u00a7", "");
                 aliveWithers.add(colorCode);
                 witherHP = Integer.parseInt(matcher1.group(1));
             } else {
                 final Matcher matcher2 = WITHER_ALIVE_HEART_PATTERN.matcher(line);
                 if (matcher2.matches()) {
                     String formattedLine = formattedSidebarLines.get(i);
-                    colorCode = StringUtil.getLastColorCodeBefore(formattedLine, "[");
+                    colorCode = StringUtil.getLastColorCodeBefore(formattedLine, "\\[").replace("\u00a7", "");
                     aliveWithers.add(colorCode);
                     witherHP = 2 * Integer.parseInt(matcher2.group(1));
                 }
