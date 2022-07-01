@@ -166,8 +166,8 @@ public class KillCounter {
                 if (matcher.groupCount() == 2) {
                     String killedPlayer = matcher.group(1);
                     String killer = matcher.group(2);
-                    String killedTeamColor = StringUtil.getLastFormattingCodeBefore(FormattedText, killedPlayer).replace("\u00a7","");
-                    String killerTeamColor = StringUtil.getLastFormattingCodeBefore(FormattedText, killer).replace("\u00a7","");
+                    String killedTeamColor = StringUtil.getLastColorCodeBefore(FormattedText, killedPlayer).replace("\u00a7", "");
+                    String killerTeamColor = StringUtil.getLastColorCodeBefore(FormattedText, killer).replace("\u00a7", "");
                     if (!killedTeamColor.equals("") && !killerTeamColor.equals("")) {
                         if (removeKilledPlayer(killedPlayer, killedTeamColor)) {
                             addKill(killer, killerTeamColor);
@@ -185,7 +185,7 @@ public class KillCounter {
 
                 if (matcher.groupCount() == 1) {
                     String killedPlayer = matcher.group(1);
-                    String killedTeamColor = StringUtil.getLastFormattingCodeBefore(FormattedText, killedPlayer).replace("\u00a7","");
+                    String killedTeamColor = StringUtil.getLastColorCodeBefore(FormattedText, killedPlayer).replace("\u00a7", "");
                     if (!killedTeamColor.equals("")) {
                         if (removeKilledPlayer(killedPlayer, killedTeamColor)) {
                             playersPresentInGame.add(killedPlayer);
