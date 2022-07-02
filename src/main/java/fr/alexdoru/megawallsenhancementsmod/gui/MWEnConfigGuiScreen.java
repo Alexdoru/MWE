@@ -96,7 +96,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 26:
                 return "Clear view : " + getSuffix(ConfigHandler.clearVision);
             case 9:
-                return "Show hunter strength HUD : " + getSuffix(ConfigHandler.hunterStrengthHUD);
+                return "Show strength HUD : " + getSuffix(ConfigHandler.strengthHUD);
             case 18:
                 return "Cancel night vision effect : " + getSuffix(!ConfigHandler.keepNightVisionEffect);
             case 2:
@@ -187,8 +187,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.GREEN + "to the camera for a better visibility");
                 break;
             case 9:
-                textLines.add(EnumChatFormatting.GREEN + "When you play the Hunter class it prints a HUD");
-                textLines.add(EnumChatFormatting.GREEN + "and plays a sound before getting strength");
+                textLines.add(EnumChatFormatting.GREEN + "Displays a HUD when you get strenght with Dreadlord, Herobrine, Hunter and Zombie");
                 break;
             case 18:
                 textLines.add(EnumChatFormatting.GREEN + "Removes the visual effect of night vision");
@@ -261,10 +260,10 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 ConfigHandler.shortencoinmessage = !ConfigHandler.shortencoinmessage;
                 break;
             case 9:
-                if (!ConfigHandler.hunterStrengthHUD) {
+                if (!ConfigHandler.strengthHUD) {
                     Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(ChatEvents.STRENGTH_SOUND, 0.0F));
                 }
-                ConfigHandler.hunterStrengthHUD = !ConfigHandler.hunterStrengthHUD;
+                ConfigHandler.strengthHUD = !ConfigHandler.strengthHUD;
                 break;
             case 18:
                 ConfigHandler.keepNightVisionEffect = !ConfigHandler.keepNightVisionEffect;

@@ -40,31 +40,22 @@ public class ScoreboardUtils {
      * Item at index 0 is the first line etc
      */
     public static List<String> getFormattedSidebarText(Scoreboard scoreboard) {
-
         List<String> lines = new ArrayList<>();
         ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(1);
-
         if (objective == null) {
             return lines;
         }
-
         Collection<Score> scores = scoreboard.getSortedScores(objective);
-
-        List<Score> list = scores.stream()
-                .filter(input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#"))
-                .collect(Collectors.toList());
-
+        List<Score> list = scores.stream().filter(input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#")).collect(Collectors.toList());
         if (list.size() > 15) {
             scores = Lists.newArrayList(Iterables.skip(list, scores.size() - 15));
         } else {
             scores = list;
         }
-
         for (Score score : scores) {
             ScorePlayerTeam team = scoreboard.getPlayersTeam(score.getPlayerName());
             lines.add(ScorePlayerTeam.formatPlayerName(team, ""));
         }
-
         Collections.reverse(lines);
         return lines;
     }
@@ -106,11 +97,9 @@ public class ScoreboardUtils {
      */
     public static String getSidebarTitle(Scoreboard scoreboard) {
         ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(1);
-
         if (objective == null) {
             return "";
         }
-
         return objective.getDisplayName();
     }
 

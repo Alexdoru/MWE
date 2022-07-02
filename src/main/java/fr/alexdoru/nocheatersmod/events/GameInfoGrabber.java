@@ -2,6 +2,7 @@ package fr.alexdoru.nocheatersmod.events;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
+import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import net.minecraft.util.ChatComponentText;
 
 import java.util.Date;
@@ -44,6 +45,7 @@ public class GameInfoGrabber {
         }
         for (String sidebarScore : scoresColor) {
             addChatMessage(new ChatComponentText(sidebarScore));
+            ASMLoadingPlugin.logger.info(sidebarScore);
         }
     }
 

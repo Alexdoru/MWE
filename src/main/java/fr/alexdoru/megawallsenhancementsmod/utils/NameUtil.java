@@ -267,6 +267,21 @@ public class NameUtil {
 
     }
 
+    /**
+     * Returns the formatted team name with additionnal prestige V tag
+     */
+    public static String getFormattedName(String playername) {
+        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+        if (networkPlayerInfo != null) {
+            final MWPlayerData mwPlayerData = MWPlayerData.dataCache.get(networkPlayerInfo.getGameProfile().getId());
+            if (mwPlayerData != null && mwPlayerData.P5Tag != null && mwPlayerData.originalP4Tag != null) {
+                return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername).replace(mwPlayerData.originalP4Tag, mwPlayerData.P5Tag);
+            }
+            return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername);
+        }
+        return playername;
+    }
+
     public static IChatComponent getTransformedDisplayName(GameProfile gameProfileIn) {
         MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfileIn).getMWPlayerData();
         if (mwPlayerData != null) {

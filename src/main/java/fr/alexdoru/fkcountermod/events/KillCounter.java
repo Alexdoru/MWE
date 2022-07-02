@@ -10,6 +10,7 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -94,7 +95,20 @@ public class KillCounter {
             "(\\w{1,16}) was chewed up by (\\w{1,16}).*",
             "(\\w{1,16}) was chemically cheesed by (\\w{1,16}).*",
             "(\\w{1,16}) was turned into cheese whiz by (\\w{1,16}).*",
-            "(\\w{1,16}) was magically squeaked by (\\w{1,16}).*"
+            "(\\w{1,16}) was magically squeaked by (\\w{1,16}).*",
+            /*Natural deaths messages*/
+            "(\\w{1,16}) starved to death\\.",
+            "(\\w{1,16}) hit the ground too hard\\.",
+            "(\\w{1,16}) blew up\\.",
+            "(\\w{1,16}) exploded\\.",
+            "(\\w{1,16}) tried to swim in lava\\.",
+            "(\\w{1,16}) went up in flames\\.",
+            "(\\w{1,16}) burned to death\\.",
+            "(\\w{1,16}) suffocated in a wall\\.",
+            "(\\w{1,16}) suffocated\\.",
+            "(\\w{1,16}) fell out of the world\\.",
+            "(\\w{1,16}) had a block fall on them\\.",
+            "(\\w{1,16}) drowned\\."
     };
     private static final String[] SCOREBOARD_PREFIXES = {"[R]", "[G]", "[Y]", "[B]"};
     private static final String[] DEFAULT_PREFIXES = {"c", "a", "e", "9"}; // RED GREEN YELLOW BLUE
@@ -143,47 +157,44 @@ public class KillCounter {
             return false;
         }
 
-        /*
-         * Kill message detection
-         */
-        for (Pattern kill_pattern : KILL_PATTERNS) {
+        for (Pattern pattern : KILL_PATTERNS) {
 
-            Matcher killMessageMatcher = kill_pattern.matcher(UnformattedText);
+            Matcher matcher = pattern.matcher(UnformattedText);
 
-            if (killMessageMatcher.matches()) {
+            if (matcher.matches()) {
 
-                String killedPlayer = killMessageMatcher.group(1);
-                String killer = killMessageMatcher.group(2);
-                String[] split = FormattedText.split("\u00a7");
-
-                if (split.length >= 7) {
-                    String killedTeam = split[2].substring(0, 1);
-                    String killerTeam = split[6].substring(0, 1);
-                    if (removeKilledPlayer(killedPlayer, killedTeam)) {
-                        addKill(killer, killerTeam);
-                        playersPresentInGame.add(killedPlayer);
-                        playersPresentInGame.add(killer);
+                if (matcher.groupCount() == 2) {
+                    String killedPlayer = matcher.group(1);
+                    String killer = matcher.group(2);
+                    String killedTeamColor = StringUtil.getLastColorCodeBefore(FormattedText, killedPlayer).replace("\u00a7", "");
+                    String killerTeamColor = StringUtil.getLastColorCodeBefore(FormattedText, killer).replace("\u00a7", "");
+                    if (!killedTeamColor.equals("") && !killerTeamColor.equals("")) {
+                        if (removeKilledPlayer(killedPlayer, killedTeamColor)) {
+                            addKill(killer, killerTeamColor);
+                            playersPresentInGame.add(killedPlayer);
+                            playersPresentInGame.add(killer);
+                        }
+                        FKCounterGui.instance.updateDisplayText();
                     }
-                    FKCounterGui.instance.updateDisplayText();
-                }
-
-                if (ConfigHandler.strengthParticules) {
-                    spawnParticles(killer);
-                }
-
-                String squadmate = SquadEvent.getSquad().get(killer);
-                if (squadmate != null) {
-                    ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killer, squadmate)));
-                    return true;
-                }
-                squadmate = SquadEvent.getSquad().get(killedPlayer);
-                if (squadmate != null) {
-                    ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killedPlayer, squadmate)));
+                    if (ConfigHandler.strengthParticules) {
+                        spawnParticles(killer);
+                    }
+                    ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killer, SquadEvent.getSquadname(killer)).replace(killedPlayer, SquadEvent.getSquadname(killedPlayer))));
                     return true;
                 }
 
-                ChatUtil.addChatMessage(new ChatComponentText(FormattedText));
-                return true;
+                if (matcher.groupCount() == 1) {
+                    String killedPlayer = matcher.group(1);
+                    String killedTeamColor = StringUtil.getLastColorCodeBefore(FormattedText, killedPlayer).replace("\u00a7", "");
+                    if (!killedTeamColor.equals("")) {
+                        if (removeKilledPlayer(killedPlayer, killedTeamColor)) {
+                            playersPresentInGame.add(killedPlayer);
+                        }
+                        FKCounterGui.instance.updateDisplayText();
+                    }
+                    ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killedPlayer, SquadEvent.getSquadname(killedPlayer))));
+                    return true;
+                }
 
             }
 
@@ -208,7 +219,6 @@ public class KillCounter {
         if (isNotValidTeam(team)) {
             return 0;
         }
-
         int kills = 0;
         for (int k : teamKillsArray[team].values()) {
             kills += k;

@@ -1,6 +1,9 @@
 package fr.alexdoru.nocheatersmod;
 
-import fr.alexdoru.nocheatersmod.commands.*;
+import fr.alexdoru.nocheatersmod.commands.CommandNocheaters;
+import fr.alexdoru.nocheatersmod.commands.CommandReport;
+import fr.alexdoru.nocheatersmod.commands.CommandUnWDR;
+import fr.alexdoru.nocheatersmod.commands.CommandWDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import net.minecraft.client.Minecraft;

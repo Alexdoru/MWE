@@ -198,10 +198,13 @@ public class CommandWDR extends CommandBase {
                 }
             }
 
+            if (arraycheats.contains("bhop")) {
+                PartyDetection.printBoostingReportAdvice(playername);
+            }
             ReportQueue.INSTANCE.addReportTimestamp(true);
 
             if (FKCounterMod.preGameLobby) {
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getChatReportingAdvice()));
+                addChatMessage(new ChatComponentText(getChatReportingAdvice()));
             }
 
             CachedMojangUUID apireq;
