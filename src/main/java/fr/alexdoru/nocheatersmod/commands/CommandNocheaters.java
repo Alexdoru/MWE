@@ -10,6 +10,7 @@ import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
+import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import fr.alexdoru.nocheatersmod.events.ReportQueue;
 import fr.alexdoru.nocheatersmod.util.NoCheatersMessages;
 import net.minecraft.client.Minecraft;
@@ -369,11 +370,15 @@ public class CommandNocheaters extends CommandBase {
         } else if (args[0].equalsIgnoreCase("debugreportqueue")) {
 
             ReportQueue.isDebugMode = !ReportQueue.isDebugMode;
-            if(ReportQueue.isDebugMode) {
+            if (ReportQueue.isDebugMode) {
                 debug("enabled debug report queue");
             } else {
                 debug("disabled debug report queue");
             }
+
+        } else if (args[0].equalsIgnoreCase("getscoreboard")) {
+
+            GameInfoGrabber.debugGetScoreboard();
 
         } else {
 

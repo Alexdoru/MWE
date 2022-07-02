@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 public class StringUtil {
 
     private static final Pattern FORMATTING_CODE_PATTERN = Pattern.compile("(?i)" + '\u00a7' + "[0-9A-FK-OR]");
+    private static final Pattern COLOR_CODE_PATTERN = Pattern.compile("(?i)" + '\u00a7' + "[0-9A-F]");
 
     /**
      * On hypixel the chat messages sent by players follow the pattern:
@@ -62,6 +63,34 @@ public class StringUtil {
             s = matcher.group();
         }
         return s;
+    }
+
+    public static String getLastFormattingCodeBefore(String message, String target) {
+        String[] split = message.split(target, 2);
+        if (split.length != 2) {
+            return "";
+        }
+        return getLastFormattingCodeOf(split[0]);
+    }
+
+    /**
+     * Returns only color codes, Self-explanatory, returns "" if it can't find the last color code
+     */
+    public static String getLastColorCodeOf(String text) {
+        final Matcher matcher = COLOR_CODE_PATTERN.matcher(text);
+        String s = "";
+        while (matcher.find()) {
+            s = matcher.group();
+        }
+        return s;
+    }
+
+    public static String getLastColorCodeBefore(String message, String target) {
+        String[] split = message.split(target, 2);
+        if (split.length != 2) {
+            return "";
+        }
+        return getLastColorCodeOf(split[0]);
     }
 
     public static IChatComponent censorChatMessage(String message, String messageSender) {

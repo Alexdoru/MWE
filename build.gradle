@@ -12,7 +12,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "2.0"
+version = "2.1"
 group = "fr.alexdoru"
 archivesBaseName = "[1.8.9]MegaWallsEnhancements"
 
@@ -31,7 +31,6 @@ dependencies {
 }
 
 jar {
-    appendix = minecraft.version
     manifest.attributes(
             "FMLCorePlugin": 'fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin',
             'FMLCorePluginContainsFMLMod': 'Yes, yes it does'

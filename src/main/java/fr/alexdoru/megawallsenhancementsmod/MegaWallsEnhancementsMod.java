@@ -24,7 +24,7 @@ public class MegaWallsEnhancementsMod {
 
     public static final String modid = "mwenhancements";
     public static final String modName = "MegaWallsEnhancements";
-    public static final String version = "2.0";
+    public static final String version = "2.1";
     public static final KeyBinding toggleDroppedItemLimit = new KeyBinding("Toggle dropped item limit", 0, "MegaWallsEnhancements");
     public static final KeyBinding newNickKey = new KeyBinding("New Random Nick", 0, "MegaWallsEnhancements");
     public static File configurationFile;
@@ -60,6 +60,7 @@ public class MegaWallsEnhancementsMod {
         ClientCommandHandler.instance.registerCommand(new CommandStalk());
         ClientCommandHandler.instance.registerCommand(new CommandPlancke());
         ClientCommandHandler.instance.registerCommand(new CommandScanGame());
+        ClientCommandHandler.instance.registerCommand(new CommandAddAlias());
         ClientCommandHandler.instance.registerCommand(new CommandHypixelShout());
         ClientCommandHandler.instance.registerCommand(new CommandHypixelReply());
         ClientCommandHandler.instance.registerCommand(new CommandMWEnhancements());

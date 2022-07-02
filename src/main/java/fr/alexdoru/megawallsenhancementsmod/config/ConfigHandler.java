@@ -59,7 +59,7 @@ public class ConfigHandler {
     public static boolean show_lastWitherHUD;
     public static boolean witherHUDinSiderbar;
     public static final GuiPosition lastWitherHUDPosition = new GuiPosition(0d, 0d);
-    public static boolean hunterStrengthHUD;
+    public static boolean strengthHUD;
     public static final GuiPosition hunterStrengthHUDPosition = new GuiPosition(0d, 0d);
 
     /**
@@ -113,7 +113,7 @@ public class ConfigHandler {
             config.load();
         }
 
-        /*Reads the fiels in the config and stores them in the property objects, and defines a default value if the fields doesn't exist*/
+        /*Reads the fields in the config and stores them in the property objects, and defines a default value if the fields doesn't exist*/
         final String CATEGORY_FKCounter = "Final Kill Counter";
         final Property pXpos_fkcHUD = config.get(CATEGORY_FKCounter, "Xpos FKCounter HUD", 0d, "The x position of the final kill counter HUD, value ranges from 0 to 1");
         final Property pYpos_fkcHUD = config.get(CATEGORY_FKCounter, "Ypos FKCounter HUD", 0.1d, "The y position of the final kill counter HUD, value ranges from 0 to 1");
@@ -307,7 +307,7 @@ public class ConfigHandler {
             show_lastWitherHUD = pShow_lastWitherHUD.getBoolean();
             witherHUDinSiderbar = pwitherHUDinSiderbar.getBoolean();
             lastWitherHUDPosition.setRelative(pXpos_lastWitherHUD.getDouble(), pYpos_lastWitherHUD.getDouble());
-            hunterStrengthHUD = pHunterStrengthHUD.getBoolean();
+            strengthHUD = pHunterStrengthHUD.getBoolean();
             hunterStrengthHUDPosition.setRelative(pXpos_hunterHUD.getDouble(), pYpos_hunterHUD.getDouble());
 
             toggleicons = pToggleicons.getBoolean();
@@ -387,7 +387,7 @@ public class ConfigHandler {
             pXpos_lastWitherHUD.set(lastWitherHUDarray[0]);
             pYpos_lastWitherHUD.set(lastWitherHUDarray[1]);
 
-            pHunterStrengthHUD.set(hunterStrengthHUD);
+            pHunterStrengthHUD.set(strengthHUD);
             double[] hunterStrengtharray = hunterStrengthHUDPosition.getRelativePosition();
             pXpos_hunterHUD.set(hunterStrengtharray[0]);
             pYpos_hunterHUD.set(hunterStrengtharray[1]);

@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.getTagMW;
 
 public class CommandName extends CommandBase {
 

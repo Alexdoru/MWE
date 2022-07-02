@@ -188,6 +188,13 @@ public class ChatUtil {
      * Returns the integer as a String with a space for thousands delimiter
      */
     public static String formatInt(int number) {
+        return formatLong(number);
+    }
+
+    /**
+     * Returns the integer as a String with a space for thousands delimiter
+     */
+    public static String formatLong(long number) {
         String str = String.valueOf(number);
         char separator = ' ';
         int iterator = 1;
@@ -220,7 +227,6 @@ public class ChatUtil {
                 return "V";
             default:
                 return String.valueOf(number);
-
         }
     }
 

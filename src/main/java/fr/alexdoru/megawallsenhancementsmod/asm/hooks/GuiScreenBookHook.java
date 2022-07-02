@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,34 +24,44 @@ public class GuiScreenBookHook {
     private static final Pattern nickGenerationPagePattern = Pattern.compile("We've generated a random username for you:\\s*\\w{2,16}");
 
     public static void onBookInit(ItemStack book) {
-        isOnNickGenerationPage = false;
-        if (book.hasTagCompound()) {
-            NBTTagCompound nbttagcompound = book.getTagCompound();
-            NBTTagList bookPages = nbttagcompound.getTagList("pages", 8);
-            if (bookPages != null) {
-                bookPages = (NBTTagList) bookPages.copy();
-                int bookTotalPages = bookPages.tagCount();
-                if (bookTotalPages < 1) {
-                    bookTotalPages = 1;
-                }
-                for (int i = 0; i < bookTotalPages; i++) {
-                    String pagetext = EnumChatFormatting.getTextWithoutFormattingCodes(IChatComponent.Serializer.jsonToComponent(bookPages.getStringTagAt(i)).getUnformattedText().replace("\n", ""));
-                    Matcher matcher = nickSuccessPagePattern.matcher(pagetext);
-                    if (matcher.find()) {
-                        final String newNick = matcher.group(1);
-                        if (newNick != null && !newNick.equals("")) {
-                            ConfigHandler.hypixelNick = newNick;
-                            ConfigHandler.saveConfig();
+        try {
+            isOnNickGenerationPage = false;
+            if (book.hasTagCompound()) {
+                NBTTagCompound nbttagcompound = book.getTagCompound();
+                NBTTagList bookPages = nbttagcompound.getTagList("pages", 8);
+                if (bookPages != null) {
+                    bookPages = (NBTTagList) bookPages.copy();
+                    int bookTotalPages = bookPages.tagCount();
+                    if (bookTotalPages < 1) {
+                        bookTotalPages = 1;
+                    }
+                    for (int i = 0; i < bookTotalPages; i++) {
+                        String pagetext = EnumChatFormatting.getTextWithoutFormattingCodes(IChatComponent.Serializer.jsonToComponent(bookPages.getStringTagAt(i)).getUnformattedText().replace("\n", ""));
+                        Matcher matcher = nickSuccessPagePattern.matcher(pagetext);
+                        if (matcher.find()) {
+                            final String newNick = matcher.group(1);
+                            if (newNick != null && !newNick.equals("")) {
+                                if (!ConfigHandler.hypixelNick.equals("")) {
+                                    String oldAliasForNick = SquadEvent.getSquad().remove(ConfigHandler.hypixelNick);
+                                    if (oldAliasForNick != null) {
+                                        SquadEvent.addPlayer(newNick, oldAliasForNick);
+                                    }
+                                }
+                                ConfigHandler.hypixelNick = newNick;
+                                ConfigHandler.saveConfig();
+                                return;
+                            }
+                        }
+                        matcher = nickGenerationPagePattern.matcher(pagetext);
+                        if (matcher.find()) {
+                            isOnNickGenerationPage = true;
                             return;
                         }
                     }
-                    matcher = nickGenerationPagePattern.matcher(pagetext);
-                    if (matcher.find()) {
-                        isOnNickGenerationPage = true;
-                        return;
-                    }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
