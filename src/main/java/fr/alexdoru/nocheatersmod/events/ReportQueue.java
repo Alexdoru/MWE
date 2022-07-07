@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
@@ -32,6 +33,7 @@ public class ReportQueue {
     private static final int AUTOREPORT_PER_GAME = 2;
 
     private int counter;
+    private int standingStillCounter;
     private int autoReportSent;
     private final List<ReportInQueue> queueList = new ArrayList<>();
     private final List<Long> timestampsLastReports = new ArrayList<>();
@@ -46,21 +48,28 @@ public class ReportQueue {
         }
 
         if (counter <= 0 && !queueList.isEmpty() && mc.thePlayer != null) {
-            final int index = getIndexOffFirstReportSuggestion();
-            final ReportInQueue reportInQueue = queueList.remove(index == -1 ? 0 : index);
-            final String playername = reportInQueue.reportedPlayer;
-            if (reportInQueue.isReportSuggestion || FKCounterMod.isInMwGame) {
-                mc.thePlayer.sendChatMessage("/wdr " + playername);
-                addReportTimestamp(false);
-                if (isDebugMode) {
-                    ChatUtil.debug("sent report for " + playername);
+            if (isPlayerStandingStill(mc.thePlayer)) {
+                standingStillCounter++;
+                if (standingStillCounter >= 12) {
+                    final int index = getIndexOffFirstReportSuggestion();
+                    final ReportInQueue reportInQueue = queueList.remove(index == -1 ? 0 : index);
+                    final String playername = reportInQueue.reportedPlayer;
+                    if (reportInQueue.isReportSuggestion || FKCounterMod.isInMwGame) {
+                        mc.thePlayer.sendChatMessage("/wdr " + playername);
+                        addReportTimestamp(false);
+                        if (isDebugMode) {
+                            ChatUtil.debug("sent report for " + playername);
+                        }
+                    }
+                    if (doesQueueHaveReportSuggestion()) {
+                        counter = getTickDelay() + 20 * 20;
+                    } else {
+                        final int i = TIME_BETWEEN_REPORTS_MAX - 12 * 20 * (queueList.isEmpty() ? 0 : queueList.size() - 1);
+                        counter = (int) ((10d * random.nextGaussian() / 6d) + Math.max(i, TIME_BETWEEN_REPORTS_MIN));
+                    }
                 }
-            }
-            if (doesQueueHaveReportSuggestion()) {
-                counter = getTickDelay() + 20 * 20;
             } else {
-                final int i = TIME_BETWEEN_REPORTS_MAX - 12 * 20 * (queueList.isEmpty() ? 0 : queueList.size() - 1);
-                counter = (int) ((10d * random.nextGaussian() / 6d) + Math.max(i, TIME_BETWEEN_REPORTS_MIN));
+                standingStillCounter = 0;
             }
         }
 
@@ -250,6 +259,15 @@ public class ReportQueue {
         }
         playersReportedThisGame.add(new StringLong(timestamp, playername));
         return true;
+    }
+
+    private boolean isPlayerStandingStill(EntityPlayerSP thePlayer) {
+        return (mc.inGameHasFocus || mc.ingameGUI.getChatGUI().getChatOpen())
+                && thePlayer.movementInput.moveForward == 0.0F
+                && thePlayer.movementInput.moveStrafe == 0.0F
+                && !thePlayer.movementInput.jump
+                && !thePlayer.movementInput.sneak
+                && !thePlayer.isUsingItem();
     }
 
 }

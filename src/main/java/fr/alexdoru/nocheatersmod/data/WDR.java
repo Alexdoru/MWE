@@ -11,7 +11,7 @@ public class WDR {
 
     public static final String NICK = "nick";
     public static final String IGNORED = "ignored";
-    public static final long TIME_BETWEEN_AUTOREPORT = 60L * 60L * 1000L; //60 minutes
+    public static final long TIME_BETWEEN_AUTOREPORT = 120L * 60L * 1000L; //120 minutes
     private static final long TIME_MAX_AUTOREPORT = 7L * 24L * 60L * 60L * 1000L; //1 week
 
     public long timestamp;
