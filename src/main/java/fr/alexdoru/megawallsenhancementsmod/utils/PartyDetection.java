@@ -72,12 +72,14 @@ public class PartyDetection {
             }
             final String teamColorPlayername = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(infoPlayername.getPlayerTeam(), playername), playername);
             final ChatComponentText imsg = new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "This player joined in a party with : ");
+            boolean containsPlayers = false;
             for (String player : partyList) {
                 if (!player.equals(playername)) {
                     final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(player);
                     if (networkPlayerInfo != null) {
                         final String teamColorPlayer = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), player), player);
                         if (!teamColorPlayername.equals("") && teamColorPlayername.equals(teamColorPlayer)) {
+                            containsPlayers = true;
                             imsg.appendSibling(new ChatComponentText(NameUtil.getFormattedName(player) + " ")
                                     .setChatStyle(new ChatStyle()
                                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report " + player + " for boosting")))
@@ -88,7 +90,9 @@ public class PartyDetection {
                 }
             }
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "you could boosting report them as well."));
-            new DelayedTask(() -> addChatMessage(imsg), 10);
+            if (containsPlayers) {
+                new DelayedTask(() -> addChatMessage(imsg), 10);
+            }
         }
     }
 

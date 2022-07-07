@@ -13,6 +13,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -71,6 +72,11 @@ public class CommandAddAlias extends CommandBase {
         final List<String> onlinePlayersByName = TabCompletionUtil.getOnlinePlayersByName();
         onlinePlayersByName.addAll(Arrays.asList("clearall", "list", "remove"));
         return getListOfStringsMatchingLastWord(args, onlinePlayersByName);
+    }
+
+    @Override
+    public List<String> getCommandAliases() {
+        return Collections.singletonList("ad");
     }
 
 }
