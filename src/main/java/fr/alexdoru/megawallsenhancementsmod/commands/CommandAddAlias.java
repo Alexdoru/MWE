@@ -76,7 +76,7 @@ public class CommandAddAlias extends CommandBase {
 
     @Override
     public List<String> getCommandAliases() {
-        return Collections.singletonList("as");
+        return Collections.singletonList("ad");
     }
 
 }
