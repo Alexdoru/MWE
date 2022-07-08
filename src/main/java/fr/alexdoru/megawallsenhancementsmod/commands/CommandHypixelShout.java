@@ -11,10 +11,9 @@ import net.minecraft.util.BlockPos;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class CommandHypixelShout extends CommandBase {
-
-    private static final String guide_url = "https://hypixel.net/threads/the-complete-mega-walls-guide.3489088/";
 
     @Override
     public String getCommandName() {
@@ -28,15 +27,7 @@ public class CommandHypixelShout extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        StringBuilder msg = new StringBuilder("/shout");
-        for (String arg : args) {
-            if (arg.equalsIgnoreCase("/guide")) {
-                msg.append(" " + guide_url);
-            } else {
-                msg.append(" ").append(arg);
-            }
-        }
-        (Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg.toString());
+        (Minecraft.getMinecraft()).thePlayer.sendChatMessage(Pattern.compile("seks", Pattern.CASE_INSENSITIVE).matcher("/shout " + buildString(args, 0)).replaceAll("****"));
     }
 
     @Override
@@ -51,7 +42,6 @@ public class CommandHypixelShout extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-
         if (args.length >= 2 && isKeywordreport(2, args)) {
             if (FKCounterMod.isitPrepPhase) {
                 return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
@@ -61,17 +51,13 @@ public class CommandHypixelShout extends CommandBase {
                 return getListOfStringsMatchingLastWord(args, playersInThisGame);
             }
         }
-
         if (args.length >= 3 && (isKeywordreport(3, args))) {
             return getListOfStringsMatchingLastWord(args, CommandReport.cheatsArray);
         }
-
         if (FKCounterMod.isitPrepPhase) {
             return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
         }
-
         return null;
-
     }
 
     private boolean isKeywordreport(int i, String[] args) {

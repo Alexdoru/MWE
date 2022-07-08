@@ -267,7 +267,8 @@ public class ReportQueue {
                 && thePlayer.movementInput.moveStrafe == 0.0F
                 && !thePlayer.movementInput.jump
                 && !thePlayer.movementInput.sneak
-                && !thePlayer.isUsingItem();
+                && !thePlayer.isUsingItem()
+                && !thePlayer.isSwingInProgress;
     }
 
 }
