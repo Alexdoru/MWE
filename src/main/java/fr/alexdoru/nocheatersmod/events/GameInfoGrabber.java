@@ -73,6 +73,10 @@ public class GameInfoGrabber {
             String time_line = scoresRaw.get(1);
             String[] split = time_line.split(":");
 
+            if (split.length < 3) {
+                return "?";
+            }
+
             int score_sec = 60 * Integer.parseInt(split[1].replace(" ", "")) + Integer.parseInt(split[2].replace(" ", ""));
             int sec_since_start = 0;
 
