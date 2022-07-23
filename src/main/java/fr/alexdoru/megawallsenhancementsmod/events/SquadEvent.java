@@ -142,7 +142,7 @@ public class SquadEvent {
                 addPlayer(myName);
             }
             if (myCustomNick == null && !ConfigHandler.hypixelNick.equals("")) {
-                addPlayer(ConfigHandler.hypixelNick, EnumChatFormatting.ITALIC + myName);
+                addPlayer(ConfigHandler.hypixelNick, EnumChatFormatting.ITALIC + myName + EnumChatFormatting.RESET);
             }
         }
 
