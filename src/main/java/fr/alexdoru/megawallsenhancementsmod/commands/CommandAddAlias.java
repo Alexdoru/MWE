@@ -1,5 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
@@ -12,6 +15,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.io.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,7 +23,14 @@ import java.util.List;
 
 public class CommandAddAlias extends CommandBase {
 
-    public static final HashMap<String, String> renamingMap = new HashMap<>();
+    private static final HashMap<String, String> renamingMap = new HashMap<>();
+    private static File alliasDataFile;
+
+    public CommandAddAlias() {
+        alliasDataFile = new File((Minecraft.getMinecraft()).mcDataDir, "config/alliasData.json");
+        readDataFromFile();
+        Runtime.getRuntime().addShutdownHook(new Thread(CommandAddAlias::writeDataToFile));
+    }
 
     @Override
     public String getCommandName() {
@@ -77,6 +88,37 @@ public class CommandAddAlias extends CommandBase {
     @Override
     public List<String> getCommandAliases() {
         return Collections.singletonList("ad");
+    }
+
+    public static HashMap<String, String> getMap() {
+        return renamingMap;
+    }
+
+    private static void readDataFromFile() {
+        if (!alliasDataFile.exists()) {
+            return;
+        }
+        try {
+            final Gson gson = new Gson();
+            final HashMap<String, String> hashMap = gson.fromJson(new FileReader(alliasDataFile), new TypeToken<HashMap<String, String>>() {}.getType());
+            if (hashMap != null) {
+                renamingMap.putAll(hashMap);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeDataToFile() {
+        try {
+            final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+            final String jsonString = gson.toJson(renamingMap);
+            final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(alliasDataFile));
+            bufferedWriter.write(jsonString);
+            bufferedWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
