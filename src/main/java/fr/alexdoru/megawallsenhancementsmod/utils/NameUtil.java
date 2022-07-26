@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.cache.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GuiNewChatAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
+import fr.alexdoru.megawallsenhancementsmod.commands.CommandAddAlias;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
@@ -245,6 +246,7 @@ public class NameUtil {
                         }
                     }
 
+                    String alias = CommandAddAlias.getMap().get(username);
                     boolean isobf = teamprefix.contains("\u00a7k");
                     if (iExtraPrefix != null || formattedPrestigeVstring != null) {
                         displayName = new ChatComponentText(
@@ -252,6 +254,7 @@ public class NameUtil {
                                         + teamprefix
                                         + (isSquadMate ? squadname : username)
                                         + (formattedPrestigeVstring != null ? formattedPrestigeVstring : colorSuffix
+                                        + (alias == null ? "" : EnumChatFormatting.RESET + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.RESET + ")")
                                 ));
                     }
                 }
