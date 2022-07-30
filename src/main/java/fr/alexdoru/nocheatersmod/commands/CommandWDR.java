@@ -1,6 +1,7 @@
 package fr.alexdoru.nocheatersmod.commands;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
@@ -331,11 +332,11 @@ public class CommandWDR extends CommandBase {
 
     @Override
     public List<String> getCommandAliases() {
-        ArrayList<String> res = new ArrayList<>();
-        res.add("wdr");
-        res.add("Wdr");
-        res.add("WDR");
-        return res;
+        List<String> list = new ArrayList<>();
+        list.add("wdr");
+        list.add("Wdr");
+        list.add("WDR");
+        return list;
     }
 
     @Override
@@ -350,7 +351,19 @@ public class CommandWDR extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        return args.length == 1 ? (FKCounterMod.isInMwGame && FKCounterMod.isitPrepPhase ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null) : (args.length > 1 ? getListOfStringsMatchingLastWord(args, CommandReport.cheatsArray) : null);
+        if (args.length == 1) {
+            if (FKCounterMod.isInMwGame) {
+                if (FKCounterMod.isitPrepPhase) {
+                    return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+                } else {
+                    final List<String> playersInThisGame = KillCounter.getPlayersInThisGame();
+                    playersInThisGame.removeAll(TabCompletionUtil.getOnlinePlayersByName());
+                    return getListOfStringsMatchingLastWord(args, playersInThisGame);
+                }
+            }
+            return null;
+        }
+        return args.length > 1 ? getListOfStringsMatchingLastWord(args, CommandReport.cheatsArray) : null;
     }
 
 }
