@@ -44,7 +44,11 @@ public class GuiScreenBookHook {
                                 if (!ConfigHandler.hypixelNick.equals("")) {
                                     String oldAliasForNick = SquadEvent.getSquad().remove(ConfigHandler.hypixelNick);
                                     if (oldAliasForNick != null) {
-                                        SquadEvent.addPlayer(newNick, oldAliasForNick);
+                                        if (oldAliasForNick.equals(ConfigHandler.hypixelNick)) {
+                                            SquadEvent.addPlayer(newNick);
+                                        } else {
+                                            SquadEvent.addPlayer(newNick, oldAliasForNick);
+                                        }
                                     }
                                 }
                                 ConfigHandler.hypixelNick = newNick;
