@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.events.KillCounter;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.*;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.*;
@@ -53,6 +54,7 @@ public class MegaWallsEnhancementsMod {
         MinecraftForge.EVENT_BUS.register(new ModUpdater());
         MinecraftForge.EVENT_BUS.register(new KeybindingsEvent());
         MinecraftForge.EVENT_BUS.register(new MWGameStatsEvent());
+        MinecraftForge.EVENT_BUS.register(new RenderPlayerHook());
 
         ClientCommandHandler.instance.registerCommand(new CommandName());
         ClientCommandHandler.instance.registerCommand(new CommandKill());
