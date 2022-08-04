@@ -178,7 +178,7 @@ public class ChatEvents {
             }
 
             if (msg.equals(BAN_MESSAGE)) {
-                new DelayedTask(NetHandlerPlayClientHook::printDisconnectedPlayers, 20);
+                new DelayedTask(NetHandlerPlayClientHook::printDisconnectedPlayers, 10);
                 //return;
             }
 
