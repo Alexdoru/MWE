@@ -1,0 +1,93 @@
+package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
+
+import fr.alexdoru.megawallsenhancementsmod.utils.TimerUtil;
+import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+
+public class RenderPlayerHook {
+
+    private static final TimerUtil timer = new TimerUtil(1000L);
+    private static final HashMap<String, List<Long>> arrowHitMap = new HashMap<>();
+
+    @SuppressWarnings("unused")
+    public static String getArrowCount(AbstractClientPlayer entityIn) {
+        final List<Long> list = arrowHitMap.get(entityIn.getName());
+        if (list == null || list.isEmpty()) {
+            return "";
+        }
+        return EnumChatFormatting.RESET + "  " + list.size() + EnumChatFormatting.GREEN + " \u27B9";
+    }
+
+    @SubscribeEvent
+    public void onTick(TickEvent.ClientTickEvent event) {
+        if (event.phase == TickEvent.Phase.START || !timer.update() || arrowHitMap.isEmpty()) {
+            return;
+        }
+        final long currentTime = System.currentTimeMillis();
+        Iterator<List<Long>> iterator = arrowHitMap.values().iterator();
+        while (iterator.hasNext()) {
+            List<Long> list = iterator.next();
+            for (int i = 0; i < list.size(); i++) {
+                final Long hitTime = list.get(i);
+                if (currentTime - hitTime > (i == 0 ? 60000L : 180000L)) {
+                    list.remove(i);
+                    i--;
+                    continue;
+                }
+                if (i > 0) {
+                    final Long previousHitTime = list.get(i - 1);
+                    if (hitTime - previousHitTime > 60000L) {
+                        list.remove(i);
+                        i--;
+                    }
+                }
+            }
+            if (list.isEmpty()) {
+                iterator.remove();
+            }
+        }
+    }
+
+    public static void addArrowOnPlayer(String playername, long timeOfHit) {
+        final List<Long> list = arrowHitMap.get(playername);
+        if (list == null) {
+            List<Long> newlist = new ArrayList<>();
+            newlist.add(timeOfHit);
+            arrowHitMap.put(playername, newlist);
+        } else {
+            if (list.size() == 6) {
+                list.remove(list.size() - 1);
+            }
+            list.add(0, timeOfHit);
+        }
+    }
+
+    public static void removeArrowsFrom(String playername, int arrowAmount) {
+        if (arrowAmount < 0) {
+            arrowHitMap.remove(playername);
+            return;
+        }
+        final List<Long> list = arrowHitMap.get(playername);
+        if (list == null) {
+            return;
+        }
+        if (arrowAmount >= list.size()) {
+            arrowHitMap.remove(playername);
+            return;
+        }
+        int removed = 0;
+        for (int i = list.size() - 1; i >= 0 && arrowAmount > removed; i--) {
+            list.remove(i);
+            removed++;
+        }
+    }
+
+}
