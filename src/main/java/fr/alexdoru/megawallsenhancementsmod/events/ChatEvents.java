@@ -9,10 +9,7 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.ArrowHitGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.HunterStrengthGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.KillCooldownGui;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.PartyDetection;
-import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
@@ -49,8 +46,8 @@ public class ChatEvents {
     private static final Pattern PLAYER_JOIN_PATTERN = Pattern.compile("^(\\w{1,16}) has joined \\([0-9]{1,3}/[0-9]{1,3}\\)!");
     private static final Pattern ZOMBIE_STRENGTH_PATTERN = Pattern.compile("\u00a72\u00a7lBERSERK \u00a7c\u00a7l75% ([0-9])s");
     private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:|\\[SHOUT\\] |\\[SPECTATOR\\] )(?:|\\[[A-Z]{3,6}\\] )(?:|\\[((?:MV|VI)P\\+?\\+?)\\] )(\\w{2,16}):.*");
-    private static long lastStrength = 0;
     private static final HashSet<String> MW_REPETITVE_MSG = new HashSet<>();
+    private static final TimerUtil timerStrength = new TimerUtil(11000L);
 
     static {
         MW_REPETITVE_MSG.add("You broke your protected chest");
@@ -198,13 +195,11 @@ public class ChatEvents {
 
             Matcher preStrengthMatcher = HUNTER_PRE_STRENGTH_PATTERN.matcher(fmsg);
             if (preStrengthMatcher.find()) {
-                long currentTime = System.currentTimeMillis();
-                if (currentTime - lastStrength > 11000L) {
-                    lastStrength = currentTime;
+                if (timerStrength.update()) {
                     mc.getSoundHandler().playSound(PositionedSoundRecord.create(STRENGTH_SOUND, 0.0F));
                 }
                 String preStrengthTimer = preStrengthMatcher.group(1);
-                HunterStrengthGui.instance.setPreStrengthTime(preStrengthTimer, currentTime);
+                HunterStrengthGui.instance.setPreStrengthTime(preStrengthTimer);
                 return;
             }
 
