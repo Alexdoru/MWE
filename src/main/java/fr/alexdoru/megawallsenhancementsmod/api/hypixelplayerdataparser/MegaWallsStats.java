@@ -105,36 +105,37 @@ public class MegaWallsStats {
 
         // computes the number of prestiges
         classesdata = JsonUtil.getJsonObject(mwdata, "classes");
-
-        if (classesdata == null) {
-            return;
-        }
-
-        for (MWClass mwclass : MWClass.values()) {
-            String classname = mwclass.className.toLowerCase();
-            JsonObject classeobj = JsonUtil.getJsonObject(classesdata, classname);
-            if (classeobj == null) {
-                continue;
+        if (classesdata != null) {
+            for (MWClass mwclass : MWClass.values()) {
+                String classname = mwclass.className.toLowerCase();
+                JsonObject classeobj = JsonUtil.getJsonObject(classesdata, classname);
+                if (classeobj == null) {
+                    continue;
+                }
+                final int prestige = JsonUtil.getInt(classeobj, "prestige");
+                nbprestiges = nbprestiges + prestige;
+                final int classpoints = JsonUtil.getInt(mwdata, classname + "_final_kills_standard")
+                        + JsonUtil.getInt(mwdata, classname + "_final_assists_standard")
+                        + JsonUtil.getInt(mwdata, classname + "_wins_standard") * 10;
+                total_classpoints += classpoints;
+                classpointsMap.put(classname, new Integer[]{prestige, classpoints});
             }
-            final int prestige = JsonUtil.getInt(classeobj, "prestige");
-            nbprestiges = nbprestiges + prestige;
-            final int classpoints = JsonUtil.getInt(mwdata, classname + "_final_kills_standard")
-                    + JsonUtil.getInt(mwdata, classname + "_final_assists_standard")
-                    + JsonUtil.getInt(mwdata, classname + "_wins_standard") * 10;
-            total_classpoints += classpoints;
-            classpointsMap.put(classname, new Integer[]{prestige, classpoints});
         }
 
-        final JsonElement achievementsOneTime = playerData.get("achievementsOneTime");
-
-        if (achievementsOneTime != null && achievementsOneTime.isJsonArray()) {
-            for (JsonElement jsonElement : achievementsOneTime.getAsJsonArray()) {
-                final String achievementName = jsonElement.getAsString();
-                if (achievementName != null && achievementName.startsWith("walls3_legendary_")) {
-                    legendary_skins++;
+        try {
+            final JsonElement achievementsOneTime = playerData.get("achievementsOneTime");
+            if (achievementsOneTime != null && achievementsOneTime.isJsonArray()) {
+                for (JsonElement jsonElement : achievementsOneTime.getAsJsonArray()) {
+                    if (jsonElement.isJsonArray()) {
+                        continue;
+                    }
+                    final String achievementName = jsonElement.getAsString();
+                    if (achievementName != null && achievementName.startsWith("walls3_legendary_")) {
+                        legendary_skins++;
+                    }
                 }
             }
-        }
+        } catch (Exception ignored) {}
 
     }
 
@@ -251,24 +252,18 @@ public class MegaWallsStats {
                 }};
 
         return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
-
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls stats"))
-
                 .appendSibling(new ChatComponentText("\n" + "\n" +
                         ChatUtil.centerLine(EnumChatFormatting.GREEN + "Prestiges : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(nbprestiges) + " "
                                 + EnumChatFormatting.GREEN + " Playtime (approx.) : " + EnumChatFormatting.GOLD + String.format("%.2f", time_played / 60f) + "h") + "\n"))
-
                 .appendSibling(new ChatComponentText(
                         ChatUtil.centerLine(EnumChatFormatting.GREEN + "Selected class : " + EnumChatFormatting.GOLD + (chosen_class == null ? "None" : chosen_class) + " "
                                 + EnumChatFormatting.GREEN + " Selected skin : " + EnumChatFormatting.GOLD + (chosen_skin_class == null ? (chosen_class == null ? "None" : chosen_class) : chosen_skin_class)) + "\n" + "\n")
                         .setChatStyle(new ChatStyle()
                                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for this class' stats")))
                                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + (chosen_class == null ? "None" : chosen_class)))))
-
                 .appendSibling(new ChatComponentText(ChatUtil.alignText(matrix2) + ChatUtil.alignText(matrix1)))
-
                 .appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
-
     }
 
 }
