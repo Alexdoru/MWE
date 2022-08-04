@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.utils.TimerUtil;
 import net.minecraft.util.EnumChatFormatting;
 
 public class KillCooldownGui extends MyCachedGui {
@@ -9,7 +10,8 @@ public class KillCooldownGui extends MyCachedGui {
     private static final String DUMMY_TEXT = EnumChatFormatting.DARK_RED + "/kill cooldown : 60s";
     public static KillCooldownGui instance;
     private static long lastkilltime = 0;
-    private static long lastupdate = 0;
+    private static final TimerUtil timerKillCooldown = new TimerUtil(60000L);
+    private static final TimerUtil timerUpdateText = new TimerUtil(1000L);
 
     public KillCooldownGui() {
         instance = this;
@@ -20,9 +22,8 @@ public class KillCooldownGui extends MyCachedGui {
      * Called to draw the gui, when you use /kill
      */
     public static void drawCooldownGui() {
-        final long time = System.currentTimeMillis();
-        if (!(time - lastkilltime < 60000L)) { // doesn't update the cooldown if you used /kill in the last 60 seconds
-            lastkilltime = time;
+        if (timerKillCooldown.update()) {
+            lastkilltime = System.currentTimeMillis();
         }
     }
 
@@ -38,10 +39,8 @@ public class KillCooldownGui extends MyCachedGui {
 
     @Override
     public void render() {
-        final long time = System.currentTimeMillis();
-        if (time - lastupdate >= 1000L) {
+        if (timerUpdateText.update()) {
             updateDisplayText();
-            lastupdate = time;
         }
         int[] absolutePos = this.guiPosition.getAbsolutePosition();
         frObj.drawStringWithShadow(displayText, absolutePos[0], absolutePos[1], 0);
