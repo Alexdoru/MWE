@@ -12,7 +12,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
@@ -243,7 +242,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                     NameUtil.refreshAllNamesInWorld();
                 } else {
                     if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.apikeyMissingErrorMsg()));
+                        ChatUtil.printApikeySetupInfo();
                     } else {
                         ConfigHandler.prestigeV = true;
                         NameUtil.refreshAllNamesInWorld();
