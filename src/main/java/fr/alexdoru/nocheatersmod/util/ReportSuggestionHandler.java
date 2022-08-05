@@ -130,8 +130,8 @@ public class ReportSuggestionHandler {
                 final UUID id = networkPlayerInfo.getGameProfile().getId();
                 isSenderNicked = !NameUtil.isRealPlayer(id);
                 senderUUID = id.toString().replace("-", "");
-                isSenderFlaging = CommandScanGame.doesPlayerFlag(senderUUID);
-                WDR wdr = WdredPlayers.getPlayer(senderUUID, messageSender);
+                isSenderFlaging = CommandScanGame.doesPlayerFlag(id);
+                final WDR wdr = WdredPlayers.getPlayer(senderUUID, messageSender);
                 if (wdr != null) {
                     isSenderIgnored = wdr.isIgnored();
                     isSenderCheating = wdr.hasValidCheats();
