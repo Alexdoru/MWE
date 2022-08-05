@@ -36,18 +36,9 @@ public class RenderPlayerHook {
         while (iterator.hasNext()) {
             List<Long> list = iterator.next();
             for (int i = 0; i < list.size(); i++) {
-                final Long hitTime = list.get(i);
-                if (currentTime - hitTime > (i == 0 ? 60000L : 180000L)) {
+                if (currentTime - list.get(i) > (i == 0 ? 60000L : 180000L)) {
                     list.remove(i);
                     i--;
-                    continue;
-                }
-                if (i > 0) {
-                    final Long previousHitTime = list.get(i - 1);
-                    if (hitTime - previousHitTime > 60000L) {
-                        list.remove(i);
-                        i--;
-                    }
                 }
             }
             if (list.isEmpty()) {
