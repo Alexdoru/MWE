@@ -25,6 +25,7 @@ import net.minecraft.util.IChatComponent;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 public class CommandScanGame extends CommandBase {
@@ -33,7 +34,7 @@ public class CommandScanGame extends CommandBase {
      * fills the hashmap with this instead of null when there is no match
      */
     public static final IChatComponent nomatch = new ChatComponentText("none");
-    private static final HashMap<String, IChatComponent> scanmap = new HashMap<>();
+    private static final HashMap<UUID, IChatComponent> scanmap = new HashMap<>();
     private static String scanGameId;
 
     public static void clearScanGameData() {
@@ -48,12 +49,12 @@ public class CommandScanGame extends CommandBase {
         }
     }
 
-    public static boolean doesPlayerFlag(String uuid) {
+    public static boolean doesPlayerFlag(UUID uuid) {
         IChatComponent imsg = scanmap.get(uuid);
         return imsg != null && !imsg.equals(CommandScanGame.nomatch);
     }
 
-    public static void put(String uuid, IChatComponent msg) {
+    public static void put(UUID uuid, IChatComponent msg) {
         scanmap.put(uuid, msg);
     }
 
@@ -69,47 +70,32 @@ public class CommandScanGame extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
             ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.apikeyMissingErrorMsg()));
             return;
         }
-
         String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
         Collection<NetworkPlayerInfo> playerCollection = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
-
         int i = 0;
-
         if (!currentGameId.equals("?") && currentGameId.equals(scanGameId)) {
-
             for (NetworkPlayerInfo networkPlayerInfo : playerCollection) {
-
-                String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-                IChatComponent imsg = scanmap.get(uuid);
-
+                final IChatComponent imsg = scanmap.get(networkPlayerInfo.getGameProfile().getId());
                 if (imsg == null) {
                     i++;
                     Multithreading.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
                 } else if (!imsg.equals(nomatch)) {
                     ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(imsg));
                 }
-
             }
             ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " more players..."));
-
         } else {
-
             scanGameId = GameInfoGrabber.getGameIDfromscoreboard();
-
             for (NetworkPlayerInfo networkPlayerInfo : playerCollection) {
                 i++;
                 Multithreading.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
             }
-
             ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " players..."));
-
         }
-
     }
 
     @Override
@@ -130,12 +116,12 @@ class ScanPlayerTask implements Callable<String> {
     @Override
     public String call() {
 
-        String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
+        final UUID uuid = networkPlayerInfo.getGameProfile().getId();
 
         try {
 
             String playername = networkPlayerInfo.getGameProfile().getName();
-            HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+            HypixelPlayerData playerdata = new HypixelPlayerData(uuid.toString().replace("-", ""), HypixelApiKeyUtil.getApiKey());
             MegaWallsStats megawallsstats = new MegaWallsStats(playerdata.getPlayerData());
             IChatComponent imsg = null;
 

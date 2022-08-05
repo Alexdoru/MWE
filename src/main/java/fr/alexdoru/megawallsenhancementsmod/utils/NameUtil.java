@@ -216,7 +216,7 @@ public class NameUtil {
 
                     } else { //scangame
 
-                        if (CommandScanGame.doesPlayerFlag(uuid)) {
+                        if (CommandScanGame.doesPlayerFlag(id)) {
                             extraPrefix = prefix_scan;
                             iExtraPrefix = iprefix_scan;
                         }
