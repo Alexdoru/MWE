@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.fkcountermod.events.MwGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.GeneralInfo;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
@@ -21,6 +22,8 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -37,12 +40,26 @@ public class CommandScanGame extends CommandBase {
     private static final HashMap<UUID, IChatComponent> scanmap = new HashMap<>();
     private static String scanGameId;
 
-    public static void clearScanGameData() {
+    public CommandScanGame() {
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @SubscribeEvent
+    public void onMwGame(MwGameEvent event) {
+        if (event.getType() == MwGameEvent.EventType.GAME_START) {
+            onGameStart();
+        }
+        if (event.getType() == MwGameEvent.EventType.GAME_END) {
+            clearScanGameData();
+        }
+    }
+
+    private static void clearScanGameData() {
         scanGameId = null;
         scanmap.clear();
     }
 
-    public static void onGameStart() {
+    private static void onGameStart() {
         String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
         if (!currentGameId.equals("?") && scanGameId != null && !scanGameId.equals(currentGameId)) {
             clearScanGameData();
