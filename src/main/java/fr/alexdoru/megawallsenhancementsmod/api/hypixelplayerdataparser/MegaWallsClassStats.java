@@ -66,7 +66,7 @@ public class MegaWallsClassStats {
     private int classname_self_healed = 0;
     private int classname_allies_healed = 0;
 
-    public MegaWallsClassStats(JsonObject playerData, String classname) {
+    public MegaWallsClassStats(JsonObject playerData, String classnameIn) {
 
         if (playerData == null) {
             return;
@@ -86,8 +86,8 @@ public class MegaWallsClassStats {
 
         JsonObject mwdata = mwElem.getAsJsonObject();
 
-        classname = classname.toLowerCase();
-        classnameuppercase = classname;
+        classname = classnameIn.toLowerCase();
+        classnameuppercase = classnameIn;
         chosen_skin_class = JsonUtil.getString(mwdata, "chosen_skin_" + classnameuppercase);
 
         coins = JsonUtil.getInt(mwdata, "coins");
@@ -114,12 +114,14 @@ public class MegaWallsClassStats {
         fkpergame = (float) classname_final_kills / (games_played == 0 ? 1 : (float) games_played);
 
         JsonObject classesdata = JsonUtil.getJsonObject(mwdata, "classes");
-        if (classesdata == null)
+        if (classesdata == null) {
             return;
+        }
 
         JsonObject classeobj = JsonUtil.getJsonObject(classesdata, classname);
-        if (classeobj == null)
+        if (classeobj == null) {
             return;
+        }
 
         JsonElement boolelem = classeobj.get("unlocked");
 
@@ -271,32 +273,22 @@ public class MegaWallsClassStats {
         if (unlocked || classname.equals("hunter") || classname.equals("shark") || classname.equals("cow")) {
 
             msg = new ChatComponentText(EnumChatFormatting.AQUA + bar() + "\n")
-
                     .appendSibling(PlanckeHeaderText(formattedname, playername, " - Mega Walls " + classnameuppercase + " stats"))
-
                     .appendSibling(new ChatComponentText("\n" + "\n" + alignText(matrix1))
                             .setChatStyle(new ChatStyle()
-                                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
-
-                                            EnumChatFormatting.GRAY + "Disclaimer : Class Final K/D Ratio's are not accurate for some players, as final-deaths for classes weren't tracked prior to the Mythic update.")))))
-
+                                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GRAY + "Disclaimer : Class Final K/D Ratio's are not accurate for some players, as final-deaths for classes weren't tracked prior to the Mythic update.")))))
                     .appendSibling(new ChatComponentText(alignText(matrix2) +
-
                             centerLine(EnumChatFormatting.GREEN + "Selected skin : " + EnumChatFormatting.GOLD + (chosen_skin_class == null ? (classnameuppercase == null ? "None" : classnameuppercase) : chosen_skin_class)) + "\n" + "\n"
-
                             + centerLine(EnumChatFormatting.GREEN + "Classpoints : " + EnumChatFormatting.GOLD + classpoints + " "
                             + EnumChatFormatting.GREEN + " Playtime (approx.) : " + EnumChatFormatting.GOLD + String.format("%.2f", classname_time_played / 60f) + "h") + "\n"
-
                             + centerLine(EnumChatFormatting.GREEN + "Kit : "
                             + (skill_level_d == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + intToRoman(skill_level_d) + " "
                             + (skill_level_a == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + intToRoman(skill_level_a) + " "
                             + (skill_level_b == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + intToRoman(skill_level_b) + " "
                             + (skill_level_c == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + intToRoman(skill_level_c) + " "
                             + (skill_level_g == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + intToRoman(skill_level_g) + " "
-
                             + EnumChatFormatting.GREEN + "Prestige : " + (prestige == 0 ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.GOLD) + intToRoman(prestige) + " "
                             + EnumChatFormatting.GREEN + "Echest rows : " + (enderchest_rows == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + enderchest_rows) + "\n"
-
                             + EnumChatFormatting.AQUA + bar()));
 
         } else {
