@@ -43,8 +43,8 @@ public class CommandPlancke extends CommandBase {
             return;
         }
 
-        if (HypixelApiKeyUtil.apiKeyIsNotSetup()) { // api key not setup
-            addChatMessage(new ChatComponentText(apikeyMissingErrorMsg()));
+        if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
+            printApikeySetupInfo();
             return;
         }
 

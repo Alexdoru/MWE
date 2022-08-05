@@ -68,11 +68,11 @@ public class ChatUtil {
         return imsgstart.appendSibling(imessagebody).appendSibling(imsgend);
     }
 
-    public static String apikeyMissingErrorMsg() {
-        return getTagMW() + EnumChatFormatting.RED + "You didn't set up your Api key. Connect to Hypixel and type "
+    public static void printApikeySetupInfo() {
+        addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + "You didn't set up your Api key. Connect to Hypixel and type "
                 + EnumChatFormatting.YELLOW + "\"/api new\""
                 + EnumChatFormatting.RED + " to get an Api key, the mod should automatically detect the key and save it. If you want to use a key that you already have, type "
-                + EnumChatFormatting.YELLOW + "\"/mwenhancements setapikey <key>\"";
+                + EnumChatFormatting.YELLOW + "\"/mwenhancements setapikey <key>\""));
     }
 
     public static String invalidplayernameMsg(String playername) {

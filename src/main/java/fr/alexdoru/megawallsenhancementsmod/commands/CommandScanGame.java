@@ -71,7 +71,7 @@ public class CommandScanGame extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.apikeyMissingErrorMsg()));
+            ChatUtil.printApikeySetupInfo();
             return;
         }
         String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
