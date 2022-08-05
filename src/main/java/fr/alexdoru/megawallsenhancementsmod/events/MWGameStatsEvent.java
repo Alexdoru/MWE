@@ -8,7 +8,6 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWall
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassStats;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiScreenHook;
-import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
 import net.minecraft.client.Minecraft;
@@ -35,13 +34,21 @@ public class MWGameStatsEvent {
     private static MegaWallsClassStats gameStats;
     private static String formattedname;
 
+    @SubscribeEvent
+    public void onMwGame(MwGameEvent event) {
+        if (event.getType() == MwGameEvent.EventType.GAME_START) {
+            onGameStart();
+        }
+        if (event.getType() == MwGameEvent.EventType.GAME_END) {
+            new DelayedTask(MWGameStatsEvent::onGameEnd, 300);
+        }
+    }
+
     private static void onGameStart() {
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
             return;
         }
-
         Multithreading.addTaskToQueue(() -> {
-
             String uuid = Minecraft.getMinecraft().thePlayer.getUniqueID().toString().replace("-", "");
             try {
                 HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
@@ -57,18 +64,14 @@ public class MWGameStatsEvent {
             } catch (ApiException ignored) {
             }
             isRandom = false;
-
             return null;
-
         });
-
     }
 
     private static void onGameEnd() {
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
             return;
         }
-
         Multithreading.addTaskToQueue(() -> {
             String uuid = Minecraft.getMinecraft().thePlayer.getUniqueID().toString().replace("-", "");
             try {
@@ -103,18 +106,4 @@ public class MWGameStatsEvent {
         return false;
     }
 
-    @SubscribeEvent
-    public void onMwGame(MwGameEvent event) {
-
-        if (event.getType() == MwGameEvent.EventType.GAME_START) {
-            CommandScanGame.onGameStart();
-            onGameStart();
-        }
-
-        if (event.getType() == MwGameEvent.EventType.GAME_END) {
-            CommandScanGame.clearScanGameData();
-            new DelayedTask(MWGameStatsEvent::onGameEnd, 300);
-        }
-
-    }
 }
