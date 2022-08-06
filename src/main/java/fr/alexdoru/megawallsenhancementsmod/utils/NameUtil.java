@@ -19,8 +19,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.event.ClickEvent;
+import net.minecraft.event.HoverEvent;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
@@ -283,6 +286,23 @@ public class NameUtil {
             return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername);
         }
         return playername;
+    }
+
+    /**
+     * Used for /scangame
+     */
+    public static IChatComponent getFormattedNameWithPlanckeClickEvent(NetworkPlayerInfo networkPlayerInfoIn) {
+        final String formattedName;
+        if (networkPlayerInfoIn.getPlayerTeam() == null) {
+            formattedName = networkPlayerInfoIn.getGameProfile().getName();
+        } else {
+            ScorePlayerTeam team = networkPlayerInfoIn.getPlayerTeam();
+            formattedName = team.getColorPrefix().replace("\u00a7k", "").replace("O", "") + networkPlayerInfoIn.getGameProfile().getName() + team.getColorSuffix();
+        }
+        return new ChatComponentText(formattedName)
+                .setChatStyle(new ChatStyle()
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to see the mega walls stats of that player")))
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + networkPlayerInfoIn.getGameProfile().getName() + " mw")));
     }
 
     public static IChatComponent getTransformedDisplayName(GameProfile gameProfileIn) {

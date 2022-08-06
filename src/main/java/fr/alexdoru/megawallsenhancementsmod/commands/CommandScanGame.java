@@ -15,11 +15,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.event.HoverEvent;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.common.MinecraftForge;
@@ -101,7 +98,7 @@ public class CommandScanGame extends CommandBase {
                     i++;
                     Multithreading.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
                 } else if (!imsg.equals(nomatch)) {
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(imsg));
+                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(NameUtil.getFormattedNameWithPlanckeClickEvent(networkPlayerInfo)).appendSibling(imsg));
                 }
             }
             ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " more players..."));
@@ -146,11 +143,10 @@ class ScanPlayerTask implements Callable<String> {
                     (megawallsstats.getGames_played() <= 250 && megawallsstats.getFkdr() > 5f) ||
                     (megawallsstats.getGames_played() <= 500 && megawallsstats.getFkdr() > 8f)) {
 
-                imsg = getFormattedNameWithPlanckeClickEvent(networkPlayerInfo).appendSibling(new ChatComponentText(
-                        EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played()
-                                + EnumChatFormatting.GRAY + " games , fkd : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkdr())
-                                + EnumChatFormatting.GRAY + " FK/game : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkpergame())
-                                + EnumChatFormatting.GRAY + " W/L : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getWlr())));
+                imsg = new ChatComponentText(EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played()
+                        + EnumChatFormatting.GRAY + " games , fkd : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkdr())
+                        + EnumChatFormatting.GRAY + " FK/game : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkpergame())
+                        + EnumChatFormatting.GRAY + " W/L : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getWlr()));
 
             } else if (megawallsstats.getGames_played() < 15) {
 
@@ -200,16 +196,14 @@ class ScanPlayerTask implements Callable<String> {
             if (imsg == null) {
                 float ratio = megawallsstats.getLegSkins() * 12f / (megawallsstats.getGames_played() == 0 ? 1 : megawallsstats.getGames_played());
                 if (ratio >= 1) {
-                    imsg = getFormattedNameWithPlanckeClickEvent(networkPlayerInfo).appendSibling(new ChatComponentText(
-                            EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played()
-                                    + EnumChatFormatting.GRAY + " and has : " + EnumChatFormatting.GOLD + megawallsstats.getLegSkins()
-                                    + EnumChatFormatting.GRAY + " legendary skin" + (megawallsstats.getLegSkins() > 1 ? "s" : "")
-                    ));
+                    imsg = new ChatComponentText(EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played()
+                            + EnumChatFormatting.GRAY + " and has : " + EnumChatFormatting.GOLD + megawallsstats.getLegSkins()
+                            + EnumChatFormatting.GRAY + " legendary skin" + (megawallsstats.getLegSkins() > 1 ? "s" : ""));
                 }
             }
 
             if (imsg != null) {
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(imsg));
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(NameUtil.getFormattedNameWithPlanckeClickEvent(networkPlayerInfo)).appendSibling(imsg));
                 CommandScanGame.put(uuid, imsg);
                 NameUtil.updateGameProfileAndName(networkPlayerInfo);
             } else {
@@ -228,7 +222,7 @@ class ScanPlayerTask implements Callable<String> {
         int skill_level_a = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_a"), 1); //skill
         int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"), 1); //kit
         if (skill_level_a >= 4 || skill_level_d >= 4) {
-            return getFormattedNameWithPlanckeClickEvent(networkPlayerInfo).appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " never played and has :").appendSibling(getFormattedClassMsg(className, entryclassobj, true)));
+            return new ChatComponentText(EnumChatFormatting.GRAY + " never played and has :").appendSibling(getFormattedClassMsg(className, entryclassobj, true));
         }
         return null;
     }
@@ -239,11 +233,10 @@ class ScanPlayerTask implements Callable<String> {
         int skill_level_c = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_c"), 1); //passive2
         int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"), 1); //kit
         if (skill_level_a == 5 && skill_level_b == 3 && skill_level_c == 3 && skill_level_d == 5) {
-            return getFormattedNameWithPlanckeClickEvent(networkPlayerInfo).appendSibling(new ChatComponentText(
-                    EnumChatFormatting.GRAY + " played " + EnumChatFormatting.GOLD + gameplayed + EnumChatFormatting.GRAY + " games"
-                            + EnumChatFormatting.GRAY + ", network lvl " + EnumChatFormatting.GOLD + networklevel
-                            + EnumChatFormatting.GRAY + ", with " + EnumChatFormatting.GOLD + quests + EnumChatFormatting.GRAY + " quests"
-                            + EnumChatFormatting.GRAY + " and has :")).appendSibling(getFormattedClassMsg(className, entryclassobj, false));
+            return new ChatComponentText(EnumChatFormatting.GRAY + " played " + EnumChatFormatting.GOLD + gameplayed + EnumChatFormatting.GRAY + " games"
+                    + EnumChatFormatting.GRAY + ", network lvl " + EnumChatFormatting.GOLD + networklevel
+                    + EnumChatFormatting.GRAY + ", with " + EnumChatFormatting.GOLD + quests + EnumChatFormatting.GRAY + " quests"
+                    + EnumChatFormatting.GRAY + " and has :").appendSibling(getFormattedClassMsg(className, entryclassobj, false));
         }
         return null;
     }
@@ -263,21 +256,6 @@ class ScanPlayerTask implements Callable<String> {
                     + (skill_level_g == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_g));
         }
         return null;
-    }
-
-    private IChatComponent getFormattedNameWithPlanckeClickEvent(NetworkPlayerInfo networkPlayerInfoIn) {
-        return new ChatComponentText(getFormattedName(networkPlayerInfoIn))
-                .setChatStyle(new ChatStyle()
-                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to see the mega walls stats of that player")))
-                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + networkPlayerInfoIn.getGameProfile().getName() + " mw")));
-    }
-
-    private String getFormattedName(NetworkPlayerInfo networkPlayerInfoIn) {
-        if (networkPlayerInfoIn.getPlayerTeam() == null) {
-            return networkPlayerInfoIn.getGameProfile().getName();
-        }
-        ScorePlayerTeam team = networkPlayerInfoIn.getPlayerTeam();
-        return team.getColorPrefix().replace("\u00a7k", "").replace("O", "") + networkPlayerInfoIn.getGameProfile().getName() + team.getColorSuffix();
     }
 
 }
