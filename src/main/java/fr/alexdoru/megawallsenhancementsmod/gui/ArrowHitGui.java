@@ -59,7 +59,7 @@ public class ArrowHitGui extends MyCachedGui {
             HPvalue = matcherRenegadeHit.group(2);
             arrowspinned = matcherRenegadeHit.group(3);
             hittime = System.currentTimeMillis();
-            RenderPlayerHook.addArrowOnPlayer(playername, hittime);
+            RenderPlayerHook.addArrowOnPlayer(playername, hittime, Integer.parseInt(arrowspinned));
             normalhit = false;
             setColor(HPvalue);
             instance.updateDisplayText();

@@ -47,7 +47,7 @@ public class RenderPlayerHook {
         }
     }
 
-    public static void addArrowOnPlayer(String playername, long timeOfHit) {
+    public static void addArrowOnPlayer(String playername, long timeOfHit, int currentAmountOfArrows) {
         final List<Long> list = arrowHitMap.get(playername);
         if (list == null) {
             List<Long> newlist = new ArrayList<>();
@@ -58,6 +58,9 @@ public class RenderPlayerHook {
                 list.remove(list.size() - 1);
             }
             list.add(0, timeOfHit);
+            if (list.size() > currentAmountOfArrows) {
+                removeArrowsFrom(playername, list.size() - currentAmountOfArrows);
+            }
         }
     }
 
