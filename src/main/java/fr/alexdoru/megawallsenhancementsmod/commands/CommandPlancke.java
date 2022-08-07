@@ -78,8 +78,7 @@ public class CommandPlancke extends CommandBase {
 
             if (generalstats.hasNeverJoinedHypixel()) { // player never joined hypixel
 
-                addChatMessage(new ChatComponentText(getTagMW()
-                        + EnumChatFormatting.YELLOW + args[0] + EnumChatFormatting.RED + " has never joined Hypixel."));
+                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.YELLOW + args[0] + EnumChatFormatting.RED + " has never joined Hypixel."));
                 return null;
             }
 
@@ -146,8 +145,7 @@ public class CommandPlancke extends CommandBase {
 
                 } else {
 
-                    addChatMessage(new ChatComponentText(getTagMW()
-                            + EnumChatFormatting.YELLOW + args[1] + EnumChatFormatting.RED + " isn't a valid/supported game name."));
+                    addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.YELLOW + args[1] + EnumChatFormatting.RED + " isn't a valid/supported game name."));
 
                 }
 
@@ -184,7 +182,6 @@ public class CommandPlancke extends CommandBase {
     }
 
     private IChatComponent getCommandHelp() {
-
         return new ChatComponentText(EnumChatFormatting.AQUA + bar() + "\n"
                 + centerLine(EnumChatFormatting.GOLD + "Plancke Help\n\n")
                 + EnumChatFormatting.YELLOW + "/plancke <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "General Hypixel stats\n"
@@ -194,7 +191,6 @@ public class CommandPlancke extends CommandBase {
                 + EnumChatFormatting.YELLOW + "/plancke <player> mw cp" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Mega Walls classpoints\n"
                 + EnumChatFormatting.AQUA + bar()
         );
-
     }
 
 }
