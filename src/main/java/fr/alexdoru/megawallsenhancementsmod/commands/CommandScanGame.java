@@ -134,6 +134,11 @@ class ScanPlayerTask implements Callable<String> {
 
         try {
 
+            if(!NameUtil.isRealPlayer(uuid)) {
+                CommandScanGame.put(uuid, CommandScanGame.nomatch);
+                return null;
+            }
+
             String playername = networkPlayerInfo.getGameProfile().getName();
             HypixelPlayerData playerdata = new HypixelPlayerData(uuid.toString().replace("-", ""), HypixelApiKeyUtil.getApiKey());
             MegaWallsStats megawallsstats = new MegaWallsStats(playerdata.getPlayerData());
