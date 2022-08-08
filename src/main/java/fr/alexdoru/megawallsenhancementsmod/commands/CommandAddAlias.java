@@ -9,7 +9,6 @@ import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
@@ -43,7 +42,7 @@ public class CommandAddAlias extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+    public void processCommand(ICommandSender sender, String[] args) {
         if (args.length == 1 && args[0].equals("clearall")) {
             renamingMap.clear();
             ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Cleared alias for all players."));
