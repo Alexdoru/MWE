@@ -20,23 +20,23 @@ public class MegaWallsClassStats {
     private String chosen_skin_class;
     // in the mwdata
     private int coins;
-    private int classname_kills = 0;
-    private int classname_deaths = 0;
-    private int classname_wins = 0;
-    private int classname_losses = 0;
-    private int classname_final_kills = 0;
-    private int classname_final_deaths = 0;
-    private int classname_time_played = 0;
+    private int classname_kills;
+    private int classname_deaths;
+    private int classname_wins;
+    private int classname_losses;
+    private int classname_final_kills;
+    private int classname_final_deaths;
+    private int classname_time_played;
     // to compute
-    private float kdr = 0;
-    private float fkdr = 0;
-    private float wlr = 0;
-    private float wither_damage_game = 0;
-    private float def_kill_game = 0;
-    private int games_played = 0;
-    private float fkpergame = 0;
-    private int classname_final_assists_standard = 0;
-    private int classpoints = 0;
+    private float kdr;
+    private float fkdr;
+    private float wlr;
+    private float wither_damage_game;
+    private float def_kill_game;
+    private int games_played;
+    private float fkpergame;
+    private int classname_final_assists_standard;
+    private int classpoints;
     // in the mwdata -> classes -> classname
     private boolean unlocked = false;
     private int skill_level_a = 1; // ability
@@ -44,27 +44,27 @@ public class MegaWallsClassStats {
     private int skill_level_c = 1; // passive 2
     private int skill_level_d = 1; // kit
     private int skill_level_g = 1; // gathering
-    private int prestige = 0;
+    private int prestige;
     private int enderchest_rows = 3;
 
     /*
      * fields below are for the game stats
      */
 
-    //private int classname_games_played = 0;
-    private int classname_assists = 0;
-    private int classname_wither_damage = 0;
-    private int classname_defender_kills = 0;
-    //private int classname_defender_assists = 0;
-    private int classname_a_activations = 0;
-    //private int classname_a_activations_deathmatch = 0;
-    private int classname_a_damage_dealt = 0;
-    private int classname_arrows_fired = 0;
-    private int classname_arrows_hit = 0;
-    private int classname_blocks_placed = 0;
-    private int classname_meters_walked = 0;
-    private int classname_self_healed = 0;
-    private int classname_allies_healed = 0;
+    //private int classname_games_played;
+    private int classname_assists;
+    private int classname_wither_damage;
+    private int classname_defender_kills;
+    //private int classname_defender_assists;
+    private int classname_a_activations;
+    //private int classname_a_activations_deathmatch;
+    private int classname_a_damage_dealt;
+    private int classname_arrows_fired;
+    private int classname_arrows_hit;
+    private int classname_blocks_placed;
+    private int classname_meters_walked;
+    private int classname_self_healed;
+    private int classname_allies_healed;
 
     public MegaWallsClassStats(JsonObject playerData, String classnameIn) {
 

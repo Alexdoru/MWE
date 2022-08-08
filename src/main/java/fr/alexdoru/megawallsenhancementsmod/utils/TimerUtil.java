@@ -3,7 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.utils;
 public class TimerUtil {
 
     private final long period;
-    private long lastUpdate = 0;
+    private long lastUpdate;
 
     /**
      * @param period is in milliseconds
