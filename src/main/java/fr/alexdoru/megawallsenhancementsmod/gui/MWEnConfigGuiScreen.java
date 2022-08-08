@@ -39,15 +39,16 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(19, XposLeftButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(19)));
         buttonList.add(new GuiButton(25, XposLeftButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(25)));
         buttonList.add(new GuiButton(15, XposLeftButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
-        buttonList.add(new GuiButton(24, XposLeftButton, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(24)));
-        buttonList.add(new GuiButton(21, XposLeftButton, getYposForButton(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
+        buttonList.add(new GuiButton(27, XposLeftButton, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(27)));
+        buttonList.add(new GuiButton(24, XposLeftButton, getYposForButton(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(24)));
 
-        buttonList.add(new GuiButton(0, XposRightButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
-        buttonList.add(new GuiButton(16, XposRightButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
-        buttonList.add(new GuiButton(17, XposRightButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
-        buttonList.add(new GuiSlider(20, XposRightButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
-        buttonList.add(new GuiButton(22, XposRightButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(22)));
-        buttonList.add(new GuiSlider(23, XposRightButton, getYposForButton(0), buttonsWidth, ButtonsHeight, "Maximum dropped item entities : ", "", 40d, 1000d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
+        buttonList.add(new GuiButton(21, XposRightButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
+        buttonList.add(new GuiButton(0, XposRightButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
+        buttonList.add(new GuiButton(16, XposRightButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
+        buttonList.add(new GuiButton(17, XposRightButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
+        buttonList.add(new GuiSlider(20, XposRightButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
+        buttonList.add(new GuiButton(22, XposRightButton, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(22)));
+        buttonList.add(new GuiSlider(23, XposRightButton, getYposForButton(1), buttonsWidth, ButtonsHeight, "Maximum dropped item entities : ", "", 40d, 1000d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
 
         final int XposCenterButton = getxCenter() - buttonsWidth / 2;
 
@@ -94,6 +95,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 return "Hide repetitive MW msg : " + getSuffix(ConfigHandler.hideRepetitiveMWChatMsg);
             case 26:
                 return "Clear view : " + getSuffix(ConfigHandler.clearVision);
+            case 27:
+                return "Nick Hider : " + getSuffix(ConfigHandler.nickHider);
             case 9:
                 return "Show strength HUD : " + getSuffix(ConfigHandler.strengthHUD);
             case 18:
@@ -219,6 +222,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.GREEN + "It starts reducing the render distance when exceeding the threshold set below");
                 textLines.add(EnumChatFormatting.GRAY + "There is a keybind (ESC -> options -> controls -> MegaWallsEnhancements) to toggle it on the fly");
                 break;
+            case 27:
+                textLines.add(EnumChatFormatting.GREEN + "Shows your real name instead of your nick when forming the squad in Mega Walls");
+                break;
         }
         return textLines;
     }
@@ -254,6 +260,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 26:
                 ConfigHandler.clearVision = !ConfigHandler.clearVision;
+                break;
+            case 27:
+                ConfigHandler.nickHider = !ConfigHandler.nickHider;
                 break;
             case 0:
                 ConfigHandler.shortencoinmessage = !ConfigHandler.shortencoinmessage;
