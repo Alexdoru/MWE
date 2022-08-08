@@ -128,7 +128,7 @@ public class ReportSuggestionHandler {
             if (networkPlayerInfo != null) {
                 isSenderInTablist = true;
                 final UUID id = networkPlayerInfo.getGameProfile().getId();
-                isSenderNicked = !NameUtil.isRealPlayer(id);
+                isSenderNicked = NameUtil.isntRealPlayer(id);
                 senderUUID = id.toString().replace("-", "");
                 isSenderFlaging = CommandScanGame.doesPlayerFlag(id);
                 final WDR wdr = WdredPlayers.getPlayer(senderUUID, messageSender);

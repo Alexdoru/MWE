@@ -275,9 +275,9 @@ public class ReportQueue {
 
 class ReportInQueue {
 
-    public String messageSender;
-    public String reportedPlayer;
-    public boolean isReportSuggestion;
+    public final String messageSender;
+    public final String reportedPlayer;
+    public final boolean isReportSuggestion;
 
     public ReportInQueue(String messageSender, String reportedPlayer, boolean isReportSuggestion) {
         this.messageSender = messageSender;
