@@ -184,7 +184,7 @@ public class ReportSuggestionHandler {
             return false;
         }
 
-        if (!isSenderRankValid) {
+        if (!isSenderRankValid && !messageSender.equals(ConfigHandler.hypixelNick)) {
             if (isSenderMyself) {
                 new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You need to be at least " + EnumChatFormatting.GREEN + "VIP" + EnumChatFormatting.GOLD + "+" + EnumChatFormatting.GRAY + " to share a report with others")), 0);
                 return true;
