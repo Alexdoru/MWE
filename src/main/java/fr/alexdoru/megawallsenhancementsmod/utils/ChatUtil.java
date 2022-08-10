@@ -131,22 +131,19 @@ public class ChatUtil {
         int maxLineWidth = 0;
 
         for (String[] line : messagematrix) {
-
             StringBuilder linemessage = new StringBuilder();
-
             for (String msg : line) {
                 linemessage.append(msg);
                 columnWidth = Math.max(columnWidth, frObj.getStringWidth(msg));
             }
-
             maxLineWidth = Math.max(maxLineWidth, frObj.getStringWidth(linemessage.toString()));
-
         }
 
         String leftSeparatorText = "";
 
-        if (chatWidth > maxLineWidth)
+        if (chatWidth > maxLineWidth) {
             leftSeparatorText = new String(new char[(chatWidth - maxLineWidth) / (2 * separatorWidth)]).replace("\0", String.valueOf(separator));
+        }
 
         StringBuilder message = new StringBuilder();
 
@@ -170,7 +167,6 @@ public class ChatUtil {
                 }
 
             }
-
         }
 
         return message.toString();
