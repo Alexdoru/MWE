@@ -242,7 +242,7 @@ public class SkywarsStats {
                 }};
 
         return new ChatComponentText(EnumChatFormatting.AQUA + bar() + "\n")
-                .appendSibling(PlanckeHeaderText(levelFormatted == null ? formattedName : formattedName + EnumChatFormatting.GRAY + " - " + levelFormatted, playername, " - Skywars stats"))
+                .appendSibling(PlanckeHeaderText(levelFormatted == null ? formattedName : formattedName + EnumChatFormatting.GOLD + " - " + levelFormatted, playername, " - Skywars stats"))
                 .appendSibling(new ChatComponentText("\n" + "\n"))
                 .appendSibling(new ChatComponentText(centerLine(formatSkywarsLevel(skywars_experience)) + "\n" + "\n"))
                 .appendSibling(new ChatComponentText(alignText(matrix) + "\n"))
