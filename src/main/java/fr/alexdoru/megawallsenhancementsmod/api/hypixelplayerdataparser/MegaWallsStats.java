@@ -23,35 +23,35 @@ public class MegaWallsStats {
     private final LinkedHashMap<String, Integer[]> classpointsMap = new LinkedHashMap<>();
     private String chosen_class;
     private String chosen_skin_class;
-    private int coins = 0;
-    private int mythic_favor = 0;
-    private int wither_damage = 0;
-    private int wither_kills = 0;
-    private int wins = 0;
-    private int wins_face_off = 0;
-    private int wins_practice = 0;
-    private int losses = 0;
-    private int kills = 0;
-    private int defender_kills = 0;
-    //private int assists = 0; // useless
-    private int deaths = 0;
-    private int final_kills = 0;
-    //private int final_kills_standard = 0; // useless
-    //private int final_assists = 0; // useless
-    //private int final_assists_standard = 0; // useless
-    private int final_deaths = 0;
-    private float kdr = 0;
-    private float fkdr = 0;
-    private float wlr = 0;
-    private float wither_damage_game = 0;
-    private float def_kill_game = 0;
-    private int time_played = 0;
-    private int nbprestiges = 0;
-    private int total_classpoints = 0;
-    private int legendary_skins = 0;
+    private int coins;
+    private int mythic_favor;
+    private int wither_damage;
+    private int wither_kills;
+    private int wins;
+    private int wins_face_off;
+    private int wins_practice;
+    private int losses;
+    private int kills;
+    private int defender_kills;
+    //private int assists; // useless
+    private int deaths;
+    private int final_kills;
+    //private int final_kills_standard; // useless
+    //private int final_assists; // useless
+    //private int final_assists_standard; // useless
+    private int final_deaths;
+    private float kdr;
+    private float fkdr;
+    private float wlr;
+    private float wither_damage_game;
+    private float def_kill_game;
+    private int time_played;
+    private int nbprestiges;
+    private int total_classpoints;
+    private int legendary_skins;
 
-    private int games_played = 0;
-    private float fkpergame = 0;
+    private int games_played;
+    private float fkpergame;
 
     private JsonObject classesdata = null;
 
@@ -105,36 +105,37 @@ public class MegaWallsStats {
 
         // computes the number of prestiges
         classesdata = JsonUtil.getJsonObject(mwdata, "classes");
-
-        if (classesdata == null) {
-            return;
-        }
-
-        for (MWClass mwclass : MWClass.values()) {
-            String classname = mwclass.className.toLowerCase();
-            JsonObject classeobj = JsonUtil.getJsonObject(classesdata, classname);
-            if (classeobj == null) {
-                continue;
+        if (classesdata != null) {
+            for (MWClass mwclass : MWClass.values()) {
+                String classname = mwclass.className.toLowerCase();
+                JsonObject classeobj = JsonUtil.getJsonObject(classesdata, classname);
+                if (classeobj == null) {
+                    continue;
+                }
+                final int prestige = JsonUtil.getInt(classeobj, "prestige");
+                nbprestiges = nbprestiges + prestige;
+                final int classpoints = JsonUtil.getInt(mwdata, classname + "_final_kills_standard")
+                        + JsonUtil.getInt(mwdata, classname + "_final_assists_standard")
+                        + JsonUtil.getInt(mwdata, classname + "_wins_standard") * 10;
+                total_classpoints += classpoints;
+                classpointsMap.put(classname, new Integer[]{prestige, classpoints});
             }
-            final int prestige = JsonUtil.getInt(classeobj, "prestige");
-            nbprestiges = nbprestiges + prestige;
-            final int classpoints = JsonUtil.getInt(mwdata, classname + "_final_kills_standard")
-                    + JsonUtil.getInt(mwdata, classname + "_final_assists_standard")
-                    + JsonUtil.getInt(mwdata, classname + "_wins_standard") * 10;
-            total_classpoints += classpoints;
-            classpointsMap.put(classname, new Integer[]{prestige, classpoints});
         }
 
-        final JsonElement achievementsOneTime = playerData.get("achievementsOneTime");
-
-        if (achievementsOneTime != null && achievementsOneTime.isJsonArray()) {
-            for (JsonElement jsonElement : achievementsOneTime.getAsJsonArray()) {
-                final String achievementName = jsonElement.getAsString();
-                if (achievementName != null && achievementName.startsWith("walls3_legendary_")) {
-                    legendary_skins++;
+        try {
+            final JsonElement achievementsOneTime = playerData.get("achievementsOneTime");
+            if (achievementsOneTime != null && achievementsOneTime.isJsonArray()) {
+                for (JsonElement jsonElement : achievementsOneTime.getAsJsonArray()) {
+                    if (jsonElement.isJsonArray()) {
+                        continue;
+                    }
+                    final String achievementName = jsonElement.getAsString();
+                    if (achievementName != null && achievementName.startsWith("walls3_legendary_")) {
+                        legendary_skins++;
+                    }
                 }
             }
-        }
+        } catch (Exception ignored) {}
 
     }
 
@@ -251,24 +252,18 @@ public class MegaWallsStats {
                 }};
 
         return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
-
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls stats"))
-
                 .appendSibling(new ChatComponentText("\n" + "\n" +
                         ChatUtil.centerLine(EnumChatFormatting.GREEN + "Prestiges : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(nbprestiges) + " "
                                 + EnumChatFormatting.GREEN + " Playtime (approx.) : " + EnumChatFormatting.GOLD + String.format("%.2f", time_played / 60f) + "h") + "\n"))
-
                 .appendSibling(new ChatComponentText(
                         ChatUtil.centerLine(EnumChatFormatting.GREEN + "Selected class : " + EnumChatFormatting.GOLD + (chosen_class == null ? "None" : chosen_class) + " "
                                 + EnumChatFormatting.GREEN + " Selected skin : " + EnumChatFormatting.GOLD + (chosen_skin_class == null ? (chosen_class == null ? "None" : chosen_class) : chosen_skin_class)) + "\n" + "\n")
                         .setChatStyle(new ChatStyle()
                                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for this class' stats")))
                                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + (chosen_class == null ? "None" : chosen_class)))))
-
                 .appendSibling(new ChatComponentText(ChatUtil.alignText(matrix2) + ChatUtil.alignText(matrix1)))
-
                 .appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
-
     }
 
 }

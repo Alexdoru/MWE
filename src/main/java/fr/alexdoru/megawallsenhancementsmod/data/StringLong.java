@@ -5,8 +5,8 @@ package fr.alexdoru.megawallsenhancementsmod.data;
  */
 public class StringLong {
 
-    public long timestamp;
-    public String message;
+    public final long timestamp;
+    public final String message;
 
     public StringLong(long timestamp, String message) {
         this.timestamp = timestamp;

@@ -24,7 +24,7 @@ public class GeneralInfo extends LoginData {
     private final int karma;
     private final String mcVersionRp;
 
-    private int completedQuests = 0;
+    private int completedQuests;
 
     private String DISCORD;
     private String TWITCH;

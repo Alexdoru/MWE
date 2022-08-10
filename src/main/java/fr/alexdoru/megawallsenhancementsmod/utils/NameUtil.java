@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.cache.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GuiNewChatAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
+import fr.alexdoru.megawallsenhancementsmod.commands.CommandAddAlias;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
@@ -18,8 +19,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.event.ClickEvent;
+import net.minecraft.event.HoverEvent;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
@@ -215,7 +219,7 @@ public class NameUtil {
 
                     } else { //scangame
 
-                        if (CommandScanGame.doesPlayerFlag(uuid)) {
+                        if (CommandScanGame.doesPlayerFlag(id)) {
                             extraPrefix = prefix_scan;
                             iExtraPrefix = iprefix_scan;
                         }
@@ -246,12 +250,14 @@ public class NameUtil {
                     }
 
                     boolean isobf = teamprefix.contains("\u00a7k");
-                    if (iExtraPrefix != null || formattedPrestigeVstring != null) {
+                    String alias = CommandAddAlias.getMap().get(username);
+                    if (iExtraPrefix != null || formattedPrestigeVstring != null || alias != null) {
                         displayName = new ChatComponentText(
                                 (isobf ? "" : extraPrefix)
                                         + teamprefix
                                         + (isSquadMate ? squadname : username)
                                         + (formattedPrestigeVstring != null ? formattedPrestigeVstring : colorSuffix
+                                        + (alias == null ? "" : EnumChatFormatting.RESET + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.RESET + ")")
                                 ));
                     }
                 }
@@ -282,6 +288,23 @@ public class NameUtil {
         return playername;
     }
 
+    /**
+     * Used for /scangame
+     */
+    public static IChatComponent getFormattedNameWithPlanckeClickEvent(NetworkPlayerInfo networkPlayerInfoIn) {
+        final String formattedName;
+        if (networkPlayerInfoIn.getPlayerTeam() == null) {
+            formattedName = networkPlayerInfoIn.getGameProfile().getName();
+        } else {
+            ScorePlayerTeam team = networkPlayerInfoIn.getPlayerTeam();
+            formattedName = team.getColorPrefix().replace("\u00a7k", "").replace("O", "") + networkPlayerInfoIn.getGameProfile().getName() + team.getColorSuffix();
+        }
+        return new ChatComponentText(formattedName)
+                .setChatStyle(new ChatStyle()
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to see the mega walls stats of that player")))
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + networkPlayerInfoIn.getGameProfile().getName() + " mw")));
+    }
+
     public static IChatComponent getTransformedDisplayName(GameProfile gameProfileIn) {
         MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfileIn).getMWPlayerData();
         if (mwPlayerData != null) {
@@ -306,8 +329,8 @@ public class NameUtil {
         return uuid.version() == 2;
     }
 
-    public static boolean isRealPlayer(UUID uuid) {
-        return uuid.version() == 4;
+    public static boolean isntRealPlayer(UUID uuid) {
+        return uuid.version() != 4;
     }
 
 }

@@ -48,7 +48,7 @@ public class NetHandlerPlayClientHook {
         long timenow = System.currentTimeMillis();
         for (StringLong stringLong : latestDisconnected) {
             final String playername = stringLong.message;
-            if (playername != null && timenow - stringLong.timestamp <= 2000 && !disconnectedPlayers.contains(playername)) {
+            if (playername != null && timenow - stringLong.timestamp <= 1000L && !disconnectedPlayers.contains(playername)) {
                 disconnectedPlayers.add(playername);
                 stringBuilder.append(" ").append(playername);
             }
@@ -58,7 +58,7 @@ public class NetHandlerPlayClientHook {
         }
         String str = stringBuilder.toString();
         ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player" + (disconnectedPlayers.size() == 1 ? "" : "s") + " disconnected :" + EnumChatFormatting.AQUA + str).setChatStyle(new ChatStyle()
-                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Player" + (disconnectedPlayers.size() == 1 ? "" : "s") + " disconnected in the last 2 seconds, click this message to run : \n\n" + EnumChatFormatting.YELLOW + "/stalk" + str)))
+                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Player" + (disconnectedPlayers.size() == 1 ? "" : "s") + " disconnected in the last second, click this message to run : \n\n" + EnumChatFormatting.YELLOW + "/stalk" + str)))
                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk" + str))));
     }
 

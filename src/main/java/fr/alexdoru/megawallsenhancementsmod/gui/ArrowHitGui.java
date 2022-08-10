@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
@@ -17,7 +18,8 @@ public class ArrowHitGui extends MyCachedGui {
     private static final Pattern PATTERN_RENEGADE_HIT = Pattern.compile("^(\\w+) is on ([0-9]*[.]?[0-9]+) HP, pinned by (\\d+) arrows.*");
     private static final Pattern PATTERN_LEAP_HIT = Pattern.compile("^You took ([0-9]*[.]?[0-9]+) recoil damage after traveling \\d+.\\d+ blocks!");
     private static final Pattern PATTERN_LEAP_DIRECT_HIT = Pattern.compile("^You landed a direct hit against (\\w+), taking ([0-9]*[.]?[0-9]+) recoil damage after traveling [0-9]*[.]?[0-9]+ blocks!");
-    private static final Pattern PATTERN_REND = Pattern.compile("^Your Rend dealt ([0-9]*[.]?[0-9]+) damage to \\w+");
+    private static final Pattern PATTERN_REND = Pattern.compile("^Your Rend dealt [0-9]*[.]?[0-9]+ damage to \\w+.*");
+    private static final Pattern PATTERN_REND2 = Pattern.compile("([0-9]*[.]?[0-9]+) damage to (\\w+)");
     public static ArrowHitGui instance;
     private static String HPvalue;
     private static long hittime;
@@ -32,7 +34,7 @@ public class ArrowHitGui extends MyCachedGui {
 
     public static boolean processMessage(String msg, String fmsg) {
 
-        Matcher matcherArrowHit = PATTERN_ARROW_HIT.matcher(msg);
+        final Matcher matcherArrowHit = PATTERN_ARROW_HIT.matcher(msg);
 
         if (matcherArrowHit.matches()) {
             HPvalue = matcherArrowHit.group(2);
@@ -50,21 +52,22 @@ public class ArrowHitGui extends MyCachedGui {
             return true;
         }
 
-        Matcher matcherRenegadeHit = PATTERN_RENEGADE_HIT.matcher(msg);
+        final Matcher matcherRenegadeHit = PATTERN_RENEGADE_HIT.matcher(msg);
 
         if (matcherRenegadeHit.matches()) {
+            String playername = matcherRenegadeHit.group(1);
             HPvalue = matcherRenegadeHit.group(2);
             arrowspinned = matcherRenegadeHit.group(3);
             hittime = System.currentTimeMillis();
+            RenderPlayerHook.addArrowOnPlayer(playername, hittime, Integer.parseInt(arrowspinned));
             normalhit = false;
             setColor(HPvalue);
             instance.updateDisplayText();
-            String playername = matcherRenegadeHit.group(1);
             ChatUtil.addChatMessage(new ChatComponentText(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg));
             return true;
         }
 
-        Matcher matcherLeapHit = PATTERN_LEAP_HIT.matcher(msg);
+        final Matcher matcherLeapHit = PATTERN_LEAP_HIT.matcher(msg);
 
         if (matcherLeapHit.matches()) {
             HPvalue = "-" + 2f * Float.parseFloat(matcherLeapHit.group(1));
@@ -76,7 +79,7 @@ public class ArrowHitGui extends MyCachedGui {
             return true;
         }
 
-        Matcher matcherLeapDirectHit = PATTERN_LEAP_DIRECT_HIT.matcher(msg);
+        final Matcher matcherLeapDirectHit = PATTERN_LEAP_DIRECT_HIT.matcher(msg);
 
         if (matcherLeapDirectHit.matches()) {
             HPvalue = "-" + 2f * Float.parseFloat(matcherLeapDirectHit.group(2));
@@ -89,10 +92,19 @@ public class ArrowHitGui extends MyCachedGui {
             return true;
         }
 
-        Matcher matcherRend = PATTERN_REND.matcher(msg);
+        final Matcher matcherRend = PATTERN_REND.matcher(msg);
 
         if (matcherRend.matches()) {
-            HPvalue = "-" + Float.parseFloat(matcherRend.group(1));
+            final Matcher matcherRend2 = PATTERN_REND2.matcher(msg);
+            float totalDamage = 0f;
+            while (matcherRend2.find()) {
+                final float damage = Float.parseFloat(matcherRend2.group(1));
+                final String playername = matcherRend2.group(2);
+                totalDamage += damage;
+                RenderPlayerHook.removeArrowsFrom(playername, (int) (damage / 2));
+                fmsg = FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg;
+            }
+            HPvalue = "-" + totalDamage;
             hittime = System.currentTimeMillis() + 1000L;
             normalhit = true;
             Color = EnumChatFormatting.GREEN;
@@ -109,10 +121,8 @@ public class ArrowHitGui extends MyCachedGui {
      * Sets the HP color depending on the HP input
      */
     private static void setColor(String hpvalue) {
-
         float maxhealth = mc.thePlayer.getMaxHealth();
         float floathpvalue = Float.parseFloat(hpvalue);
-
         if (floathpvalue > maxhealth) {
             Color = EnumChatFormatting.DARK_GREEN;
         } else if (floathpvalue > maxhealth * 3 / 4) {
@@ -124,7 +134,6 @@ public class ArrowHitGui extends MyCachedGui {
         } else {
             Color = EnumChatFormatting.DARK_RED;
         }
-
     }
 
     @Override
@@ -151,7 +160,7 @@ public class ArrowHitGui extends MyCachedGui {
 
     @Override
     public boolean isEnabled() {
-        return System.currentTimeMillis() - hittime < 1000L;
+        return ConfigHandler.show_ArrowHitHUD && System.currentTimeMillis() - hittime < 1000L;
     }
 
 }

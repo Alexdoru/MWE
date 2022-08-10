@@ -2,7 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm;
 
 public class InjectionStatus {
 
-    private int amount_of_injection = 0;
+    private int amount_of_injection;
 
     public void addInjection() {
         amount_of_injection--;

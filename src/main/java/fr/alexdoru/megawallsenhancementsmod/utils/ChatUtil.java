@@ -68,11 +68,11 @@ public class ChatUtil {
         return imsgstart.appendSibling(imessagebody).appendSibling(imsgend);
     }
 
-    public static String apikeyMissingErrorMsg() {
-        return getTagMW() + EnumChatFormatting.RED + "You didn't set up your Api key. Connect to Hypixel and type "
+    public static void printApikeySetupInfo() {
+        addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + "You didn't set up your Api key. Connect to Hypixel and type "
                 + EnumChatFormatting.YELLOW + "\"/api new\""
                 + EnumChatFormatting.RED + " to get an Api key, the mod should automatically detect the key and save it. If you want to use a key that you already have, type "
-                + EnumChatFormatting.YELLOW + "\"/mwenhancements setapikey <key>\"";
+                + EnumChatFormatting.YELLOW + "\"/mwenhancements setapikey <key>\""));
     }
 
     public static String invalidplayernameMsg(String playername) {
@@ -131,22 +131,19 @@ public class ChatUtil {
         int maxLineWidth = 0;
 
         for (String[] line : messagematrix) {
-
             StringBuilder linemessage = new StringBuilder();
-
             for (String msg : line) {
                 linemessage.append(msg);
                 columnWidth = Math.max(columnWidth, frObj.getStringWidth(msg));
             }
-
             maxLineWidth = Math.max(maxLineWidth, frObj.getStringWidth(linemessage.toString()));
-
         }
 
         String leftSeparatorText = "";
 
-        if (chatWidth > maxLineWidth)
+        if (chatWidth > maxLineWidth) {
             leftSeparatorText = new String(new char[(chatWidth - maxLineWidth) / (2 * separatorWidth)]).replace("\0", String.valueOf(separator));
+        }
 
         StringBuilder message = new StringBuilder();
 
@@ -170,7 +167,6 @@ public class ChatUtil {
                 }
 
             }
-
         }
 
         return message.toString();

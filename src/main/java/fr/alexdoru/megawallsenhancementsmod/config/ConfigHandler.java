@@ -48,6 +48,7 @@ public class ConfigHandler {
     public static boolean hideRepetitiveMWChatMsg;
     public static boolean clearVision;
     public static boolean automaticUpdate;
+    public static boolean nickHider;
 
     /**
      * GUI config
@@ -143,6 +144,7 @@ public class ConfigHandler {
         final Property phideRepetitiveMWChatMsg = config.get(CATEGORY_MWENh, "Delete repetitive chat messages in mw", true, "Delete repetitive chat messages in mw");
         final Property pclearVision = config.get(CATEGORY_MWENh, "Clear Vision", true, "Hides particles too close to the camera");
         final Property pautomaticUpdate = config.get(CATEGORY_MWENh, "Automatic Update", true, "Updates the mod automatically");
+        final Property pNickHider = config.get(CATEGORY_MWENh, "Nick Hider", true, "Shows your real name instead of your nick when in squad");
 
         final String CATEGORY_GUI = "GUI";
         final Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
@@ -220,6 +222,7 @@ public class ConfigHandler {
         pOrderMWWENh.add(phideRepetitiveMWChatMsg.getName());
         pOrderMWWENh.add(pclearVision.getName());
         pOrderMWWENh.add(pautomaticUpdate.getName());
+        pOrderMWWENh.add(pNickHider.getName());
         config.setCategoryPropertyOrder(CATEGORY_MWENh, pOrderMWWENh);
 
         List<String> pOrderGUI = new ArrayList<>();
@@ -299,6 +302,7 @@ public class ConfigHandler {
             hideRepetitiveMWChatMsg = phideRepetitiveMWChatMsg.getBoolean();
             clearVision = pclearVision.getBoolean();
             automaticUpdate = pautomaticUpdate.getBoolean();
+            nickHider = pNickHider.getBoolean();
 
             show_killcooldownHUD = pShow_killcooldownHUD.getBoolean();
             killcooldownHUDPosition.setRelative(pXpos_killcooldownHUD.getDouble(), pYpos_killcooldownHUD.getDouble());
@@ -370,6 +374,7 @@ public class ConfigHandler {
             phideRepetitiveMWChatMsg.set(hideRepetitiveMWChatMsg);
             pclearVision.set(clearVision);
             pautomaticUpdate.set(automaticUpdate);
+            pNickHider.set(nickHider);
 
             pShow_killcooldownHUD.set(show_killcooldownHUD);
             double[] killcooldownHUDarray = killcooldownHUDPosition.getRelativePosition();

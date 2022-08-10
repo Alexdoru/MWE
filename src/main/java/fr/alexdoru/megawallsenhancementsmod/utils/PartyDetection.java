@@ -14,9 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.getTagNoCheaters;
-
 public class PartyDetection {
 
     private static String lastPlayerJoining = "";
@@ -71,7 +68,7 @@ public class PartyDetection {
                 return;
             }
             final String teamColorPlayername = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(infoPlayername.getPlayerTeam(), playername), playername);
-            final ChatComponentText imsg = new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "This player joined in a party with : ");
+            final ChatComponentText imsg = new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "This player joined in a party with : ");
             boolean containsPlayers = false;
             for (String player : partyList) {
                 if (!player.equals(playername)) {
@@ -83,15 +80,14 @@ public class PartyDetection {
                             imsg.appendSibling(new ChatComponentText(NameUtil.getFormattedName(player) + " ")
                                     .setChatStyle(new ChatStyle()
                                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report " + player + " for boosting")))
-                                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + player + " -b BOO -C"))
-                                    ));
+                                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + player + " -b BOO -C"))));
                         }
                     }
                 }
             }
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "you could boosting report them as well."));
+            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "you can click their name to report them for boosting."));
             if (containsPlayers) {
-                new DelayedTask(() -> addChatMessage(imsg), 10);
+                new DelayedTask(() -> ChatUtil.addChatMessage(imsg), 10);
             }
         }
     }

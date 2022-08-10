@@ -35,6 +35,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new NetworkPlayerInfoTransformer());
         registerTransformer(new RenderGlobalTransformer());
         registerTransformer(new RenderManagerTransformer());
+        registerTransformer(new RenderPlayerTransformer());
         registerTransformer(new ScoreboardTransformer());
         registerTransformer(new SidebarmodReloaded_CustomSidebar());
         registerTransformer(new SidebarmodRevamp_GuiSidebar());
