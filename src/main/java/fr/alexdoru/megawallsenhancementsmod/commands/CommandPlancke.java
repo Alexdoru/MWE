@@ -139,7 +139,8 @@ public class CommandPlancke extends CommandBase {
 
                 } else if (args[1].equalsIgnoreCase("uhc")) { // general stats for UHC champions
 
-                    addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP uhc"));
+                    UHCStats uhcStats = new UHCStats(playerdata.getPlayerData());
+                    addChatMessage(uhcStats.getFormattedMessage(formattedName, playername));
 
                 } else {
 
@@ -166,7 +167,7 @@ public class CommandPlancke extends CommandBase {
             return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
         }
         if (args.length == 2) {
-            final String[] games = {"blitz", "megawalls", "skywars"};
+            final String[] games = {"blitz", "megawalls", "skywars", "uhc"};
             return getListOfStringsMatchingLastWord(args, games);
         }
         if (args.length == 3 && (args[1].equalsIgnoreCase("mw") || args[1].equalsIgnoreCase("megawalls"))) {
@@ -182,6 +183,7 @@ public class CommandPlancke extends CommandBase {
                 + EnumChatFormatting.YELLOW + "/plancke <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "General Hypixel stats\n"
                 + EnumChatFormatting.YELLOW + "/plancke <player> bsg" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Blitz stats\n"
                 + EnumChatFormatting.YELLOW + "/plancke <player> sw" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Skywars stats\n"
+                + EnumChatFormatting.YELLOW + "/plancke <player> uhc" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "UHC stats\n"
                 + EnumChatFormatting.YELLOW + "/plancke <player> mw" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "General Mega Walls stats\n"
                 + EnumChatFormatting.YELLOW + "/plancke <player> mw classname" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Class specific Mega Walls stats\n"
                 + EnumChatFormatting.YELLOW + "/plancke <player> mw cp" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Mega Walls classpoints\n"
