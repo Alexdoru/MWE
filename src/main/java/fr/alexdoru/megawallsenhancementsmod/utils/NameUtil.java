@@ -249,9 +249,9 @@ public class NameUtil {
                         }
                     }
 
-                    String alias = CommandAddAlias.getMap().get(username);
                     boolean isobf = teamprefix.contains("\u00a7k");
-                    if (iExtraPrefix != null || formattedPrestigeVstring != null) {
+                    String alias = CommandAddAlias.getMap().get(username);
+                    if (iExtraPrefix != null || formattedPrestigeVstring != null || alias != null) {
                         displayName = new ChatComponentText(
                                 (isobf ? "" : extraPrefix)
                                         + teamprefix
