@@ -60,8 +60,8 @@ public class CommandNocheaters extends CommandBase {
             boolean doStalk = args[0].equalsIgnoreCase("reportlist");
 
             if (doStalk) {
-                if (HypixelApiKeyUtil.apiKeyIsNotSetup()) { //api key not setup
-                    addChatMessage(new ChatComponentText(apikeyMissingErrorMsg()));
+                if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
+                    printApikeySetupInfo();
                     return;
                 }
             }
@@ -236,8 +236,8 @@ public class CommandNocheaters extends CommandBase {
 
         } else if (args[0].equalsIgnoreCase("ignorelist")) {
 
-            if (HypixelApiKeyUtil.apiKeyIsNotSetup()) { //api key not setup
-                addChatMessage(new ChatComponentText(apikeyMissingErrorMsg()));
+            if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
+                printApikeySetupInfo();
                 return;
             }
 

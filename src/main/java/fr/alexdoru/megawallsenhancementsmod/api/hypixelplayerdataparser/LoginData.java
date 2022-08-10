@@ -60,12 +60,10 @@ public class LoginData {
     }
 
     public void parseLatestActivity(JsonObject playerData) {
-
-        this.latestActivityTime = JsonUtil.getLong(playerData, "lastClaimedReward");
-        this.latestActivity = "Claimed Daily Reward";
-
+        latestActivityTime = JsonUtil.getLong(playerData, "lastClaimedReward");
+        latestActivity = "Claimed Daily Reward";
         JsonElement questElem = playerData.get("quests");
-        if (questElem.isJsonObject()) {
+        if (questElem != null && questElem.isJsonObject()) {
             JsonObject questobj = questElem.getAsJsonObject();
             for (Map.Entry<String, JsonElement> questEntry : questobj.entrySet()) {
                 if (questEntry.getValue().isJsonObject()) {
@@ -86,7 +84,6 @@ public class LoginData {
                 }
             }
         }
-
     }
 
     private void parseFormattedName(String prefix, String rankPlusColor, String packageRank, String newPackageRank, String monthlyRankColor) {

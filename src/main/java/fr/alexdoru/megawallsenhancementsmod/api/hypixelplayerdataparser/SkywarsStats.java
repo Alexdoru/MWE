@@ -46,13 +46,13 @@ public class SkywarsStats {
     private int skywars_experience;
     private String levelFormatted;
 
-    private float kdr = 0;
-    private float kdr_solo = 0;
-    private float kdr_team = 0;
+    private float kdr;
+    private float kdr_solo;
+    private float kdr_team;
 
-    private float wlr = 0;
-    private float wlr_solo = 0;
-    private float wlr_team = 0;
+    private float wlr;
+    private float wlr_solo;
+    private float wlr_team;
 
     public SkywarsStats(JsonObject playerData) {
 
@@ -242,7 +242,7 @@ public class SkywarsStats {
                 }};
 
         return new ChatComponentText(EnumChatFormatting.AQUA + bar() + "\n")
-                .appendSibling(PlanckeHeaderText(levelFormatted == null ? formattedName : formattedName + EnumChatFormatting.GRAY + " - " + levelFormatted, playername, " - Skywars stats"))
+                .appendSibling(PlanckeHeaderText(levelFormatted == null ? formattedName : formattedName + EnumChatFormatting.GOLD + " - " + levelFormatted, playername, " - Skywars stats"))
                 .appendSibling(new ChatComponentText("\n" + "\n"))
                 .appendSibling(new ChatComponentText(centerLine(formatSkywarsLevel(skywars_experience)) + "\n" + "\n"))
                 .appendSibling(new ChatComponentText(alignText(matrix) + "\n"))

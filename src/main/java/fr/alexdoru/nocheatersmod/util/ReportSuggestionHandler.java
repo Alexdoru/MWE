@@ -128,10 +128,10 @@ public class ReportSuggestionHandler {
             if (networkPlayerInfo != null) {
                 isSenderInTablist = true;
                 final UUID id = networkPlayerInfo.getGameProfile().getId();
-                isSenderNicked = !NameUtil.isRealPlayer(id);
+                isSenderNicked = NameUtil.isntRealPlayer(id);
                 senderUUID = id.toString().replace("-", "");
-                isSenderFlaging = CommandScanGame.doesPlayerFlag(senderUUID);
-                WDR wdr = WdredPlayers.getPlayer(senderUUID, messageSender);
+                isSenderFlaging = CommandScanGame.doesPlayerFlag(id);
+                final WDR wdr = WdredPlayers.getPlayer(senderUUID, messageSender);
                 if (wdr != null) {
                     isSenderIgnored = wdr.isIgnored();
                     isSenderCheating = wdr.hasValidCheats();
@@ -184,7 +184,7 @@ public class ReportSuggestionHandler {
             return false;
         }
 
-        if (!isSenderRankValid) {
+        if (!isSenderRankValid && !messageSender.equals(ConfigHandler.hypixelNick)) {
             if (isSenderMyself) {
                 new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You need to be at least " + EnumChatFormatting.GREEN + "VIP" + EnumChatFormatting.GOLD + "+" + EnumChatFormatting.GRAY + " to share a report with others")), 0);
                 return true;

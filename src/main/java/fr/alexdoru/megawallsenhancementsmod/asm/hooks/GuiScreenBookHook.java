@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.utils.TimerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,7 +19,7 @@ import java.util.regex.Pattern;
 public class GuiScreenBookHook {
 
     private static boolean isOnNickGenerationPage = false;
-    private static long lastTimeClicked;
+    private static final TimerUtil timer = new TimerUtil(500L);
 
     private static final Pattern nickSuccessPagePattern = Pattern.compile("You have finished setting up your nickname!\\s*When you go into a game, you will be nicked as\\s*(?:|\\[(?:MV|VI)P\\+?\\+?\\] )(\\w{2,16})");
     private static final Pattern nickGenerationPagePattern = Pattern.compile("We've generated a random username for you:\\s*\\w{2,16}");
@@ -44,7 +45,11 @@ public class GuiScreenBookHook {
                                 if (!ConfigHandler.hypixelNick.equals("")) {
                                     String oldAliasForNick = SquadEvent.getSquad().remove(ConfigHandler.hypixelNick);
                                     if (oldAliasForNick != null) {
-                                        SquadEvent.addPlayer(newNick, oldAliasForNick);
+                                        if (oldAliasForNick.equals(ConfigHandler.hypixelNick)) {
+                                            SquadEvent.addPlayer(newNick);
+                                        } else {
+                                            SquadEvent.addPlayer(newNick, oldAliasForNick);
+                                        }
                                     }
                                 }
                                 ConfigHandler.hypixelNick = newNick;
@@ -66,8 +71,7 @@ public class GuiScreenBookHook {
     }
 
     public static void onKeyTyped(int keycode) {
-        if (isOnNickGenerationPage && System.currentTimeMillis() - lastTimeClicked > 500 && MegaWallsEnhancementsMod.newNickKey.getKeyCode() != 0 && MegaWallsEnhancementsMod.newNickKey.getKeyCode() == keycode) {
-            lastTimeClicked = System.currentTimeMillis();
+        if (isOnNickGenerationPage && timer.update() && MegaWallsEnhancementsMod.newNickKey.getKeyCode() != 0 && MegaWallsEnhancementsMod.newNickKey.getKeyCode() == keycode) {
             Minecraft.getMinecraft().thePlayer.sendChatMessage("/nick help setrandom");
         }
     }

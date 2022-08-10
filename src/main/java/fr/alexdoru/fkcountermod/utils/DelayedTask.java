@@ -18,15 +18,13 @@ public class DelayedTask {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        if (event.phase != Phase.START) return;
-
-        if (counter <= 0) {
-            MinecraftForge.EVENT_BUS.unregister(this);
-            run.run();
+        if (event.phase == Phase.START) {
+            if (counter <= 0) {
+                MinecraftForge.EVENT_BUS.unregister(this);
+                run.run();
+            }
+            counter--;
         }
-
-        counter--;
-
     }
 
 }

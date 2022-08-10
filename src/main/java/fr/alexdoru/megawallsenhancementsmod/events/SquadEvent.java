@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.events;
 
+import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
@@ -73,20 +74,17 @@ public class SquadEvent {
      */
     public static void formSquad() {
 
-        Minecraft mc = Minecraft.getMinecraft();
+        if (!FKCounterMod.isMWEnvironement) {
+            return;
+        }
 
+        Minecraft mc = Minecraft.getMinecraft();
         if (mc.theWorld == null) {
             return;
         }
 
         Scoreboard scoreboard = mc.theWorld.getScoreboard();
         if (scoreboard == null) {
-            return;
-        }
-
-        boolean isinMW = ScoreboardUtils.getUnformattedSidebarTitle(scoreboard).contains("MEGA WALLS");
-
-        if (!isinMW) {
             return;
         }
 
@@ -142,7 +140,7 @@ public class SquadEvent {
                 addPlayer(myName);
             }
             if (myCustomNick == null && !ConfigHandler.hypixelNick.equals("")) {
-                addPlayer(ConfigHandler.hypixelNick, EnumChatFormatting.ITALIC + myName);
+                addPlayer(ConfigHandler.hypixelNick, ConfigHandler.nickHider ? EnumChatFormatting.ITALIC + myName + EnumChatFormatting.RESET : ConfigHandler.hypixelNick);
             }
         }
 

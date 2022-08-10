@@ -36,13 +36,12 @@ public class HunterStrengthGui extends MyCachedGui {
         return timeStartRender + renderDuration - System.currentTimeMillis() > 0;
     }
 
-    public void setPreStrengthTime(String preStrengthTimer, long currentTime) {
+    public void setPreStrengthTime(String preStrengthTimer) {
         isStrengthRender = false;
         try {
-            timeStartRender = currentTime;
+            timeStartRender = System.currentTimeMillis();
             renderDuration = 1000L * Integer.parseInt(preStrengthTimer) + 1000L;
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
     }
 
     public void setStrengthRenderStart(long duration) {
