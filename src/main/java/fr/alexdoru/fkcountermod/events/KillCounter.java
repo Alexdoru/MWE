@@ -34,6 +34,14 @@ public class KillCounter {
     public static final int YELLOW_TEAM = 2;
     public static final int BLUE_TEAM = 3;
     private static final String[] KILL_MESSAGES = {
+            /*Banana messages, put those messages at the top to not conflict with the other pattern (\w{1,16}) was killed by (\w{1,16})*/
+            "(\\w{1,16}) got banana pistol'd by (\\w{1,16}).*",
+            "(\\w{1,16}) was peeled by (\\w{1,16}).*",
+            "(\\w{1,16}) was mushed by (\\w{1,16}).*",
+            "(\\w{1,16}) was hit by a banana split from (\\w{1,16}).*",
+            "(\\w{1,16}) was killed by an explosive banana from (\\w{1,16}).*",
+            "(\\w{1,16}) was killed by a magic banana from (\\w{1,16}).*",
+            "(\\w{1,16}) was turned into mush by (\\w{1,16}).*",
             /*Default messages*/
             "(\\w{1,16}) was shot and killed by (\\w{1,16}).*",
             "(\\w{1,16}) was snowballed to death by (\\w{1,16}).*",
@@ -83,13 +91,6 @@ public class KillCounter {
             "(\\w{1,16}) was overcooked by (\\w{1,16}).*",
             "(\\w{1,16}) was deep fried by (\\w{1,16}).*",
             "(\\w{1,16}) was boiled by (\\w{1,16}).*",
-            /*Digital messages*/
-            "(\\w{1,16}) was injected with malware by (\\w{1,16}).*",
-            "(\\w{1,16}) was DDoS'd by (\\w{1,16}).*",
-            "(\\w{1,16}) was deleted by (\\w{1,16}).*",
-            "(\\w{1,16}) was purged by an antivirus owned by (\\w{1,16}).*",
-            "(\\w{1,16}) was fragmented by (\\w{1,16}).*",
-            "(\\w{1,16}) was corrupted by (\\w{1,16}).*",
             /*Squeak messages*/
             "(\\w{1,16}) was squeaked from a distance by (\\w{1,16}).*",
             "(\\w{1,16}) was hit by frozen cheese from (\\w{1,16}).*",
