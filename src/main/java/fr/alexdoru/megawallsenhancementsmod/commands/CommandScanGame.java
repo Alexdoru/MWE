@@ -149,7 +149,7 @@ class ScanPlayerTask implements Callable<String> {
                     (megawallsstats.getGames_played() <= 500 && megawallsstats.getFkdr() > 8f)) {
 
                 imsg = new ChatComponentText(EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played()
-                        + EnumChatFormatting.GRAY + " games , fkd : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkdr())
+                        + EnumChatFormatting.GRAY + " games, fkd : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkdr())
                         + EnumChatFormatting.GRAY + " FK/game : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkpergame())
                         + EnumChatFormatting.GRAY + " W/L : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getWlr()));
 
@@ -202,7 +202,7 @@ class ScanPlayerTask implements Callable<String> {
                 float ratio = megawallsstats.getLegSkins() * 12f / (megawallsstats.getGames_played() == 0 ? 1 : megawallsstats.getGames_played());
                 if (ratio >= 1) {
                     imsg = new ChatComponentText(EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played()
-                            + EnumChatFormatting.GRAY + " and has : " + EnumChatFormatting.GOLD + megawallsstats.getLegSkins()
+                            + EnumChatFormatting.GRAY + " games, and has : " + EnumChatFormatting.GOLD + megawallsstats.getLegSkins()
                             + EnumChatFormatting.GRAY + " legendary skin" + (megawallsstats.getLegSkins() > 1 ? "s" : ""));
                 }
             }
