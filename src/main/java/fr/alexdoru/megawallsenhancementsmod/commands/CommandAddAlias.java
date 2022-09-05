@@ -103,7 +103,7 @@ public class CommandAddAlias extends CommandBase {
             if (hashMap != null) {
                 renamingMap.putAll(hashMap);
             }
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

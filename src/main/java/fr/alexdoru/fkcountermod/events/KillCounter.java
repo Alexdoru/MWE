@@ -392,10 +392,6 @@ public class KillCounter {
         if (world == null) {
             return;
         }
-        EntityPlayer player = world.getPlayerEntityByName(killer); // O(N)
-        if (player == null) {
-            return;
-        }
         ScorePlayerTeam team = world.getScoreboard().getPlayersTeam(killer); // O(1)
         if (team == null) {
             return;
@@ -407,7 +403,6 @@ public class KillCounter {
         }
 
         int duration;
-
         if (mwClass == MWClass.DREADLORD) {
             duration = 5 * 20;
         } else if (mwClass == MWClass.HEROBRINE) {
@@ -416,10 +411,14 @@ public class KillCounter {
             return;
         }
 
+        EntityPlayer player = world.getPlayerEntityByName(killer); // O(N)
+        if (player == null) {
+            return;
+        }
+
         for (int i = 0; i < duration / 10; i++) {
 
-            new DelayedTask(() ->
-            {
+            new DelayedTask(() -> {
                 for (int j = 0; j < 5; ++j) {
                     double d0 = rand.nextGaussian() * 0.02D;
                     double d1 = rand.nextGaussian() * 0.02D;
@@ -456,8 +455,7 @@ public class KillCounter {
         }
 
         if (event.getType() == MwGameEvent.EventType.CONNECT) {
-
-            String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId(); // this is not null due to how the event is defined/Posted
+            String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId(); // this is not null due to how the event is defined/posted
             if (gameId == null || !gameId.equals(currentGameId)) {
                 ResetKillCounterTo(currentGameId);
             }
