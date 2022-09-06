@@ -258,14 +258,14 @@ public class KillCounter {
         return ScoreboardEvent.getMwScoreboardParser().areAllWithersAlive();
     }
 
-    /*
+    /**
      * Detects the color codes you are using in your mega walls settings by looking at the scoreboard/sidebartext
      */
     private static void setTeamPrefixes() {
         for (String line : ScoreboardUtils.getFormattedSidebarText()) {
             for (int team = 0; team < TEAMS; team++) {
                 if (line.contains(SCOREBOARD_PREFIXES[team])) {
-                    prefixes[team] = line.split("\u00a7")[1].substring(0, 1); // crash ici unsoprted null pointer
+                    prefixes[team] = StringUtil.getLastColorCodeBefore(line, SCOREBOARD_PREFIXES[team]).replace("\u00a7", "");
                 }
             }
         }
