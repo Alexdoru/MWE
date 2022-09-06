@@ -7,7 +7,10 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
-import fr.alexdoru.megawallsenhancementsmod.utils.*;
+import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
+import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
@@ -121,34 +124,16 @@ public class CommandNocheaters extends CommandBase {
                 if (warning) {
                     addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "No reports to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available."));
                 } else {
-
-                    IChatComponent imsg = new ChatComponentText(EnumChatFormatting.RED + ChatUtil.bar() + "\n" + "             ");
-                    String command = doStalk ? getCommandUsage(null) + " reportlist" : getCommandUsage(null) + " debugreportlist";
-
-                    if (displaypage > 1) {
-                        imsg.appendSibling(new ChatComponentText("" + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + " <<")
-                                .setChatStyle(new ChatStyle()
-                                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to view page " + (displaypage - 1))))
-                                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command + " " + (displaypage - 1)))));
-                    } else {
-                        imsg.appendSibling(new ChatComponentText("   "));
-                    }
-
-                    imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + " Report list (Page " + displaypage + " of " + nbpage + ")"));
-
-                    if (displaypage < nbpage) {
-                        imsg.appendSibling(new ChatComponentText("" + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + " >>")
-                                .setChatStyle(new ChatStyle()
-                                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to view page " + (displaypage + 1))))
-                                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command + " " + (displaypage + 1)))));
-                    }
-
-                    imsg.appendSibling(new ChatComponentText("\n"))
-                            .appendSibling(imsgbody)
-                            .appendSibling(new ChatComponentText(EnumChatFormatting.RED + ChatUtil.bar()));
-
-                    addChatMessage(imsg);
-
+                    printIChatList(
+                            "Report list",
+                            imsgbody,
+                            displaypage,
+                            nbpage,
+                            doStalk ? getCommandUsage(null) + " reportlist" : getCommandUsage(null) + " debugreportlist",
+                            EnumChatFormatting.RED,
+                            null,
+                            null
+                    );
                 }
 
                 return null;
@@ -158,7 +143,7 @@ public class CommandNocheaters extends CommandBase {
         } else if (args[0].equalsIgnoreCase("ignore")) {
 
             if (args.length == 1) {
-                addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + getCommandUsage(sender) + " ignore <playername>"));
+                addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + getCommandUsage(sender) + " ignore <playername>"));
             } else {
 
                 ReportQueue.INSTANCE.clearReportsSentBy(args[1]);
@@ -225,7 +210,7 @@ public class CommandNocheaters extends CommandBase {
                         WdredPlayers.getWdredMap().put(uuid, new WDR(time, time, hacks));
                     }
 
-                    addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You added " + EnumChatFormatting.RED + playername
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "You added " + EnumChatFormatting.RED + playername
                             + EnumChatFormatting.GREEN + " to your ignore list, it will ignore all report suggestions from that player. Use : "
                             + EnumChatFormatting.YELLOW + getCommandUsage(sender) + " ignorelist" + EnumChatFormatting.GREEN + " to list and remove poeple from the list."));
                     return null;
@@ -288,38 +273,20 @@ public class CommandNocheaters extends CommandBase {
                 }
 
                 if (warning && nbreport == 1) {
-                    addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "No one in your ignore list"));
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "No one in your ignore list"));
                 } else if (warning) {
-                    addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "No ignored players to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available."));
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "No ignored players to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available."));
                 } else {
-
-                    IChatComponent imsg = new ChatComponentText(EnumChatFormatting.DARK_GRAY + ChatUtil.bar() + "\n" + "     ");
-                    String command = getCommandUsage(null) + " ignorelist";
-
-                    if (displaypage > 1) {
-                        imsg.appendSibling(new ChatComponentText("" + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + " <<")
-                                .setChatStyle(new ChatStyle()
-                                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to view page " + (displaypage - 1))))
-                                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command + " " + (displaypage - 1)))));
-                    } else {
-                        imsg.appendSibling(new ChatComponentText("   "));
-                    }
-
-                    imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + " Ignore list (Page " + displaypage + " of " + nbpage + ") " + EnumChatFormatting.GOLD + "Click a name to un-ignore"));
-
-                    if (displaypage < nbpage) {
-                        imsg.appendSibling(new ChatComponentText("" + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + " >>")
-                                .setChatStyle(new ChatStyle()
-                                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to view page " + (displaypage + 1))))
-                                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command + " " + (displaypage + 1)))));
-                    }
-
-                    imsg.appendSibling(new ChatComponentText("\n"))
-                            .appendSibling(imsgbody)
-                            .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + ChatUtil.bar()));
-
-                    addChatMessage(imsg);
-
+                    printIChatList(
+                            "Ignore list",
+                            imsgbody,
+                            displaypage,
+                            nbpage,
+                            getCommandUsage(null) + " ignorelist",
+                            EnumChatFormatting.DARK_GRAY,
+                            null,
+                            null
+                    );
                 }
 
                 return null;
@@ -336,7 +303,7 @@ public class CommandNocheaters extends CommandBase {
 
                 if (wdr == null) {
 
-                    addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GOLD + playername + EnumChatFormatting.RED + " wasn't found in your ignore list"));
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GOLD + playername + EnumChatFormatting.RED + " wasn't found in your ignore list"));
 
                 } else {
 
@@ -346,7 +313,7 @@ public class CommandNocheaters extends CommandBase {
                         wdr.hacks.remove(WDR.IGNORED);
                     }
 
-                    addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GOLD + playername
+                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GOLD + playername
                             + EnumChatFormatting.GREEN + " has been removed from your ignore list, you will now receive report suggestions from that player."));
 
                 }

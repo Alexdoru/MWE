@@ -3,21 +3,22 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangNameHistory;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.event.HoverEvent;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 
 import java.util.Collections;
 import java.util.List;
 
 import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.printIChatList;
 
 public class CommandName extends CommandBase {
 
@@ -79,12 +80,10 @@ public class CommandName extends CommandBase {
             boolean warning = true;
 
             for (int i = n - 1; i >= 0; i--) {
-
                 if (nbnames == 9) {
                     nbnames = 1;
                     nbpage++;
                 }
-
                 if (nbpage == displaypage) {
                     if (i == 0) { // original name
                         imsgbody.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + apinamehistory.getNames().get(i) + EnumChatFormatting.GRAY + " Original name\n"));
@@ -95,42 +94,22 @@ public class CommandName extends CommandBase {
                     }
                     warning = false;
                 }
-
                 nbnames++;
             }
 
             if (warning) {
                 addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "No names to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available."));
             } else {
-
-                IChatComponent imsg = new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar() + "\n" + "             ");
-
-                if (displaypage > 1) {
-                    imsg.appendSibling(new ChatComponentText("" + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + " <<")
-                            .setChatStyle(new ChatStyle()
-                                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to view page " + (displaypage - 1))))
-                                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/name " + args[0] + " " + (displaypage - 1)))));
-                } else {
-                    imsg.appendSibling(new ChatComponentText("   "));
-                }
-
-                imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + " Name History (Page " + displaypage + " of " + nbpage + ")")
-                        .setChatStyle(new ChatStyle()
-                                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to open " + EnumChatFormatting.BLUE + "NamesMC" + EnumChatFormatting.YELLOW + " in browser")))
-                                .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://namemc.com/search?q=" + args[0]))));
-
-                if (displaypage < nbpage) {
-                    imsg.appendSibling(new ChatComponentText("" + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD + " >>")
-                            .setChatStyle(new ChatStyle()
-                                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to view page " + (displaypage + 1))))
-                                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/name " + args[0] + " " + (displaypage + 1)))));
-                }
-
-                imsg.appendSibling(new ChatComponentText("\n"))
-                        .appendSibling(imsgbody)
-                        .appendSibling(new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar()));
-
-                addChatMessage(imsg);
+                printIChatList(
+                        "Name History",
+                        imsgbody,
+                        displaypage,
+                        nbpage,
+                        "/name " + args[0],
+                        EnumChatFormatting.BLUE,
+                        new ChatComponentText(EnumChatFormatting.YELLOW + "Click to open " + EnumChatFormatting.BLUE + "NamesMC" + EnumChatFormatting.YELLOW + " in browser"),
+                        "https://namemc.com/search?q=" + args[0]
+                );
             }
 
             return null;
