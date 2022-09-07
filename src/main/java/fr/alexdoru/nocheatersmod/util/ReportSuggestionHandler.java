@@ -7,6 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
+import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
@@ -155,7 +156,7 @@ public class ReportSuggestionHandler {
             return false;
         }
 
-        if (isSenderMyself) {
+        if (isSenderMyself || (SquadEvent.getSquad().get(messageSender) != null)) {
             String[] args = new String[]{reportedPlayer, cheat};
             CommandWDR.handleWDRCommand(args, true, canWDRPlayer(reportedPlayer));
         }
