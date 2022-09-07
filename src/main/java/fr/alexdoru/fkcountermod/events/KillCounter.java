@@ -170,8 +170,8 @@ public class KillCounter {
                     String killedPlayer = matcher.group(1);
                     RenderPlayerHook.removeArrowsFrom(killedPlayer, -1);
                     String killer = matcher.group(2);
-                    String killedTeamColor = StringUtil.getLastColorCodeBefore(FormattedText, killedPlayer).replace("\u00a7", "");
-                    String killerTeamColor = StringUtil.getLastColorCodeBefore(FormattedText, killer).replace("\u00a7", "");
+                    String killedTeamColor = StringUtil.getLastColorCodeBefore(FormattedText, killedPlayer);
+                    String killerTeamColor = StringUtil.getLastColorCodeBefore(FormattedText, killer);
                     if (!killedTeamColor.equals("") && !killerTeamColor.equals("")) {
                         if (removeKilledPlayer(killedPlayer, killedTeamColor)) {
                             addKill(killer, killerTeamColor);
@@ -190,7 +190,7 @@ public class KillCounter {
                 if (matcher.groupCount() == 1) {
                     String killedPlayer = matcher.group(1);
                     RenderPlayerHook.removeArrowsFrom(killedPlayer, -1);
-                    String killedTeamColor = StringUtil.getLastColorCodeBefore(FormattedText, killedPlayer).replace("\u00a7", "");
+                    String killedTeamColor = StringUtil.getLastColorCodeBefore(FormattedText, killedPlayer);
                     if (!killedTeamColor.equals("")) {
                         if (removeKilledPlayer(killedPlayer, killedTeamColor)) {
                             playersPresentInGame.add(killedPlayer);
@@ -265,7 +265,7 @@ public class KillCounter {
         for (String line : ScoreboardUtils.getFormattedSidebarText()) {
             for (int team = 0; team < TEAMS; team++) {
                 if (line.contains(SCOREBOARD_PREFIXES[team])) {
-                    prefixes[team] = StringUtil.getLastColorCodeBefore(line, SCOREBOARD_PREFIXES[team]).replace("\u00a7", "");
+                    prefixes[team] = StringUtil.getLastColorCodeBefore(line, SCOREBOARD_PREFIXES[team]);
                 }
             }
         }
