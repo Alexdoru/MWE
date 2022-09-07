@@ -74,7 +74,7 @@ public class StringUtil {
     }
 
     /**
-     * Returns only color codes, Self-explanatory, returns "" if it can't find the last color code
+     * Returns the color code character, Self-explanatory, returns "" if it can't find the last color code
      */
     public static String getLastColorCodeOf(String text) {
         final Matcher matcher = COLOR_CODE_PATTERN.matcher(text);
@@ -82,7 +82,7 @@ public class StringUtil {
         while (matcher.find()) {
             s = matcher.group();
         }
-        return s;
+        return String.valueOf(s.charAt(1));
     }
 
     public static String getLastColorCodeBefore(String message, String target) {
