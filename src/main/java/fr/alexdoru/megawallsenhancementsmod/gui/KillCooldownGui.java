@@ -15,8 +15,8 @@ public class KillCooldownGui extends MyCachedGui {
     private static final TimerUtil timerUpdateText = new TimerUtil(1000L);
 
     public KillCooldownGui() {
+        super(ConfigHandler.killcooldownHUDPosition);
         instance = this;
-        guiPosition = ConfigHandler.killcooldownHUDPosition;
     }
 
     /**

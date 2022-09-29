@@ -19,8 +19,8 @@ public class LastWitherHPGui extends MyCachedGui {
     private static int witherHp = 0;
 
     public LastWitherHPGui() {
+        super(ConfigHandler.lastWitherHUDPosition);
         instance = this;
-        guiPosition = ConfigHandler.lastWitherHUDPosition;
         MinecraftForge.EVENT_BUS.register(this);
     }
 

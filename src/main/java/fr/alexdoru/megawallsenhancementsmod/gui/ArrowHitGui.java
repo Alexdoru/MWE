@@ -29,8 +29,8 @@ public class ArrowHitGui extends MyCachedGui {
     private static String arrowspinned;
 
     public ArrowHitGui() {
+        super(ConfigHandler.arrowHitHUDPosition);
         instance = this;
-        guiPosition = ConfigHandler.arrowHitHUDPosition;
     }
 
     public static boolean processMessage(String msg, String fmsg) {

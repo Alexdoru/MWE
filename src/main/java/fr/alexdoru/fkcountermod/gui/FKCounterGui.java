@@ -37,8 +37,8 @@ public class FKCounterGui extends MyCachedGui {
     private final int DUMMY_BACKGROUND_COLOR = new Color(255, 255, 255, 127).getRGB();
 
     public FKCounterGui() {
+        super(ConfigHandler.fkcounterPosition);
         instance = this;
-        guiPosition = ConfigHandler.fkcounterPosition;
     }
 
     @Override
