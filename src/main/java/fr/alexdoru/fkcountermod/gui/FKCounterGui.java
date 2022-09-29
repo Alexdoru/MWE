@@ -121,7 +121,7 @@ public class FKCounterGui extends MyCachedGui {
 
     @Override
     public boolean isEnabled() {
-        return (!ConfigHandler.FKHUDinSidebar && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame && getGameId() != null);
+        return !ConfigHandler.FKHUDinSidebar && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame && getGameId() != null;
     }
 
     @Override
