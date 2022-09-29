@@ -17,6 +17,10 @@ public abstract class MyCachedGui extends Gui implements IRenderer, ICachedHUDTe
     public String displayText = "";
     public GuiPosition guiPosition;
 
+    public MyCachedGui(GuiPosition guiPosition) {
+        this.guiPosition = guiPosition;
+    }
+
     @Override
     public String getDisplayText() {
         return displayText;

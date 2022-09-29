@@ -14,8 +14,8 @@ public class HunterStrengthGui extends MyCachedGui {
     private static boolean isStrengthRender;
 
     public HunterStrengthGui() {
+        super(ConfigHandler.hunterStrengthHUDPosition);
         instance = this;
-        guiPosition = ConfigHandler.hunterStrengthHUDPosition;
     }
 
     @Override
