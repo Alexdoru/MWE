@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import net.minecraft.client.gui.ScaledResolution;
 
 public class HunterStrengthGui extends MyCachedGui {
 
@@ -18,8 +19,8 @@ public class HunterStrengthGui extends MyCachedGui {
     }
 
     @Override
-    public void render() {
-        int[] absolutePos = this.guiPosition.getAbsolutePosition();
+    public void render(ScaledResolution resolution) {
+        int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
         int timeLeft = (int) ((timeStartRender + renderDuration - System.currentTimeMillis()) / 1000L);
         displayText = (isStrengthRender ? STRENGTH_TEXT : PRE_STRENGTH_TEXT) + timeLeft;
         drawCenteredString(frObj, displayText, absolutePos[0], absolutePos[1], 0);

@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.gui.HunterStrengthGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.KillCooldownGui;
 import fr.alexdoru.megawallsenhancementsmod.gui.LastWitherHPGui;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -32,13 +33,13 @@ public final class GuiManager {
     @SubscribeEvent
     public void onRenderGUI(RenderGameOverlayEvent.Post event) {
         if (event.type == ElementType.TEXT && !(mc.currentScreen instanceof PositionEditGuiScreen)) {
-            registeredRenderers.forEach(this::callRenderer);
+            registeredRenderers.forEach(registeredRenderer -> callRenderer(registeredRenderer, event.resolution));
         }
     }
 
-    private void callRenderer(IRenderer renderer) {
+    private void callRenderer(IRenderer renderer, ScaledResolution resolution) {
         if (renderer.isEnabled()) {
-            renderer.render();
+            renderer.render(resolution);
         }
     }
 
