@@ -183,12 +183,12 @@ public class ModUpdater {
 
     private static void deleteOldJar(String absolutePathToDelete, File deleter) throws IOException {
         if (Util.getOSType() == Util.EnumOS.LINUX) {
-            Runtime.getRuntime().exec("chmod +x \"" + deleter.getAbsolutePath() + "\"");
+            Runtime.getRuntime().exec(new String[]{"chmod", "+x", deleter.getAbsolutePath()});
         } else if (Util.getOSType() == Util.EnumOS.OSX) {
-            Runtime.getRuntime().exec("chmod 755 \"" + deleter.getAbsolutePath() + "\"");
+            Runtime.getRuntime().exec(new String[]{"chmod", "755", deleter.getAbsolutePath()});
         }
         Runtime.getRuntime().exec(
-                "java -jar " + deleter.getName() + " \"" + absolutePathToDelete + "\"",
+                new String[]{"java", "-jar", deleter.getName(), absolutePathToDelete},
                 null,
                 deleter.getParentFile()
         );
