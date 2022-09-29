@@ -1,5 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.guiapi;
 
+import net.minecraft.client.gui.ScaledResolution;
+
 public interface IRenderer {
 
     /**
@@ -17,12 +19,13 @@ public interface IRenderer {
     int getWidth();
 
     /**
-     * Render the HUD.
+     * Renders the HUD.
+     * @param resolution - Screen's resolution
      */
-    void render();
+    void render(ScaledResolution resolution);
 
     /**
-     * Render the dummy HUD, which is
+     * Renders the dummy HUD, which is
      * used in the configuration screen
      * where you can move it around.
      */

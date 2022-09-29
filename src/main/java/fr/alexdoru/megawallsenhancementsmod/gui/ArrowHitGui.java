@@ -5,6 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -147,8 +148,8 @@ public class ArrowHitGui extends MyCachedGui {
     }
 
     @Override
-    public void render() {
-        int[] absolutePos = this.guiPosition.getAbsolutePosition();
+    public void render(ScaledResolution resolution) {
+        int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
         drawCenteredString(frObj, displayText, absolutePos[0], absolutePos[1] - frObj.FONT_HEIGHT, 0);
     }
 

@@ -5,6 +5,7 @@ import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.gui.MyCachedGui;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -55,8 +56,8 @@ public class FKCounterGui extends MyCachedGui {
     }
 
     @Override
-    public void render() {
-        int[] absolutePos = this.guiPosition.getAbsolutePosition();
+    public void render(ScaledResolution resolution) {
+        int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
         int x = absolutePos[0];
         int y = absolutePos[1];
         if (ConfigHandler.draw_background) {

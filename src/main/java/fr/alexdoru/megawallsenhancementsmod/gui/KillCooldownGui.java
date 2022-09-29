@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui;
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.TimerUtil;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
 public class KillCooldownGui extends MyCachedGui {
@@ -38,11 +39,11 @@ public class KillCooldownGui extends MyCachedGui {
     }
 
     @Override
-    public void render() {
+    public void render(ScaledResolution resolution) {
         if (timerUpdateText.update()) {
             updateDisplayText();
         }
-        int[] absolutePos = this.guiPosition.getAbsolutePosition();
+        int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
         frObj.drawStringWithShadow(displayText, absolutePos[0], absolutePos[1], 0);
     }
 

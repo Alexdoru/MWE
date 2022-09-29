@@ -4,6 +4,7 @@ import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.events.MwGameEvent;
 import fr.alexdoru.fkcountermod.events.ScoreboardEvent;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -50,11 +51,11 @@ public class LastWitherHPGui extends MyCachedGui {
     }
 
     @Override
-    public void render() {
+    public void render(ScaledResolution resolution) {
         if (ConfigHandler.witherHUDinSiderbar) {
             return;
         }
-        int[] absolutePos = this.guiPosition.getAbsolutePosition();
+        int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
         frObj.drawStringWithShadow(displayText, absolutePos[0], absolutePos[1], 0);
     }
 

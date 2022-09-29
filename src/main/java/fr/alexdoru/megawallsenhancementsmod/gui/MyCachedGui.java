@@ -7,6 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.IRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
 
 public abstract class MyCachedGui extends Gui implements IRenderer, ICachedHUDText {
 
@@ -35,12 +36,10 @@ public abstract class MyCachedGui extends Gui implements IRenderer, ICachedHUDTe
     }
 
     @Override
-    public void render() {
-    }
+    public void render(ScaledResolution resolution) {}
 
     @Override
-    public void renderDummy() {
-    }
+    public void renderDummy() {}
 
     @Override
     public boolean isEnabled() {
