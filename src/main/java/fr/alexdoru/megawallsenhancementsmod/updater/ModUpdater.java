@@ -22,6 +22,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.URL;
@@ -32,6 +34,7 @@ import java.nio.file.StandardCopyOption;
 public class ModUpdater {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
+    private static final Logger updateLogger = LogManager.getLogger("Updater MegaWallsEnhancements");
     private static boolean hasTriggered = false;
     public static boolean isUpTodate = false;
 
@@ -122,13 +125,13 @@ public class ModUpdater {
                 String newModFileName = getFileName(browser_download_url);
                 File modCacheFile = new File(cacheDir, newModFileName);
                 downloadFileTo(browser_download_url, modCacheFile);
-                System.out.println("Downloaded MWEnhancement Update");
+                updateLogger.info("Downloaded MWEnhancement Update");
 
-                String GITHUB_DELETER_URL = "https://github.com/W-OVERFLOW/Deleter/releases/download/v1.4/Deleter-1.4.jar";// TODO essayer de faire marcher le 1.5
+                String GITHUB_DELETER_URL = "https://github.com/W-OVERFLOW/Deleter/releases/download/v1.8/Deleter-1.8.jar";
                 String deleterFileName = getFileName(GITHUB_DELETER_URL);
                 File deleterFile = new File(cacheDir, deleterFileName);
                 downloadFileTo(GITHUB_DELETER_URL, deleterFile);
-                System.out.println("Downloaded Mod Deleter");
+                updateLogger.info("Downloaded Mod Deleter");
 
                 if (modCacheFile.exists() && deleterFile.exists()) {
 
@@ -180,12 +183,12 @@ public class ModUpdater {
 
     private static void deleteOldJar(String absolutePathToDelete, File deleter) throws IOException {
         if (Util.getOSType() == Util.EnumOS.LINUX) {
-            Runtime.getRuntime().exec("chmod +x \"" + deleter.getAbsolutePath() + "\"");
+            Runtime.getRuntime().exec(new String[]{"chmod", "+x", deleter.getAbsolutePath()});
         } else if (Util.getOSType() == Util.EnumOS.OSX) {
-            Runtime.getRuntime().exec("chmod 755 \"" + deleter.getAbsolutePath() + "\"");
+            Runtime.getRuntime().exec(new String[]{"chmod", "755", deleter.getAbsolutePath()});
         }
         Runtime.getRuntime().exec(
-                "java -jar " + deleter.getName() + " \"" + absolutePathToDelete + "\"",// TODO tester de changer
+                new String[]{"java", "-jar", deleter.getName(), absolutePathToDelete},
                 null,
                 deleter.getParentFile()
         );
