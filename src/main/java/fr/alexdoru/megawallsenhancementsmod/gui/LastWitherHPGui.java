@@ -52,9 +52,6 @@ public class LastWitherHPGui extends MyCachedGui {
 
     @Override
     public void render(ScaledResolution resolution) {
-        if (ConfigHandler.witherHUDinSiderbar) {
-            return;
-        }
         int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
         frObj.drawStringWithShadow(displayText, absolutePos[0], absolutePos[1], 0);
     }
@@ -67,7 +64,7 @@ public class LastWitherHPGui extends MyCachedGui {
 
     @Override
     public boolean isEnabled() {
-        return ConfigHandler.show_lastWitherHUD && FKCounterMod.isInMwGame && ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive();
+        return !ConfigHandler.witherHUDinSiderbar && ConfigHandler.show_lastWitherHUD && FKCounterMod.isInMwGame && ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive();
     }
 
 }
