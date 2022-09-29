@@ -9,6 +9,10 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * API was terminated by Microsoft RIP
+ */
+@Deprecated
 public class MojangNameHistory {
 
     private static List<String> names;

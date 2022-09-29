@@ -2,23 +2,19 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
-import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangNameHistory;
-import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.NumberInvalidException;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.event.ClickEvent;
+import net.minecraft.event.HoverEvent;
+import net.minecraft.util.*;
 
 import java.util.Collections;
 import java.util.List;
 
 import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.printIChatList;
+import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.bar;
 
 public class CommandName extends CommandBase {
 
@@ -45,72 +41,27 @@ public class CommandName extends CommandBase {
 
         Multithreading.addTaskToQueue(() -> {
 
-            CachedMojangUUID apiname;
+            final String playername = args[0];
             try {
-                apiname = new CachedMojangUUID(args[0]);
-            } catch (ApiException e1) {
-                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + e1.getMessage()));
-                return null;
-            }
-            String uuid = apiname.getUuid();
-
-            MojangNameHistory apinamehistory;
-            try {
-                apinamehistory = new MojangNameHistory(uuid);
+                new CachedMojangUUID(playername);
             } catch (ApiException e1) {
                 addChatMessage(new ChatComponentText(EnumChatFormatting.RED + e1.getMessage()));
                 return null;
             }
 
-            int displaypage = 1;
-            int nbnames = 1;
-            int nbpage = 1;
-
-            if (args.length > 1) {
-                try {
-                    displaypage = parseInt(args[1]);
-                } catch (NumberInvalidException e) {
-                    addChatMessage(new ChatComponentText(EnumChatFormatting.RED + args[1] + " isn't a valid number."));
-                    return null;
-                }
-            }
-
-            int n = apinamehistory.getNames().size();
-            IChatComponent imsgbody = new ChatComponentText("");
-            boolean warning = true;
-
-            for (int i = n - 1; i >= 0; i--) {
-                if (nbnames == 9) {
-                    nbnames = 1;
-                    nbpage++;
-                }
-                if (nbpage == displaypage) {
-                    if (i == 0) { // original name
-                        imsgbody.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + apinamehistory.getNames().get(i) + EnumChatFormatting.GRAY + " Original name\n"));
-                    } else if (i == n - 1) {
-                        imsgbody.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + apinamehistory.getNames().get(i) + EnumChatFormatting.GRAY + " since " + DateUtil.localformatTimestampday(apinamehistory.getTimestamps().get(i)) + "\n"));
-                    } else {
-                        imsgbody.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + apinamehistory.getNames().get(i) + EnumChatFormatting.GRAY + " " + DateUtil.localformatTimestampday(apinamehistory.getTimestamps().get(i)) + "\n"));
-                    }
-                    warning = false;
-                }
-                nbnames++;
-            }
-
-            if (warning) {
-                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "No names to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available."));
-            } else {
-                printIChatList(
-                        "Name History",
-                        imsgbody,
-                        displaypage,
-                        nbpage,
-                        "/name " + args[0],
-                        EnumChatFormatting.BLUE,
-                        new ChatComponentText(EnumChatFormatting.YELLOW + "Click to open " + EnumChatFormatting.BLUE + "NamesMC" + EnumChatFormatting.YELLOW + " in browser"),
-                        "https://namemc.com/search?q=" + args[0]
-                );
-            }
+            final String namesMC_URL = "https://namemc.com/search?q=" + playername;
+            final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.BLUE + bar() + "\n" + "                " +
+                    EnumChatFormatting.GOLD + "Name History - " + playername + "\n\n" +
+                    EnumChatFormatting.GRAY + "Name History API had been removed by Microsoft RIP\n")
+                    .appendSibling(new ChatComponentText(
+                            EnumChatFormatting.GREEN + "Click to open " +
+                                    EnumChatFormatting.BLUE + EnumChatFormatting.BOLD + "NamesMC" +
+                                    EnumChatFormatting.GREEN + " in browser\n\n")
+                            .setChatStyle(new ChatStyle()
+                                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, namesMC_URL))
+                                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + namesMC_URL)))))
+                    .appendSibling(new ChatComponentText(EnumChatFormatting.BLUE + bar()));
+            addChatMessage(imsg);
 
             return null;
 
