@@ -115,7 +115,7 @@ public class CommandReport extends CommandBase {
 
         }
 
-        (Minecraft.getMinecraft()).thePlayer.sendChatMessage(msg.toString());
+        Minecraft.getMinecraft().thePlayer.sendChatMessage(msg.toString());
 
     }
 

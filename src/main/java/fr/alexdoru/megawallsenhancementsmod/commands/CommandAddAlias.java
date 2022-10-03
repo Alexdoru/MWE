@@ -26,7 +26,7 @@ public class CommandAddAlias extends CommandBase {
     private static File alliasDataFile;
 
     public CommandAddAlias() {
-        alliasDataFile = new File((Minecraft.getMinecraft()).mcDataDir, "config/alliasData.json");
+        alliasDataFile = new File(Minecraft.getMinecraft().mcDataDir, "config/alliasData.json");
         readDataFromFile();
         Runtime.getRuntime().addShutdownHook(new Thread(CommandAddAlias::writeDataToFile));
     }
