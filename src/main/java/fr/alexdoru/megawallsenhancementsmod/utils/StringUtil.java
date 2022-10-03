@@ -54,7 +54,9 @@ public class StringUtil {
     }
 
     /**
-     * Self-explanatory, returns "" if it can't find the last formatting code
+     * Returns the last formatting code of a String
+     * Returns "" if it can't find any formatting code
+     * Else returns "§ + code"
      */
     public static String getLastFormattingCodeOf(String text) {
         final Matcher matcher = FORMATTING_CODE_PATTERN.matcher(text);
@@ -65,6 +67,11 @@ public class StringUtil {
         return s;
     }
 
+    /**
+     * Returns the last formatting code before a certain word in a String
+     * Returns "" if it can't find any formatting code
+     * Else returns "§ + code"
+     */
     public static String getLastFormattingCodeBefore(String message, String target) {
         String[] split = message.split(target, 2);
         if (split.length != 2) {
@@ -74,7 +81,9 @@ public class StringUtil {
     }
 
     /**
-     * Returns the color code character, Self-explanatory, returns "" if it can't find the last color code
+     * Returns the last color code character, only color codes, not formatting codes
+     * This only returns one character and not "§ + code"
+     * Returns "" if it can't find the last color code
      */
     public static String getLastColorCodeOf(String text) {
         final Matcher matcher = COLOR_CODE_PATTERN.matcher(text);
@@ -85,6 +94,11 @@ public class StringUtil {
         return String.valueOf(s.charAt(1));
     }
 
+    /**
+     * Returns the last color code before a certain word in a String, only color codes, not formatting codes
+     * This only returns one character and not "§ + code"
+     * Returns "" if it can't find the last color code
+     */
     public static String getLastColorCodeBefore(String message, String target) {
         String[] split = message.split(target, 2);
         if (split.length != 2) {
