@@ -32,7 +32,7 @@ public class NoCheatersMod {
         ClientCommandHandler.instance.registerCommand(new CommandUnWDR());
         ClientCommandHandler.instance.registerCommand(new CommandReport());
         ClientCommandHandler.instance.registerCommand(new CommandNocheaters());
-        WdredPlayers.wdrsFile = new File((Minecraft.getMinecraft()).mcDataDir, "config/wdred.txt");
+        WdredPlayers.wdrsFile = new File(Minecraft.getMinecraft().mcDataDir, "config/wdred.txt");
         Runtime.getRuntime().addShutdownHook(new Thread(WdredPlayers::saveReportedPlayers));
         WdredPlayers.loadReportedPlayers();
 
