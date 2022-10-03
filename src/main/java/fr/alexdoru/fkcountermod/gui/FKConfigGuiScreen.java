@@ -44,9 +44,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
 
         buttonList.add(new GuiSlider(5, getxCenter() - 150 / 2, getyCenter() + 70, "HUD Size : ", 0.1d, 4d, ConfigHandler.fkc_hud_size, this));
         buttonList.add(new GuiSlider(6, getxCenter() - 150 / 2, getyCenter() + 94, 150, 20, "Player amount : ", "", 1d, 10d, ConfigHandler.playerAmount, false, true, this));
-        if (parent != null) {
-            buttonList.add(new GuiButton(200, getxCenter() - 150 / 2, getyCenter() + 122, 150, 20, "Done"));
-        }
+        buttonList.add(new GuiButton(200, getxCenter() - 150 / 2, getyCenter() + 122, 150, 20, "Done"));
         super.initGui();
     }
 
@@ -162,7 +160,6 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                 FKCounterGui.instance.updateDisplayText();
                 break;
         }
-
     }
 
 }
