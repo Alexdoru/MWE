@@ -18,7 +18,7 @@ public class GuiIngameHook {
     }
 
     public static String getSidebarTextLine(String textIn, int lineNumber) {
-        if (ConfigHandler.witherHUDinSiderbar && lineNumber == 12 && ConfigHandler.show_lastWitherHUD && FKCounterMod.isInMwGame && ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive()) {
+        if (ConfigHandler.witherHUDinSidebar && lineNumber == 12 && ConfigHandler.show_lastWitherHUD && FKCounterMod.isInMwGame && ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive()) {
             return LastWitherHPGui.instance.displayText;
         }
         if (ConfigHandler.FKHUDinSidebar && lineNumber == 11 && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame && KillCounter.getGameId() != null) {
