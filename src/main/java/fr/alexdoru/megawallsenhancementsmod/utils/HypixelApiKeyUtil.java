@@ -3,9 +3,6 @@ package fr.alexdoru.megawallsenhancementsmod.utils;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.util.EnumChatFormatting;
 
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.getTagMW;
-
 public class HypixelApiKeyUtil {
 
     public static String getApiKey() {
@@ -13,7 +10,7 @@ public class HypixelApiKeyUtil {
     }
 
     public static void setApiKey(String key) {
-        addChatMessage(getTagMW() + EnumChatFormatting.GREEN + "Api key set successfully");
+        ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Api key set successfully");
         ConfigHandler.APIKey = key;
         ConfigHandler.saveConfig();
     }

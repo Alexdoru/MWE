@@ -1,12 +1,11 @@
 package fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser;
 
 import com.google.gson.JsonObject;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
-
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class SkywarsStats {
 
@@ -201,58 +200,58 @@ public class SkywarsStats {
         String[][] matrix = {
                 {
                         EnumChatFormatting.YELLOW + "Overall : ",
-                        EnumChatFormatting.AQUA + "K : " + EnumChatFormatting.GOLD + formatInt(kills) + " ",
-                        EnumChatFormatting.AQUA + "D : " + EnumChatFormatting.RED + formatInt(deaths) + " ",
+                        EnumChatFormatting.AQUA + "K : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(kills) + " ",
+                        EnumChatFormatting.AQUA + "D : " + EnumChatFormatting.RED + ChatUtil.formatInt(deaths) + " ",
                         EnumChatFormatting.AQUA + "K/D : " + (kdr > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.2f", kdr)
                 },
 
                 {
                         "",
-                        EnumChatFormatting.AQUA + "W : " + EnumChatFormatting.GOLD + formatInt(wins) + " ",
-                        EnumChatFormatting.AQUA + "L : " + EnumChatFormatting.RED + formatInt(losses) + " ",
+                        EnumChatFormatting.AQUA + "W : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wins) + " ",
+                        EnumChatFormatting.AQUA + "L : " + EnumChatFormatting.RED + ChatUtil.formatInt(losses) + " ",
                         EnumChatFormatting.AQUA + "W/L : " + (wlr > 1f / 12f ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.2f", wlr) + "\n"
                 },
 
                 {
                         EnumChatFormatting.YELLOW + "Solo : ",
-                        EnumChatFormatting.AQUA + "K : " + EnumChatFormatting.GOLD + formatInt(kills_solo) + " ",
-                        EnumChatFormatting.AQUA + "D : " + EnumChatFormatting.RED + formatInt(deaths_solo) + " ",
+                        EnumChatFormatting.AQUA + "K : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(kills_solo) + " ",
+                        EnumChatFormatting.AQUA + "D : " + EnumChatFormatting.RED + ChatUtil.formatInt(deaths_solo) + " ",
                         EnumChatFormatting.AQUA + "K/D : " + (kdr > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.2f", kdr_solo)
                 },
 
                 {
                         "",
-                        EnumChatFormatting.AQUA + "W : " + EnumChatFormatting.GOLD + formatInt(wins_solo) + " ",
-                        EnumChatFormatting.AQUA + "L : " + EnumChatFormatting.RED + formatInt(losses_solo) + " ",
+                        EnumChatFormatting.AQUA + "W : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wins_solo) + " ",
+                        EnumChatFormatting.AQUA + "L : " + EnumChatFormatting.RED + ChatUtil.formatInt(losses_solo) + " ",
                         EnumChatFormatting.AQUA + "W/L : " + (wlr > 1f / 12f ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.2f", wlr_solo) + "\n"
                 },
 
                 {
                         EnumChatFormatting.YELLOW + "Team : ",
-                        EnumChatFormatting.AQUA + "K : " + EnumChatFormatting.GOLD + formatInt(kills_team) + " ",
-                        EnumChatFormatting.AQUA + "D : " + EnumChatFormatting.RED + formatInt(deaths_team) + " ",
+                        EnumChatFormatting.AQUA + "K : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(kills_team) + " ",
+                        EnumChatFormatting.AQUA + "D : " + EnumChatFormatting.RED + ChatUtil.formatInt(deaths_team) + " ",
                         EnumChatFormatting.AQUA + "K/D : " + (kdr > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.2f", kdr_team)
                 },
 
                 {
                         "",
-                        EnumChatFormatting.AQUA + "W : " + EnumChatFormatting.GOLD + formatInt(wins_team) + " ",
-                        EnumChatFormatting.AQUA + "L : " + EnumChatFormatting.RED + formatInt(losses_team) + " ",
+                        EnumChatFormatting.AQUA + "W : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wins_team) + " ",
+                        EnumChatFormatting.AQUA + "L : " + EnumChatFormatting.RED + ChatUtil.formatInt(losses_team) + " ",
                         EnumChatFormatting.AQUA + "W/L : " + (wlr > 1f / 12f ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.2f", wlr_team)
                 }};
 
-        return new ChatComponentText(EnumChatFormatting.AQUA + bar() + "\n")
-                .appendSibling(PlanckeHeaderText(levelFormatted == null ? formattedName : formattedName + EnumChatFormatting.GOLD + " - " + levelFormatted, playername, " - Skywars stats"))
+        return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
+                .appendSibling(ChatUtil.PlanckeHeaderText(levelFormatted == null ? formattedName : formattedName + EnumChatFormatting.GOLD + " - " + levelFormatted, playername, " - Skywars stats"))
                 .appendSibling(new ChatComponentText("\n" + "\n"))
-                .appendSibling(new ChatComponentText(centerLine(formatSkywarsLevel(skywars_experience)) + "\n" + "\n"))
-                .appendSibling(new ChatComponentText(alignText(matrix) + "\n"))
+                .appendSibling(new ChatComponentText(ChatUtil.centerLine(formatSkywarsLevel(skywars_experience)) + "\n" + "\n"))
+                .appendSibling(new ChatComponentText(ChatUtil.alignText(matrix) + "\n"))
                 .appendSibling(new ChatComponentText(
-                        centerLine(EnumChatFormatting.GREEN + "Coins : " + EnumChatFormatting.GOLD + formatInt(coins)
-                                + EnumChatFormatting.GREEN + " Souls : " + EnumChatFormatting.AQUA + formatInt(souls)) + "\n"
-                                + centerLine(EnumChatFormatting.GREEN + " Playtime : " + EnumChatFormatting.GOLD + String.format("%.2f", time_played / 3600f) + "h"
-                                + EnumChatFormatting.GREEN + " Heads : " + EnumChatFormatting.DARK_PURPLE + formatInt(heads)
-                                + EnumChatFormatting.GREEN + " Shards : " + EnumChatFormatting.AQUA + formatInt(shard))))
-                .appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + bar()));
+                        ChatUtil.centerLine(EnumChatFormatting.GREEN + "Coins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(coins)
+                                + EnumChatFormatting.GREEN + " Souls : " + EnumChatFormatting.AQUA + ChatUtil.formatInt(souls)) + "\n"
+                                + ChatUtil.centerLine(EnumChatFormatting.GREEN + " Playtime : " + EnumChatFormatting.GOLD + String.format("%.2f", time_played / 3600f) + "h"
+                                + EnumChatFormatting.GREEN + " Heads : " + EnumChatFormatting.DARK_PURPLE + ChatUtil.formatInt(heads)
+                                + EnumChatFormatting.GREEN + " Shards : " + EnumChatFormatting.AQUA + ChatUtil.formatInt(shard))))
+                .appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
 
     }
 

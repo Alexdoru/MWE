@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
@@ -10,8 +11,6 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 import java.lang.reflect.Field;
-
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class MegaWallsClassStats {
 
@@ -179,52 +178,52 @@ public class MegaWallsClassStats {
 
         String[][] matrix1 = {
                 {
-                        EnumChatFormatting.GREEN + "Kills : " + EnumChatFormatting.GOLD + formatInt(classname_kills) + " ",
-                        EnumChatFormatting.GREEN + "Assists : " + EnumChatFormatting.GOLD + formatInt(classname_assists)
+                        EnumChatFormatting.GREEN + "Kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_kills) + " ",
+                        EnumChatFormatting.GREEN + "Assists : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_assists)
                 },
 
                 {
-                        EnumChatFormatting.GREEN + "Final Kills : " + EnumChatFormatting.GOLD + formatInt(classname_final_kills) + " ",
-                        EnumChatFormatting.GREEN + "Final Assists : " + EnumChatFormatting.GOLD + formatInt(classname_final_assists_standard),
+                        EnumChatFormatting.GREEN + "Final Kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_final_kills) + " ",
+                        EnumChatFormatting.GREEN + "Final Assists : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_final_assists_standard),
                 },
 
                 {
-                        EnumChatFormatting.GREEN + "Deaths : " + EnumChatFormatting.GOLD + formatInt(classname_deaths) + " ",
-                        EnumChatFormatting.GREEN + "Final Death : " + EnumChatFormatting.GOLD + formatInt(classname_final_deaths),
+                        EnumChatFormatting.GREEN + "Deaths : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_deaths) + " ",
+                        EnumChatFormatting.GREEN + "Final Death : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_final_deaths),
                 },
 
                 {
-                        EnumChatFormatting.GREEN + "Ability activations : " + EnumChatFormatting.GOLD + formatInt(classname_a_activations) + " ",
-                        EnumChatFormatting.GREEN + "Ability Damage : " + EnumChatFormatting.GOLD + formatInt(classname_a_damage_dealt / 2) + EnumChatFormatting.RED + "\u2764",
+                        EnumChatFormatting.GREEN + "Ability activations : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_a_activations) + " ",
+                        EnumChatFormatting.GREEN + "Ability Damage : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_a_damage_dealt / 2) + EnumChatFormatting.RED + "\u2764",
                 },
 
                 {
-                        EnumChatFormatting.GREEN + "Wither Damage : " + EnumChatFormatting.GOLD + formatInt(classname_wither_damage) + " ",
-                        EnumChatFormatting.GREEN + "Defender kills : " + EnumChatFormatting.GOLD + formatInt(classname_defender_kills),
+                        EnumChatFormatting.GREEN + "Wither Damage : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_wither_damage) + " ",
+                        EnumChatFormatting.GREEN + "Defender kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_defender_kills),
                 },
 
                 {
-                        EnumChatFormatting.GREEN + "Self healed : " + EnumChatFormatting.GOLD + formatInt(classname_self_healed / 2) + EnumChatFormatting.RED + "\u2764" + " ",
-                        EnumChatFormatting.GREEN + "Allies healed : " + EnumChatFormatting.GOLD + formatInt(classname_allies_healed / 2) + EnumChatFormatting.RED + "\u2764",
+                        EnumChatFormatting.GREEN + "Self healed : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_self_healed / 2) + EnumChatFormatting.RED + "\u2764" + " ",
+                        EnumChatFormatting.GREEN + "Allies healed : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_allies_healed / 2) + EnumChatFormatting.RED + "\u2764",
                 },
 
                 {
-                        EnumChatFormatting.GREEN + "Blocks placed : " + EnumChatFormatting.GOLD + formatInt(classname_blocks_placed) + " ",
-                        EnumChatFormatting.GREEN + "Meters walked : " + EnumChatFormatting.GOLD + formatInt(classname_meters_walked),
+                        EnumChatFormatting.GREEN + "Blocks placed : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_blocks_placed) + " ",
+                        EnumChatFormatting.GREEN + "Meters walked : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_meters_walked),
                 }};
 
-        IChatComponent imsg = new ChatComponentText(EnumChatFormatting.BLUE + bar() + "\n")
-                .appendSibling(new ChatComponentText(centerLine(formattedname + EnumChatFormatting.GOLD + " - Game stats - " + classnameuppercase)));
+        IChatComponent imsg = new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar() + "\n")
+                .appendSibling(new ChatComponentText(ChatUtil.centerLine(formattedname + EnumChatFormatting.GOLD + " - Game stats - " + classnameuppercase)));
 
         if (games_played != 1) {
-            imsg.appendSibling(new ChatComponentText("\n" + centerLine(EnumChatFormatting.DARK_RED + "These stats are for " + games_played + " games, not one.")));
+            imsg.appendSibling(new ChatComponentText("\n" + ChatUtil.centerLine(EnumChatFormatting.DARK_RED + "These stats are for " + games_played + " games, not one.")));
         }
 
-        imsg.appendSibling(new ChatComponentText("\n" + "\n" + alignText(matrix1)))
-                .appendSibling(new ChatComponentText(centerLine(EnumChatFormatting.GREEN + "Arrows shot : " + EnumChatFormatting.GOLD + classname_arrows_fired
+        imsg.appendSibling(new ChatComponentText("\n" + "\n" + ChatUtil.alignText(matrix1)))
+                .appendSibling(new ChatComponentText(ChatUtil.centerLine(EnumChatFormatting.GREEN + "Arrows shot : " + EnumChatFormatting.GOLD + classname_arrows_fired
                         + EnumChatFormatting.GREEN + " Arrows hits : " + EnumChatFormatting.GOLD + classname_arrows_hit
                         + EnumChatFormatting.GREEN + " Arrows accuracy : " + EnumChatFormatting.GOLD + String.format("%.2f", arrowaccuracy) + "%" + "\n")))
-                .appendSibling(new ChatComponentText(EnumChatFormatting.BLUE + bar()));
+                .appendSibling(new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar()));
         return imsg;
     }
 
@@ -232,28 +231,28 @@ public class MegaWallsClassStats {
 
         String[][] matrix1 = {
                 {
-                        EnumChatFormatting.AQUA + "Kills : " + EnumChatFormatting.GOLD + formatInt(classname_kills) + " ",
-                        EnumChatFormatting.AQUA + "Deaths : " + EnumChatFormatting.RED + formatInt(classname_deaths) + " ",
+                        EnumChatFormatting.AQUA + "Kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_kills) + " ",
+                        EnumChatFormatting.AQUA + "Deaths : " + EnumChatFormatting.RED + ChatUtil.formatInt(classname_deaths) + " ",
                         EnumChatFormatting.AQUA + "K/D Ratio : " + (kdr > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", kdr)
                 },
 
                 {
-                        EnumChatFormatting.AQUA + "Final Kills : " + EnumChatFormatting.GOLD + formatInt(classname_final_kills) + " ",
-                        EnumChatFormatting.AQUA + "Final Deaths : " + EnumChatFormatting.RED + formatInt(classname_final_deaths) + " ",
+                        EnumChatFormatting.AQUA + "Final Kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_final_kills) + " ",
+                        EnumChatFormatting.AQUA + "Final Deaths : " + EnumChatFormatting.RED + ChatUtil.formatInt(classname_final_deaths) + " ",
                         EnumChatFormatting.AQUA + "FK/D Ratio : " + (fkdr > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", fkdr)
                 },
 
                 {
-                        EnumChatFormatting.AQUA + "Wins : " + EnumChatFormatting.GOLD + formatInt(classname_wins) + " ",
-                        EnumChatFormatting.AQUA + "Losses : " + EnumChatFormatting.RED + formatInt(classname_losses) + " ",
+                        EnumChatFormatting.AQUA + "Wins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_wins) + " ",
+                        EnumChatFormatting.AQUA + "Losses : " + EnumChatFormatting.RED + ChatUtil.formatInt(classname_losses) + " ",
                         EnumChatFormatting.AQUA + "W/L Ratio : " + (wlr > 0.25f ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", wlr) + "\n"
                 }};
 
         String[][] matrix2 = {
 
                 {
-                        EnumChatFormatting.AQUA + "Wither damage : " + EnumChatFormatting.GOLD + formatInt(classname_wither_damage) + "     ",
-                        EnumChatFormatting.AQUA + "Defending Kills : " + EnumChatFormatting.GOLD + formatInt(classname_defender_kills)
+                        EnumChatFormatting.AQUA + "Wither damage : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_wither_damage) + "     ",
+                        EnumChatFormatting.AQUA + "Defending Kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_defender_kills)
                 },
 
                 {
@@ -262,7 +261,7 @@ public class MegaWallsClassStats {
                 },
 
                 {
-                        EnumChatFormatting.AQUA + "Games played : " + EnumChatFormatting.GOLD + formatInt(games_played) + "     ",
+                        EnumChatFormatting.AQUA + "Games played : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(games_played) + "     ",
                         EnumChatFormatting.AQUA + "FK/game : " + (fkpergame > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", fkpergame)
                 },
         };
@@ -272,31 +271,31 @@ public class MegaWallsClassStats {
 
         if (unlocked || classname.equals("hunter") || classname.equals("shark") || classname.equals("cow")) {
 
-            msg = new ChatComponentText(EnumChatFormatting.AQUA + bar() + "\n")
-                    .appendSibling(PlanckeHeaderText(formattedname, playername, " - Mega Walls " + classnameuppercase + " stats"))
-                    .appendSibling(new ChatComponentText("\n" + "\n" + alignText(matrix1))
+            msg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
+                    .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls " + classnameuppercase + " stats"))
+                    .appendSibling(new ChatComponentText("\n" + "\n" + ChatUtil.alignText(matrix1))
                             .setChatStyle(new ChatStyle()
                                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GRAY + "Disclaimer : Class Final K/D Ratio's are not accurate for some players, as final-deaths for classes weren't tracked prior to the Mythic update.")))))
-                    .appendSibling(new ChatComponentText(alignText(matrix2) +
-                            centerLine(EnumChatFormatting.GREEN + "Selected skin : " + EnumChatFormatting.GOLD + (chosen_skin_class == null ? (classnameuppercase == null ? "None" : classnameuppercase) : chosen_skin_class)) + "\n" + "\n"
-                            + centerLine(EnumChatFormatting.GREEN + "Classpoints : " + EnumChatFormatting.GOLD + classpoints + " "
+                    .appendSibling(new ChatComponentText(ChatUtil.alignText(matrix2) +
+                            ChatUtil.centerLine(EnumChatFormatting.GREEN + "Selected skin : " + EnumChatFormatting.GOLD + (chosen_skin_class == null ? (classnameuppercase == null ? "None" : classnameuppercase) : chosen_skin_class)) + "\n" + "\n"
+                            + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Classpoints : " + EnumChatFormatting.GOLD + classpoints + " "
                             + EnumChatFormatting.GREEN + " Playtime (approx.) : " + EnumChatFormatting.GOLD + String.format("%.2f", classname_time_played / 60f) + "h") + "\n"
-                            + centerLine(EnumChatFormatting.GREEN + "Kit : "
-                            + (skill_level_d == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + intToRoman(skill_level_d) + " "
-                            + (skill_level_a == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + intToRoman(skill_level_a) + " "
-                            + (skill_level_b == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + intToRoman(skill_level_b) + " "
-                            + (skill_level_c == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + intToRoman(skill_level_c) + " "
-                            + (skill_level_g == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + intToRoman(skill_level_g) + " "
-                            + EnumChatFormatting.GREEN + "Prestige : " + (prestige == 0 ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.GOLD) + intToRoman(prestige) + " "
+                            + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Kit : "
+                            + (skill_level_d == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_d) + " "
+                            + (skill_level_a == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_a) + " "
+                            + (skill_level_b == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_b) + " "
+                            + (skill_level_c == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_c) + " "
+                            + (skill_level_g == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_g) + " "
+                            + EnumChatFormatting.GREEN + "Prestige : " + (prestige == 0 ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.GOLD) + ChatUtil.intToRoman(prestige) + " "
                             + EnumChatFormatting.GREEN + "Echest rows : " + (enderchest_rows == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + enderchest_rows) + "\n"
-                            + EnumChatFormatting.AQUA + bar()));
+                            + EnumChatFormatting.AQUA + ChatUtil.bar()));
 
         } else {
 
-            msg = new ChatComponentText(EnumChatFormatting.AQUA + bar() + "\n"
-                    + centerLine(formattedname + EnumChatFormatting.GOLD + " - Mega Walls " + classnameuppercase + " stats") + "\n" + "\n"
-                    + centerLine(formattedname + EnumChatFormatting.RED + " didn't purchased " + EnumChatFormatting.GOLD + classnameuppercase) + "\n"
-                    + EnumChatFormatting.AQUA + bar());
+            msg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n"
+                    + ChatUtil.centerLine(formattedname + EnumChatFormatting.GOLD + " - Mega Walls " + classnameuppercase + " stats") + "\n" + "\n"
+                    + ChatUtil.centerLine(formattedname + EnumChatFormatting.RED + " didn't purchased " + EnumChatFormatting.GOLD + classnameuppercase) + "\n"
+                    + EnumChatFormatting.AQUA + ChatUtil.bar());
 
         }
 

@@ -13,8 +13,6 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import static fr.alexdoru.fkcountermod.events.KillCounter.*;
-
 public class FKCounterGui extends MyCachedGui {
 
     /*used as an example when in the settings*/
@@ -121,15 +119,15 @@ public class FKCounterGui extends MyCachedGui {
 
     @Override
     public boolean isEnabled() {
-        return !ConfigHandler.FKHUDinSidebar && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame && getGameId() != null;
+        return !ConfigHandler.FKHUDinSidebar && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame && KillCounter.getGameId() != null;
     }
 
     @Override
     public void updateDisplayText() {
 
-        if (getGameId() != null) {
+        if (KillCounter.getGameId() != null) {
 
-            HashMap<Integer, Integer> sortedmap = getSortedTeamKillsMap();
+            HashMap<Integer, Integer> sortedmap = KillCounter.getSortedTeamKillsMap();
             StringBuilder strBuilder = new StringBuilder();
             int i = 0;
 
@@ -139,7 +137,7 @@ public class FKCounterGui extends MyCachedGui {
                     if (i != 0) {
                         strBuilder.append(EnumChatFormatting.DARK_GRAY).append(" / ");
                     }
-                    strBuilder.append(getColorPrefixFromTeam(entry.getKey()))
+                    strBuilder.append(KillCounter.getColorPrefixFromTeam(entry.getKey()))
                             .append(entry.getValue());
                     i++;
                 }
@@ -151,7 +149,7 @@ public class FKCounterGui extends MyCachedGui {
                     if (i != 0) {
                         strBuilder.append("\n");
                     }
-                    strBuilder.append(getColorPrefixFromTeam(team)).append(getTeamNameFromTeam(team).charAt(0)).append(EnumChatFormatting.WHITE).append(" ").append(getKills(team));
+                    strBuilder.append(KillCounter.getColorPrefixFromTeam(team)).append(KillCounter.getTeamNameFromTeam(team).charAt(0)).append(EnumChatFormatting.WHITE).append(" ").append(KillCounter.getKills(team));
                     HashMap<String, Integer> teamkillsmap = KillCounter.sortByDecreasingValue1(KillCounter.getPlayers(team));
                     if (!teamkillsmap.isEmpty()) {
                         int playerAmount = 0;
@@ -180,10 +178,10 @@ public class FKCounterGui extends MyCachedGui {
                     if (i != 0) {
                         strBuilder.append("\n");
                     }
-                    strBuilder.append(getColorPrefixFromTeam(team))
-                            .append(getTeamNameFromTeam(team))
+                    strBuilder.append(KillCounter.getColorPrefixFromTeam(team))
+                            .append(KillCounter.getTeamNameFromTeam(team))
                             .append(EnumChatFormatting.WHITE).append(": ")
-                            .append(getKills(team));
+                            .append(KillCounter.getKills(team));
                     i++;
                 }
 

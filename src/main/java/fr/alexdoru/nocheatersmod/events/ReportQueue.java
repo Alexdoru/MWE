@@ -19,8 +19,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
-
 public class ReportQueue {
 
     public static boolean isDebugMode = false;
@@ -195,7 +193,7 @@ public class ReportQueue {
         }
         final String msg = stringBuilder.toString();
         if (!msg.equals("")) {
-            addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed reports targeting :" + EnumChatFormatting.GOLD + msg);
+            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed reports targeting :" + EnumChatFormatting.GOLD + msg);
         }
     }
 
@@ -211,7 +209,7 @@ public class ReportQueue {
         }
         final String msg = stringBuilder.toString();
         if (!msg.equals("")) {
-            addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed reports targeting :" + EnumChatFormatting.GOLD + msg);
+            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed reports targeting :" + EnumChatFormatting.GOLD + msg);
         }
     }
 
@@ -227,7 +225,7 @@ public class ReportQueue {
         }
         final String msg = stringBuilder.toString();
         if (!msg.equals("")) {
-            addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed all reports targeting :" + EnumChatFormatting.GOLD + msg);
+            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed all reports targeting :" + EnumChatFormatting.GOLD + msg);
         }
     }
 

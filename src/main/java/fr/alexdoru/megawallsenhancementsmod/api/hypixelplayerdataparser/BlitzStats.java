@@ -1,12 +1,11 @@
 package fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser;
 
 import com.google.gson.JsonObject;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
-
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class BlitzStats {
 
@@ -60,29 +59,29 @@ public class BlitzStats {
 
         final String[][] matrix = {
                 {
-                        EnumChatFormatting.AQUA + "Kills : " + EnumChatFormatting.GOLD + formatInt(kills) + " ",
-                        EnumChatFormatting.AQUA + "Deaths : " + EnumChatFormatting.RED + formatInt(deaths) + " ",
+                        EnumChatFormatting.AQUA + "Kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(kills) + " ",
+                        EnumChatFormatting.AQUA + "Deaths : " + EnumChatFormatting.RED + ChatUtil.formatInt(deaths) + " ",
                         EnumChatFormatting.AQUA + "K/D : " + (kdr > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.2f", kdr)
                 },
         };
 
         final String[][] matrix2 = {
                 {
-                        EnumChatFormatting.AQUA + "Wins solo : " + EnumChatFormatting.GOLD + formatInt(wins_solo_normal) + " ",
-                        EnumChatFormatting.AQUA + "Wins team : " + EnumChatFormatting.GOLD + formatInt(wins_teams_normal) + " ",
+                        EnumChatFormatting.AQUA + "Wins solo : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wins_solo_normal) + " ",
+                        EnumChatFormatting.AQUA + "Wins team : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wins_teams_normal) + " ",
                 },
         };
 
-        return new ChatComponentText(EnumChatFormatting.AQUA + bar() + "\n")
-                .appendSibling(PlanckeHeaderText(formattedName, playername, " - Blitz stats"))
+        return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
+                .appendSibling(ChatUtil.PlanckeHeaderText(formattedName, playername, " - Blitz stats"))
                 .appendSibling(new ChatComponentText("\n" + "\n"))
-                .appendSibling(new ChatComponentText(alignText(matrix)))
-                .appendSibling(new ChatComponentText(alignText(matrix2) + "\n"))
+                .appendSibling(new ChatComponentText(ChatUtil.alignText(matrix)))
+                .appendSibling(new ChatComponentText(ChatUtil.alignText(matrix2) + "\n"))
                 .appendSibling(new ChatComponentText(
-                        defaultkit == null ? "" : centerLine(EnumChatFormatting.GREEN + "Selected Kit : " + EnumChatFormatting.GOLD + defaultkit + "\n")
-                                + centerLine(EnumChatFormatting.GREEN + " Playtime : " + EnumChatFormatting.GOLD + String.format("%.2f", time_played / 3600f) + "h") + "\n"
-                                + centerLine(EnumChatFormatting.GREEN + "Coins : " + EnumChatFormatting.GOLD + formatInt(coins))))
-                .appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + bar()));
+                        defaultkit == null ? "" : ChatUtil.centerLine(EnumChatFormatting.GREEN + "Selected Kit : " + EnumChatFormatting.GOLD + defaultkit + "\n")
+                                + ChatUtil.centerLine(EnumChatFormatting.GREEN + " Playtime : " + EnumChatFormatting.GOLD + String.format("%.2f", time_played / 3600f) + "h") + "\n"
+                                + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Coins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(coins))))
+                .appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
 
     }
 

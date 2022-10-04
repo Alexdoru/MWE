@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.CommandBase;
@@ -12,9 +13,6 @@ import net.minecraft.util.*;
 
 import java.util.Collections;
 import java.util.List;
-
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.bar;
 
 public class CommandName extends CommandBase {
 
@@ -35,7 +33,7 @@ public class CommandName extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length < 1) {
-            addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
             return;
         }
 
@@ -45,12 +43,12 @@ public class CommandName extends CommandBase {
             try {
                 new CachedMojangUUID(playername);
             } catch (ApiException e1) {
-                addChatMessage(EnumChatFormatting.RED + e1.getMessage());
+                ChatUtil.addChatMessage(EnumChatFormatting.RED + e1.getMessage());
                 return null;
             }
 
             final String namesMC_URL = "https://namemc.com/search?q=" + playername;
-            final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.BLUE + bar() + "\n" + "                " +
+            final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar() + "\n" + "                " +
                     EnumChatFormatting.GOLD + "Name History - " + playername + "\n\n" +
                     EnumChatFormatting.GRAY + "Name History API had been removed by Microsoft RIP\n")
                     .appendSibling(new ChatComponentText(
@@ -60,8 +58,8 @@ public class CommandName extends CommandBase {
                             .setChatStyle(new ChatStyle()
                                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, namesMC_URL))
                                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + namesMC_URL)))))
-                    .appendSibling(new ChatComponentText(EnumChatFormatting.BLUE + bar()));
-            addChatMessage(imsg);
+                    .appendSibling(new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar()));
+            ChatUtil.addChatMessage(imsg);
 
             return null;
 
