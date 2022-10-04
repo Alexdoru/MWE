@@ -151,7 +151,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
     public void onChangeSliderValue(GuiSlider slider) {
         switch (slider.id) {
             case 5:
-                final double newvalue = Math.floor(slider.getValue() / 0.05d) * 0.05d;
+                final double newvalue = Math.floor(slider.getValue() * 20d) / 20d;
                 ConfigHandler.fkc_hud_size = newvalue;
                 slider.setValue(newvalue);
                 break;
