@@ -106,7 +106,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 3:
                 return "Show arrow Hit HUD : " + getSuffix(ConfigHandler.show_ArrowHitHUD);
             case 11:
-                return "Show wither death time HUD : " + (ConfigHandler.witherHUDinSiderbar ? EnumChatFormatting.YELLOW + "in Sidebar" : getSuffix(ConfigHandler.show_lastWitherHUD));
+                return "Show wither death time HUD : " + (ConfigHandler.witherHUDinSidebar ? EnumChatFormatting.YELLOW + "in Sidebar" : getSuffix(ConfigHandler.show_lastWitherHUD));
             case 19:
                 return "Colored tablist health : " + getSuffix(ConfigHandler.useColoredScores);
             case 17:
@@ -283,15 +283,15 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 ConfigHandler.show_ArrowHitHUD = !ConfigHandler.show_ArrowHitHUD;
                 break;
             case 11:
-                if (ConfigHandler.show_lastWitherHUD && !ConfigHandler.witherHUDinSiderbar) {
-                    ConfigHandler.witherHUDinSiderbar = true;
+                if (ConfigHandler.show_lastWitherHUD && !ConfigHandler.witherHUDinSidebar) {
+                    ConfigHandler.witherHUDinSidebar = true;
                     break;
                 }
-                if (!ConfigHandler.show_lastWitherHUD && !ConfigHandler.witherHUDinSiderbar) {
+                if (!ConfigHandler.show_lastWitherHUD && !ConfigHandler.witherHUDinSidebar) {
                     ConfigHandler.show_lastWitherHUD = true;
                     break;
                 }
-                ConfigHandler.witherHUDinSiderbar = false;
+                ConfigHandler.witherHUDinSidebar = false;
                 ConfigHandler.show_lastWitherHUD = false;
                 break;
             case 19:
