@@ -7,7 +7,6 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.Arrays;
@@ -95,7 +94,7 @@ public class CommandReport extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length < 1) {
-            addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
+            addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
             return;
         }
 

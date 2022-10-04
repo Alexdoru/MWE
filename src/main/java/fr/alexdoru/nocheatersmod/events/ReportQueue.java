@@ -8,7 +8,6 @@ import fr.alexdoru.nocheatersmod.data.WDR;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -131,7 +130,7 @@ public class ReportQueue {
                 MinecraftForge.EVENT_BUS.register(this);
                 counter = random.nextInt(TIME_BETWEEN_REPORTS_MAX);
             } else if (printDelayMsg) {
-                ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Sending report in a moment..."));
+                ChatUtil.addChatMessage(EnumChatFormatting.GRAY + "Sending report in a moment...");
             }
             queueList.add(new ReportInQueue(null, playername, false));
         }
@@ -196,7 +195,7 @@ public class ReportQueue {
         }
         final String msg = stringBuilder.toString();
         if (!msg.equals("")) {
-            addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed reports targeting :" + EnumChatFormatting.GOLD + msg));
+            addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed reports targeting :" + EnumChatFormatting.GOLD + msg);
         }
     }
 
@@ -212,7 +211,7 @@ public class ReportQueue {
         }
         final String msg = stringBuilder.toString();
         if (!msg.equals("")) {
-            addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed reports targeting :" + EnumChatFormatting.GOLD + msg));
+            addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed reports targeting :" + EnumChatFormatting.GOLD + msg);
         }
     }
 
@@ -228,7 +227,7 @@ public class ReportQueue {
         }
         final String msg = stringBuilder.toString();
         if (!msg.equals("")) {
-            addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed all reports targeting :" + EnumChatFormatting.GOLD + msg));
+            addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed all reports targeting :" + EnumChatFormatting.GOLD + msg);
         }
     }
 
@@ -239,7 +238,7 @@ public class ReportQueue {
         long l = System.currentTimeMillis();
         timestampsLastReports.removeIf(o -> (o + 2 * 60 * 1000L < l));
         if (manualReport && timestampsLastReports.size() > 4) {
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Don't report too many players at once or Hypixel will ignore your reports thinking you are a bot trying to flood their system"));
+            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Don't report too many players at once or Hypixel will ignore your reports thinking you are a bot trying to flood their system");
         }
         timestampsLastReports.add(l);
     }

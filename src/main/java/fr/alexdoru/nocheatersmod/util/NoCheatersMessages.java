@@ -52,7 +52,7 @@ public class NoCheatersMessages {
             }
         }
         if (callFromCommand && !foundReport) {
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "No reported player here !"));
+            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "No reported player here !");
         }
     }
 

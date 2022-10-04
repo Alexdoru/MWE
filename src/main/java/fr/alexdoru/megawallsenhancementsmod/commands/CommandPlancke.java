@@ -51,7 +51,7 @@ public class CommandPlancke extends CommandBase {
             try {
                 apiname = new CachedMojangUUID(args[0]);
             } catch (ApiException e) {
-                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + e.getMessage()));
+                addChatMessage(EnumChatFormatting.RED + e.getMessage());
                 return null;
             }
 
@@ -63,11 +63,11 @@ public class CommandPlancke extends CommandBase {
                 playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
                 generalstats = new GeneralInfo(playerdata.getPlayerData());
                 if (!playername.equals(generalstats.getdisplayname())) {
-                    addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + "This player never joined Hypixel, it might be a nick."));
+                    addChatMessage(getTagMW() + EnumChatFormatting.RED + "This player never joined Hypixel, it might be a nick.");
                     return null;
                 }
             } catch (ApiException e) {
-                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + e.getMessage()));
+                addChatMessage(EnumChatFormatting.RED + e.getMessage());
                 return null;
             }
 
@@ -75,7 +75,7 @@ public class CommandPlancke extends CommandBase {
 
             if (generalstats.hasNeverJoinedHypixel()) { // player never joined hypixel
 
-                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.YELLOW + args[0] + EnumChatFormatting.RED + " has never joined Hypixel."));
+                addChatMessage(getTagMW() + EnumChatFormatting.YELLOW + args[0] + EnumChatFormatting.RED + " has never joined Hypixel.");
                 return null;
             }
 
@@ -89,7 +89,7 @@ public class CommandPlancke extends CommandBase {
 
                 if (args[1].equalsIgnoreCase("bw") || args[1].equalsIgnoreCase("bedwars")) { // general stats for bedwars
 
-                    addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP bedwars"));
+                    addChatMessage(EnumChatFormatting.RED + "WIP bedwars");
 
                 } else if (args[1].equalsIgnoreCase("bsg") || args[1].equalsIgnoreCase("blitz")) { // general stats for blitz survival games
 
@@ -98,7 +98,7 @@ public class CommandPlancke extends CommandBase {
 
                 } else if (args[1].equalsIgnoreCase("duel") || args[1].equalsIgnoreCase("duels")) { // general stats for duels
 
-                    addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP duels"));
+                    addChatMessage(EnumChatFormatting.RED + "WIP duels");
 
                 } else if (args[1].equalsIgnoreCase("mw") || args[1].equalsIgnoreCase("megawalls")) { // stats for mega walls
 
@@ -118,7 +118,7 @@ public class CommandPlancke extends CommandBase {
 
                             MWClass mwclass = MWClass.fromTagOrName(args[2]);
                             if (mwclass == null) {
-                                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.YELLOW + args[2] + EnumChatFormatting.RED + " isn't a valid mega walls class name."));
+                                addChatMessage(getTagMW() + EnumChatFormatting.YELLOW + args[2] + EnumChatFormatting.RED + " isn't a valid mega walls class name.");
                                 return null;
                             }
                             MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwclass.className);
@@ -135,7 +135,7 @@ public class CommandPlancke extends CommandBase {
 
                 } else if (args[1].equalsIgnoreCase("tnt") || args[1].equalsIgnoreCase("tntgames")) { // general stats for tnt games
 
-                    addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "WIP tntgames"));
+                    addChatMessage(EnumChatFormatting.RED + "WIP tntgames");
 
                 } else if (args[1].equalsIgnoreCase("uhc")) { // general stats for UHC champions
 
@@ -144,7 +144,7 @@ public class CommandPlancke extends CommandBase {
 
                 } else {
 
-                    addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.YELLOW + args[1] + EnumChatFormatting.RED + " isn't a valid/supported game name."));
+                    addChatMessage(getTagMW() + EnumChatFormatting.YELLOW + args[1] + EnumChatFormatting.RED + " isn't a valid/supported game name.");
 
                 }
 

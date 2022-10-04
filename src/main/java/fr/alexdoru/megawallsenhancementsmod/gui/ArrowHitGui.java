@@ -6,7 +6,6 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.regex.Matcher;
@@ -49,7 +48,7 @@ public class ArrowHitGui extends MyCachedGui {
             hittime = System.currentTimeMillis();
             instance.updateDisplayText();
             String playername = matcherArrowHit.group(1);
-            ChatUtil.addChatMessage(new ChatComponentText(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg));
+            ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg);
             return true;
         }
 
@@ -64,7 +63,7 @@ public class ArrowHitGui extends MyCachedGui {
             normalhit = false;
             setColor(HPvalue);
             instance.updateDisplayText();
-            ChatUtil.addChatMessage(new ChatComponentText(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg));
+            ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg);
             return true;
         }
 
@@ -76,7 +75,7 @@ public class ArrowHitGui extends MyCachedGui {
             normalhit = true;
             Color = EnumChatFormatting.GREEN;
             instance.updateDisplayText();
-            ChatUtil.addChatMessage(new ChatComponentText(fmsg));
+            ChatUtil.addChatMessage(fmsg);
             return true;
         }
 
@@ -89,7 +88,7 @@ public class ArrowHitGui extends MyCachedGui {
             Color = EnumChatFormatting.GREEN;
             instance.updateDisplayText();
             String playername = matcherLeapDirectHit.group(1);
-            ChatUtil.addChatMessage(new ChatComponentText(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg));
+            ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg);
             return true;
         }
 
@@ -110,7 +109,7 @@ public class ArrowHitGui extends MyCachedGui {
             normalhit = true;
             Color = EnumChatFormatting.GREEN;
             instance.updateDisplayText();
-            ChatUtil.addChatMessage(new ChatComponentText(fmsg));
+            ChatUtil.addChatMessage(fmsg);
             return true;
         }
 

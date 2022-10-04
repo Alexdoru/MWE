@@ -41,7 +41,7 @@ public class CommandStalk extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length < 1) {
-            addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
+            addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
             return;
         }
 
@@ -85,7 +85,7 @@ class StalkTask implements Callable<String> {
             HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
             LoginData logindata = new LoginData(playerdata.getPlayerData());
             if (!playername.equals(logindata.getdisplayname())) {
-                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + "This player never joined Hypixel, it might be a nick."));
+                addChatMessage(getTagMW() + EnumChatFormatting.RED + "This player never joined Hypixel, it might be a nick.");
                 return null;
             }
             String formattedName = logindata.getFormattedName();
@@ -119,14 +119,12 @@ class StalkTask implements Callable<String> {
 
                 if (playerdata.getPlayerData() == null) { // Failed to contact hypixel's API
 
-                    addChatMessage(new ChatComponentText(getTagMW()
-                            + EnumChatFormatting.RED + "Failed to retrieve information from Hypixel's api for : " + playername + EnumChatFormatting.RED + "."));
+                    addChatMessage(getTagMW() + EnumChatFormatting.RED + "Failed to retrieve information from Hypixel's api for : " + playername + EnumChatFormatting.RED + ".");
                     return null;
 
                 } else if (logindata.hasNeverJoinedHypixel()) { // player never joined hypixel
 
-                    addChatMessage(new ChatComponentText(getTagMW()
-                            + EnumChatFormatting.YELLOW + playername + EnumChatFormatting.RED + " has never joined Hypixel."));
+                    addChatMessage(getTagMW() + EnumChatFormatting.YELLOW + playername + EnumChatFormatting.RED + " has never joined Hypixel.");
                     return null;
 
                 } else if (logindata.isStaffonHypixel()) { // player is a staff member
@@ -197,7 +195,7 @@ class StalkTask implements Callable<String> {
             }
 
         } catch (ApiException e) {
-            addChatMessage(new ChatComponentText(EnumChatFormatting.RED + e.getMessage()));
+            addChatMessage(EnumChatFormatting.RED + e.getMessage());
         }
 
         return null;

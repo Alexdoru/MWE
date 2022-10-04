@@ -3,7 +3,6 @@ package fr.alexdoru.nocheatersmod.events;
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
-import net.minecraft.util.ChatComponentText;
 
 import java.util.Date;
 import java.util.List;
@@ -40,11 +39,11 @@ public class GameInfoGrabber {
     public static void debugGetScoreboard() {
         List<String> scoresColor = ScoreboardUtils.getFormattedSidebarText();
         if (scoresColor.size() == 0) {
-            addChatMessage(new ChatComponentText("There are no active scoreboards in this world."));
+            addChatMessage("There are no active scoreboards in this world.");
             return;
         }
         for (String sidebarScore : scoresColor) {
-            addChatMessage(new ChatComponentText(sidebarScore));
+            addChatMessage(sidebarScore);
             ASMLoadingPlugin.logger.info(sidebarScore);
         }
     }

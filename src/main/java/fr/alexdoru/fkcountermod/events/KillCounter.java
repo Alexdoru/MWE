@@ -17,7 +17,6 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -183,7 +182,7 @@ public class KillCounter {
                     if (ConfigHandler.strengthParticules) {
                         spawnParticles(killer);
                     }
-                    ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killer, SquadEvent.getSquadname(killer)).replace(killedPlayer, SquadEvent.getSquadname(killedPlayer))));
+                    ChatUtil.addChatMessage(FormattedText.replace(killer, SquadEvent.getSquadname(killer)).replace(killedPlayer, SquadEvent.getSquadname(killedPlayer)));
                     return true;
                 }
 
@@ -197,7 +196,7 @@ public class KillCounter {
                         }
                         FKCounterGui.instance.updateDisplayText();
                     }
-                    ChatUtil.addChatMessage(new ChatComponentText(FormattedText.replace(killedPlayer, SquadEvent.getSquadname(killedPlayer))));
+                    ChatUtil.addChatMessage(FormattedText.replace(killedPlayer, SquadEvent.getSquadname(killedPlayer)));
                     return true;
                 }
 

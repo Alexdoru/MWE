@@ -101,14 +101,14 @@ public class CommandScanGame extends CommandBase {
                     ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(NameUtil.getFormattedNameWithPlanckeClickEvent(networkPlayerInfo)).appendSibling(imsg));
                 }
             }
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " more players..."));
+            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " more players...");
         } else {
             scanGameId = GameInfoGrabber.getGameIDfromscoreboard();
             for (NetworkPlayerInfo networkPlayerInfo : playerCollection) {
                 i++;
                 Multithreading.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
             }
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " players..."));
+            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " players...");
         }
     }
 
