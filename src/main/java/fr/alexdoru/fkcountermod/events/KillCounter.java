@@ -153,7 +153,7 @@ public class KillCounter {
         FKCounterGui.instance.updateDisplayText();
     }
 
-    public static boolean processMessage(String FormattedText, String UnformattedText) {
+    public static boolean processMessage(String formattedText, String unformattedText) {
 
         if (!FKCounterMod.isInMwGame) {
             return false;
@@ -161,16 +161,16 @@ public class KillCounter {
 
         for (Pattern pattern : KILL_PATTERNS) {
 
-            Matcher matcher = pattern.matcher(UnformattedText);
+            Matcher matcher = pattern.matcher(unformattedText);
 
             if (matcher.matches()) {
 
                 if (matcher.groupCount() == 2) {
                     String killedPlayer = matcher.group(1);
-                    RenderPlayerHook.removeArrowsFrom(killedPlayer, -1);
                     String killer = matcher.group(2);
-                    String killedTeamColor = StringUtil.getLastColorCodeBefore(FormattedText, killedPlayer);
-                    String killerTeamColor = StringUtil.getLastColorCodeBefore(FormattedText, killer);
+                    RenderPlayerHook.removeArrowsFrom(killedPlayer, -1);
+                    String killedTeamColor = StringUtil.getLastColorCodeBefore(formattedText, killedPlayer);
+                    String killerTeamColor = StringUtil.getLastColorCodeBefore(formattedText.replaceFirst(killedPlayer, ""), killer);
                     if (!killedTeamColor.equals("") && !killerTeamColor.equals("")) {
                         if (removeKilledPlayer(killedPlayer, killedTeamColor)) {
                             addKill(killer, killerTeamColor);
@@ -182,21 +182,21 @@ public class KillCounter {
                     if (ConfigHandler.strengthParticules) {
                         spawnParticles(killer);
                     }
-                    ChatUtil.addChatMessage(FormattedText.replace(killer, SquadEvent.getSquadname(killer)).replace(killedPlayer, SquadEvent.getSquadname(killedPlayer)));
+                    ChatUtil.addChatMessage(formattedText.replace(killer, SquadEvent.getSquadname(killer)).replace(killedPlayer, SquadEvent.getSquadname(killedPlayer)));
                     return true;
                 }
 
                 if (matcher.groupCount() == 1) {
                     String killedPlayer = matcher.group(1);
                     RenderPlayerHook.removeArrowsFrom(killedPlayer, -1);
-                    String killedTeamColor = StringUtil.getLastColorCodeBefore(FormattedText, killedPlayer);
+                    String killedTeamColor = StringUtil.getLastColorCodeBefore(formattedText, killedPlayer);
                     if (!killedTeamColor.equals("")) {
                         if (removeKilledPlayer(killedPlayer, killedTeamColor)) {
                             playersPresentInGame.add(killedPlayer);
                         }
                         FKCounterGui.instance.updateDisplayText();
                     }
-                    ChatUtil.addChatMessage(FormattedText.replace(killedPlayer, SquadEvent.getSquadname(killedPlayer)));
+                    ChatUtil.addChatMessage(formattedText.replace(killedPlayer, SquadEvent.getSquadname(killedPlayer)));
                     return true;
                 }
 
