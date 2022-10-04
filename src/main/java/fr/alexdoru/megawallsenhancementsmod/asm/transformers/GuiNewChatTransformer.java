@@ -83,6 +83,21 @@ public class GuiNewChatTransformer implements IMyClassTransformer {
             mv.visitEnd();
         }
 
+        {
+            MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "getChatLines", "()Ljava/util/List;", ASMLoadingPlugin.isObf ? "()Ljava/util/List<Lava;>;" : "()Ljava/util/List<Lnet/minecraft/client/gui/ChatLine;>;", null);
+            mv.visitCode();
+            Label l0 = new Label();
+            mv.visitLabel(l0);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitFieldInsn(GETFIELD, ASMLoadingPlugin.isObf ? "avt" : "net/minecraft/client/gui/GuiNewChat",  ASMLoadingPlugin.isObf ? "h" : "chatLines", "Ljava/util/List;");
+            mv.visitInsn(ARETURN);
+            Label l1 = new Label();
+            mv.visitLabel(l1);
+            mv.visitLocalVariable("this", ASMLoadingPlugin.isObf ? "Lavt;" : "Lnet/minecraft/client/gui/GuiNewChat;", null, l0, l1, 0);
+            mv.visitMaxs(1, 1);
+            mv.visitEnd();
+        }
+
         return classNode;
 
     }
