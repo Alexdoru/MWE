@@ -6,11 +6,14 @@ import fr.alexdoru.fkcountermod.gui.elements.ButtonToggle;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.MyGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiSlider;
+import net.minecraftforge.fml.common.Loader;
 
 public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
@@ -99,6 +102,9 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                     buttonshowplayers.setting = false;
                     ConfigHandler.compact_hud = true;
                     buttoncompacthud.setting = true;
+                    if(Loader.isModLoaded("feather")) {
+                        ChatUtil.addChatMessage(EnumChatFormatting.RED + "The sidebar integration for HUD doesn't work with Feather because the client is obfuscated and closed source >:(");
+                    }
                 }
                 break;
             case 8:
