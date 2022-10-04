@@ -21,4 +21,8 @@ public class TimerUtil {
         return false;
     }
 
+    public boolean canUpdate() {
+        return System.currentTimeMillis() - lastUpdate > period;
+    }
+
 }
