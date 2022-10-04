@@ -1,12 +1,11 @@
 package fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser;
 
 import com.google.gson.JsonObject;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
-
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class UHCStats {
 
@@ -111,46 +110,46 @@ public class UHCStats {
         String[][] matrix = {
                 {
                         EnumChatFormatting.YELLOW + "Overall : ",
-                        EnumChatFormatting.AQUA + "W : " + EnumChatFormatting.GOLD + formatInt(wins_total) + " ",
-                        EnumChatFormatting.AQUA + "Heads : " + EnumChatFormatting.GOLD + formatInt(heads_eaten_total)
+                        EnumChatFormatting.AQUA + "W : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wins_total) + " ",
+                        EnumChatFormatting.AQUA + "Heads : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(heads_eaten_total)
                 },
 
                 {
-                        EnumChatFormatting.AQUA + "K : " + EnumChatFormatting.GOLD + formatInt(kills_total) + " ",
-                        EnumChatFormatting.AQUA + "D : " + EnumChatFormatting.RED + formatInt(deaths_total) + " ",
+                        EnumChatFormatting.AQUA + "K : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(kills_total) + " ",
+                        EnumChatFormatting.AQUA + "D : " + EnumChatFormatting.RED + ChatUtil.formatInt(deaths_total) + " ",
                         EnumChatFormatting.AQUA + "K/D : " + (kdr_total > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.2f", kdr_total) + "\n"
                 },
 
                 {
                         EnumChatFormatting.YELLOW + "Solo : ",
-                        EnumChatFormatting.AQUA + "W : " + EnumChatFormatting.GOLD + formatInt(wins_solo) + " ",
-                        EnumChatFormatting.AQUA + "Heads : " + EnumChatFormatting.GOLD + formatInt(heads_eaten_solo)
+                        EnumChatFormatting.AQUA + "W : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wins_solo) + " ",
+                        EnumChatFormatting.AQUA + "Heads : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(heads_eaten_solo)
                 },
 
                 {
-                        EnumChatFormatting.AQUA + "K : " + EnumChatFormatting.GOLD + formatInt(kills_solo) + " ",
-                        EnumChatFormatting.AQUA + "D : " + EnumChatFormatting.RED + formatInt(deaths_solo) + " ",
+                        EnumChatFormatting.AQUA + "K : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(kills_solo) + " ",
+                        EnumChatFormatting.AQUA + "D : " + EnumChatFormatting.RED + ChatUtil.formatInt(deaths_solo) + " ",
                         EnumChatFormatting.AQUA + "K/D : " + (kdr_solo > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.2f", kdr_solo) + "\n"
                 },
 
                 {
                         EnumChatFormatting.YELLOW + "Team : ",
-                        EnumChatFormatting.AQUA + "W : " + EnumChatFormatting.GOLD + formatInt(wins) + " ",
-                        EnumChatFormatting.AQUA + "Heads : " + EnumChatFormatting.GOLD + formatInt(heads_eaten)
+                        EnumChatFormatting.AQUA + "W : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wins) + " ",
+                        EnumChatFormatting.AQUA + "Heads : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(heads_eaten)
                 },
 
                 {
-                        EnumChatFormatting.AQUA + "K : " + EnumChatFormatting.GOLD + formatInt(kills) + " ",
-                        EnumChatFormatting.AQUA + "D : " + EnumChatFormatting.RED + formatInt(deaths) + " ",
+                        EnumChatFormatting.AQUA + "K : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(kills) + " ",
+                        EnumChatFormatting.AQUA + "D : " + EnumChatFormatting.RED + ChatUtil.formatInt(deaths) + " ",
                         EnumChatFormatting.AQUA + "K/D : " + (kdr_team > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.2f", kdr_team) + "\n"
                 }};
 
-        return new ChatComponentText(EnumChatFormatting.AQUA + bar() + "\n")
-                .appendSibling(PlanckeHeaderText(EnumChatFormatting.GOLD + "[" + getStarLevel(score) + '\u272B' + "] " + formattedName, playername, " - UHC stats"))
+        return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
+                .appendSibling(ChatUtil.PlanckeHeaderText(EnumChatFormatting.GOLD + "[" + getStarLevel(score) + '\u272B' + "] " + formattedName, playername, " - UHC stats"))
                 .appendSibling(new ChatComponentText("\n" + "\n"))
-                .appendSibling(new ChatComponentText(alignText(matrix) + "\n"))
-                .appendSibling(new ChatComponentText(centerLine(EnumChatFormatting.GREEN + "Score : " + EnumChatFormatting.GOLD + formatInt(score) + EnumChatFormatting.GREEN + " Coins : " + EnumChatFormatting.GOLD + formatInt(coins) + "\n")))
-                .appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + bar()));
+                .appendSibling(new ChatComponentText(ChatUtil.alignText(matrix) + "\n"))
+                .appendSibling(new ChatComponentText(ChatUtil.centerLine(EnumChatFormatting.GREEN + "Score : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(score) + EnumChatFormatting.GREEN + " Coins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(coins) + "\n")))
+                .appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
     }
 
 }

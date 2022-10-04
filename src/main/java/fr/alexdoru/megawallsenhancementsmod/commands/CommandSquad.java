@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
@@ -15,8 +16,6 @@ import net.minecraft.util.IChatComponent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class CommandSquad extends CommandBase {
 
@@ -54,14 +53,14 @@ public class CommandSquad extends CommandBase {
         }
 
         if (args.length < 1) {
-            addChatMessage(getCommandHelp());
+            ChatUtil.addChatMessage(getCommandHelp());
             return;
         }
 
         if (args[0].equalsIgnoreCase("add")) {
 
             if (args.length < 2) {
-                addChatMessage(EnumChatFormatting.RED + "Usage : /squad <add> <playername>");
+                ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : /squad <add> <playername>");
                 return;
             }
 
@@ -72,7 +71,7 @@ public class CommandSquad extends CommandBase {
                 }
                 String alias = stringBuilder.toString();
                 SquadEvent.addPlayer(args[1], alias);
-                addChatMessage(getTagMW() +
+                ChatUtil.addChatMessage(ChatUtil.getTagMW() +
                         EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[1] + EnumChatFormatting.GREEN + " as " +
                         EnumChatFormatting.GOLD + alias + EnumChatFormatting.GREEN + " to the squad.");
                 return;
@@ -80,25 +79,25 @@ public class CommandSquad extends CommandBase {
 
             for (int i = 1; i < args.length; i++) {
                 SquadEvent.addPlayer(args[i]);
-                addChatMessage(getTagMW() +
+                ChatUtil.addChatMessage(ChatUtil.getTagMW() +
                         EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " to the squad.");
             }
 
         } else if (args[0].equalsIgnoreCase("disband")) {
 
             SquadEvent.clearSquad();
-            addChatMessage(getTagMW() + EnumChatFormatting.GREEN + "Removed all players from the squad.");
+            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Removed all players from the squad.");
 
         } else if (args[0].equalsIgnoreCase("l") || args[0].equalsIgnoreCase("list")) {
 
             HashMap<String, String> squad = SquadEvent.getSquad();
 
             if (squad.isEmpty()) {
-                addChatMessage(getTagMW() + EnumChatFormatting.RED + "No one in the squad right now.");
+                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "No one in the squad right now.");
                 return;
             }
 
-            IChatComponent imsg = new ChatComponentText(getTagMW() + EnumChatFormatting.GREEN + "Players in your squad : \n");
+            IChatComponent imsg = new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Players in your squad : \n");
 
             for (Entry<String, String> entry : squad.entrySet()) {
                 String displayname = entry.getKey();
@@ -107,25 +106,25 @@ public class CommandSquad extends CommandBase {
                         + (displayname.equals(squadname) ? "" : EnumChatFormatting.GREEN + " renamed as : " + EnumChatFormatting.GOLD + entry.getValue()) + "\n"));
             }
 
-            addChatMessage(imsg);
+            ChatUtil.addChatMessage(imsg);
 
         } else if (args[0].equalsIgnoreCase("remove")) {
 
             if (args.length < 2) {
-                addChatMessage(EnumChatFormatting.RED + "Usage : /squad <remove> <playername>");
+                ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : /squad <remove> <playername>");
                 return;
             }
 
             for (int i = 1; i < args.length; i++) {
                 if (SquadEvent.removePlayer(args[i])) {
-                    addChatMessage(getTagMW() + EnumChatFormatting.GREEN + "Removed " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " from the squad.");
+                    ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Removed " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " from the squad.");
                 } else {
-                    addChatMessage(getTagMW() + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.RED + " isn't in the squad.");
+                    ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.RED + " isn't in the squad.");
                 }
             }
 
         } else {
-            addChatMessage(getCommandHelp());
+            ChatUtil.addChatMessage(getCommandHelp());
         }
 
     }
@@ -138,14 +137,14 @@ public class CommandSquad extends CommandBase {
 
     private IChatComponent getCommandHelp() {
 
-        return new ChatComponentText(EnumChatFormatting.GREEN + bar() + "\n"
-                + centerLine(EnumChatFormatting.GOLD + "Squad Help\n\n")
+        return new ChatComponentText(EnumChatFormatting.GREEN + ChatUtil.bar() + "\n"
+                + ChatUtil.centerLine(EnumChatFormatting.GOLD + "Squad Help\n\n")
                 + EnumChatFormatting.YELLOW + "/squad add <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "add a player to the squad\n"
                 + EnumChatFormatting.YELLOW + "/squad add <player> as Nickname" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "add a player to the squad and change their name\n"
                 + EnumChatFormatting.YELLOW + "/squad remove <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "remove a player from the squad\n"
                 + EnumChatFormatting.YELLOW + "/squad list" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "list players in the squad\n"
                 + EnumChatFormatting.YELLOW + "/squad disband" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "disband the squad\n"
-                + EnumChatFormatting.GREEN + bar()
+                + EnumChatFormatting.GREEN + ChatUtil.bar()
         );
 
     }

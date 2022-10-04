@@ -1,6 +1,7 @@
 package fr.alexdoru.nocheatersmod.commands;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
@@ -11,8 +12,6 @@ import net.minecraft.util.EnumChatFormatting;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
 
 public class CommandReport extends CommandBase {
 
@@ -94,7 +93,7 @@ public class CommandReport extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length < 1) {
-            addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
             return;
         }
 

@@ -7,10 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
-import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
-import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
@@ -28,8 +25,6 @@ import net.minecraft.util.*;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
-
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
 
 public class CommandNocheaters extends CommandBase {
 
@@ -64,7 +59,7 @@ public class CommandNocheaters extends CommandBase {
 
             if (doStalk) {
                 if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                    printApikeySetupInfo();
+                    ChatUtil.printApikeySetupInfo();
                     return;
                 }
             }
@@ -79,7 +74,7 @@ public class CommandNocheaters extends CommandBase {
                     try {
                         displaypage = parseInt(args[1]);
                     } catch (NumberInvalidException e) {
-                        addChatMessage(EnumChatFormatting.RED + "Not a valid number");
+                        ChatUtil.addChatMessage(EnumChatFormatting.RED + "Not a valid number");
                         return null;
                     }
                 }
@@ -122,9 +117,9 @@ public class CommandNocheaters extends CommandBase {
                 }
 
                 if (warning) {
-                    addChatMessage(EnumChatFormatting.RED + "No reports to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available.");
+                    ChatUtil.addChatMessage(EnumChatFormatting.RED + "No reports to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available.");
                 } else {
-                    printIChatList(
+                    ChatUtil.printIChatList(
                             "Report list",
                             imsgbody,
                             displaypage,
@@ -143,7 +138,7 @@ public class CommandNocheaters extends CommandBase {
         } else if (args[0].equalsIgnoreCase("ignore")) {
 
             if (args.length == 1) {
-                addChatMessage(getTagNoCheaters() + EnumChatFormatting.RED + getCommandUsage(sender) + " ignore <playername>");
+                ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + getCommandUsage(sender) + " ignore <playername>");
             } else {
 
                 ReportQueue.INSTANCE.clearReportsSentBy(args[1]);
@@ -188,7 +183,7 @@ public class CommandNocheaters extends CommandBase {
                         }
 
                         if (!isaNick) { // couldn't find the nicked player in the tab list
-                            addChatMessage(getTagNoCheaters() + invalidplayernameMsg(args[0]) + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist");
+                            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + ChatUtil.invalidplayernameMsg(args[0]) + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist");
                             return null;
                         }
 
@@ -209,7 +204,7 @@ public class CommandNocheaters extends CommandBase {
                         WdredPlayers.getWdredMap().put(uuid, new WDR(time, time, hacks));
                     }
 
-                    addChatMessage(getTagNoCheaters() + EnumChatFormatting.GREEN + "You added " + EnumChatFormatting.RED + playername
+                    ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You added " + EnumChatFormatting.RED + playername
                             + EnumChatFormatting.GREEN + " to your ignore list, it will ignore all report suggestions from that player. Use : "
                             + EnumChatFormatting.YELLOW + getCommandUsage(sender) + " ignorelist" + EnumChatFormatting.GREEN + " to list and remove poeple from the list.");
                     return null;
@@ -221,7 +216,7 @@ public class CommandNocheaters extends CommandBase {
         } else if (args[0].equalsIgnoreCase("ignorelist")) {
 
             if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                printApikeySetupInfo();
+                ChatUtil.printApikeySetupInfo();
                 return;
             }
 
@@ -235,7 +230,7 @@ public class CommandNocheaters extends CommandBase {
                     try {
                         displaypage = parseInt(args[1]);
                     } catch (NumberInvalidException e) {
-                        addChatMessage(EnumChatFormatting.RED + "Not a valid number");
+                        ChatUtil.addChatMessage(EnumChatFormatting.RED + "Not a valid number");
                         return null;
                     }
                 }
@@ -272,11 +267,11 @@ public class CommandNocheaters extends CommandBase {
                 }
 
                 if (warning && nbreport == 1) {
-                    addChatMessage(getTagNoCheaters() + EnumChatFormatting.RED + "No one in your ignore list");
+                    ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "No one in your ignore list");
                 } else if (warning) {
-                    addChatMessage(getTagNoCheaters() + EnumChatFormatting.RED + "No ignored players to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available.");
+                    ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "No ignored players to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available.");
                 } else {
-                    printIChatList(
+                    ChatUtil.printIChatList(
                             "Ignore list",
                             imsgbody,
                             displaypage,
@@ -302,7 +297,7 @@ public class CommandNocheaters extends CommandBase {
 
                 if (wdr == null) {
 
-                    addChatMessage(getTagNoCheaters() + EnumChatFormatting.GOLD + playername + EnumChatFormatting.RED + " wasn't found in your ignore list");
+                    ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GOLD + playername + EnumChatFormatting.RED + " wasn't found in your ignore list");
 
                 } else {
 
@@ -312,14 +307,14 @@ public class CommandNocheaters extends CommandBase {
                         wdr.hacks.remove(WDR.IGNORED);
                     }
 
-                    addChatMessage(getTagNoCheaters() + EnumChatFormatting.GOLD + playername
+                    ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GOLD + playername
                             + EnumChatFormatting.GREEN + " has been removed from your ignore list, you will now receive report suggestions from that player.");
 
                 }
 
             } else {
 
-                addChatMessage(EnumChatFormatting.DARK_RED + "This shouldn't happen");
+                ChatUtil.addChatMessage(EnumChatFormatting.DARK_RED + "This shouldn't happen");
 
             }
 
@@ -337,9 +332,9 @@ public class CommandNocheaters extends CommandBase {
 
             ReportQueue.isDebugMode = !ReportQueue.isDebugMode;
             if (ReportQueue.isDebugMode) {
-                debug("enabled debug report queue");
+                ChatUtil.debug("enabled debug report queue");
             } else {
-                debug("disabled debug report queue");
+                ChatUtil.debug("disabled debug report queue");
             }
 
         } else if (args[0].equalsIgnoreCase("getscoreboard")) {
@@ -348,7 +343,7 @@ public class CommandNocheaters extends CommandBase {
 
         } else {
 
-            addChatMessage(getCommandHelp());
+            ChatUtil.addChatMessage(getCommandHelp());
 
         }
 
@@ -356,15 +351,15 @@ public class CommandNocheaters extends CommandBase {
 
     private IChatComponent getCommandHelp() {
 
-        return new ChatComponentText(EnumChatFormatting.RED + bar() + "\n"
-                + centerLine(EnumChatFormatting.GOLD + "NoCheaters Help\n\n")
+        return new ChatComponentText(EnumChatFormatting.RED + ChatUtil.bar() + "\n"
+                + ChatUtil.centerLine(EnumChatFormatting.GOLD + "NoCheaters Help\n\n")
                 + EnumChatFormatting.YELLOW + getCommandUsage(null) + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the list of reported players in your current world\n"
                 + EnumChatFormatting.YELLOW + getCommandUsage(null) + " config" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "opens the config gui\n"
                 + EnumChatFormatting.YELLOW + getCommandUsage(null) + " ignore <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "ignores all future report suggestions from that player\n"
                 + EnumChatFormatting.YELLOW + getCommandUsage(null) + " ignorelist" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the list of ignored players\n"
                 + EnumChatFormatting.YELLOW + getCommandUsage(null) + " reportlist" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the list of reported players\n"
                 + EnumChatFormatting.YELLOW + getCommandUsage(null) + " clearreportqueue" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "cancels all reports suggestions about to be sent\n"
-                + EnumChatFormatting.RED + bar()
+                + EnumChatFormatting.RED + ChatUtil.bar()
         );
 
     }

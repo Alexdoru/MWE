@@ -32,8 +32,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
-
 public class CommandWDR extends CommandBase {
 
     private static final HashMap<String, TimeMark> TimeMarksMap = new HashMap<>();
@@ -49,7 +47,7 @@ public class CommandWDR extends CommandBase {
         String serverID = GameInfoGrabber.getGameIDfromscoreboard();
         String timerOnReplay = GameInfoGrabber.getTimeSinceGameStart(timestamp, serverID, 0);
         TimeMarksMap.put(key, new TimeMark(timestamp, serverID, timerOnReplay));
-        addChatMessage(new ChatComponentText(getTagNoCheaters()
+        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters()
                 + EnumChatFormatting.GREEN + "Added timestamp : " + EnumChatFormatting.GOLD + "#" + key + EnumChatFormatting.GREEN + ".")
                 .setChatStyle(new ChatStyle()
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
@@ -69,7 +67,7 @@ public class CommandWDR extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length == 0) {
-            addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
             return;
         }
         handleWDRCommand(args, false, false);
@@ -96,12 +94,12 @@ public class CommandWDR extends CommandBase {
                     if (args[i].charAt(0) == timestampreportkey) { // handling timestamped reports
 
                         if (isaTimestampedReport) {
-                            addChatMessage(getTagNoCheaters() + EnumChatFormatting.RED + "You can't have more than one timestamp in the arguments.");
+                            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "You can't have more than one timestamp in the arguments.");
                             return null;
                         }
 
                         if (usesTimeMark) {
-                            addChatMessage(getTagNoCheaters() + EnumChatFormatting.RED + "You can't use both special arguments in the same reports!");
+                            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "You can't use both special arguments in the same reports!");
                             return null;
                         }
 
@@ -135,12 +133,12 @@ public class CommandWDR extends CommandBase {
                     } else if (args[i].charAt(0) == timemarkedreportkey) { // process the command if you use a stored timestamp
 
                         if (usesTimeMark) {
-                            addChatMessage(getTagNoCheaters() + EnumChatFormatting.RED + "You can't use more than one #timestamp in the arguments.");
+                            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "You can't use more than one #timestamp in the arguments.");
                             return null;
                         }
 
                         if (isaTimestampedReport) {
-                            addChatMessage(getTagNoCheaters() + EnumChatFormatting.RED + "You can't use both special arguments in the same reports!");
+                            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "You can't use both special arguments in the same reports!");
                             return null;
                         }
 
@@ -151,7 +149,7 @@ public class CommandWDR extends CommandBase {
 
                         if (timemark == null) {
 
-                            addChatMessage(getTagNoCheaters() + EnumChatFormatting.YELLOW + key + EnumChatFormatting.RED + " isn't a valid timestamp #");
+                            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.YELLOW + key + EnumChatFormatting.RED + " isn't a valid timestamp #");
                             return null;
 
                         } else {
@@ -181,7 +179,7 @@ public class CommandWDR extends CommandBase {
             }
 
             if ((isaTimestampedReport || usesTimeMark) && args.length == 2) {
-                addChatMessage(EnumChatFormatting.RED + "Usage : /wdr <player> <cheats(optional)> <timestamp(optional)>");
+                ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : /wdr <player> <cheats(optional)> <timestamp(optional)>");
                 return null;
             }
 
@@ -205,7 +203,7 @@ public class CommandWDR extends CommandBase {
             ReportQueue.INSTANCE.addReportTimestamp(true);
 
             if (FKCounterMod.preGameLobby) {
-                addChatMessage(getChatReportingAdvice());
+                ChatUtil.addChatMessage(ChatUtil.getChatReportingAdvice());
             }
 
             CachedMojangUUID apireq;
@@ -247,7 +245,7 @@ public class CommandWDR extends CommandBase {
                 }
 
                 if (!isaNick) { // couldn't find the nicked player in the tab list
-                    addChatMessage(getTagNoCheaters() + invalidplayernameMsg(args[0]) + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist");
+                    ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + ChatUtil.invalidplayernameMsg(args[0]) + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist");
                     return null;
                 }
 
@@ -277,7 +275,7 @@ public class CommandWDR extends CommandBase {
                 WdredPlayers.getWdredMap().put(uuid, newreport);
                 NameUtil.updateGameProfileAndName(playername, false);
                 if (!(alreadyReported && sentFromAutoReport)) {
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() +
+                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
                             EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : ""))
                             .appendSibling(NoCheatersMessages.createPlayerNameWithHoverText(formattedPlayername, playername, uuid, newreport, EnumChatFormatting.RED)[0])
                             .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " with a " + EnumChatFormatting.YELLOW +
@@ -318,7 +316,7 @@ public class CommandWDR extends CommandBase {
                 WdredPlayers.getWdredMap().put(uuid, new WDR(time, time, argsinWDR));
                 NameUtil.updateGameProfileAndName(playername, false);
                 if (!(alreadyReported && sentFromAutoReport)) {
-                    addChatMessage(getTagNoCheaters() +
+                    ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() +
                             EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
                             + EnumChatFormatting.RED + (formattedPlayername == null ? playername : EnumChatFormatting.RESET + formattedPlayername) + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
                             + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : "."));

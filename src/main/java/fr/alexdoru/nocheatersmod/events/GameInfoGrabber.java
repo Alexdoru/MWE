@@ -3,13 +3,12 @@ package fr.alexdoru.nocheatersmod.events;
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
 
 public class GameInfoGrabber {
 
@@ -39,11 +38,11 @@ public class GameInfoGrabber {
     public static void debugGetScoreboard() {
         List<String> scoresColor = ScoreboardUtils.getFormattedSidebarText();
         if (scoresColor.size() == 0) {
-            addChatMessage("There are no active scoreboards in this world.");
+            ChatUtil.addChatMessage("There are no active scoreboards in this world.");
             return;
         }
         for (String sidebarScore : scoresColor) {
-            addChatMessage(sidebarScore);
+            ChatUtil.addChatMessage(sidebarScore);
             ASMLoadingPlugin.logger.info(sidebarScore);
         }
     }

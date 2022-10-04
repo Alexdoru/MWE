@@ -32,8 +32,6 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
-
 public class ReportSuggestionHandler {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
@@ -66,7 +64,7 @@ public class ReportSuggestionHandler {
                 if (isAValidName(reportedPlayer)) {
                     handleReportSuggestion(reportedPlayer, senderRank, messageSender, squadname, reportText, "bhop", fmsgIn);
                 } else {
-                    addChatMessage(getIChatComponentWithSquadnameAsSender(fmsgIn, messageSender, squadname));
+                    ChatUtil.addChatMessage(getIChatComponentWithSquadnameAsSender(fmsgIn, messageSender, squadname));
                 }
                 return true;
             } else if (matcher2.find()) {
@@ -85,7 +83,7 @@ public class ReportSuggestionHandler {
                 if (isAValidCheat(cheat) && isAValidName(reportedPlayer)) {
                     handleReportSuggestion(reportedPlayer, senderRank, messageSender, squadname, reportText, cheat, fmsgIn);
                 } else {
-                    addChatMessage(getIChatComponentWithSquadnameAsSender(fmsgIn, messageSender, squadname));
+                    ChatUtil.addChatMessage(getIChatComponentWithSquadnameAsSender(fmsgIn, messageSender, squadname));
                 }
                 return true;
             }
@@ -163,7 +161,7 @@ public class ReportSuggestionHandler {
 
         if (FKCounterMod.isitPrepPhase) {
             if (isSenderMyself) {
-                new DelayedTask(() -> addChatMessage(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " Cannot share a report before the walls fall!"), 0);
+                new DelayedTask(() -> ChatUtil.addChatMessage(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " Cannot share a report before the walls fall!"), 0);
                 return true;
             }
             return false;
@@ -171,7 +169,7 @@ public class ReportSuggestionHandler {
 
         if (isSenderFlaging) {
             if (isSenderMyself) {
-                new DelayedTask(() -> addChatMessage(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You cannot share a report since you flag in /scangame!"), 0);
+                new DelayedTask(() -> ChatUtil.addChatMessage(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You cannot share a report since you flag in /scangame!"), 0);
                 return true;
             }
             return false;
@@ -179,7 +177,7 @@ public class ReportSuggestionHandler {
 
         if (isSenderNicked) {
             if (isSenderMyself) {
-                new DelayedTask(() -> addChatMessage(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You cannot share a report when you are nicked!"), 0);
+                new DelayedTask(() -> ChatUtil.addChatMessage(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You cannot share a report when you are nicked!"), 0);
                 return true;
             }
             return false;
@@ -187,7 +185,7 @@ public class ReportSuggestionHandler {
 
         if (!isSenderRankValid && !messageSender.equals(ConfigHandler.hypixelNick)) {
             if (isSenderMyself) {
-                new DelayedTask(() -> addChatMessage(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You need to be at least " + EnumChatFormatting.GREEN + "VIP" + EnumChatFormatting.GOLD + "+" + EnumChatFormatting.GRAY + " to share a report with others"), 0);
+                new DelayedTask(() -> ChatUtil.addChatMessage(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You need to be at least " + EnumChatFormatting.GREEN + "VIP" + EnumChatFormatting.GOLD + "+" + EnumChatFormatting.GRAY + " to share a report with others"), 0);
                 return true;
             }
             return false;
@@ -195,23 +193,23 @@ public class ReportSuggestionHandler {
 
         if (canReportSuggestionPlayer(reportedPlayer)) {
             if (isSenderMyself) {
-                new DelayedTask(() -> addChatMessage(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Your report will be shared with other players in the game"), 0);
+                new DelayedTask(() -> ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Your report will be shared with other players in the game"), 0);
                 return true;
             }
             checkReportSpam();
             if(ReportQueue.INSTANCE.addPlayerToQueueRandom(messageSender, reportedPlayer)) {
-                new DelayedTask(() -> addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment... ").appendSibling(ChatUtil.getCancelButton(reportedPlayer))), 0);
+                new DelayedTask(() -> ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment... ").appendSibling(ChatUtil.getCancelButton(reportedPlayer))), 0);
                 return true;
             } else {
-                new DelayedTask(() -> addChatMessage(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You already reported this player during this game"), 0);
+                new DelayedTask(() -> ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You already reported this player during this game"), 0);
             }
             return false;
         } else {
             if (isSenderMyself) {
-                new DelayedTask(() -> addChatMessage(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " This player has already been reported during this game"), 0);
+                new DelayedTask(() -> ChatUtil.addChatMessage(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " This player has already been reported during this game"), 0);
                 return true;
             } else {
-                new DelayedTask(() -> addChatMessage(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You already reported this player during this game"), 0);
+                new DelayedTask(() -> ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You already reported this player during this game"), 0);
             }
         }
 
@@ -224,14 +222,14 @@ public class ReportSuggestionHandler {
         reportSpamCheck.add(l);
         reportSpamCheck.removeIf(time -> (time + 30L * 1000L < l));
         if (reportSpamCheck.size() >= 4) {
-            addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.YELLOW + "Is someone trying to spam the reporting system ? ").appendSibling(ChatUtil.getCancelAllReportsButton()));
+            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.YELLOW + "Is someone trying to spam the reporting system ? ").appendSibling(ChatUtil.getCancelAllReportsButton()));
         }
     }
 
     private static void printCustomReportSuggestionChatText(String fmsg, @Nullable String messageSender, String reportedPlayer, String cheat, String reportText, @Nullable String squadname, boolean isSenderMyself, boolean isTargetMyself, boolean isSenderInTablist, boolean isSenderIgnored, boolean isSenderCheating, boolean isSenderFlaging, boolean isSenderNicked, boolean gotAutoreported, @Nullable String senderUUID) {
 
         if (!ConfigHandler.reportsuggestions) {
-            addChatMessage(getIChatComponentWithSquadnameAsSender(fmsg, messageSender, squadname));
+            ChatUtil.addChatMessage(getIChatComponentWithSquadnameAsSender(fmsg, messageSender, squadname));
             return;
         }
 
@@ -241,7 +239,7 @@ public class ReportSuggestionHandler {
             final String newFmsg = StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED) + " ";
             final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
             addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
-            addChatMessage(imsg);
+            ChatUtil.addChatMessage(imsg);
             return;
         }
 
@@ -250,12 +248,12 @@ public class ReportSuggestionHandler {
             if (senderUUID != null) {
                 imsg.appendSibling(ChatUtil.getUnIgnoreButton(senderUUID, messageSender));
             }
-            addChatMessage(imsg);
+            ChatUtil.addChatMessage(imsg);
             return;
         }
 
         if (isSenderCheating) {
-            addChatMessage(StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.YELLOW + " (Cheater)", EnumChatFormatting.GRAY + EnumChatFormatting.STRIKETHROUGH.toString(), true));
+            ChatUtil.addChatMessage(StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.YELLOW + " (Cheater)", EnumChatFormatting.GRAY + EnumChatFormatting.STRIKETHROUGH.toString(), true));
             return;
         }
 
@@ -263,10 +261,10 @@ public class ReportSuggestionHandler {
             final String newFmsg = StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.LIGHT_PURPLE + " (Scangame)", "", true);
             final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
             if (FKCounterMod.isMWEnvironement && !isSenderMyself) {
-                imsg.appendSibling(getIgnoreButton(messageSender));
+                imsg.appendSibling(ChatUtil.getIgnoreButton(messageSender));
             }
             addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
-            addChatMessage(imsg);
+            ChatUtil.addChatMessage(imsg);
             return;
         }
 
@@ -275,17 +273,17 @@ public class ReportSuggestionHandler {
             final String newFmsg = StringUtil.changeColorOf(s1, reportText, EnumChatFormatting.DARK_RED) + " ";
             final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
             addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
-            addChatMessage(imsg);
+            ChatUtil.addChatMessage(imsg);
             return;
         }
 
         final String newFmsg = StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED) + " ";
         final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
         if (FKCounterMod.isMWEnvironement && !isSenderMyself) {
-            imsg.appendSibling(getIgnoreButton(messageSender));
+            imsg.appendSibling(ChatUtil.getIgnoreButton(messageSender));
         }
         addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
-        addChatMessage(imsg);
+        ChatUtil.addChatMessage(imsg);
 
     }
 
@@ -317,10 +315,10 @@ public class ReportSuggestionHandler {
             return;
         }
         if (!gotautoreported) {
-            imsg.appendSibling(getReportButton(reportedPlayer, "cheating", ClickEvent.Action.RUN_COMMAND));
+            imsg.appendSibling(ChatUtil.getReportButton(reportedPlayer, "cheating", ClickEvent.Action.RUN_COMMAND));
         }
         if (!isSenderMyself || !gotautoreported) {
-            imsg.appendSibling(getWDRButton(reportedPlayer, cheat, ClickEvent.Action.SUGGEST_COMMAND));
+            imsg.appendSibling(ChatUtil.getWDRButton(reportedPlayer, cheat, ClickEvent.Action.SUGGEST_COMMAND));
         }
     }
 

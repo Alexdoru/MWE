@@ -18,8 +18,6 @@ import net.minecraft.util.IChatComponent;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.*;
-
 public class CommandStalk extends CommandBase {
 
     @Override
@@ -41,12 +39,12 @@ public class CommandStalk extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length < 1) {
-            addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
             return;
         }
 
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-            printApikeySetupInfo();
+            ChatUtil.printApikeySetupInfo();
             return;
         }
 
@@ -85,7 +83,7 @@ class StalkTask implements Callable<String> {
             HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
             LoginData logindata = new LoginData(playerdata.getPlayerData());
             if (!playername.equals(logindata.getdisplayname())) {
-                addChatMessage(getTagMW() + EnumChatFormatting.RED + "This player never joined Hypixel, it might be a nick.");
+                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "This player never joined Hypixel, it might be a nick.");
                 return null;
             }
             String formattedName = logindata.getFormattedName();
@@ -94,8 +92,8 @@ class StalkTask implements Callable<String> {
                 if (apistatus.getGamemode().equals("Mega Walls")) { // stalked player is in MW, display currrent class and skin
 
                     MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
-                    addChatMessage(
-                            new ChatComponentText(getTagMW())
+                    ChatUtil.addChatMessage(
+                            new ChatComponentText(ChatUtil.getTagMW())
                                     .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
                                     .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + apistatus.getGamemode() + " " + apistatus.getMode() +
                                             (apistatus.getMap() == null ? "" : (EnumChatFormatting.GREEN + " on " + EnumChatFormatting.YELLOW + apistatus.getMap()))
@@ -105,8 +103,8 @@ class StalkTask implements Callable<String> {
                     );
 
                 } else { // player isn't in MW
-                    addChatMessage(
-                            new ChatComponentText(getTagMW())
+                    ChatUtil.addChatMessage(
+                            new ChatComponentText(ChatUtil.getTagMW())
                                     .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
                                     .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + apistatus.getGamemode() + " " + apistatus.getMode() +
                                             (apistatus.getMap() == null ? "" : (EnumChatFormatting.GREEN + " on " + EnumChatFormatting.YELLOW + apistatus.getMap()))))
@@ -119,17 +117,17 @@ class StalkTask implements Callable<String> {
 
                 if (playerdata.getPlayerData() == null) { // Failed to contact hypixel's API
 
-                    addChatMessage(getTagMW() + EnumChatFormatting.RED + "Failed to retrieve information from Hypixel's api for : " + playername + EnumChatFormatting.RED + ".");
+                    ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "Failed to retrieve information from Hypixel's api for : " + playername + EnumChatFormatting.RED + ".");
                     return null;
 
                 } else if (logindata.hasNeverJoinedHypixel()) { // player never joined hypixel
 
-                    addChatMessage(getTagMW() + EnumChatFormatting.YELLOW + playername + EnumChatFormatting.RED + " has never joined Hypixel.");
+                    ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + playername + EnumChatFormatting.RED + " has never joined Hypixel.");
                     return null;
 
                 } else if (logindata.isStaffonHypixel()) { // player is a staff member
 
-                    addChatMessage(new ChatComponentText(getTagMW())
+                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW())
                             .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
                             .appendSibling(new ChatComponentText(EnumChatFormatting.RED + " is completely hiding their online status from the API."
                                     + EnumChatFormatting.DARK_GRAY + " It happens for staff members.")));
@@ -142,7 +140,7 @@ class StalkTask implements Callable<String> {
                     String latestActivity = logindata.getLatestActivity();
 
                     MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
-                    IChatComponent imsg = new ChatComponentText(getTagMW())
+                    IChatComponent imsg = new ChatComponentText(ChatUtil.getTagMW())
                             .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
                             .appendSibling(new ChatComponentText(EnumChatFormatting.RED + " is blocking their API."));
 
@@ -158,7 +156,7 @@ class StalkTask implements Callable<String> {
                         ));
                     }
 
-                    addChatMessage(imsg);
+                    ChatUtil.addChatMessage(imsg);
                     return null;
 
                 } else if (logindata.isOnline()) { // player is online but hiding their session, that doesn't work anymore
@@ -166,7 +164,7 @@ class StalkTask implements Callable<String> {
                     if (FKCounterMod.isMWEnvironement && logindata.getMostRecentGameType().equals("Mega Walls")) { // online and in MW
 
                         MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
-                        addChatMessage(new ChatComponentText(getTagMW())
+                        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW())
                                 .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
                                 .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType()
                                         + EnumChatFormatting.GREEN + " playing "
@@ -176,7 +174,7 @@ class StalkTask implements Callable<String> {
                                 )));
 
                     } else { // online not in MW
-                        addChatMessage(new ChatComponentText(getTagMW())
+                        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW())
                                 .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
                                 .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType()
                                         + EnumChatFormatting.GREEN + "." + EnumChatFormatting.DARK_GRAY + " (This player hides their session.)")));
@@ -185,7 +183,7 @@ class StalkTask implements Callable<String> {
 
                 } else { // offline
                     String offlinesince = DateUtil.timeSince(logindata.getLastLogout());
-                    addChatMessage(new ChatComponentText(getTagMW())
+                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW())
                             .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
                             .appendSibling(new ChatComponentText(EnumChatFormatting.RED + " has been offline for " + EnumChatFormatting.YELLOW + offlinesince
                                     + EnumChatFormatting.RED + "." + (logindata.getMostRecentGameType().equals("?") ? "" : EnumChatFormatting.RED + " Last seen in : " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType()))));
@@ -195,7 +193,7 @@ class StalkTask implements Callable<String> {
             }
 
         } catch (ApiException e) {
-            addChatMessage(EnumChatFormatting.RED + e.getMessage());
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + e.getMessage());
         }
 
         return null;
