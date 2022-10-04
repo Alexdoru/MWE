@@ -11,7 +11,6 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.io.*;
@@ -45,31 +44,31 @@ public class CommandAddAlias extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length == 1 && args[0].equals("clearall")) {
             renamingMap.clear();
-            ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Cleared alias for all players."));
+            ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Cleared alias for all players.");
             return;
         } else if (args.length == 1 && args[0].equals("list")) {
-            ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "In this lobby :\n"));
+            ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "In this lobby :\n");
             for (NetworkPlayerInfo networkPlayerInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
                 final String alias = renamingMap.get(networkPlayerInfo.getGameProfile().getName());
                 if (alias != null) {
-                    ChatUtil.addChatMessage(new ChatComponentText(NameUtil.getFormattedName(networkPlayerInfo.getGameProfile().getName()) + EnumChatFormatting.RESET + " (" + alias + ")"));
+                    ChatUtil.addChatMessage(NameUtil.getFormattedName(networkPlayerInfo.getGameProfile().getName()) + EnumChatFormatting.RESET + " (" + alias + ")");
                 }
             }
             return;
         }
         if (args.length != 2) {
-            ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : /addalias <playername> <alias>"));
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : /addalias <playername> <alias>");
             return;
         }
         if (args[0].equals("remove")) {
             renamingMap.remove(args[1]);
             NameUtil.updateGameProfileAndName(args[1], true);
-            ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Removed alias for " + EnumChatFormatting.GOLD + args[1]));
+            ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Removed alias for " + EnumChatFormatting.GOLD + args[1]);
             return;
         }
         renamingMap.put(args[0], args[1]);
         NameUtil.updateGameProfileAndName(args[0], true);
-        ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Added alias for " + EnumChatFormatting.GOLD + args[0] + EnumChatFormatting.GREEN + " : " + EnumChatFormatting.GOLD + args[1]));
+        ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Added alias for " + EnumChatFormatting.GOLD + args[0] + EnumChatFormatting.GREEN + " : " + EnumChatFormatting.GOLD + args[1]);
     }
 
     @Override

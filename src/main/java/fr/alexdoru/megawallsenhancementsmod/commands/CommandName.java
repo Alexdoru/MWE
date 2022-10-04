@@ -35,7 +35,7 @@ public class CommandName extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length < 1) {
-            addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender)));
+            addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
             return;
         }
 
@@ -45,7 +45,7 @@ public class CommandName extends CommandBase {
             try {
                 new CachedMojangUUID(playername);
             } catch (ApiException e1) {
-                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + e1.getMessage()));
+                addChatMessage(EnumChatFormatting.RED + e1.getMessage());
                 return null;
             }
 

@@ -17,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.HashSet;
@@ -42,7 +41,7 @@ public class GuiContainerHook {
     public static boolean shouldCancelHotkey(Slot theSlot, int i) {
         final boolean isItemImportant = isItemImportant(theSlot, i);
         if (isItemImportant) {
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Prevented dangerous hotkey in external inventory"));
+            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Prevented dangerous hotkey in external inventory");
             return true;
         }
         return false;

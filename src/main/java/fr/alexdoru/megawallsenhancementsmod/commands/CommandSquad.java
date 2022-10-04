@@ -61,7 +61,7 @@ public class CommandSquad extends CommandBase {
         if (args[0].equalsIgnoreCase("add")) {
 
             if (args.length < 2) {
-                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : /squad <add> <playername>"));
+                addChatMessage(EnumChatFormatting.RED + "Usage : /squad <add> <playername>");
                 return;
             }
 
@@ -72,29 +72,29 @@ public class CommandSquad extends CommandBase {
                 }
                 String alias = stringBuilder.toString();
                 SquadEvent.addPlayer(args[1], alias);
-                addChatMessage(new ChatComponentText(getTagMW() +
+                addChatMessage(getTagMW() +
                         EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[1] + EnumChatFormatting.GREEN + " as " +
-                        EnumChatFormatting.GOLD + alias + EnumChatFormatting.GREEN + " to the squad."));
+                        EnumChatFormatting.GOLD + alias + EnumChatFormatting.GREEN + " to the squad.");
                 return;
             }
 
             for (int i = 1; i < args.length; i++) {
                 SquadEvent.addPlayer(args[i]);
-                addChatMessage(new ChatComponentText(getTagMW() +
-                        EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " to the squad."));
+                addChatMessage(getTagMW() +
+                        EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " to the squad.");
             }
 
         } else if (args[0].equalsIgnoreCase("disband")) {
 
             SquadEvent.clearSquad();
-            addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.GREEN + "Removed all players from the squad."));
+            addChatMessage(getTagMW() + EnumChatFormatting.GREEN + "Removed all players from the squad.");
 
         } else if (args[0].equalsIgnoreCase("l") || args[0].equalsIgnoreCase("list")) {
 
             HashMap<String, String> squad = SquadEvent.getSquad();
 
             if (squad.isEmpty()) {
-                addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + "No one in the squad right now."));
+                addChatMessage(getTagMW() + EnumChatFormatting.RED + "No one in the squad right now.");
                 return;
             }
 
@@ -112,17 +112,15 @@ public class CommandSquad extends CommandBase {
         } else if (args[0].equalsIgnoreCase("remove")) {
 
             if (args.length < 2) {
-                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : /squad <remove> <playername>"));
+                addChatMessage(EnumChatFormatting.RED + "Usage : /squad <remove> <playername>");
                 return;
             }
 
             for (int i = 1; i < args.length; i++) {
                 if (SquadEvent.removePlayer(args[i])) {
-                    addChatMessage(new ChatComponentText(getTagMW() +
-                            EnumChatFormatting.GREEN + "Removed " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " from the squad."));
+                    addChatMessage(getTagMW() + EnumChatFormatting.GREEN + "Removed " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " from the squad.");
                 } else {
-                    addChatMessage(new ChatComponentText(getTagMW() +
-                            EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.RED + " isn't in the squad."));
+                    addChatMessage(getTagMW() + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.RED + " isn't in the squad.");
                 }
             }
 

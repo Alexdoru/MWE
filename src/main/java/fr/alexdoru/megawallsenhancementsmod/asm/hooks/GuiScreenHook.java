@@ -9,7 +9,6 @@ import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.Date;
@@ -33,7 +32,7 @@ public class GuiScreenHook {
             if (MWGameStatsEvent.getGameStats() != null) {
                 ChatUtil.addChatMessage(MWGameStatsEvent.getGameStats().getGameStatMessage(MWGameStatsEvent.getFormattedname()));
             } else {
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + "No game stats available"));
+                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "No game stats available");
             }
             return true;
         }
@@ -61,7 +60,7 @@ public class GuiScreenHook {
                 if (FKCounterMod.preGameLobby && ConfigHandler.toggleautoreport) {
                     wdr.timestamp = time - WDR.TIME_BETWEEN_AUTOREPORT;
                     wdr.timeLastManualReport = time - WDR.TIME_BETWEEN_AUTOREPORT;
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Your cheating report against " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + " will be sent during the game."));
+                    ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Your cheating report against " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + " will be sent during the game.");
                 } else {
                     wdr.timestamp = time;
                     wdr.timeLastManualReport = time;
@@ -71,7 +70,7 @@ public class GuiScreenHook {
                 }
                 NameUtil.updateGameProfileAndName(playername, false);
             } else {
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Those cheats aren't recognized by the mod :" + EnumChatFormatting.GOLD + wdr.hacksToString() + EnumChatFormatting.RED + ", use valid cheats to use the reporting features."));
+                ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Those cheats aren't recognized by the mod :" + EnumChatFormatting.GOLD + wdr.hacksToString() + EnumChatFormatting.RED + ", use valid cheats to use the reporting features.");
             }
         }
     }

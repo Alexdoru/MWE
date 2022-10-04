@@ -23,6 +23,10 @@ public class ChatUtil {
         return EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "NoCheaters" + EnumChatFormatting.GOLD + "] ";
     }
 
+    public static void addChatMessage(String msg) {
+        addChatMessage(new ChatComponentText(msg));
+    }
+
     public static void addChatMessage(IChatComponent msg) {
         if (mc.theWorld != null && mc.thePlayer != null) {
             mc.thePlayer.addChatMessage(msg);
@@ -56,10 +60,10 @@ public class ChatUtil {
     }
 
     public static void printApikeySetupInfo() {
-        addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.RED + "You didn't set up your Api key. Connect to Hypixel and type "
+        addChatMessage(getTagMW() + EnumChatFormatting.RED + "You didn't set up your Api key. Connect to Hypixel and type "
                 + EnumChatFormatting.YELLOW + "\"/api new\""
                 + EnumChatFormatting.RED + " to get an Api key, the mod should automatically detect the key and save it. If you want to use a key that you already have, type "
-                + EnumChatFormatting.YELLOW + "\"/mwenhancements setapikey <key>\""));
+                + EnumChatFormatting.YELLOW + "\"/mwenhancements setapikey <key>\"");
     }
 
     public static String invalidplayernameMsg(String playername) {
@@ -310,7 +314,7 @@ public class ChatUtil {
     }
 
     public static void debug(String msg) {
-        addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + "[Debug]: " + EnumChatFormatting.RESET + msg));
+        addChatMessage(EnumChatFormatting.AQUA + "[Debug]: " + EnumChatFormatting.RESET + msg);
     }
 
 }

@@ -10,7 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.*;
@@ -48,7 +47,7 @@ public class CommandFKCounter extends CommandBase {
         } else if (args.length > 0 && (args[0].equalsIgnoreCase("players") || args[0].equalsIgnoreCase("player") || args[0].equalsIgnoreCase("p"))) {
 
             if (getGameId() == null) {
-                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "This is not available right now"));
+                addChatMessage(EnumChatFormatting.RED + "This is not available right now");
                 return;
             }
 
@@ -68,14 +67,14 @@ public class CommandFKCounter extends CommandBase {
                 strBuilder.append("\n");
             }
 
-            addChatMessage(new ChatComponentText(strBuilder.toString()));
+            addChatMessage(strBuilder.toString());
 
         } else if (args.length == 2 && args[0].equalsIgnoreCase("remove")) {
             removePlayer(args[1]);
         } else if (args.length > 0 && args[0].equalsIgnoreCase("say")) {
 
             if (getGameId() == null) {
-                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "This is not available right now"));
+                addChatMessage(EnumChatFormatting.RED + "This is not available right now");
                 return;
             }
 
@@ -107,22 +106,22 @@ public class CommandFKCounter extends CommandBase {
 
         } else if (args.length > 0 && args[0].equalsIgnoreCase("help")) {
 
-            addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + "\n"
+            addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + "\n"
                     + EnumChatFormatting.RED + "/fks : prints the amount of finals per team in the chat \n"
                     + EnumChatFormatting.RED + "/fks p or players : prints the amount of finals per player in the chat \n "
                     + EnumChatFormatting.RED + "/fks say : makes you send a message in the chat with the amount of finals per team \n"
-                    + EnumChatFormatting.RED + "/fks settings : opens the settings GUI"));
+                    + EnumChatFormatting.RED + "/fks settings : opens the settings GUI");
 
         } else {
             if (getGameId() == null) {
-                addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "This is not available right now"));
+                addChatMessage(EnumChatFormatting.RED + "This is not available right now");
                 return;
             }
             String strBuilder = getColorPrefixFromTeam(RED_TEAM) + getTeamNameFromTeam(RED_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(RED_TEAM) + "\n" +
                     getColorPrefixFromTeam(GREEN_TEAM) + getTeamNameFromTeam(GREEN_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(GREEN_TEAM) + "\n" +
                     getColorPrefixFromTeam(YELLOW_TEAM) + getTeamNameFromTeam(YELLOW_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(YELLOW_TEAM) + "\n" +
                     getColorPrefixFromTeam(BLUE_TEAM) + getTeamNameFromTeam(BLUE_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(BLUE_TEAM);
-            addChatMessage(new ChatComponentText(strBuilder));
+            addChatMessage(strBuilder);
 
         }
 
@@ -159,13 +158,13 @@ public class CommandFKCounter extends CommandBase {
                 if (kills != null) {
                     KillCounter.removeKilledPlayer(playerName, team);
                     FKCounterGui.instance.updateDisplayText();
-                    ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Removed " + KillCounter.getColorPrefixFromTeam(team) + playerName
-                            + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + kills + EnumChatFormatting.GREEN + " final" + (kills > 1 ? "s" : "") + " from the " + KillCounter.getColorPrefixFromTeam(team) + KillCounter.getTeamNameFromTeam(team) + EnumChatFormatting.GREEN + " team."));
+                    ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Removed " + KillCounter.getColorPrefixFromTeam(team) + playerName
+                            + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + kills + EnumChatFormatting.GREEN + " final" + (kills > 1 ? "s" : "") + " from the " + KillCounter.getColorPrefixFromTeam(team) + KillCounter.getTeamNameFromTeam(team) + EnumChatFormatting.GREEN + " team.");
                     return;
                 }
             }
         }
-        ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Cannot find " + playerName + " in the FKCounter."));
+        ChatUtil.addChatMessage(EnumChatFormatting.RED + "Cannot find " + playerName + " in the FKCounter.");
     }
 
     private ArrayList<String> getPlayerListinKillCounter() {

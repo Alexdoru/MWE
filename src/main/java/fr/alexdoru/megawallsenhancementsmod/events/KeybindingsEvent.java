@@ -6,7 +6,6 @@ import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import fr.alexdoru.nocheatersmod.commands.CommandWDR;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
@@ -28,9 +27,9 @@ public class KeybindingsEvent {
             ConfigHandler.limitDroppedEntityRendered = !ConfigHandler.limitDroppedEntityRendered;
             ConfigHandler.saveConfig();
             if (ConfigHandler.limitDroppedEntityRendered) {
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.WHITE + "Limit dropped items rendered: " + EnumChatFormatting.GREEN + "On"));
+                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.WHITE + "Limit dropped items rendered: " + EnumChatFormatting.GREEN + "On");
             } else {
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.WHITE + "Limit dropped items rendered: " + EnumChatFormatting.RED + "Off"));
+                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.WHITE + "Limit dropped items rendered: " + EnumChatFormatting.RED + "Off");
             }
         }
 

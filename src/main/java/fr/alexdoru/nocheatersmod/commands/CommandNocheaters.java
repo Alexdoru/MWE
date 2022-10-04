@@ -79,7 +79,7 @@ public class CommandNocheaters extends CommandBase {
                     try {
                         displaypage = parseInt(args[1]);
                     } catch (NumberInvalidException e) {
-                        addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Not a valid number"));
+                        addChatMessage(EnumChatFormatting.RED + "Not a valid number");
                         return null;
                     }
                 }
@@ -122,7 +122,7 @@ public class CommandNocheaters extends CommandBase {
                 }
 
                 if (warning) {
-                    addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "No reports to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available."));
+                    addChatMessage(EnumChatFormatting.RED + "No reports to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available.");
                 } else {
                     printIChatList(
                             "Report list",
@@ -143,7 +143,7 @@ public class CommandNocheaters extends CommandBase {
         } else if (args[0].equalsIgnoreCase("ignore")) {
 
             if (args.length == 1) {
-                addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + getCommandUsage(sender) + " ignore <playername>"));
+                addChatMessage(getTagNoCheaters() + EnumChatFormatting.RED + getCommandUsage(sender) + " ignore <playername>");
             } else {
 
                 ReportQueue.INSTANCE.clearReportsSentBy(args[1]);
@@ -188,8 +188,7 @@ public class CommandNocheaters extends CommandBase {
                         }
 
                         if (!isaNick) { // couldn't find the nicked player in the tab list
-                            addChatMessage(new ChatComponentText(getTagNoCheaters()
-                                    + invalidplayernameMsg(args[0]) + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist"));
+                            addChatMessage(getTagNoCheaters() + invalidplayernameMsg(args[0]) + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist");
                             return null;
                         }
 
@@ -210,9 +209,9 @@ public class CommandNocheaters extends CommandBase {
                         WdredPlayers.getWdredMap().put(uuid, new WDR(time, time, hacks));
                     }
 
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GREEN + "You added " + EnumChatFormatting.RED + playername
+                    addChatMessage(getTagNoCheaters() + EnumChatFormatting.GREEN + "You added " + EnumChatFormatting.RED + playername
                             + EnumChatFormatting.GREEN + " to your ignore list, it will ignore all report suggestions from that player. Use : "
-                            + EnumChatFormatting.YELLOW + getCommandUsage(sender) + " ignorelist" + EnumChatFormatting.GREEN + " to list and remove poeple from the list."));
+                            + EnumChatFormatting.YELLOW + getCommandUsage(sender) + " ignorelist" + EnumChatFormatting.GREEN + " to list and remove poeple from the list.");
                     return null;
 
                 });
@@ -236,7 +235,7 @@ public class CommandNocheaters extends CommandBase {
                     try {
                         displaypage = parseInt(args[1]);
                     } catch (NumberInvalidException e) {
-                        addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "Not a valid number"));
+                        addChatMessage(EnumChatFormatting.RED + "Not a valid number");
                         return null;
                     }
                 }
@@ -273,9 +272,9 @@ public class CommandNocheaters extends CommandBase {
                 }
 
                 if (warning && nbreport == 1) {
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "No one in your ignore list"));
+                    addChatMessage(getTagNoCheaters() + EnumChatFormatting.RED + "No one in your ignore list");
                 } else if (warning) {
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.RED + "No ignored players to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available."));
+                    addChatMessage(getTagNoCheaters() + EnumChatFormatting.RED + "No ignored players to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available.");
                 } else {
                     printIChatList(
                             "Ignore list",
@@ -303,7 +302,7 @@ public class CommandNocheaters extends CommandBase {
 
                 if (wdr == null) {
 
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GOLD + playername + EnumChatFormatting.RED + " wasn't found in your ignore list"));
+                    addChatMessage(getTagNoCheaters() + EnumChatFormatting.GOLD + playername + EnumChatFormatting.RED + " wasn't found in your ignore list");
 
                 } else {
 
@@ -313,14 +312,14 @@ public class CommandNocheaters extends CommandBase {
                         wdr.hacks.remove(WDR.IGNORED);
                     }
 
-                    addChatMessage(new ChatComponentText(getTagNoCheaters() + EnumChatFormatting.GOLD + playername
-                            + EnumChatFormatting.GREEN + " has been removed from your ignore list, you will now receive report suggestions from that player."));
+                    addChatMessage(getTagNoCheaters() + EnumChatFormatting.GOLD + playername
+                            + EnumChatFormatting.GREEN + " has been removed from your ignore list, you will now receive report suggestions from that player.");
 
                 }
 
             } else {
 
-                addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_RED + "This shouldn't happen"));
+                addChatMessage(EnumChatFormatting.DARK_RED + "This shouldn't happen");
 
             }
 

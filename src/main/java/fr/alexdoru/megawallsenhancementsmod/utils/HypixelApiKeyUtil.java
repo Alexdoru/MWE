@@ -1,7 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import static fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil.addChatMessage;
@@ -14,7 +13,7 @@ public class HypixelApiKeyUtil {
     }
 
     public static void setApiKey(String key) {
-        addChatMessage(new ChatComponentText(getTagMW() + EnumChatFormatting.GREEN + "Api key set successfully"));
+        addChatMessage(getTagMW() + EnumChatFormatting.GREEN + "Api key set successfully");
         ConfigHandler.APIKey = key;
         ConfigHandler.saveConfig();
     }
