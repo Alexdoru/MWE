@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
+import net.minecraftforge.fml.common.Loader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -285,6 +286,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 11:
                 if (ConfigHandler.show_lastWitherHUD && !ConfigHandler.witherHUDinSidebar) {
                     ConfigHandler.witherHUDinSidebar = true;
+                    if(Loader.isModLoaded("feather")) {
+                        ChatUtil.addChatMessage(EnumChatFormatting.RED + "The sidebar integration for HUD doesn't work with Feather because the client is obfuscated and closed source >:(");
+                    }
                     break;
                 }
                 if (!ConfigHandler.show_lastWitherHUD && !ConfigHandler.witherHUDinSidebar) {
