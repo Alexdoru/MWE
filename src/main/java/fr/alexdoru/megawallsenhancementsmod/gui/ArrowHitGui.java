@@ -133,7 +133,7 @@ public class ArrowHitGui extends MyCachedGui {
         final int updatedCounter = chatLine.getUpdatedCounter();
         final int currentUpdateCounter = mc.ingameGUI.getUpdateCounter();
         final int counterDiff = Math.abs(currentUpdateCounter - updatedCounter);
-        return chatMessage.startsWith(playername) && counterDiff <= 2;
+        return chatMessage.startsWith(playername) && counterDiff <= 4;
     }
 
     /**
