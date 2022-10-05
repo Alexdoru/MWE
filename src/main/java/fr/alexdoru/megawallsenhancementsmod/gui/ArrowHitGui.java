@@ -1,13 +1,16 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GuiNewChatAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
+import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,8 +40,9 @@ public class ArrowHitGui extends MyCachedGui {
         final Matcher matcherArrowHit = PATTERN_ARROW_HIT.matcher(msg);
 
         if (matcherArrowHit.matches()) {
+            final String playername = matcherArrowHit.group(1);
             HPvalue = matcherArrowHit.group(2);
-            if (HPvalue.equals("0")) {
+            if (isDeadFromShot(playername)) {
                 HPvalue = "Kill";
                 Color = EnumChatFormatting.GOLD;
             } else {
@@ -47,7 +51,6 @@ public class ArrowHitGui extends MyCachedGui {
             normalhit = true;
             hittime = System.currentTimeMillis();
             instance.updateDisplayText();
-            String playername = matcherArrowHit.group(1);
             ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg);
             return true;
         }
@@ -87,7 +90,7 @@ public class ArrowHitGui extends MyCachedGui {
             normalhit = true;
             Color = EnumChatFormatting.GREEN;
             instance.updateDisplayText();
-            String playername = matcherLeapDirectHit.group(1);
+            final String playername = matcherLeapDirectHit.group(1);
             ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg);
             return true;
         }
@@ -115,6 +118,22 @@ public class ArrowHitGui extends MyCachedGui {
 
         return false;
 
+    }
+
+    private static boolean isDeadFromShot(String playername) {
+        if (!HPvalue.equals("0")) {
+            return false;
+        }
+        final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
+        if (chatLines.isEmpty()) {
+            return false;
+        }
+        final ChatLine chatLine = chatLines.get(0);
+        final String chatMessage = EnumChatFormatting.getTextWithoutFormattingCodes(chatLine.getChatComponent().getUnformattedText());
+        final int updatedCounter = chatLine.getUpdatedCounter();
+        final int currentUpdateCounter = mc.ingameGUI.getUpdateCounter();
+        final int counterDiff = Math.abs(currentUpdateCounter - updatedCounter);
+        return chatMessage.startsWith(playername) && counterDiff <= 2;
     }
 
     /**
