@@ -5,7 +5,7 @@ import net.minecraft.client.gui.ScaledResolution;
 
 public final class GuiPosition {
 
-    private final Minecraft mc = Minecraft.getMinecraft();
+    private static final Minecraft mc = Minecraft.getMinecraft();
 
     /*The relative x and y coordinates. Ranging from 0 to 1.*/
     private double x, y;

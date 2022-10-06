@@ -13,7 +13,7 @@ import java.util.List;
 public final class GuiManager {
 
     private final List<IRenderer> registeredRenderers = new ArrayList<>();
-    private final Minecraft mc = Minecraft.getMinecraft();
+    private static final Minecraft mc = Minecraft.getMinecraft();
 
     /**
      * Register your Guis here
