@@ -24,9 +24,9 @@ public class ArrowHitHUD extends MyCachedHUD {
     private static final Pattern PATTERN_LEAP_HIT = Pattern.compile("^You took ([0-9]*[.]?[0-9]+) recoil damage after traveling \\d+.\\d+ blocks!");
     private static final Pattern PATTERN_LEAP_DIRECT_HIT = Pattern.compile("^You landed a direct hit against (\\w+), taking ([0-9]*[.]?[0-9]+) recoil damage after traveling [0-9]*[.]?[0-9]+ blocks!");
     private static final Pattern PATTERN_REND = Pattern.compile("^Your Rend dealt [0-9]*[.]?[0-9]+ damage to \\w+.*");
-    private static final Pattern PATTERN_REND_2 = Pattern.compile("([0-9]*[.]?[0-9]+) damage to (\\w+)");
+    private static final Pattern PATTERN_REND_DAMAGE = Pattern.compile("([0-9]*[.]?[0-9]+) damage to (\\w+)");
 
-    private long hittime;
+    private long hitTime;
 
     public ArrowHitHUD() {
         super(ConfigHandler.arrowHitHUDPosition);
@@ -38,7 +38,7 @@ public class ArrowHitHUD extends MyCachedHUD {
         final Matcher matcherArrowHit = PATTERN_ARROW_HIT.matcher(msg);
 
         if (matcherArrowHit.matches()) {
-            hittime = System.currentTimeMillis();
+            hitTime = System.currentTimeMillis();
             final String playername = matcherArrowHit.group(1);
             final String hitValue = matcherArrowHit.group(2);
             if (isDeadFromShot(playername, hitValue)) {
@@ -53,11 +53,11 @@ public class ArrowHitHUD extends MyCachedHUD {
         final Matcher matcherRenegadeHit = PATTERN_RENEGADE_HIT.matcher(msg);
 
         if (matcherRenegadeHit.matches()) {
-            hittime = System.currentTimeMillis();
+            hitTime = System.currentTimeMillis();
             final String playername = matcherRenegadeHit.group(1);
             final String hitValue = matcherRenegadeHit.group(2);
             final String arrowsPinned = matcherRenegadeHit.group(3);
-            RenderPlayerHook.addArrowOnPlayer(playername, hittime, Integer.parseInt(arrowsPinned));
+            RenderPlayerHook.addArrowOnPlayer(playername, hitTime, Integer.parseInt(arrowsPinned));
             final boolean bool = Float.parseFloat(hitValue) > (Float.parseFloat(arrowsPinned)) * 2.0f;
             displayText = getColor(hitValue) + hitValue + EnumChatFormatting.GRAY + " (" + (bool ? EnumChatFormatting.GREEN : EnumChatFormatting.GOLD) + arrowsPinned + EnumChatFormatting.GRAY + ")";
             ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg);
@@ -67,7 +67,7 @@ public class ArrowHitHUD extends MyCachedHUD {
         final Matcher matcherLeapHit = PATTERN_LEAP_HIT.matcher(msg);
 
         if (matcherLeapHit.matches()) {
-            hittime = System.currentTimeMillis() + 1000L;
+            hitTime = System.currentTimeMillis() + 1000L;
             displayText = EnumChatFormatting.GREEN + "-" + 2f * Float.parseFloat(matcherLeapHit.group(1));
             ChatUtil.addChatMessage(fmsg);
             return true;
@@ -76,7 +76,7 @@ public class ArrowHitHUD extends MyCachedHUD {
         final Matcher matcherLeapDirectHit = PATTERN_LEAP_DIRECT_HIT.matcher(msg);
 
         if (matcherLeapDirectHit.matches()) {
-            hittime = System.currentTimeMillis() + 1000L;
+            hitTime = System.currentTimeMillis() + 1000L;
             final String playername = matcherLeapDirectHit.group(1);
             displayText = EnumChatFormatting.GREEN + "-" + 2f * Float.parseFloat(matcherLeapDirectHit.group(2));
             ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg);
@@ -86,8 +86,8 @@ public class ArrowHitHUD extends MyCachedHUD {
         final Matcher matcherRend = PATTERN_REND.matcher(msg);
 
         if (matcherRend.matches()) {
-            hittime = System.currentTimeMillis() + 1000L;
-            final Matcher matcherRend2 = PATTERN_REND_2.matcher(msg);
+            hitTime = System.currentTimeMillis() + 1000L;
+            final Matcher matcherRend2 = PATTERN_REND_DAMAGE.matcher(msg);
             float totalDamage = 0f;
             while (matcherRend2.find()) {
                 final float damage = Float.parseFloat(matcherRend2.group(1));
@@ -154,7 +154,7 @@ public class ArrowHitHUD extends MyCachedHUD {
 
     @Override
     public boolean isEnabled() {
-        return ConfigHandler.show_ArrowHitHUD && System.currentTimeMillis() - hittime < 1000L;
+        return ConfigHandler.show_ArrowHitHUD && System.currentTimeMillis() - hitTime < 1000L;
     }
 
 }
