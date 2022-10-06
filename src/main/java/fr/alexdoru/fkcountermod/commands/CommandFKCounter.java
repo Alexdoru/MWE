@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class CommandFKCounter extends CommandBase {
 
-    private final Minecraft mc = Minecraft.getMinecraft();
+    private static final Minecraft mc = Minecraft.getMinecraft();
 
     @Override
     public String getCommandName() {
