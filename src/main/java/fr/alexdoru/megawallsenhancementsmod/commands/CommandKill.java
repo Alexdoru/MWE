@@ -31,7 +31,7 @@ public class CommandKill extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
         Minecraft.getMinecraft().thePlayer.sendChatMessage("/kill");
         if (ConfigHandler.show_killcooldownHUD && FKCounterMod.isInMwGame) {
-            KillCooldownGui.drawCooldownGui();
+            KillCooldownGui.instance.drawCooldownGui();
         }
     }
 

@@ -11,12 +11,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class LastWitherHPGui extends MyCachedGui {
 
-    private static final String DUMMY_TEXT = EnumChatFormatting.GREEN + "Wither dies in 148s";
     public static LastWitherHPGui instance;
-    private static String color = "";
-    private static long lastWitherHPUpdate = 0;
-    private static long thirdWitherDeathTime = 0;
-    private static int witherHp = 0;
+
+    private static final String DUMMY_TEXT = EnumChatFormatting.GREEN + "Wither dies in 148s";
+    private String color = "";
+    private long lastWitherHPUpdate = 0;
+    private long thirdWitherDeathTime = 0;
+    private int witherHp = 0;
 
     public LastWitherHPGui() {
         super(ConfigHandler.lastWitherHUDPosition);
@@ -45,20 +46,20 @@ public class LastWitherHPGui extends MyCachedGui {
 
     @Override
     public void updateDisplayText() {
-        long time = System.currentTimeMillis();
-        int timeToDie = (witherHp / 8) * 5 + (thirdWitherDeathTime + 55000L - time > 0 ? (int) ((thirdWitherDeathTime + 55000L - time) / 1000L) - 4 : (int) ((lastWitherHPUpdate - time) / 1000L) + 3);
+        final long time = System.currentTimeMillis();
+        final int timeToDie = (witherHp / 8) * 5 + (thirdWitherDeathTime + 55000L - time > 0 ? (int) ((thirdWitherDeathTime + 55000L - time) / 1000L) - 4 : (int) ((lastWitherHPUpdate - time) / 1000L) + 3);
         displayText = color + "Wither dies in " + Math.max(0, timeToDie) + "s";
     }
 
     @Override
     public void render(ScaledResolution resolution) {
-        int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
+        final int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
         frObj.drawStringWithShadow(displayText, absolutePos[0], absolutePos[1], 0);
     }
 
     @Override
     public void renderDummy() {
-        int[] absolutePos = this.guiPosition.getAbsolutePosition();
+        final int[] absolutePos = this.guiPosition.getAbsolutePosition();
         frObj.drawStringWithShadow(DUMMY_TEXT, absolutePos[0], absolutePos[1], 0);
     }
 

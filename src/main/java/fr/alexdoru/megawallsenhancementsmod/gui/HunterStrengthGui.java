@@ -5,13 +5,14 @@ import net.minecraft.client.gui.ScaledResolution;
 
 public class HunterStrengthGui extends MyCachedGui {
 
-    private static final String DUMMY_TEXT = "\u00a77(\u00a7l\u00a7c\u00a7lStrength\u00a77) \u00a7e\u00a7l in 10";
-    private static final String PRE_STRENGTH_TEXT = "\u00a77(\u00a7l\u00a7c\u00a7lStrength\u00a77) \u00a7e\u00a7l in ";
-    private static final String STRENGTH_TEXT = "\u00a7l\u00a7c\u00a7lStrength \u00a7e\u00a7l";
     public static HunterStrengthGui instance;
-    private static long timeStartRender;
-    private static long renderDuration;
-    private static boolean isStrengthRender;
+
+    private static final String DUMMY_TEXT = "\u00a77(\u00a7l\u00a7c\u00a7lStrength\u00a77)\u00a7e\u00a7l in 10";
+    private static final String PRE_STRENGTH_TEXT = "\u00a77(\u00a7l\u00a7c\u00a7lStrength\u00a77)\u00a7e\u00a7l in ";
+    private static final String STRENGTH_TEXT = "\u00a7l\u00a7c\u00a7lStrength \u00a7e\u00a7l";
+    private long timeStartRender;
+    private long renderDuration;
+    private boolean isStrengthRender;
 
     public HunterStrengthGui() {
         super(ConfigHandler.hunterStrengthHUDPosition);
@@ -20,15 +21,15 @@ public class HunterStrengthGui extends MyCachedGui {
 
     @Override
     public void render(ScaledResolution resolution) {
-        int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
-        int timeLeft = (int) ((timeStartRender + renderDuration - System.currentTimeMillis()) / 1000L);
+        final int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
+        final int timeLeft = (int) ((timeStartRender + renderDuration - System.currentTimeMillis()) / 1000L);
         displayText = (isStrengthRender ? STRENGTH_TEXT : PRE_STRENGTH_TEXT) + timeLeft;
         drawCenteredString(frObj, displayText, absolutePos[0], absolutePos[1], 0);
     }
 
     @Override
     public void renderDummy() {
-        int[] absolutePos = this.guiPosition.getAbsolutePosition();
+        final int[] absolutePos = this.guiPosition.getAbsolutePosition();
         drawCenteredString(frObj, DUMMY_TEXT, absolutePos[0], absolutePos[1], 0);
     }
 
@@ -39,10 +40,8 @@ public class HunterStrengthGui extends MyCachedGui {
 
     public void setPreStrengthTime(String preStrengthTimer) {
         isStrengthRender = false;
-        try {
-            timeStartRender = System.currentTimeMillis();
-            renderDuration = 1000L * Integer.parseInt(preStrengthTimer) + 1000L;
-        } catch (Exception ignored) {}
+        timeStartRender = System.currentTimeMillis();
+        renderDuration = 1000L * Integer.parseInt(preStrengthTimer) + 1000L;
     }
 
     public void setStrengthRenderStart(long duration) {

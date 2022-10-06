@@ -16,41 +16,36 @@ import java.util.regex.Pattern;
 
 public class ArrowHitGui extends MyCachedGui {
 
+    public static ArrowHitGui instance;
+
     private static final String DUMMY_TEXT = EnumChatFormatting.GREEN + "20.0";
     private static final Pattern PATTERN_ARROW_HIT = Pattern.compile("^(\\w+) is on ([0-9]*[.]?[0-9]+) HP!");
     private static final Pattern PATTERN_RENEGADE_HIT = Pattern.compile("^(\\w+) is on ([0-9]*[.]?[0-9]+) HP, pinned by (\\d+) arrows.*");
     private static final Pattern PATTERN_LEAP_HIT = Pattern.compile("^You took ([0-9]*[.]?[0-9]+) recoil damage after traveling \\d+.\\d+ blocks!");
     private static final Pattern PATTERN_LEAP_DIRECT_HIT = Pattern.compile("^You landed a direct hit against (\\w+), taking ([0-9]*[.]?[0-9]+) recoil damage after traveling [0-9]*[.]?[0-9]+ blocks!");
     private static final Pattern PATTERN_REND = Pattern.compile("^Your Rend dealt [0-9]*[.]?[0-9]+ damage to \\w+.*");
-    private static final Pattern PATTERN_REND2 = Pattern.compile("([0-9]*[.]?[0-9]+) damage to (\\w+)");
-    public static ArrowHitGui instance;
-    private static String HPvalue;
-    private static long hittime;
-    private static boolean normalhit = true;
-    private static EnumChatFormatting Color;
-    private static String arrowspinned;
+    private static final Pattern PATTERN_REND_2 = Pattern.compile("([0-9]*[.]?[0-9]+) damage to (\\w+)");
+
+    private long hittime;
 
     public ArrowHitGui() {
         super(ConfigHandler.arrowHitHUDPosition);
         instance = this;
     }
 
-    public static boolean processMessage(String msg, String fmsg) {
+    public boolean processMessage(String msg, String fmsg) {
 
         final Matcher matcherArrowHit = PATTERN_ARROW_HIT.matcher(msg);
 
         if (matcherArrowHit.matches()) {
-            final String playername = matcherArrowHit.group(1);
-            HPvalue = matcherArrowHit.group(2);
-            if (isDeadFromShot(playername)) {
-                HPvalue = "Kill";
-                Color = EnumChatFormatting.GOLD;
-            } else {
-                setColor(HPvalue);
-            }
-            normalhit = true;
             hittime = System.currentTimeMillis();
-            instance.updateDisplayText();
+            final String playername = matcherArrowHit.group(1);
+            final String hitValue = matcherArrowHit.group(2);
+            if (isDeadFromShot(playername, hitValue)) {
+                displayText = EnumChatFormatting.GOLD + "Kill";
+            } else {
+                displayText = getColor(hitValue) + hitValue;
+            }
             ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg);
             return true;
         }
@@ -58,14 +53,13 @@ public class ArrowHitGui extends MyCachedGui {
         final Matcher matcherRenegadeHit = PATTERN_RENEGADE_HIT.matcher(msg);
 
         if (matcherRenegadeHit.matches()) {
-            String playername = matcherRenegadeHit.group(1);
-            HPvalue = matcherRenegadeHit.group(2);
-            arrowspinned = matcherRenegadeHit.group(3);
             hittime = System.currentTimeMillis();
-            RenderPlayerHook.addArrowOnPlayer(playername, hittime, Integer.parseInt(arrowspinned));
-            normalhit = false;
-            setColor(HPvalue);
-            instance.updateDisplayText();
+            final String playername = matcherRenegadeHit.group(1);
+            final String hitValue = matcherRenegadeHit.group(2);
+            final String arrowsPinned = matcherRenegadeHit.group(3);
+            RenderPlayerHook.addArrowOnPlayer(playername, hittime, Integer.parseInt(arrowsPinned));
+            final boolean bool = Float.parseFloat(hitValue) > (Float.parseFloat(arrowsPinned)) * 2.0f;
+            displayText = getColor(hitValue) + hitValue + EnumChatFormatting.GRAY + " (" + (bool ? EnumChatFormatting.GREEN : EnumChatFormatting.GOLD) + arrowsPinned + EnumChatFormatting.GRAY + ")";
             ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg);
             return true;
         }
@@ -73,11 +67,8 @@ public class ArrowHitGui extends MyCachedGui {
         final Matcher matcherLeapHit = PATTERN_LEAP_HIT.matcher(msg);
 
         if (matcherLeapHit.matches()) {
-            HPvalue = "-" + 2f * Float.parseFloat(matcherLeapHit.group(1));
             hittime = System.currentTimeMillis() + 1000L;
-            normalhit = true;
-            Color = EnumChatFormatting.GREEN;
-            instance.updateDisplayText();
+            displayText = EnumChatFormatting.GREEN + "-" + 2f * Float.parseFloat(matcherLeapHit.group(1));
             ChatUtil.addChatMessage(fmsg);
             return true;
         }
@@ -85,12 +76,9 @@ public class ArrowHitGui extends MyCachedGui {
         final Matcher matcherLeapDirectHit = PATTERN_LEAP_DIRECT_HIT.matcher(msg);
 
         if (matcherLeapDirectHit.matches()) {
-            HPvalue = "-" + 2f * Float.parseFloat(matcherLeapDirectHit.group(2));
             hittime = System.currentTimeMillis() + 1000L;
-            normalhit = true;
-            Color = EnumChatFormatting.GREEN;
-            instance.updateDisplayText();
             final String playername = matcherLeapDirectHit.group(1);
+            displayText = EnumChatFormatting.GREEN + "-" + 2f * Float.parseFloat(matcherLeapDirectHit.group(2));
             ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg);
             return true;
         }
@@ -98,7 +86,8 @@ public class ArrowHitGui extends MyCachedGui {
         final Matcher matcherRend = PATTERN_REND.matcher(msg);
 
         if (matcherRend.matches()) {
-            final Matcher matcherRend2 = PATTERN_REND2.matcher(msg);
+            hittime = System.currentTimeMillis() + 1000L;
+            final Matcher matcherRend2 = PATTERN_REND_2.matcher(msg);
             float totalDamage = 0f;
             while (matcherRend2.find()) {
                 final float damage = Float.parseFloat(matcherRend2.group(1));
@@ -107,11 +96,7 @@ public class ArrowHitGui extends MyCachedGui {
                 RenderPlayerHook.removeArrowsFrom(playername, (int) (damage / 2));
                 fmsg = FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg;
             }
-            HPvalue = "-" + totalDamage;
-            hittime = System.currentTimeMillis() + 1000L;
-            normalhit = true;
-            Color = EnumChatFormatting.GREEN;
-            instance.updateDisplayText();
+            displayText = EnumChatFormatting.GREEN + "-" + totalDamage;
             ChatUtil.addChatMessage(fmsg);
             return true;
         }
@@ -120,8 +105,8 @@ public class ArrowHitGui extends MyCachedGui {
 
     }
 
-    private static boolean isDeadFromShot(String playername) {
-        if (!HPvalue.equals("0")) {
+    private boolean isDeadFromShot(String playername, String hpValue) {
+        if (!hpValue.equals("0")) {
             return false;
         }
         final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
@@ -139,41 +124,31 @@ public class ArrowHitGui extends MyCachedGui {
     /**
      * Sets the HP color depending on the HP input
      */
-    private static void setColor(String hpvalue) {
-        float maxhealth = mc.thePlayer.getMaxHealth();
-        float floathpvalue = Float.parseFloat(hpvalue);
+    private EnumChatFormatting getColor(String hpValue) {
+        final float maxhealth = mc.thePlayer.getMaxHealth();
+        final float floathpvalue = Float.parseFloat(hpValue);
         if (floathpvalue > maxhealth) {
-            Color = EnumChatFormatting.DARK_GREEN;
+            return EnumChatFormatting.DARK_GREEN;
         } else if (floathpvalue > maxhealth * 3 / 4) {
-            Color = EnumChatFormatting.GREEN;
+            return EnumChatFormatting.GREEN;
         } else if (floathpvalue > maxhealth / 2) {
-            Color = EnumChatFormatting.YELLOW;
+            return EnumChatFormatting.YELLOW;
         } else if (floathpvalue > maxhealth / 4) {
-            Color = EnumChatFormatting.RED;
+            return EnumChatFormatting.RED;
         } else {
-            Color = EnumChatFormatting.DARK_RED;
-        }
-    }
-
-    @Override
-    public void updateDisplayText() {
-        if (normalhit) {
-            displayText = Color + HPvalue;
-        } else {
-            boolean bool = Float.parseFloat(HPvalue) > (Float.parseFloat(arrowspinned)) * 2.0f;
-            displayText = Color + HPvalue + EnumChatFormatting.GRAY + " (" + (bool ? EnumChatFormatting.GREEN : EnumChatFormatting.GOLD) + arrowspinned + EnumChatFormatting.GRAY + ")";
+            return EnumChatFormatting.DARK_RED;
         }
     }
 
     @Override
     public void render(ScaledResolution resolution) {
-        int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
+        final int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
         drawCenteredString(frObj, displayText, absolutePos[0], absolutePos[1] - frObj.FONT_HEIGHT, 0);
     }
 
     @Override
     public void renderDummy() {
-        int[] absolutePos = this.guiPosition.getAbsolutePosition();
+        final int[] absolutePos = this.guiPosition.getAbsolutePosition();
         drawCenteredString(frObj, DUMMY_TEXT, absolutePos[0], absolutePos[1] - frObj.FONT_HEIGHT, 0);
     }
 

@@ -76,8 +76,8 @@ public class ChatEvents {
         /*normal chat messages*/
         if (event.type == 0) {
 
-            String msg = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
-            String fmsg = event.message.getFormattedText();
+            final String msg = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
+            final String fmsg = event.message.getFormattedText();
 
             if (FKCounterMod.isInMwGame && ConfigHandler.hideRepetitiveMWChatMsg && MW_REPETITVE_MSG.contains(msg)) {
                 event.setCanceled(true);
@@ -91,7 +91,7 @@ public class ChatEvents {
             }
 
             if (msg.equals(OWN_WITHER_DEATH_MESSAGE)) {
-                KillCooldownGui.hideGUI();
+                KillCooldownGui.instance.hideGUI();
                 return;
             }
 
@@ -99,7 +99,7 @@ public class ChatEvents {
              * shortens the coins messages removing the booster info
              */
             if (ConfigHandler.shortencoinmessage) {
-                Matcher matchercoins = COINS_PATTERN.matcher(msg);
+                final Matcher matchercoins = COINS_PATTERN.matcher(msg);
                 if (matchercoins.matches()) {
                     event.message = new ChatComponentText(fmsg.replace(matchercoins.group(1), ""));
                     return;
@@ -116,12 +116,12 @@ public class ChatEvents {
                 return;
             }
 
-            if (ArrowHitGui.processMessage(msg, fmsg)) {
+            if (ArrowHitGui.instance.processMessage(msg, fmsg)) {
                 event.setCanceled(true);
                 return;
             }
 
-            Matcher matcher = MESSAGE_PATTERN.matcher(msg);
+            final Matcher matcher = MESSAGE_PATTERN.matcher(msg);
             String senderRank = null;
             String messageSender = null;
             String squadname = null;
@@ -170,7 +170,7 @@ public class ChatEvents {
             }
 
             if (FKCounterMod.preGameLobby) {
-                Matcher playerJoinMatcher = PLAYER_JOIN_PATTERN.matcher(msg);
+                final Matcher playerJoinMatcher = PLAYER_JOIN_PATTERN.matcher(msg);
                 if (playerJoinMatcher.matches()) {
                     PartyDetection.onPlayerJoin(playerJoinMatcher.group(1), System.currentTimeMillis());
                     return;
@@ -185,31 +185,31 @@ public class ChatEvents {
             /*Status messages*/
         } else if (ConfigHandler.strengthHUD && event.type == 2) {
 
-            String fmsg = event.message.getFormattedText();
+            final String fmsg = event.message.getFormattedText();
 
-            Matcher dreadStrenghtMatcher = DREADLORD_STRENGTH_PATTERN.matcher(fmsg);
+            final Matcher dreadStrenghtMatcher = DREADLORD_STRENGTH_PATTERN.matcher(fmsg);
             if (dreadStrenghtMatcher.find()) {
                 HunterStrengthGui.instance.setStrengthRenderStart(Long.parseLong(dreadStrenghtMatcher.group(1)) * 1000L);
                 return;
             }
 
-            Matcher preStrengthMatcher = HUNTER_PRE_STRENGTH_PATTERN.matcher(fmsg);
+            final Matcher preStrengthMatcher = HUNTER_PRE_STRENGTH_PATTERN.matcher(fmsg);
             if (preStrengthMatcher.find()) {
                 if (timerStrength.update()) {
                     mc.getSoundHandler().playSound(PositionedSoundRecord.create(STRENGTH_SOUND, 0.0F));
                 }
-                String preStrengthTimer = preStrengthMatcher.group(1);
+                final String preStrengthTimer = preStrengthMatcher.group(1);
                 HunterStrengthGui.instance.setPreStrengthTime(preStrengthTimer);
                 return;
             }
 
-            Matcher herobrineStrenghtMatcher = HEROBRINE_STRENGTH_PATTERN.matcher(fmsg);
+            final Matcher herobrineStrenghtMatcher = HEROBRINE_STRENGTH_PATTERN.matcher(fmsg);
             if (herobrineStrenghtMatcher.find()) {
                 HunterStrengthGui.instance.setStrengthRenderStart(Long.parseLong(herobrineStrenghtMatcher.group(1)) * 1000L);
                 return;
             }
 
-            Matcher zombieStrenghtMatcher = ZOMBIE_STRENGTH_PATTERN.matcher(fmsg);
+            final Matcher zombieStrenghtMatcher = ZOMBIE_STRENGTH_PATTERN.matcher(fmsg);
             if (zombieStrenghtMatcher.find()) {
                 HunterStrengthGui.instance.setStrengthRenderStart(Long.parseLong(zombieStrenghtMatcher.group(1)) * 1000L);
             }
@@ -222,7 +222,7 @@ public class ChatEvents {
      * automatically sets up the api key on hypixel when you type /api new
      */
     private boolean parseAPIKey(String msg) {
-        Matcher matcherapikey = API_KEY_PATTERN.matcher(msg);
+        final Matcher matcherapikey = API_KEY_PATTERN.matcher(msg);
         if (matcherapikey.matches()) {
             HypixelApiKeyUtil.setApiKey(matcherapikey.group(1));
             return true;
