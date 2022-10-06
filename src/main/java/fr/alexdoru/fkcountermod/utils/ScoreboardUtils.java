@@ -24,11 +24,11 @@ public class ScoreboardUtils {
      * Item at index 0 is the first line etc
      */
     public static List<String> getFormattedSidebarText() {
-        List<String> lines = new ArrayList<>();
+        final List<String> lines = new ArrayList<>();
         if (mc.theWorld == null) {
             return lines;
         }
-        Scoreboard scoreboard = mc.theWorld.getScoreboard();
+        final Scoreboard scoreboard = mc.theWorld.getScoreboard();
         if (scoreboard == null) {
             return lines;
         }
@@ -40,20 +40,20 @@ public class ScoreboardUtils {
      * Item at index 0 is the first line etc
      */
     public static List<String> getFormattedSidebarText(Scoreboard scoreboard) {
-        List<String> lines = new ArrayList<>();
-        ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(1);
+        final List<String> lines = new ArrayList<>();
+        final ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(1);
         if (objective == null) {
             return lines;
         }
         Collection<Score> scores = scoreboard.getSortedScores(objective);
-        List<Score> list = scores.stream().filter(input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#")).collect(Collectors.toList());
+        final List<Score> list = scores.stream().filter(input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#")).collect(Collectors.toList());
         if (list.size() > 15) {
             scores = Lists.newArrayList(Iterables.skip(list, scores.size() - 15));
         } else {
             scores = list;
         }
-        for (Score score : scores) {
-            ScorePlayerTeam team = scoreboard.getPlayersTeam(score.getPlayerName());
+        for (final Score score : scores) {
+            final ScorePlayerTeam team = scoreboard.getPlayersTeam(score.getPlayerName());
             lines.add(ScorePlayerTeam.formatPlayerName(team, ""));
         }
         Collections.reverse(lines);
@@ -75,7 +75,7 @@ public class ScoreboardUtils {
      * @param scoreboard - raw minecraft scoreboard - mc.theWorld.getScoreboard()
      */
     public static List<String> getUnformattedSidebarText(Scoreboard scoreboard) {
-        List<String> lines = getFormattedSidebarText(scoreboard);
+        final List<String> lines = getFormattedSidebarText(scoreboard);
         return stripControlCodes(lines);
     }
 
@@ -85,7 +85,7 @@ public class ScoreboardUtils {
      * @param ListIn - String list with chat color control codes
      */
     public static List<String> stripControlCodes(List<String> ListIn) {
-        List<String> unformattedList = new ArrayList<>();
+        final List<String> unformattedList = new ArrayList<>();
         for (int i = 0; i < ListIn.size(); i++) {
             unformattedList.add(i, StringUtils.stripControlCodes(ListIn.get(i)));
         }
@@ -96,7 +96,7 @@ public class ScoreboardUtils {
      * Returns formatted top of the scoreboard/sidebar
      */
     public static String getSidebarTitle(Scoreboard scoreboard) {
-        ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(1);
+        final ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(1);
         if (objective == null) {
             return "";
         }

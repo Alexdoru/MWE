@@ -29,18 +29,18 @@ public class HttpClient {
 
     public String getrawresponse() throws ApiException {
 
-        BufferedReader reader;
+        final BufferedReader reader;
         String line;
-        StringBuilder responsecontent = new StringBuilder();
+        final StringBuilder responsecontent = new StringBuilder();
 
         try {
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             connection.setRequestMethod("GET");
             connection.setConnectTimeout(10000);
             connection.setReadTimeout(10000);
 
-            int status = connection.getResponseCode();
+            final int status = connection.getResponseCode();
 
             if (status == 200) { //connection successfull
 

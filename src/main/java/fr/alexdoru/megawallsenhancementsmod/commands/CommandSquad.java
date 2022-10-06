@@ -37,11 +37,11 @@ public class CommandSquad extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
 
-        Minecraft mc = Minecraft.getMinecraft();
+        final Minecraft mc = Minecraft.getMinecraft();
         String title = null;
 
         if (mc.theWorld != null) {
-            Scoreboard scoreboard = mc.theWorld.getScoreboard();
+            final Scoreboard scoreboard = mc.theWorld.getScoreboard();
             if (scoreboard != null) {
                 title = ScoreboardUtils.getUnformattedSidebarTitle(scoreboard);
             }
@@ -65,11 +65,11 @@ public class CommandSquad extends CommandBase {
             }
 
             if (args.length >= 4 && args[2].equalsIgnoreCase("as")) {
-                StringBuilder stringBuilder = new StringBuilder();
+                final StringBuilder stringBuilder = new StringBuilder();
                 for (int i = 3; i < args.length; i++) {
                     stringBuilder.append(args[i]).append((i == args.length - 1) ? "" : " ");
                 }
-                String alias = stringBuilder.toString();
+                final String alias = stringBuilder.toString();
                 SquadEvent.addPlayer(args[1], alias);
                 ChatUtil.addChatMessage(ChatUtil.getTagMW() +
                         EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[1] + EnumChatFormatting.GREEN + " as " +
@@ -90,18 +90,18 @@ public class CommandSquad extends CommandBase {
 
         } else if (args[0].equalsIgnoreCase("l") || args[0].equalsIgnoreCase("list")) {
 
-            HashMap<String, String> squad = SquadEvent.getSquad();
+            final HashMap<String, String> squad = SquadEvent.getSquad();
 
             if (squad.isEmpty()) {
                 ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "No one in the squad right now.");
                 return;
             }
 
-            IChatComponent imsg = new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Players in your squad : \n");
+            final IChatComponent imsg = new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Players in your squad : \n");
 
-            for (Entry<String, String> entry : squad.entrySet()) {
-                String displayname = entry.getKey();
-                String squadname = entry.getValue();
+            for (final Entry<String, String> entry : squad.entrySet()) {
+                final String displayname = entry.getKey();
+                final String squadname = entry.getValue();
                 imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + "- " + EnumChatFormatting.GOLD + displayname
                         + (displayname.equals(squadname) ? "" : EnumChatFormatting.GREEN + " renamed as : " + EnumChatFormatting.GOLD + entry.getValue()) + "\n"));
             }
@@ -131,7 +131,7 @@ public class CommandSquad extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        String[] args1 = {"add", "disband", "list", "remove"};
+        final String[] args1 = {"add", "disband", "list", "remove"};
         return args.length == 1 ? getListOfStringsMatchingLastWord(args, args1) : args.length >= 2 ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null;
     }
 

@@ -15,7 +15,7 @@ public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDTe
     public static final FontRenderer frObj = mc.fontRendererObj;
 
     public String displayText = "";
-    public GuiPosition guiPosition;
+    public final GuiPosition guiPosition;
 
     public MyCachedHUD(GuiPosition guiPosition) {
         this.guiPosition = guiPosition;
@@ -61,7 +61,7 @@ public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDTe
     }
 
     public void drawMultilineString(String msg, int x, int y, boolean shadow) {
-        for (String line : msg.split("\n")) {
+        for (final String line : msg.split("\n")) {
             frObj.drawString(line, x, y, 16777215, shadow);
             y += frObj.FONT_HEIGHT;
         }
@@ -69,8 +69,8 @@ public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDTe
 
     public int getMultilineWidth(String string) {
         int maxwidth = 0;
-        for (String line : string.split("\n")) {
-            int width = frObj.getStringWidth(line);
+        for (final String line : string.split("\n")) {
+            final int width = frObj.getStringWidth(line);
             if (width > maxwidth) {
                 maxwidth = width;
             }

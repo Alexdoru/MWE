@@ -50,13 +50,13 @@ public class CommandMWEnhancements extends CommandBase {
             NameUtil.refreshAllNamesInWorld();
             return;
         } else if (args.length >= 1 && args[0].equalsIgnoreCase("howplaygame")) {
-            String title = ScoreboardUtils.getUnformattedSidebarTitle();
+            final String title = ScoreboardUtils.getUnformattedSidebarTitle();
             if (title != null && title.contains("MEGA WALLS")) {
-                String msg1 = "During the first 6 minutes you have to mine iron, make armor and store everything in your enderchest";
-                String msg2 = "Once the walls fall down you can go to mid and fight other players, each class has unique abilities";
-                String msg3 = "Every team has a wither, you have to protect yours and kill the withers from the other teams";
-                String msg4 = "Once a wither is dead the players from that team can't respawn, be the last team standing to win";
-                String msg5 = "More informations about the game: https://hypixel.net/threads/the-complete-mega-walls-guide.3489088/";
+                final String msg1 = "During the first 6 minutes you have to mine iron, make armor and store everything in your enderchest";
+                final String msg2 = "Once the walls fall down you can go to mid and fight other players, each class has unique abilities";
+                final String msg3 = "Every team has a wither, you have to protect yours and kill the withers from the other teams";
+                final String msg4 = "Once a wither is dead the players from that team can't respawn, be the last team standing to win";
+                final String msg5 = "More informations about the game: https://hypixel.net/threads/the-complete-mega-walls-guide.3489088/";
                 sendChatMessage(msg1);
                 new DelayedTask(() -> sendChatMessage(msg2), 80);
                 new DelayedTask(() -> sendChatMessage(msg3), 155);
@@ -72,7 +72,7 @@ public class CommandMWEnhancements extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        String[] possibilities = {"clearcache", "howplaygame", "refreshconfig", "setapikey"};
+        final String[] possibilities = {"clearcache", "howplaygame", "refreshconfig", "setapikey"};
         return getListOfStringsMatchingLastWord(args, possibilities);
     }
 

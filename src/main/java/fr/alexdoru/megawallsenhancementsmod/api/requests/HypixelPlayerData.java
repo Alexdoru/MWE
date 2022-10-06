@@ -14,21 +14,21 @@ public class HypixelPlayerData {
 
     public HypixelPlayerData(String uuid, String apikey) throws ApiException {
 
-        HttpClient httpclient = new HttpClient("https://api.hypixel.net/player?key=" + apikey + "&uuid=" + uuid);
-        String rawresponse = httpclient.getrawresponse();
+        final HttpClient httpclient = new HttpClient("https://api.hypixel.net/player?key=" + apikey + "&uuid=" + uuid);
+        final String rawresponse = httpclient.getrawresponse();
 
         if (rawresponse == null)
             throw new ApiException("No response from Hypixel's Api");
 
-        JsonParser parser = new JsonParser();
-        JsonObject obj = parser.parse(rawresponse).getAsJsonObject();
+        final JsonParser parser = new JsonParser();
+        final JsonObject obj = parser.parse(rawresponse).getAsJsonObject();
 
         if (obj == null)
             throw new ApiException("Cannot parse response from Hypixel's Api");
 
         if (!obj.get("success").getAsBoolean()) {
 
-            String msg = JsonUtil.getString(obj, "cause");
+            final String msg = JsonUtil.getString(obj, "cause");
 
             if (msg == null) {
                 throw new ApiException("Failed to retreive data from Hypixel's Api for this player");
@@ -38,13 +38,13 @@ public class HypixelPlayerData {
 
         }
 
-        JsonElement playerdataElem = obj.get("player");
+        final JsonElement playerdataElem = obj.get("player");
 
         if (playerdataElem == null || !playerdataElem.isJsonObject()) {
             throw new ApiException("This player never joined Hypixel, it might be a nick.");
         }
 
-        JsonObject playerdata = playerdataElem.getAsJsonObject();
+        final JsonObject playerdata = playerdataElem.getAsJsonObject();
 
         if (playerdata == null)
             throw new ApiException("An error occured while parsing data for this player on Hypixel's Api");

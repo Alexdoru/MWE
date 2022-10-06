@@ -62,13 +62,13 @@ public class MegaWallsStats {
             return;
         }
 
-        JsonObject statsdata = playerData.get("stats").getAsJsonObject();
+        final JsonObject statsdata = playerData.get("stats").getAsJsonObject();
 
         if (statsdata == null) {
             return;
         }
 
-        JsonObject mwdata = JsonUtil.getJsonObject(statsdata, "Walls3");
+        final JsonObject mwdata = JsonUtil.getJsonObject(statsdata, "Walls3");
 
         if (mwdata == null) {
             return;
@@ -107,9 +107,9 @@ public class MegaWallsStats {
         // computes the number of prestiges
         classesdata = JsonUtil.getJsonObject(mwdata, "classes");
         if (classesdata != null) {
-            for (MWClass mwclass : MWClass.values()) {
-                String classname = mwclass.className.toLowerCase();
-                JsonObject classeobj = JsonUtil.getJsonObject(classesdata, classname);
+            for (final MWClass mwclass : MWClass.values()) {
+                final String classname = mwclass.className.toLowerCase();
+                final JsonObject classeobj = JsonUtil.getJsonObject(classesdata, classname);
                 if (classeobj == null) {
                     continue;
                 }
@@ -126,7 +126,7 @@ public class MegaWallsStats {
         try {
             final JsonElement achievementsOneTime = playerData.get("achievementsOneTime");
             if (achievementsOneTime != null && achievementsOneTime.isJsonArray()) {
-                for (JsonElement jsonElement : achievementsOneTime.getAsJsonArray()) {
+                for (final JsonElement jsonElement : achievementsOneTime.getAsJsonArray()) {
                     if (jsonElement.isJsonArray()) {
                         continue;
                     }
@@ -165,9 +165,9 @@ public class MegaWallsStats {
     }
 
     public IChatComponent getClassPointsMessage(String formattedname, String playername) {
-        IChatComponent imsg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
+        final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls Classpoints\n\n"));
-        for (Map.Entry<String, Integer[]> entry : classpointsMap.entrySet()) {
+        for (final Map.Entry<String, Integer[]> entry : classpointsMap.entrySet()) {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + ChatUtil.capitalizeFirstLetter(entry.getKey()))
                     .setChatStyle(new ChatStyle()
                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for " + entry.getKey() + " stats")))
@@ -185,7 +185,7 @@ public class MegaWallsStats {
 
     public IChatComponent getFormattedMessage(String formattedname, String playername) {
 
-        String[][] matrix1 = {
+        final String[][] matrix1 = {
                 {
                         EnumChatFormatting.AQUA + "Kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(kills) + " ",
                         EnumChatFormatting.AQUA + "Deaths : " + EnumChatFormatting.RED + ChatUtil.formatInt(deaths) + " ",
@@ -204,7 +204,7 @@ public class MegaWallsStats {
                         EnumChatFormatting.AQUA + "W/L Ratio : " + (wlr > 0.25f ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", wlr)
                 }};
 
-        String[][] matrix2 = {
+        final String[][] matrix2 = {
                 {
                         EnumChatFormatting.AQUA + "Games played : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(games_played) + "     ",
                         EnumChatFormatting.AQUA + "FK/game : " + (fkpergame > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", fkpergame)

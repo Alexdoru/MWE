@@ -88,7 +88,7 @@ public class ReportQueue {
     }
 
     private boolean doesQueueHaveReportSuggestion() {
-        for (ReportInQueue reportInQueue : queueList) {
+        for (final ReportInQueue reportInQueue : queueList) {
             if (reportInQueue.isReportSuggestion) {
                 return true;
             }
@@ -99,7 +99,7 @@ public class ReportQueue {
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
         if (isDebugMode && event.type == RenderGameOverlayEvent.ElementType.TEXT) {
-            int x = 0;
+            final int x = 0;
             int y = frObj.FONT_HEIGHT * 4;
             frObj.drawString(EnumChatFormatting.DARK_GREEN + "REPORT QUEUE", x, y, 0, true);
             y += frObj.FONT_HEIGHT;
@@ -182,7 +182,7 @@ public class ReportQueue {
     }
 
     public void clearReportsSentBy(String playername) {
-        StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
         final Iterator<ReportInQueue> iterator = queueList.iterator();
         while (iterator.hasNext()) {
             final ReportInQueue reportInQueue = iterator.next();
@@ -198,7 +198,7 @@ public class ReportQueue {
     }
 
     public void clearSuggestionsInReportQueue() {
-        StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
         final Iterator<ReportInQueue> iterator = queueList.iterator();
         while (iterator.hasNext()) {
             final ReportInQueue reportInQueue = iterator.next();
@@ -214,7 +214,7 @@ public class ReportQueue {
     }
 
     public void clearReportsFor(String reportedPlayer) {
-        StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
         final Iterator<ReportInQueue> iterator = queueList.iterator();
         while (iterator.hasNext()) {
             final ReportInQueue reportInQueue = iterator.next();
@@ -233,7 +233,7 @@ public class ReportQueue {
      * Called everytime a report is sent to check that the player doesn't send too many reports in a short time
      */
     public void addReportTimestamp(boolean manualReport) {
-        long l = System.currentTimeMillis();
+        final long l = System.currentTimeMillis();
         timestampsLastReports.removeIf(o -> (o + 2 * 60 * 1000L < l));
         if (manualReport && timestampsLastReports.size() > 4) {
             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Don't report too many players at once or Hypixel will ignore your reports thinking you are a bot trying to flood their system");
@@ -247,9 +247,9 @@ public class ReportQueue {
     }
 
     private boolean canReportPlayerThisGame(String playername) {
-        long timestamp = System.currentTimeMillis();
+        final long timestamp = System.currentTimeMillis();
         playersReportedThisGame.removeIf(o -> (o.timestamp + 40L * 60L * 1000L < timestamp));
-        for (StringLong stringLong : playersReportedThisGame) {
+        for (final StringLong stringLong : playersReportedThisGame) {
             if (stringLong.message != null && stringLong.message.equalsIgnoreCase(playername)) {
                 return false;
             }

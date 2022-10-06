@@ -102,7 +102,8 @@ public interface ILeveling {
      * @return The experience required to reach that level and progress
      */
     static double getTotalExpToLevel(double level) {
-        double lv = Math.floor(level), x0 = ILeveling.getTotalExpToFullLevel(lv);
+        final double lv = Math.floor(level);
+        final double x0 = ILeveling.getTotalExpToFullLevel(lv);
         if (level == lv) return x0;
         return (ILeveling.getTotalExpToFullLevel(lv + 1) - x0) * (level % 1) + x0;
     }
@@ -133,7 +134,8 @@ public interface ILeveling {
      * @return Current progress to the next level
      */
     static double getPercentageToNextLevel(double exp) {
-        double lv = ILeveling.getLevel(exp), x0 = getTotalExpToLevel(lv);
+        final double lv = ILeveling.getLevel(exp);
+        final double x0 = getTotalExpToLevel(lv);
         return (exp - x0) / (ILeveling.getTotalExpToLevel(lv + 1) - x0);
     }
 }

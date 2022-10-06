@@ -39,36 +39,36 @@ public class GeneralInfo extends LoginData {
         this.karma = JsonUtil.getInt(playerData, "karma");
         this.mcVersionRp = JsonUtil.getString(playerData, "mcVersionRp");
 
-        JsonObject questsdata = JsonUtil.getJsonObject(playerData, "quests");
+        final JsonObject questsdata = JsonUtil.getJsonObject(playerData, "quests");
 
         if (questsdata != null) {
 
-            for (Map.Entry<String, JsonElement> entry : questsdata.entrySet()) {
+            for (final Map.Entry<String, JsonElement> entry : questsdata.entrySet()) {
                 if (entry.getValue() != null && entry.getValue().isJsonObject()) {
 
-                    JsonObject entryobj = entry.getValue().getAsJsonObject();
-                    JsonElement completionsElem = entryobj.get("completions");
+                    final JsonObject entryobj = entry.getValue().getAsJsonObject();
+                    final JsonElement completionsElem = entryobj.get("completions");
 
                     if (completionsElem == null)
                         continue;
 
-                    JsonArray completionsArray = completionsElem.getAsJsonArray();
+                    final JsonArray completionsArray = completionsElem.getAsJsonArray();
 
                     if (completionsArray == null)
                         continue;
 
-                    for (JsonElement ignored : completionsArray) {
+                    for (final JsonElement ignored : completionsArray) {
                         this.completedQuests++;
                     }
                 }
             }
         }
 
-        JsonObject socialMediaObj = JsonUtil.getJsonObject(playerData, "socialMedia");
+        final JsonObject socialMediaObj = JsonUtil.getJsonObject(playerData, "socialMedia");
 
         if (socialMediaObj != null) {
 
-            JsonObject linksObj = JsonUtil.getJsonObject(socialMediaObj, "links");
+            final JsonObject linksObj = JsonUtil.getJsonObject(socialMediaObj, "links");
 
             if (linksObj != null) {
                 this.DISCORD = JsonUtil.getString(linksObj, "DISCORD");
@@ -83,7 +83,7 @@ public class GeneralInfo extends LoginData {
 
     public IChatComponent getFormattedMessage(String formattedname, String guildname) {
 
-        IChatComponent msg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
+        final IChatComponent msg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
 
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, this.getdisplayname(), " - General info"))
 

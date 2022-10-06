@@ -34,10 +34,10 @@ public class LoginData {
         /*
          * the 8 first characters on the _id entry of the API happen to be the amount of seconds since 1st jan 1970 in hexadecimal
          */
-        String _id = JsonUtil.getString(playerData, "_id");
+        final String _id = JsonUtil.getString(playerData, "_id");
 
         if (_id != null) {
-            String substring = _id.substring(0, 8);
+            final String substring = _id.substring(0, 8);
             this.firstLogin = Long.parseLong(substring, 16) * 1000L;
         }
 
@@ -48,12 +48,12 @@ public class LoginData {
         this.rank = JsonUtil.getString(playerData, "rank");
         this.displayname = JsonUtil.getString(playerData, "displayname");
 
-        String prefix = JsonUtil.getString(playerData, "prefix");
-        String rankPlusColor = JsonUtil.getString(playerData, "rankPlusColor");
+        final String prefix = JsonUtil.getString(playerData, "prefix");
+        final String rankPlusColor = JsonUtil.getString(playerData, "rankPlusColor");
         this.monthlyPackageRank = JsonUtil.getString(playerData, "monthlyPackageRank");
-        String packageRank = JsonUtil.getString(playerData, "packageRank");
-        String newPackageRank = JsonUtil.getString(playerData, "newPackageRank");
-        String monthlyRankColor = JsonUtil.getString(playerData, "monthlyRankColor");
+        final String packageRank = JsonUtil.getString(playerData, "packageRank");
+        final String newPackageRank = JsonUtil.getString(playerData, "newPackageRank");
+        final String monthlyRankColor = JsonUtil.getString(playerData, "monthlyRankColor");
 
         parseFormattedName(prefix, rankPlusColor, packageRank, newPackageRank, monthlyRankColor);
 
@@ -62,18 +62,18 @@ public class LoginData {
     public void parseLatestActivity(JsonObject playerData) {
         latestActivityTime = JsonUtil.getLong(playerData, "lastClaimedReward");
         latestActivity = "Claimed Daily Reward";
-        JsonElement questElem = playerData.get("quests");
+        final JsonElement questElem = playerData.get("quests");
         if (questElem != null && questElem.isJsonObject()) {
-            JsonObject questobj = questElem.getAsJsonObject();
-            for (Map.Entry<String, JsonElement> questEntry : questobj.entrySet()) {
+            final JsonObject questobj = questElem.getAsJsonObject();
+            for (final Map.Entry<String, JsonElement> questEntry : questobj.entrySet()) {
                 if (questEntry.getValue().isJsonObject()) {
-                    JsonObject gameObj = questEntry.getValue().getAsJsonObject();
-                    JsonElement completionsElem = gameObj.get("completions");
+                    final JsonObject gameObj = questEntry.getValue().getAsJsonObject();
+                    final JsonElement completionsElem = gameObj.get("completions");
                     if (completionsElem != null && completionsElem.isJsonArray()) {
-                        JsonArray completionsArray = completionsElem.getAsJsonArray();
-                        for (JsonElement element : completionsArray) {
+                        final JsonArray completionsArray = completionsElem.getAsJsonArray();
+                        for (final JsonElement element : completionsArray) {
                             if (element.isJsonObject()) {
-                                long l = JsonUtil.getLong(element.getAsJsonObject(), "time");
+                                final long l = JsonUtil.getLong(element.getAsJsonObject(), "time");
                                 if (l > latestActivityTime) {
                                     latestActivityTime = l;
                                     latestActivity = "Quest " + questEntry.getKey();
@@ -121,7 +121,7 @@ public class LoginData {
         }
 
         if (monthlyPackageRank != null && monthlyPackageRank.equals("SUPERSTAR")) { // MVP++
-            EnumChatFormatting rankPlusPlusColor = monthlyRankColor != null ? EnumChatFormatting.getValueByName(monthlyRankColor) : EnumChatFormatting.GOLD;
+            final EnumChatFormatting rankPlusPlusColor = monthlyRankColor != null ? EnumChatFormatting.getValueByName(monthlyRankColor) : EnumChatFormatting.GOLD;
             this.formattedname = rankPlusPlusColor + "[MVP" + EnumChatFormatting.getValueByName(rankPlusColor) + "++" + rankPlusPlusColor + "]" + " " + this.displayname;
             return;
         }

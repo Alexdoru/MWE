@@ -42,10 +42,10 @@ public class CommandWDR extends CommandBase {
 
     public static void addTimeMark() {
         nbTimeMarks++;
-        String key = String.valueOf(nbTimeMarks);
-        long timestamp = (new Date()).getTime();
-        String serverID = GameInfoGrabber.getGameIDfromscoreboard();
-        String timerOnReplay = GameInfoGrabber.getTimeSinceGameStart(timestamp, serverID, 0);
+        final String key = String.valueOf(nbTimeMarks);
+        final long timestamp = (new Date()).getTime();
+        final String serverID = GameInfoGrabber.getGameIDfromscoreboard();
+        final String timerOnReplay = GameInfoGrabber.getTimeSinceGameStart(timestamp, serverID, 0);
         TimeMarksMap.put(key, new TimeMark(timestamp, serverID, timerOnReplay));
         ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters()
                 + EnumChatFormatting.GREEN + "Added timestamp : " + EnumChatFormatting.GOLD + "#" + key + EnumChatFormatting.GREEN + ".")
@@ -77,14 +77,14 @@ public class CommandWDR extends CommandBase {
         Multithreading.addTaskToQueue(() -> {
             boolean isaTimestampedReport = false;
             boolean usesTimeMark = false;
-            ArrayList<String> arraycheats = new ArrayList<>();    // for WDR object
+            final ArrayList<String> arraycheats = new ArrayList<>();    // for WDR object
             String playername = args[0];
-            StringBuilder message = new StringBuilder("/wdr " + playername);
+            final StringBuilder message = new StringBuilder("/wdr " + playername);
             String serverID = "?";
             String timerOnReplay = "?";
             long longtimetosubtract = 0;
             long timestamp = 0;
-            long time = (new Date()).getTime();
+            final long time = (new Date()).getTime();
 
             if (args.length == 1) {
                 arraycheats.add("cheating");
@@ -104,14 +104,14 @@ public class CommandWDR extends CommandBase {
                         }
 
                         isaTimestampedReport = true;
-                        String rawtimestamp = args[i].substring(1);
+                        final String rawtimestamp = args[i].substring(1);
 
                         if (!args[i].equals("-")) { // computing the -time argument
 
-                            Matcher Matcher0 = Pattern.compile("(\\d+)").matcher(rawtimestamp);
-                            Matcher Matcher1 = Pattern.compile("(\\d+)s").matcher(rawtimestamp);
-                            Matcher Matcher2 = Pattern.compile("(\\d+)m").matcher(rawtimestamp);
-                            Matcher Matcher3 = Pattern.compile("(\\d+)m(\\d+)s").matcher(rawtimestamp);
+                            final Matcher Matcher0 = Pattern.compile("(\\d+)").matcher(rawtimestamp);
+                            final Matcher Matcher1 = Pattern.compile("(\\d+)s").matcher(rawtimestamp);
+                            final Matcher Matcher2 = Pattern.compile("(\\d+)m").matcher(rawtimestamp);
+                            final Matcher Matcher3 = Pattern.compile("(\\d+)m(\\d+)s").matcher(rawtimestamp);
 
                             if (Matcher0.matches()) {
                                 longtimetosubtract = Long.parseLong(Matcher0.group(1));
@@ -144,8 +144,8 @@ public class CommandWDR extends CommandBase {
 
                         usesTimeMark = true;
 
-                        String key = args[i].substring(1);
-                        TimeMark timemark = TimeMarksMap.get(key);
+                        final String key = args[i].substring(1);
+                        final TimeMark timemark = TimeMarksMap.get(key);
 
                         if (timemark == null) {
 
@@ -206,7 +206,7 @@ public class CommandWDR extends CommandBase {
                 ChatUtil.addChatMessage(ChatUtil.getChatReportingAdvice());
             }
 
-            CachedMojangUUID apireq;
+            final CachedMojangUUID apireq;
             String uuid = null;
             boolean isaNick = false;
             String formattedPlayername = null;
@@ -216,10 +216,10 @@ public class CommandWDR extends CommandBase {
                 uuid = apireq.getUuid();
                 playername = apireq.getName();
                 if (uuid != null && !HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                    CachedHypixelPlayerData playerdata;
+                    final CachedHypixelPlayerData playerdata;
                     try {
                         playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
-                        LoginData loginData = new LoginData(playerdata.getPlayerData());
+                        final LoginData loginData = new LoginData(playerdata.getPlayerData());
                         formattedPlayername = loginData.getFormattedName();
                         if (loginData.hasNeverJoinedHypixel()) {
                             uuid = null;
@@ -235,7 +235,7 @@ public class CommandWDR extends CommandBase {
 
             if (uuid == null) {  // The playername doesn't exist or never joined hypixel
 
-                for (NetworkPlayerInfo networkplayerinfo : mc.getNetHandler().getPlayerInfoMap()) { // search for the player's gameprofile in the tablist
+                for (final NetworkPlayerInfo networkplayerinfo : mc.getNetHandler().getPlayerInfoMap()) { // search for the player's gameprofile in the tablist
                     if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(args[0])) {
                         uuid = networkplayerinfo.getGameProfile().getName();
                         formattedPlayername = ScorePlayerTeam.formatPlayerName(networkplayerinfo.getPlayerTeam(), networkplayerinfo.getGameProfile().getName());
@@ -251,7 +251,7 @@ public class CommandWDR extends CommandBase {
 
             }
 
-            ArrayList<String> argsinWDR = new ArrayList<>();
+            final ArrayList<String> argsinWDR = new ArrayList<>();
             if (isaTimestampedReport || usesTimeMark) { // format for timestamps reports : UUID timestamplastreport -serverID timeonreplay playernameduringgame timestampforcheat specialcheat cheat1 cheat2 cheat3 etc
 
                 argsinWDR.add("-" + serverID);
@@ -260,7 +260,7 @@ public class CommandWDR extends CommandBase {
                 argsinWDR.add(Long.toString(timestamp));
                 argsinWDR.addAll(arraycheats);
 
-                WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+                final WDR wdr = WdredPlayers.getWdredMap().get(uuid);
                 boolean alreadyReported = false;
                 if (wdr != null) {
                     argsinWDR.addAll(wdr.hacks);
@@ -271,7 +271,7 @@ public class CommandWDR extends CommandBase {
                     argsinWDR.add(WDR.NICK);
                 }
 
-                WDR newreport = new WDR(timestamp, timestamp, argsinWDR);
+                final WDR newreport = new WDR(timestamp, timestamp, argsinWDR);
                 WdredPlayers.getWdredMap().put(uuid, newreport);
                 NameUtil.updateGameProfileAndName(playername, false);
                 if (!(alreadyReported && sentFromAutoReport)) {
@@ -285,7 +285,7 @@ public class CommandWDR extends CommandBase {
 
             } else {  // isn't a timestamped report
 
-                WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+                final WDR wdr = WdredPlayers.getWdredMap().get(uuid);
                 boolean alreadyReported = false;
 
                 if (wdr != null) {
@@ -293,9 +293,9 @@ public class CommandWDR extends CommandBase {
                     argsinWDR.addAll(wdr.hacks);
                     alreadyReported = true;
 
-                    for (String arraycheat : arraycheats) {
+                    for (final String arraycheat : arraycheats) {
                         boolean doublon = false;
-                        for (String arg : argsinWDR) {
+                        for (final String arg : argsinWDR) {
                             if (arraycheat.equals(arg)) {
                                 doublon = true;
                                 break;
@@ -330,7 +330,7 @@ public class CommandWDR extends CommandBase {
 
     @Override
     public List<String> getCommandAliases() {
-        List<String> list = new ArrayList<>();
+        final List<String> list = new ArrayList<>();
         list.add("wdr");
         list.add("Wdr");
         list.add("WDR");

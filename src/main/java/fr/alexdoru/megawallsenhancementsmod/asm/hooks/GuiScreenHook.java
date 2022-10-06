@@ -51,12 +51,12 @@ public class GuiScreenHook {
         if (args.length < 3) {
             return;
         }
-        String uuid = args[1];
-        String playername = args[2];
-        WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+        final String uuid = args[1];
+        final String playername = args[2];
+        final WDR wdr = WdredPlayers.getWdredMap().get(uuid);
         if (wdr != null) {
             if (wdr.hasValidCheats()) {
-                long time = (new Date()).getTime();
+                final long time = (new Date()).getTime();
                 if (FKCounterMod.preGameLobby && ConfigHandler.toggleautoreport) {
                     wdr.timestamp = time - WDR.TIME_BETWEEN_AUTOREPORT;
                     wdr.timeLastManualReport = time - WDR.TIME_BETWEEN_AUTOREPORT;

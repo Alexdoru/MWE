@@ -159,18 +159,18 @@ public class KillCounter {
             return false;
         }
 
-        for (Pattern pattern : KILL_PATTERNS) {
+        for (final Pattern pattern : KILL_PATTERNS) {
 
-            Matcher matcher = pattern.matcher(unformattedText);
+            final Matcher matcher = pattern.matcher(unformattedText);
 
             if (matcher.matches()) {
 
                 if (matcher.groupCount() == 2) {
-                    String killedPlayer = matcher.group(1);
-                    String killer = matcher.group(2);
+                    final String killedPlayer = matcher.group(1);
+                    final String killer = matcher.group(2);
                     RenderPlayerHook.removeArrowsFrom(killedPlayer, -1);
-                    String killedTeamColor = StringUtil.getLastColorCodeBefore(formattedText, killedPlayer);
-                    String killerTeamColor = StringUtil.getLastColorCodeBefore(formattedText.replaceFirst(killedPlayer, ""), killer);
+                    final String killedTeamColor = StringUtil.getLastColorCodeBefore(formattedText, killedPlayer);
+                    final String killerTeamColor = StringUtil.getLastColorCodeBefore(formattedText.replaceFirst(killedPlayer, ""), killer);
                     if (!killedTeamColor.equals("") && !killerTeamColor.equals("")) {
                         if (removeKilledPlayer(killedPlayer, killedTeamColor)) {
                             addKill(killer, killerTeamColor);
@@ -187,9 +187,9 @@ public class KillCounter {
                 }
 
                 if (matcher.groupCount() == 1) {
-                    String killedPlayer = matcher.group(1);
+                    final String killedPlayer = matcher.group(1);
                     RenderPlayerHook.removeArrowsFrom(killedPlayer, -1);
-                    String killedTeamColor = StringUtil.getLastColorCodeBefore(formattedText, killedPlayer);
+                    final String killedTeamColor = StringUtil.getLastColorCodeBefore(formattedText, killedPlayer);
                     if (!killedTeamColor.equals("")) {
                         if (removeKilledPlayer(killedPlayer, killedTeamColor)) {
                             playersPresentInGame.add(killedPlayer);
@@ -224,7 +224,7 @@ public class KillCounter {
             return 0;
         }
         int kills = 0;
-        for (int k : teamKillsArray[team].values()) {
+        for (final int k : teamKillsArray[team].values()) {
             kills += k;
         }
         return kills;
@@ -234,7 +234,7 @@ public class KillCounter {
      * Returns a sorted hashmap where the Keys are the Team interger, and the values are the amounts of finals for that team
      */
     public static HashMap<Integer, Integer> getSortedTeamKillsMap() {
-        HashMap<Integer, Integer> hashmap = new HashMap<>();
+        final HashMap<Integer, Integer> hashmap = new HashMap<>();
         hashmap.put(RED_TEAM, getKills(RED_TEAM));
         hashmap.put(GREEN_TEAM, getKills(GREEN_TEAM));
         hashmap.put(YELLOW_TEAM, getKills(YELLOW_TEAM));
@@ -261,7 +261,7 @@ public class KillCounter {
      * Detects the color codes you are using in your mega walls settings by looking at the scoreboard/sidebartext
      */
     private static void setTeamPrefixes() {
-        for (String line : ScoreboardUtils.getFormattedSidebarText()) {
+        for (final String line : ScoreboardUtils.getFormattedSidebarText()) {
             for (int team = 0; team < TEAMS; team++) {
                 if (line.contains(SCOREBOARD_PREFIXES[team])) {
                     prefixes[team] = StringUtil.getLastColorCodeBefore(line, SCOREBOARD_PREFIXES[team]);
@@ -281,7 +281,7 @@ public class KillCounter {
      * (happens when someone tries to lag and gets double tapped)
      */
     private static boolean removeKilledPlayer(String player, String color) {
-        int team = getTeamFromColor(color);
+        final int team = getTeamFromColor(color);
         if (isNotValidTeam(team)) {
             return false;
         }
@@ -295,25 +295,25 @@ public class KillCounter {
     }
 
     private static void addKill(String playerGettingTheKill, String color) {
-        int team = getTeamFromColor(color);
+        final int team = getTeamFromColor(color);
         if (isNotValidTeam(team)) {
             return;
         }
         if (deadPlayers.contains(playerGettingTheKill)) {
             return;
         }
-        Integer finals = teamKillsArray[team].merge(playerGettingTheKill, 1, Integer::sum);
+        final Integer finals = teamKillsArray[team].merge(playerGettingTheKill, 1, Integer::sum);
         allPlayerKills.merge(playerGettingTheKill, 1, Integer::sum);
         updateNetworkPlayerinfo(playerGettingTheKill, finals);
     }
 
     public static int getPlayersFinals(String playername) {
-        Integer finals = allPlayerKills.get(playername);
+        final Integer finals = allPlayerKills.get(playername);
         return finals == null ? 0 : finals;
     }
 
     private static void updateNetworkPlayerinfo(String playername, int finals) {
-        NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
         if (networkPlayerInfo instanceof NetworkPlayerInfoAccessor) {
             ((NetworkPlayerInfoAccessor) networkPlayerInfo).setPlayerFinalkills(finals);
         }
@@ -351,7 +351,7 @@ public class KillCounter {
      * Used by the report suggestion system
      */
     public static boolean wasPlayerInThisGame(String playername) {
-        for (String name : playersPresentInGame) {
+        for (final String name : playersPresentInGame) {
             if (name.equalsIgnoreCase(playername))
                 return true;
         }
@@ -367,41 +367,41 @@ public class KillCounter {
     }
 
     public static HashMap<String, Integer> sortByDecreasingValue1(HashMap<String, Integer> hashmapIn) {
-        List<Map.Entry<String, Integer>> list = new LinkedList<>(hashmapIn.entrySet());
+        final List<Map.Entry<String, Integer>> list = new LinkedList<>(hashmapIn.entrySet());
         list.sort((o1, o2) -> (o2.getValue()).compareTo(o1.getValue()));
-        HashMap<String, Integer> temp = new LinkedHashMap<>();
-        for (Map.Entry<String, Integer> aa : list) {
+        final HashMap<String, Integer> temp = new LinkedHashMap<>();
+        for (final Map.Entry<String, Integer> aa : list) {
             temp.put(aa.getKey(), aa.getValue());
         }
         return temp;
     }
 
     private static HashMap<Integer, Integer> sortByDecreasingValue2(HashMap<Integer, Integer> hashmapIn) {
-        List<Map.Entry<Integer, Integer>> list = new LinkedList<>(hashmapIn.entrySet());
+        final List<Map.Entry<Integer, Integer>> list = new LinkedList<>(hashmapIn.entrySet());
         list.sort((o1, o2) -> (o2.getValue()).compareTo(o1.getValue()));
-        HashMap<Integer, Integer> temp = new LinkedHashMap<>();
-        for (Map.Entry<Integer, Integer> aa : list) {
+        final HashMap<Integer, Integer> temp = new LinkedHashMap<>();
+        for (final Map.Entry<Integer, Integer> aa : list) {
             temp.put(aa.getKey(), aa.getValue());
         }
         return temp;
     }
 
     private static void spawnParticles(String killer) {
-        WorldClient world = Minecraft.getMinecraft().theWorld;
+        final WorldClient world = Minecraft.getMinecraft().theWorld;
         if (world == null) {
             return;
         }
-        ScorePlayerTeam team = world.getScoreboard().getPlayersTeam(killer); // O(1)
+        final ScorePlayerTeam team = world.getScoreboard().getPlayersTeam(killer); // O(1)
         if (team == null) {
             return;
         }
-        String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replace("[", "").replace("]", "").replace(" ", ""));
-        MWClass mwClass = MWClass.fromTag(classTag);
+        final String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replace("[", "").replace("]", "").replace(" ", ""));
+        final MWClass mwClass = MWClass.fromTag(classTag);
         if (mwClass == null) {
             return;
         }
 
-        int duration;
+        final int duration;
         if (mwClass == MWClass.DREADLORD) {
             duration = 5 * 20;
         } else if (mwClass == MWClass.HEROBRINE) {
@@ -410,7 +410,7 @@ public class KillCounter {
             return;
         }
 
-        EntityPlayer player = world.getPlayerEntityByName(killer); // O(N)
+        final EntityPlayer player = world.getPlayerEntityByName(killer); // O(N)
         if (player == null) {
             return;
         }
@@ -419,9 +419,9 @@ public class KillCounter {
 
             new DelayedTask(() -> {
                 for (int j = 0; j < 5; ++j) {
-                    double d0 = rand.nextGaussian() * 0.02D;
-                    double d1 = rand.nextGaussian() * 0.02D;
-                    double d2 = rand.nextGaussian() * 0.02D;
+                    final double d0 = rand.nextGaussian() * 0.02D;
+                    final double d1 = rand.nextGaussian() * 0.02D;
+                    final double d2 = rand.nextGaussian() * 0.02D;
                     world.spawnParticle(
                             EnumParticleTypes.VILLAGER_ANGRY,
                             player.posX + (double) (rand.nextFloat() * player.width * 2.0F) - (double) player.width,
@@ -445,7 +445,7 @@ public class KillCounter {
          * to fix the bug where the FKCounter doesn't work properly if you play two games in a row on a server with the same serverID
          */
         if (event.getType() == MwGameEvent.EventType.GAME_START) {
-            String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId();
+            final String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId();
             if (currentGameId != null) {
                 ResetKillCounterTo(currentGameId);
             }
@@ -454,7 +454,7 @@ public class KillCounter {
         }
 
         if (event.getType() == MwGameEvent.EventType.CONNECT) {
-            String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId(); // this is not null due to how the event is defined/posted
+            final String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId(); // this is not null due to how the event is defined/posted
             if (gameId == null || !gameId.equals(currentGameId)) {
                 ResetKillCounterTo(currentGameId);
             }

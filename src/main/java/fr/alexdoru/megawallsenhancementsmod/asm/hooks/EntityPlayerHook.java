@@ -8,7 +8,7 @@ import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 public class EntityPlayerHook {
 
     public static String getTransformedDisplayName(String displayNameIn, GameProfile gameProfile) {
-        MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfile).getMWPlayerData();
+        final MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfile).getMWPlayerData();
         if (mwPlayerData == null) {
             return displayNameIn;
         } else {

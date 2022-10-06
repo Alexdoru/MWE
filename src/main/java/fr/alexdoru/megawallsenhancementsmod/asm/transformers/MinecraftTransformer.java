@@ -17,9 +17,9 @@ public class MinecraftTransformer implements IMyClassTransformer {
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(6);
 
-        for (MethodNode methodNode : classNode.methods) {
+        for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "s" : "runTick") && methodNode.desc.equals("()V")) {
-                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
                     if (insnNode.getOpcode() == INVOKEVIRTUAL && insnNode instanceof MethodInsnNode
                             && ((MethodInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "wm" : "net/minecraft/entity/player/InventoryPlayer")
@@ -42,7 +42,7 @@ public class MinecraftTransformer implements IMyClassTransformer {
                          * Injects after line 1994 :
                          * MinecraftHook.onSettingChange(this.gameSettings.advancedItemTooltips, "Advanced Item Tooltips");
                          */
-                        InsnList list = new InsnList();
+                        final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "ave" : "net/minecraft/client/Minecraft", ASMLoadingPlugin.isObf ? "t" : "gameSettings", ASMLoadingPlugin.isObf ? "Lavh;" : "Lnet/minecraft/client/settings/GameSettings;"));
@@ -62,7 +62,7 @@ public class MinecraftTransformer implements IMyClassTransformer {
                          * Injects after line 2000 :
                          * MinecraftHook.onSettingChange(this.renderManager.isDebugBoundingBox(), "Hitboxes");
                          */
-                        InsnList list = new InsnList();
+                        final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "ave" : "net/minecraft/client/Minecraft", ASMLoadingPlugin.isObf ? "aa" : "renderManager", ASMLoadingPlugin.isObf ? "Lbiu;" : "Lnet/minecraft/client/renderer/entity/RenderManager;"));
@@ -82,7 +82,7 @@ public class MinecraftTransformer implements IMyClassTransformer {
                          * Injects after line 2005 :
                          * MinecraftHook.onSettingChange(this.gameSettings.pauseOnLostFocus, "Pause on lost focus");
                          */
-                        InsnList list = new InsnList();
+                        final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "ave" : "net/minecraft/client/Minecraft", ASMLoadingPlugin.isObf ? "t" : "gameSettings", ASMLoadingPlugin.isObf ? "Lavh;" : "Lnet/minecraft/client/settings/GameSettings;"));
@@ -117,7 +117,7 @@ public class MinecraftTransformer implements IMyClassTransformer {
                          */
                         methodNode.instructions.remove(insnNode.getPrevious());
                         methodNode.instructions.remove(insnNode.getNext());
-                        InsnList list = new InsnList();
+                        final InsnList list = new InsnList();
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/MinecraftHook", "dropOneItem", ASMLoadingPlugin.isObf ? "(Lbew;)V" : "(Lnet/minecraft/client/entity/EntityPlayerSP;)V", false));
                         methodNode.instructions.insertBefore(insnNode, list);
                         methodNode.instructions.remove(insnNode);
@@ -132,7 +132,7 @@ public class MinecraftTransformer implements IMyClassTransformer {
     }
 
     private InsnList updateCurrentSlotInsnList() {
-        InsnList list = new InsnList();
+        final InsnList list = new InsnList();
         list.add(new VarInsnNode(ALOAD, 0));
         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/MinecraftHook", "updateCurrentSlot", ASMLoadingPlugin.isObf ? "(Lave;)V" : "(Lnet/minecraft/client/Minecraft;)V", false));
         return list;

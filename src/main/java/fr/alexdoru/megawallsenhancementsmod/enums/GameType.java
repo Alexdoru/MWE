@@ -45,7 +45,7 @@ public enum GameType {
     }
 
     public static GameType fromId(String id) {
-        for (GameType game : values()) {
+        for (final GameType game : values()) {
             if (id.equals(game.id)) {
                 return game;
             }

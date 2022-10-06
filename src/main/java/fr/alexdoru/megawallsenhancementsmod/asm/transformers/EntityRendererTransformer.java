@@ -17,17 +17,17 @@ public class EntityRendererTransformer implements IMyClassTransformer {
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(2);
-        for (MethodNode methodNode : classNode.methods) {
+        for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "g" : "updateLightmap") && methodNode.desc.equals("(F)V")
                     || methodNode.name.equals(ASMLoadingPlugin.isObf ? "i" : "updateFogColor") && methodNode.desc.equals("(F)V")) {
-                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (insnNode.getOpcode() == GETSTATIC && insnNode instanceof FieldInsnNode && ((FieldInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "r" : "nightVision")) {
-                        AbstractInsnNode nextNode = insnNode.getNext();
+                        final AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode.getOpcode() == INVOKEVIRTUAL && nextNode instanceof MethodInsnNode && ((MethodInsnNode) nextNode).name.equals(ASMLoadingPlugin.isObf ? "a" : "isPotionActive")) {
-                            AbstractInsnNode secondNode = nextNode.getNext();
+                            final AbstractInsnNode secondNode = nextNode.getNext();
                             if (secondNode.getOpcode() == IFEQ && secondNode instanceof JumpInsnNode) {
-                                LabelNode labelNode = ((JumpInsnNode) secondNode).label;
-                                InsnList list = new InsnList();
+                                final LabelNode labelNode = ((JumpInsnNode) secondNode).label;
+                                final InsnList list = new InsnList();
                                 list.add(new JumpInsnNode(IFEQ, labelNode));
                                 list.add(new FieldInsnNode(GETSTATIC, "fr/alexdoru/megawallsenhancementsmod/config/ConfigHandler", "keepNightVisionEffect", "Z"));
                                 methodNode.instructions.insertBefore(secondNode, list);

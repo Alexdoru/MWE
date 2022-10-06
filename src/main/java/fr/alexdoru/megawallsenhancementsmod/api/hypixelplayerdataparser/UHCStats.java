@@ -37,13 +37,13 @@ public class UHCStats {
             return;
         }
 
-        JsonObject statsdata = playerData.get("stats").getAsJsonObject();
+        final JsonObject statsdata = playerData.get("stats").getAsJsonObject();
 
         if (statsdata == null) {
             return;
         }
 
-        JsonObject uhcData = JsonUtil.getJsonObject(statsdata, "UHC");
+        final JsonObject uhcData = JsonUtil.getJsonObject(statsdata, "UHC");
 
         if (uhcData == null) {
             return;
@@ -107,7 +107,7 @@ public class UHCStats {
 
     public IChatComponent getFormattedMessage(String formattedName, String playername) {
 
-        String[][] matrix = {
+        final String[][] matrix = {
                 {
                         EnumChatFormatting.YELLOW + "Overall : ",
                         EnumChatFormatting.AQUA + "W : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wins_total) + " ",

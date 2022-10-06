@@ -18,10 +18,10 @@ public class NetHandlerPlayClientTransformer implements IMyClassTransformer {
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(3);
 
-        for (MethodNode methodNode : classNode.methods) {
+        for (final MethodNode methodNode : classNode.methods) {
 
             if (methodNode.name.equals("<init>") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lave;Laxu;Lek;Lcom/mojang/authlib/GameProfile;)V" : "(Lnet/minecraft/client/Minecraft;Lnet/minecraft/client/gui/GuiScreen;Lnet/minecraft/network/NetworkManager;Lcom/mojang/authlib/GameProfile;)V")) {
-                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (insnNode.getOpcode() == PUTFIELD && insnNode instanceof FieldInsnNode
                             && ((FieldInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "bcy" : "net/minecraft/client/network/NetHandlerPlayClient")
                             && ((FieldInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "i" : "playerInfoMap")
@@ -37,17 +37,17 @@ public class NetHandlerPlayClientTransformer implements IMyClassTransformer {
                 AbstractInsnNode targetNodeRemoveInjection = null;
                 AbstractInsnNode targetNodePutInjection = null;
 
-                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
                     if (insnNode.getOpcode() == INVOKEINTERFACE && insnNode instanceof MethodInsnNode && ((MethodInsnNode) insnNode).name.equals("remove") && ((MethodInsnNode) insnNode).desc.equals("(Ljava/lang/Object;)Ljava/lang/Object;")) {
-                        AbstractInsnNode nextNode = insnNode.getNext();
+                        final AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode.getOpcode() == POP) {
                             targetNodeRemoveInjection = nextNode;
                         }
                     }
 
                     if (insnNode.getOpcode() == INVOKEINTERFACE && insnNode instanceof MethodInsnNode && ((MethodInsnNode) insnNode).name.equals("put") && ((MethodInsnNode) insnNode).desc.equals("(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;")) {
-                        AbstractInsnNode nextNode = insnNode.getNext();
+                        final AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode.getOpcode() == POP) {
                             targetNodePutInjection = nextNode.getNext();
                         }
@@ -62,7 +62,7 @@ public class NetHandlerPlayClientTransformer implements IMyClassTransformer {
                      * With :
                      * NetHandlerPlayClientHook.removePlayerFromMap(this.playerInfoMap.remove(s38packetplayerlistitem$addplayerdata.getProfile().getId()));
                      */
-                    InsnList listRemove = new InsnList();
+                    final InsnList listRemove = new InsnList();
                     listRemove.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/NetHandlerPlayClientHook", "removePlayerFromMap", "(Ljava/lang/Object;)V", false));
                     methodNode.instructions.insertBefore(targetNodeRemoveInjection, listRemove);
                     methodNode.instructions.remove(targetNodeRemoveInjection);
@@ -71,7 +71,7 @@ public class NetHandlerPlayClientTransformer implements IMyClassTransformer {
                      * Injects after line 1637 :
                      * NetHandlerPlayClientHook.putPlayerInMap(networkplayerinfo.getGameProfile().getName(), networkplayerinfo);
                      */
-                    InsnList listPut = new InsnList();
+                    final InsnList listPut = new InsnList();
                     listPut.add(new VarInsnNode(ALOAD, 4));
                     listPut.add(new MethodInsnNode(INVOKEVIRTUAL, ASMLoadingPlugin.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", ASMLoadingPlugin.isObf ? "a" : "getGameProfile", "()Lcom/mojang/authlib/GameProfile;", false));
                     listPut.add(new MethodInsnNode(INVOKEVIRTUAL, "com/mojang/authlib/GameProfile", "getName", "()Ljava/lang/String;", false));

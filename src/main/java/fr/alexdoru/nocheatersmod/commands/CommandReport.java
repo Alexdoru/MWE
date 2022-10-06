@@ -97,7 +97,7 @@ public class CommandReport extends CommandBase {
             return;
         }
 
-        StringBuilder msg = new StringBuilder("/report " + args[0]);
+        final StringBuilder msg = new StringBuilder("/report " + args[0]);
 
         for (int i = 1; i < args.length; i++) {
 

@@ -15,15 +15,15 @@ public class HypixelGuild {
 
     public HypixelGuild(String uuid, String apikey) throws ApiException {
 
-        HttpClient httpclient = new HttpClient("https://api.hypixel.net/guild?key=" + apikey + "&player=" + uuid);
-        String rawresponse = httpclient.getrawresponse();
+        final HttpClient httpclient = new HttpClient("https://api.hypixel.net/guild?key=" + apikey + "&player=" + uuid);
+        final String rawresponse = httpclient.getrawresponse();
 
         if (rawresponse == null) {
             throw new ApiException("No response from Hypixel's Api");
         }
 
-        JsonParser parser = new JsonParser();
-        JsonObject obj = parser.parse(rawresponse).getAsJsonObject();
+        final JsonParser parser = new JsonParser();
+        final JsonObject obj = parser.parse(rawresponse).getAsJsonObject();
 
         if (obj == null) {
             throw new ApiException("Cannot parse response from Hypixel's Api");
@@ -31,7 +31,7 @@ public class HypixelGuild {
 
         if (!obj.get("success").getAsBoolean()) {
 
-            String msg = JsonUtil.getString(obj, "cause");
+            final String msg = JsonUtil.getString(obj, "cause");
 
             if (msg == null) {
                 throw new ApiException("Failed to retreive data from Hypixel's Api for this guild");
@@ -41,21 +41,21 @@ public class HypixelGuild {
 
         }
 
-        JsonElement guildDataElem = obj.get("guild");
+        final JsonElement guildDataElem = obj.get("guild");
 
         if (guildDataElem == null || !guildDataElem.isJsonObject()) {
             return;
         }
 
-        JsonObject guildData = guildDataElem.getAsJsonObject();
+        final JsonObject guildData = guildDataElem.getAsJsonObject();
 
         if (guildData == null) {
             return;
         }
 
         this.guildName = JsonUtil.getString(guildData, "name");
-        String tag = JsonUtil.getString(guildData, "tag");
-        EnumChatFormatting tagColor = EnumChatFormatting.getValueByName(JsonUtil.getString(guildData, "tagColor"));
+        final String tag = JsonUtil.getString(guildData, "tag");
+        final EnumChatFormatting tagColor = EnumChatFormatting.getValueByName(JsonUtil.getString(guildData, "tagColor"));
         this.formattedGuildTag = " " + (tag == null ? "" : (tagColor == null ? "[" + tag + "]" : tagColor + "[" + tag + "]"));
 
     }

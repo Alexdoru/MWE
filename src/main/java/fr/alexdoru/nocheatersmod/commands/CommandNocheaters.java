@@ -55,7 +55,7 @@ public class CommandNocheaters extends CommandBase {
 
         } else if (args[0].equalsIgnoreCase("reportlist") || args[0].equalsIgnoreCase("debugreportlist")) {
 
-            boolean doStalk = args[0].equalsIgnoreCase("reportlist");
+            final boolean doStalk = args[0].equalsIgnoreCase("reportlist");
 
             if (doStalk) {
                 if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
@@ -80,19 +80,19 @@ public class CommandNocheaters extends CommandBase {
                 }
 
                 if (args.length == 1 || sortedmap.isEmpty()) {
-                    HashMap<String, WDR> newmap = new HashMap<>(WdredPlayers.getWdredMap());
+                    final HashMap<String, WDR> newmap = new HashMap<>(WdredPlayers.getWdredMap());
                     sortedmap = sortByValue(newmap);
                 }
 
-                IChatComponent imsgbody = new ChatComponentText("");
+                final IChatComponent imsgbody = new ChatComponentText("");
                 boolean warning = true;
-                long timeNow = (new Date()).getTime();
-                List<Future<IChatComponent>> futureList = new ArrayList<>();
+                final long timeNow = (new Date()).getTime();
+                final List<Future<IChatComponent>> futureList = new ArrayList<>();
 
-                for (Map.Entry<String, WDR> entry : sortedmap.entrySet()) {
+                for (final Map.Entry<String, WDR> entry : sortedmap.entrySet()) {
 
-                    String uuid = entry.getKey();
-                    WDR wdr = entry.getValue();
+                    final String uuid = entry.getKey();
+                    final WDR wdr = entry.getValue();
 
                     if(wdr.isOnlyIgnored()) {
                         continue;
@@ -112,7 +112,7 @@ public class CommandNocheaters extends CommandBase {
 
                 }
 
-                for (Future<IChatComponent> iChatComponentFuture : futureList) {
+                for (final Future<IChatComponent> iChatComponentFuture : futureList) {
                     imsgbody.appendSibling(iChatComponentFuture.get());
                 }
 
@@ -145,7 +145,7 @@ public class CommandNocheaters extends CommandBase {
 
                 Multithreading.addTaskToQueue(() -> {
 
-                    CachedMojangUUID apireq;
+                    final CachedMojangUUID apireq;
                     String uuid = null;
                     String playername = args[1];
                     boolean isaNick = false;
@@ -155,10 +155,10 @@ public class CommandNocheaters extends CommandBase {
                         uuid = apireq.getUuid();
                         playername = apireq.getName();
                         if (uuid != null && !HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                            CachedHypixelPlayerData playerdata;
+                            final CachedHypixelPlayerData playerdata;
                             try {
                                 playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
-                                LoginData loginData = new LoginData(playerdata.getPlayerData());
+                                final LoginData loginData = new LoginData(playerdata.getPlayerData());
                                 if (loginData.hasNeverJoinedHypixel()) {
                                     uuid = null;
                                 } else if (!playername.equals(loginData.getdisplayname())) {
@@ -174,7 +174,7 @@ public class CommandNocheaters extends CommandBase {
                     if (uuid == null) {  // The playername doesn't exist or never joined hypixel
 
                         // search for the player's gameprofile in the tablist
-                        for (NetworkPlayerInfo networkplayerinfo : mc.getNetHandler().getPlayerInfoMap()) {
+                        for (final NetworkPlayerInfo networkplayerinfo : mc.getNetHandler().getPlayerInfoMap()) {
                             if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(args[0])) {
                                 uuid = networkplayerinfo.getGameProfile().getName();
                                 playername = uuid;
@@ -189,7 +189,7 @@ public class CommandNocheaters extends CommandBase {
 
                     }
 
-                    WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+                    final WDR wdr = WdredPlayers.getWdredMap().get(uuid);
 
                     if (wdr != null) { // the player was already reported before
 
@@ -198,8 +198,8 @@ public class CommandNocheaters extends CommandBase {
                         }
 
                     } else { // the player wasn't reported before
-                        long time = (new Date()).getTime();
-                        ArrayList<String> hacks = new ArrayList<>();
+                        final long time = (new Date()).getTime();
+                        final ArrayList<String> hacks = new ArrayList<>();
                         hacks.add(WDR.IGNORED);
                         WdredPlayers.getWdredMap().put(uuid, new WDR(time, time, hacks));
                     }
@@ -235,16 +235,16 @@ public class CommandNocheaters extends CommandBase {
                     }
                 }
 
-                IChatComponent imsgbody = new ChatComponentText("");
+                final IChatComponent imsgbody = new ChatComponentText("");
                 boolean warning = true;
-                List<Future<IChatComponent>> futureList = new ArrayList<>();
+                final List<Future<IChatComponent>> futureList = new ArrayList<>();
 
-                for (Map.Entry<String, WDR> entry : WdredPlayers.getWdredMap().entrySet()) {
+                for (final Map.Entry<String, WDR> entry : WdredPlayers.getWdredMap().entrySet()) {
 
                     if (entry.getValue().isIgnored()) {
 
-                        String uuid = entry.getKey();
-                        WDR wdr = entry.getValue();
+                        final String uuid = entry.getKey();
+                        final WDR wdr = entry.getValue();
 
                         if (nbreport == 11) {
                             nbreport = 1;
@@ -262,7 +262,7 @@ public class CommandNocheaters extends CommandBase {
 
                 }
 
-                for (Future<IChatComponent> iChatComponentFuture : futureList) {
+                for (final Future<IChatComponent> iChatComponentFuture : futureList) {
                     imsgbody.appendSibling(iChatComponentFuture.get());
                 }
 
@@ -291,9 +291,9 @@ public class CommandNocheaters extends CommandBase {
 
             if (args.length == 3) {
 
-                String uuid = args[1];
-                String playername = args[2];
-                WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+                final String uuid = args[1];
+                final String playername = args[2];
+                final WDR wdr = WdredPlayers.getWdredMap().get(uuid);
 
                 if (wdr == null) {
 
@@ -366,7 +366,7 @@ public class CommandNocheaters extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        String[] arguments = {"clearreportqueue", "config", "help", "ignore", "ignorelist", "reportlist"};
+        final String[] arguments = {"clearreportqueue", "config", "help", "ignore", "ignorelist", "reportlist"};
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, arguments);
         }
@@ -385,10 +385,10 @@ public class CommandNocheaters extends CommandBase {
      * Returns a sorted hashmap of reports from high to low
      */
     private static HashMap<String, WDR> sortByValue(HashMap<String, WDR> hashmapIn) {
-        List<Map.Entry<String, WDR>> list = new LinkedList<>(hashmapIn.entrySet());
+        final List<Map.Entry<String, WDR>> list = new LinkedList<>(hashmapIn.entrySet());
         list.sort((o1, o2) -> (o1.getValue()).compareToInvert(o2.getValue()));
-        HashMap<String, WDR> temp = new LinkedHashMap<>();
-        for (Map.Entry<String, WDR> aa : list) {
+        final HashMap<String, WDR> temp = new LinkedHashMap<>();
+        for (final Map.Entry<String, WDR> aa : list) {
             temp.put(aa.getKey(), aa.getValue());
         }
         return temp;
@@ -415,7 +415,7 @@ class CreateReportLineTask implements Callable<IChatComponent> {
 
         try {
 
-            IChatComponent imsg;
+            final IChatComponent imsg;
 
             if (doStalk) {
 
@@ -425,18 +425,18 @@ class CreateReportLineTask implements Callable<IChatComponent> {
 
                 } else {
 
-                    HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
-                    LoginData logindata = new LoginData(playerdata.getPlayerData());
+                    final HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                    final LoginData logindata = new LoginData(playerdata.getPlayerData());
                     imsg = NoCheatersMessages.createPlayerNameWithHoverText(logindata.getFormattedName(), logindata.getdisplayname(), uuid, wdr, EnumChatFormatting.WHITE)[0];
 
-                    IChatComponent ismgStatus = new ChatComponentText("");
+                    final IChatComponent ismgStatus = new ChatComponentText("");
 
                     if (logindata.isHidingFromAPI()) {
 
                         logindata.parseLatestActivity(playerdata.getPlayerData());
-                        long latestActivityTime = logindata.getLatestActivityTime();
-                        String latestActivity = logindata.getLatestActivity();
-                        boolean isProbBanned = isProbBanned(latestActivityTime);
+                        final long latestActivityTime = logindata.getLatestActivityTime();
+                        final String latestActivity = logindata.getLatestActivity();
+                        final boolean isProbBanned = isProbBanned(latestActivityTime);
                         ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " " + latestActivity + " " + (isProbBanned ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.YELLOW) + DateUtil.timeSince(latestActivityTime)));
 
                     } else if (logindata.isOnline()) { // player is online
@@ -445,7 +445,7 @@ class CreateReportLineTask implements Callable<IChatComponent> {
 
                     } else { // print lastlogout
 
-                        boolean isProbBanned = isProbBanned(logindata.getLastLogout());
+                        final boolean isProbBanned = isProbBanned(logindata.getLastLogout());
                         ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Lastlogout " + (isProbBanned ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.YELLOW) + DateUtil.timeSince(logindata.getLastLogout())));
 
                     }
@@ -500,8 +500,8 @@ class IgnoreLineTask implements Callable<IChatComponent> {
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to un-ignore " + formattedName)))
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nocheaters ignoreremove " + uuid + " " + uuid)));
             } else {
-                HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
-                LoginData logindata = new LoginData(playerdata.getPlayerData());
+                final HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                final LoginData logindata = new LoginData(playerdata.getPlayerData());
                 formattedName = logindata.getFormattedName();
                 return new ChatComponentText(formattedName + "\n").setChatStyle(new ChatStyle()
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to un-ignore " + formattedName)))

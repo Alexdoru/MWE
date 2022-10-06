@@ -30,9 +30,9 @@ public class GuiNewChatTransformer implements IMyClassTransformer {
              * }
              *
              */
-            MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "deleteWarningMessagesFor", "(Ljava/lang/String;)V", null, null);
+            final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "deleteWarningMessagesFor", "(Ljava/lang/String;)V", null, null);
             mv.visitCode();
-            Label l0 = new Label();
+            final Label l0 = new Label();
             mv.visitLabel(l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ALOAD, 0);
@@ -42,10 +42,10 @@ public class GuiNewChatTransformer implements IMyClassTransformer {
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, ASMLoadingPlugin.isObf ? "avt" : "net/minecraft/client/gui/GuiNewChat", ASMLoadingPlugin.isObf ? "h" : "chatLines", "Ljava/util/List;");
             mv.visitMethodInsn(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiNewChatHook", "deleteWarningMessagesFor", ASMLoadingPlugin.isObf ? "(Lavt;Ljava/lang/String;Ljava/util/List;Ljava/util/List;)V" : "(Lnet/minecraft/client/gui/GuiNewChat;Ljava/lang/String;Ljava/util/List;Ljava/util/List;)V", false);
-            Label l1 = new Label();
+            final Label l1 = new Label();
             mv.visitLabel(l1);
             mv.visitInsn(RETURN);
-            Label l2 = new Label();
+            final Label l2 = new Label();
             mv.visitLabel(l2);
             mv.visitLocalVariable("this", ASMLoadingPlugin.isObf ? "Lavt;" : "Lnet/minecraft/client/gui/GuiNewChat;", null, l0, l2, 0);
             mv.visitLocalVariable("playername", "Ljava/lang/String;", null, l0, l2, 1);
@@ -62,9 +62,9 @@ public class GuiNewChatTransformer implements IMyClassTransformer {
              * }
              *
              */
-            MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "deleteAllWarningMessages", "()V", null, null);
+            final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "deleteAllWarningMessages", "()V", null, null);
             mv.visitCode();
-            Label l0 = new Label();
+            final Label l0 = new Label();
             mv.visitLabel(l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ALOAD, 0);
@@ -73,10 +73,10 @@ public class GuiNewChatTransformer implements IMyClassTransformer {
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, ASMLoadingPlugin.isObf ? "avt" : "net/minecraft/client/gui/GuiNewChat", ASMLoadingPlugin.isObf ? "h" : "chatLines", "Ljava/util/List;");
             mv.visitMethodInsn(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiNewChatHook", "deleteAllWarningMessages", ASMLoadingPlugin.isObf ? "(Lavt;Ljava/util/List;Ljava/util/List;)V" : "(Lnet/minecraft/client/gui/GuiNewChat;Ljava/util/List;Ljava/util/List;)V", false);
-            Label l1 = new Label();
+            final Label l1 = new Label();
             mv.visitLabel(l1);
             mv.visitInsn(RETURN);
-            Label l2 = new Label();
+            final Label l2 = new Label();
             mv.visitLabel(l2);
             mv.visitLocalVariable("this", ASMLoadingPlugin.isObf ? "Lavt;" : "Lnet/minecraft/client/gui/GuiNewChat;", null, l0, l2, 0);
             mv.visitMaxs(4, 1);
@@ -92,14 +92,14 @@ public class GuiNewChatTransformer implements IMyClassTransformer {
              * }
              *
              */
-            MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "getChatLines", "()Ljava/util/List;", ASMLoadingPlugin.isObf ? "()Ljava/util/List<Lava;>;" : "()Ljava/util/List<Lnet/minecraft/client/gui/ChatLine;>;", null);
+            final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "getChatLines", "()Ljava/util/List;", ASMLoadingPlugin.isObf ? "()Ljava/util/List<Lava;>;" : "()Ljava/util/List<Lnet/minecraft/client/gui/ChatLine;>;", null);
             mv.visitCode();
-            Label l0 = new Label();
+            final Label l0 = new Label();
             mv.visitLabel(l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, ASMLoadingPlugin.isObf ? "avt" : "net/minecraft/client/gui/GuiNewChat",  ASMLoadingPlugin.isObf ? "h" : "chatLines", "Ljava/util/List;");
             mv.visitInsn(ARETURN);
-            Label l1 = new Label();
+            final Label l1 = new Label();
             mv.visitLabel(l1);
             mv.visitLocalVariable("this", ASMLoadingPlugin.isObf ? "Lavt;" : "Lnet/minecraft/client/gui/GuiNewChat;", null, l0, l1, 0);
             mv.visitMaxs(1, 1);

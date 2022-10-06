@@ -31,11 +31,11 @@ public class StringUtil {
      * after second split :"§6[MVP§8++§6] " + "Kyotone" + "§f§r§f" + ": " + "§r§eAlexdoru§r§f is bhopping§r"
      */
     public static String insertAfterName(String message, String messageSender, @Nonnull String injectedText, String injectAtMsgStart, boolean cleanEnd) {
-        String[] split = message.split(messageSender, 2);
+        final String[] split = message.split(messageSender, 2);
         if (split.length != 2) {
             return message;
         }
-        String[] secondSplit = split[1].split(": ", 2);
+        final String[] secondSplit = split[1].split(": ", 2);
         if (secondSplit.length != 2) {
             return split[0] + messageSender + injectedText + (cleanEnd ? EnumChatFormatting.getTextWithoutFormattingCodes(split[1]) : split[1]);
         }
@@ -46,7 +46,7 @@ public class StringUtil {
      * Changes the color of the target inside a message while keeping the original color after that
      */
     public static String changeColorOf(String message, String target, EnumChatFormatting color) {
-        String[] split = message.split(target, 2);
+        final String[] split = message.split(target, 2);
         if (split.length != 2) {
             return message;
         }
@@ -73,7 +73,7 @@ public class StringUtil {
      * Else returns "§ + code"
      */
     public static String getLastFormattingCodeBefore(String message, String target) {
-        String[] split = message.split(target, 2);
+        final String[] split = message.split(target, 2);
         if (split.length != 2) {
             return "";
         }
@@ -100,7 +100,7 @@ public class StringUtil {
      * Returns "" if it can't find the last color code
      */
     public static String getLastColorCodeBefore(String message, String target) {
-        String[] split = message.split(target, 2);
+        final String[] split = message.split(target, 2);
         if (split.length != 2) {
             return "";
         }
@@ -108,11 +108,11 @@ public class StringUtil {
     }
 
     public static IChatComponent censorChatMessage(String message, String messageSender) {
-        String[] split = message.split(messageSender, 2);
+        final String[] split = message.split(messageSender, 2);
         if (split.length != 2) {
             return new ChatComponentText(message);
         }
-        String[] secondSplit = split[1].split(": ", 2);
+        final String[] secondSplit = split[1].split(": ", 2);
         if (secondSplit.length != 2) {
             return new ChatComponentText(message);
         }

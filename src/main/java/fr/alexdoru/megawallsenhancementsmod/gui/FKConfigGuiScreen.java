@@ -119,27 +119,27 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
     }
 
     private ButtonToggle addSettingButton(boolean setting, int buttonid, int row, int column, String buttonText) {
-        int x;
+        final int x;
         final int i = (widthBetweenButtons + buttonSize) * (column - columns / 2);
         if (columns % 2 == 0) { // even
             x = getxCenter() + widthBetweenButtons / 2 + i;
         } else { // odd
             x = getxCenter() - buttonSize / 2 + i;
         }
-        int y = getyCenter() - findMenuHeight() / 2 + heightBetweenButtons + row * buttonSize;
+        final int y = getyCenter() - findMenuHeight() / 2 + heightBetweenButtons + row * buttonSize;
         return new ButtonToggle(setting, buttonid, x + 10, y + 10, buttonText);
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        int rectWidth = findMenuWidth();
-        int rectHeight = findMenuHeight();
+        final int rectWidth = findMenuWidth();
+        final int rectHeight = findMenuHeight();
         GlStateManager.enableBlend();
         GlStateManager.color(1, 1, 1, 0.7F);
         mc.getTextureManager().bindTexture(BACKGROUND);
         drawModalRectWithCustomSizedTexture(getxCenter() - rectWidth / 2, getyCenter() - rectHeight / 2, 0, 0, rectWidth, rectHeight, rectWidth, rectHeight);
         drawCenteredTitle("Final Kill Counter v" + FKCounterMod.VERSION, 2, (width / 2.0f), getYposForButton(-5), Integer.parseInt("55FFFF", 16));
-        String msg = "for Mega Walls";
+        final String msg = "for Mega Walls";
         drawCenteredString(fontRendererObj, msg, getxCenter() + fontRendererObj.getStringWidth(msg), getYposForButton(-5) + 2 * fontRendererObj.FONT_HEIGHT, Integer.parseInt("AAAAAA", 16));
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

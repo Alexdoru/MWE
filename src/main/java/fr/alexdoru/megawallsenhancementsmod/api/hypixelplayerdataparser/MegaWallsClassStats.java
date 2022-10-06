@@ -71,19 +71,19 @@ public class MegaWallsClassStats {
             return;
         }
 
-        JsonObject statsdata = playerData.get("stats").getAsJsonObject();
+        final JsonObject statsdata = playerData.get("stats").getAsJsonObject();
 
         if (statsdata == null) {
             return;
         }
 
-        JsonElement mwElem = statsdata.get("Walls3");
+        final JsonElement mwElem = statsdata.get("Walls3");
 
         if (mwElem == null) {
             return;
         }
 
-        JsonObject mwdata = mwElem.getAsJsonObject();
+        final JsonObject mwdata = mwElem.getAsJsonObject();
 
         classname = classnameIn.toLowerCase();
         classnameuppercase = classnameIn;
@@ -104,25 +104,25 @@ public class MegaWallsClassStats {
         wlr = (float) classname_wins / (classname_losses == 0 ? 1 : (float) classname_losses);
 
         // to compute classpoints
-        int classname_final_kills_standard = JsonUtil.getInt(mwdata, classname + "_final_kills_standard");
+        final int classname_final_kills_standard = JsonUtil.getInt(mwdata, classname + "_final_kills_standard");
         classname_final_assists_standard = JsonUtil.getInt(mwdata, classname + "_final_assists_standard");
-        int classname_wins_standard = JsonUtil.getInt(mwdata, classname + "_wins_standard");
+        final int classname_wins_standard = JsonUtil.getInt(mwdata, classname + "_wins_standard");
         classpoints = classname_final_kills_standard + classname_final_assists_standard + classname_wins_standard * 10;
 
         games_played = classname_wins + classname_losses; // doesn't count the draws
         fkpergame = (float) classname_final_kills / (games_played == 0 ? 1 : (float) games_played);
 
-        JsonObject classesdata = JsonUtil.getJsonObject(mwdata, "classes");
+        final JsonObject classesdata = JsonUtil.getJsonObject(mwdata, "classes");
         if (classesdata == null) {
             return;
         }
 
-        JsonObject classeobj = JsonUtil.getJsonObject(classesdata, classname);
+        final JsonObject classeobj = JsonUtil.getJsonObject(classesdata, classname);
         if (classeobj == null) {
             return;
         }
 
-        JsonElement boolelem = classeobj.get("unlocked");
+        final JsonElement boolelem = classeobj.get("unlocked");
 
         if (boolelem != null) {
             unlocked = boolelem.getAsBoolean();
@@ -159,7 +159,7 @@ public class MegaWallsClassStats {
      * Returns this minus the input
      */
     public void minus(MegaWallsClassStats mwclassStats) throws IllegalArgumentException, IllegalAccessException {
-        for (Field field : this.getClass().getDeclaredFields()) {
+        for (final Field field : this.getClass().getDeclaredFields()) {
             if (field.getType() == int.class) {
                 if (!field.isAccessible()) {
                     field.setAccessible(true);
@@ -174,9 +174,9 @@ public class MegaWallsClassStats {
      */
     public IChatComponent getGameStatMessage(String formattedname) {
 
-        float arrowaccuracy = 100f * (float) classname_arrows_hit / (float) (classname_arrows_fired == 0 ? 1 : classname_arrows_fired);
+        final float arrowaccuracy = 100f * (float) classname_arrows_hit / (float) (classname_arrows_fired == 0 ? 1 : classname_arrows_fired);
 
-        String[][] matrix1 = {
+        final String[][] matrix1 = {
                 {
                         EnumChatFormatting.GREEN + "Kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_kills) + " ",
                         EnumChatFormatting.GREEN + "Assists : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_assists)
@@ -212,7 +212,7 @@ public class MegaWallsClassStats {
                         EnumChatFormatting.GREEN + "Meters walked : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_meters_walked),
                 }};
 
-        IChatComponent imsg = new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar() + "\n")
+        final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar() + "\n")
                 .appendSibling(new ChatComponentText(ChatUtil.centerLine(formattedname + EnumChatFormatting.GOLD + " - Game stats - " + classnameuppercase)));
 
         if (games_played != 1) {
@@ -229,7 +229,7 @@ public class MegaWallsClassStats {
 
     public IChatComponent getFormattedMessage(String formattedname, String playername) {
 
-        String[][] matrix1 = {
+        final String[][] matrix1 = {
                 {
                         EnumChatFormatting.AQUA + "Kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_kills) + " ",
                         EnumChatFormatting.AQUA + "Deaths : " + EnumChatFormatting.RED + ChatUtil.formatInt(classname_deaths) + " ",
@@ -248,7 +248,7 @@ public class MegaWallsClassStats {
                         EnumChatFormatting.AQUA + "W/L Ratio : " + (wlr > 0.25f ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", wlr) + "\n"
                 }};
 
-        String[][] matrix2 = {
+        final String[][] matrix2 = {
 
                 {
                         EnumChatFormatting.AQUA + "Wither damage : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_wither_damage) + "     ",
@@ -267,7 +267,7 @@ public class MegaWallsClassStats {
         };
 
 
-        IChatComponent msg;
+        final IChatComponent msg;
 
         if (unlocked || classname.equals("hunter") || classname.equals("shark") || classname.equals("cow")) {
 

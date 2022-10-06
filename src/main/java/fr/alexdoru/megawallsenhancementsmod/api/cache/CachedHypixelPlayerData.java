@@ -15,7 +15,7 @@ public class CachedHypixelPlayerData {
         if (uuid != null && uuid.equals(uuidIn) && !timer.update()) {
             return;
         }
-        HypixelPlayerData hypixelPlayerData = new HypixelPlayerData(uuidIn, apikey);
+        final HypixelPlayerData hypixelPlayerData = new HypixelPlayerData(uuidIn, apikey);
         playerData = hypixelPlayerData.getPlayerData();
         uuid = uuidIn;
     }

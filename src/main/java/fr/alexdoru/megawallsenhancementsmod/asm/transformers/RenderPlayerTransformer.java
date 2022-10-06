@@ -17,9 +17,9 @@ public class RenderPlayerTransformer implements IMyClassTransformer {
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
-        for (MethodNode methodNode : classNode.methods) {
+        for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "renderOffsetLivingLabel") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lbet;DDDLjava/lang/String;FD)V" : "(Lnet/minecraft/client/entity/AbstractClientPlayer;DDDLjava/lang/String;FD)V")) {
-                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (insnNode instanceof MethodInsnNode && insnNode.getOpcode() == INVOKEVIRTUAL
                             && ((MethodInsnNode) insnNode).owner.equals("java/lang/StringBuilder")
                             && ((MethodInsnNode) insnNode).name.equals("toString")
@@ -32,7 +32,7 @@ public class RenderPlayerTransformer implements IMyClassTransformer {
                              With :
                              this.renderLivingLabel(entityIn, score.getScorePoints() + " " + scoreobjective.getDisplayName() + RenderPlayerHook.getArrowCount(entityIn), x, y, z, 64);
                              */
-                            InsnList list = new InsnList();
+                            final InsnList list = new InsnList();
                             list.add(new VarInsnNode(ALOAD, 1));
                             list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderPlayerHook", "getArrowCount", ASMLoadingPlugin.isObf ? "(Lbet;)Ljava/lang/String;" : "(Lnet/minecraft/client/entity/AbstractClientPlayer;)Ljava/lang/String;", false));
                             list.add(new MethodInsnNode(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false));

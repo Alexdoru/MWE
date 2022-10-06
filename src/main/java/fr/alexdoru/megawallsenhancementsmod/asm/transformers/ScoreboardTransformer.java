@@ -19,12 +19,12 @@ public class ScoreboardTransformer implements IMyClassTransformer {
 
         status.setInjectionPoints(2);
 
-        for (MethodNode methodNode : classNode.methods) {
+        for (final MethodNode methodNode : classNode.methods) {
 
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "addPlayerToTeam") && methodNode.desc.equals("(Ljava/lang/String;Ljava/lang/String;)Z")) {
-                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (insnNode.getOpcode() == ICONST_1 && insnNode instanceof InsnNode) {
-                        AbstractInsnNode nextNode = insnNode.getNext();
+                        final AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode != null && nextNode.getOpcode() == IRETURN) {
                             /*
                              * Injects before line 329 :
@@ -38,14 +38,14 @@ public class ScoreboardTransformer implements IMyClassTransformer {
             }
 
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "removePlayerFromTeam") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Ljava/lang/String;Laul;)V" : "(Ljava/lang/String;Lnet/minecraft/scoreboard/ScorePlayerTeam;)V")) {
-                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (insnNode.getOpcode() == INVOKEINTERFACE && insnNode instanceof MethodInsnNode
                             && ((MethodInsnNode) insnNode).owner.equals("java/util/Collection")
                             && ((MethodInsnNode) insnNode).name.equals("remove")
                             && ((MethodInsnNode) insnNode).desc.equals("(Ljava/lang/Object;)Z")) {
-                        AbstractInsnNode secondNode = insnNode.getNext();
+                        final AbstractInsnNode secondNode = insnNode.getNext();
                         if (secondNode != null && secondNode.getOpcode() == POP) {
-                            AbstractInsnNode thirdNode = secondNode.getNext();
+                            final AbstractInsnNode thirdNode = secondNode.getNext();
                             if (thirdNode != null) {
                                 /*
                                  * Injects after line 360 :
@@ -64,7 +64,7 @@ public class ScoreboardTransformer implements IMyClassTransformer {
     }
 
     private InsnList getInsnList() {
-        InsnList list = new InsnList();
+        final InsnList list = new InsnList();
         list.add(new VarInsnNode(ALOAD, 1));
         list.add(new MethodInsnNode(
                 INVOKESTATIC,

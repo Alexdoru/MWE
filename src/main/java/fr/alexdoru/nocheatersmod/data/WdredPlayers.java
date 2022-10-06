@@ -33,10 +33,10 @@ public class WdredPlayers {
 
     public static void saveReportedPlayers() {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(wdrsFile));
-            for (Entry<String, WDR> entry : WDR_HASH_MAP.entrySet()) {
-                String uuid = entry.getKey();
-                WDR wdr = entry.getValue();
+            final BufferedWriter writer = new BufferedWriter(new FileWriter(wdrsFile));
+            for (final Entry<String, WDR> entry : WDR_HASH_MAP.entrySet()) {
+                final String uuid = entry.getKey();
+                final WDR wdr = entry.getValue();
                 writer.write(uuid + " " + wdr.timestamp + " " + wdr.timeLastManualReport + wdr.hacksToString() + "\n");
             }
             writer.close();
@@ -52,15 +52,15 @@ public class WdredPlayers {
         }
         try {
 
-            long datenow = (new Date()).getTime();
-            BufferedReader reader = new BufferedReader(new FileReader(wdrsFile));
+            final long datenow = (new Date()).getTime();
+            final BufferedReader reader = new BufferedReader(new FileReader(wdrsFile));
 
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-                String[] split = line.split(" ");
+                final String[] split = line.split(" ");
                 if (split.length >= 3) {
 
                     boolean oldDataFormat = false;
-                    String uuid = split[0];
+                    final String uuid = split[0];
                     long timestamp = 0L;
                     long timeManualReport = 0L;
 
@@ -77,13 +77,13 @@ public class WdredPlayers {
                     }
 
                     if (ConfigHandler.deleteReports && datenow > timestamp + ConfigHandler.timeDeleteReport) {
-                        ArrayList<String> hacks = transformOldReports(Arrays.copyOfRange(split, oldDataFormat ? 2 : 3, split.length));
+                        final ArrayList<String> hacks = transformOldReports(Arrays.copyOfRange(split, oldDataFormat ? 2 : 3, split.length));
                         if (hacks.isEmpty()) {
                             continue;
                         }
                     }
 
-                    ArrayList<String> hacks = filterTimestampedReports(
+                    final ArrayList<String> hacks = filterTimestampedReports(
                             Arrays.copyOfRange(split, oldDataFormat ? 2 : 3, split.length),
                             datenow
                     );
@@ -109,8 +109,8 @@ public class WdredPlayers {
      * Deletes old reports exept if they are ignored players
      */
     private static ArrayList<String> transformOldReports(String[] split) {
-        ArrayList<String> hacks = new ArrayList<>();
-        List<String> splitList = Arrays.asList(split);
+        final ArrayList<String> hacks = new ArrayList<>();
+        final List<String> splitList = Arrays.asList(split);
         if (splitList.contains(WDR.IGNORED) && !splitList.contains(WDR.NICK)) {
             hacks.add(WDR.IGNORED);
         }
@@ -122,7 +122,7 @@ public class WdredPlayers {
      */
     private static ArrayList<String> filterTimestampedReports(String[] split, long datenow) {
 
-        ArrayList<String> hacks = new ArrayList<>();
+        final ArrayList<String> hacks = new ArrayList<>();
 
         if (split[0].charAt(0) == '-' && datenow - Long.parseLong(split[3]) - TIME_TRANSFORM_TIMESTAMPED_REPORT > 0) {
 
@@ -150,9 +150,9 @@ public class WdredPlayers {
 
     public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list) {
 
-        ArrayList<T> newList = new ArrayList<>();
+        final ArrayList<T> newList = new ArrayList<>();
 
-        for (T element : list) {
+        for (final T element : list) {
             if (!newList.contains(element)) {
                 newList.add(element);
             }

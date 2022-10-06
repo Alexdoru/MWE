@@ -58,7 +58,7 @@ public abstract class MyGuiScreen extends GuiScreen {
      * Call this at the end of the drawScreen method to draw the tooltips defined in getTooltopText
      */
     public void drawTooltips(int mouseX, int mouseY) {
-        for (GuiButton button : this.buttonList) {
+        for (final GuiButton button : this.buttonList) {
             if (button.isMouseOver()) {
                 drawHoveringText(getTooltipText(button.id), mouseX, mouseY);
                 return;

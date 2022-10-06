@@ -17,9 +17,9 @@ public class GuiContainerTransformer implements IMyClassTransformer {
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
-        for (MethodNode methodNode : classNode.methods) {
+        for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "b" : "checkHotbarKeys") && methodNode.desc.equals("(I)Z")) {
-                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (insnNode instanceof MethodInsnNode && insnNode.getOpcode() == INVOKEVIRTUAL
                             && ((MethodInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "ayl" : "net/minecraft/client/gui/inventory/GuiContainer")
                             && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "a" : "handleMouseClick")
@@ -40,8 +40,8 @@ public class GuiContainerTransformer implements IMyClassTransformer {
     }
 
     private InsnList getInsnList() {
-        InsnList list = new InsnList();
-        LabelNode notCancelled = new LabelNode();
+        final InsnList list = new InsnList();
+        final LabelNode notCancelled = new LabelNode();
         list.add(new VarInsnNode(ALOAD, 0));
         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "ayl" : "net/minecraft/client/gui/inventory/GuiContainer", ASMLoadingPlugin.isObf ? "u" : "theSlot", ASMLoadingPlugin.isObf ? "Lyg;" : "Lnet/minecraft/inventory/Slot;"));
         list.add(new VarInsnNode(ILOAD, 2));

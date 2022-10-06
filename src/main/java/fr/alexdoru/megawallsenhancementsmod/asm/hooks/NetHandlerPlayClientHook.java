@@ -29,7 +29,7 @@ public class NetHandlerPlayClientHook {
     @SuppressWarnings("UnstableApiUsage")
     public static void removePlayerFromMap(Object o) {
         if (o instanceof NetworkPlayerInfo) {
-            String playerName = ((NetworkPlayerInfo) o).getGameProfile().getName();
+            final String playerName = ((NetworkPlayerInfo) o).getGameProfile().getName();
             playerInfoMap.remove(playerName);
             latestDisconnected.add(new StringLong(System.currentTimeMillis(), playerName));
             MWPlayerData.dataCache.remove(((NetworkPlayerInfo) o).getGameProfile().getId());
@@ -43,10 +43,10 @@ public class NetHandlerPlayClientHook {
     }
 
     public static void printDisconnectedPlayers() {
-        List<String> disconnectedPlayers = new ArrayList<>();
-        StringBuilder stringBuilder = new StringBuilder();
-        long timenow = System.currentTimeMillis();
-        for (StringLong stringLong : latestDisconnected) {
+        final List<String> disconnectedPlayers = new ArrayList<>();
+        final StringBuilder stringBuilder = new StringBuilder();
+        final long timenow = System.currentTimeMillis();
+        for (final StringLong stringLong : latestDisconnected) {
             final String playername = stringLong.message;
             if (playername != null && timenow - stringLong.timestamp <= 1000L && !disconnectedPlayers.contains(playername)) {
                 disconnectedPlayers.add(playername);
@@ -56,7 +56,7 @@ public class NetHandlerPlayClientHook {
         if (disconnectedPlayers.isEmpty()) {
             return;
         }
-        String str = stringBuilder.toString();
+        final String str = stringBuilder.toString();
         ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player" + (disconnectedPlayers.size() == 1 ? "" : "s") + " disconnected :" + EnumChatFormatting.AQUA + str).setChatStyle(new ChatStyle()
                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Player" + (disconnectedPlayers.size() == 1 ? "" : "s") + " disconnected in the last second, click this message to run : \n\n" + EnumChatFormatting.YELLOW + "/stalk" + str)))
                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk" + str))));

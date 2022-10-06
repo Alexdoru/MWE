@@ -17,9 +17,9 @@ public class EntityPlayerTransformer implements IMyClassTransformer {
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
-        for (MethodNode methodNode : classNode.methods) {
+        for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "f_" : "getDisplayName") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "()Leu;" : "()Lnet/minecraft/util/IChatComponent;")) {
-                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (insnNode.getOpcode() == INVOKESTATIC && insnNode instanceof MethodInsnNode
                             && ((MethodInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "aul" : "net/minecraft/scoreboard/ScorePlayerTeam")
                             && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "a" : "formatPlayerName")
@@ -30,7 +30,7 @@ public class EntityPlayerTransformer implements IMyClassTransformer {
                          * With :
                          * ichatcomponent.appendSibling(new ChatComponentText(EntityPlayerHook.getTransformedDisplayName(ScorePlayerTeam.formatPlayerName(this.getTeam(), this.getDisplayNameString()), this.gameProfile)));
                          */
-                        InsnList list = new InsnList();
+                        final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "wn" : "net/minecraft/entity/player/EntityPlayer", ASMLoadingPlugin.isObf ? "bH" : "gameProfile", "Lcom/mojang/authlib/GameProfile;"));
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/EntityPlayerHook", "getTransformedDisplayName", "(Ljava/lang/String;Lcom/mojang/authlib/GameProfile;)Ljava/lang/String;", false));

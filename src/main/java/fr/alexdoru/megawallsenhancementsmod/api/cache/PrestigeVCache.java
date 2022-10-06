@@ -21,19 +21,19 @@ public class PrestigeVCache {
 
     public static EnumChatFormatting checkCacheAndUpdate(String uuid, String playername, String classTag) {
 
-        MWClass mwClass = MWClass.fromTag(classTag);
+        final MWClass mwClass = MWClass.fromTag(classTag);
         if (mwClass == null) {
             return null;
         }
 
-        PlayerPrestigeData playerPrestigeData = prestigeDataMap.get(uuid);
+        final PlayerPrestigeData playerPrestigeData = prestigeDataMap.get(uuid);
 
         if (playerPrestigeData == null) {
             createPlayerPrestigeData(uuid, mwClass, playername);
             return null;
         }
 
-        EnumChatFormatting chatFormatting = playerPrestigeData.playersPrestigeColors.get(mwClass);
+        final EnumChatFormatting chatFormatting = playerPrestigeData.playersPrestigeColors.get(mwClass);
         if (chatFormatting == null) {
             createClassData(uuid, mwClass, playerPrestigeData, playername);
             return null;
@@ -47,11 +47,11 @@ public class PrestigeVCache {
 
         Multithreading.addTaskToQueue(() -> {
 
-            CachedHypixelPlayerData playerdata;
+            final CachedHypixelPlayerData playerdata;
             try {
                 playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
-                MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwClass.className);
-                PlayerPrestigeData playerPrestigeData = new PlayerPrestigeData();
+                final MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwClass.className);
+                final PlayerPrestigeData playerPrestigeData = new PlayerPrestigeData();
                 playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints(), mwclassstats.getCoins());
                 prestigeDataMap.put(uuid, playerPrestigeData);
                 NameUtil.updateGameProfileAndName(playername, false);
@@ -69,10 +69,10 @@ public class PrestigeVCache {
 
         Multithreading.addTaskToQueue(() -> {
 
-            CachedHypixelPlayerData playerdata;
+            final CachedHypixelPlayerData playerdata;
             try {
                 playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
-                MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwClass.className);
+                final MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwClass.className);
                 playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints(), mwclassstats.getCoins());
                 NameUtil.updateGameProfileAndName(playername, false);
             } catch (ApiException e) {

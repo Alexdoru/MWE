@@ -20,7 +20,7 @@ public class SquadEvent {
 
     @SubscribeEvent
     public void onNameFormat(NameFormat event) {
-        String squadname = squadmap.get(event.username);
+        final String squadname = squadmap.get(event.username);
         if (squadname != null) {
             event.displayname = squadname;
         }
@@ -36,7 +36,7 @@ public class SquadEvent {
     }
 
     public static boolean removePlayer(String playername) {
-        boolean success = squadmap.remove(playername) != null;
+        final boolean success = squadmap.remove(playername) != null;
         if (success) {
             NameUtil.updateGameProfileAndName(playername, true);
         }
@@ -44,10 +44,10 @@ public class SquadEvent {
     }
 
     public static void clearSquad() {
-        List<String> playerlist = new ArrayList<>();
+        final List<String> playerlist = new ArrayList<>();
         squadmap.forEach((key, value) -> playerlist.add(key));
         squadmap.clear();
-        for (String playername : playerlist) {
+        for (final String playername : playerlist) {
             NameUtil.updateGameProfileAndName(playername, true);
         }
     }
@@ -78,22 +78,22 @@ public class SquadEvent {
             return;
         }
 
-        Minecraft mc = Minecraft.getMinecraft();
+        final Minecraft mc = Minecraft.getMinecraft();
         if (mc.theWorld == null) {
             return;
         }
 
-        Scoreboard scoreboard = mc.theWorld.getScoreboard();
+        final Scoreboard scoreboard = mc.theWorld.getScoreboard();
         if (scoreboard == null) {
             return;
         }
 
-        List<String> scoresRaw = ScoreboardUtils.getUnformattedSidebarText();
+        final List<String> scoresRaw = ScoreboardUtils.getUnformattedSidebarText();
         boolean found_teammates = false;
 
-        HashMap<String, String> newsquad = new HashMap<>();
+        final HashMap<String, String> newsquad = new HashMap<>();
 
-        for (String line : scoresRaw) {
+        for (final String line : scoresRaw) {
 
             if (found_teammates) {
 
@@ -101,8 +101,8 @@ public class SquadEvent {
                     break;
                 }
 
-                String nameonscoreboard = line.replace(" ", "");
-                String squadmate = squadmap.get(nameonscoreboard);
+                final String nameonscoreboard = line.replace(" ", "");
+                final String squadmate = squadmap.get(nameonscoreboard);
                 /*
                  * the player was already in the squad before, reuse the same name transformation
                  */

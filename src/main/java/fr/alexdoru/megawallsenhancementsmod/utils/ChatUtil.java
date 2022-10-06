@@ -74,9 +74,9 @@ public class ChatUtil {
      * Draws a bar that takes the width of the chat window
      */
     public static String bar() {
-        char separator = '-';
-        int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
-        int separatorWidth = frObj.getCharWidth(separator);
+        final char separator = '-';
+        final int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
+        final int separatorWidth = frObj.getCharWidth(separator);
         return EnumChatFormatting.STRIKETHROUGH + new String(new char[chatWidth / separatorWidth]).replace("\0", "-");
     }
 
@@ -84,14 +84,14 @@ public class ChatUtil {
      * Returns the message with spaces at the start to make the message centered in the chat box
      */
     public static String centerLine(String message) {
-        char space = ' ';
-        int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
-        int separatorWidth = frObj.getCharWidth(space);
-        int messageWidth = frObj.getStringWidth(message);
+        final char space = ' ';
+        final int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
+        final int separatorWidth = frObj.getCharWidth(space);
+        final int messageWidth = frObj.getStringWidth(message);
         if (messageWidth >= chatWidth) {
             return message;
         }
-        String separatorText = new String(new char[(chatWidth - messageWidth) / (2 * separatorWidth)]).replace("\0", " ");
+        final String separatorText = new String(new char[(chatWidth - messageWidth) / (2 * separatorWidth)]).replace("\0", " ");
         return separatorText + message;
     }
 
@@ -99,10 +99,10 @@ public class ChatUtil {
      * Returns the amounts of spaces needed to make a message centered
      */
     public static String getSeparatorToCenter(String message) {
-        char space = ' ';
-        int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
-        int separatorWidth = frObj.getCharWidth(space);
-        int messageWidth = frObj.getStringWidth(message);
+        final char space = ' ';
+        final int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
+        final int separatorWidth = frObj.getCharWidth(space);
+        final int messageWidth = frObj.getStringWidth(message);
         if (messageWidth >= chatWidth) {
             return "";
         }
@@ -115,15 +115,15 @@ public class ChatUtil {
      */
     public static String alignText(String[][] messagematrix) {
 
-        char separator = ' ';
-        int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
-        int separatorWidth = frObj.getCharWidth(separator);
+        final char separator = ' ';
+        final int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
+        final int separatorWidth = frObj.getCharWidth(separator);
         int columnWidth = 0;
         int maxLineWidth = 0;
 
-        for (String[] line : messagematrix) {
-            StringBuilder linemessage = new StringBuilder();
-            for (String msg : line) {
+        for (final String[] line : messagematrix) {
+            final StringBuilder linemessage = new StringBuilder();
+            for (final String msg : line) {
                 linemessage.append(msg);
                 columnWidth = Math.max(columnWidth, frObj.getStringWidth(msg));
             }
@@ -136,14 +136,14 @@ public class ChatUtil {
             leftSeparatorText = new String(new char[(chatWidth - maxLineWidth) / (2 * separatorWidth)]).replace("\0", String.valueOf(separator));
         }
 
-        StringBuilder message = new StringBuilder();
+        final StringBuilder message = new StringBuilder();
 
-        for (String[] strings : messagematrix) { // lines
+        for (final String[] strings : messagematrix) { // lines
             for (int j = 0; j < strings.length; j++) { // columns
 
                 if (j == 0) { // first element on the left
 
-                    int messageWidth = frObj.getStringWidth(strings[j]);
+                    final int messageWidth = frObj.getStringWidth(strings[j]);
                     message.append(leftSeparatorText).append(strings[j]).append(new String(new char[(columnWidth - messageWidth) / (separatorWidth)]).replace("\0", String.valueOf(separator)));
 
                 } else if (j == strings.length - 1) { // last element on the right
@@ -152,7 +152,7 @@ public class ChatUtil {
 
                 } else { // element in the middle
 
-                    int messageWidth = frObj.getStringWidth(strings[j]);
+                    final int messageWidth = frObj.getStringWidth(strings[j]);
                     message.append(strings[j]).append(new String(new char[(columnWidth - messageWidth) / (separatorWidth)]).replace("\0", String.valueOf(separator)));
 
                 }
@@ -182,10 +182,10 @@ public class ChatUtil {
      * Returns the integer as a String with a space for thousands delimiter
      */
     public static String formatLong(long number) {
-        String str = String.valueOf(number);
-        char separator = ' ';
+        final String str = String.valueOf(number);
+        final char separator = ' ';
         int iterator = 1;
-        StringBuilder msg = new StringBuilder();
+        final StringBuilder msg = new StringBuilder();
         for (int i = str.length() - 1; i >= 0; i--) {
             msg.insert(0, ((iterator == 3 && i != 0) ? String.valueOf(separator) : "") + str.charAt(i));
             if (iterator == 3) {

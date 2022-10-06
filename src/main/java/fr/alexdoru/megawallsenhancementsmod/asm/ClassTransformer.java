@@ -52,20 +52,20 @@ public class ClassTransformer implements IClassTransformer {
             return null;
         }
 
-        IMyClassTransformer classTransformer = transformerHashMap.get(transformedName);
+        final IMyClassTransformer classTransformer = transformerHashMap.get(transformedName);
 
         if (classTransformer == null) {
             return basicClass;
         }
 
         try {
-            ClassNode classNode = new ClassNode();
-            ClassReader classReader = new ClassReader(basicClass);
+            final ClassNode classNode = new ClassNode();
+            final ClassReader classReader = new ClassReader(basicClass);
             classReader.accept(classNode, 0);
-            ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-            InjectionStatus status = new InjectionStatus();
+            final ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+            final InjectionStatus status = new InjectionStatus();
             classTransformer.transform(classNode, status).accept(classWriter);
-            byte[] transformedByteArray = classWriter.toByteArray();
+            final byte[] transformedByteArray = classWriter.toByteArray();
             if (!status.isTransformationSuccessfull()) {
                 ASMLoadingPlugin.logger.error("Class transformation incomplete : " + getClassName(classTransformer.getTargetClassName()) + " missing " + status.getAmount_of_injection() + " injections");
             }
@@ -80,7 +80,7 @@ public class ClassTransformer implements IClassTransformer {
     }
 
     private String getClassName(String targetClassName) {
-        String[] split = targetClassName.split("\\.");
+        final String[] split = targetClassName.split("\\.");
         return split[split.length - 1];
     }
 
