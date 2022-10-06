@@ -5,6 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GuiNewChatAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.ColorUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.ScaledResolution;
@@ -121,23 +122,8 @@ public class ArrowHitHUD extends MyCachedHUD {
         return chatMessage.startsWith(playername) && counterDiff <= 4;
     }
 
-    /**
-     * Sets the HP color depending on the HP input
-     */
-    private EnumChatFormatting getColor(String hpValue) {
-        final float maxhealth = mc.thePlayer.getMaxHealth();
-        final float floathpvalue = Float.parseFloat(hpValue);
-        if (floathpvalue > maxhealth) {
-            return EnumChatFormatting.DARK_GREEN;
-        } else if (floathpvalue > maxhealth * 3 / 4) {
-            return EnumChatFormatting.GREEN;
-        } else if (floathpvalue > maxhealth / 2) {
-            return EnumChatFormatting.YELLOW;
-        } else if (floathpvalue > maxhealth / 4) {
-            return EnumChatFormatting.RED;
-        } else {
-            return EnumChatFormatting.DARK_RED;
-        }
+    private EnumChatFormatting getColor(String healthPoints) {
+        return ColorUtil.getHPColor(mc.thePlayer.getMaxHealth(), Float.parseFloat(healthPoints));
     }
 
     @Override
