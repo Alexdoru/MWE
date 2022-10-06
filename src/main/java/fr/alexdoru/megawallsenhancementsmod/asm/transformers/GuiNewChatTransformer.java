@@ -84,6 +84,14 @@ public class GuiNewChatTransformer implements IMyClassTransformer {
         }
 
         {
+            /*
+             * Adds method :
+             *
+             * public List<ChatLines> getChatLines() {
+             *     return this.chatLines;
+             * }
+             *
+             */
             MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "getChatLines", "()Ljava/util/List;", ASMLoadingPlugin.isObf ? "()Ljava/util/List<Lava;>;" : "()Ljava/util/List<Lnet/minecraft/client/gui/ChatLine;>;", null);
             mv.visitCode();
             Label l0 = new Label();
