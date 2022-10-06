@@ -3,7 +3,6 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
-import fr.alexdoru.nocheatersmod.commands.CommandReport;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;

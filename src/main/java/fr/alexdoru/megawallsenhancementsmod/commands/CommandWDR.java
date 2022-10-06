@@ -1,4 +1,4 @@
-package fr.alexdoru.nocheatersmod.commands;
+package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.events.KillCounter;
