@@ -30,16 +30,16 @@ public class NoCheatersMessages {
     public static void printReportMessagesForWorld(boolean callFromCommand) {
         ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).deleteAllWarningMessages();
         boolean foundReport = false;
-        long datenow = (new Date()).getTime();
-        for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-            String playerName = networkPlayerInfo.getGameProfile().getName();
-            WDR wdr = WdredPlayers.getPlayer(uuid, playerName);
+        final long datenow = (new Date()).getTime();
+        for (final NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
+            final String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
+            final String playerName = networkPlayerInfo.getGameProfile().getName();
+            final WDR wdr = WdredPlayers.getPlayer(uuid, playerName);
             if (wdr == null) {
                 continue;
             }
             foundReport = true;
-            boolean gotautoreported = ReportQueue.INSTANCE.addAutoReportToQueue(datenow, playerName, wdr);
+            final boolean gotautoreported = ReportQueue.INSTANCE.addAutoReportToQueue(datenow, playerName, wdr);
             if (wdr.transformName()) {
                 printWarningMessage(
                         datenow,
@@ -58,12 +58,12 @@ public class NoCheatersMessages {
 
     public static void printWarningMessage(long datenow, String uuid, String formattedName, String playername, WDR wdr, boolean disableReportButton) {
 
-        String wdrmapKey = wdr.isNicked() ? playername : uuid;
-        IChatComponent[] imsgArray = createPlayerNameWithHoverText(formattedName, playername, wdrmapKey, wdr, EnumChatFormatting.LIGHT_PURPLE);
-        IChatComponent imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ").appendSibling(imsgArray[0]);
-        IChatComponent allCheats = imsgArray[1];
+        final String wdrmapKey = wdr.isNicked() ? playername : uuid;
+        final IChatComponent[] imsgArray = createPlayerNameWithHoverText(formattedName, playername, wdrmapKey, wdr, EnumChatFormatting.LIGHT_PURPLE);
+        final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ").appendSibling(imsgArray[0]);
+        final IChatComponent allCheats = imsgArray[1];
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " joined,"));
-        boolean olderThanMaxAutoreport = wdr.shouldPrintBigText(datenow);
+        final boolean olderThanMaxAutoreport = wdr.shouldPrintBigText(datenow);
 
         if (olderThanMaxAutoreport) {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " [Report Player]").setChatStyle(new ChatStyle()
@@ -104,19 +104,19 @@ public class NoCheatersMessages {
      */
     public static IChatComponent[] createPlayerNameWithHoverText(String formattedNameIn, String playername, String wdrmapKey, WDR wdr, EnumChatFormatting namecolor) {
 
-        String formattedName = formattedNameIn == null ? namecolor.toString() + playername : formattedNameIn;
+        final String formattedName = formattedNameIn == null ? namecolor.toString() + playername : formattedNameIn;
 
         if (wdr.hacks.get(0).charAt(0) == '-') {
             StringBuilder cheats = new StringBuilder();
             long timestamphackreport = 0L;
-            StringBuilder allCheats = new StringBuilder();
+            final StringBuilder allCheats = new StringBuilder();
             String serverID = "";
             String timeronreplay = "";
             String playernamewhenreported = "";
             String oldname = "";
             long oldtimestamp = 0L;
             String oldgameID = "";
-            IChatComponent hoverText = new ChatComponentText(formattedName);
+            final IChatComponent hoverText = new ChatComponentText(formattedName);
 
             int j = 0;
             for (int i = 0; i < wdr.hacks.size(); i++) {
@@ -177,14 +177,14 @@ public class NoCheatersMessages {
 
             }
 
-            IChatComponent imsg = new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
+            final IChatComponent imsg = new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText)));
 
             return new IChatComponent[]{imsg, new ChatComponentText(EnumChatFormatting.DARK_BLUE + allCheats.toString())};
 
         } else {
 
-            IChatComponent imsg = new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
+            final IChatComponent imsg = new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + wdrmapKey + " " + playername))
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
                             formattedName + "\n"
@@ -193,9 +193,9 @@ public class NoCheatersMessages {
                                     + EnumChatFormatting.GREEN + "Reported for :" + EnumChatFormatting.GOLD + wdr.hacksToString() + "\n\n"
                                     + EnumChatFormatting.YELLOW + "Click here to remove this player from your report list"))));
 
-            IChatComponent allCheats = new ChatComponentText("");
+            final IChatComponent allCheats = new ChatComponentText("");
 
-            for (String hack : wdr.hacks) {
+            for (final String hack : wdr.hacks) {
                 if (hack.equalsIgnoreCase("bhop")) {
                     allCheats.appendSibling(new ChatComponentText(" " + EnumChatFormatting.DARK_RED + hack));
                 } else if (hack.equalsIgnoreCase(WDR.NICK)) {

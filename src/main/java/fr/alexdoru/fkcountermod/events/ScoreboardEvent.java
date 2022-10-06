@@ -35,7 +35,7 @@ public class ScoreboardEvent {
             return;
         }
 
-        Scoreboard scoreboard = mc.theWorld.getScoreboard();
+        final Scoreboard scoreboard = mc.theWorld.getScoreboard();
         if (scoreboard == null) {
             FKCounterMod.isInMwGame = false;
             FKCounterMod.isMWEnvironement = false;
@@ -46,9 +46,9 @@ public class ScoreboardEvent {
 
         mwScoreboardParser = new ScoreboardParser(scoreboard);
 
-        String gameId = mwScoreboardParser.getGameId();
-        boolean hasgameended = mwScoreboardParser.hasGameEnded();
-        int amountWitherAlive = mwScoreboardParser.getAliveWithers().size();
+        final String gameId = mwScoreboardParser.getGameId();
+        final boolean hasgameended = mwScoreboardParser.hasGameEnded();
+        final int amountWitherAlive = mwScoreboardParser.getAliveWithers().size();
         FKCounterMod.isInMwGame = mwScoreboardParser.isInMwGame();
         FKCounterMod.isMWEnvironement = mwScoreboardParser.isMWEnvironement();
         FKCounterMod.preGameLobby = mwScoreboardParser.isPreGameLobby();

@@ -57,14 +57,14 @@ public class CommandScanGame extends CommandBase {
     }
 
     private static void onGameStart() {
-        String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
+        final String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
         if (!currentGameId.equals("?") && scanGameId != null && !scanGameId.equals(currentGameId)) {
             clearScanGameData();
         }
     }
 
     public static boolean doesPlayerFlag(UUID uuid) {
-        IChatComponent imsg = scanmap.get(uuid);
+        final IChatComponent imsg = scanmap.get(uuid);
         return imsg != null && !imsg.equals(CommandScanGame.nomatch);
     }
 
@@ -88,11 +88,11 @@ public class CommandScanGame extends CommandBase {
             ChatUtil.printApikeySetupInfo();
             return;
         }
-        String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
-        Collection<NetworkPlayerInfo> playerCollection = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
+        final String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
+        final Collection<NetworkPlayerInfo> playerCollection = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
         int i = 0;
         if (!currentGameId.equals("?") && currentGameId.equals(scanGameId)) {
-            for (NetworkPlayerInfo networkPlayerInfo : playerCollection) {
+            for (final NetworkPlayerInfo networkPlayerInfo : playerCollection) {
                 final IChatComponent imsg = scanmap.get(networkPlayerInfo.getGameProfile().getId());
                 if (imsg == null) {
                     i++;
@@ -104,7 +104,7 @@ public class CommandScanGame extends CommandBase {
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " more players...");
         } else {
             scanGameId = GameInfoGrabber.getGameIDfromscoreboard();
-            for (NetworkPlayerInfo networkPlayerInfo : playerCollection) {
+            for (final NetworkPlayerInfo networkPlayerInfo : playerCollection) {
                 i++;
                 Multithreading.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
             }
@@ -139,9 +139,9 @@ class ScanPlayerTask implements Callable<String> {
                 return null;
             }
 
-            String playername = networkPlayerInfo.getGameProfile().getName();
-            HypixelPlayerData playerdata = new HypixelPlayerData(uuid.toString().replace("-", ""), HypixelApiKeyUtil.getApiKey());
-            MegaWallsStats megawallsstats = new MegaWallsStats(playerdata.getPlayerData());
+            final String playername = networkPlayerInfo.getGameProfile().getName();
+            final HypixelPlayerData playerdata = new HypixelPlayerData(uuid.toString().replace("-", ""), HypixelApiKeyUtil.getApiKey());
+            final MegaWallsStats megawallsstats = new MegaWallsStats(playerdata.getPlayerData());
             IChatComponent imsg = null;
 
             if ((megawallsstats.getGames_played() <= 25 && megawallsstats.getFkdr() > 3.5f) ||
@@ -155,18 +155,18 @@ class ScanPlayerTask implements Callable<String> {
 
             } else if (megawallsstats.getGames_played() < 15) {
 
-                GeneralInfo generalInfo = new GeneralInfo(playerdata.getPlayerData());
-                boolean firstGame = megawallsstats.getGames_played() == 0;
-                boolean secondFlag = generalInfo.getCompletedQuests() < 20 && generalInfo.getNetworkLevel() > 30f;
-                JsonObject classesdata = megawallsstats.getClassesdata();
+                final GeneralInfo generalInfo = new GeneralInfo(playerdata.getPlayerData());
+                final boolean firstGame = megawallsstats.getGames_played() == 0;
+                final boolean secondFlag = generalInfo.getCompletedQuests() < 20 && generalInfo.getNetworkLevel() > 30f;
+                final JsonObject classesdata = megawallsstats.getClassesdata();
 
                 if (FKCounterMod.isInMwGame) {
 
-                    ScorePlayerTeam team = Minecraft.getMinecraft().theWorld.getScoreboard().getPlayersTeam(playername);
-                    String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replace("[", "").replace("]", "").replace(" ", ""));
-                    MWClass mwClass = MWClass.fromTag(classTag);
+                    final ScorePlayerTeam team = Minecraft.getMinecraft().theWorld.getScoreboard().getPlayersTeam(playername);
+                    final String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replace("[", "").replace("]", "").replace(" ", ""));
+                    final MWClass mwClass = MWClass.fromTag(classTag);
                     if (mwClass != null) {
-                        JsonObject entryclassobj = classesdata.getAsJsonObject(mwClass.className.toLowerCase());
+                        final JsonObject entryclassobj = classesdata.getAsJsonObject(mwClass.className.toLowerCase());
                         if (firstGame) {
                             imsg = getMsgFirstGame(mwClass.className, entryclassobj);
                         } else if (secondFlag) {
@@ -176,9 +176,9 @@ class ScanPlayerTask implements Callable<String> {
 
                 } else {
 
-                    for (Map.Entry<String, JsonElement> entry : classesdata.entrySet()) {
+                    for (final Map.Entry<String, JsonElement> entry : classesdata.entrySet()) {
                         if (entry.getValue() != null && entry.getValue().isJsonObject()) {
-                            JsonObject entryclassobj = entry.getValue().getAsJsonObject();
+                            final JsonObject entryclassobj = entry.getValue().getAsJsonObject();
                             if (imsg == null) {
                                 if (firstGame) {
                                     imsg = getMsgFirstGame(entry.getKey(), entryclassobj);
@@ -186,7 +186,7 @@ class ScanPlayerTask implements Callable<String> {
                                     imsg = getMsg(entry.getKey(), entryclassobj, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megawallsstats.getGames_played());
                                 }
                             } else {
-                                IChatComponent classMsg = getFormattedClassMsg(entry.getKey(), entryclassobj, firstGame);
+                                final IChatComponent classMsg = getFormattedClassMsg(entry.getKey(), entryclassobj, firstGame);
                                 if (classMsg != null) {
                                     imsg.appendSibling(classMsg);
                                 }
@@ -199,7 +199,7 @@ class ScanPlayerTask implements Callable<String> {
             }
 
             if (imsg == null) {
-                float ratio = megawallsstats.getLegSkins() * 12f / (megawallsstats.getGames_played() == 0 ? 1 : megawallsstats.getGames_played());
+                final float ratio = megawallsstats.getLegSkins() * 12f / (megawallsstats.getGames_played() == 0 ? 1 : megawallsstats.getGames_played());
                 if (ratio >= 1) {
                     imsg = new ChatComponentText(EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megawallsstats.getGames_played()
                             + EnumChatFormatting.GRAY + " games, and has : " + EnumChatFormatting.GOLD + megawallsstats.getLegSkins()
@@ -224,8 +224,8 @@ class ScanPlayerTask implements Callable<String> {
     }
 
     private IChatComponent getMsgFirstGame(String className, JsonObject entryclassobj) {
-        int skill_level_a = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_a"), 1); //skill
-        int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"), 1); //kit
+        final int skill_level_a = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_a"), 1); //skill
+        final int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"), 1); //kit
         if (skill_level_a >= 4 || skill_level_d >= 4) {
             return new ChatComponentText(EnumChatFormatting.GRAY + " never played and has :").appendSibling(getFormattedClassMsg(className, entryclassobj, true));
         }
@@ -233,10 +233,10 @@ class ScanPlayerTask implements Callable<String> {
     }
 
     private IChatComponent getMsg(String className, JsonObject entryclassobj, int quests, int networklevel, int gameplayed) {
-        int skill_level_a = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_a"), 1); //skill
-        int skill_level_b = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_b"), 1); //passive1
-        int skill_level_c = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_c"), 1); //passive2
-        int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"), 1); //kit
+        final int skill_level_a = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_a"), 1); //skill
+        final int skill_level_b = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_b"), 1); //passive1
+        final int skill_level_c = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_c"), 1); //passive2
+        final int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"), 1); //kit
         if (skill_level_a == 5 && skill_level_b == 3 && skill_level_c == 3 && skill_level_d == 5) {
             return new ChatComponentText(EnumChatFormatting.GRAY + " played " + EnumChatFormatting.GOLD + gameplayed + EnumChatFormatting.GRAY + " games"
                     + EnumChatFormatting.GRAY + ", network lvl " + EnumChatFormatting.GOLD + networklevel
@@ -247,11 +247,11 @@ class ScanPlayerTask implements Callable<String> {
     }
 
     private IChatComponent getFormattedClassMsg(String className, JsonObject entryclassobj, boolean firstgame) {
-        int skill_level_a = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_a"), 1); //skill
-        int skill_level_b = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_b"), 1); //passive1
-        int skill_level_c = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_c"), 1); //passive2
-        int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"), 1); //kit
-        int skill_level_g = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_g"), 1); //gathering
+        final int skill_level_a = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_a"), 1); //skill
+        final int skill_level_b = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_b"), 1); //passive1
+        final int skill_level_c = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_c"), 1); //passive2
+        final int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"), 1); //kit
+        final int skill_level_g = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_g"), 1); //gathering
         if (firstgame ? skill_level_a >= 4 || skill_level_d >= 4 : skill_level_a == 5 && skill_level_b == 3 && skill_level_c == 3 && skill_level_d == 5) {
             return new ChatComponentText(" " + EnumChatFormatting.GOLD + className + " "
                     + (skill_level_d == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_d) + " "

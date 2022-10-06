@@ -14,17 +14,17 @@ public class MegaWallsClassSkinData {
         if (playerData == null)
             return;
 
-        JsonObject statsdata = playerData.get("stats").getAsJsonObject();
+        final JsonObject statsdata = playerData.get("stats").getAsJsonObject();
 
         if (statsdata == null)
             return;
 
-        JsonElement mwElem = statsdata.get("Walls3");
+        final JsonElement mwElem = statsdata.get("Walls3");
 
         if (mwElem == null)
             return;
 
-        JsonObject mwdata = mwElem.getAsJsonObject();
+        final JsonObject mwdata = mwElem.getAsJsonObject();
 
         this.chosen_class = JsonUtil.getString(mwdata, "chosen_class");
         this.chosen_skin_class = JsonUtil.getString(mwdata, "chosen_skin_" + this.chosen_class);

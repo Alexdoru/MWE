@@ -25,22 +25,22 @@ public class NetworkPlayerInfoTransformer implements IMyClassTransformer {
         classNode.interfaces.add("fr/alexdoru/megawallsenhancementsmod/asm/accessor/NetworkPlayerInfoAccessor");
 
         {
-            FieldVisitor fieldVisitor = classNode.visitField(ACC_PUBLIC, "playerFinalkills", "I", null, 0);
+            final FieldVisitor fieldVisitor = classNode.visitField(ACC_PUBLIC, "playerFinalkills", "I", null, 0);
             fieldVisitor.visitEnd();
         }
 
         {
-            MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "setPlayerFinalkills", "(I)V", null, null);
+            final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "setPlayerFinalkills", "(I)V", null, null);
             mv.visitCode();
-            Label l0 = new Label();
+            final Label l0 = new Label();
             mv.visitLabel(l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ILOAD, 1);
             mv.visitFieldInsn(PUTFIELD, ASMLoadingPlugin.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", "playerFinalkills", "I");
-            Label l1 = new Label();
+            final Label l1 = new Label();
             mv.visitLabel(l1);
             mv.visitInsn(RETURN);
-            Label l2 = new Label();
+            final Label l2 = new Label();
             mv.visitLabel(l2);
             mv.visitLocalVariable("this", ASMLoadingPlugin.isObf ? "Lbdc;" : "Lnet/minecraft/client/network/NetworkPlayerInfo;", null, l0, l2, 0);
             mv.visitLocalVariable("playerFinalkillsIn", "I", null, l0, l2, 1);
@@ -48,15 +48,15 @@ public class NetworkPlayerInfoTransformer implements IMyClassTransformer {
             mv.visitEnd();
         }
 
-        for (MethodNode methodNode : classNode.methods) {
+        for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals("<init>") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lgz$b;)V" : "(Lnet/minecraft/network/play/server/S38PacketPlayerListItem$AddPlayerData;)V")) {
-                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (insnNode.getOpcode() == PUTFIELD && ((FieldInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo") && ((FieldInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "h" : "displayName")) {
                         /*
                          * Replace line 48 with :
                          * this.displayname = NetworkPlayerInfoHook.getDisplayName(this.displayname, this.gameProfile)
                          */
-                        InsnList list = new InsnList();
+                        final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", ASMLoadingPlugin.isObf ? "a" : "gameProfile", "Lcom/mojang/authlib/GameProfile;"));
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/NetworkPlayerInfoHook", "getDisplayName", ASMLoadingPlugin.isObf ? "(Leu;Lcom/mojang/authlib/GameProfile;)Leu;" : "(Lnet/minecraft/util/IChatComponent;Lcom/mojang/authlib/GameProfile;)Lnet/minecraft/util/IChatComponent;", false));
@@ -64,9 +64,9 @@ public class NetworkPlayerInfoTransformer implements IMyClassTransformer {
                         status.addInjection();
 
                         /*Adds after line 48 : this.playersFinalKills = NetworkPlayerInfoHook.getPlayersFinals(this.gameProfile.getName())*/
-                        AbstractInsnNode nextNode = insnNode.getNext();
+                        final AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode != null) {
-                            InsnList list2 = new InsnList();
+                            final InsnList list2 = new InsnList();
                             list2.add(new VarInsnNode(ALOAD, 0));
                             list2.add(new VarInsnNode(ALOAD, 0));
                             list2.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", ASMLoadingPlugin.isObf ? "a" : "gameProfile", "Lcom/mojang/authlib/GameProfile;"));

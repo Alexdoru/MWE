@@ -17,9 +17,9 @@ public class GuiScreenTransformer implements IMyClassTransformer {
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
-        for (MethodNode methodNode : classNode.methods) {
+        for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "handleComponentClick") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Leu;)Z" : "(Lnet/minecraft/util/IChatComponent;)Z")) {
-                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (insnNode instanceof VarInsnNode && insnNode.getOpcode() == ALOAD && ((VarInsnNode) insnNode).var == 0) {
                         final AbstractInsnNode secondNode = insnNode.getNext();
                         if (secondNode instanceof VarInsnNode && secondNode.getOpcode() == ALOAD && ((VarInsnNode) secondNode).var == 2) {
@@ -55,8 +55,8 @@ public class GuiScreenTransformer implements IMyClassTransformer {
     }
 
     private InsnList getInsnList() {
-        InsnList list = new InsnList();
-        LabelNode notCancelled = new LabelNode();
+        final InsnList list = new InsnList();
+        final LabelNode notCancelled = new LabelNode();
         list.add(new VarInsnNode(ALOAD, 2));
         list.add(new MethodInsnNode(INVOKEVIRTUAL, ASMLoadingPlugin.isObf ? "et" : "net/minecraft/event/ClickEvent", ASMLoadingPlugin.isObf ? "b" : "getValue", "()Ljava/lang/String;", false));
         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiScreenHook", "handleMWEnCustomChatCommand", "(Ljava/lang/String;)Z", false));

@@ -46,7 +46,7 @@ public class CommandPlancke extends CommandBase {
 
         Multithreading.addTaskToQueue(() -> {
 
-            CachedMojangUUID apiname;
+            final CachedMojangUUID apiname;
             try {
                 apiname = new CachedMojangUUID(args[0]);
             } catch (ApiException e) {
@@ -54,10 +54,10 @@ public class CommandPlancke extends CommandBase {
                 return null;
             }
 
-            String uuid = apiname.getUuid();
-            String playername = apiname.getName();
-            CachedHypixelPlayerData playerdata;
-            GeneralInfo generalstats;
+            final String uuid = apiname.getUuid();
+            final String playername = apiname.getName();
+            final CachedHypixelPlayerData playerdata;
+            final GeneralInfo generalstats;
             try {
                 playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
                 generalstats = new GeneralInfo(playerdata.getPlayerData());
@@ -70,7 +70,7 @@ public class CommandPlancke extends CommandBase {
                 return null;
             }
 
-            String formattedName = generalstats.getFormattedName();
+            final String formattedName = generalstats.getFormattedName();
 
             if (generalstats.hasNeverJoinedHypixel()) { // player never joined hypixel
 
@@ -80,8 +80,8 @@ public class CommandPlancke extends CommandBase {
 
             if (args.length == 1) {
 
-                HypixelGuild hypixelGuild = new HypixelGuild(uuid, HypixelApiKeyUtil.getApiKey());
-                String guildTag = hypixelGuild.getFormattedGuildTag();
+                final HypixelGuild hypixelGuild = new HypixelGuild(uuid, HypixelApiKeyUtil.getApiKey());
+                final String guildTag = hypixelGuild.getFormattedGuildTag();
                 ChatUtil.addChatMessage(generalstats.getFormattedMessage(formattedName + (guildTag == null ? "" : guildTag), hypixelGuild.getGuildName()));
 
             } else {
@@ -103,24 +103,24 @@ public class CommandPlancke extends CommandBase {
 
                     if (args.length == 2) {
 
-                        MegaWallsStats mwstats = new MegaWallsStats(playerdata.getPlayerData());
+                        final MegaWallsStats mwstats = new MegaWallsStats(playerdata.getPlayerData());
                         ChatUtil.addChatMessage(mwstats.getFormattedMessage(formattedName, playername));
 
                     } else {
 
                         if (args[2].equals("cp") || args[2].equals("classpoint") || args[2].equals("classpoints")) {
 
-                            MegaWallsStats mwstats = new MegaWallsStats(playerdata.getPlayerData());
+                            final MegaWallsStats mwstats = new MegaWallsStats(playerdata.getPlayerData());
                             ChatUtil.addChatMessage(mwstats.getClassPointsMessage(formattedName, playername));
 
                         } else {
 
-                            MWClass mwclass = MWClass.fromTagOrName(args[2]);
+                            final MWClass mwclass = MWClass.fromTagOrName(args[2]);
                             if (mwclass == null) {
                                 ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + args[2] + EnumChatFormatting.RED + " isn't a valid mega walls class name.");
                                 return null;
                             }
-                            MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwclass.className);
+                            final MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwclass.className);
                             ChatUtil.addChatMessage(mwclassstats.getFormattedMessage(formattedName, playername));
 
                         }
@@ -129,7 +129,7 @@ public class CommandPlancke extends CommandBase {
 
                 } else if (args[1].equalsIgnoreCase("sw") || args[1].equalsIgnoreCase("skywars")) { // general stats for skywars
 
-                    SkywarsStats skywarsStats = new SkywarsStats(playerdata.getPlayerData());
+                    final SkywarsStats skywarsStats = new SkywarsStats(playerdata.getPlayerData());
                     ChatUtil.addChatMessage(skywarsStats.getFormattedMessage(formattedName, playername));
 
                 } else if (args[1].equalsIgnoreCase("tnt") || args[1].equalsIgnoreCase("tntgames")) { // general stats for tnt games
@@ -138,7 +138,7 @@ public class CommandPlancke extends CommandBase {
 
                 } else if (args[1].equalsIgnoreCase("uhc")) { // general stats for UHC champions
 
-                    UHCStats uhcStats = new UHCStats(playerdata.getPlayerData());
+                    final UHCStats uhcStats = new UHCStats(playerdata.getPlayerData());
                     ChatUtil.addChatMessage(uhcStats.getFormattedMessage(formattedName, playername));
 
                 } else {

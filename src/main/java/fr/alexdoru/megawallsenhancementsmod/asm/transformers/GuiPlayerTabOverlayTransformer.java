@@ -20,7 +20,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
 
         boolean isPatcherLoaded = true;
-        int injectionPoints = 6;
+        final int injectionPoints = 6;
         status.setInjectionPoints(injectionPoints);
 
         try {
@@ -31,13 +31,13 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
         } catch (Exception ignored) {
         }
 
-        for (MethodNode methodNode : classNode.methods) {
+        for (final MethodNode methodNode : classNode.methods) {
 
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "renderPlayerlist") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(ILauo;Lauk;)V" : "(ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V")) {
 
                 boolean foundListFormattedStringToWidth = false;
 
-                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
                     if (insnNode.getOpcode() == BIPUSH && insnNode instanceof IntInsnNode && ((IntInsnNode) insnNode).operand == 20) {
                         methodNode.instructions.insertBefore(insnNode, new IntInsnNode(BIPUSH, 25));
@@ -52,7 +52,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                     }
 
                     if (insnNode.getOpcode() == ILOAD && insnNode instanceof VarInsnNode && ((VarInsnNode) insnNode).var == 7) {
-                        AbstractInsnNode nextNode = insnNode.getNext();
+                        final AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode.getOpcode() == ISTORE && nextNode instanceof VarInsnNode && ((VarInsnNode) nextNode).var == 12) {
                             /*
                              * Replaces line 109 :
@@ -60,7 +60,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                              * With :
                              * l = j + GuiPlayerTabOverlayHook.getFKScoreWidth();
                              */
-                            InsnList list = new InsnList();
+                            final InsnList list = new InsnList();
                             list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "getFKScoreWidth", "()I", false));
                             list.add(new InsnNode(IADD));
                             methodNode.instructions.insertBefore(nextNode, list);
@@ -82,7 +82,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
 
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "drawScoreboardValues") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lauk;ILjava/lang/String;IILbdc;)V" : "(Lnet/minecraft/scoreboard/ScoreObjective;ILjava/lang/String;IILnet/minecraft/client/network/NetworkPlayerInfo;)V")) {
                 boolean sliceFlag = false;
-                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
                     if (insnNode.getOpcode() == GETSTATIC
                             && insnNode instanceof FieldInsnNode
@@ -95,7 +95,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                         After transformation :
                         String s1 = GuiPlayerTabOverlayHook.getColoredHP(i) + "" + i;
                          */
-                        InsnList list = new InsnList();
+                        final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ILOAD, 7));
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "getColoredHP", ASMLoadingPlugin.isObf ? "(I)La;" : "(I)Lnet/minecraft/util/EnumChatFormatting;", false));
                         methodNode.instructions.insertBefore(insnNode, list);
@@ -109,7 +109,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                         Injects before line 365 :
                         GuiPlayerTabOverlayHook.renderFinals(p_175247_6_.playerFinalkills, p_175247_5_, p_175247_2_);
                          */
-                        InsnList list = new InsnList();
+                        final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 6)); // load networkplayerinfo / p_175247_6_
                         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", "playerFinalkills", "I")); // get playerFinalkills field
                         list.add(new VarInsnNode(ILOAD, 5));

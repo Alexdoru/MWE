@@ -13,11 +13,11 @@ public class TabCompletionUtil {
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     public static List<String> getOnlinePlayersByName() {
-        List<String> players = new ArrayList<>();
+        final List<String> players = new ArrayList<>();
         final NetHandlerPlayClient netHandler = mc.getNetHandler();
         if (netHandler != null) {
-            for (NetworkPlayerInfo networkPlayerInfo : netHandler.getPlayerInfoMap()) {
-                String playerName = networkPlayerInfo.getGameProfile().getName();
+            for (final NetworkPlayerInfo networkPlayerInfo : netHandler.getPlayerInfoMap()) {
+                final String playerName = networkPlayerInfo.getGameProfile().getName();
                 ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(playerName);
                 if (team == null) {
                     if (playerName != null) {

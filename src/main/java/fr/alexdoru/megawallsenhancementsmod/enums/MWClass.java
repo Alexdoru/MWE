@@ -38,7 +38,7 @@ public enum MWClass {
     }
 
     public static MWClass fromTagOrName(String nameIn) {
-        for (MWClass mwClass : values()) {
+        for (final MWClass mwClass : values()) {
             if (nameIn.equalsIgnoreCase(mwClass.tagLowerCase) || nameIn.equalsIgnoreCase(mwClass.className)) {
                 return mwClass;
             }
@@ -47,7 +47,7 @@ public enum MWClass {
     }
 
     public static MWClass fromTag(String TAG) {
-        for (MWClass mwClass : values()) {
+        for (final MWClass mwClass : values()) {
             if (TAG.equals(mwClass.TAG)) {
                 return mwClass;
             }

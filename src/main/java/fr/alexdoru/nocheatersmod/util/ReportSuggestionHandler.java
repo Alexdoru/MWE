@@ -46,8 +46,8 @@ public class ReportSuggestionHandler {
 
         if (ConfigHandler.reportsuggestions || ConfigHandler.autoreportSuggestions) {
 
-            Matcher matcher1 = REPORT_PATTERN1.matcher(msgIn);
-            Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);
+            final Matcher matcher1 = REPORT_PATTERN1.matcher(msgIn);
+            final Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);
 
             if (matcher1.find()) {
                 String reportText = matcher1.group();
@@ -70,7 +70,7 @@ public class ReportSuggestionHandler {
             } else if (matcher2.find()) {
                 String reportText = matcher2.group();
                 String reportedPlayer = matcher2.group(1);
-                String cheat = matcher2.group(2);
+                final String cheat = matcher2.group(2);
                 String uncensoredName = null;
                 if (reportedPlayer.contains("****")) {
                     uncensoredName = findPlayernameWithCorrectCase(reportedPlayer.replace("****", "seks"));
@@ -105,8 +105,8 @@ public class ReportSuggestionHandler {
      */
     private static void handleReportSuggestion(String reportedPlayer, @Nullable String senderRank, @Nullable String messageSender, @Nullable String squadname, String reportText, String cheat, String fmsg) {
 
-        boolean isSenderMyself = isPlayerMyself(messageSender);
-        boolean isTargetMyself = isPlayerMyself(reportedPlayer);
+        final boolean isSenderMyself = isPlayerMyself(messageSender);
+        final boolean isTargetMyself = isPlayerMyself(reportedPlayer);
         boolean isSenderInTablist = false;
         boolean isSenderNicked = false;
         boolean isSenderFlaging = false;
@@ -123,7 +123,7 @@ public class ReportSuggestionHandler {
 
         } else if (messageSender != null) {
 
-            NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(messageSender);
+            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(messageSender);
             if (networkPlayerInfo != null) {
                 isSenderInTablist = true;
                 final UUID id = networkPlayerInfo.getGameProfile().getId();
@@ -143,7 +143,7 @@ public class ReportSuggestionHandler {
             isSenderRankValid = true;
         }
 
-        boolean gotAutoreported = checkAndSendReportSuggestion(messageSender, reportedPlayer, cheat, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, false, isSenderRankValid);
+        final boolean gotAutoreported = checkAndSendReportSuggestion(messageSender, reportedPlayer, cheat, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, false, isSenderRankValid);
         printCustomReportSuggestionChatText(fmsg, messageSender, reportedPlayer, cheat, reportText, squadname, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, false, gotAutoreported, senderUUID);
 
     }
@@ -155,7 +155,7 @@ public class ReportSuggestionHandler {
         }
 
         if (isSenderMyself || (SquadEvent.getSquad().get(messageSender) != null)) {
-            String[] args = new String[]{reportedPlayer, cheat};
+            final String[] args = new String[]{reportedPlayer, cheat};
             CommandWDR.handleWDRCommand(args, true, canWDRPlayer(reportedPlayer));
         }
 
@@ -218,7 +218,7 @@ public class ReportSuggestionHandler {
     }
 
     private static void checkReportSpam() {
-        long l = System.currentTimeMillis();
+        final long l = System.currentTimeMillis();
         reportSpamCheck.add(l);
         reportSpamCheck.removeIf(time -> (time + 30L * 1000L < l));
         if (reportSpamCheck.size() >= 4) {
@@ -288,9 +288,9 @@ public class ReportSuggestionHandler {
     }
 
     private static boolean canReportSuggestionPlayer(String playername) {
-        long timestamp = System.currentTimeMillis();
+        final long timestamp = System.currentTimeMillis();
         reportSuggestionHistory.removeIf(o -> (o.timestamp + TIME_BETWEEN_REPORT_SUGGESTION_PLAYER < timestamp));
-        for (StringLong stringLong : reportSuggestionHistory) {
+        for (final StringLong stringLong : reportSuggestionHistory) {
             if (stringLong.message != null && stringLong.message.equalsIgnoreCase(playername)) {
                 return false;
             }
@@ -300,9 +300,9 @@ public class ReportSuggestionHandler {
     }
 
     private static boolean canWDRPlayer(String playername) {
-        long timestamp = System.currentTimeMillis();
+        final long timestamp = System.currentTimeMillis();
         reportSuggestionHistory.removeIf(o -> (o.timestamp + TIME_BETWEEN_REPORT_SUGGESTION_PLAYER < timestamp));
-        for (StringLong stringLong : reportSuggestionHistory) {
+        for (final StringLong stringLong : reportSuggestionHistory) {
             if (stringLong.message != null && stringLong.message.equalsIgnoreCase(playername)) {
                 return false;
             }
@@ -343,7 +343,7 @@ public class ReportSuggestionHandler {
     }
 
     private static String findPlayernameWithCorrectCase(String nameIn) {
-        for (NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
+        for (final NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (networkPlayerInfo.getGameProfile().getName().equalsIgnoreCase(nameIn)) {
                 return networkPlayerInfo.getGameProfile().getName();
             }

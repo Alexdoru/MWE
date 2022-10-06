@@ -23,8 +23,8 @@ public class MojangPlayernameToUUID {
 
     public MojangPlayernameToUUID(String playername) throws ApiException {
 
-        HttpClient httpclient = new HttpClient("https://api.mojang.com/users/profiles/minecraft/" + playername);
-        String rawresponse = httpclient.getrawresponse();
+        final HttpClient httpclient = new HttpClient("https://api.mojang.com/users/profiles/minecraft/" + playername);
+        final String rawresponse = httpclient.getrawresponse();
 
         if (rawresponse == null) {
             this.name = null;
@@ -32,9 +32,9 @@ public class MojangPlayernameToUUID {
             throw new ApiException(ChatUtil.invalidplayernameMsg(playername));
         }
 
-        JsonParser parser = new JsonParser();
-        JsonObject obj = parser.parse(rawresponse).getAsJsonObject();
-        String id = obj.get("id").getAsString();
+        final JsonParser parser = new JsonParser();
+        final JsonObject obj = parser.parse(rawresponse).getAsJsonObject();
+        final String id = obj.get("id").getAsString();
 
         this.name = obj.get("name").getAsString();
         this.uuid = id.replace("-", "");

@@ -19,12 +19,12 @@ public class RenderManagerTransformer implements IMyClassTransformer {
 
         status.setInjectionPoints(7);
 
-        for (MethodNode methodNode : classNode.methods) {
+        for (final MethodNode methodNode : classNode.methods) {
 
             if (methodNode.name.equals("<init>") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lbmj;Lbjh;)V" : "(Lnet/minecraft/client/renderer/texture/TextureManager;Lnet/minecraft/client/renderer/entity/RenderItem;)V")) {
-                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (insnNode.getOpcode() == ICONST_0) {
-                        AbstractInsnNode nextNode = insnNode.getNext();
+                        final AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode instanceof FieldInsnNode && nextNode.getOpcode() == PUTFIELD
                                 && ((FieldInsnNode) nextNode).owner.equals(ASMLoadingPlugin.isObf ? "biu" : "net/minecraft/client/renderer/entity/RenderManager")
                                 && ((FieldInsnNode) nextNode).name.equals(ASMLoadingPlugin.isObf ? "t" : "debugBoundingBox")
@@ -54,7 +54,7 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), getCancelRenderInsnList());
                 status.addInjection();
 
-                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
                     if (insnNode.getOpcode() == ALOAD && insnNode instanceof VarInsnNode && ((VarInsnNode) insnNode).var == 12) {
                         /*
@@ -63,7 +63,7 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                          * With :
                          * RenderGlobal.drawOutlinedBoundingBox(RenderManagerHook.getAxisAlignedBB(axisalignedbb1, entityIn), 255, 255, 255, 255);
                          */
-                        InsnList list = new InsnList();
+                        final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 1));
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderManagerHook", "getAxisAlignedBB", ASMLoadingPlugin.isObf ? "(Laug;Lpk;)Lnet/minecraft/util/AxisAlignedBB;" : "(Lnet/minecraft/util/AxisAlignedBB;Lnet/minecraft/entity/Entity;)Lnet/minecraft/util/AxisAlignedBB;", false));
                         methodNode.instructions.insertBefore(insnNode.getNext(), list);
@@ -71,16 +71,16 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                     }
 
                     if (insnNode.getOpcode() == INSTANCEOF && insnNode instanceof TypeInsnNode && ((TypeInsnNode) insnNode).desc.equals(ASMLoadingPlugin.isObf ? "pr" : "net/minecraft/entity/EntityLivingBase")) {
-                        AbstractInsnNode nextNode = insnNode.getNext();
+                        final AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode.getOpcode() == IFEQ && nextNode instanceof JumpInsnNode) {
-                            LabelNode labelNode = ((JumpInsnNode) nextNode).label;
+                            final LabelNode labelNode = ((JumpInsnNode) nextNode).label;
                             /*
                              * Transforms line 453 :
                              * if (entityIn instanceof EntityLivingBase)
                              * Becomes :
                              * if (entityIn instanceof EntityLivingBase && ConfigHandler.drawRedBox)
                              */
-                            InsnList list = new InsnList();
+                            final InsnList list = new InsnList();
                             list.add(new JumpInsnNode(IFEQ, labelNode));
                             list.add(new FieldInsnNode(GETSTATIC, "fr/alexdoru/megawallsenhancementsmod/config/ConfigHandler", "drawRedBox", "Z"));
                             methodNode.instructions.insertBefore(nextNode, list);
@@ -94,7 +94,7 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                          * Line 464
                          * Replaces the 2.0D with RenderManagerHook.getBlueVectLength(entityIn);
                          */
-                        InsnList list = new InsnList();
+                        final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 1)); // load entity
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderManagerHook", "getBlueVectLength", ASMLoadingPlugin.isObf ? "(Lpk;)D" : "(Lnet/minecraft/entity/Entity;)D", false));
                         methodNode.instructions.insertBefore(insnNode, list);
@@ -109,8 +109,8 @@ public class RenderManagerTransformer implements IMyClassTransformer {
     }
 
     private InsnList getCancelRenderInsnList() {
-        InsnList list = new InsnList();
-        LabelNode notCancelled = new LabelNode();
+        final InsnList list = new InsnList();
+        final LabelNode notCancelled = new LabelNode();
         list.add(new VarInsnNode(ALOAD, 1)); // load entity
         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderManagerHook", "cancelHitboxRender", ASMLoadingPlugin.isObf ? "(Lpk;)Z" : "(Lnet/minecraft/entity/Entity;)Z", false)); // load the boolean
         list.add(new JumpInsnNode(IFEQ, notCancelled)); // if (true) { return;} else {jump to notCancelled label}

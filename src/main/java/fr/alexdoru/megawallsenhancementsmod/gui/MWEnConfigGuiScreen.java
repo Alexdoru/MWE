@@ -133,7 +133,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
 
     @Override
     public List<String> getTooltipText(int id) {
-        List<String> textLines = new ArrayList<>();
+        final List<String> textLines = new ArrayList<>();
         switch (id) {
             case 21:
                 textLines.add(EnumChatFormatting.GREEN + "Prevents dropping the sword you are holding in your hotbar");

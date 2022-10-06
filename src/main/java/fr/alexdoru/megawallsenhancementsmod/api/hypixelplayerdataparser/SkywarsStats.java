@@ -59,13 +59,13 @@ public class SkywarsStats {
             return;
         }
 
-        JsonObject statsdata = playerData.get("stats").getAsJsonObject();
+        final JsonObject statsdata = playerData.get("stats").getAsJsonObject();
 
         if (statsdata == null) {
             return;
         }
 
-        JsonObject swdata = JsonUtil.getJsonObject(statsdata, "SkyWars");
+        final JsonObject swdata = JsonUtil.getJsonObject(statsdata, "SkyWars");
 
         if (swdata == null) {
             return;
@@ -120,9 +120,9 @@ public class SkywarsStats {
     private String formatSkywarsLevel(int skywars_experience) {
 
         //int current_level;
-        int current_level_xp_max;
-        int xp_remaning;
-        float level_progress;
+        final int current_level_xp_max;
+        final int xp_remaning;
+        final float level_progress;
 
         if (skywars_experience < 20) {
             //current_level = 1;
@@ -186,10 +186,10 @@ public class SkywarsStats {
             level_progress = xp_remaning / 10000f;
         }
 
-        int i = (int) ((1f - level_progress) * 10) + 1;
+        final int i = (int) ((1f - level_progress) * 10) + 1;
 
-        String str1 = new String(new char[i]).replace("\0", "\u25A0");
-        String str2 = new String(new char[10 - i]).replace("\0", "\u25A0");
+        final String str1 = new String(new char[i]).replace("\0", "\u25A0");
+        final String str2 = new String(new char[10 - i]).replace("\0", "\u25A0");
 
         return EnumChatFormatting.GRAY + "Progress: " + EnumChatFormatting.AQUA + (current_level_xp_max - xp_remaning) + EnumChatFormatting.GRAY + "/" + EnumChatFormatting.GREEN + current_level_xp_max + EnumChatFormatting.GRAY + " XP"
                 + EnumChatFormatting.DARK_GRAY + " [" + EnumChatFormatting.AQUA + str1 + EnumChatFormatting.GRAY + str2 + EnumChatFormatting.DARK_GRAY + "]";
@@ -197,7 +197,7 @@ public class SkywarsStats {
 
     public IChatComponent getFormattedMessage(String formattedName, String playername) {
 
-        String[][] matrix = {
+        final String[][] matrix = {
                 {
                         EnumChatFormatting.YELLOW + "Overall : ",
                         EnumChatFormatting.AQUA + "K : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(kills) + " ",

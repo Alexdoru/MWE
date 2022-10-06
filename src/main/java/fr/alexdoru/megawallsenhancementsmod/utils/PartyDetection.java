@@ -53,7 +53,7 @@ public class PartyDetection {
     }
 
     private static void addAllWithoutDuplicates(List<String> listToKeep, List<String> listToAdd) {
-        for (String s : listToAdd) {
+        for (final String s : listToAdd) {
             if (!listToKeep.contains(s)) {
                 listToKeep.add(s);
             }
@@ -70,7 +70,7 @@ public class PartyDetection {
             final String teamColorPlayername = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(infoPlayername.getPlayerTeam(), playername), playername);
             final ChatComponentText imsg = new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "This player joined in a party with : ");
             boolean containsPlayers = false;
-            for (String player : partyList) {
+            for (final String player : partyList) {
                 if (!player.equals(playername)) {
                     final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(player);
                     if (networkPlayerInfo != null) {

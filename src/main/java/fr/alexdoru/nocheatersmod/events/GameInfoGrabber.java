@@ -21,11 +21,11 @@ public class GameInfoGrabber {
     private static String gameID = "?";
 
     public static String getGameIDfromscoreboard() {
-        List<String> scoresRaw = ScoreboardUtils.getUnformattedSidebarText();
+        final List<String> scoresRaw = ScoreboardUtils.getUnformattedSidebarText();
         if (scoresRaw.size() == 0) {
             return "?";
         }
-        Matcher matcher = GAME_ID_PATTERN.matcher(scoresRaw.get(0));
+        final Matcher matcher = GAME_ID_PATTERN.matcher(scoresRaw.get(0));
         if (!matcher.matches()) {
             return "?";
         }
@@ -36,12 +36,12 @@ public class GameInfoGrabber {
      * Prints scoreboard in chat
      */
     public static void debugGetScoreboard() {
-        List<String> scoresColor = ScoreboardUtils.getFormattedSidebarText();
+        final List<String> scoresColor = ScoreboardUtils.getFormattedSidebarText();
         if (scoresColor.size() == 0) {
             ChatUtil.addChatMessage("There are no active scoreboards in this world.");
             return;
         }
-        for (String sidebarScore : scoresColor) {
+        for (final String sidebarScore : scoresColor) {
             ChatUtil.addChatMessage(sidebarScore);
             ASMLoadingPlugin.logger.info(sidebarScore);
         }
@@ -62,20 +62,20 @@ public class GameInfoGrabber {
 
         if (FKCounterMod.isInMwGame) {
 
-            List<String> scoresRaw = ScoreboardUtils.getUnformattedSidebarText();
+            final List<String> scoresRaw = ScoreboardUtils.getUnformattedSidebarText();
 
             if (scoresRaw.size() < 2) {
                 return "?";
             }
 
-            String time_line = scoresRaw.get(1);
-            String[] split = time_line.split(":");
+            final String time_line = scoresRaw.get(1);
+            final String[] split = time_line.split(":");
 
             if (split.length < 3) {
                 return "?";
             }
 
-            int score_sec = 60 * Integer.parseInt(split[1].replace(" ", "")) + Integer.parseInt(split[2].replace(" ", ""));
+            final int score_sec = 60 * Integer.parseInt(split[1].replace(" ", "")) + Integer.parseInt(split[2].replace(" ", ""));
             int sec_since_start = 0;
 
             switch (split[0]) {
@@ -86,9 +86,9 @@ public class GameInfoGrabber {
                     sec_since_start = 6 * 60 + (8 * 60 - score_sec);
                     break;
                 case TIME_DEATHMATCH:
-                    String storedGameID = getstoredGameID();
+                    final String storedGameID = getstoredGameID();
                     if (!storedGameID.equals("?") && storedGameID.equals(serverID)) {
-                        long long_sec_since_start = (timestamp > getstoredTimestamp() ? timestamp - getstoredTimestamp() : 0L) / 1000; //en secondes
+                        final long long_sec_since_start = (timestamp > getstoredTimestamp() ? timestamp - getstoredTimestamp() : 0L) / 1000; //en secondes
                         return long_sec_since_start / 60 + "min" + long_sec_since_start % 60 + "sec";
                     } else {
                         return "?";
@@ -98,12 +98,12 @@ public class GameInfoGrabber {
                     break;
             }
 
-            int result = sec_since_start > delay ? sec_since_start - delay : 0;
+            final int result = sec_since_start > delay ? sec_since_start - delay : 0;
             return result / 60 + "min" + result % 60 + "sec";
 
         } else if (!getstoredGameID().equals("?") && getstoredGameID().equals(serverID)) {
 
-            long sec_since_start = (timestamp > getstoredTimestamp() ? timestamp - getstoredTimestamp() : 0L) / 1000; //en secondes
+            final long sec_since_start = (timestamp > getstoredTimestamp() ? timestamp - getstoredTimestamp() : 0L) / 1000; //en secondes
             return sec_since_start / 60 + "min" + sec_since_start % 60 + "sec";
 
         }

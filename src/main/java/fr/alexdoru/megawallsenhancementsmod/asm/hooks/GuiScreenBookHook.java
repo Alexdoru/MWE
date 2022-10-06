@@ -28,7 +28,7 @@ public class GuiScreenBookHook {
         try {
             isOnNickGenerationPage = false;
             if (book.hasTagCompound()) {
-                NBTTagCompound nbttagcompound = book.getTagCompound();
+                final NBTTagCompound nbttagcompound = book.getTagCompound();
                 NBTTagList bookPages = nbttagcompound.getTagList("pages", 8);
                 if (bookPages != null) {
                     bookPages = (NBTTagList) bookPages.copy();
@@ -37,13 +37,13 @@ public class GuiScreenBookHook {
                         bookTotalPages = 1;
                     }
                     for (int i = 0; i < bookTotalPages; i++) {
-                        String pagetext = EnumChatFormatting.getTextWithoutFormattingCodes(IChatComponent.Serializer.jsonToComponent(bookPages.getStringTagAt(i)).getUnformattedText().replace("\n", ""));
+                        final String pagetext = EnumChatFormatting.getTextWithoutFormattingCodes(IChatComponent.Serializer.jsonToComponent(bookPages.getStringTagAt(i)).getUnformattedText().replace("\n", ""));
                         Matcher matcher = nickSuccessPagePattern.matcher(pagetext);
                         if (matcher.find()) {
                             final String newNick = matcher.group(1);
                             if (newNick != null && !newNick.equals("")) {
                                 if (!ConfigHandler.hypixelNick.equals("")) {
-                                    String oldAliasForNick = SquadEvent.getSquad().remove(ConfigHandler.hypixelNick);
+                                    final String oldAliasForNick = SquadEvent.getSquad().remove(ConfigHandler.hypixelNick);
                                     if (oldAliasForNick != null) {
                                         if (oldAliasForNick.equals(ConfigHandler.hypixelNick)) {
                                             SquadEvent.addPlayer(newNick);

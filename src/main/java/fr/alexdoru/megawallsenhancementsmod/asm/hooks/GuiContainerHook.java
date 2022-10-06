@@ -99,7 +99,7 @@ public class GuiContainerHook {
                         if (potionEffects.size() == 1 && potionEffects.get(0).getPotionID() == Potion.absorption.id) {
                             return false;
                         }
-                        for (PotionEffect effect : potionEffects) {
+                        for (final PotionEffect effect : potionEffects) {
                             /*Phoenix & Renegade Pots*/
                             if (effect.getPotionID() == Potion.regeneration.id && isSplash) {
                                 return false;
@@ -124,7 +124,7 @@ public class GuiContainerHook {
     private static boolean itemStackHasCustomDisplayName(ItemStack itemStack) {
         final NBTTagCompound tagCompound = itemStack.getTagCompound();
         if (tagCompound != null && tagCompound.hasKey("display", 10)) {
-            NBTTagCompound displayTag = tagCompound.getCompoundTag("display");
+            final NBTTagCompound displayTag = tagCompound.getCompoundTag("display");
             return displayTag.hasKey("Name", 8);
         }
         return false;
@@ -146,7 +146,7 @@ public class GuiContainerHook {
     }
 
     private static boolean hasAnotherBowThatsEnchanted(ItemStack[] mainInventory) {
-        for (ItemStack itemStack : mainInventory) {
+        for (final ItemStack itemStack : mainInventory) {
             if (itemStack != null) {
                 final Item item = itemStack.getItem();
                 if (item == Items.bow && itemStack.isItemEnchanted()) {

@@ -191,7 +191,7 @@ public class ConfigHandler {
         final Property phitboxDrawRange = config.get(CATEGORY_HITBOX, "Hitbox render range", 6f, "Doesn't render the hitbox of entities closer than this");
 
         /*Set the Order in which the config entries appear in the config file */
-        List<String> pOrderFKC = new ArrayList<>();
+        final List<String> pOrderFKC = new ArrayList<>();
         pOrderFKC.add(pXpos_fkcHUD.getName());
         pOrderFKC.add(pYpos_fkcHUD.getName());
         pOrderFKC.add(pshow_fkcHUD.getName());
@@ -205,7 +205,7 @@ public class ConfigHandler {
         pOrderFKC.add(pfinalsInTablist.getName());
         config.setCategoryPropertyOrder(CATEGORY_FKCounter, pOrderFKC);
 
-        List<String> pOrderMWWENh = new ArrayList<>();
+        final List<String> pOrderMWWENh = new ArrayList<>();
         pOrderMWWENh.add(pAPIKey.getName());
         pOrderMWWENh.add(phypixelNick.getName());
         pOrderMWWENh.add(pstrengthParticules.getName());
@@ -224,7 +224,7 @@ public class ConfigHandler {
         pOrderMWWENh.add(pNickHider.getName());
         config.setCategoryPropertyOrder(CATEGORY_MWENh, pOrderMWWENh);
 
-        List<String> pOrderGUI = new ArrayList<>();
+        final List<String> pOrderGUI = new ArrayList<>();
         pOrderGUI.add(pShow_killcooldownHUD.getName());
         pOrderGUI.add(pXpos_killcooldownHUD.getName());
         pOrderGUI.add(pYpos_killcooldownHUD.getName());
@@ -240,7 +240,7 @@ public class ConfigHandler {
         pOrderGUI.add(pYpos_hunterHUD.getName());
         config.setCategoryPropertyOrder(CATEGORY_GUI, pOrderGUI);
 
-        List<String> pOrderNOCHEATERS = new ArrayList<>();
+        final List<String> pOrderNOCHEATERS = new ArrayList<>();
         pOrderNOCHEATERS.add(pToggleicons.getName());
         pOrderNOCHEATERS.add(pTogglewarnings.getName());
         pOrderNOCHEATERS.add(preportsuggestions.getName());
@@ -252,7 +252,7 @@ public class ConfigHandler {
         pOrderNOCHEATERS.add(pdeleteCheaterChatMsg.getName());
         config.setCategoryPropertyOrder(CATEGORY_NOCHEATERS, pOrderNOCHEATERS);
 
-        List<String> pOrderHitbox = new ArrayList<>();
+        final List<String> pOrderHitbox = new ArrayList<>();
         pOrderHitbox.add(pisDebugHitboxOn.getName());
         pOrderHitbox.add(pdrawHitboxForPlayers.getName());
         pOrderHitbox.add(pdrawHitboxForGroundedArrows.getName());
@@ -345,7 +345,7 @@ public class ConfigHandler {
 
         if (saveFieldsToConfig) {
 
-            double[] fkcHUDarray = fkcounterPosition.getRelativePosition();
+            final double[] fkcHUDarray = fkcounterPosition.getRelativePosition();
             pXpos_fkcHUD.set(fkcHUDarray[0]);
             pYpos_fkcHUD.set(fkcHUDarray[1]);
             pshow_fkcHUD.set(show_fkcHUD);
@@ -376,23 +376,23 @@ public class ConfigHandler {
             pNickHider.set(nickHider);
 
             pShow_killcooldownHUD.set(show_killcooldownHUD);
-            double[] killcooldownHUDarray = killcooldownHUDPosition.getRelativePosition();
+            final double[] killcooldownHUDarray = killcooldownHUDPosition.getRelativePosition();
             pXpos_killcooldownHUD.set(killcooldownHUDarray[0]);
             pYpos_killcooldownHUD.set(killcooldownHUDarray[1]);
 
             pShow_ArrowHitHUD.set(show_ArrowHitHUD);
-            double[] ArrowHitHUDarray = arrowHitHUDPosition.getRelativePosition();
+            final double[] ArrowHitHUDarray = arrowHitHUDPosition.getRelativePosition();
             pXpos_ArrowHitHUD.set(ArrowHitHUDarray[0]);
             pYpos_ArrowHitHUD.set(ArrowHitHUDarray[1]);
 
             pShow_lastWitherHUD.set(show_lastWitherHUD);
             pwitherHUDinSidebar.set(witherHUDinSidebar);
-            double[] lastWitherHUDarray = lastWitherHUDPosition.getRelativePosition();
+            final double[] lastWitherHUDarray = lastWitherHUDPosition.getRelativePosition();
             pXpos_lastWitherHUD.set(lastWitherHUDarray[0]);
             pYpos_lastWitherHUD.set(lastWitherHUDarray[1]);
 
             pHunterStrengthHUD.set(strengthHUD);
-            double[] hunterStrengtharray = hunterStrengthHUDPosition.getRelativePosition();
+            final double[] hunterStrengtharray = hunterStrengthHUDPosition.getRelativePosition();
             pXpos_hunterHUD.set(hunterStrengtharray[0]);
             pYpos_hunterHUD.set(hunterStrengtharray[1]);
 

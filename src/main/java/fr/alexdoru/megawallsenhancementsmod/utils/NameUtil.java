@@ -57,11 +57,11 @@ public class NameUtil {
      * for example : /squad add player as aliasname
      */
     public static void updateGameProfileAndName(String playername, boolean refreshDisplayName) {
-        NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
         if (networkPlayerInfo != null) {
             transformGameProfile(networkPlayerInfo.getGameProfile(), true);
             networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
-            EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
+            final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
                 transformGameProfile(player.getGameProfile(), true);
                 NameUtil.transformNametag(player, false);
@@ -70,7 +70,7 @@ public class NameUtil {
                 }
             }
         } else {
-            EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
+            final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
                 transformGameProfile(player.getGameProfile(), true);
                 NameUtil.transformNametag(player, false);
@@ -86,11 +86,11 @@ public class NameUtil {
      */
     public static void updateGameProfileAndName(GameProfile gameProfile) {
         transformGameProfile(gameProfile, true);
-        NetworkPlayerInfo networkPlayerInfo = mc.getNetHandler().getPlayerInfo(gameProfile.getId());
+        final NetworkPlayerInfo networkPlayerInfo = mc.getNetHandler().getPlayerInfo(gameProfile.getId());
         if (networkPlayerInfo != null) {
             networkPlayerInfo.setDisplayName(getTransformedDisplayName(gameProfile));
         }
-        EntityPlayer player = mc.theWorld.getPlayerEntityByName(gameProfile.getName());
+        final EntityPlayer player = mc.theWorld.getPlayerEntityByName(gameProfile.getName());
         if (player != null) {
             NameUtil.transformNametag(player, false);
         }
@@ -102,7 +102,7 @@ public class NameUtil {
     public static void updateGameProfileAndName(NetworkPlayerInfo networkPlayerInfo) {
         transformGameProfile(networkPlayerInfo.getGameProfile(), true);
         networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
-        EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
+        final EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
         if (player != null) {
             NameUtil.transformNametag(player, false);
         }
@@ -122,7 +122,7 @@ public class NameUtil {
             transformGameProfile(player.getGameProfile(), true);
         }
 
-        MWPlayerData mwPlayerData = ((GameProfileAccessor) player.getGameProfile()).getMWPlayerData();
+        final MWPlayerData mwPlayerData = ((GameProfileAccessor) player.getGameProfile()).getMWPlayerData();
 
         if (mwPlayerData == null) {
             return;
@@ -133,11 +133,11 @@ public class NameUtil {
         }
 
         if (onPlayerJoin && mwPlayerData.wdr != null && mwPlayerData.wdr.transformName()) { // player was reported
-            long datenow = (new Date()).getTime();
-            String playerName = player.getName();
-            boolean gotautoreported = ReportQueue.INSTANCE.addAutoReportToQueue(datenow, playerName, mwPlayerData.wdr);
+            final long datenow = (new Date()).getTime();
+            final String playerName = player.getName();
+            final boolean gotautoreported = ReportQueue.INSTANCE.addAutoReportToQueue(datenow, playerName, mwPlayerData.wdr);
             if (ConfigHandler.togglewarnings || mwPlayerData.wdr.shouldPrintBigText(datenow)) {
-                String uuid = player.getUniqueID().toString().replace("-", "");
+                final String uuid = player.getUniqueID().toString().replace("-", "");
                 ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).deleteWarningMessagesFor(playerName);
                 NoCheatersMessages.printWarningMessage(
                         datenow,
@@ -153,7 +153,7 @@ public class NameUtil {
     }
 
     public static void transformNameTablist(UUID uuid) {
-        NetworkPlayerInfo networkPlayerInfo = mc.getNetHandler().getPlayerInfo(uuid);
+        final NetworkPlayerInfo networkPlayerInfo = mc.getNetHandler().getPlayerInfo(uuid);
         if (networkPlayerInfo != null) {
             transformGameProfile(networkPlayerInfo.getGameProfile(), true);
             networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
@@ -167,12 +167,12 @@ public class NameUtil {
      */
     public static void transformGameProfile(GameProfile gameProfileIn, boolean forceRefresh) {
 
-        GameProfileAccessor gameProfileAccessor = (GameProfileAccessor) gameProfileIn;
-        MWPlayerData mwPlayerData = gameProfileAccessor.getMWPlayerData();
-        UUID id = gameProfileIn.getId();
+        final GameProfileAccessor gameProfileAccessor = (GameProfileAccessor) gameProfileIn;
+        final MWPlayerData mwPlayerData = gameProfileAccessor.getMWPlayerData();
+        final UUID id = gameProfileIn.getId();
 
         if (mwPlayerData == null && !forceRefresh) {
-            MWPlayerData cachedMWPlayerData = MWPlayerData.dataCache.get(id);
+            final MWPlayerData cachedMWPlayerData = MWPlayerData.dataCache.get(id);
             if (cachedMWPlayerData != null) {
                 gameProfileAccessor.setMWPlayerData(cachedMWPlayerData);
                 return;
@@ -181,13 +181,13 @@ public class NameUtil {
 
         if (mwPlayerData == null || forceRefresh) {
 
-            String username = gameProfileIn.getName();
-            String uuid = id.toString().replace("-", "");
-            WDR wdr = WdredPlayers.getPlayer(uuid, username);
+            final String username = gameProfileIn.getName();
+            final String uuid = id.toString().replace("-", "");
+            final WDR wdr = WdredPlayers.getPlayer(uuid, username);
             String extraPrefix = "";
             IChatComponent iExtraPrefix = null;
-            String squadname = SquadEvent.getSquad().get(username);
-            boolean isSquadMate = squadname != null;
+            final String squadname = SquadEvent.getSquad().get(username);
+            final boolean isSquadMate = squadname != null;
 
             if (ConfigHandler.toggleicons) {
 
@@ -234,15 +234,15 @@ public class NameUtil {
             String formattedPrestigeVstring = null;
             String colorSuffix = null;
             if (mc.theWorld != null) {
-                ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
+                final ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
                 if (team != null) {
-                    String teamprefix = team.getColorPrefix();
+                    final String teamprefix = team.getColorPrefix();
                     colorSuffix = team.getColorSuffix();
                     if (ConfigHandler.prestigeV && colorSuffix != null && colorSuffix.contains(EnumChatFormatting.GOLD.toString())) {
-                        Matcher matcher = PATTERN_CLASS_TAG.matcher(colorSuffix);
+                        final Matcher matcher = PATTERN_CLASS_TAG.matcher(colorSuffix);
                         if (matcher.find()) {
-                            String tag = matcher.group(1);
-                            EnumChatFormatting prestigeVcolor = PrestigeVCache.checkCacheAndUpdate(uuid, gameProfileIn.getName(), tag);
+                            final String tag = matcher.group(1);
+                            final EnumChatFormatting prestigeVcolor = PrestigeVCache.checkCacheAndUpdate(uuid, gameProfileIn.getName(), tag);
                             if (prestigeVcolor != null) {
                                 formattedPrestigeVstring = " " + prestigeVcolor + "[" + tag + "]";
                             }
@@ -250,7 +250,7 @@ public class NameUtil {
                     }
 
                     boolean isobf = teamprefix.contains("\u00a7k");
-                    String alias = CommandAddAlias.getMap().get(username);
+                    final String alias = CommandAddAlias.getMap().get(username);
                     if (iExtraPrefix != null || formattedPrestigeVstring != null || alias != null) {
                         displayName = new ChatComponentText(
                                 (isobf ? "" : extraPrefix)
@@ -306,7 +306,7 @@ public class NameUtil {
     }
 
     public static IChatComponent getTransformedDisplayName(GameProfile gameProfileIn) {
-        MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfileIn).getMWPlayerData();
+        final MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfileIn).getMWPlayerData();
         if (mwPlayerData != null) {
             return mwPlayerData.displayName;
         }

@@ -22,19 +22,19 @@ public class EntityArrowTransformer implements IMyClassTransformer {
         classNode.interfaces.add("fr/alexdoru/megawallsenhancementsmod/asm/accessor/EntityArrowAccessor");
 
         {
-            FieldVisitor fieldVisitor = classNode.visitField(ACC_PUBLIC, "isPinnedToPlayer", "Z", null, 0);
+            final FieldVisitor fieldVisitor = classNode.visitField(ACC_PUBLIC, "isPinnedToPlayer", "Z", null, 0);
             fieldVisitor.visitEnd();
         }
 
         {
-            MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "isInGround", "()Z", null, null);
+            final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "isInGround", "()Z", null, null);
             mv.visitCode();
-            Label l0 = new Label();
+            final Label l0 = new Label();
             mv.visitLabel(l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, ASMLoadingPlugin.isObf ? "wq" : "net/minecraft/entity/projectile/EntityArrow", ASMLoadingPlugin.isObf ? "i" : "inGround", "Z");
             mv.visitInsn(IRETURN);
-            Label l1 = new Label();
+            final Label l1 = new Label();
             mv.visitLabel(l1);
             mv.visitLocalVariable("this", ASMLoadingPlugin.isObf ? "Lwq;" : "Lnet/minecraft/entity/projectile/EntityArrow;", null, l0, l1, 0);
             mv.visitMaxs(1, 1);
@@ -42,14 +42,14 @@ public class EntityArrowTransformer implements IMyClassTransformer {
         }
 
         {
-            MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "getIsPinnedToPlayer", "()Z", null, null);
+            final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "getIsPinnedToPlayer", "()Z", null, null);
             mv.visitCode();
-            Label l0 = new Label();
+            final Label l0 = new Label();
             mv.visitLabel(l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, ASMLoadingPlugin.isObf ? "wq" : "net/minecraft/entity/projectile/EntityArrow", "isPinnedToPlayer", "Z");
             mv.visitInsn(IRETURN);
-            Label l1 = new Label();
+            final Label l1 = new Label();
             mv.visitLabel(l1);
             mv.visitLocalVariable("this", ASMLoadingPlugin.isObf ? "Lwq;" : "Lnet/minecraft/entity/projectile/EntityArrow;", null, l0, l1, 0);
             mv.visitMaxs(1, 1);

@@ -29,7 +29,7 @@ public class GuiNewChatHook {
         IChatComponent targetedChatComponent = null;
         final int chatSearchLength = 100;
 
-        Iterator<ChatLine> iterator = chatLines.iterator();
+        final Iterator<ChatLine> iterator = chatLines.iterator();
         int i = 0;
         while (iterator.hasNext() && i < chatSearchLength) {
             final IChatComponent chatComponent = iterator.next().getChatComponent();
@@ -55,7 +55,7 @@ public class GuiNewChatHook {
         final Pattern pattern = Pattern.compile("^\u00a7cWarning : (?:|\u00a77\u2716 )" + ANY_FORMATTING_CODE + "\\w{2,16}" + "(?:|" + ANY_FORMATTING_CODE + " \\[[A-Z]{3}\\])\u00a77 joined,.*");
         final int chatSearchLength = 300;
 
-        Iterator<ChatLine> iterator = chatLines.iterator();
+        final Iterator<ChatLine> iterator = chatLines.iterator();
         int i = 0;
         while (iterator.hasNext() && i < chatSearchLength) {
             final IChatComponent chatComponent = iterator.next().getChatComponent();

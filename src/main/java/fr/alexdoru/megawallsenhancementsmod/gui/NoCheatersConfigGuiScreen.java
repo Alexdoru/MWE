@@ -33,8 +33,8 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         /*
          * Defines the button list
          */
-        int buttonsWidth = 200;
-        int xPos = getxCenter() - buttonsWidth / 2;
+        final int buttonsWidth = 200;
+        final int xPos = getxCenter() - buttonsWidth / 2;
         buttonList.add(new GuiButton(1, xPos, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
         buttonList.add(reportSuggestionButton = new GuiButton(8, xPos, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(8)));
         buttonList.add(autoreportSuggestionButton = new GuiButton(9, xPos, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
@@ -69,7 +69,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
 
     @Override
     public List<String> getTooltipText(int id) {
-        List<String> textLines = new ArrayList<>();
+        final List<String> textLines = new ArrayList<>();
         switch (id) {
             case 1:
                 textLines.add(EnumChatFormatting.GREEN + "Prints a warning message in chat when a reported player joins your world");
@@ -170,11 +170,11 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle("NoCheaters v" + NoCheatersMod.version, 2, (width / 2.0f), getYposForButton(-6), Integer.parseInt("FF5555", 16));
-        String msg = "NoCheaters saves players reported via " + EnumChatFormatting.YELLOW + "/wdr playername" + EnumChatFormatting.WHITE + " (not /report)";
+        final String msg = "NoCheaters saves players reported via " + EnumChatFormatting.YELLOW + "/wdr playername" + EnumChatFormatting.WHITE + " (not /report)";
         drawCenteredString(fontRendererObj, msg, getxCenter(), getYposForButton(-5) + fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
-        String msg1 = "If you want to remove a player from your report list use :";
+        final String msg1 = "If you want to remove a player from your report list use :";
         drawCenteredString(fontRendererObj, msg1, getxCenter(), getYposForButton(-5) + 2 * fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
-        String msg2 = EnumChatFormatting.YELLOW + "/unwdr playername" + EnumChatFormatting.WHITE + " or click the name on the warning message";
+        final String msg2 = EnumChatFormatting.YELLOW + "/unwdr playername" + EnumChatFormatting.WHITE + " or click the name on the warning message";
         drawCenteredString(fontRendererObj, msg2, getxCenter(), getYposForButton(-5) + 3 * fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
         super.drawScreen(mouseX, mouseY, partialTicks);
         drawTooltips(mouseX, mouseY);

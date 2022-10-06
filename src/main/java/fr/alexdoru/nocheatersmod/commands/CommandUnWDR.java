@@ -39,7 +39,7 @@ public class CommandUnWDR extends CommandBase {
 
             Multithreading.addTaskToQueue(() -> {
 
-                CachedMojangUUID apireq;
+                final CachedMojangUUID apireq;
                 String playername = args[0];
                 try {
                     apireq = (new CachedMojangUUID(playername));
@@ -49,8 +49,8 @@ public class CommandUnWDR extends CommandBase {
                     return null;
                 }
 
-                String uuid = apireq.getUuid();
-                WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+                final String uuid = apireq.getUuid();
+                final WDR wdr = WdredPlayers.getWdredMap().get(uuid);
 
                 if (wdr == null) {
                     ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list.");
@@ -66,8 +66,8 @@ public class CommandUnWDR extends CommandBase {
 
         } else if (args.length == 2) { // when you click the message it does /unwdr <UUID> <playername>
 
-            String uuid = args[0];
-            WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+            final String uuid = args[0];
+            final WDR wdr = WdredPlayers.getWdredMap().get(uuid);
 
             if (wdr == null) {
                 ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list.");

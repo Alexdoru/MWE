@@ -13,7 +13,7 @@ public class CachedMojangUUID {
         if (Playername != null && Playername.equalsIgnoreCase(playernameIn)) // don't send a request again if it is the same player as before
             return;
 
-        MojangPlayernameToUUID mojangPlayernameToUUID = new MojangPlayernameToUUID(playernameIn);
+        final MojangPlayernameToUUID mojangPlayernameToUUID = new MojangPlayernameToUUID(playernameIn);
 
         Playername = mojangPlayernameToUUID.getName();
         uuid = mojangPlayernameToUUID.getUuid();

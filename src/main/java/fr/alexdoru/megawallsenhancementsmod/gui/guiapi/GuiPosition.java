@@ -32,13 +32,13 @@ public final class GuiPosition {
      * @param y The absolute y coordinate to be set.
      */
     public void setAbsolute(int x, int y) {
-        ScaledResolution res = new ScaledResolution(mc);
+        final ScaledResolution res = new ScaledResolution(mc);
         this.x = ((double) x) / ((double) res.getScaledWidth());
         this.y = ((double) y) / ((double) res.getScaledHeight());
     }
 
     public int[] getAbsolutePosition() {
-        ScaledResolution res = new ScaledResolution(mc);
+        final ScaledResolution res = new ScaledResolution(mc);
         return new int[]{(int) (x * res.getScaledWidth()), (int) (y * res.getScaledHeight())};
     }
 

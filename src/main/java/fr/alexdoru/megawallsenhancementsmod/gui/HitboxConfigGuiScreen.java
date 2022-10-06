@@ -19,8 +19,8 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
     @Override
     public void initGui() {
 
-        int XleftColumn = getxCenter() - buttonWidth - 10;
-        int XrightColumn = getxCenter() + 10;
+        final int XleftColumn = getxCenter() - buttonWidth - 10;
+        final int XrightColumn = getxCenter() + 10;
 
         buttonList.add(new GuiButton(1, XleftColumn, getYposForButton(-4), buttonWidth, ButtonsHeight, getButtonDisplayString(1)));
         buttonList.add(new GuiButton(2, XleftColumn, getYposForButton(-3), buttonWidth, ButtonsHeight, getButtonDisplayString(2)));
@@ -151,7 +151,7 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle("Hitboxes", 2, getxCenter(), getYposForButton(-8) + ButtonsHeight / 2.0f, Integer.parseInt("5555FF", 16));
-        String msg = EnumChatFormatting.GRAY + "You obviously need to press f3+b to enable hitboxes";
+        final String msg = EnumChatFormatting.GRAY + "You obviously need to press f3+b to enable hitboxes";
         drawCenteredString(fontRendererObj, msg, getxCenter(), getYposForButton(-6) + fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
         drawCenteredTitle("Draw Hitbox for :", 1, getxCenter() - buttonWidth / 2.0f - 10, getYposForButton(-4) - ButtonsHeight / 2.0f, Integer.parseInt("FFFFFF", 16));
         drawCenteredTitle("Blue vector :", 1, getxCenter() + buttonWidth / 2.0f + 10, getYposForButton(2) - ButtonsHeight / 2.0f, Integer.parseInt("0000FF", 16));

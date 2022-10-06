@@ -32,21 +32,21 @@ public class ScoreboardParser {
             return;
         }
 
-        String title = ScoreboardUtils.getUnformattedSidebarTitle(scoreboard);
+        final String title = ScoreboardUtils.getUnformattedSidebarTitle(scoreboard);
         if (!MW_TITLE_PATTERN.matcher(title).matches()) {
             return;
         }
         isMWEnvironement = true;
-        List<String> formattedSidebarLines = ScoreboardUtils.getFormattedSidebarText(scoreboard);
-        List<String> unformattedSidebarLines = ScoreboardUtils.stripControlCodes(formattedSidebarLines);
+        final List<String> formattedSidebarLines = ScoreboardUtils.getFormattedSidebarText(scoreboard);
+        final List<String> unformattedSidebarLines = ScoreboardUtils.stripControlCodes(formattedSidebarLines);
 
         if (unformattedSidebarLines.size() == 0) {
             return;
         }
 
-        Matcher matcher = GAME_ID_PATTERN.matcher(unformattedSidebarLines.get(0));
+        final Matcher matcher = GAME_ID_PATTERN.matcher(unformattedSidebarLines.get(0));
         if (!matcher.matches()) {
-            for (String line : unformattedSidebarLines) {
+            for (final String line : unformattedSidebarLines) {
                 if (PREGAME_LOBBY_PATTERN.matcher(line).find()) {
                     gameId = null;
                     preGameLobby = true;
@@ -59,7 +59,7 @@ public class ScoreboardParser {
 
         gameId = matcher.group(1);
 
-        for (String line : unformattedSidebarLines) {
+        for (final String line : unformattedSidebarLines) {
             if (MW_INGAME_PATTERN.matcher(line).find()) {
                 isInMwGame = true;
                 continue;
@@ -85,19 +85,19 @@ public class ScoreboardParser {
 
         for (int i = 3; i < Math.min(unformattedSidebarLines.size(), 7); i++) {
 
-            String line = unformattedSidebarLines.get(i);
+            final String line = unformattedSidebarLines.get(i);
             /*Wither alive detection*/
             final Matcher matcher1 = WITHER_ALIVE_PATTERN.matcher(line);
             String colorCode;
             if (matcher1.matches()) {
-                String formattedLine = formattedSidebarLines.get(i);
+                final String formattedLine = formattedSidebarLines.get(i);
                 colorCode = StringUtil.getLastColorCodeBefore(formattedLine, "\\[");
                 aliveWithers.add(colorCode);
                 witherHP = Integer.parseInt(matcher1.group(1));
             } else {
                 final Matcher matcher2 = WITHER_ALIVE_HEART_PATTERN.matcher(line);
                 if (matcher2.matches()) {
-                    String formattedLine = formattedSidebarLines.get(i);
+                    final String formattedLine = formattedSidebarLines.get(i);
                     colorCode = StringUtil.getLastColorCodeBefore(formattedLine, "\\[");
                     aliveWithers.add(colorCode);
                     witherHP = 2 * Integer.parseInt(matcher2.group(1));

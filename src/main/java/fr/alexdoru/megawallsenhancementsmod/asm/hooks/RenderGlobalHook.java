@@ -32,7 +32,7 @@ public class RenderGlobalHook {
 
     public static void renderEntitySimple(RenderManager renderManagerIn, Entity entityIn, float partialTicks, double viewerX, double viewerY, double viewerZ) {
         if (ConfigHandler.limitDroppedEntityRendered && entityIn instanceof EntityItem) {
-            double d = Math.min(entityIn.getDistanceSq(viewerX, viewerY, viewerZ), 255.9999d);
+            final double d = Math.min(entityIn.getDistanceSq(viewerX, viewerY, viewerZ), 255.9999d);
             entityItemCount[(int) d]++;
             if (d <= prevRenderDistance) {
                 renderManagerIn.renderEntitySimple(entityIn, partialTicks);

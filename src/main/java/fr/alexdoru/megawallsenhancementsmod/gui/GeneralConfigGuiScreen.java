@@ -13,7 +13,7 @@ public class GeneralConfigGuiScreen extends MyGuiScreen {
         /*
          * Defines the button list
          */
-        int buttonsWidth = 150;
+        final int buttonsWidth = 150;
         this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getYposForButton(-2), buttonsWidth, ButtonsHeight, EnumChatFormatting.AQUA + "Final Kill Counter"));
         this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getYposForButton(-1), buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "Mega Walls Enhancements"));
         this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getYposForButton(0), buttonsWidth, ButtonsHeight, EnumChatFormatting.RED + "No Cheaters"));

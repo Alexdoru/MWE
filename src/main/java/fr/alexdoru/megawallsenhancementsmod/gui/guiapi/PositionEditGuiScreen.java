@@ -47,9 +47,9 @@ public class PositionEditGuiScreen extends GuiScreen {
     }
 
     private void moveSelectedRendererBy(int offsetX, int offsetY) {
-        int[] absolutePos = guiPosition.getAbsolutePosition();
-        int x = absolutePos[0];
-        int y = absolutePos[1];
+        final int[] absolutePos = guiPosition.getAbsolutePosition();
+        final int x = absolutePos[0];
+        final int y = absolutePos[1];
 
         guiPosition.setAbsolute(x + offsetX, y + offsetY);
         adjustBounds();
@@ -70,13 +70,13 @@ public class PositionEditGuiScreen extends GuiScreen {
      * Makes sure the HUD can't get out of the screen
      */
     private void adjustBounds() {
-        ScaledResolution res = new ScaledResolution(mc);
+        final ScaledResolution res = new ScaledResolution(mc);
 
-        int screenWidth = res.getScaledWidth();
-        int screenHeight = res.getScaledHeight();
+        final int screenWidth = res.getScaledWidth();
+        final int screenHeight = res.getScaledHeight();
 
-        int absoluteX = Math.max(0, Math.min((int) (guiPosition.getRelativeX() * res.getScaledWidth()), Math.max(screenWidth - this.renderer.getWidth(), 0)));
-        int absoluteY = Math.max(0, Math.min((int) (guiPosition.getRelativeY() * res.getScaledHeight()), Math.max(screenHeight - this.renderer.getHeight(), 0)));
+        final int absoluteX = Math.max(0, Math.min((int) (guiPosition.getRelativeX() * res.getScaledWidth()), Math.max(screenWidth - this.renderer.getWidth(), 0)));
+        final int absoluteY = Math.max(0, Math.min((int) (guiPosition.getRelativeY() * res.getScaledHeight()), Math.max(screenHeight - this.renderer.getHeight(), 0)));
 
         this.guiPosition.setAbsolute(absoluteX, absoluteY);
     }

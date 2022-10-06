@@ -87,7 +87,7 @@ public class WDR {
     }
 
     public boolean hasValidCheats() {
-        for (String cheat : hacks) {
+        for (final String cheat : hacks) {
             if (CommandReport.cheatsList.contains(cheat)) {
                 return true;
             }
@@ -96,8 +96,8 @@ public class WDR {
     }
 
     public String hacksToString() {
-        StringBuilder cheats = new StringBuilder();
-        for (String hack : hacks) {
+        final StringBuilder cheats = new StringBuilder();
+        for (final String hack : hacks) {
             cheats.append(" ").append(hack);
         }
         return cheats.toString();

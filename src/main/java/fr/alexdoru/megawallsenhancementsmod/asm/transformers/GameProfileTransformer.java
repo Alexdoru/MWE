@@ -21,21 +21,21 @@ public class GameProfileTransformer implements IMyClassTransformer {
 
         classNode.interfaces.add("fr/alexdoru/megawallsenhancementsmod/asm/accessor/GameProfileAccessor");
 
-        String MWPlayerData_desc = "Lfr/alexdoru/megawallsenhancementsmod/data/MWPlayerData;";
+        final String MWPlayerData_desc = "Lfr/alexdoru/megawallsenhancementsmod/data/MWPlayerData;";
         {
-            FieldVisitor fieldVisitor = classNode.visitField(ACC_PRIVATE, "mwPlayerData", MWPlayerData_desc, null, null);
+            final FieldVisitor fieldVisitor = classNode.visitField(ACC_PRIVATE, "mwPlayerData", MWPlayerData_desc, null, null);
             fieldVisitor.visitEnd();
         }
 
         {
-            MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "getMWPlayerData", "()" + MWPlayerData_desc, null, null);
+            final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "getMWPlayerData", "()" + MWPlayerData_desc, null, null);
             mv.visitCode();
-            Label l0 = new Label();
+            final Label l0 = new Label();
             mv.visitLabel(l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitFieldInsn(GETFIELD, "com/mojang/authlib/GameProfile", "mwPlayerData", MWPlayerData_desc);
             mv.visitInsn(ARETURN);
-            Label l1 = new Label();
+            final Label l1 = new Label();
             mv.visitLabel(l1);
             mv.visitLocalVariable("this", "Lcom/mojang/authlib/GameProfile;", null, l0, l1, 0);
             mv.visitMaxs(1, 1);
@@ -43,17 +43,17 @@ public class GameProfileTransformer implements IMyClassTransformer {
         }
 
         {
-            MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "setMWPlayerData", "(" + MWPlayerData_desc + ")V", null, null);
+            final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "setMWPlayerData", "(" + MWPlayerData_desc + ")V", null, null);
             mv.visitCode();
-            Label l0 = new Label();
+            final Label l0 = new Label();
             mv.visitLabel(l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ALOAD, 1);
             mv.visitFieldInsn(PUTFIELD, "com/mojang/authlib/GameProfile", "mwPlayerData", MWPlayerData_desc);
-            Label l1 = new Label();
+            final Label l1 = new Label();
             mv.visitLabel(l1);
             mv.visitInsn(RETURN);
-            Label l2 = new Label();
+            final Label l2 = new Label();
             mv.visitLabel(l2);
             mv.visitLocalVariable("this", "Lcom/mojang/authlib/GameProfile;", null, l0, l2, 0);
             mv.visitLocalVariable("mwPlayerDataIn", MWPlayerData_desc, null, l0, l2, 1);

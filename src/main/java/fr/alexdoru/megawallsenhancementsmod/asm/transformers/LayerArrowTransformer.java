@@ -17,15 +17,15 @@ public class LayerArrowTransformer implements IMyClassTransformer {
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
-        for (MethodNode methodNode : classNode.methods) {
+        for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "doRenderLayer") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lpr;FFFFFFF)V" : "(Lnet/minecraft/entity/EntityLivingBase;FFFFFFF)V")) {
-                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (insnNode.getOpcode() == ASTORE && insnNode instanceof VarInsnNode && ((VarInsnNode) insnNode).var == 10) {
                         /*
                          * Injects after line 32 :
                          * entity.isPinnedToPlayer = true;
                          */
-                        InsnList list = new InsnList();
+                        final InsnList list = new InsnList();
                         list.add(new InsnNode(DUP));
                         list.add(new InsnNode(ICONST_1));
                         list.add(new FieldInsnNode(PUTFIELD, ASMLoadingPlugin.isObf ? "wq" : "net/minecraft/entity/projectile/EntityArrow", "isPinnedToPlayer", "Z"));

@@ -19,13 +19,13 @@ public class RenderGlobalTransformer implements IMyClassTransformer {
 
         status.setInjectionPoints(2);
 
-        for (MethodNode methodNode : classNode.methods) {
+        for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "renderEntities") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lpk;Lbia;F)V" : "(Lnet/minecraft/entity/Entity;Lnet/minecraft/client/renderer/culling/ICamera;F)V")) {
                 int ordinal = 0;
-                for (AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
                     if (insnNode.getOpcode() == ICONST_0) {
-                        AbstractInsnNode nextNode = insnNode.getNext();
+                        final AbstractInsnNode nextNode = insnNode.getNext();
                         if (nextNode instanceof FieldInsnNode && nextNode.getOpcode() == PUTFIELD
                                 && ((FieldInsnNode) nextNode).owner.equals(ASMLoadingPlugin.isObf ? "bfr" : "net/minecraft/client/renderer/RenderGlobal")
                                 && ((FieldInsnNode) nextNode).name.equals(ASMLoadingPlugin.isObf ? "S" : "countEntitiesRendered")
@@ -50,7 +50,7 @@ public class RenderGlobalTransformer implements IMyClassTransformer {
                          * RenderGlobalHook.renderEntitySimple(this.renderManager, entity2, partialTicks);
                          */
                         if (ordinal == 3) {
-                            InsnList list = new InsnList();
+                            final InsnList list = new InsnList();
                             list.add(new VarInsnNode(DLOAD, 5));
                             list.add(new VarInsnNode(DLOAD, 7));
                             list.add(new VarInsnNode(DLOAD, 9));

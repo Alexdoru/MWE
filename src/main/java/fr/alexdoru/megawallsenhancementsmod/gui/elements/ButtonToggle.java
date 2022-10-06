@@ -36,7 +36,7 @@ public class ButtonToggle extends GuiButton {
 
         GlStateManager.pushMatrix();
         {
-            float dilatation = 0.5f;
+            final float dilatation = 0.5f;
             GlStateManager.translate(xPosition + (float) width / 2.0f, yPosition - 10f, 0);
             GlStateManager.scale(dilatation, dilatation, 1);
             this.drawCenteredString(mc.fontRendererObj, this.buttonText, 0, 0, 0xFFFFFF);

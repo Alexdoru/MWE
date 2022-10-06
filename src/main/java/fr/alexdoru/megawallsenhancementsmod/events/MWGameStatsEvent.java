@@ -47,15 +47,15 @@ public class MWGameStatsEvent {
             return;
         }
         Multithreading.addTaskToQueue(() -> {
-            String uuid = Minecraft.getMinecraft().thePlayer.getUniqueID().toString().replace("-", "");
+            final String uuid = Minecraft.getMinecraft().thePlayer.getUniqueID().toString().replace("-", "");
             try {
-                HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                final HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
                 if (formattedname == null) {
-                    LoginData logindata = new LoginData(playerdata.getPlayerData());
+                    final LoginData logindata = new LoginData(playerdata.getPlayerData());
                     formattedname = logindata.getFormattedName();
                 }
                 if (!isRandom) {
-                    MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
+                    final MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
                     chosen_class = mwclassskindata.getCurrentmwclass().toLowerCase();
                 }
                 MWclassStats = new MegaWallsClassStats(playerdata.getPlayerData(), chosen_class);
@@ -71,9 +71,9 @@ public class MWGameStatsEvent {
             return;
         }
         Multithreading.addTaskToQueue(() -> {
-            String uuid = Minecraft.getMinecraft().thePlayer.getUniqueID().toString().replace("-", "");
+            final String uuid = Minecraft.getMinecraft().thePlayer.getUniqueID().toString().replace("-", "");
             try {
-                HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                final HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
                 gameStats = new MegaWallsClassStats(playerdata.getPlayerData(), chosen_class);
                 if (MWclassStats == null) {
                     return null;
@@ -95,7 +95,7 @@ public class MWGameStatsEvent {
     }
 
     public static boolean processMessage(String msg) {
-        Matcher matcher = RANDOM_CLASS_PATTERN.matcher(msg);
+        final Matcher matcher = RANDOM_CLASS_PATTERN.matcher(msg);
         if (matcher.matches()) {
             chosen_class = matcher.group(1).toLowerCase();
             isRandom = true;

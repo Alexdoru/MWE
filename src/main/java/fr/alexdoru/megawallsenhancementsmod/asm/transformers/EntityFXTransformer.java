@@ -17,7 +17,7 @@ public class EntityFXTransformer implements IMyClassTransformer {
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
-        for (MethodNode methodNode : classNode.methods) {
+        for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "renderParticle") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lbfd;Lpk;FFFFFF)V" : "(Lnet/minecraft/client/renderer/WorldRenderer;Lnet/minecraft/entity/Entity;FFFFFF)V")) {
                 /*
                  * Injects at HEAD:
@@ -34,8 +34,8 @@ public class EntityFXTransformer implements IMyClassTransformer {
     }
 
     private InsnList hideParticleInsnList() {
-        InsnList list = new InsnList();
-        LabelNode notCanceled = new LabelNode();
+        final InsnList list = new InsnList();
+        final LabelNode notCanceled = new LabelNode();
         list.add(new VarInsnNode(ALOAD, 0));
         list.add(new VarInsnNode(ALOAD, 2));
         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/EntityFXHook", "shouldHideParticle", ASMLoadingPlugin.isObf ? "(Lbeb;Lpk;)Z" : "(Lnet/minecraft/client/particle/EntityFX;Lnet/minecraft/entity/Entity;)Z", false));

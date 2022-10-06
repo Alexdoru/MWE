@@ -18,7 +18,7 @@ public class RenderManagerHook {
 
     public static boolean cancelHitboxRender(Entity entityIn) {
         if (ConfigHandler.drawRangedHitbox) {
-            EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
+            final EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
             if (thePlayer != null && entityIn.getDistanceToEntity(thePlayer) <= ConfigHandler.hitboxDrawRange) {
                 return true;
             }
@@ -66,7 +66,7 @@ public class RenderManagerHook {
 
     public static AxisAlignedBB getAxisAlignedBB(AxisAlignedBB axisAlignedBBIn, Entity entityIn) {
         if (ConfigHandler.realSizeHitbox) {
-            float f = entityIn.getCollisionBorderSize();
+            final float f = entityIn.getCollisionBorderSize();
             return axisAlignedBBIn.expand(f, f, f);
         }
         return axisAlignedBBIn;

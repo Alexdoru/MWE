@@ -48,14 +48,14 @@ public class CommandFKCounter extends CommandBase {
                 return;
             }
 
-            StringBuilder strBuilder = new StringBuilder();
+            final StringBuilder strBuilder = new StringBuilder();
             for (int TEAM = KillCounter.RED_TEAM; TEAM <= KillCounter.BLUE_TEAM; TEAM++) {
                 strBuilder.append(KillCounter.getColorPrefixFromTeam(TEAM))
                         .append(KillCounter.getTeamNameFromTeam(TEAM))
                         .append(EnumChatFormatting.WHITE)
                         .append(": ");
-                for (Iterator<Map.Entry<String, Integer>> iterator = KillCounter.sortByDecreasingValue1(KillCounter.getPlayers(TEAM)).entrySet().iterator(); iterator.hasNext(); ) {
-                    Map.Entry<String, Integer> entry = iterator.next();
+                for (final Iterator<Map.Entry<String, Integer>> iterator = KillCounter.sortByDecreasingValue1(KillCounter.getPlayers(TEAM)).entrySet().iterator(); iterator.hasNext(); ) {
+                    final Map.Entry<String, Integer> entry = iterator.next();
                     strBuilder.append(SquadEvent.getSquadname(entry.getKey())).append(" (").append(entry.getValue()).append(")");
                     if (iterator.hasNext()) {
                         strBuilder.append(", ");
@@ -75,13 +75,13 @@ public class CommandFKCounter extends CommandBase {
                 return;
             }
 
-            StringBuilder strBuilder = new StringBuilder();
+            final StringBuilder strBuilder = new StringBuilder();
 
             if (args.length == 1) {
 
-                HashMap<Integer, Integer> sortedmap = KillCounter.getSortedTeamKillsMap();
+                final HashMap<Integer, Integer> sortedmap = KillCounter.getSortedTeamKillsMap();
                 int i = 0;
-                for (Map.Entry<Integer, Integer> entry : sortedmap.entrySet()) {
+                for (final Map.Entry<Integer, Integer> entry : sortedmap.entrySet()) {
                     if (i != 0) {
                         strBuilder.append(", ");
                     }
@@ -114,7 +114,7 @@ public class CommandFKCounter extends CommandBase {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + "This is not available right now");
                 return;
             }
-            String strBuilder = KillCounter.getColorPrefixFromTeam(KillCounter.RED_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.RED_TEAM) + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.RED_TEAM) + "\n" +
+            final String strBuilder = KillCounter.getColorPrefixFromTeam(KillCounter.RED_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.RED_TEAM) + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.RED_TEAM) + "\n" +
                     KillCounter.getColorPrefixFromTeam(KillCounter.GREEN_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.GREEN_TEAM) + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.GREEN_TEAM) + "\n" +
                     KillCounter.getColorPrefixFromTeam(KillCounter.YELLOW_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.YELLOW_TEAM) + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.YELLOW_TEAM) + "\n" +
                     KillCounter.getColorPrefixFromTeam(KillCounter.BLUE_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.BLUE_TEAM) + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.BLUE_TEAM);
@@ -131,8 +131,8 @@ public class CommandFKCounter extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        String[] fksarguments = {"players", "remove", "say", "settings", "help"};
-        String[] colors = {"red", "green", "yellow", "blue"};
+        final String[] fksarguments = {"players", "remove", "say", "settings", "help"};
+        final String[] colors = {"red", "green", "yellow", "blue"};
 
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, fksarguments);
@@ -148,10 +148,10 @@ public class CommandFKCounter extends CommandBase {
     }
 
     private void removePlayer(String playerName) {
-        HashMap<String, Integer>[] teamKillsArray = KillCounter.getTeamKillsArray();
+        final HashMap<String, Integer>[] teamKillsArray = KillCounter.getTeamKillsArray();
         if (teamKillsArray != null) {
             for (int team = 0; team < KillCounter.TEAMS; team++) {
-                Integer kills = teamKillsArray[team].get(playerName);
+                final Integer kills = teamKillsArray[team].get(playerName);
                 if (kills != null) {
                     KillCounter.removeKilledPlayer(playerName, team);
                     FKCounterHUD.instance.updateDisplayText();
@@ -165,13 +165,13 @@ public class CommandFKCounter extends CommandBase {
     }
 
     private ArrayList<String> getPlayerListinKillCounter() {
-        ArrayList<String> playerList = new ArrayList<>();
-        HashMap<String, Integer>[] teamKillsArray = KillCounter.getTeamKillsArray();
+        final ArrayList<String> playerList = new ArrayList<>();
+        final HashMap<String, Integer>[] teamKillsArray = KillCounter.getTeamKillsArray();
         if (teamKillsArray == null) {
             return playerList;
         }
-        for (HashMap<String, Integer> teamMap : teamKillsArray) {
-            for (Map.Entry<String, Integer> entry : teamMap.entrySet()) {
+        for (final HashMap<String, Integer> teamMap : teamKillsArray) {
+            for (final Map.Entry<String, Integer> entry : teamMap.entrySet()) {
                 playerList.add(entry.getKey());
             }
         }

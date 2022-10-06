@@ -32,9 +32,9 @@ public class RenderPlayerHook {
             return;
         }
         final long currentTime = System.currentTimeMillis();
-        Iterator<List<Long>> iterator = arrowHitMap.values().iterator();
+        final Iterator<List<Long>> iterator = arrowHitMap.values().iterator();
         while (iterator.hasNext()) {
-            List<Long> list = iterator.next();
+            final List<Long> list = iterator.next();
             for (int i = 0; i < list.size(); i++) {
                 if (currentTime - list.get(i) > (i == 0 ? 60000L : 180000L)) {
                     list.remove(i);
@@ -50,7 +50,7 @@ public class RenderPlayerHook {
     public static void addArrowOnPlayer(String playername, long timeOfHit, int currentAmountOfArrows) {
         final List<Long> list = arrowHitMap.get(playername);
         if (list == null) {
-            List<Long> newlist = new ArrayList<>();
+            final List<Long> newlist = new ArrayList<>();
             newlist.add(timeOfHit);
             arrowHitMap.put(playername, newlist);
         } else {
