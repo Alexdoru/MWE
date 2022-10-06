@@ -28,7 +28,7 @@ public class CommandHypixelMessage extends CommandBase {
 
     @Override
     public List<String> getCommandAliases() {
-        return Arrays.asList("w", "msg", "MSG", "Msg");
+        return Arrays.asList("w", "msg");
     }
 
     @Override

@@ -25,10 +25,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -330,11 +327,7 @@ public class CommandWDR extends CommandBase {
 
     @Override
     public List<String> getCommandAliases() {
-        final List<String> list = new ArrayList<>();
-        list.add("wdr");
-        list.add("Wdr");
-        list.add("WDR");
-        return list;
+        return Collections.singletonList("wdr");
     }
 
     @Override

@@ -9,7 +9,6 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class CommandHypixelShout extends CommandBase {
@@ -27,11 +26,6 @@ public class CommandHypixelShout extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         Minecraft.getMinecraft().thePlayer.sendChatMessage("/shout " + buildString(args, 0));
-    }
-
-    @Override
-    public List<String> getCommandAliases() {
-        return Arrays.asList("SHOUT", "Shout");
     }
 
     @Override

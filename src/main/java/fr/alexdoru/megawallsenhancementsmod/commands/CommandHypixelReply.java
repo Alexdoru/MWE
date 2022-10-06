@@ -6,7 +6,6 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 
-import java.util.Collections;
 import java.util.List;
 
 public class CommandHypixelReply extends CommandBase {
@@ -34,11 +33,6 @@ public class CommandHypixelReply extends CommandBase {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
-    }
-
-    @Override
-    public List<String> getCommandAliases() {
-        return Collections.singletonList("R");
     }
 
 }
