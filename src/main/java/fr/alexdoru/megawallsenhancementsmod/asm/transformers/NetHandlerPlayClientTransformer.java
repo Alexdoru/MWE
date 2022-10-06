@@ -26,7 +26,7 @@ public class NetHandlerPlayClientTransformer implements IMyClassTransformer {
                             && ((FieldInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "bcy" : "net/minecraft/client/network/NetHandlerPlayClient")
                             && ((FieldInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "i" : "playerInfoMap")
                             && ((FieldInsnNode) insnNode).desc.equals("Ljava/util/Map;")) {
-                        methodNode.instructions.insertBefore(insnNode.getNext(), new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/NetHandlerPlayClientHook", "clearPlayerMap", "()V", false));
+                        methodNode.instructions.insert(insnNode, new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/NetHandlerPlayClientHook", "clearPlayerMap", "()V", false));
                         status.addInjection();
                     }
                 }

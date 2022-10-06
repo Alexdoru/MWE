@@ -34,7 +34,7 @@ public class EntityPlayerTransformer implements IMyClassTransformer {
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "wn" : "net/minecraft/entity/player/EntityPlayer", ASMLoadingPlugin.isObf ? "bH" : "gameProfile", "Lcom/mojang/authlib/GameProfile;"));
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/EntityPlayerHook", "getTransformedDisplayName", "(Ljava/lang/String;Lcom/mojang/authlib/GameProfile;)Ljava/lang/String;", false));
-                        methodNode.instructions.insertBefore(insnNode.getNext(), list);
+                        methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
                     }
                 }

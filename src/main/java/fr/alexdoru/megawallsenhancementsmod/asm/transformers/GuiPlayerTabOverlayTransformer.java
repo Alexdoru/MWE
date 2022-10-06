@@ -73,7 +73,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                             && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "c" : "listFormattedStringToWidth")
                             && ((MethodInsnNode) insnNode).desc.equals("(Ljava/lang/String;I)Ljava/util/List;")) {
                         foundListFormattedStringToWidth = true;
-                        methodNode.instructions.insertBefore(insnNode.getNext(), new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "addPlayerCountinHeader", "(Ljava/util/List;)Ljava/util/List;", false));
+                        methodNode.instructions.insert(insnNode, new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "addPlayerCountinHeader", "(Ljava/util/List;)Ljava/util/List;", false));
                         status.addInjection();
                     }
 

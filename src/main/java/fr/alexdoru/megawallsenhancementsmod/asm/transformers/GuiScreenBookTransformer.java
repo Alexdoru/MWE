@@ -60,7 +60,7 @@ public class GuiScreenBookTransformer implements IMyClassTransformer {
                                 "renderInstructions",
                                 "(II)V",
                                 false));
-                        methodNode.instructions.insertBefore(insnNode.getNext(), list);
+                        methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
                         break;
                     }
