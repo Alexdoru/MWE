@@ -1,4 +1,4 @@
-package fr.alexdoru.nocheatersmod.commands;
+package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;

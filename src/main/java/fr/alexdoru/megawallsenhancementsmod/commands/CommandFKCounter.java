@@ -1,4 +1,4 @@
-package fr.alexdoru.fkcountermod.commands;
+package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;

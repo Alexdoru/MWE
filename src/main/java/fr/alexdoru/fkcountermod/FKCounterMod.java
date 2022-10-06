@@ -1,7 +1,7 @@
 package fr.alexdoru.fkcountermod;
 
-import fr.alexdoru.fkcountermod.commands.CommandFKCounter;
 import fr.alexdoru.fkcountermod.events.ScoreboardEvent;
+import fr.alexdoru.megawallsenhancementsmod.commands.CommandFKCounter;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 
