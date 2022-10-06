@@ -7,9 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 
-import java.util.Collections;
-import java.util.List;
-
 public class CommandKill extends CommandBase {
 
     @Override
@@ -20,11 +17,6 @@ public class CommandKill extends CommandBase {
     @Override
     public String getCommandUsage(ICommandSender sender) {
         return "/kill";
-    }
-
-    @Override
-    public List<String> getCommandAliases() {
-        return Collections.singletonList("Kill");
     }
 
     @Override
