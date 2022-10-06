@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.ColorUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -174,29 +175,12 @@ public class MegaWallsStats {
             if (entry.getValue()[0] != 0) {
                 imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + " P" + ChatUtil.intToRoman(entry.getValue()[0])));
             }
-            imsg.appendSibling(new ChatComponentText(" : " + formatClasspoint(entry.getValue()[1]) + "\n"));
+            final Integer classpoints = entry.getValue()[1];
+            imsg.appendSibling(new ChatComponentText(" : " + ColorUtil.getPrestigeVColor(classpoints) + classpoints + "\n"));
         }
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "Total : " + EnumChatFormatting.GOLD + total_classpoints + "\n"));
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
         return imsg;
-    }
-
-    private String formatClasspoint(int classpoints) {
-        if (classpoints < 2000) {
-            return EnumChatFormatting.GRAY.toString() + classpoints;
-        } else if (classpoints < 10000) {
-            return EnumChatFormatting.GOLD.toString() + classpoints;
-        } else if (classpoints < 13000) {
-            return EnumChatFormatting.DARK_PURPLE.toString() + classpoints;
-        } else if (classpoints < 19000) {
-            return EnumChatFormatting.DARK_BLUE.toString() + classpoints;
-        } else if (classpoints < 28000) {
-            return EnumChatFormatting.DARK_AQUA.toString() + classpoints;
-        } else if (classpoints < 40000) {
-            return EnumChatFormatting.DARK_GREEN.toString() + classpoints;
-        } else {
-            return EnumChatFormatting.DARK_RED.toString() + classpoints;
-        }
     }
 
     public IChatComponent getFormattedMessage(String formattedname, String playername) {
