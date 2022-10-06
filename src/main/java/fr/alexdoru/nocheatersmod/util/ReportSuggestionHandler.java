@@ -40,7 +40,12 @@ public class ReportSuggestionHandler {
     private static final List<Long> reportSpamCheck = new ArrayList<>();
     private static final long TIME_BETWEEN_REPORT_SUGGESTION_PLAYER = 40L * 60L * 1000L;
 
-    public static boolean parseReportMessage(@Nullable String senderRank, @Nullable String messageSender, @Nullable String squadname, String msgIn, String fmsgIn) {
+    public static boolean parseReportMessage(
+            @Nullable String senderRank,
+            @Nullable String messageSender,
+            @Nullable String squadname,
+            String msgIn,
+            String fmsgIn) {
 
         if (ConfigHandler.reportsuggestions || ConfigHandler.autoreportSuggestions) {
 
@@ -68,7 +73,7 @@ public class ReportSuggestionHandler {
             } else if (matcher2.find()) {
                 String reportText = matcher2.group();
                 String reportedPlayer = matcher2.group(1);
-                final String cheat = matcher2.group(2);
+                final String cheat = matcher2.group(2).toLowerCase();
                 String uncensoredName = null;
                 if (reportedPlayer.contains("****")) {
                     uncensoredName = findPlayernameWithCorrectCase(reportedPlayer.replace("****", "seks"));
@@ -95,7 +100,14 @@ public class ReportSuggestionHandler {
     /**
      * reportedPlayer is necessarily in the tablist
      */
-    private static void handleReportSuggestion(String reportedPlayer, @Nullable String senderRank, @Nullable String messageSender, @Nullable String squadname, String reportText, String cheat, String fmsg) {
+    private static void handleReportSuggestion(
+            String reportedPlayer,
+            @Nullable String senderRank,
+            @Nullable String messageSender,
+            @Nullable String squadname,
+            String reportText,
+            String cheat,
+            String fmsg) {
 
         final boolean isSenderMyself = isPlayerMyself(messageSender);
         final boolean isTargetMyself = isPlayerMyself(reportedPlayer);
@@ -140,7 +152,18 @@ public class ReportSuggestionHandler {
 
     }
 
-    private static boolean checkAndSendReportSuggestion(@Nullable String messageSender, String reportedPlayer, String cheat, boolean isSenderMyself, boolean isTargetMyself, boolean isSenderInTablist, boolean isSenderIgnored, boolean isSenderCheating, boolean isSenderFlaging, boolean isSenderNicked, boolean isSenderRankValid) {
+    private static boolean checkAndSendReportSuggestion(
+            @Nullable String messageSender,
+            String reportedPlayer,
+            String cheat,
+            boolean isSenderMyself,
+            boolean isTargetMyself,
+            boolean isSenderInTablist,
+            boolean isSenderIgnored,
+            boolean isSenderCheating,
+            boolean isSenderFlaging,
+            boolean isSenderNicked,
+            boolean isSenderRankValid) {
 
         if (!ConfigHandler.autoreportSuggestions || !isSenderInTablist || messageSender == null || isSenderIgnored || isSenderCheating || !FKCounterMod.isInMwGame || isTargetMyself) {
             return false;
@@ -218,7 +241,22 @@ public class ReportSuggestionHandler {
         }
     }
 
-    private static void printCustomReportSuggestionChatText(String fmsg, @Nullable String messageSender, String reportedPlayer, String cheat, String reportText, @Nullable String squadname, boolean isSenderMyself, boolean isTargetMyself, boolean isSenderInTablist, boolean isSenderIgnored, boolean isSenderCheating, boolean isSenderFlaging, boolean isSenderNicked, boolean gotAutoreported, @Nullable String senderUUID) {
+    private static void printCustomReportSuggestionChatText(
+            String fmsg,
+            @Nullable String messageSender,
+            String reportedPlayer,
+            String cheat,
+            String reportText,
+            @Nullable String squadname,
+            boolean isSenderMyself,
+            boolean isTargetMyself,
+            boolean isSenderInTablist,
+            boolean isSenderIgnored,
+            boolean isSenderCheating,
+            boolean isSenderFlaging,
+            boolean isSenderNicked,
+            boolean gotAutoreported,
+            @Nullable String senderUUID) {
 
         if (!ConfigHandler.reportsuggestions) {
             ChatUtil.addChatMessage(getIChatComponentWithSquadnameAsSender(fmsg, messageSender, squadname));
