@@ -8,11 +8,12 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class KillCooldownGui extends MyCachedGui {
 
-    private static final String DUMMY_TEXT = EnumChatFormatting.DARK_RED + "/kill cooldown : 60s";
     public static KillCooldownGui instance;
-    private static long lastkilltime = 0;
-    private static final TimerUtil timerKillCooldown = new TimerUtil(60000L);
-    private static final TimerUtil timerUpdateText = new TimerUtil(1000L);
+
+    private static final String DUMMY_TEXT = EnumChatFormatting.DARK_RED + "/kill cooldown : 60s";
+    private long lastkilltime = 0;
+    private final TimerUtil timerKillCooldown = new TimerUtil(60000L);
+    private final TimerUtil timerUpdateText = new TimerUtil(1000L);
 
     public KillCooldownGui() {
         super(ConfigHandler.killcooldownHUDPosition);
@@ -22,19 +23,19 @@ public class KillCooldownGui extends MyCachedGui {
     /**
      * Called to draw the gui, when you use /kill
      */
-    public static void drawCooldownGui() {
+    public void drawCooldownGui() {
         if (timerKillCooldown.update()) {
             lastkilltime = System.currentTimeMillis();
         }
     }
 
-    public static void hideGUI() {
+    public void hideGUI() {
         lastkilltime = 0;
     }
 
     @Override
     public void updateDisplayText() {
-        int timeleft = 60 - ((int) (System.currentTimeMillis() - lastkilltime)) / 1000;
+        final int timeleft = 60 - ((int) (System.currentTimeMillis() - lastkilltime)) / 1000;
         displayText = EnumChatFormatting.DARK_RED + "/kill cooldown : " + timeleft + "s";
     }
 
@@ -43,13 +44,13 @@ public class KillCooldownGui extends MyCachedGui {
         if (timerUpdateText.update()) {
             updateDisplayText();
         }
-        int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
+        final int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
         frObj.drawStringWithShadow(displayText, absolutePos[0], absolutePos[1], 0);
     }
 
     @Override
     public void renderDummy() {
-        int[] absolutePos = this.guiPosition.getAbsolutePosition();
+        final int[] absolutePos = this.guiPosition.getAbsolutePosition();
         frObj.drawStringWithShadow(DUMMY_TEXT, absolutePos[0], absolutePos[1], 0);
     }
 
