@@ -34,8 +34,8 @@ import java.util.regex.Pattern;
 public class ReportSuggestionHandler {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
-    private static final Pattern REPORT_PATTERN1 = Pattern.compile("([a-zA-Z0-9_*]{2,16}) (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE);
-    private static final Pattern REPORT_PATTERN2 = Pattern.compile("\\/?(?:wdr|report) ([a-zA-Z0-9_*]{2,16}) (\\w+)", Pattern.CASE_INSENSITIVE);
+    private static final Pattern REPORT_PATTERN1 = Pattern.compile("(\\w{2,16}) (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE);
+    private static final Pattern REPORT_PATTERN2 = Pattern.compile("\\/?(?:wdr|report) (\\w{2,16}) (\\w+)", Pattern.CASE_INSENSITIVE);
     private static final List<StringLong> reportSuggestionHistory = new ArrayList<>();
     private static final List<Long> reportSpamCheck = new ArrayList<>();
     private static final long TIME_BETWEEN_REPORT_SUGGESTION_PLAYER = 40L * 60L * 1000L;
@@ -53,17 +53,8 @@ public class ReportSuggestionHandler {
             final Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);
 
             if (matcher1.find()) {
-                String reportText = matcher1.group();
-                String reportedPlayer = matcher1.group(1);
-                String uncensoredName = null;
-                if (reportedPlayer.contains("****")) {
-                    uncensoredName = findPlayernameWithCorrectCase(reportedPlayer.replace("****", "seks"));
-                }
-                if (uncensoredName != null) {
-                    fmsgIn = fmsgIn.replace(reportedPlayer, uncensoredName);
-                    reportText = reportText.replace(reportedPlayer, uncensoredName);
-                    reportedPlayer = uncensoredName;
-                }
+                final String reportText = matcher1.group();
+                final String reportedPlayer = matcher1.group(1);
                 if (isAValidName(reportedPlayer)) {
                     handleReportSuggestion(reportedPlayer, senderRank, messageSender, squadname, reportText, "bhop", fmsgIn);
                 } else {
@@ -71,18 +62,9 @@ public class ReportSuggestionHandler {
                 }
                 return true;
             } else if (matcher2.find()) {
-                String reportText = matcher2.group();
-                String reportedPlayer = matcher2.group(1);
+                final String reportText = matcher2.group();
+                final String reportedPlayer = matcher2.group(1);
                 final String cheat = matcher2.group(2).toLowerCase();
-                String uncensoredName = null;
-                if (reportedPlayer.contains("****")) {
-                    uncensoredName = findPlayernameWithCorrectCase(reportedPlayer.replace("****", "seks"));
-                }
-                if (uncensoredName != null) {
-                    fmsgIn = fmsgIn.replace(reportedPlayer, uncensoredName);
-                    reportText = reportText.replace(reportedPlayer, uncensoredName);
-                    reportedPlayer = uncensoredName;
-                }
                 if (isAValidCheat(cheat) && isAValidName(reportedPlayer)) {
                     handleReportSuggestion(reportedPlayer, senderRank, messageSender, squadname, reportText, cheat, fmsgIn);
                 } else {
@@ -372,15 +354,6 @@ public class ReportSuggestionHandler {
 
     public static void clearReportSuggestionHistory() {
         reportSuggestionHistory.clear();
-    }
-
-    private static String findPlayernameWithCorrectCase(String nameIn) {
-        for (final NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            if (networkPlayerInfo.getGameProfile().getName().equalsIgnoreCase(nameIn)) {
-                return networkPlayerInfo.getGameProfile().getName();
-            }
-        }
-        return null;
     }
 
 }
