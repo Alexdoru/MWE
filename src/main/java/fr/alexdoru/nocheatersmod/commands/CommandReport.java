@@ -55,6 +55,7 @@ public class CommandReport extends CommandBase {
             "keepsprint",
             "noslowdown",
             "fastbreak",
+            "speedmine",
             "cheating"
     };
     public static final List<String> cheatsList = Arrays.asList(cheatsArray);
