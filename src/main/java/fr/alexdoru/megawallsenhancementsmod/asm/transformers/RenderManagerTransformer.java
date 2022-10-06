@@ -66,7 +66,7 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 1));
                         list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderManagerHook", "getAxisAlignedBB", ASMLoadingPlugin.isObf ? "(Laug;Lpk;)Lnet/minecraft/util/AxisAlignedBB;" : "(Lnet/minecraft/util/AxisAlignedBB;Lnet/minecraft/entity/Entity;)Lnet/minecraft/util/AxisAlignedBB;", false));
-                        methodNode.instructions.insertBefore(insnNode.getNext(), list);
+                        methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
                     }
 

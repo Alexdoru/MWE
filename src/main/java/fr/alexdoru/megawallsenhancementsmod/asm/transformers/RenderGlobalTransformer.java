@@ -34,7 +34,7 @@ public class RenderGlobalTransformer implements IMyClassTransformer {
                              * Injects after line 565 :
                              * RenderGlobalHook.resetEntityItemCount();
                              */
-                            methodNode.instructions.insertBefore(nextNode.getNext(), new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderGlobalHook", "resetEntityItemCount", "()V", false));
+                            methodNode.instructions.insert(nextNode, new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderGlobalHook", "resetEntityItemCount", "()V", false));
                             status.addInjection();
                         }
                     }
