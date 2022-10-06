@@ -2,14 +2,11 @@ package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
-import fr.alexdoru.megawallsenhancementsmod.events.LowHPIndicator;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
+import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
@@ -269,10 +266,10 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 ConfigHandler.shortencoinmessage = !ConfigHandler.shortencoinmessage;
                 break;
             case 9:
-                if (!ConfigHandler.strengthHUD) {
-                    Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(ChatEvents.STRENGTH_SOUND, 0.0F));
-                }
                 ConfigHandler.strengthHUD = !ConfigHandler.strengthHUD;
+                if (ConfigHandler.strengthHUD) {
+                    SoundUtil.playStrengthSound();
+                }
                 break;
             case 18:
                 ConfigHandler.keepNightVisionEffect = !ConfigHandler.keepNightVisionEffect;
@@ -307,7 +304,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 17:
                 ConfigHandler.playSoundLowHP = !ConfigHandler.playSoundLowHP;
                 if (ConfigHandler.playSoundLowHP) {
-                    LowHPIndicator.playSound();
+                    SoundUtil.playLowHPSound();
                 }
                 break;
             case 4:

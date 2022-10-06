@@ -15,12 +15,9 @@ import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import fr.alexdoru.nocheatersmod.events.ReportQueue;
 import fr.alexdoru.nocheatersmod.util.ReportSuggestionHandler;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -31,8 +28,6 @@ import java.util.regex.Pattern;
 
 public class ChatEvents {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
-    public static final ResourceLocation STRENGTH_SOUND = new ResourceLocation("item.fireCharge.use");
     private static final String BAN_MESSAGE = "A player has been removed from your game.";
     private static final String HUNTER_STRENGTH_MESSAGE = "Your Force of Nature gave you a 5 second Strength I buff.";
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
@@ -196,7 +191,7 @@ public class ChatEvents {
             final Matcher preStrengthMatcher = HUNTER_PRE_STRENGTH_PATTERN.matcher(fmsg);
             if (preStrengthMatcher.find()) {
                 if (timerStrength.update()) {
-                    mc.getSoundHandler().playSound(PositionedSoundRecord.create(STRENGTH_SOUND, 0.0F));
+                    SoundUtil.playStrengthSound();
                 }
                 final String preStrengthTimer = preStrengthMatcher.group(1);
                 HunterStrengthHUD.instance.setPreStrengthTime(preStrengthTimer);

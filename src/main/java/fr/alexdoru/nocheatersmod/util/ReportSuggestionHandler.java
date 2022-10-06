@@ -10,6 +10,7 @@ import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import fr.alexdoru.nocheatersmod.commands.CommandReport;
 import fr.alexdoru.nocheatersmod.commands.CommandWDR;
@@ -17,13 +18,11 @@ import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.ReportQueue;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
-import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -35,7 +34,6 @@ import java.util.regex.Pattern;
 public class ReportSuggestionHandler {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
-    public static final ResourceLocation REPORT_SUGGESTION_SOUND = new ResourceLocation("random.orb");
     private static final Pattern REPORT_PATTERN1 = Pattern.compile("([a-zA-Z0-9_*]{2,16}) (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE);
     private static final Pattern REPORT_PATTERN2 = Pattern.compile("\\/?(?:wdr|report) ([a-zA-Z0-9_*]{2,16}) (\\w+)", Pattern.CASE_INSENSITIVE);
     private static final List<StringLong> reportSuggestionHistory = new ArrayList<>();
@@ -92,12 +90,6 @@ public class ReportSuggestionHandler {
 
         return false;
 
-    }
-
-    public static void playReportSuggestionSound(boolean playSound) {
-        if (playSound) {
-            mc.getSoundHandler().playSound(PositionedSoundRecord.create(REPORT_SUGGESTION_SOUND, 1.0F));
-        }
     }
 
     /**
@@ -233,7 +225,9 @@ public class ReportSuggestionHandler {
             return;
         }
 
-        playReportSuggestionSound(!isSenderIgnored && !isSenderCheating && !isSenderFlaging);
+        if (!isSenderIgnored && !isSenderCheating && !isSenderFlaging) {
+            SoundUtil.playReportSuggestionSound();
+        }
 
         if (!isSenderInTablist || messageSender == null) {
             final String newFmsg = StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED) + " ";
