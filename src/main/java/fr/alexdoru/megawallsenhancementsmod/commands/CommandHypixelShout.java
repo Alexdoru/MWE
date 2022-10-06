@@ -11,7 +11,6 @@ import net.minecraft.util.BlockPos;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class CommandHypixelShout extends CommandBase {
 
@@ -27,7 +26,7 @@ public class CommandHypixelShout extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        Minecraft.getMinecraft().thePlayer.sendChatMessage(Pattern.compile("seks", Pattern.CASE_INSENSITIVE).matcher("/shout " + buildString(args, 0)).replaceAll("****"));
+        Minecraft.getMinecraft().thePlayer.sendChatMessage("/shout " + buildString(args, 0));
     }
 
     @Override
