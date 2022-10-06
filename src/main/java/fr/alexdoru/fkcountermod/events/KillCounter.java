@@ -277,8 +277,8 @@ public class KillCounter {
 
     /**
      * Removes a player from the fkcounter and returns true when successfull
-     * aka if the players was in final kill and if the player wasn't already dead
-     * (happens when someone tries to lag and gets double tapped)
+     * i.e. if the players was in final kill and if the player wasn't already dead,
+     * it sometime happens when a player gets double tapped
      */
     private static boolean removeKilledPlayer(String player, String color) {
         final int team = getTeamFromColor(color);
@@ -289,6 +289,7 @@ public class KillCounter {
             teamKillsArray[team].remove(player);
             allPlayerKills.remove(player);
             deadPlayers.add(player);
+            updateNetworkPlayerinfo(player, 0);
             return true;
         }
         return false;
