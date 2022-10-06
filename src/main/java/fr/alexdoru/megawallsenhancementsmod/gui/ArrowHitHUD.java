@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ArrowHitGui extends MyCachedGui {
+public class ArrowHitHUD extends MyCachedHUD {
 
-    public static ArrowHitGui instance;
+    public static ArrowHitHUD instance;
 
     private static final String DUMMY_TEXT = EnumChatFormatting.GREEN + "20.0";
     private static final Pattern PATTERN_ARROW_HIT = Pattern.compile("^(\\w+) is on ([0-9]*[.]?[0-9]+) HP!");
@@ -28,7 +28,7 @@ public class ArrowHitGui extends MyCachedGui {
 
     private long hittime;
 
-    public ArrowHitGui() {
+    public ArrowHitHUD() {
         super(ConfigHandler.arrowHitHUDPosition);
         instance = this;
     }

@@ -1,6 +1,6 @@
 package fr.alexdoru.fkcountermod.utils;
 
-import fr.alexdoru.megawallsenhancementsmod.gui.LastWitherHPGui;
+import fr.alexdoru.megawallsenhancementsmod.gui.LastWitherHPHUD;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import net.minecraft.scoreboard.Scoreboard;
 
@@ -115,7 +115,7 @@ public class ScoreboardParser {
         }
 
         if (isOnlyOneWitherAlive()) {
-            LastWitherHPGui.instance.updateWitherHP(witherHP);
+            LastWitherHPHUD.instance.updateWitherHP(witherHP);
         }
 
     }

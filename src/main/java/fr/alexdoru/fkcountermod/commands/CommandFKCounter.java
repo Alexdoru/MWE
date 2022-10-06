@@ -1,10 +1,10 @@
 package fr.alexdoru.fkcountermod.commands;
 
 import fr.alexdoru.fkcountermod.events.KillCounter;
-import fr.alexdoru.fkcountermod.gui.FKConfigGuiScreen;
-import fr.alexdoru.fkcountermod.gui.FKCounterGui;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.gui.FKConfigGuiScreen;
+import fr.alexdoru.megawallsenhancementsmod.gui.FKCounterHUD;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
@@ -154,7 +154,7 @@ public class CommandFKCounter extends CommandBase {
                 Integer kills = teamKillsArray[team].get(playerName);
                 if (kills != null) {
                     KillCounter.removeKilledPlayer(playerName, team);
-                    FKCounterGui.instance.updateDisplayText();
+                    FKCounterHUD.instance.updateDisplayText();
                     ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Removed " + KillCounter.getColorPrefixFromTeam(team) + playerName
                             + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + kills + EnumChatFormatting.GREEN + " final" + (kills > 1 ? "s" : "") + " from the " + KillCounter.getColorPrefixFromTeam(team) + KillCounter.getTeamNameFromTeam(team) + EnumChatFormatting.GREEN + " team.");
                     return;

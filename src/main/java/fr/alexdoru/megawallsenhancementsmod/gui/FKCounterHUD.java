@@ -1,10 +1,9 @@
-package fr.alexdoru.fkcountermod.gui;
+package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
-import fr.alexdoru.megawallsenhancementsmod.gui.MyCachedGui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
@@ -13,9 +12,9 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-public class FKCounterGui extends MyCachedGui {
+public class FKCounterHUD extends MyCachedHUD {
 
-    public static FKCounterGui instance;
+    public static FKCounterHUD instance;
 
     /*used as an example when in the settings*/
     private static final String DUMMY_TEXT = EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 1\n"
@@ -35,7 +34,7 @@ public class FKCounterGui extends MyCachedGui {
     private static final int BACKGROUND_COLOR = new Color(0, 0, 0, 96).getRGB();
     private static final int DUMMY_BACKGROUND_COLOR = new Color(255, 255, 255, 127).getRGB();
 
-    public FKCounterGui() {
+    public FKCounterHUD() {
         super(ConfigHandler.fkcounterPosition);
         instance = this;
     }

@@ -9,9 +9,9 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class LastWitherHPGui extends MyCachedGui {
+public class LastWitherHPHUD extends MyCachedHUD {
 
-    public static LastWitherHPGui instance;
+    public static LastWitherHPHUD instance;
 
     private static final String DUMMY_TEXT = EnumChatFormatting.GREEN + "Wither dies in 148s";
     private String color = "";
@@ -19,7 +19,7 @@ public class LastWitherHPGui extends MyCachedGui {
     private long thirdWitherDeathTime = 0;
     private int witherHp = 0;
 
-    public LastWitherHPGui() {
+    public LastWitherHPHUD() {
         super(ConfigHandler.lastWitherHUDPosition);
         instance = this;
         MinecraftForge.EVENT_BUS.register(this);

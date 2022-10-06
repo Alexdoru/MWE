@@ -9,7 +9,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 
-public abstract class MyCachedGui extends Gui implements IRenderer, ICachedHUDText {
+public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDText {
 
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static final FontRenderer frObj = mc.fontRendererObj;
@@ -17,7 +17,7 @@ public abstract class MyCachedGui extends Gui implements IRenderer, ICachedHUDTe
     public String displayText = "";
     public GuiPosition guiPosition;
 
-    public MyCachedGui(GuiPosition guiPosition) {
+    public MyCachedHUD(GuiPosition guiPosition) {
         this.guiPosition = guiPosition;
     }
 

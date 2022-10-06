@@ -314,28 +314,28 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 mc.displayGuiScreen(parent);
                 break;
             case 5:
-                mc.displayGuiScreen(new PositionEditGuiScreen(KillCooldownGui.instance, this));
+                mc.displayGuiScreen(new PositionEditGuiScreen(KillCooldownHUD.instance, this));
                 break;
             case 6:
-                mc.displayGuiScreen(new PositionEditGuiScreen(ArrowHitGui.instance, this));
+                mc.displayGuiScreen(new PositionEditGuiScreen(ArrowHitHUD.instance, this));
                 break;
             case 10:
-                mc.displayGuiScreen(new PositionEditGuiScreen(LastWitherHPGui.instance, this));
+                mc.displayGuiScreen(new PositionEditGuiScreen(LastWitherHPHUD.instance, this));
                 break;
             case 13:
-                mc.displayGuiScreen(new PositionEditGuiScreen(HunterStrengthGui.instance, this));
+                mc.displayGuiScreen(new PositionEditGuiScreen(HunterStrengthHUD.instance, this));
                 break;
             case 7:
-                KillCooldownGui.instance.guiPosition.setRelative(0d, 0d);
+                KillCooldownHUD.instance.guiPosition.setRelative(0d, 0d);
                 break;
             case 8:
-                ArrowHitGui.instance.guiPosition.setRelative(0.5d, 9d / 20d);
+                ArrowHitHUD.instance.guiPosition.setRelative(0.5d, 9d / 20d);
                 break;
             case 12:
-                LastWitherHPGui.instance.guiPosition.setRelative(0.75d, 0.05d);
+                LastWitherHPHUD.instance.guiPosition.setRelative(0.75d, 0.05d);
                 break;
             case 14:
-                HunterStrengthGui.instance.guiPosition.setRelative(0.5d, 8d / 20d);
+                HunterStrengthHUD.instance.guiPosition.setRelative(0.5d, 8d / 20d);
                 break;
             default:
                 break;

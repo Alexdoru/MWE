@@ -1,10 +1,9 @@
-package fr.alexdoru.fkcountermod.gui;
+package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
-import fr.alexdoru.fkcountermod.gui.elements.ButtonFancy;
-import fr.alexdoru.fkcountermod.gui.elements.ButtonToggle;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.gui.MyGuiScreen;
+import fr.alexdoru.megawallsenhancementsmod.gui.elements.ButtonFancy;
+import fr.alexdoru.megawallsenhancementsmod.gui.elements.ButtonToggle;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import net.minecraft.client.gui.GuiButton;
@@ -56,7 +55,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
 
         switch (button.id) {
             case 100:
-                mc.displayGuiScreen(new PositionEditGuiScreen(FKCounterGui.instance, this));
+                mc.displayGuiScreen(new PositionEditGuiScreen(FKCounterHUD.instance, this));
                 break;
             case 200:
                 mc.displayGuiScreen(parent);
@@ -114,7 +113,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
         }
 
         if (button instanceof ButtonToggle) {
-            FKCounterGui.instance.updateDisplayText();
+            FKCounterHUD.instance.updateDisplayText();
         }
 
     }
@@ -163,7 +162,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                 break;
             case 6:
                 ConfigHandler.playerAmount = (int) slider.getValue();
-                FKCounterGui.instance.updateDisplayText();
+                FKCounterHUD.instance.updateDisplayText();
                 break;
         }
     }
