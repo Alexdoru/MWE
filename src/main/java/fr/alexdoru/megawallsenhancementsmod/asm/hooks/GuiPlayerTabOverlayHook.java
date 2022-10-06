@@ -4,7 +4,6 @@ import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.ColorUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
@@ -13,8 +12,8 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class GuiPlayerTabOverlayHook {
 
-    private static final FontRenderer fontRendererObj = Minecraft.getMinecraft().fontRendererObj;
-    private static final int FK_SCORE_WIDTH = fontRendererObj.getStringWidth("00  ");
+    private static final Minecraft mc = Minecraft.getMinecraft();
+    private static final int FK_SCORE_WIDTH = mc.fontRendererObj.getStringWidth("00  ");
 
     public static int getFKScoreWidth() {
         return ConfigHandler.finalsInTablist ? (FKCounterMod.isInMwGame ? FK_SCORE_WIDTH : 0) : 0;
@@ -24,13 +23,13 @@ public class GuiPlayerTabOverlayHook {
         if (!ConfigHandler.finalsInTablist || playersFinals == 0 || !FKCounterMod.isInMwGame) {
             return;
         }
-        String s1 = EnumChatFormatting.GOLD + "" + playersFinals;
-        fontRendererObj.drawStringWithShadow(s1, (float) (x - fontRendererObj.getStringWidth(s1) - FK_SCORE_WIDTH), (float) y, 16777215);
+        final String s1 = EnumChatFormatting.GOLD + "" + playersFinals;
+        mc.fontRendererObj.drawStringWithShadow(s1, (float) (x - mc.fontRendererObj.getStringWidth(s1) - FK_SCORE_WIDTH), (float) y, 16777215);
     }
 
     public static List<String> addPlayerCountinHeader(List<String> listIn) {
         if (listIn != null) {
-            int i = Minecraft.getMinecraft().thePlayer.sendQueue.getPlayerInfoMap().size();
+            final int i = Minecraft.getMinecraft().thePlayer.sendQueue.getPlayerInfoMap().size();
             if (i < 2) {
                 return listIn;
             }
