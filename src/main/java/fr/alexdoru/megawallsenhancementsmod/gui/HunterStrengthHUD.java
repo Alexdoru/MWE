@@ -3,9 +3,9 @@ package fr.alexdoru.megawallsenhancementsmod.gui;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.gui.ScaledResolution;
 
-public class HunterStrengthGui extends MyCachedGui {
+public class HunterStrengthHUD extends MyCachedHUD {
 
-    public static HunterStrengthGui instance;
+    public static HunterStrengthHUD instance;
 
     private static final String DUMMY_TEXT = "\u00a77(\u00a7l\u00a7c\u00a7lStrength\u00a77)\u00a7e\u00a7l in 10";
     private static final String PRE_STRENGTH_TEXT = "\u00a77(\u00a7l\u00a7c\u00a7lStrength\u00a77)\u00a7e\u00a7l in ";
@@ -14,7 +14,7 @@ public class HunterStrengthGui extends MyCachedGui {
     private long renderDuration;
     private boolean isStrengthRender;
 
-    public HunterStrengthGui() {
+    public HunterStrengthHUD() {
         super(ConfigHandler.hunterStrengthHUDPosition);
         instance = this;
     }

@@ -6,30 +6,30 @@ import fr.alexdoru.megawallsenhancementsmod.utils.TimerUtil;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
-public class KillCooldownGui extends MyCachedGui {
+public class KillCooldownHUD extends MyCachedHUD {
 
-    public static KillCooldownGui instance;
+    public static KillCooldownHUD instance;
 
     private static final String DUMMY_TEXT = EnumChatFormatting.DARK_RED + "/kill cooldown : 60s";
     private long lastkilltime = 0;
     private final TimerUtil timerKillCooldown = new TimerUtil(60000L);
     private final TimerUtil timerUpdateText = new TimerUtil(1000L);
 
-    public KillCooldownGui() {
+    public KillCooldownHUD() {
         super(ConfigHandler.killcooldownHUDPosition);
         instance = this;
     }
 
     /**
-     * Called to draw the gui, when you use /kill
+     * Called to draw the HUD, when you use /kill
      */
-    public void drawCooldownGui() {
+    public void drawCooldownHUD() {
         if (timerKillCooldown.update()) {
             lastkilltime = System.currentTimeMillis();
         }
     }
 
-    public void hideGUI() {
+    public void hideHUD() {
         lastkilltime = 0;
     }
 

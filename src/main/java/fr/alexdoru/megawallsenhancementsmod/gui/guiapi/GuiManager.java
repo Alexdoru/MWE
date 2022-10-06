@@ -1,10 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.guiapi;
 
-import fr.alexdoru.fkcountermod.gui.FKCounterGui;
-import fr.alexdoru.megawallsenhancementsmod.gui.ArrowHitGui;
-import fr.alexdoru.megawallsenhancementsmod.gui.HunterStrengthGui;
-import fr.alexdoru.megawallsenhancementsmod.gui.KillCooldownGui;
-import fr.alexdoru.megawallsenhancementsmod.gui.LastWitherHPGui;
+import fr.alexdoru.megawallsenhancementsmod.gui.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -23,11 +19,11 @@ public final class GuiManager {
      * Register your Guis here
      */
     public GuiManager() {
-        this.registeredRenderers.add(new FKCounterGui());
-        this.registeredRenderers.add(new ArrowHitGui());
-        this.registeredRenderers.add(new KillCooldownGui());
-        this.registeredRenderers.add(new HunterStrengthGui());
-        this.registeredRenderers.add(new LastWitherHPGui());
+        this.registeredRenderers.add(new FKCounterHUD());
+        this.registeredRenderers.add(new ArrowHitHUD());
+        this.registeredRenderers.add(new KillCooldownHUD());
+        this.registeredRenderers.add(new HunterStrengthHUD());
+        this.registeredRenderers.add(new LastWitherHPHUD());
     }
 
     @SubscribeEvent

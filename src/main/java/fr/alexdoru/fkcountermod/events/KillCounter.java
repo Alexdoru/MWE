@@ -1,7 +1,6 @@
 package fr.alexdoru.fkcountermod.events;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
-import fr.alexdoru.fkcountermod.gui.FKCounterGui;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.NetworkPlayerInfoAccessor;
@@ -10,6 +9,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.gui.FKCounterHUD;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import net.minecraft.client.Minecraft;
@@ -132,7 +132,7 @@ public class KillCounter {
         for (int i = 0; i < KILL_MESSAGES.length; i++) {
             KILL_PATTERNS[i] = Pattern.compile(KILL_MESSAGES[i]);
         }
-        FKCounterGui.instance.updateDisplayText();
+        FKCounterHUD.instance.updateDisplayText();
     }
 
     /**
@@ -150,7 +150,7 @@ public class KillCounter {
             prefixes[i] = DEFAULT_PREFIXES[i];
             teamKillsArray[i] = new HashMap<>();
         }
-        FKCounterGui.instance.updateDisplayText();
+        FKCounterHUD.instance.updateDisplayText();
     }
 
     public static boolean processMessage(String formattedText, String unformattedText) {
@@ -177,7 +177,7 @@ public class KillCounter {
                             playersPresentInGame.add(killedPlayer);
                             playersPresentInGame.add(killer);
                         }
-                        FKCounterGui.instance.updateDisplayText();
+                        FKCounterHUD.instance.updateDisplayText();
                     }
                     if (ConfigHandler.strengthParticules) {
                         spawnParticles(killer);
@@ -194,7 +194,7 @@ public class KillCounter {
                         if (removeKilledPlayer(killedPlayer, killedTeamColor)) {
                             playersPresentInGame.add(killedPlayer);
                         }
-                        FKCounterGui.instance.updateDisplayText();
+                        FKCounterHUD.instance.updateDisplayText();
                     }
                     ChatUtil.addChatMessage(formattedText.replace(killedPlayer, SquadEvent.getSquadname(killedPlayer)));
                     return true;
@@ -268,7 +268,7 @@ public class KillCounter {
                 }
             }
         }
-        FKCounterGui.instance.updateDisplayText();
+        FKCounterHUD.instance.updateDisplayText();
     }
 
     public static void removeKilledPlayer(String player, int team) {

@@ -3,7 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui.guiapi;
 public interface ICachedHUDText {
 
     /**
-     * Returns the stored static text to be displayed
+     * Returns the stored text to be displayed
      */
     String getDisplayText();
 

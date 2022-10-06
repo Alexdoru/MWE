@@ -6,9 +6,9 @@ import fr.alexdoru.fkcountermod.events.MwGameEvent;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.gui.ArrowHitGui;
-import fr.alexdoru.megawallsenhancementsmod.gui.HunterStrengthGui;
-import fr.alexdoru.megawallsenhancementsmod.gui.KillCooldownGui;
+import fr.alexdoru.megawallsenhancementsmod.gui.ArrowHitHUD;
+import fr.alexdoru.megawallsenhancementsmod.gui.HunterStrengthHUD;
+import fr.alexdoru.megawallsenhancementsmod.gui.KillCooldownHUD;
 import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
@@ -91,7 +91,7 @@ public class ChatEvents {
             }
 
             if (msg.equals(OWN_WITHER_DEATH_MESSAGE)) {
-                KillCooldownGui.instance.hideGUI();
+                KillCooldownHUD.instance.hideHUD();
                 return;
             }
 
@@ -116,7 +116,7 @@ public class ChatEvents {
                 return;
             }
 
-            if (ArrowHitGui.instance.processMessage(msg, fmsg)) {
+            if (ArrowHitHUD.instance.processMessage(msg, fmsg)) {
                 event.setCanceled(true);
                 return;
             }
@@ -161,7 +161,7 @@ public class ChatEvents {
             }
 
             if (ConfigHandler.strengthHUD && msg.equals(HUNTER_STRENGTH_MESSAGE)) {
-                HunterStrengthGui.instance.setStrengthRenderStart(5000L);
+                HunterStrengthHUD.instance.setStrengthRenderStart(5000L);
                 return;
             }
 
@@ -189,7 +189,7 @@ public class ChatEvents {
 
             final Matcher dreadStrenghtMatcher = DREADLORD_STRENGTH_PATTERN.matcher(fmsg);
             if (dreadStrenghtMatcher.find()) {
-                HunterStrengthGui.instance.setStrengthRenderStart(Long.parseLong(dreadStrenghtMatcher.group(1)) * 1000L);
+                HunterStrengthHUD.instance.setStrengthRenderStart(Long.parseLong(dreadStrenghtMatcher.group(1)) * 1000L);
                 return;
             }
 
@@ -199,19 +199,19 @@ public class ChatEvents {
                     mc.getSoundHandler().playSound(PositionedSoundRecord.create(STRENGTH_SOUND, 0.0F));
                 }
                 final String preStrengthTimer = preStrengthMatcher.group(1);
-                HunterStrengthGui.instance.setPreStrengthTime(preStrengthTimer);
+                HunterStrengthHUD.instance.setPreStrengthTime(preStrengthTimer);
                 return;
             }
 
             final Matcher herobrineStrenghtMatcher = HEROBRINE_STRENGTH_PATTERN.matcher(fmsg);
             if (herobrineStrenghtMatcher.find()) {
-                HunterStrengthGui.instance.setStrengthRenderStart(Long.parseLong(herobrineStrenghtMatcher.group(1)) * 1000L);
+                HunterStrengthHUD.instance.setStrengthRenderStart(Long.parseLong(herobrineStrenghtMatcher.group(1)) * 1000L);
                 return;
             }
 
             final Matcher zombieStrenghtMatcher = ZOMBIE_STRENGTH_PATTERN.matcher(fmsg);
             if (zombieStrenghtMatcher.find()) {
-                HunterStrengthGui.instance.setStrengthRenderStart(Long.parseLong(zombieStrenghtMatcher.group(1)) * 1000L);
+                HunterStrengthHUD.instance.setStrengthRenderStart(Long.parseLong(zombieStrenghtMatcher.group(1)) * 1000L);
             }
 
         }

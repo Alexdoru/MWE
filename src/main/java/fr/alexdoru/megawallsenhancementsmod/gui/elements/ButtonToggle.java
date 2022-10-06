@@ -1,4 +1,4 @@
-package fr.alexdoru.fkcountermod.gui.elements;
+package fr.alexdoru.megawallsenhancementsmod.gui.elements;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
