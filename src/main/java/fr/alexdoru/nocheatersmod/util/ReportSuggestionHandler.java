@@ -129,8 +129,34 @@ public class ReportSuggestionHandler {
             isSenderRankValid = true;
         }
 
-        final boolean gotAutoreported = checkAndSendReportSuggestion(messageSender, reportedPlayer, cheat, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, false, isSenderRankValid);
-        printCustomReportSuggestionChatText(fmsg, messageSender, reportedPlayer, cheat, reportText, squadname, isSenderMyself, isTargetMyself, isSenderInTablist, isSenderIgnored, isSenderCheating, isSenderFlaging, false, gotAutoreported, senderUUID);
+        final boolean gotAutoreported = checkAndSendReportSuggestion(
+                messageSender,
+                reportedPlayer,
+                cheat,
+                isSenderMyself,
+                isTargetMyself,
+                isSenderInTablist,
+                isSenderIgnored,
+                isSenderCheating,
+                isSenderFlaging,
+                false,
+                isSenderRankValid);
+        printCustomReportSuggestionChatText(
+                fmsg,
+                messageSender,
+                reportedPlayer,
+                cheat,
+                reportText,
+                squadname,
+                isSenderMyself,
+                isTargetMyself,
+                isSenderInTablist,
+                isSenderIgnored,
+                isSenderCheating,
+                isSenderFlaging,
+                false,
+                gotAutoreported,
+                senderUUID);
 
     }
 
@@ -147,7 +173,13 @@ public class ReportSuggestionHandler {
             boolean isSenderNicked,
             boolean isSenderRankValid) {
 
-        if (!ConfigHandler.autoreportSuggestions || !isSenderInTablist || messageSender == null || isSenderIgnored || isSenderCheating || !FKCounterMod.isInMwGame || isTargetMyself) {
+        if (!ConfigHandler.autoreportSuggestions ||
+                !isSenderInTablist ||
+                messageSender == null ||
+                isSenderIgnored ||
+                isSenderCheating ||
+                !FKCounterMod.isInMwGame ||
+                isTargetMyself) {
             return false;
         }
 
@@ -195,7 +227,8 @@ public class ReportSuggestionHandler {
             }
             checkReportSpam();
             if(ReportQueue.INSTANCE.addPlayerToQueueRandom(messageSender, reportedPlayer)) {
-                new DelayedTask(() -> ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment... ").appendSibling(ChatUtil.getCancelButton(reportedPlayer))), 0);
+                new DelayedTask(() -> ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment... ")
+                        .appendSibling(ChatUtil.getCancelButton(reportedPlayer))), 0);
                 return true;
             } else {
                 new DelayedTask(() -> ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " You already reported this player during this game"), 0);
@@ -219,7 +252,8 @@ public class ReportSuggestionHandler {
         reportSpamCheck.add(l);
         reportSpamCheck.removeIf(time -> (time + 30L * 1000L < l));
         if (reportSpamCheck.size() >= 4) {
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.YELLOW + "Is someone trying to spam the reporting system ? ").appendSibling(ChatUtil.getCancelAllReportsButton()));
+            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.YELLOW + "Is someone trying to spam the reporting system ? ")
+                    .appendSibling(ChatUtil.getCancelAllReportsButton()));
         }
     }
 
