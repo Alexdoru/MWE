@@ -34,8 +34,9 @@ import java.util.regex.Pattern;
 public class ReportSuggestionHandler {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
-    private static final Pattern REPORT_PATTERN1 = Pattern.compile("(\\w{2,16}) (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE);
-    private static final Pattern REPORT_PATTERN2 = Pattern.compile("\\/?(?:wdr|report) (\\w{2,16}) (\\w+)", Pattern.CASE_INSENSITIVE);
+    private static final String uuidPattern = "[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}";
+    private static final Pattern REPORT_PATTERN1 = Pattern.compile("((?:\\w{2,16}|" + uuidPattern + ")) (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE);
+    private static final Pattern REPORT_PATTERN2 = Pattern.compile("\\/?(?:wdr|report) (\\w{2,16}) ((?:\\w{2,16}|" + uuidPattern + "))", Pattern.CASE_INSENSITIVE);
     private static final List<StringLong> reportSuggestionHistory = new ArrayList<>();
     private static final List<Long> reportSpamCheck = new ArrayList<>();
     private static final long TIME_BETWEEN_REPORT_SUGGESTION_PLAYER = 40L * 60L * 1000L;
@@ -46,37 +47,53 @@ public class ReportSuggestionHandler {
             @Nullable String squadname,
             String msgIn,
             String fmsgIn) {
-
         if (ConfigHandler.reportsuggestions || ConfigHandler.autoreportSuggestions) {
-
             final Matcher matcher1 = REPORT_PATTERN1.matcher(msgIn);
             final Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);
-
             if (matcher1.find()) {
                 final String reportText = matcher1.group();
-                final String reportedPlayer = matcher1.group(1);
-                if (isAValidName(reportedPlayer)) {
-                    handleReportSuggestion(reportedPlayer, senderRank, messageSender, squadname, reportText, "bhop", fmsgIn);
+                final String reportedPlayerOrUUID = matcher1.group(1);
+                final String reportedPlayer = reportedPlayerOrUUID.length() == 36 ? getNameFromUUID(reportedPlayerOrUUID) : reportedPlayerOrUUID;
+                if (reportedPlayer != null && isNameValid(reportedPlayer)) {
+                    handleReportSuggestion(
+                            reportedPlayer,
+                            senderRank,
+                            messageSender,
+                            squadname,
+                            reportedPlayerOrUUID.equals(reportedPlayer) ? reportText : reportText.replace(reportedPlayerOrUUID, reportedPlayer),
+                            "bhop",
+                            reportedPlayerOrUUID.equals(reportedPlayer) ? fmsgIn : fmsgIn.replace(reportedPlayerOrUUID, reportedPlayer));
                 } else {
                     ChatUtil.addChatMessage(getIChatComponentWithSquadnameAsSender(fmsgIn, messageSender, squadname));
                 }
                 return true;
             } else if (matcher2.find()) {
                 final String reportText = matcher2.group();
-                final String reportedPlayer = matcher2.group(1);
+                final String reportedPlayerOrUUID = matcher2.group(1);
+                final String reportedPlayer = reportedPlayerOrUUID.length() == 36 ? getNameFromUUID(reportedPlayerOrUUID) : reportedPlayerOrUUID;
                 final String cheat = matcher2.group(2).toLowerCase();
-                if (isAValidCheat(cheat) && isAValidName(reportedPlayer)) {
-                    handleReportSuggestion(reportedPlayer, senderRank, messageSender, squadname, reportText, cheat, fmsgIn);
+                if (reportedPlayer != null && isAValidCheat(cheat) && isNameValid(reportedPlayer)) {
+                    handleReportSuggestion(
+                            reportedPlayer,
+                            senderRank,
+                            messageSender,
+                            squadname,
+                            reportedPlayerOrUUID.equals(reportedPlayer) ? reportText : reportText.replace(reportedPlayerOrUUID, reportedPlayer),
+                            cheat,
+                            reportedPlayerOrUUID.equals(reportedPlayer) ? fmsgIn : fmsgIn.replace(reportedPlayerOrUUID, reportedPlayer));
                 } else {
                     ChatUtil.addChatMessage(getIChatComponentWithSquadnameAsSender(fmsgIn, messageSender, squadname));
                 }
                 return true;
             }
-
         }
-
         return false;
+    }
 
+    private static String getNameFromUUID(String s) {
+        final UUID uuid = UUID.fromString(s);
+        final NetworkPlayerInfo networkPlayerInfo = Minecraft.getMinecraft().getNetHandler().getPlayerInfo(uuid);
+        return networkPlayerInfo == null ? null : networkPlayerInfo.getGameProfile().getName();
     }
 
     /**
@@ -378,7 +395,7 @@ public class ReportSuggestionHandler {
         return CommandReport.cheatsList.contains(cheat);
     }
 
-    private static boolean isAValidName(String playername) {
+    private static boolean isNameValid(String playername) {
         return NetHandlerPlayClientHook.playerInfoMap.get(playername) != null || isPlayerMyself(playername) || KillCounter.wasPlayerInThisGame(playername);
     }
 
