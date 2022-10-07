@@ -2,6 +2,7 @@ package fr.alexdoru.nocheatersmod.data;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
+import net.minecraft.client.Minecraft;
 
 import java.io.*;
 import java.util.*;
@@ -16,7 +17,13 @@ public class WdredPlayers {
      * In the wdred file the data is saved with the following pattern
      * uuid timestamp timeLastManualReport hack1 hack2 hack3 hack4 hack5
      */
-    public static File wdrsFile;
+    private static File wdrsFile;
+
+    public static void init() {
+        wdrsFile = new File(Minecraft.getMinecraft().mcDataDir, "config/wdred.txt");
+        loadReportedPlayers();
+        Runtime.getRuntime().addShutdownHook(new Thread(WdredPlayers::saveReportedPlayers));
+    }
 
     public static HashMap<String, WDR> getWdredMap() {
         return WDR_HASH_MAP;
@@ -41,7 +48,7 @@ public class WdredPlayers {
             }
             writer.close();
         } catch (IOException e) {
-            NoCheatersMod.logger.error("Failed to write date to the wdr file");
+            NoCheatersMod.logger.error("Failed to write data to the wdr file");
         }
     }
 
@@ -121,45 +128,31 @@ public class WdredPlayers {
      * Transforms the timestamped reports older into normal reports
      */
     private static ArrayList<String> filterTimestampedReports(String[] split, long datenow) {
-
         final ArrayList<String> hacks = new ArrayList<>();
-
         if (split[0].charAt(0) == '-' && datenow - Long.parseLong(split[3]) - TIME_TRANSFORM_TIMESTAMPED_REPORT > 0) {
-
             int j = 0; // indice of timestamp
             for (int i = 0; i < split.length; i++) {
-
                 if (split[i].charAt(0) == '-') { // serverID
                     j = i;
                 } else if (i > j + 3) { // cheats
                     hacks.add(split[i]);
                 }
-
             }
-
             return removeDuplicates(hacks);
-
         } else {
-
             hacks.addAll(Arrays.asList(split));
             return hacks;
-
         }
-
     }
 
-    public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list) {
-
+    private static <T> ArrayList<T> removeDuplicates(ArrayList<T> list) {
         final ArrayList<T> newList = new ArrayList<>();
-
         for (final T element : list) {
             if (!newList.contains(element)) {
                 newList.add(element);
             }
         }
-
         return newList;
-
     }
 
 }
