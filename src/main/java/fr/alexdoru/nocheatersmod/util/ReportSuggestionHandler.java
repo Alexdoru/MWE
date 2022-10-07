@@ -72,7 +72,7 @@ public class ReportSuggestionHandler {
                 final String reportedPlayerOrUUID = matcher2.group(1);
                 final String reportedPlayer = reportedPlayerOrUUID.length() == 36 ? getNameFromUUID(reportedPlayerOrUUID) : reportedPlayerOrUUID;
                 final String cheat = matcher2.group(2).toLowerCase();
-                if (reportedPlayer != null && isAValidCheat(cheat) && isNameValid(reportedPlayer)) {
+                if (reportedPlayer != null && isCheatValid(cheat) && isNameValid(reportedPlayer)) {
                     handleReportSuggestion(
                             reportedPlayer,
                             senderRank,
@@ -391,7 +391,7 @@ public class ReportSuggestionHandler {
         return new ChatComponentText(messageSender != null && squadname != null ? fmsg.replaceFirst(messageSender, squadname) : fmsg);
     }
 
-    private static boolean isAValidCheat(String cheat) {
+    private static boolean isCheatValid(String cheat) {
         return CommandReport.cheatsList.contains(cheat);
     }
 
@@ -405,6 +405,30 @@ public class ReportSuggestionHandler {
 
     public static void clearReportSuggestionHistory() {
         reportSuggestionHistory.clear();
+    }
+
+    /**
+     * Mirrors the {@link ReportSuggestionHandler#parseReportMessage(String, String, String, String, String)}
+     * method and returns true if this method would parse the shout as a report suggestion
+     * but the player can't be found in the tablist.
+     * Although it only checks one regex pattern because the other one would conflict
+     * too much with messages that people want to send outside of report suggestions.
+     * This is mainly to prevent wasting shouts if the targeted player
+     * isn't found at the moment you send the shout.
+     */
+    public static boolean shouldCancelShout(String msg) {
+        final Matcher matcher2 = REPORT_PATTERN2.matcher(msg);
+        if (matcher2.find()) {
+            final String reportedPlayerOrUUID = matcher2.group(1);
+            final String reportedPlayer = reportedPlayerOrUUID.length() == 36 ? getNameFromUUID(reportedPlayerOrUUID) : reportedPlayerOrUUID;
+            final String cheat = matcher2.group(2).toLowerCase();
+            if (isCheatValid(cheat) && reportedPlayer != null) {
+                return !isNameValid(reportedPlayer);
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 
 }

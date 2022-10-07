@@ -2,11 +2,14 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.events.KillCounter;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
+import fr.alexdoru.nocheatersmod.util.ReportSuggestionHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumChatFormatting;
 
 import java.util.List;
 
@@ -24,7 +27,15 @@ public class CommandHypixelShout extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        Minecraft.getMinecraft().thePlayer.sendChatMessage("/shout " + buildString(args, 0));
+        final String msg = buildString(args, 0);
+        if (ReportSuggestionHandler.shouldCancelShout(msg)) {
+            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED +
+                    "Shout was canceled since the player you are trying to report isn't in the tablist anymore," +
+                    " your report wouldn't have worked, try again in a few second." +
+                    " This can happen when the targeted player just respawned.");
+        } else {
+            Minecraft.getMinecraft().thePlayer.sendChatMessage("/shout " + msg);
+        }
     }
 
     @Override
