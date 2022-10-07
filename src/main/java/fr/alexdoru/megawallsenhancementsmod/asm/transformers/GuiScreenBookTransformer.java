@@ -20,19 +20,26 @@ public class GuiScreenBookTransformer implements IMyClassTransformer {
         for (final MethodNode methodNode : classNode.methods) {
 
             if (methodNode.name.equals("<init>") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lwn;Lzx;Z)V" : "(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/item/ItemStack;Z)V")) {
+                /*
+                 * Injects at head of constructor :
+                 * GuiScreenBookHook.onBookInit(book);
+                 */
                 final InsnList list = new InsnList();
                 list.add(new VarInsnNode(ALOAD, 2));
                 list.add(new MethodInsnNode(INVOKESTATIC,
                         "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiScreenBookHook",
                         "onBookInit",
                         ASMLoadingPlugin.isObf ? "(Lzx;)V" : "(Lnet/minecraft/item/ItemStack;)V",
-                        false
-                ));
+                        false));
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), list);
                 status.addInjection();
             }
 
             if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "keyTyped") && methodNode.desc.equals("(CI)V")) {
+                /*
+                 * Injects at head :
+                 * GuiScreenBookHook.onKeyTyped(keyCode);
+                 */
                 final InsnList list = new InsnList();
                 list.add(new VarInsnNode(ILOAD, 2));
                 list.add(new MethodInsnNode(INVOKESTATIC,
@@ -50,6 +57,10 @@ public class GuiScreenBookTransformer implements IMyClassTransformer {
                             && ((MethodInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "ayo" : "net/minecraft/client/gui/GuiScreenBook")
                             && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "b" : "drawTexturedModalRect")
                             && ((MethodInsnNode) insnNode).desc.equals("(IIIIII)V")) {
+                        /*
+                         * Injects at line 411 :
+                         * GuiScreenBookHook.renderInstructions(this.width, this.bookImageHeight);
+                         */
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "ayo" : "net/minecraft/client/gui/GuiScreenBook", ASMLoadingPlugin.isObf ? "l" : "width", "I"));
