@@ -235,7 +235,7 @@ public class ChatUtil {
     }
 
     public static IChatComponent getReportButton(String playername, String cheatReport, ClickEvent.Action actionreport) {
-        return new ChatComponentText(EnumChatFormatting.DARK_GREEN + "[Report] ")
+        return new ChatComponentText(EnumChatFormatting.DARK_GREEN + " [Report]")
                 .setChatStyle(new ChatStyle()
                         .setChatClickEvent(new ClickEvent(actionreport, "/report " + playername + " " + cheatReport))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
@@ -246,7 +246,7 @@ public class ChatUtil {
     }
 
     public static IChatComponent getWDRButton(String playername, String cheatWDR, ClickEvent.Action actionwdr) {
-        return new ChatComponentText(EnumChatFormatting.DARK_PURPLE + "[WDR] ")
+        return new ChatComponentText(EnumChatFormatting.DARK_PURPLE + " [WDR]")
                 .setChatStyle(new ChatStyle()
                         .setChatClickEvent(new ClickEvent(actionwdr, "/wdr " + playername + " " + cheatWDR))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
@@ -267,7 +267,7 @@ public class ChatUtil {
     }
 
     public static IChatComponent getIgnoreButton(String playername) {
-        return new ChatComponentText(EnumChatFormatting.YELLOW + "[Ignore] ")
+        return new ChatComponentText(EnumChatFormatting.YELLOW + " [Ignore]")
                 .setChatStyle(new ChatStyle()
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nocheaters ignore " + playername))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
@@ -279,7 +279,7 @@ public class ChatUtil {
     }
 
     public static IChatComponent getCancelButton(String playername) {
-        return new ChatComponentText(EnumChatFormatting.RED + "[Cancel] ")
+        return new ChatComponentText(EnumChatFormatting.RED + " [Cancel]")
                 .setChatStyle(new ChatStyle()
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nocheaters cancelreport " + playername))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
@@ -287,7 +287,7 @@ public class ChatUtil {
     }
 
     public static IChatComponent getCancelAllReportsButton() {
-        return new ChatComponentText(EnumChatFormatting.RED + "[Cancel All Reports] ")
+        return new ChatComponentText(EnumChatFormatting.RED + " [Cancel All Reports]")
                 .setChatStyle(new ChatStyle()
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nocheaters clearreportqueue"))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
