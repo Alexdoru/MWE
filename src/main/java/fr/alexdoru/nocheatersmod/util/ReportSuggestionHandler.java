@@ -245,7 +245,7 @@ public class ReportSuggestionHandler {
             }
             checkReportSpam();
             if(ReportQueue.INSTANCE.addPlayerToQueueRandom(messageSender, reportedPlayer)) {
-                new DelayedTask(() -> ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment... ")
+                new DelayedTask(() -> ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment...")
                         .appendSibling(ChatUtil.getCancelButton(reportedPlayer))), 0);
                 return true;
             } else {
@@ -270,7 +270,7 @@ public class ReportSuggestionHandler {
         reportSpamCheck.add(l);
         reportSpamCheck.removeIf(time -> (time + 30L * 1000L < l));
         if (reportSpamCheck.size() >= 4) {
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.YELLOW + "Is someone trying to spam the reporting system ? ")
+            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.YELLOW + "Is someone trying to spam the reporting system ?")
                     .appendSibling(ChatUtil.getCancelAllReportsButton()));
         }
     }
@@ -302,7 +302,7 @@ public class ReportSuggestionHandler {
         }
 
         if (!isSenderInTablist || messageSender == null) {
-            final String newFmsg = StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED) + " ";
+            final String newFmsg = StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED);
             final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
             addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
             ChatUtil.addChatMessage(imsg);
