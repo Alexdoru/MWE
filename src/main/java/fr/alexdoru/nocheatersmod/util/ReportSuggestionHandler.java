@@ -4,6 +4,7 @@ import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
+import fr.alexdoru.megawallsenhancementsmod.commands.CommandHypixelShout;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandReport;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandWDR;
@@ -429,6 +430,44 @@ public class ReportSuggestionHandler {
             }
         }
         return false;
+    }
+
+    /**
+     * Parses the blocked message to look for a report suggestion, if it contains one,
+     * and it was sent from a shout, it sends it again but with the uuid instead of the playername
+     */
+    public static void processBlockedMessage(String msg) {
+        final String latestShoutSent = CommandHypixelShout.getLatestShoutSent();
+        if (latestShoutSent == null || !latestShoutSent.equals(msg)) {
+            return;
+        }
+        CommandHypixelShout.resetLastShout();
+        final Matcher matcher1 = Pattern.compile("(\\w{2,16}) (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE).matcher(msg);
+        final Matcher matcher2 = Pattern.compile("\\/?(?:wdr|report) (\\w{2,16}) (\\w+)", Pattern.CASE_INSENSITIVE).matcher(msg);
+        if (matcher1.find()) {
+            final String reportText = matcher1.group();
+            final String reportedPlayer = matcher1.group(1);
+            if (isNameValid(reportedPlayer)) {
+                sendShoutWithUUID(msg, reportText, reportedPlayer);
+            }
+        } else if (matcher2.find()) {
+            final String reportText = matcher2.group();
+            final String reportedPlayer = matcher2.group(1);
+            final String cheat = matcher2.group(2).toLowerCase();
+            if (isCheatValid(cheat) && isNameValid(reportedPlayer)) {
+                sendShoutWithUUID(msg, reportText, reportedPlayer);
+            }
+        }
+    }
+
+    private static void sendShoutWithUUID(String blockedMessgae, String reportText, String reportedPlayer) {
+        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(reportedPlayer);
+        if (networkPlayerInfo == null) return;
+        final String uuid = networkPlayerInfo.getGameProfile().getId().toString();
+        if (mc.thePlayer != null) {
+            new DelayedTask(() -> ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Shout was blocked, trying to send report suggestion with UUID instead"), 1);
+            mc.thePlayer.sendChatMessage("/shout " + blockedMessgae.replaceFirst(reportText, reportText.replaceFirst(reportedPlayer, uuid)));
+        }
     }
 
 }
