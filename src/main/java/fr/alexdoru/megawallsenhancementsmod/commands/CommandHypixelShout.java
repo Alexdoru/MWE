@@ -15,6 +15,8 @@ import java.util.List;
 
 public class CommandHypixelShout extends CommandBase {
 
+    private static String latestShoutSent;
+
     @Override
     public String getCommandName() {
         return "shout";
@@ -34,6 +36,7 @@ public class CommandHypixelShout extends CommandBase {
                     " your report wouldn't have worked, try again in a few second." +
                     " This can happen when the targeted player just respawned.");
         } else {
+            latestShoutSent = msg;
             Minecraft.getMinecraft().thePlayer.sendChatMessage("/shout " + msg);
         }
     }
@@ -65,6 +68,14 @@ public class CommandHypixelShout extends CommandBase {
 
     private boolean isKeywordreport(int i, String[] args) {
         return args[args.length - i].equalsIgnoreCase("report") || args[args.length - i].equalsIgnoreCase("wdr") || args[args.length - i].equalsIgnoreCase("/report") || args[args.length - i].equalsIgnoreCase("/wdr");
+    }
+
+    public static String getLatestShoutSent() {
+        return latestShoutSent;
+    }
+
+    public static void resetLastShout() {
+        latestShoutSent = null;
     }
 
 }

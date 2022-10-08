@@ -34,6 +34,7 @@ public class ChatEvents {
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
     private static final String PREP_PHASE = "Prepare your defenses!";
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
+    private static final Pattern BLOCKED_MESSAGE = Pattern.compile("^We blocked your comment \"(.+)\" as it is breaking our rules because[a-zA-Z\\s]+\\. https:\\/\\/www.hypixel.net\\/rules\\/.*");
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Triple Coins \\+ EXP, |)(?:Active Booster, |)\\w+'s Network Booster\\)).*");
     private static final Pattern DREADLORD_STRENGTH_PATTERN = Pattern.compile("\u00a74\u00a7lSOUL SIPHON \u00a7c\u00a7l85% ([0-9])s");
     private static final Pattern HEROBRINE_STRENGTH_PATTERN = Pattern.compile("\u00a7e\u00a7lPOWER \u00a7c\u00a7l85% ([0-9])s");
@@ -124,6 +125,13 @@ public class ChatEvents {
                 senderRank = matcher.group(1);
                 messageSender = matcher.group(2);
                 squadname = SquadEvent.getSquad().get(messageSender);
+            }
+
+            final Matcher matcherBlockedMessage = BLOCKED_MESSAGE.matcher(msg);
+            if (matcherBlockedMessage.matches()) {
+                final String blockedMessage = matcherBlockedMessage.group(1);
+                ReportSuggestionHandler.processBlockedMessage(blockedMessage);
+                return;
             }
 
             if (ReportSuggestionHandler.parseReportMessage(senderRank, messageSender, squadname, msg, fmsg)) {
