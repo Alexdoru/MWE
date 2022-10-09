@@ -8,4 +8,5 @@ public interface GuiNewChatAccessor {
     void deleteWarningMessagesFor(String playername);
     void deleteAllWarningMessages();
     List<ChatLine> getChatLines();
+    List<ChatLine> getDrawnChatLines();
 }
