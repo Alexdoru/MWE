@@ -5,6 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import fr.alexdoru.nocheatersmod.events.ReportQueue;
+import fr.alexdoru.nocheatersmod.util.ChatHandler;
 import fr.alexdoru.nocheatersmod.util.NoCheatersMessages;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -119,6 +120,8 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 ConfigHandler.togglewarnings = !ConfigHandler.togglewarnings;
                 if (ConfigHandler.togglewarnings) {
                     NoCheatersMessages.printReportMessagesForWorld(false);
+                } else {
+                    ChatHandler.deleteAllWarningMessages();
                 }
                 break;
             case 8:
