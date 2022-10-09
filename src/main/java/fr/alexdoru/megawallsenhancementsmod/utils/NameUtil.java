@@ -4,7 +4,6 @@ import com.mojang.authlib.GameProfile;
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
-import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GuiNewChatAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandAddAlias;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
@@ -14,6 +13,7 @@ import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.nocheatersmod.data.WDR;
 import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import fr.alexdoru.nocheatersmod.events.ReportQueue;
+import fr.alexdoru.nocheatersmod.util.ChatHandler;
 import fr.alexdoru.nocheatersmod.util.NoCheatersMessages;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -138,7 +138,7 @@ public class NameUtil {
             final boolean gotautoreported = ReportQueue.INSTANCE.addAutoReportToQueue(datenow, playerName, mwPlayerData.wdr);
             if (ConfigHandler.togglewarnings || mwPlayerData.wdr.shouldPrintBigText(datenow)) {
                 final String uuid = player.getUniqueID().toString().replace("-", "");
-                ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).deleteWarningMessagesFor(playerName);
+                ChatHandler.deleteWarningMessagesFor(playerName);
                 NoCheatersMessages.printWarningMessage(
                         datenow,
                         uuid,

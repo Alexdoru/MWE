@@ -1,9 +1,8 @@
-package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
+package fr.alexdoru.nocheatersmod.util;
 
-
+import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GuiNewChatAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
-import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
@@ -12,9 +11,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-@SuppressWarnings("unused")
-public class GuiNewChatHook {
+public class ChatHandler {
 
+    private static final Minecraft mc = Minecraft.getMinecraft();
     private static final String ANY_FORMATTING_CODE = "\u00a7[0-9a-f]";
 
     /*
@@ -23,12 +22,11 @@ public class GuiNewChatHook {
      * drawnChatLines : contains the messages printed in the chat according to the width off the chat, each item in the list is one line of chat and not necessarily one message
      * as a result drawnChatLines.size() >= chatLines.size()
      */
-    public static void deleteWarningMessagesFor(GuiNewChat guiNewChat, String playername, List<ChatLine> drawnChatLines, List<ChatLine> chatLines) {
-
+    public static void deleteWarningMessagesFor(String playername) {
+        final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
         final Pattern pattern = Pattern.compile("^\u00a7cWarning : (?:|\u00a77\u2716 )" + ANY_FORMATTING_CODE + playername + "(?:|" + ANY_FORMATTING_CODE + " \\[[A-Z]{3}\\])\u00a77 joined,.*");
         IChatComponent targetedChatComponent = null;
         final int chatSearchLength = 100;
-
         final Iterator<ChatLine> iterator = chatLines.iterator();
         int i = 0;
         while (iterator.hasNext() && i < chatSearchLength) {
@@ -41,20 +39,16 @@ public class GuiNewChatHook {
             }
             i++;
         }
-
         if (targetedChatComponent == null) {
             return;
         }
-
-        deleteFromDrawnChatLines(guiNewChat, drawnChatLines, targetedChatComponent, chatSearchLength * 3);
-
+        deleteFromDrawnChatLines(targetedChatComponent, chatSearchLength * 3);
     }
 
-    public static void deleteAllWarningMessages(GuiNewChat guiNewChat, List<ChatLine> drawnChatLines, List<ChatLine> chatLines) {
-
+    public static void deleteAllWarningMessages() {
+        final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
         final Pattern pattern = Pattern.compile("^\u00a7cWarning : (?:|\u00a77\u2716 )" + ANY_FORMATTING_CODE + "\\w{2,16}" + "(?:|" + ANY_FORMATTING_CODE + " \\[[A-Z]{3}\\])\u00a77 joined,.*");
         final int chatSearchLength = 300;
-
         final Iterator<ChatLine> iterator = chatLines.iterator();
         int i = 0;
         while (iterator.hasNext() && i < chatSearchLength) {
@@ -62,15 +56,15 @@ public class GuiNewChatHook {
             final String text = chatComponent.getUnformattedText();
             if (pattern.matcher(text).matches()) {
                 iterator.remove();
-                deleteFromDrawnChatLines(guiNewChat, drawnChatLines, chatComponent, chatSearchLength * 3);
+                deleteFromDrawnChatLines(chatComponent, chatSearchLength * 3);
             }
             i++;
         }
-
     }
 
-    private static void deleteFromDrawnChatLines(GuiNewChat guiNewChat, List<ChatLine> drawnChatLines, IChatComponent targetedChatComponent, int drawnChatSearchLength) {
-        final int j = MathHelper.floor_float((float) guiNewChat.getChatWidth() / guiNewChat.getChatScale());
+    private static void deleteFromDrawnChatLines(IChatComponent targetedChatComponent, int drawnChatSearchLength) {
+        final List<ChatLine> drawnChatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getDrawnChatLines();
+        final int j = MathHelper.floor_float((float) mc.ingameGUI.getChatGUI().getChatWidth() / mc.ingameGUI.getChatGUI().getChatScale());
         final List<IChatComponent> todeleteList = GuiUtilRenderComponents.splitText(targetedChatComponent, j, Minecraft.getMinecraft().fontRendererObj, false, false);
         String textToDelete = todeleteList.get(0).getUnformattedText();
         /*
