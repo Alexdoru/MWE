@@ -1,7 +1,6 @@
 package fr.alexdoru.nocheatersmod.util;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GuiNewChatAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiScreenHook;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
@@ -28,7 +27,7 @@ public class NoCheatersMessages {
      * Called when you type /nocheaters
      */
     public static void printReportMessagesForWorld(boolean callFromCommand) {
-        ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).deleteAllWarningMessages();
+        ChatHandler.deleteAllWarningMessages();
         boolean foundReport = false;
         final long datenow = (new Date()).getTime();
         for (final NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
