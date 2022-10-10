@@ -3,8 +3,6 @@ package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
-import org.objectweb.asm.Label;
-import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -18,30 +16,16 @@ public class NetworkPlayerInfoTransformer implements IMyClassTransformer {
 
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
-
         status.setInjectionPoints(2);
         addInterface(classNode, "NetworkPlayerInfoAccessor");
         classNode.visitField(ACC_PUBLIC, "playerFinalkills", "I", null, 0).visitEnd();
-
-        {
-            final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "setPlayerFinalkills", "(I)V", null, null);
-            mv.visitCode();
-            final Label l0 = new Label();
-            mv.visitLabel(l0);
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitVarInsn(ILOAD, 1);
-            mv.visitFieldInsn(PUTFIELD, ASMLoadingPlugin.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", "playerFinalkills", "I");
-            final Label l1 = new Label();
-            mv.visitLabel(l1);
-            mv.visitInsn(RETURN);
-            final Label l2 = new Label();
-            mv.visitLabel(l2);
-            mv.visitLocalVariable("this", ASMLoadingPlugin.isObf ? "Lbdc;" : "Lnet/minecraft/client/network/NetworkPlayerInfo;", null, l0, l2, 0);
-            mv.visitLocalVariable("playerFinalkillsIn", "I", null, l0, l2, 1);
-            mv.visitMaxs(2, 2);
-            mv.visitEnd();
-        }
-
+        addSetterMethod(
+                classNode,
+                "setPlayerFinalkills",
+                ASMLoadingPlugin.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo",
+                "playerFinalkills",
+                "I",
+                null);
         for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals("<init>") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lgz$b;)V" : "(Lnet/minecraft/network/play/server/S38PacketPlayerListItem$AddPlayerData;)V")) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {

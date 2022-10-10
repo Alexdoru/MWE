@@ -3,11 +3,9 @@ package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
-import org.objectweb.asm.Label;
-import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.ClassNode;
 
-import static org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 
 public class EntityArrowTransformer implements IMyClassTransformer {
 
@@ -18,40 +16,23 @@ public class EntityArrowTransformer implements IMyClassTransformer {
 
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
-
         status.setInjectionPoints(0);
         addInterface(classNode, "EntityArrowAccessor");
         classNode.visitField(ACC_PUBLIC, "pinnedToPlayer", "Z", null, 0).visitEnd();
-
-        {
-            final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "isInGround", "()Z", null, null);
-            mv.visitCode();
-            final Label l0 = new Label();
-            mv.visitLabel(l0);
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, ASMLoadingPlugin.isObf ? "wq" : "net/minecraft/entity/projectile/EntityArrow", ASMLoadingPlugin.isObf ? "i" : "inGround", "Z");
-            mv.visitInsn(IRETURN);
-            final Label l1 = new Label();
-            mv.visitLabel(l1);
-            mv.visitLocalVariable("this", ASMLoadingPlugin.isObf ? "Lwq;" : "Lnet/minecraft/entity/projectile/EntityArrow;", null, l0, l1, 0);
-            mv.visitMaxs(1, 1);
-            mv.visitEnd();
-        }
-
-        {
-            final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "isPinnedToPlayer", "()Z", null, null);
-            mv.visitCode();
-            final Label l0 = new Label();
-            mv.visitLabel(l0);
-            mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, ASMLoadingPlugin.isObf ? "wq" : "net/minecraft/entity/projectile/EntityArrow", "pinnedToPlayer", "Z");
-            mv.visitInsn(IRETURN);
-            final Label l1 = new Label();
-            mv.visitLabel(l1);
-            mv.visitLocalVariable("this", ASMLoadingPlugin.isObf ? "Lwq;" : "Lnet/minecraft/entity/projectile/EntityArrow;", null, l0, l1, 0);
-            mv.visitMaxs(1, 1);
-            mv.visitEnd();
-        }
+        addGetterMethod(
+                classNode,
+                "isInGround",
+                ASMLoadingPlugin.isObf ? "wq" : "net/minecraft/entity/projectile/EntityArrow",
+                ASMLoadingPlugin.isObf ? "i" : "inGround",
+                "Z",
+                null);
+        addGetterMethod(
+                classNode,
+                "isPinnedToPlayer",
+                ASMLoadingPlugin.isObf ? "wq" : "net/minecraft/entity/projectile/EntityArrow",
+                "pinnedToPlayer",
+                "Z",
+                null);
         return classNode;
     }
 
