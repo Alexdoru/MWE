@@ -19,7 +19,7 @@ public class GameProfileTransformer implements IMyClassTransformer {
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
 
         status.setInjectionPoints(0);
-        classNode.interfaces.add("fr/alexdoru/megawallsenhancementsmod/asm/accessor/GameProfileAccessor");
+        addInterface(classNode, "GameProfileAccessor");
         final String MWPlayerData_desc = "Lfr/alexdoru/megawallsenhancementsmod/data/MWPlayerData;";
         classNode.visitField(ACC_PRIVATE, "mwPlayerData", MWPlayerData_desc, null, null).visitEnd();
 

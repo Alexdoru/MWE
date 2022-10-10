@@ -20,7 +20,7 @@ public class NetworkPlayerInfoTransformer implements IMyClassTransformer {
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
 
         status.setInjectionPoints(2);
-        classNode.interfaces.add("fr/alexdoru/megawallsenhancementsmod/asm/accessor/NetworkPlayerInfoAccessor");
+        addInterface(classNode, "NetworkPlayerInfoAccessor");
         classNode.visitField(ACC_PUBLIC, "playerFinalkills", "I", null, 0).visitEnd();
 
         {

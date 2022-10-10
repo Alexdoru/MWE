@@ -20,7 +20,7 @@ public class EntityArrowTransformer implements IMyClassTransformer {
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
 
         status.setInjectionPoints(0);
-        classNode.interfaces.add("fr/alexdoru/megawallsenhancementsmod/asm/accessor/EntityArrowAccessor");
+        addInterface(classNode, "EntityArrowAccessor");
         classNode.visitField(ACC_PUBLIC, "isPinnedToPlayer", "Z", null, 0).visitEnd();
 
         {
