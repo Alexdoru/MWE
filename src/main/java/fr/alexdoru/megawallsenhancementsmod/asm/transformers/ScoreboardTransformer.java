@@ -68,7 +68,7 @@ public class ScoreboardTransformer implements IMyClassTransformer {
         list.add(new VarInsnNode(ALOAD, 1));
         list.add(new MethodInsnNode(
                 INVOKESTATIC,
-                "fr/alexdoru/megawallsenhancementsmod/asm/hooks/ScoreboardHook",
+                getHookClass("ScoreboardHook"),
                 "transformNameTablist",
                 "(Ljava/lang/String;)V",
                 false

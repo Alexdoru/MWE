@@ -61,7 +61,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                              * l = j + GuiPlayerTabOverlayHook.getFKScoreWidth();
                              */
                             final InsnList list = new InsnList();
-                            list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "getFKScoreWidth", "()I", false));
+                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "getFKScoreWidth", "()I", false));
                             list.add(new InsnNode(IADD));
                             methodNode.instructions.insertBefore(nextNode, list);
                             status.addInjection();
@@ -73,7 +73,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                             && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "c" : "listFormattedStringToWidth")
                             && ((MethodInsnNode) insnNode).desc.equals("(Ljava/lang/String;I)Ljava/util/List;")) {
                         foundListFormattedStringToWidth = true;
-                        methodNode.instructions.insert(insnNode, new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "addPlayerCountinHeader", "(Ljava/util/List;)Ljava/util/List;", false));
+                        methodNode.instructions.insert(insnNode, new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "addPlayerCountinHeader", "(Ljava/util/List;)Ljava/util/List;", false));
                         status.addInjection();
                     }
 
@@ -97,7 +97,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                          */
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ILOAD, 7));
-                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "getColoredHP", ASMLoadingPlugin.isObf ? "(I)La;" : "(I)Lnet/minecraft/util/EnumChatFormatting;", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "getColoredHP", ASMLoadingPlugin.isObf ? "(I)La;" : "(I)Lnet/minecraft/util/EnumChatFormatting;", false));
                         methodNode.instructions.insertBefore(insnNode, list);
                         methodNode.instructions.remove(insnNode);
                         sliceFlag = true;
@@ -114,7 +114,7 @@ public class GuiPlayerTabOverlayTransformer implements IMyClassTransformer {
                         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "bdc" : "net/minecraft/client/network/NetworkPlayerInfo", "playerFinalkills", "I")); // get playerFinalkills field
                         list.add(new VarInsnNode(ILOAD, 5));
                         list.add(new VarInsnNode(ILOAD, 2));
-                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiPlayerTabOverlayHook", "renderFinals", "(III)V", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "renderFinals", "(III)V", false));
                         methodNode.instructions.insertBefore(insnNode, list);
                         status.addInjection();
                         break;

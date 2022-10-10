@@ -38,7 +38,7 @@ public class EntityFXTransformer implements IMyClassTransformer {
         final LabelNode notCanceled = new LabelNode();
         list.add(new VarInsnNode(ALOAD, 0));
         list.add(new VarInsnNode(ALOAD, 2));
-        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/EntityFXHook", "shouldHideParticle", ASMLoadingPlugin.isObf ? "(Lbeb;Lpk;)Z" : "(Lnet/minecraft/client/particle/EntityFX;Lnet/minecraft/entity/Entity;)Z", false));
+        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("EntityFXHook"), "shouldHideParticle", ASMLoadingPlugin.isObf ? "(Lbeb;Lpk;)Z" : "(Lnet/minecraft/client/particle/EntityFX;Lnet/minecraft/entity/Entity;)Z", false));
         list.add(new JumpInsnNode(IFEQ, notCanceled));
         list.add(new InsnNode(RETURN));
         list.add(notCanceled);

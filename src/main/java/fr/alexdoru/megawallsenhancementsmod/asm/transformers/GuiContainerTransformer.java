@@ -45,7 +45,7 @@ public class GuiContainerTransformer implements IMyClassTransformer {
         list.add(new VarInsnNode(ALOAD, 0));
         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "ayl" : "net/minecraft/client/gui/inventory/GuiContainer", ASMLoadingPlugin.isObf ? "u" : "theSlot", ASMLoadingPlugin.isObf ? "Lyg;" : "Lnet/minecraft/inventory/Slot;"));
         list.add(new VarInsnNode(ILOAD, 2));
-        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiContainerHook", "shouldCancelHotkey", ASMLoadingPlugin.isObf ? "(Lyg;I)Z" : "(Lnet/minecraft/inventory/Slot;I)Z", false));
+        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiContainerHook"), "shouldCancelHotkey", ASMLoadingPlugin.isObf ? "(Lyg;I)Z" : "(Lnet/minecraft/inventory/Slot;I)Z", false));
         list.add(new JumpInsnNode(IFEQ, notCancelled));
         list.add(new InsnNode(ICONST_1));
         list.add(new InsnNode(IRETURN));

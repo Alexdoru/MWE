@@ -34,7 +34,7 @@ public class RenderGlobalTransformer implements IMyClassTransformer {
                              * Injects after line 565 :
                              * RenderGlobalHook.resetEntityItemCount();
                              */
-                            methodNode.instructions.insert(nextNode, new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderGlobalHook", "resetEntityItemCount", "()V", false));
+                            methodNode.instructions.insert(nextNode, new MethodInsnNode(INVOKESTATIC, getHookClass("RenderGlobalHook"), "resetEntityItemCount", "()V", false));
                             status.addInjection();
                         }
                     }
@@ -54,7 +54,7 @@ public class RenderGlobalTransformer implements IMyClassTransformer {
                             list.add(new VarInsnNode(DLOAD, 5));
                             list.add(new VarInsnNode(DLOAD, 7));
                             list.add(new VarInsnNode(DLOAD, 9));
-                            list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderGlobalHook", "renderEntitySimple", ASMLoadingPlugin.isObf ? "(Lbiu;Lpk;FDDD)V" : "(Lnet/minecraft/client/renderer/entity/RenderManager;Lnet/minecraft/entity/Entity;FDDD)V", false));
+                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderGlobalHook"), "renderEntitySimple", ASMLoadingPlugin.isObf ? "(Lbiu;Lpk;FDDD)V" : "(Lnet/minecraft/client/renderer/entity/RenderManager;Lnet/minecraft/entity/Entity;FDDD)V", false));
                             methodNode.instructions.insertBefore(insnNode, list);
                             methodNode.instructions.remove(insnNode.getNext()); // remove POP
                             methodNode.instructions.remove(insnNode); // remove INVOKEVIRTUAL RenderManager.renderEntitySimple (Lnet/minecraft/entity/Entity;F)Z

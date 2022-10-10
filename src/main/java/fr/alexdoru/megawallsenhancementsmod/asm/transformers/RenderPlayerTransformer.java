@@ -34,7 +34,7 @@ public class RenderPlayerTransformer implements IMyClassTransformer {
                              */
                             final InsnList list = new InsnList();
                             list.add(new VarInsnNode(ALOAD, 1));
-                            list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderPlayerHook", "getArrowCount", ASMLoadingPlugin.isObf ? "(Lbet;)Ljava/lang/String;" : "(Lnet/minecraft/client/entity/AbstractClientPlayer;)Ljava/lang/String;", false));
+                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderPlayerHook"), "getArrowCount", ASMLoadingPlugin.isObf ? "(Lbet;)Ljava/lang/String;" : "(Lnet/minecraft/client/entity/AbstractClientPlayer;)Ljava/lang/String;", false));
                             list.add(new MethodInsnNode(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false));
                             methodNode.instructions.insertBefore(insnNode, list);
                             status.addInjection();
