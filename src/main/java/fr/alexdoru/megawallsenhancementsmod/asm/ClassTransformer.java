@@ -73,7 +73,6 @@ public class ClassTransformer implements IClassTransformer {
             return transformedByteArray;
         } catch (Exception e) {
             ASMLoadingPlugin.logger.error("Failed to transform " + classTransformer.getTargetClassName());
-            e.printStackTrace();
             return basicClass;
         }
 
