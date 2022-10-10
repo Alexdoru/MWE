@@ -8,11 +8,13 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ClassTransformer implements IClassTransformer {
 
-    private final HashMap<String, IMyClassTransformer> transformerHashMap = new HashMap<>();
+    private final HashMap<String, List<IMyClassTransformer>> transformerHashMap = new HashMap<>();
 
     /**
      * Register the IMyClassTransformer(s) here
@@ -44,7 +46,14 @@ public class ClassTransformer implements IClassTransformer {
     }
 
     private void registerTransformer(IMyClassTransformer classTransformer) {
-        transformerHashMap.put(classTransformer.getTargetClassName(), classTransformer);
+        final List<IMyClassTransformer> list = transformerHashMap.get(classTransformer.getTargetClassName());
+        if (list == null) {
+            final List<IMyClassTransformer> newList = new ArrayList<>();
+            newList.add(classTransformer);
+            transformerHashMap.put(classTransformer.getTargetClassName(), newList);
+        } else {
+            list.add(classTransformer);
+        }
     }
 
     @Override
@@ -54,32 +63,34 @@ public class ClassTransformer implements IClassTransformer {
             return null;
         }
 
-        final IMyClassTransformer classTransformer = transformerHashMap.get(transformedName);
+        final List<IMyClassTransformer> transformerList = transformerHashMap.get(transformedName);
 
-        if (classTransformer == null) {
+        if (transformerList == null) {
             return basicClass;
         }
 
-        try {
-            final ClassNode classNode = new ClassNode();
-            final ClassReader classReader = new ClassReader(basicClass);
-            classReader.accept(classNode, 0);
-            final ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-            final InjectionStatus status = new InjectionStatus();
-            classTransformer.transform(classNode, status).accept(classWriter);
-            final byte[] transformedByteArray = classWriter.toByteArray();
-            if (!status.isTransformationSuccessfull()) {
-                ASMLoadingPlugin.logger.error("Class transformation incomplete : " + getClassName(classTransformer.getTargetClassName()) + " missing " + status.getAmount_of_injection() + " injections");
+        for (final IMyClassTransformer transformer : transformerList) {
+            try {
+                final ClassNode classNode = new ClassNode();
+                final ClassReader classReader = new ClassReader(basicClass);
+                classReader.accept(classNode, 0);
+                final ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+                final InjectionStatus status = new InjectionStatus();
+                transformer.transform(classNode, status).accept(classWriter);
+                if (!status.isTransformationSuccessfull()) {
+                    ASMLoadingPlugin.logger.error("Class transformation incomplete : " + stripClassName(transformer.getClass().getName()) + " missing " + status.getInjectionCount() + " injections in " + stripClassName(transformedName));
+                }
+                basicClass = classWriter.toByteArray();
+            } catch (Exception e) {
+                ASMLoadingPlugin.logger.error("Failed to transform " + stripClassName(transformedName) + " with " + stripClassName(transformer.getClass().getName()));
             }
-            return transformedByteArray;
-        } catch (Exception e) {
-            ASMLoadingPlugin.logger.error("Failed to transform " + classTransformer.getTargetClassName());
-            return basicClass;
         }
+
+        return basicClass;
 
     }
 
-    private String getClassName(String targetClassName) {
+    private String stripClassName(String targetClassName) {
         final String[] split = targetClassName.split("\\.");
         return split[split.length - 1];
     }

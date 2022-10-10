@@ -2,22 +2,22 @@ package fr.alexdoru.megawallsenhancementsmod.asm;
 
 public class InjectionStatus {
 
-    private int amount_of_injection;
+    private int injectionCount = -1;
 
     public void addInjection() {
-        amount_of_injection--;
+        injectionCount--;
     }
 
     public void setInjectionPoints(int injectionPoints) {
-        amount_of_injection = injectionPoints;
+        injectionCount = injectionPoints;
     }
 
-    public int getAmount_of_injection() {
-        return amount_of_injection;
+    public int getInjectionCount() {
+        return injectionCount;
     }
 
     public boolean isTransformationSuccessfull() {
-        return amount_of_injection == 0;
+        return injectionCount == 0;
     }
 
 }
