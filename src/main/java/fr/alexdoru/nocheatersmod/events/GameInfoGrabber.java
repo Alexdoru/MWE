@@ -2,7 +2,7 @@ package fr.alexdoru.nocheatersmod.events;
 
 import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
-import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
+import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 
 import java.util.Date;
@@ -43,7 +43,7 @@ public class GameInfoGrabber {
         }
         for (final String sidebarScore : scoresColor) {
             ChatUtil.addChatMessage(sidebarScore);
-            ASMLoadingPlugin.logger.info(sidebarScore);
+            MegaWallsEnhancementsMod.logger.info(sidebarScore);
         }
     }
 
