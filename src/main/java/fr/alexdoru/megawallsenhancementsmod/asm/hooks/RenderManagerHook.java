@@ -30,7 +30,7 @@ public class RenderManagerHook {
             if (((EntityArrowAccessor) entityIn).isInGround()) {
                 return !ConfigHandler.drawHitboxForGroundedArrows;
             }
-            if (((EntityArrowAccessor) entityIn).getIsPinnedToPlayer()) {
+            if (((EntityArrowAccessor) entityIn).isPinnedToPlayer()) {
                 return !ConfigHandler.drawHitboxForPinnedArrows;
             }
             return !ConfigHandler.drawHitboxForFlyingArrows;
