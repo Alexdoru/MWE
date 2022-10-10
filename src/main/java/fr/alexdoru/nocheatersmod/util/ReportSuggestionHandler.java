@@ -198,9 +198,13 @@ public class ReportSuggestionHandler {
             return false;
         }
 
-        if (isSenderMyself || (SquadEvent.getSquad().get(messageSender) != null)) {
-            final String[] args = new String[]{reportedPlayer, cheat};
-            CommandWDR.handleWDRCommand(args, true, canWDRPlayer(reportedPlayer));
+        if (isSenderMyself) {
+            CommandWDR.handleWDRCommand(new String[]{reportedPlayer, cheat}, canWDRPlayer(reportedPlayer), false);
+        } else if (SquadEvent.getSquad().get(messageSender) != null) {
+            CommandWDR.handleWDRCommand(new String[]{reportedPlayer, cheat}, false, false);
+            if (canWDRPlayer(reportedPlayer)) {
+                ReportQueue.INSTANCE.addPlayerToQueueRandom(null, reportedPlayer);
+            }
         }
 
         if (FKCounterMod.isitPrepPhase) {

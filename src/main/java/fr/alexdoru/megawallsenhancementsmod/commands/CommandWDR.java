@@ -67,10 +67,10 @@ public class CommandWDR extends CommandBase {
             ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
             return;
         }
-        handleWDRCommand(args, false, false);
+        handleWDRCommand(args, true, true);
     }
 
-    public static void handleWDRCommand(String[] args, boolean sentFromAutoReport, boolean canWDRPlayer) {
+    public static void handleWDRCommand(String[] args, boolean sendReport, boolean showReportMessage) {
         Multithreading.addTaskToQueue(() -> {
             boolean isaTimestampedReport = false;
             boolean usesTimeMark = false;
@@ -184,11 +184,7 @@ public class CommandWDR extends CommandBase {
                 message.append(" ").append(timerOnReplay.equals("?") ? "" : timerOnReplay);
             }
 
-            if (sentFromAutoReport) {
-                if (canWDRPlayer) {
-                    ReportQueue.INSTANCE.addPlayerToQueueRandom(null, playername);
-                }
-            } else {
+            if (sendReport) {
                 if (mc.thePlayer != null) {
                     mc.thePlayer.sendChatMessage(message.toString());
                 }
@@ -271,7 +267,7 @@ public class CommandWDR extends CommandBase {
                 final WDR newreport = new WDR(timestamp, timestamp, argsinWDR);
                 WdredPlayers.getWdredMap().put(uuid, newreport);
                 NameUtil.updateGameProfileAndName(playername, false);
-                if (!(alreadyReported && sentFromAutoReport)) {
+                if (!(alreadyReported && showReportMessage)) {
                     ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
                             EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : ""))
                             .appendSibling(NoCheatersMessages.createPlayerNameWithHoverText(formattedPlayername, playername, uuid, newreport, EnumChatFormatting.RED)[0])
@@ -312,7 +308,7 @@ public class CommandWDR extends CommandBase {
                 }
                 WdredPlayers.getWdredMap().put(uuid, new WDR(time, time, argsinWDR));
                 NameUtil.updateGameProfileAndName(playername, false);
-                if (!(alreadyReported && sentFromAutoReport)) {
+                if (!(alreadyReported && showReportMessage)) {
                     ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() +
                             EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
                             + EnumChatFormatting.RED + (formattedPlayername == null ? playername : EnumChatFormatting.RESET + formattedPlayername) + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
