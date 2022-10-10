@@ -157,7 +157,6 @@ public class ReportSuggestionHandler {
                 isSenderIgnored,
                 isSenderCheating,
                 isSenderFlaging,
-                false,
                 isSenderRankValid);
         printCustomReportSuggestionChatText(
                 fmsg,
@@ -172,7 +171,6 @@ public class ReportSuggestionHandler {
                 isSenderIgnored,
                 isSenderCheating,
                 isSenderFlaging,
-                false,
                 gotAutoreported,
                 senderUUID);
 
@@ -188,7 +186,6 @@ public class ReportSuggestionHandler {
             boolean isSenderIgnored,
             boolean isSenderCheating,
             boolean isSenderFlaging,
-            boolean isSenderNicked,
             boolean isSenderRankValid) {
 
         if (!ConfigHandler.autoreportSuggestions ||
@@ -217,14 +214,6 @@ public class ReportSuggestionHandler {
         if (isSenderFlaging) {
             if (isSenderMyself) {
                 new DelayedTask(() -> ChatUtil.addChatMessage(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You cannot share a report since you flag in /scangame!"), 0);
-                return true;
-            }
-            return false;
-        }
-
-        if (isSenderNicked) {
-            if (isSenderMyself) {
-                new DelayedTask(() -> ChatUtil.addChatMessage(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " You cannot share a report when you are nicked!"), 0);
                 return true;
             }
             return false;
@@ -288,7 +277,6 @@ public class ReportSuggestionHandler {
             boolean isSenderIgnored,
             boolean isSenderCheating,
             boolean isSenderFlaging,
-            boolean isSenderNicked,
             boolean gotAutoreported,
             @Nullable String senderUUID) {
 
@@ -329,15 +317,6 @@ public class ReportSuggestionHandler {
             if (FKCounterMod.isMWEnvironement && !isSenderMyself) {
                 imsg.appendSibling(ChatUtil.getIgnoreButton(messageSender));
             }
-            addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
-            ChatUtil.addChatMessage(imsg);
-            return;
-        }
-
-        if (isSenderNicked) {
-            final String s1 = StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.DARK_PURPLE + " (Nick)", "", false);
-            final String newFmsg = StringUtil.changeColorOf(s1, reportText, EnumChatFormatting.DARK_RED) + " ";
-            final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
             addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
             ChatUtil.addChatMessage(imsg);
             return;
