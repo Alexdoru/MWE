@@ -19,6 +19,8 @@ public class EntityArrowTransformer implements IMyClassTransformer {
 
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+
+        status.setInjectionPoints(0);
         classNode.interfaces.add("fr/alexdoru/megawallsenhancementsmod/asm/accessor/EntityArrowAccessor");
 
         {
