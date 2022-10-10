@@ -59,7 +59,7 @@ public class GuiScreenTransformer implements IMyClassTransformer {
         final LabelNode notCancelled = new LabelNode();
         list.add(new VarInsnNode(ALOAD, 2));
         list.add(new MethodInsnNode(INVOKEVIRTUAL, ASMLoadingPlugin.isObf ? "et" : "net/minecraft/event/ClickEvent", ASMLoadingPlugin.isObf ? "b" : "getValue", "()Ljava/lang/String;", false));
-        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiScreenHook", "handleMWEnCustomChatCommand", "(Ljava/lang/String;)Z", false));
+        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiScreenHook"), "handleMWEnCustomChatCommand", "(Ljava/lang/String;)Z", false));
         list.add(new JumpInsnNode(IFEQ, notCancelled));
         list.add(new InsnNode(ICONST_1));
         list.add(new InsnNode(IRETURN));

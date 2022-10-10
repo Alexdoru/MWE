@@ -29,7 +29,7 @@ public class CommandHandlerTransformer implements IMyClassTransformer {
                              * With :
                              * String s = CommandHandlerHook.putToLowerCase(astring[0]);
                              */
-                            methodNode.instructions.insert(nextNode, new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/CommandHandlerHook", "putToLowerCase", "(Ljava/lang/String;)Ljava/lang/String;", false));
+                            methodNode.instructions.insert(nextNode, new MethodInsnNode(INVOKESTATIC, getHookClass("CommandHandlerHook"), "putToLowerCase", "(Ljava/lang/String;)Ljava/lang/String;", false));
                             status.addInjection();
                         }
                     }

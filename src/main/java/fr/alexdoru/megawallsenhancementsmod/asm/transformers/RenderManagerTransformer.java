@@ -65,7 +65,7 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                          */
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 1));
-                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderManagerHook", "getAxisAlignedBB", ASMLoadingPlugin.isObf ? "(Laug;Lpk;)Lnet/minecraft/util/AxisAlignedBB;" : "(Lnet/minecraft/util/AxisAlignedBB;Lnet/minecraft/entity/Entity;)Lnet/minecraft/util/AxisAlignedBB;", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderManagerHook"), "getAxisAlignedBB", ASMLoadingPlugin.isObf ? "(Laug;Lpk;)Lnet/minecraft/util/AxisAlignedBB;" : "(Lnet/minecraft/util/AxisAlignedBB;Lnet/minecraft/entity/Entity;)Lnet/minecraft/util/AxisAlignedBB;", false));
                         methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
                     }
@@ -96,7 +96,7 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                          */
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 1)); // load entity
-                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderManagerHook", "getBlueVectLength", ASMLoadingPlugin.isObf ? "(Lpk;)D" : "(Lnet/minecraft/entity/Entity;)D", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderManagerHook"), "getBlueVectLength", ASMLoadingPlugin.isObf ? "(Lpk;)D" : "(Lnet/minecraft/entity/Entity;)D", false));
                         methodNode.instructions.insertBefore(insnNode, list);
                         methodNode.instructions.remove(insnNode);
                         status.addInjection();
@@ -112,7 +112,7 @@ public class RenderManagerTransformer implements IMyClassTransformer {
         final InsnList list = new InsnList();
         final LabelNode notCancelled = new LabelNode();
         list.add(new VarInsnNode(ALOAD, 1)); // load entity
-        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/RenderManagerHook", "cancelHitboxRender", ASMLoadingPlugin.isObf ? "(Lpk;)Z" : "(Lnet/minecraft/entity/Entity;)Z", false)); // load the boolean
+        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderManagerHook"), "cancelHitboxRender", ASMLoadingPlugin.isObf ? "(Lpk;)Z" : "(Lnet/minecraft/entity/Entity;)Z", false)); // load the boolean
         list.add(new JumpInsnNode(IFEQ, notCancelled)); // if (true) { return;} else {jump to notCancelled label}
         list.add(new InsnNode(RETURN)); // return;
         list.add(notCancelled);

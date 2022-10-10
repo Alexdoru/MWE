@@ -30,7 +30,7 @@ public class GuiIngameTransformer implements IMyClassTransformer {
                             methodNode.instructions.insertBefore(
                                     nextNode,
                                     new MethodInsnNode(INVOKESTATIC,
-                                            "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiIngameHook",
+                                            getHookClass("GuiIngameHook"),
                                             "cancelHungerTitle",
                                             "(Ljava/lang/String;)Ljava/lang/String;",
                                             false

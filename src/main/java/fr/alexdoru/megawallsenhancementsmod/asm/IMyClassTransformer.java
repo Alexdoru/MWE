@@ -5,13 +5,18 @@ import org.objectweb.asm.tree.ClassNode;
 public interface IMyClassTransformer {
 
     /**
-     * Should return the de-obfuscated name of the targeted class. Example : "net.minecraft.client.Minecraft"
+     * Returns the de-obfuscated name of the targeted class.
+     * Example : "net.minecraft.client.Minecraft"
      */
     String getTargetClassName();
 
     /**
-     * Should return the transformed ClassNode
+     * Returns the transformed ClassNode
      */
     ClassNode transform(ClassNode classNode, InjectionStatus status);
+
+    default String getHookClass(String className) {
+        return "fr/alexdoru/megawallsenhancementsmod/asm/hooks/" + className;
+    }
 
 }

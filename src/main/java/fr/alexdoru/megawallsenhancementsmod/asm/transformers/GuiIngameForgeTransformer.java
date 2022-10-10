@@ -38,7 +38,7 @@ public class GuiIngameForgeTransformer implements IMyClassTransformer {
                                      */
                                     final InsnList list = new InsnList();
                                     list.add(new FieldInsnNode(GETSTATIC, "net/minecraftforge/client/GuiIngameForge", "left_height", "I"));
-                                    list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiIngameForgeHook", "adjustActionBarHeight", "(II)I", false));
+                                    list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiIngameForgeHook"), "adjustActionBarHeight", "(II)I", false));
                                     methodNode.instructions.insert(secondNode, list);
                                     status.addInjection();
                                 }

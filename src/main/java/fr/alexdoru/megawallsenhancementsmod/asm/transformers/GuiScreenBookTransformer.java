@@ -27,7 +27,7 @@ public class GuiScreenBookTransformer implements IMyClassTransformer {
                 final InsnList list = new InsnList();
                 list.add(new VarInsnNode(ALOAD, 2));
                 list.add(new MethodInsnNode(INVOKESTATIC,
-                        "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiScreenBookHook",
+                        getHookClass("GuiScreenBookHook"),
                         "onBookInit",
                         ASMLoadingPlugin.isObf ? "(Lzx;)V" : "(Lnet/minecraft/item/ItemStack;)V",
                         false));
@@ -43,7 +43,7 @@ public class GuiScreenBookTransformer implements IMyClassTransformer {
                 final InsnList list = new InsnList();
                 list.add(new VarInsnNode(ILOAD, 2));
                 list.add(new MethodInsnNode(INVOKESTATIC,
-                        "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiScreenBookHook",
+                        getHookClass("GuiScreenBookHook"),
                         "onKeyTyped",
                         "(I)V",
                         false));
@@ -67,7 +67,7 @@ public class GuiScreenBookTransformer implements IMyClassTransformer {
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "ayo" : "net/minecraft/client/gui/GuiScreenBook", ASMLoadingPlugin.isObf ? "v" : "bookImageHeight", "I"));
                         list.add(new MethodInsnNode(INVOKESTATIC,
-                                "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiScreenBookHook",
+                                getHookClass("GuiScreenBookHook"),
                                 "renderInstructions",
                                 "(II)V",
                                 false));
