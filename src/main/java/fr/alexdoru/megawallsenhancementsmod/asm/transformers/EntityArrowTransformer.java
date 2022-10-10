@@ -21,7 +21,7 @@ public class EntityArrowTransformer implements IMyClassTransformer {
 
         status.setInjectionPoints(0);
         addInterface(classNode, "EntityArrowAccessor");
-        classNode.visitField(ACC_PUBLIC, "isPinnedToPlayer", "Z", null, 0).visitEnd();
+        classNode.visitField(ACC_PUBLIC, "pinnedToPlayer", "Z", null, 0).visitEnd();
 
         {
             final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "isInGround", "()Z", null, null);
@@ -39,12 +39,12 @@ public class EntityArrowTransformer implements IMyClassTransformer {
         }
 
         {
-            final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "getIsPinnedToPlayer", "()Z", null, null);
+            final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "isPinnedToPlayer", "()Z", null, null);
             mv.visitCode();
             final Label l0 = new Label();
             mv.visitLabel(l0);
             mv.visitVarInsn(ALOAD, 0);
-            mv.visitFieldInsn(GETFIELD, ASMLoadingPlugin.isObf ? "wq" : "net/minecraft/entity/projectile/EntityArrow", "isPinnedToPlayer", "Z");
+            mv.visitFieldInsn(GETFIELD, ASMLoadingPlugin.isObf ? "wq" : "net/minecraft/entity/projectile/EntityArrow", "pinnedToPlayer", "Z");
             mv.visitInsn(IRETURN);
             final Label l1 = new Label();
             mv.visitLabel(l1);

@@ -23,12 +23,12 @@ public class LayerArrowTransformer implements IMyClassTransformer {
                     if (insnNode.getOpcode() == ASTORE && insnNode instanceof VarInsnNode && ((VarInsnNode) insnNode).var == 10) {
                         /*
                          * Injects after line 32 :
-                         * entity.isPinnedToPlayer = true;
+                         * entity.pinnedToPlayer = true;
                          */
                         final InsnList list = new InsnList();
                         list.add(new InsnNode(DUP));
                         list.add(new InsnNode(ICONST_1));
-                        list.add(new FieldInsnNode(PUTFIELD, ASMLoadingPlugin.isObf ? "wq" : "net/minecraft/entity/projectile/EntityArrow", "isPinnedToPlayer", "Z"));
+                        list.add(new FieldInsnNode(PUTFIELD, ASMLoadingPlugin.isObf ? "wq" : "net/minecraft/entity/projectile/EntityArrow", "pinnedToPlayer", "Z"));
                         methodNode.instructions.insertBefore(insnNode, list);
                         status.addInjection();
                     }
