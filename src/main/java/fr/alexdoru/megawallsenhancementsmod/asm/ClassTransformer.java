@@ -58,17 +58,9 @@ public class ClassTransformer implements IClassTransformer {
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
-
-        if (basicClass == null) {
-            return null;
-        }
-
+        if (basicClass == null) return null;
         final List<IMyClassTransformer> transformerList = transformerHashMap.get(transformedName);
-
-        if (transformerList == null) {
-            return basicClass;
-        }
-
+        if (transformerList == null) return basicClass;
         for (final IMyClassTransformer transformer : transformerList) {
             try {
                 final ClassNode classNode = new ClassNode();
@@ -85,9 +77,7 @@ public class ClassTransformer implements IClassTransformer {
                 ASMLoadingPlugin.logger.error("Failed to transform " + stripClassName(transformedName) + " with " + stripClassName(transformer.getClass().getName()));
             }
         }
-
         return basicClass;
-
     }
 
     private String stripClassName(String targetClassName) {
