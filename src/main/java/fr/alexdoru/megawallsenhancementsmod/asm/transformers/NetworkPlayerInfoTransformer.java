@@ -3,7 +3,6 @@ package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
-import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.*;
@@ -21,13 +20,8 @@ public class NetworkPlayerInfoTransformer implements IMyClassTransformer {
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
 
         status.setInjectionPoints(2);
-
         classNode.interfaces.add("fr/alexdoru/megawallsenhancementsmod/asm/accessor/NetworkPlayerInfoAccessor");
-
-        {
-            final FieldVisitor fieldVisitor = classNode.visitField(ACC_PUBLIC, "playerFinalkills", "I", null, 0);
-            fieldVisitor.visitEnd();
-        }
+        classNode.visitField(ACC_PUBLIC, "playerFinalkills", "I", null, 0).visitEnd();
 
         {
             final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "setPlayerFinalkills", "(I)V", null, null);
