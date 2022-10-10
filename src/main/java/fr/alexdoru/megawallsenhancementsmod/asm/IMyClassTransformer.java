@@ -15,6 +15,10 @@ public interface IMyClassTransformer {
      */
     ClassNode transform(ClassNode classNode, InjectionStatus status);
 
+    default void addInterface(ClassNode classNode, String interfaceName) {
+        classNode.interfaces.add("fr/alexdoru/megawallsenhancementsmod/asm/accessor/" + interfaceName);
+    }
+
     default String getHookClass(String className) {
         return "fr/alexdoru/megawallsenhancementsmod/asm/hooks/" + className;
     }
