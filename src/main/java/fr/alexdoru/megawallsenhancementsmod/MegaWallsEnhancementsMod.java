@@ -17,11 +17,15 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
 @Mod(modid = MegaWallsEnhancementsMod.modid, name = MegaWallsEnhancementsMod.modName, version = MegaWallsEnhancementsMod.version, acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
 public class MegaWallsEnhancementsMod {
+
+    public static final Logger logger = LogManager.getLogger("MegaWallsEnhancements");
 
     public static final String modid = "mwenhancements";
     public static final String modName = "MegaWallsEnhancements";
