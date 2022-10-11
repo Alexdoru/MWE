@@ -56,13 +56,7 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                          */
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 1));
-                        list.add(new MethodInsnNode(
-                                INVOKESTATIC,
-                                getHookClass("RenderManagerHook"),
-                                "getAxisAlignedBB",
-                                "(L" + ClassMapping.AXISALIGNEDBB + ";L" + ClassMapping.ENTITY + ";)L" + ClassMapping.AXISALIGNEDBB + ";",
-                                false
-                        ));
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderManagerHook"), "getAxisAlignedBB", "(L" + ClassMapping.AXISALIGNEDBB + ";L" + ClassMapping.ENTITY + ";)L" + ClassMapping.AXISALIGNEDBB + ";", false));
                         methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
                     }
