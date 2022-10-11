@@ -268,6 +268,10 @@ public class ReportQueue {
                 && !thePlayer.isSwingInProgress;
     }
 
+    public List<StringLong> getPlayersReportedThisGame() {
+        return playersReportedThisGame;
+    }
+
 }
 
 class ReportInQueue {

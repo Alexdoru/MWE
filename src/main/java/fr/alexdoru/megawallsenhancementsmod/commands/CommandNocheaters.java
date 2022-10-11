@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
+import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import fr.alexdoru.nocheatersmod.data.WDR;
@@ -341,6 +342,20 @@ public class CommandNocheaters extends CommandBase {
 
             GameInfoGrabber.debugGetScoreboard();
 
+        } else if (args[0].equalsIgnoreCase("autoreporthistory")) {
+
+            final StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(ChatUtil.getTagNoCheaters());
+            stringBuilder.append(EnumChatFormatting.GREEN);
+            stringBuilder.append("Players reported this game : ");
+            stringBuilder.append(EnumChatFormatting.GOLD);
+            for (final StringLong stringLong : ReportQueue.INSTANCE.getPlayersReportedThisGame()) {
+                if (stringLong.message != null) {
+                    stringBuilder.append(stringLong.message).append(" ");
+                }
+            }
+            ChatUtil.addChatMessage(stringBuilder.toString());
+
         } else {
 
             ChatUtil.addChatMessage(getCommandHelp());
@@ -359,6 +374,7 @@ public class CommandNocheaters extends CommandBase {
                 + EnumChatFormatting.YELLOW + getCommandUsage(null) + " ignorelist" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the list of ignored players\n"
                 + EnumChatFormatting.YELLOW + getCommandUsage(null) + " reportlist" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the list of reported players\n"
                 + EnumChatFormatting.YELLOW + getCommandUsage(null) + " clearreportqueue" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "cancels all reports suggestions about to be sent\n"
+                + EnumChatFormatting.YELLOW + getCommandUsage(null) + " autoreporthistory" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints all players reported during the ongoing game\n"
                 + EnumChatFormatting.RED + ChatUtil.bar()
         );
 
@@ -366,7 +382,7 @@ public class CommandNocheaters extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        final String[] arguments = {"clearreportqueue", "config", "help", "ignore", "ignorelist", "reportlist"};
+        final String[] arguments = {"autoreporthistory", "clearreportqueue", "config", "help", "ignore", "ignorelist", "reportlist"};
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, arguments);
         }
