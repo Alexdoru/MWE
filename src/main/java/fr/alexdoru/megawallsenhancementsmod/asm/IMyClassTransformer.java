@@ -2,7 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm;
 
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
 
@@ -25,6 +25,64 @@ public interface IMyClassTransformer {
 
     default String getHookClass(String className) {
         return "fr/alexdoru/megawallsenhancementsmod/asm/hooks/" + className;
+    }
+
+    default boolean checkMethodNode(MethodNode methodNode, MethodMapping mapping) {
+        return methodNode.name.equals(mapping.name) && methodNode.desc.equals(mapping.desc);
+    }
+
+    default boolean checkInsnNode(AbstractInsnNode insnNode, int opcode) {
+        return insnNode instanceof InsnNode && insnNode.getOpcode() == opcode;
+    }
+
+    default boolean checkTypeInsnNode(AbstractInsnNode insnNode, int opcode, ClassMapping desc) {
+        return insnNode instanceof TypeInsnNode && insnNode.getOpcode() == opcode && ((TypeInsnNode) insnNode).desc.equals(desc.toString());
+    }
+
+    default boolean checkIntInsnNode(AbstractInsnNode insnNode, int opcode, int operand) {
+        return insnNode instanceof IntInsnNode && insnNode.getOpcode() == opcode && ((IntInsnNode) insnNode).operand == operand;
+    }
+
+    default boolean checkJumpInsnNode(AbstractInsnNode insnNode, int opcode) {
+        return insnNode instanceof JumpInsnNode && insnNode.getOpcode() == opcode;
+    }
+
+    default boolean checkMethodInsnNode(AbstractInsnNode insnNode, MethodMapping method) {
+        return insnNode instanceof MethodInsnNode && insnNode.getOpcode() == method.opcode
+                && ((MethodInsnNode) insnNode).owner.equals(method.owner)
+                && ((MethodInsnNode) insnNode).name.equals(method.name)
+                && ((MethodInsnNode) insnNode).desc.equals(method.desc);
+    }
+
+    default boolean checkVarInsnNode(AbstractInsnNode insnNode, int opcode) {
+        return insnNode instanceof VarInsnNode && insnNode.getOpcode() == opcode;
+    }
+
+    default boolean checkVarInsnNode(AbstractInsnNode insnNode, int opcode, int index) {
+        return insnNode instanceof VarInsnNode && insnNode.getOpcode() == opcode && ((VarInsnNode) insnNode).var == index;
+    }
+
+    default boolean checkFieldInsnNode(AbstractInsnNode insnNode, int opcode, FieldMapping field) {
+        return insnNode instanceof FieldInsnNode && insnNode.getOpcode() == opcode
+                && ((FieldInsnNode) insnNode).owner.equals(field.owner)
+                && ((FieldInsnNode) insnNode).name.equals(field.name)
+                && ((FieldInsnNode) insnNode).desc.equals(field.desc);
+    }
+
+    default MethodInsnNode getNewMethodInsnNode(MethodMapping method) {
+        return new MethodInsnNode(method.opcode, method.owner, method.name, method.desc, false);
+    }
+
+    default FieldInsnNode getNewFieldInsnNode(int opcode, FieldMapping field) {
+        return new FieldInsnNode(opcode, field.owner, field.name, field.desc);
+    }
+
+    default FieldInsnNode getNewConfigFieldInsnNode(String name) {
+        return new FieldInsnNode(GETSTATIC, "fr/alexdoru/megawallsenhancementsmod/config/ConfigHandler", name, "Z");
+    }
+
+    default void addGetterMethod(ClassNode classNode, String methodName, ClassMapping owner, String fieldName, String fieldDesc, String methodSignature) {
+        addGetterMethod(classNode, methodName, owner.toString(), fieldName, fieldDesc, methodSignature);
     }
 
     /**
@@ -62,6 +120,10 @@ public interface IMyClassTransformer {
             default:
                 return ARETURN;
         }
+    }
+
+    default void addSetterMethod(ClassNode classNode, String methodName, ClassMapping owner, String fieldName, String fieldDesc, String methodSignature) {
+        addSetterMethod(classNode, methodName, owner.toString(), fieldName, fieldDesc, methodSignature);
     }
 
     /**

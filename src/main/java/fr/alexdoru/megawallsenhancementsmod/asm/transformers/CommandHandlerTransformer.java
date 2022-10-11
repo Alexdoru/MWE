@@ -1,9 +1,12 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
-import org.objectweb.asm.tree.*;
+import fr.alexdoru.megawallsenhancementsmod.asm.MethodMapping;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
 
 import static org.objectweb.asm.Opcodes.*;
 
@@ -18,11 +21,11 @@ public class CommandHandlerTransformer implements IMyClassTransformer {
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
-            if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "getTabCompletionOptions") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lm;Ljava/lang/String;Lcj;)Ljava/util/List;" : "(Lnet/minecraft/command/ICommandSender;Ljava/lang/String;Lnet/minecraft/util/BlockPos;)Ljava/util/List;")) {
+            if (checkMethodNode(methodNode, MethodMapping.GETTABCOMPLETIONOPTION)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if (insnNode instanceof InsnNode && insnNode.getOpcode() == ICONST_0) {
+                    if (checkInsnNode(insnNode, ICONST_0)) {
                         final AbstractInsnNode nextNode = insnNode.getNext();
-                        if (nextNode instanceof InsnNode && nextNode.getOpcode() == AALOAD) {
+                        if (checkInsnNode(nextNode, AALOAD)) {
                             /*
                              * Replaces line 169 :
                              * String s = astring[0];

@@ -23,7 +23,7 @@ public class SidebarmodReloaded_CustomSidebar implements IMyClassTransformer {
                             && ((MethodInsnNode) insnNode).name.equals("func_96667_a")
                             && ((MethodInsnNode) insnNode).desc.equals("(Lnet/minecraft/scoreboard/Team;Ljava/lang/String;)Ljava/lang/String;")) {
                         final AbstractInsnNode nextNode = insnNode.getNext();
-                        if (nextNode != null && nextNode.getOpcode() == ASTORE && nextNode instanceof VarInsnNode && ((VarInsnNode) nextNode).var == 15) {
+                        if (checkVarInsnNode(nextNode, ASTORE, 15)) {
                             /*
                             Original line : String s1 = ScorePlayerTeam.formatPlayerName(scoreplayerteam1, score1.getPlayerName());
                             After transformation : String s1 = GuiIngameHook.getSidebarTextLine(ScorePlayerTeam.formatPlayerName(scoreplayerteam1, score1.getPlayerName()), j);

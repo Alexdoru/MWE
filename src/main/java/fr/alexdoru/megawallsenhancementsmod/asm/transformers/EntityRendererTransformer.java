@@ -1,8 +1,9 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
+import fr.alexdoru.megawallsenhancementsmod.asm.FieldMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
+import fr.alexdoru.megawallsenhancementsmod.asm.MethodMapping;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -18,19 +19,18 @@ public class EntityRendererTransformer implements IMyClassTransformer {
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(2);
         for (final MethodNode methodNode : classNode.methods) {
-            if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "g" : "updateLightmap") && methodNode.desc.equals("(F)V")
-                    || methodNode.name.equals(ASMLoadingPlugin.isObf ? "i" : "updateFogColor") && methodNode.desc.equals("(F)V")) {
+            if (checkMethodNode(methodNode, MethodMapping.UPDATELIGHTMAP) || checkMethodNode(methodNode, MethodMapping.UPDATEFOGCOLOR)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if (insnNode.getOpcode() == GETSTATIC && insnNode instanceof FieldInsnNode && ((FieldInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "r" : "nightVision")) {
-                        final AbstractInsnNode nextNode = insnNode.getNext();
-                        if (nextNode.getOpcode() == INVOKEVIRTUAL && nextNode instanceof MethodInsnNode && ((MethodInsnNode) nextNode).name.equals(ASMLoadingPlugin.isObf ? "a" : "isPotionActive")) {
-                            final AbstractInsnNode secondNode = nextNode.getNext();
-                            if (secondNode.getOpcode() == IFEQ && secondNode instanceof JumpInsnNode) {
-                                final LabelNode labelNode = ((JumpInsnNode) secondNode).label;
+                    if (checkFieldInsnNode(insnNode, GETSTATIC, FieldMapping.POTION$NIGHTVISION)) {
+                        final AbstractInsnNode secondNode = insnNode.getNext();
+                        if (secondNode instanceof MethodInsnNode && secondNode.getOpcode() == INVOKEVIRTUAL && ((MethodInsnNode) secondNode).name.equals(MethodMapping.ISPOTIONACTIVE.name)) {
+                            final AbstractInsnNode thirdNode = secondNode.getNext();
+                            if (checkJumpInsnNode(thirdNode, IFEQ)) {
+                                final LabelNode labelNode = ((JumpInsnNode) thirdNode).label;
                                 final InsnList list = new InsnList();
                                 list.add(new JumpInsnNode(IFEQ, labelNode));
-                                list.add(new FieldInsnNode(GETSTATIC, "fr/alexdoru/megawallsenhancementsmod/config/ConfigHandler", "keepNightVisionEffect", "Z"));
-                                methodNode.instructions.insertBefore(secondNode, list);
+                                list.add(getNewConfigFieldInsnNode("keepNightVisionEffect"));
+                                methodNode.instructions.insertBefore(thirdNode, list);
                                 status.addInjection();
                             }
                         }
