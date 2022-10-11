@@ -331,8 +331,8 @@ public class CommandNocheaters extends CommandBase {
 
         } else if (args[0].equalsIgnoreCase("debugreportqueue")) {
 
-            ReportQueue.isDebugMode = !ReportQueue.isDebugMode;
-            if (ReportQueue.isDebugMode) {
+            ReportQueue.INSTANCE.isDebugMode = !ReportQueue.INSTANCE.isDebugMode;
+            if (ReportQueue.INSTANCE.isDebugMode) {
                 ChatUtil.debug("enabled debug report queue");
             } else {
                 ChatUtil.debug("disabled debug report queue");

@@ -29,6 +29,7 @@ public class ReportQueue {
     private static final int TIME_BETWEEN_REPORTS_MIN = 3 * 60 * 20;
     private static final int AUTOREPORT_PER_GAME = 2;
 
+    public boolean isDebugMode = false;
     private int counter;
     private int standingStillCounter;
     private int autoReportSent;
