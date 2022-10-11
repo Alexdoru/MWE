@@ -26,14 +26,16 @@ public class GameProfileTransformer implements IMyClassTransformer {
                 ClassMapping.GAMEPROFILE,
                 "mwPlayerData",
                 MWPlayerData_desc,
-                null);
+                null
+        );
         addSetterMethod(
                 classNode,
                 "setMWPlayerData",
                 ClassMapping.GAMEPROFILE,
                 "mwPlayerData",
                 MWPlayerData_desc,
-                null);
+                null
+        );
         return classNode;
     }
 

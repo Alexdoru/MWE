@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
+import fr.alexdoru.megawallsenhancementsmod.asm.ClassMapping;
+import fr.alexdoru.megawallsenhancementsmod.asm.FieldMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import org.objectweb.asm.tree.ClassNode;
@@ -19,18 +20,14 @@ public class GuiNewChatTransformer implements IMyClassTransformer {
         addGetterMethod(
                 classNode,
                 "getChatLines",
-                ASMLoadingPlugin.isObf ? "avt" : "net/minecraft/client/gui/GuiNewChat",
-                ASMLoadingPlugin.isObf ? "h" : "chatLines",
-                "Ljava/util/List;",
-                ASMLoadingPlugin.isObf ? "()Ljava/util/List<Lava;>;" : "()Ljava/util/List<Lnet/minecraft/client/gui/ChatLine;>;"
+                FieldMapping.GUINEWCHAT$CHATLINES,
+                "()Ljava/util/List<L" + ClassMapping.CHATLINE + ";>;"
         );
         addGetterMethod(
                 classNode,
                 "getDrawnChatLines",
-                ASMLoadingPlugin.isObf ? "avt" : "net/minecraft/client/gui/GuiNewChat",
-                ASMLoadingPlugin.isObf ? "i" : "drawnChatLines",
-                "Ljava/util/List;",
-                ASMLoadingPlugin.isObf ? "()Ljava/util/List<Lava;>;" : "()Ljava/util/List<Lnet/minecraft/client/gui/ChatLine;>;"
+                FieldMapping.GUINEWCHAT$DRAWNCHATLINES,
+                "()Ljava/util/List<L" + ClassMapping.CHATLINE + ";>;"
         );
         return classNode;
     }
