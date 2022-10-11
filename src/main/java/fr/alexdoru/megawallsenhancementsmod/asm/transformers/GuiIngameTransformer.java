@@ -22,13 +22,10 @@ public class GuiIngameTransformer implements IMyClassTransformer {
 
             if (checkMethodNode(methodNode, MethodMapping.DISPLAYTITLE)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if (checkVarInsnNode(insnNode, ALOAD, 2)) {
-                        final AbstractInsnNode nextNode = insnNode.getNext();
-                        if (checkFieldInsnNode(nextNode, PUTFIELD, FieldMapping.GUIINGAME$DISPLAYEDSUBTITLE)) {
-                            methodNode.instructions.insertBefore(nextNode, new MethodInsnNode(INVOKESTATIC, getHookClass("GuiIngameHook"), "cancelHungerTitle", "(Ljava/lang/String;)Ljava/lang/String;", false));
-                            status.addInjection();
-                            break;
-                        }
+                    if (checkVarInsnNode(insnNode, ALOAD, 2) && checkFieldInsnNode(insnNode.getNext(), PUTFIELD, FieldMapping.GUIINGAME$DISPLAYEDSUBTITLE)) {
+                        methodNode.instructions.insert(insnNode, new MethodInsnNode(INVOKESTATIC, getHookClass("GuiIngameHook"), "cancelHungerTitle", "(Ljava/lang/String;)Ljava/lang/String;", false));
+                        status.addInjection();
+                        break;
                     }
                 }
             }

@@ -35,7 +35,7 @@ public class GuiScreenTransformer implements IMyClassTransformer {
                                          *     return true;
                                          * }
                                          */
-                                        methodNode.instructions.insertBefore(secondNode, getInsnList());
+                                        methodNode.instructions.insert(insnNode, getInsnList());
                                         status.addInjection();
                                     }
                                 }
