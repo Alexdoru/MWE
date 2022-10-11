@@ -1,8 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
-import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
-import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
+import fr.alexdoru.megawallsenhancementsmod.asm.*;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -18,12 +16,9 @@ public class GuiContainerTransformer implements IMyClassTransformer {
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
-            if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "b" : "checkHotbarKeys") && methodNode.desc.equals("(I)Z")) {
+            if (checkMethodNode(methodNode, MethodMapping.CHECKHOTBARKEYS)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if (insnNode instanceof MethodInsnNode && insnNode.getOpcode() == INVOKEVIRTUAL
-                            && ((MethodInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "ayl" : "net/minecraft/client/gui/inventory/GuiContainer")
-                            && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "a" : "handleMouseClick")
-                            && ((MethodInsnNode) insnNode).desc.equals(ASMLoadingPlugin.isObf ? "(Lyg;III)V" : "(Lnet/minecraft/inventory/Slot;III)V")) {
+                    if (checkMethodInsnNode(insnNode, MethodMapping.HANDLEMOUSECLICK)) {
                         /*
                          * Insert before line 720 :
                          * if(GuiContainerHook.shouldCancelHotkey(this.theSlot, i)) {
@@ -43,9 +38,9 @@ public class GuiContainerTransformer implements IMyClassTransformer {
         final InsnList list = new InsnList();
         final LabelNode notCancelled = new LabelNode();
         list.add(new VarInsnNode(ALOAD, 0));
-        list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "ayl" : "net/minecraft/client/gui/inventory/GuiContainer", ASMLoadingPlugin.isObf ? "u" : "theSlot", ASMLoadingPlugin.isObf ? "Lyg;" : "Lnet/minecraft/inventory/Slot;"));
+        list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.GUICONTAINER$THESLOT));
         list.add(new VarInsnNode(ILOAD, 2));
-        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiContainerHook"), "shouldCancelHotkey", ASMLoadingPlugin.isObf ? "(Lyg;I)Z" : "(Lnet/minecraft/inventory/Slot;I)Z", false));
+        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiContainerHook"), "shouldCancelHotkey", "(L" + ClassMapping.SLOT + ";I)Z", false));
         list.add(new JumpInsnNode(IFEQ, notCancelled));
         list.add(new InsnNode(ICONST_1));
         list.add(new InsnNode(IRETURN));

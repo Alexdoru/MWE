@@ -1,8 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
-import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
-import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
+import fr.alexdoru.megawallsenhancementsmod.asm.*;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -19,7 +17,7 @@ public class GuiScreenBookTransformer implements IMyClassTransformer {
         status.setInjectionPoints(3);
         for (final MethodNode methodNode : classNode.methods) {
 
-            if (methodNode.name.equals("<init>") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Lwn;Lzx;Z)V" : "(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/item/ItemStack;Z)V")) {
+            if (checkMethodNode(methodNode, MethodMapping.GUISCREENBOOK$INIT)) {
                 /*
                  * Injects at head of constructor :
                  * GuiScreenBookHook.onBookInit(book);
@@ -29,13 +27,13 @@ public class GuiScreenBookTransformer implements IMyClassTransformer {
                 list.add(new MethodInsnNode(INVOKESTATIC,
                         getHookClass("GuiScreenBookHook"),
                         "onBookInit",
-                        ASMLoadingPlugin.isObf ? "(Lzx;)V" : "(Lnet/minecraft/item/ItemStack;)V",
+                        "(L" + ClassMapping.ITEMSTACK + ";)V",
                         false));
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), list);
                 status.addInjection();
             }
 
-            if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "keyTyped") && methodNode.desc.equals("(CI)V")) {
+            if (checkMethodNode(methodNode, MethodMapping.GUISCREENBOOK$KEYTYPED)) {
                 /*
                  * Injects at head :
                  * GuiScreenBookHook.onKeyTyped(keyCode);
@@ -51,21 +49,18 @@ public class GuiScreenBookTransformer implements IMyClassTransformer {
                 status.addInjection();
             }
 
-            if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "drawScreen") && methodNode.desc.equals("(IIF)V")) {
+            if (checkMethodNode(methodNode, MethodMapping.GUISCREENBOOK$DRAWSCREEN)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if(insnNode instanceof MethodInsnNode && insnNode.getOpcode() == INVOKEVIRTUAL
-                            && ((MethodInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "ayo" : "net/minecraft/client/gui/GuiScreenBook")
-                            && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "b" : "drawTexturedModalRect")
-                            && ((MethodInsnNode) insnNode).desc.equals("(IIIIII)V")) {
+                    if (checkMethodInsnNode(insnNode, MethodMapping.GUISCREENBOOK$DRAWTEXTUREDMODALRECT)) {
                         /*
                          * Injects at line 411 :
                          * GuiScreenBookHook.renderInstructions(this.width, this.bookImageHeight);
                          */
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
-                        list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "ayo" : "net/minecraft/client/gui/GuiScreenBook", ASMLoadingPlugin.isObf ? "l" : "width", "I"));
+                        list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.GUISCREENBOOK$WIDTH));
                         list.add(new VarInsnNode(ALOAD, 0));
-                        list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "ayo" : "net/minecraft/client/gui/GuiScreenBook", ASMLoadingPlugin.isObf ? "v" : "bookImageHeight", "I"));
+                        list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.GUISCREENBOOK$BOOKIMAGEHEIGHT));
                         list.add(new MethodInsnNode(INVOKESTATIC,
                                 getHookClass("GuiScreenBookHook"),
                                 "renderInstructions",

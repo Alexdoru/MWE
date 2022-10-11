@@ -1,8 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
+import fr.alexdoru.megawallsenhancementsmod.asm.MethodMapping;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -21,39 +21,30 @@ public class ScoreboardTransformer implements IMyClassTransformer {
 
         for (final MethodNode methodNode : classNode.methods) {
 
-            if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "addPlayerToTeam") && methodNode.desc.equals("(Ljava/lang/String;Ljava/lang/String;)Z")) {
+            if (checkMethodNode(methodNode, MethodMapping.ADDPLAYERTOTEAM)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if (insnNode.getOpcode() == ICONST_1 && insnNode instanceof InsnNode) {
-                        final AbstractInsnNode nextNode = insnNode.getNext();
-                        if (nextNode != null && nextNode.getOpcode() == IRETURN) {
-                            /*
-                             * Injects before line 329 :
-                             * ScoreboardHook.transformNameTablist(player);
-                             */
-                            methodNode.instructions.insertBefore(insnNode, getInsnList());
-                            status.addInjection();
-                        }
+                    if (checkInsnNode(insnNode, ICONST_1) && checkInsnNode(insnNode.getNext(), IRETURN)) {
+                        /*
+                         * Injects before line 329 :
+                         * ScoreboardHook.transformNameTablist(player);
+                         */
+                        methodNode.instructions.insertBefore(insnNode, getInsnList());
+                        status.addInjection();
                     }
                 }
             }
 
-            if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "removePlayerFromTeam") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Ljava/lang/String;Laul;)V" : "(Ljava/lang/String;Lnet/minecraft/scoreboard/ScorePlayerTeam;)V")) {
+            if (checkMethodNode(methodNode, MethodMapping.REMOVEPLAYERFROMTEAM)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if (insnNode.getOpcode() == INVOKEINTERFACE && insnNode instanceof MethodInsnNode
-                            && ((MethodInsnNode) insnNode).owner.equals("java/util/Collection")
-                            && ((MethodInsnNode) insnNode).name.equals("remove")
-                            && ((MethodInsnNode) insnNode).desc.equals("(Ljava/lang/Object;)Z")) {
-                        final AbstractInsnNode secondNode = insnNode.getNext();
-                        if (secondNode != null && secondNode.getOpcode() == POP) {
-                            final AbstractInsnNode thirdNode = secondNode.getNext();
-                            if (thirdNode != null) {
-                                /*
-                                 * Injects after line 360 :
-                                 * ScoreboardHook.transformNameTablist(player);
-                                 */
-                                methodNode.instructions.insertBefore(thirdNode, getInsnList());
-                                status.addInjection();
-                            }
+                    if (checkMethodInsnNode(insnNode, MethodMapping.COLLECTION$REMOVE)) {
+                        final AbstractInsnNode nextNode = insnNode.getNext();
+                        if (checkInsnNode(nextNode, POP)) {
+                            /*
+                             * Injects after line 360 :
+                             * ScoreboardHook.transformNameTablist(player);
+                             */
+                            methodNode.instructions.insert(nextNode, getInsnList());
+                            status.addInjection();
                         }
                     }
                 }

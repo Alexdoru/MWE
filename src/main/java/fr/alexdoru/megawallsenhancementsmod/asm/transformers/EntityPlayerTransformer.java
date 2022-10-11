@@ -1,8 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
-import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
-import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
+import fr.alexdoru.megawallsenhancementsmod.asm.*;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -18,12 +16,9 @@ public class EntityPlayerTransformer implements IMyClassTransformer {
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
-            if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "f_" : "getDisplayName") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "()Leu;" : "()Lnet/minecraft/util/IChatComponent;")) {
+            if (checkMethodNode(methodNode, MethodMapping.GETDISPLAYNAME)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if (insnNode.getOpcode() == INVOKESTATIC && insnNode instanceof MethodInsnNode
-                            && ((MethodInsnNode) insnNode).owner.equals(ASMLoadingPlugin.isObf ? "aul" : "net/minecraft/scoreboard/ScorePlayerTeam")
-                            && ((MethodInsnNode) insnNode).name.equals(ASMLoadingPlugin.isObf ? "a" : "formatPlayerName")
-                            && ((MethodInsnNode) insnNode).desc.equals(ASMLoadingPlugin.isObf ? "(Lauq;Ljava/lang/String;)Ljava/lang/String;" : "(Lnet/minecraft/scoreboard/Team;Ljava/lang/String;)Ljava/lang/String;")) {
+                    if (checkMethodInsnNode(insnNode, MethodMapping.FORMATPLAYERNAME)) {
                         /*
                          * Replaces line 2422 :
                          * ichatcomponent.appendSibling(new ChatComponentText(ScorePlayerTeam.formatPlayerName(this.getTeam(), this.getDisplayNameString())));
@@ -32,8 +27,8 @@ public class EntityPlayerTransformer implements IMyClassTransformer {
                          */
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
-                        list.add(new FieldInsnNode(GETFIELD, ASMLoadingPlugin.isObf ? "wn" : "net/minecraft/entity/player/EntityPlayer", ASMLoadingPlugin.isObf ? "bH" : "gameProfile", "Lcom/mojang/authlib/GameProfile;"));
-                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("EntityPlayerHook"), "getTransformedDisplayName", "(Ljava/lang/String;Lcom/mojang/authlib/GameProfile;)Ljava/lang/String;", false));
+                        list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.ENTITYPLAYER$GAMEPROFILE));
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("EntityPlayerHook"), "getTransformedDisplayName", "(Ljava/lang/String;L" + ClassMapping.GAMEPROFILE + ";)Ljava/lang/String;", false));
                         methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
                     }

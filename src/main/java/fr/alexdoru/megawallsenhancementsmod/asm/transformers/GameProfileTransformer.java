@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
+import fr.alexdoru.megawallsenhancementsmod.asm.ClassMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import org.objectweb.asm.tree.ClassNode;
@@ -22,14 +23,14 @@ public class GameProfileTransformer implements IMyClassTransformer {
         addGetterMethod(
                 classNode,
                 "getMWPlayerData",
-                "com/mojang/authlib/GameProfile",
+                ClassMapping.GAMEPROFILE,
                 "mwPlayerData",
                 MWPlayerData_desc,
                 null);
         addSetterMethod(
                 classNode,
                 "setMWPlayerData",
-                "com/mojang/authlib/GameProfile",
+                ClassMapping.GAMEPROFILE,
                 "mwPlayerData",
                 MWPlayerData_desc,
                 null);

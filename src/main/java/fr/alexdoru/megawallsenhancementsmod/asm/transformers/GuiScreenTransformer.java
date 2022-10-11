@@ -1,8 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
+import fr.alexdoru.megawallsenhancementsmod.asm.MethodMapping;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -18,23 +18,17 @@ public class GuiScreenTransformer implements IMyClassTransformer {
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
-            if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "handleComponentClick") && methodNode.desc.equals(ASMLoadingPlugin.isObf ? "(Leu;)Z" : "(Lnet/minecraft/util/IChatComponent;)Z")) {
+            if (checkMethodNode(methodNode, MethodMapping.HANDLECOMPONENTCLICK)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if (insnNode instanceof VarInsnNode && insnNode.getOpcode() == ALOAD && ((VarInsnNode) insnNode).var == 0) {
+                    if (checkVarInsnNode(insnNode, ALOAD, 0)) {
                         final AbstractInsnNode secondNode = insnNode.getNext();
-                        if (secondNode instanceof VarInsnNode && secondNode.getOpcode() == ALOAD && ((VarInsnNode) secondNode).var == 2) {
+                        if (checkVarInsnNode(secondNode, ALOAD, 2)) {
                             final AbstractInsnNode thirdNode = secondNode.getNext();
-                            if (thirdNode instanceof MethodInsnNode && thirdNode.getOpcode() == INVOKEVIRTUAL
-                                    && ((MethodInsnNode) thirdNode).owner.equals(ASMLoadingPlugin.isObf ? "et" : "net/minecraft/event/ClickEvent")
-                                    && ((MethodInsnNode) thirdNode).name.equals(ASMLoadingPlugin.isObf ? "b" : "getValue")
-                                    && ((MethodInsnNode) thirdNode).desc.equals("()Ljava/lang/String;")) {
+                            if (checkMethodInsnNode(thirdNode, MethodMapping.CLICKEVENT$GETVALUE)) {
                                 final AbstractInsnNode fourthNode = thirdNode.getNext();
-                                if (fourthNode instanceof InsnNode && fourthNode.getOpcode() == ICONST_0) {
+                                if (checkInsnNode(fourthNode, ICONST_0)) {
                                     final AbstractInsnNode fifthNode = fourthNode.getNext();
-                                    if (fifthNode instanceof MethodInsnNode && fifthNode.getOpcode() == INVOKEVIRTUAL
-                                            && ((MethodInsnNode) fifthNode).owner.equals(ASMLoadingPlugin.isObf ? "axu" : "net/minecraft/client/gui/GuiScreen")
-                                            && ((MethodInsnNode) fifthNode).name.equals(ASMLoadingPlugin.isObf ? "b" : "sendChatMessage")
-                                            && ((MethodInsnNode) fifthNode).desc.equals("(Ljava/lang/String;Z)V")) {
+                                    if (checkMethodInsnNode(fifthNode, MethodMapping.SENDCHATMESSAGE)) {
                                         /*
                                          * Inject before line 450 :
                                          * if(GuiScreenHook.handleMWEnCustomChatCommand(clickevent.getValue())) {
@@ -58,7 +52,7 @@ public class GuiScreenTransformer implements IMyClassTransformer {
         final InsnList list = new InsnList();
         final LabelNode notCancelled = new LabelNode();
         list.add(new VarInsnNode(ALOAD, 2));
-        list.add(new MethodInsnNode(INVOKEVIRTUAL, ASMLoadingPlugin.isObf ? "et" : "net/minecraft/event/ClickEvent", ASMLoadingPlugin.isObf ? "b" : "getValue", "()Ljava/lang/String;", false));
+        list.add(getNewMethodInsnNode(MethodMapping.CLICKEVENT$GETVALUE));
         list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiScreenHook"), "handleMWEnCustomChatCommand", "(Ljava/lang/String;)Z", false));
         list.add(new JumpInsnNode(IFEQ, notCancelled));
         list.add(new InsnNode(ICONST_1));
