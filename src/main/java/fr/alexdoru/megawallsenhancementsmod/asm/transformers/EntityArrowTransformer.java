@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.ClassMapping;
+import fr.alexdoru.megawallsenhancementsmod.asm.FieldMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import org.objectweb.asm.tree.ClassNode;
@@ -23,17 +23,17 @@ public class EntityArrowTransformer implements IMyClassTransformer {
         addGetterMethod(
                 classNode,
                 "isInGround",
-                ClassMapping.ENTITYARROW,
-                ASMLoadingPlugin.isObf ? "i" : "inGround",
-                "Z",
-                null);
+                FieldMapping.ENTITYARROW$ISINGROUND,
+                null
+        );
         addGetterMethod(
                 classNode,
                 "isPinnedToPlayer",
                 ClassMapping.ENTITYARROW,
                 "pinnedToPlayer",
                 "Z",
-                null);
+                null
+        );
         return classNode;
     }
 

@@ -4,12 +4,15 @@ import static fr.alexdoru.megawallsenhancementsmod.asm.ClassMapping.*;
 
 public enum FieldMapping {
 
+    ENTITYARROW$ISINGROUND(ENTITYARROW, "i", "inGround", "Z"),
     ENTITYPLAYER$GAMEPROFILE(ENTITYPLAYER, "bH", "gameProfile", GAMEPROFILE),
     ENUMCHATFORMATTING$YELLOW(ENUMCHATFORMATTING, "o", "YELLOW", ENUMCHATFORMATTING),
     GAMESETTINGS$ADVANCEDITEMTOOLTIPS(GAMESETTINGS, "y", "advancedItemTooltips", "Z"),
     GAMESETTINGS$PAUSEONLOSTFOCUS(GAMESETTINGS, "z", "pauseOnLostFocus", "Z"),
     GUICONTAINER$THESLOT(GUICONTAINER, "u", "theSlot", SLOT),
     GUIINGAME$DISPLAYEDSUBTITLE(GUIINGAME, "y", "displayedSubTitle", "Ljava/lang/String;"),
+    GUINEWCHAT$CHATLINES(GUINEWCHAT, "h", "chatLines", "Ljava/util/List;"),
+    GUINEWCHAT$DRAWNCHATLINES(GUINEWCHAT, "i", "drawnChatLines", "Ljava/util/List;"),
     GUISCREENBOOK$BOOKIMAGEHEIGHT(GUISCREENBOOK, "v", "bookImageHeight", "I"),
     GUISCREENBOOK$WIDTH(GUISCREENBOOK, "l", "width", "I"),
     INVENTORYPLAYER$CURRENTITEM(INVENTORYPLAYER, "c", "currentItem", "I"),

@@ -5,6 +5,7 @@ public enum ClassMapping {
     ABSTRACTCLIENTPLAYER("bet", "net/minecraft/client/entity/AbstractClientPlayer"),
     AXISALIGNEDBB("aug", "net/minecraft/util/AxisAlignedBB"),
     BLOCKPOS("cj", "net/minecraft/util/BlockPos"),
+    CHATLINE("ava", "net/minecraft/client/gui/ChatLine"),
     CLICKEVENT("et", "net/minecraft/event/ClickEvent"),
     COLLECTION("java/util/Collection"),
     ENTITY("pk", "net/minecraft/entity/Entity"),
