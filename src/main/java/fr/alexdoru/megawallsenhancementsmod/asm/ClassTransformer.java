@@ -14,6 +14,8 @@ import java.util.List;
 
 public class ClassTransformer implements IClassTransformer {
 
+    @SuppressWarnings("FieldCanBeLocal")
+    private final boolean DEBUG = false;
     private final HashMap<String, List<IMyClassTransformer>> transformerHashMap = new HashMap<>();
 
     /**
@@ -61,6 +63,7 @@ public class ClassTransformer implements IClassTransformer {
         if (basicClass == null) return null;
         final List<IMyClassTransformer> transformerList = transformerHashMap.get(transformedName);
         if (transformerList == null) return basicClass;
+        final long l = System.currentTimeMillis();
         for (final IMyClassTransformer transformer : transformerList) {
             try {
                 final ClassNode classNode = new ClassNode();
@@ -70,12 +73,17 @@ public class ClassTransformer implements IClassTransformer {
                 final InjectionStatus status = new InjectionStatus();
                 transformer.transform(classNode, status).accept(classWriter);
                 if (!status.isTransformationSuccessfull()) {
-                    ASMLoadingPlugin.logger.error("Class transformation incomplete : " + stripClassName(transformer.getClass().getName()) + " missing " + status.getInjectionCount() + " injections in " + stripClassName(transformedName));
+                    ASMLoadingPlugin.logger.error("Class transformation incomplete, transformer " + stripClassName(transformer.getClass().getName()) + " missing " + status.getInjectionCount() + " injections in " + transformedName);
+                } else if (DEBUG) {
+                    ASMLoadingPlugin.logger.info("Applied " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
                 }
                 basicClass = classWriter.toByteArray();
             } catch (Exception e) {
-                ASMLoadingPlugin.logger.error("Failed to transform " + stripClassName(transformedName) + " with " + stripClassName(transformer.getClass().getName()));
+                ASMLoadingPlugin.logger.error("Failed to apply " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
             }
+        }
+        if (DEBUG) {
+            ASMLoadingPlugin.logger.info("Transformed " + transformedName + " in " + (System.currentTimeMillis() - l) + "ms");
         }
         return basicClass;
     }
