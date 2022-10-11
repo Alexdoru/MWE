@@ -25,7 +25,6 @@ public class ChatHandler {
     public static void deleteWarningMessagesFor(String playername) {
         final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
         final Pattern pattern = Pattern.compile("^\u00a7cWarning : (?:|\u00a77\u2716 )" + ANY_FORMATTING_CODE + playername + "(?:|" + ANY_FORMATTING_CODE + " \\[[A-Z]{3}\\])\u00a77 joined,.*");
-        IChatComponent targetedChatComponent = null;
         final int chatSearchLength = 100;
         final Iterator<ChatLine> iterator = chatLines.iterator();
         int i = 0;
@@ -33,16 +32,12 @@ public class ChatHandler {
             final IChatComponent chatComponent = iterator.next().getChatComponent();
             final String text = chatComponent.getUnformattedText();
             if (pattern.matcher(text).matches()) {
-                targetedChatComponent = chatComponent;
                 iterator.remove();
+                deleteFromDrawnChatLines(chatComponent, chatSearchLength * 3);
                 break;
             }
             i++;
         }
-        if (targetedChatComponent == null) {
-            return;
-        }
-        deleteFromDrawnChatLines(targetedChatComponent, chatSearchLength * 3);
     }
 
     public static void deleteAllWarningMessages() {
