@@ -4,7 +4,6 @@ import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandWDR;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
-import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -21,7 +20,7 @@ public class KeybindingsEvent {
             return;
         }
 
-        if (NoCheatersMod.addtimemark_key.isPressed()) {
+        if (MegaWallsEnhancementsMod.addTimestampKey.isPressed()) {
             CommandWDR.addTimeMark();
         } else if (MegaWallsEnhancementsMod.toggleDroppedItemLimit.isPressed()) {
             ConfigHandler.limitDroppedEntityRendered = !ConfigHandler.limitDroppedEntityRendered;

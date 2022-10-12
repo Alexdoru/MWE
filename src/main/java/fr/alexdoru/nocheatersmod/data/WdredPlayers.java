@@ -1,8 +1,9 @@
 package fr.alexdoru.nocheatersmod.data;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.nocheatersmod.NoCheatersMod;
 import net.minecraft.client.Minecraft;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.*;
@@ -10,6 +11,7 @@ import java.util.Map.Entry;
 
 public class WdredPlayers {
 
+    public static final Logger logger = LogManager.getLogger("NoCheaters WDR Data");
     private static final long TIME_TRANSFORM_NICKED_REPORT = 86400000L; // 24hours
     private static final long TIME_TRANSFORM_TIMESTAMPED_REPORT = 14L * 24L * 60L * 60L * 1000L; //14 days
     private static final HashMap<String, WDR> WDR_HASH_MAP = new HashMap<>();
@@ -48,13 +50,13 @@ public class WdredPlayers {
             }
             writer.close();
         } catch (IOException e) {
-            NoCheatersMod.logger.error("Failed to write data to the wdr file");
+            logger.error("Failed to write data to the wdr file");
         }
     }
 
     public static void loadReportedPlayers() {
         if (!wdrsFile.exists()) {
-            NoCheatersMod.logger.info("Couldn't find existing wdr file");
+            logger.info("Couldn't find existing wdr file");
             return;
         }
         try {
@@ -80,7 +82,7 @@ public class WdredPlayers {
                             oldDataFormat = true;
                         }
                     } catch (Exception e) {
-                        NoCheatersMod.logger.error("Failed to parse timestamp for : " + uuid);
+                        logger.error("Failed to parse timestamp for : " + uuid);
                     }
 
                     if (ConfigHandler.deleteReports && datenow > timestamp + ConfigHandler.timeDeleteReport) {
@@ -107,7 +109,7 @@ public class WdredPlayers {
             reader.close();
 
         } catch (Exception e) {
-            NoCheatersMod.logger.error("Failed to read the wdr file");
+            logger.error("Failed to read the wdr file");
         }
 
     }
