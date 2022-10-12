@@ -4,6 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
@@ -44,6 +45,10 @@ public class MinecraftHook {
 
     private static boolean checkIfHoldingSword(EntityPlayerSP thePlayer) {
         return thePlayer.getCurrentEquippedItem() != null && thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword;
+    }
+
+    public static boolean shouldCancelRightClick(ItemStack itemStack) {
+        return false;
     }
 
 }
