@@ -36,6 +36,12 @@ public class MinecraftHook {
         }
     }
 
+    public static void onReloadChunks(Minecraft mc) {
+        if (mc.theWorld != null && mc.thePlayer != null) {
+            mc.thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "[Debug]: " + EnumChatFormatting.WHITE + "Reloading all chunks"));
+        }
+    }
+
     private static boolean checkIfHoldingSword(EntityPlayerSP thePlayer) {
         return thePlayer.getCurrentEquippedItem() != null && thePlayer.getCurrentEquippedItem().getItem() instanceof ItemSword;
     }
