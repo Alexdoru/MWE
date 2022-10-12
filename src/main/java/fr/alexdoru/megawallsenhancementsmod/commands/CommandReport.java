@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;

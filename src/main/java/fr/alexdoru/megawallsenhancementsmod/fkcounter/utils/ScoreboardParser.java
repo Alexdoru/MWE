@@ -1,4 +1,4 @@
-package fr.alexdoru.fkcountermod.utils;
+package fr.alexdoru.megawallsenhancementsmod.fkcounter.utils;
 
 import fr.alexdoru.megawallsenhancementsmod.gui.LastWitherHPHUD;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;

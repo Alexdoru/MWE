@@ -1,9 +1,9 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
-import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GuiNewChatAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.ColorUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;

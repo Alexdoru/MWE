@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.gui.KillCooldownHUD;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;

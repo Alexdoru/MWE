@@ -1,19 +1,19 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.GameInfoGrabber;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.ReportQueue;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.util.NoCheatersMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.*;
-import fr.alexdoru.nocheatersmod.data.WDR;
-import fr.alexdoru.nocheatersmod.data.WdredPlayers;
-import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
-import fr.alexdoru.nocheatersmod.events.ReportQueue;
-import fr.alexdoru.nocheatersmod.util.NoCheatersMessages;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.CommandBase;
@@ -46,7 +46,7 @@ public class CommandNocheaters extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length == 0) {
-            NoCheatersMessages.printReportMessagesForWorld(true);
+            NoCheatersMessagesHandler.printReportMessagesForWorld(true);
             return;
         }
 
@@ -437,13 +437,13 @@ class CreateReportLineTask implements Callable<IChatComponent> {
 
                 if (wdr.isNicked()) {
 
-                    imsg = NoCheatersMessages.createPlayerNameWithHoverText(EnumChatFormatting.DARK_PURPLE + "[Nick] " + EnumChatFormatting.GOLD + uuid, uuid, uuid, wdr, EnumChatFormatting.WHITE)[0];
+                    imsg = NoCheatersMessagesHandler.createPlayerNameWithHoverText(EnumChatFormatting.DARK_PURPLE + "[Nick] " + EnumChatFormatting.GOLD + uuid, uuid, uuid, wdr, EnumChatFormatting.WHITE)[0];
 
                 } else {
 
                     final HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
                     final LoginData logindata = new LoginData(playerdata.getPlayerData());
-                    imsg = NoCheatersMessages.createPlayerNameWithHoverText(logindata.getFormattedName(), logindata.getdisplayname(), uuid, wdr, EnumChatFormatting.WHITE)[0];
+                    imsg = NoCheatersMessagesHandler.createPlayerNameWithHoverText(logindata.getFormattedName(), logindata.getdisplayname(), uuid, wdr, EnumChatFormatting.WHITE)[0];
 
                     final IChatComponent ismgStatus = new ChatComponentText("");
 

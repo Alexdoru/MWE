@@ -1,13 +1,13 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
-import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.MWGameStatsEvent;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.ClipboardUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
-import fr.alexdoru.nocheatersmod.data.WDR;
-import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
 

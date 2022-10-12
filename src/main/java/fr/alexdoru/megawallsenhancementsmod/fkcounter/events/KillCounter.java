@@ -1,14 +1,14 @@
-package fr.alexdoru.fkcountermod.events;
+package fr.alexdoru.megawallsenhancementsmod.fkcounter.events;
 
-import fr.alexdoru.fkcountermod.FKCounterMod;
-import fr.alexdoru.fkcountermod.utils.DelayedTask;
-import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.NetworkPlayerInfoAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.DelayedTask;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.gui.FKCounterHUD;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;

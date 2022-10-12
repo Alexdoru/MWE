@@ -1,15 +1,15 @@
 package fr.alexdoru.megawallsenhancementsmod;
 
-import fr.alexdoru.fkcountermod.events.KillCounter;
-import fr.alexdoru.fkcountermod.events.ScoreboardEvent;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.*;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.*;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.KillCounter;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.ScoreboardEvent;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.NoCheatersEvents;
 import fr.alexdoru.megawallsenhancementsmod.updater.ModUpdater;
-import fr.alexdoru.nocheatersmod.data.WdredPlayers;
-import fr.alexdoru.nocheatersmod.events.NoCheatersEvents;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;

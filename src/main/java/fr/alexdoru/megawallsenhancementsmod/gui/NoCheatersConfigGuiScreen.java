@@ -1,12 +1,11 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.ReportQueue;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.util.ChatHandler;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.util.NoCheatersMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
-import fr.alexdoru.nocheatersmod.NoCheatersMod;
-import fr.alexdoru.nocheatersmod.events.ReportQueue;
-import fr.alexdoru.nocheatersmod.util.ChatHandler;
-import fr.alexdoru.nocheatersmod.util.NoCheatersMessages;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
@@ -119,7 +118,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
             case 1:
                 ConfigHandler.togglewarnings = !ConfigHandler.togglewarnings;
                 if (ConfigHandler.togglewarnings) {
-                    NoCheatersMessages.printReportMessagesForWorld(false);
+                    NoCheatersMessagesHandler.printReportMessagesForWorld(false);
                 } else {
                     ChatHandler.deleteAllWarningMessages();
                 }
@@ -174,7 +173,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredTitle("NoCheaters v" + NoCheatersMod.version, 2, (width / 2.0f), getYposForButton(-6), Integer.parseInt("FF5555", 16));
+        drawCenteredTitle("NoCheaters", 2, (width / 2.0f), getYposForButton(-6), Integer.parseInt("FF5555", 16));
         final String msg = "NoCheaters saves players reported via " + EnumChatFormatting.YELLOW + "/wdr playername" + EnumChatFormatting.WHITE + " (not /report)";
         drawCenteredString(fontRendererObj, msg, getxCenter(), getYposForButton(-5) + fontRendererObj.FONT_HEIGHT, Integer.parseInt("FFFFFF", 16));
         final String msg1 = "If you want to remove a player from your report list use :";

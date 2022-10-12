@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.data;
 
-import fr.alexdoru.nocheatersmod.data.WDR;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
 import net.minecraft.util.IChatComponent;
 
 import java.util.HashMap;

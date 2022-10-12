@@ -2,15 +2,15 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import fr.alexdoru.fkcountermod.FKCounterMod;
-import fr.alexdoru.fkcountermod.events.MwGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.GeneralInfo;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.GameInfoGrabber;
 import fr.alexdoru.megawallsenhancementsmod.utils.*;
-import fr.alexdoru.nocheatersmod.events.GameInfoGrabber;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.CommandBase;

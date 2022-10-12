@@ -1,12 +1,12 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassSkinData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerStatus;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangPlayernameToUUID;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;

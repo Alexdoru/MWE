@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
-import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.ButtonFancy;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.ButtonToggle;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;

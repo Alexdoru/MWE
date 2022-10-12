@@ -2,12 +2,12 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
-import fr.alexdoru.nocheatersmod.data.WDR;
-import fr.alexdoru.nocheatersmod.data.WdredPlayers;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;

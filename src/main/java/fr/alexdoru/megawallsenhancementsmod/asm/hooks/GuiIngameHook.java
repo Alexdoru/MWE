@@ -1,9 +1,9 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
-import fr.alexdoru.fkcountermod.FKCounterMod;
-import fr.alexdoru.fkcountermod.events.KillCounter;
-import fr.alexdoru.fkcountermod.events.ScoreboardEvent;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.KillCounter;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.ScoreboardEvent;
 import fr.alexdoru.megawallsenhancementsmod.gui.FKCounterHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.LastWitherHPHUD;
 

@@ -1,9 +1,9 @@
 package fr.alexdoru.megawallsenhancementsmod.gui;
 
-import fr.alexdoru.fkcountermod.FKCounterMod;
-import fr.alexdoru.fkcountermod.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.KillCounter;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;

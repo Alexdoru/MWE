@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
-import fr.alexdoru.fkcountermod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.DelayedTask;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;

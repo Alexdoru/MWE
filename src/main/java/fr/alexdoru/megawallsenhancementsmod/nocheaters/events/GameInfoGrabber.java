@@ -1,8 +1,8 @@
-package fr.alexdoru.nocheatersmod.events;
+package fr.alexdoru.megawallsenhancementsmod.nocheaters.events;
 
-import fr.alexdoru.fkcountermod.FKCounterMod;
-import fr.alexdoru.fkcountermod.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 
 import java.util.Date;

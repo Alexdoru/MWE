@@ -1,7 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
 import com.mojang.authlib.GameProfile;
-import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
@@ -10,11 +9,12 @@ import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
-import fr.alexdoru.nocheatersmod.data.WDR;
-import fr.alexdoru.nocheatersmod.data.WdredPlayers;
-import fr.alexdoru.nocheatersmod.events.ReportQueue;
-import fr.alexdoru.nocheatersmod.util.ChatHandler;
-import fr.alexdoru.nocheatersmod.util.NoCheatersMessages;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.ReportQueue;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.util.ChatHandler;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.util.NoCheatersMessagesHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -139,7 +139,7 @@ public class NameUtil {
             if (ConfigHandler.togglewarnings || mwPlayerData.wdr.shouldPrintBigText(datenow)) {
                 final String uuid = player.getUniqueID().toString().replace("-", "");
                 ChatHandler.deleteWarningMessagesFor(playerName);
-                NoCheatersMessages.printWarningMessage(
+                NoCheatersMessagesHandler.printWarningMessage(
                         datenow,
                         uuid,
                         (!FKCounterMod.isInMwGame || FKCounterMod.isitPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(player.getTeam(), playerName),
