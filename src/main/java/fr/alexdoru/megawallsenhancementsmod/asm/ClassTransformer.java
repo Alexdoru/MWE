@@ -33,7 +33,10 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new GuiIngameTransformer_CancelHunger());
         registerTransformer(new GuiIngameTransformer_Sidebar());
         registerTransformer(new GuiNewChatTransformer());
-        registerTransformer(new GuiPlayerTabOverlayTransformer());
+        registerTransformer(new GuiPlayerTabOverlayTransformer_ColoredScores());
+        registerTransformer(new GuiPlayerTabOverlayTransformer_FinalKills());
+        registerTransformer(new GuiPlayerTabOverlayTransformer_LongerTab());
+        registerTransformer(new GuiPlayerTabOverlayTransformer_PlayerCount());
         registerTransformer(new GuiScreenBookTransformer());
         registerTransformer(new GuiScreenTransformer());
         registerTransformer(new LayerArrowTransformer());
