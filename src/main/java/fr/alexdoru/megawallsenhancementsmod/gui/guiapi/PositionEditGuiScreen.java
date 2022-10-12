@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.guiapi;
 
-import fr.alexdoru.fkcountermod.utils.DelayedTask;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.DelayedTask;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;

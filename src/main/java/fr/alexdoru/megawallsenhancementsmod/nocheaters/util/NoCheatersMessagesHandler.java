@@ -1,12 +1,12 @@
-package fr.alexdoru.nocheatersmod.util;
+package fr.alexdoru.megawallsenhancementsmod.nocheaters.util;
 
-import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiScreenHook;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
-import fr.alexdoru.nocheatersmod.data.WDR;
-import fr.alexdoru.nocheatersmod.data.WdredPlayers;
-import fr.alexdoru.nocheatersmod.events.ReportQueue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
@@ -19,7 +19,7 @@ import net.minecraft.util.IChatComponent;
 
 import java.util.Date;
 
-public class NoCheatersMessages {
+public class NoCheatersMessagesHandler {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
 

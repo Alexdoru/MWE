@@ -1,4 +1,4 @@
-package fr.alexdoru.fkcountermod.events;
+package fr.alexdoru.megawallsenhancementsmod.fkcounter.events;
 
 import net.minecraftforge.fml.common.eventhandler.Event;
 

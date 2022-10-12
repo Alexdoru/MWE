@@ -1,4 +1,4 @@
-package fr.alexdoru.nocheatersmod.data;
+package fr.alexdoru.megawallsenhancementsmod.nocheaters.data;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.Minecraft;

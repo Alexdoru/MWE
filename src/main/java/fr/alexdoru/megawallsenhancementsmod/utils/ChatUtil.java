@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
-import fr.alexdoru.fkcountermod.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.event.ClickEvent;

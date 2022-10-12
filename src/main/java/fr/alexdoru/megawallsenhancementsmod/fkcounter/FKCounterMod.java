@@ -1,4 +1,4 @@
-package fr.alexdoru.fkcountermod;
+package fr.alexdoru.megawallsenhancementsmod.fkcounter;
 
 public class FKCounterMod {
 

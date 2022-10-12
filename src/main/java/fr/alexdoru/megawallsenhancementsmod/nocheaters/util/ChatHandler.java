@@ -1,4 +1,4 @@
-package fr.alexdoru.nocheatersmod.util;
+package fr.alexdoru.megawallsenhancementsmod.nocheaters.util;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GuiNewChatAccessor;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;

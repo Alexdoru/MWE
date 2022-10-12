@@ -1,4 +1,4 @@
-package fr.alexdoru.nocheatersmod.data;
+package fr.alexdoru.megawallsenhancementsmod.nocheaters.data;
 
 public class TimeMark {
 
@@ -7,11 +7,9 @@ public class TimeMark {
     public final String timerOnReplay;
 
     public TimeMark(long timestamp, String serverID, String timerOnReplay) {
-
         this.timestamp = timestamp;
         this.serverID = serverID;
         this.timerOnReplay = timerOnReplay;
-
     }
 
 }

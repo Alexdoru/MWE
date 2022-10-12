@@ -1,8 +1,8 @@
-package fr.alexdoru.nocheatersmod.data;
+package fr.alexdoru.megawallsenhancementsmod.nocheaters.data;
 
-import fr.alexdoru.fkcountermod.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandReport;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 
 import java.util.ArrayList;
 import java.util.Date;
