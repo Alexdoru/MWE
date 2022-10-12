@@ -32,6 +32,7 @@ public class ReportQueue {
     public boolean isDebugMode = false;
     private int counter;
     private int standingStillCounter;
+    private int standingStillLimit = 18;
     private int movingCounter;
     private int autoReportSent;
     private final List<ReportInQueue> queueList = new ArrayList<>();
@@ -49,7 +50,7 @@ public class ReportQueue {
         if (counter <= 0 && !queueList.isEmpty() && mc.thePlayer != null) {
             if (isPlayerStandingStill(mc.thePlayer)) {
                 standingStillCounter++;
-                if (standingStillCounter >= 12) {
+                if (standingStillCounter >= standingStillLimit) {
                     movingCounter = 0;
                     final int index = getIndexOfFirstReportSuggestion();
                     final ReportInQueue reportInQueue = queueList.remove(index == -1 ? 0 : index);
@@ -57,29 +58,17 @@ public class ReportQueue {
                     if (reportInQueue.isReportSuggestion || FKCounterMod.isInMwGame) {
                         mc.thePlayer.sendChatMessage("/wdr " + playername);
                         addReportTimestamp(false);
-                        if (isDebugMode) {
-                            ChatUtil.debug("sent report for " + playername);
-                        }
+                        if (isDebugMode) ChatUtil.debug("sent report for " + playername);
                     }
-                    if (doesQueueHaveReportSuggestion()) {
-                        counter = getTickDelay() + 20 * 20;
-                    } else {
-                        final int i = TIME_BETWEEN_REPORTS_MAX - 12 * 20 * (queueList.isEmpty() ? 0 : queueList.size() - 1);
-                        counter = (int) ((10d * random.nextGaussian() / 6d) + Math.max(i, TIME_BETWEEN_REPORTS_MIN));
-                    }
+                    counter = getNextCounterDelay();
+                    standingStillLimit = 12 + random.nextInt(20);
                     ChatHandler.deleteStopMovingInstruction();
                 } else {
-                    movingCounter++;
-                    if (movingCounter % 40 == 0) {
-                        ChatHandler.printStopMovingInstruction();
-                    }
+                    incrementMovingCounter();
                 }
             } else {
                 standingStillCounter = 0;
-                movingCounter++;
-                if (movingCounter % 40 == 0) {
-                    ChatHandler.printStopMovingInstruction();
-                }
+                incrementMovingCounter();
             }
         }
 
@@ -89,6 +78,22 @@ public class ReportQueue {
 
         counter--;
 
+    }
+
+    private void incrementMovingCounter() {
+        movingCounter++;
+        if (movingCounter % 40 == 0) {
+            ChatHandler.printStopMovingInstruction();
+        }
+    }
+
+    private int getNextCounterDelay() {
+        if (doesQueueHaveReportSuggestion()) {
+            return getTickDelay() + 20 * 20;
+        } else {
+            final int i = TIME_BETWEEN_REPORTS_MAX - 12 * 20 * (queueList.isEmpty() ? 0 : queueList.size() - 1);
+            return (int) ((10d * random.nextGaussian() / 6d) + Math.max(i, TIME_BETWEEN_REPORTS_MIN));
+        }
     }
 
     private int getIndexOfFirstReportSuggestion() {
