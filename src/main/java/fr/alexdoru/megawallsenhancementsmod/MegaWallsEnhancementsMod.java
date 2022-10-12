@@ -22,14 +22,19 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-@Mod(modid = MegaWallsEnhancementsMod.modid, name = MegaWallsEnhancementsMod.modName, version = MegaWallsEnhancementsMod.version, acceptedMinecraftVersions = "[1.8.9]", clientSideOnly = true)
+@Mod(
+        modid = MegaWallsEnhancementsMod.modid,
+        name = MegaWallsEnhancementsMod.modName,
+        version = MegaWallsEnhancementsMod.version,
+        acceptedMinecraftVersions = "[1.8.9]",
+        clientSideOnly = true
+)
 public class MegaWallsEnhancementsMod {
-
-    public static final Logger logger = LogManager.getLogger("MegaWallsEnhancements");
 
     public static final String modid = "mwenhancements";
     public static final String modName = "MegaWallsEnhancements";
     public static final String version = "2.6";
+    public static final Logger logger = LogManager.getLogger(modName);
     public static final KeyBinding toggleDroppedItemLimit = new KeyBinding("Toggle dropped item limit", 0, "MegaWallsEnhancements");
     public static final KeyBinding newNickKey = new KeyBinding("New Random Nick", 0, "MegaWallsEnhancements");
     public static File configurationFile;
