@@ -88,7 +88,7 @@ public class ScoreboardParser {
             final String line = unformattedSidebarLines.get(i);
             /*Wither alive detection*/
             final Matcher matcher1 = WITHER_ALIVE_PATTERN.matcher(line);
-            String colorCode;
+            final String colorCode;
             if (matcher1.matches()) {
                 final String formattedLine = formattedSidebarLines.get(i);
                 colorCode = StringUtil.getLastColorCodeBefore(formattedLine, "\\[");
