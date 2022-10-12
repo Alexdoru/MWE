@@ -18,6 +18,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Util;
+import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -42,6 +43,7 @@ public class ModUpdater {
     public void onTick(TickEvent.ClientTickEvent event) {
         if (mc.theWorld != null && mc.thePlayer != null && !hasTriggered) {
             hasTriggered = true;
+            checkForgeVersion();
             Multithreading.addTaskToQueue(() -> {
                 try {
                     checkForUpdate();
@@ -51,6 +53,12 @@ public class ModUpdater {
                 return null;
             });
             MinecraftForge.EVENT_BUS.unregister(this);
+        }
+    }
+
+    private static void checkForgeVersion() {
+        if (ForgeVersion.buildVersion < 2318) {
+            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "You are using an outdated version of forge, things might not work properly!");
         }
     }
 
