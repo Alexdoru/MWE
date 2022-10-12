@@ -113,7 +113,7 @@ public class ModUpdater {
             if (ConfigHandler.automaticUpdate && browser_download_url != null && browser_download_url.endsWith(".jar")) {
 
                 if (Loader.isModLoaded("feather")) {
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + "The automatic updater is disabled on Feather."));
+                    ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "The automatic updater is disabled on Feather.");
                     return;
                 }
 
@@ -135,7 +135,7 @@ public class ModUpdater {
 
                 if (modCacheFile.exists() && deleterFile.exists()) {
 
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements " + EnumChatFormatting.GOLD + "version v" + version + EnumChatFormatting.GREEN + " has been downloaded and will be installed automatically when closing your game."));
+                    ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements " + EnumChatFormatting.GOLD + "version v" + version + EnumChatFormatting.GREEN + " has been downloaded and will be installed automatically when closing your game.");
 
                     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                         try {
