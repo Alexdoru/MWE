@@ -27,7 +27,7 @@ public class GuiPlayerTabOverlayHook {
         mc.fontRendererObj.drawStringWithShadow(s1, (float) (x - mc.fontRendererObj.getStringWidth(s1) - FK_SCORE_WIDTH), (float) y, 16777215);
     }
 
-    public static List<String> addPlayerCountinHeader(List<String> listIn) {
+    public static List<String> addPlayerCountInHeader(List<String> listIn) {
         if (listIn != null) {
             final int i = Minecraft.getMinecraft().thePlayer.sendQueue.getPlayerInfoMap().size();
             if (i < 2) {
