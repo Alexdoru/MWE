@@ -88,7 +88,7 @@ public class ChatHandler {
         }
     }
 
-    private static final IChatComponent stopMovingMsg = new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.YELLOW + "Stop moving for a second to send autoreport!");
+    private static final IChatComponent stopMovingMsg = new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Stop moving for a second to send autoreport!");
 
     public static void printStopMovingInstruction() {
         deleteStopMovingInstruction();
