@@ -6,7 +6,7 @@ import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class SidebarmodRevamp_GuiSidebar implements IMyClassTransformer {
+public class SidebarmodRevamp_GuiSidebarTransformer implements IMyClassTransformer {
     @Override
     public String getTargetClassName() {
         return "revamp.sidebarmod.gui.GuiSidebar";

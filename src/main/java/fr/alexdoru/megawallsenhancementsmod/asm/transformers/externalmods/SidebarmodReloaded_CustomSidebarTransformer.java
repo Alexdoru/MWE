@@ -6,7 +6,7 @@ import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class SidebarmodReloaded_CustomSidebar implements IMyClassTransformer {
+public class SidebarmodReloaded_CustomSidebarTransformer implements IMyClassTransformer {
     @Override
     public String getTargetClassName() {
         return "fr.alexdoru.sidebarmod.gui.CustomSidebar";
