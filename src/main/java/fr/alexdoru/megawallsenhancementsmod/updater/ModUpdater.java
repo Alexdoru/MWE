@@ -67,14 +67,14 @@ public class ModUpdater {
      */
     public static void checkForUpdate() throws ApiException, IOException {
 
-        String GITHUB_API_URL = "https://api.github.com/repos/Alexdoru/MegaWallsEnhancements/releases";
-        HttpClient httpClient = new HttpClient(GITHUB_API_URL);
-        String rawresponse = httpClient.getrawresponse();
+        final String GITHUB_API_URL = "https://api.github.com/repos/Alexdoru/MegaWallsEnhancements/releases";
+        final HttpClient httpClient = new HttpClient(GITHUB_API_URL);
+        final String rawresponse = httpClient.getrawresponse();
         if (rawresponse == null) {
             throw new ApiException("No response from github's Api");
         }
-        JsonParser parser = new JsonParser();
-        JsonElement element = parser.parse(rawresponse);
+        final JsonParser parser = new JsonParser();
+        final JsonElement element = parser.parse(rawresponse);
         if (element == null) {
             throw new ApiException("Cannot parse response from github's Api");
         }
@@ -87,18 +87,18 @@ public class ModUpdater {
         String version = "";
         String browser_download_url = null;
 
-        for (JsonElement jsonElement : element.getAsJsonArray()) {
-            JsonObject release = jsonElement.getAsJsonObject();
-            String tag_name = JsonUtil.getString(release, "tag_name");
+        for (final JsonElement jsonElement : element.getAsJsonArray()) {
+            final JsonObject release = jsonElement.getAsJsonObject();
+            final String tag_name = JsonUtil.getString(release, "tag_name");
             if (tag_name != null && release.has("assets")) {
-                int releaseVersion = Integer.parseInt(tag_name.replace(".", ""));
+                final int releaseVersion = Integer.parseInt(tag_name.replace(".", ""));
                 if (releaseVersion > latestVersion) {
                     latestVersion = releaseVersion;
                     version = tag_name;
                     final JsonElement assets = release.get("assets");
                     if (assets != null && assets.isJsonArray()) {
                         final JsonArray assetsJsonArray = assets.getAsJsonArray();
-                        for (JsonElement assetsElement : assetsJsonArray) {
+                        for (final JsonElement assetsElement : assetsJsonArray) {
                             if (assetsElement != null && assetsElement.isJsonObject()) {
                                 final JsonObject assetsJsonObject = assetsElement.getAsJsonObject();
                                 browser_download_url = JsonUtil.getString(assetsJsonObject, "browser_download_url");
@@ -111,7 +111,7 @@ public class ModUpdater {
 
         if (Integer.parseInt(MegaWallsEnhancementsMod.version.replace(".", "")) < latestVersion) {
 
-            String GITHUB_URL = "https://github.com/Alexdoru/MegaWallsEnhancements/releases";
+            final String GITHUB_URL = "https://github.com/Alexdoru/MegaWallsEnhancements/releases";
             ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements "
                     + EnumChatFormatting.GOLD + "version v" + version + EnumChatFormatting.GREEN + " is available, click this message to see the changelog and download page.")
                     .setChatStyle(new ChatStyle()
@@ -125,19 +125,19 @@ public class ModUpdater {
                     return;
                 }
 
-                File cacheDir = new File("config/updatecache");
+                final File cacheDir = new File("config/updatecache");
                 if (!cacheDir.exists() && !cacheDir.mkdir()) {
                     throw new IllegalStateException("Could not create cache folder");
                 }
 
-                String newModFileName = getFileName(browser_download_url);
-                File modCacheFile = new File(cacheDir, newModFileName);
+                final String newModFileName = getFileName(browser_download_url);
+                final File modCacheFile = new File(cacheDir, newModFileName);
                 downloadFileTo(browser_download_url, modCacheFile);
                 updateLogger.info("Downloaded MWEnhancement Update");
 
-                String GITHUB_DELETER_URL = "https://github.com/W-OVERFLOW/Deleter/releases/download/v1.8/Deleter-1.8.jar";
-                String deleterFileName = getFileName(GITHUB_DELETER_URL);
-                File deleterFile = new File(cacheDir, deleterFileName);
+                final String GITHUB_DELETER_URL = "https://github.com/W-OVERFLOW/Deleter/releases/download/v1.8/Deleter-1.8.jar";
+                final String deleterFileName = getFileName(GITHUB_DELETER_URL);
+                final File deleterFile = new File(cacheDir, deleterFileName);
                 downloadFileTo(GITHUB_DELETER_URL, deleterFile);
                 updateLogger.info("Downloaded Mod Deleter");
 
@@ -150,8 +150,8 @@ public class ModUpdater {
                             final File oldJarFile = MegaWallsEnhancementsMod.jarFile;
                             final File newJarFile = new File(oldJarFile.getParent(), newModFileName);
                             if (newJarFile.createNewFile() && modCacheFile.exists() && oldJarFile.exists()) {
-                                try (InputStream source = new FileInputStream(modCacheFile); OutputStream dest = new FileOutputStream(newJarFile)) {
-                                    byte[] buffer = new byte[1024];
+                                try (final InputStream source = new FileInputStream(modCacheFile); final OutputStream dest = new FileOutputStream(newJarFile)) {
+                                    final byte[] buffer = new byte[1024];
                                     int length;
                                     while ((length = source.read(buffer)) > 0) {
                                         dest.write(buffer, 0, length);
@@ -178,9 +178,9 @@ public class ModUpdater {
     }
 
     private static void downloadFileTo(String browser_download_url, File cacheFile) throws IOException {
-        URLConnection connection = new URL(browser_download_url).openConnection();
+        final URLConnection connection = new URL(browser_download_url).openConnection();
         connection.setRequestProperty("User-Agent", "Updater");
-        InputStream inputStream = connection.getInputStream();
+        final InputStream inputStream = connection.getInputStream();
         Files.copy(inputStream, cacheFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         inputStream.close();
     }

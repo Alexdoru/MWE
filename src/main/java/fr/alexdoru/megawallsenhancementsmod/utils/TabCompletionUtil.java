@@ -18,7 +18,7 @@ public class TabCompletionUtil {
         if (netHandler != null) {
             for (final NetworkPlayerInfo networkPlayerInfo : netHandler.getPlayerInfoMap()) {
                 final String playerName = networkPlayerInfo.getGameProfile().getName();
-                ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(playerName);
+                final ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(playerName);
                 if (team == null) {
                     if (playerName != null) {
                         players.add(playerName);

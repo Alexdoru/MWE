@@ -296,7 +296,7 @@ public class NameUtil {
         if (networkPlayerInfoIn.getPlayerTeam() == null) {
             formattedName = networkPlayerInfoIn.getGameProfile().getName();
         } else {
-            ScorePlayerTeam team = networkPlayerInfoIn.getPlayerTeam();
+            final ScorePlayerTeam team = networkPlayerInfoIn.getPlayerTeam();
             formattedName = team.getColorPrefix().replace("\u00a7k", "").replace("O", "") + networkPlayerInfoIn.getGameProfile().getName() + team.getColorSuffix();
         }
         return new ChatComponentText(formattedName)
