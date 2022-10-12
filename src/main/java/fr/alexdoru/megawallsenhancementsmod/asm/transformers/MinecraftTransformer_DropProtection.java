@@ -20,21 +20,13 @@ public class MinecraftTransformer_DropProtection implements IMyClassTransformer 
             if (checkMethodNode(methodNode, MethodMapping.RUNTICK)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
-                    if (checkMethodInsnNode(insnNode, MethodMapping.CHANGECURRENTITEM)) {
+                    if (checkMethodInsnNode(insnNode, MethodMapping.CHANGECURRENTITEM) ||
+                            checkFieldInsnNode(insnNode, PUTFIELD, FieldMapping.INVENTORYPLAYER$CURRENTITEM)) {
                         /*
-                         * Injects before line 1869
+                         * Injects after line 1869 & 2077
                          * MinecraftHook.updateCurrentSlot(this);
                          */
-                        methodNode.instructions.insertBefore(insnNode, updateCurrentSlotInsnList());
-                        status.addInjection();
-                    }
-
-                    if (checkFieldInsnNode(insnNode, PUTFIELD, FieldMapping.INVENTORYPLAYER$CURRENTITEM)) {
-                        /*
-                         * Injects before line 2077
-                         * MinecraftHook.updateCurrentSlot(this);
-                         */
-                        methodNode.instructions.insertBefore(insnNode, updateCurrentSlotInsnList());
+                        methodNode.instructions.insert(insnNode, updateCurrentSlotInsnList());
                         status.addInjection();
                     }
 
