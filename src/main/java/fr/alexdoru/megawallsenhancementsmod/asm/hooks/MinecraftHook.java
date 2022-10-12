@@ -1,11 +1,17 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.TimerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -13,6 +19,7 @@ import net.minecraft.util.EnumChatFormatting;
 public class MinecraftHook {
 
     private static long lastSlotChangeFromSwordSlot;
+    private static final TimerUtil warpTimer = new TimerUtil(5000L);
 
     public static void dropOneItem(EntityPlayerSP thePlayer) {
         if (ConfigHandler.safeInventory && (System.currentTimeMillis() < lastSlotChangeFromSwordSlot + 100 || checkIfHoldingSword(thePlayer))) {
@@ -48,6 +55,23 @@ public class MinecraftHook {
     }
 
     public static boolean shouldCancelRightClick(ItemStack itemStack) {
+        if (FKCounterMod.isInMwGame && itemStack != null && itemStack.getItem() == Items.paper) {
+            final NBTTagCompound tagCompound = itemStack.getTagCompound();
+            if (tagCompound != null && tagCompound.hasKey("display", 10)) {
+                final NBTTagCompound displayTag = tagCompound.getCompoundTag("display");
+                if (displayTag.hasKey("Name", 8)) {
+                    final String itemName = displayTag.getString("Name");
+                    if (itemName.contains("Play Again")) {
+                        if (!SquadEvent.getSquad().isEmpty() && warpTimer.update()) {
+                            ChatUtil.addChatMessage(EnumChatFormatting.YELLOW + ChatUtil.bar());
+                            ChatUtil.addChatMessage(EnumChatFormatting.YELLOW + "You have players in your Squad, click again to warp");
+                            ChatUtil.addChatMessage(EnumChatFormatting.YELLOW + ChatUtil.bar());
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
         return false;
     }
 
