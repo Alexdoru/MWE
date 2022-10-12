@@ -14,11 +14,23 @@ public class MinecraftTransformer_DebugMessages implements IMyClassTransformer {
 
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
-        status.setInjectionPoints(3);
+        status.setInjectionPoints(4);
 
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.RUNTICK)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+
+                    if(checkMethodInsnNode(insnNode, MethodMapping.LOADRENDERER)) {
+                        /*
+                         * Injects after line 1989 :
+                         * MinecraftHook.onSettingChange(this.gameSettings.advancedItemTooltips, "Advanced Item Tooltips");
+                         */
+                        final InsnList list = new InsnList();
+                        list.add(new VarInsnNode(ALOAD, 0));
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("MinecraftHook"), "onReloadChunks", "(L" + ClassMapping.MINECRAFT + ";)V", false));
+                        methodNode.instructions.insert(insnNode, list);
+                        status.addInjection();
+                    }
 
                     if (checkFieldInsnNode(insnNode, PUTFIELD, FieldMapping.GAMESETTINGS$ADVANCEDITEMTOOLTIPS)) {
                         /*
