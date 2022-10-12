@@ -42,6 +42,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new LayerArrowTransformer());
         registerTransformer(new MinecraftTransformer_DebugMessages());
         registerTransformer(new MinecraftTransformer_DropProtection());
+        registerTransformer(new MinecraftTransformer_WarpProtection());
         registerTransformer(new NetHandlerPlayClientTransformer());
         registerTransformer(new NetworkPlayerInfoTransformer());
         registerTransformer(new RenderGlobalTransformer());
