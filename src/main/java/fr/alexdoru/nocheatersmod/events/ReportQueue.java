@@ -5,6 +5,7 @@ import fr.alexdoru.fkcountermod.events.MwGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.nocheatersmod.data.WDR;
+import fr.alexdoru.nocheatersmod.util.ChatHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
@@ -21,7 +22,6 @@ import java.util.Random;
 
 public class ReportQueue {
 
-    public static boolean isDebugMode = false;
     public static final ReportQueue INSTANCE = new ReportQueue();
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static final FontRenderer frObj = mc.fontRendererObj;
@@ -32,6 +32,7 @@ public class ReportQueue {
     public boolean isDebugMode = false;
     private int counter;
     private int standingStillCounter;
+    private int movingCounter;
     private int autoReportSent;
     private final List<ReportInQueue> queueList = new ArrayList<>();
     private final List<Long> timestampsLastReports = new ArrayList<>();
@@ -49,7 +50,8 @@ public class ReportQueue {
             if (isPlayerStandingStill(mc.thePlayer)) {
                 standingStillCounter++;
                 if (standingStillCounter >= 12) {
-                    final int index = getIndexOffFirstReportSuggestion();
+                    movingCounter = 0;
+                    final int index = getIndexOfFirstReportSuggestion();
                     final ReportInQueue reportInQueue = queueList.remove(index == -1 ? 0 : index);
                     final String playername = reportInQueue.reportedPlayer;
                     if (reportInQueue.isReportSuggestion || FKCounterMod.isInMwGame) {
@@ -65,9 +67,19 @@ public class ReportQueue {
                         final int i = TIME_BETWEEN_REPORTS_MAX - 12 * 20 * (queueList.isEmpty() ? 0 : queueList.size() - 1);
                         counter = (int) ((10d * random.nextGaussian() / 6d) + Math.max(i, TIME_BETWEEN_REPORTS_MIN));
                     }
+                    ChatHandler.deleteStopMovingInstruction();
+                } else {
+                    movingCounter++;
+                    if (movingCounter % 40 == 0) {
+                        ChatHandler.printStopMovingInstruction();
+                    }
                 }
             } else {
                 standingStillCounter = 0;
+                movingCounter++;
+                if (movingCounter % 40 == 0) {
+                    ChatHandler.printStopMovingInstruction();
+                }
             }
         }
 
@@ -79,7 +91,7 @@ public class ReportQueue {
 
     }
 
-    private int getIndexOffFirstReportSuggestion() {
+    private int getIndexOfFirstReportSuggestion() {
         for (int i = 0; i < queueList.size(); i++) {
             if (queueList.get(i).isReportSuggestion) {
                 return i;

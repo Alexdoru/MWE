@@ -1,9 +1,12 @@
 package fr.alexdoru.nocheatersmod.util;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GuiNewChatAccessor;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 
@@ -85,4 +88,26 @@ public class ChatHandler {
         }
     }
 
+    private static final IChatComponent stopMovingMsg = new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.YELLOW + "Stop moving for a second to send autoreport!");
+
+    public static void printStopMovingInstruction() {
+        deleteStopMovingInstruction();
+        ChatUtil.addChatMessage(stopMovingMsg);
+    }
+
+    public static void deleteStopMovingInstruction() {
+        final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
+        final int chatSearchLength = 40;
+        final Iterator<ChatLine> iterator = chatLines.iterator();
+        int i = 0;
+        while (iterator.hasNext() && i < chatSearchLength) {
+            final IChatComponent chatComponent = iterator.next().getChatComponent();
+            if (stopMovingMsg == chatComponent) {
+                iterator.remove();
+                deleteFromDrawnChatLines(chatComponent, chatSearchLength * 3);
+                break;
+            }
+            i++;
+        }
+    }
 }
