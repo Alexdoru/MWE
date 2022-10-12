@@ -249,16 +249,16 @@ public class NameUtil {
                         }
                     }
 
-                    boolean isobf = teamprefix.contains("\u00a7k");
+                    final boolean isobf = teamprefix.contains("\u00a7k");
                     final String alias = CommandAddAlias.getMap().get(username);
                     if (iExtraPrefix != null || formattedPrestigeVstring != null || alias != null) {
                         displayName = new ChatComponentText(
                                 (isobf ? "" : extraPrefix)
                                         + teamprefix
                                         + (isSquadMate ? squadname : username)
-                                        + (formattedPrestigeVstring != null ? formattedPrestigeVstring : colorSuffix
+                                        + (formattedPrestigeVstring != null ? formattedPrestigeVstring : colorSuffix)
                                         + (alias == null ? "" : EnumChatFormatting.RESET + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.RESET + ")")
-                                ));
+                        );
                     }
                 }
             }
