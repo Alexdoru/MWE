@@ -1,10 +1,5 @@
 package fr.alexdoru.fkcountermod;
 
-import fr.alexdoru.fkcountermod.events.ScoreboardEvent;
-import fr.alexdoru.megawallsenhancementsmod.commands.CommandFKCounter;
-import net.minecraftforge.client.ClientCommandHandler;
-import net.minecraftforge.common.MinecraftForge;
-
 public class FKCounterMod {
 
     public static final String MODID = "fkcounter";
@@ -24,10 +19,5 @@ public class FKCounterMod {
      */
     public static boolean isitPrepPhase = false;
     public static boolean isMWEnvironement = false;
-
-    public static void init() {
-        MinecraftForge.EVENT_BUS.register(new ScoreboardEvent());
-        ClientCommandHandler.instance.registerCommand(new CommandFKCounter());
-    }
 
 }
