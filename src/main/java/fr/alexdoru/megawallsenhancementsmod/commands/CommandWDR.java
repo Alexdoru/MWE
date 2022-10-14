@@ -32,10 +32,56 @@ import java.util.regex.Pattern;
 public class CommandWDR extends CommandBase {
 
     private static final HashMap<String, TimeMark> TimeMarksMap = new HashMap<>();
-    private static final char timestampreportkey = '-';
-    private static final char timemarkedreportkey = '#';
+    private static final char TIMESTAMP_REPORT_CHAR = '-';
+    private static final char TIMEMARK_REPORT_CHAR = '#';
     private static int nbTimeMarks = 0;
     private static final Minecraft mc = Minecraft.getMinecraft();
+
+    @Override
+    public String getCommandName() {
+        return "watchdogreport";
+    }
+
+    @Override
+    public void processCommand(ICommandSender sender, String[] args) {
+        if (args.length == 0) {
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
+            return;
+        }
+        handleWDRCommand(args, true, true);
+    }
+
+    @Override
+    public List<String> getCommandAliases() {
+        return Collections.singletonList("wdr");
+    }
+
+    @Override
+    public String getCommandUsage(ICommandSender sender) {
+        return "/wdr <player> <cheats(optional)> <timestamp(optional)>";
+    }
+
+    @Override
+    public boolean canCommandSenderUseCommand(ICommandSender sender) {
+        return true;
+    }
+
+    @Override
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+        if (args.length == 1) {
+            if (FKCounterMod.isInMwGame) {
+                if (FKCounterMod.isitPrepPhase) {
+                    return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+                } else {
+                    final List<String> playersInThisGame = KillCounter.getPlayersInThisGame();
+                    playersInThisGame.removeAll(TabCompletionUtil.getOnlinePlayersByName());
+                    return getListOfStringsMatchingLastWord(args, playersInThisGame);
+                }
+            }
+            return null;
+        }
+        return args.length > 1 ? getListOfStringsMatchingLastWord(args, CommandReport.cheatsArray) : null;
+    }
 
     public static void addTimeMark() {
         nbTimeMarks++;
@@ -56,20 +102,6 @@ public class CommandWDR extends CommandBase {
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/wdr  " + "#" + key))));
     }
 
-    @Override
-    public String getCommandName() {
-        return "watchdogreport";
-    }
-
-    @Override
-    public void processCommand(ICommandSender sender, String[] args) {
-        if (args.length == 0) {
-            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
-            return;
-        }
-        handleWDRCommand(args, true, true);
-    }
-
     public static void handleWDRCommand(String[] args, boolean sendReport, boolean showReportMessage) {
         Multithreading.addTaskToQueue(() -> {
             boolean isaTimestampedReport = false;
@@ -88,7 +120,7 @@ public class CommandWDR extends CommandBase {
             } else {
                 for (int i = 1; i < args.length; i++) { // reads each arg one by one
 
-                    if (args[i].charAt(0) == timestampreportkey) { // handling timestamped reports
+                    if (args[i].charAt(0) == TIMESTAMP_REPORT_CHAR) { // handling timestamped reports
 
                         if (isaTimestampedReport) {
                             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "You can't have more than one timestamp in the arguments.");
@@ -127,7 +159,7 @@ public class CommandWDR extends CommandBase {
                         timerOnReplay = GameInfoGrabber.getTimeSinceGameStart(timestamp, serverID, (int) longtimetosubtract);
                         message.append(" ").append(args[i]);
 
-                    } else if (args[i].charAt(0) == timemarkedreportkey) { // process the command if you use a stored timestamp
+                    } else if (args[i].charAt(0) == TIMEMARK_REPORT_CHAR) { // process the command if you use a stored timestamp
 
                         if (usesTimeMark) {
                             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "You can't use more than one #timestamp in the arguments.");
@@ -319,38 +351,6 @@ public class CommandWDR extends CommandBase {
             return null;
 
         });
-    }
-
-    @Override
-    public List<String> getCommandAliases() {
-        return Collections.singletonList("wdr");
-    }
-
-    @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/wdr <player> <cheats(optional)> <timestamp(optional)>";
-    }
-
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
-    }
-
-    @Override
-    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        if (args.length == 1) {
-            if (FKCounterMod.isInMwGame) {
-                if (FKCounterMod.isitPrepPhase) {
-                    return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
-                } else {
-                    final List<String> playersInThisGame = KillCounter.getPlayersInThisGame();
-                    playersInThisGame.removeAll(TabCompletionUtil.getOnlinePlayersByName());
-                    return getListOfStringsMatchingLastWord(args, playersInThisGame);
-                }
-            }
-            return null;
-        }
-        return args.length > 1 ? getListOfStringsMatchingLastWord(args, CommandReport.cheatsArray) : null;
     }
 
 }
