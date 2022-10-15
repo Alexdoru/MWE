@@ -7,7 +7,7 @@ import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.util.StringUtils;
+import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -80,19 +80,6 @@ public class ScoreboardUtils {
     }
 
     /**
-     * Strips the color control codes of all the lines of the input list
-     *
-     * @param ListIn - String list with chat color control codes
-     */
-    public static List<String> stripControlCodes(List<String> ListIn) {
-        final List<String> unformattedList = new ArrayList<>();
-        for (int i = 0; i < ListIn.size(); i++) {
-            unformattedList.add(i, StringUtils.stripControlCodes(ListIn.get(i)));
-        }
-        return unformattedList;
-    }
-
-    /**
      * Returns formatted top of the scoreboard/sidebar
      */
     public static String getSidebarTitle(Scoreboard scoreboard) {
@@ -107,11 +94,24 @@ public class ScoreboardUtils {
      * Returns unformatted top of the scoreboard/sidebar
      */
     public static String getUnformattedSidebarTitle(Scoreboard scoreboard) {
-        return StringUtils.stripControlCodes(getSidebarTitle(scoreboard));
+        return EnumChatFormatting.getTextWithoutFormattingCodes(getSidebarTitle(scoreboard));
     }
 
     public static String getUnformattedSidebarTitle() {
         return mc.theWorld == null ? null : getUnformattedSidebarTitle(mc.theWorld.getScoreboard());
+    }
+
+    /**
+     * Strips the color control codes of all the lines of the input list
+     *
+     * @param ListIn - String list with chat color control codes
+     */
+    public static List<String> stripControlCodes(List<String> ListIn) {
+        final List<String> list = new ArrayList<>();
+        for (int i = 0; i < ListIn.size(); i++) {
+            list.add(i, EnumChatFormatting.getTextWithoutFormattingCodes(ListIn.get(i)));
+        }
+        return list;
     }
 
 }
