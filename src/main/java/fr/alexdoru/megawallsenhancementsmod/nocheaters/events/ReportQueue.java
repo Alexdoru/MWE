@@ -82,7 +82,7 @@ public class ReportQueue {
 
     private void incrementMovingCounter() {
         movingCounter++;
-        if (movingCounter % 40 == 0) {
+        if (movingCounter % 5 == 0) {
             ChatHandler.printStopMovingInstruction();
         }
     }
