@@ -11,12 +11,15 @@ import java.util.regex.Pattern;
 
 public class ScoreboardParser {
 
-    private static final Pattern GAME_ID_PATTERN = Pattern.compile("\\s*\\d+/\\d+/\\d+\\s+([\\d\\w]+)\\s*", Pattern.CASE_INSENSITIVE);
-    private static final Pattern MW_TITLE_PATTERN = Pattern.compile("\\s*MEGA\\sWALLS\\s*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern GAME_END_PATTERN = Pattern.compile("Game End: (\\d+):(\\d+)");
+    private static final Pattern GATES_OPEN_PATTERN = Pattern.compile("Gates Open: \\d+:\\d+");
+    private static final Pattern WALLS_FALL_PATTERN = Pattern.compile("Walls Fall: (\\d+):(\\d+)");
+    private static final Pattern GAME_ID_PATTERN = Pattern.compile("\\d+/\\d+/\\d+\\s+([\\d\\w]+)");
+    private static final Pattern MW_TITLE_PATTERN = Pattern.compile("MEGA\\sWALLS");
     private static final Pattern MW_INGAME_PATTERN = Pattern.compile("[0-9]+\\sFinals?\\s[0-9]+\\sF\\.\\sAssists?");
     private static final Pattern PREGAME_LOBBY_PATTERN = Pattern.compile("Players:\\s*[0-9]+/[0-9]+");
-    private static final Pattern WITHER_ALIVE_PATTERN = Pattern.compile("\\s*\\[.\\] Wither HP: ?(\\d+).*", Pattern.CASE_INSENSITIVE);
-    private static final Pattern WITHER_ALIVE_HEART_PATTERN = Pattern.compile("\\s*\\[.\\] Wither [\u2764\u2665]: ?(\\d+).*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern WITHER_ALIVE_PATTERN = Pattern.compile("\\[[BGRY]\\] Wither HP: ?(\\d+)");
+    private static final Pattern WITHER_ALIVE_HEART_PATTERN = Pattern.compile("\\[[BGRY]\\] Wither [\u2764\u2665]: ?(\\d+)");
 
     private final ArrayList<String> aliveWithers = new ArrayList<>();
     private String gameId = null;
@@ -24,59 +27,51 @@ public class ScoreboardParser {
     private boolean isMWEnvironement = false;
     private boolean preGameLobby = false;
     private boolean isitPrepPhase = false;
-    private boolean hasgameended = false;
+    private boolean hasGameEnded = false;
 
-    /* This is run on every tick to parse the scoreboard data */
+    /* This runs on every tick to parse the scoreboard data */
     public ScoreboardParser(Scoreboard scoreboard) {
+
         if (scoreboard == null) {
             return;
         }
 
         final String title = ScoreboardUtils.getUnformattedSidebarTitle(scoreboard);
-        if (!MW_TITLE_PATTERN.matcher(title).matches()) {
+        if (MW_TITLE_PATTERN.matcher(title).find()) {
+            isMWEnvironement = true;
+        } else {
             return;
         }
-        isMWEnvironement = true;
+
         final List<String> formattedSidebarLines = ScoreboardUtils.getFormattedSidebarText(scoreboard);
         final List<String> unformattedSidebarLines = ScoreboardUtils.stripControlCodes(formattedSidebarLines);
 
-        if (unformattedSidebarLines.size() == 0) {
+        if (unformattedSidebarLines.isEmpty()) {
             return;
         }
 
         final Matcher matcher = GAME_ID_PATTERN.matcher(unformattedSidebarLines.get(0));
-        if (!matcher.matches()) {
-            for (final String line : unformattedSidebarLines) {
-                if (PREGAME_LOBBY_PATTERN.matcher(line).find()) {
-                    gameId = null;
-                    preGameLobby = true;
-                    isInMwGame = false;
-                    return;
-                }
-            }
+        if (matcher.find()) {
+            gameId = matcher.group(1);
+        } else {
+            checkPreGameLobby(unformattedSidebarLines);
             return;
         }
 
-        gameId = matcher.group(1);
+        if (unformattedSidebarLines.size() < 9) {
+            return;
+        }
 
-        for (final String line : unformattedSidebarLines) {
-            if (MW_INGAME_PATTERN.matcher(line).find()) {
-                isInMwGame = true;
-                continue;
-            }
-            if (PREGAME_LOBBY_PATTERN.matcher(line).find()) {
-                gameId = null;
-                preGameLobby = true;
-                isInMwGame = false;
+        if (MW_INGAME_PATTERN.matcher(unformattedSidebarLines.get(8)).find()) {
+            isInMwGame = true;
+        } else {
+            if (checkPreGameLobby(unformattedSidebarLines)) {
                 return;
             }
         }
 
-        if (unformattedSidebarLines.size() < 7) {
-            return;
-        }
-
-        if (unformattedSidebarLines.get(1).contains("Walls Fall:") || unformattedSidebarLines.get(1).contains("Gates Open:")) {
+        if (WALLS_FALL_PATTERN.matcher(unformattedSidebarLines.get(1)).find()
+                || GATES_OPEN_PATTERN.matcher(unformattedSidebarLines.get(1)).find()) {
             isitPrepPhase = true;
         }
 
@@ -89,14 +84,14 @@ public class ScoreboardParser {
             /*Wither alive detection*/
             final Matcher matcher1 = WITHER_ALIVE_PATTERN.matcher(line);
             final String colorCode;
-            if (matcher1.matches()) {
+            if (matcher1.find()) {
                 final String formattedLine = formattedSidebarLines.get(i);
                 colorCode = StringUtil.getLastColorCodeBefore(formattedLine, "\\[");
                 aliveWithers.add(colorCode);
                 witherHP = Integer.parseInt(matcher1.group(1));
             } else {
                 final Matcher matcher2 = WITHER_ALIVE_HEART_PATTERN.matcher(line);
-                if (matcher2.matches()) {
+                if (matcher2.find()) {
                     final String formattedLine = formattedSidebarLines.get(i);
                     colorCode = StringUtil.getLastColorCodeBefore(formattedLine, "\\[");
                     aliveWithers.add(colorCode);
@@ -111,13 +106,25 @@ public class ScoreboardParser {
         }
 
         if (eliminated_teams == 3 || unformattedSidebarLines.get(1).contains("None!:")) {
-            hasgameended = true;
+            hasGameEnded = true;
         }
 
         if (isOnlyOneWitherAlive()) {
             LastWitherHPHUD.instance.updateWitherHP(witherHP);
         }
 
+    }
+
+    private boolean checkPreGameLobby(List<String> unformattedSidebarLines) {
+        for (final String line : unformattedSidebarLines) {
+            if (PREGAME_LOBBY_PATTERN.matcher(line).find()) {
+                gameId = null;
+                preGameLobby = true;
+                isInMwGame = false;
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isWitherAlive(String colorCode) {
@@ -137,7 +144,7 @@ public class ScoreboardParser {
     }
 
     public boolean hasGameEnded() {
-        return hasgameended;
+        return hasGameEnded;
     }
 
     public boolean isitPrepPhase() {
@@ -159,4 +166,5 @@ public class ScoreboardParser {
     public boolean isPreGameLobby() {
         return preGameLobby;
     }
+
 }
