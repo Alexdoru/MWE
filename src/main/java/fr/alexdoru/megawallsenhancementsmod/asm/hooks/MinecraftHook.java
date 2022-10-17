@@ -63,9 +63,9 @@ public class MinecraftHook {
                     final String itemName = displayTag.getString("Name");
                     if (itemName.contains("Play Again")) {
                         if (!SquadEvent.getSquad().isEmpty() && warpTimer.update()) {
-                            ChatUtil.addChatMessage(EnumChatFormatting.YELLOW + ChatUtil.bar());
-                            ChatUtil.addChatMessage(EnumChatFormatting.YELLOW + "You have players in your Squad, click again to warp");
-                            ChatUtil.addChatMessage(EnumChatFormatting.YELLOW + ChatUtil.bar());
+                            ChatUtil.addChatMessage(EnumChatFormatting.YELLOW + ChatUtil.bar() + "\n"
+                                    + EnumChatFormatting.YELLOW + "You have players in your Squad, click again to warp" + "\n"
+                                    + EnumChatFormatting.YELLOW + ChatUtil.bar());
                             return true;
                         }
                     }
