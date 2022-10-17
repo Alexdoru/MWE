@@ -1,6 +1,7 @@
-package fr.alexdoru.megawallsenhancementsmod.api.cache;
+package fr.alexdoru.megawallsenhancementsmod.data;
 
 
+import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassStats;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
