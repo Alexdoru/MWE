@@ -3,9 +3,9 @@ package fr.alexdoru.megawallsenhancementsmod.nocheaters.util;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandHypixelShout;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandReport;
-import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandWDR;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
@@ -133,7 +133,7 @@ public class ReportSuggestionHandler {
                 final UUID id = networkPlayerInfo.getGameProfile().getId();
                 isSenderNicked = NameUtil.isntRealPlayer(id);
                 senderUUID = id.toString().replace("-", "");
-                isSenderFlaging = CommandScanGame.doesPlayerFlag(id);
+                isSenderFlaging = ScangameData.doesPlayerFlag(id);
                 final WDR wdr = WdredPlayers.getPlayer(senderUUID, messageSender);
                 if (wdr != null) {
                     isSenderIgnored = wdr.isIgnored();

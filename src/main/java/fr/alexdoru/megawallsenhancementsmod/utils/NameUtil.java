@@ -4,10 +4,10 @@ import com.mojang.authlib.GameProfile;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
-import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.AliasData;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
+import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
@@ -220,7 +220,7 @@ public class NameUtil {
 
                     } else { //scangame
 
-                        if (CommandScanGame.doesPlayerFlag(id)) {
+                        if (ScangameData.doesPlayerFlag(id)) {
                             extraPrefix = prefix_scan;
                             iExtraPrefix = iprefix_scan;
                         }

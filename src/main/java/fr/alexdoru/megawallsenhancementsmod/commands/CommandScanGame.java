@@ -6,9 +6,9 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.GeneralInfo;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
+import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.GameInfoGrabber;
 import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import net.minecraft.client.Minecraft;
@@ -19,54 +19,13 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
 public class CommandScanGame extends CommandBase {
-
-    private static final HashMap<UUID, ScanResult> scangameMap = new HashMap<>();
-    private static String scanGameId;
-
-    public CommandScanGame() {
-        MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    @SubscribeEvent
-    public void onMwGame(MwGameEvent event) {
-        if (event.getType() == MwGameEvent.EventType.GAME_START) {
-            onGameStart();
-        }
-        if (event.getType() == MwGameEvent.EventType.GAME_END) {
-            clearScanGameData();
-        }
-    }
-
-    private static void clearScanGameData() {
-        scanGameId = null;
-        scangameMap.clear();
-    }
-
-    private static void onGameStart() {
-        final String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
-        if (!currentGameId.equals("?") && scanGameId != null && !scanGameId.equals(currentGameId)) {
-            clearScanGameData();
-        }
-    }
-
-    public static boolean doesPlayerFlag(UUID uuid) {
-        final ScanResult scanResult = scangameMap.get(uuid);
-        return scanResult != null && scanResult.msg != null;
-    }
-
-    public static void put(UUID uuid, IChatComponent msg) {
-        scangameMap.put(uuid, new ScanResult(msg));
-    }
 
     @Override
     public String getCommandName() {
@@ -87,9 +46,9 @@ public class CommandScanGame extends CommandBase {
         final String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
         final Collection<NetworkPlayerInfo> playerCollection = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
         int i = 0;
-        if (!currentGameId.equals("?") && currentGameId.equals(scanGameId)) {
+        if (!currentGameId.equals("?") && currentGameId.equals(ScangameData.getScanGameId())) {
             for (final NetworkPlayerInfo networkPlayerInfo : playerCollection) {
-                final ScanResult scanResult = scangameMap.get(networkPlayerInfo.getGameProfile().getId());
+                final ScangameData.ScanResult scanResult = ScangameData.get(networkPlayerInfo.getGameProfile().getId());
                 if (scanResult == null) {
                     i++;
                     Multithreading.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
@@ -99,7 +58,7 @@ public class CommandScanGame extends CommandBase {
             }
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " more players...");
         } else {
-            scanGameId = GameInfoGrabber.getGameIDfromscoreboard();
+            ScangameData.setScanGameId(GameInfoGrabber.getGameIDfromscoreboard());
             for (final NetworkPlayerInfo networkPlayerInfo : playerCollection) {
                 i++;
                 Multithreading.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
@@ -111,16 +70,6 @@ public class CommandScanGame extends CommandBase {
     @Override
     public boolean canCommandSenderUseCommand(ICommandSender sender) {
         return true;
-    }
-
-}
-
-class ScanResult {
-
-    public final IChatComponent msg;
-
-    ScanResult(IChatComponent msg) {
-        this.msg = msg;
     }
 
 }
@@ -141,7 +90,7 @@ class ScanPlayerTask implements Callable<String> {
         try {
 
             if (NameUtil.isntRealPlayer(uuid)) {
-                CommandScanGame.put(uuid, null);
+                ScangameData.put(uuid, null);
                 return null;
             }
 
@@ -215,14 +164,14 @@ class ScanPlayerTask implements Callable<String> {
 
             if (imsg != null) {
                 ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(NameUtil.getFormattedNameWithPlanckeClickEvent(networkPlayerInfo)).appendSibling(imsg));
-                CommandScanGame.put(uuid, imsg);
+                ScangameData.put(uuid, imsg);
                 NameUtil.updateGameProfileAndName(networkPlayerInfo);
                 return null;
             }
 
         } catch (ApiException ignored) {}
 
-        CommandScanGame.put(uuid, null);
+        ScangameData.put(uuid, null);
         return null;
 
     }
