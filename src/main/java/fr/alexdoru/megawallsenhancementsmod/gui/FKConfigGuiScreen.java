@@ -101,7 +101,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                     buttonshowplayers.setting = false;
                     ConfigHandler.fkcounterHUDCompact = true;
                     buttoncompacthud.setting = true;
-                    if(Loader.isModLoaded("feather")) {
+                    if (Loader.isModLoaded("feather")) {
                         ChatUtil.addChatMessage(EnumChatFormatting.RED + "The sidebar integration for HUD doesn't work with Feather because the client is obfuscated and closed source >:(");
                     }
                 }

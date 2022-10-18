@@ -237,7 +237,7 @@ public class ReportSuggestionHandler {
                 return true;
             }
             checkReportSpam();
-            if(ReportQueue.INSTANCE.addPlayerToQueueRandom(messageSender, reportedPlayer)) {
+            if (ReportQueue.INSTANCE.addPlayerToQueueRandom(messageSender, reportedPlayer)) {
                 new DelayedTask(() -> ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Sending report in a moment...")
                         .appendSibling(ChatUtil.getCancelButton(reportedPlayer))), 0);
                 return true;

@@ -20,6 +20,7 @@ public interface IRenderer {
 
     /**
      * Renders the HUD.
+     *
      * @param resolution - Screen's resolution
      */
     void render(ScaledResolution resolution);

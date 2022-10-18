@@ -283,7 +283,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 11:
                 if (ConfigHandler.showLastWitherHUD && !ConfigHandler.witherHUDinSidebar) {
                     ConfigHandler.witherHUDinSidebar = true;
-                    if(Loader.isModLoaded("feather")) {
+                    if (Loader.isModLoaded("feather")) {
                         ChatUtil.addChatMessage(EnumChatFormatting.RED + "The sidebar integration for HUD doesn't work with Feather because the client is obfuscated and closed source >:(");
                     }
                     break;

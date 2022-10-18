@@ -134,7 +134,7 @@ class ScanPlayerTask implements Callable<String> {
 
         try {
 
-            if(NameUtil.isntRealPlayer(uuid)) {
+            if (NameUtil.isntRealPlayer(uuid)) {
                 CommandScanGame.put(uuid, CommandScanGame.nomatch);
                 return null;
             }

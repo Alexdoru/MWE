@@ -95,7 +95,7 @@ public class CommandNocheaters extends CommandBase {
                     final String uuid = entry.getKey();
                     final WDR wdr = entry.getValue();
 
-                    if(wdr.isOnlyIgnored()) {
+                    if (wdr.isOnlyIgnored()) {
                         continue;
                     }
 
