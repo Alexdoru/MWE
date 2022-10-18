@@ -61,6 +61,8 @@ public class ConfigHandler {
     public static final GuiPosition lastWitherHUDPosition = new GuiPosition(0d, 0d);
     public static boolean strengthHUD;
     public static final GuiPosition hunterStrengthHUDPosition = new GuiPosition(0d, 0d);
+    public static boolean squadHealthHUD;// TODO add config
+    public static final GuiPosition squadHealthHUDPosition = new GuiPosition(0d, 0d);// TODO add config
 
     /**
      * NoCheaters Config

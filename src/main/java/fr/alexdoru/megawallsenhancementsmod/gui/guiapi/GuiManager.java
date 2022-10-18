@@ -24,6 +24,7 @@ public final class GuiManager {
         this.registeredRenderers.add(new KillCooldownHUD());
         this.registeredRenderers.add(new HunterStrengthHUD());
         this.registeredRenderers.add(new LastWitherHPHUD());
+        //this.registeredRenderers.add(new SquadHealthHUD()); // TODO squad health hud
     }
 
     @SubscribeEvent
