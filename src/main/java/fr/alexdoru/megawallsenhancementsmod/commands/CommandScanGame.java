@@ -89,7 +89,7 @@ class ScanPlayerTask implements Callable<String> {
 
         try {
 
-            if (NameUtil.isntRealPlayer(uuid)) {
+            if (NameUtil.isntRealPlayer(uuid) || ScangameData.skipScan(uuid)) {
                 ScangameData.put(uuid, null);
                 return null;
             }
@@ -160,6 +160,10 @@ class ScanPlayerTask implements Callable<String> {
                             + EnumChatFormatting.GRAY + " games, and has : " + EnumChatFormatting.GOLD + megawallsstats.getLegSkins()
                             + EnumChatFormatting.GRAY + " legendary skin" + (megawallsstats.getLegSkins() > 1 ? "s" : ""));
                 }
+            }
+
+            if (imsg == null && megawallsstats.getGames_played() > 500) {
+                ScangameData.addToSkipSet(uuid);
             }
 
             if (imsg != null) {
