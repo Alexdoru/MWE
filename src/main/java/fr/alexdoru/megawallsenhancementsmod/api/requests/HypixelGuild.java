@@ -17,7 +17,7 @@ public class HypixelGuild {
     public HypixelGuild(String uuid) throws ApiException {
 
         final HttpClient httpclient = new HttpClient("https://api.hypixel.net/guild?key=" + HypixelApiKeyUtil.getApiKey() + "&player=" + uuid);
-        final String rawresponse = httpclient.getrawresponse();
+        final String rawresponse = httpclient.getRawResponse();
 
         if (rawresponse == null) {
             throw new ApiException("No response from Hypixel's Api");

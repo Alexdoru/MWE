@@ -25,7 +25,7 @@ public class MojangNameHistory {
             return;
 
         final HttpClient httpclient = new HttpClient("https://api.mojang.com/user/profiles/" + uuidIn + "/names");
-        final String rawresponse = httpclient.getrawresponse();
+        final String rawresponse = httpclient.getRawResponse();
 
         if (rawresponse == null)
             throw new ApiException("No response from Mojang's Api");
