@@ -24,7 +24,7 @@ public class MojangPlayernameToUUID {
     public MojangPlayernameToUUID(String playername) throws ApiException {
 
         final HttpClient httpclient = new HttpClient("https://api.mojang.com/users/profiles/minecraft/" + playername);
-        final String rawresponse = httpclient.getrawresponse();
+        final String rawresponse = httpclient.getRawResponse();
 
         if (rawresponse == null) {
             this.name = null;
