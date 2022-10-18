@@ -4,9 +4,9 @@ import com.mojang.authlib.GameProfile;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
-import fr.alexdoru.megawallsenhancementsmod.commands.CommandAddAlias;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.data.AliasData;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
@@ -250,7 +250,7 @@ public class NameUtil {
                     }
 
                     final boolean isobf = teamprefix.contains("\u00a7k");
-                    final String alias = CommandAddAlias.getMap().get(username);
+                    final String alias = AliasData.getAlias(username);
                     if (iExtraPrefix != null || formattedPrestigeVstring != null || alias != null) {
                         displayName = new ChatComponentText(
                                 (isobf ? "" : extraPrefix)
