@@ -30,11 +30,7 @@ import java.util.concurrent.Callable;
 
 public class CommandScanGame extends CommandBase {
 
-    /*
-     * fills the hashmap with this instead of null when there is no match
-     */
-    public static final IChatComponent nomatch = new ChatComponentText("none");
-    private static final HashMap<UUID, IChatComponent> scanmap = new HashMap<>();
+    private static final HashMap<UUID, ScanResult> scangameMap = new HashMap<>();
     private static String scanGameId;
 
     public CommandScanGame() {
@@ -53,7 +49,7 @@ public class CommandScanGame extends CommandBase {
 
     private static void clearScanGameData() {
         scanGameId = null;
-        scanmap.clear();
+        scangameMap.clear();
     }
 
     private static void onGameStart() {
@@ -64,12 +60,12 @@ public class CommandScanGame extends CommandBase {
     }
 
     public static boolean doesPlayerFlag(UUID uuid) {
-        final IChatComponent imsg = scanmap.get(uuid);
-        return imsg != null && !imsg.equals(CommandScanGame.nomatch);
+        final ScanResult scanResult = scangameMap.get(uuid);
+        return scanResult != null && scanResult.msg != null;
     }
 
     public static void put(UUID uuid, IChatComponent msg) {
-        scanmap.put(uuid, msg);
+        scangameMap.put(uuid, new ScanResult(msg));
     }
 
     @Override
@@ -93,12 +89,12 @@ public class CommandScanGame extends CommandBase {
         int i = 0;
         if (!currentGameId.equals("?") && currentGameId.equals(scanGameId)) {
             for (final NetworkPlayerInfo networkPlayerInfo : playerCollection) {
-                final IChatComponent imsg = scanmap.get(networkPlayerInfo.getGameProfile().getId());
-                if (imsg == null) {
+                final ScanResult scanResult = scangameMap.get(networkPlayerInfo.getGameProfile().getId());
+                if (scanResult == null) {
                     i++;
                     Multithreading.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
-                } else if (!imsg.equals(nomatch)) {
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(NameUtil.getFormattedNameWithPlanckeClickEvent(networkPlayerInfo)).appendSibling(imsg));
+                } else if (scanResult.msg != null) {
+                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(NameUtil.getFormattedNameWithPlanckeClickEvent(networkPlayerInfo)).appendSibling(scanResult.msg));
                 }
             }
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " more players...");
@@ -119,6 +115,16 @@ public class CommandScanGame extends CommandBase {
 
 }
 
+class ScanResult {
+
+    public final IChatComponent msg;
+
+    ScanResult(IChatComponent msg) {
+        this.msg = msg;
+    }
+
+}
+
 class ScanPlayerTask implements Callable<String> {
 
     final NetworkPlayerInfo networkPlayerInfo;
@@ -135,7 +141,7 @@ class ScanPlayerTask implements Callable<String> {
         try {
 
             if (NameUtil.isntRealPlayer(uuid)) {
-                CommandScanGame.put(uuid, CommandScanGame.nomatch);
+                CommandScanGame.put(uuid, null);
                 return null;
             }
 
@@ -211,14 +217,12 @@ class ScanPlayerTask implements Callable<String> {
                 ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(NameUtil.getFormattedNameWithPlanckeClickEvent(networkPlayerInfo)).appendSibling(imsg));
                 CommandScanGame.put(uuid, imsg);
                 NameUtil.updateGameProfileAndName(networkPlayerInfo);
-            } else {
-                CommandScanGame.put(uuid, CommandScanGame.nomatch);
+                return null;
             }
 
-        } catch (ApiException ignored) {
-            CommandScanGame.put(uuid, CommandScanGame.nomatch);
-        }
+        } catch (ApiException ignored) {}
 
+        CommandScanGame.put(uuid, null);
         return null;
 
     }
