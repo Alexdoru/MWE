@@ -35,17 +35,17 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
     public void initGui() {
         buttonList.add(new ButtonFancy(100, getxCenter() + widthBetweenButtons / 2 + (widthBetweenButtons + buttonSize) + 10, getyCenter() - findMenuHeight() / 2 + heightBetweenButtons + buttonSize + 10, 30, 14, "Move HUD", 0.5));
 
-        buttonList.add(addSettingButton(ConfigHandler.show_fkcHUD, 0, 0, 0, "Show HUD"));
-        buttonList.add(buttoncompacthud = addSettingButton(ConfigHandler.compact_hud, 1, 0, 1, "Compact HUD"));
-        buttonList.add(buttonsidebar = addSettingButton(ConfigHandler.FKHUDinSidebar, 7, 0, 2, "HUD in Sidebar"));
-        buttonList.add(addSettingButton(ConfigHandler.finalsInTablist, 8, 0, 3, "FK in tablist"));
+        buttonList.add(addSettingButton(ConfigHandler.showfkcounterHUD, 0, 0, 0, "Show HUD"));
+        buttonList.add(buttoncompacthud = addSettingButton(ConfigHandler.fkcounterHUDCompact, 1, 0, 1, "Compact HUD"));
+        buttonList.add(buttonsidebar = addSettingButton(ConfigHandler.fkcounterHUDinSidebar, 7, 0, 2, "HUD in Sidebar"));
+        buttonList.add(addSettingButton(ConfigHandler.fkcounterHUDTablist, 8, 0, 3, "FK in tablist"));
 
-        buttonList.add(addSettingButton(ConfigHandler.draw_background, 3, 1, 0, "HUD Background"));
-        buttonList.add(addSettingButton(ConfigHandler.text_shadow, 4, 1, 1, "Text Shadow"));
-        buttonList.add(buttonshowplayers = addSettingButton(ConfigHandler.show_players, 2, 1, 2, "Show Players"));
+        buttonList.add(addSettingButton(ConfigHandler.fkcounterHUDDrawBackground, 3, 1, 0, "HUD Background"));
+        buttonList.add(addSettingButton(ConfigHandler.fkcounterHUDTextShadow, 4, 1, 1, "Text Shadow"));
+        buttonList.add(buttonshowplayers = addSettingButton(ConfigHandler.fkcounterHUDShowPlayers, 2, 1, 2, "Show Players"));
 
-        buttonList.add(new GuiSlider(5, getxCenter() - 150 / 2, getyCenter() + 70, "HUD Size : ", 0.1d, 4d, ConfigHandler.fkc_hud_size, this));
-        buttonList.add(new GuiSlider(6, getxCenter() - 150 / 2, getyCenter() + 94, 150, 20, "Player amount : ", "", 1d, 10d, ConfigHandler.playerAmount, false, true, this));
+        buttonList.add(new GuiSlider(5, getxCenter() - 150 / 2, getyCenter() + 70, "HUD Size : ", 0.1d, 4d, ConfigHandler.fkcounterHUDSize, this));
+        buttonList.add(new GuiSlider(6, getxCenter() - 150 / 2, getyCenter() + 94, 150, 20, "Player amount : ", "", 1d, 10d, ConfigHandler.fkcounterHUDPlayerAmount, false, true, this));
         buttonList.add(new GuiButton(200, getxCenter() - 150 / 2, getyCenter() + 122, 150, 20, "Done"));
         super.initGui();
     }
@@ -61,45 +61,45 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                 mc.displayGuiScreen(parent);
                 break;
             case 0:
-                ConfigHandler.show_fkcHUD = !ConfigHandler.show_fkcHUD;
-                ((ButtonToggle) button).setting = ConfigHandler.show_fkcHUD;
+                ConfigHandler.showfkcounterHUD = !ConfigHandler.showfkcounterHUD;
+                ((ButtonToggle) button).setting = ConfigHandler.showfkcounterHUD;
                 break;
             case 1:
-                ConfigHandler.compact_hud = !ConfigHandler.compact_hud;
-                ((ButtonToggle) button).setting = ConfigHandler.compact_hud;
-                if (ConfigHandler.compact_hud) {
-                    ConfigHandler.show_players = false;
+                ConfigHandler.fkcounterHUDCompact = !ConfigHandler.fkcounterHUDCompact;
+                ((ButtonToggle) button).setting = ConfigHandler.fkcounterHUDCompact;
+                if (ConfigHandler.fkcounterHUDCompact) {
+                    ConfigHandler.fkcounterHUDShowPlayers = false;
                     buttonshowplayers.setting = false;
                 } else {
-                    ConfigHandler.FKHUDinSidebar = false;
+                    ConfigHandler.fkcounterHUDinSidebar = false;
                     buttonsidebar.setting = false;
                 }
                 break;
             case 2:
-                ConfigHandler.show_players = !ConfigHandler.show_players;
-                ((ButtonToggle) button).setting = ConfigHandler.show_players;
-                if (ConfigHandler.show_players) {
-                    ConfigHandler.compact_hud = false;
+                ConfigHandler.fkcounterHUDShowPlayers = !ConfigHandler.fkcounterHUDShowPlayers;
+                ((ButtonToggle) button).setting = ConfigHandler.fkcounterHUDShowPlayers;
+                if (ConfigHandler.fkcounterHUDShowPlayers) {
+                    ConfigHandler.fkcounterHUDCompact = false;
                     buttoncompacthud.setting = false;
-                    ConfigHandler.FKHUDinSidebar = false;
+                    ConfigHandler.fkcounterHUDinSidebar = false;
                     buttonsidebar.setting = false;
                 }
                 break;
             case 3:
-                ConfigHandler.draw_background = !ConfigHandler.draw_background;
-                ((ButtonToggle) button).setting = ConfigHandler.draw_background;
+                ConfigHandler.fkcounterHUDDrawBackground = !ConfigHandler.fkcounterHUDDrawBackground;
+                ((ButtonToggle) button).setting = ConfigHandler.fkcounterHUDDrawBackground;
                 break;
             case 4:
-                ConfigHandler.text_shadow = !ConfigHandler.text_shadow;
-                ((ButtonToggle) button).setting = ConfigHandler.text_shadow;
+                ConfigHandler.fkcounterHUDTextShadow = !ConfigHandler.fkcounterHUDTextShadow;
+                ((ButtonToggle) button).setting = ConfigHandler.fkcounterHUDTextShadow;
                 break;
             case 7:
-                ConfigHandler.FKHUDinSidebar = !ConfigHandler.FKHUDinSidebar;
-                ((ButtonToggle) button).setting = ConfigHandler.FKHUDinSidebar;
-                if (ConfigHandler.FKHUDinSidebar) {
-                    ConfigHandler.show_players = false;
+                ConfigHandler.fkcounterHUDinSidebar = !ConfigHandler.fkcounterHUDinSidebar;
+                ((ButtonToggle) button).setting = ConfigHandler.fkcounterHUDinSidebar;
+                if (ConfigHandler.fkcounterHUDinSidebar) {
+                    ConfigHandler.fkcounterHUDShowPlayers = false;
                     buttonshowplayers.setting = false;
-                    ConfigHandler.compact_hud = true;
+                    ConfigHandler.fkcounterHUDCompact = true;
                     buttoncompacthud.setting = true;
                     if(Loader.isModLoaded("feather")) {
                         ChatUtil.addChatMessage(EnumChatFormatting.RED + "The sidebar integration for HUD doesn't work with Feather because the client is obfuscated and closed source >:(");
@@ -107,8 +107,8 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                 }
                 break;
             case 8:
-                ConfigHandler.finalsInTablist = !ConfigHandler.finalsInTablist;
-                ((ButtonToggle) button).setting = ConfigHandler.finalsInTablist;
+                ConfigHandler.fkcounterHUDTablist = !ConfigHandler.fkcounterHUDTablist;
+                ((ButtonToggle) button).setting = ConfigHandler.fkcounterHUDTablist;
                 break;
         }
 
@@ -157,11 +157,11 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
         switch (slider.id) {
             case 5:
                 final double newvalue = Math.floor(slider.getValue() * 20d) / 20d;
-                ConfigHandler.fkc_hud_size = newvalue;
+                ConfigHandler.fkcounterHUDSize = newvalue;
                 slider.setValue(newvalue);
                 break;
             case 6:
-                ConfigHandler.playerAmount = (int) slider.getValue();
+                ConfigHandler.fkcounterHUDPlayerAmount = (int) slider.getValue();
                 FKCounterHUD.instance.updateDisplayText();
                 break;
         }

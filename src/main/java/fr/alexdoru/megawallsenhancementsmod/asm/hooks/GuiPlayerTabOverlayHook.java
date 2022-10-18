@@ -16,11 +16,11 @@ public class GuiPlayerTabOverlayHook {
     private static final int FK_SCORE_WIDTH = mc.fontRendererObj.getStringWidth("00  ");
 
     public static int getFKScoreWidth() {
-        return ConfigHandler.finalsInTablist ? (FKCounterMod.isInMwGame ? FK_SCORE_WIDTH : 0) : 0;
+        return ConfigHandler.fkcounterHUDTablist ? (FKCounterMod.isInMwGame ? FK_SCORE_WIDTH : 0) : 0;
     }
 
     public static void renderFinals(int playersFinals, int x, int y) {
-        if (!ConfigHandler.finalsInTablist || playersFinals == 0 || !FKCounterMod.isInMwGame) {
+        if (!ConfigHandler.fkcounterHUDTablist || playersFinals == 0 || !FKCounterMod.isInMwGame) {
             return;
         }
         final String s1 = EnumChatFormatting.GOLD + "" + playersFinals;

@@ -94,7 +94,7 @@ public class ChatEvents {
             /*
              * shortens the coins messages removing the booster info
              */
-            if (ConfigHandler.shortencoinmessage) {
+            if (ConfigHandler.shortCoinMessage) {
                 final Matcher matchercoins = COINS_PATTERN.matcher(msg);
                 if (matchercoins.matches()) {
                     event.message = new ChatComponentText(fmsg.replace(matchercoins.group(1), ""));
@@ -163,7 +163,7 @@ public class ChatEvents {
                 return;
             }
 
-            if (ConfigHandler.strengthHUD && msg.equals(HUNTER_STRENGTH_MESSAGE)) {
+            if (ConfigHandler.showStrengthHUD && msg.equals(HUNTER_STRENGTH_MESSAGE)) {
                 HunterStrengthHUD.instance.setStrengthRenderStart(5000L);
                 return;
             }
@@ -186,7 +186,7 @@ public class ChatEvents {
             }
 
             /*Status messages*/
-        } else if (ConfigHandler.strengthHUD && event.type == 2) {
+        } else if (ConfigHandler.showStrengthHUD && event.type == 2) {
 
             final String fmsg = event.message.getFormattedText();
 

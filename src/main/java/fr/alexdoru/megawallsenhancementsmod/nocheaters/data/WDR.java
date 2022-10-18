@@ -47,7 +47,7 @@ public class WDR {
     }
 
     public boolean shouldPutGrayIcon() {
-        return ConfigHandler.toggleautoreport && isOlderThanMaxAutoreport((new Date()).getTime());
+        return ConfigHandler.toggleAutoreport && isOlderThanMaxAutoreport((new Date()).getTime());
     }
 
     public boolean isOnlyIgnored() {
@@ -71,7 +71,7 @@ public class WDR {
     }
 
     public boolean canBeAutoreported(long datenow) {
-        return ConfigHandler.toggleautoreport
+        return ConfigHandler.toggleAutoreport
                 && FKCounterMod.isInMwGame
                 && !FKCounterMod.isitPrepPhase
                 && canBeReported(datenow)
@@ -83,7 +83,7 @@ public class WDR {
      * to prevent chat spam while playing
      */
     public boolean shouldPrintBigText(long datenow) {
-        return FKCounterMod.isMWEnvironement && !FKCounterMod.isInMwGame && ConfigHandler.toggleautoreport && isOlderThanMaxAutoreport(datenow);
+        return FKCounterMod.isMWEnvironement && !FKCounterMod.isInMwGame && ConfigHandler.toggleAutoreport && isOlderThanMaxAutoreport(datenow);
     }
 
     public boolean hasValidCheats() {

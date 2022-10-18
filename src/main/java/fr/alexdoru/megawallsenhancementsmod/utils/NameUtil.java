@@ -137,7 +137,7 @@ public class NameUtil {
             final long datenow = (new Date()).getTime();
             final String playerName = player.getName();
             final boolean gotautoreported = ReportQueue.INSTANCE.addAutoReportToQueue(datenow, playerName, mwPlayerData.wdr);
-            if (ConfigHandler.togglewarnings || mwPlayerData.wdr.shouldPrintBigText(datenow)) {
+            if (ConfigHandler.warningMessages || mwPlayerData.wdr.shouldPrintBigText(datenow)) {
                 final String uuid = player.getUniqueID().toString().replace("-", "");
                 ChatHandler.deleteWarningMessagesFor(playerName);
                 NoCheatersMessagesHandler.printWarningMessage(
@@ -190,7 +190,7 @@ public class NameUtil {
             final String squadname = SquadEvent.getSquad().get(username);
             final boolean isSquadMate = squadname != null;
 
-            if (ConfigHandler.toggleicons) {
+            if (ConfigHandler.iconsOnNames) {
 
                 if (isSquadMate) {
 

@@ -16,7 +16,7 @@ public class KillCooldownHUD extends MyCachedHUD {
     private final TimerUtil timerUpdateText = new TimerUtil(1000L);
 
     public KillCooldownHUD() {
-        super(ConfigHandler.killcooldownHUDPosition);
+        super(ConfigHandler.killCooldownHUDPosition);
         instance = this;
     }
 

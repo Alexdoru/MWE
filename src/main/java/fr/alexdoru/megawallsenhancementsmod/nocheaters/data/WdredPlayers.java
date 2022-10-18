@@ -85,7 +85,7 @@ public class WdredPlayers {
                         logger.error("Failed to parse timestamp for : " + uuid);
                     }
 
-                    if (ConfigHandler.deleteReports && datenow > timestamp + ConfigHandler.timeDeleteReport) {
+                    if (ConfigHandler.deleteOldReports && datenow > timestamp + ConfigHandler.timeDeleteReport) {
                         final ArrayList<String> hacks = transformOldReports(Arrays.copyOfRange(split, oldDataFormat ? 2 : 3, split.length));
                         if (hacks.isEmpty()) {
                             continue;

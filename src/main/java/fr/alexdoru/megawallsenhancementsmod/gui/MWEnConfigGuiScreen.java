@@ -84,9 +84,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 16:
                 return "Strength particule HBR DRE : " + getSuffix(ConfigHandler.strengthParticules);
             case 15:
-                return "Icons on names : " + getSuffix(ConfigHandler.toggleicons);
+                return "Icons on names : " + getSuffix(ConfigHandler.iconsOnNames);
             case 0:
-                return "Short coin messages : " + getSuffix(ConfigHandler.shortencoinmessage);
+                return "Short coin messages : " + getSuffix(ConfigHandler.shortCoinMessage);
             case 24:
                 return "Prestige V tags : " + getSuffix(ConfigHandler.prestigeV);
             case 25:
@@ -96,15 +96,15 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 27:
                 return "Nick Hider : " + getSuffix(ConfigHandler.nickHider);
             case 9:
-                return "Show strength HUD : " + getSuffix(ConfigHandler.strengthHUD);
+                return "Show strength HUD : " + getSuffix(ConfigHandler.showStrengthHUD);
             case 18:
                 return "Cancel night vision effect : " + getSuffix(!ConfigHandler.keepNightVisionEffect);
             case 2:
-                return "Show /kill cooldown HUD : " + getSuffix(ConfigHandler.show_killcooldownHUD);
+                return "Show /kill cooldown HUD : " + getSuffix(ConfigHandler.showKillCooldownHUD);
             case 3:
-                return "Show arrow Hit HUD : " + getSuffix(ConfigHandler.show_ArrowHitHUD);
+                return "Show arrow Hit HUD : " + getSuffix(ConfigHandler.showArrowHitHUD);
             case 11:
-                return "Show wither death time HUD : " + (ConfigHandler.witherHUDinSidebar ? EnumChatFormatting.YELLOW + "in Sidebar" : getSuffix(ConfigHandler.show_lastWitherHUD));
+                return "Show wither death time HUD : " + (ConfigHandler.witherHUDinSidebar ? EnumChatFormatting.YELLOW + "in Sidebar" : getSuffix(ConfigHandler.showLastWitherHUD));
             case 19:
                 return "Colored tablist health : " + getSuffix(ConfigHandler.useColoredScores);
             case 17:
@@ -237,7 +237,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 ConfigHandler.strengthParticules = !ConfigHandler.strengthParticules;
                 break;
             case 15:
-                ConfigHandler.toggleicons = !ConfigHandler.toggleicons;
+                ConfigHandler.iconsOnNames = !ConfigHandler.iconsOnNames;
                 NameUtil.refreshAllNamesInWorld();
                 break;
             case 24:
@@ -263,11 +263,11 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 ConfigHandler.nickHider = !ConfigHandler.nickHider;
                 break;
             case 0:
-                ConfigHandler.shortencoinmessage = !ConfigHandler.shortencoinmessage;
+                ConfigHandler.shortCoinMessage = !ConfigHandler.shortCoinMessage;
                 break;
             case 9:
-                ConfigHandler.strengthHUD = !ConfigHandler.strengthHUD;
-                if (ConfigHandler.strengthHUD) {
+                ConfigHandler.showStrengthHUD = !ConfigHandler.showStrengthHUD;
+                if (ConfigHandler.showStrengthHUD) {
                     SoundUtil.playStrengthSound();
                 }
                 break;
@@ -275,25 +275,25 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 ConfigHandler.keepNightVisionEffect = !ConfigHandler.keepNightVisionEffect;
                 break;
             case 2:
-                ConfigHandler.show_killcooldownHUD = !ConfigHandler.show_killcooldownHUD;
+                ConfigHandler.showKillCooldownHUD = !ConfigHandler.showKillCooldownHUD;
                 break;
             case 3:
-                ConfigHandler.show_ArrowHitHUD = !ConfigHandler.show_ArrowHitHUD;
+                ConfigHandler.showArrowHitHUD = !ConfigHandler.showArrowHitHUD;
                 break;
             case 11:
-                if (ConfigHandler.show_lastWitherHUD && !ConfigHandler.witherHUDinSidebar) {
+                if (ConfigHandler.showLastWitherHUD && !ConfigHandler.witherHUDinSidebar) {
                     ConfigHandler.witherHUDinSidebar = true;
                     if(Loader.isModLoaded("feather")) {
                         ChatUtil.addChatMessage(EnumChatFormatting.RED + "The sidebar integration for HUD doesn't work with Feather because the client is obfuscated and closed source >:(");
                     }
                     break;
                 }
-                if (!ConfigHandler.show_lastWitherHUD && !ConfigHandler.witherHUDinSidebar) {
-                    ConfigHandler.show_lastWitherHUD = true;
+                if (!ConfigHandler.showLastWitherHUD && !ConfigHandler.witherHUDinSidebar) {
+                    ConfigHandler.showLastWitherHUD = true;
                     break;
                 }
                 ConfigHandler.witherHUDinSidebar = false;
-                ConfigHandler.show_lastWitherHUD = false;
+                ConfigHandler.showLastWitherHUD = false;
                 break;
             case 19:
                 ConfigHandler.useColoredScores = !ConfigHandler.useColoredScores;
