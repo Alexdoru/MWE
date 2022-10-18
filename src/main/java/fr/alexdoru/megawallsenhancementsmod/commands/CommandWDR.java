@@ -243,7 +243,7 @@ public class CommandWDR extends CommandBase {
                 if (uuid != null && !HypixelApiKeyUtil.apiKeyIsNotSetup()) {
                     final CachedHypixelPlayerData playerdata;
                     try {
-                        playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                        playerdata = new CachedHypixelPlayerData(uuid);
                         final LoginData loginData = new LoginData(playerdata.getPlayerData());
                         formattedPlayername = loginData.getFormattedName();
                         if (loginData.hasNeverJoinedHypixel()) {

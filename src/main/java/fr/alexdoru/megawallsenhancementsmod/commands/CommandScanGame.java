@@ -140,7 +140,7 @@ class ScanPlayerTask implements Callable<String> {
             }
 
             final String playername = networkPlayerInfo.getGameProfile().getName();
-            final HypixelPlayerData playerdata = new HypixelPlayerData(uuid.toString().replace("-", ""), HypixelApiKeyUtil.getApiKey());
+            final HypixelPlayerData playerdata = new HypixelPlayerData(uuid.toString().replace("-", ""));
             final MegaWallsStats megawallsstats = new MegaWallsStats(playerdata.getPlayerData());
             IChatComponent imsg = null;
 

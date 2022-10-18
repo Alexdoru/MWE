@@ -158,7 +158,7 @@ public class CommandNocheaters extends CommandBase {
                         if (uuid != null && !HypixelApiKeyUtil.apiKeyIsNotSetup()) {
                             final CachedHypixelPlayerData playerdata;
                             try {
-                                playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                                playerdata = new CachedHypixelPlayerData(uuid);
                                 final LoginData loginData = new LoginData(playerdata.getPlayerData());
                                 if (loginData.hasNeverJoinedHypixel()) {
                                     uuid = null;
@@ -441,7 +441,7 @@ class CreateReportLineTask implements Callable<IChatComponent> {
 
                 } else {
 
-                    final HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                    final HypixelPlayerData playerdata = new HypixelPlayerData(uuid);
                     final LoginData logindata = new LoginData(playerdata.getPlayerData());
                     imsg = NoCheatersMessagesHandler.createPlayerNameWithHoverText(logindata.getFormattedName(), logindata.getdisplayname(), uuid, wdr, EnumChatFormatting.WHITE)[0];
 
@@ -516,7 +516,7 @@ class IgnoreLineTask implements Callable<IChatComponent> {
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to un-ignore " + formattedName)))
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nocheaters ignoreremove " + uuid + " " + uuid)));
             } else {
-                final HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                final HypixelPlayerData playerdata = new HypixelPlayerData(uuid);
                 final LoginData logindata = new LoginData(playerdata.getPlayerData());
                 formattedName = logindata.getFormattedName();
                 return new ChatComponentText(formattedName + "\n").setChatStyle(new ChatStyle()

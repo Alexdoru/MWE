@@ -79,8 +79,8 @@ class StalkTask implements Callable<String> {
             // player found on mojang's api
 
             final String playername = apiname.getName();
-            final HypixelPlayerStatus apistatus = new HypixelPlayerStatus(uuid, HypixelApiKeyUtil.getApiKey());
-            final HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+            final HypixelPlayerStatus apistatus = new HypixelPlayerStatus(uuid);
+            final HypixelPlayerData playerdata = new HypixelPlayerData(uuid);
             final LoginData logindata = new LoginData(playerdata.getPlayerData());
             if (!playername.equals(logindata.getdisplayname())) {
                 ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "This player never joined Hypixel, it might be a nick.");

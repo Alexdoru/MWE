@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
+import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 
 public class HypixelPlayerData {
@@ -12,9 +13,9 @@ public class HypixelPlayerData {
     private final JsonObject playerData;
     private final String uuid;
 
-    public HypixelPlayerData(String uuid, String apikey) throws ApiException {
+    public HypixelPlayerData(String uuid) throws ApiException {
 
-        final HttpClient httpclient = new HttpClient("https://api.hypixel.net/player?key=" + apikey + "&uuid=" + uuid);
+        final HttpClient httpclient = new HttpClient("https://api.hypixel.net/player?key=" + HypixelApiKeyUtil.getApiKey() + "&uuid=" + uuid);
         final String rawresponse = httpclient.getrawresponse();
 
         if (rawresponse == null)
