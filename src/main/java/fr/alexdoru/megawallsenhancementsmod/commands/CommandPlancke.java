@@ -59,7 +59,7 @@ public class CommandPlancke extends CommandBase {
             final CachedHypixelPlayerData playerdata;
             final GeneralInfo generalstats;
             try {
-                playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                playerdata = new CachedHypixelPlayerData(uuid);
                 generalstats = new GeneralInfo(playerdata.getPlayerData());
                 if (!playername.equals(generalstats.getdisplayname())) {
                     ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "This player never joined Hypixel, it might be a nick.");
@@ -80,7 +80,7 @@ public class CommandPlancke extends CommandBase {
 
             if (args.length == 1) {
 
-                final HypixelGuild hypixelGuild = new HypixelGuild(uuid, HypixelApiKeyUtil.getApiKey());
+                final HypixelGuild hypixelGuild = new HypixelGuild(uuid);
                 final String guildTag = hypixelGuild.getFormattedGuildTag();
                 ChatUtil.addChatMessage(generalstats.getFormattedMessage(formattedName + (guildTag == null ? "" : guildTag), hypixelGuild.getGuildName()));
 

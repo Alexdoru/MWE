@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
+import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -13,9 +14,9 @@ public class HypixelGuild {
     private String guildName;
     private String formattedGuildTag;
 
-    public HypixelGuild(String uuid, String apikey) throws ApiException {
+    public HypixelGuild(String uuid) throws ApiException {
 
-        final HttpClient httpclient = new HttpClient("https://api.hypixel.net/guild?key=" + apikey + "&player=" + uuid);
+        final HttpClient httpclient = new HttpClient("https://api.hypixel.net/guild?key=" + HypixelApiKeyUtil.getApiKey() + "&player=" + uuid);
         final String rawresponse = httpclient.getrawresponse();
 
         if (rawresponse == null) {

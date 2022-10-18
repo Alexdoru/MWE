@@ -11,11 +11,11 @@ public class CachedHypixelPlayerData {
     private static String uuid;
     private static final TimerUtil timer = new TimerUtil(60000L);
 
-    public CachedHypixelPlayerData(String uuidIn, String apikey) throws ApiException {
+    public CachedHypixelPlayerData(String uuidIn) throws ApiException {
         if (uuid != null && uuid.equals(uuidIn) && !timer.update()) {
             return;
         }
-        final HypixelPlayerData hypixelPlayerData = new HypixelPlayerData(uuidIn, apikey);
+        final HypixelPlayerData hypixelPlayerData = new HypixelPlayerData(uuidIn);
         playerData = hypixelPlayerData.getPlayerData();
         uuid = uuidIn;
     }

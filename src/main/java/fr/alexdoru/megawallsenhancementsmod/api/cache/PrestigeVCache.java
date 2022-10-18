@@ -4,7 +4,6 @@ package fr.alexdoru.megawallsenhancementsmod.api.cache;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassStats;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
-import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.util.EnumChatFormatting;
@@ -48,7 +47,7 @@ public class PrestigeVCache {
         Multithreading.addTaskToQueue(() -> {
 
             try {
-                final CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                final CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(uuid);
                 final MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwClass.className);
                 final PlayerPrestigeData playerPrestigeData = new PlayerPrestigeData();
                 playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints(), mwclassstats.getCoins());
@@ -69,7 +68,7 @@ public class PrestigeVCache {
         Multithreading.addTaskToQueue(() -> {
 
             try {
-                final CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                final CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(uuid);
                 final MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwClass.className);
                 playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints(), mwclassstats.getCoins());
                 NameUtil.updateGameProfileAndName(playername, false);

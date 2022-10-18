@@ -49,7 +49,7 @@ public class MWGameStatsEvent {
         Multithreading.addTaskToQueue(() -> {
             final String uuid = Minecraft.getMinecraft().thePlayer.getUniqueID().toString().replace("-", "");
             try {
-                final HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                final HypixelPlayerData playerdata = new HypixelPlayerData(uuid);
                 if (formattedname == null) {
                     final LoginData logindata = new LoginData(playerdata.getPlayerData());
                     formattedname = logindata.getFormattedName();
@@ -73,7 +73,7 @@ public class MWGameStatsEvent {
         Multithreading.addTaskToQueue(() -> {
             final String uuid = Minecraft.getMinecraft().thePlayer.getUniqueID().toString().replace("-", "");
             try {
-                final HypixelPlayerData playerdata = new HypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                final HypixelPlayerData playerdata = new HypixelPlayerData(uuid);
                 gameStats = new MegaWallsClassStats(playerdata.getPlayerData(), chosen_class);
                 if (MWclassStats == null) {
                     return null;
