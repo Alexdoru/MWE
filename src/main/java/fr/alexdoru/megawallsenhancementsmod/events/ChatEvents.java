@@ -60,7 +60,7 @@ public class ChatEvents {
 
     @SubscribeEvent
     public void onMWGameStart(MwGameEvent event) {
-        if (event.getType() == MwGameEvent.EventType.GAME_START || event.getType() == MwGameEvent.EventType.GAME_END ) {
+        if (event.getType() == MwGameEvent.EventType.GAME_START || event.getType() == MwGameEvent.EventType.GAME_END) {
             ReportSuggestionHandler.clearReportSuggestionHistory();
             ReportQueue.INSTANCE.clearPlayersReportedThisGame();
         }

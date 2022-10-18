@@ -20,7 +20,7 @@ public class MinecraftTransformer_DebugMessages implements IMyClassTransformer {
             if (checkMethodNode(methodNode, MethodMapping.RUNTICK)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
-                    if(checkMethodInsnNode(insnNode, MethodMapping.LOADRENDERER)) {
+                    if (checkMethodInsnNode(insnNode, MethodMapping.LOADRENDERER)) {
                         /*
                          * Injects after line 1989 :
                          * MinecraftHook.onSettingChange(this.gameSettings.advancedItemTooltips, "Advanced Item Tooltips");
