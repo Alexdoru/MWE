@@ -47,9 +47,8 @@ public class PrestigeVCache {
 
         Multithreading.addTaskToQueue(() -> {
 
-            final CachedHypixelPlayerData playerdata;
             try {
-                playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                final CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
                 final MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwClass.className);
                 final PlayerPrestigeData playerPrestigeData = new PlayerPrestigeData();
                 playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints(), mwclassstats.getCoins());
@@ -69,9 +68,8 @@ public class PrestigeVCache {
 
         Multithreading.addTaskToQueue(() -> {
 
-            final CachedHypixelPlayerData playerdata;
             try {
-                playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
+                final CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(uuid, HypixelApiKeyUtil.getApiKey());
                 final MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwClass.className);
                 playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints(), mwclassstats.getCoins());
                 NameUtil.updateGameProfileAndName(playername, false);
