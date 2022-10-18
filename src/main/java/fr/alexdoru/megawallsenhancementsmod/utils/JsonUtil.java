@@ -6,8 +6,16 @@ import com.google.gson.JsonObject;
 
 import java.util.List;
 
-// https://github.com/5zig/The-5zig-Mod/blob/efce66b2cec83e76f40e4e18e96a2013a89e0a42/The%205zig%20Mod/src/eu/the5zig/mod/util/JsonUtil.java
 public class JsonUtil {
+
+    // TODO faire que tous les calls de json passent par cette class
+
+    public static boolean getBoolean(JsonObject object, String name) {
+        final JsonElement element = object.get(name);
+        if (element == null || element.isJsonNull())
+            return false;
+        return element.getAsBoolean();
+    }
 
     public static int getInt(JsonObject object, String name) {
         final JsonElement element = object.get(name);
