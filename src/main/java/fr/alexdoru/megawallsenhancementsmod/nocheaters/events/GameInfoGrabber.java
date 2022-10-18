@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class GameInfoGrabber {
 
-    private static final Pattern GAME_ID_PATTERN = Pattern.compile("\\s*\\d+/\\d+/\\d+\\s+([\\d\\w]+)\\s*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern GAME_ID_PATTERN = Pattern.compile("\\d+/\\d+/\\d+\\s+([\\d\\w]+)");
     private static final String TIME_WALLS_FALL = "Walls Fall"; // finish 6min after replay starts
     private static final String TIME_ENRAGE_OFF = "Enrage Off"; // lasts for 8mins
     private static final String TIME_DEATHMATCH = "Deathmatch"; // lasts for 31min
@@ -26,7 +26,7 @@ public class GameInfoGrabber {
             return "?";
         }
         final Matcher matcher = GAME_ID_PATTERN.matcher(scoresRaw.get(0));
-        if (!matcher.matches()) {
+        if (!matcher.find()) {
             return "?";
         }
         return matcher.group(1);
