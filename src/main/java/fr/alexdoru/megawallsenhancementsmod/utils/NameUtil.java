@@ -53,7 +53,8 @@ public class NameUtil {
     /**
      * This updates the infos storred in GameProfile.MWPlayerData for the player : playername
      * and refreshes the name in the tablist and the nametag
-     * set refreshDisplayName to true to update the name of the player in case you change it via a command
+     * set refreshDisplayName to true to fire the NameFormat Event and
+     * update the name of the player in case you change it via a command
      * for example : /squad add player as aliasname
      */
     public static void updateGameProfileAndName(String playername, boolean refreshDisplayName) {
