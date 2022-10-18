@@ -39,6 +39,7 @@ public class HttpClient {
             connection.setRequestMethod("GET");
             connection.setConnectTimeout(10000);
             connection.setReadTimeout(10000);
+            connection.addRequestProperty("User-Agent", "Alexdoru's Mega Walls Enhancements Mod");
 
             final int status = connection.getResponseCode();
 
