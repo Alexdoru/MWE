@@ -7,12 +7,14 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 
 public class ScangameData {
 
     private static final ScangameData instance = new ScangameData();
     private static final HashMap<UUID, ScanResult> scangameMap = new HashMap<>();
+    private static final HashSet<UUID> skipScanSetUUID = new HashSet<>();
     private static String scanGameId;
 
     static {
@@ -60,6 +62,14 @@ public class ScangameData {
 
     public static String getScanGameId() {
         return scanGameId;
+    }
+
+    public static void addToSkipSet(UUID uuid) {
+        skipScanSetUUID.add(uuid);
+    }
+
+    public static boolean skipScan(UUID uuid) {
+        return skipScanSetUUID.contains(uuid);
     }
 
     public static class ScanResult {
