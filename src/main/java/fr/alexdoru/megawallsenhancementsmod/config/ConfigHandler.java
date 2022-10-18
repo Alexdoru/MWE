@@ -18,16 +18,16 @@ public class ConfigHandler {
     /**
      * FKCounter config
      */
-    public static final GuiPosition fkcounterPosition = new GuiPosition(0d, 0d);
-    public static boolean show_fkcHUD;
-    public static boolean compact_hud;
-    public static boolean show_players;
-    public static boolean FKHUDinSidebar;
-    public static boolean draw_background;
-    public static boolean text_shadow;
-    public static double fkc_hud_size;
-    public static int playerAmount;
-    public static boolean finalsInTablist;
+    public static final GuiPosition fkcounterHUDPosition = new GuiPosition(0d, 0d);
+    public static boolean showfkcounterHUD;
+    public static boolean fkcounterHUDCompact;
+    public static boolean fkcounterHUDShowPlayers;
+    public static boolean fkcounterHUDinSidebar;
+    public static boolean fkcounterHUDDrawBackground;
+    public static boolean fkcounterHUDTextShadow;
+    public static double fkcounterHUDSize;
+    public static int fkcounterHUDPlayerAmount;
+    public static boolean fkcounterHUDTablist;
 
     /**
      * MWEnhancements config
@@ -35,7 +35,7 @@ public class ConfigHandler {
     public static String APIKey;
     public static String hypixelNick;
     public static boolean strengthParticules;
-    public static boolean shortencoinmessage;
+    public static boolean shortCoinMessage;
     public static boolean playSoundLowHP;
     public static double healthThreshold;
     public static boolean keepNightVisionEffect;
@@ -52,27 +52,27 @@ public class ConfigHandler {
     /**
      * HUD config
      */
-    public static boolean show_killcooldownHUD;
-    public static final GuiPosition killcooldownHUDPosition = new GuiPosition(0d, 0d);
-    public static boolean show_ArrowHitHUD;
+    public static boolean showKillCooldownHUD;
+    public static final GuiPosition killCooldownHUDPosition = new GuiPosition(0d, 0d);
+    public static boolean showArrowHitHUD;
     public static final GuiPosition arrowHitHUDPosition = new GuiPosition(0d, 0d);
-    public static boolean show_lastWitherHUD;
+    public static boolean showLastWitherHUD;
     public static boolean witherHUDinSidebar;
     public static final GuiPosition lastWitherHUDPosition = new GuiPosition(0d, 0d);
-    public static boolean strengthHUD;
+    public static boolean showStrengthHUD;
     public static final GuiPosition hunterStrengthHUDPosition = new GuiPosition(0d, 0d);
-    public static boolean squadHealthHUD;// TODO add config
+    public static boolean showSquadHealthHUD;// TODO add config
     public static final GuiPosition squadHealthHUDPosition = new GuiPosition(0d, 0d);// TODO add config
 
     /**
      * NoCheaters Config
      */
-    public static boolean toggleicons;
-    public static boolean togglewarnings;
-    public static boolean toggleautoreport;
-    public static boolean reportsuggestions;
+    public static boolean iconsOnNames;
+    public static boolean warningMessages;
+    public static boolean toggleAutoreport;
+    public static boolean reportSuggestions;
     public static boolean autoreportSuggestions;
-    public static boolean deleteReports;
+    public static boolean deleteOldReports;
     public static long timeDeleteReport;
     public static boolean censorCheaterChatMsg;
     public static boolean deleteCheaterChatMsg;
@@ -92,7 +92,7 @@ public class ConfigHandler {
     public static boolean drawHitboxItemFrame;
     public static boolean drawHitboxForOtherEntity;
     public static boolean drawRedBox;
-    public static boolean HideBlueVect;
+    public static boolean hideBlueVect;
     public static boolean drawBlueVectForPlayersOnly;
     public static boolean makeBlueVect3Meters;
     public static boolean realSizeHitbox;
@@ -277,21 +277,21 @@ public class ConfigHandler {
         /*sets the fields of this class to the fields in the properties*/
         if (readFieldsFromConfig) {
 
-            fkcounterPosition.setRelative(pXpos_fkcHUD.getDouble(), pYpos_fkcHUD.getDouble());
-            show_fkcHUD = pshow_fkcHUD.getBoolean();
-            compact_hud = pcompactHUD.getBoolean();
-            show_players = pshow_players.getBoolean();
-            FKHUDinSidebar = pinSidebar.getBoolean();
-            draw_background = pdraw_background.getBoolean();
-            text_shadow = ptext_shadow.getBoolean();
-            fkc_hud_size = pfkc_hud_size.getDouble();
-            playerAmount = pPlayerAmount.getInt();
-            finalsInTablist = pfinalsInTablist.getBoolean();
+            fkcounterHUDPosition.setRelative(pXpos_fkcHUD.getDouble(), pYpos_fkcHUD.getDouble());
+            showfkcounterHUD = pshow_fkcHUD.getBoolean();
+            fkcounterHUDCompact = pcompactHUD.getBoolean();
+            fkcounterHUDShowPlayers = pshow_players.getBoolean();
+            fkcounterHUDinSidebar = pinSidebar.getBoolean();
+            fkcounterHUDDrawBackground = pdraw_background.getBoolean();
+            fkcounterHUDTextShadow = ptext_shadow.getBoolean();
+            fkcounterHUDSize = pfkc_hud_size.getDouble();
+            fkcounterHUDPlayerAmount = pPlayerAmount.getInt();
+            fkcounterHUDTablist = pfinalsInTablist.getBoolean();
 
             APIKey = pAPIKey.getString();
             hypixelNick = phypixelNick.getString();
             strengthParticules = pstrengthParticules.getBoolean();
-            shortencoinmessage = pShortencoinmessage.getBoolean();
+            shortCoinMessage = pShortencoinmessage.getBoolean();
             playSoundLowHP = pPlaySoundLowHP.getBoolean();
             healthThreshold = pHealthThreshold.getDouble();
             keepNightVisionEffect = !pCancelNightVisionEffect.getBoolean();
@@ -305,22 +305,22 @@ public class ConfigHandler {
             automaticUpdate = pautomaticUpdate.getBoolean();
             nickHider = pNickHider.getBoolean();
 
-            show_killcooldownHUD = pShow_killcooldownHUD.getBoolean();
-            killcooldownHUDPosition.setRelative(pXpos_killcooldownHUD.getDouble(), pYpos_killcooldownHUD.getDouble());
-            show_ArrowHitHUD = pShow_ArrowHitHUD.getBoolean();
+            showKillCooldownHUD = pShow_killcooldownHUD.getBoolean();
+            killCooldownHUDPosition.setRelative(pXpos_killcooldownHUD.getDouble(), pYpos_killcooldownHUD.getDouble());
+            showArrowHitHUD = pShow_ArrowHitHUD.getBoolean();
             arrowHitHUDPosition.setRelative(pXpos_ArrowHitHUD.getDouble(), pYpos_ArrowHitHUD.getDouble());
-            show_lastWitherHUD = pShow_lastWitherHUD.getBoolean();
+            showLastWitherHUD = pShow_lastWitherHUD.getBoolean();
             witherHUDinSidebar = pwitherHUDinSidebar.getBoolean();
             lastWitherHUDPosition.setRelative(pXpos_lastWitherHUD.getDouble(), pYpos_lastWitherHUD.getDouble());
-            strengthHUD = pHunterStrengthHUD.getBoolean();
+            showStrengthHUD = pHunterStrengthHUD.getBoolean();
             hunterStrengthHUDPosition.setRelative(pXpos_hunterHUD.getDouble(), pYpos_hunterHUD.getDouble());
 
-            toggleicons = pToggleicons.getBoolean();
-            togglewarnings = pTogglewarnings.getBoolean();
-            toggleautoreport = pToggleautoreport.getBoolean();
-            reportsuggestions = preportsuggestions.getBoolean();
+            iconsOnNames = pToggleicons.getBoolean();
+            warningMessages = pTogglewarnings.getBoolean();
+            toggleAutoreport = pToggleautoreport.getBoolean();
+            reportSuggestions = preportsuggestions.getBoolean();
             autoreportSuggestions = pautoreportSuggestions.getBoolean();
-            deleteReports = pdeleteReports.getBoolean();
+            deleteOldReports = pdeleteReports.getBoolean();
             timeDeleteReport = 24L * 3600L * 1000L * ((long) ptimeDeleteReport.getInt());
             censorCheaterChatMsg = pcensorCheaterChatMsg.getBoolean();
             deleteCheaterChatMsg = pdeleteCheaterChatMsg.getBoolean();
@@ -336,7 +336,7 @@ public class ConfigHandler {
             drawHitboxItemFrame = pdrawHitboxItemFrame.getBoolean();
             drawHitboxForOtherEntity = pdrawHitboxForOtherEntity.getBoolean();
             drawRedBox = pdrawRedBox.getBoolean();
-            HideBlueVect = pHideBlueVect.getBoolean();
+            hideBlueVect = pHideBlueVect.getBoolean();
             drawBlueVectForPlayersOnly = pdrawBlueVectForPlayersOnly.getBoolean();
             makeBlueVect3Meters = pmakeBlueVect3Meters.getBoolean();
             realSizeHitbox = prealSizeHitbox.getBoolean();
@@ -347,23 +347,23 @@ public class ConfigHandler {
 
         if (saveFieldsToConfig) {
 
-            final double[] fkcHUDarray = fkcounterPosition.getRelativePosition();
+            final double[] fkcHUDarray = fkcounterHUDPosition.getRelativePosition();
             pXpos_fkcHUD.set(fkcHUDarray[0]);
             pYpos_fkcHUD.set(fkcHUDarray[1]);
-            pshow_fkcHUD.set(show_fkcHUD);
-            pcompactHUD.set(compact_hud);
-            pshow_players.set(show_players);
-            pinSidebar.set(FKHUDinSidebar);
-            pdraw_background.set(draw_background);
-            ptext_shadow.set(text_shadow);
-            pfkc_hud_size.set(fkc_hud_size);
-            pPlayerAmount.set(playerAmount);
-            pfinalsInTablist.set(finalsInTablist);
+            pshow_fkcHUD.set(showfkcounterHUD);
+            pcompactHUD.set(fkcounterHUDCompact);
+            pshow_players.set(fkcounterHUDShowPlayers);
+            pinSidebar.set(fkcounterHUDinSidebar);
+            pdraw_background.set(fkcounterHUDDrawBackground);
+            ptext_shadow.set(fkcounterHUDTextShadow);
+            pfkc_hud_size.set(fkcounterHUDSize);
+            pPlayerAmount.set(fkcounterHUDPlayerAmount);
+            pfinalsInTablist.set(fkcounterHUDTablist);
 
             pAPIKey.set(APIKey);
             phypixelNick.set(hypixelNick);
             pstrengthParticules.set(strengthParticules);
-            pShortencoinmessage.set(shortencoinmessage);
+            pShortencoinmessage.set(shortCoinMessage);
             pPlaySoundLowHP.set(playSoundLowHP);
             pHealthThreshold.set(healthThreshold);
             pCancelNightVisionEffect.set(!keepNightVisionEffect);
@@ -377,33 +377,33 @@ public class ConfigHandler {
             pautomaticUpdate.set(automaticUpdate);
             pNickHider.set(nickHider);
 
-            pShow_killcooldownHUD.set(show_killcooldownHUD);
-            final double[] killcooldownHUDarray = killcooldownHUDPosition.getRelativePosition();
+            pShow_killcooldownHUD.set(showKillCooldownHUD);
+            final double[] killcooldownHUDarray = killCooldownHUDPosition.getRelativePosition();
             pXpos_killcooldownHUD.set(killcooldownHUDarray[0]);
             pYpos_killcooldownHUD.set(killcooldownHUDarray[1]);
 
-            pShow_ArrowHitHUD.set(show_ArrowHitHUD);
+            pShow_ArrowHitHUD.set(showArrowHitHUD);
             final double[] ArrowHitHUDarray = arrowHitHUDPosition.getRelativePosition();
             pXpos_ArrowHitHUD.set(ArrowHitHUDarray[0]);
             pYpos_ArrowHitHUD.set(ArrowHitHUDarray[1]);
 
-            pShow_lastWitherHUD.set(show_lastWitherHUD);
+            pShow_lastWitherHUD.set(showLastWitherHUD);
             pwitherHUDinSidebar.set(witherHUDinSidebar);
             final double[] lastWitherHUDarray = lastWitherHUDPosition.getRelativePosition();
             pXpos_lastWitherHUD.set(lastWitherHUDarray[0]);
             pYpos_lastWitherHUD.set(lastWitherHUDarray[1]);
 
-            pHunterStrengthHUD.set(strengthHUD);
+            pHunterStrengthHUD.set(showStrengthHUD);
             final double[] hunterStrengtharray = hunterStrengthHUDPosition.getRelativePosition();
             pXpos_hunterHUD.set(hunterStrengtharray[0]);
             pYpos_hunterHUD.set(hunterStrengtharray[1]);
 
-            pToggleicons.set(toggleicons);
-            pTogglewarnings.set(togglewarnings);
-            pToggleautoreport.set(toggleautoreport);
-            preportsuggestions.set(reportsuggestions);
+            pToggleicons.set(iconsOnNames);
+            pTogglewarnings.set(warningMessages);
+            pToggleautoreport.set(toggleAutoreport);
+            preportsuggestions.set(reportSuggestions);
             pautoreportSuggestions.set(autoreportSuggestions);
-            pdeleteReports.set(deleteReports);
+            pdeleteReports.set(deleteOldReports);
             ptimeDeleteReport.set((int) (timeDeleteReport / (24L * 3600L * 1000L)));
             pcensorCheaterChatMsg.set(censorCheaterChatMsg);
             pdeleteCheaterChatMsg.set(deleteCheaterChatMsg);
@@ -419,7 +419,7 @@ public class ConfigHandler {
             pdrawHitboxItemFrame.set(drawHitboxItemFrame);
             pdrawHitboxForOtherEntity.set(drawHitboxForOtherEntity);
             pdrawRedBox.set(drawRedBox);
-            pHideBlueVect.set(HideBlueVect);
+            pHideBlueVect.set(hideBlueVect);
             pdrawBlueVectForPlayersOnly.set(drawBlueVectForPlayersOnly);
             pmakeBlueVect3Meters.set(makeBlueVect3Meters);
             prealSizeHitbox.set(realSizeHitbox);

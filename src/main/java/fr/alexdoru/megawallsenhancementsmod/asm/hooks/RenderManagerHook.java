@@ -51,7 +51,7 @@ public class RenderManagerHook {
     }
 
     public static double getBlueVectLength(Entity entityIn) {
-        if (ConfigHandler.HideBlueVect) {
+        if (ConfigHandler.hideBlueVect) {
             return 0;
         }
         if (ConfigHandler.drawBlueVectForPlayersOnly) {

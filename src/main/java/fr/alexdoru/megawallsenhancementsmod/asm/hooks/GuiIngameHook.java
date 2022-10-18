@@ -18,10 +18,10 @@ public class GuiIngameHook {
     }
 
     public static String getSidebarTextLine(String textIn, int lineNumber) {
-        if (ConfigHandler.witherHUDinSidebar && lineNumber == 12 && ConfigHandler.show_lastWitherHUD && FKCounterMod.isInMwGame && ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive()) {
+        if (ConfigHandler.witherHUDinSidebar && lineNumber == 12 && ConfigHandler.showLastWitherHUD && FKCounterMod.isInMwGame && ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive()) {
             return LastWitherHPHUD.instance.displayText;
         }
-        if (ConfigHandler.FKHUDinSidebar && lineNumber == 11 && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame && KillCounter.getGameId() != null) {
+        if (ConfigHandler.fkcounterHUDinSidebar && lineNumber == 11 && ConfigHandler.showfkcounterHUD && FKCounterMod.isInMwGame && KillCounter.getGameId() != null) {
             return FKCounterHUD.instance.displayText;
         }
         return textIn;

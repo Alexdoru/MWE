@@ -48,7 +48,7 @@ public class ReportSuggestionHandler {
             @Nullable String squadname,
             String msgIn,
             String fmsgIn) {
-        if (ConfigHandler.reportsuggestions || ConfigHandler.autoreportSuggestions) {
+        if (ConfigHandler.reportSuggestions || ConfigHandler.autoreportSuggestions) {
             final Matcher matcher1 = REPORT_PATTERN1.matcher(msgIn);
             final Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);
             if (matcher1.find()) {
@@ -284,7 +284,7 @@ public class ReportSuggestionHandler {
             boolean gotAutoreported,
             @Nullable String senderUUID) {
 
-        if (!ConfigHandler.reportsuggestions) {
+        if (!ConfigHandler.reportSuggestions) {
             ChatUtil.addChatMessage(getIChatComponentWithSquadnameAsSender(fmsg, messageSender, squadname));
             return;
         }

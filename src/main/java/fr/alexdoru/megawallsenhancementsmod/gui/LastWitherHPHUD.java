@@ -65,7 +65,7 @@ public class LastWitherHPHUD extends MyCachedHUD {
 
     @Override
     public boolean isEnabled() {
-        return !ConfigHandler.witherHUDinSidebar && ConfigHandler.show_lastWitherHUD && FKCounterMod.isInMwGame && ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive();
+        return !ConfigHandler.witherHUDinSidebar && ConfigHandler.showLastWitherHUD && FKCounterMod.isInMwGame && ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive();
     }
 
 }

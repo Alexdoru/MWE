@@ -140,7 +140,7 @@ public class ArrowHitHUD extends MyCachedHUD {
 
     @Override
     public boolean isEnabled() {
-        return ConfigHandler.show_ArrowHitHUD && System.currentTimeMillis() - hitTime < 1000L;
+        return ConfigHandler.showArrowHitHUD && System.currentTimeMillis() - hitTime < 1000L;
     }
 
 }

@@ -49,15 +49,15 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     private String getButtonDisplayString(int id) {
         switch (id) {
             case 1:
-                return "Warning messages in chat : " + getSuffix(ConfigHandler.togglewarnings);
+                return "Warning messages in chat : " + getSuffix(ConfigHandler.warningMessages);
             case 8:
-                return "Report suggestions in chat : " + getSuffix(ConfigHandler.reportsuggestions);
+                return "Report suggestions in chat : " + getSuffix(ConfigHandler.reportSuggestions);
             case 9:
                 return "Auto-report suggestions : " + getSuffix(ConfigHandler.autoreportSuggestions);
             case 2:
-                return "Auto-report cheaters : " + getSuffix(ConfigHandler.toggleautoreport);
+                return "Auto-report cheaters : " + getSuffix(ConfigHandler.toggleAutoreport);
             case 6:
-                return "Delete old reports : " + getSuffix(ConfigHandler.deleteReports);
+                return "Delete old reports : " + getSuffix(ConfigHandler.deleteOldReports);
             case 10:
                 return "Censor cheaters in chat : " + (ConfigHandler.deleteCheaterChatMsg ? EnumChatFormatting.GREEN + "Delete" : (ConfigHandler.censorCheaterChatMsg ? EnumChatFormatting.YELLOW + "Censor" : EnumChatFormatting.RED + "Disabled"));
             case 3:
@@ -116,19 +116,19 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     protected void actionPerformed(GuiButton button) throws IOException {
         switch (button.id) {
             case 1:
-                ConfigHandler.togglewarnings = !ConfigHandler.togglewarnings;
-                if (ConfigHandler.togglewarnings) {
+                ConfigHandler.warningMessages = !ConfigHandler.warningMessages;
+                if (ConfigHandler.warningMessages) {
                     NoCheatersMessagesHandler.printReportMessagesForWorld(false);
                 } else {
                     ChatHandler.deleteAllWarningMessages();
                 }
                 break;
             case 8:
-                ConfigHandler.reportsuggestions = !ConfigHandler.reportsuggestions;
-                if (ConfigHandler.reportsuggestions) {
+                ConfigHandler.reportSuggestions = !ConfigHandler.reportSuggestions;
+                if (ConfigHandler.reportSuggestions) {
                     SoundUtil.playReportSuggestionSound();
                 }
-                if (!ConfigHandler.reportsuggestions) {
+                if (!ConfigHandler.reportSuggestions) {
                     ConfigHandler.autoreportSuggestions = false;
                     autoreportSuggestionButton.displayString = getButtonDisplayString(9);
                 }
@@ -136,7 +136,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
             case 9:
                 ConfigHandler.autoreportSuggestions = !ConfigHandler.autoreportSuggestions;
                 if (ConfigHandler.autoreportSuggestions) {
-                    ConfigHandler.reportsuggestions = true;
+                    ConfigHandler.reportSuggestions = true;
                     reportSuggestionButton.displayString = getButtonDisplayString(8);
                 } else {
                     ReportQueue.INSTANCE.clearSuggestionsInReportQueue();
@@ -155,14 +155,14 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 ConfigHandler.censorCheaterChatMsg = false;
                 break;
             case 2:
-                ConfigHandler.toggleautoreport = !ConfigHandler.toggleautoreport;
+                ConfigHandler.toggleAutoreport = !ConfigHandler.toggleAutoreport;
                 NameUtil.refreshAllNamesInWorld();
                 break;
             case 3:
                 mc.displayGuiScreen(parent);
                 break;
             case 6:
-                ConfigHandler.deleteReports = !ConfigHandler.deleteReports;
+                ConfigHandler.deleteOldReports = !ConfigHandler.deleteOldReports;
                 break;
             default:
                 break;

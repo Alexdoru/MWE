@@ -35,22 +35,22 @@ public class FKCounterHUD extends MyCachedHUD {
     private static final int DUMMY_BACKGROUND_COLOR = new Color(255, 255, 255, 127).getRGB();
 
     public FKCounterHUD() {
-        super(ConfigHandler.fkcounterPosition);
+        super(ConfigHandler.fkcounterHUDPosition);
         instance = this;
     }
 
     @Override
     public int getHeight() {
-        if (ConfigHandler.compact_hud) {
-            return (int) (frObj.FONT_HEIGHT * ConfigHandler.fkc_hud_size);
+        if (ConfigHandler.fkcounterHUDCompact) {
+            return (int) (frObj.FONT_HEIGHT * ConfigHandler.fkcounterHUDSize);
         } else {
-            return (int) (frObj.FONT_HEIGHT * 4 * ConfigHandler.fkc_hud_size);
+            return (int) (frObj.FONT_HEIGHT * 4 * ConfigHandler.fkcounterHUDSize);
         }
     }
 
     @Override
     public int getWidth() {
-        return (int) (getMultilineWidth(getDisplayText()) * ConfigHandler.fkc_hud_size);
+        return (int) (getMultilineWidth(getDisplayText()) * ConfigHandler.fkcounterHUDSize);
     }
 
     @Override
@@ -60,15 +60,15 @@ public class FKCounterHUD extends MyCachedHUD {
         final int y = absolutePos[1];
         GlStateManager.pushMatrix();
         {
-            if (ConfigHandler.draw_background) {
+            if (ConfigHandler.fkcounterHUDDrawBackground) {
                 drawRect(x - 2, y - 2, x + getWidth() + 1, y + getHeight(), BACKGROUND_COLOR);
             }
             GlStateManager.translate(x, y, 0);
-            GlStateManager.scale(ConfigHandler.fkc_hud_size, ConfigHandler.fkc_hud_size, 0d);
-            if (ConfigHandler.compact_hud) {
-                frObj.drawString(getDisplayText(), 0, 0, 16777215, ConfigHandler.text_shadow);
+            GlStateManager.scale(ConfigHandler.fkcounterHUDSize, ConfigHandler.fkcounterHUDSize, 0d);
+            if (ConfigHandler.fkcounterHUDCompact) {
+                frObj.drawString(getDisplayText(), 0, 0, 16777215, ConfigHandler.fkcounterHUDTextShadow);
             } else {
-                drawMultilineString(getDisplayText(), 0, 0, ConfigHandler.text_shadow);
+                drawMultilineString(getDisplayText(), 0, 0, ConfigHandler.fkcounterHUDTextShadow);
             }
         }
         GlStateManager.popMatrix();
@@ -82,12 +82,12 @@ public class FKCounterHUD extends MyCachedHUD {
         final int y = absolutePos[1];
 
         final int width;
-        if (ConfigHandler.compact_hud) {
-            width = (int) (frObj.getStringWidth(DUMMY_TEXT_COMPACT) * ConfigHandler.fkc_hud_size);
-        } else if (ConfigHandler.show_players) {
-            width = (int) (getMultilineWidth(DUMMY_TEXT_PLAYERS) * ConfigHandler.fkc_hud_size);
+        if (ConfigHandler.fkcounterHUDCompact) {
+            width = (int) (frObj.getStringWidth(DUMMY_TEXT_COMPACT) * ConfigHandler.fkcounterHUDSize);
+        } else if (ConfigHandler.fkcounterHUDShowPlayers) {
+            width = (int) (getMultilineWidth(DUMMY_TEXT_PLAYERS) * ConfigHandler.fkcounterHUDSize);
         } else {
-            width = (int) (getMultilineWidth(DUMMY_TEXT) * ConfigHandler.fkc_hud_size);
+            width = (int) (getMultilineWidth(DUMMY_TEXT) * ConfigHandler.fkcounterHUDSize);
         }
 
         final int left = x - 2;
@@ -103,13 +103,13 @@ public class FKCounterHUD extends MyCachedHUD {
             drawVerticalLine(left, top, bottom, Color.RED.getRGB());
             drawVerticalLine(right, top, bottom, Color.RED.getRGB());
             GlStateManager.translate(x, y, 0);
-            GlStateManager.scale(ConfigHandler.fkc_hud_size, ConfigHandler.fkc_hud_size, 0d);
-            if (ConfigHandler.compact_hud) {
-                frObj.drawString(DUMMY_TEXT_COMPACT, 0, 0, 16777215, ConfigHandler.text_shadow);
-            } else if (ConfigHandler.show_players) {
-                drawMultilineString(DUMMY_TEXT_PLAYERS, 0, 0, ConfigHandler.text_shadow);
+            GlStateManager.scale(ConfigHandler.fkcounterHUDSize, ConfigHandler.fkcounterHUDSize, 0d);
+            if (ConfigHandler.fkcounterHUDCompact) {
+                frObj.drawString(DUMMY_TEXT_COMPACT, 0, 0, 16777215, ConfigHandler.fkcounterHUDTextShadow);
+            } else if (ConfigHandler.fkcounterHUDShowPlayers) {
+                drawMultilineString(DUMMY_TEXT_PLAYERS, 0, 0, ConfigHandler.fkcounterHUDTextShadow);
             } else {
-                drawMultilineString(DUMMY_TEXT, 0, 0, ConfigHandler.text_shadow);
+                drawMultilineString(DUMMY_TEXT, 0, 0, ConfigHandler.fkcounterHUDTextShadow);
             }
         }
         GlStateManager.popMatrix();
@@ -118,7 +118,7 @@ public class FKCounterHUD extends MyCachedHUD {
 
     @Override
     public boolean isEnabled() {
-        return !ConfigHandler.FKHUDinSidebar && ConfigHandler.show_fkcHUD && FKCounterMod.isInMwGame && KillCounter.getGameId() != null;
+        return !ConfigHandler.fkcounterHUDinSidebar && ConfigHandler.showfkcounterHUD && FKCounterMod.isInMwGame && KillCounter.getGameId() != null;
     }
 
     @Override
@@ -130,7 +130,7 @@ public class FKCounterHUD extends MyCachedHUD {
             final StringBuilder strBuilder = new StringBuilder();
             int i = 0;
 
-            if (ConfigHandler.compact_hud) {
+            if (ConfigHandler.fkcounterHUDCompact) {
 
                 for (final Entry<Integer, Integer> entry : sortedmap.entrySet()) {
                     if (i != 0) {
@@ -141,7 +141,7 @@ public class FKCounterHUD extends MyCachedHUD {
                     i++;
                 }
 
-            } else if (ConfigHandler.show_players) {
+            } else if (ConfigHandler.fkcounterHUDShowPlayers) {
 
                 for (final Entry<Integer, Integer> teamEntry : sortedmap.entrySet()) {
                     final int team = teamEntry.getKey();
@@ -161,7 +161,7 @@ public class FKCounterHUD extends MyCachedHUD {
                             }
                             strBuilder.append(SquadEvent.getSquadname(playerEntry.getKey())).append(" (").append(playerEntry.getValue()).append(")");
                             playerAmount++;
-                            if (playerAmount == ConfigHandler.playerAmount) {
+                            if (playerAmount == ConfigHandler.fkcounterHUDPlayerAmount) {
                                 break;
                             }
                             isFirst = false;

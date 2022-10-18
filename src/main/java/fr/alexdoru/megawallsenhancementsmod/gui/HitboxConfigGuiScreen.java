@@ -69,7 +69,7 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
             case 9:
                 return "Red eyeline : " + getSuffix(ConfigHandler.drawRedBox);
             case 10:
-                return "Draw blue vector : " + getSuffix(!ConfigHandler.HideBlueVect);
+                return "Draw blue vector : " + getSuffix(!ConfigHandler.hideBlueVect);
             case 11:
                 return "For players only : " + getSuffix(ConfigHandler.drawBlueVectForPlayersOnly);
             case 12:
@@ -120,7 +120,7 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
                 ConfigHandler.drawRedBox = !ConfigHandler.drawRedBox;
                 break;
             case 10:
-                ConfigHandler.HideBlueVect = !ConfigHandler.HideBlueVect;
+                ConfigHandler.hideBlueVect = !ConfigHandler.hideBlueVect;
                 break;
             case 11:
                 ConfigHandler.drawBlueVectForPlayersOnly = !ConfigHandler.drawBlueVectForPlayersOnly;
