@@ -12,7 +12,6 @@ import fr.alexdoru.megawallsenhancementsmod.gui.huds.KillCooldownHUD;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.GameInfoGrabber;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.util.ReportSuggestionHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -56,14 +55,6 @@ public class ChatEvents {
         MW_REPETITVE_MSG.add("Your Eagles Eye Skill is ready!");
         MW_REPETITVE_MSG.add("Left Click with any bow to activate your skill!");
         MW_REPETITVE_MSG.add("Your From the Depths Skill is ready!");
-    }
-
-    @SubscribeEvent
-    public void onMWGameStart(MwGameEvent event) {
-        if (event.getType() == MwGameEvent.EventType.GAME_START || event.getType() == MwGameEvent.EventType.GAME_END) {
-            ReportSuggestionHandler.clearReportSuggestionHistory();
-            ReportQueue.INSTANCE.clearPlayersReportedThisGame();
-        }
     }
 
     @SubscribeEvent
