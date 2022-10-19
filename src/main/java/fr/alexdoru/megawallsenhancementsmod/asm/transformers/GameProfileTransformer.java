@@ -1,8 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.ClassMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
+import fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping;
 import org.objectweb.asm.tree.ClassNode;
 
 import static org.objectweb.asm.Opcodes.ACC_PRIVATE;

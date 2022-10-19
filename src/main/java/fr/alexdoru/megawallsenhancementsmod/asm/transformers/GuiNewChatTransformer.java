@@ -1,9 +1,9 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.ClassMapping;
-import fr.alexdoru.megawallsenhancementsmod.asm.FieldMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
+import fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping;
+import fr.alexdoru.megawallsenhancementsmod.asm.mappings.FieldMapping;
 import org.objectweb.asm.tree.ClassNode;
 
 public class GuiNewChatTransformer implements IMyClassTransformer {

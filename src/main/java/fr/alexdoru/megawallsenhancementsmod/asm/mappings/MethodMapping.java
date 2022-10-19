@@ -1,6 +1,8 @@
-package fr.alexdoru.megawallsenhancementsmod.asm;
+package fr.alexdoru.megawallsenhancementsmod.asm.mappings;
 
-import static fr.alexdoru.megawallsenhancementsmod.asm.ClassMapping.*;
+import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
+
+import static fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping.*;
 import static org.objectweb.asm.Opcodes.*;
 
 public enum MethodMapping {

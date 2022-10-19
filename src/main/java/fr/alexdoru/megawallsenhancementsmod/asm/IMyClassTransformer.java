@@ -1,5 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.asm;
 
+import fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping;
+import fr.alexdoru.megawallsenhancementsmod.asm.mappings.FieldMapping;
+import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.*;
