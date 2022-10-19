@@ -5,6 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsEndGameStats;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.util.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.ClipboardUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
@@ -64,6 +65,7 @@ public class GuiScreenHook {
                         Minecraft.getMinecraft().thePlayer.sendChatMessage("/wdr " + playername);
                     }
                 }
+                ChatHandler.deleteWarningMessagesFor(playername);
                 NameUtil.updateGameProfileAndName(playername, false);
             } else {
                 ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Those cheats aren't recognized by the mod :" + EnumChatFormatting.GOLD + wdr.hacksToString() + EnumChatFormatting.RED + ", use valid cheats to use the reporting features.");
