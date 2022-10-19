@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.gui;
+package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.ReportQueue;
