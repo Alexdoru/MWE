@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.events.MWGameStatsEvent;
+import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsEndGameStats;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
@@ -29,11 +29,7 @@ public class GuiScreenHook {
             return true;
         }
         if (MW_GAME_END_STATS.equals(command)) {
-            if (MWGameStatsEvent.getGameStats() != null) {
-                ChatUtil.addChatMessage(MWGameStatsEvent.getGameStats().getGameStatMessage(MWGameStatsEvent.getFormattedname()));
-            } else {
-                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "No game stats available");
-            }
+            MegaWallsEndGameStats.printGameStatsMessage();
             return true;
         }
         if (command != null && command.startsWith(SEND_REPORT_AGAIN)) {
