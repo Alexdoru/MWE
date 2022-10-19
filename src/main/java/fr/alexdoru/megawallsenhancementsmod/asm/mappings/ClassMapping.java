@@ -1,4 +1,6 @@
-package fr.alexdoru.megawallsenhancementsmod.asm;
+package fr.alexdoru.megawallsenhancementsmod.asm.mappings;
+
+import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 
 public enum ClassMapping {
 
