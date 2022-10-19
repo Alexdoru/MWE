@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
+import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.ArrowHitHUD;
@@ -8,7 +9,6 @@ import fr.alexdoru.megawallsenhancementsmod.gui.huds.HunterStrengthHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.KillCooldownHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.LastWitherHPHUD;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import net.minecraft.client.gui.GuiButton;
