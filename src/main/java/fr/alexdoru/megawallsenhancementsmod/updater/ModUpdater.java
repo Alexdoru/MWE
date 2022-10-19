@@ -58,14 +58,19 @@ public class ModUpdater {
 
     private static void checkForgeVersion() {
         if (ForgeVersion.buildVersion < 2318) {
-            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "You are using an outdated version of forge, things might not work properly!");
+        final String forgeUrl = "https://files.minecraftforge.net/net/minecraftforge/forge/index_1.8.9.html";
+        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + "You are using an outdated version of forge, " +
+                "things might not work properly! Click this message to open the download page for Forge.")
+                .setChatStyle(new ChatStyle()
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, forgeUrl))
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + forgeUrl)))));
         }
     }
 
     /**
      * https://github.com/DeDiamondPro/Auto-Updater
      */
-    public static void checkForUpdate() throws ApiException, IOException {
+    private static void checkForUpdate() throws ApiException, IOException {
 
         final String GITHUB_API_URL = "https://api.github.com/repos/Alexdoru/MegaWallsEnhancements/releases";
         final HttpClient httpClient = new HttpClient(GITHUB_API_URL);
