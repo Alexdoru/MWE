@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.events;
 
+import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassSkinData;
@@ -10,7 +11,6 @@ import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;

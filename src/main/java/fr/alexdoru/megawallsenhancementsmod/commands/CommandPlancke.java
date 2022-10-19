@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
+import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
@@ -7,7 +8,6 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.*;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelGuild;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.CommandBase;
