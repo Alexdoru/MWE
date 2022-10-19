@@ -9,6 +9,7 @@ import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.ScoreboardEvent;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.NoCheatersEvents;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.util.ReportSuggestionHandler;
 import fr.alexdoru.megawallsenhancementsmod.updater.ModUpdater;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -67,6 +68,7 @@ public class MegaWallsEnhancementsMod {
         MinecraftForge.EVENT_BUS.register(new MWGameStatsEvent());
         MinecraftForge.EVENT_BUS.register(new RenderPlayerHook());
         MinecraftForge.EVENT_BUS.register(new NoCheatersEvents());
+        MinecraftForge.EVENT_BUS.register(new ReportSuggestionHandler());
 
         ClientCommandHandler.instance.registerCommand(new CommandWDR());
         ClientCommandHandler.instance.registerCommand(new CommandName());

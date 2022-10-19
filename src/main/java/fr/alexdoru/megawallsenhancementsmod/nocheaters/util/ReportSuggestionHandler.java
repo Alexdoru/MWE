@@ -10,6 +10,7 @@ import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.KillCounter;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
@@ -24,6 +25,7 @@ import net.minecraft.event.ClickEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -41,6 +43,14 @@ public class ReportSuggestionHandler {
     private static final List<StringLong> reportSuggestionHistory = new ArrayList<>();
     private static final List<Long> reportSpamCheck = new ArrayList<>();
     private static final long TIME_BETWEEN_REPORT_SUGGESTION_PLAYER = 40L * 60L * 1000L;
+
+    @SubscribeEvent
+    public void onMegaWallsGameEvent(MwGameEvent event) {
+        if (event.getType() == MwGameEvent.EventType.GAME_START || event.getType() == MwGameEvent.EventType.GAME_END) {
+            clearReportSuggestionHistory();
+            ReportQueue.INSTANCE.clearPlayersReportedThisGame();
+        }
+    }
 
     public static boolean parseReportMessage(
             @Nullable String senderRank,
@@ -387,7 +397,7 @@ public class ReportSuggestionHandler {
         return (mc.thePlayer != null && mc.thePlayer.getName().equalsIgnoreCase(name)) || (!ConfigHandler.hypixelNick.equals("") && ConfigHandler.hypixelNick.equals(name));
     }
 
-    public static void clearReportSuggestionHistory() {
+    private static void clearReportSuggestionHistory() {
         reportSuggestionHistory.clear();
     }
 
