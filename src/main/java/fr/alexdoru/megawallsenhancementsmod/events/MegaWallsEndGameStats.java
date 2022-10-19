@@ -9,6 +9,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiScreenHook;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
 import net.minecraft.client.Minecraft;
@@ -20,6 +21,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +32,7 @@ public class MegaWallsEndGameStats {
     private static boolean isRandom = false;
     /*Data downloaded at the start of the game*/
     private static MegaWallsClassStats mwClassStartGameStats;
+    private static long timestampGameStart;
     private static IChatComponent endGameStatsMessage;
 
     @SubscribeEvent
@@ -45,6 +48,7 @@ public class MegaWallsEndGameStats {
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
             return;
         }
+        timestampGameStart = (new Date()).getTime();
         Multithreading.addTaskToQueue(() -> {
             try {
                 final EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
@@ -76,7 +80,8 @@ public class MegaWallsEndGameStats {
                 final MegaWallsClassStats endGameStats = new MegaWallsClassStats(playerdata.getPlayerData(), selectedClass);
                 endGameStats.minus(mwClassStartGameStats);
                 final String formattedName = new LoginData(playerdata.getPlayerData()).getFormattedName();
-                endGameStatsMessage = endGameStats.getGameStatMessage(formattedName);
+                final String gameDuration = DateUtil.timeSince(timestampGameStart);
+                endGameStatsMessage = endGameStats.getGameStatMessage(formattedName, gameDuration);
                 mwClassStartGameStats = null;
                 ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Click to view the stats of your " + EnumChatFormatting.AQUA + "Mega Walls " + EnumChatFormatting.YELLOW + "game!")
                         .setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.MW_GAME_END_STATS))));
