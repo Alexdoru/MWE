@@ -12,33 +12,32 @@ import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MWGameStatsEvent {
+public class MegaWallsEndGameStats {
 
     private static final Pattern RANDOM_CLASS_PATTERN = Pattern.compile("^Random class: (\\w+)*");
-    private static String chosen_class;
+    private static String selectedClass;
     private static boolean isRandom = false;
     /*Data downloaded at the start of the game*/
-    private static MegaWallsClassStats MWclassStats;
-    /*Stats of the last game*/
-    private static MegaWallsClassStats gameStats;
-    private static String formattedname;
+    private static MegaWallsClassStats mwClassStartGameStats;
+    private static IChatComponent endGameStatsMessage;
 
     @SubscribeEvent
     public void onMwGame(MwGameEvent event) {
         if (event.getType() == MwGameEvent.EventType.GAME_START) {
             onGameStart();
-        }
-        if (event.getType() == MwGameEvent.EventType.GAME_END) {
-            new DelayedTask(MWGameStatsEvent::onGameEnd, 300);
+        } else if (event.getType() == MwGameEvent.EventType.GAME_END) {
+            new DelayedTask(MegaWallsEndGameStats::onGameEnd, 300);
         }
     }
 
@@ -47,57 +46,57 @@ public class MWGameStatsEvent {
             return;
         }
         Multithreading.addTaskToQueue(() -> {
-            final String uuid = Minecraft.getMinecraft().thePlayer.getUniqueID().toString().replace("-", "");
             try {
-                final HypixelPlayerData playerdata = new HypixelPlayerData(uuid);
-                if (formattedname == null) {
-                    final LoginData logindata = new LoginData(playerdata.getPlayerData());
-                    formattedname = logindata.getFormattedName();
+                final EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
+                if (thePlayer == null) {
+                    return null;
                 }
+                final HypixelPlayerData playerdata = new HypixelPlayerData(thePlayer.getUniqueID().toString().replace("-", ""));
                 if (!isRandom) {
-                    final MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
-                    chosen_class = mwclassskindata.getCurrentmwclass().toLowerCase();
+                    selectedClass = new MegaWallsClassSkinData(playerdata.getPlayerData()).getCurrentmwclass().toLowerCase();
                 }
-                MWclassStats = new MegaWallsClassStats(playerdata.getPlayerData(), chosen_class);
-            } catch (ApiException ignored) {
-            }
-            isRandom = false;
+                mwClassStartGameStats = new MegaWallsClassStats(playerdata.getPlayerData(), selectedClass);
+            } catch (ApiException ignored) {}
             return null;
         });
+        isRandom = false;
     }
 
     private static void onGameEnd() {
-        if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
+        if (HypixelApiKeyUtil.apiKeyIsNotSetup() || mwClassStartGameStats == null) {
             return;
         }
         Multithreading.addTaskToQueue(() -> {
-            final String uuid = Minecraft.getMinecraft().thePlayer.getUniqueID().toString().replace("-", "");
             try {
-                final HypixelPlayerData playerdata = new HypixelPlayerData(uuid);
-                gameStats = new MegaWallsClassStats(playerdata.getPlayerData(), chosen_class);
-                if (MWclassStats == null) {
+                final EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
+                if (thePlayer == null) {
                     return null;
                 }
-                gameStats.minus(MWclassStats);
+                final HypixelPlayerData playerdata = new HypixelPlayerData(thePlayer.getUniqueID().toString().replace("-", ""));
+                final MegaWallsClassStats endGameStats = new MegaWallsClassStats(playerdata.getPlayerData(), selectedClass);
+                endGameStats.minus(mwClassStartGameStats);
+                final String formattedName = new LoginData(playerdata.getPlayerData()).getFormattedName();
+                endGameStatsMessage = endGameStats.getGameStatMessage(formattedName);
+                mwClassStartGameStats = null;
                 ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Click to view the stats of your " + EnumChatFormatting.AQUA + "Mega Walls " + EnumChatFormatting.YELLOW + "game!")
                         .setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.MW_GAME_END_STATS))));
-            } catch (ApiException | IllegalArgumentException | IllegalAccessException ignored) {}
+            } catch (Exception ignored) {}
             return null;
         });
     }
 
-    public static MegaWallsClassStats getGameStats() {
-        return gameStats;
-    }
-
-    public static String getFormattedname() {
-        return formattedname;
+    public static void printGameStatsMessage() {
+        if (endGameStatsMessage != null) {
+            ChatUtil.addChatMessage(endGameStatsMessage);
+        } else {
+            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "No game stats available");
+        }
     }
 
     public static boolean processMessage(String msg) {
         final Matcher matcher = RANDOM_CLASS_PATTERN.matcher(msg);
         if (matcher.matches()) {
-            chosen_class = matcher.group(1).toLowerCase();
+            selectedClass = matcher.group(1).toLowerCase();
             isRandom = true;
             return true;
         }

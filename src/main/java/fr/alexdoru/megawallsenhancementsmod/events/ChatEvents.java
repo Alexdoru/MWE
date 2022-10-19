@@ -150,7 +150,7 @@ public class ChatEvents {
                 event.message = new ChatComponentText(fmsg.replaceFirst(messageSender, squadname));
             }
 
-            if (MWGameStatsEvent.processMessage(msg)) {
+            if (MegaWallsEndGameStats.processMessage(msg)) {
                 return;
             }
 

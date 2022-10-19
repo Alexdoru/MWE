@@ -65,9 +65,9 @@ public class MegaWallsEnhancementsMod {
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
         MinecraftForge.EVENT_BUS.register(new ScoreboardEvent());
         MinecraftForge.EVENT_BUS.register(new KeybindingsEvent());
-        MinecraftForge.EVENT_BUS.register(new MWGameStatsEvent());
         MinecraftForge.EVENT_BUS.register(new RenderPlayerHook());
         MinecraftForge.EVENT_BUS.register(new NoCheatersEvents());
+        MinecraftForge.EVENT_BUS.register(new MegaWallsEndGameStats());
         MinecraftForge.EVENT_BUS.register(new ReportSuggestionHandler());
 
         ClientCommandHandler.instance.registerCommand(new CommandWDR());
