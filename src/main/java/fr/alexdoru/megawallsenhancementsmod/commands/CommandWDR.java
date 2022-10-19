@@ -104,7 +104,7 @@ public class CommandWDR extends CommandBase {
     }
 
     public static void handleWDRCommand(String[] args, boolean sendReport, boolean showReportMessage) {
-        Multithreading.addTaskToQueue(() -> {
+        MultithreadingUtil.addTaskToQueue(() -> {
             boolean isaTimestampedReport = false;
             boolean usesTimeMark = false;
             final ArrayList<String> arraycheats = new ArrayList<>();    // for WDR object

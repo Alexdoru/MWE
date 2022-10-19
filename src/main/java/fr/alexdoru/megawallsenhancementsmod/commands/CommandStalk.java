@@ -10,7 +10,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangPlayernameToUUID;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
+import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -53,7 +53,7 @@ public class CommandStalk extends CommandBase {
         }
 
         for (final String name : args) {
-            Multithreading.addTaskToQueue(new StalkTask(name));
+            MultithreadingUtil.addTaskToQueue(new StalkTask(name));
         }
 
     }
