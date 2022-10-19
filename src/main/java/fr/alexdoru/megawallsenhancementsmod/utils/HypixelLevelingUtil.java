@@ -5,21 +5,18 @@ package fr.alexdoru.megawallsenhancementsmod.utils;
  *
  * @author Plancke
  */
-public interface ILeveling {
+public class HypixelLevelingUtil {
 
-    String EXP_FIELD = "networkExp";
-    String LVL_FIELD = "networkLevel";
-
-    double BASE = 10_000;
-    double GROWTH = 2_500;
-
+    private static final String EXP_FIELD = "networkExp";
+    private static final String LVL_FIELD = "networkLevel";
+    private static final double BASE = 10_000;
+    private static final double GROWTH = 2_500;
     /* Constants to generate the total amount of XP to complete a level */
-    double HALF_GROWTH = 0.5 * GROWTH;
-
+    private static final double HALF_GROWTH = 0.5 * GROWTH;
     /* Constants to look up the level from the total amount of XP */
-    double REVERSE_PQ_PREFIX = -(BASE - 0.5 * GROWTH) / GROWTH;
-    double REVERSE_CONST = REVERSE_PQ_PREFIX * REVERSE_PQ_PREFIX;
-    double GROWTH_DIVIDES_2 = 2 / GROWTH;
+    private static final double REVERSE_PQ_PREFIX = -(BASE - 0.5 * GROWTH) / GROWTH;
+    private static final double REVERSE_CONST = REVERSE_PQ_PREFIX * REVERSE_PQ_PREFIX;
+    private static final double GROWTH_DIVIDES_2 = 2 / GROWTH;
 
     /**
      * This method returns the level of a player calculated by the current experience gathered. The result is
@@ -37,7 +34,7 @@ public interface ILeveling {
      * @param exp Total experience gathered by the player.
      * @return Absolute level of player (Smallest value is 1.0)
      */
-    static double getLevel(double exp) {
+    public static double getLevel(double exp) {
         return exp < 0 ? 1 : Math.floor(1 + REVERSE_PQ_PREFIX + Math.sqrt(REVERSE_CONST + GROWTH_DIVIDES_2 * exp));
     }
 
@@ -57,8 +54,8 @@ public interface ILeveling {
      * @param exp Total experience gathered by the player.
      * @return Exact level of player (The smallest value is 1.0)
      */
-    static double getExactLevel(double exp) {
-        return ILeveling.getLevel(exp) + ILeveling.getPercentageToNextLevel(exp);
+    public static double getExactLevel(double exp) {
+        return getLevel(exp) + getPercentageToNextLevel(exp);
     }
 
     /**
@@ -79,7 +76,7 @@ public interface ILeveling {
      * @param level Level from which you want to get the next level with the same level progress
      * @return Experience to reach the next level with same progress
      */
-    static double getExpFromLevelToNext(double level) {
+    public static double getExpFromLevelToNext(double level) {
         return level < 1 ? BASE : GROWTH * (level - 1) + BASE;
     }
 
@@ -101,11 +98,11 @@ public interface ILeveling {
      * @param level The level and progress of the level to reach
      * @return The experience required to reach that level and progress
      */
-    static double getTotalExpToLevel(double level) {
+    public static double getTotalExpToLevel(double level) {
         final double lv = Math.floor(level);
-        final double x0 = ILeveling.getTotalExpToFullLevel(lv);
+        final double x0 = getTotalExpToFullLevel(lv);
         if (level == lv) return x0;
-        return (ILeveling.getTotalExpToFullLevel(lv + 1) - x0) * (level % 1) + x0;
+        return (getTotalExpToFullLevel(lv + 1) - x0) * (level % 1) + x0;
     }
 
     /**
@@ -115,7 +112,7 @@ public interface ILeveling {
      * @param level Level to receive the amount of experience to
      * @return Experience to reach the given level
      */
-    static double getTotalExpToFullLevel(double level) {
+    public static double getTotalExpToFullLevel(double level) {
         return (HALF_GROWTH * (level - 2) + BASE) * (level - 1);
     }
 
@@ -133,9 +130,10 @@ public interface ILeveling {
      * @param exp Current experience gathered by the player
      * @return Current progress to the next level
      */
-    static double getPercentageToNextLevel(double exp) {
-        final double lv = ILeveling.getLevel(exp);
+    public static double getPercentageToNextLevel(double exp) {
+        final double lv = getLevel(exp);
         final double x0 = getTotalExpToLevel(lv);
-        return (exp - x0) / (ILeveling.getTotalExpToLevel(lv + 1) - x0);
+        return (exp - x0) / (getTotalExpToLevel(lv + 1) - x0);
     }
+
 }
