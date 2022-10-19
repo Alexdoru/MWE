@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiScreenHook;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.ILeveling;
+import fr.alexdoru.megawallsenhancementsmod.utils.HypixelLevelingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -158,7 +158,7 @@ public class GeneralInfo extends LoginData {
     }
 
     public float getNetworkLevel() {
-        return (float) ILeveling.getExactLevel((double) networkExp);
+        return (float) HypixelLevelingUtil.getExactLevel((double) networkExp);
     }
 
     public int getCompletedQuests() {
