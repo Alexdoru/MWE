@@ -5,7 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
+import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.CommandBase;
@@ -37,7 +37,7 @@ public class CommandUnWDR extends CommandBase {
 
         if (args.length == 1) { // if you use /unwdr <playername>
 
-            Multithreading.addTaskToQueue(() -> {
+            MultithreadingUtil.addTaskToQueue(() -> {
 
                 final CachedMojangUUID apireq;
                 String playername = args[0];

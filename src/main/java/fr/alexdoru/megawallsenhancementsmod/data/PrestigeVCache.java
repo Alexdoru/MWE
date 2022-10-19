@@ -5,7 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassStats;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
-import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
+import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -45,7 +45,7 @@ public class PrestigeVCache {
 
     private static void createPlayerPrestigeData(String uuid, MWClass mwClass, String playername) {
 
-        Multithreading.addTaskToQueue(() -> {
+        MultithreadingUtil.addTaskToQueue(() -> {
 
             try {
                 final CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(uuid);
@@ -66,7 +66,7 @@ public class PrestigeVCache {
 
     private static void createClassData(String uuid, MWClass mwClass, PlayerPrestigeData playerPrestigeData, String playername) {
 
-        Multithreading.addTaskToQueue(() -> {
+        MultithreadingUtil.addTaskToQueue(() -> {
 
             try {
                 final CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(uuid);

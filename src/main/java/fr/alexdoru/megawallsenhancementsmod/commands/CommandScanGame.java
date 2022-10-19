@@ -13,7 +13,7 @@ import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.GameInfoGrabber;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
+import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -55,7 +55,7 @@ public class CommandScanGame extends CommandBase {
                 final ScangameData.ScanResult scanResult = ScangameData.get(networkPlayerInfo.getGameProfile().getId());
                 if (scanResult == null) {
                     i++;
-                    Multithreading.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
+                    MultithreadingUtil.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
                 } else if (scanResult.msg != null) {
                     ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(NameUtil.getFormattedNameWithPlanckeClickEvent(networkPlayerInfo)).appendSibling(scanResult.msg));
                 }
@@ -65,7 +65,7 @@ public class CommandScanGame extends CommandBase {
             ScangameData.setScanGameId(GameInfoGrabber.getGameIDfromscoreboard());
             for (final NetworkPlayerInfo networkPlayerInfo : playerCollection) {
                 i++;
-                Multithreading.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
+                MultithreadingUtil.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
             }
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " players...");
         }

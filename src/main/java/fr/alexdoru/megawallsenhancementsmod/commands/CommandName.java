@@ -3,7 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
+import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -37,7 +37,7 @@ public class CommandName extends CommandBase {
             return;
         }
 
-        Multithreading.addTaskToQueue(() -> {
+        MultithreadingUtil.addTaskToQueue(() -> {
 
             final String playername = args[0];
             try {

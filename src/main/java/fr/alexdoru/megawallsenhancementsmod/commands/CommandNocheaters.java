@@ -16,7 +16,7 @@ import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.util.NoCheatersMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
+import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -69,7 +69,7 @@ public class CommandNocheaters extends CommandBase {
                 }
             }
 
-            Multithreading.addTaskToQueue(() -> {
+            MultithreadingUtil.addTaskToQueue(() -> {
 
                 int displaypage = 1;
                 int nbreport = 1; // pour compter le nb de report et en afficher que 8 par page
@@ -110,7 +110,7 @@ public class CommandNocheaters extends CommandBase {
 
                     if (nbpage == displaypage) {
                         warning = false;
-                        futureList.add(Multithreading.addTaskToQueueAndGetFuture(new CreateReportLineTask(uuid, wdr, doStalk, timeNow)));
+                        futureList.add(MultithreadingUtil.addTaskToQueueAndGetFuture(new CreateReportLineTask(uuid, wdr, doStalk, timeNow)));
                     }
 
                     nbreport++;
@@ -148,7 +148,7 @@ public class CommandNocheaters extends CommandBase {
 
                 ReportQueue.INSTANCE.clearReportsSentBy(args[1]);
 
-                Multithreading.addTaskToQueue(() -> {
+                MultithreadingUtil.addTaskToQueue(() -> {
 
                     final CachedMojangUUID apireq;
                     String uuid = null;
@@ -225,7 +225,7 @@ public class CommandNocheaters extends CommandBase {
                 return;
             }
 
-            Multithreading.addTaskToQueue(() -> {
+            MultithreadingUtil.addTaskToQueue(() -> {
 
                 int displaypage = 1;
                 int nbreport = 1; // pour compter le nb de report et en afficher que 8 par page
@@ -257,7 +257,7 @@ public class CommandNocheaters extends CommandBase {
                         }
 
                         if (nbpage == displaypage) {
-                            futureList.add(Multithreading.addTaskToQueueAndGetFuture(new IgnoreLineTask(uuid, wdr)));
+                            futureList.add(MultithreadingUtil.addTaskToQueueAndGetFuture(new IgnoreLineTask(uuid, wdr)));
                             warning = false;
                         }
 

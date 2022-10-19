@@ -11,7 +11,7 @@ import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
+import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.event.ClickEvent;
@@ -49,7 +49,7 @@ public class MegaWallsEndGameStats {
             return;
         }
         timestampGameStart = (new Date()).getTime();
-        Multithreading.addTaskToQueue(() -> {
+        MultithreadingUtil.addTaskToQueue(() -> {
             try {
                 final EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
                 if (thePlayer == null) {
@@ -70,7 +70,7 @@ public class MegaWallsEndGameStats {
         if (HypixelApiKeyUtil.apiKeyIsNotSetup() || mwClassStartGameStats == null) {
             return;
         }
-        Multithreading.addTaskToQueue(() -> {
+        MultithreadingUtil.addTaskToQueue(() -> {
             try {
                 final EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
                 if (thePlayer == null) {

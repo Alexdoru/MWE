@@ -8,7 +8,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.*;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelGuild;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
+import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -44,7 +44,7 @@ public class CommandPlancke extends CommandBase {
             return;
         }
 
-        Multithreading.addTaskToQueue(() -> {
+        MultithreadingUtil.addTaskToQueue(() -> {
 
             final CachedMojangUUID apiname;
             try {
