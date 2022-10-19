@@ -172,7 +172,7 @@ public class MegaWallsClassStats {
     /*
      * message used for the stats message at the end of a game
      */
-    public IChatComponent getGameStatMessage(String formattedname) {
+    public IChatComponent getGameStatMessage(String formattedname, String gameDuration) {
 
         final float arrowaccuracy = 100f * (float) classname_arrows_hit / (float) (classname_arrows_fired == 0 ? 1 : classname_arrows_fired);
 
@@ -213,7 +213,8 @@ public class MegaWallsClassStats {
                 }};
 
         final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar() + "\n")
-                .appendSibling(new ChatComponentText(ChatUtil.centerLine(formattedname + EnumChatFormatting.GOLD + " - Game stats - " + classnameuppercase)));
+                .appendSibling(new ChatComponentText(ChatUtil.centerLine(formattedname + EnumChatFormatting.GOLD + " - Game stats - " + classnameuppercase)))
+                .appendSibling(new ChatComponentText(ChatUtil.centerLine(EnumChatFormatting.GREEN + "Game Duration : " + EnumChatFormatting.GOLD + gameDuration)));
 
         if (games_played != 1) {
             imsg.appendSibling(new ChatComponentText("\n" + ChatUtil.centerLine(EnumChatFormatting.DARK_RED + "These stats are for " + games_played + " games, not one.")));
