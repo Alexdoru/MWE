@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.guiapi;
 
-import fr.alexdoru.megawallsenhancementsmod.gui.*;
+import fr.alexdoru.megawallsenhancementsmod.gui.huds.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;

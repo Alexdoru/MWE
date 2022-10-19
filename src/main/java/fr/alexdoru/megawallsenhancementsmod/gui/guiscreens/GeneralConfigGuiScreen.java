@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.gui;
+package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.gui.GuiButton;

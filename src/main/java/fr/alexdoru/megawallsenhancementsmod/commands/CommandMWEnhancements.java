@@ -5,7 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.ScoreboardUtils;
-import fr.alexdoru.megawallsenhancementsmod.gui.GeneralConfigGuiScreen;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiscreens.GeneralConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;

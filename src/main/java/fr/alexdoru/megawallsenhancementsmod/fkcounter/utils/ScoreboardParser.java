@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.fkcounter.utils;
 
-import fr.alexdoru.megawallsenhancementsmod.gui.LastWitherHPHUD;
+import fr.alexdoru.megawallsenhancementsmod.gui.huds.LastWitherHPHUD;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import net.minecraft.scoreboard.Scoreboard;
 

@@ -7,7 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginDat
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.DelayedTask;
-import fr.alexdoru.megawallsenhancementsmod.gui.NoCheatersConfigGuiScreen;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiscreens.NoCheatersConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.GameInfoGrabber;

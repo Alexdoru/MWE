@@ -4,8 +4,8 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.ScoreboardEvent;
-import fr.alexdoru.megawallsenhancementsmod.gui.FKCounterHUD;
-import fr.alexdoru.megawallsenhancementsmod.gui.LastWitherHPHUD;
+import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
+import fr.alexdoru.megawallsenhancementsmod.gui.huds.LastWitherHPHUD;
 
 @SuppressWarnings("unused")
 public class GuiIngameHook {

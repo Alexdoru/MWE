@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.gui;
+package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
