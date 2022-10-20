@@ -110,9 +110,9 @@ public class CommandWDR extends CommandBase {
 
     public static void handleWDRCommand(String[] args, boolean sendReport, boolean showReportMessage) {
         MultithreadingUtil.addTaskToQueue(() -> {
-            boolean isaTimestampedReport = false;
+            boolean usesTimestamp = false;
             boolean usesTimeMark = false;
-            final ArrayList<String> arraycheats = new ArrayList<>();    // for WDR object
+            final ArrayList<String> arraycheats = new ArrayList<>();
             String playername = args[0];
             final StringBuilder message = new StringBuilder("/wdr " + playername);
             String serverID = "?";
@@ -122,13 +122,16 @@ public class CommandWDR extends CommandBase {
             final long time = (new Date()).getTime();
 
             if (args.length == 1) {
+
                 arraycheats.add("cheating");
+
             } else {
+
                 for (int i = 1; i < args.length; i++) { // reads each arg one by one
 
                     if (args[i].charAt(0) == TIMESTAMP_REPORT_CHAR) { // handling timestamped reports
 
-                        if (isaTimestampedReport) {
+                        if (usesTimestamp) {
                             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "You can't have more than one timestamp in the arguments.");
                             return null;
                         }
@@ -138,7 +141,7 @@ public class CommandWDR extends CommandBase {
                             return null;
                         }
 
-                        isaTimestampedReport = true;
+                        usesTimestamp = true;
                         final String rawtimestamp = args[i].substring(1);
 
                         if (!args[i].equals("-")) { // computing the -time argument
@@ -160,6 +163,10 @@ public class CommandWDR extends CommandBase {
 
                         }
 
+                        if (args.length == 2) {
+                            arraycheats.add("cheating");
+                        }
+
                         timestamp = time - longtimetosubtract * 1000; // Milliseconds
                         serverID = GameInfoGrabber.getGameIDfromscoreboard();
                         timerOnReplay = GameInfoGrabber.getTimeSinceGameStart(timestamp, serverID, (int) longtimetosubtract);
@@ -172,7 +179,7 @@ public class CommandWDR extends CommandBase {
                             return null;
                         }
 
-                        if (isaTimestampedReport) {
+                        if (usesTimestamp) {
                             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "You can't use both special arguments in the same reports!");
                             return null;
                         }
@@ -189,9 +196,14 @@ public class CommandWDR extends CommandBase {
 
                         } else {
 
+                            if (args.length == 2) {
+                                arraycheats.add("cheating");
+                            }
+
                             timestamp = timemark.timestamp;
                             serverID = timemark.serverID;
                             timerOnReplay = timemark.timerOnReplay;
+                            message.append(" ").append(TIMESTAMP_REPORT_CHAR).append((time - timestamp) / 1000L);
 
                         }
 
@@ -213,15 +225,6 @@ public class CommandWDR extends CommandBase {
 
             }
 
-            if ((isaTimestampedReport || usesTimeMark) && args.length == 2) {
-                ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : /wdr <player> <cheats(optional)> <timestamp(optional)>");
-                return null;
-            }
-
-            if ((isaTimestampedReport || usesTimeMark)) { // adds the timestamp to the report
-                message.append(" ").append(timerOnReplay.equals("?") ? "" : timerOnReplay);
-            }
-
             if (sendReport) {
                 if (mc.thePlayer != null) {
                     mc.thePlayer.sendChatMessage(message.toString());
@@ -231,6 +234,7 @@ public class CommandWDR extends CommandBase {
             if (arraycheats.contains("bhop")) {
                 PartyDetection.printBoostingReportAdvice(playername);
             }
+
             ReportQueue.INSTANCE.addReportTimestamp(true);
 
             if (FKCounterMod.preGameLobby) {
@@ -283,7 +287,7 @@ public class CommandWDR extends CommandBase {
             }
 
             final ArrayList<String> argsinWDR = new ArrayList<>();
-            if (isaTimestampedReport || usesTimeMark) { // format for timestamps reports : UUID timestamplastreport -serverID timeonreplay playernameduringgame timestampforcheat specialcheat cheat1 cheat2 cheat3 etc
+            if (usesTimestamp || usesTimeMark) { // format for timestamps reports : UUID timestamplastreport -serverID timeonreplay playernameduringgame timestampforcheat specialcheat cheat1 cheat2 cheat3 etc
 
                 argsinWDR.add("-" + serverID);
                 argsinWDR.add(timerOnReplay);
