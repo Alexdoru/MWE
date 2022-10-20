@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.scoreboard;
 
+import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraftforge.common.MinecraftForge;
@@ -57,25 +57,25 @@ public class ScoreboardTracker {
         if (gameId == null) { // not in MW game
 
             if (prevGameId != null) {
-                MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.DISCONNECT));
+                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.EventType.DISCONNECT));
             }
 
         } else { // is in MW game
 
             if (amountWitherAlive == 1 && prevAmountWitherAlive > 1) {
-                MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.THIRD_WITHER_DEATH));
+                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.EventType.THIRD_WITHER_DEATH));
             } else if (amountWitherAlive == 0 && prevAmountWitherAlive > 0) {
-                MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.DEATHMATCH_START));
+                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.EventType.DEATHMATCH_START));
             }
 
             if (!gameId.equals(prevGameId)) {
-                MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.CONNECT));
+                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.EventType.CONNECT));
             }
 
         }
 
         if (hasgameended && !prevHasGameEnded) {
-            MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.GAME_END));
+            MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.EventType.GAME_END));
         }
 
         prevGameId = gameId;

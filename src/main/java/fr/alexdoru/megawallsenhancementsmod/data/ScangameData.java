@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.data;
 
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
+import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.GameInfoGrabber;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,11 +22,11 @@ public class ScangameData {
     }
 
     @SubscribeEvent
-    public void onMwGame(MwGameEvent event) {
-        if (event.getType() == MwGameEvent.EventType.GAME_START) {
+    public void onMwGame(MegaWallsGameEvent event) {
+        if (event.getType() == MegaWallsGameEvent.EventType.GAME_START) {
             onGameStart();
         }
-        if (event.getType() == MwGameEvent.EventType.GAME_END) {
+        if (event.getType() == MegaWallsGameEvent.EventType.GAME_END) {
             clearScanGameData();
         }
     }

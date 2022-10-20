@@ -8,7 +8,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWall
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiScreenHook;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
+import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
@@ -37,10 +37,10 @@ public class MegaWallsEndGameStats {
     private static IChatComponent endGameStatsMessage;
 
     @SubscribeEvent
-    public void onMwGame(MwGameEvent event) {
-        if (event.getType() == MwGameEvent.EventType.GAME_START) {
+    public void onMwGame(MegaWallsGameEvent event) {
+        if (event.getType() == MegaWallsGameEvent.EventType.GAME_START) {
             onGameStart();
-        } else if (event.getType() == MwGameEvent.EventType.GAME_END) {
+        } else if (event.getType() == MegaWallsGameEvent.EventType.GAME_END) {
             new DelayedTask(MegaWallsEndGameStats::onGameEnd, 300);
         }
     }

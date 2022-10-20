@@ -1,8 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
@@ -37,8 +37,8 @@ public class LastWitherHPHUD extends MyCachedHUD {
     }
 
     @SubscribeEvent
-    public void onMWEvent(MwGameEvent event) {
-        if (event.getType() == MwGameEvent.EventType.THIRD_WITHER_DEATH) {
+    public void onMWEvent(MegaWallsGameEvent event) {
+        if (event.getType() == MegaWallsGameEvent.EventType.THIRD_WITHER_DEATH) {
             thirdWitherDeathTime = System.currentTimeMillis();
             color = "\u00a7" + ScoreboardTracker.getMwScoreboardParser().getAliveWithers().get(0);
         }

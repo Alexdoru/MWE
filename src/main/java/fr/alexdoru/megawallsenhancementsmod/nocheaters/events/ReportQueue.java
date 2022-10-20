@@ -1,8 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.nocheaters.events;
 
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
+import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.util.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
@@ -134,8 +134,8 @@ public class ReportQueue {
     }
 
     @SubscribeEvent
-    public void onGameEnd(MwGameEvent event) {
-        if (event.getType() == MwGameEvent.EventType.GAME_END) {
+    public void onGameEnd(MegaWallsGameEvent event) {
+        if (event.getType() == MegaWallsGameEvent.EventType.GAME_END) {
             queueList.removeIf(reportInQueue -> !reportInQueue.isReportSuggestion);
         }
     }
