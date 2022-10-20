@@ -458,7 +458,7 @@ public class ReportSuggestionHandler {
         final String uuid = networkPlayerInfo.getGameProfile().getId().toString();
         if (mc.thePlayer != null) {
             new DelayedTask(() -> ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Shout was blocked, trying to send report suggestion with UUID instead"), 1);
-            mc.thePlayer.sendChatMessage("/shout " + blockedMessgae.replaceFirst(reportText, reportText.replaceFirst(reportedPlayer, uuid)));
+            new DelayedTask(() -> mc.thePlayer.sendChatMessage("/shout " + blockedMessgae.replaceFirst(reportText, reportText.replaceFirst(reportedPlayer, uuid))), 20);
         }
     }
 
