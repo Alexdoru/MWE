@@ -28,7 +28,7 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ChatEvents {
+public class ChatListener {
 
     private static final String BAN_MESSAGE = "A player has been removed from your game.";
     private static final String HUNTER_STRENGTH_MESSAGE = "Your Force of Nature gave you a 5 second Strength I buff.";

@@ -3,8 +3,8 @@ package fr.alexdoru.megawallsenhancementsmod;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.*;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
-import fr.alexdoru.megawallsenhancementsmod.events.KeybindingsEvent;
+import fr.alexdoru.megawallsenhancementsmod.events.ChatListener;
+import fr.alexdoru.megawallsenhancementsmod.events.KeybindingListener;
 import fr.alexdoru.megawallsenhancementsmod.features.LowHPIndicator;
 import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
@@ -62,15 +62,15 @@ public class MegaWallsEnhancementsMod {
         ClientRegistry.registerKeyBinding(toggleDroppedItemLimit);
 
         MinecraftForge.EVENT_BUS.register(new GuiManager());
-        MinecraftForge.EVENT_BUS.register(new ChatEvents());
-        MinecraftForge.EVENT_BUS.register(new SquadHandler());
         MinecraftForge.EVENT_BUS.register(new ModUpdater());
         MinecraftForge.EVENT_BUS.register(new KillCounter());
+        MinecraftForge.EVENT_BUS.register(new ChatListener());
+        MinecraftForge.EVENT_BUS.register(new SquadHandler());
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
-        MinecraftForge.EVENT_BUS.register(new KeybindingsEvent());
         MinecraftForge.EVENT_BUS.register(new RenderPlayerHook());
         MinecraftForge.EVENT_BUS.register(new NoCheatersEvents());
         MinecraftForge.EVENT_BUS.register(new ScoreboardTracker());
+        MinecraftForge.EVENT_BUS.register(new KeybindingListener());
         MinecraftForge.EVENT_BUS.register(new MegaWallsEndGameStats());
         MinecraftForge.EVENT_BUS.register(new ReportSuggestionHandler());
 

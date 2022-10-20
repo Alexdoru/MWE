@@ -9,7 +9,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 
-public class KeybindingsEvent {
+public class KeybindingListener {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
 
