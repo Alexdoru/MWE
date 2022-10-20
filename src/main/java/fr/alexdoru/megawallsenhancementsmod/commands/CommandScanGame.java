@@ -7,6 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.GeneralInfo;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatListener;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
@@ -48,9 +49,18 @@ public class CommandScanGame extends CommandBase {
             return;
         }
         final String currentGameId = GameInfoGrabber.getGameIdFromScoreboard();
+        if (currentGameId.equals("?")) {
+            Minecraft.getMinecraft().thePlayer.sendChatMessage("/locraw");
+            ChatListener.interceptLocrawAndRunScangame();
+        } else {
+            handleScangameCommand(currentGameId);
+        }
+    }
+
+    public static void handleScangameCommand(String currentGameId) {
         final Collection<NetworkPlayerInfo> playerCollection = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
         int i = 0;
-        if (!currentGameId.equals("?") && currentGameId.equals(ScangameData.getScanGameId())) {
+        if (currentGameId.equals(ScangameData.getScanGameId())) {
             for (final NetworkPlayerInfo networkPlayerInfo : playerCollection) {
                 final ScangameData.ScanResult scanResult = ScangameData.get(networkPlayerInfo.getGameProfile().getId());
                 if (scanResult == null) {
@@ -62,7 +72,7 @@ public class CommandScanGame extends CommandBase {
             }
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " more players...");
         } else {
-            ScangameData.setScanGameId(GameInfoGrabber.getGameIdFromScoreboard());
+            ScangameData.setScanGameId(currentGameId);
             for (final NetworkPlayerInfo networkPlayerInfo : playerCollection) {
                 i++;
                 MultithreadingUtil.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
