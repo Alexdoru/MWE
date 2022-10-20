@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.api.apikey;
 
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import net.minecraft.util.EnumChatFormatting;
 
 public class HypixelApiKeyUtil {

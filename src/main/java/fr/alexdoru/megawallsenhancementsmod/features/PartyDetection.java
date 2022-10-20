@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.features;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;

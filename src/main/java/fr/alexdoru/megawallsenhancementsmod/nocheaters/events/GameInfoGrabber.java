@@ -1,10 +1,10 @@
 package fr.alexdoru.megawallsenhancementsmod.nocheaters.events;
 
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardParser;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 
 import java.util.Date;
 import java.util.List;

@@ -1,9 +1,9 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import com.google.common.collect.EvictingQueue;
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;

@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiScreenHook;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.HypixelLevelingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;

@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.utils;
+package fr.alexdoru.megawallsenhancementsmod.chat;
 
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import net.minecraft.client.Minecraft;
