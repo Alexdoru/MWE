@@ -1,10 +1,10 @@
 package fr.alexdoru.megawallsenhancementsmod.nocheaters.events;
 
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.util.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;

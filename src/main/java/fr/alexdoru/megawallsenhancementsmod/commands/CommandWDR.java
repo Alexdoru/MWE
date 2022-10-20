@@ -5,6 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
+import fr.alexdoru.megawallsenhancementsmod.chat.WarningMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
@@ -13,7 +14,6 @@ import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.GameInfoGrabber;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.ReportQueue;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.util.NoCheatersMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -304,7 +304,7 @@ public class CommandWDR extends CommandBase {
                 if (showReportMessage || !alreadyReported) {
                     ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
                             EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : ""))
-                            .appendSibling(NoCheatersMessagesHandler.createPlayerNameWithHoverText(formattedPlayername, playername, uuid, newreport, EnumChatFormatting.RED)[0])
+                            .appendSibling(WarningMessagesHandler.createPlayerNameWithHoverText(formattedPlayername, playername, uuid, newreport, EnumChatFormatting.RED)[0])
                             .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " with a " + EnumChatFormatting.YELLOW +
                                     "timestamp" + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
                                     + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : "."))));

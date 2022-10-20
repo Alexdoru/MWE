@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
+import fr.alexdoru.megawallsenhancementsmod.chat.ReportSuggestionHandler;
 import fr.alexdoru.megawallsenhancementsmod.commands.*;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.ChatListener;
@@ -12,7 +13,6 @@ import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.NoCheatersEvents;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.util.ReportSuggestionHandler;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.updater.ModUpdater;
 import net.minecraft.client.settings.KeyBinding;

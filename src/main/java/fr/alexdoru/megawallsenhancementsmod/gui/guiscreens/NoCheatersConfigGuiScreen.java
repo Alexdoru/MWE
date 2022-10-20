@@ -1,9 +1,9 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
+import fr.alexdoru.megawallsenhancementsmod.chat.WarningMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.ReportQueue;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.util.ChatHandler;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.util.NoCheatersMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import net.minecraft.client.gui.GuiButton;
@@ -118,7 +118,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
             case 1:
                 ConfigHandler.warningMessages = !ConfigHandler.warningMessages;
                 if (ConfigHandler.warningMessages) {
-                    NoCheatersMessagesHandler.printReportMessagesForWorld(false);
+                    WarningMessagesHandler.printReportMessagesForWorld(false);
                 } else {
                     ChatHandler.deleteAllWarningMessages();
                 }
