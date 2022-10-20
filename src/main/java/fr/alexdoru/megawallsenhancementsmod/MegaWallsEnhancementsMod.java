@@ -12,7 +12,7 @@ import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.NoCheatersEvents;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.PlayerJoinListener;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.updater.ModUpdater;
 import net.minecraft.client.settings.KeyBinding;
@@ -68,8 +68,8 @@ public class MegaWallsEnhancementsMod {
         MinecraftForge.EVENT_BUS.register(new SquadHandler());
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
         MinecraftForge.EVENT_BUS.register(new RenderPlayerHook());
-        MinecraftForge.EVENT_BUS.register(new NoCheatersEvents());
         MinecraftForge.EVENT_BUS.register(new ScoreboardTracker());
+        MinecraftForge.EVENT_BUS.register(new PlayerJoinListener());
         MinecraftForge.EVENT_BUS.register(new KeybindingListener());
         MinecraftForge.EVENT_BUS.register(new MegaWallsEndGameStats());
         MinecraftForge.EVENT_BUS.register(new ReportSuggestionHandler());
