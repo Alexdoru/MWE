@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.chat;
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.data.WdredPlayers;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
@@ -43,11 +44,14 @@ public class ChatListener {
     private static final Pattern DREADLORD_STRENGTH_PATTERN = Pattern.compile("\u00a74\u00a7lSOUL SIPHON \u00a7c\u00a7l85% ([0-9])s");
     private static final Pattern HEROBRINE_STRENGTH_PATTERN = Pattern.compile("\u00a7e\u00a7lPOWER \u00a7c\u00a7l85% ([0-9])s");
     private static final Pattern HUNTER_PRE_STRENGTH_PATTERN = Pattern.compile("\u00a7a\u00a7lF\\.O\\.N\\. \u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l([0-9]+)");
+    private static final Pattern LOCRAW_PATTERN = Pattern.compile("^\\{\"server\":\"(\\w+)\",\"gametype\":\"\\w+\"(?:|,\"lobbyname\":\"\\w+\")(?:|,\"mode\":\"\\w+\")(?:|,\"map\":\"\\w+ ?\")\\}$");
     private static final Pattern PLAYER_JOIN_PATTERN = Pattern.compile("^(\\w{1,16}) has joined \\([0-9]{1,3}/[0-9]{1,3}\\)!");
     private static final Pattern ZOMBIE_STRENGTH_PATTERN = Pattern.compile("\u00a72\u00a7lBERSERK \u00a7c\u00a7l75% ([0-9])s");
     private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:|\\[SHOUT\\] |\\[SPECTATOR\\] )(?:|\\[[A-Z]{3,6}\\] )(?:|\\[((?:MV|VI)P\\+?\\+?)\\] )(\\w{2,16}):.*");
     private static final HashSet<String> MW_REPETITVE_MSG = new HashSet<>();
     private static final TimerUtil timerStrength = new TimerUtil(11000L);
+    private static boolean interceptLocraw;
+    private static long timeInterceptLocraw;
 
     static {
         MW_REPETITVE_MSG.add("You broke your protected chest");
@@ -178,7 +182,21 @@ public class ChatListener {
 
             if (msg.equals(BAN_MESSAGE)) {
                 new DelayedTask(NetHandlerPlayClientHook::printDisconnectedPlayers, 10);
-                //return;
+                return;
+            }
+
+            if (interceptLocraw) {
+                if (System.currentTimeMillis() - timeInterceptLocraw < 1001L) {
+                    final Matcher locrawMatcher = LOCRAW_PATTERN.matcher(msg);
+                    if (locrawMatcher.matches()) {
+                        final String gameId = locrawMatcher.group(1).replace("mega", "M");
+                        ScangameData.setScanGameId(gameId);
+                        interceptLocraw = false;
+                        event.setCanceled(true);
+                    }
+                } else {
+                    interceptLocraw = false;
+                }
             }
 
             /*Status messages*/
@@ -227,6 +245,11 @@ public class ChatListener {
             return true;
         }
         return false;
+    }
+
+    public static void interceptLocraw() {
+        interceptLocraw = true;
+        timeInterceptLocraw = System.currentTimeMillis();
     }
 
 }
