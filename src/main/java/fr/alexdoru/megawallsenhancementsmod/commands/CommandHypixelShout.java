@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.KillCounter;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.util.ReportSuggestionHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;

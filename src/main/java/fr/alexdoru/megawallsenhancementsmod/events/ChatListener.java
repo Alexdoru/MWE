@@ -7,7 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.KillCounter;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.ArrowHitHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.HunterStrengthHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.KillCooldownHUD;

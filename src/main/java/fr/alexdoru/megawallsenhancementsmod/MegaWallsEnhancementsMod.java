@@ -8,7 +8,7 @@ import fr.alexdoru.megawallsenhancementsmod.events.KeybindingListener;
 import fr.alexdoru.megawallsenhancementsmod.features.LowHPIndicator;
 import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.KillCounter;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.NoCheatersEvents;

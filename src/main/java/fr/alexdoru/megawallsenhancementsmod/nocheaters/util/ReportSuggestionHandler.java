@@ -10,7 +10,7 @@ import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.KillCounter;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.ReportQueue;
