@@ -7,6 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWall
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassStats;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiScreenHook;
+import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
@@ -27,8 +28,8 @@ import java.util.regex.Pattern;
 
 public class MegaWallsEndGameStats {
 
-    private static final Pattern RANDOM_CLASS_PATTERN = Pattern.compile("^Random class: (\\w+)*");
-    private static String selectedClass;
+    private static final Pattern RANDOM_CLASS_PATTERN = Pattern.compile("^Random class: (\\w+)");
+    private static MWClass selectedClass;
     private static boolean isRandom = false;
     /*Data downloaded at the start of the game*/
     private static MegaWallsClassStats mwClassStartGameStats;
@@ -57,9 +58,12 @@ public class MegaWallsEndGameStats {
                 }
                 final HypixelPlayerData playerdata = new HypixelPlayerData(thePlayer.getUniqueID().toString().replace("-", ""));
                 if (!isRandom) {
-                    selectedClass = new MegaWallsClassSkinData(playerdata.getPlayerData()).getCurrentmwclass().toLowerCase();
+                    selectedClass = MWClass.fromTagOrName(new MegaWallsClassSkinData(playerdata.getPlayerData()).getCurrentmwclass());
                 }
-                mwClassStartGameStats = new MegaWallsClassStats(playerdata.getPlayerData(), selectedClass);
+                if (selectedClass == null) {
+                    return null;
+                }
+                mwClassStartGameStats = new MegaWallsClassStats(playerdata.getPlayerData(), selectedClass.className);
             } catch (ApiException ignored) {}
             return null;
         });
@@ -67,7 +71,7 @@ public class MegaWallsEndGameStats {
     }
 
     private static void onGameEnd() {
-        if (HypixelApiKeyUtil.apiKeyIsNotSetup() || mwClassStartGameStats == null) {
+        if (HypixelApiKeyUtil.apiKeyIsNotSetup() || mwClassStartGameStats == null || selectedClass == null) {
             return;
         }
         MultithreadingUtil.addTaskToQueue(() -> {
@@ -77,7 +81,7 @@ public class MegaWallsEndGameStats {
                     return null;
                 }
                 final HypixelPlayerData playerdata = new HypixelPlayerData(thePlayer.getUniqueID().toString().replace("-", ""));
-                final MegaWallsClassStats endGameStats = new MegaWallsClassStats(playerdata.getPlayerData(), selectedClass);
+                final MegaWallsClassStats endGameStats = new MegaWallsClassStats(playerdata.getPlayerData(), selectedClass.className);
                 endGameStats.minus(mwClassStartGameStats);
                 final String formattedName = new LoginData(playerdata.getPlayerData()).getFormattedName();
                 final String gameDuration = DateUtil.timeSince(timestampGameStart);
@@ -100,8 +104,8 @@ public class MegaWallsEndGameStats {
 
     public static boolean processMessage(String msg) {
         final Matcher matcher = RANDOM_CLASS_PATTERN.matcher(msg);
-        if (matcher.matches()) {
-            selectedClass = matcher.group(1).toLowerCase();
+        if (matcher.find()) {
+            selectedClass = MWClass.fromTagOrName(matcher.group(1));
             isRandom = true;
             return true;
         }
