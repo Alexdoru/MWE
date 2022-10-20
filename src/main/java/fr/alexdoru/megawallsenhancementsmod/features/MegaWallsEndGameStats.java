@@ -56,7 +56,7 @@ public class MegaWallsEndGameStats {
                 if (thePlayer == null) {
                     return null;
                 }
-                final HypixelPlayerData playerdata = new HypixelPlayerData(thePlayer.getUniqueID().toString().replace("-", ""));
+                final HypixelPlayerData playerdata = new HypixelPlayerData(thePlayer.getUniqueID().toString());
                 if (!isRandom) {
                     selectedClass = MWClass.fromTagOrName(new MegaWallsClassSkinData(playerdata.getPlayerData()).getCurrentmwclass());
                 }
@@ -80,7 +80,7 @@ public class MegaWallsEndGameStats {
                 if (thePlayer == null) {
                     return null;
                 }
-                final HypixelPlayerData playerdata = new HypixelPlayerData(thePlayer.getUniqueID().toString().replace("-", ""));
+                final HypixelPlayerData playerdata = new HypixelPlayerData(thePlayer.getUniqueID().toString());
                 final MegaWallsClassStats endGameStats = new MegaWallsClassStats(playerdata.getPlayerData(), selectedClass.className);
                 endGameStats.minus(mwClassStartGameStats);
                 final String formattedName = new LoginData(playerdata.getPlayerData()).getFormattedName();
