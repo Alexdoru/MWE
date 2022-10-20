@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.nocheaters.events;
 
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.DelayedTask;
+import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;

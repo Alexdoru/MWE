@@ -6,7 +6,6 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.ArrowHitHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.HunterStrengthHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.KillCooldownHUD;

@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.fkcounter.utils;
+package fr.alexdoru.megawallsenhancementsmod.utils;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
