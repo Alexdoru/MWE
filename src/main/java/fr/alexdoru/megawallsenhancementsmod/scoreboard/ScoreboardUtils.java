@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.fkcounter.utils;
+package fr.alexdoru.megawallsenhancementsmod.scoreboard;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;

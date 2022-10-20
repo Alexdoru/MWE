@@ -3,7 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.ScoreboardEvent;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
@@ -30,8 +30,8 @@ public class LastWitherHPHUD extends MyCachedHUD {
             lastWitherHPUpdate = System.currentTimeMillis();
         }
         witherHp = witherHPIn;
-        if (ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive()) {
-            color = "\u00a7" + ScoreboardEvent.getMwScoreboardParser().getAliveWithers().get(0);
+        if (ScoreboardTracker.getMwScoreboardParser().isOnlyOneWitherAlive()) {
+            color = "\u00a7" + ScoreboardTracker.getMwScoreboardParser().getAliveWithers().get(0);
         }
         updateDisplayText();
     }
@@ -40,7 +40,7 @@ public class LastWitherHPHUD extends MyCachedHUD {
     public void onMWEvent(MwGameEvent event) {
         if (event.getType() == MwGameEvent.EventType.THIRD_WITHER_DEATH) {
             thirdWitherDeathTime = System.currentTimeMillis();
-            color = "\u00a7" + ScoreboardEvent.getMwScoreboardParser().getAliveWithers().get(0);
+            color = "\u00a7" + ScoreboardTracker.getMwScoreboardParser().getAliveWithers().get(0);
         }
     }
 
@@ -65,7 +65,7 @@ public class LastWitherHPHUD extends MyCachedHUD {
 
     @Override
     public boolean isEnabled() {
-        return !ConfigHandler.witherHUDinSidebar && ConfigHandler.showLastWitherHUD && FKCounterMod.isInMwGame && ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive();
+        return !ConfigHandler.witherHUDinSidebar && ConfigHandler.showLastWitherHUD && FKCounterMod.isInMwGame && ScoreboardTracker.getMwScoreboardParser().isOnlyOneWitherAlive();
     }
 
 }

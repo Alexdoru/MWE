@@ -1,14 +1,14 @@
-package fr.alexdoru.megawallsenhancementsmod.fkcounter.events;
+package fr.alexdoru.megawallsenhancementsmod.scoreboard;
 
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.ScoreboardParser;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-public class ScoreboardEvent {
+public class ScoreboardTracker {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static ScoreboardParser mwScoreboardParser = new ScoreboardParser(null);
