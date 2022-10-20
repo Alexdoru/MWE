@@ -5,7 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatListener;
 import fr.alexdoru.megawallsenhancementsmod.chat.ReportSuggestionHandler;
 import fr.alexdoru.megawallsenhancementsmod.commands.*;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.data.WdredPlayers;
+import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.events.KeybindingListener;
 import fr.alexdoru.megawallsenhancementsmod.features.LowHPIndicator;
 import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
@@ -91,7 +91,7 @@ public class MegaWallsEnhancementsMod {
         ClientCommandHandler.instance.registerCommand(new CommandMWEnhancements());
         ClientCommandHandler.instance.registerCommand(new CommandHypixelMessage());
 
-        WdredPlayers.init();
+        WdrData.init();
 
     }
 

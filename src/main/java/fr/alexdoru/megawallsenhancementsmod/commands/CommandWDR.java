@@ -9,7 +9,7 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.chat.WarningMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.ReportTimestamp;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
-import fr.alexdoru.megawallsenhancementsmod.data.WdredPlayers;
+import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
@@ -293,7 +293,7 @@ public class CommandWDR extends CommandBase {
                 argsinWDR.add(Long.toString(timestamp));
                 argsinWDR.addAll(arraycheats);
 
-                final WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+                final WDR wdr = WdrData.getWdr(uuid);
                 boolean alreadyReported = false;
                 if (wdr != null) {
                     argsinWDR.addAll(wdr.hacks);
@@ -305,7 +305,7 @@ public class CommandWDR extends CommandBase {
                 }
 
                 final WDR newreport = new WDR(timestamp, timestamp, argsinWDR);
-                WdredPlayers.getWdredMap().put(uuid, newreport);
+                WdrData.put(uuid, newreport);
                 NameUtil.updateGameProfileAndName(playername, false);
                 if (showReportMessage || !alreadyReported) {
                     ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
@@ -318,7 +318,7 @@ public class CommandWDR extends CommandBase {
 
             } else {  // isn't a timestamped report
 
-                final WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+                final WDR wdr = WdrData.getWdr(uuid);
                 boolean alreadyReported = false;
 
                 if (wdr != null) {
@@ -346,7 +346,7 @@ public class CommandWDR extends CommandBase {
                 if (isaNick && !argsinWDR.contains(WDR.NICK)) {
                     argsinWDR.add(WDR.NICK);
                 }
-                WdredPlayers.getWdredMap().put(uuid, new WDR(time, time, argsinWDR));
+                WdrData.put(uuid, new WDR(time, time, argsinWDR));
                 NameUtil.updateGameProfileAndName(playername, false);
                 if (showReportMessage || !alreadyReported) {
                     ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() +

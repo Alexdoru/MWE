@@ -5,7 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
-import fr.alexdoru.megawallsenhancementsmod.data.WdredPlayers;
+import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
@@ -51,7 +51,7 @@ public class CommandUnWDR extends CommandBase {
                 }
 
                 final String uuid = apireq.getUuid();
-                final WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+                final WDR wdr = WdrData.getWdr(uuid);
 
                 if (wdr == null) {
                     ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list.");
@@ -69,7 +69,7 @@ public class CommandUnWDR extends CommandBase {
         } else if (args.length == 2) { // when you click the message it does /unwdr <UUID> <playername>
 
             final String uuid = args[0];
-            final WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+            final WDR wdr = WdrData.getWdr(uuid);
 
             if (wdr == null) {
                 ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list.");
@@ -89,7 +89,7 @@ public class CommandUnWDR extends CommandBase {
             wdr.hacks.clear();
             wdr.hacks.add(WDR.IGNORED);
         } else {
-            WdredPlayers.getWdredMap().remove(uuid);
+            WdrData.remove(uuid);
         }
     }
 

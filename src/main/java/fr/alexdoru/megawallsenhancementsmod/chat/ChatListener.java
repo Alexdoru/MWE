@@ -6,7 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
-import fr.alexdoru.megawallsenhancementsmod.data.WdredPlayers;
+import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
@@ -145,7 +145,7 @@ public class ChatListener {
                 final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(messageSender);
                 if (networkPlayerInfo != null) {
                     final String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-                    final WDR wdr = WdredPlayers.getPlayer(uuid, messageSender);
+                    final WDR wdr = WdrData.getWdr(uuid, messageSender);
                     if (wdr != null && wdr.hasValidCheats()) {
                         if (!ConfigHandler.deleteCheaterChatMsg) {
                             ChatUtil.addChatMessage(StringUtil.censorChatMessage(fmsg, messageSender));

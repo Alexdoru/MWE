@@ -9,12 +9,12 @@ import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class WdredPlayers {
+public class WdrData {
 
-    public static final Logger logger = LogManager.getLogger("NoCheaters WDR Data");
+    private static final Logger logger = LogManager.getLogger("NoCheaters");
     private static final long TIME_TRANSFORM_NICKED_REPORT = 86400000L; // 24hours
     private static final long TIME_TRANSFORM_TIMESTAMPED_REPORT = 14L * 24L * 60L * 60L * 1000L; //14 days
-    private static final HashMap<String, WDR> WDR_HASH_MAP = new HashMap<>();
+    private static final HashMap<String, WDR> wdrMap = new HashMap<>();
     /**
      * In the wdred file the data is saved with the following pattern
      * uuid timestamp timeLastManualReport hack1 hack2 hack3 hack4 hack5
@@ -24,26 +24,38 @@ public class WdredPlayers {
     public static void init() {
         wdrsFile = new File(Minecraft.getMinecraft().mcDataDir, "config/wdred.txt");
         loadReportedPlayers();
-        Runtime.getRuntime().addShutdownHook(new Thread(WdredPlayers::saveReportedPlayers));
+        Runtime.getRuntime().addShutdownHook(new Thread(WdrData::saveReportedPlayers));
     }
 
     public static HashMap<String, WDR> getWdredMap() {
-        return WDR_HASH_MAP;
+        return wdrMap;
     }
 
-    public static WDR getPlayer(String uuid, String playername) {
-        WDR wdr = WDR_HASH_MAP.get(uuid);
+    public static WDR getWdr(String uuid) {
+        return wdrMap.get(uuid);
+    }
+
+    public static WDR getWdr(String uuid, String playername) {
+        WDR wdr = wdrMap.get(uuid);
         if (wdr != null) {
             return wdr;
         }
-        wdr = WDR_HASH_MAP.get(playername);
+        wdr = wdrMap.get(playername);
         return wdr;
+    }
+
+    public static void put(String uuid, WDR wdr) {
+        wdrMap.put(uuid, wdr);
+    }
+
+    public static void remove(String uuid) {
+        wdrMap.remove(uuid);
     }
 
     public static void saveReportedPlayers() {
         try {
             final BufferedWriter writer = new BufferedWriter(new FileWriter(wdrsFile));
-            for (final Entry<String, WDR> entry : WDR_HASH_MAP.entrySet()) {
+            for (final Entry<String, WDR> entry : wdrMap.entrySet()) {
                 final String uuid = entry.getKey();
                 final WDR wdr = entry.getValue();
                 writer.write(uuid + " " + wdr.timestamp + " " + wdr.timeLastManualReport + wdr.hacksToString() + "\n");
@@ -54,7 +66,7 @@ public class WdredPlayers {
         }
     }
 
-    public static void loadReportedPlayers() {
+    private static void loadReportedPlayers() {
         if (!wdrsFile.exists()) {
             logger.info("Couldn't find existing wdr file");
             return;
@@ -101,7 +113,7 @@ public class WdredPlayers {
                         continue;
                     }
 
-                    WDR_HASH_MAP.put(uuid, new WDR(timestamp, timeManualReport, hacks));
+                    wdrMap.put(uuid, new WDR(timestamp, timeManualReport, hacks));
 
                 }
             }
