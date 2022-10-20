@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.nocheaters.util;
+package fr.alexdoru.megawallsenhancementsmod.chat;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiScreenHook;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
@@ -19,7 +19,7 @@ import net.minecraft.util.IChatComponent;
 
 import java.util.Date;
 
-public class NoCheatersMessagesHandler {
+public class WarningMessagesHandler {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
 
