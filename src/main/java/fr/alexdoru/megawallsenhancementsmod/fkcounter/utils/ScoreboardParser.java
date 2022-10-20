@@ -58,11 +58,11 @@ public class ScoreboardParser {
             return;
         }
 
-        if (unformattedSidebarLines.size() < 9) {
+        if (unformattedSidebarLines.size() < 10) {
             return;
         }
 
-        if (MW_INGAME_PATTERN.matcher(unformattedSidebarLines.get(8)).find()) {
+        if (MW_INGAME_PATTERN.matcher(unformattedSidebarLines.get(9)).find()) {
             isInMwGame = true;
         } else {
             if (checkPreGameLobby(unformattedSidebarLines)) {
