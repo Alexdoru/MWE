@@ -5,6 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
+import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
@@ -441,12 +442,12 @@ public class KillCounter {
     }
 
     @SubscribeEvent
-    public void onMwGame(MwGameEvent event) {
+    public void onMwGame(MegaWallsGameEvent event) {
 
         /*
          * to fix the bug where the FKCounter doesn't work properly if you play two games in a row on a server with the same serverID
          */
-        if (event.getType() == MwGameEvent.EventType.GAME_START) {
+        if (event.getType() == MegaWallsGameEvent.EventType.GAME_START) {
             final String currentGameId = ScoreboardTracker.getMwScoreboardParser().getGameId();
             if (currentGameId != null) {
                 ResetKillCounterTo(currentGameId);
@@ -455,7 +456,7 @@ public class KillCounter {
             return;
         }
 
-        if (event.getType() == MwGameEvent.EventType.CONNECT) {
+        if (event.getType() == MegaWallsGameEvent.EventType.CONNECT) {
             final String currentGameId = ScoreboardTracker.getMwScoreboardParser().getGameId(); // this is not null due to how the event is defined/posted
             if (gameId == null || !gameId.equals(currentGameId)) {
                 ResetKillCounterTo(currentGameId);

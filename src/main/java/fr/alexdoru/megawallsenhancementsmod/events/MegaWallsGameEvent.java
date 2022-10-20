@@ -1,8 +1,8 @@
-package fr.alexdoru.megawallsenhancementsmod.fkcounter.events;
+package fr.alexdoru.megawallsenhancementsmod.events;
 
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-public class MwGameEvent extends Event {
+public class MegaWallsGameEvent extends Event {
 
     public enum EventType {
         CONNECT,
@@ -23,7 +23,7 @@ public class MwGameEvent extends Event {
      * THIRD_WITHER_DIED is fired when the third wither dies
      * DEATHMATCH_START is fired when the last wither dies
      */
-    public MwGameEvent(EventType type) {
+    public MegaWallsGameEvent(EventType type) {
         this.type = type;
     }
 

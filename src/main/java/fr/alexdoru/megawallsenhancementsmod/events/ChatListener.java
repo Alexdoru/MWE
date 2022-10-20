@@ -8,7 +8,6 @@ import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.KillCounter;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.ArrowHitHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.HunterStrengthHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.KillCooldownHUD;
@@ -97,7 +96,7 @@ public class ChatListener {
             }
 
             if (msg.equals(PREP_PHASE)) {
-                MinecraftForge.EVENT_BUS.post(new MwGameEvent(MwGameEvent.EventType.GAME_START));
+                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.EventType.GAME_START));
                 return;
             }
 
