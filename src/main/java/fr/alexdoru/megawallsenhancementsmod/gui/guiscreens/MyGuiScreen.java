@@ -20,8 +20,7 @@ public abstract class MyGuiScreen extends GuiScreen {
     public void initGui() {
         try {
             mc.entityRenderer.loadShader(SHADER);
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
         super.initGui();
     }
 
@@ -30,8 +29,7 @@ public abstract class MyGuiScreen extends GuiScreen {
         ConfigHandler.saveConfig();
         try {
             mc.entityRenderer.stopUseShader();
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
         super.onGuiClosed();
     }
 
