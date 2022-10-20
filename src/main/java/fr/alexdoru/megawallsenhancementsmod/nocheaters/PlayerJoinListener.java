@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class NoCheatersEvents {
+public class PlayerJoinListener {
 
     @SubscribeEvent
     public void onPlayerJoin(EntityJoinWorldEvent event) {
