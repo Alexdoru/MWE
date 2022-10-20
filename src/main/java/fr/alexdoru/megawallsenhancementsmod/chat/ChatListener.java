@@ -1,9 +1,9 @@
-package fr.alexdoru.megawallsenhancementsmod.events;
+package fr.alexdoru.megawallsenhancementsmod.chat;
 
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
-import fr.alexdoru.megawallsenhancementsmod.chat.ReportSuggestionHandler;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
@@ -15,7 +15,10 @@ import fr.alexdoru.megawallsenhancementsmod.gui.huds.KillCooldownHUD;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.GameInfoGrabber;
-import fr.alexdoru.megawallsenhancementsmod.utils.*;
+import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
+import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.TimerUtil;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;

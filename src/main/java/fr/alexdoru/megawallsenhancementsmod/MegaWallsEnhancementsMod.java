@@ -1,10 +1,10 @@
 package fr.alexdoru.megawallsenhancementsmod;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatListener;
 import fr.alexdoru.megawallsenhancementsmod.chat.ReportSuggestionHandler;
 import fr.alexdoru.megawallsenhancementsmod.commands.*;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.events.ChatListener;
 import fr.alexdoru.megawallsenhancementsmod.events.KeybindingListener;
 import fr.alexdoru.megawallsenhancementsmod.features.LowHPIndicator;
 import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
