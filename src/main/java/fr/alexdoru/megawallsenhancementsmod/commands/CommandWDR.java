@@ -93,7 +93,7 @@ public class CommandWDR extends CommandBase {
         nbTimeMarks++;
         final String key = String.valueOf(nbTimeMarks);
         final long timestamp = (new Date()).getTime();
-        final String serverID = GameInfoGrabber.getGameIDfromscoreboard();
+        final String serverID = GameInfoGrabber.getGameIdFromScoreboard();
         final String timerOnReplay = GameInfoGrabber.getTimeSinceGameStart(timestamp, serverID, 0);
         timestampsMap.put(key, new ReportTimestamp(timestamp, serverID, timerOnReplay));
         ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters()
@@ -168,7 +168,7 @@ public class CommandWDR extends CommandBase {
                         }
 
                         timestamp = time - longtimetosubtract * 1000; // Milliseconds
-                        serverID = GameInfoGrabber.getGameIDfromscoreboard();
+                        serverID = GameInfoGrabber.getGameIdFromScoreboard();
                         timerOnReplay = GameInfoGrabber.getTimeSinceGameStart(timestamp, serverID, (int) longtimetosubtract);
                         message.append(" ").append(args[i]);
 

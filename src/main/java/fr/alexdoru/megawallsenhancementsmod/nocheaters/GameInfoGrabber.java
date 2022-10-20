@@ -19,16 +19,18 @@ public class GameInfoGrabber {
     private static long gamestarttimestamp = 0;
     private static String gameID = "?";
 
-    public static String getGameIDfromscoreboard() {
+    public static String getGameIdFromScoreboard() {
         final List<String> scoresRaw = ScoreboardUtils.getUnformattedSidebarText();
-        if (scoresRaw.size() == 0) {
+        if (scoresRaw.isEmpty()) {
             return "?";
         }
-        final Matcher matcher = ScoreboardParser.GAME_ID_PATTERN.matcher(scoresRaw.get(0));
-        if (!matcher.find()) {
-            return "?";
+        for (final String line : scoresRaw) {
+            final Matcher matcher = ScoreboardParser.GAME_ID_PATTERN.matcher(line);
+            if (matcher.find()) {
+                return matcher.group(1);
+            }
         }
-        return matcher.group(1);
+        return "?";
     }
 
     /**
@@ -46,9 +48,9 @@ public class GameInfoGrabber {
         }
     }
 
-    public static void saveinfoOnGameStart() {
+    public static void saveGameInfoOnGameStart() {
         gamestarttimestamp = (new Date()).getTime() + 1000L;
-        gameID = getGameIDfromscoreboard();
+        gameID = getGameIdFromScoreboard();
     }
 
     /**
@@ -85,9 +87,9 @@ public class GameInfoGrabber {
                     sec_since_start = 6 * 60 + (8 * 60 - score_sec);
                     break;
                 case TIME_DEATHMATCH:
-                    final String storedGameID = getstoredGameID();
+                    final String storedGameID = getStoredGameID();
                     if (!storedGameID.equals("?") && storedGameID.equals(serverID)) {
-                        final long long_sec_since_start = (timestamp > getstoredTimestamp() ? timestamp - getstoredTimestamp() : 0L) / 1000; //en secondes
+                        final long long_sec_since_start = (timestamp > getStoredTimestamp() ? timestamp - getStoredTimestamp() : 0L) / 1000; //en secondes
                         return long_sec_since_start / 60 + "min" + long_sec_since_start % 60 + "sec";
                     } else {
                         return "?";
@@ -100,9 +102,9 @@ public class GameInfoGrabber {
             final int result = sec_since_start > delay ? sec_since_start - delay : 0;
             return result / 60 + "min" + result % 60 + "sec";
 
-        } else if (!getstoredGameID().equals("?") && getstoredGameID().equals(serverID)) {
+        } else if (!getStoredGameID().equals("?") && getStoredGameID().equals(serverID)) {
 
-            final long sec_since_start = (timestamp > getstoredTimestamp() ? timestamp - getstoredTimestamp() : 0L) / 1000; //en secondes
+            final long sec_since_start = (timestamp > getStoredTimestamp() ? timestamp - getStoredTimestamp() : 0L) / 1000; //en secondes
             return sec_since_start / 60 + "min" + sec_since_start % 60 + "sec";
 
         }
@@ -111,11 +113,11 @@ public class GameInfoGrabber {
 
     }
 
-    public static String getstoredGameID() {
+    public static String getStoredGameID() {
         return gameID;
     }
 
-    public static long getstoredTimestamp() {
+    public static long getStoredTimestamp() {
         return gamestarttimestamp;
     }
 
