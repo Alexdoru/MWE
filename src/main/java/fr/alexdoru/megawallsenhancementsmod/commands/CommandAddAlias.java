@@ -9,7 +9,9 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,6 +35,10 @@ public class CommandAddAlias extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
+        if (args.length < 1) {
+            ChatUtil.addChatMessage(getCommandHelp());
+            return;
+        }
         if (args.length == 1 && args[0].equals("clearall")) {
             AliasData.getMap().clear();
             ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Cleared alias for all players.");
@@ -60,6 +66,16 @@ public class CommandAddAlias extends CommandBase {
         AliasData.putAlias(args[0], args[1]);
         NameUtil.updateGameProfileAndName(args[0], false);
         ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Added alias for " + EnumChatFormatting.GOLD + args[0] + EnumChatFormatting.GREEN + " : " + EnumChatFormatting.GOLD + args[1]);
+    }
+
+    private IChatComponent getCommandHelp() {
+        return new ChatComponentText(EnumChatFormatting.GREEN + ChatUtil.bar() + "\n"
+                + ChatUtil.centerLine(EnumChatFormatting.GOLD + "AddAlias Help\n\n")
+                + EnumChatFormatting.YELLOW + "/addalias <player> <alias>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Adds an alias for the player\n"
+                + EnumChatFormatting.YELLOW + "/addalias <remove> <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Removes the alias for the player\n"
+                + EnumChatFormatting.YELLOW + "/addalias <clearall>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Deletes all allias data\n"
+                + EnumChatFormatting.GREEN + ChatUtil.bar()
+        );
     }
 
     @Override
