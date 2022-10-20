@@ -169,12 +169,11 @@ public class CommandNocheaters extends CommandBase {
                                 } else if (!playername.equals(loginData.getdisplayname())) {
                                     uuid = null;
                                 }
-                            } catch (ApiException ignored) {
+                            } catch (ApiException e) {
                                 uuid = null;
                             }
                         }
-                    } catch (ApiException ignored) {
-                    }
+                    } catch (ApiException ignored) {}
 
                     if (uuid == null) {  // The playername doesn't exist or never joined hypixel
 
