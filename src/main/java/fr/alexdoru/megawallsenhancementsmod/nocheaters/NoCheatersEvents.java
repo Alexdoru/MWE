@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.nocheaters.events;
+package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;

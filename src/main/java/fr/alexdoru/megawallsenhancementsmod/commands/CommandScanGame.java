@@ -11,7 +11,7 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.GameInfoGrabber;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoGrabber;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
