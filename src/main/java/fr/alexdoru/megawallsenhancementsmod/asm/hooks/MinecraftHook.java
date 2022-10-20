@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TimerUtil;
@@ -62,7 +62,7 @@ public class MinecraftHook {
                 if (displayTag.hasKey("Name", 8)) {
                     final String itemName = displayTag.getString("Name");
                     if (itemName.contains("Play Again")) {
-                        if (!SquadEvent.getSquad().isEmpty() && warpTimer.update()) {
+                        if (!SquadHandler.getSquad().isEmpty() && warpTimer.update()) {
                             ChatUtil.addChatMessage(EnumChatFormatting.YELLOW + ChatUtil.bar() + "\n"
                                     + EnumChatFormatting.YELLOW + "You have players in your Squad, click again to warp" + "\n"
                                     + EnumChatFormatting.YELLOW + ChatUtil.bar());

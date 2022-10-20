@@ -2,7 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.TimerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -43,12 +43,12 @@ public class GuiScreenBookHook {
                             final String newNick = matcher.group(1);
                             if (newNick != null && !newNick.equals("")) {
                                 if (!ConfigHandler.hypixelNick.equals("")) {
-                                    final String oldAliasForNick = SquadEvent.getSquad().remove(ConfigHandler.hypixelNick);
+                                    final String oldAliasForNick = SquadHandler.getSquad().remove(ConfigHandler.hypixelNick);
                                     if (oldAliasForNick != null) {
                                         if (oldAliasForNick.equals(ConfigHandler.hypixelNick)) {
-                                            SquadEvent.addPlayer(newNick);
+                                            SquadHandler.addPlayer(newNick);
                                         } else {
-                                            SquadEvent.addPlayer(newNick, oldAliasForNick);
+                                            SquadHandler.addPlayer(newNick, oldAliasForNick);
                                         }
                                     }
                                 }

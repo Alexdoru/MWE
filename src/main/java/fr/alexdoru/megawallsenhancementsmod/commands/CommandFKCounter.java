@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiscreens.FKConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
@@ -56,7 +56,7 @@ public class CommandFKCounter extends CommandBase {
                         .append(": ");
                 for (final Iterator<Map.Entry<String, Integer>> iterator = KillCounter.sortByDecreasingValue1(KillCounter.getPlayers(TEAM)).entrySet().iterator(); iterator.hasNext(); ) {
                     final Map.Entry<String, Integer> entry = iterator.next();
-                    strBuilder.append(SquadEvent.getSquadname(entry.getKey())).append(" (").append(entry.getValue()).append(")");
+                    strBuilder.append(SquadHandler.getSquadname(entry.getKey())).append(" (").append(entry.getValue()).append(")");
                     if (iterator.hasNext()) {
                         strBuilder.append(", ");
                     }

@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.events;
+package fr.alexdoru.megawallsenhancementsmod.features;
 
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;

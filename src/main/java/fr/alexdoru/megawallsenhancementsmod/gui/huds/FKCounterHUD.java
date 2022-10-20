@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.KillCounter;
 import net.minecraft.client.gui.ScaledResolution;
@@ -159,7 +159,7 @@ public class FKCounterHUD extends MyCachedHUD {
                             } else {
                                 strBuilder.append(" - ");
                             }
-                            strBuilder.append(SquadEvent.getSquadname(playerEntry.getKey())).append(" (").append(playerEntry.getValue()).append(")");
+                            strBuilder.append(SquadHandler.getSquadname(playerEntry.getKey())).append(" (").append(playerEntry.getValue()).append(")");
                             playerAmount++;
                             if (playerAmount == ConfigHandler.fkcounterHUDPlayerAmount) {
                                 break;

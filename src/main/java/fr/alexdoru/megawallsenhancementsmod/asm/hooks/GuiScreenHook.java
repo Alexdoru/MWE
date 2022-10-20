@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsEndGameStats;
+import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;

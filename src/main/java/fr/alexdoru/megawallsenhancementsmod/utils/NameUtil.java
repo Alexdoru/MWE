@@ -8,7 +8,7 @@ import fr.alexdoru.megawallsenhancementsmod.data.AliasData;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.data.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
-import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
@@ -187,7 +187,7 @@ public class NameUtil {
             final WDR wdr = WdredPlayers.getPlayer(uuid, username);
             String extraPrefix = "";
             IChatComponent iExtraPrefix = null;
-            final String squadname = SquadEvent.getSquad().get(username);
+            final String squadname = SquadHandler.getSquad().get(username);
             final boolean isSquadMate = squadname != null;
 
             if (ConfigHandler.iconsOnNames) {

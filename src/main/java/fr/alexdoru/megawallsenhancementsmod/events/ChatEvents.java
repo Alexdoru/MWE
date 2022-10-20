@@ -3,6 +3,9 @@ package fr.alexdoru.megawallsenhancementsmod.events;
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
+import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
+import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
@@ -73,7 +76,7 @@ public class ChatEvents {
 
             if (msg.equals(GENERAL_START_MESSAGE)) {
                 GameInfoGrabber.saveinfoOnGameStart();
-                SquadEvent.formSquad();
+                SquadHandler.formSquad();
                 return;
             }
 
@@ -115,7 +118,7 @@ public class ChatEvents {
             if (matcher.matches()) {
                 senderRank = matcher.group(1);
                 messageSender = matcher.group(2);
-                squadname = SquadEvent.getSquad().get(messageSender);
+                squadname = SquadHandler.getSquad().get(messageSender);
             }
 
             final Matcher matcherBlockedMessage = BLOCKED_MESSAGE.matcher(msg);
