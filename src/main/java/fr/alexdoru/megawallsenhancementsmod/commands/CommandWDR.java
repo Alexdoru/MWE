@@ -7,12 +7,12 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.chat.WarningMessagesHandler;
+import fr.alexdoru.megawallsenhancementsmod.data.ReportTimestamp;
+import fr.alexdoru.megawallsenhancementsmod.data.WDR;
+import fr.alexdoru.megawallsenhancementsmod.data.WdredPlayers;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.TimeMark;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.GameInfoGrabber;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 
 public class CommandWDR extends CommandBase {
 
-    private static final HashMap<String, TimeMark> TimeMarksMap = new HashMap<>();
+    private static final HashMap<String, ReportTimestamp> timestampsMap = new HashMap<>();
     private static final char TIMESTAMP_REPORT_CHAR = '-';
     private static final char TIMEMARK_REPORT_CHAR = '#';
     private static int nbTimeMarks = 0;
@@ -95,7 +95,7 @@ public class CommandWDR extends CommandBase {
         final long timestamp = (new Date()).getTime();
         final String serverID = GameInfoGrabber.getGameIDfromscoreboard();
         final String timerOnReplay = GameInfoGrabber.getTimeSinceGameStart(timestamp, serverID, 0);
-        TimeMarksMap.put(key, new TimeMark(timestamp, serverID, timerOnReplay));
+        timestampsMap.put(key, new ReportTimestamp(timestamp, serverID, timerOnReplay));
         ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters()
                 + EnumChatFormatting.GREEN + "Added timestamp : " + EnumChatFormatting.GOLD + "#" + key + EnumChatFormatting.GREEN + ".")
                 .setChatStyle(new ChatStyle()
@@ -180,7 +180,7 @@ public class CommandWDR extends CommandBase {
                         usesTimeMark = true;
 
                         final String key = args[i].substring(1);
-                        final TimeMark timemark = TimeMarksMap.get(key);
+                        final ReportTimestamp timemark = timestampsMap.get(key);
 
                         if (timemark == null) {
 

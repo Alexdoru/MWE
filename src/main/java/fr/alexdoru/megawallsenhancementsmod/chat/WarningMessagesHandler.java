@@ -1,9 +1,9 @@
 package fr.alexdoru.megawallsenhancementsmod.chat;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiScreenHook;
+import fr.alexdoru.megawallsenhancementsmod.data.WDR;
+import fr.alexdoru.megawallsenhancementsmod.data.WdredPlayers;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WDR;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import net.minecraft.client.Minecraft;
