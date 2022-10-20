@@ -213,7 +213,7 @@ public class MegaWallsClassStats {
                 }};
 
         final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar() + "\n")
-                .appendSibling(new ChatComponentText(ChatUtil.centerLine(formattedname + EnumChatFormatting.GOLD + " - Game stats - " + classnameuppercase)))
+                .appendSibling(new ChatComponentText(ChatUtil.centerLine(formattedname + EnumChatFormatting.GOLD + " - Game stats - " + classnameuppercase) + "\n"))
                 .appendSibling(new ChatComponentText(ChatUtil.centerLine(EnumChatFormatting.GREEN + "Game Duration : " + EnumChatFormatting.GOLD + gameDuration)));
 
         if (games_played != 1) {
