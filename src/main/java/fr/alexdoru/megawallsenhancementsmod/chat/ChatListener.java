@@ -14,7 +14,7 @@ import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.ArrowHitHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.HunterStrengthHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.KillCooldownHUD;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.GameInfoGrabber;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoGrabber;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;

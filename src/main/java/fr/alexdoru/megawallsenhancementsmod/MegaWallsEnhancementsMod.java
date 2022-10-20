@@ -12,7 +12,7 @@ import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.events.NoCheatersEvents;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.NoCheatersEvents;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.updater.ModUpdater;
 import net.minecraft.client.settings.KeyBinding;

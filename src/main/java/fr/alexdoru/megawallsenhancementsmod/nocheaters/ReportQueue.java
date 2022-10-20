@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.nocheaters.events;
+package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
