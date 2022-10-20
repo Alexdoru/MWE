@@ -3,9 +3,9 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.KillCounter;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.ScoreboardEvent;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.LastWitherHPHUD;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 
 @SuppressWarnings("unused")
 public class GuiIngameHook {
@@ -18,7 +18,7 @@ public class GuiIngameHook {
     }
 
     public static String getSidebarTextLine(String textIn, int lineNumber) {
-        if (ConfigHandler.witherHUDinSidebar && lineNumber == 12 && ConfigHandler.showLastWitherHUD && FKCounterMod.isInMwGame && ScoreboardEvent.getMwScoreboardParser().isOnlyOneWitherAlive()) {
+        if (ConfigHandler.witherHUDinSidebar && lineNumber == 12 && ConfigHandler.showLastWitherHUD && FKCounterMod.isInMwGame && ScoreboardTracker.getMwScoreboardParser().isOnlyOneWitherAlive()) {
             return LastWitherHPHUD.instance.displayText;
         }
         if (ConfigHandler.fkcounterHUDinSidebar && lineNumber == 11 && ConfigHandler.showfkcounterHUD && FKCounterMod.isInMwGame && KillCounter.getGameId() != null) {

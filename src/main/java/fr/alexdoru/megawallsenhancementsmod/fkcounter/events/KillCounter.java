@@ -8,8 +8,9 @@ import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.DelayedTask;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import net.minecraft.client.Minecraft;
@@ -250,11 +251,11 @@ public class KillCounter {
     }
 
     private static boolean isWitherDead(String color) {
-        return !ScoreboardEvent.getMwScoreboardParser().isWitherAlive(color);
+        return !ScoreboardTracker.getMwScoreboardParser().isWitherAlive(color);
     }
 
     private static boolean areAllWithersAlive() {
-        return ScoreboardEvent.getMwScoreboardParser().areAllWithersAlive();
+        return ScoreboardTracker.getMwScoreboardParser().areAllWithersAlive();
     }
 
     /**
@@ -446,7 +447,7 @@ public class KillCounter {
          * to fix the bug where the FKCounter doesn't work properly if you play two games in a row on a server with the same serverID
          */
         if (event.getType() == MwGameEvent.EventType.GAME_START) {
-            final String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId();
+            final String currentGameId = ScoreboardTracker.getMwScoreboardParser().getGameId();
             if (currentGameId != null) {
                 ResetKillCounterTo(currentGameId);
             }
@@ -455,7 +456,7 @@ public class KillCounter {
         }
 
         if (event.getType() == MwGameEvent.EventType.CONNECT) {
-            final String currentGameId = ScoreboardEvent.getMwScoreboardParser().getGameId(); // this is not null due to how the event is defined/posted
+            final String currentGameId = ScoreboardTracker.getMwScoreboardParser().getGameId(); // this is not null due to how the event is defined/posted
             if (gameId == null || !gameId.equals(currentGameId)) {
                 ResetKillCounterTo(currentGameId);
             }
