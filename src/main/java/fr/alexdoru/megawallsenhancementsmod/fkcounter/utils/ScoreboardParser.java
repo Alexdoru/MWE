@@ -11,10 +11,10 @@ import java.util.regex.Pattern;
 
 public class ScoreboardParser {
 
+    public static final Pattern GAME_ID_PATTERN = Pattern.compile("\\d+/\\d+/\\d+\\s+([\\d\\w]+)");
     private static final Pattern GAME_END_PATTERN = Pattern.compile("Game End: (\\d+):(\\d+)");
     private static final Pattern GATES_OPEN_PATTERN = Pattern.compile("Gates Open: \\d+:\\d+");
     private static final Pattern WALLS_FALL_PATTERN = Pattern.compile("Walls Fall: (\\d+):(\\d+)");
-    private static final Pattern GAME_ID_PATTERN = Pattern.compile("\\d+/\\d+/\\d+\\s+([\\d\\w]+)");
     private static final Pattern MW_TITLE_PATTERN = Pattern.compile("MEGA\\sWALLS");
     private static final Pattern MW_INGAME_PATTERN = Pattern.compile("[0-9]+\\sFinals?\\s[0-9]+\\sF\\.\\sAssists?");
     private static final Pattern PREGAME_LOBBY_PATTERN = Pattern.compile("Players:\\s*[0-9]+/[0-9]+");

@@ -2,17 +2,16 @@ package fr.alexdoru.megawallsenhancementsmod.nocheaters.events;
 
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.ScoreboardParser;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.utils.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class GameInfoGrabber {
 
-    private static final Pattern GAME_ID_PATTERN = Pattern.compile("\\d+/\\d+/\\d+\\s+([\\d\\w]+)");
     private static final String TIME_WALLS_FALL = "Walls Fall"; // finish 6min after replay starts
     private static final String TIME_ENRAGE_OFF = "Enrage Off"; // lasts for 8mins
     private static final String TIME_DEATHMATCH = "Deathmatch"; // lasts for 31min
@@ -25,7 +24,7 @@ public class GameInfoGrabber {
         if (scoresRaw.size() == 0) {
             return "?";
         }
-        final Matcher matcher = GAME_ID_PATTERN.matcher(scoresRaw.get(0));
+        final Matcher matcher = ScoreboardParser.GAME_ID_PATTERN.matcher(scoresRaw.get(0));
         if (!matcher.find()) {
             return "?";
         }
