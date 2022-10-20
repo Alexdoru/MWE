@@ -37,7 +37,7 @@ public class ScangameData {
     }
 
     private static void onGameStart() {
-        final String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
+        final String currentGameId = GameInfoGrabber.getGameIdFromScoreboard();
         if (!currentGameId.equals("?") && scanGameId != null && !scanGameId.equals(currentGameId)) {
             clearScanGameData();
         }

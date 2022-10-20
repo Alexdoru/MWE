@@ -47,7 +47,7 @@ public class CommandScanGame extends CommandBase {
             ChatUtil.printApikeySetupInfo();
             return;
         }
-        final String currentGameId = GameInfoGrabber.getGameIDfromscoreboard();
+        final String currentGameId = GameInfoGrabber.getGameIdFromScoreboard();
         final Collection<NetworkPlayerInfo> playerCollection = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
         int i = 0;
         if (!currentGameId.equals("?") && currentGameId.equals(ScangameData.getScanGameId())) {
@@ -62,7 +62,7 @@ public class CommandScanGame extends CommandBase {
             }
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " more players...");
         } else {
-            ScangameData.setScanGameId(GameInfoGrabber.getGameIDfromscoreboard());
+            ScangameData.setScanGameId(GameInfoGrabber.getGameIdFromScoreboard());
             for (final NetworkPlayerInfo networkPlayerInfo : playerCollection) {
                 i++;
                 MultithreadingUtil.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));

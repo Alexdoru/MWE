@@ -77,7 +77,7 @@ public class ChatListener {
             }
 
             if (msg.equals(GENERAL_START_MESSAGE)) {
-                GameInfoGrabber.saveinfoOnGameStart();
+                GameInfoGrabber.saveGameInfoOnGameStart();
                 SquadHandler.formSquad();
                 return;
             }
