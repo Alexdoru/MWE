@@ -2,7 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.chat;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiScreenHook;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
-import fr.alexdoru.megawallsenhancementsmod.data.WdredPlayers;
+import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
@@ -32,7 +32,7 @@ public class WarningMessagesHandler {
         for (final NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
             final String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
             final String playerName = networkPlayerInfo.getGameProfile().getName();
-            final WDR wdr = WdredPlayers.getPlayer(uuid, playerName);
+            final WDR wdr = WdrData.getWdr(uuid, playerName);
             if (wdr == null) {
                 continue;
             }

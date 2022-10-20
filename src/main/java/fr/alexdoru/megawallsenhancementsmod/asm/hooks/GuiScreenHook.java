@@ -4,7 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
-import fr.alexdoru.megawallsenhancementsmod.data.WdredPlayers;
+import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.ClipboardUtil;
@@ -50,7 +50,7 @@ public class GuiScreenHook {
         }
         final String uuid = args[1];
         final String playername = args[2];
-        final WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+        final WDR wdr = WdrData.getWdr(uuid);
         if (wdr != null) {
             if (wdr.hasValidCheats()) {
                 final long time = (new Date()).getTime();

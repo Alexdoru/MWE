@@ -179,7 +179,7 @@ public class NameUtil {
 
             final String username = gameProfileIn.getName();
             final String uuid = id.toString().replace("-", "");
-            final WDR wdr = WdredPlayers.getPlayer(uuid, username);
+            final WDR wdr = WdrData.getWdr(uuid, username);
             String extraPrefix = "";
             IChatComponent iExtraPrefix = null;
             final String squadname = SquadHandler.getSquad().get(username);

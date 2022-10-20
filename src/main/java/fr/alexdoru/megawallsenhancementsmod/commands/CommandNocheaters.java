@@ -10,7 +10,7 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.chat.WarningMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
-import fr.alexdoru.megawallsenhancementsmod.data.WdredPlayers;
+import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiscreens.NoCheatersConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoGrabber;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
@@ -85,7 +85,7 @@ public class CommandNocheaters extends CommandBase {
                 }
 
                 if (args.length == 1 || sortedmap.isEmpty()) {
-                    final HashMap<String, WDR> newmap = new HashMap<>(WdredPlayers.getWdredMap());
+                    final HashMap<String, WDR> newmap = new HashMap<>(WdrData.getWdredMap());
                     sortedmap = sortByValue(newmap);
                 }
 
@@ -193,7 +193,7 @@ public class CommandNocheaters extends CommandBase {
 
                     }
 
-                    final WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+                    final WDR wdr = WdrData.getWdr(uuid);
 
                     if (wdr != null) { // the player was already reported before
 
@@ -205,7 +205,7 @@ public class CommandNocheaters extends CommandBase {
                         final long time = (new Date()).getTime();
                         final ArrayList<String> hacks = new ArrayList<>();
                         hacks.add(WDR.IGNORED);
-                        WdredPlayers.getWdredMap().put(uuid, new WDR(time, time, hacks));
+                        WdrData.put(uuid, new WDR(time, time, hacks));
                     }
 
                     ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You added " + EnumChatFormatting.RED + playername
@@ -243,7 +243,7 @@ public class CommandNocheaters extends CommandBase {
                 boolean warning = true;
                 final List<Future<IChatComponent>> futureList = new ArrayList<>();
 
-                for (final Map.Entry<String, WDR> entry : WdredPlayers.getWdredMap().entrySet()) {
+                for (final Map.Entry<String, WDR> entry : WdrData.getWdredMap().entrySet()) {
 
                     if (entry.getValue().isIgnored()) {
 
@@ -297,7 +297,7 @@ public class CommandNocheaters extends CommandBase {
 
                 final String uuid = args[1];
                 final String playername = args[2];
-                final WDR wdr = WdredPlayers.getWdredMap().get(uuid);
+                final WDR wdr = WdrData.getWdr(uuid);
 
                 if (wdr == null) {
 
@@ -306,7 +306,7 @@ public class CommandNocheaters extends CommandBase {
                 } else {
 
                     if (wdr.isOnlyIgnored()) {
-                        WdredPlayers.getWdredMap().remove(uuid);
+                        WdrData.remove(uuid);
                     } else {
                         wdr.hacks.remove(WDR.IGNORED);
                     }

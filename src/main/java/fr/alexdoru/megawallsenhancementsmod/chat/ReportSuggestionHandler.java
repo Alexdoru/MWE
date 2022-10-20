@@ -8,7 +8,7 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
-import fr.alexdoru.megawallsenhancementsmod.data.WdredPlayers;
+import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
@@ -143,7 +143,7 @@ public class ReportSuggestionHandler {
                 isSenderNicked = NameUtil.isntRealPlayer(id);
                 senderUUID = id.toString().replace("-", "");
                 isSenderFlaging = ScangameData.doesPlayerFlag(id);
-                final WDR wdr = WdredPlayers.getPlayer(senderUUID, messageSender);
+                final WDR wdr = WdrData.getWdr(senderUUID, messageSender);
                 if (wdr != null) {
                     isSenderIgnored = wdr.isIgnored();
                     isSenderCheating = wdr.hasValidCheats();
