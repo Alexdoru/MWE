@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.events;
+package fr.alexdoru.megawallsenhancementsmod.features;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;

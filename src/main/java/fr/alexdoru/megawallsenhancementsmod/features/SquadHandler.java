@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.events;
+package fr.alexdoru.megawallsenhancementsmod.features;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SquadEvent {
+public class SquadHandler {
 
     private static final HashMap<String, String> squadmap = new HashMap<>();
 

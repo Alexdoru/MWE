@@ -7,7 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.commands.CommandWDR;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
-import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.MwGameEvent;
@@ -206,7 +206,7 @@ public class ReportSuggestionHandler {
 
         if (isSenderMyself) {
             CommandWDR.handleWDRCommand(new String[]{reportedPlayer, cheat}, canWDRPlayer(reportedPlayer), false);
-        } else if (SquadEvent.getSquad().get(messageSender) != null) {
+        } else if (SquadHandler.getSquad().get(messageSender) != null) {
             CommandWDR.handleWDRCommand(new String[]{reportedPlayer, cheat}, false, false);
             if (canWDRPlayer(reportedPlayer)) {
                 ReportQueue.INSTANCE.addPlayerToQueueRandom(null, reportedPlayer);

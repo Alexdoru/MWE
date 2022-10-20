@@ -1,6 +1,10 @@
-package fr.alexdoru.megawallsenhancementsmod.utils;
+package fr.alexdoru.megawallsenhancementsmod.features;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
+import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;

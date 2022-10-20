@@ -5,7 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
-import fr.alexdoru.megawallsenhancementsmod.events.SquadEvent;
+import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
@@ -183,7 +183,7 @@ public class KillCounter {
                     if (ConfigHandler.strengthParticules) {
                         spawnParticles(killer);
                     }
-                    ChatUtil.addChatMessage(formattedText.replace(killer, SquadEvent.getSquadname(killer)).replace(killedPlayer, SquadEvent.getSquadname(killedPlayer)));
+                    ChatUtil.addChatMessage(formattedText.replace(killer, SquadHandler.getSquadname(killer)).replace(killedPlayer, SquadHandler.getSquadname(killedPlayer)));
                     return true;
                 }
 
@@ -197,7 +197,7 @@ public class KillCounter {
                         }
                         FKCounterHUD.instance.updateDisplayText();
                     }
-                    ChatUtil.addChatMessage(formattedText.replace(killedPlayer, SquadEvent.getSquadname(killedPlayer)));
+                    ChatUtil.addChatMessage(formattedText.replace(killedPlayer, SquadHandler.getSquadname(killedPlayer)));
                     return true;
                 }
 

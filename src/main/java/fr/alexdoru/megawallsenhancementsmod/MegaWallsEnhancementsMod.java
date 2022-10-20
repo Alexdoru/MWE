@@ -3,7 +3,11 @@ package fr.alexdoru.megawallsenhancementsmod;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.*;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.events.*;
+import fr.alexdoru.megawallsenhancementsmod.events.ChatEvents;
+import fr.alexdoru.megawallsenhancementsmod.events.KeybindingsEvent;
+import fr.alexdoru.megawallsenhancementsmod.features.LowHPIndicator;
+import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
+import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.events.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.data.WdredPlayers;
@@ -59,7 +63,7 @@ public class MegaWallsEnhancementsMod {
 
         MinecraftForge.EVENT_BUS.register(new GuiManager());
         MinecraftForge.EVENT_BUS.register(new ChatEvents());
-        MinecraftForge.EVENT_BUS.register(new SquadEvent());
+        MinecraftForge.EVENT_BUS.register(new SquadHandler());
         MinecraftForge.EVENT_BUS.register(new ModUpdater());
         MinecraftForge.EVENT_BUS.register(new KillCounter());
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
