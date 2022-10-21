@@ -2,10 +2,10 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
-import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.*;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelGuild;
+import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangPlayernameToUUID;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
@@ -46,9 +46,9 @@ public class CommandPlancke extends CommandBase {
 
         MultithreadingUtil.addTaskToQueue(() -> {
 
-            final CachedMojangUUID apiname;
+            final MojangPlayernameToUUID apiname;
             try {
-                apiname = new CachedMojangUUID(args[0]);
+                apiname = new MojangPlayernameToUUID(args[0]);
             } catch (ApiException e) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + e.getMessage());
                 return null;

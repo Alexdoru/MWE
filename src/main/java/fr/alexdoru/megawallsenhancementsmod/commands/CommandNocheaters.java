@@ -2,10 +2,10 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
-import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
+import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangPlayernameToUUID;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.chat.WarningMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
@@ -150,13 +150,12 @@ public class CommandNocheaters extends CommandBase {
 
                 MultithreadingUtil.addTaskToQueue(() -> {
 
-                    final CachedMojangUUID apireq;
                     String uuid = null;
                     String playername = args[1];
                     boolean isaNick = false;
 
                     try {
-                        apireq = new CachedMojangUUID(playername);
+                        final MojangPlayernameToUUID apireq = new MojangPlayernameToUUID(playername);
                         uuid = apireq.getUuid();
                         playername = apireq.getName();
                         if (uuid != null && !HypixelApiKeyUtil.apiKeyIsNotSetup()) {
