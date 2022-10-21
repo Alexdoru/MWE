@@ -30,12 +30,13 @@ public final class GuiManager {
     @SubscribeEvent
     public void onRenderGUI(RenderGameOverlayEvent.Post event) {
         if (event.type == ElementType.TEXT && !(mc.currentScreen instanceof PositionEditGuiScreen)) {
-            registeredRenderers.forEach(registeredRenderer -> callRenderer(registeredRenderer, event.resolution));
+            final long time = System.currentTimeMillis();
+            registeredRenderers.forEach(registeredRenderer -> callRenderer(registeredRenderer, event.resolution, time));
         }
     }
 
-    private void callRenderer(IRenderer renderer, ScaledResolution resolution) {
-        if (renderer.isEnabled()) {
+    private void callRenderer(IRenderer renderer, ScaledResolution resolution, long currentTimeMillis) {
+        if (renderer.isEnabled(currentTimeMillis)) {
             renderer.render(resolution);
         }
     }

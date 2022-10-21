@@ -37,7 +37,7 @@ public interface IRenderer {
      * more conveniently than unregistering
      * it from the API.
      */
-    boolean isEnabled();
+    boolean isEnabled(long currentTimeMillis);
 
     /**
      * Is called for each HUD when the configuration screen is closed

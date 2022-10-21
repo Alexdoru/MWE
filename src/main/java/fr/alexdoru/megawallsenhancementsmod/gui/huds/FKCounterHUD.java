@@ -117,7 +117,7 @@ public class FKCounterHUD extends MyCachedHUD {
     }
 
     @Override
-    public boolean isEnabled() {
+    public boolean isEnabled(long currentTimeMillis) {
         return !ConfigHandler.fkcounterHUDinSidebar && ConfigHandler.showfkcounterHUD && FKCounterMod.isInMwGame && KillCounter.getGameId() != null;
     }
 
