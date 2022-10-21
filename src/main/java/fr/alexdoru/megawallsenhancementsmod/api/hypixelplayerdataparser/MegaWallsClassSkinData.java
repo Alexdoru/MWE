@@ -1,6 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 
@@ -10,25 +9,19 @@ public class MegaWallsClassSkinData {
     private String chosen_skin_class;
 
     public MegaWallsClassSkinData(JsonObject playerData) {
-
-        if (playerData == null)
+        if (playerData == null) {
             return;
-
-        final JsonObject statsdata = playerData.get("stats").getAsJsonObject();
-
-        if (statsdata == null)
+        }
+        final JsonObject statsObj = JsonUtil.getJsonObject(playerData, "stats");
+        if (statsObj == null) {
             return;
-
-        final JsonElement mwElem = statsdata.get("Walls3");
-
-        if (mwElem == null)
+        }
+        final JsonObject megaWallsStatsObj = JsonUtil.getJsonObject(statsObj, "Walls3");
+        if (megaWallsStatsObj == null) {
             return;
-
-        final JsonObject mwdata = mwElem.getAsJsonObject();
-
-        this.chosen_class = JsonUtil.getString(mwdata, "chosen_class");
-        this.chosen_skin_class = JsonUtil.getString(mwdata, "chosen_skin_" + this.chosen_class);
-
+        }
+        this.chosen_class = JsonUtil.getString(megaWallsStatsObj, "chosen_class");
+        this.chosen_skin_class = JsonUtil.getString(megaWallsStatsObj, "chosen_skin_" + this.chosen_class);
     }
 
     public String getCurrentmwclass() {
@@ -38,4 +31,5 @@ public class MegaWallsClassSkinData {
     public String getCurrentmwskin() {
         return this.chosen_skin_class;
     }
+
 }

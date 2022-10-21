@@ -36,15 +36,11 @@ public class UHCStats {
         if (playerData == null) {
             return;
         }
-
-        final JsonObject statsdata = playerData.get("stats").getAsJsonObject();
-
-        if (statsdata == null) {
+        final JsonObject statsObj = JsonUtil.getJsonObject(playerData, "stats");
+        if (statsObj == null) {
             return;
         }
-
-        final JsonObject uhcData = JsonUtil.getJsonObject(statsdata, "UHC");
-
+        final JsonObject uhcData = JsonUtil.getJsonObject(statsObj, "UHC");
         if (uhcData == null) {
             return;
         }

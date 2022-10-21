@@ -62,23 +62,23 @@ public class LoginData {
     public void parseLatestActivity(JsonObject playerData) {
         latestActivityTime = JsonUtil.getLong(playerData, "lastClaimedReward");
         latestActivity = "Claimed Daily Reward";
-        final JsonElement questElem = playerData.get("quests");
-        if (questElem != null && questElem.isJsonObject()) {
-            final JsonObject questobj = questElem.getAsJsonObject();
-            for (final Map.Entry<String, JsonElement> questEntry : questobj.entrySet()) {
-                if (questEntry.getValue().isJsonObject()) {
-                    final JsonObject gameObj = questEntry.getValue().getAsJsonObject();
-                    final JsonElement completionsElem = gameObj.get("completions");
-                    if (completionsElem != null && completionsElem.isJsonArray()) {
-                        final JsonArray completionsArray = completionsElem.getAsJsonArray();
-                        for (final JsonElement element : completionsArray) {
-                            if (element.isJsonObject()) {
-                                final long l = JsonUtil.getLong(element.getAsJsonObject(), "time");
-                                if (l > latestActivityTime) {
-                                    latestActivityTime = l;
-                                    latestActivity = "Quest " + questEntry.getKey();
-                                }
-                            }
+        final JsonObject questobj = JsonUtil.getJsonObject(playerData, "quests");
+        if (questobj == null) {
+            return;
+        }
+        for (final Map.Entry<String, JsonElement> questEntry : questobj.entrySet()) {
+            if (questEntry.getValue().isJsonObject()) {
+                final JsonObject gameObj = questEntry.getValue().getAsJsonObject();
+                final JsonArray completionsArray = JsonUtil.getJsonArray(gameObj, "completions");
+                if (completionsArray == null) {
+                    continue;
+                }
+                for (final JsonElement element : completionsArray) {
+                    if (element instanceof JsonObject) {
+                        final long l = JsonUtil.getLong(element.getAsJsonObject(), "time");
+                        if (l > latestActivityTime) {
+                            latestActivityTime = l;
+                            latestActivity = "Quest " + questEntry.getKey();
                         }
                     }
                 }

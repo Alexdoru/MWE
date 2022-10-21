@@ -146,7 +146,7 @@ class ScanPlayerTask implements Callable<String> {
                 } else {
 
                     for (final Map.Entry<String, JsonElement> entry : classesdata.entrySet()) {
-                        if (entry.getValue() != null && entry.getValue().isJsonObject()) {
+                        if (entry.getValue() instanceof JsonObject) {
                             final JsonObject entryclassobj = entry.getValue().getAsJsonObject();
                             if (imsg == null) {
                                 if (firstGame) {

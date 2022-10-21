@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
@@ -61,51 +62,47 @@ public class MegaWallsStats {
         if (playerData == null) {
             return;
         }
-
-        final JsonObject statsdata = playerData.get("stats").getAsJsonObject();
-
-        if (statsdata == null) {
+        final JsonObject statsObj = JsonUtil.getJsonObject(playerData, "stats");
+        if (statsObj == null) {
+            return;
+        }
+        final JsonObject megaWallsStatsObj = JsonUtil.getJsonObject(statsObj, "Walls3");
+        if (megaWallsStatsObj == null) {
             return;
         }
 
-        final JsonObject mwdata = JsonUtil.getJsonObject(statsdata, "Walls3");
-
-        if (mwdata == null) {
-            return;
-        }
-
-        chosen_class = JsonUtil.getString(mwdata, "chosen_class");
-        chosen_skin_class = JsonUtil.getString(mwdata, "chosen_skin_" + chosen_class);
-        coins = JsonUtil.getInt(mwdata, "coins");
-        mythic_favor = JsonUtil.getInt(mwdata, "mythic_favor");
-        wither_damage = JsonUtil.getInt(mwdata, "wither_damage") + JsonUtil.getInt(mwdata, "witherDamage"); // add both to get wither damage
-        wither_kills = JsonUtil.getInt(mwdata, "wither_kills");
-        wins = JsonUtil.getInt(mwdata, "wins");
-        wins_face_off = JsonUtil.getInt(mwdata, "wins_face_off");
-        wins_practice = JsonUtil.getInt(mwdata, "wins_practice");
-        losses = JsonUtil.getInt(mwdata, "losses");
-        kills = JsonUtil.getInt(mwdata, "kills");
-        defender_kills = JsonUtil.getInt(mwdata, "defender_kills");
-        //assists = JsonUtil.getInt(mwdata,"assists");
-        deaths = JsonUtil.getInt(mwdata, "deaths");
-        final_kills = JsonUtil.getInt(mwdata, "final_kills");
-        //final_kills_standard = JsonUtil.getInt(mwdata,"final_kills_standard");
-        //final_assists = JsonUtil.getInt(mwdata,"final_assists");
-        //final_assists_standard = JsonUtil.getInt(mwdata,"final_assists_standard");
-        final_deaths = JsonUtil.getInt(mwdata, "final_deaths") + JsonUtil.getInt(mwdata, "finalDeaths");
+        chosen_class = JsonUtil.getString(megaWallsStatsObj, "chosen_class");
+        chosen_skin_class = JsonUtil.getString(megaWallsStatsObj, "chosen_skin_" + chosen_class);
+        coins = JsonUtil.getInt(megaWallsStatsObj, "coins");
+        mythic_favor = JsonUtil.getInt(megaWallsStatsObj, "mythic_favor");
+        wither_damage = JsonUtil.getInt(megaWallsStatsObj, "wither_damage") + JsonUtil.getInt(megaWallsStatsObj, "witherDamage"); // add both to get wither damage
+        wither_kills = JsonUtil.getInt(megaWallsStatsObj, "wither_kills");
+        wins = JsonUtil.getInt(megaWallsStatsObj, "wins");
+        wins_face_off = JsonUtil.getInt(megaWallsStatsObj, "wins_face_off");
+        wins_practice = JsonUtil.getInt(megaWallsStatsObj, "wins_practice");
+        losses = JsonUtil.getInt(megaWallsStatsObj, "losses");
+        kills = JsonUtil.getInt(megaWallsStatsObj, "kills");
+        defender_kills = JsonUtil.getInt(megaWallsStatsObj, "defender_kills");
+        //assists = JsonUtil.getInt(megaWallsStatsObj,"assists");
+        deaths = JsonUtil.getInt(megaWallsStatsObj, "deaths");
+        final_kills = JsonUtil.getInt(megaWallsStatsObj, "final_kills");
+        //final_kills_standard = JsonUtil.getInt(megaWallsStatsObj,"final_kills_standard");
+        //final_assists = JsonUtil.getInt(megaWallsStatsObj,"final_assists");
+        //final_assists_standard = JsonUtil.getInt(megaWallsStatsObj,"final_assists_standard");
+        final_deaths = JsonUtil.getInt(megaWallsStatsObj, "final_deaths") + JsonUtil.getInt(megaWallsStatsObj, "finalDeaths");
 
         kdr = (float) kills / (deaths == 0 ? 1 : (float) deaths);
         fkdr = (float) final_kills / (final_deaths == 0 ? 1 : (float) final_deaths);
         wlr = (float) wins / (losses == 0 ? 1 : (float) losses);
 
-        time_played = JsonUtil.getInt(mwdata, "time_played") + JsonUtil.getInt(mwdata, "time_played_standard"); // additionner les deux / en minutes
+        time_played = JsonUtil.getInt(megaWallsStatsObj, "time_played") + JsonUtil.getInt(megaWallsStatsObj, "time_played_standard"); // additionner les deux / en minutes
         games_played = wins + losses; // doesn't count the draws
         fkpergame = (float) final_kills / (games_played == 0 ? 1 : (float) games_played);
         wither_damage_game = wither_damage / (games_played == 0 ? 1 : (float) games_played);
         def_kill_game = defender_kills / (games_played == 0 ? 1 : (float) games_played);
 
         // computes the number of prestiges
-        classesdata = JsonUtil.getJsonObject(mwdata, "classes");
+        classesdata = JsonUtil.getJsonObject(megaWallsStatsObj, "classes");
         if (classesdata != null) {
             for (final MWClass mwclass : MWClass.values()) {
                 final String classname = mwclass.className.toLowerCase();
@@ -115,25 +112,26 @@ public class MegaWallsStats {
                 }
                 final int prestige = JsonUtil.getInt(classeobj, "prestige");
                 nbprestiges = nbprestiges + prestige;
-                final int classpoints = JsonUtil.getInt(mwdata, classname + "_final_kills_standard")
-                        + JsonUtil.getInt(mwdata, classname + "_final_assists_standard")
-                        + JsonUtil.getInt(mwdata, classname + "_wins_standard") * 10;
+                final int classpoints = JsonUtil.getInt(megaWallsStatsObj, classname + "_final_kills_standard")
+                        + JsonUtil.getInt(megaWallsStatsObj, classname + "_final_assists_standard")
+                        + JsonUtil.getInt(megaWallsStatsObj, classname + "_wins_standard") * 10;
                 total_classpoints += classpoints;
                 classpointsMap.put(classname, new Integer[]{prestige, classpoints});
             }
         }
 
         try {
-            final JsonElement achievementsOneTime = playerData.get("achievementsOneTime");
-            if (achievementsOneTime != null && achievementsOneTime.isJsonArray()) {
-                for (final JsonElement jsonElement : achievementsOneTime.getAsJsonArray()) {
-                    if (jsonElement.isJsonArray()) {
-                        continue;
-                    }
-                    final String achievementName = jsonElement.getAsString();
-                    if (achievementName != null && achievementName.startsWith("walls3_legendary_")) {
-                        legendary_skins++;
-                    }
+            final JsonArray achievementsOneTimeArray = JsonUtil.getJsonArray(playerData, "achievementsOneTime");
+            if (achievementsOneTimeArray == null) {
+                return;
+            }
+            for (final JsonElement jsonElement : achievementsOneTimeArray) {
+                if (jsonElement.isJsonArray()) {
+                    continue;
+                }
+                final String achievementName = jsonElement.getAsString();
+                if (achievementName != null && achievementName.startsWith("walls3_legendary_")) {
+                    legendary_skins++;
                 }
             }
         } catch (Exception ignored) {}

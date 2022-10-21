@@ -1,6 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
@@ -70,49 +69,43 @@ public class MegaWallsClassStats {
         if (playerData == null) {
             return;
         }
-
-        final JsonObject statsdata = playerData.get("stats").getAsJsonObject();
-
-        if (statsdata == null) {
+        final JsonObject statsObj = JsonUtil.getJsonObject(playerData, "stats");
+        if (statsObj == null) {
             return;
         }
-
-        final JsonElement mwElem = statsdata.get("Walls3");
-
-        if (mwElem == null) {
+        final JsonObject megaWallsStatsObj = JsonUtil.getJsonObject(statsObj, "Walls3");
+        if (megaWallsStatsObj == null) {
             return;
         }
-
-        final JsonObject mwdata = mwElem.getAsJsonObject();
 
         classname = classnameIn.toLowerCase();
         classnameuppercase = classnameIn;
-        chosen_skin_class = JsonUtil.getString(mwdata, "chosen_skin_" + classnameuppercase);
+        chosen_skin_class = JsonUtil.getString(megaWallsStatsObj, "chosen_skin_" + classnameuppercase);
 
-        coins = JsonUtil.getInt(mwdata, "coins");
+        coins = JsonUtil.getInt(megaWallsStatsObj, "coins");
 
-        classname_kills = JsonUtil.getInt(mwdata, classname + "_kills");
-        classname_deaths = JsonUtil.getInt(mwdata, classname + "_deaths");
-        classname_wins = JsonUtil.getInt(mwdata, classname + "_wins");
-        classname_losses = JsonUtil.getInt(mwdata, classname + "_losses");
-        classname_final_kills = JsonUtil.getInt(mwdata, classname + "_final_kills");
-        classname_final_deaths = JsonUtil.getInt(mwdata, classname + "_final_deaths");
-        classname_time_played = JsonUtil.getInt(mwdata, classname + "_time_played");
+        classname_kills = JsonUtil.getInt(megaWallsStatsObj, classname + "_kills");
+        classname_deaths = JsonUtil.getInt(megaWallsStatsObj, classname + "_deaths");
+        classname_wins = JsonUtil.getInt(megaWallsStatsObj, classname + "_wins");
+        classname_losses = JsonUtil.getInt(megaWallsStatsObj, classname + "_losses");
+        classname_final_kills = JsonUtil.getInt(megaWallsStatsObj, classname + "_final_kills");
+        classname_final_deaths = JsonUtil.getInt(megaWallsStatsObj, classname + "_final_deaths");
+        classname_time_played = JsonUtil.getInt(megaWallsStatsObj, classname + "_time_played");
 
         kdr = (float) classname_kills / (classname_deaths == 0 ? 1 : (float) classname_deaths);
         fkdr = (float) classname_final_kills / (classname_final_deaths == 0 ? 1 : (float) classname_final_deaths);
         wlr = (float) classname_wins / (classname_losses == 0 ? 1 : (float) classname_losses);
 
         // to compute classpoints
-        final int classname_final_kills_standard = JsonUtil.getInt(mwdata, classname + "_final_kills_standard");
-        classname_final_assists_standard = JsonUtil.getInt(mwdata, classname + "_final_assists_standard");
-        final int classname_wins_standard = JsonUtil.getInt(mwdata, classname + "_wins_standard");
+        final int classname_final_kills_standard = JsonUtil.getInt(megaWallsStatsObj, classname + "_final_kills_standard");
+        classname_final_assists_standard = JsonUtil.getInt(megaWallsStatsObj, classname + "_final_assists_standard");
+        final int classname_wins_standard = JsonUtil.getInt(megaWallsStatsObj, classname + "_wins_standard");
         classpoints = classname_final_kills_standard + classname_final_assists_standard + classname_wins_standard * 10;
 
         games_played = classname_wins + classname_losses; // doesn't count the draws
         fkpergame = (float) classname_final_kills / (games_played == 0 ? 1 : (float) games_played);
 
-        final JsonObject classesdata = JsonUtil.getJsonObject(mwdata, "classes");
+        final JsonObject classesdata = JsonUtil.getJsonObject(megaWallsStatsObj, "classes");
         if (classesdata == null) {
             return;
         }
@@ -134,21 +127,22 @@ public class MegaWallsClassStats {
         /*
          * fields below are for the game stats
          */
-        classname_assists = JsonUtil.getInt(mwdata, classname + "_assists");
-        classname_wither_damage = JsonUtil.getInt(mwdata, classname + "_wither_damage");
-        classname_defender_kills = JsonUtil.getInt(mwdata, classname + "_defender_kills");
+        classname_assists = JsonUtil.getInt(megaWallsStatsObj, classname + "_assists");
+        classname_wither_damage = JsonUtil.getInt(megaWallsStatsObj, classname + "_wither_damage");
+        classname_defender_kills = JsonUtil.getInt(megaWallsStatsObj, classname + "_defender_kills");
         //classname_defender_assists = JsonUtil.getInt(mwdata,classname + "_defender_assists");
-        classname_a_activations = JsonUtil.getInt(mwdata, classname + "_a_activations");
+        classname_a_activations = JsonUtil.getInt(megaWallsStatsObj, classname + "_a_activations");
         //classname_a_activations_deathmatch = JsonUtil.getInt(mwdata,classname + "_a_activations_deathmatch");
-        classname_a_damage_dealt = JsonUtil.getInt(mwdata, classname + "_a_damage_dealt");
-        classname_arrows_fired = JsonUtil.getInt(mwdata, classname + "_arrows_fired");
-        classname_arrows_hit = JsonUtil.getInt(mwdata, classname + "_arrows_hit");
-        classname_blocks_placed = JsonUtil.getInt(mwdata, classname + "_blocks_placed");
-        classname_meters_walked = JsonUtil.getInt(mwdata, classname + "_meters_walked");
-        classname_self_healed = JsonUtil.getInt(mwdata, classname + "_self_healed");
-        classname_allies_healed = JsonUtil.getInt(mwdata, classname + "_allies_healed");
+        classname_a_damage_dealt = JsonUtil.getInt(megaWallsStatsObj, classname + "_a_damage_dealt");
+        classname_arrows_fired = JsonUtil.getInt(megaWallsStatsObj, classname + "_arrows_fired");
+        classname_arrows_hit = JsonUtil.getInt(megaWallsStatsObj, classname + "_arrows_hit");
+        classname_blocks_placed = JsonUtil.getInt(megaWallsStatsObj, classname + "_blocks_placed");
+        classname_meters_walked = JsonUtil.getInt(megaWallsStatsObj, classname + "_meters_walked");
+        classname_self_healed = JsonUtil.getInt(megaWallsStatsObj, classname + "_self_healed");
+        classname_allies_healed = JsonUtil.getInt(megaWallsStatsObj, classname + "_allies_healed");
         wither_damage_game = classname_wither_damage / (games_played == 0 ? 1 : (float) games_played);
         def_kill_game = classname_defender_kills / (games_played == 0 ? 1 : (float) games_played);
+
     }
 
     /*

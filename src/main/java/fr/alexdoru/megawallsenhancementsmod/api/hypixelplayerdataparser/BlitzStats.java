@@ -27,29 +27,25 @@ public class BlitzStats {
         if (playerData == null) {
             return;
         }
-
-        final JsonObject statsdata = playerData.get("stats").getAsJsonObject();
-
-        if (statsdata == null) {
+        final JsonObject statsObj = JsonUtil.getJsonObject(playerData, "stats");
+        if (statsObj == null) {
+            return;
+        }
+        final JsonObject bsgObj = JsonUtil.getJsonObject(statsObj, "HungerGames");
+        if (bsgObj == null) {
             return;
         }
 
-        final JsonObject bsgData = JsonUtil.getJsonObject(statsdata, "HungerGames");
-
-        if (bsgData == null) {
-            return;
-        }
-
-        coins = JsonUtil.getInt(bsgData, "coins");
-        //wins = JsonUtil.getInt(bsgData, "wins");
-        wins_solo_normal = JsonUtil.getInt(bsgData, "wins_solo_normal");
-        wins_teams_normal = JsonUtil.getInt(bsgData, "wins_teams_normal");
-        deaths = JsonUtil.getInt(bsgData, "deaths");
-        kills = JsonUtil.getInt(bsgData, "kills");
-        //kills_solo_normal = JsonUtil.getInt(bsgData, "kills_solo_normal");
-        //kills_teams_normal = JsonUtil.getInt(bsgData, "kills_teams_normal");
-        time_played = JsonUtil.getInt(bsgData, "time_played");
-        defaultkit = JsonUtil.getString(bsgData, "defaultkit");
+        coins = JsonUtil.getInt(bsgObj, "coins");
+        //wins = JsonUtil.getInt(bsgObj, "wins");
+        wins_solo_normal = JsonUtil.getInt(bsgObj, "wins_solo_normal");
+        wins_teams_normal = JsonUtil.getInt(bsgObj, "wins_teams_normal");
+        deaths = JsonUtil.getInt(bsgObj, "deaths");
+        kills = JsonUtil.getInt(bsgObj, "kills");
+        //kills_solo_normal = JsonUtil.getInt(bsgObj, "kills_solo_normal");
+        //kills_teams_normal = JsonUtil.getInt(bsgObj, "kills_teams_normal");
+        time_played = JsonUtil.getInt(bsgObj, "time_played");
+        defaultkit = JsonUtil.getString(bsgObj, "defaultkit");
 
         kdr = (float) kills / (deaths == 0 ? 1 : (float) deaths);
 
