@@ -39,11 +39,7 @@ public class CommandAddAlias extends CommandBase {
             ChatUtil.addChatMessage(getCommandHelp());
             return;
         }
-        if (args.length == 1 && args[0].equals("clearall")) {
-            AliasData.getMap().clear();
-            ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Cleared alias for all players.");
-            return;
-        } else if (args.length == 1 && args[0].equals("list")) {
+        if (args.length == 1 && args[0].equals("list")) {
             ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "In this lobby :\n");
             for (final NetworkPlayerInfo networkPlayerInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
                 final String alias = AliasData.getAlias(networkPlayerInfo.getGameProfile().getName());
@@ -73,7 +69,6 @@ public class CommandAddAlias extends CommandBase {
                 + ChatUtil.centerLine(EnumChatFormatting.GOLD + "AddAlias Help\n\n")
                 + EnumChatFormatting.YELLOW + "/addalias <player> <alias>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Adds an alias for the player\n"
                 + EnumChatFormatting.YELLOW + "/addalias <remove> <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Removes the alias for the player\n"
-                + EnumChatFormatting.YELLOW + "/addalias <clearall>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Deletes all allias data\n"
                 + EnumChatFormatting.GREEN + ChatUtil.bar()
         );
     }
@@ -86,7 +81,7 @@ public class CommandAddAlias extends CommandBase {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         final List<String> onlinePlayersByName = TabCompletionUtil.getOnlinePlayersByName();
-        onlinePlayersByName.addAll(Arrays.asList("clearall", "list", "remove"));
+        onlinePlayersByName.addAll(Arrays.asList("list", "remove"));
         return getListOfStringsMatchingLastWord(args, onlinePlayersByName);
     }
 
