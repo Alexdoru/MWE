@@ -12,7 +12,7 @@ public class CachedHypixelPlayerData {
     private static final TimerUtil timer = new TimerUtil(60000L);
 
     public CachedHypixelPlayerData(String uuidIn) throws ApiException {
-        if (uuid != null && uuid.equals(uuidIn) && !timer.update()) {
+        if (!timer.update() && uuid != null && uuid.equals(uuidIn)) {
             return;
         }
         final HypixelPlayerData hypixelPlayerData = new HypixelPlayerData(uuidIn);
