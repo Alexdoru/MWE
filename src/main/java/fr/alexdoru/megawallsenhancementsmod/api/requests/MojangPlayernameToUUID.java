@@ -1,20 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.api.requests;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
-import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
-
-/* Contacts Mojang's api to retrieve uuid
- * response looks like this :
- * 
- * {
-    "name": "KrisJelbring",
-    "id": "7125ba8b1c864508b92bb5c042ccfe2b"
-	}
- * 
- */
 
 public class MojangPlayernameToUUID {
 
@@ -22,22 +10,11 @@ public class MojangPlayernameToUUID {
     private final String uuid;
 
     public MojangPlayernameToUUID(String playername) throws ApiException {
-
-        final HttpClient httpclient = new HttpClient("https://api.mojang.com/users/profiles/minecraft/" + playername);
-        final String rawresponse = httpclient.getRawResponse();
-
-        if (rawresponse == null) {
-            this.name = null;
-            this.uuid = null;
-            throw new ApiException(ChatUtil.invalidplayernameMsg(playername));
-        }
-
-        final JsonObject obj = new JsonParser().parse(rawresponse).getAsJsonObject();
+        final HttpClient httpClient = new HttpClient("https://api.mojang.com/users/profiles/minecraft/" + playername);
+        final JsonObject obj = httpClient.getJsonResponse();
         final String id = obj.get("id").getAsString();
-
         this.name = obj.get("name").getAsString();
         this.uuid = id.replace("-", "");
-
     }
 
     public String getName() {
