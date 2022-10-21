@@ -1,6 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.api.requests;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
@@ -21,39 +20,36 @@ public class HypixelPlayerStatus {
         final HttpClient httpclient = new HttpClient("https://api.hypixel.net/status?key=" + HypixelApiKeyUtil.getApiKey() + "&uuid=" + uuid);
         final String rawresponse = httpclient.getRawResponse();
 
-        if (rawresponse == null)
+        if (rawresponse == null) {
             throw new ApiException("No response from Hypixel's Api");
+        }
 
-        final JsonParser parser = new JsonParser();
-        final JsonObject obj = parser.parse(rawresponse).getAsJsonObject();
+        final JsonObject obj = new JsonParser().parse(rawresponse).getAsJsonObject();
 
-        if (obj == null)
+        if (obj == null) {
             throw new ApiException("Cannot parse response from Hypixel's Api");
+        }
 
-        if (!obj.get("success").getAsBoolean()) {
-
+        if (!JsonUtil.getBoolean(obj, "success")) {
             final String msg = JsonUtil.getString(obj, "cause");
-
             if (msg == null) {
                 throw new ApiException("Failed to retreive data from Hypixel's Api for this player");
             } else {
                 throw new ApiException(msg);
             }
-
         }
 
-        final JsonObject sessionobj = obj.get("session").getAsJsonObject();
-        this.online = sessionobj.get("online").getAsBoolean();
+        final JsonObject sessionobj = JsonUtil.getJsonObject(obj, "session");
+        if (sessionobj == null) {
+            throw new ApiException("Failed to retreive data from Hypixel's Api for this player");
+        }
+
+        this.online = JsonUtil.getBoolean(sessionobj, "online");
 
         if (this.online) {
-            this.gamemode = sessionobj.get("gameType").getAsString(); // can be null
-            this.mode = sessionobj.get("mode").getAsString();         // can be null
-
-            final JsonElement mapelem = sessionobj.get("map");
-
-            if (mapelem != null)
-                this.map = mapelem.getAsString();                     // can be null
-
+            this.gamemode = JsonUtil.getString(sessionobj, "gameType");
+            this.mode = JsonUtil.getString(sessionobj, "mode");
+            this.map = JsonUtil.getString(sessionobj, "map");
         }
 
     }
@@ -72,8 +68,9 @@ public class HypixelPlayerStatus {
 
     public String getMode() {
 
-        if (this.mode == null)
+        if (this.mode == null) {
             return "?";
+        }
 
         switch (this.mode) {
 

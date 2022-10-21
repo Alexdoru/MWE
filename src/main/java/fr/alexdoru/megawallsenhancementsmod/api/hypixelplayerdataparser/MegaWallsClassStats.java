@@ -37,7 +37,7 @@ public class MegaWallsClassStats {
     private int classname_final_assists_standard;
     private int classpoints;
     // in the mwdata -> classes -> classname
-    private boolean unlocked = false;
+    private boolean unlocked;
     private int skill_level_a = 1; // ability
     private int skill_level_b = 1; // passive 1
     private int skill_level_c = 1; // passive 2
@@ -122,11 +122,7 @@ public class MegaWallsClassStats {
             return;
         }
 
-        final JsonElement boolelem = classeobj.get("unlocked");
-
-        if (boolelem != null) {
-            unlocked = boolelem.getAsBoolean();
-        }
+        unlocked = JsonUtil.getBoolean(classeobj, "unlocked");
         skill_level_a = Math.max(JsonUtil.getInt(classeobj, "skill_level_a"), 1);
         skill_level_b = Math.max(JsonUtil.getInt(classeobj, "skill_level_b"), 1);
         skill_level_c = Math.max(JsonUtil.getInt(classeobj, "skill_level_c"), 1);
