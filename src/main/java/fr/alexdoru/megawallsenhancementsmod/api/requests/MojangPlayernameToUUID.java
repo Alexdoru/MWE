@@ -32,8 +32,7 @@ public class MojangPlayernameToUUID {
             throw new ApiException(ChatUtil.invalidplayernameMsg(playername));
         }
 
-        final JsonParser parser = new JsonParser();
-        final JsonObject obj = parser.parse(rawresponse).getAsJsonObject();
+        final JsonObject obj = new JsonParser().parse(rawresponse).getAsJsonObject();
         final String id = obj.get("id").getAsString();
 
         this.name = obj.get("name").getAsString();

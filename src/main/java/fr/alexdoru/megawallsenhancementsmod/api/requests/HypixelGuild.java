@@ -23,23 +23,19 @@ public class HypixelGuild {
             throw new ApiException("No response from Hypixel's Api");
         }
 
-        final JsonParser parser = new JsonParser();
-        final JsonObject obj = parser.parse(rawresponse).getAsJsonObject();
+        final JsonObject obj = new JsonParser().parse(rawresponse).getAsJsonObject();
 
         if (obj == null) {
             throw new ApiException("Cannot parse response from Hypixel's Api");
         }
 
-        if (!obj.get("success").getAsBoolean()) {
-
+        if (!JsonUtil.getBoolean(obj, "success")) {
             final String msg = JsonUtil.getString(obj, "cause");
-
             if (msg == null) {
                 throw new ApiException("Failed to retreive data from Hypixel's Api for this guild");
             } else {
                 throw new ApiException(msg);
             }
-
         }
 
         final JsonElement guildDataElem = obj.get("guild");

@@ -27,24 +27,23 @@ public class MojangNameHistory {
         final HttpClient httpclient = new HttpClient("https://api.mojang.com/user/profiles/" + uuidIn + "/names");
         final String rawresponse = httpclient.getRawResponse();
 
-        if (rawresponse == null)
+        if (rawresponse == null) {
             throw new ApiException("No response from Mojang's Api");
+        }
 
-        final JsonParser parser = new JsonParser();
-        final JsonArray array = parser.parse(rawresponse).getAsJsonArray();
+        final JsonArray array = new JsonParser().parse(rawresponse).getAsJsonArray();
 
-        if (array.size() == 0)
+        if (array.size() == 0) {
             throw new ApiException("Name history data is empty");
+        }
 
         final List<String> nameslist = new ArrayList<>();
         final List<Long> timestampslist = new ArrayList<>();
 
         for (int i = 0; i < array.size(); i++) {
-
             final JsonObject obj = array.get(i).getAsJsonObject();
             final String name = obj.get("name").getAsString();
             final Long timestamp = (i == 0) ? 0L : obj.get("changedToAt").getAsLong();
-
             nameslist.add(name);
             timestampslist.add(timestamp);
         }
