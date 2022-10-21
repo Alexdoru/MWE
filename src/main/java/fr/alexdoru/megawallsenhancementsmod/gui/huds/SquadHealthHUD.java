@@ -38,7 +38,7 @@ public class SquadHealthHUD implements IRenderer {
     }
 
     @Override
-    public boolean isEnabled() {
+    public boolean isEnabled(long currentTimeMillis) {
         // TODO : Implement auto-generated method
         return true;
     }

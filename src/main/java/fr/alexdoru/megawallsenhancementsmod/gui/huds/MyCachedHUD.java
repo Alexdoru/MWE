@@ -46,7 +46,7 @@ public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDTe
     public void renderDummy() {}
 
     @Override
-    public boolean isEnabled() {
+    public boolean isEnabled(long currentTimeMillis) {
         return true;
     }
 

@@ -64,7 +64,7 @@ public class LastWitherHPHUD extends MyCachedHUD {
     }
 
     @Override
-    public boolean isEnabled() {
+    public boolean isEnabled(long currentTimeMillis) {
         return !ConfigHandler.witherHUDinSidebar && ConfigHandler.showLastWitherHUD && FKCounterMod.isInMwGame && ScoreboardTracker.getMwScoreboardParser().isOnlyOneWitherAlive();
     }
 

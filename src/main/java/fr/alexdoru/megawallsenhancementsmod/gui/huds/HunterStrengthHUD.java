@@ -34,8 +34,8 @@ public class HunterStrengthHUD extends MyCachedHUD {
     }
 
     @Override
-    public boolean isEnabled() {
-        return timeStartRender + renderDuration - System.currentTimeMillis() > 0;
+    public boolean isEnabled(long currentTimeMillis) {
+        return timeStartRender + renderDuration - currentTimeMillis > 0;
     }
 
     public void setPreStrengthTime(String preStrengthTimer) {
