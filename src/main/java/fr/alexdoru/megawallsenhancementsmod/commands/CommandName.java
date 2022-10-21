@@ -48,8 +48,8 @@ public class CommandName extends CommandBase {
             }
 
             final String namesMC_URL = "https://namemc.com/search?q=" + playername;
-            final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar() + "\n" + "                " +
-                    EnumChatFormatting.GOLD + "Name History - " + playername + "\n\n" +
+            final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar() + "\n"
+                    + ChatUtil.centerLine(EnumChatFormatting.GOLD + "Name History - " + playername) + "\n\n" +
                     EnumChatFormatting.GRAY + "Name History API had been removed by Microsoft RIP\n")
                     .appendSibling(new ChatComponentText(
                             EnumChatFormatting.GREEN + "Click to open " +
