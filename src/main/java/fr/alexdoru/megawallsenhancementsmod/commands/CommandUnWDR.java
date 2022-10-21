@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
+import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangPlayernameToUUID;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
@@ -40,10 +40,10 @@ public class CommandUnWDR extends CommandBase {
 
             MultithreadingUtil.addTaskToQueue(() -> {
 
-                final CachedMojangUUID apireq;
+                final MojangPlayernameToUUID apireq;
                 String playername = args[0];
                 try {
-                    apireq = (new CachedMojangUUID(playername));
+                    apireq = (new MojangPlayernameToUUID(playername));
                     playername = apireq.getName();
                 } catch (ApiException e) {
                     ChatUtil.addChatMessage(EnumChatFormatting.RED + e.getMessage());

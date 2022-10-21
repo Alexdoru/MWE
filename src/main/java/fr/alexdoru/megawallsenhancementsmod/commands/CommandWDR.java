@@ -2,9 +2,9 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
-import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
+import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangPlayernameToUUID;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.chat.WarningMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.ReportTimestamp;
@@ -246,7 +246,7 @@ public class CommandWDR extends CommandBase {
             String formattedPlayername = null;
 
             try {
-                final CachedMojangUUID apireq = new CachedMojangUUID(playername);
+                final MojangPlayernameToUUID apireq = new MojangPlayernameToUUID(playername);
                 uuid = apireq.getUuid();
                 playername = apireq.getName();
                 if (uuid != null && !HypixelApiKeyUtil.apiKeyIsNotSetup()) {

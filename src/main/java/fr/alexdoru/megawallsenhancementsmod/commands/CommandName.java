@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedMojangUUID;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
+import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangPlayernameToUUID;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
@@ -41,7 +41,7 @@ public class CommandName extends CommandBase {
 
             final String playername = args[0];
             try {
-                new CachedMojangUUID(playername);
+                new MojangPlayernameToUUID(playername);
             } catch (ApiException e1) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + e1.getMessage());
                 return null;

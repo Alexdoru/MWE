@@ -6,12 +6,22 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 
+import java.util.HashMap;
+
 public class MojangPlayernameToUUID {
 
+    private static final HashMap<String, NameUuidData> nameUuidCache = new HashMap<>();
     private final String name;
     private final String uuid;
 
     public MojangPlayernameToUUID(String playername) throws ApiException {
+        final String lowerCaseName = playername.toLowerCase();
+        final NameUuidData cachedData = nameUuidCache.get(lowerCaseName);
+        if (cachedData != null) {
+            this.name = cachedData.name;
+            this.uuid = cachedData.uuid;
+            return;
+        }
         final HttpClient httpClient = new HttpClient("https://api.mojang.com/users/profiles/minecraft/" + playername);
         final JsonObject obj = httpClient.getJsonResponse();
         this.name = JsonUtil.getString(obj, "name");
@@ -20,6 +30,7 @@ public class MojangPlayernameToUUID {
             throw new ApiException(ChatUtil.invalidplayernameMsg(playername));
         }
         this.uuid = id.replace("-", "");
+        nameUuidCache.put(lowerCaseName, new NameUuidData(this.name, this.uuid));
     }
 
     public String getName() {
@@ -30,4 +41,18 @@ public class MojangPlayernameToUUID {
         return this.uuid;
     }
 
+    static class NameUuidData {
+
+        public final String name;
+        public final String uuid;
+
+        NameUuidData(String name, String uuid) {
+            this.name = name;
+            this.uuid = uuid;
+        }
+
+    }
+
 }
+
+
