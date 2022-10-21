@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
+import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +37,8 @@ public class MojangNameHistory {
 
         for (int i = 0; i < array.size(); i++) {
             final JsonObject obj = array.get(i).getAsJsonObject();
-            final String name = obj.get("name").getAsString();
-            final Long timestamp = (i == 0) ? 0L : obj.get("changedToAt").getAsLong();
+            final String name = JsonUtil.getString(obj, "name");
+            final Long timestamp = (i == 0) ? 0L : JsonUtil.getLong(obj, "changedToAt");
             nameslist.add(name);
             timestampslist.add(timestamp);
         }

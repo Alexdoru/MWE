@@ -1,10 +1,10 @@
 package fr.alexdoru.megawallsenhancementsmod.api.requests;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
+import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 
 public class HypixelPlayerData {
 
@@ -14,13 +14,9 @@ public class HypixelPlayerData {
     public HypixelPlayerData(String uuid) throws ApiException {
         final HttpClient httpClient = new HttpClient("https://api.hypixel.net/player?key=" + HypixelApiKeyUtil.getApiKey() + "&uuid=" + uuid);
         final JsonObject obj = httpClient.getJsonResponse();
-        final JsonElement playerdataElem = obj.get("player");
-        if (playerdataElem == null || !playerdataElem.isJsonObject()) {
-            throw new ApiException("This player never joined Hypixel, it might be a nick.");
-        }
-        final JsonObject playerdata = playerdataElem.getAsJsonObject();
+        final JsonObject playerdata = JsonUtil.getJsonObject(obj, "player");
         if (playerdata == null) {
-            throw new ApiException("An error occured while parsing data for this player on Hypixel's Api");
+            throw new ApiException("This player never joined Hypixel, it might be a nick.");
         }
         this.playerData = playerdata;
         this.uuid = uuid;

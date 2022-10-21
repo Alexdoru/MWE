@@ -58,15 +58,11 @@ public class SkywarsStats {
         if (playerData == null) {
             return;
         }
-
-        final JsonObject statsdata = playerData.get("stats").getAsJsonObject();
-
-        if (statsdata == null) {
+        final JsonObject statsObj = JsonUtil.getJsonObject(playerData, "stats");
+        if (statsObj == null) {
             return;
         }
-
-        final JsonObject swdata = JsonUtil.getJsonObject(statsdata, "SkyWars");
-
+        final JsonObject swdata = JsonUtil.getJsonObject(statsObj, "SkyWars");
         if (swdata == null) {
             return;
         }

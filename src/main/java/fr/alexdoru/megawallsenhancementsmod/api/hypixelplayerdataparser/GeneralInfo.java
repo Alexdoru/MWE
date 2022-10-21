@@ -42,21 +42,12 @@ public class GeneralInfo extends LoginData {
         final JsonObject questsdata = JsonUtil.getJsonObject(playerData, "quests");
 
         if (questsdata != null) {
-
             for (final Map.Entry<String, JsonElement> entry : questsdata.entrySet()) {
-                if (entry.getValue() != null && entry.getValue().isJsonObject()) {
-
-                    final JsonObject entryobj = entry.getValue().getAsJsonObject();
-                    final JsonElement completionsElem = entryobj.get("completions");
-
-                    if (completionsElem == null)
+                if (entry.getValue() instanceof JsonObject) {
+                    final JsonArray completionsArray = JsonUtil.getJsonArray(entry.getValue().getAsJsonObject(), "completions");
+                    if (completionsArray == null) {
                         continue;
-
-                    final JsonArray completionsArray = completionsElem.getAsJsonArray();
-
-                    if (completionsArray == null)
-                        continue;
-
+                    }
                     for (final JsonElement ignored : completionsArray) {
                         this.completedQuests++;
                     }
