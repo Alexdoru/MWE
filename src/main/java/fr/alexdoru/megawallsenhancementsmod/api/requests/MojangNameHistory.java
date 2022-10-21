@@ -2,7 +2,6 @@ package fr.alexdoru.megawallsenhancementsmod.api.requests;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 
@@ -21,17 +20,12 @@ public class MojangNameHistory {
 
     public MojangNameHistory(String uuidIn) throws ApiException {
 
-        if (uuid != null && uuid.equals(uuidIn))
+        if (uuid != null && uuid.equals(uuidIn)) {
             return;
-
-        final HttpClient httpclient = new HttpClient("https://api.mojang.com/user/profiles/" + uuidIn + "/names");
-        final String rawresponse = httpclient.getRawResponse();
-
-        if (rawresponse == null) {
-            throw new ApiException("No response from Mojang's Api");
         }
 
-        final JsonArray array = new JsonParser().parse(rawresponse).getAsJsonArray();
+        final HttpClient httpClient = new HttpClient("https://api.mojang.com/user/profiles/" + uuidIn + "/names");
+        final JsonArray array = httpClient.getJsonResponse().getAsJsonArray();
 
         if (array.size() == 0) {
             throw new ApiException("Name history data is empty");

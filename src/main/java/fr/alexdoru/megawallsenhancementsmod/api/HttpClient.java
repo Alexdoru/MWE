@@ -1,6 +1,10 @@
 package fr.alexdoru.megawallsenhancementsmod.api;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 
 public class HttpClient {
 
-    private final String rawResponse;
+    private final JsonObject jsonResponse;
 
     public HttpClient(String url) throws ApiException {
 
@@ -26,10 +30,22 @@ public class HttpClient {
 
             if (status != 200) {
                 if (url.contains("api.hypixel.net")) {
-                    if (status == 429) {
-                        throw new ApiException("Exceeding amount of requests per minute allowed by Hypixel");
+                    if (status == 400) {
+                        throw new ApiException("Missing one or more fields");
                     } else if (status == 403) {
                         throw new ApiException("Invalid API key");
+                    } else if (status == 404) {
+                        throw new ApiException("Page not found");
+                    } else if (status == 422) {
+                        throw new ApiException("Malformed UUID");
+                    } else if (status == 429) {
+                        throw new ApiException("Exceeding amount of requests per minute allowed by Hypixel");
+                    } else if (status == 503) {
+                        throw new ApiException("Leaderboard data has not yet been populated");
+                    }
+                } else if (url.contains("api.mojang.com")) {
+                    if (status == 204) {
+                        throw new ApiException(ChatUtil.invalidplayernameMsg(stripLastElementOfUrl(url)));
                     }
                 }
                 throw new ApiException("Http error code : " + status);
@@ -42,7 +58,26 @@ public class HttpClient {
                 responseContent.append(line);
             }
             reader.close();
-            this.rawResponse = responseContent.toString();
+
+            final JsonObject obj = new JsonParser().parse(responseContent.toString()).getAsJsonObject();
+
+            if (obj == null) {
+                throw new ApiException("Cannot parse Api response to Json");
+            }
+
+            // I think this will never run because a code != 200 will be received
+            if (!url.contains("api.mojang.com")) {
+                if (!JsonUtil.getBoolean(obj, "success")) {
+                    final String msg = JsonUtil.getString(obj, "cause");
+                    if (msg == null) {
+                        throw new ApiException("Request to api unsuccessful");
+                    } else {
+                        throw new ApiException(msg);
+                    }
+                }
+            }
+
+            this.jsonResponse = obj;
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -51,8 +86,13 @@ public class HttpClient {
 
     }
 
-    public String getRawResponse() {
-        return this.rawResponse;
+    public JsonObject getJsonResponse() {
+        return jsonResponse;
+    }
+
+    private String stripLastElementOfUrl(String url) {
+        final String[] split = url.split("/");
+        return split[split.length - 1];
     }
 
 }
