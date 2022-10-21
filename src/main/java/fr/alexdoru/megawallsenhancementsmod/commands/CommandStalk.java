@@ -79,9 +79,6 @@ class StalkTask implements Callable<String> {
         try {
             final MojangPlayernameToUUID apiname = new MojangPlayernameToUUID(name);
             final String uuid = apiname.getUuid();
-
-            // player found on mojang's api
-
             final String playername = apiname.getName();
             final HypixelPlayerStatus apistatus = new HypixelPlayerStatus(uuid);
             final HypixelPlayerData playerdata = new HypixelPlayerData(uuid);
