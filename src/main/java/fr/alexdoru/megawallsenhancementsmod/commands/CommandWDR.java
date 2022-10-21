@@ -278,7 +278,7 @@ public class CommandWDR extends CommandBase {
                 }
 
                 if (!isaNick) { // couldn't find the nicked player in the tab list
-                    ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + ChatUtil.invalidplayernameMsg(args[0]) + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist");
+                    ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + ChatUtil.invalidPlayernameMsg(args[0]) + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist");
                     return null;
                 }
 

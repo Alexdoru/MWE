@@ -27,7 +27,7 @@ public class MojangPlayernameToUUID {
         this.name = JsonUtil.getString(obj, "name");
         final String id = JsonUtil.getString(obj, "id");
         if (this.name == null || id == null) {
-            throw new ApiException(ChatUtil.invalidplayernameMsg(playername));
+            throw new ApiException(ChatUtil.invalidPlayernameMsg(playername));
         }
         this.uuid = id.replace("-", "");
         nameUuidCache.put(lowerCaseName, new NameUuidData(this.name, this.uuid));

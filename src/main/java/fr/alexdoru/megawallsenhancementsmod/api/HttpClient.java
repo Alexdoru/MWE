@@ -45,7 +45,7 @@ public class HttpClient {
                     }
                 } else if (url.contains("api.mojang.com")) {
                     if (status == 204) {
-                        throw new ApiException(ChatUtil.invalidplayernameMsg(stripLastElementOfUrl(url)));
+                        throw new ApiException(ChatUtil.invalidPlayernameMsg(stripLastElementOfUrl(url)));
                     }
                 }
                 throw new ApiException("Http error code : " + status);
