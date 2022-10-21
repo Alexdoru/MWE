@@ -84,15 +84,7 @@ public class ChatUtil {
      * Returns the message with spaces at the start to make the message centered in the chat box
      */
     public static String centerLine(String message) {
-        final char space = ' ';
-        final int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
-        final int separatorWidth = frObj.getCharWidth(space);
-        final int messageWidth = frObj.getStringWidth(message);
-        if (messageWidth >= chatWidth) {
-            return message;
-        }
-        final String separatorText = new String(new char[(chatWidth - messageWidth) / (2 * separatorWidth)]).replace("\0", " ");
-        return separatorText + message;
+        return getSeparatorToCenter(message) + message;
     }
 
     /**
