@@ -10,10 +10,11 @@ import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PrestigeVCache {
 
-    private static final HashMap<String, PlayerPrestigeData> prestigeDataMap = new HashMap<>();
+    private static final ConcurrentHashMap<String, PlayerPrestigeData> prestigeDataMap = new ConcurrentHashMap<>();
 
     public static void clearCache() {
         prestigeDataMap.clear();
