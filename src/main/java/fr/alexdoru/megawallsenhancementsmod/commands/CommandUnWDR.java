@@ -9,6 +9,7 @@ import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
@@ -57,8 +58,11 @@ public class CommandUnWDR extends CommandBase {
                     ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list.");
                 } else {
                     removeOrUpdateWDR(wdr, uuid);
-                    ChatHandler.deleteWarningMessagesFor(playername);
-                    NameUtil.updateGameProfileAndName(playername, false);
+                    final String finalPlayername = playername;
+                    Minecraft.getMinecraft().addScheduledTask(() -> {
+                        ChatHandler.deleteWarningMessagesFor(finalPlayername);
+                        NameUtil.updateGameProfileAndName(finalPlayername, false);
+                    });
                     ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + ".");
                 }
 
@@ -75,7 +79,7 @@ public class CommandUnWDR extends CommandBase {
                 ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list.");
             } else {
                 removeOrUpdateWDR(wdr, uuid);
-                ChatHandler.deleteWarningMessagesFor(args[1]);
+                Minecraft.getMinecraft().addScheduledTask(() -> ChatHandler.deleteWarningMessagesFor(args[1]));
                 NameUtil.updateGameProfileAndName(args[1], false);
                 ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + args[1] + EnumChatFormatting.GREEN + ".");
             }

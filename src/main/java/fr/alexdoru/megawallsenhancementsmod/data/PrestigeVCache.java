@@ -7,6 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWall
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.HashMap;
@@ -54,7 +55,7 @@ public class PrestigeVCache {
                 final PlayerPrestigeData playerPrestigeData = new PlayerPrestigeData();
                 playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints(), mwclassstats.getCoins());
                 prestigeDataMap.put(uuid, playerPrestigeData);
-                NameUtil.updateGameProfileAndName(playername, false);
+                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateGameProfileAndName(playername, false));
             } catch (ApiException e) {
                 prestigeDataMap.put(uuid, new PlayerPrestigeData());
             }
@@ -73,7 +74,7 @@ public class PrestigeVCache {
                 final CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(uuid);
                 final MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwClass.className);
                 playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints(), mwclassstats.getCoins());
-                NameUtil.updateGameProfileAndName(playername, false);
+                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateGameProfileAndName(playername, false));
             } catch (ApiException e) {
                 playerPrestigeData.addClass(mwClass, 0, 0);
             }

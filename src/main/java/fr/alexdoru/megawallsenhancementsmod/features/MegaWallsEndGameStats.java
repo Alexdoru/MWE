@@ -50,13 +50,14 @@ public class MegaWallsEndGameStats {
             return;
         }
         timestampGameStart = (new Date()).getTime();
+        final EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
+        if (thePlayer == null) {
+            return;
+        }
+        final String uuid = thePlayer.getUniqueID().toString();
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
-                final EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
-                if (thePlayer == null) {
-                    return null;
-                }
-                final HypixelPlayerData playerdata = new HypixelPlayerData(thePlayer.getUniqueID().toString());
+                final HypixelPlayerData playerdata = new HypixelPlayerData(uuid);
                 if (!isRandom) {
                     selectedClass = MWClass.fromTagOrName(new MegaWallsClassSkinData(playerdata.getPlayerData()).getCurrentmwclass());
                 }
@@ -74,13 +75,14 @@ public class MegaWallsEndGameStats {
         if (HypixelApiKeyUtil.apiKeyIsNotSetup() || mwClassStartGameStats == null || selectedClass == null) {
             return;
         }
+        final EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
+        if (thePlayer == null) {
+            return;
+        }
+        final String uuid = thePlayer.getUniqueID().toString();
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
-                final EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
-                if (thePlayer == null) {
-                    return null;
-                }
-                final HypixelPlayerData playerdata = new HypixelPlayerData(thePlayer.getUniqueID().toString());
+                final HypixelPlayerData playerdata = new HypixelPlayerData(uuid);
                 final MegaWallsClassStats endGameStats = new MegaWallsClassStats(playerdata.getPlayerData(), selectedClass.className);
                 endGameStats.minus(mwClassStartGameStats);
                 final String formattedName = new LoginData(playerdata.getPlayerData()).getFormattedName();
