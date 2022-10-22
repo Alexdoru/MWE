@@ -109,105 +109,104 @@ public class CommandWDR extends CommandBase {
     }
 
     public static void handleWDRCommand(String[] args, boolean sendReport, boolean showReportMessage) {
-        MultithreadingUtil.addTaskToQueue(() -> {
-            boolean usesTimestamp = false;
-            boolean usesTimeMark = false;
-            final ArrayList<String> arraycheats = new ArrayList<>();
-            String playername = args[0];
-            final StringBuilder message = new StringBuilder("/wdr " + playername);
-            String serverID = "?";
-            String timerOnReplay = "?";
-            long longtimetosubtract = 0;
-            long timestamp = 0;
-            final long time = (new Date()).getTime();
+        boolean usesTimestamp = false;
+        boolean usesTimeMark = false;
+        final ArrayList<String> arraycheats = new ArrayList<>();
+        final String playername = args[0];
+        final StringBuilder message = new StringBuilder("/wdr " + playername);
+        String serverID = "?";
+        String timerOnReplay = "?";
+        long longtimetosubtract = 0;
+        long timestamp = 0;
+        final long time = (new Date()).getTime();
 
-            if (args.length == 1) {
+        if (args.length == 1) {
 
-                arraycheats.add("cheating");
+            arraycheats.add("cheating");
 
-            } else {
+        } else {
 
-                for (int i = 1; i < args.length; i++) { // reads each arg one by one
+            for (int i = 1; i < args.length; i++) { // reads each arg one by one
 
-                    if (args[i].charAt(0) == TIMESTAMP_REPORT_CHAR) { // handling timestamped reports
+                if (args[i].charAt(0) == TIMESTAMP_REPORT_CHAR) { // handling timestamped reports
 
-                        if (usesTimestamp) {
-                            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "You can't have more than one timestamp in the arguments.");
-                            return null;
+                    if (usesTimestamp) {
+                        ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "You can't have more than one timestamp in the arguments.");
+                        return;
+                    }
+
+                    if (usesTimeMark) {
+                        ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "You can't use both special arguments in the same reports!");
+                        return;
+                    }
+
+                    usesTimestamp = true;
+                    final String rawtimestamp = args[i].substring(1);
+
+                    if (!args[i].equals("-")) { // computing the -time argument
+
+                        final Matcher Matcher0 = Pattern.compile("(\\d+)").matcher(rawtimestamp);
+                        final Matcher Matcher1 = Pattern.compile("(\\d+)s").matcher(rawtimestamp);
+                        final Matcher Matcher2 = Pattern.compile("(\\d+)m").matcher(rawtimestamp);
+                        final Matcher Matcher3 = Pattern.compile("(\\d+)m(\\d+)s").matcher(rawtimestamp);
+
+                        if (Matcher0.matches()) {
+                            longtimetosubtract = Long.parseLong(Matcher0.group(1));
+                        } else if (Matcher1.matches()) {
+                            longtimetosubtract = Long.parseLong(Matcher1.group(1));
+                        } else if (Matcher2.matches()) {
+                            longtimetosubtract = 60 * Long.parseLong(Matcher2.group(1));
+                        } else if (Matcher3.matches()) {
+                            longtimetosubtract = 60 * Long.parseLong(Matcher3.group(1)) + Long.parseLong(Matcher3.group(2));
                         }
 
-                        if (usesTimeMark) {
-                            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "You can't use both special arguments in the same reports!");
-                            return null;
-                        }
+                    }
 
-                        usesTimestamp = true;
-                        final String rawtimestamp = args[i].substring(1);
+                    if (args.length == 2) {
+                        arraycheats.add("cheating");
+                    }
 
-                        if (!args[i].equals("-")) { // computing the -time argument
+                    timestamp = time - longtimetosubtract * 1000; // Milliseconds
+                    serverID = GameInfoGrabber.getGameIdFromScoreboard();
+                    timerOnReplay = GameInfoGrabber.getTimeSinceGameStart(timestamp, serverID, (int) longtimetosubtract);
+                    message.append(" ").append(args[i]);
 
-                            final Matcher Matcher0 = Pattern.compile("(\\d+)").matcher(rawtimestamp);
-                            final Matcher Matcher1 = Pattern.compile("(\\d+)s").matcher(rawtimestamp);
-                            final Matcher Matcher2 = Pattern.compile("(\\d+)m").matcher(rawtimestamp);
-                            final Matcher Matcher3 = Pattern.compile("(\\d+)m(\\d+)s").matcher(rawtimestamp);
+                } else if (args[i].charAt(0) == TIMEMARK_REPORT_CHAR) { // process the command if you use a stored timestamp
 
-                            if (Matcher0.matches()) {
-                                longtimetosubtract = Long.parseLong(Matcher0.group(1));
-                            } else if (Matcher1.matches()) {
-                                longtimetosubtract = Long.parseLong(Matcher1.group(1));
-                            } else if (Matcher2.matches()) {
-                                longtimetosubtract = 60 * Long.parseLong(Matcher2.group(1));
-                            } else if (Matcher3.matches()) {
-                                longtimetosubtract = 60 * Long.parseLong(Matcher3.group(1)) + Long.parseLong(Matcher3.group(2));
-                            }
+                    if (usesTimeMark) {
+                        ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "You can't use more than one #timestamp in the arguments.");
+                        return;
+                    }
 
-                        }
+                    if (usesTimestamp) {
+                        ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "You can't use both special arguments in the same reports!");
+                        return;
+                    }
+
+                    usesTimeMark = true;
+
+                    final String key = args[i].substring(1);
+                    final ReportTimestamp timemark = timestampsMap.get(key);
+
+                    if (timemark == null) {
+
+                        ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.YELLOW + key + EnumChatFormatting.RED + " isn't a valid timestamp #");
+                        return;
+
+                    } else {
 
                         if (args.length == 2) {
                             arraycheats.add("cheating");
                         }
 
-                        timestamp = time - longtimetosubtract * 1000; // Milliseconds
-                        serverID = GameInfoGrabber.getGameIdFromScoreboard();
-                        timerOnReplay = GameInfoGrabber.getTimeSinceGameStart(timestamp, serverID, (int) longtimetosubtract);
-                        message.append(" ").append(args[i]);
+                        timestamp = timemark.timestamp;
+                        serverID = timemark.serverID;
+                        timerOnReplay = timemark.timerOnReplay;
+                        message.append(" ").append(TIMESTAMP_REPORT_CHAR).append((time - timestamp) / 1000L);
 
-                    } else if (args[i].charAt(0) == TIMEMARK_REPORT_CHAR) { // process the command if you use a stored timestamp
+                    }
 
-                        if (usesTimeMark) {
-                            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "You can't use more than one #timestamp in the arguments.");
-                            return null;
-                        }
-
-                        if (usesTimestamp) {
-                            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "You can't use both special arguments in the same reports!");
-                            return null;
-                        }
-
-                        usesTimeMark = true;
-
-                        final String key = args[i].substring(1);
-                        final ReportTimestamp timemark = timestampsMap.get(key);
-
-                        if (timemark == null) {
-
-                            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.YELLOW + key + EnumChatFormatting.RED + " isn't a valid timestamp #");
-                            return null;
-
-                        } else {
-
-                            if (args.length == 2) {
-                                arraycheats.add("cheating");
-                            }
-
-                            timestamp = timemark.timestamp;
-                            serverID = timemark.serverID;
-                            timerOnReplay = timemark.timerOnReplay;
-                            message.append(" ").append(TIMESTAMP_REPORT_CHAR).append((time - timestamp) / 1000L);
-
-                        }
-
-                    } else if (args[i].equalsIgnoreCase("fastbreak")) {
+                } else if (args[i].equalsIgnoreCase("fastbreak")) {
                         arraycheats.add(args[i]);
                         message.append(" speed");
                     } else if (args[i].equalsIgnoreCase("autoblock") || args[i].equalsIgnoreCase("multiaura")) {
@@ -221,9 +220,9 @@ public class CommandWDR extends CommandBase {
                         message.append(" ").append(args[i]); //reconstructs the message to send it to the server
                     }
 
-                }
-
             }
+
+        }
 
             if (sendReport) {
                 if (mc.thePlayer != null) {
@@ -231,24 +230,33 @@ public class CommandWDR extends CommandBase {
                 }
             }
 
-            if (arraycheats.contains("bhop")) {
-                PartyDetection.printBoostingReportAdvice(playername);
-            }
+        if (arraycheats.contains("bhop")) {
+            PartyDetection.printBoostingReportAdvice(playername);
+        }
 
-            ReportQueue.INSTANCE.addReportTimestamp(true);
+        ReportQueue.INSTANCE.addReportTimestamp(true);
 
-            if (FKCounterMod.preGameLobby) {
-                ChatUtil.addChatMessage(ChatUtil.getChatReportingAdvice());
-            }
+        if (FKCounterMod.preGameLobby) {
+            ChatUtil.addChatMessage(ChatUtil.getChatReportingAdvice());
+        }
+
+        final boolean finalUsesTimestamp = usesTimestamp;
+        final boolean finalUsesTimeMark = usesTimeMark;
+        final String finalServerID = serverID;
+        final String finalTimerOnReplay = timerOnReplay;
+        final long finalTimestamp = timestamp;
+
+        MultithreadingUtil.addTaskToQueue(() -> {
 
             String uuid = null;
             boolean isaNick = false;
             String formattedPlayername = null;
+            String playernameInThread = playername;
 
             try {
-                final MojangPlayernameToUUID apireq = new MojangPlayernameToUUID(playername);
+                final MojangPlayernameToUUID apireq = new MojangPlayernameToUUID(playernameInThread);
                 uuid = apireq.getUuid();
-                playername = apireq.getName();
+                playernameInThread = apireq.getName();
                 if (uuid != null && !HypixelApiKeyUtil.apiKeyIsNotSetup()) {
                     final CachedHypixelPlayerData playerdata;
                     try {
@@ -257,7 +265,7 @@ public class CommandWDR extends CommandBase {
                         formattedPlayername = loginData.getFormattedName();
                         if (loginData.hasNeverJoinedHypixel()) {
                             uuid = null;
-                        } else if (!playername.equals(loginData.getdisplayname())) {
+                        } else if (!playernameInThread.equals(loginData.getdisplayname())) {
                             uuid = null;
                         }
                     } catch (ApiException e) {
@@ -272,7 +280,7 @@ public class CommandWDR extends CommandBase {
                     if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(args[0])) {
                         uuid = networkplayerinfo.getGameProfile().getName();
                         formattedPlayername = ScorePlayerTeam.formatPlayerName(networkplayerinfo.getPlayerTeam(), networkplayerinfo.getGameProfile().getName());
-                        playername = uuid;
+                        playernameInThread = uuid;
                         isaNick = true;
                     }
                 }
@@ -284,13 +292,14 @@ public class CommandWDR extends CommandBase {
 
             }
 
+            final String finalPlayername = playernameInThread;
             final ArrayList<String> argsinWDR = new ArrayList<>();
-            if (usesTimestamp || usesTimeMark) { // format for timestamps reports : UUID timestamplastreport -serverID timeonreplay playernameduringgame timestampforcheat specialcheat cheat1 cheat2 cheat3 etc
+            if (finalUsesTimestamp || finalUsesTimeMark) { // format for timestamps reports : UUID timestamplastreport -serverID timeonreplay playernameduringgame timestampforcheat specialcheat cheat1 cheat2 cheat3 etc
 
-                argsinWDR.add("-" + serverID);
-                argsinWDR.add(timerOnReplay);
-                argsinWDR.add(playername);
-                argsinWDR.add(Long.toString(timestamp));
+                argsinWDR.add("-" + finalServerID);
+                argsinWDR.add(finalTimerOnReplay);
+                argsinWDR.add(finalPlayername);
+                argsinWDR.add(Long.toString(finalTimestamp));
                 argsinWDR.addAll(arraycheats);
 
                 final WDR wdr = WdrData.getWdr(uuid);
@@ -304,13 +313,13 @@ public class CommandWDR extends CommandBase {
                     argsinWDR.add(WDR.NICK);
                 }
 
-                final WDR newreport = new WDR(timestamp, timestamp, argsinWDR);
+                final WDR newreport = new WDR(finalTimestamp, finalTimestamp, argsinWDR);
                 WdrData.put(uuid, newreport);
-                NameUtil.updateGameProfileAndName(playername, false);
+                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateGameProfileAndName(finalPlayername, false));
                 if (showReportMessage || !alreadyReported) {
                     ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
                             EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : ""))
-                            .appendSibling(WarningMessagesHandler.createPlayerNameWithHoverText(formattedPlayername, playername, uuid, newreport, EnumChatFormatting.RED)[0])
+                            .appendSibling(WarningMessagesHandler.createPlayerNameWithHoverText(formattedPlayername, playernameInThread, uuid, newreport, EnumChatFormatting.RED)[0])
                             .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " with a " + EnumChatFormatting.YELLOW +
                                     "timestamp" + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
                                     + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : "."))));
@@ -347,11 +356,11 @@ public class CommandWDR extends CommandBase {
                     argsinWDR.add(WDR.NICK);
                 }
                 WdrData.put(uuid, new WDR(time, time, argsinWDR));
-                NameUtil.updateGameProfileAndName(playername, false);
+                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateGameProfileAndName(finalPlayername, false));
                 if (showReportMessage || !alreadyReported) {
                     ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() +
                             EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
-                            + EnumChatFormatting.RED + (formattedPlayername == null ? playername : EnumChatFormatting.RESET + formattedPlayername) + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
+                            + EnumChatFormatting.RED + (formattedPlayername == null ? playernameInThread : EnumChatFormatting.RESET + formattedPlayername) + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
                             + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : "."));
                 }
             }

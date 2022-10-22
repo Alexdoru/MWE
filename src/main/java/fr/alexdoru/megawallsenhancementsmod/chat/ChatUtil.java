@@ -28,8 +28,20 @@ public class ChatUtil {
     }
 
     public static void addChatMessage(IChatComponent msg) {
-        if (mc.theWorld != null && mc.thePlayer != null) {
-            mc.thePlayer.addChatMessage(msg);
+        addChatMessage(msg, mc.isCallingFromMinecraftThread());
+    }
+
+    private static void addChatMessage(IChatComponent msg, boolean isCallingFromMinecraftThread) {
+        if (isCallingFromMinecraftThread) {
+            if (mc.theWorld != null && mc.thePlayer != null) {
+                mc.thePlayer.addChatMessage(msg);
+            }
+        } else {
+            mc.addScheduledTask(() -> {
+                if (mc.theWorld != null && mc.thePlayer != null) {
+                    mc.thePlayer.addChatMessage(msg);
+                }
+            });
         }
     }
 
