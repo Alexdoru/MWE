@@ -6,11 +6,11 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MojangPlayernameToUUID {
 
-    private static final HashMap<String, NameUuidData> nameUuidCache = new HashMap<>();
+    private static final ConcurrentHashMap<String, NameUuidData> nameUuidCache = new ConcurrentHashMap<>();
     private final String name;
     private final String uuid;
 

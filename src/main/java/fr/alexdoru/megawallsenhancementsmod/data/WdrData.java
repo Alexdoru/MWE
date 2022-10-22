@@ -6,15 +6,19 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class WdrData {
 
     private static final Logger logger = LogManager.getLogger("NoCheaters");
     private static final long TIME_TRANSFORM_NICKED_REPORT = 86400000L; // 24hours
     private static final long TIME_TRANSFORM_TIMESTAMPED_REPORT = 14L * 24L * 60L * 60L * 1000L; //14 days
-    private static final HashMap<String, WDR> wdrMap = new HashMap<>();
+    private static final ConcurrentHashMap<String, WDR> wdrMap = new ConcurrentHashMap<>();
     /**
      * In the wdred file the data is saved with the following pattern
      * uuid timestamp timeLastManualReport hack1 hack2 hack3 hack4 hack5
@@ -27,7 +31,7 @@ public class WdrData {
         Runtime.getRuntime().addShutdownHook(new Thread(WdrData::saveReportedPlayers));
     }
 
-    public static HashMap<String, WDR> getWdredMap() {
+    public static ConcurrentHashMap<String, WDR> getWdredMap() {
         return wdrMap;
     }
 
