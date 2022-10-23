@@ -72,6 +72,7 @@ public class CommandScanGame extends CommandBase {
             }
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " more players...");
         } else {
+            ScangameData.clearScanGameData();
             ScangameData.setScanGameId(currentGameId);
             for (final NetworkPlayerInfo networkPlayerInfo : playerCollection) {
                 i++;

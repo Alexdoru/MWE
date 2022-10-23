@@ -30,14 +30,14 @@ public class ScangameData {
         }
     }
 
-    private static void clearScanGameData() {
+    public static void clearScanGameData() {
         scanGameId = null;
         scangameMap.clear();
     }
 
     private static void onGameStart() {
         final String currentGameId = GameInfoGrabber.getGameIdFromScoreboard();
-        if (!currentGameId.equals("?") && scanGameId != null && !scanGameId.equals(currentGameId)) {
+        if (!currentGameId.equals("?") && !currentGameId.equals(scanGameId)) {
             clearScanGameData();
         }
     }
