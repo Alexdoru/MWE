@@ -138,7 +138,8 @@ public class UHCStats {
                         EnumChatFormatting.AQUA + "K : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(kills) + " ",
                         EnumChatFormatting.AQUA + "D : " + EnumChatFormatting.RED + ChatUtil.formatInt(deaths) + " ",
                         EnumChatFormatting.AQUA + "K/D : " + (kdr_team > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.2f", kdr_team) + "\n"
-                }};
+                }
+        };
 
         return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(EnumChatFormatting.GOLD + "[" + getStarLevel(score) + '\u272B' + "] " + formattedName, playername, " - UHC stats"))

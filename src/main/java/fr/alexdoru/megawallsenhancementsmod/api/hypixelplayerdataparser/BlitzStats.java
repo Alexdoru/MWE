@@ -65,7 +65,7 @@ public class BlitzStats {
                 {
                         EnumChatFormatting.AQUA + "Wins solo : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wins_solo_normal) + " ",
                         EnumChatFormatting.AQUA + "Wins team : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wins_teams_normal) + " ",
-                },
+                }
         };
 
         return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
