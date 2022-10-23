@@ -5,7 +5,6 @@ import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
@@ -76,18 +75,19 @@ public class CommandReport extends CommandBase {
     }
 
     @Override
-    public int compareTo(ICommand o) {
-        return 0;
-    }
-
-    @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        return args.length == 1 ? (FKCounterMod.isInMwGame && FKCounterMod.isitPrepPhase ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null) : (args.length > 1 ? getListOfStringsMatchingLastWord(args, cheatsArray) : null);
-    }
-
-    @Override
-    public boolean isUsernameIndex(String[] args, int index) {
-        return false;
+        if (args.length == 1) {
+            if (FKCounterMod.isInMwGame && FKCounterMod.isitPrepPhase) {
+                return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+            }
+            return null;
+        }
+        if (args.length > 1) {
+            final List<String> list = Arrays.asList(cheatsArray);
+            list.add("boosting");
+            return getListOfStringsMatchingLastWord(args, list);
+        }
+        return null;
     }
 
     @Override
@@ -95,6 +95,11 @@ public class CommandReport extends CommandBase {
 
         if (args.length < 1) {
             ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
+            return;
+        }
+
+        if (args.length == 2 && args[1].equalsIgnoreCase("boosting")) {
+            Minecraft.getMinecraft().thePlayer.sendChatMessage("/report " + args[0] + " -b BOO -C");
             return;
         }
 
