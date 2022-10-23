@@ -234,7 +234,8 @@ public class SkywarsStats {
                         EnumChatFormatting.AQUA + "W : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wins_team) + " ",
                         EnumChatFormatting.AQUA + "L : " + EnumChatFormatting.RED + ChatUtil.formatInt(losses_team) + " ",
                         EnumChatFormatting.AQUA + "W/L : " + (wlr > 1f / 12f ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.2f", wlr_team)
-                }};
+                }
+        };
 
         return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(levelFormatted == null ? formattedName : formattedName + EnumChatFormatting.GOLD + " - " + levelFormatted, playername, " - Skywars stats"))
