@@ -9,6 +9,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -83,7 +84,7 @@ public class CommandReport extends CommandBase {
             return null;
         }
         if (args.length > 1) {
-            final List<String> list = Arrays.asList(cheatsArray);
+            final List<String> list = new ArrayList<>(Arrays.asList(cheatsArray));
             list.add("boosting");
             return getListOfStringsMatchingLastWord(args, list);
         }
