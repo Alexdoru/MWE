@@ -4,7 +4,6 @@ import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
@@ -191,7 +190,6 @@ public class ChatListener {
                     final Matcher locrawMatcher = LOCRAW_PATTERN.matcher(msg);
                     if (locrawMatcher.matches()) {
                         final String gameId = locrawMatcher.group(1).replace("mega", "M");
-                        ScangameData.setScanGameId(gameId);
                         CommandScanGame.handleScangameCommand(gameId);
                         interceptLocraw = false;
                         event.setCanceled(true);
