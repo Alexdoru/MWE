@@ -57,24 +57,16 @@ public class NameUtil {
         if (networkPlayerInfo != null) {
             transformGameProfile(networkPlayerInfo.getGameProfile(), true);
             networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
-            final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
-            if (player != null) {
-                transformGameProfile(player.getGameProfile(), true);
-                NameUtil.transformNametag(player, false);
-                if (refreshDisplayName) {
-                    player.refreshDisplayName();
-                }
-            }
-        } else {
-            final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
-            if (player != null) {
-                transformGameProfile(player.getGameProfile(), true);
-                NameUtil.transformNametag(player, false);
-                if (refreshDisplayName) {
-                    player.refreshDisplayName();
-                }
+        }
+        final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
+        if (player != null) {
+            transformGameProfile(player.getGameProfile(), true);
+            NameUtil.transformNametag(player, false);
+            if (refreshDisplayName) {
+                player.refreshDisplayName();
             }
         }
+
     }
 
     /**
