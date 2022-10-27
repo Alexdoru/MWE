@@ -12,7 +12,7 @@
 
 # Mega Walls Enhancements
 
-**This is a mod for Minecraft Forge 1.8.9 that contains many improvements and features for Hypixel and Hypixel's Mega Walls. It bundles three mods in one .jar. Use `/mwenhancements` to open the config menu.**
+**This is a mod for Minecraft Forge 1.8.9 that contains many improvements and features for Hypixel and Hypixel's Mega Walls. Use `/mwenhancements` to open the config menu.**
 
 [Link to the Hypixel post](https://hypixel.net/threads/forge-1-8-9-mega-walls-enhancements-mod-a-mod-for-mega-walls.4470633/) with detailed information.
 
