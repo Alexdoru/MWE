@@ -264,6 +264,10 @@ public class ReportQueue {
         autoReportSent = 0;
     }
 
+    /**
+     * This is only a check for reports via the auto reports
+     * the check for report suggestions is in the ReportSuggestionHandler
+     */
     private boolean canReportPlayerThisGame(String playername) {
         final long timestamp = System.currentTimeMillis();
         playersReportedThisGame.removeIf(o -> (o.timestamp + 40L * 60L * 1000L < timestamp));
