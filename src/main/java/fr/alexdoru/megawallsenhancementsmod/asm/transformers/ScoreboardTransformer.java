@@ -16,34 +16,61 @@ public class ScoreboardTransformer implements IMyClassTransformer {
 
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
-
-        status.setInjectionPoints(2);
-
+        status.setInjectionPoints(3);
         for (final MethodNode methodNode : classNode.methods) {
 
-            if (checkMethodNode(methodNode, MethodMapping.ADDPLAYERTOTEAM)) {
+            if (checkMethodNode(methodNode, MethodMapping.SCOREBOARD$REMOVETEAM)) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                    if (checkVarInsnNode(insnNode, ALOAD)) {
+                        final int index = ((VarInsnNode) insnNode).var;
+                        final AbstractInsnNode secondNode = insnNode.getNext();
+                        if (checkMethodInsnNode(secondNode, MethodMapping.MAP$REMOVE)) {
+                            final AbstractInsnNode thirdNode = secondNode.getNext();
+                            if (checkInsnNode(thirdNode, POP)) {
+                                /*
+                                 * Injects after line 299 :
+                                 * ScoreboardHook.removeTeamHook(player);
+                                 */
+                                final InsnList list = new InsnList();
+                                list.add(new VarInsnNode(ALOAD, index));
+                                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("ScoreboardHook"), "removeTeamHook", "(Ljava/lang/String;)V", false));
+                                methodNode.instructions.insert(thirdNode, list);
+                                status.addInjection();
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (checkMethodNode(methodNode, MethodMapping.SCOREBOARD$ADDPLAYERTOTEAM)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkInsnNode(insnNode, ICONST_1) && checkInsnNode(insnNode.getNext(), IRETURN)) {
                         /*
                          * Injects before line 329 :
-                         * ScoreboardHook.transformNameTablist(player);
+                         * ScoreboardHook.addPlayerToTeamHook(player);
                          */
-                        methodNode.instructions.insertBefore(insnNode, getInsnList());
+                        final InsnList list = new InsnList();
+                        list.add(new VarInsnNode(ALOAD, 1));
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("ScoreboardHook"), "addPlayerToTeamHook", "(Ljava/lang/String;)V", false));
+                        methodNode.instructions.insertBefore(insnNode, list);
                         status.addInjection();
                     }
                 }
             }
 
-            if (checkMethodNode(methodNode, MethodMapping.REMOVEPLAYERFROMTEAM)) {
+            if (checkMethodNode(methodNode, MethodMapping.SCOREBOARD$REMOVEPLAYERFROMTEAM)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkMethodInsnNode(insnNode, MethodMapping.COLLECTION$REMOVE)) {
                         final AbstractInsnNode nextNode = insnNode.getNext();
                         if (checkInsnNode(nextNode, POP)) {
                             /*
                              * Injects after line 360 :
-                             * ScoreboardHook.transformNameTablist(player);
+                             * ScoreboardHook.removePlayerFromTeamHook(player);
                              */
-                            methodNode.instructions.insert(nextNode, getInsnList());
+                            final InsnList list = new InsnList();
+                            list.add(new VarInsnNode(ALOAD, 1));
+                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("ScoreboardHook"), "removePlayerFromTeamHook", "(Ljava/lang/String;)V", false));
+                            methodNode.instructions.insert(nextNode, list);
                             status.addInjection();
                         }
                     }
@@ -52,13 +79,6 @@ public class ScoreboardTransformer implements IMyClassTransformer {
 
         }
         return classNode;
-    }
-
-    private InsnList getInsnList() {
-        final InsnList list = new InsnList();
-        list.add(new VarInsnNode(ALOAD, 1));
-        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("ScoreboardHook"), "transformNameTablist", "(Ljava/lang/String;)V", false));
-        return list;
     }
 
 }
