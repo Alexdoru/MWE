@@ -237,7 +237,7 @@ public class MegaWallsClassStats {
                 {
                         EnumChatFormatting.AQUA + "Wins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_wins) + " ",
                         EnumChatFormatting.AQUA + "Losses : " + EnumChatFormatting.RED + ChatUtil.formatInt(classname_losses) + " ",
-                        EnumChatFormatting.AQUA + "W/L Ratio : " + (wlr > 0.25f ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", wlr) + "\n"
+                        EnumChatFormatting.AQUA + "W/L Ratio : " + (wlr > 0.25f ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", wlr)
                 }
         };
 
@@ -265,11 +265,10 @@ public class MegaWallsClassStats {
 
             msg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                     .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls " + classnameuppercase + " stats"))
-                    .appendSibling(new ChatComponentText("\n" + "\n" + ChatUtil.alignText(matrix1))
+                    .appendSibling(new ChatComponentText("\n" + "\n" + ChatUtil.alignText(matrix1) + "\n")
                             .setChatStyle(new ChatStyle()
                                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GRAY + "Disclaimer : Class Final K/D Ratio's are not accurate for some players, as final-deaths for classes weren't tracked prior to the Mythic update.")))))
-                    .appendSibling(new ChatComponentText(ChatUtil.alignText(matrix2) +
-                            ChatUtil.centerLine(EnumChatFormatting.GREEN + "Selected skin : " + EnumChatFormatting.GOLD + (chosen_skin_class == null ? (classnameuppercase == null ? "None" : classnameuppercase) : chosen_skin_class)) + "\n" + "\n"
+                    .appendSibling(new ChatComponentText(ChatUtil.alignText(matrix2) + "\n"
                             + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Classpoints : " + EnumChatFormatting.GOLD + classpoints + " "
                             + EnumChatFormatting.GREEN + " Playtime (approx.) : " + EnumChatFormatting.GOLD + String.format("%.2f", classname_time_played / 60f) + "h") + "\n"
                             + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Kit : "
@@ -280,6 +279,7 @@ public class MegaWallsClassStats {
                             + (skill_level_g == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_g) + " "
                             + EnumChatFormatting.GREEN + "Prestige : " + (prestige == 0 ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.GOLD) + ChatUtil.intToRoman(prestige) + " "
                             + EnumChatFormatting.GREEN + "Echest rows : " + (enderchest_rows == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + enderchest_rows) + "\n"
+                            + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Selected skin : " + EnumChatFormatting.GOLD + (chosen_skin_class == null ? (classnameuppercase == null ? "None" : classnameuppercase) : chosen_skin_class)) + "\n"
                             + EnumChatFormatting.AQUA + ChatUtil.bar()));
 
         } else {
