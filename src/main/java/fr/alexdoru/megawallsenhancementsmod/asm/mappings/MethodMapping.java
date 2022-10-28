@@ -7,7 +7,6 @@ import static org.objectweb.asm.Opcodes.*;
 
 public enum MethodMapping {
 
-    ADDPLAYERTOTEAM("a", "addPlayerToTeam", "(Ljava/lang/String;Ljava/lang/String;)Z"),
     CHANGECURRENTITEM(INVOKEVIRTUAL, INVENTORYPLAYER, "d", "changeCurrentItem", "(I)V"),
     CHECKHOTBARKEYS("b", "checkHotbarKeys", "(I)Z"),
     CLICKEVENT$GETVALUE(INVOKEVIRTUAL, CLICKEVENT, "b", "getValue", "()Ljava/lang/String;"),
@@ -37,7 +36,6 @@ public enum MethodMapping {
     NETHANDLERPLAYCLIENT$INIT("<init>", "(L" + MINECRAFT + ";L" + GUISCREEN + ";L" + NETWORKMANAGER + ";L" + GAMEPROFILE + ";)V"),
     NETWORKPLAYERINFO$GETGAMEPROFILE(INVOKEVIRTUAL, NETWORKPLAYERINFO, "a", "getGameProfile", "()L" + GAMEPROFILE + ";"),
     NETWORKPLAYERINFO$INIT("<init>", "(L" + S38PACKETPLAYERLISTITEM$ADDPLAYERDATA + ";)V"),
-    REMOVEPLAYERFROMTEAM("a", "removePlayerFromTeam", "(Ljava/lang/String;L" + SCOREPLAYERTEAM + ";)V"),
     RENDERDEBUGBOUNDINGBOX("b", "renderDebugBoundingBox", "(L" + ENTITY + ";DDDFF)V"),
     RENDERENTITIES("a", "renderEntities", "(L" + ENTITY + ";L" + ICAMERA + ";F)V"),
     RENDERENTITYSIMPLE(INVOKEVIRTUAL, RENDERMANAGER, "a", "renderEntitySimple", "(L" + ENTITY + ";F)Z"),
@@ -50,6 +48,9 @@ public enum MethodMapping {
     RENDERSCOREBOARD("a", "renderScoreboard", "(L" + SCOREOBJECTIVE + ";L" + SCALEDRESOLUTION + ";)V"),
     RIGHTCLICKMOUSE("ax", "rightClickMouse", "()V"),
     RUNTICK("s", "runTick", "()V"),
+    SCOREBOARD$ADDPLAYERTOTEAM("a", "addPlayerToTeam", "(Ljava/lang/String;Ljava/lang/String;)Z"),
+    SCOREBOARD$REMOVEPLAYERFROMTEAM("a", "removePlayerFromTeam", "(Ljava/lang/String;L" + SCOREPLAYERTEAM + ";)V"),
+    SCOREBOARD$REMOVETEAM("d", "removeTeam", "(L" + SCOREPLAYERTEAM + ";)V"),
     SENDCHATMESSAGE(INVOKEVIRTUAL, GUISCREEN, "b", "sendChatMessage", "(Ljava/lang/String;Z)V"),
     SETDEBUGBOUNDINGBOX(INVOKEVIRTUAL, RENDERMANAGER, "b", "setDebugBoundingBox", "(Z)V"),
     STRINGBUILDER$TOSTRING(INVOKEVIRTUAL, STRINGBUILDER, "toString", "()Ljava/lang/String;"),

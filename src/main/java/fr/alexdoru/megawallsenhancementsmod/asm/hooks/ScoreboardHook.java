@@ -6,7 +6,19 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 @SuppressWarnings("unused")
 public class ScoreboardHook {
 
-    public static void transformNameTablist(String playername) {
+    public static void removeTeamHook(String playername) {
+        transformNameTablist(playername);
+    }
+
+    public static void addPlayerToTeamHook(String playername) {
+        transformNameTablist(playername);
+    }
+
+    public static void removePlayerFromTeamHook(String playername) {
+        transformNameTablist(playername);
+    }
+
+    private static void transformNameTablist(String playername) {
         final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
         if (networkPlayerInfo != null) {
             NameUtil.transformGameProfile(networkPlayerInfo.getGameProfile(), true);
