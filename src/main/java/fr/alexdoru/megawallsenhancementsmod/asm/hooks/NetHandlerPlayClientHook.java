@@ -4,9 +4,12 @@ import com.google.common.collect.EvictingQueue;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
+import net.minecraft.network.play.server.S3EPacketTeams;
+import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
@@ -40,6 +43,18 @@ public class NetHandlerPlayClientHook {
         playerInfoMap.clear();
         latestDisconnected.clear();
         MWPlayerData.dataCache.clear();
+    }
+
+    public static void handleTeamPacket(S3EPacketTeams packetIn, ScorePlayerTeam scoreplayerteam) {
+        if (packetIn.getAction() == 2) {
+            scoreplayerteam.getMembershipCollection().forEach(playername -> {
+                final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+                if (networkPlayerInfo != null) {
+                    NameUtil.transformGameProfile(networkPlayerInfo.getGameProfile(), true);
+                    networkPlayerInfo.setDisplayName(NameUtil.getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
+                }
+            });
+        }
     }
 
     public static void printDisconnectedPlayers() {

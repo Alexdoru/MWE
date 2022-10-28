@@ -9,7 +9,7 @@ import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class NetHandlerPlayClientTransformer implements IMyClassTransformer {
+public class NetHandlerPlayClientTransformer_PlayerMapTracker implements IMyClassTransformer {
 
     @Override
     public String getTargetClassName() {
@@ -31,7 +31,7 @@ public class NetHandlerPlayClientTransformer implements IMyClassTransformer {
                 }
             }
 
-            if (checkMethodNode(methodNode, MethodMapping.HANDLEPLAYERLISTITEM)) {
+            if (checkMethodNode(methodNode, MethodMapping.NETHANDLERPLAYCLIENT$HANDLEPLAYERLISTITEM)) {
 
                 AbstractInsnNode targetNodeRemoveInjection = null;
                 AbstractInsnNode targetNodePutInjection = null;
