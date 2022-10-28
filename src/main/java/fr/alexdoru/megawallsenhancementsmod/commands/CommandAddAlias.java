@@ -42,9 +42,8 @@ public class CommandAddAlias extends CommandBase {
         if (args.length == 1 && args[0].equals("list")) {
             ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "In this lobby :\n");
             for (final NetworkPlayerInfo networkPlayerInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
-                final String alias = AliasData.getAlias(networkPlayerInfo.getGameProfile().getName());
-                if (alias != null) {
-                    ChatUtil.addChatMessage(NameUtil.getFormattedName(networkPlayerInfo.getGameProfile().getName()) + EnumChatFormatting.RESET + " (" + alias + ")");
+                if (AliasData.getAlias(networkPlayerInfo.getGameProfile().getName()) != null) {
+                    ChatUtil.addChatMessage(NameUtil.getFormattedName(networkPlayerInfo));
                 }
             }
             return;

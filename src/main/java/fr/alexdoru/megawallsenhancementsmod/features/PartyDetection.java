@@ -80,7 +80,7 @@ public class PartyDetection {
                         final String teamColorPlayer = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), player), player);
                         if (!teamColorPlayername.equals("") && teamColorPlayername.equals(teamColorPlayer)) {
                             containsPlayers = true;
-                            imsg.appendSibling(new ChatComponentText(NameUtil.getFormattedName(player) + " ")
+                            imsg.appendSibling(new ChatComponentText(NameUtil.getFormattedName(networkPlayerInfo) + " ")
                                     .setChatStyle(new ChatStyle()
                                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report " + player + " for boosting")))
                                             .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + player + " -b BOO -C"))));

@@ -47,7 +47,7 @@ public class ArrowHitHUD extends MyCachedHUD {
             } else {
                 displayText = getColor(hitValue) + hitValue;
             }
-            ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg);
+            ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg);
             return true;
         }
 
@@ -61,7 +61,7 @@ public class ArrowHitHUD extends MyCachedHUD {
             RenderPlayerHook.addArrowOnPlayer(playername, hitTime, Integer.parseInt(arrowsPinned));
             final boolean bool = Float.parseFloat(hitValue) > (Float.parseFloat(arrowsPinned)) * 2.0f;
             displayText = getColor(hitValue) + hitValue + EnumChatFormatting.GRAY + " (" + (bool ? EnumChatFormatting.GREEN : EnumChatFormatting.GOLD) + arrowsPinned + EnumChatFormatting.GRAY + ")";
-            ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg);
+            ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg);
             return true;
         }
 
@@ -80,7 +80,7 @@ public class ArrowHitHUD extends MyCachedHUD {
             hitTime = System.currentTimeMillis() + 1000L;
             final String playername = matcherLeapDirectHit.group(1);
             displayText = EnumChatFormatting.GREEN + "-" + 2f * Float.parseFloat(matcherLeapDirectHit.group(2));
-            ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg);
+            ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg);
             return true;
         }
 
@@ -95,7 +95,7 @@ public class ArrowHitHUD extends MyCachedHUD {
                 final String playername = matcherRend2.group(2);
                 totalDamage += damage;
                 RenderPlayerHook.removeArrowsFrom(playername, (int) (damage / 2));
-                fmsg = FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedName(playername)) : fmsg;
+                fmsg = FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg;
             }
             displayText = EnumChatFormatting.GREEN + "-" + totalDamage;
             ChatUtil.addChatMessage(fmsg);

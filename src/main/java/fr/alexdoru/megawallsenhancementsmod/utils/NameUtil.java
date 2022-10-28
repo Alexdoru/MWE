@@ -262,18 +262,38 @@ public class NameUtil {
     }
 
     /**
-     * Returns the formatted team name with additionnal prestige V tag
+     * Returns the formatted team name with additionnaly a custom prestige V tag
+     * This doesn't return the icons in front that the player may have.
+     */
+    public static String getFormattedNameWithoutIcons(String playername) {
+        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+        if (networkPlayerInfo == null) {
+            return playername;
+        }
+        final MWPlayerData mwPlayerData = MWPlayerData.dataCache.get(networkPlayerInfo.getGameProfile().getId());
+        if (mwPlayerData != null && mwPlayerData.P5Tag != null && mwPlayerData.originalP4Tag != null) {
+            return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername).replace(mwPlayerData.originalP4Tag, mwPlayerData.P5Tag);
+        }
+        return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername);
+    }
+
+    /**
+     * Returns the formatted name of the player, additionnal icons and prestive V tag included
+     * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay}
      */
     public static String getFormattedName(String playername) {
         final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
-        if (networkPlayerInfo != null) {
-            final MWPlayerData mwPlayerData = MWPlayerData.dataCache.get(networkPlayerInfo.getGameProfile().getId());
-            if (mwPlayerData != null && mwPlayerData.P5Tag != null && mwPlayerData.originalP4Tag != null) {
-                return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername).replace(mwPlayerData.originalP4Tag, mwPlayerData.P5Tag);
-            }
-            return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername);
+        if (networkPlayerInfo == null) {
+            return playername;
         }
-        return playername;
+        return getFormattedName(networkPlayerInfo);
+    }
+
+    public static String getFormattedName(NetworkPlayerInfo networkPlayerInfo) {
+        if (networkPlayerInfo.getDisplayName() == null) {
+            return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), networkPlayerInfo.getGameProfile().getName());
+        }
+        return networkPlayerInfo.getDisplayName().getFormattedText();
     }
 
     /**
