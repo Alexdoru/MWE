@@ -24,8 +24,4 @@ public class CachedHypixelPlayerData {
         return playerData;
     }
 
-    public String getUuid() {
-        return uuid;
-    }
-
 }
