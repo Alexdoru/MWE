@@ -208,7 +208,7 @@ public class ReportSuggestionHandler {
         }
 
         if (isSenderMyself) {
-            CommandWDR.handleWDRCommand(new String[]{reportedPlayer, cheat}, canWDRPlayer(reportedPlayer), false);
+            CommandWDR.handleWDRCommand(new String[]{reportedPlayer, cheat}, canReportSuggestionPlayer(reportedPlayer, false), false);
         } else if (SquadHandler.getSquad().get(messageSender) != null) {
             CommandWDR.handleWDRCommand(new String[]{reportedPlayer, cheat}, false, false);
         }
@@ -237,7 +237,7 @@ public class ReportSuggestionHandler {
             return false;
         }
 
-        if (canReportSuggestionPlayer(reportedPlayer)) {
+        if (canReportSuggestionPlayer(reportedPlayer, true)) {
             if (isSenderMyself) {
                 new DelayedTask(() -> ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "\u2714" + EnumChatFormatting.GRAY + " Your report will be shared with other players in the game"), 0);
                 return true;
@@ -342,7 +342,10 @@ public class ReportSuggestionHandler {
 
     }
 
-    private static boolean canReportSuggestionPlayer(String playername) {
+    /**
+     * Check to not send report suggestion twice per game for the same player
+     */
+    private static boolean canReportSuggestionPlayer(String playername, boolean addReportToList) {
         final long timestamp = System.currentTimeMillis();
         reportSuggestionHistory.removeIf(o -> (o.timestamp + TIME_BETWEEN_REPORT_SUGGESTION_PLAYER < timestamp));
         for (final StringLong stringLong : reportSuggestionHistory) {
@@ -350,17 +353,8 @@ public class ReportSuggestionHandler {
                 return false;
             }
         }
-        reportSuggestionHistory.add(new StringLong(timestamp, playername));
-        return true;
-    }
-
-    private static boolean canWDRPlayer(String playername) {
-        final long timestamp = System.currentTimeMillis();
-        reportSuggestionHistory.removeIf(o -> (o.timestamp + TIME_BETWEEN_REPORT_SUGGESTION_PLAYER < timestamp));
-        for (final StringLong stringLong : reportSuggestionHistory) {
-            if (stringLong.message != null && stringLong.message.equalsIgnoreCase(playername)) {
-                return false;
-            }
+        if (addReportToList) {
+            reportSuggestionHistory.add(new StringLong(timestamp, playername));
         }
         return true;
     }
