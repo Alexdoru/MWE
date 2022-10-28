@@ -114,6 +114,12 @@ class ScanPlayerTask implements Callable<String> {
             final MegaWallsStats megawallsstats = new MegaWallsStats(playerdata.getPlayerData());
             IChatComponent imsg = null;
 
+            if (megawallsstats.getGames_played() > 500) {
+                ScangameData.addToSkipSet(uuid);
+                ScangameData.put(uuid, null);
+                return null;
+            }
+
             if ((megawallsstats.getGames_played() <= 25 && megawallsstats.getFkdr() > 3.5f) ||
                     (megawallsstats.getGames_played() <= 250 && megawallsstats.getFkdr() > 5f) ||
                     (megawallsstats.getGames_played() <= 500 && megawallsstats.getFkdr() > 8f)) {
@@ -175,10 +181,6 @@ class ScanPlayerTask implements Callable<String> {
                             + EnumChatFormatting.GRAY + " games, and has : " + EnumChatFormatting.GOLD + megawallsstats.getLegSkins()
                             + EnumChatFormatting.GRAY + " legendary skin" + (megawallsstats.getLegSkins() > 1 ? "s" : ""));
                 }
-            }
-
-            if (imsg == null && megawallsstats.getGames_played() > 500) {
-                ScangameData.addToSkipSet(uuid);
             }
 
             if (imsg != null) {
