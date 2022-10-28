@@ -44,6 +44,7 @@ public enum ClassMapping {
     RENDERMANAGER("biu", "net/minecraft/client/renderer/entity/RenderManager"),
     S38PACKETPLAYERLISTITEM("gz", "net/minecraft/network/play/server/S38PacketPlayerListItem"),
     S38PACKETPLAYERLISTITEM$ADDPLAYERDATA("gz$b", "net/minecraft/network/play/server/S38PacketPlayerListItem$AddPlayerData"),
+    S3EPACKETTEAMS("hr", "net/minecraft/network/play/server/S3EPacketTeams"),
     SCALEDRESOLUTION("avr", "net/minecraft/client/gui/ScaledResolution"),
     SCOREBOARD("auo", "net/minecraft/scoreboard/Scoreboard"),
     SCOREOBJECTIVE("auk", "net/minecraft/scoreboard/ScoreObjective"),
