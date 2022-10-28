@@ -137,14 +137,13 @@ public class UHCStats {
                 {
                         EnumChatFormatting.AQUA + "K : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(kills) + " ",
                         EnumChatFormatting.AQUA + "D : " + EnumChatFormatting.RED + ChatUtil.formatInt(deaths) + " ",
-                        EnumChatFormatting.AQUA + "K/D : " + (kdr_team > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.2f", kdr_team) + "\n"
+                        EnumChatFormatting.AQUA + "K/D : " + (kdr_team > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.2f", kdr_team)
                 }
         };
 
         return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(EnumChatFormatting.GOLD + "[" + getStarLevel(score) + '\u272B' + "] " + formattedName, playername, " - UHC stats"))
-                .appendSibling(new ChatComponentText("\n" + "\n"))
-                .appendSibling(new ChatComponentText(ChatUtil.alignText(matrix) + "\n"))
+                .appendSibling(new ChatComponentText("\n" + "\n" + ChatUtil.alignText(matrix) + "\n"))
                 .appendSibling(new ChatComponentText(ChatUtil.centerLine(EnumChatFormatting.GREEN + "Score : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(score) + EnumChatFormatting.GREEN + " Coins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(coins) + "\n")))
                 .appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
     }
