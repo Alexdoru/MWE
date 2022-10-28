@@ -359,6 +359,10 @@ public class ReportSuggestionHandler {
         return true;
     }
 
+    public static List<StringLong> getReportSuggestionHistory() {
+        return reportSuggestionHistory;
+    }
+
     private static void addButtons(IChatComponent imsg, String reportedPlayer, String cheat, boolean isSenderMyself, boolean isTargetMyself, boolean gotautoreported) {
         if (isTargetMyself) {
             return;
