@@ -21,6 +21,7 @@ public class MegaWallsClassStats {
     private int classname_kills;
     private int classname_deaths;
     private int classname_wins;
+    private int classname_wins_face_off;
     private int classname_losses;
     private int classname_final_kills;
     private int classname_final_deaths;
@@ -52,6 +53,7 @@ public class MegaWallsClassStats {
     //private int classname_games_played;
     private int classname_assists;
     private int classname_wither_damage;
+    private int classname_wither_kills;
     private int classname_defender_kills;
     //private int classname_defender_assists;
     private int classname_a_activations;
@@ -87,6 +89,7 @@ public class MegaWallsClassStats {
         classname_kills = JsonUtil.getInt(megaWallsStatsObj, classname + "_kills");
         classname_deaths = JsonUtil.getInt(megaWallsStatsObj, classname + "_deaths");
         classname_wins = JsonUtil.getInt(megaWallsStatsObj, classname + "_wins");
+        classname_wins_face_off = JsonUtil.getInt(megaWallsStatsObj, classname + "_wins_face_off");
         classname_losses = JsonUtil.getInt(megaWallsStatsObj, classname + "_losses");
         classname_final_kills = JsonUtil.getInt(megaWallsStatsObj, classname + "_final_kills");
         classname_final_deaths = JsonUtil.getInt(megaWallsStatsObj, classname + "_final_deaths");
@@ -104,6 +107,26 @@ public class MegaWallsClassStats {
 
         games_played = classname_wins + classname_losses; // doesn't count the draws
         fkpergame = (float) classname_final_kills / (games_played == 0 ? 1 : (float) games_played);
+
+        /*
+         * fields below are for the game stats
+         */
+        classname_assists = JsonUtil.getInt(megaWallsStatsObj, classname + "_assists");
+        classname_wither_damage = JsonUtil.getInt(megaWallsStatsObj, classname + "_wither_damage");
+        classname_wither_kills = JsonUtil.getInt(megaWallsStatsObj, classname + "_wither_kills");
+        classname_defender_kills = JsonUtil.getInt(megaWallsStatsObj, classname + "_defender_kills");
+        //classname_defender_assists = JsonUtil.getInt(mwdata,classname + "_defender_assists");
+        classname_a_activations = JsonUtil.getInt(megaWallsStatsObj, classname + "_a_activations");
+        //classname_a_activations_deathmatch = JsonUtil.getInt(mwdata,classname + "_a_activations_deathmatch");
+        classname_a_damage_dealt = JsonUtil.getInt(megaWallsStatsObj, classname + "_a_damage_dealt");
+        classname_arrows_fired = JsonUtil.getInt(megaWallsStatsObj, classname + "_arrows_fired");
+        classname_arrows_hit = JsonUtil.getInt(megaWallsStatsObj, classname + "_arrows_hit");
+        classname_blocks_placed = JsonUtil.getInt(megaWallsStatsObj, classname + "_blocks_placed");
+        classname_meters_walked = JsonUtil.getInt(megaWallsStatsObj, classname + "_meters_walked");
+        classname_self_healed = JsonUtil.getInt(megaWallsStatsObj, classname + "_self_healed");
+        classname_allies_healed = JsonUtil.getInt(megaWallsStatsObj, classname + "_allies_healed");
+        wither_damage_game = classname_wither_damage / (games_played == 0 ? 1 : (float) games_played);
+        def_kill_game = classname_defender_kills / (games_played == 0 ? 1 : (float) games_played);
 
         final JsonObject classesdata = JsonUtil.getJsonObject(megaWallsStatsObj, "classes");
         if (classesdata == null) {
@@ -123,25 +146,6 @@ public class MegaWallsClassStats {
         skill_level_g = Math.max(JsonUtil.getInt(classeobj, "skill_level_g"), 1);
         prestige = JsonUtil.getInt(classeobj, "prestige");
         enderchest_rows = Math.max(JsonUtil.getInt(classeobj, "enderchest_rows"), 3);
-
-        /*
-         * fields below are for the game stats
-         */
-        classname_assists = JsonUtil.getInt(megaWallsStatsObj, classname + "_assists");
-        classname_wither_damage = JsonUtil.getInt(megaWallsStatsObj, classname + "_wither_damage");
-        classname_defender_kills = JsonUtil.getInt(megaWallsStatsObj, classname + "_defender_kills");
-        //classname_defender_assists = JsonUtil.getInt(mwdata,classname + "_defender_assists");
-        classname_a_activations = JsonUtil.getInt(megaWallsStatsObj, classname + "_a_activations");
-        //classname_a_activations_deathmatch = JsonUtil.getInt(mwdata,classname + "_a_activations_deathmatch");
-        classname_a_damage_dealt = JsonUtil.getInt(megaWallsStatsObj, classname + "_a_damage_dealt");
-        classname_arrows_fired = JsonUtil.getInt(megaWallsStatsObj, classname + "_arrows_fired");
-        classname_arrows_hit = JsonUtil.getInt(megaWallsStatsObj, classname + "_arrows_hit");
-        classname_blocks_placed = JsonUtil.getInt(megaWallsStatsObj, classname + "_blocks_placed");
-        classname_meters_walked = JsonUtil.getInt(megaWallsStatsObj, classname + "_meters_walked");
-        classname_self_healed = JsonUtil.getInt(megaWallsStatsObj, classname + "_self_healed");
-        classname_allies_healed = JsonUtil.getInt(megaWallsStatsObj, classname + "_allies_healed");
-        wither_damage_game = classname_wither_damage / (games_played == 0 ? 1 : (float) games_played);
-        def_kill_game = classname_defender_kills / (games_played == 0 ? 1 : (float) games_played);
 
     }
 
@@ -243,6 +247,11 @@ public class MegaWallsClassStats {
 
         final String[][] matrix2 = {
                 {
+                        EnumChatFormatting.AQUA + "Games played : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(games_played) + "     ",
+                        EnumChatFormatting.AQUA + "FK/game : " + (fkpergame > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", fkpergame)
+                },
+
+                {
                         EnumChatFormatting.AQUA + "Wither damage : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_wither_damage) + "     ",
                         EnumChatFormatting.AQUA + "Defending Kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_defender_kills)
                 },
@@ -253,8 +262,8 @@ public class MegaWallsClassStats {
                 },
 
                 {
-                        EnumChatFormatting.AQUA + "Games played : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(games_played) + "     ",
-                        EnumChatFormatting.AQUA + "FK/game : " + (fkpergame > 1 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", fkpergame)
+                        EnumChatFormatting.AQUA + "Wither kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_wither_kills) + "     ",
+                        EnumChatFormatting.AQUA + "Faceoff wins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_wins_face_off)
                 }
         };
 
