@@ -25,6 +25,7 @@ public enum ClassMapping {
     GUIINGAME("avo", "net/minecraft/client/gui/GuiIngame"),
     GUIINGAMEFORGE("net/minecraftforge/client/GuiIngameForge"),
     GUINEWCHAT("avt", "net/minecraft/client/gui/GuiNewChat"),
+    GUIPLAYERTABOVERLAY("awh", "net/minecraft/client/gui/GuiPlayerTabOverlay"),
     GUISCREEN("axu", "net/minecraft/client/gui/GuiScreen"),
     GUISCREENBOOK("ayo", "net/minecraft/client/gui/GuiScreenBook"),
     ICAMERA("bia", "net/minecraft/client/renderer/culling/ICamera"),

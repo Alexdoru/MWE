@@ -48,6 +48,7 @@ public class ConfigHandler {
     public static boolean clearVision;
     public static boolean automaticUpdate;
     public static boolean nickHider;
+    public static boolean hideTablistHeaderFooter = true; // TODO add config and uncomment transformer
 
     /**
      * HUD config
