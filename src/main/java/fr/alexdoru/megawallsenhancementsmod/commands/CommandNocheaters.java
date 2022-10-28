@@ -7,6 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginDat
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangPlayernameToUUID;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.chat.ReportSuggestionHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.WarningMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
@@ -351,7 +352,7 @@ public class CommandNocheaters extends CommandBase {
             stringBuilder.append(EnumChatFormatting.GREEN);
             stringBuilder.append("Players reported this game : ");
             stringBuilder.append(EnumChatFormatting.GOLD);
-            for (final StringLong stringLong : ReportQueue.INSTANCE.getPlayersReportedThisGame()) {
+            for (final StringLong stringLong : ReportSuggestionHandler.getReportSuggestionHistory()) {
                 if (stringLong.message != null) {
                     stringBuilder.append(stringLong.message).append(" ");
                 }
