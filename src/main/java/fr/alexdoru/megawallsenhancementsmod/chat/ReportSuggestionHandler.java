@@ -211,9 +211,6 @@ public class ReportSuggestionHandler {
             CommandWDR.handleWDRCommand(new String[]{reportedPlayer, cheat}, canWDRPlayer(reportedPlayer), false);
         } else if (SquadHandler.getSquad().get(messageSender) != null) {
             CommandWDR.handleWDRCommand(new String[]{reportedPlayer, cheat}, false, false);
-            if (canWDRPlayer(reportedPlayer)) {
-                ReportQueue.INSTANCE.addPlayerToQueueRandom(null, reportedPlayer);
-            }
         }
 
         if (FKCounterMod.isitPrepPhase) {
