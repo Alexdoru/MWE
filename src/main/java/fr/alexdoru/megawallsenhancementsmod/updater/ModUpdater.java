@@ -3,14 +3,13 @@ package fr.alexdoru.megawallsenhancementsmod.updater;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.utils.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.Multithreading;
+import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -44,7 +43,7 @@ public class ModUpdater {
         if (mc.theWorld != null && mc.thePlayer != null && !hasTriggered) {
             hasTriggered = true;
             checkForgeVersion();
-            Multithreading.addTaskToQueue(() -> {
+            MultithreadingUtil.addTaskToQueue(() -> {
                 try {
                     checkForUpdate();
                 } catch (ApiException e) {
@@ -74,17 +73,8 @@ public class ModUpdater {
 
         final String GITHUB_API_URL = "https://api.github.com/repos/Alexdoru/MegaWallsEnhancements/releases";
         final HttpClient httpClient = new HttpClient(GITHUB_API_URL);
-        final String rawresponse = httpClient.getrawresponse();
-        if (rawresponse == null) {
-            throw new ApiException("No response from github's Api");
-        }
-        final JsonParser parser = new JsonParser();
-        final JsonElement element = parser.parse(rawresponse);
-        if (element == null) {
-            throw new ApiException("Cannot parse response from github's Api");
-        }
-
-        if (!element.isJsonArray()) {
+        final JsonObject jsonResponse = httpClient.getJsonResponse();
+        if (!jsonResponse.isJsonArray()) {
             throw new ApiException("Failed to parse response from github's Api, it is not a Json Array");
         }
 
@@ -92,7 +82,7 @@ public class ModUpdater {
         String version = "";
         String browser_download_url = null;
 
-        for (final JsonElement jsonElement : element.getAsJsonArray()) {
+        for (final JsonElement jsonElement : jsonResponse.getAsJsonArray()) {
             final JsonObject release = jsonElement.getAsJsonObject();
             final String tag_name = JsonUtil.getString(release, "tag_name");
             if (tag_name != null && release.has("assets")) {
