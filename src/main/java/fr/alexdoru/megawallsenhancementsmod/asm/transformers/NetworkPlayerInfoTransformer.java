@@ -5,6 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.FieldMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -18,48 +19,90 @@ public class NetworkPlayerInfoTransformer implements IMyClassTransformer {
 
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
-        status.setInjectionPoints(2);
+        status.setInjectionPoints(1);
         addInterface(classNode, "NetworkPlayerInfoAccessor");
-        classNode.visitField(ACC_PUBLIC, "playerFinalkills", "I", null, 0).visitEnd();
+        final String FIELD_NAME_FINAL_KILLS = "mwenhancements$playerFinalkills";
+        final String FIELD_NAME_DISPLAYNAME = "mwenhancements$displayName";
+        classNode.visitField(ACC_PUBLIC, FIELD_NAME_FINAL_KILLS, "I", null, 0).visitEnd();
+        classNode.visitField(ACC_PRIVATE, FIELD_NAME_DISPLAYNAME, "L" + ClassMapping.ICHATCOMPONENT + ";", null, null).visitEnd();
         addSetterMethod(
                 classNode,
                 "setPlayerFinalkills",
                 ClassMapping.NETWORKPLAYERINFO,
-                "playerFinalkills",
+                FIELD_NAME_FINAL_KILLS,
                 "I",
                 null
         );
+        addSetterMethod(
+                classNode,
+                "setCustomDisplayname",
+                ClassMapping.NETWORKPLAYERINFO,
+                FIELD_NAME_DISPLAYNAME,
+                "L" + ClassMapping.ICHATCOMPONENT + ";",
+                null
+        );
         for (final MethodNode methodNode : classNode.methods) {
+
             if (checkMethodNode(methodNode, MethodMapping.NETWORKPLAYERINFO$INIT)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkFieldInsnNode(insnNode, PUTFIELD, FieldMapping.NETWORKPLAYERINFO$DISPLAYNAME)) {
                         /*
-                         * Replace line 48 with :
-                         * this.displayname = NetworkPlayerInfoHook.getDisplayName(this.displayname, this.gameProfile)
+                         * Adds after line 48 :
+                         * this.mwenhancements$displayName = NetworkPlayerInfoHook.getDisplayName(this.displayname, this.gameProfile);
+                         * this.mwenhancements$playerFinalkills = NetworkPlayerInfoHook.getPlayersFinals(this.gameProfile.getName());
                          */
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
+                        list.add(new VarInsnNode(ALOAD, 0));
                         list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.NETWORKPLAYERINFO$GAMEPROFILE));
-                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("NetworkPlayerInfoHook"), "getDisplayName", "(L" + ClassMapping.ICHATCOMPONENT + ";L" + ClassMapping.GAMEPROFILE + ";)L" + ClassMapping.ICHATCOMPONENT + ";", false));
-                        methodNode.instructions.insertBefore(insnNode, list);
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("NetworkPlayerInfoHook"), "getDisplayName", "(L" + ClassMapping.GAMEPROFILE + ";)L" + ClassMapping.ICHATCOMPONENT + ";", false));
+                        list.add(new FieldInsnNode(PUTFIELD, ClassMapping.NETWORKPLAYERINFO.toString(), FIELD_NAME_DISPLAYNAME, "L" + ClassMapping.ICHATCOMPONENT + ";"));
+                        list.add(new VarInsnNode(ALOAD, 0));
+                        list.add(new VarInsnNode(ALOAD, 0));
+                        list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.NETWORKPLAYERINFO$GAMEPROFILE));
+                        list.add(new MethodInsnNode(INVOKEVIRTUAL, "com/mojang/authlib/GameProfile", "getName", "()Ljava/lang/String;", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("NetworkPlayerInfoHook"), "getPlayersFinals", "(Ljava/lang/String;)I", false));
+                        list.add(new FieldInsnNode(PUTFIELD, ClassMapping.NETWORKPLAYERINFO.toString(), FIELD_NAME_FINAL_KILLS, "I"));
+                        methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
-                        /*
-                         * Adds after line 48 :
-                         * this.playersFinalKills = NetworkPlayerInfoHook.getPlayersFinals(this.gameProfile.getName())
-                         */
-                        final InsnList list2 = new InsnList();
-                        list2.add(new VarInsnNode(ALOAD, 0));
-                        list2.add(new VarInsnNode(ALOAD, 0));
-                        list2.add(getNewFieldInsnNode(GETFIELD, FieldMapping.NETWORKPLAYERINFO$GAMEPROFILE));
-                        list2.add(new MethodInsnNode(INVOKEVIRTUAL, "com/mojang/authlib/GameProfile", "getName", "()Ljava/lang/String;", false));
-                        list2.add(new MethodInsnNode(INVOKESTATIC, getHookClass("NetworkPlayerInfoHook"), "getPlayersFinals", "(Ljava/lang/String;)I", false));
-                        list2.add(new FieldInsnNode(PUTFIELD, ClassMapping.NETWORKPLAYERINFO.toString(), "playerFinalkills", "I"));
-                        methodNode.instructions.insert(insnNode, list2);
-                        status.addInjection();
-                        return classNode;
                     }
                 }
             }
+
+            if (checkMethodNode(methodNode, MethodMapping.NETWORKPLAYERINFO$GETDISPLAYNAME)) {
+                methodNode.instructions.clear();
+                /*
+                 * public IChatComponent getDisplayName() {
+                 *     return this.displayName != null ? this.displayName : this.mwenhancements$displayName;
+                 * }
+                 */
+                methodNode.visitCode();
+
+                final Label l0 = new Label();
+                final Label isNullLabel = new Label();
+                methodNode.visitLabel(l0);
+                methodNode.visitVarInsn(ALOAD, 0);
+                methodNode.visitFieldInsn(GETFIELD, ClassMapping.NETWORKPLAYERINFO.toString(), FieldMapping.NETWORKPLAYERINFO$DISPLAYNAME.name, "L" + ClassMapping.ICHATCOMPONENT + ";");
+                methodNode.visitJumpInsn(IFNULL, isNullLabel);
+
+                final Label l1 = new Label();
+                methodNode.visitLabel(l1);
+                methodNode.visitVarInsn(ALOAD, 0);
+                methodNode.visitFieldInsn(GETFIELD, ClassMapping.NETWORKPLAYERINFO.toString(), FieldMapping.NETWORKPLAYERINFO$DISPLAYNAME.name, "L" + ClassMapping.ICHATCOMPONENT + ";");
+                methodNode.visitInsn(ARETURN);
+
+                methodNode.visitLabel(isNullLabel);
+                methodNode.visitVarInsn(ALOAD, 0);
+                methodNode.visitFieldInsn(GETFIELD, ClassMapping.NETWORKPLAYERINFO.toString(), FIELD_NAME_DISPLAYNAME, "L" + ClassMapping.ICHATCOMPONENT + ";");
+                methodNode.visitInsn(ARETURN);
+
+                final Label l2 = new Label();
+                methodNode.visitLabel(l2);
+                methodNode.visitLocalVariable("this", "L" + ClassMapping.NETWORKPLAYERINFO + ";", null, l0, l2, 0);
+                methodNode.visitMaxs(1, 1);
+                methodNode.visitEnd();
+            }
+
         }
         return classNode;
     }

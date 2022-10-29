@@ -52,7 +52,7 @@ public class GuiPlayerTabOverlayTransformer_FinalKills implements IMyClassTransf
                              */
                             final InsnList list = new InsnList();
                             list.add(new VarInsnNode(ALOAD, 6)); // load networkplayerinfo / p_175247_6_
-                            list.add(new FieldInsnNode(GETFIELD, ClassMapping.NETWORKPLAYERINFO.toString(), "playerFinalkills", "I")); // get playerFinalkills field
+                            list.add(new FieldInsnNode(GETFIELD, ClassMapping.NETWORKPLAYERINFO.toString(), "mwenhancements$playerFinalkills", "I")); // get playerFinalkills field
                             list.add(new VarInsnNode(ILOAD, 5));
                             list.add(new VarInsnNode(ILOAD, 2));
                             list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "renderFinals", "(III)V", false));
