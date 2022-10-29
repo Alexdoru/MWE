@@ -47,6 +47,8 @@ public class PrestigeVCache {
 
     private static void createPlayerPrestigeData(String uuid, MWClass mwClass, String playername) {
 
+        prestigeDataMap.put(uuid, new PlayerPrestigeData());
+
         MultithreadingUtil.addTaskToQueue(() -> {
 
             try {
@@ -67,6 +69,8 @@ public class PrestigeVCache {
     }
 
     private static void createClassData(String uuid, MWClass mwClass, PlayerPrestigeData playerPrestigeData, String playername) {
+
+        playerPrestigeData.addClass(mwClass, 0, 0);
 
         MultithreadingUtil.addTaskToQueue(() -> {
 
