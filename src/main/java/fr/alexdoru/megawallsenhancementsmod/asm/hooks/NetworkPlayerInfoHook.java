@@ -8,9 +8,9 @@ import net.minecraft.util.IChatComponent;
 @SuppressWarnings("unused")
 public class NetworkPlayerInfoHook {
 
-    public static IChatComponent getDisplayName(IChatComponent displayNameIn, GameProfile gameProfileIn) {
+    public static IChatComponent getDisplayName(GameProfile gameProfileIn) {
         NameUtil.transformGameProfile(gameProfileIn, false);
-        return displayNameIn == null ? NameUtil.getTransformedDisplayName(gameProfileIn) : displayNameIn;
+        return NameUtil.getTransformedDisplayName(gameProfileIn);
     }
 
     public static int getPlayersFinals(String playername) {
