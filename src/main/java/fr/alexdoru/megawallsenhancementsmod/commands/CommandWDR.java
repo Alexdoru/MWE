@@ -207,18 +207,18 @@ public class CommandWDR extends CommandBase {
                     }
 
                 } else if (args[i].equalsIgnoreCase("fastbreak")) {
-                        arraycheats.add(args[i]);
-                        message.append(" speed");
-                    } else if (args[i].equalsIgnoreCase("autoblock") || args[i].equalsIgnoreCase("multiaura")) {
-                        arraycheats.add(args[i]);
-                        message.append(" killaura");
-                    } else if (args[i].equalsIgnoreCase("noslowdown") || args[i].equalsIgnoreCase("keepsprint")) {
-                        arraycheats.add(args[i]);
-                        message.append(" velocity");
-                    } else {
-                        arraycheats.add(args[i]);
-                        message.append(" ").append(args[i]); //reconstructs the message to send it to the server
-                    }
+                    arraycheats.add(args[i]);
+                    message.append(" speed");
+                } else if (args[i].equalsIgnoreCase("autoblock") || args[i].equalsIgnoreCase("multiaura")) {
+                    arraycheats.add(args[i]);
+                    message.append(" killaura");
+                } else if (args[i].equalsIgnoreCase("noslowdown") || args[i].equalsIgnoreCase("keepsprint")) {
+                    arraycheats.add(args[i]);
+                    message.append(" velocity");
+                } else {
+                    arraycheats.add(args[i]);
+                    message.append(" ").append(args[i]); //reconstructs the message to send it to the server
+                }
 
             }
 

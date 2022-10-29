@@ -82,8 +82,8 @@ public class MegaWallsEnhancementsMod {
         ClientCommandHandler.instance.registerCommand(new CommandStalk());
         ClientCommandHandler.instance.registerCommand(new CommandReport());
         ClientCommandHandler.instance.registerCommand(new CommandPlancke());
-        ClientCommandHandler.instance.registerCommand(new CommandScanGame());
         ClientCommandHandler.instance.registerCommand(new CommandAddAlias());
+        ClientCommandHandler.instance.registerCommand(new CommandScanGame());
         ClientCommandHandler.instance.registerCommand(new CommandFKCounter());
         ClientCommandHandler.instance.registerCommand(new CommandNocheaters());
         ClientCommandHandler.instance.registerCommand(new CommandHypixelShout());

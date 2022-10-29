@@ -19,10 +19,6 @@ public class AliasData {
         Runtime.getRuntime().addShutdownHook(new Thread(AliasData::writeDataToFile));
     }
 
-    public static HashMap<String, String> getMap() {
-        return aliasMap;
-    }
-
     public static String getAlias(String playername) {
         return aliasMap.get(playername);
     }
@@ -31,8 +27,8 @@ public class AliasData {
         aliasMap.put(playername, alias);
     }
 
-    public static String removeAlias(String playername) {
-        return aliasMap.remove(playername);
+    public static void removeAlias(String playername) {
+        aliasMap.remove(playername);
     }
 
     private static void readDataFromFile() {
@@ -41,8 +37,7 @@ public class AliasData {
         }
         try {
             final Gson gson = new Gson();
-            final HashMap<String, String> hashMap = gson.fromJson(new FileReader(alliasDataFile), new TypeToken<HashMap<String, String>>() {
-            }.getType());
+            final HashMap<String, String> hashMap = gson.fromJson(new FileReader(alliasDataFile), new TypeToken<HashMap<String, String>>() {}.getType());
             if (hashMap != null) {
                 aliasMap.putAll(hashMap);
             }
@@ -51,7 +46,7 @@ public class AliasData {
         }
     }
 
-    public static void writeDataToFile() {
+    private static void writeDataToFile() {
         try {
             final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
             final String jsonString = gson.toJson(aliasMap);
