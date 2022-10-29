@@ -12,7 +12,6 @@ import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.event.ClickEvent;
@@ -96,17 +95,13 @@ public class NameUtil {
     }
 
     /**
-     * Transforms the nametag of the player based on the infos stored in getGameProfile.MWPlayerData
+     * Transforms the nametag of the player entity based on the infos stored in getGameProfile.MWPlayerData
      * to save performance instead of redoing the hashmap access
      */
     public static void transformNametag(EntityPlayer player, boolean onPlayerJoin) {
 
         if (!onPlayerJoin) {
             player.getPrefixes().removeAll(allPrefix);
-        }
-
-        if (player instanceof EntityPlayerSP) {
-            transformGameProfile(player.getGameProfile(), true);
         }
 
         final MWPlayerData mwPlayerData = ((GameProfileAccessor) player.getGameProfile()).getMWPlayerData();
