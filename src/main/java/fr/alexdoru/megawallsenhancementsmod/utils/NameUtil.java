@@ -70,21 +70,6 @@ public class NameUtil {
         }
     }
 
-    public static void transformNameTablist(String playername) {
-        if (isValidMinecraftName(playername)) {
-            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
-            if (networkPlayerInfo != null) {
-                transformGameProfile(networkPlayerInfo.getGameProfile(), true);
-                networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
-            }
-        }
-    }
-
-    private static final Pattern MINECRAFT_NAME_PATTERN = Pattern.compile("\\w{1,16}");
-    public static boolean isValidMinecraftName(String playername) {
-        return !StringUtil.isNullOrEmpty(playername) && MINECRAFT_NAME_PATTERN.matcher(playername).matches();
-    }
-
     /**
      * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
      */
@@ -94,6 +79,21 @@ public class NameUtil {
         final EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
         if (player != null) {
             NameUtil.transformNametag(player, false);
+        }
+    }
+
+    private static final Pattern MINECRAFT_NAME_PATTERN = Pattern.compile("\\w{1,16}");
+    public static boolean isValidMinecraftName(String playername) {
+        return !StringUtil.isNullOrEmpty(playername) && MINECRAFT_NAME_PATTERN.matcher(playername).matches();
+    }
+
+    public static void transformNameTablist(String playername) {
+        if (isValidMinecraftName(playername)) {
+            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+            if (networkPlayerInfo != null) {
+                transformGameProfile(networkPlayerInfo.getGameProfile(), true);
+                networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
+            }
         }
     }
 
