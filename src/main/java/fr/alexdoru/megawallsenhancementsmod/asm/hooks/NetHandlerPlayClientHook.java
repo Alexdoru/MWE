@@ -47,13 +47,7 @@ public class NetHandlerPlayClientHook {
 
     public static void handleTeamPacket(S3EPacketTeams packetIn, ScorePlayerTeam scoreplayerteam) {
         if (packetIn.getAction() == 2) {
-            scoreplayerteam.getMembershipCollection().forEach(playername -> {
-                final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
-                if (networkPlayerInfo != null) {
-                    NameUtil.transformGameProfile(networkPlayerInfo.getGameProfile(), true);
-                    networkPlayerInfo.setDisplayName(NameUtil.getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
-                }
-            });
+            scoreplayerteam.getMembershipCollection().forEach(NameUtil::transformNameTablist);
         }
     }
 

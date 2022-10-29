@@ -53,35 +53,36 @@ public class NameUtil {
      * for example : /squad add player as aliasname
      */
     public static void updateGameProfileAndName(String playername, boolean refreshDisplayName) {
-        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
-        if (networkPlayerInfo != null) {
-            transformGameProfile(networkPlayerInfo.getGameProfile(), true);
-            networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
-        }
-        final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
-        if (player != null) {
-            transformGameProfile(player.getGameProfile(), true);
-            NameUtil.transformNametag(player, false);
-            if (refreshDisplayName) {
-                player.refreshDisplayName();
+        if (isValidMinecraftName(playername)) {
+            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+            if (networkPlayerInfo != null) {
+                transformGameProfile(networkPlayerInfo.getGameProfile(), true);
+                networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
+            }
+            final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
+            if (player != null) {
+                transformGameProfile(player.getGameProfile(), true);
+                NameUtil.transformNametag(player, false);
+                if (refreshDisplayName) {
+                    player.refreshDisplayName();
+                }
             }
         }
-
     }
 
-    /**
-     * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
-     */
-    public static void updateGameProfileAndName(GameProfile gameProfile) {
-        transformGameProfile(gameProfile, true);
-        final NetworkPlayerInfo networkPlayerInfo = mc.getNetHandler().getPlayerInfo(gameProfile.getId());
-        if (networkPlayerInfo != null) {
-            networkPlayerInfo.setDisplayName(getTransformedDisplayName(gameProfile));
+    public static void transformNameTablist(String playername) {
+        if (isValidMinecraftName(playername)) {
+            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+            if (networkPlayerInfo != null) {
+                transformGameProfile(networkPlayerInfo.getGameProfile(), true);
+                networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
+            }
         }
-        final EntityPlayer player = mc.theWorld.getPlayerEntityByName(gameProfile.getName());
-        if (player != null) {
-            NameUtil.transformNametag(player, false);
-        }
+    }
+
+    private static final Pattern MINECRAFT_NAME_PATTERN = Pattern.compile("\\w{1,16}");
+    public static boolean isValidMinecraftName(String playername) {
+        return !StringUtil.isNullOrEmpty(playername) && MINECRAFT_NAME_PATTERN.matcher(playername).matches();
     }
 
     /**
@@ -138,14 +139,6 @@ public class NameUtil {
             }
         }
 
-    }
-
-    public static void transformNameTablist(UUID uuid) {
-        final NetworkPlayerInfo networkPlayerInfo = mc.getNetHandler().getPlayerInfo(uuid);
-        if (networkPlayerInfo != null) {
-            transformGameProfile(networkPlayerInfo.getGameProfile(), true);
-            networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
-        }
     }
 
     /**
