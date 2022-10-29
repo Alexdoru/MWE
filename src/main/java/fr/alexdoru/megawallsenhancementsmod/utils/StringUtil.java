@@ -121,6 +121,10 @@ public class StringUtil {
                         .setChatStyle(new ChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(secondSplit[1])))));
     }
 
+    public static boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
+    }
+
     //private static final Pattern FORMATTING_CODE_END_OF_STRING_PATTERN = Pattern.compile('\u00a7' + "[0-9A-FK-OR]$");
     ///* NEEDS TO BE TESTED
     // * Removes all formatting codes located directly before the target string
