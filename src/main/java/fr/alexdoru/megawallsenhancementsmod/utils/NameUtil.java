@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.utils;
 
 import com.mojang.authlib.GameProfile;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessor.NetworkPlayerInfoAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.WarningMessagesHandler;
@@ -57,7 +58,7 @@ public class NameUtil {
             final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
             if (networkPlayerInfo != null) {
                 transformGameProfile(networkPlayerInfo.getGameProfile(), true);
-                networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
+                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
             }
             final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
@@ -75,7 +76,7 @@ public class NameUtil {
      */
     public static void updateGameProfileAndName(NetworkPlayerInfo networkPlayerInfo) {
         transformGameProfile(networkPlayerInfo.getGameProfile(), true);
-        networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
+        ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
         final EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
         if (player != null) {
             NameUtil.transformNametag(player, false);
@@ -92,7 +93,7 @@ public class NameUtil {
             final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
             if (networkPlayerInfo != null) {
                 transformGameProfile(networkPlayerInfo.getGameProfile(), true);
-                networkPlayerInfo.setDisplayName(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
+                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
             }
         }
     }
