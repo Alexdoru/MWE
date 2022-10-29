@@ -6,15 +6,15 @@ import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 public class ScoreboardHook {
 
     public static void removeTeamHook(String playername) {
-        NameUtil.transformNameTablist(playername);
+        NameUtil.onScoreboardPacket(playername);
     }
 
     public static void addPlayerToTeamHook(String playername) {
-        NameUtil.transformNameTablist(playername);
+        NameUtil.onScoreboardPacket(playername);
     }
 
     public static void removePlayerFromTeamHook(String playername) {
-        NameUtil.transformNameTablist(playername);
+        NameUtil.onScoreboardPacket(playername);
     }
 
 }

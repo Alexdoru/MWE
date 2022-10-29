@@ -47,7 +47,7 @@ public class NetHandlerPlayClientHook {
 
     public static void handleTeamPacket(S3EPacketTeams packetIn, ScorePlayerTeam scoreplayerteam) {
         if (packetIn.getAction() == 2) {
-            scoreplayerteam.getMembershipCollection().forEach(NameUtil::transformNameTablist);
+            scoreplayerteam.getMembershipCollection().forEach(NameUtil::onScoreboardPacket);
         }
     }
 
