@@ -52,7 +52,7 @@ public class WdrData {
         wdrMap.remove(uuid);
     }
 
-    public static void saveReportedPlayers() {
+    private static void saveReportedPlayers() {
         try {
             final BufferedWriter writer = new BufferedWriter(new FileWriter(wdrsFile));
             for (final Entry<String, WDR> entry : wdrMap.entrySet()) {
