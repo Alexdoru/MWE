@@ -57,8 +57,7 @@ public class NameUtil {
         if (isValidMinecraftName(playername)) {
             final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
             if (networkPlayerInfo != null) {
-                transformGameProfile(networkPlayerInfo.getGameProfile(), true);
-                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
+                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(transformGameProfile(networkPlayerInfo.getGameProfile(), true));
             }
             final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
@@ -75,8 +74,7 @@ public class NameUtil {
      * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
      */
     public static void updateGameProfileAndName(NetworkPlayerInfo networkPlayerInfo) {
-        transformGameProfile(networkPlayerInfo.getGameProfile(), true);
-        ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
+        ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(transformGameProfile(networkPlayerInfo.getGameProfile(), true));
         final EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
         if (player != null) {
             NameUtil.transformNametag(player, false);
@@ -92,8 +90,7 @@ public class NameUtil {
         if (isValidMinecraftName(playername)) {
             final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
             if (networkPlayerInfo != null) {
-                transformGameProfile(networkPlayerInfo.getGameProfile(), true);
-                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(getTransformedDisplayName(networkPlayerInfo.getGameProfile()));
+                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(transformGameProfile(networkPlayerInfo.getGameProfile(), true));
             }
         }
     }
@@ -146,8 +143,9 @@ public class NameUtil {
      * Transforms the infos storred in GameProfile.MWPlayerData
      * For each new player spawned in the world it will create a new networkplayerinfo instance a rerun all the code in the method
      * to generate the field MWPlayerData, however it will reuse the field to display the nametag
+     * This method also returns the customDisplayName to disaply in the Tablist
      */
-    public static void transformGameProfile(GameProfile gameProfileIn, boolean forceRefresh) {
+    public static IChatComponent transformGameProfile(GameProfile gameProfileIn, boolean forceRefresh) {
 
         final GameProfileAccessor gameProfileAccessor = (GameProfileAccessor) gameProfileIn;
         final MWPlayerData mwPlayerData = gameProfileAccessor.getMWPlayerData();
@@ -158,10 +156,10 @@ public class NameUtil {
                 final MWPlayerData cachedMWPlayerData = MWPlayerData.dataCache.get(id);
                 if (cachedMWPlayerData != null) {
                     gameProfileAccessor.setMWPlayerData(cachedMWPlayerData);
-                    return;
+                    return cachedMWPlayerData.displayName;
                 }
             } else {
-                return;
+                return mwPlayerData.displayName;
             }
         }
 
@@ -240,6 +238,8 @@ public class NameUtil {
         } else {
             mwPlayerData.setData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring);
         }
+
+        return displayName;
 
     }
 
