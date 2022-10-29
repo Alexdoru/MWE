@@ -87,7 +87,7 @@ public class NameUtil {
         return !StringUtil.isNullOrEmpty(playername) && MINECRAFT_NAME_PATTERN.matcher(playername).matches();
     }
 
-    public static void transformNameTablist(String playername) {
+    public static void onScoreboardPacket(String playername) {
         if (isValidMinecraftName(playername)) {
             final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
             if (networkPlayerInfo != null) {
