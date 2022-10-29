@@ -152,104 +152,92 @@ public class NameUtil {
         final MWPlayerData mwPlayerData = gameProfileAccessor.getMWPlayerData();
         final UUID id = gameProfileIn.getId();
 
-        if (mwPlayerData == null && !forceRefresh) {
-            final MWPlayerData cachedMWPlayerData = MWPlayerData.dataCache.get(id);
-            if (cachedMWPlayerData != null) {
-                gameProfileAccessor.setMWPlayerData(cachedMWPlayerData);
+        if (!forceRefresh) {
+            if (mwPlayerData == null) {
+                final MWPlayerData cachedMWPlayerData = MWPlayerData.dataCache.get(id);
+                if (cachedMWPlayerData != null) {
+                    gameProfileAccessor.setMWPlayerData(cachedMWPlayerData);
+                    return;
+                }
+            } else {
                 return;
             }
         }
 
-        if (mwPlayerData == null || forceRefresh) {
+        final String username = gameProfileIn.getName();
+        final String uuid = id.toString().replace("-", "");
+        final WDR wdr = WdrData.getWdr(uuid, username);
+        String extraPrefix = "";
+        IChatComponent iExtraPrefix = null;
+        final String squadname = SquadHandler.getSquad().get(username);
+        final boolean isSquadMate = squadname != null;
 
-            final String username = gameProfileIn.getName();
-            final String uuid = id.toString().replace("-", "");
-            final WDR wdr = WdrData.getWdr(uuid, username);
-            String extraPrefix = "";
-            IChatComponent iExtraPrefix = null;
-            final String squadname = SquadHandler.getSquad().get(username);
-            final boolean isSquadMate = squadname != null;
-
-            if (ConfigHandler.iconsOnNames) {
-
-                if (isSquadMate) {
-
-                    extraPrefix = squadprefix;
-                    iExtraPrefix = isquadprefix;
-
-                } else {
-
-                    if (wdr != null) {
-
-                        if (wdr.transformName()) {
-
-                            if (wdr.shouldPutGrayIcon()) {
-                                extraPrefix = prefix_old_report;
-                                iExtraPrefix = iprefix_old_report;
-                            } else {
-                                if (wdr.hacks.contains("bhop")) {
-                                    extraPrefix = prefix_bhop;
-                                    iExtraPrefix = iprefix_bhop;
-                                } else {
-                                    extraPrefix = prefix;
-                                    iExtraPrefix = iprefix;
-                                }
-                            }
-
-                        }
-
-                    } else { //scangame
-
-                        if (ScangameData.doesPlayerFlag(id)) {
-                            extraPrefix = prefix_scan;
-                            iExtraPrefix = iprefix_scan;
-                        }
-
-                    }
-
-                }
-
-            }
-
-            IChatComponent displayName = null;
-            String formattedPrestigeVstring = null;
-            String colorSuffix = null;
-            if (mc.theWorld != null) {
-                final ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
-                if (team != null) {
-                    final String teamprefix = team.getColorPrefix();
-                    colorSuffix = team.getColorSuffix();
-                    if (ConfigHandler.prestigeV && colorSuffix != null && colorSuffix.contains(EnumChatFormatting.GOLD.toString())) {
-                        final Matcher matcher = PATTERN_CLASS_TAG.matcher(colorSuffix);
-                        if (matcher.find()) {
-                            final String tag = matcher.group(1);
-                            final EnumChatFormatting prestigeVcolor = PrestigeVCache.checkCacheAndUpdate(uuid, gameProfileIn.getName(), tag);
-                            if (prestigeVcolor != null) {
-                                formattedPrestigeVstring = " " + prestigeVcolor + "[" + tag + "]";
-                            }
-                        }
-                    }
-
-                    final boolean isobf = teamprefix.contains("\u00a7k");
-                    final String alias = AliasData.getAlias(username);
-                    if (iExtraPrefix != null || formattedPrestigeVstring != null || alias != null) {
-                        displayName = new ChatComponentText(
-                                (isobf ? "" : extraPrefix)
-                                        + teamprefix
-                                        + (isSquadMate ? squadname : username)
-                                        + (formattedPrestigeVstring != null ? formattedPrestigeVstring : colorSuffix)
-                                        + (alias == null ? "" : EnumChatFormatting.RESET + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.RESET + ")")
-                        );
-                    }
-                }
-            }
-
-            if (mwPlayerData == null) {
-                gameProfileAccessor.setMWPlayerData(new MWPlayerData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring));
+        if (ConfigHandler.iconsOnNames) {
+            if (isSquadMate) {
+                extraPrefix = squadprefix;
+                iExtraPrefix = isquadprefix;
             } else {
-                mwPlayerData.setData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring);
+                if (wdr != null) {
+                    if (wdr.transformName()) {
+                        if (wdr.shouldPutGrayIcon()) {
+                            extraPrefix = prefix_old_report;
+                            iExtraPrefix = iprefix_old_report;
+                        } else {
+                            if (wdr.hacks.contains("bhop")) {
+                                extraPrefix = prefix_bhop;
+                                iExtraPrefix = iprefix_bhop;
+                            } else {
+                                extraPrefix = prefix;
+                                iExtraPrefix = iprefix;
+                            }
+                        }
+                    }
+                } else {
+                    if (ScangameData.doesPlayerFlag(id)) {
+                        extraPrefix = prefix_scan;
+                        iExtraPrefix = iprefix_scan;
+                    }
+                }
             }
+        }
 
+        IChatComponent displayName = null;
+        String formattedPrestigeVstring = null;
+        String colorSuffix = null;
+        if (mc.theWorld != null) {
+            final ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
+            if (team != null) {
+                final String teamprefix = team.getColorPrefix();
+                colorSuffix = team.getColorSuffix();
+                if (ConfigHandler.prestigeV && colorSuffix != null && colorSuffix.contains(EnumChatFormatting.GOLD.toString())) {
+                    final Matcher matcher = PATTERN_CLASS_TAG.matcher(colorSuffix);
+                    if (matcher.find()) {
+                        final String tag = matcher.group(1);
+                        final EnumChatFormatting prestigeVcolor = PrestigeVCache.checkCacheAndUpdate(uuid, gameProfileIn.getName(), tag);
+                        if (prestigeVcolor != null) {
+                            formattedPrestigeVstring = " " + prestigeVcolor + "[" + tag + "]";
+                        }
+                    }
+                }
+
+                final boolean isobf = teamprefix.contains("\u00a7k");
+                final String alias = AliasData.getAlias(username);
+                if (iExtraPrefix != null || formattedPrestigeVstring != null || alias != null) {
+                    displayName = new ChatComponentText(
+                            (isobf ? "" : extraPrefix)
+                                    + teamprefix
+                                    + (isSquadMate ? squadname : username)
+                                    + (formattedPrestigeVstring != null ? formattedPrestigeVstring : colorSuffix)
+                                    + (alias == null ? "" : EnumChatFormatting.RESET + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.RESET + ")")
+                    );
+                }
+            }
+        }
+
+        if (mwPlayerData == null) {
+            gameProfileAccessor.setMWPlayerData(new MWPlayerData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring));
+        } else {
+            mwPlayerData.setData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring);
         }
 
     }
