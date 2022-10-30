@@ -1,5 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.api;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
@@ -16,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 public class HttpClient {
 
     private final JsonObject jsonResponse;
+    private final JsonArray jsonArray;
 
     public HttpClient(String url) throws ApiException {
 
@@ -59,6 +62,15 @@ public class HttpClient {
             }
             reader.close();
 
+            if (url.contains("api.github.com")) {
+                final JsonElement element = new JsonParser().parse(responseContent.toString());
+                if (element != null && element.isJsonArray()) {
+                    this.jsonResponse = null;
+                    this.jsonArray = element.getAsJsonArray();
+                    return;
+                }
+            }
+
             final JsonObject obj = new JsonParser().parse(responseContent.toString()).getAsJsonObject();
 
             if (obj == null) {
@@ -78,6 +90,7 @@ public class HttpClient {
             }
 
             this.jsonResponse = obj;
+            this.jsonArray = null;
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,6 +101,10 @@ public class HttpClient {
 
     public JsonObject getJsonResponse() {
         return jsonResponse;
+    }
+
+    public JsonArray getJsonArray() {
+        return jsonArray;
     }
 
     private String stripLastElementOfUrl(String url) {
