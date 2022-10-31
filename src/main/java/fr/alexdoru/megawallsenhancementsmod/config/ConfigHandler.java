@@ -62,6 +62,8 @@ public class ConfigHandler {
     public static final GuiPosition lastWitherHUDPosition = new GuiPosition(0d, 0d);
     public static boolean showStrengthHUD;
     public static final GuiPosition hunterStrengthHUDPosition = new GuiPosition(0d, 0d);
+    public static boolean showPrimedTNTHUD;
+    public static final GuiPosition creeperTNTHUDPosition = new GuiPosition(0d, 0d);
     public static boolean showSquadHealthHUD;// TODO add config
     public static final GuiPosition squadHealthHUDPosition = new GuiPosition(0d, 0d);// TODO add config
 
@@ -162,6 +164,9 @@ public class ConfigHandler {
         final Property pHunterStrengthHUD = config.get(CATEGORY_GUI, "Hunter Strength HUD", true, "Displays HUD and plays a sound 10 seconds before getting strength with hunter");
         final Property pXpos_hunterHUD = config.get(CATEGORY_GUI, "Xpos hunter Strength HUD", 0.5d, "The x position of the Hunter Strength HUD, value ranges from 0 to 1");
         final Property pYpos_hunterHUD = config.get(CATEGORY_GUI, "Ypos hunter Strength HUD", 8d / 20d, "The y position of the Hunter Strength HUD, value ranges from 0 to 1");
+        final Property pCreeperTNTHUD = config.get(CATEGORY_GUI, "Creeper Primed TNT HUD", true, "Displays HUD showing the cooldown on your primed tnt with creeper");
+        final Property pXpos_creeperHUD = config.get(CATEGORY_GUI, "Xpos creeper primed TNT HUD", 0.5d, "The x position of the Creeper Primed TNT HUD, value ranges from 0 to 1");
+        final Property pYpos_creeperHUD = config.get(CATEGORY_GUI, "Ypos creeper primed TNT HUD", 8d / 20d, "The y position of the Creeper Primed TNT HUD, value ranges from 0 to 1");
 
         final String CATEGORY_NOCHEATERS = "NoCheaters";
         final Property pToggleicons = config.get(CATEGORY_NOCHEATERS, "Toggle Icons", true, "Display warning symbol on nametags of reported players");
@@ -241,6 +246,9 @@ public class ConfigHandler {
         pOrderGUI.add(pHunterStrengthHUD.getName());
         pOrderGUI.add(pXpos_hunterHUD.getName());
         pOrderGUI.add(pYpos_hunterHUD.getName());
+        pOrderGUI.add(pCreeperTNTHUD.getName());
+        pOrderFKC.add(pXpos_creeperHUD.getName());
+        pOrderFKC.add(pYpos_creeperHUD.getName());
         config.setCategoryPropertyOrder(CATEGORY_GUI, pOrderGUI);
 
         final List<String> pOrderNOCHEATERS = new ArrayList<>();
@@ -315,6 +323,8 @@ public class ConfigHandler {
             lastWitherHUDPosition.setRelative(pXpos_lastWitherHUD.getDouble(), pYpos_lastWitherHUD.getDouble());
             showStrengthHUD = pHunterStrengthHUD.getBoolean();
             hunterStrengthHUDPosition.setRelative(pXpos_hunterHUD.getDouble(), pYpos_hunterHUD.getDouble());
+            showPrimedTNTHUD = pCreeperTNTHUD.getBoolean();
+            creeperTNTHUDPosition.setRelative(pXpos_creeperHUD.getDouble(), pYpos_creeperHUD.getDouble());
 
             iconsOnNames = pToggleicons.getBoolean();
             warningMessages = pTogglewarnings.getBoolean();
@@ -399,6 +409,16 @@ public class ConfigHandler {
             pXpos_hunterHUD.set(hunterStrengtharray[0]);
             pYpos_hunterHUD.set(hunterStrengtharray[1]);
 
+            pCreeperTNTHUD.set(showPrimedTNTHUD);
+            final double[] creeperPrimedTNTarray = creeperTNTHUDPosition.getRelativePosition();
+            pXpos_creeperHUD.set(creeperPrimedTNTarray[0]);
+            pYpos_creeperHUD.set(creeperPrimedTNTarray[1]);
+
+
+            pToggleicons.set(iconsOnNames);
+            pTogglewarnings.set(warningMessages);
+            pToggleautoreport.set(toggleAutoreport);
+            preportsuggestions.set(reportSuggestions);
             pToggleicons.set(iconsOnNames);
             pTogglewarnings.set(warningMessages);
             pToggleautoreport.set(toggleAutoreport);
