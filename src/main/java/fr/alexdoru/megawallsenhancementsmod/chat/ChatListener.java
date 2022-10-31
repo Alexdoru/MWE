@@ -13,6 +13,7 @@ import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.ArrowHitHUD;
+import fr.alexdoru.megawallsenhancementsmod.gui.huds.CreeperPrimedTNTHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.HunterStrengthHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.KillCooldownHUD;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoGrabber;
@@ -44,6 +45,7 @@ public class ChatListener {
     private static final Pattern DREADLORD_STRENGTH_PATTERN = Pattern.compile("\u00a74\u00a7lSOUL SIPHON \u00a7c\u00a7l85% ([0-9])s");
     private static final Pattern HEROBRINE_STRENGTH_PATTERN = Pattern.compile("\u00a7e\u00a7lPOWER \u00a7c\u00a7l85% ([0-9])s");
     private static final Pattern HUNTER_PRE_STRENGTH_PATTERN = Pattern.compile("\u00a7a\u00a7lF\\.O\\.N\\. \u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l([0-9]+)");
+    private static final Pattern CREEPER_FISSION_HEART_COOLDOWN_PATTERN = Pattern.compile("^\u00a7a\u00a7lFISSION HEART \u00a7c\u00a7l([0-9]+)s");
     private static final Pattern LOCRAW_PATTERN = Pattern.compile("^\\{\"server\":\"(\\w+)\",\"gametype\":\"\\w+\"(?:|,\"lobbyname\":\"\\w+\")(?:|,\"mode\":\"\\w+\")(?:|,\"map\":\"\\w+ ?\")\\}$");
     private static final Pattern PLAYER_JOIN_PATTERN = Pattern.compile("^(\\w{1,16}) has joined \\([0-9]{1,3}/[0-9]{1,3}\\)!");
     private static final Pattern ZOMBIE_STRENGTH_PATTERN = Pattern.compile("\u00a72\u00a7lBERSERK \u00a7c\u00a7l75% ([0-9])s");
@@ -231,6 +233,15 @@ public class ChatListener {
                 HunterStrengthHUD.instance.setStrengthRenderStart(Long.parseLong(zombieStrenghtMatcher.group(1)) * 1000L);
             }
 
+        } if (ConfigHandler.showPrimedTNTHUD && event.type == 2) {
+
+            final String fmsg = event.message.getFormattedText();
+
+            final Matcher fissionHeartCoolDownMatcher = CREEPER_FISSION_HEART_COOLDOWN_PATTERN.matcher(fmsg);
+            if (fissionHeartCoolDownMatcher.find()) {
+                final String fissionHeartCooldownTimer = fissionHeartCoolDownMatcher.group(1);
+                CreeperPrimedTNTHUD.instance.setCooldownRenderStart(fissionHeartCooldownTimer);
+            }
         }
 
     }
