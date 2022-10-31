@@ -21,6 +21,7 @@ import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TimerUtil;
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
