@@ -234,7 +234,8 @@ public class ChatListener {
                 HunterStrengthHUD.instance.setStrengthRenderStart(Long.parseLong(zombieStrenghtMatcher.group(1)) * 1000L);
             }
 
-        } if (ConfigHandler.showPrimedTNTHUD && event.type == 2) {
+        }
+        if (ConfigHandler.showPrimedTNTHUD && event.type == 2) {
 
             final String fmsg = event.message.getFormattedText();
 
