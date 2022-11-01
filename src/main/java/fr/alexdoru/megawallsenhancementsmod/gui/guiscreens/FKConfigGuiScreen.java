@@ -122,11 +122,11 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
     private ButtonToggle addSettingButton(boolean setting, int buttonid, int row, int column, String buttonText) {
         final int x;
         final int i = (widthBetweenButtons + buttonSize) * (column - columns / 2);
-        if (columns % 2 == 0) { // even
-            x = getxCenter() + widthBetweenButtons / 2 + i;
-        } else { // odd
-            x = getxCenter() - buttonSize / 2 + i;
-        }
+        //if (columns % 2 == 0) { // even
+        x = getxCenter() + widthBetweenButtons / 2 + i;
+        //} else { // odd
+        //    x = getxCenter() - buttonSize / 2 + i;
+        //}
         final int y = getyCenter() - findMenuHeight() / 2 + heightBetweenButtons + row * buttonSize;
         return new ButtonToggle(setting, buttonid, x + 10, y + 10, buttonText);
     }
