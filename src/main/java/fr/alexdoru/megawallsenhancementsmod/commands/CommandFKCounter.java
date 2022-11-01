@@ -6,8 +6,6 @@ import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiscreens.FKConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
-import net.minecraft.client.Minecraft;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
@@ -15,9 +13,7 @@ import net.minecraft.util.EnumChatFormatting;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class CommandFKCounter extends CommandBase {
-
-    private static final Minecraft mc = Minecraft.getMinecraft();
+public class CommandFKCounter extends MyAbstractCommand {
 
     @Override
     public String getCommandName() {
@@ -27,11 +23,6 @@ public class CommandFKCounter extends CommandBase {
     @Override
     public String getCommandUsage(ICommandSender sender) {
         return "/fks <help|p|players|say|settings>";
-    }
-
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
     }
 
     @Override
@@ -99,7 +90,7 @@ public class CommandFKCounter extends CommandBase {
                 strBuilder.append(KillCounter.getTeamNameFromTeam(KillCounter.BLUE_TEAM)).append(": ").append(KillCounter.sortByDecreasingValue1(KillCounter.getPlayers(KillCounter.BLUE_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
             }
 
-            mc.thePlayer.sendChatMessage(strBuilder.toString());
+            sendChatMessage(strBuilder.toString());
 
         } else if (args.length > 0 && args[0].equalsIgnoreCase("help")) {
 

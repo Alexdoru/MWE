@@ -9,8 +9,6 @@ import fr.alexdoru.megawallsenhancementsmod.gui.guiscreens.GeneralConfigGuiScree
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
@@ -18,7 +16,7 @@ import net.minecraft.util.EnumChatFormatting;
 import java.util.Collections;
 import java.util.List;
 
-public class CommandMWEnhancements extends CommandBase {
+public class CommandMWEnhancements extends MyAbstractCommand {
 
     @Override
     public String getCommandName() {
@@ -67,7 +65,7 @@ public class CommandMWEnhancements extends CommandBase {
             }
             return;
         }
-        new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(new GeneralConfigGuiScreen()), 1);
+        new DelayedTask(() -> mc.displayGuiScreen(new GeneralConfigGuiScreen()), 1);
     }
 
     @Override
@@ -77,19 +75,8 @@ public class CommandMWEnhancements extends CommandBase {
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
-    }
-
-    @Override
     public List<String> getCommandAliases() {
         return Collections.singletonList("megawallsenhancements");
-    }
-
-    private void sendChatMessage(String msg) {
-        if (Minecraft.getMinecraft().thePlayer != null) {
-            Minecraft.getMinecraft().thePlayer.sendChatMessage(msg);
-        }
     }
 
 }

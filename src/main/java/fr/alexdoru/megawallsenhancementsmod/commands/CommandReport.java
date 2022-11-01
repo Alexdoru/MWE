@@ -3,8 +3,6 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
@@ -13,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CommandReport extends CommandBase {
+public class CommandReport extends MyAbstractCommand {
 
     /* cheats recognized by hypixel*/
     public static final String[] recognizedcheats = {
@@ -71,11 +69,6 @@ public class CommandReport extends CommandBase {
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
-    }
-
-    @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
             if (FKCounterMod.isInMwGame && FKCounterMod.isitPrepPhase) {
@@ -100,7 +93,7 @@ public class CommandReport extends CommandBase {
         }
 
         if (args.length == 2 && args[1].equalsIgnoreCase("boosting")) {
-            Minecraft.getMinecraft().thePlayer.sendChatMessage("/report " + args[0] + " -b BOO -C");
+            sendChatMessage("/report " + args[0] + " -b BOO -C");
             return;
         }
 
@@ -120,7 +113,7 @@ public class CommandReport extends CommandBase {
 
         }
 
-        Minecraft.getMinecraft().thePlayer.sendChatMessage(msg.toString());
+        sendChatMessage(msg.toString());
 
     }
 

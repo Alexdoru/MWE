@@ -10,7 +10,6 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
@@ -19,7 +18,7 @@ import net.minecraft.util.IChatComponent;
 
 import java.util.List;
 
-public class CommandPlancke extends CommandBase {
+public class CommandPlancke extends MyAbstractCommand {
 
     @Override
     public String getCommandName() {
@@ -153,11 +152,6 @@ public class CommandPlancke extends CommandBase {
 
         });
 
-    }
-
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
     }
 
     @Override
