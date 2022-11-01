@@ -19,6 +19,11 @@ public class ScoreboardUtils {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
 
+    public static boolean isPlayingHypixelPit() {
+        final String title = ScoreboardUtils.getUnformattedSidebarTitle();
+        return title != null && title.contains("THE HYPIXEL PIT");
+    }
+
     /**
      * Returns a list of formatted strings containing each line of the scoreboard/sidebar
      * Item at index 0 is the first line etc
@@ -80,14 +85,10 @@ public class ScoreboardUtils {
     }
 
     /**
-     * Returns formatted top of the scoreboard/sidebar
+     * Returns unformatted top of the scoreboard/sidebar
      */
-    public static String getSidebarTitle(Scoreboard scoreboard) {
-        final ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(1);
-        if (objective == null) {
-            return "";
-        }
-        return objective.getDisplayName();
+    public static String getUnformattedSidebarTitle() {
+        return mc.theWorld == null ? null : getUnformattedSidebarTitle(mc.theWorld.getScoreboard());
     }
 
     /**
@@ -97,8 +98,18 @@ public class ScoreboardUtils {
         return EnumChatFormatting.getTextWithoutFormattingCodes(getSidebarTitle(scoreboard));
     }
 
-    public static String getUnformattedSidebarTitle() {
-        return mc.theWorld == null ? null : getUnformattedSidebarTitle(mc.theWorld.getScoreboard());
+    /**
+     * Returns formatted top of the scoreboard/sidebar
+     */
+    public static String getSidebarTitle(Scoreboard scoreboard) {
+        if (scoreboard == null) {
+            return "";
+        }
+        final ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(1);
+        if (objective == null) {
+            return "";
+        }
+        return objective.getDisplayName();
     }
 
     /**
