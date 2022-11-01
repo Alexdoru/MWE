@@ -441,10 +441,6 @@ public class ConfigHandler {
             pToggleicons.set(iconsOnNames);
             pTogglewarnings.set(warningMessages);
             pToggleautoreport.set(toggleAutoreport);
-            preportsuggestions.set(reportSuggestions);
-            pToggleicons.set(iconsOnNames);
-            pTogglewarnings.set(warningMessages);
-            pToggleautoreport.set(toggleAutoreport);
             pstopAutoreportAfterWeek.set(stopAutoreportAfterWeek);
             preportsuggestions.set(reportSuggestions);
             pautoreportSuggestions.set(autoreportSuggestions);
