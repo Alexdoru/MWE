@@ -5,7 +5,6 @@ import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
@@ -30,16 +29,7 @@ public class CommandSquad extends MyAbstractCommand {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
 
-        String title = null;
-
-        if (mc.theWorld != null) {
-            final Scoreboard scoreboard = mc.theWorld.getScoreboard();
-            if (scoreboard != null) {
-                title = ScoreboardUtils.getUnformattedSidebarTitle(scoreboard);
-            }
-        }
-
-        if (title != null && title.contains("THE HYPIXEL PIT")) {
+        if (ScoreboardUtils.isPlayingHypixelPit()) {
             sendChatMessage("/squad ", args);
             return;
         }
