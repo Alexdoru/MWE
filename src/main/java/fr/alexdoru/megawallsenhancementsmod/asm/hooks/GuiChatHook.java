@@ -5,6 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.command.CommandBase;
+import net.minecraftforge.client.ClientCommandHandler;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -24,6 +25,7 @@ public class GuiChatHook {
             }
             return waitingOnAutocompleteIn;
         } else {
+            ClientCommandHandler.instance.latestAutoComplete = null;
             tabCompleteOptions = TabCompletionUtil.getOnlinePlayersByName();
             new DelayedTask(() -> {
                 if (Minecraft.getMinecraft().currentScreen instanceof GuiChat) {
