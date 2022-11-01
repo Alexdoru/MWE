@@ -34,6 +34,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
 
     @Override
     public void initGui() {
+        super.initGui();
         buttonList.add(new ButtonFancy(100, getxCenter() + widthBetweenButtons / 2 + (widthBetweenButtons + buttonSize) + 10, getyCenter() - findMenuHeight() / 2 + heightBetweenButtons + buttonSize + 10, 30, 14, "Move HUD", 0.5));
 
         buttonList.add(addSettingButton(ConfigHandler.showfkcounterHUD, 0, 0, 0, "Show HUD"));
@@ -48,7 +49,6 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
         buttonList.add(new GuiSlider(5, getxCenter() - 150 / 2, getyCenter() + 70, "HUD Size : ", 0.1d, 4d, ConfigHandler.fkcounterHUDSize, this));
         buttonList.add(new GuiSlider(6, getxCenter() - 150 / 2, getyCenter() + 94, 150, 20, "Player amount : ", "", 1d, 10d, ConfigHandler.fkcounterHUDPlayerAmount, false, true, this));
         buttonList.add(new GuiButton(200, getxCenter() - 150 / 2, getyCenter() + 122, 150, 20, "Done"));
-        super.initGui();
     }
 
     @Override

@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
@@ -13,11 +14,17 @@ import java.util.List;
 public abstract class MyGuiScreen extends GuiScreen {
 
     private static final ResourceLocation SHADER = new ResourceLocation("fkcounter", "shaders/blur.json");
-    public final int ButtonsHeight = 20;
-    public GuiScreen parent = null;
+    protected final int ButtonsHeight = 20;
+    protected GuiScreen parent = null;
+    private int usersGuiScale;
 
     @Override
     public void initGui() {
+        usersGuiScale = mc.gameSettings.guiScale;
+        mc.gameSettings.guiScale = 2;
+        final ScaledResolution scaledresolution = new ScaledResolution(this.mc);
+        this.width = scaledresolution.getScaledWidth();
+        this.height = scaledresolution.getScaledHeight();
         try {
             mc.entityRenderer.loadShader(SHADER);
         } catch (Exception ignored) {}
@@ -26,6 +33,7 @@ public abstract class MyGuiScreen extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
+        mc.gameSettings.guiScale = usersGuiScale;
         ConfigHandler.saveConfig();
         try {
             mc.entityRenderer.stopUseShader();

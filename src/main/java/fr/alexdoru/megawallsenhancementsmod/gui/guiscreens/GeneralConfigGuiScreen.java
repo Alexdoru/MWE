@@ -10,6 +10,7 @@ public class GeneralConfigGuiScreen extends MyGuiScreen {
 
     @Override
     public void initGui() {
+        super.initGui();
         /*
          * Defines the button list
          */
@@ -20,7 +21,6 @@ public class GeneralConfigGuiScreen extends MyGuiScreen {
         this.buttonList.add(new GuiButton(5, getxCenter() + buttonsWidth, getYposForButton(0), buttonsWidth, ButtonsHeight, EnumChatFormatting.WHITE + "Automatic Updates : " + getSuffix(ConfigHandler.automaticUpdate)));
         this.buttonList.add(new GuiButton(4, getxCenter() - buttonsWidth / 2, getYposForButton(1), buttonsWidth, ButtonsHeight, EnumChatFormatting.BLUE + "Hitboxes, better F3+b"));
         this.buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getYposForButton(4), 150, ButtonsHeight, "Close"));
-        super.initGui();
     }
 
     @Override
