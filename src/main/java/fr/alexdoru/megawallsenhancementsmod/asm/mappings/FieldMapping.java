@@ -6,11 +6,13 @@ import static fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping.*;
 
 public enum FieldMapping {
 
+    CLIENTCOMMANDHANDLER$INSTANCE(CLIENTCOMMANDHANDLER, "instance", CLIENTCOMMANDHANDLER),
     ENTITYARROW$ISINGROUND(ENTITYARROW, "i", "inGround", "Z"),
     ENTITYPLAYER$GAMEPROFILE(ENTITYPLAYER, "bH", "gameProfile", GAMEPROFILE),
     ENUMCHATFORMATTING$YELLOW(ENUMCHATFORMATTING, "o", "YELLOW", ENUMCHATFORMATTING),
     GAMESETTINGS$ADVANCEDITEMTOOLTIPS(GAMESETTINGS, "y", "advancedItemTooltips", "Z"),
     GAMESETTINGS$PAUSEONLOSTFOCUS(GAMESETTINGS, "z", "pauseOnLostFocus", "Z"),
+    GUICHAT$WAITINGONAUTOCOMPLETE(GUICHAT, "r", "waitingOnAutocomplete", "Z"),
     GUICONTAINER$THESLOT(GUICONTAINER, "u", "theSlot", SLOT),
     GUIINGAME$DISPLAYEDSUBTITLE(GUIINGAME, "y", "displayedSubTitle", "Ljava/lang/String;"),
     GUINEWCHAT$CHATLINES(GUINEWCHAT, "h", "chatLines", "Ljava/util/List;"),
@@ -32,6 +34,12 @@ public enum FieldMapping {
     public final String owner;
     public final String name;
     public final String desc;
+
+    FieldMapping(ClassMapping owner, String mcpName, ClassMapping desc) {
+        this.owner = owner.toString();
+        this.name = mcpName;
+        this.desc = "L" + desc + ";";
+    }
 
     FieldMapping(ClassMapping owner, String obfName, String mcpName, String desc) {
         this.owner = owner.toString();

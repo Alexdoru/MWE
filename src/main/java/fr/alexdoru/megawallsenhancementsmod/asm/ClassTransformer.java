@@ -28,6 +28,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new EntityPlayerTransformer());
         registerTransformer(new EntityRendererTransformer());
         registerTransformer(new GameProfileTransformer());
+        registerTransformer(new GuiChatTransformer());
         registerTransformer(new GuiContainerTransformer());
         registerTransformer(new GuiIngameForgeTransformer());
         registerTransformer(new GuiIngameTransformer_CancelHunger());
