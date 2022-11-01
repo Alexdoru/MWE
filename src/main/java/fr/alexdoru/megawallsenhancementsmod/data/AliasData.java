@@ -6,7 +6,9 @@ import com.google.gson.reflect.TypeToken;
 import net.minecraft.client.Minecraft;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class AliasData {
 
@@ -17,6 +19,10 @@ public class AliasData {
         alliasDataFile = new File(Minecraft.getMinecraft().mcDataDir, "config/alliasData.json");
         readDataFromFile();
         Runtime.getRuntime().addShutdownHook(new Thread(AliasData::writeDataToFile));
+    }
+
+    public static List<String> getAllNames() {
+        return new ArrayList<>(aliasMap.keySet());
     }
 
     public static String getAlias(String playername) {
