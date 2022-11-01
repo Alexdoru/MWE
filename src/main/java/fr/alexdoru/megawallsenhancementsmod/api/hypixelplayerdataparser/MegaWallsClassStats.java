@@ -204,6 +204,16 @@ public class MegaWallsClassStats {
                 {
                         EnumChatFormatting.GREEN + "Blocks placed : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_blocks_placed) + " ",
                         EnumChatFormatting.GREEN + "Meters walked : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_meters_walked),
+                },
+
+                {
+                        EnumChatFormatting.GREEN + "Arrow shots : " + EnumChatFormatting.GOLD + classname_arrows_fired + " ",
+                        EnumChatFormatting.GREEN + "Arrow hits : " + EnumChatFormatting.GOLD + classname_arrows_hit,
+                },
+
+                {
+                        EnumChatFormatting.GREEN + "Arrows accuracy : " + EnumChatFormatting.GOLD + String.format("%.2f", arrowaccuracy) + "%" + " ",
+                        EnumChatFormatting.GREEN + "Wither Kills : " + EnumChatFormatting.GOLD + classname_wither_kills,
                 }
         };
 
@@ -215,10 +225,7 @@ public class MegaWallsClassStats {
             imsg.appendSibling(new ChatComponentText("\n" + ChatUtil.centerLine(EnumChatFormatting.DARK_RED + "These stats are for " + games_played + " games, not one.")));
         }
 
-        imsg.appendSibling(new ChatComponentText("\n" + "\n" + ChatUtil.alignText(matrix1)))
-                .appendSibling(new ChatComponentText(ChatUtil.centerLine(EnumChatFormatting.GREEN + "Arrows shot : " + EnumChatFormatting.GOLD + classname_arrows_fired
-                        + EnumChatFormatting.GREEN + " Arrows hits : " + EnumChatFormatting.GOLD + classname_arrows_hit
-                        + EnumChatFormatting.GREEN + " Arrows accuracy : " + EnumChatFormatting.GOLD + String.format("%.2f", arrowaccuracy) + "%" + "\n")))
+        imsg.appendSibling(new ChatComponentText("\n" + "\n" + ChatUtil.alignText(matrix1) + "\n"))
                 .appendSibling(new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar()));
         return imsg;
     }
