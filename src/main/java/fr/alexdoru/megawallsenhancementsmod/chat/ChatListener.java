@@ -27,6 +27,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -201,48 +202,51 @@ public class ChatListener {
             }
 
             /*Status messages*/
-        } else if (ConfigHandler.showStrengthHUD && event.type == 2) {
+        } else if (event.type == 2) {
 
             final String fmsg = event.message.getFormattedText();
 
-            final Matcher dreadStrenghtMatcher = DREADLORD_STRENGTH_PATTERN.matcher(fmsg);
-            if (dreadStrenghtMatcher.find()) {
-                HunterStrengthHUD.instance.setStrengthRenderStart(Long.parseLong(dreadStrenghtMatcher.group(1)) * 1000L);
-                return;
-            }
-
-            final Matcher preStrengthMatcher = HUNTER_PRE_STRENGTH_PATTERN.matcher(fmsg);
-            if (preStrengthMatcher.find()) {
-                if (timerStrength.update()) {
-                    SoundUtil.playStrengthSound();
+            if (ConfigHandler.showStrengthHUD) {
+                final Matcher dreadStrenghtMatcher = DREADLORD_STRENGTH_PATTERN.matcher(fmsg);
+                if (dreadStrenghtMatcher.find()) {
+                    HunterStrengthHUD.instance.setStrengthRenderStart(Long.parseLong(dreadStrenghtMatcher.group(1)) * 1000L);
+                    return;
                 }
-                final String preStrengthTimer = preStrengthMatcher.group(1);
-                HunterStrengthHUD.instance.setPreStrengthTime(preStrengthTimer);
-                return;
+
+                final Matcher preStrengthMatcher = HUNTER_PRE_STRENGTH_PATTERN.matcher(fmsg);
+                if (preStrengthMatcher.find()) {
+                    if (timerStrength.update()) {
+                        SoundUtil.playStrengthSound();
+                    }
+                    final String preStrengthTimer = preStrengthMatcher.group(1);
+                    HunterStrengthHUD.instance.setPreStrengthTime(preStrengthTimer);
+                    return;
+                }
+
+                final Matcher herobrineStrenghtMatcher = HEROBRINE_STRENGTH_PATTERN.matcher(fmsg);
+                if (herobrineStrenghtMatcher.find()) {
+                    HunterStrengthHUD.instance.setStrengthRenderStart(Long.parseLong(herobrineStrenghtMatcher.group(1)) * 1000L);
+                    return;
+                }
+
+                final Matcher zombieStrenghtMatcher = ZOMBIE_STRENGTH_PATTERN.matcher(fmsg);
+                if (zombieStrenghtMatcher.find()) {
+                    HunterStrengthHUD.instance.setStrengthRenderStart(Long.parseLong(zombieStrenghtMatcher.group(1)) * 1000L);
+                }
             }
 
-            final Matcher herobrineStrenghtMatcher = HEROBRINE_STRENGTH_PATTERN.matcher(fmsg);
-            if (herobrineStrenghtMatcher.find()) {
-                HunterStrengthHUD.instance.setStrengthRenderStart(Long.parseLong(herobrineStrenghtMatcher.group(1)) * 1000L);
-                return;
+            if (ConfigHandler.showPrimedTNTHUD) {
+
+                final Matcher fissionHeartCoolDownMatcher = CREEPER_FISSION_HEART_COOLDOWN_PATTERN.matcher(fmsg);
+                if (fissionHeartCoolDownMatcher.find()) {
+                    final String fissionHeartCooldownTimer = fissionHeartCoolDownMatcher.group(1);
+                    CreeperPrimedTNTHUD.instance.setCooldownRenderStart(fissionHeartCooldownTimer);
+                }
             }
 
-            final Matcher zombieStrenghtMatcher = ZOMBIE_STRENGTH_PATTERN.matcher(fmsg);
-            if (zombieStrenghtMatcher.find()) {
-                HunterStrengthHUD.instance.setStrengthRenderStart(Long.parseLong(zombieStrenghtMatcher.group(1)) * 1000L);
-            }
 
         }
-        if (ConfigHandler.showPrimedTNTHUD && event.type == 2) {
 
-            final String fmsg = event.message.getFormattedText();
-
-            final Matcher fissionHeartCoolDownMatcher = CREEPER_FISSION_HEART_COOLDOWN_PATTERN.matcher(fmsg);
-            if (fissionHeartCoolDownMatcher.find()) {
-                final String fissionHeartCooldownTimer = fissionHeartCoolDownMatcher.group(1);
-                CreeperPrimedTNTHUD.instance.setCooldownRenderStart(fissionHeartCooldownTimer);
-            }
-        }
 
     }
 
