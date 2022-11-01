@@ -12,7 +12,6 @@ import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
@@ -22,7 +21,7 @@ import net.minecraft.util.IChatComponent;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public class CommandStalk extends CommandBase {
+public class CommandStalk extends MyAbstractCommand {
 
     @Override
     public String getCommandName() {
@@ -32,11 +31,6 @@ public class CommandStalk extends CommandBase {
     @Override
     public String getCommandUsage(ICommandSender sender) {
         return "/stalk <playernames>";
-    }
-
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
     }
 
     @Override

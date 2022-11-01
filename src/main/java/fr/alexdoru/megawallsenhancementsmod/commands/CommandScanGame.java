@@ -18,7 +18,6 @@ import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
@@ -30,7 +29,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
-public class CommandScanGame extends CommandBase {
+public class CommandScanGame extends MyAbstractCommand {
 
     @Override
     public String getCommandName() {
@@ -50,7 +49,7 @@ public class CommandScanGame extends CommandBase {
         }
         final String currentGameId = GameInfoGrabber.getGameIdFromScoreboard();
         if (currentGameId.equals("?")) {
-            Minecraft.getMinecraft().thePlayer.sendChatMessage("/locraw");
+            sendChatMessage("/locraw");
             ChatListener.interceptLocrawAndRunScangame();
         } else {
             handleScangameCommand(currentGameId);
@@ -58,7 +57,7 @@ public class CommandScanGame extends CommandBase {
     }
 
     public static void handleScangameCommand(String currentGameId) {
-        final Collection<NetworkPlayerInfo> playerCollection = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
+        final Collection<NetworkPlayerInfo> playerCollection = mc.getNetHandler().getPlayerInfoMap();
         int i = 0;
         if (currentGameId.equals(ScangameData.getScanGameId())) {
             for (final NetworkPlayerInfo networkPlayerInfo : playerCollection) {
@@ -80,11 +79,6 @@ public class CommandScanGame extends CommandBase {
             }
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " players...");
         }
-    }
-
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
     }
 
 }

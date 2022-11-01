@@ -5,7 +5,6 @@ import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangPlayernameToUUID;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -14,7 +13,7 @@ import net.minecraft.util.*;
 import java.util.Collections;
 import java.util.List;
 
-public class CommandName extends CommandBase {
+public class CommandName extends MyAbstractCommand {
 
     @Override
     public String getCommandName() {
@@ -70,11 +69,6 @@ public class CommandName extends CommandBase {
     @Override
     public List<String> getCommandAliases() {
         return Collections.singletonList("names");
-    }
-
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
     }
 
     @Override

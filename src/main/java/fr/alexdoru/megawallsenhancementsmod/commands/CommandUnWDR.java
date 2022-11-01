@@ -10,14 +10,13 @@ import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.List;
 
-public class CommandUnWDR extends CommandBase {
+public class CommandUnWDR extends MyAbstractCommand {
 
     @Override
     public String getCommandName() {
@@ -95,11 +94,6 @@ public class CommandUnWDR extends CommandBase {
         } else {
             WdrData.remove(uuid);
         }
-    }
-
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
     }
 
     @Override

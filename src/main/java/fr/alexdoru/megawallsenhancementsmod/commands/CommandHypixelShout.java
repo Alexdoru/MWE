@@ -5,15 +5,13 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ReportSuggestionHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.List;
 
-public class CommandHypixelShout extends CommandBase {
+public class CommandHypixelShout extends MyAbstractCommand {
 
     private static String latestShoutSent;
 
@@ -37,13 +35,8 @@ public class CommandHypixelShout extends CommandBase {
                     " This can happen when the targeted player just respawned.");
         } else {
             latestShoutSent = msg;
-            Minecraft.getMinecraft().thePlayer.sendChatMessage("/shout " + msg);
+            sendChatMessage("/shout " + msg);
         }
-    }
-
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
     }
 
     @Override

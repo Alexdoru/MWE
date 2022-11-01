@@ -21,7 +21,6 @@ import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -35,13 +34,12 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CommandWDR extends CommandBase {
+public class CommandWDR extends MyAbstractCommand {
 
     private static final HashMap<String, ReportTimestamp> timestampsMap = new HashMap<>();
     private static final char TIMESTAMP_REPORT_CHAR = '-';
     private static final char TIMEMARK_REPORT_CHAR = '#';
     private static int nbTimeMarks = 0;
-    private static final Minecraft mc = Minecraft.getMinecraft();
 
     @Override
     public String getCommandName() {
@@ -65,11 +63,6 @@ public class CommandWDR extends CommandBase {
     @Override
     public String getCommandUsage(ICommandSender sender) {
         return "/wdr <player> <cheats(optional)> <timestamp(optional)>";
-    }
-
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
     }
 
     @Override
@@ -226,7 +219,7 @@ public class CommandWDR extends CommandBase {
 
             if (sendReport) {
                 if (mc.thePlayer != null) {
-                    mc.thePlayer.sendChatMessage(message.toString());
+                    sendChatMessage(message.toString());
                 }
             }
 

@@ -4,8 +4,6 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.BlockPos;
@@ -17,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class CommandSquad extends CommandBase {
+public class CommandSquad extends MyAbstractCommand {
 
     @Override
     public String getCommandName() {
@@ -30,14 +28,8 @@ public class CommandSquad extends CommandBase {
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
-    }
-
-    @Override
     public void processCommand(ICommandSender sender, String[] args) {
 
-        final Minecraft mc = Minecraft.getMinecraft();
         String title = null;
 
         if (mc.theWorld != null) {
@@ -48,7 +40,7 @@ public class CommandSquad extends CommandBase {
         }
 
         if (title != null && title.contains("THE HYPIXEL PIT")) {
-            mc.thePlayer.sendChatMessage("/squad " + buildString(args, 0));
+            sendChatMessage("/squad ", args);
             return;
         }
 

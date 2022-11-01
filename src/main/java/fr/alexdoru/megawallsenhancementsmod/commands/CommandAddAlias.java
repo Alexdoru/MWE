@@ -4,9 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.data.AliasData;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
@@ -17,7 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class CommandAddAlias extends CommandBase {
+public class CommandAddAlias extends MyAbstractCommand {
 
     public CommandAddAlias() {
         AliasData.init();
@@ -41,7 +39,7 @@ public class CommandAddAlias extends CommandBase {
         }
         if (args.length == 1 && args[0].equals("list")) {
             ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "In this lobby :\n");
-            for (final NetworkPlayerInfo networkPlayerInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+            for (final NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
                 if (AliasData.getAlias(networkPlayerInfo.getGameProfile().getName()) != null) {
                     ChatUtil.addChatMessage(NameUtil.getFormattedName(networkPlayerInfo));
                 }
@@ -70,11 +68,6 @@ public class CommandAddAlias extends CommandBase {
                 + EnumChatFormatting.YELLOW + "/addalias <remove> <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Removes the alias for the player\n"
                 + EnumChatFormatting.GREEN + ChatUtil.bar()
         );
-    }
-
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
     }
 
     @Override

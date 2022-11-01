@@ -19,9 +19,7 @@ import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
 import net.minecraft.event.ClickEvent;
@@ -32,10 +30,9 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
-public class CommandNocheaters extends CommandBase {
+public class CommandNocheaters extends MyAbstractCommand {
 
     private static HashMap<String, WDR> sortedmap = new HashMap<>();
-    private static final Minecraft mc = Minecraft.getMinecraft();
 
     @Override
     public String getCommandName() {
@@ -393,11 +390,6 @@ public class CommandNocheaters extends CommandBase {
             return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
         }
         return null;
-    }
-
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
     }
 
     /**

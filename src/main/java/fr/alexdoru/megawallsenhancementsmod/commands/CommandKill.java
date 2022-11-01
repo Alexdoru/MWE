@@ -3,11 +3,9 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.KillCooldownHUD;
-import net.minecraft.client.Minecraft;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 
-public class CommandKill extends CommandBase {
+public class CommandKill extends MyAbstractCommand {
 
     @Override
     public String getCommandName() {
@@ -21,15 +19,10 @@ public class CommandKill extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        Minecraft.getMinecraft().thePlayer.sendChatMessage("/kill");
+        sendChatMessage("/kill");
         if (ConfigHandler.showKillCooldownHUD && FKCounterMod.isInMwGame) {
             KillCooldownHUD.instance.drawCooldownHUD();
         }
-    }
-
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return true;
     }
 
 }
