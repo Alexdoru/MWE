@@ -18,7 +18,7 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
 
     @Override
     public void initGui() {
-
+        super.initGui();
         final int XleftColumn = getxCenter() - buttonWidth - 10;
         final int XrightColumn = getxCenter() + 10;
 
@@ -41,7 +41,6 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
         buttonList.add(new GuiButton(12, XrightColumn, getYposForButton(4), buttonWidth, ButtonsHeight, getButtonDisplayString(12)));
 
         buttonList.add(new GuiButton(0, getxCenter() - 150 / 2, getYposForButton(6), 150, ButtonsHeight, getButtonDisplayString(0)));
-        super.initGui();
     }
 
     private String getButtonDisplayString(int id) {

@@ -30,6 +30,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
 
     @Override
     public void initGui() {
+        super.initGui();
         /*
          * Defines the button list
          */
@@ -43,7 +44,6 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         buttonList.add(new GuiSlider(7, xPos, getYposForButton(2), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
         buttonList.add(new GuiButton(10, xPos, getYposForButton(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(10)));
         buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getYposForButton(5), 150, ButtonsHeight, getButtonDisplayString(3)));
-        super.initGui();
     }
 
     private String getButtonDisplayString(int id) {

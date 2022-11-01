@@ -29,6 +29,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
 
     @Override
     public void initGui() {
+        super.initGui();
         /*
          * Defines the button list
          */
@@ -78,7 +79,6 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
 
         /* Exit button */
         buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getYposForButton(8), 150, ButtonsHeight, getButtonDisplayString(4)));
-        super.initGui();
     }
 
     private String getButtonDisplayString(int id) {
