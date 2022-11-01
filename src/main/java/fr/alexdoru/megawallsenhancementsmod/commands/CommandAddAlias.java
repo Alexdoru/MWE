@@ -79,6 +79,9 @@ public class CommandAddAlias extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+        if (args.length == 2 && args[0].equalsIgnoreCase("remove")) {
+            return getListOfStringsMatchingLastWord(args, AliasData.getAllNames());
+        }
         final List<String> onlinePlayersByName = TabCompletionUtil.getOnlinePlayersByName();
         onlinePlayersByName.addAll(Arrays.asList("list", "remove"));
         return getListOfStringsMatchingLastWord(args, onlinePlayersByName);
