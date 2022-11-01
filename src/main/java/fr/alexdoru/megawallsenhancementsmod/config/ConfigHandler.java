@@ -419,10 +419,6 @@ public class ConfigHandler {
             pTogglewarnings.set(warningMessages);
             pToggleautoreport.set(toggleAutoreport);
             preportsuggestions.set(reportSuggestions);
-            pToggleicons.set(iconsOnNames);
-            pTogglewarnings.set(warningMessages);
-            pToggleautoreport.set(toggleAutoreport);
-            preportsuggestions.set(reportSuggestions);
             pautoreportSuggestions.set(autoreportSuggestions);
             pdeleteReports.set(deleteOldReports);
             ptimeDeleteReport.set((int) (timeDeleteReport / (24L * 3600L * 1000L)));
