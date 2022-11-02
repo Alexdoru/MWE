@@ -38,4 +38,12 @@ public class ASMLoadingPlugin implements IFMLLoadingPlugin {
         return null;
     }
 
+    public static boolean isPatcherLoaded() {
+        try {
+            final String PATCHER_CLASS = "club/sk1er/patcher/Patcher.class";
+            return ClassLoader.getSystemClassLoader().getResource(PATCHER_CLASS) != null;
+        } catch (Exception ignored) {}
+        return false;
+    }
+
 }

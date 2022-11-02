@@ -1,14 +1,13 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
+import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.IntInsnNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.BIPUSH;
+import static org.objectweb.asm.Opcodes.GETSTATIC;
 
 public class GuiPlayerTabOverlayTransformer_LongerTab implements IMyClassTransformer {
 
@@ -19,19 +18,8 @@ public class GuiPlayerTabOverlayTransformer_LongerTab implements IMyClassTransfo
 
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
-
-        boolean isPatcherLoaded = true;
-        final int injectionPoints = 2;
-        status.setInjectionPoints(injectionPoints);
-
-        try {
-            final String PATCHER_CLASS = "club/sk1er/patcher/Patcher.class";
-            isPatcherLoaded = this.getClass().getClassLoader().getResource(PATCHER_CLASS) != null;
-            if (isPatcherLoaded) {
-                status.setInjectionPoints(injectionPoints - 1);
-            }
-        } catch (Exception ignored) {}
-
+        final boolean isPatcherLoaded = ASMLoadingPlugin.isPatcherLoaded();
+        status.setInjectionPoints(isPatcherLoaded ? 1 : 2);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.RENDERPLAYERLIST)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
@@ -41,16 +29,14 @@ public class GuiPlayerTabOverlayTransformer_LongerTab implements IMyClassTransfo
                         status.addInjection();
                     }
                     if (!isPatcherLoaded && checkIntInsnNode(insnNode, BIPUSH, 80)) {
-                        methodNode.instructions.insertBefore(insnNode, new IntInsnNode(BIPUSH, 100));
+                        methodNode.instructions.insertBefore(insnNode, new FieldInsnNode(GETSTATIC, "fr/alexdoru/megawallsenhancementsmod/config/ConfigHandler", "tablistSize", "I"));
                         methodNode.instructions.remove(insnNode);
                         status.addInjection();
                     }
                 }
             }
         }
-
         return classNode;
-
     }
 
 }
