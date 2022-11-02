@@ -35,11 +35,12 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(18, XposLeftButton, getButtonYPos(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(18)));
         buttonList.add(new GuiButton(26, XposLeftButton, getButtonYPos(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(26)));
         buttonList.add(new GuiButton(19, XposLeftButton, getButtonYPos(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(19)));
-        buttonList.add(new GuiButton(25, XposLeftButton, getButtonYPos(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(25)));
-        buttonList.add(new GuiButton(28, XposLeftButton, getButtonYPos(5), buttonsWidth, ButtonsHeight, getButtonDisplayString(28)));
-        buttonList.add(new GuiButton(15, XposLeftButton, getButtonYPos(6), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
-        buttonList.add(new GuiButton(27, XposLeftButton, getButtonYPos(7), buttonsWidth, ButtonsHeight, getButtonDisplayString(27)));
-        buttonList.add(new GuiButton(24, XposLeftButton, getButtonYPos(8), buttonsWidth, ButtonsHeight, getButtonDisplayString(24)));
+        buttonList.add(new GuiButton(31, XposLeftButton, getButtonYPos(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(31)));
+        buttonList.add(new GuiButton(25, XposLeftButton, getButtonYPos(5), buttonsWidth, ButtonsHeight, getButtonDisplayString(25)));
+        buttonList.add(new GuiButton(28, XposLeftButton, getButtonYPos(6), buttonsWidth, ButtonsHeight, getButtonDisplayString(28)));
+        buttonList.add(new GuiButton(15, XposLeftButton, getButtonYPos(7), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
+        buttonList.add(new GuiButton(27, XposLeftButton, getButtonYPos(8), buttonsWidth, ButtonsHeight, getButtonDisplayString(27)));
+        buttonList.add(new GuiButton(24, XposLeftButton, getButtonYPos(9), buttonsWidth, ButtonsHeight, getButtonDisplayString(24)));
 
         buttonList.add(new GuiButton(21, XposRightButton, getButtonYPos(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
         buttonList.add(new GuiButton(0, XposRightButton, getButtonYPos(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
@@ -56,7 +57,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         }
 
         /* Exit button */
-        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(isPatcherLoaded ? 10 : 11), 150, ButtonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(11), 150, ButtonsHeight, getButtonDisplayString(4)));
     }
 
     @Override
@@ -96,6 +97,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 return "Hide tablist header/footer : " + getSuffix(ConfigHandler.hideTablistHeaderFooter);
             case 29:
                 return "Show playercount tablist : " + getSuffix(ConfigHandler.showPlayercountTablist);
+            case 31:
+                return "Fix actionbar text overlap : " + getSuffix(ConfigHandler.fixActionbarTextOverlap);
             case 4:
                 return "Done";
             default:
@@ -195,6 +198,10 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.GREEN + "Change the amount of players displayed in the tablist");
                 textLines.add(EnumChatFormatting.GRAY + "Vanilla = 80");
                 break;
+            case 31:
+                textLines.add(EnumChatFormatting.GREEN + "Prevents the actionbar text from overlapping with the armor bar");
+                textLines.add(EnumChatFormatting.GREEN + "if the player has more that 2 rows of health");
+                break;
         }
         return textLines;
     }
@@ -257,6 +264,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 29:
                 ConfigHandler.showPlayercountTablist = !ConfigHandler.showPlayercountTablist;
+                break;
+            case 31:
+                ConfigHandler.fixActionbarTextOverlap = !ConfigHandler.fixActionbarTextOverlap;
                 break;
             case 4:
                 mc.displayGuiScreen(parent);
