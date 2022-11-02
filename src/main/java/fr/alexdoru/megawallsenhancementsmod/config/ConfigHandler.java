@@ -74,6 +74,7 @@ public class ConfigHandler {
     public static boolean iconsOnNames;
     public static boolean warningMessages;
     public static boolean toggleAutoreport;
+    public static boolean stopAutoreportAfterWeek;
     public static boolean reportSuggestions;
     public static boolean autoreportSuggestions;
     public static boolean deleteOldReports;
@@ -176,6 +177,7 @@ public class ConfigHandler {
         final Property preportsuggestions = config.get(CATEGORY_NOCHEATERS, "Report suggestion", true, "Give report suggestions in the chat based on messages in shouts");
         final Property pautoreportSuggestions = config.get(CATEGORY_NOCHEATERS, "Send report suggestions", true, "Send report suggestions");
         final Property pToggleautoreport = config.get(CATEGORY_NOCHEATERS, "Autoreport saved cheaters", true, "Automatically reports previously reported players when they are in your game");
+        final Property pstopAutoreportAfterWeek = config.get(CATEGORY_NOCHEATERS, "Stop autoreport after a week", true, "Stop reporting previously reported players if the last report > week old");
         final Property pdeleteReports = config.get(CATEGORY_NOCHEATERS, "Delete Old Report", false, "Deletes reports older than the specified value");
         final Property ptimeDeleteReport = config.get(CATEGORY_NOCHEATERS, "Time delete reports", 365, "Reports older than this will be deleted on game start (days)");
         final Property pcensorCheaterChatMsg = config.get(CATEGORY_NOCHEATERS, "Censor Cheater Chat", false, "Censors chat messages sent by reported cheaters");
@@ -259,6 +261,7 @@ public class ConfigHandler {
         pOrderNOCHEATERS.add(pTogglewarnings.getName());
         pOrderNOCHEATERS.add(preportsuggestions.getName());
         pOrderNOCHEATERS.add(pToggleautoreport.getName());
+        pOrderNOCHEATERS.add(pstopAutoreportAfterWeek.getName());
         pOrderNOCHEATERS.add(pautoreportSuggestions.getName());
         pOrderNOCHEATERS.add(pdeleteReports.getName());
         pOrderNOCHEATERS.add(ptimeDeleteReport.getName());
@@ -334,6 +337,7 @@ public class ConfigHandler {
             iconsOnNames = pToggleicons.getBoolean();
             warningMessages = pTogglewarnings.getBoolean();
             toggleAutoreport = pToggleautoreport.getBoolean();
+            stopAutoreportAfterWeek = pstopAutoreportAfterWeek.getBoolean();
             reportSuggestions = preportsuggestions.getBoolean();
             autoreportSuggestions = pautoreportSuggestions.getBoolean();
             deleteOldReports = pdeleteReports.getBoolean();
@@ -421,6 +425,7 @@ public class ConfigHandler {
             pToggleicons.set(iconsOnNames);
             pTogglewarnings.set(warningMessages);
             pToggleautoreport.set(toggleAutoreport);
+            pstopAutoreportAfterWeek.set(stopAutoreportAfterWeek);
             preportsuggestions.set(reportSuggestions);
             pautoreportSuggestions.set(autoreportSuggestions);
             pdeleteReports.set(deleteOldReports);
