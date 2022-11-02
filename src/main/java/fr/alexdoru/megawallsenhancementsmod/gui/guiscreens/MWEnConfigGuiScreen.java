@@ -45,7 +45,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(17, XposRightButton, getButtonYPos(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
         buttonList.add(new GuiSlider(20, XposRightButton, getButtonYPos(5), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
         buttonList.add(new GuiButton(22, XposRightButton, getButtonYPos(6), buttonsWidth, ButtonsHeight, getButtonDisplayString(22)));
-        buttonList.add(new GuiSlider(23, XposRightButton, getButtonYPos(7), buttonsWidth, ButtonsHeight, "Maximum dropped item entities : ", "", 40d, 1000d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
+        buttonList.add(new GuiSlider(23, XposRightButton, getButtonYPos(7), buttonsWidth, ButtonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
 
         /* Exit button */
         buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(9), 150, ButtonsHeight, getButtonDisplayString(4)));
