@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
+import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
@@ -49,8 +50,13 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(22, XposRightButton, getButtonYPos(7), buttonsWidth, ButtonsHeight, getButtonDisplayString(22)));
         buttonList.add(new GuiSlider(23, XposRightButton, getButtonYPos(8), buttonsWidth, ButtonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
 
+        final boolean isPatcherLoaded = ASMLoadingPlugin.isPatcherLoaded();
+        if (!isPatcherLoaded) {
+            buttonList.add(new GuiSlider(30, XposRightButton, getButtonYPos(9), buttonsWidth, ButtonsHeight, "Tablist size : ", " players", 50d, 125d, ConfigHandler.tablistSize, false, true, this));
+        }
+
         /* Exit button */
-        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(10), 150, ButtonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(isPatcherLoaded ? 10 : 11), 150, ButtonsHeight, getButtonDisplayString(4)));
     }
 
     @Override
@@ -185,6 +191,10 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 29:
                 textLines.add(EnumChatFormatting.GREEN + "Displays the amount of players in the lobby at the top of the tablist");
                 break;
+            case 30:
+                textLines.add(EnumChatFormatting.GREEN + "Change the amount of players displayed in the tablist");
+                textLines.add(EnumChatFormatting.GRAY + "Vanilla = 80");
+                break;
         }
         return textLines;
     }
@@ -266,6 +276,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 23:
                 ConfigHandler.maxDroppedEntityRendered = (int) slider.getValue();
+                break;
+            case 30:
+                ConfigHandler.tablistSize = (int) slider.getValue();
                 break;
         }
     }
