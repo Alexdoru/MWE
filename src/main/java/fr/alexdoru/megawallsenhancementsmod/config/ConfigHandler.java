@@ -48,7 +48,7 @@ public class ConfigHandler {
     public static boolean clearVision;
     public static boolean automaticUpdate;
     public static boolean nickHider;
-    public static boolean hideTablistHeaderFooter = true; // TODO add config and uncomment transformer
+    public static boolean hideTablistHeaderFooter;
 
     /**
      * HUD config
@@ -147,6 +147,7 @@ public class ConfigHandler {
         final Property pclearVision = config.get(CATEGORY_MWENh, "Clear Vision", true, "Hides particles too close to the camera");
         final Property pautomaticUpdate = config.get(CATEGORY_MWENh, "Automatic Update", true, "Updates the mod automatically");
         final Property pNickHider = config.get(CATEGORY_MWENh, "Nick Hider", true, "Shows your real name instead of your nick when in squad");
+        final Property phideTablistHeaderFooter = config.get(CATEGORY_MWENh, "Hide Header Footer Tablist", false, "Hides the header and footer text in the Tablist");
 
         final String CATEGORY_GUI = "GUI";
         final Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
@@ -225,6 +226,7 @@ public class ConfigHandler {
         pOrderMWWENh.add(pclearVision.getName());
         pOrderMWWENh.add(pautomaticUpdate.getName());
         pOrderMWWENh.add(pNickHider.getName());
+        pOrderMWWENh.add(phideTablistHeaderFooter.getName());
         config.setCategoryPropertyOrder(CATEGORY_MWENh, pOrderMWWENh);
 
         final List<String> pOrderGUI = new ArrayList<>();
@@ -305,6 +307,7 @@ public class ConfigHandler {
             clearVision = pclearVision.getBoolean();
             automaticUpdate = pautomaticUpdate.getBoolean();
             nickHider = pNickHider.getBoolean();
+            hideTablistHeaderFooter = phideTablistHeaderFooter.getBoolean();
 
             showKillCooldownHUD = pShow_killcooldownHUD.getBoolean();
             killCooldownHUDPosition.setRelative(pXpos_killcooldownHUD.getDouble(), pYpos_killcooldownHUD.getDouble());
@@ -377,6 +380,7 @@ public class ConfigHandler {
             pclearVision.set(clearVision);
             pautomaticUpdate.set(automaticUpdate);
             pNickHider.set(nickHider);
+            phideTablistHeaderFooter.set(hideTablistHeaderFooter);
 
             pShow_killcooldownHUD.set(showKillCooldownHUD);
             final double[] killcooldownHUDarray = killCooldownHUDPosition.getRelativePosition();
