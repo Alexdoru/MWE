@@ -45,11 +45,11 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredTitle(EnumChatFormatting.BLUE + "Hitboxes", 2, getxCenter(), getButtonYPos(-1), 0);
+        drawCenteredTitle(EnumChatFormatting.BLUE + "Hitboxes", 2, getxCenter(), getButtonYPos(-1));
         final String msg = EnumChatFormatting.GRAY + "You obviously need to press f3+b to enable hitboxes";
         drawCenteredString(fontRendererObj, msg, getxCenter(), getButtonYPos(-1) + 2 * fontRendererObj.FONT_HEIGHT, 0);
-        drawCenteredTitle(EnumChatFormatting.WHITE + "Draw Hitbox for :", 1, getxCenter() - buttonWidth / 2.0f - 10, getButtonYPos(1) - ButtonsHeight / 2.0f, 0);
-        drawCenteredTitle(EnumChatFormatting.BLUE + "Blue vector :", 1, getxCenter() + buttonWidth / 2.0f + 10, getButtonYPos(7) - ButtonsHeight / 2.0f, 0);
+        drawCenteredTitle(EnumChatFormatting.WHITE + "Draw Hitbox for :", 1, getxCenter() - buttonWidth / 2.0f - 10, getButtonYPos(1) - ButtonsHeight / 2.0f);
+        drawCenteredTitle(EnumChatFormatting.BLUE + "Blue vector :", 1, getxCenter() + buttonWidth / 2.0f + 10, getButtonYPos(7) - ButtonsHeight / 2.0f);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

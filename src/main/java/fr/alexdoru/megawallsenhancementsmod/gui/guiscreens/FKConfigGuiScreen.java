@@ -70,7 +70,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
         GlStateManager.color(1, 1, 1, 0.7F);
         mc.getTextureManager().bindTexture(BACKGROUND);
         drawModalRectWithCustomSizedTexture(getxCenter() - rectWidth / 2, getButtonYPos(4) - rectHeight / 2, 0, 0, rectWidth, rectHeight, rectWidth, rectHeight);
-        drawCenteredTitle(EnumChatFormatting.AQUA + "Final Kill Counter v" + FKCounterMod.VERSION, 2, getxCenter(), getButtonYPos(-1), 0);
+        drawCenteredTitle(EnumChatFormatting.AQUA + "Final Kill Counter v" + FKCounterMod.VERSION, 2, getxCenter(), getButtonYPos(-1));
         final String msg = "for Mega Walls";
         drawCenteredString(fontRendererObj, EnumChatFormatting.GRAY + msg, getxCenter() + fontRendererObj.getStringWidth(msg), getButtonYPos(-1) + 2 * fontRendererObj.FONT_HEIGHT, 0);
         super.drawScreen(mouseX, mouseY, partialTicks);

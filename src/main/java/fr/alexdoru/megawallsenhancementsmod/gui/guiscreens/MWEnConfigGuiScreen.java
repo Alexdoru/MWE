@@ -62,7 +62,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredTitle(EnumChatFormatting.GREEN + "Mega Walls Enhancements v" + MegaWallsEnhancementsMod.version, 2, getxCenter(), getButtonYPos(-1), 0);
+        drawCenteredTitle(EnumChatFormatting.GREEN + "Mega Walls Enhancements v" + MegaWallsEnhancementsMod.version, 2, getxCenter(), getButtonYPos(-1));
         super.drawScreen(mouseX, mouseY, partialTicks);
         drawTooltips(mouseX, mouseY);
     }
@@ -107,7 +107,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
     }
 
     @Override
-    public List<String> getTooltipText(int id) {
+    protected List<String> getTooltipText(int id) {
         final List<String> textLines = new ArrayList<>();
         switch (id) {
             case 21:

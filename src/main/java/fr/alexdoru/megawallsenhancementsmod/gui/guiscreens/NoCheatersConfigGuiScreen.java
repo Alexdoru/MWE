@@ -49,7 +49,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredTitle(EnumChatFormatting.RED + "NoCheaters", 2, getxCenter(), getButtonYPos(-1), 0);
+        drawCenteredTitle(EnumChatFormatting.RED + "NoCheaters", 2, getxCenter(), getButtonYPos(-1));
         final String msg = EnumChatFormatting.WHITE + "NoCheaters saves players reported via " + EnumChatFormatting.YELLOW + "/wdr playername" + EnumChatFormatting.WHITE + " (not /report)";
         drawCenteredString(fontRendererObj, msg, getxCenter(), getButtonYPos(0) + fontRendererObj.FONT_HEIGHT, 0);
         final String msg1 = EnumChatFormatting.WHITE + "If you want to remove a player from your report list use :";
@@ -84,7 +84,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     }
 
     @Override
-    public List<String> getTooltipText(int id) {
+    protected List<String> getTooltipText(int id) {
         final List<String> textLines = new ArrayList<>();
         switch (id) {
             case 1:
