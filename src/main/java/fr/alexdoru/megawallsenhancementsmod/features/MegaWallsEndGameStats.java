@@ -66,9 +66,9 @@ public class MegaWallsEndGameStats {
                 }
                 mwClassStartGameStats = new MegaWallsClassStats(playerdata.getPlayerData(), selectedClass.className);
             } catch (ApiException ignored) {}
+            isRandom = false;
             return null;
         });
-        isRandom = false;
     }
 
     private static void onGameEnd() {
