@@ -15,17 +15,17 @@ public class GeneralConfigGuiScreen extends MyGuiScreen {
          * Defines the button list
          */
         final int buttonsWidth = 150;
-        this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getYposForButton(-2), buttonsWidth, ButtonsHeight, EnumChatFormatting.AQUA + "Final Kill Counter"));
-        this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getYposForButton(-1), buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "Mega Walls Enhancements"));
-        this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getYposForButton(0), buttonsWidth, ButtonsHeight, EnumChatFormatting.RED + "No Cheaters"));
-        this.buttonList.add(new GuiButton(5, getxCenter() + buttonsWidth, getYposForButton(0), buttonsWidth, ButtonsHeight, EnumChatFormatting.WHITE + "Automatic Updates : " + getSuffix(ConfigHandler.automaticUpdate)));
-        this.buttonList.add(new GuiButton(4, getxCenter() - buttonsWidth / 2, getYposForButton(1), buttonsWidth, ButtonsHeight, EnumChatFormatting.BLUE + "Hitboxes, better F3+b"));
-        this.buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getYposForButton(4), 150, ButtonsHeight, "Close"));
+        this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getButtonYPos(0), buttonsWidth, ButtonsHeight, EnumChatFormatting.AQUA + "Final Kill Counter"));
+        this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getButtonYPos(1), buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "Mega Walls Enhancements"));
+        this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getButtonYPos(2), buttonsWidth, ButtonsHeight, EnumChatFormatting.RED + "No Cheaters"));
+        this.buttonList.add(new GuiButton(5, getxCenter() + buttonsWidth, getButtonYPos(2), buttonsWidth, ButtonsHeight, EnumChatFormatting.WHITE + "Automatic Updates : " + getSuffix(ConfigHandler.automaticUpdate)));
+        this.buttonList.add(new GuiButton(4, getxCenter() - buttonsWidth / 2, getButtonYPos(3), buttonsWidth, ButtonsHeight, EnumChatFormatting.BLUE + "Hitboxes, better F3+b"));
+        this.buttonList.add(new GuiButton(3, getxCenter() - buttonsWidth / 2, getButtonYPos(5), buttonsWidth, ButtonsHeight, "Close"));
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredTitle("Config", 2, (width / 2.0f), getyCenter() - (ButtonsHeight + 4) * 6, Integer.parseInt("55FF55", 16));
+        drawCenteredTitle("Config", 2, (width / 2f), getButtonYPos(-1), Integer.parseInt("55FF55", 16));
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
