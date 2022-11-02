@@ -25,14 +25,15 @@ public class HUDsConfigGuiScreen extends MyGuiScreen {
 
     @Override
     public void initGui() {
-        final int buttonsWidth = 210;
+        super.initGui();
+        final int buttonsWidth = 200;
         final int XposCenterButton = getxCenter() - buttonsWidth / 2;
         /* HUD Buttons */
         buttonList.add(new GuiButton(3, XposCenterButton, getButtonYPos(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
         buttonList.add(new GuiButton(2, XposCenterButton, getButtonYPos(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
         buttonList.add(new GuiButton(9, XposCenterButton, getButtonYPos(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
         buttonList.add(new GuiButton(11, XposCenterButton, getButtonYPos(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
-        final int sideButtonsWidth = 100;
+        final int sideButtonsWidth = 90;
         final int XposCenterLeftButton = getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth;
         final int XposCenterRightButton = getxCenter() + buttonsWidth / 2 + 4;
         /* Buttons : Reset HUD position */
@@ -58,13 +59,13 @@ public class HUDsConfigGuiScreen extends MyGuiScreen {
     private String getButtonDisplayString(int id) {
         switch (id) {
             case 9:
-                return "Show strength HUD : " + getSuffix(ConfigHandler.showStrengthHUD);
+                return "Strength HUD : " + getSuffix(ConfigHandler.showStrengthHUD);
             case 2:
-                return "Show /kill cooldown HUD : " + getSuffix(ConfigHandler.showKillCooldownHUD);
+                return "/kill cooldown HUD : " + getSuffix(ConfigHandler.showKillCooldownHUD);
             case 3:
-                return "Show arrow Hit HUD : " + getSuffix(ConfigHandler.showArrowHitHUD);
+                return "Arrow Hit HUD : " + getSuffix(ConfigHandler.showArrowHitHUD);
             case 11:
-                return "Show wither death time HUD : " + (ConfigHandler.witherHUDinSidebar ? EnumChatFormatting.YELLOW + "in Sidebar" : getSuffix(ConfigHandler.showLastWitherHUD));
+                return "Wither death time HUD : " + (ConfigHandler.witherHUDinSidebar ? EnumChatFormatting.YELLOW + "in Sidebar" : getSuffix(ConfigHandler.showLastWitherHUD));
             case 4:
                 return "Done";
             case 5:
@@ -76,7 +77,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen {
             case 8:
             case 12:
             case 14:
-                return "Reset HUD position";
+                return "Reset position";
             default:
                 return "no display text for this button id";
         }
