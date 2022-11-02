@@ -46,16 +46,16 @@ public abstract class MyGuiScreen extends GuiScreen {
         return false;
     }
 
-    public String getSuffix(boolean enabled) {
+    protected String getSuffix(boolean enabled) {
         return enabled ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled";
     }
 
-    public void drawCenteredTitle(String title, int dilatation, float xPos, float yPos, int color) {
+    protected void drawCenteredTitle(String title, int dilatation, float xPos, float yPos) {
         GlStateManager.pushMatrix();
         {
             GlStateManager.translate(xPos - (mc.fontRendererObj.getStringWidth(title) * dilatation) / 2.0f, yPos, 0);
             GlStateManager.scale(dilatation, dilatation, dilatation);
-            mc.fontRendererObj.drawStringWithShadow(title, 0, 0, color);
+            mc.fontRendererObj.drawStringWithShadow(title, 0, 0, 0);
         }
         GlStateManager.popMatrix();
     }
@@ -63,18 +63,13 @@ public abstract class MyGuiScreen extends GuiScreen {
     /**
      * Call this at the end of the drawScreen method to draw the tooltips defined in getTooltopText
      */
-    public void drawTooltips(int mouseX, int mouseY) {
+    protected void drawTooltips(int mouseX, int mouseY) {
         for (final GuiButton button : this.buttonList) {
             if (button.isMouseOver()) {
                 drawHoveringText(getTooltipText(button.id), mouseX, mouseY);
                 return;
             }
         }
-    }
-
-    @Deprecated
-    public int getYposForButton(int relativePosition) {
-        return getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * relativePosition;
     }
 
     protected int getButtonYPos(int i) {
@@ -84,16 +79,12 @@ public abstract class MyGuiScreen extends GuiScreen {
     /**
      * Override this method and make a switch with all the buttons tooltips
      */
-    public List<String> getTooltipText(int id) {
+    protected List<String> getTooltipText(int id) {
         return new ArrayList<>();
     }
 
-    public int getxCenter() {
+    protected int getxCenter() {
         return this.width / 2;
-    }
-
-    public int getyCenter() {
-        return this.height / 2;
     }
 
 }

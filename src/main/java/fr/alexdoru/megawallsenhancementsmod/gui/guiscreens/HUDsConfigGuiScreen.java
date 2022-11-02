@@ -52,7 +52,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredTitle(EnumChatFormatting.DARK_PURPLE + "HUDs", 2, getxCenter(), getButtonYPos(-1), 0);
+        drawCenteredTitle(EnumChatFormatting.DARK_PURPLE + "HUDs", 2, getxCenter(), getButtonYPos(-1));
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -84,7 +84,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen {
     }
 
     @Override
-    public List<String> getTooltipText(int id) {
+    protected List<String> getTooltipText(int id) {
         final List<String> textLines = new ArrayList<>();
         switch (id) {
             case 2:
