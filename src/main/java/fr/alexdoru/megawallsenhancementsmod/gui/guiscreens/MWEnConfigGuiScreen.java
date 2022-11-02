@@ -42,11 +42,12 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
 
         buttonList.add(new GuiButton(21, XposRightButton, getButtonYPos(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
         buttonList.add(new GuiButton(0, XposRightButton, getButtonYPos(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
-        buttonList.add(new GuiButton(16, XposRightButton, getButtonYPos(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
-        buttonList.add(new GuiButton(17, XposRightButton, getButtonYPos(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
-        buttonList.add(new GuiSlider(20, XposRightButton, getButtonYPos(5), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
-        buttonList.add(new GuiButton(22, XposRightButton, getButtonYPos(6), buttonsWidth, ButtonsHeight, getButtonDisplayString(22)));
-        buttonList.add(new GuiSlider(23, XposRightButton, getButtonYPos(7), buttonsWidth, ButtonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
+        buttonList.add(new GuiButton(29, XposRightButton, getButtonYPos(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(29)));
+        buttonList.add(new GuiButton(16, XposRightButton, getButtonYPos(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
+        buttonList.add(new GuiButton(17, XposRightButton, getButtonYPos(5), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
+        buttonList.add(new GuiSlider(20, XposRightButton, getButtonYPos(6), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
+        buttonList.add(new GuiButton(22, XposRightButton, getButtonYPos(7), buttonsWidth, ButtonsHeight, getButtonDisplayString(22)));
+        buttonList.add(new GuiSlider(23, XposRightButton, getButtonYPos(8), buttonsWidth, ButtonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
 
         /* Exit button */
         buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(10), 150, ButtonsHeight, getButtonDisplayString(4)));
@@ -87,6 +88,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 return "Limit dropped item rendered : " + getSuffix(ConfigHandler.limitDroppedEntityRendered);
             case 28:
                 return "Hide tablist header/footer : " + getSuffix(ConfigHandler.hideTablistHeaderFooter);
+            case 29:
+                return "Show playercount tablist : " + getSuffix(ConfigHandler.showPlayercountTablist);
             case 4:
                 return "Done";
             default:
@@ -179,6 +182,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 28:
                 textLines.add(EnumChatFormatting.GREEN + "Hides the header and footer text located at the top and bottom of the tablist");
                 break;
+            case 29:
+                textLines.add(EnumChatFormatting.GREEN + "Displays the amount of players in the lobby at the top of the tablist");
+                break;
         }
         return textLines;
     }
@@ -238,6 +244,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 28:
                 ConfigHandler.hideTablistHeaderFooter = !ConfigHandler.hideTablistHeaderFooter;
+                break;
+            case 29:
+                ConfigHandler.showPlayercountTablist = !ConfigHandler.showPlayercountTablist;
                 break;
             case 4:
                 mc.displayGuiScreen(parent);

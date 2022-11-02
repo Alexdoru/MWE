@@ -49,6 +49,7 @@ public class ConfigHandler {
     public static boolean automaticUpdate;
     public static boolean nickHider;
     public static boolean hideTablistHeaderFooter;
+    public static boolean showPlayercountTablist;
 
     /**
      * HUD config
@@ -148,6 +149,7 @@ public class ConfigHandler {
         final Property pautomaticUpdate = config.get(CATEGORY_MWENh, "Automatic Update", true, "Updates the mod automatically");
         final Property pNickHider = config.get(CATEGORY_MWENh, "Nick Hider", true, "Shows your real name instead of your nick when in squad");
         final Property phideTablistHeaderFooter = config.get(CATEGORY_MWENh, "Hide Header Footer Tablist", false, "Hides the header and footer text in the Tablist");
+        final Property pshowPlayercountTablist = config.get(CATEGORY_MWENh, "Show playercount Tablist", true, "Shows the amount of players in the lobby at the top of the Tablist");
 
         final String CATEGORY_GUI = "GUI";
         final Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
@@ -227,6 +229,7 @@ public class ConfigHandler {
         pOrderMWWENh.add(pautomaticUpdate.getName());
         pOrderMWWENh.add(pNickHider.getName());
         pOrderMWWENh.add(phideTablistHeaderFooter.getName());
+        pOrderMWWENh.add(pshowPlayercountTablist.getName());
         config.setCategoryPropertyOrder(CATEGORY_MWENh, pOrderMWWENh);
 
         final List<String> pOrderGUI = new ArrayList<>();
@@ -308,6 +311,7 @@ public class ConfigHandler {
             automaticUpdate = pautomaticUpdate.getBoolean();
             nickHider = pNickHider.getBoolean();
             hideTablistHeaderFooter = phideTablistHeaderFooter.getBoolean();
+            showPlayercountTablist = pshowPlayercountTablist.getBoolean();
 
             showKillCooldownHUD = pShow_killcooldownHUD.getBoolean();
             killCooldownHUDPosition.setRelative(pXpos_killcooldownHUD.getDouble(), pYpos_killcooldownHUD.getDouble());
@@ -381,6 +385,7 @@ public class ConfigHandler {
             pautomaticUpdate.set(automaticUpdate);
             pNickHider.set(nickHider);
             phideTablistHeaderFooter.set(hideTablistHeaderFooter);
+            pshowPlayercountTablist.set(showPlayercountTablist);
 
             pShow_killcooldownHUD.set(showKillCooldownHUD);
             final double[] killcooldownHUDarray = killCooldownHUDPosition.getRelativePosition();
