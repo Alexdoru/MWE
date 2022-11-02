@@ -23,7 +23,17 @@ public class GuiPlayerTabOverlayTransformer_HideHeaderFooter implements IMyClass
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkVarInsnNode(insnNode, ALOAD, 0)) {
                         final AbstractInsnNode secondNode = insnNode.getNext();
-                        if (checkFieldInsnNode(secondNode, GETFIELD, FieldMapping.GUIPLAYERTABOVERLAY$HEADER) || checkFieldInsnNode(secondNode, GETFIELD, FieldMapping.GUIPLAYERTABOVERLAY$FOOTER)) {
+                        if (checkFieldInsnNode(secondNode, GETFIELD, FieldMapping.GUIPLAYERTABOVERLAY$HEADER)) {
+                            final AbstractInsnNode thirdNode = secondNode.getNext();
+                            if (checkJumpInsnNode(thirdNode, IFNULL)) {
+                                final LabelNode label = ((JumpInsnNode) thirdNode).label;
+                                final InsnList list = new InsnList();
+                                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "shouldRenderHeader", "()Z", false));
+                                list.add(new JumpInsnNode(IFEQ, label));
+                                methodNode.instructions.insert(thirdNode, list);
+                                status.addInjection();
+                            }
+                        } else if (checkFieldInsnNode(secondNode, GETFIELD, FieldMapping.GUIPLAYERTABOVERLAY$FOOTER)) {
                             final AbstractInsnNode thirdNode = secondNode.getNext();
                             if (checkJumpInsnNode(thirdNode, IFNULL)) {
                                 final LabelNode label = ((JumpInsnNode) thirdNode).label;

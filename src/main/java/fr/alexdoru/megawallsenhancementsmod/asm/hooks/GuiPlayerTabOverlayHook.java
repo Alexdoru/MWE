@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.utils.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,17 +28,27 @@ public class GuiPlayerTabOverlayHook {
         mc.fontRendererObj.drawStringWithShadow(s1, (float) (x - mc.fontRendererObj.getStringWidth(s1) - FK_SCORE_WIDTH), (float) y, 16777215);
     }
 
-    public static List<String> addPlayerCountInHeader(List<String> listIn) {
-        if (listIn != null) {
-            final int i = Minecraft.getMinecraft().thePlayer.sendQueue.getPlayerInfoMap().size();
-            if (i < 2) {
-                return listIn;
-            }
-            final ArrayList<String> list = new ArrayList<>(listIn);
-            list.add(0, EnumChatFormatting.GREEN + "Players: " + EnumChatFormatting.GOLD + i);
-            return list;
+    public static boolean shouldRenderHeader() {
+        return ConfigHandler.showPlayercountTablist || !ConfigHandler.hideTablistHeaderFooter;
+    }
+
+    @Nonnull
+    public static List<String> addPlayerCountInHeader(@Nonnull List<String> listIn) {
+        if (!ConfigHandler.showPlayercountTablist) {
+            return listIn;
         }
-        return null;
+        final int i = Minecraft.getMinecraft().thePlayer.sendQueue.getPlayerInfoMap().size();
+        if (i < 2) {
+            return ConfigHandler.hideTablistHeaderFooter ? new ArrayList<>() : listIn;
+        }
+        final List<String> list;
+        if (ConfigHandler.hideTablistHeaderFooter) {
+            list = new ArrayList<>();
+        } else {
+            list = new ArrayList<>(listIn);
+        }
+        list.add(0, EnumChatFormatting.GREEN + "Players: " + EnumChatFormatting.GOLD + i);
+        return list;
     }
 
     public static EnumChatFormatting getColoredHP(int healthPoints) {
