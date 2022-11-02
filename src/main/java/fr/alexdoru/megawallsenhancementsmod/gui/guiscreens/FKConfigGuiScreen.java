@@ -35,7 +35,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
     @Override
     public void initGui() {
         super.initGui();
-        buttonList.add(new ButtonFancy(100, getxCenter() + widthBetweenButtons / 2 + (widthBetweenButtons + buttonSize) + 10, getButtonYPos(3) - findMenuHeight() / 2 + heightBetweenButtons + buttonSize + 10, 30, 14, "Move HUD", 0.5));
+        buttonList.add(new ButtonFancy(100, getxCenter() + widthBetweenButtons / 2 + (widthBetweenButtons + buttonSize) + 10, getButtonYPos(4) - findMenuHeight() / 2 + heightBetweenButtons + buttonSize + 10, 30, 14, "Move HUD", 0.5));
 
         buttonList.add(addSettingButton(ConfigHandler.showfkcounterHUD, 0, 0, 0, "Show HUD"));
         buttonList.add(buttoncompacthud = addSettingButton(ConfigHandler.fkcounterHUDCompact, 1, 0, 1, "Compact HUD"));
@@ -45,9 +45,9 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
         buttonList.add(addSettingButton(ConfigHandler.fkcounterHUDTextShadow, 4, 1, 1, "Text Shadow"));
         buttonList.add(buttonshowplayers = addSettingButton(ConfigHandler.fkcounterHUDShowPlayers, 2, 1, 2, "Show Players"));
 
-        buttonList.add(new GuiSlider(5, getxCenter() - 150 / 2, getButtonYPos(6), "HUD Size : ", 0.1d, 4d, ConfigHandler.fkcounterHUDSize, this));
-        buttonList.add(new GuiSlider(6, getxCenter() - 150 / 2, getButtonYPos(7), 150, 20, "Player amount : ", "", 1d, 10d, ConfigHandler.fkcounterHUDPlayerAmount, false, true, this));
-        buttonList.add(new GuiButton(200, getxCenter() - 150 / 2, getButtonYPos(8), 150, 20, "Done"));
+        buttonList.add(new GuiSlider(5, getxCenter() - 150 / 2, getButtonYPos(7), "HUD Size : ", 0.1d, 4d, ConfigHandler.fkcounterHUDSize, this));
+        buttonList.add(new GuiSlider(6, getxCenter() - 150 / 2, getButtonYPos(8), 150, 20, "Player amount : ", "", 1d, 10d, ConfigHandler.fkcounterHUDPlayerAmount, false, true, this));
+        buttonList.add(new GuiButton(200, getxCenter() - 150 / 2, getButtonYPos(9), 150, 20, "Done"));
     }
 
     private ButtonToggle addSettingButton(boolean setting, int buttonid, int row, int column, String buttonText) {
@@ -58,7 +58,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
         //} else { // odd
         //    x = getxCenter() - buttonSize / 2 + i;
         //}
-        final int y = getButtonYPos(3) - findMenuHeight() / 2 + heightBetweenButtons + row * buttonSize;
+        final int y = getButtonYPos(4) - findMenuHeight() / 2 + heightBetweenButtons + row * buttonSize;
         return new ButtonToggle(setting, buttonid, x + 10, y + 10, buttonText);
     }
 
@@ -69,8 +69,8 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
         GlStateManager.enableBlend();
         GlStateManager.color(1, 1, 1, 0.7F);
         mc.getTextureManager().bindTexture(BACKGROUND);
-        drawModalRectWithCustomSizedTexture(getxCenter() - rectWidth / 2, getButtonYPos(3) - rectHeight / 2, 0, 0, rectWidth, rectHeight, rectWidth, rectHeight);
-        drawCenteredTitle(EnumChatFormatting.AQUA + "Final Kill Counter v" + FKCounterMod.VERSION, 2, (width / 2.0f), getButtonYPos(-1), 0);
+        drawModalRectWithCustomSizedTexture(getxCenter() - rectWidth / 2, getButtonYPos(4) - rectHeight / 2, 0, 0, rectWidth, rectHeight, rectWidth, rectHeight);
+        drawCenteredTitle(EnumChatFormatting.AQUA + "Final Kill Counter v" + FKCounterMod.VERSION, 2, getxCenter(), getButtonYPos(-1), 0);
         final String msg = "for Mega Walls";
         drawCenteredString(fontRendererObj, EnumChatFormatting.GRAY + msg, getxCenter() + fontRendererObj.getStringWidth(msg), getButtonYPos(-1) + 2 * fontRendererObj.FONT_HEIGHT, 0);
         super.drawScreen(mouseX, mouseY, partialTicks);
@@ -78,7 +78,6 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
 
     @Override
     public void actionPerformed(GuiButton button) {
-
         switch (button.id) {
             case 100:
                 mc.displayGuiScreen(new PositionEditGuiScreen(FKCounterHUD.instance, this));
@@ -137,11 +136,9 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                 ((ButtonToggle) button).setting = ConfigHandler.fkcounterHUDTablist;
                 break;
         }
-
         if (button instanceof ButtonToggle) {
             FKCounterHUD.instance.updateDisplayText();
         }
-
     }
 
     private int findMenuWidth() {
