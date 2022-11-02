@@ -14,6 +14,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
 import net.minecraftforge.fml.common.Loader;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(3, XposCenterButton, getYposForButton(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
         buttonList.add(new GuiButton(11, XposCenterButton, getYposForButton(6), buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
         buttonList.add(new GuiButton(28, XposCenterButton, getYposForButton(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(28)));
+        buttonList.add(new GuiButton(31, XposCenterButton, getYposForButton(7), buttonsWidth, ButtonsHeight, getButtonDisplayString(31)));
 
         final int sideButtonsWidth = 100;
         final int XposCenterLeftButton = getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth;
@@ -70,6 +72,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(8, XposCenterLeftButton, getYposForButton(3), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(8)));
         buttonList.add(new GuiButton(12, XposCenterLeftButton, getYposForButton(6), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(12)));
         buttonList.add(new GuiButton(29, XposCenterLeftButton, getYposForButton(2), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(29)));
+        buttonList.add(new GuiButton(32, XposCenterLeftButton, getYposForButton(7), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(32)));
 
         /* Buttons : Move HUD */
         buttonList.add(new GuiButton(10, XposCenterRightButton, getYposForButton(6), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(10)));
@@ -78,14 +81,17 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(6, XposCenterRightButton, getYposForButton(3), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(6)));
         buttonList.add(new GuiButton(10, XposCenterRightButton, getYposForButton(6), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(10)));
         buttonList.add(new GuiButton(30, XposCenterRightButton, getYposForButton(2), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(30)));
+        buttonList.add(new GuiButton(33, XposCenterRightButton, getYposForButton(7), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(33)));
 
         /* Exit button */
-        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getYposForButton(8), 150, ButtonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getYposForButton(9), 150, ButtonsHeight, getButtonDisplayString(4)));
         super.initGui();
     }
 
     private String getButtonDisplayString(int id) {
         switch (id) {
+            case 31:
+                return "Energy Display HUD : " + getSuffix(ConfigHandler.showEnergyDisplayHUD);
             case 28:
                 return "Primed TNT Cooldown : " + getSuffix(ConfigHandler.showPrimedTNTHUD);
             case 21:
@@ -127,12 +133,14 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 6:
             case 10:
             case 13:
+            case 33:
                 return "Move HUD";
             case 29:
             case 7:
             case 8:
             case 12:
             case 14:
+            case 32:
                 return "Reset HUD position";
             default:
                 return "no display text for this button id";
@@ -197,6 +205,10 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.GREEN + "Stops rendering particles that are too close (75cm)");
                 textLines.add(EnumChatFormatting.GREEN + "to the camera for a better visibility");
                 break;
+            case 28:
+                textLines.add(EnumChatFormatting.GREEN + "Displays the cooldown of the primed tnt near your crosshair while playing creeper");
+            case 31:
+                textLines.add(EnumChatFormatting.GREEN + "Displays the amount of energy you have near your crosshair");
             case 9:
                 textLines.add(EnumChatFormatting.GREEN + "Displays a HUD when you get strenght with Dreadlord, Herobrine, Hunter and Zombie");
                 break;
@@ -276,6 +288,12 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 0:
                 ConfigHandler.shortCoinMessage = !ConfigHandler.shortCoinMessage;
                 break;
+            case 28:
+                ConfigHandler.showPrimedTNTHUD = !ConfigHandler.showPrimedTNTHUD;
+                break;
+            case 31:
+                ConfigHandler.showEnergyDisplayHUD = !ConfigHandler.showEnergyDisplayHUD;
+                break;
             case 9:
                 ConfigHandler.showStrengthHUD = !ConfigHandler.showStrengthHUD;
                 if (ConfigHandler.showStrengthHUD) {
@@ -335,6 +353,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 30:
                 mc.displayGuiScreen(new PositionEditGuiScreen(CreeperPrimedTNTHUD.instance, this));
+            case 33:
+                mc.displayGuiScreen(new PositionEditGuiScreen(EnergyDisplayHUD.instance, this));
             case 7:
                 KillCooldownHUD.instance.guiPosition.setRelative(0d, 0d);
                 break;
@@ -349,6 +369,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 29:
                 CreeperPrimedTNTHUD.instance.guiPosition.setRelative(0.5, 8d/20d);
+            case 32:
+                EnergyDisplayHUD.instance.guiPosition.setRelative(0.5, 9d/20d);
             default:
                 break;
         }
