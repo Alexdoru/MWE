@@ -225,7 +225,7 @@ public class MegaWallsClassStats {
             imsg.appendSibling(new ChatComponentText("\n" + ChatUtil.centerLine(EnumChatFormatting.DARK_RED + "These stats are for " + games_played + " games, not one.")));
         }
 
-        imsg.appendSibling(new ChatComponentText("\n" + "\n" + ChatUtil.alignText(matrix1) + "\n"))
+        imsg.appendSibling(new ChatComponentText("\n" + "\n" + ChatUtil.alignText(matrix1)))
                 .appendSibling(new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar()));
         return imsg;
     }
