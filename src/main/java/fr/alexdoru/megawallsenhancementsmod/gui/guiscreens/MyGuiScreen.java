@@ -72,8 +72,13 @@ public abstract class MyGuiScreen extends GuiScreen {
         }
     }
 
+    @Deprecated
     public int getYposForButton(int relativePosition) {
         return getyCenter() - ButtonsHeight / 2 + (ButtonsHeight + 4) * relativePosition;
+    }
+
+    protected int getButtonYPos(int i) {
+        return this.height / 8 + (ButtonsHeight + 4) * (i + 1);
     }
 
     /**
