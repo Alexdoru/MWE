@@ -40,10 +40,11 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         buttonList.add(reportSuggestionButton = new GuiButton(8, xPos, getButtonYPos(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(8)));
         buttonList.add(autoreportSuggestionButton = new GuiButton(9, xPos, getButtonYPos(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
         buttonList.add(new GuiButton(2, xPos, getButtonYPos(5), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
-        buttonList.add(new GuiButton(6, xPos, getButtonYPos(6), buttonsWidth, ButtonsHeight, getButtonDisplayString(6)));
-        buttonList.add(new GuiSlider(7, xPos, getButtonYPos(7), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
-        buttonList.add(new GuiButton(10, xPos, getButtonYPos(8), buttonsWidth, ButtonsHeight, getButtonDisplayString(10)));
-        buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getButtonYPos(10), 150, ButtonsHeight, getButtonDisplayString(3)));
+        buttonList.add(new GuiButton(11, xPos, getButtonYPos(6), buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
+        buttonList.add(new GuiButton(6, xPos, getButtonYPos(7), buttonsWidth, ButtonsHeight, getButtonDisplayString(6)));
+        buttonList.add(new GuiSlider(7, xPos, getButtonYPos(8), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
+        buttonList.add(new GuiButton(10, xPos, getButtonYPos(9), buttonsWidth, ButtonsHeight, getButtonDisplayString(10)));
+        buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getButtonYPos(11), 150, ButtonsHeight, getButtonDisplayString(3)));
     }
 
     @Override
@@ -69,6 +70,8 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 return "Auto-report suggestions : " + getSuffix(ConfigHandler.autoreportSuggestions);
             case 2:
                 return "Auto-report cheaters : " + getSuffix(ConfigHandler.toggleAutoreport);
+            case 11:
+                return "Stop report after a week : " + getSuffix(ConfigHandler.stopAutoreportAfterWeek);
             case 6:
                 return "Delete old reports : " + getSuffix(ConfigHandler.deleteOldReports);
             case 10:
@@ -98,6 +101,10 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 textLines.add("");
                 textLines.add(EnumChatFormatting.DARK_RED + "Don't keep players that don't cheat anymore in your report list");
                 textLines.add(EnumChatFormatting.GREEN + "Use : " + EnumChatFormatting.YELLOW + "/unwdr playername" + EnumChatFormatting.GREEN + " to remove them from your report list");
+                break;
+            case 11:
+                textLines.add(EnumChatFormatting.GREEN + "Stop auto-reporting players for whom your last report is more than a week old");
+                textLines.add(EnumChatFormatting.GREEN + "The icon on their name will turn gray");
                 break;
             case 6:
                 textLines.add(EnumChatFormatting.GREEN + "Deletes reports older than the specified value");
@@ -176,6 +183,10 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 break;
             case 6:
                 ConfigHandler.deleteOldReports = !ConfigHandler.deleteOldReports;
+                break;
+            case 11:
+                ConfigHandler.stopAutoreportAfterWeek = !ConfigHandler.stopAutoreportAfterWeek;
+                NameUtil.refreshAllNamesInWorld();
                 break;
             default:
                 break;
