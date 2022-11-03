@@ -40,7 +40,7 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
         buttonList.add(new GuiSlider(16, XrightColumn, getButtonYPos(4), buttonsWidth, buttonsHeight, "Range : ", " m", 0d, 64d, ConfigHandler.hitboxDrawRange, false, true, this));
         buttonList.add(new GuiButton(10, XrightColumn, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(10)));
         buttonList.add(new GuiButton(11, XrightColumn, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(11)));
-        buttonList.add(new GuiButton(12, XrightColumn, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(12)));
+        buttonList.add(new GuiButton(12, XrightColumn, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(12)));
 
         buttonList.add(new GuiButton(0, getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, getButtonDisplayString(0)));
     }
