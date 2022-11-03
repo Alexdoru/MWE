@@ -72,6 +72,7 @@ public class ConfigHandler {
     public static final GuiPosition squadHealthHUDPosition = new GuiPosition(0d, 0d);// TODO add config
     public static boolean showEnergyDisplayHUD;
     public static final GuiPosition energyDisplayHUDPosition = new GuiPosition(0d, 0d);
+    public static int aquaEnergyDisplayThreshold;
 
     /**
      * NoCheaters Config
@@ -181,6 +182,7 @@ public class ConfigHandler {
         final Property pEnergyDisplayHUD = config.get(CATEGORY_GUI, "Energy Display HUD", true, "Displays HUD showing your current energy when you hit someone");
         final Property pXpos_energyDisplayHUD = config.get(CATEGORY_GUI, "Xpos energy display HUD", 0.5d, "The x position of the Energy Display HUD, value ranges from 0 to 1");
         final Property pYpos_energyDisplayHUD = config.get(CATEGORY_GUI, "Ypos energy display HUD", 9d / 20d, "The y position of the Energy Display HUD, value ranges from 0 to 1");
+        final Property pAquaEnergyDisplayThreshold = config.get(CATEGORY_GUI, "Threshold to make energy display aqua", 100, "The threshold number that when hit will cause the energy display to turn aqua");
 
         final String CATEGORY_NOCHEATERS = "NoCheaters";
         final Property pToggleicons = config.get(CATEGORY_NOCHEATERS, "Toggle Icons", true, "Display warning symbol on nametags of reported players");
@@ -353,6 +355,7 @@ public class ConfigHandler {
             showPrimedTNTHUD = pCreeperTNTHUD.getBoolean();
             creeperTNTHUDPosition.setRelative(pXpos_creeperHUD.getDouble(), pYpos_creeperHUD.getDouble());
             showEnergyDisplayHUD = pEnergyDisplayHUD.getBoolean();
+            aquaEnergyDisplayThreshold = pAquaEnergyDisplayThreshold.getInt();
 
             iconsOnNames = pToggleicons.getBoolean();
             warningMessages = pTogglewarnings.getBoolean();
@@ -451,6 +454,7 @@ public class ConfigHandler {
             final double[] energyDisplayarray = energyDisplayHUDPosition.getRelativePosition();
             pXpos_energyDisplayHUD.set(energyDisplayarray[0]);
             pYpos_energyDisplayHUD.set(energyDisplayarray[1]);
+            pAquaEnergyDisplayThreshold.set(aquaEnergyDisplayThreshold);
 
 
             pToggleicons.set(iconsOnNames);

@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
@@ -23,16 +24,24 @@ public class EnergyDisplayHUD extends MyCachedHUD {
 
     @Override
     public void render(ScaledResolution resolution) {
-        final EntityPlayer player = mc.thePlayer;
-        energy = player.experienceLevel;
-        if (energy != storedEnergy) {
-            timeStartRender = System.currentTimeMillis();
+        if (FKCounterMod.isInMwGame) {
+            final EntityPlayer player = mc.thePlayer;
+            energy = player.experienceLevel;
+            if (energy >= ConfigHandler.aquaEnergyDisplayThreshold) {
+                colorPrefix = EnumChatFormatting.AQUA;
+            } else {
+                colorPrefix = EnumChatFormatting.GREEN;
+            }
+            if (energy != storedEnergy) {
+                timeStartRender = System.currentTimeMillis();
+            }
+            final int timeLeft = (int) ((timeStartRender + renderDuration - System.currentTimeMillis()) / 1000L);
+            final int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
+            displayText = (timeLeft > 0 && energy != 0 ? colorPrefix + "" + energy : "");
+            drawCenteredString(frObj, displayText, absolutePos[0], absolutePos[1], 0);
+            storedEnergy = energy;
         }
-        final int timeLeft = (int) ((timeStartRender + renderDuration - System.currentTimeMillis()) / 1000L);
-        final int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
-        displayText = (timeLeft > 0 ? colorPrefix + "" + energy : "");
-        drawCenteredString(frObj, displayText, absolutePos[0], absolutePos[1], 0);
-        storedEnergy = energy;
+
     }
 
     @Override
@@ -43,8 +52,7 @@ public class EnergyDisplayHUD extends MyCachedHUD {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        //return timeStartRender + renderDuration - currentTimeMillis > 0;
-        return true;
+        return ConfigHandler.showEnergyDisplayHUD;
     }
 
 
