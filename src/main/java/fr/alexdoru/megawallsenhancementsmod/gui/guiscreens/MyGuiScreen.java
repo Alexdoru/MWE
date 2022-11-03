@@ -14,17 +14,28 @@ import java.util.List;
 public abstract class MyGuiScreen extends GuiScreen {
 
     private static final ResourceLocation SHADER = new ResourceLocation("fkcounter", "shaders/blur.json");
-    protected final int ButtonsHeight = 20;
+    protected final int buttonsHeight = 20;
     protected GuiScreen parent = null;
-    private int usersGuiScale;
+    private int usersGuiScale = -1;
+    protected int maxWidth;
+    protected int maxHeight;
 
     @Override
     public void initGui() {
+        if (usersGuiScale != -1) {
+            mc.gameSettings.guiScale = usersGuiScale;
+        }
         usersGuiScale = mc.gameSettings.guiScale;
         mc.gameSettings.guiScale = 2;
-        final ScaledResolution scaledresolution = new ScaledResolution(this.mc);
+        ScaledResolution scaledresolution = new ScaledResolution(this.mc);
         this.width = scaledresolution.getScaledWidth();
         this.height = scaledresolution.getScaledHeight();
+        if (this.maxHeight + this.height / 6 > this.height || this.maxWidth > this.width) {
+            mc.gameSettings.guiScale = 1;
+            scaledresolution = new ScaledResolution(this.mc);
+            this.width = scaledresolution.getScaledWidth();
+            this.height = scaledresolution.getScaledHeight();
+        }
         try {
             mc.entityRenderer.loadShader(SHADER);
         } catch (Exception ignored) {}
@@ -73,7 +84,7 @@ public abstract class MyGuiScreen extends GuiScreen {
     }
 
     protected int getButtonYPos(int i) {
-        return this.height / 8 + (ButtonsHeight + 4) * (i + 1);
+        return this.height / 8 + (buttonsHeight + 4) * (i + 1);
     }
 
     /**

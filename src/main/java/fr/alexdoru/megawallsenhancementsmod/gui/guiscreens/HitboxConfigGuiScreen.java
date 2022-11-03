@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
-    private final int buttonWidth = 170;
+    private final int buttonsWidth = 170;
 
     public HitboxConfigGuiScreen(GuiScreen parent) {
         this.parent = parent;
@@ -18,29 +18,31 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
 
     @Override
     public void initGui() {
+        this.maxWidth = (10 + buttonsWidth) * 2;
+        this.maxHeight = (buttonsHeight + 4) * 12 + buttonsHeight;
         super.initGui();
-        final int XleftColumn = getxCenter() - buttonWidth - 10;
+        final int XleftColumn = getxCenter() - buttonsWidth - 10;
         final int XrightColumn = getxCenter() + 10;
 
-        buttonList.add(new GuiButton(1, XleftColumn, getButtonYPos(1), buttonWidth, ButtonsHeight, getButtonDisplayString(1)));
-        buttonList.add(new GuiButton(2, XleftColumn, getButtonYPos(2), buttonWidth, ButtonsHeight, getButtonDisplayString(2)));
-        buttonList.add(new GuiButton(3, XleftColumn, getButtonYPos(3), buttonWidth, ButtonsHeight, getButtonDisplayString(3)));
-        buttonList.add(new GuiButton(13, XleftColumn, getButtonYPos(4), buttonWidth, ButtonsHeight, getButtonDisplayString(13)));
-        buttonList.add(new GuiButton(4, XleftColumn, getButtonYPos(5), buttonWidth, ButtonsHeight, getButtonDisplayString(4)));
-        buttonList.add(new GuiButton(5, XleftColumn, getButtonYPos(6), buttonWidth, ButtonsHeight, getButtonDisplayString(5)));
-        buttonList.add(new GuiButton(6, XleftColumn, getButtonYPos(7), buttonWidth, ButtonsHeight, getButtonDisplayString(6)));
-        buttonList.add(new GuiButton(7, XleftColumn, getButtonYPos(8), buttonWidth, ButtonsHeight, getButtonDisplayString(7)));
-        buttonList.add(new GuiButton(8, XleftColumn, getButtonYPos(9), buttonWidth, ButtonsHeight, getButtonDisplayString(8)));
+        buttonList.add(new GuiButton(1, XleftColumn, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(1)));
+        buttonList.add(new GuiButton(2, XleftColumn, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(2)));
+        buttonList.add(new GuiButton(3, XleftColumn, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(3)));
+        buttonList.add(new GuiButton(13, XleftColumn, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(13)));
+        buttonList.add(new GuiButton(4, XleftColumn, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(5, XleftColumn, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(5)));
+        buttonList.add(new GuiButton(6, XleftColumn, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(6)));
+        buttonList.add(new GuiButton(7, XleftColumn, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(7)));
+        buttonList.add(new GuiButton(8, XleftColumn, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(8)));
 
-        buttonList.add(new GuiButton(14, XrightColumn, getButtonYPos(1), buttonWidth, ButtonsHeight, getButtonDisplayString(14)));
-        buttonList.add(new GuiButton(9, XrightColumn, getButtonYPos(2), buttonWidth, ButtonsHeight, getButtonDisplayString(9)));
-        buttonList.add(new GuiButton(15, XrightColumn, getButtonYPos(3), buttonWidth, ButtonsHeight, getButtonDisplayString(15)));
-        buttonList.add(new GuiSlider(16, XrightColumn, getButtonYPos(4), buttonWidth, ButtonsHeight, "Range : ", " m", 0d, 64d, ConfigHandler.hitboxDrawRange, false, true, this));
-        buttonList.add(new GuiButton(10, XrightColumn, getButtonYPos(7), buttonWidth, ButtonsHeight, getButtonDisplayString(10)));
-        buttonList.add(new GuiButton(11, XrightColumn, getButtonYPos(8), buttonWidth, ButtonsHeight, getButtonDisplayString(11)));
-        buttonList.add(new GuiButton(12, XrightColumn, getButtonYPos(7), buttonWidth, ButtonsHeight, getButtonDisplayString(12)));
+        buttonList.add(new GuiButton(14, XrightColumn, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(14)));
+        buttonList.add(new GuiButton(9, XrightColumn, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(9)));
+        buttonList.add(new GuiButton(15, XrightColumn, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(15)));
+        buttonList.add(new GuiSlider(16, XrightColumn, getButtonYPos(4), buttonsWidth, buttonsHeight, "Range : ", " m", 0d, 64d, ConfigHandler.hitboxDrawRange, false, true, this));
+        buttonList.add(new GuiButton(10, XrightColumn, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(10)));
+        buttonList.add(new GuiButton(11, XrightColumn, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(11)));
+        buttonList.add(new GuiButton(12, XrightColumn, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(12)));
 
-        buttonList.add(new GuiButton(0, getxCenter() - 150 / 2, getButtonYPos(11), 150, ButtonsHeight, getButtonDisplayString(0)));
+        buttonList.add(new GuiButton(0, getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, getButtonDisplayString(0)));
     }
 
     @Override
@@ -48,8 +50,8 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
         drawCenteredTitle(EnumChatFormatting.BLUE + "Hitboxes", 2, getxCenter(), getButtonYPos(-1));
         final String msg = EnumChatFormatting.GRAY + "You obviously need to press f3+b to enable hitboxes";
         drawCenteredString(fontRendererObj, msg, getxCenter(), getButtonYPos(-1) + 2 * fontRendererObj.FONT_HEIGHT, 0);
-        drawCenteredTitle(EnumChatFormatting.WHITE + "Draw Hitbox for :", 1, getxCenter() - buttonWidth / 2.0f - 10, getButtonYPos(1) - ButtonsHeight / 2.0f);
-        drawCenteredTitle(EnumChatFormatting.BLUE + "Blue vector :", 1, getxCenter() + buttonWidth / 2.0f + 10, getButtonYPos(7) - ButtonsHeight / 2.0f);
+        drawCenteredTitle(EnumChatFormatting.WHITE + "Draw Hitbox for :", 1, getxCenter() - buttonsWidth / 2.0f - 10, getButtonYPos(1) - buttonsHeight / 2.0f);
+        drawCenteredTitle(EnumChatFormatting.BLUE + "Blue vector :", 1, getxCenter() + buttonsWidth / 2.0f + 10, getButtonYPos(7) - buttonsHeight / 2.0f);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

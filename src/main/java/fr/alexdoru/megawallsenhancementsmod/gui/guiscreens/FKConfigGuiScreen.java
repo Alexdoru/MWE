@@ -34,6 +34,8 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
 
     @Override
     public void initGui() {
+        this.maxWidth = findMenuWidth();
+        this.maxHeight = (buttonsHeight + 4) * 10 + buttonsHeight;
         super.initGui();
         buttonList.add(new ButtonFancy(100, getxCenter() + widthBetweenButtons / 2 + (widthBetweenButtons + buttonSize) + 10, getButtonYPos(4) - findMenuHeight() / 2 + heightBetweenButtons + buttonSize + 10, 30, 14, "Move HUD", 0.5));
 
@@ -46,8 +48,8 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
         buttonList.add(buttonshowplayers = addSettingButton(ConfigHandler.fkcounterHUDShowPlayers, 2, 1, 2, "Show Players"));
 
         buttonList.add(new GuiSlider(5, getxCenter() - 150 / 2, getButtonYPos(7), "HUD Size : ", 0.1d, 4d, ConfigHandler.fkcounterHUDSize, this));
-        buttonList.add(new GuiSlider(6, getxCenter() - 150 / 2, getButtonYPos(8), 150, 20, "Player amount : ", "", 1d, 10d, ConfigHandler.fkcounterHUDPlayerAmount, false, true, this));
-        buttonList.add(new GuiButton(200, getxCenter() - 150 / 2, getButtonYPos(9), 150, 20, "Done"));
+        buttonList.add(new GuiSlider(6, getxCenter() - 150 / 2, getButtonYPos(8), 150, buttonsHeight, "Player amount : ", "", 1d, 10d, ConfigHandler.fkcounterHUDPlayerAmount, false, true, this));
+        buttonList.add(new GuiButton(200, getxCenter() - 150 / 2, getButtonYPos(9), 150, buttonsHeight, "Done"));
     }
 
     private ButtonToggle addSettingButton(boolean setting, int buttonid, int row, int column, String buttonText) {
