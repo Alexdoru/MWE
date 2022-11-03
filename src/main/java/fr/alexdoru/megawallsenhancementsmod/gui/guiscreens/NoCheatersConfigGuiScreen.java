@@ -19,6 +19,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
 
     private GuiButton reportSuggestionButton;
     private GuiButton autoreportSuggestionButton;
+    private final String msg = EnumChatFormatting.WHITE + "NoCheaters saves players reported via " + EnumChatFormatting.YELLOW + "/wdr playername" + EnumChatFormatting.WHITE + " (not /report)";
 
     public NoCheatersConfigGuiScreen() {
         this.parent = null;
@@ -30,27 +31,28 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
 
     @Override
     public void initGui() {
+        this.maxWidth = fontRendererObj.getStringWidth(msg);
+        this.maxHeight = (buttonsHeight + 4) * 12 + buttonsHeight;
         super.initGui();
         /*
          * Defines the button list
          */
         final int buttonsWidth = 200;
         final int xPos = getxCenter() - buttonsWidth / 2;
-        buttonList.add(new GuiButton(1, xPos, getButtonYPos(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(1)));
-        buttonList.add(reportSuggestionButton = new GuiButton(8, xPos, getButtonYPos(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(8)));
-        buttonList.add(autoreportSuggestionButton = new GuiButton(9, xPos, getButtonYPos(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
-        buttonList.add(new GuiButton(2, xPos, getButtonYPos(5), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
-        buttonList.add(new GuiButton(11, xPos, getButtonYPos(6), buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
-        buttonList.add(new GuiButton(6, xPos, getButtonYPos(7), buttonsWidth, ButtonsHeight, getButtonDisplayString(6)));
+        buttonList.add(new GuiButton(1, xPos, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(1)));
+        buttonList.add(reportSuggestionButton = new GuiButton(8, xPos, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(8)));
+        buttonList.add(autoreportSuggestionButton = new GuiButton(9, xPos, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(9)));
+        buttonList.add(new GuiButton(2, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(2)));
+        buttonList.add(new GuiButton(11, xPos, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(11)));
+        buttonList.add(new GuiButton(6, xPos, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(6)));
         buttonList.add(new GuiSlider(7, xPos, getButtonYPos(8), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
-        buttonList.add(new GuiButton(10, xPos, getButtonYPos(9), buttonsWidth, ButtonsHeight, getButtonDisplayString(10)));
-        buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getButtonYPos(11), 150, ButtonsHeight, getButtonDisplayString(3)));
+        buttonList.add(new GuiButton(10, xPos, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(10)));
+        buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, getButtonDisplayString(3)));
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle(EnumChatFormatting.RED + "NoCheaters", 2, getxCenter(), getButtonYPos(-1));
-        final String msg = EnumChatFormatting.WHITE + "NoCheaters saves players reported via " + EnumChatFormatting.YELLOW + "/wdr playername" + EnumChatFormatting.WHITE + " (not /report)";
         drawCenteredString(fontRendererObj, msg, getxCenter(), getButtonYPos(0) + fontRendererObj.FONT_HEIGHT, 0);
         final String msg1 = EnumChatFormatting.WHITE + "If you want to remove a player from your report list use :";
         drawCenteredString(fontRendererObj, msg1, getxCenter(), getButtonYPos(0) + 2 * fontRendererObj.FONT_HEIGHT, 0);

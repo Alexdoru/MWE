@@ -25,29 +25,31 @@ public class HUDsConfigGuiScreen extends MyGuiScreen {
 
     @Override
     public void initGui() {
-        super.initGui();
         final int buttonsWidth = 200;
+        final int sideButtonsWidth = 90;
+        this.maxWidth = sideButtonsWidth * 2 + buttonsWidth + 4 * 2;
+        this.maxHeight = (buttonsHeight + 4) * 7 + buttonsHeight;
+        super.initGui();
         final int XposCenterButton = getxCenter() - buttonsWidth / 2;
         /* HUD Buttons */
-        buttonList.add(new GuiButton(3, XposCenterButton, getButtonYPos(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
-        buttonList.add(new GuiButton(2, XposCenterButton, getButtonYPos(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
-        buttonList.add(new GuiButton(9, XposCenterButton, getButtonYPos(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
-        buttonList.add(new GuiButton(11, XposCenterButton, getButtonYPos(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
-        final int sideButtonsWidth = 90;
+        buttonList.add(new GuiButton(3, XposCenterButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(3)));
+        buttonList.add(new GuiButton(2, XposCenterButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(2)));
+        buttonList.add(new GuiButton(9, XposCenterButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(9)));
+        buttonList.add(new GuiButton(11, XposCenterButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(11)));
         final int XposCenterLeftButton = getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth;
         final int XposCenterRightButton = getxCenter() + buttonsWidth / 2 + 4;
         /* Buttons : Reset HUD position */
-        buttonList.add(new GuiButton(8, XposCenterLeftButton, getButtonYPos(1), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(8)));
-        buttonList.add(new GuiButton(7, XposCenterLeftButton, getButtonYPos(2), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(7)));
-        buttonList.add(new GuiButton(14, XposCenterLeftButton, getButtonYPos(3), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(14)));
-        buttonList.add(new GuiButton(12, XposCenterLeftButton, getButtonYPos(4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(12)));
+        buttonList.add(new GuiButton(8, XposCenterLeftButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(8)));
+        buttonList.add(new GuiButton(7, XposCenterLeftButton, getButtonYPos(2), sideButtonsWidth, buttonsHeight, getButtonDisplayString(7)));
+        buttonList.add(new GuiButton(14, XposCenterLeftButton, getButtonYPos(3), sideButtonsWidth, buttonsHeight, getButtonDisplayString(14)));
+        buttonList.add(new GuiButton(12, XposCenterLeftButton, getButtonYPos(4), sideButtonsWidth, buttonsHeight, getButtonDisplayString(12)));
         /* Buttons : Move HUD */
-        buttonList.add(new GuiButton(6, XposCenterRightButton, getButtonYPos(1), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(6)));
-        buttonList.add(new GuiButton(5, XposCenterRightButton, getButtonYPos(2), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(5)));
-        buttonList.add(new GuiButton(13, XposCenterRightButton, getButtonYPos(3), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(13)));
-        buttonList.add(new GuiButton(10, XposCenterRightButton, getButtonYPos(4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(10)));
+        buttonList.add(new GuiButton(6, XposCenterRightButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(6)));
+        buttonList.add(new GuiButton(5, XposCenterRightButton, getButtonYPos(2), sideButtonsWidth, buttonsHeight, getButtonDisplayString(5)));
+        buttonList.add(new GuiButton(13, XposCenterRightButton, getButtonYPos(3), sideButtonsWidth, buttonsHeight, getButtonDisplayString(13)));
+        buttonList.add(new GuiButton(10, XposCenterRightButton, getButtonYPos(4), sideButtonsWidth, buttonsHeight, getButtonDisplayString(10)));
         /* Exit button */
-        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(6), 150, ButtonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(6), 150, buttonsHeight, getButtonDisplayString(4)));
     }
 
     @Override

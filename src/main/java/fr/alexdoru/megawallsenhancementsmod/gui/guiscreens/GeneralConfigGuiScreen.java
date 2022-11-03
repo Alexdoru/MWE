@@ -10,18 +10,20 @@ public class GeneralConfigGuiScreen extends MyGuiScreen {
 
     @Override
     public void initGui() {
+        final int buttonsWidth = 150;
+        this.maxWidth = buttonsWidth + (buttonsWidth + 10) * 2;
+        this.maxHeight = (buttonsHeight + 4) * 8 + buttonsHeight;
         super.initGui();
         /*
          * Defines the button list
          */
-        final int buttonsWidth = 150;
-        this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getButtonYPos(1), buttonsWidth, ButtonsHeight, EnumChatFormatting.AQUA + "Final Kill Counter"));
-        this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getButtonYPos(2), buttonsWidth, ButtonsHeight, EnumChatFormatting.GREEN + "Mega Walls Enhancements"));
-        this.buttonList.add(new GuiButton(5, getxCenter() - buttonsWidth / 2, getButtonYPos(3), buttonsWidth, ButtonsHeight, EnumChatFormatting.DARK_PURPLE + "HUDs"));
-        this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getButtonYPos(4), buttonsWidth, ButtonsHeight, EnumChatFormatting.RED + "No Cheaters"));
-        this.buttonList.add(new GuiButton(6, getxCenter() + buttonsWidth, getButtonYPos(2), buttonsWidth, ButtonsHeight, EnumChatFormatting.WHITE + "Automatic Updates : " + getSuffix(ConfigHandler.automaticUpdate)));
-        this.buttonList.add(new GuiButton(4, getxCenter() - buttonsWidth / 2, getButtonYPos(5), buttonsWidth, ButtonsHeight, EnumChatFormatting.BLUE + "Hitboxes, better F3+b"));
-        this.buttonList.add(new GuiButton(3, getxCenter() - buttonsWidth / 2, getButtonYPos(7), buttonsWidth, ButtonsHeight, "Close"));
+        this.buttonList.add(new GuiButton(0, getxCenter() - buttonsWidth / 2, getButtonYPos(1), buttonsWidth, buttonsHeight, EnumChatFormatting.AQUA + "Final Kill Counter"));
+        this.buttonList.add(new GuiButton(1, getxCenter() - buttonsWidth / 2, getButtonYPos(2), buttonsWidth, buttonsHeight, EnumChatFormatting.GREEN + "Mega Walls Enhancements"));
+        this.buttonList.add(new GuiButton(5, getxCenter() - buttonsWidth / 2, getButtonYPos(3), buttonsWidth, buttonsHeight, EnumChatFormatting.DARK_PURPLE + "HUDs"));
+        this.buttonList.add(new GuiButton(2, getxCenter() - buttonsWidth / 2, getButtonYPos(4), buttonsWidth, buttonsHeight, EnumChatFormatting.RED + "No Cheaters"));
+        this.buttonList.add(new GuiButton(6, getxCenter() + buttonsWidth / 2 + 10, getButtonYPos(2), buttonsWidth, buttonsHeight, EnumChatFormatting.WHITE + "Automatic Updates : " + getSuffix(ConfigHandler.automaticUpdate)));
+        this.buttonList.add(new GuiButton(4, getxCenter() - buttonsWidth / 2, getButtonYPos(5), buttonsWidth, buttonsHeight, EnumChatFormatting.BLUE + "Hitboxes, better F3+b"));
+        this.buttonList.add(new GuiButton(3, getxCenter() - buttonsWidth / 2, getButtonYPos(7), buttonsWidth, buttonsHeight, "Close"));
     }
 
     @Override

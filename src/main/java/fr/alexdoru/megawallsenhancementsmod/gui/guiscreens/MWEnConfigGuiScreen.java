@@ -24,40 +24,42 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
 
     @Override
     public void initGui() {
+        final int buttonsWidth = 210;
+        this.maxWidth = (10 + buttonsWidth) * 2;
+        this.maxHeight = (buttonsHeight + 4) * 12 + buttonsHeight;
         super.initGui();
         /*
          * Defines the button list
          */
-        final int buttonsWidth = 210;
         final int XposLeftButton = getxCenter() - buttonsWidth - 10;
         final int XposRightButton = getxCenter() + 10;
 
-        buttonList.add(new GuiButton(18, XposLeftButton, getButtonYPos(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(18)));
-        buttonList.add(new GuiButton(26, XposLeftButton, getButtonYPos(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(26)));
-        buttonList.add(new GuiButton(19, XposLeftButton, getButtonYPos(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(19)));
-        buttonList.add(new GuiButton(31, XposLeftButton, getButtonYPos(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(31)));
-        buttonList.add(new GuiButton(25, XposLeftButton, getButtonYPos(5), buttonsWidth, ButtonsHeight, getButtonDisplayString(25)));
-        buttonList.add(new GuiButton(28, XposLeftButton, getButtonYPos(6), buttonsWidth, ButtonsHeight, getButtonDisplayString(28)));
-        buttonList.add(new GuiButton(15, XposLeftButton, getButtonYPos(7), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
-        buttonList.add(new GuiButton(27, XposLeftButton, getButtonYPos(8), buttonsWidth, ButtonsHeight, getButtonDisplayString(27)));
-        buttonList.add(new GuiButton(24, XposLeftButton, getButtonYPos(9), buttonsWidth, ButtonsHeight, getButtonDisplayString(24)));
+        buttonList.add(new GuiButton(18, XposLeftButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(18)));
+        buttonList.add(new GuiButton(26, XposLeftButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(26)));
+        buttonList.add(new GuiButton(19, XposLeftButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(19)));
+        buttonList.add(new GuiButton(31, XposLeftButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(31)));
+        buttonList.add(new GuiButton(25, XposLeftButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(25)));
+        buttonList.add(new GuiButton(28, XposLeftButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(28)));
+        buttonList.add(new GuiButton(15, XposLeftButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(15)));
+        buttonList.add(new GuiButton(27, XposLeftButton, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(27)));
+        buttonList.add(new GuiButton(24, XposLeftButton, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(24)));
 
-        buttonList.add(new GuiButton(21, XposRightButton, getButtonYPos(1), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
-        buttonList.add(new GuiButton(0, XposRightButton, getButtonYPos(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
-        buttonList.add(new GuiButton(29, XposRightButton, getButtonYPos(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(29)));
-        buttonList.add(new GuiButton(16, XposRightButton, getButtonYPos(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
-        buttonList.add(new GuiButton(17, XposRightButton, getButtonYPos(5), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
-        buttonList.add(new GuiSlider(20, XposRightButton, getButtonYPos(6), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
-        buttonList.add(new GuiButton(22, XposRightButton, getButtonYPos(7), buttonsWidth, ButtonsHeight, getButtonDisplayString(22)));
-        buttonList.add(new GuiSlider(23, XposRightButton, getButtonYPos(8), buttonsWidth, ButtonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
+        buttonList.add(new GuiButton(21, XposRightButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(21)));
+        buttonList.add(new GuiButton(0, XposRightButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(0)));
+        buttonList.add(new GuiButton(29, XposRightButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(29)));
+        buttonList.add(new GuiButton(16, XposRightButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(16)));
+        buttonList.add(new GuiButton(17, XposRightButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(17)));
+        buttonList.add(new GuiSlider(20, XposRightButton, getButtonYPos(6), buttonsWidth, buttonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
+        buttonList.add(new GuiButton(22, XposRightButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(22)));
+        buttonList.add(new GuiSlider(23, XposRightButton, getButtonYPos(8), buttonsWidth, buttonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
 
         final boolean isPatcherLoaded = ASMLoadingPlugin.isPatcherLoaded();
         if (!isPatcherLoaded) {
-            buttonList.add(new GuiSlider(30, XposRightButton, getButtonYPos(9), buttonsWidth, ButtonsHeight, "Tablist size : ", " players", 50d, 125d, ConfigHandler.tablistSize, false, true, this));
+            buttonList.add(new GuiSlider(30, XposRightButton, getButtonYPos(9), buttonsWidth, buttonsHeight, "Tablist size : ", " players", 50d, 125d, ConfigHandler.tablistSize, false, true, this));
         }
 
         /* Exit button */
-        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(11), 150, ButtonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, getButtonDisplayString(4)));
     }
 
     @Override
