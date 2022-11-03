@@ -5,8 +5,6 @@ import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.*;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import net.minecraft.client.gui.GuiButton;
@@ -14,7 +12,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,33 +34,15 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         final int XposLeftButton = getxCenter() - buttonsWidth - 10;
         final int XposRightButton = getxCenter() + 10;
 
-        buttonList.add(new GuiButton(18, XposLeftButton, getYposForButton(-6), buttonsWidth, ButtonsHeight, getButtonDisplayString(18)));
-        buttonList.add(new GuiButton(26, XposLeftButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(26)));
-        buttonList.add(new GuiButton(19, XposLeftButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(19)));
-        buttonList.add(new GuiButton(25, XposLeftButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(25)));
-        buttonList.add(new GuiButton(15, XposLeftButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, getButtonDisplayString(15)));
-        buttonList.add(new GuiButton(27, XposLeftButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(27)));
-        buttonList.add(new GuiButton(24, XposLeftButton, getYposForButton(0), buttonsWidth, ButtonsHeight, getButtonDisplayString(24)));
-
-        buttonList.add(new GuiButton(21, XposRightButton, getYposForButton(-6), buttonsWidth, ButtonsHeight, getButtonDisplayString(21)));
-        buttonList.add(new GuiButton(0, XposRightButton, getYposForButton(-5), buttonsWidth, ButtonsHeight, getButtonDisplayString(0)));
-        buttonList.add(new GuiButton(16, XposRightButton, getYposForButton(-4), buttonsWidth, ButtonsHeight, getButtonDisplayString(16)));
-        buttonList.add(new GuiButton(17, XposRightButton, getYposForButton(-3), buttonsWidth, ButtonsHeight, getButtonDisplayString(17)));
-        buttonList.add(new GuiSlider(20, XposRightButton, getYposForButton(-2), buttonsWidth, ButtonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
-        buttonList.add(new GuiButton(22, XposRightButton, getYposForButton(-1), buttonsWidth, ButtonsHeight, getButtonDisplayString(22)));
-        buttonList.add(new GuiSlider(23, XposRightButton, getYposForButton(0), buttonsWidth, ButtonsHeight, "Maximum dropped item entities : ", "", 40d, 1000d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
-
-        final int XposCenterButton = getxCenter() - buttonsWidth / 2;
-
-        /* HUD Buttons */
-        buttonList.add(new GuiButton(11, XposCenterButton, getYposForButton(6), buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
-        buttonList.add(new GuiButton(9, XposCenterButton, getYposForButton(5), buttonsWidth, ButtonsHeight, getButtonDisplayString(9)));
-        buttonList.add(new GuiButton(2, XposCenterButton, getYposForButton(4), buttonsWidth, ButtonsHeight, getButtonDisplayString(2)));
-        buttonList.add(new GuiButton(3, XposCenterButton, getYposForButton(3), buttonsWidth, ButtonsHeight, getButtonDisplayString(3)));
-        buttonList.add(new GuiButton(11, XposCenterButton, getYposForButton(6), buttonsWidth, ButtonsHeight, getButtonDisplayString(11)));
-        buttonList.add(new GuiButton(28, XposCenterButton, getYposForButton(2), buttonsWidth, ButtonsHeight, getButtonDisplayString(28)));
-        buttonList.add(new GuiButton(31, XposCenterButton, getYposForButton(7), buttonsWidth, ButtonsHeight, getButtonDisplayString(31)));
-        buttonList.add(new GuiSlider(34, XposRightButton, getYposForButton(1), buttonsWidth, ButtonsHeight, "Aqua energy HUD threshold : ", "", 1d, 160d, ConfigHandler.aquaEnergyDisplayThreshold, false, true, this));
+        buttonList.add(new GuiButton(18, XposLeftButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(18)));
+        buttonList.add(new GuiButton(26, XposLeftButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(26)));
+        buttonList.add(new GuiButton(19, XposLeftButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(19)));
+        buttonList.add(new GuiButton(31, XposLeftButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(31)));
+        buttonList.add(new GuiButton(25, XposLeftButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(25)));
+        buttonList.add(new GuiButton(28, XposLeftButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(28)));
+        buttonList.add(new GuiButton(15, XposLeftButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(15)));
+        buttonList.add(new GuiButton(27, XposLeftButton, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(27)));
+        buttonList.add(new GuiButton(24, XposLeftButton, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(24)));
 
         buttonList.add(new GuiButton(21, XposRightButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(21)));
         buttonList.add(new GuiButton(0, XposRightButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(0)));
@@ -74,35 +53,24 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(22, XposRightButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(22)));
         buttonList.add(new GuiSlider(23, XposRightButton, getButtonYPos(8), buttonsWidth, buttonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
 
-        /* Buttons : Reset HUD position */
-        buttonList.add(new GuiButton(12, XposCenterLeftButton, getYposForButton(6), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(12)));
-        buttonList.add(new GuiButton(14, XposCenterLeftButton, getYposForButton(5), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(14)));
-        buttonList.add(new GuiButton(7, XposCenterLeftButton, getYposForButton(4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(7)));
-        buttonList.add(new GuiButton(8, XposCenterLeftButton, getYposForButton(3), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(8)));
-        buttonList.add(new GuiButton(12, XposCenterLeftButton, getYposForButton(6), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(12)));
-        buttonList.add(new GuiButton(29, XposCenterLeftButton, getYposForButton(2), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(29)));
-        buttonList.add(new GuiButton(32, XposCenterLeftButton, getYposForButton(7), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(32)));
-
-        /* Buttons : Move HUD */
-        buttonList.add(new GuiButton(10, XposCenterRightButton, getYposForButton(6), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(10)));
-        buttonList.add(new GuiButton(13, XposCenterRightButton, getYposForButton(5), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(13)));
-        buttonList.add(new GuiButton(5, XposCenterRightButton, getYposForButton(4), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(5)));
-        buttonList.add(new GuiButton(6, XposCenterRightButton, getYposForButton(3), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(6)));
-        buttonList.add(new GuiButton(10, XposCenterRightButton, getYposForButton(6), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(10)));
-        buttonList.add(new GuiButton(30, XposCenterRightButton, getYposForButton(2), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(30)));
-        buttonList.add(new GuiButton(33, XposCenterRightButton, getYposForButton(7), sideButtonsWidth, ButtonsHeight, getButtonDisplayString(33)));
+        final boolean isPatcherLoaded = ASMLoadingPlugin.isPatcherLoaded();
+        if (!isPatcherLoaded) {
+            buttonList.add(new GuiSlider(30, XposRightButton, getButtonYPos(9), buttonsWidth, buttonsHeight, "Tablist size : ", " players", 50d, 125d, ConfigHandler.tablistSize, false, true, this));
+        }
 
         /* Exit button */
-        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getYposForButton(8), 150, ButtonsHeight, getButtonDisplayString(4)));
-        super.initGui();
+        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, getButtonDisplayString(4)));
+    }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        drawCenteredTitle(EnumChatFormatting.GREEN + "Mega Walls Enhancements v" + MegaWallsEnhancementsMod.version, 2, getxCenter(), getButtonYPos(-1));
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        drawTooltips(mouseX, mouseY);
     }
 
     private String getButtonDisplayString(int id) {
         switch (id) {
-            case 31:
-                return "Energy Display HUD : " + getSuffix(ConfigHandler.showEnergyDisplayHUD);
-            case 28:
-                return "Primed TNT Cooldown : " + getSuffix(ConfigHandler.showPrimedTNTHUD);
             case 21:
                 return "Safe inventory : " + getSuffix(ConfigHandler.safeInventory);
             case 16:
@@ -135,20 +103,6 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 return "Fix actionbar text overlap : " + getSuffix(ConfigHandler.fixActionbarTextOverlap);
             case 4:
                 return "Done";
-            case 30:
-            case 5:
-            case 6:
-            case 10:
-            case 13:
-            case 33:
-                return "Move HUD";
-            case 29:
-            case 7:
-            case 8:
-            case 12:
-            case 14:
-            case 32:
-                return "Reset HUD position";
             default:
                 return "no display text for this button id";
         }
@@ -211,13 +165,6 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 26:
                 textLines.add(EnumChatFormatting.GREEN + "Stops rendering particles that are too close (75cm)");
                 textLines.add(EnumChatFormatting.GREEN + "to the camera for a better visibility");
-                break;
-            case 28:
-                textLines.add(EnumChatFormatting.GREEN + "Displays the cooldown of the primed tnt near your crosshair while playing creeper");
-            case 31:
-                textLines.add(EnumChatFormatting.GREEN + "Displays the amount of energy you have near your crosshair");
-            case 9:
-                textLines.add(EnumChatFormatting.GREEN + "Displays a HUD when you get strenght with Dreadlord, Herobrine, Hunter and Zombie");
                 break;
             case 18:
                 textLines.add(EnumChatFormatting.GREEN + "Removes the visual effect of night vision");
@@ -299,12 +246,6 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 0:
                 ConfigHandler.shortCoinMessage = !ConfigHandler.shortCoinMessage;
                 break;
-            case 9:
-                ConfigHandler.showStrengthHUD = !ConfigHandler.showStrengthHUD;
-                if (ConfigHandler.showStrengthHUD) {
-                    SoundUtil.playStrengthSound();
-                }
-                break;
             case 18:
                 ConfigHandler.keepNightVisionEffect = !ConfigHandler.keepNightVisionEffect;
                 break;
@@ -326,20 +267,12 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 29:
                 ConfigHandler.showPlayercountTablist = !ConfigHandler.showPlayercountTablist;
                 break;
-            case 30:
-                mc.displayGuiScreen(new PositionEditGuiScreen(CreeperPrimedTNTHUD.instance, this));
-            case 33:
-                mc.displayGuiScreen(new PositionEditGuiScreen(EnergyDisplayHUD.instance, this));
-            case 7:
-                KillCooldownHUD.instance.guiPosition.setRelative(0d, 0d);
+            case 31:
+                ConfigHandler.fixActionbarTextOverlap = !ConfigHandler.fixActionbarTextOverlap;
                 break;
             case 4:
                 mc.displayGuiScreen(parent);
                 break;
-            case 29:
-                CreeperPrimedTNTHUD.instance.guiPosition.setRelative(0.5, 8d/20d);
-            case 32:
-                EnergyDisplayHUD.instance.guiPosition.setRelative(0.5, 9d/20d);
             default:
                 break;
         }
@@ -355,6 +288,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 23:
                 ConfigHandler.maxDroppedEntityRendered = (int) slider.getValue();
+                break;
+            case 30:
+                ConfigHandler.tablistSize = (int) slider.getValue();
                 break;
         }
     }

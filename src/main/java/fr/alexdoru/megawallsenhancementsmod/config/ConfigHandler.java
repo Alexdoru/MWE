@@ -355,6 +355,7 @@ public class ConfigHandler {
             showPrimedTNTHUD = pCreeperTNTHUD.getBoolean();
             creeperTNTHUDPosition.setRelative(pXpos_creeperHUD.getDouble(), pYpos_creeperHUD.getDouble());
             showEnergyDisplayHUD = pEnergyDisplayHUD.getBoolean();
+            energyDisplayHUDPosition.setRelative(pXpos_energyDisplayHUD.getDouble(), pYpos_energyDisplayHUD.getDouble());
             aquaEnergyDisplayThreshold = pAquaEnergyDisplayThreshold.getInt();
 
             iconsOnNames = pToggleicons.getBoolean();

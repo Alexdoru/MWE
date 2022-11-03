@@ -16,6 +16,7 @@ public class EnergyDisplayHUD extends MyCachedHUD {
     private int energy;
     private int storedEnergy;
     private EnumChatFormatting colorPrefix = EnumChatFormatting.GREEN;
+    private String boldPrefix = "";
 
     public EnergyDisplayHUD() {
         super(ConfigHandler.energyDisplayHUDPosition);
@@ -29,15 +30,17 @@ public class EnergyDisplayHUD extends MyCachedHUD {
             energy = player.experienceLevel;
             if (energy >= ConfigHandler.aquaEnergyDisplayThreshold) {
                 colorPrefix = EnumChatFormatting.AQUA;
+                boldPrefix = "\u00a7l";
             } else {
                 colorPrefix = EnumChatFormatting.GREEN;
+                boldPrefix = "";
             }
             if (energy != storedEnergy) {
                 timeStartRender = System.currentTimeMillis();
             }
             final int timeLeft = (int) ((timeStartRender + renderDuration - System.currentTimeMillis()) / 1000L);
             final int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
-            displayText = (timeLeft > 0 && energy != 0 ? colorPrefix + "" + energy : "");
+            displayText = (timeLeft > 0 && energy != 0 ? colorPrefix + boldPrefix + "" + energy : "");
             drawCenteredString(frObj, displayText, absolutePos[0], absolutePos[1], 0);
             storedEnergy = energy;
         }
