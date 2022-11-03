@@ -72,6 +72,10 @@ public interface IMyClassTransformer {
                 && ((FieldInsnNode) insnNode).desc.equals(field.desc);
     }
 
+    default boolean checkFrameNode(AbstractInsnNode insnNode, int type) {
+        return insnNode instanceof FrameNode && ((FrameNode) insnNode).type == type;
+    }
+
     default MethodInsnNode getNewMethodInsnNode(MethodMapping method) {
         return new MethodInsnNode(method.opcode, method.owner, method.name, method.desc, false);
     }

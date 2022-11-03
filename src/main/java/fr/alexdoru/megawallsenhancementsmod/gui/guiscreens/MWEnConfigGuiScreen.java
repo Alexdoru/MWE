@@ -24,9 +24,10 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
 
     @Override
     public void initGui() {
+        final boolean isPatcherLoaded = ASMLoadingPlugin.isPatcherLoaded();
         final int buttonsWidth = 210;
         this.maxWidth = (10 + buttonsWidth) * 2;
-        this.maxHeight = (buttonsHeight + 4) * 12 + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * ((isPatcherLoaded ? 12 : 11) + 1) + buttonsHeight;
         super.initGui();
         /*
          * Defines the button list
@@ -40,26 +41,26 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(31, XposLeftButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(31)));
         buttonList.add(new GuiButton(25, XposLeftButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(25)));
         buttonList.add(new GuiButton(28, XposLeftButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(28)));
-        buttonList.add(new GuiButton(15, XposLeftButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(15)));
-        buttonList.add(new GuiButton(27, XposLeftButton, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(27)));
-        buttonList.add(new GuiButton(24, XposLeftButton, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(24)));
+        buttonList.add(new GuiButton(32, XposLeftButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(32)));
+        buttonList.add(new GuiButton(15, XposLeftButton, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(15)));
+        buttonList.add(new GuiButton(27, XposLeftButton, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(27)));
 
-        buttonList.add(new GuiButton(21, XposRightButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(21)));
-        buttonList.add(new GuiButton(0, XposRightButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(0)));
-        buttonList.add(new GuiButton(29, XposRightButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(29)));
-        buttonList.add(new GuiButton(16, XposRightButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(16)));
-        buttonList.add(new GuiButton(17, XposRightButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(17)));
-        buttonList.add(new GuiSlider(20, XposRightButton, getButtonYPos(6), buttonsWidth, buttonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
-        buttonList.add(new GuiButton(22, XposRightButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(22)));
-        buttonList.add(new GuiSlider(23, XposRightButton, getButtonYPos(8), buttonsWidth, buttonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
+        buttonList.add(new GuiButton(24, XposRightButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(24)));
+        buttonList.add(new GuiButton(21, XposRightButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(21)));
+        buttonList.add(new GuiButton(0, XposRightButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(0)));
+        buttonList.add(new GuiButton(29, XposRightButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(29)));
+        buttonList.add(new GuiButton(16, XposRightButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(16)));
+        buttonList.add(new GuiButton(17, XposRightButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(17)));
+        buttonList.add(new GuiSlider(20, XposRightButton, getButtonYPos(7), buttonsWidth, buttonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
+        buttonList.add(new GuiButton(22, XposRightButton, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(22)));
+        buttonList.add(new GuiSlider(23, XposRightButton, getButtonYPos(9), buttonsWidth, buttonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
 
-        final boolean isPatcherLoaded = ASMLoadingPlugin.isPatcherLoaded();
         if (!isPatcherLoaded) {
-            buttonList.add(new GuiSlider(30, XposRightButton, getButtonYPos(9), buttonsWidth, buttonsHeight, "Tablist size : ", " players", 50d, 125d, ConfigHandler.tablistSize, false, true, this));
+            buttonList.add(new GuiSlider(30, XposRightButton, getButtonYPos(10), buttonsWidth, buttonsHeight, "Tablist size : ", " players", 50d, 125d, ConfigHandler.tablistSize, false, true, this));
         }
 
         /* Exit button */
-        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(isPatcherLoaded ? 12 : 11), 150, buttonsHeight, getButtonDisplayString(4)));
     }
 
     @Override
@@ -101,6 +102,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 return "Show playercount tablist : " + getSuffix(ConfigHandler.showPlayercountTablist);
             case 31:
                 return "Fix actionbar text overlap : " + getSuffix(ConfigHandler.fixActionbarTextOverlap);
+            case 32:
+                return "Hide tablist ping : " + getSuffix(ConfigHandler.hidePingTablist);
             case 4:
                 return "Done";
             default:
@@ -204,6 +207,10 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.GREEN + "Prevents the actionbar text from overlapping with the armor bar");
                 textLines.add(EnumChatFormatting.GREEN + "if the player has more that 2 rows of health");
                 break;
+            case 32:
+                textLines.add(EnumChatFormatting.GREEN + "Stops rendering the ping in the tablist");
+                textLines.add(EnumChatFormatting.GREEN + "when all values are equal to 1");
+                break;
         }
         return textLines;
     }
@@ -269,6 +276,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 31:
                 ConfigHandler.fixActionbarTextOverlap = !ConfigHandler.fixActionbarTextOverlap;
+                break;
+            case 32:
+                ConfigHandler.hidePingTablist = !ConfigHandler.hidePingTablist;
                 break;
             case 4:
                 mc.displayGuiScreen(parent);

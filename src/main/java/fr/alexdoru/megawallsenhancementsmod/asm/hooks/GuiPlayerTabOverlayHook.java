@@ -4,6 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.ColorUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.EnumChatFormatting;
 
 import javax.annotation.Nonnull;
@@ -37,7 +38,7 @@ public class GuiPlayerTabOverlayHook {
         if (!ConfigHandler.showPlayercountTablist) {
             return listIn;
         }
-        final int i = Minecraft.getMinecraft().thePlayer.sendQueue.getPlayerInfoMap().size();
+        final int i = mc.thePlayer.sendQueue.getPlayerInfoMap().size();
         if (i < 2) {
             return ConfigHandler.hideTablistHeaderFooter ? new ArrayList<>() : listIn;
         }
@@ -51,10 +52,26 @@ public class GuiPlayerTabOverlayHook {
         return list;
     }
 
+    private static boolean drawPing = true;
+
+    public static int getPingWidth(List<NetworkPlayerInfo> list) { // called once per frame
+        if (ConfigHandler.hidePingTablist) {
+            final long l = System.nanoTime();
+            drawPing = !list.stream().allMatch(it -> it.getResponseTime() == 1);
+            return drawPing ? 13 : 0;
+        }
+        drawPing = true;
+        return 13;
+    }
+
+    public static boolean shouldDrawPing() { //called n times per frame
+        return drawPing;
+    }
+
     public static EnumChatFormatting getColoredHP(int healthPoints) {
         if (ConfigHandler.useColoredScores) {
             final float maxHealthPoints;
-            final float playerHealth = Minecraft.getMinecraft().thePlayer.getMaxHealth();
+            final float playerHealth = mc.thePlayer.getMaxHealth();
             if (FKCounterMod.isInMwGame && playerHealth == 20f) {
                 maxHealthPoints = 40f;
             } else {
