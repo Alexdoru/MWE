@@ -4,10 +4,13 @@ import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.asm.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.InjectionStatus;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
-import org.objectweb.asm.tree.*;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
 
 import static org.objectweb.asm.Opcodes.BIPUSH;
-import static org.objectweb.asm.Opcodes.GETSTATIC;
+import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 
 public class GuiPlayerTabOverlayTransformer_LongerTab implements IMyClassTransformer {
 
@@ -24,12 +27,12 @@ public class GuiPlayerTabOverlayTransformer_LongerTab implements IMyClassTransfo
             if (checkMethodNode(methodNode, MethodMapping.RENDERPLAYERLIST)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkIntInsnNode(insnNode, BIPUSH, 20)) {
-                        methodNode.instructions.insertBefore(insnNode, new IntInsnNode(BIPUSH, 25));
+                        methodNode.instructions.insertBefore(insnNode, new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "getTablistHeight", "()I", false));
                         methodNode.instructions.remove(insnNode);
                         status.addInjection();
                     }
                     if (!isPatcherLoaded && checkIntInsnNode(insnNode, BIPUSH, 80)) {
-                        methodNode.instructions.insertBefore(insnNode, new FieldInsnNode(GETSTATIC, "fr/alexdoru/megawallsenhancementsmod/config/ConfigHandler", "tablistSize", "I"));
+                        methodNode.instructions.insertBefore(insnNode, new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "getTotalPlayerAmount", "()I", false));
                         methodNode.instructions.remove(insnNode);
                         status.addInjection();
                     }
