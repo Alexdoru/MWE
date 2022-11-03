@@ -56,6 +56,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle(EnumChatFormatting.DARK_PURPLE + "HUDs", 2, getxCenter(), getButtonYPos(-1));
         super.drawScreen(mouseX, mouseY, partialTicks);
+        drawTooltips(mouseX, mouseY);
     }
 
     private String getButtonDisplayString(int id) {
