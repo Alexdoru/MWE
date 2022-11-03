@@ -80,6 +80,10 @@ public class GuiPlayerTabOverlayHook {
         return drawPing;
     }
 
+    public static int fixMissplacedDrawRect(int l1) {
+        return l1 % 2;
+    }
+
     public static EnumChatFormatting getColoredHP(int healthPoints) {
         if (ConfigHandler.useColoredScores) {
             final float maxHealthPoints;
