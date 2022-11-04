@@ -15,7 +15,7 @@ import java.util.List;
 public class GuiPlayerTabOverlayHook {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
-    private static final int FK_SCORE_WIDTH = mc.fontRendererObj.getStringWidth("00  ");
+    private static final int FK_SCORE_WIDTH = mc.fontRendererObj.getStringWidth(" 00");
 
     public static int getFKScoreWidth() {
         return ConfigHandler.fkcounterHUDTablist ? (FKCounterMod.isInMwGame ? FK_SCORE_WIDTH : 0) : 0;
