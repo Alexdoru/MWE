@@ -166,7 +166,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen {
                 mc.displayGuiScreen(new PositionEditGuiScreen(SquadHealthHUD.instance, this));
                 break;
             case 7:
-                KillCooldownHUD.instance.guiPosition.setRelative(0d, 0d);
+                KillCooldownHUD.instance.guiPosition.setRelative(0.15d, 0d);
                 break;
             case 8:
                 ArrowHitHUD.instance.guiPosition.setRelative(0.5d, 9d / 20d);
