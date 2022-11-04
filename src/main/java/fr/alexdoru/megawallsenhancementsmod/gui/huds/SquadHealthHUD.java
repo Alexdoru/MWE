@@ -11,6 +11,7 @@ import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.IRenderer;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -132,13 +133,8 @@ public class SquadHealthHUD implements IRenderer {
 
     private static final Pattern squadSuffixPattern = Pattern.compile("^" + EnumChatFormatting.GOLD + "\\[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "\\] ");
     private String getPlayerName(NetworkPlayerInfo networkPlayerInfoIn) {
-        final String formattedName;
-        if (networkPlayerInfoIn.getDisplayName() != null) {
-            formattedName = networkPlayerInfoIn.getDisplayName().getFormattedText();
-        } else {
-            formattedName = ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.getPlayerTeam(), networkPlayerInfoIn.getGameProfile().getName());
-        }
-        return ConfigHandler.iconsOnNames ? squadSuffixPattern.matcher(formattedName).replaceFirst(""):formattedName;
+        final String formattedName = NameUtil.getFormattedName(networkPlayerInfoIn);
+        return ConfigHandler.iconsOnNames ? squadSuffixPattern.matcher(formattedName).replaceFirst("") : formattedName;
     }
 
     @Override
