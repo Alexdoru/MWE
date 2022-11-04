@@ -146,10 +146,7 @@ public class SquadHealthHUD implements IRenderer {
 
     @Override
     public int getWidth() {
-        return mc.fontRendererObj.getStringWidth(mc.thePlayer.getName())
-                + mc.fontRendererObj.getStringWidth(" 00")
-                + mc.fontRendererObj.getStringWidth(" 0")
-                + 2;
+        return mc.fontRendererObj.getStringWidth(mc.thePlayer.getName());
     }
 
     @Override
