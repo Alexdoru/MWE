@@ -14,6 +14,7 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
+import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -158,6 +159,7 @@ public class MegaWallsStats {
         return legendary_skins;
     }
 
+    @Nullable
     public JsonObject getClassesdata() {
         return classesdata;
     }
