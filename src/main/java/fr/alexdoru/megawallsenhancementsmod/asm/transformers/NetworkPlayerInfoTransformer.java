@@ -33,6 +33,14 @@ public class NetworkPlayerInfoTransformer implements IMyClassTransformer {
                 "I",
                 null
         );
+        addGetterMethod(
+                classNode,
+                "getPlayerFinalkills",
+                ClassMapping.NETWORKPLAYERINFO,
+                FIELD_NAME_FINAL_KILLS,
+                "I",
+                null
+        );
         addSetterMethod(
                 classNode,
                 "setCustomDisplayname",
