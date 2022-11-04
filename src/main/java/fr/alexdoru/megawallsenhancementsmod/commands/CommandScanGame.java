@@ -184,9 +184,7 @@ class ScanPlayerTask implements Callable<String> {
                 return null;
             }
 
-        } catch (ApiException e) {
-            return null;
-        }
+        } catch (ApiException ignored) {}
 
         ScangameData.put(uuid, null);
         return null;
