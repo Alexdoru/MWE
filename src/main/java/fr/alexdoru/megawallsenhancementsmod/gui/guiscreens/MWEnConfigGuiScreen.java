@@ -27,7 +27,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         final boolean isPatcherLoaded = ASMLoadingPlugin.isPatcherLoaded();
         final int buttonsWidth = 210;
         this.maxWidth = (10 + buttonsWidth) * 2;
-        this.maxHeight = (buttonsHeight + 4) * ((isPatcherLoaded ? 12 : 11) + 1) + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * ((isPatcherLoaded ? 11 : 10) + 1) + buttonsHeight;
         super.initGui();
         /*
          * Defines the button list
@@ -60,7 +60,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         }
 
         /* Exit button */
-        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(isPatcherLoaded ? 12 : 11), 150, buttonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(isPatcherLoaded ? 11 : 10), 150, buttonsHeight, getButtonDisplayString(4)));
     }
 
     @Override
