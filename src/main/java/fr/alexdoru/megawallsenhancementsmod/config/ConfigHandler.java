@@ -66,8 +66,8 @@ public class ConfigHandler {
     public static final GuiPosition lastWitherHUDPosition = new GuiPosition(0d, 0d);
     public static boolean showStrengthHUD;
     public static final GuiPosition hunterStrengthHUDPosition = new GuiPosition(0d, 0d);
-    public static boolean showSquadHealthHUD;// TODO add config
-    public static final GuiPosition squadHealthHUDPosition = new GuiPosition(0d, 0d);// TODO add config
+    public static boolean showSquadHUD = true;
+    public static final GuiPosition squadHUDPosition = new GuiPosition(0d, 0d);
 
     /**
      * NoCheaters Config
@@ -172,6 +172,9 @@ public class ConfigHandler {
         final Property pHunterStrengthHUD = config.get(CATEGORY_GUI, "Hunter Strength HUD", true, "Displays HUD and plays a sound 10 seconds before getting strength with hunter");
         final Property pXpos_hunterHUD = config.get(CATEGORY_GUI, "Xpos hunter Strength HUD", 0.5d, "The x position of the Hunter Strength HUD, value ranges from 0 to 1");
         final Property pYpos_hunterHUD = config.get(CATEGORY_GUI, "Ypos hunter Strength HUD", 8d / 20d, "The y position of the Hunter Strength HUD, value ranges from 0 to 1");
+        final Property pshowSquadHUD = config.get(CATEGORY_GUI, "Squad HUD", true, "Displays a mini-tablist with only your squadmates");
+        final Property pXpos_SquadHUD = config.get(CATEGORY_GUI, "Xpos squad HUD", 0d, "The x position of the squad HUD, value ranges from 0 to 1");
+        final Property pYpos_SquadHUD = config.get(CATEGORY_GUI, "Ypos squad HUD", 0d, "The y position of the squad HUD, value ranges from 0 to 1");
 
         final String CATEGORY_NOCHEATERS = "NoCheaters";
         final Property pToggleicons = config.get(CATEGORY_NOCHEATERS, "Toggle Icons", true, "Display warning symbol on nametags of reported players");
@@ -257,6 +260,9 @@ public class ConfigHandler {
         pOrderGUI.add(pHunterStrengthHUD.getName());
         pOrderGUI.add(pXpos_hunterHUD.getName());
         pOrderGUI.add(pYpos_hunterHUD.getName());
+        pOrderGUI.add(pshowSquadHUD.getName());
+        pOrderGUI.add(pXpos_SquadHUD.getName());
+        pOrderGUI.add(pYpos_SquadHUD.getName());
         config.setCategoryPropertyOrder(CATEGORY_GUI, pOrderGUI);
 
         final List<String> pOrderNOCHEATERS = new ArrayList<>();
@@ -337,6 +343,8 @@ public class ConfigHandler {
             lastWitherHUDPosition.setRelative(pXpos_lastWitherHUD.getDouble(), pYpos_lastWitherHUD.getDouble());
             showStrengthHUD = pHunterStrengthHUD.getBoolean();
             hunterStrengthHUDPosition.setRelative(pXpos_hunterHUD.getDouble(), pYpos_hunterHUD.getDouble());
+            showSquadHUD = pshowSquadHUD.getBoolean();
+            squadHUDPosition.setRelative(pXpos_SquadHUD.getDouble(), pYpos_SquadHUD.getDouble());
 
             iconsOnNames = pToggleicons.getBoolean();
             warningMessages = pTogglewarnings.getBoolean();
@@ -426,6 +434,11 @@ public class ConfigHandler {
             final double[] hunterStrengtharray = hunterStrengthHUDPosition.getRelativePosition();
             pXpos_hunterHUD.set(hunterStrengtharray[0]);
             pYpos_hunterHUD.set(hunterStrengtharray[1]);
+
+            pshowSquadHUD.set(showSquadHUD);
+            final double[] squadHUDarray = squadHUDPosition.getRelativePosition();
+            pXpos_SquadHUD.set(squadHUDarray[0]);
+            pYpos_SquadHUD.set(squadHUDarray[1]);
 
             pToggleicons.set(iconsOnNames);
             pTogglewarnings.set(warningMessages);

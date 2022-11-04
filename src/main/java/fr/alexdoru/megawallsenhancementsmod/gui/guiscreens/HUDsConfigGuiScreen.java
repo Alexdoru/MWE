@@ -3,10 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.ArrowHitHUD;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.HunterStrengthHUD;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.KillCooldownHUD;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.LastWitherHPHUD;
+import fr.alexdoru.megawallsenhancementsmod.gui.huds.*;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -28,28 +25,31 @@ public class HUDsConfigGuiScreen extends MyGuiScreen {
         final int buttonsWidth = 200;
         final int sideButtonsWidth = 90;
         this.maxWidth = sideButtonsWidth * 2 + buttonsWidth + 4 * 2;
-        this.maxHeight = (buttonsHeight + 4) * 7 + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * 8 + buttonsHeight;
         super.initGui();
         final int XposCenterButton = getxCenter() - buttonsWidth / 2;
+        final int XposCenterLeftButton = getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth;
+        final int XposCenterRightButton = getxCenter() + buttonsWidth / 2 + 4;
         /* HUD Buttons */
         buttonList.add(new GuiButton(3, XposCenterButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(3)));
         buttonList.add(new GuiButton(2, XposCenterButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(2)));
-        buttonList.add(new GuiButton(9, XposCenterButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(9)));
-        buttonList.add(new GuiButton(11, XposCenterButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(11)));
-        final int XposCenterLeftButton = getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth;
-        final int XposCenterRightButton = getxCenter() + buttonsWidth / 2 + 4;
+        buttonList.add(new GuiButton(15, XposCenterButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(15)));
+        buttonList.add(new GuiButton(9, XposCenterButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(9)));
+        buttonList.add(new GuiButton(11, XposCenterButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(11)));
         /* Buttons : Reset HUD position */
         buttonList.add(new GuiButton(8, XposCenterLeftButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(8)));
         buttonList.add(new GuiButton(7, XposCenterLeftButton, getButtonYPos(2), sideButtonsWidth, buttonsHeight, getButtonDisplayString(7)));
-        buttonList.add(new GuiButton(14, XposCenterLeftButton, getButtonYPos(3), sideButtonsWidth, buttonsHeight, getButtonDisplayString(14)));
-        buttonList.add(new GuiButton(12, XposCenterLeftButton, getButtonYPos(4), sideButtonsWidth, buttonsHeight, getButtonDisplayString(12)));
+        buttonList.add(new GuiButton(16, XposCenterLeftButton, getButtonYPos(3), sideButtonsWidth, buttonsHeight, getButtonDisplayString(16)));
+        buttonList.add(new GuiButton(14, XposCenterLeftButton, getButtonYPos(4), sideButtonsWidth, buttonsHeight, getButtonDisplayString(14)));
+        buttonList.add(new GuiButton(12, XposCenterLeftButton, getButtonYPos(5), sideButtonsWidth, buttonsHeight, getButtonDisplayString(12)));
         /* Buttons : Move HUD */
         buttonList.add(new GuiButton(6, XposCenterRightButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(6)));
         buttonList.add(new GuiButton(5, XposCenterRightButton, getButtonYPos(2), sideButtonsWidth, buttonsHeight, getButtonDisplayString(5)));
-        buttonList.add(new GuiButton(13, XposCenterRightButton, getButtonYPos(3), sideButtonsWidth, buttonsHeight, getButtonDisplayString(13)));
-        buttonList.add(new GuiButton(10, XposCenterRightButton, getButtonYPos(4), sideButtonsWidth, buttonsHeight, getButtonDisplayString(10)));
+        buttonList.add(new GuiButton(17, XposCenterRightButton, getButtonYPos(3), sideButtonsWidth, buttonsHeight, getButtonDisplayString(17)));
+        buttonList.add(new GuiButton(13, XposCenterRightButton, getButtonYPos(4), sideButtonsWidth, buttonsHeight, getButtonDisplayString(13)));
+        buttonList.add(new GuiButton(10, XposCenterRightButton, getButtonYPos(5), sideButtonsWidth, buttonsHeight, getButtonDisplayString(10)));
         /* Exit button */
-        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(6), 150, buttonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(7), 150, buttonsHeight, getButtonDisplayString(4)));
     }
 
     @Override
@@ -61,12 +61,14 @@ public class HUDsConfigGuiScreen extends MyGuiScreen {
 
     private String getButtonDisplayString(int id) {
         switch (id) {
-            case 9:
-                return "Strength HUD : " + getSuffix(ConfigHandler.showStrengthHUD);
-            case 2:
-                return "/kill cooldown HUD : " + getSuffix(ConfigHandler.showKillCooldownHUD);
             case 3:
                 return "Arrow Hit HUD : " + getSuffix(ConfigHandler.showArrowHitHUD);
+            case 2:
+                return "/kill cooldown HUD : " + getSuffix(ConfigHandler.showKillCooldownHUD);
+            case 15:
+                return "Squad HUD : " + getSuffix(ConfigHandler.showSquadHUD);
+            case 9:
+                return "Strength HUD : " + getSuffix(ConfigHandler.showStrengthHUD);
             case 11:
                 return "Wither death time HUD : " + (ConfigHandler.witherHUDinSidebar ? EnumChatFormatting.YELLOW + "in Sidebar" : getSuffix(ConfigHandler.showLastWitherHUD));
             case 4:
@@ -75,11 +77,13 @@ public class HUDsConfigGuiScreen extends MyGuiScreen {
             case 6:
             case 10:
             case 13:
+            case 17:
                 return "Move HUD";
             case 7:
             case 8:
             case 12:
             case 14:
+            case 16:
                 return "Reset position";
             default:
                 return "no display text for this button id";
@@ -103,6 +107,9 @@ public class HUDsConfigGuiScreen extends MyGuiScreen {
                 textLines.add(EnumChatFormatting.GREEN + "Displays a HUD with the time it takes for the last wither to die");
                 textLines.add(EnumChatFormatting.GREEN + "The HUD can be configured to appear in the Sidebar");
                 break;
+            case 15:
+                textLines.add(EnumChatFormatting.GREEN + "Displays a mini tablist with just your squadmates");
+                break;
         }
         return textLines;
     }
@@ -121,6 +128,9 @@ public class HUDsConfigGuiScreen extends MyGuiScreen {
                 break;
             case 3:
                 ConfigHandler.showArrowHitHUD = !ConfigHandler.showArrowHitHUD;
+                break;
+            case 15:
+                ConfigHandler.showSquadHUD = !ConfigHandler.showSquadHUD;
                 break;
             case 11:
                 if (ConfigHandler.showLastWitherHUD && !ConfigHandler.witherHUDinSidebar) {
@@ -152,6 +162,9 @@ public class HUDsConfigGuiScreen extends MyGuiScreen {
             case 13:
                 mc.displayGuiScreen(new PositionEditGuiScreen(HunterStrengthHUD.instance, this));
                 break;
+            case 17:
+                mc.displayGuiScreen(new PositionEditGuiScreen(SquadHealthHUD.instance, this));
+                break;
             case 7:
                 KillCooldownHUD.instance.guiPosition.setRelative(0d, 0d);
                 break;
@@ -163,6 +176,9 @@ public class HUDsConfigGuiScreen extends MyGuiScreen {
                 break;
             case 14:
                 HunterStrengthHUD.instance.guiPosition.setRelative(0.5d, 8d / 20d);
+                break;
+            case 16:
+                SquadHealthHUD.instance.guiPosition.setRelative(0.0d, 0.0d);
                 break;
             default:
                 break;
