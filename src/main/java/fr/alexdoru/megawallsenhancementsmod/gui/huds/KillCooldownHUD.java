@@ -34,6 +34,11 @@ public class KillCooldownHUD extends MyCachedHUD {
     }
 
     @Override
+    public int getWidth() {
+        return frObj.getStringWidth(DUMMY_TEXT);
+    }
+
+    @Override
     public void updateDisplayText() {
         final int timeleft = 60 - ((int) (System.currentTimeMillis() - lastkilltime)) / 1000;
         displayText = EnumChatFormatting.DARK_RED + "/kill cooldown : " + timeleft + "s";
