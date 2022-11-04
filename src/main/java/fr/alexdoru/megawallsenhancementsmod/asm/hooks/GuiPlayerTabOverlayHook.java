@@ -68,6 +68,10 @@ public class GuiPlayerTabOverlayHook {
 
     public static int getPingWidth(List<NetworkPlayerInfo> list) { // called once per frame
         if (ConfigHandler.hidePingTablist) {
+            if (FKCounterMod.isInMwGame) {
+                drawPing = false;
+                return 0;
+            }
             final long l = System.nanoTime();
             drawPing = !list.stream().allMatch(it -> it.getResponseTime() == 1);
             return drawPing ? 13 : 0;
