@@ -72,8 +72,7 @@ public class GuiPlayerTabOverlayHook {
                 drawPing = false;
                 return 0;
             }
-            final long l = System.nanoTime();
-            drawPing = !list.stream().allMatch(it -> it.getResponseTime() == 1);
+            drawPing = !list.stream().allMatch(it -> it.getResponseTime() <= 1);
             return drawPing ? 13 : 0;
         }
         drawPing = true;
