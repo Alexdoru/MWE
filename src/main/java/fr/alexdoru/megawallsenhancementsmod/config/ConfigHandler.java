@@ -53,6 +53,7 @@ public class ConfigHandler {
     public static boolean showPlayercountTablist;
     public static int tablistSize;
     public static boolean fixActionbarTextOverlap;
+    public static boolean hidePingTablist;
 
     /**
      * HUD config
@@ -161,6 +162,7 @@ public class ConfigHandler {
         final Property pshowPlayercountTablist = config.get(CATEGORY_MWENh, "Show playercount Tablist", true, "Shows the amount of players in the lobby at the top of the Tablist");
         final Property ptablistSize = config.get(CATEGORY_MWENh, "Tablist size", 100, "Amount of players displayed in the tablist (Vanilla 80)");
         final Property pfixActionbarTextOverlap = config.get(CATEGORY_MWENh, "Fix actionbar text overlap", true, "Prevents the actionbar text from overlapping with the armor bar");
+        final Property phidePingTablist = config.get(CATEGORY_MWENh, "Hide ping tablist", false, "Don't render the ping in the tablist if all values are equal to 1");
 
         final String CATEGORY_GUI = "GUI";
         final Property pShow_killcooldownHUD = config.get(CATEGORY_GUI, "Show kill cooldown HUD", true, "Displays the cooldown for the /kill command when in MegaWalls");
@@ -251,6 +253,7 @@ public class ConfigHandler {
         pOrderMWWENh.add(pshowPlayercountTablist.getName());
         pOrderMWWENh.add(ptablistSize.getName());
         pOrderMWWENh.add(pfixActionbarTextOverlap.getName());
+        pOrderMWWENh.add(phidePingTablist.getName());
         config.setCategoryPropertyOrder(CATEGORY_MWENh, pOrderMWWENh);
 
         final List<String> pOrderGUI = new ArrayList<>();
@@ -342,6 +345,7 @@ public class ConfigHandler {
             showPlayercountTablist = pshowPlayercountTablist.getBoolean();
             tablistSize = ptablistSize.getInt();
             fixActionbarTextOverlap = pfixActionbarTextOverlap.getBoolean();
+            hidePingTablist = phidePingTablist.getBoolean();
 
             showKillCooldownHUD = pShow_killcooldownHUD.getBoolean();
             killCooldownHUDPosition.setRelative(pXpos_killcooldownHUD.getDouble(), pYpos_killcooldownHUD.getDouble());
@@ -424,6 +428,7 @@ public class ConfigHandler {
             pshowPlayercountTablist.set(showPlayercountTablist);
             ptablistSize.set(tablistSize);
             pfixActionbarTextOverlap.set(fixActionbarTextOverlap);
+            phidePingTablist.set(hidePingTablist);
 
             pShow_killcooldownHUD.set(showKillCooldownHUD);
             final double[] killcooldownHUDarray = killCooldownHUDPosition.getRelativePosition();

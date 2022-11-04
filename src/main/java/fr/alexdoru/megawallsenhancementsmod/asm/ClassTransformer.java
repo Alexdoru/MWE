@@ -36,7 +36,9 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new GuiNewChatTransformer());
         registerTransformer(new GuiPlayerTabOverlayTransformer_ColoredScores());
         registerTransformer(new GuiPlayerTabOverlayTransformer_FinalKills());
+        registerTransformer(new GuiPlayerTabOverlayTransformer_FixMissplacedDrawRect());
         registerTransformer(new GuiPlayerTabOverlayTransformer_HideHeaderFooter());
+        registerTransformer(new GuiPlayerTabOverlayTransformer_HidePing());
         registerTransformer(new GuiPlayerTabOverlayTransformer_LongerTab());
         registerTransformer(new GuiPlayerTabOverlayTransformer_PlayerCount());
         registerTransformer(new GuiScreenBookTransformer());

@@ -38,7 +38,7 @@ public class GuiPlayerTabOverlayTransformer_HideHeaderFooter implements IMyClass
                             if (checkJumpInsnNode(thirdNode, IFNULL)) {
                                 final LabelNode label = ((JumpInsnNode) thirdNode).label;
                                 final InsnList list = new InsnList();
-                                list.add(getNewConfigFieldInsnNode("hideTablistHeaderFooter"));
+                                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "shouldHideFooter", "()Z", false));
                                 list.add(new JumpInsnNode(IFNE, label));
                                 methodNode.instructions.insert(thirdNode, list);
                                 status.addInjection();
