@@ -22,6 +22,7 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -56,7 +57,7 @@ public class NameUtil {
         if (isValidMinecraftName(playername)) {
             final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
             if (networkPlayerInfo != null) {
-                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(transformGameProfile(networkPlayerInfo.getGameProfile(), true));
+                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(transformGameProfile(networkPlayerInfo.getGameProfile(), true).displayName);
             }
             final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
@@ -73,7 +74,7 @@ public class NameUtil {
      * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
      */
     public static void updateGameProfileAndName(NetworkPlayerInfo networkPlayerInfo) {
-        ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(transformGameProfile(networkPlayerInfo.getGameProfile(), true));
+        ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(transformGameProfile(networkPlayerInfo.getGameProfile(), true).displayName);
         final EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
         if (player != null) {
             NameUtil.transformNametag(player, false);
@@ -89,7 +90,7 @@ public class NameUtil {
         if (isValidMinecraftName(playername)) {
             final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
             if (networkPlayerInfo != null) {
-                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(transformGameProfile(networkPlayerInfo.getGameProfile(), true));
+                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(transformGameProfile(networkPlayerInfo.getGameProfile(), true).displayName);
             }
         }
     }
@@ -135,15 +136,15 @@ public class NameUtil {
     }
 
     /**
-     * Transforms the infos storred in GameProfile.MWPlayerData
+     * Transforms the infos storred in GameProfile.MWPlayerData and returns the MWplayerData of the player
      * For each new player spawned in the world it will create a new networkplayerinfo instance a rerun all the code in the method
-     * to generate the field MWPlayerData, however it will reuse the field to display the nametag
-     * This method also returns the customDisplayName to disaply in the Tablist
+     * to generate the MWPlayerData instance, however it will reuse the field to display the nametag
      */
-    public static IChatComponent transformGameProfile(GameProfile gameProfileIn, boolean forceRefresh) {
+    @Nonnull
+    public static MWPlayerData transformGameProfile(GameProfile gameProfileIn, boolean forceRefresh) {
 
         final GameProfileAccessor gameProfileAccessor = (GameProfileAccessor) gameProfileIn;
-        final MWPlayerData mwPlayerData = gameProfileAccessor.getMWPlayerData();
+        MWPlayerData mwPlayerData = gameProfileAccessor.getMWPlayerData();
         final UUID id = gameProfileIn.getId();
 
         if (!forceRefresh) {
@@ -151,10 +152,10 @@ public class NameUtil {
                 final MWPlayerData cachedMWPlayerData = MWPlayerData.dataCache.get(id);
                 if (cachedMWPlayerData != null) {
                     gameProfileAccessor.setMWPlayerData(cachedMWPlayerData);
-                    return cachedMWPlayerData.displayName;
+                    return cachedMWPlayerData;
                 }
             } else {
-                return mwPlayerData.displayName;
+                return mwPlayerData;
             }
         }
 
@@ -229,12 +230,13 @@ public class NameUtil {
         }
 
         if (mwPlayerData == null) {
-            gameProfileAccessor.setMWPlayerData(new MWPlayerData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring));
+            mwPlayerData = new MWPlayerData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring);
+            gameProfileAccessor.setMWPlayerData(mwPlayerData);
         } else {
             mwPlayerData.setData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring);
         }
 
-        return displayName;
+        return mwPlayerData;
 
     }
 
