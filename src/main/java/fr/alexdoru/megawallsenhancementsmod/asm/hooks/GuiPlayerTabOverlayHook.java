@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.ColorUtil;
@@ -69,7 +70,7 @@ public class GuiPlayerTabOverlayHook {
     public static int getPingWidth(List<NetworkPlayerInfo> list) { // called once per frame
         if (ConfigHandler.hidePingTablist) {
             final long l = System.nanoTime();
-            drawPing = !list.stream().allMatch(it -> it.getResponseTime() == 1);
+            drawPing = !list.stream().allMatch(it -> it.getResponseTime() <= 1);
             return drawPing ? 13 : 0;
         }
         drawPing = true;
