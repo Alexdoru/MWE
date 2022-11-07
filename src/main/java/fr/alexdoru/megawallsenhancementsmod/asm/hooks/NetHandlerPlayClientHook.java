@@ -32,14 +32,14 @@ public class NetHandlerPlayClientHook {
             final String playerName = ((NetworkPlayerInfo) o).getGameProfile().getName();
             final NetworkPlayerInfo removedInfo = playerInfoMap.remove(playerName);
             latestDisconnected.add(new DisconnectedPlayer(System.currentTimeMillis(), playerName, removedInfo == null ? playerName : NameUtil.getFormattedName(removedInfo)));
-            MWPlayerData.dataCache.remove(((NetworkPlayerInfo) o).getGameProfile().getId());
+            MWPlayerData.remove(((NetworkPlayerInfo) o).getGameProfile().getId());
         }
     }
 
     public static void clearPlayerMap() {
         playerInfoMap.clear();
         latestDisconnected.clear();
-        MWPlayerData.dataCache.clear();
+        MWPlayerData.clearData();
     }
 
     public static void handleTeamPacket(S3EPacketTeams packetIn, ScorePlayerTeam scoreplayerteam) {

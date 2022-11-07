@@ -11,33 +11,52 @@ import java.util.UUID;
  */
 public class MWPlayerData {
 
-    public static final HashMap<UUID, MWPlayerData> dataCache = new HashMap<>();
+    private static final HashMap<UUID, PlayerData> dataCache = new HashMap<>();
 
-    public WDR wdr;
-    public IChatComponent extraPrefix;
-    public String squadname;
-    public IChatComponent displayName;
-    public String originalP4Tag;
-    public String P5Tag;
-
-    public MWPlayerData(UUID id, WDR wdr, IChatComponent extraPrefix, String squadname, IChatComponent displayNameIn, String originalP4Tag, String P5Tag) {
-        this.wdr = wdr;
-        this.extraPrefix = extraPrefix;
-        this.squadname = squadname;
-        this.displayName = displayNameIn;
-        this.originalP4Tag = originalP4Tag;
-        this.P5Tag = P5Tag;
-        dataCache.put(id, this);
+    public static void clearData() {
+        dataCache.clear();
     }
 
-    public void setData(UUID id, WDR wdr, IChatComponent extraPrefix, String squadname, IChatComponent displayNameIn, String originalP4Tag, String P5Tag) {
-        this.wdr = wdr;
-        this.extraPrefix = extraPrefix;
-        this.squadname = squadname;
-        this.displayName = displayNameIn;
-        this.originalP4Tag = originalP4Tag;
-        this.P5Tag = P5Tag;
-        dataCache.put(id, this);
+    public static void put(UUID uuid, PlayerData data) {
+        dataCache.put(uuid, data);
+    }
+
+    public static PlayerData get(UUID uuid) {
+        return dataCache.get(uuid);
+    }
+
+    public static void remove(UUID uuid) {
+        dataCache.remove(uuid);
+    }
+
+    public static class PlayerData {
+
+        public WDR wdr;
+        public IChatComponent extraPrefix;
+        public String squadname;
+        public IChatComponent displayName;
+        public String originalP4Tag;
+        public String P5Tag;
+
+        public PlayerData(UUID id, WDR wdr, IChatComponent extraPrefix, String squadname, IChatComponent displayNameIn, String originalP4Tag, String P5Tag) {
+            this.wdr = wdr;
+            this.extraPrefix = extraPrefix;
+            this.squadname = squadname;
+            this.displayName = displayNameIn;
+            this.originalP4Tag = originalP4Tag;
+            this.P5Tag = P5Tag;
+            dataCache.put(id, this);
+        }
+
+        public void setData(WDR wdr, IChatComponent extraPrefix, String squadname, IChatComponent displayNameIn, String originalP4Tag, String P5Tag) {
+            this.wdr = wdr;
+            this.extraPrefix = extraPrefix;
+            this.squadname = squadname;
+            this.displayName = displayNameIn;
+            this.originalP4Tag = originalP4Tag;
+            this.P5Tag = P5Tag;
+        }
+
     }
 
 }
