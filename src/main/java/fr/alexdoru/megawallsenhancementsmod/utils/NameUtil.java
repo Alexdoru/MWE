@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
 import com.mojang.authlib.GameProfile;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.NetworkPlayerInfoAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
@@ -62,7 +63,7 @@ public class NameUtil {
             final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
                 transformGameProfile(player.getGameProfile(), true);
-                NameUtil.transformNametag(player, false);
+                NameUtil.updateEntityPlayerFields(player, false);
                 if (refreshDisplayName) {
                     player.refreshDisplayName();
                 }
@@ -77,7 +78,7 @@ public class NameUtil {
         ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(transformGameProfile(networkPlayerInfo.getGameProfile(), true).displayName);
         final EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
         if (player != null) {
-            NameUtil.transformNametag(player, false);
+            NameUtil.updateEntityPlayerFields(player, false);
         }
     }
 
@@ -96,10 +97,11 @@ public class NameUtil {
     }
 
     /**
-     * Transforms the nametag of the player entity based on the infos stored in getGameProfile.MWPlayerData
-     * to save performance instead of redoing the hashmap access
+     * Updates the custom fields in the entity player, such as the prestige V tag,
+     * so current prestige 4 tag, the icon on nametags and also checks to print
+     * the warning message if player was reported and is currently joining the world
      */
-    public static void transformNametag(EntityPlayer player, boolean onPlayerJoin) {
+    public static void updateEntityPlayerFields(EntityPlayer player, boolean onPlayerJoin) {
 
         if (!onPlayerJoin) {
             player.getPrefixes().removeAll(allPrefix);
@@ -110,6 +112,9 @@ public class NameUtil {
         if (mwPlayerData == null) {
             return;
         }
+
+        ((EntityPlayerAccessor) player).setPrestige4Tag(mwPlayerData.originalP4Tag);
+        ((EntityPlayerAccessor) player).setPrestige5Tag(mwPlayerData.P5Tag);
 
         if (mwPlayerData.extraPrefix != null) {
             player.addPrefix(mwPlayerData.extraPrefix);
