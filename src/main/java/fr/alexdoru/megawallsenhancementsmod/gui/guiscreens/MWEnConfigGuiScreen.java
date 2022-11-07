@@ -24,10 +24,10 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
 
     @Override
     public void initGui() {
-        final boolean isPatcherLoaded = ASMLoadingPlugin.isPatcherLoaded();
+        final boolean isPatcherNotLoaded = !ASMLoadingPlugin.isPatcherLoaded();
         final int buttonsWidth = 210;
         this.maxWidth = (10 + buttonsWidth) * 2;
-        this.maxHeight = (buttonsHeight + 4) * ((isPatcherLoaded ? 11 : 10) + 1) + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * ((isPatcherNotLoaded ? 11 : 10) + 1) + buttonsHeight;
         super.initGui();
         /*
          * Defines the button list
@@ -55,12 +55,12 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(22, XposRightButton, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(22)));
         buttonList.add(new GuiSlider(23, XposRightButton, getButtonYPos(9), buttonsWidth, buttonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
 
-        if (!isPatcherLoaded) {
+        if (isPatcherNotLoaded) {
             buttonList.add(new GuiSlider(30, XposRightButton, getButtonYPos(10), buttonsWidth, buttonsHeight, "Tablist size : ", " players", 50d, 125d, ConfigHandler.tablistSize, false, true, this));
         }
 
         /* Exit button */
-        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(isPatcherLoaded ? 11 : 10), 150, buttonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(isPatcherNotLoaded ? 12 : 11), 150, buttonsHeight, getButtonDisplayString(4)));
     }
 
     @Override
