@@ -52,11 +52,6 @@ public class LastWitherHPHUD extends MyCachedHUD {
     }
 
     @Override
-    public int getWidth() {
-        return frObj.getStringWidth(DUMMY_TEXT);
-    }
-
-    @Override
     public void render(ScaledResolution resolution) {
         final int[] absolutePos = this.guiPosition.getAbsolutePositionForRender(resolution, frObj.getStringWidth(displayText), frObj.FONT_HEIGHT);
         frObj.drawStringWithShadow(displayText, absolutePos[0], absolutePos[1], 0);
