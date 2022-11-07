@@ -27,6 +27,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.WorldSettings;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -97,7 +98,7 @@ public class SquadHealthHUD implements IRenderer {
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 GlStateManager.enableAlpha();
                 GlStateManager.enableBlend();
-                GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+                GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
                 final NetworkPlayerInfo networkplayerinfo = playerlistToRender.get(i);
                 final String formattedName = this.getPlayerName(networkplayerinfo);
                 final GameProfile gameprofile = networkplayerinfo.getGameProfile();
@@ -169,7 +170,7 @@ public class SquadHealthHUD implements IRenderer {
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 GlStateManager.enableAlpha();
                 GlStateManager.enableBlend();
-                GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+                GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
                 final String formattedName = EnumChatFormatting.GREEN + mc.thePlayer.getName();
                 this.mc.fontRendererObj.drawStringWithShadow(formattedName, (float) xDrawingPos, (float) yDrawingPos, -1);
                 final int xStartFinalDrawingPos = xDrawingPos + maxNameWidth + 1;
