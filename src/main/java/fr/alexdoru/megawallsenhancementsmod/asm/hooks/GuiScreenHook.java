@@ -66,7 +66,7 @@ public class GuiScreenHook {
                     }
                 }
                 ChatHandler.deleteWarningMessagesFor(playername);
-                NameUtil.updateGameProfileAndName(playername, false);
+                NameUtil.updateMWPlayerDataAndEntityData(playername, false);
             } else {
                 ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Those cheats aren't recognized by the mod :" + EnumChatFormatting.GOLD + wdr.hacksToString() + EnumChatFormatting.RED + ", use valid cheats to use the reporting features.");
             }

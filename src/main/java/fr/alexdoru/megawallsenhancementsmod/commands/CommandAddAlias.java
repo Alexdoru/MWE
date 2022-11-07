@@ -52,12 +52,12 @@ public class CommandAddAlias extends MyAbstractCommand {
         }
         if (args[0].equals("remove")) {
             AliasData.removeAlias(args[1]);
-            NameUtil.updateGameProfileAndName(args[1], false);
+            NameUtil.updateMWPlayerDataAndEntityData(args[1], false);
             ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Removed alias for " + EnumChatFormatting.GOLD + args[1]);
             return;
         }
         AliasData.putAlias(args[0], args[1]);
-        NameUtil.updateGameProfileAndName(args[0], false);
+        NameUtil.updateMWPlayerDataAndEntityData(args[0], false);
         ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Added alias for " + EnumChatFormatting.GOLD + args[0] + EnumChatFormatting.GREEN + " : " + EnumChatFormatting.GOLD + args[1]);
     }
 

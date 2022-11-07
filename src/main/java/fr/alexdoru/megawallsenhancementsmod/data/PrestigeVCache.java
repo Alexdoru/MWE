@@ -57,7 +57,7 @@ public class PrestigeVCache {
                 final PlayerPrestigeData playerPrestigeData = new PlayerPrestigeData();
                 playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints(), mwclassstats.getCoins());
                 prestigeDataMap.put(uuid, playerPrestigeData);
-                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateGameProfileAndName(playername, false));
+                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateMWPlayerDataAndEntityData(playername, false));
             } catch (ApiException e) {
                 prestigeDataMap.put(uuid, new PlayerPrestigeData());
             }
@@ -78,7 +78,7 @@ public class PrestigeVCache {
                 final CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(uuid);
                 final MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwClass.className);
                 playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints(), mwclassstats.getCoins());
-                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateGameProfileAndName(playername, false));
+                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateMWPlayerDataAndEntityData(playername, false));
             } catch (ApiException e) {
                 playerPrestigeData.addClass(mwClass, 0, 0);
             }

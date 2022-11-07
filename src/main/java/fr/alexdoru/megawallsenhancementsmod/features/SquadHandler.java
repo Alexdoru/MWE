@@ -32,13 +32,13 @@ public class SquadHandler {
 
     public static void addPlayer(String playername, String friendlyName) {
         squadmap.put(playername, friendlyName);
-        NameUtil.updateGameProfileAndName(playername, true);
+        NameUtil.updateMWPlayerDataAndEntityData(playername, true);
     }
 
     public static boolean removePlayer(String playername) {
         final boolean success = squadmap.remove(playername) != null;
         if (success) {
-            NameUtil.updateGameProfileAndName(playername, true);
+            NameUtil.updateMWPlayerDataAndEntityData(playername, true);
         }
         return success;
     }
@@ -48,7 +48,7 @@ public class SquadHandler {
         squadmap.forEach((key, value) -> playerlist.add(key));
         squadmap.clear();
         for (final String playername : playerlist) {
-            NameUtil.updateGameProfileAndName(playername, true);
+            NameUtil.updateMWPlayerDataAndEntityData(playername, true);
         }
     }
 
