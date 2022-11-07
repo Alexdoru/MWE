@@ -83,8 +83,7 @@ public class NameUtil {
         if (isValidMinecraftName(playername)) {
             final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
             if (networkPlayerInfo != null) {
-                final MWPlayerData mwPlayerData = updateAndGetMWPlayerData(networkPlayerInfo.getGameProfile(), true);
-                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(mwPlayerData.displayName);
+                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(updateAndGetMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
             }
             final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
@@ -128,7 +127,7 @@ public class NameUtil {
      */
     public static void updateEntityPlayerFields(EntityPlayer player, boolean onPlayerJoin) {
 
-        final MWPlayerData mwPlayerData = MWPlayerData.dataCache.get(player.getUniqueID());
+        final MWPlayerData.PlayerData mwPlayerData = MWPlayerData.get(player.getUniqueID());
         if (mwPlayerData == null) {
             return;
         }
@@ -166,10 +165,10 @@ public class NameUtil {
      * a rerun all the code in the method to generate the MWPlayerData instance
      */
     @Nonnull
-    public static MWPlayerData updateAndGetMWPlayerData(GameProfile gameProfileIn, boolean forceRefresh) {
+    public static MWPlayerData.PlayerData updateAndGetMWPlayerData(GameProfile gameProfileIn, boolean forceRefresh) {
 
         final UUID id = gameProfileIn.getId();
-        MWPlayerData mwPlayerData = MWPlayerData.dataCache.get(id);
+        MWPlayerData.PlayerData mwPlayerData = MWPlayerData.get(id);
 
         if (!forceRefresh && mwPlayerData != null) {
             return mwPlayerData;
@@ -246,9 +245,9 @@ public class NameUtil {
         }
 
         if (mwPlayerData == null) {
-            mwPlayerData = new MWPlayerData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring);
+            mwPlayerData = new MWPlayerData.PlayerData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring);
         } else {
-            mwPlayerData.setData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring);
+            mwPlayerData.setData(wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring);
         }
 
         return mwPlayerData;
@@ -264,7 +263,7 @@ public class NameUtil {
         if (networkPlayerInfo == null) {
             return playername;
         }
-        final MWPlayerData mwPlayerData = MWPlayerData.dataCache.get(networkPlayerInfo.getGameProfile().getId());
+        final MWPlayerData.PlayerData mwPlayerData = MWPlayerData.get(networkPlayerInfo.getGameProfile().getId());
         if (mwPlayerData != null && mwPlayerData.P5Tag != null && mwPlayerData.originalP4Tag != null) {
             return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername).replace(mwPlayerData.originalP4Tag, mwPlayerData.P5Tag);
         }
