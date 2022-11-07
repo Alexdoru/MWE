@@ -19,7 +19,7 @@ public class PlayerJoinListener {
                         - for self the player spawn before receiving a networkplayerinfo packet
                      */
                     new DelayedTask(() -> {
-                        NameUtil.transformGameProfile(((EntityPlayerSP) event.entity).getGameProfile(), true);
+                        NameUtil.updateAndGetMWPlayerData(((EntityPlayerSP) event.entity).getGameProfile(), true);
                         NameUtil.updateEntityPlayerFields((EntityPlayer) event.entity, true);
                     }, 1);
                 } else {

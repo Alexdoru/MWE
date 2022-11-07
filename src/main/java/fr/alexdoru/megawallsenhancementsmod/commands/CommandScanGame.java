@@ -177,7 +177,7 @@ class ScanPlayerTask implements Callable<String> {
             if (imsg != null) {
                 ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(NameUtil.getFormattedNameWithPlanckeClickEvent(networkPlayerInfo)).appendSibling(imsg));
                 ScangameData.put(uuid, imsg);
-                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateGameProfileAndName(networkPlayerInfo));
+                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateMWPlayerDataAndEntityData(networkPlayerInfo));
                 return null;
             }
 
