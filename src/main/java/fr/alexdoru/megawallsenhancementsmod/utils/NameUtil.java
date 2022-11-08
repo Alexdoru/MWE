@@ -98,12 +98,23 @@ public class NameUtil {
     /**
      * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
      */
-    public static void updateMWPlayerDataAndEntityData(NetworkPlayerInfo networkPlayerInfo) {
+    public static void updateMWPlayerDataAndEntityData(NetworkPlayerInfo networkPlayerInfo, boolean refreshDisplayName) {
         ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(updateAndGetMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
         final EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
         if (player != null) {
             NameUtil.updateEntityPlayerFields(player, false);
+            if (refreshDisplayName) {
+                player.refreshDisplayName();
+            }
         }
+    }
+
+    public static void refreshAllNamesInWorld() {
+        mc.getNetHandler().getPlayerInfoMap().forEach(p -> {
+            if (p != null) {
+                NameUtil.updateMWPlayerDataAndEntityData(p, true);
+            }
+        });
     }
 
     private static final Pattern MINECRAFT_NAME_PATTERN = Pattern.compile("\\w{1,16}");
@@ -255,6 +266,29 @@ public class NameUtil {
     }
 
     /**
+     * Returns the formatted name of the player, additionnal icons and prestive V tag included
+     * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay}
+     */
+    public static String getFormattedName(String playername) {
+        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+        if (networkPlayerInfo == null) {
+            return playername;
+        }
+        return getFormattedName(networkPlayerInfo);
+    }
+
+    /**
+     * Returns the formatted name of the player, additionnal icons and prestive V tag included
+     * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay}
+     */
+    public static String getFormattedName(NetworkPlayerInfo networkPlayerInfo) {
+        if (networkPlayerInfo.getDisplayName() == null) {
+            return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), networkPlayerInfo.getGameProfile().getName());
+        }
+        return networkPlayerInfo.getDisplayName().getFormattedText();
+    }
+
+    /**
      * Returns the formatted team name with additionnaly a custom prestige V tag
      * This doesn't return the icons in front that the player may have.
      */
@@ -268,25 +302,6 @@ public class NameUtil {
             return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername).replace(mwPlayerData.originalP4Tag, mwPlayerData.P5Tag);
         }
         return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername);
-    }
-
-    /**
-     * Returns the formatted name of the player, additionnal icons and prestive V tag included
-     * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay}
-     */
-    public static String getFormattedName(String playername) {
-        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
-        if (networkPlayerInfo == null) {
-            return playername;
-        }
-        return getFormattedName(networkPlayerInfo);
-    }
-
-    public static String getFormattedName(NetworkPlayerInfo networkPlayerInfo) {
-        if (networkPlayerInfo.getDisplayName() == null) {
-            return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), networkPlayerInfo.getGameProfile().getName());
-        }
-        return networkPlayerInfo.getDisplayName().getFormattedText();
     }
 
     /**
@@ -304,14 +319,6 @@ public class NameUtil {
                 .setChatStyle(new ChatStyle()
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to see the mega walls stats of that player")))
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + networkPlayerInfoIn.getGameProfile().getName() + " mw")));
-    }
-
-    public static void refreshAllNamesInWorld() {
-        mc.getNetHandler().getPlayerInfoMap().forEach(p -> {
-            if (p != null) {
-                NameUtil.updateMWPlayerDataAndEntityData(p.getGameProfile().getName(), true);
-            }
-        });
     }
 
     /**
