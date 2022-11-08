@@ -18,14 +18,11 @@ public class RenderGlobalTransformer implements IMyClassTransformer {
 
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
-
         status.setInjectionPoints(2);
-
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.RENDERENTITIES)) {
                 int ordinal = 0;
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-
                     if (checkInsnNode(insnNode, ICONST_0)) {
                         final AbstractInsnNode nextNode = insnNode.getNext();
                         if (checkFieldInsnNode(nextNode, PUTFIELD, FieldMapping.RENDERGLOBAL$COUNTENTITIESRENDERED)) {
@@ -36,9 +33,7 @@ public class RenderGlobalTransformer implements IMyClassTransformer {
                             methodNode.instructions.insert(nextNode, new MethodInsnNode(INVOKESTATIC, getHookClass("RenderGlobalHook"), "resetEntityItemCount", "()V", false));
                             status.addInjection();
                         }
-                    }
-
-                    if (checkMethodInsnNode(insnNode, MethodMapping.RENDERENTITYSIMPLE)) {
+                    } else if (checkMethodInsnNode(insnNode, MethodMapping.RENDERENTITYSIMPLE)) {
                         ordinal++;
                         /* Replace line 672 :
                          * this.renderManager.renderEntitySimple(entity2, partialTicks);
@@ -57,7 +52,6 @@ public class RenderGlobalTransformer implements IMyClassTransformer {
                             status.addInjection();
                         }
                     }
-
                 }
             }
         }
