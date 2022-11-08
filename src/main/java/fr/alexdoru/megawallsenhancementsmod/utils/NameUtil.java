@@ -146,6 +146,10 @@ public class NameUtil {
         ((EntityPlayerAccessor) player).setPrestige4Tag(mwPlayerData.originalP4Tag);
         ((EntityPlayerAccessor) player).setPrestige5Tag(mwPlayerData.P5Tag);
 
+        if (!onPlayerJoin) {
+            player.getPrefixes().removeAll(allPrefix);
+        }
+
         if (mwPlayerData.extraPrefix != null) {
             player.addPrefix(mwPlayerData.extraPrefix);
         }
