@@ -144,15 +144,24 @@ public class ScoreboardUtils {
             if (scoreplayerteam == null) {
                 s1 = score.getPlayerName() + EnumChatFormatting.RED + "" + score.getScorePoints();
                 printChat.add(s1);
-                printConsole.add("playername : '" + score.getPlayerName() + "' points : '" + score.getScorePoints());
+                printConsole.add("playername : '" + getStringAsUnicode(score.getPlayerName()) + "' points : '" + score.getScorePoints());
             } else {
                 s1 = scoreplayerteam.getColorPrefix() + score.getPlayerName() + scoreplayerteam.getColorSuffix() + EnumChatFormatting.RED + "" + score.getScorePoints();
                 printChat.add(s1);
-                printConsole.add("prefix : '" + scoreplayerteam.getColorPrefix() + "' playername : '" + score.getPlayerName() + "' suffix : " + scoreplayerteam.getColorSuffix() + "' points : '" + score.getScorePoints());
+                printConsole.add("prefix : '" + scoreplayerteam.getColorPrefix() + "' playername : '" + getStringAsUnicode(score.getPlayerName()) + "' suffix : " + scoreplayerteam.getColorSuffix() + "' points : '" + score.getScorePoints());
             }
         }
         printChat.forEach(ChatUtil::addChatMessage);
         printConsole.forEach(MegaWallsEnhancementsMod.logger::info);
+    }
+
+    private static String getStringAsUnicode(String s) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            final char c = s.charAt(i);
+            stringBuilder.append("\\u").append(Integer.toHexString(c | 0x10000).substring(1));
+        }
+        return stringBuilder.toString();
     }
 
     /**
