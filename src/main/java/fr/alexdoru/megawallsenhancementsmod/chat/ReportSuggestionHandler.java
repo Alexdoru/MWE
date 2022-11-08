@@ -300,7 +300,7 @@ public class ReportSuggestionHandler {
         }
 
         if (!isSenderInTablist || messageSender == null) {
-            final String newFmsg = StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED);
+            final String newFmsg = getReportTextWithFormattedName(fmsg, reportText, reportedPlayer);
             final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
             addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
             ChatUtil.addChatMessage(imsg);
@@ -332,7 +332,7 @@ public class ReportSuggestionHandler {
             return;
         }
 
-        final String newFmsg = StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED) + " ";
+        final String newFmsg = getReportTextWithFormattedName(fmsg, reportText, reportedPlayer);
         final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
         if (FKCounterMod.isMWEnvironement && !isSenderMyself) {
             imsg.appendSibling(ChatUtil.getIgnoreButton(messageSender));
@@ -340,6 +340,14 @@ public class ReportSuggestionHandler {
         addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
         ChatUtil.addChatMessage(imsg);
 
+    }
+
+    private static String getReportTextWithFormattedName(String fmsg, String reportText, String reportedPlayer) {
+        if (FKCounterMod.isInMwGame) {
+            final String newReportText = EnumChatFormatting.DARK_RED + reportText.replace(reportedPlayer, NameUtil.getFormattedNameWithoutIcons(reportedPlayer) + EnumChatFormatting.DARK_RED);
+            return StringUtil.replaceTargetWith(fmsg, reportText, newReportText);
+        }
+        return StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED);
     }
 
     /**

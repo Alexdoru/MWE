@@ -262,7 +262,7 @@ public class ChatUtil {
     }
 
     public static IChatComponent getUnIgnoreButton(String uuid, String playername) {
-        return new ChatComponentText(EnumChatFormatting.YELLOW + "[Un-Ignore] ")
+        return new ChatComponentText(EnumChatFormatting.YELLOW + " [Un-Ignore]")
                 .setChatStyle(new ChatStyle()
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nocheaters ignoreremove " + uuid + " " + playername))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
