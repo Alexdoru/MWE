@@ -72,6 +72,10 @@ public interface IMyClassTransformer {
                 && ((FieldInsnNode) insnNode).desc.equals(field.desc);
     }
 
+    default boolean checkLdcInsnNode(AbstractInsnNode insnNode, Object obj) {
+        return insnNode instanceof LdcInsnNode && ((LdcInsnNode) insnNode).cst != null && ((LdcInsnNode) insnNode).cst.equals(obj);
+    }
+
     default boolean checkFrameNode(AbstractInsnNode insnNode, int type) {
         return insnNode instanceof FrameNode && ((FrameNode) insnNode).type == type;
     }
@@ -123,6 +127,7 @@ public interface IMyClassTransformer {
                 return DRETURN;
             case "F":
                 return FRETURN;
+            case "C":
             case "I":
             case "Z":
                 return IRETURN;
@@ -168,6 +173,7 @@ public interface IMyClassTransformer {
                 return DLOAD;
             case "F":
                 return FLOAD;
+            case "C":
             case "I":
             case "Z":
                 return ILOAD;
