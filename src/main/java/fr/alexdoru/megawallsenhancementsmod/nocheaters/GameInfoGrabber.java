@@ -1,7 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
-import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
-import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardParser;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
@@ -31,21 +29,6 @@ public class GameInfoGrabber {
             }
         }
         return "?";
-    }
-
-    /**
-     * Prints scoreboard in chat
-     */
-    public static void debugGetScoreboard() {
-        final List<String> scoresColor = ScoreboardUtils.getFormattedSidebarText();
-        if (scoresColor.size() == 0) {
-            ChatUtil.addChatMessage("There are no active scoreboards in this world.");
-            return;
-        }
-        for (final String sidebarScore : scoresColor) {
-            ChatUtil.addChatMessage(sidebarScore);
-            MegaWallsEnhancementsMod.logger.info(sidebarScore);
-        }
     }
 
     public static void saveGameInfoOnGameStart() {
