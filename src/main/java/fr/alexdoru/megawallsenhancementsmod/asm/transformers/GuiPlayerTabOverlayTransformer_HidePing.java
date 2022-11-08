@@ -37,15 +37,13 @@ public class GuiPlayerTabOverlayTransformer_HidePing implements IMyClassTransfor
                     } else if (checkVarInsnNode(insnNode, ALOAD, 0)) {
                         latestAload0 = insnNode;
                     } else if (latestAload0 != null && checkMethodInsnNode(insnNode, MethodMapping.GUIPLAYERTABOVERLAY$DRAWPING)) {
-                        if (checkFrameNode(latestAload0.getPrevious(), F_SAME)) {
-                            final LabelNode label = new LabelNode();
-                            final InsnList list = new InsnList();
-                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "shouldDrawPing", "()Z", false));
-                            list.add(new JumpInsnNode(IFEQ, label));
-                            methodNode.instructions.insertBefore(latestAload0, list);
-                            methodNode.instructions.insert(insnNode, label);
-                            status.addInjection();
-                        }
+                        final LabelNode label = new LabelNode();
+                        final InsnList list = new InsnList();
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "shouldDrawPing", "()Z", false));
+                        list.add(new JumpInsnNode(IFEQ, label));
+                        methodNode.instructions.insertBefore(latestAload0, list);
+                        methodNode.instructions.insert(insnNode, label);
+                        status.addInjection();
                     }
                 }
             }
