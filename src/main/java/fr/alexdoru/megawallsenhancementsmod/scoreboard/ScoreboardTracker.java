@@ -21,6 +21,13 @@ public class ScoreboardTracker {
     }
 
     @SubscribeEvent
+    public void onGameStart(MegaWallsGameEvent event) {
+        if (event.getType() == MegaWallsGameEvent.EventType.GAME_START) {
+            ScoreboardParser.onGameStart();
+        }
+    }
+
+    @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
 
         if (event.phase == TickEvent.Phase.START) {
