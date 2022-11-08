@@ -244,7 +244,6 @@ public class NameUtil {
                         }
                     }
                 }
-
                 final boolean isobf = teamprefix.contains("\u00a7k");
                 final String alias = AliasData.getAlias(username);
                 if (iExtraPrefix != null || isSquadMate || formattedPrestigeVstring != null || alias != null) {
@@ -267,6 +266,11 @@ public class NameUtil {
 
         return mwPlayerData;
 
+    }
+
+    private static final Pattern obfPattern = Pattern.compile("\u00a7k[OX]*");
+    private static String deobfString(String obfText) {
+        return obfPattern.matcher(obfText).replaceAll("");
     }
 
     /**
@@ -317,7 +321,7 @@ public class NameUtil {
             formattedName = networkPlayerInfoIn.getGameProfile().getName();
         } else {
             final ScorePlayerTeam team = networkPlayerInfoIn.getPlayerTeam();
-            formattedName = team.getColorPrefix().replace("\u00a7k", "").replace("O", "") + networkPlayerInfoIn.getGameProfile().getName() + team.getColorSuffix();
+            formattedName = deobfString(team.getColorPrefix()) + networkPlayerInfoIn.getGameProfile().getName() + team.getColorSuffix();
         }
         return new ChatComponentText(formattedName)
                 .setChatStyle(new ChatStyle()
