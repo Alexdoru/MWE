@@ -1,8 +1,12 @@
 package fr.alexdoru.megawallsenhancementsmod.scoreboard;
 
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.LastWitherHPHUD;
+import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.util.EnumChatFormatting;
+import org.lwjgl.opengl.Display;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +16,6 @@ import java.util.regex.Pattern;
 public class ScoreboardParser {
 
     public static final Pattern GAME_ID_PATTERN = Pattern.compile("\\d+/\\d+/\\d+\\s+([\\d\\w]+)");
-    private static final Pattern GAME_END_PATTERN = Pattern.compile("Game End: (\\d+):(\\d+)");
     private static final Pattern GATES_OPEN_PATTERN = Pattern.compile("Gates Open: \\d+:\\d+");
     private static final Pattern WALLS_FALL_PATTERN = Pattern.compile("Walls Fall: (\\d+):(\\d+)");
     private static final Pattern MW_TITLE_PATTERN = Pattern.compile("MEGA\\sWALLS");
@@ -21,6 +24,9 @@ public class ScoreboardParser {
     private static final Pattern WITHER_ALIVE_PATTERN = Pattern.compile("\\[[BGRY]\\] Wither HP: ?(\\d+)");
     private static final Pattern WITHER_ALIVE_HEART_PATTERN = Pattern.compile("\\[[BGRY]\\] Wither [\u2764\u2665]: ?(\\d+)");
 
+    private static boolean triggeredWallsFallAlert = false;
+    private static boolean triggeredGameEndAlert = false;
+
     private final ArrayList<String> aliveWithers = new ArrayList<>();
     private String gameId = null;
     private boolean isInMwGame = false;
@@ -28,6 +34,11 @@ public class ScoreboardParser {
     private boolean preGameLobby = false;
     private boolean isitPrepPhase = false;
     private boolean hasGameEnded = false;
+
+    public static void onGameStart() {
+        triggeredWallsFallAlert = false;
+        triggeredGameEndAlert = false;
+    }
 
     /* This runs on every tick to parse the scoreboard data */
     public ScoreboardParser(Scoreboard scoreboard) {
@@ -70,9 +81,21 @@ public class ScoreboardParser {
             }
         }
 
-        if (WALLS_FALL_PATTERN.matcher(unformattedSidebarLines.get(1)).find()
-                || GATES_OPEN_PATTERN.matcher(unformattedSidebarLines.get(1)).find()) {
+        final Matcher wallsFallMatcher = WALLS_FALL_PATTERN.matcher(unformattedSidebarLines.get(1));
+        if (wallsFallMatcher.find()) {
             isitPrepPhase = true;
+            if (!triggeredWallsFallAlert && wallsFallMatcher.group(1).equals("00") && wallsFallMatcher.group(2).equals("10") && !Display.isActive()) {
+                SoundUtil.playGameStartSound();
+                triggeredWallsFallAlert = true;
+            }
+        } else if (GATES_OPEN_PATTERN.matcher(unformattedSidebarLines.get(1)).find()) {
+            isitPrepPhase = true;
+        } else if (!triggeredGameEndAlert && "Game End: 05:00".equals(unformattedSidebarLines.get(1))) {
+            SoundUtil.playNotePling();
+            ChatUtil.addChatMessage(EnumChatFormatting.YELLOW + "Game ends in 5 minutes!");
+            triggeredGameEndAlert = true;
+        } else if (unformattedSidebarLines.get(1).contains("None!:")) {
+            hasGameEnded = true;
         }
 
         int eliminated_teams = 0;
@@ -105,7 +128,7 @@ public class ScoreboardParser {
 
         }
 
-        if (eliminated_teams == 3 || unformattedSidebarLines.get(1).contains("None!:")) {
+        if (eliminated_teams == 3) {
             hasGameEnded = true;
         }
 
