@@ -2,6 +2,8 @@ package fr.alexdoru.megawallsenhancementsmod.scoreboard;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
@@ -110,6 +112,47 @@ public class ScoreboardUtils {
             return "";
         }
         return objective.getDisplayName();
+    }
+
+    /**
+     * Prints scoreboard in chat
+     */
+    public static void debugGetScoreboard() {
+        if (mc.theWorld == null) {
+            return;
+        }
+        final Scoreboard scoreboard = mc.theWorld.getScoreboard();
+        if (scoreboard == null) {
+            return;
+        }
+        final ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(1);
+        if (objective == null) {
+            return;
+        }
+        Collection<Score> scores = scoreboard.getSortedScores(objective);
+        final List<Score> list = scores.stream().filter(input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#")).collect(Collectors.toList());
+        if (list.size() > 15) {
+            scores = Lists.newArrayList(Iterables.skip(list, scores.size() - 15));
+        } else {
+            scores = list;
+        }
+        final List<String> printChat = new ArrayList<>();
+        final List<String> printConsole = new ArrayList<>();
+        for (final Score score : scores) {
+            final ScorePlayerTeam scoreplayerteam = scoreboard.getPlayersTeam(score.getPlayerName());
+            final String s1;
+            if (scoreplayerteam == null) {
+                s1 = score.getPlayerName() + EnumChatFormatting.RED + "" + score.getScorePoints();
+                printChat.add(s1);
+                printConsole.add("playername : '" + score.getPlayerName() + "' points : '" + score.getScorePoints());
+            } else {
+                s1 = scoreplayerteam.getColorPrefix() + score.getPlayerName() + scoreplayerteam.getColorSuffix() + EnumChatFormatting.RED + "" + score.getScorePoints();
+                printChat.add(s1);
+                printConsole.add("prefix : '" + scoreplayerteam.getColorPrefix() + "' playername : '" + score.getPlayerName() + "' suffix : " + scoreplayerteam.getColorSuffix() + "' points : '" + score.getScorePoints());
+            }
+        }
+        printChat.forEach(ChatUtil::addChatMessage);
+        printConsole.forEach(MegaWallsEnhancementsMod.logger::info);
     }
 
     /**

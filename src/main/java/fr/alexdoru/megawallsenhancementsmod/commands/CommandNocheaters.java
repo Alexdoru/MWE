@@ -13,8 +13,8 @@ import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiscreens.NoCheatersConfigGuiScreen;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoGrabber;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
@@ -340,7 +340,7 @@ public class CommandNocheaters extends MyAbstractCommand {
 
         } else if (args[0].equalsIgnoreCase("getscoreboard")) {
 
-            GameInfoGrabber.debugGetScoreboard();
+            ScoreboardUtils.debugGetScoreboard();
 
         } else if (args[0].equalsIgnoreCase("autoreporthistory")) {
 
