@@ -35,30 +35,30 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         /* HUD Buttons */
         buttonList.add(new GuiButton(3, XposCenterButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(3)));
         buttonList.add(new GuiButton(2, XposCenterButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(2)));
-        buttonList.add(new GuiButton(15, XposCenterButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(15)));
-        buttonList.add(new GuiButton(18, XposCenterButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(18)));
-        buttonList.add(new GuiSlider(21, XposCenterButton, getButtonYPos(7), buttonsWidth, buttonsHeight, "Aqua energy threshold : ", "", 1d, 160d, ConfigHandler.aquaEnergyDisplayThreshold, false, true, this));
-
         buttonList.add(new GuiButton(22, XposCenterButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(22)));
         buttonList.add(new GuiButton(9, XposCenterButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(9)));
         buttonList.add(new GuiButton(11, XposCenterButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(11)));
+        buttonList.add(new GuiButton(15, XposCenterButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(15)));
+        buttonList.add(new GuiButton(18, XposCenterButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(18)));
+        buttonList.add(new GuiSlider(21, XposCenterButton, getButtonYPos(8), buttonsWidth, buttonsHeight, "Aqua energy threshold : ", "", 1d, 160d, ConfigHandler.aquaEnergyDisplayThreshold, false, true, this));
+
         /* Buttons : Reset HUD position */
         buttonList.add(new GuiButton(8, XposCenterLeftButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(8)));
         buttonList.add(new GuiButton(7, XposCenterLeftButton, getButtonYPos(2), sideButtonsWidth, buttonsHeight, getButtonDisplayString(7)));
-        buttonList.add(new GuiButton(19, XposCenterLeftButton, getButtonYPos(6), sideButtonsWidth, buttonsHeight, getButtonDisplayString(19)));
-        buttonList.add(new GuiButton(16, XposCenterLeftButton, getButtonYPos(6), sideButtonsWidth, buttonsHeight, getButtonDisplayString(16)));
         buttonList.add(new GuiButton(23, XposCenterLeftButton, getButtonYPos(3), sideButtonsWidth, buttonsHeight, getButtonDisplayString(23)));
         buttonList.add(new GuiButton(14, XposCenterLeftButton, getButtonYPos(4), sideButtonsWidth, buttonsHeight, getButtonDisplayString(14)));
         buttonList.add(new GuiButton(12, XposCenterLeftButton, getButtonYPos(5), sideButtonsWidth, buttonsHeight, getButtonDisplayString(12)));
+        buttonList.add(new GuiButton(19, XposCenterLeftButton, getButtonYPos(6), sideButtonsWidth, buttonsHeight, getButtonDisplayString(19)));
+        buttonList.add(new GuiButton(16, XposCenterLeftButton, getButtonYPos(7), sideButtonsWidth, buttonsHeight, getButtonDisplayString(16)));
         /* Buttons : Move HUD */
         buttonList.add(new GuiButton(6, XposCenterRightButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(6)));
         buttonList.add(new GuiButton(5, XposCenterRightButton, getButtonYPos(2), sideButtonsWidth, buttonsHeight, getButtonDisplayString(5)));
-        buttonList.add(new GuiButton(17, XposCenterRightButton, getButtonYPos(5), sideButtonsWidth, buttonsHeight, getButtonDisplayString(17)));
-        buttonList.add(new GuiButton(20, XposCenterRightButton, getButtonYPos(6), sideButtonsWidth, buttonsHeight, getButtonDisplayString(20)));
-
         buttonList.add(new GuiButton(24, XposCenterRightButton, getButtonYPos(3), sideButtonsWidth, buttonsHeight, getButtonDisplayString(24)));
         buttonList.add(new GuiButton(13, XposCenterRightButton, getButtonYPos(4), sideButtonsWidth, buttonsHeight, getButtonDisplayString(13)));
         buttonList.add(new GuiButton(10, XposCenterRightButton, getButtonYPos(5), sideButtonsWidth, buttonsHeight, getButtonDisplayString(10)));
+        buttonList.add(new GuiButton(17, XposCenterRightButton, getButtonYPos(6), sideButtonsWidth, buttonsHeight, getButtonDisplayString(17)));
+        buttonList.add(new GuiButton(20, XposCenterRightButton, getButtonYPos(7), sideButtonsWidth, buttonsHeight, getButtonDisplayString(20)));
+
         /* Exit button */
         buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(10), 150, buttonsHeight, getButtonDisplayString(4)));
     }
