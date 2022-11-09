@@ -46,6 +46,22 @@ public final class GuiPosition {
         return new int[]{(int) (x * res.getScaledWidth()), (int) (y * res.getScaledHeight())};
     }
 
+    /**
+     * Returns x and y coordinates to start the render
+     * so that the whole HUD fits within the screen
+     */
+    public int[] getAbsolutePositionForRender(ScaledResolution res, int hudWidth, int hudHigth) {
+        int xRenderPos = (int) (x * res.getScaledWidth());
+        int yRenderPos = (int) (y * res.getScaledHeight());
+        if (xRenderPos + hudWidth > res.getScaledWidth()) {
+            xRenderPos = res.getScaledWidth() - hudWidth;
+        }
+        if (yRenderPos + hudHigth > res.getScaledHeight()) {
+            yRenderPos = res.getScaledHeight() - hudHigth;
+        }
+        return new int[]{xRenderPos, yRenderPos};
+    }
+
     public double[] getRelativePosition() {
         return new double[]{x, y};
     }

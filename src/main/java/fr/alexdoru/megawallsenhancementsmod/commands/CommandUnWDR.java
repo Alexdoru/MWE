@@ -60,7 +60,7 @@ public class CommandUnWDR extends MyAbstractCommand {
                     final String finalPlayername = playername;
                     Minecraft.getMinecraft().addScheduledTask(() -> {
                         ChatHandler.deleteWarningMessagesFor(finalPlayername);
-                        NameUtil.updateGameProfileAndName(finalPlayername, false);
+                        NameUtil.updateMWPlayerDataAndEntityData(finalPlayername, false);
                     });
                     ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + ".");
                 }
@@ -79,7 +79,7 @@ public class CommandUnWDR extends MyAbstractCommand {
             } else {
                 removeOrUpdateWDR(wdr, uuid);
                 Minecraft.getMinecraft().addScheduledTask(() -> ChatHandler.deleteWarningMessagesFor(args[1]));
-                NameUtil.updateGameProfileAndName(args[1], false);
+                NameUtil.updateMWPlayerDataAndEntityData(args[1], false);
                 ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + args[1] + EnumChatFormatting.GREEN + ".");
             }
 

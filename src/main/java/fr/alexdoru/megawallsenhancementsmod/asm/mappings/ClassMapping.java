@@ -36,6 +36,7 @@ public enum ClassMapping {
     INVENTORYPLAYER("wm", "net/minecraft/entity/player/InventoryPlayer"),
     ITEMSTACK("zx", "net/minecraft/item/ItemStack"),
     MAP("java/util/Map"),
+    MATH("java/lang/Math"),
     MINECRAFT("ave", "net/minecraft/client/Minecraft"),
     NETHANDLERPLAYCLIENT("bcy", "net/minecraft/client/network/NetHandlerPlayClient"),
     NETWORKMANAGER("ek", "net/minecraft/network/NetworkManager"),
@@ -55,7 +56,8 @@ public enum ClassMapping {
     STRINGBUILDER("java/lang/StringBuilder"),
     TEAM("auq", "net/minecraft/scoreboard/Team"),
     TEXTUREMANAGER("bmj", "net/minecraft/client/renderer/texture/TextureManager"),
-    WORLDRENDERER("bfd", "net/minecraft/client/renderer/WorldRenderer");
+    WORLDRENDERER("bfd", "net/minecraft/client/renderer/WorldRenderer"),
+    WORLDSETTINGS$GAMETYPE("adp$a", "net/minecraft/world/WorldSettings$GameType");
 
     public final String name;
 

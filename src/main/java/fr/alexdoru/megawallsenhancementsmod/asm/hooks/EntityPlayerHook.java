@@ -1,22 +1,18 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
-import com.mojang.authlib.GameProfile;
-import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
-import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityPlayerAccessor;
+import net.minecraft.entity.player.EntityPlayer;
 
 @SuppressWarnings("unused")
 public class EntityPlayerHook {
 
-    public static String getTransformedDisplayName(String displayNameIn, GameProfile gameProfile) {
-        final MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfile).getMWPlayerData();
-        if (mwPlayerData == null) {
-            return displayNameIn;
+    public static String getTransformedDisplayName(String displayNameIn, EntityPlayer entityIn) {
+        final String prestige4Tag = ((EntityPlayerAccessor) entityIn).getPrestige4Tag();
+        final String prestige5Tag = ((EntityPlayerAccessor) entityIn).getPrestige5Tag();
+        if (prestige5Tag != null && prestige4Tag != null) {
+            return displayNameIn.replace(prestige4Tag, prestige5Tag);
         } else {
-            if (mwPlayerData.P5Tag != null && mwPlayerData.originalP4Tag != null) {
-                return displayNameIn.replace(mwPlayerData.originalP4Tag, mwPlayerData.P5Tag);
-            } else {
-                return displayNameIn;
-            }
+            return displayNameIn;
         }
     }
 

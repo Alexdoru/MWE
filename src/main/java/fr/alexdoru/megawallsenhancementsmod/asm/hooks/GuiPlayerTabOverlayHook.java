@@ -1,6 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
-import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.ColorUtil;
@@ -16,18 +15,30 @@ import java.util.List;
 public class GuiPlayerTabOverlayHook {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
-    private static final int FK_SCORE_WIDTH = mc.fontRendererObj.getStringWidth("00  ");
+    private static int finalsScoreWidth = 0;
 
-    public static int getFKScoreWidth() {
-        return ConfigHandler.fkcounterHUDTablist ? (FKCounterMod.isInMwGame ? FK_SCORE_WIDTH : 0) : 0;
+    public static void resetFinalsScoreWidth() {
+        finalsScoreWidth = 0;
     }
 
-    public static void renderFinals(int playersFinals, int x, int y) {
-        if (!ConfigHandler.fkcounterHUDTablist || playersFinals == 0 || !FKCounterMod.isInMwGame) {
+    public static void computeFKScoreWidth(int playerFinalkills) {
+        if (FKCounterMod.isInMwGame && ConfigHandler.fkcounterHUDTablist) {
+            if (playerFinalkills != 0) {
+                finalsScoreWidth = Math.max(finalsScoreWidth, mc.fontRendererObj.getStringWidth(" " + playerFinalkills));
+            }
+        }
+    }
+
+    public static int getRenderScoreWidth() {
+        return finalsScoreWidth;
+    }
+
+    public static void renderFinals(int playerFinalkills, int j2, int i, int k2) {
+        if (!ConfigHandler.fkcounterHUDTablist || playerFinalkills == 0 || !FKCounterMod.isInMwGame) {
             return;
         }
-        final String s1 = EnumChatFormatting.GOLD + "" + playersFinals;
-        mc.fontRendererObj.drawStringWithShadow(s1, (float) (x - mc.fontRendererObj.getStringWidth(s1) - FK_SCORE_WIDTH), (float) y, 16777215);
+        final String s1 = EnumChatFormatting.GOLD + " " + playerFinalkills;
+        mc.fontRendererObj.drawStringWithShadow(s1, j2 + i + 1, k2, 16777215);
     }
 
     public static boolean shouldRenderHeader() {
@@ -69,7 +80,10 @@ public class GuiPlayerTabOverlayHook {
 
     public static int getPingWidth(List<NetworkPlayerInfo> list) { // called once per frame
         if (ConfigHandler.hidePingTablist) {
-            final long l = System.nanoTime();
+            if (FKCounterMod.isInMwGame) {
+                drawPing = false;
+                return 0;
+            }
             drawPing = !list.stream().allMatch(it -> it.getResponseTime() <= 1);
             return drawPing ? 13 : 0;
         }

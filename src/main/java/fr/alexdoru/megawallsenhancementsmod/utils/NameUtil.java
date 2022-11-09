@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
 import com.mojang.authlib.GameProfile;
-import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GameProfileAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.NetworkPlayerInfoAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
@@ -22,6 +22,7 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,32 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * What this class does :
+ * on new NetworkPlayerInfo instance creation :
+ * - updates/creates MWPlayerData stored in the cache
+ * - assigns custom displayName or null
+ * - assigns the finals of the player
+ * on Scoreboard Team packets :
+ * - transforms the name in the tablist
+ * on playerJoin :
+ * - look the MWPlayerData and assigns the custom fields in EntityPlayer (prestige 5)
+ * - print warning message
+ * <p>
+ * When the world loads, for EntityPlayerSP it does :
+ * - fire on playerjoin event twice
+ * - then receive two new Networkplayerinfo packets
+ * When swapping lobbys on hypixel for entityplayerSP :
+ * - fires the playerjoin event 6 times
+ * - then receive two new Networkplayerinfo packets
+ * When swapping lobbys on hypixel for other players :
+ * - receive two new Networkplayerinfo packets
+ * - fires the playerjoin event once
+ * - then receives one networkplayerinfo packet
+ * When a player enters our render distance :
+ * - receive once new Networkplayerinfo packet
+ * - fire the playerjoin event once
+ */
 public class NameUtil {
 
     private static final IChatComponent iprefix_old_report = new ChatComponentText(EnumChatFormatting.GRAY + "" + EnumChatFormatting.BOLD + "\u26a0 ");
@@ -46,22 +73,21 @@ public class NameUtil {
     private static final Pattern PATTERN_CLASS_TAG = Pattern.compile("\\[([A-Z]{3})\\]");
 
     /**
-     * This updates the infos storred in GameProfile.MWPlayerData for the player : playername
-     * and refreshes the name in the tablist and the nametag
-     * set refreshDisplayName to true to fire the NameFormat Event and
-     * update the name of the player in case you change it via a command
+     * This updates the infos storred in MWPlayerData.dataCache for the player : playername
+     * and refreshes the name in the tablist and the nametag.
+     * Set refreshDisplayName to true to fire the NameFormat Event and
+     * update the name of the player as well, in case you changed it via a command
      * for example : /squad add player as aliasname
      */
-    public static void updateGameProfileAndName(String playername, boolean refreshDisplayName) {
+    public static void updateMWPlayerDataAndEntityData(String playername, boolean refreshDisplayName) {
         if (isValidMinecraftName(playername)) {
             final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
             if (networkPlayerInfo != null) {
-                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(transformGameProfile(networkPlayerInfo.getGameProfile(), true));
+                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(updateAndGetMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
             }
             final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
-                transformGameProfile(player.getGameProfile(), true);
-                NameUtil.transformNametag(player, false);
+                NameUtil.updateEntityPlayerFields(player, false);
                 if (refreshDisplayName) {
                     player.refreshDisplayName();
                 }
@@ -72,12 +98,23 @@ public class NameUtil {
     /**
      * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
      */
-    public static void updateGameProfileAndName(NetworkPlayerInfo networkPlayerInfo) {
-        ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(transformGameProfile(networkPlayerInfo.getGameProfile(), true));
+    public static void updateMWPlayerDataAndEntityData(NetworkPlayerInfo networkPlayerInfo, boolean refreshDisplayName) {
+        ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(updateAndGetMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
         final EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
         if (player != null) {
-            NameUtil.transformNametag(player, false);
+            NameUtil.updateEntityPlayerFields(player, false);
+            if (refreshDisplayName) {
+                player.refreshDisplayName();
+            }
         }
+    }
+
+    public static void refreshAllNamesInWorld() {
+        mc.getNetHandler().getPlayerInfoMap().forEach(p -> {
+            if (p != null) {
+                NameUtil.updateMWPlayerDataAndEntityData(p, true);
+            }
+        });
     }
 
     private static final Pattern MINECRAFT_NAME_PATTERN = Pattern.compile("\\w{1,16}");
@@ -89,25 +126,28 @@ public class NameUtil {
         if (isValidMinecraftName(playername)) {
             final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
             if (networkPlayerInfo != null) {
-                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(transformGameProfile(networkPlayerInfo.getGameProfile(), true));
+                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(updateAndGetMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
             }
         }
     }
 
     /**
-     * Transforms the nametag of the player entity based on the infos stored in getGameProfile.MWPlayerData
-     * to save performance instead of redoing the hashmap access
+     * Updates the custom fields in the entity player, such as the prestige V tag,
+     * so current prestige 4 tag, the icon on nametags and also checks to print
+     * the warning message if player was reported and is currently joining the world
      */
-    public static void transformNametag(EntityPlayer player, boolean onPlayerJoin) {
+    public static void updateEntityPlayerFields(EntityPlayer player, boolean onPlayerJoin) {
+
+        final MWPlayerData.PlayerData mwPlayerData = MWPlayerData.get(player.getUniqueID());
+        if (mwPlayerData == null) {
+            return;
+        }
+
+        ((EntityPlayerAccessor) player).setPrestige4Tag(mwPlayerData.originalP4Tag);
+        ((EntityPlayerAccessor) player).setPrestige5Tag(mwPlayerData.P5Tag);
 
         if (!onPlayerJoin) {
             player.getPrefixes().removeAll(allPrefix);
-        }
-
-        final MWPlayerData mwPlayerData = ((GameProfileAccessor) player.getGameProfile()).getMWPlayerData();
-
-        if (mwPlayerData == null) {
-            return;
         }
 
         if (mwPlayerData.extraPrefix != null) {
@@ -135,27 +175,18 @@ public class NameUtil {
     }
 
     /**
-     * Transforms the infos storred in GameProfile.MWPlayerData
-     * For each new player spawned in the world it will create a new networkplayerinfo instance a rerun all the code in the method
-     * to generate the field MWPlayerData, however it will reuse the field to display the nametag
-     * This method also returns the customDisplayName to disaply in the Tablist
+     * Transforms the infos storred in MWPlayerData.dataCache and returns the MWplayerData for the player
+     * For each new player spawned in the world it will create a new networkplayerinfo instance
+     * a rerun all the code in the method to generate the MWPlayerData instance
      */
-    public static IChatComponent transformGameProfile(GameProfile gameProfileIn, boolean forceRefresh) {
+    @Nonnull
+    public static MWPlayerData.PlayerData updateAndGetMWPlayerData(GameProfile gameProfileIn, boolean forceRefresh) {
 
-        final GameProfileAccessor gameProfileAccessor = (GameProfileAccessor) gameProfileIn;
-        final MWPlayerData mwPlayerData = gameProfileAccessor.getMWPlayerData();
         final UUID id = gameProfileIn.getId();
+        MWPlayerData.PlayerData mwPlayerData = MWPlayerData.get(id);
 
-        if (!forceRefresh) {
-            if (mwPlayerData == null) {
-                final MWPlayerData cachedMWPlayerData = MWPlayerData.dataCache.get(id);
-                if (cachedMWPlayerData != null) {
-                    gameProfileAccessor.setMWPlayerData(cachedMWPlayerData);
-                    return cachedMWPlayerData.displayName;
-                }
-            } else {
-                return mwPlayerData.displayName;
-            }
+        if (!forceRefresh && mwPlayerData != null) {
+            return mwPlayerData;
         }
 
         final String username = gameProfileIn.getName();
@@ -213,7 +244,6 @@ public class NameUtil {
                         }
                     }
                 }
-
                 final boolean isobf = teamprefix.contains("\u00a7k");
                 final String alias = AliasData.getAlias(username);
                 if (iExtraPrefix != null || isSquadMate || formattedPrestigeVstring != null || alias != null) {
@@ -229,29 +259,18 @@ public class NameUtil {
         }
 
         if (mwPlayerData == null) {
-            gameProfileAccessor.setMWPlayerData(new MWPlayerData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring));
+            mwPlayerData = new MWPlayerData.PlayerData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring);
         } else {
-            mwPlayerData.setData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring);
+            mwPlayerData.setData(wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring);
         }
 
-        return displayName;
+        return mwPlayerData;
 
     }
 
-    /**
-     * Returns the formatted team name with additionnaly a custom prestige V tag
-     * This doesn't return the icons in front that the player may have.
-     */
-    public static String getFormattedNameWithoutIcons(String playername) {
-        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
-        if (networkPlayerInfo == null) {
-            return playername;
-        }
-        final MWPlayerData mwPlayerData = MWPlayerData.dataCache.get(networkPlayerInfo.getGameProfile().getId());
-        if (mwPlayerData != null && mwPlayerData.P5Tag != null && mwPlayerData.originalP4Tag != null) {
-            return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername).replace(mwPlayerData.originalP4Tag, mwPlayerData.P5Tag);
-        }
-        return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername);
+    private static final Pattern obfPattern = Pattern.compile("\u00a7k[OX]*");
+    private static String deobfString(String obfText) {
+        return obfPattern.matcher(obfText).replaceAll("");
     }
 
     /**
@@ -266,11 +285,31 @@ public class NameUtil {
         return getFormattedName(networkPlayerInfo);
     }
 
+    /**
+     * Returns the formatted name of the player, additionnal icons and prestive V tag included
+     * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay}
+     */
     public static String getFormattedName(NetworkPlayerInfo networkPlayerInfo) {
         if (networkPlayerInfo.getDisplayName() == null) {
             return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), networkPlayerInfo.getGameProfile().getName());
         }
         return networkPlayerInfo.getDisplayName().getFormattedText();
+    }
+
+    /**
+     * Returns the formatted team name with additionnaly a custom prestige V tag
+     * This doesn't return the icons in front that the player may have.
+     */
+    public static String getFormattedNameWithoutIcons(String playername) {
+        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+        if (networkPlayerInfo == null) {
+            return playername;
+        }
+        final MWPlayerData.PlayerData mwPlayerData = MWPlayerData.get(networkPlayerInfo.getGameProfile().getId());
+        if (mwPlayerData != null && mwPlayerData.P5Tag != null && mwPlayerData.originalP4Tag != null) {
+            return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername).replace(mwPlayerData.originalP4Tag, mwPlayerData.P5Tag);
+        }
+        return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername);
     }
 
     /**
@@ -282,28 +321,12 @@ public class NameUtil {
             formattedName = networkPlayerInfoIn.getGameProfile().getName();
         } else {
             final ScorePlayerTeam team = networkPlayerInfoIn.getPlayerTeam();
-            formattedName = team.getColorPrefix().replace("\u00a7k", "").replace("O", "") + networkPlayerInfoIn.getGameProfile().getName() + team.getColorSuffix();
+            formattedName = deobfString(team.getColorPrefix()) + networkPlayerInfoIn.getGameProfile().getName() + team.getColorSuffix();
         }
         return new ChatComponentText(formattedName)
                 .setChatStyle(new ChatStyle()
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to see the mega walls stats of that player")))
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + networkPlayerInfoIn.getGameProfile().getName() + " mw")));
-    }
-
-    public static IChatComponent getTransformedDisplayName(GameProfile gameProfileIn) {
-        final MWPlayerData mwPlayerData = ((GameProfileAccessor) gameProfileIn).getMWPlayerData();
-        if (mwPlayerData != null) {
-            return mwPlayerData.displayName;
-        }
-        return null;
-    }
-
-    public static void refreshAllNamesInWorld() {
-        mc.getNetHandler().getPlayerInfoMap().forEach(p -> {
-            if (p != null) {
-                NameUtil.updateGameProfileAndName(p.getGameProfile().getName(), true);
-            }
-        });
     }
 
     /**

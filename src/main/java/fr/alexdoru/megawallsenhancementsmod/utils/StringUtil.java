@@ -87,11 +87,11 @@ public class StringUtil {
      */
     public static String getLastColorCodeOf(String text) {
         final Matcher matcher = COLOR_CODE_PATTERN.matcher(text);
-        String s = "";
+        String s = null;
         while (matcher.find()) {
             s = matcher.group();
         }
-        return String.valueOf(s.charAt(1));
+        return s == null ? "" : String.valueOf(s.charAt(1));
     }
 
     /**

@@ -26,7 +26,7 @@ public final class GuiManager {
         this.registeredRenderers.add(new CreeperPrimedTNTHUD());
         this.registeredRenderers.add(new LastWitherHPHUD());
         this.registeredRenderers.add(new EnergyDisplayHUD());
-        //this.registeredRenderers.add(new SquadHealthHUD()); // TODO squad health hud
+        this.registeredRenderers.add(new SquadHealthHUD());
     }
 
     @SubscribeEvent

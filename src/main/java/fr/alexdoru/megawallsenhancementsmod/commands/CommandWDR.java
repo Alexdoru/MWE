@@ -308,7 +308,7 @@ public class CommandWDR extends MyAbstractCommand {
 
                 final WDR newreport = new WDR(finalTimestamp, finalTimestamp, argsinWDR);
                 WdrData.put(uuid, newreport);
-                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateGameProfileAndName(finalPlayername, false));
+                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateMWPlayerDataAndEntityData(finalPlayername, false));
                 if (showReportMessage || !alreadyReported) {
                     ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
                             EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : ""))
@@ -349,7 +349,7 @@ public class CommandWDR extends MyAbstractCommand {
                     argsinWDR.add(WDR.NICK);
                 }
                 WdrData.put(uuid, new WDR(time, time, argsinWDR));
-                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateGameProfileAndName(finalPlayername, false));
+                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateMWPlayerDataAndEntityData(finalPlayername, false));
                 if (showReportMessage || !alreadyReported) {
                     ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() +
                             EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")

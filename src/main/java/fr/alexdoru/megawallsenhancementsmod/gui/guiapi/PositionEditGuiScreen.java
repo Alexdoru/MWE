@@ -14,13 +14,10 @@ public class PositionEditGuiScreen extends GuiScreen {
     private int prevX, prevY;
 
     public PositionEditGuiScreen(IRenderer renderer, GuiScreen parent) {
-
         GuiPosition pos = renderer.getHUDPosition();
-
         if (pos == null) {
             pos = new GuiPosition(0.5d, 0.5d);
         }
-
         this.renderer = renderer;
         this.guiPosition = pos;
         this.parent = parent;
@@ -50,7 +47,6 @@ public class PositionEditGuiScreen extends GuiScreen {
         final int[] absolutePos = guiPosition.getAbsolutePosition();
         final int x = absolutePos[0];
         final int y = absolutePos[1];
-
         guiPosition.setAbsolute(x + offsetX, y + offsetY);
         adjustBounds();
     }
@@ -71,13 +67,10 @@ public class PositionEditGuiScreen extends GuiScreen {
      */
     private void adjustBounds() {
         final ScaledResolution res = new ScaledResolution(mc);
-
         final int screenWidth = res.getScaledWidth();
         final int screenHeight = res.getScaledHeight();
-
         final int absoluteX = Math.max(0, Math.min((int) (guiPosition.getRelativeX() * res.getScaledWidth()), Math.max(screenWidth - this.renderer.getWidth(), 0)));
         final int absoluteY = Math.max(0, Math.min((int) (guiPosition.getRelativeY() * res.getScaledHeight()), Math.max(screenHeight - this.renderer.getHeight(), 0)));
-
         this.guiPosition.setAbsolute(absoluteX, absoluteY);
     }
 

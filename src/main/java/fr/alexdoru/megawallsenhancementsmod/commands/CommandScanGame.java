@@ -3,7 +3,6 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
-import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.GeneralInfo;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
@@ -95,13 +94,12 @@ class ScanPlayerTask implements Callable<String> {
     public String call() {
 
         final UUID uuid = networkPlayerInfo.getGameProfile().getId();
+        if (NameUtil.isntRealPlayer(uuid) || ScangameData.skipScan(uuid)) {
+            ScangameData.put(uuid, null);
+            return null;
+        }
 
         try {
-
-            if (NameUtil.isntRealPlayer(uuid) || ScangameData.skipScan(uuid)) {
-                ScangameData.put(uuid, null);
-                return null;
-            }
 
             final String playername = networkPlayerInfo.getGameProfile().getName();
             final HypixelPlayerData playerdata = new HypixelPlayerData(uuid.toString());
@@ -129,41 +127,40 @@ class ScanPlayerTask implements Callable<String> {
                 final boolean firstGame = megawallsstats.getGames_played() == 0;
                 final boolean secondFlag = generalInfo.getCompletedQuests() < 20 && generalInfo.getNetworkLevel() > 30f;
                 final JsonObject classesdata = megawallsstats.getClassesdata();
-
-                if (FKCounterMod.isInMwGame) {
-
-                    final ScorePlayerTeam team = Minecraft.getMinecraft().theWorld.getScoreboard().getPlayersTeam(playername);
-                    final String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replace("[", "").replace("]", "").replace(" ", ""));
-                    final MWClass mwClass = MWClass.fromTag(classTag);
-                    if (mwClass != null) {
-                        final JsonObject entryclassobj = classesdata.getAsJsonObject(mwClass.className.toLowerCase());
-                        if (firstGame) {
-                            imsg = getMsgFirstGame(mwClass.className, entryclassobj);
-                        } else if (secondFlag) {
-                            imsg = getMsg(mwClass.className, entryclassobj, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megawallsstats.getGames_played());
-                        }
-                    }
-
-                } else {
-
-                    for (final Map.Entry<String, JsonElement> entry : classesdata.entrySet()) {
-                        if (entry.getValue() instanceof JsonObject) {
-                            final JsonObject entryclassobj = entry.getValue().getAsJsonObject();
-                            if (imsg == null) {
+                if (classesdata != null) {
+                    if (FKCounterMod.isInMwGame) {
+                        final ScorePlayerTeam team = Minecraft.getMinecraft().theWorld.getScoreboard().getPlayersTeam(playername);
+                        final String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replace("[", "").replace("]", "").replace(" ", ""));
+                        final MWClass mwClass = MWClass.fromTag(classTag);
+                        if (mwClass != null) {
+                            final JsonObject entryclassobj = JsonUtil.getJsonObject(classesdata, mwClass.className.toLowerCase());
+                            if (entryclassobj != null) {
                                 if (firstGame) {
-                                    imsg = getMsgFirstGame(entry.getKey(), entryclassobj);
+                                    imsg = getMsgFirstGame(mwClass.className, entryclassobj);
                                 } else if (secondFlag) {
-                                    imsg = getMsg(entry.getKey(), entryclassobj, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megawallsstats.getGames_played());
+                                    imsg = getMsg(mwClass.className, entryclassobj, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megawallsstats.getGames_played());
                                 }
-                            } else {
-                                final IChatComponent classMsg = getFormattedClassMsg(entry.getKey(), entryclassobj, firstGame);
-                                if (classMsg != null) {
-                                    imsg.appendSibling(classMsg);
+                            }
+                        }
+                    } else {
+                        for (final Map.Entry<String, JsonElement> entry : classesdata.entrySet()) {
+                            if (entry.getValue() instanceof JsonObject) {
+                                final JsonObject entryclassobj = entry.getValue().getAsJsonObject();
+                                if (imsg == null) {
+                                    if (firstGame) {
+                                        imsg = getMsgFirstGame(entry.getKey(), entryclassobj);
+                                    } else if (secondFlag) {
+                                        imsg = getMsg(entry.getKey(), entryclassobj, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megawallsstats.getGames_played());
+                                    }
+                                } else {
+                                    final IChatComponent classMsg = getFormattedClassMsg(entry.getKey(), entryclassobj, firstGame);
+                                    if (classMsg != null) {
+                                        imsg.appendSibling(classMsg);
+                                    }
                                 }
                             }
                         }
                     }
-
                 }
 
             }
@@ -180,13 +177,11 @@ class ScanPlayerTask implements Callable<String> {
             if (imsg != null) {
                 ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(NameUtil.getFormattedNameWithPlanckeClickEvent(networkPlayerInfo)).appendSibling(imsg));
                 ScangameData.put(uuid, imsg);
-                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateGameProfileAndName(networkPlayerInfo));
+                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateMWPlayerDataAndEntityData(networkPlayerInfo, false));
                 return null;
             }
 
-        } catch (ApiException e) {
-            return null;
-        }
+        } catch (Exception ignored) {}
 
         ScangameData.put(uuid, null);
         return null;

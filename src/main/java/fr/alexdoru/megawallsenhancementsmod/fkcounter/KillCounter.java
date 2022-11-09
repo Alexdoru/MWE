@@ -151,6 +151,11 @@ public class KillCounter {
             prefixes[i] = DEFAULT_PREFIXES[i];
             teamKillsArray[i] = new HashMap<>();
         }
+        Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap().forEach(p -> {
+            if (p != null) {
+                ((NetworkPlayerInfoAccessor) p).setPlayerFinalkills(0);
+            }
+        });
         FKCounterHUD.instance.updateDisplayText();
     }
 

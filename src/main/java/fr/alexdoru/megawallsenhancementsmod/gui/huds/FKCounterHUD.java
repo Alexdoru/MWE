@@ -55,7 +55,7 @@ public class FKCounterHUD extends MyCachedHUD {
 
     @Override
     public void render(ScaledResolution resolution) {
-        final int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
+        final int[] absolutePos = this.guiPosition.getAbsolutePositionForRender(resolution, getWidth(), getHeight());
         final int x = absolutePos[0];
         final int y = absolutePos[1];
         GlStateManager.pushMatrix();

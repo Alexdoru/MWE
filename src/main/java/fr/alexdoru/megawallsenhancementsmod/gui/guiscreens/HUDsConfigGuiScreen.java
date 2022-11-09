@@ -27,35 +27,40 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         final int buttonsWidth = 200;
         final int sideButtonsWidth = 90;
         this.maxWidth = sideButtonsWidth * 2 + buttonsWidth + 4 * 2;
-        this.maxHeight = (buttonsHeight + 4) * 7 + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * 8 + buttonsHeight;
         super.initGui();
         final int XposCenterButton = getxCenter() - buttonsWidth / 2;
+        final int XposCenterLeftButton = getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth;
+        final int XposCenterRightButton = getxCenter() + buttonsWidth / 2 + 4;
         /* HUD Buttons */
         buttonList.add(new GuiButton(3, XposCenterButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(3)));
         buttonList.add(new GuiButton(2, XposCenterButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(2)));
-        buttonList.add(new GuiButton(9, XposCenterButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(9)));
-        buttonList.add(new GuiButton(11, XposCenterButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(11)));
         buttonList.add(new GuiButton(15, XposCenterButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(15)));
         buttonList.add(new GuiButton(18, XposCenterButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(18)));
         buttonList.add(new GuiSlider(21, XposCenterButton, getButtonYPos(7), buttonsWidth, buttonsHeight, "Aqua energy threshold : ", "", 1d, 160d, ConfigHandler.aquaEnergyDisplayThreshold, false, true, this));
-        final int XposCenterLeftButton = getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth;
-        final int XposCenterRightButton = getxCenter() + buttonsWidth / 2 + 4;
+
+        buttonList.add(new GuiButton(22, XposCenterButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(22)));
+        buttonList.add(new GuiButton(9, XposCenterButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(9)));
+        buttonList.add(new GuiButton(11, XposCenterButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(11)));
         /* Buttons : Reset HUD position */
         buttonList.add(new GuiButton(8, XposCenterLeftButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(8)));
         buttonList.add(new GuiButton(7, XposCenterLeftButton, getButtonYPos(2), sideButtonsWidth, buttonsHeight, getButtonDisplayString(7)));
-        buttonList.add(new GuiButton(14, XposCenterLeftButton, getButtonYPos(3), sideButtonsWidth, buttonsHeight, getButtonDisplayString(14)));
-        buttonList.add(new GuiButton(12, XposCenterLeftButton, getButtonYPos(4), sideButtonsWidth, buttonsHeight, getButtonDisplayString(12)));
-        buttonList.add(new GuiButton(16, XposCenterLeftButton, getButtonYPos(5), sideButtonsWidth, buttonsHeight, getButtonDisplayString(16)));
         buttonList.add(new GuiButton(19, XposCenterLeftButton, getButtonYPos(6), sideButtonsWidth, buttonsHeight, getButtonDisplayString(19)));
+        buttonList.add(new GuiButton(16, XposCenterLeftButton, getButtonYPos(6), sideButtonsWidth, buttonsHeight, getButtonDisplayString(16)));
+        buttonList.add(new GuiButton(23, XposCenterLeftButton, getButtonYPos(3), sideButtonsWidth, buttonsHeight, getButtonDisplayString(23)));
+        buttonList.add(new GuiButton(14, XposCenterLeftButton, getButtonYPos(4), sideButtonsWidth, buttonsHeight, getButtonDisplayString(14)));
+        buttonList.add(new GuiButton(12, XposCenterLeftButton, getButtonYPos(5), sideButtonsWidth, buttonsHeight, getButtonDisplayString(12)));
         /* Buttons : Move HUD */
         buttonList.add(new GuiButton(6, XposCenterRightButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(6)));
         buttonList.add(new GuiButton(5, XposCenterRightButton, getButtonYPos(2), sideButtonsWidth, buttonsHeight, getButtonDisplayString(5)));
-        buttonList.add(new GuiButton(13, XposCenterRightButton, getButtonYPos(3), sideButtonsWidth, buttonsHeight, getButtonDisplayString(13)));
-        buttonList.add(new GuiButton(10, XposCenterRightButton, getButtonYPos(4), sideButtonsWidth, buttonsHeight, getButtonDisplayString(10)));
         buttonList.add(new GuiButton(17, XposCenterRightButton, getButtonYPos(5), sideButtonsWidth, buttonsHeight, getButtonDisplayString(17)));
         buttonList.add(new GuiButton(20, XposCenterRightButton, getButtonYPos(6), sideButtonsWidth, buttonsHeight, getButtonDisplayString(20)));
+
+        buttonList.add(new GuiButton(24, XposCenterRightButton, getButtonYPos(3), sideButtonsWidth, buttonsHeight, getButtonDisplayString(24)));
+        buttonList.add(new GuiButton(13, XposCenterRightButton, getButtonYPos(4), sideButtonsWidth, buttonsHeight, getButtonDisplayString(13)));
+        buttonList.add(new GuiButton(10, XposCenterRightButton, getButtonYPos(5), sideButtonsWidth, buttonsHeight, getButtonDisplayString(10)));
         /* Exit button */
-        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(9), 150, buttonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(10), 150, buttonsHeight, getButtonDisplayString(4)));
     }
 
     @Override
@@ -67,12 +72,14 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
 
     private String getButtonDisplayString(int id) {
         switch (id) {
-            case 9:
-                return "Strength HUD : " + getSuffix(ConfigHandler.showStrengthHUD);
-            case 2:
-                return "/kill cooldown HUD : " + getSuffix(ConfigHandler.showKillCooldownHUD);
             case 3:
                 return "Arrow Hit HUD : " + getSuffix(ConfigHandler.showArrowHitHUD);
+            case 2:
+                return "/kill cooldown HUD : " + getSuffix(ConfigHandler.showKillCooldownHUD);
+            case 22:
+                return "Squad HUD : " + getSuffix(ConfigHandler.showSquadHUD);
+            case 9:
+                return "Strength HUD : " + getSuffix(ConfigHandler.showStrengthHUD);
             case 11:
                 return "Wither death time HUD : " + (ConfigHandler.witherHUDinSidebar ? EnumChatFormatting.YELLOW + "in Sidebar" : getSuffix(ConfigHandler.showLastWitherHUD));
             case 15:
@@ -85,6 +92,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 6:
             case 10:
             case 13:
+            case 24:
             case 17:
             case 20:
                 return "Move HUD";
@@ -92,6 +100,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 8:
             case 12:
             case 14:
+            case 23:
             case 16:
             case 19:
                 return "Reset position";
@@ -116,6 +125,9 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 11:
                 textLines.add(EnumChatFormatting.GREEN + "Displays a HUD with the time it takes for the last wither to die");
                 textLines.add(EnumChatFormatting.GREEN + "The HUD can be configured to appear in the Sidebar");
+                break;
+            case 22:
+                textLines.add(EnumChatFormatting.GREEN + "Displays a mini tablist with just your squadmates");
                 break;
             case 15:
                 textLines.add(EnumChatFormatting.GREEN + "Displays a HUD with the cooldown of the primed TNT whilst playing Creeper");
@@ -142,6 +154,9 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 3:
                 ConfigHandler.showArrowHitHUD = !ConfigHandler.showArrowHitHUD;
+                break;
+            case 22:
+                ConfigHandler.showSquadHUD = !ConfigHandler.showSquadHUD;
                 break;
             case 11:
                 if (ConfigHandler.showLastWitherHUD && !ConfigHandler.witherHUDinSidebar) {
@@ -179,6 +194,9 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 13:
                 mc.displayGuiScreen(new PositionEditGuiScreen(HunterStrengthHUD.instance, this));
                 break;
+            case 24:
+                mc.displayGuiScreen(new PositionEditGuiScreen(SquadHealthHUD.instance, this));
+                break;
             case 17:
                 mc.displayGuiScreen(new PositionEditGuiScreen(CreeperPrimedTNTHUD.instance, this));
                 break;
@@ -196,6 +214,9 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 14:
                 HunterStrengthHUD.instance.guiPosition.setRelative(0.5d, 8d / 20d);
+                break;
+            case 23:
+                SquadHealthHUD.instance.guiPosition.setRelative(0.25d, 0.0d);
                 break;
             case 16:
                 CreeperPrimedTNTHUD.instance.guiPosition.setRelative(0.5d, 8d/20d);
