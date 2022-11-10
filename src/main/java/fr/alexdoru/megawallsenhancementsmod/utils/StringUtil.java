@@ -137,6 +137,15 @@ public class StringUtil {
         return s == null || s.isEmpty();
     }
 
+    public static String getStringAsUnicode(String s) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            final char c = s.charAt(i);
+            stringBuilder.append("\\u").append(Integer.toHexString(c | 0x10000).substring(1));
+        }
+        return stringBuilder.toString();
+    }
+
     //private static final Pattern FORMATTING_CODE_END_OF_STRING_PATTERN = Pattern.compile('\u00a7' + "[0-9A-FK-OR]$");
     ///* NEEDS TO BE TESTED
     // * Removes all formatting codes located directly before the target string
