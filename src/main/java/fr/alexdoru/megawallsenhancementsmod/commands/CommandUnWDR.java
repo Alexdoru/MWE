@@ -42,15 +42,15 @@ public class CommandUnWDR extends MyAbstractCommand {
 
                 final MojangPlayernameToUUID apireq;
                 String playername = args[0];
+                String uuid;
                 try {
                     apireq = (new MojangPlayernameToUUID(playername));
                     playername = apireq.getName();
+                    uuid = apireq.getUuid();
                 } catch (ApiException e) {
-                    ChatUtil.addChatMessage(EnumChatFormatting.RED + e.getMessage());
-                    return null;
+                    uuid = playername;
                 }
 
-                final String uuid = apireq.getUuid();
                 final WDR wdr = WdrData.getWdr(uuid);
 
                 if (wdr == null) {
