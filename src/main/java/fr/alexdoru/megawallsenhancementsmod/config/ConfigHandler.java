@@ -3,7 +3,6 @@ package fr.alexdoru.megawallsenhancementsmod.config;
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.EnergyDisplayHUD;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -184,9 +183,9 @@ public class ConfigHandler {
         final Property pCreeperTNTHUD = config.get(CATEGORY_GUI, "Creeper Primed TNT HUD", true, "Displays HUD showing the cooldown on your primed tnt with creeper");
         final Property pXpos_creeperHUD = config.get(CATEGORY_GUI, "Xpos creeper primed TNT HUD", 0.5d, "The x position of the Creeper Primed TNT HUD, value ranges from 0 to 1");
         final Property pYpos_creeperHUD = config.get(CATEGORY_GUI, "Ypos creeper primed TNT HUD", 8d / 20d, "The y position of the Creeper Primed TNT HUD, value ranges from 0 to 1");
-        final Property pEnergyDisplayHUD = config.get(CATEGORY_GUI, "Energy Display HUD", true, "Displays HUD showing your current energy when you hit someone");
+        final Property pEnergyDisplayHUD = config.get(CATEGORY_GUI, "Energy Display HUD", false, "Displays HUD showing your current energy when you hit someone");
         final Property pXpos_energyDisplayHUD = config.get(CATEGORY_GUI, "Xpos energy display HUD", 0.5d, "The x position of the Energy Display HUD, value ranges from 0 to 1");
-        final Property pYpos_energyDisplayHUD = config.get(CATEGORY_GUI, "Ypos energy display HUD", 9d / 20d, "The y position of the Energy Display HUD, value ranges from 0 to 1");
+        final Property pYpos_energyDisplayHUD = config.get(CATEGORY_GUI, "Ypos energy display HUD", 10.5d / 20d, "The y position of the Energy Display HUD, value ranges from 0 to 1");
         final Property pAquaEnergyDisplayThreshold = config.get(CATEGORY_GUI, "Threshold to make energy display aqua", 100, "The threshold number that when hit will cause the energy display to turn aqua");
 
         final String CATEGORY_NOCHEATERS = "NoCheaters";
@@ -282,6 +281,7 @@ public class ConfigHandler {
         pOrderGUI.add(pEnergyDisplayHUD.getName());
         pOrderGUI.add(pXpos_energyDisplayHUD.getName());
         pOrderGUI.add(pYpos_energyDisplayHUD.getName());
+        pOrderGUI.add(pAquaEnergyDisplayThreshold.getName());
         config.setCategoryPropertyOrder(CATEGORY_GUI, pOrderGUI);
 
         final List<String> pOrderNOCHEATERS = new ArrayList<>();
@@ -469,7 +469,6 @@ public class ConfigHandler {
             pXpos_energyDisplayHUD.set(energyDisplayarray[0]);
             pYpos_energyDisplayHUD.set(energyDisplayarray[1]);
             pAquaEnergyDisplayThreshold.set(aquaEnergyDisplayThreshold);
-
 
             pshowSquadHUD.set(showSquadHUD);
             final double[] squadHUDarray = squadHUDPosition.getRelativePosition();

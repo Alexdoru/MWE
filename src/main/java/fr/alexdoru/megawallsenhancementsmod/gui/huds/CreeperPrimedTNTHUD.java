@@ -4,16 +4,14 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
-
 public class CreeperPrimedTNTHUD extends MyCachedHUD {
 
     public static CreeperPrimedTNTHUD instance;
 
-    private static final String DUMMY_TEXT = "\u00a7a3.0s";
+    private static final String DUMMY_TEXT = EnumChatFormatting.GREEN + "Tnt " + EnumChatFormatting.RED + "3.0s";
     private long timeStartRender;
-    private long renderDuration;        //in reality the timer ingame counts from 3-0 including the full second of 0 time so its 4s
-    private String lastCountdownNum = "balls";
-    private EnumChatFormatting colorPrefix = EnumChatFormatting.GREEN;
+    private long renderDuration;
+    private String lastCountdownNum = "";
 
     public CreeperPrimedTNTHUD() {
         super(ConfigHandler.creeperTNTHUDPosition);
@@ -25,7 +23,7 @@ public class CreeperPrimedTNTHUD extends MyCachedHUD {
         final int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
         final long temp = (timeStartRender + renderDuration - System.currentTimeMillis());
         final String timeLeft = String.format("%.1f", (float) temp / 1000);
-        displayText = (colorPrefix + timeLeft + "s");
+        displayText = EnumChatFormatting.GREEN + "Tnt " + (EnumChatFormatting.RED + timeLeft + "s");
         drawCenteredString(frObj, displayText, absolutePos[0], absolutePos[1], 0);
     }
 
@@ -45,17 +43,7 @@ public class CreeperPrimedTNTHUD extends MyCachedHUD {
             timeStartRender = System.currentTimeMillis();
             renderDuration = 1000L * Integer.parseInt(cooldownTimer) + 1000L;
         }
-        if (cooldownTimer.equals("3")) {
-            colorPrefix = EnumChatFormatting.GREEN;
-        } else if (cooldownTimer.equals("2")) {
-            colorPrefix = EnumChatFormatting.YELLOW;
-        } else if (cooldownTimer.equals("1")) {
-            colorPrefix = EnumChatFormatting.GOLD;
-        } else if (cooldownTimer.equals("0")) {
-            colorPrefix = EnumChatFormatting.RED;
-        }
         lastCountdownNum = cooldownTimer;
     }
-
 
 }

@@ -4,11 +4,10 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.*;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
-import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.fml.client.config.GuiSlider;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         final int buttonsWidth = 200;
         final int sideButtonsWidth = 90;
         this.maxWidth = sideButtonsWidth * 2 + buttonsWidth + 4 * 2;
-        this.maxHeight = (buttonsHeight + 4) * 8 + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * 11 + buttonsHeight;
         super.initGui();
         final int XposCenterButton = getxCenter() - buttonsWidth / 2;
         final int XposCenterLeftButton = getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth;
@@ -38,7 +37,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(11, XposCenterButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(11)));
         buttonList.add(new GuiButton(15, XposCenterButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(15)));
         buttonList.add(new GuiButton(18, XposCenterButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(18)));
-        buttonList.add(new GuiSlider(21, XposCenterButton, getButtonYPos(8), buttonsWidth, buttonsHeight, "Aqua energy threshold : ", "", 1d, 160d, ConfigHandler.aquaEnergyDisplayThreshold, false, true, this));
+        buttonList.add(new GuiSlider(21, XposCenterButton, getButtonYPos(8), buttonsWidth, buttonsHeight, "Energy threshold : ", "", 1d, 160d, ConfigHandler.aquaEnergyDisplayThreshold, false, true, this));
 
         /* Buttons : Reset HUD position */
         buttonList.add(new GuiButton(8, XposCenterLeftButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(8)));
@@ -128,11 +127,11 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.GREEN + "Displays a mini tablist with just your squadmates");
                 break;
             case 15:
-                textLines.add(EnumChatFormatting.GREEN + "Displays a HUD with the cooldown of the primed TNT whilst playing Creeper");
+                textLines.add(EnumChatFormatting.GREEN + "Displays a HUD with the cooldown of the primed TNT when playing Creeper");
                 break;
             case 18:
                 textLines.add(EnumChatFormatting.GREEN + "Displays a HUD with the amount of energy you have");
-                textLines.add(EnumChatFormatting.GREEN + "Turns " + EnumChatFormatting.AQUA + EnumChatFormatting.BOLD + "aqua" + EnumChatFormatting.GREEN + " when you hit an amount of energy you choose");
+                textLines.add(EnumChatFormatting.GREEN + "Turns " + EnumChatFormatting.AQUA + EnumChatFormatting.BOLD + "aqua" + EnumChatFormatting.GREEN + " when your energy level exceeds the amount set below");
                 break;
         }
         return textLines;
@@ -214,10 +213,10 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 SquadHealthHUD.instance.guiPosition.setRelative(0.25d, 0.0d);
                 break;
             case 16:
-                CreeperPrimedTNTHUD.instance.guiPosition.setRelative(0.5d, 8d/20d);
+                CreeperPrimedTNTHUD.instance.guiPosition.setRelative(0.5d, 8d / 20d);
                 break;
             case 19:
-                EnergyDisplayHUD.instance.guiPosition.setRelative(0.5d, 9d/20d);
+                EnergyDisplayHUD.instance.guiPosition.setRelative(0.5d, 10.5d / 20d);
                 break;
             default:
                 break;
@@ -228,9 +227,8 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
 
     @Override
     public void onChangeSliderValue(GuiSlider slider) {
-        switch (slider.id) {
-            case 21:
-                ConfigHandler.aquaEnergyDisplayThreshold = (int) slider.getValue();
+        if (slider.id == 21) {
+            ConfigHandler.aquaEnergyDisplayThreshold = (int) slider.getValue();
         }
     }
 
