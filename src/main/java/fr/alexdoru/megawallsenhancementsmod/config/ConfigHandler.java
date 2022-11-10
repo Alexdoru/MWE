@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.config;
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
+import fr.alexdoru.megawallsenhancementsmod.gui.huds.EnergyDisplayHUD;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -68,6 +69,11 @@ public class ConfigHandler {
     public static final GuiPosition hunterStrengthHUDPosition = new GuiPosition(0d, 0d);
     public static boolean showSquadHUD = true;
     public static final GuiPosition squadHUDPosition = new GuiPosition(0d, 0d);
+    public static boolean showPrimedTNTHUD;
+    public static final GuiPosition creeperTNTHUDPosition = new GuiPosition(0d, 0d);
+    public static boolean showEnergyDisplayHUD;
+    public static final GuiPosition energyDisplayHUDPosition = new GuiPosition(0d, 0d);
+    public static int aquaEnergyDisplayThreshold;
 
     /**
      * NoCheaters Config
@@ -175,6 +181,13 @@ public class ConfigHandler {
         final Property pshowSquadHUD = config.get(CATEGORY_GUI, "Squad HUD", true, "Displays a mini-tablist with only your squadmates");
         final Property pXpos_SquadHUD = config.get(CATEGORY_GUI, "Xpos squad HUD", 0.25d, "The x position of the squad HUD, value ranges from 0 to 1");
         final Property pYpos_SquadHUD = config.get(CATEGORY_GUI, "Ypos squad HUD", 0d, "The y position of the squad HUD, value ranges from 0 to 1");
+        final Property pCreeperTNTHUD = config.get(CATEGORY_GUI, "Creeper Primed TNT HUD", true, "Displays HUD showing the cooldown on your primed tnt with creeper");
+        final Property pXpos_creeperHUD = config.get(CATEGORY_GUI, "Xpos creeper primed TNT HUD", 0.5d, "The x position of the Creeper Primed TNT HUD, value ranges from 0 to 1");
+        final Property pYpos_creeperHUD = config.get(CATEGORY_GUI, "Ypos creeper primed TNT HUD", 8d / 20d, "The y position of the Creeper Primed TNT HUD, value ranges from 0 to 1");
+        final Property pEnergyDisplayHUD = config.get(CATEGORY_GUI, "Energy Display HUD", true, "Displays HUD showing your current energy when you hit someone");
+        final Property pXpos_energyDisplayHUD = config.get(CATEGORY_GUI, "Xpos energy display HUD", 0.5d, "The x position of the Energy Display HUD, value ranges from 0 to 1");
+        final Property pYpos_energyDisplayHUD = config.get(CATEGORY_GUI, "Ypos energy display HUD", 9d / 20d, "The y position of the Energy Display HUD, value ranges from 0 to 1");
+        final Property pAquaEnergyDisplayThreshold = config.get(CATEGORY_GUI, "Threshold to make energy display aqua", 100, "The threshold number that when hit will cause the energy display to turn aqua");
 
         final String CATEGORY_NOCHEATERS = "NoCheaters";
         final Property pToggleicons = config.get(CATEGORY_NOCHEATERS, "Toggle Icons", true, "Display warning symbol on nametags of reported players");
@@ -263,6 +276,12 @@ public class ConfigHandler {
         pOrderGUI.add(pshowSquadHUD.getName());
         pOrderGUI.add(pXpos_SquadHUD.getName());
         pOrderGUI.add(pYpos_SquadHUD.getName());
+        pOrderGUI.add(pCreeperTNTHUD.getName());
+        pOrderGUI.add(pXpos_creeperHUD.getName());
+        pOrderGUI.add(pYpos_creeperHUD.getName());
+        pOrderGUI.add(pEnergyDisplayHUD.getName());
+        pOrderGUI.add(pXpos_energyDisplayHUD.getName());
+        pOrderGUI.add(pYpos_energyDisplayHUD.getName());
         config.setCategoryPropertyOrder(CATEGORY_GUI, pOrderGUI);
 
         final List<String> pOrderNOCHEATERS = new ArrayList<>();
@@ -343,6 +362,11 @@ public class ConfigHandler {
             lastWitherHUDPosition.setRelative(pXpos_lastWitherHUD.getDouble(), pYpos_lastWitherHUD.getDouble());
             showStrengthHUD = pHunterStrengthHUD.getBoolean();
             hunterStrengthHUDPosition.setRelative(pXpos_hunterHUD.getDouble(), pYpos_hunterHUD.getDouble());
+            showPrimedTNTHUD = pCreeperTNTHUD.getBoolean();
+            creeperTNTHUDPosition.setRelative(pXpos_creeperHUD.getDouble(), pYpos_creeperHUD.getDouble());
+            showEnergyDisplayHUD = pEnergyDisplayHUD.getBoolean();
+            energyDisplayHUDPosition.setRelative(pXpos_energyDisplayHUD.getDouble(), pYpos_energyDisplayHUD.getDouble());
+            aquaEnergyDisplayThreshold = pAquaEnergyDisplayThreshold.getInt();
             showSquadHUD = pshowSquadHUD.getBoolean();
             squadHUDPosition.setRelative(pXpos_SquadHUD.getDouble(), pYpos_SquadHUD.getDouble());
 
@@ -434,6 +458,18 @@ public class ConfigHandler {
             final double[] hunterStrengtharray = hunterStrengthHUDPosition.getRelativePosition();
             pXpos_hunterHUD.set(hunterStrengtharray[0]);
             pYpos_hunterHUD.set(hunterStrengtharray[1]);
+
+            pCreeperTNTHUD.set(showPrimedTNTHUD);
+            final double[] creeperPrimedTNTarray = creeperTNTHUDPosition.getRelativePosition();
+            pXpos_creeperHUD.set(creeperPrimedTNTarray[0]);
+            pYpos_creeperHUD.set(creeperPrimedTNTarray[1]);
+
+            pEnergyDisplayHUD.set(showEnergyDisplayHUD);
+            final double[] energyDisplayarray = energyDisplayHUDPosition.getRelativePosition();
+            pXpos_energyDisplayHUD.set(energyDisplayarray[0]);
+            pYpos_energyDisplayHUD.set(energyDisplayarray[1]);
+            pAquaEnergyDisplayThreshold.set(aquaEnergyDisplayThreshold);
+
 
             pshowSquadHUD.set(showSquadHUD);
             final double[] squadHUDarray = squadHUDPosition.getRelativePosition();

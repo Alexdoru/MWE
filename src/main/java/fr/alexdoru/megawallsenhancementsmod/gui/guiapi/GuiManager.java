@@ -23,7 +23,9 @@ public final class GuiManager {
         this.registeredRenderers.add(new ArrowHitHUD());
         this.registeredRenderers.add(new KillCooldownHUD());
         this.registeredRenderers.add(new HunterStrengthHUD());
+        this.registeredRenderers.add(new CreeperPrimedTNTHUD());
         this.registeredRenderers.add(new LastWitherHPHUD());
+        this.registeredRenderers.add(new EnergyDisplayHUD());
         this.registeredRenderers.add(new SquadHealthHUD());
     }
 
