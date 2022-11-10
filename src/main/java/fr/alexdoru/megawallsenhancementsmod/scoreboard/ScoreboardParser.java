@@ -4,7 +4,6 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.LastWitherHPHUD;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.opengl.Display;
@@ -92,12 +91,9 @@ public class ScoreboardParser {
         } else if (GATES_OPEN_PATTERN.matcher(unformattedSidebarLines.get(1)).find()) {
             isitPrepPhase = true;
         } else if (!triggeredGameEndAlert && "Game End: 05:00".equals(unformattedSidebarLines.get(1))) {
-            triggeredGameEndAlert = true;
             SoundUtil.playNotePling();
             ChatUtil.addChatMessage(EnumChatFormatting.YELLOW + "Game ends in 5 minutes!");
-            Minecraft.getMinecraft().ingameGUI.displayTitle(null, null, 5, 20, 5);
-            Minecraft.getMinecraft().ingameGUI.displayTitle("", null, 0, 0, 0);
-            Minecraft.getMinecraft().ingameGUI.displayTitle(null, EnumChatFormatting.YELLOW + "Game ends in 5 minutes!", 0, 0, 0);
+            triggeredGameEndAlert = true;
         } else if (unformattedSidebarLines.get(1).contains("None!:")) {
             hasGameEnded = true;
         }

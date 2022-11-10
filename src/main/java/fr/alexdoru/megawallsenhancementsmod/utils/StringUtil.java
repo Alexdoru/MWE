@@ -54,6 +54,18 @@ public class StringUtil {
     }
 
     /**
+     * Replaces the target inside the String while preserving the color
+     * after the replacement
+     */
+    public static String replaceTargetWith(String message, String target, String replacement) {
+        final String[] split = message.split(target, 2);
+        if (split.length != 2) {
+            return message;
+        }
+        return split[0] + replacement + getLastFormattingCodeOf(split[0]) + split[1];
+    }
+
+    /**
      * Returns the last formatting code of a String
      * Returns "" if it can't find any formatting code
      * Else returns "§ + code"

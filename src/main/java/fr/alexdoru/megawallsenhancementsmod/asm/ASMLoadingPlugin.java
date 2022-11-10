@@ -46,4 +46,12 @@ public class ASMLoadingPlugin implements IFMLLoadingPlugin {
         return false;
     }
 
+    public static boolean isFeatherLoaded() {
+        try {
+            final String FEATHER_CLASS = "net/digitalingot/featheropt/FeatherOptMixinPlugin.class";
+            return ClassLoader.getSystemClassLoader().getResource(FEATHER_CLASS) != null;
+        } catch (Exception ignored) {}
+        return false;
+    }
+
 }
