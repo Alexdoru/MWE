@@ -12,6 +12,7 @@ public class CreeperPrimedTNTHUD extends MyCachedHUD {
     private long timeStartRender;
     private long renderDuration;
     private String lastCountdownNum = "";
+    private EnumChatFormatting colorPrefix = EnumChatFormatting.GREEN;
 
     public CreeperPrimedTNTHUD() {
         super(ConfigHandler.creeperTNTHUDPosition);
@@ -23,7 +24,7 @@ public class CreeperPrimedTNTHUD extends MyCachedHUD {
         final int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
         final long temp = (timeStartRender + renderDuration - System.currentTimeMillis());
         final String timeLeft = String.format("%.1f", (float) temp / 1000);
-        displayText = EnumChatFormatting.GREEN + "Tnt " + (EnumChatFormatting.RED + timeLeft + "s");
+        displayText = EnumChatFormatting.GREEN + "Tnt " + (colorPrefix + timeLeft + "s");
         drawCenteredString(frObj, displayText, absolutePos[0], absolutePos[1], 0);
     }
 
@@ -42,6 +43,20 @@ public class CreeperPrimedTNTHUD extends MyCachedHUD {
         if (!lastCountdownNum.equals(cooldownTimer)) {
             timeStartRender = System.currentTimeMillis();
             renderDuration = 1000L * Integer.parseInt(cooldownTimer) + 1000L;
+        }
+        switch (cooldownTimer) {
+            case "3":
+                colorPrefix = EnumChatFormatting.GREEN;
+                break;
+            case "2":
+                colorPrefix = EnumChatFormatting.YELLOW;
+                break;
+            case "1":
+                colorPrefix = EnumChatFormatting.GOLD;
+                break;
+            case "0":
+                colorPrefix = EnumChatFormatting.RED;
+                break;
         }
         lastCountdownNum = cooldownTimer;
     }
