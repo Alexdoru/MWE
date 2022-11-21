@@ -17,44 +17,14 @@ public class EntityPlayerTransformer implements IMyClassTransformer {
 
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
-        status.setInjectionPoints(1);
         addInterface(classNode, "EntityPlayerAccessor");
         final String PRESTIGE_4_TAG_FIELD_NAME = "mwenhancements$Prestige4Tag";
         final String PRESTIGE_5_TAG_FIELD_NAME = "mwenhancements$Prestige5Tag";
         classNode.visitField(ACC_PRIVATE, PRESTIGE_4_TAG_FIELD_NAME, "Ljava/lang/String;", null, null).visitEnd();
         classNode.visitField(ACC_PRIVATE, PRESTIGE_5_TAG_FIELD_NAME, "Ljava/lang/String;", null, null).visitEnd();
-        addGetterMethod(
-                classNode,
-                "getPrestige4Tag",
-                ClassMapping.ENTITYPLAYER,
-                PRESTIGE_4_TAG_FIELD_NAME,
-                "Ljava/lang/String;",
-                null
-        );
-        addSetterMethod(
-                classNode,
-                "setPrestige4Tag",
-                ClassMapping.ENTITYPLAYER,
-                PRESTIGE_4_TAG_FIELD_NAME,
-                "Ljava/lang/String;",
-                null
-        );
-        addGetterMethod(
-                classNode,
-                "getPrestige5Tag",
-                ClassMapping.ENTITYPLAYER,
-                PRESTIGE_5_TAG_FIELD_NAME,
-                "Ljava/lang/String;",
-                null
-        );
-        addSetterMethod(
-                classNode,
-                "setPrestige5Tag",
-                ClassMapping.ENTITYPLAYER,
-                PRESTIGE_5_TAG_FIELD_NAME,
-                "Ljava/lang/String;",
-                null
-        );
+        addGetterAndSetterMethod(classNode, "Prestige4Tag", ClassMapping.ENTITYPLAYER, PRESTIGE_4_TAG_FIELD_NAME, "Ljava/lang/String;", null);
+        addGetterAndSetterMethod(classNode, "Prestige5Tag", ClassMapping.ENTITYPLAYER, PRESTIGE_5_TAG_FIELD_NAME, "Ljava/lang/String;", null);
+        status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.GETDISPLAYNAME)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {

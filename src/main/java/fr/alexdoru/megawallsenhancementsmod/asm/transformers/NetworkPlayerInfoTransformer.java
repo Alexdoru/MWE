@@ -25,17 +25,9 @@ public class NetworkPlayerInfoTransformer implements IMyClassTransformer {
         final String FIELD_NAME_DISPLAYNAME = "mwenhancements$displayName";
         classNode.visitField(ACC_PUBLIC, FIELD_NAME_FINAL_KILLS, "I", null, 0).visitEnd();
         classNode.visitField(ACC_PRIVATE, FIELD_NAME_DISPLAYNAME, "L" + ClassMapping.ICHATCOMPONENT + ";", null, null).visitEnd();
-        addSetterMethod(
+        addGetterAndSetterMethod(
                 classNode,
-                "setPlayerFinalkills",
-                ClassMapping.NETWORKPLAYERINFO,
-                FIELD_NAME_FINAL_KILLS,
-                "I",
-                null
-        );
-        addGetterMethod(
-                classNode,
-                "getPlayerFinalkills",
+                "PlayerFinalkills",
                 ClassMapping.NETWORKPLAYERINFO,
                 FIELD_NAME_FINAL_KILLS,
                 "I",

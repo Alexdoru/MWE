@@ -92,6 +92,11 @@ public interface IMyClassTransformer {
         return new FieldInsnNode(GETSTATIC, "fr/alexdoru/megawallsenhancementsmod/config/ConfigHandler", name, "Z");
     }
 
+    default void addGetterAndSetterMethod(ClassNode classNode, String methodName, ClassMapping owner, String fieldName, String fieldDesc, String methodSignature) {
+        addGetterMethod(classNode, "get" + methodName, owner.toString(), fieldName, fieldDesc, methodSignature);
+        addSetterMethod(classNode, "set" + methodName, owner.toString(), fieldName, fieldDesc, methodSignature);
+    }
+
     default void addGetterMethod(ClassNode classNode, String methodName, FieldMapping field, String methodSignature) {
         addGetterMethod(classNode, methodName, field.owner, field.name, field.desc, methodSignature);
     }
