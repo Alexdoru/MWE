@@ -252,7 +252,7 @@ public class NameUtil {
                                     + teamprefix
                                     + (isSquadMate ? squadname : username)
                                     + (formattedPrestigeVstring != null ? formattedPrestigeVstring : colorSuffix)
-                                    + (alias == null ? "" : EnumChatFormatting.RESET + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.RESET + ")")
+                                    + (isobf || alias == null ? "" : EnumChatFormatting.RESET + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.RESET + ")")
                     );
                 }
             }
