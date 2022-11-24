@@ -1,9 +1,11 @@
 package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -26,6 +28,7 @@ public class PlayerJoinListener {
                     NameUtil.updateEntityPlayerFields((EntityPlayer) event.entity, true);
                 }
             } catch (Exception e) {
+                ChatUtil.addChatMessage(EnumChatFormatting.RED + "Caught an exception when spawning " + event.entity.getName());
                 e.printStackTrace();
             }
         }
