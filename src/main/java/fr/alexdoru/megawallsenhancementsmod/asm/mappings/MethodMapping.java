@@ -44,6 +44,7 @@ public enum MethodMapping {
     NETWORKPLAYERINFO$GETGAMEPROFILE(INVOKEVIRTUAL, NETWORKPLAYERINFO, "a", "getGameProfile", "()L" + GAMEPROFILE + ";"),
     NETWORKPLAYERINFO$GETGAMETYPE(INVOKEVIRTUAL, NETWORKPLAYERINFO, "b", "getGameType", "()L" + WORLDSETTINGS$GAMETYPE + ";"),
     NETWORKPLAYERINFO$INIT("<init>", "(L" + S38PACKETPLAYERLISTITEM$ADDPLAYERDATA + ";)V"),
+    PROFILER$ENDSECTION(INVOKEVIRTUAL, PROFILER, "b", "endSection", "()V"),
     RENDERDEBUGBOUNDINGBOX("b", "renderDebugBoundingBox", "(L" + ENTITY + ";DDDFF)V"),
     RENDERENTITIES("a", "renderEntities", "(L" + ENTITY + ";L" + ICAMERA + ";F)V"),
     RENDERENTITYSIMPLE(INVOKEVIRTUAL, RENDERMANAGER, "a", "renderEntitySimple", "(L" + ENTITY + ";F)Z"),
@@ -64,7 +65,8 @@ public enum MethodMapping {
     SETDEBUGBOUNDINGBOX(INVOKEVIRTUAL, RENDERMANAGER, "b", "setDebugBoundingBox", "(Z)V"),
     STRINGBUILDER$TOSTRING(INVOKEVIRTUAL, STRINGBUILDER, "toString", "()Ljava/lang/String;"),
     UPDATEFOGCOLOR("i", "updateFogColor", "(F)V"),
-    UPDATELIGHTMAP("g", "updateLightmap", "(F)V");
+    UPDATELIGHTMAP("g", "updateLightmap", "(F)V"),
+    WORLD$UPDATEENTITYWITHOPTIONALFORCE("a", "updateEntityWithOptionalForce", "(L" + ENTITY + ";Z)V");
 
     public final int opcode;
     public final String owner;

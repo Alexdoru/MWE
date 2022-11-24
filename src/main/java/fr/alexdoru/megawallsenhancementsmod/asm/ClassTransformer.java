@@ -56,6 +56,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new ScorePlayerTeamTransformer());
         registerTransformer(new SidebarmodReloaded_CustomSidebarTransformer());
         registerTransformer(new SidebarmodRevamp_GuiSidebarTransformer());
+        registerTransformer(new WorldTransformer());
     }
 
     private void registerTransformer(IMyClassTransformer classTransformer) {

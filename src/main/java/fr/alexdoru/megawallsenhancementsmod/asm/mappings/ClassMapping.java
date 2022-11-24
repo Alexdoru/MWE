@@ -41,7 +41,9 @@ public enum ClassMapping {
     NETHANDLERPLAYCLIENT("bcy", "net/minecraft/client/network/NetHandlerPlayClient"),
     NETWORKMANAGER("ek", "net/minecraft/network/NetworkManager"),
     NETWORKPLAYERINFO("bdc", "net/minecraft/client/network/NetworkPlayerInfo"),
+    PLAYERDATASAMPLES("fr/alexdoru/megawallsenhancementsmod/hackerdetector/data/PlayerDataSamples"),
     POTION("pe", "net/minecraft/potion/Potion"),
+    PROFILER("nt", "net/minecraft/profiler/Profiler"),
     RENDERGLOBAL("bfr", "net/minecraft/client/renderer/RenderGlobal"),
     RENDERITEM("bjh", "net/minecraft/client/renderer/entity/RenderItem"),
     RENDERMANAGER("biu", "net/minecraft/client/renderer/entity/RenderManager"),
@@ -56,6 +58,7 @@ public enum ClassMapping {
     STRINGBUILDER("java/lang/StringBuilder"),
     TEAM("auq", "net/minecraft/scoreboard/Team"),
     TEXTUREMANAGER("bmj", "net/minecraft/client/renderer/texture/TextureManager"),
+    WORLD("adm", "net/minecraft/world/World"),
     WORLDRENDERER("bfd", "net/minecraft/client/renderer/WorldRenderer"),
     WORLDSETTINGS$GAMETYPE("adp$a", "net/minecraft/world/WorldSettings$GameType");
 
