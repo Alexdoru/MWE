@@ -53,7 +53,9 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle(EnumChatFormatting.RED + "NoCheaters", 2, getxCenter(), getButtonYPos(-1));
-        drawCenteredString(fontRendererObj, msg, getxCenter(), getButtonYPos(0) + fontRendererObj.FONT_HEIGHT, 0);
+        drawCenteredString(fontRendererObj, msg, getxCenter(), getButtonYPos(0), 0);
+        final String msg0 = EnumChatFormatting.WHITE + "and warns you about them ingame (icon on name, chat message)";
+        drawCenteredString(fontRendererObj, msg0, getxCenter(), getButtonYPos(0) + fontRendererObj.FONT_HEIGHT, 0);
         final String msg1 = EnumChatFormatting.WHITE + "If you want to remove a player from your report list use :";
         drawCenteredString(fontRendererObj, msg1, getxCenter(), getButtonYPos(0) + 2 * fontRendererObj.FONT_HEIGHT, 0);
         final String msg2 = EnumChatFormatting.YELLOW + "/unwdr playername" + EnumChatFormatting.WHITE + " or click the name on the warning message";
