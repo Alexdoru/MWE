@@ -30,6 +30,10 @@ public interface IMyClassTransformer {
         return "fr/alexdoru/megawallsenhancementsmod/asm/hooks/" + className;
     }
 
+    default boolean isConstructorMethod(MethodNode methodNode) {
+        return methodNode.name.startsWith("<init>");
+    }
+
     default boolean checkMethodNode(MethodNode methodNode, MethodMapping mapping) {
         return methodNode.name.equals(mapping.name) && methodNode.desc.equals(mapping.desc);
     }
