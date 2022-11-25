@@ -9,7 +9,6 @@ import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -76,7 +75,6 @@ public class HackerDetector {
     public void performChecksOnPlayer(EntityPlayer player) {
         if (mc.thePlayer == null ||
                 player == mc.thePlayer ||
-                //!player.getName().equals("") || // TODO removedebug
                 player.ticksExisted < 20 ||
                 player.isDead ||
                 player.capabilities.isFlying ||
@@ -87,28 +85,26 @@ public class HackerDetector {
         final long timeStart = System.nanoTime();
         playersCheckedTemp++;
         final PlayerDataSamples data = ((EntityPlayerAccessor) player).getPlayerDataSamples();
-        updateEntityFields(player, data);
+        updateEntityData(player, data);
         checkList.forEach(check -> check.performCheck(player, data));
         timeElapsedTemp += System.nanoTime() - timeStart;
     }
 
-    private void updateEntityFields(EntityPlayer player, PlayerDataSamples data) {
-        final IAttributeInstance attribute = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
-        data.sprintTime = attribute.getModifier(sprintingUUID) == null ? 0 : data.sprintTime + 1;
+    private void updateEntityData(EntityPlayer player, PlayerDataSamples data) {
+        data.sprintTime = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getModifier(sprintingUUID) == null ? 0 : data.sprintTime + 1;
         data.useItemTime = player.isUsingItem() ? data.useItemTime + 1 : 0;
         data.lastHurtTime = player.hurtTime == 9 ? 0 : data.lastHurtTime + 1;
-        final Vector3D dXdYdZ = new Vector3D(
+        data.dXdYdZVector3D = new Vector3D(
                 player.posX - player.lastTickPosX,
                 player.posY - player.lastTickPosY,
                 player.posZ - player.lastTickPosZ
         );
-        //data.prevPositionDiffXZ = data.positionDiffXZ;
-        //data.positionDiffXZ = dXdYdZ.lengthVector2DXZ();
+        data.isNotMoving = data.dXdYdZVector3D.isZero();
         if (!data.dXdYdZSampleList.isEmpty()) {
             final Vector3D lastdXdYdZ = data.dXdYdZSampleList.getFirst();
-            data.directionDeltaXZList.add(dXdYdZ.getXZAngleDiffWithVector(lastdXdYdZ));
+            data.directionDeltaXZList.add(data.dXdYdZVector3D.getXZAngleDiffWithVector(lastdXdYdZ));
         }
-        data.dXdYdZSampleList.add(dXdYdZ);
+        data.dXdYdZSampleList.add(data.dXdYdZVector3D);
     }
 
     /**

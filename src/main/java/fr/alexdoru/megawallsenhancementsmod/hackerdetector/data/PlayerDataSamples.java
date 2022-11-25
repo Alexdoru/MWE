@@ -11,19 +11,20 @@ public class PlayerDataSamples {
 
     // TODO add time falling ? in ticks
 
+    /** True if the player's position is identical to the last tick */
+    public boolean isNotMoving = true;
     /** Amount of ticks since the player started sprinting */
     public int sprintTime = 0;
     /** Amount of ticks since the player has been using an item */
     public int useItemTime = 0;
     /** Amount of ticks since the player took a hit */
     public int lastHurtTime = 0;// TODO comment out
-    ///**
-    // * Holds the distance covered by the player in the XZ plane during the last tick
-    // * This is proportional to the velocity in the XZ plane of the entity
-    // * To get the actual velocity one whould have to multiply the value by 20(tick/sec)
-    // */
-    //public double positionDiffXZ = 0D;
-    //public double prevPositionDiffXZ = 0D;
+    /**
+     * Holds the distance covered by the player in the XZ plane during the last tick
+     * This is proportional to the velocity in the XZ plane of the entity
+     * To get the actual velocity one whould have to multiply the value by 20(tick/sec)
+     */
+    public Vector3D dXdYdZVector3D = new Vector3D(0D, 0D, 0D);
     /**
      * Holds the 'pos - prevPos' of the player for the last 20 ticks along the 3 axis
      * This is proportional to the velocity of the entity

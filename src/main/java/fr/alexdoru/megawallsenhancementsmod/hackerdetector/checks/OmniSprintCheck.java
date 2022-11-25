@@ -33,13 +33,9 @@ public class OmniSprintCheck extends AbstractCheck {
     //  frequently triggers on player in PIT, might be due to the slime block jump thing
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        if (player.hurtTime != 0 || data.sprintTime < 15 || player.isRiding()) {
+        if (player.hurtTime != 0 || data.isNotMoving || data.sprintTime < 15 || player.isRiding()) {
             // TODO data.sprintTime resets to 0 on every hit when using keepsprint
             //  could instead check the players acceleration and velocity if data.sprintTime < 15
-            return false;
-        }
-        /*Skip check for this tick since the player is sprinting but not moving, might be lagging*/
-        if (player.posX == player.lastTickPosX && player.posY == player.lastTickPosY && player.posZ == player.lastTickPosZ) {
             return false;
         }
         if (!data.directionDeltaXZList.hasCollectedSample()) {
@@ -52,27 +48,15 @@ public class OmniSprintCheck extends AbstractCheck {
                 return false;
             }
         }
-        final Vector2D positionDiffXZ = new Vector2D(player.posX - player.lastTickPosX, player.posZ - player.lastTickPosZ);
         final Vector2D playersLook = Vector2D.getVectorFromRotation(player.rotationPitch, player.rotationYaw);
-        final double angularDiff = positionDiffXZ.getAngleWithVector(playersLook);
+        final double angularDiff = data.dXdYdZVector3D.getProjectionInXZPlane().getAngleWithVector(playersLook);
         if (angularDiff < 60d) {
             return false;
         }
         // TODO remove debug stuff
-        fail(player, "Omnisprint");
-        log(player.getName() + " failed Omnisprint check"
-                + " angle diff " + String.format("%.4f", angularDiff)
-                + " normpositionDiffXZ " + String.format("%.4f", positionDiffXZ.lengthVector())
-                + " xPos " + String.format("%.4f", player.posX)
-                + " lastTickPosX " + String.format("%.4f", player.lastTickPosX)
-                + " yPos " + String.format("%.4f", player.posY)
-                + " lastTickPosY " + String.format("%.4f", player.lastTickPosY)
-                + " posZ " + String.format("%.4f", player.posZ)
-                + " lastTickPosZ " + String.format("%.4f", player.lastTickPosZ)
-                + " rotationPitch " + String.format("%.4f", player.rotationPitch)
-                + " rotationYaw " + String.format("%.4f", player.rotationYaw)
-                + " sprintTime " + data.sprintTime
-                + " lastHurtTime " + data.lastHurtTime
+        fail(player, this.getCheatName());
+        log(player, this.getCheatName(), data,
+                "angularDiff " + String.format("%.4f", angularDiff)
         );
         return true;
     }

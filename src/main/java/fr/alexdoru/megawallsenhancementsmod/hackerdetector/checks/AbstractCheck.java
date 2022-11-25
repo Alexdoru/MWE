@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,6 +48,7 @@ public abstract class AbstractCheck implements ICheck {
     }
 
     protected static void flag(EntityPlayer player, String cheat, String cheatDescription) {
+        logger.warn(player.getName() + " flags " + cheat);// TODO remove debug
         ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RESET
                 + NameUtil.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.YELLOW + " flags "
@@ -57,15 +59,29 @@ public abstract class AbstractCheck implements ICheck {
         );
     }
 
-    protected static void log(String msg) {
-        logger.info(msg);
+    protected static void fail(EntityPlayer player, String cheat) {
+        ChatUtil.debug(NameUtil.getFormattedNameWithoutIcons(player.getName())
+                + EnumChatFormatting.GRAY + " failed "
+                + EnumChatFormatting.RED + cheat
+                + EnumChatFormatting.GRAY + " check ");
     }
 
-    protected static void fail(EntityPlayer player, String cheat) {
-        ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RESET
-                + NameUtil.getFormattedNameWithoutIcons(player.getName())
-                + EnumChatFormatting.GRAY + " failed "
-                + EnumChatFormatting.RED + cheat);
+    protected static void log(EntityPlayer player, String cheat, PlayerDataSamples data, String extramsg) { // TODO print toutes les variables
+        logger.info(player.getName() + " failed " + cheat + " check "
+                + extramsg
+                + " | speedXZ (m/s) " + String.format("%.4f", data.dXdYdZVector3D.lengthVectorInXZPlane() * 20D)
+                + " | posX " + String.format("%.4f", player.posX)
+                + " | lastTickPosX " + String.format("%.4f", player.lastTickPosX)
+                + " | posY " + String.format("%.4f", player.posY)
+                + " | lastTickPosY " + String.format("%.4f", player.lastTickPosY)
+                + " | posZ " + String.format("%.4f", player.posZ)
+                + " | lastTickPosZ " + String.format("%.4f", player.lastTickPosZ)
+                + " | rotationPitch " + String.format("%.4f", player.rotationPitch)
+                + " | rotationYaw " + String.format("%.4f", player.rotationYaw)
+                + " | sprintTime " + data.sprintTime
+                + " | lastHurtTime " + data.lastHurtTime
+                + " | ticksExisted " + player.ticksExisted
+        );
     }
 
     protected static void debug(String msg) {
