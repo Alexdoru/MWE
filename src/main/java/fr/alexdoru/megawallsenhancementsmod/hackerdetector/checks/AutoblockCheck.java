@@ -43,9 +43,9 @@ public class AutoblockCheck extends AbstractCheck {
             final ItemStack itemStack = player.getHeldItem();
             if (itemStack != null && swordSet.contains(itemStack.getItem())) {
                 // TODO remove debug
-                fail(player, "Autoblock");
-                log(player.getName() + " failed autoblock check"
-                        + " data.useItemTime " + data.useItemTime
+                fail(player, this.getCheatName());
+                log(player,this.getCheatName(), data,
+                        "useItemTime " + data.useItemTime
                 );
                 return true;
             }
@@ -54,7 +54,7 @@ public class AutoblockCheck extends AbstractCheck {
     }
 
     public static ViolationLevelTracker getViolationTracker() {
-        return new ViolationLevelTracker(1, 1, 20);
+        return new ViolationLevelTracker(1, 2, 30);
     }
 
 }

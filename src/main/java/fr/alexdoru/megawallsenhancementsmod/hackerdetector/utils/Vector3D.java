@@ -20,6 +20,10 @@ public class Vector3D extends Vec3 {
         return new Vector3D(f1 * f2, f3, f * f2);
     }
 
+    public boolean isZero() {
+        return this.xCoord == 0D && this.yCoord == 0D && this.zCoord == 0D;
+    }
+
     /**
      * Returns the absolute angle in between
      * the 2Dvector resulting of the projection of this onto the XZ plane and
@@ -39,10 +43,17 @@ public class Vector3D extends Vec3 {
     }
 
     /**
+     * Returns the 2D vector resulting of the projection of this onto the XZ plane
+     */
+    public Vector2D getProjectionInXZPlane() {
+        return new Vector2D(this.xCoord, this.zCoord);
+    }
+
+    /**
      * Returns the length of the 2D vector resulting of the projection of this onto the XZ plane
      */
-    public double lengthVector2DXZ() {
-        return MathHelper.sqrt_double(this.xCoord * this.xCoord + this.zCoord * this.zCoord);
+    public double lengthVectorInXZPlane() {
+        return this.getProjectionInXZPlane().lengthVector();
     }
 
 }

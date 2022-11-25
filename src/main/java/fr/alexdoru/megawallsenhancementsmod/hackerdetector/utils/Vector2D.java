@@ -18,6 +18,10 @@ public class Vector2D {
         this.v = v;
     }
 
+    public boolean isZero() {
+        return this.u == 0D && this.v == 0D;
+    }
+
     /**
      * Returns the length of the vector.
      */

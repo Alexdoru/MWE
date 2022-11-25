@@ -9,6 +9,7 @@ public class NoSlowdownCheck extends AbstractCheck {
     @Override
     public String getCheatName() {
         return "NoSlowdown";
+        // TODO check the avg velocity over the last X ticks and flag keepsprint/noslow ?
     }
 
     @Override
@@ -23,13 +24,16 @@ public class NoSlowdownCheck extends AbstractCheck {
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
+        // TODO what does it do with spider leap
+        //  desactiver si la vitesse est < à une valeurs minimum
+        // TODO apparently it flags players eating/drinking/bowing while using keepsprint
         /* It takes 32 ticks to eat/drink one food/potion item */
-        if (data.sprintTime > 40 && data.useItemTime > 8) {
+        if (!data.isNotMoving && data.sprintTime > 40 && data.useItemTime > 8) {
             // TODO remove debug
-            fail(player, "noslowdown");
-            log(player.getName() + " failed noslowdown check"
-                    + " sprintTime " + data.sprintTime
-                    + " useItemTime " + data.useItemTime
+            fail(player, this.getCheatName());
+            log(player, this.getCheatName(), data,
+                    "sprintTime " + data.sprintTime
+                            + " useItemTime " + data.useItemTime
             );
             return true;
         }
@@ -37,7 +41,7 @@ public class NoSlowdownCheck extends AbstractCheck {
     }
 
     public static ViolationLevelTracker getViolationTracker() {
-        return new ViolationLevelTracker(1, 2, 15);
+        return new ViolationLevelTracker(1, 2, 17);
     }
 
 }
