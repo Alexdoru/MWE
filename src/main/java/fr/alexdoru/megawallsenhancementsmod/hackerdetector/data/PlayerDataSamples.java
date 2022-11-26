@@ -42,9 +42,9 @@ public class PlayerDataSamples {
     public double lookAngleDiff = 0D;
     /** Variation of Yaw since last tick (which is in XZ plane) */
     public double dYaw = 0D;
+    public boolean lastNonZerodYawPositive = true;
     /** Amount of ticks since dYaw changed sign */
     public int lastTime_dYawChangedSign = 0;
-    public boolean wasLastdYawPositive = true;
     /** Amount of ticks since the last sword swing started, used to check if the player is looking at an entity */
     // TODO test if entity gets hurt for through blocks check
     public int lastSwingTime = 0;

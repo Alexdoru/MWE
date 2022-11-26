@@ -23,19 +23,18 @@ public class KillAuraSwitchCheck extends AbstractCheck {
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        if (player.isSwingInProgress) {
-            //if (player.swingProgressInt == 0) {
-            //    final MovingObjectPosition movingObjectPosition = player.rayTrace(3.5, 1.F);
-            //}
-            // TODO remove debug
-        }
-        logger.info("swingProgressInt " + player.swingProgressInt
-                + " lastSwingTime " + data.lastSwingTime
-                + " lookAngleDiff " + String.format("%.4f", data.lookAngleDiff)
-                + " dYaw " + String.format("%.4f", data.dYaw)
-                + " wasLastdYawPositive " + data.wasLastdYawPositive
-                + " lastTime_dYawChangedSign " + data.lastTime_dYawChangedSign
-        );
+        //if (player.isSwingInProgress) {
+        //    //if (player.swingProgressInt == 0) {
+        //    //    final MovingObjectPosition movingObjectPosition = player.rayTrace(3.5, 1.F);
+        //    //}
+        //    // TODO remove debug
+        //}
+        //logger.info("swingProgressInt " + player.swingProgressInt
+        //        + " | lastSwingTime " + data.lastSwingTime
+        //        + " | lookAngleDiff " + String.format("%.4f", data.lookAngleDiff)
+        //        + " | dYaw " + String.format("%.4f", data.dYaw)
+        //        + " | lastTime_dYawChangedSign " + data.lastTime_dYawChangedSign
+        //);
         return false;
     }
 

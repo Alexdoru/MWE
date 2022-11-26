@@ -40,7 +40,7 @@ public class HackerDetector {
 
     public HackerDetector() {
         checkList.add(new AutoblockCheck());
-        //checkList.add(new KillAuraSwitchCheck());// TODO remove debug
+        checkList.add(new KillAuraSwitchCheck());
         checkList.add(new SprintCheck());
         checkList.add(new OmniSprintCheck());
         // TODO add kill aura check if player tracks entity while hitting it with good tracking, look at the 3D angle diff > a certain value
@@ -99,6 +99,7 @@ public class HackerDetector {
         data.sprintTime = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getModifier(sprintingUUID) == null ? 0 : data.sprintTime + 1;
         data.useItemTime = player.isUsingItem() ? data.useItemTime + 1 : 0;
         data.lastHurtTime = player.hurtTime == 9 ? 0 : data.lastHurtTime + 1;
+        data.lastSwingTime = player.isSwingInProgress && player.swingProgressInt == 0 ? 0 : data.lastSwingTime + 1;
         data.dXdYdZVector3D = new Vector3D(
                 player.posX - player.lastTickPosX,
                 player.posY - player.lastTickPosY,
@@ -114,14 +115,22 @@ public class HackerDetector {
         final Vector3D lookVector = Vector3D.getVectorFromRotation(player.rotationPitch, player.rotationYaw);
         data.lookAngleDiff = lookVector.getAngleWithVector(data.lookVector);
         data.lookVector = lookVector;
-        data.dYaw = player.rotationYaw - player.prevRotationYaw;
-        if (data.wasLastdYawPositive) {
-            data.lastTime_dYawChangedSign = data.dYaw < 0D ? 0 : data.lastTime_dYawChangedSign + 1;
+        final double dYaw = player.rotationYaw - player.prevRotationYaw;
+        if (dYaw != 0 && data.dYaw != 0) {
+            data.lastTime_dYawChangedSign = dYaw * data.dYaw > 0 ? data.lastTime_dYawChangedSign + 1 : 0;
+        } else if (dYaw != 0) {
+            if (data.lastNonZerodYawPositive) {
+                data.lastTime_dYawChangedSign = dYaw > 0 ? data.lastTime_dYawChangedSign + 1 : 0;
+            } else {
+                data.lastTime_dYawChangedSign = dYaw < 0 ? data.lastTime_dYawChangedSign + 1 : 0;
+            }
         } else {
-            data.lastTime_dYawChangedSign = data.dYaw >= 0D ? 0 : data.lastTime_dYawChangedSign + 1;
+            data.lastTime_dYawChangedSign = data.lastTime_dYawChangedSign + 1;
         }
-        data.wasLastdYawPositive = data.dYaw >= 0D;
-        data.lastSwingTime = player.isSwingInProgress && player.swingProgressInt == 0 ? 0 : data.lastSwingTime + 1;
+        if (dYaw != 0) {
+            data.lastNonZerodYawPositive = dYaw > 0;
+        }
+        data.dYaw = dYaw;
     }
 
     /**
