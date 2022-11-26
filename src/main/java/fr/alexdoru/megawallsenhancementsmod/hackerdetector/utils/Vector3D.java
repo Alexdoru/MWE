@@ -5,6 +5,10 @@ import net.minecraft.util.Vec3;
 
 public class Vector3D extends Vec3 {
 
+    public Vector3D() {
+        super(0D, 0D, 0D);
+    }
+
     public Vector3D(double x, double y, double z) {
         super(x, y, z);
     }
@@ -54,6 +58,24 @@ public class Vector3D extends Vec3 {
      */
     public double lengthVectorInXZPlane() {
         return this.getProjectionInXZPlane().lengthVector();
+    }
+
+    /**
+     * Returns the absolute angle in between this and otherVector
+     * in the plane formed by those two vectors
+     * Result is in degres
+     */
+    public double getAngleWithVector(Vector3D otherVector) {
+        final double den = Math.sqrt((this.xCoord * this.xCoord + this.yCoord * this.yCoord + this.zCoord * this.zCoord) *
+                (otherVector.xCoord * otherVector.xCoord + otherVector.yCoord * otherVector.yCoord + otherVector.zCoord * otherVector.zCoord));
+        if (den < 1.0000000116860974E-7D) {
+            return 0D;
+        }
+        final double cos = this.dotProduct(otherVector) / den;
+        if (cos > 1D || cos < -1D) {
+            return 0D;
+        }
+        return Math.toDegrees(Math.acos(cos));
     }
 
 }

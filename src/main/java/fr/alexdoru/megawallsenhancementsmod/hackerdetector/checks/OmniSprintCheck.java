@@ -20,7 +20,7 @@ public class OmniSprintCheck extends AbstractCheck {
 
     @Override
     public void performCheck(EntityPlayer player, PlayerDataSamples data) {
-        super.checkViolationLevel(player, data.omnisprintVL, this.check(player, data));
+        super.checkViolationLevel(player, this.check(player, data), data.omnisprintVL);
     }
 
     /**
@@ -49,19 +49,21 @@ public class OmniSprintCheck extends AbstractCheck {
             }
         }
         final Vector2D playersLook = Vector2D.getVectorFromRotation(player.rotationPitch, player.rotationYaw);
-        final double angularDiff = data.dXdYdZVector3D.getProjectionInXZPlane().getAngleWithVector(playersLook);
+        final double angularDiff = data.dXdZVector2D.getAngleWithVector(playersLook);
         if (angularDiff < 60d) {
+            // TODO change the angle it checks here depending on the max angle directionDeltaXZ
+            //  in the loop above on data.directionDeltaXZList
             return false;
         }
         // TODO remove debug stuff
         fail(player, this.getCheatName());
-        log(player, this.getCheatName(), data,
+        log(player, this.getCheatName(), data.omnisprintVL, data,
                 "angularDiff " + String.format("%.4f", angularDiff)
         );
         return true;
     }
 
-    public static ViolationLevelTracker getViolationTracker() {
+    public static ViolationLevelTracker newViolationTracker() {
         return new ViolationLevelTracker(2, 1, 20);
     }
 

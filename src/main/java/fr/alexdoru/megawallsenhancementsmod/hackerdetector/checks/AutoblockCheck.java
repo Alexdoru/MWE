@@ -34,17 +34,19 @@ public class AutoblockCheck extends AbstractCheck {
 
     @Override
     public void performCheck(EntityPlayer player, PlayerDataSamples data) {
-        super.checkViolationLevel(player, data.autoblockVL, this.check(player, data));
+        super.checkViolationLevel(player, this.check(player, data), data.autoblockVL);
     }
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
+        // TODO check if player eat/drank something in the tick before to avoid flagging no hit glitch check
+        //  print a log message in case it skips and flags
         if (player.isSwingInProgress && data.useItemTime > 20) {
             final ItemStack itemStack = player.getHeldItem();
             if (itemStack != null && swordSet.contains(itemStack.getItem())) {
                 // TODO remove debug
                 fail(player, this.getCheatName());
-                log(player,this.getCheatName(), data,
+                log(player,this.getCheatName(), data.autoblockVL, data,
                         "useItemTime " + data.useItemTime
                 );
                 return true;
@@ -53,7 +55,7 @@ public class AutoblockCheck extends AbstractCheck {
         return false;
     }
 
-    public static ViolationLevelTracker getViolationTracker() {
+    public static ViolationLevelTracker newViolationTracker() {
         return new ViolationLevelTracker(1, 2, 30);
     }
 

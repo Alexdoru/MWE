@@ -2,7 +2,10 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.*;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.AutoblockCheck;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.ICheck;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.OmniSprintCheck;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.SprintCheck;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
@@ -37,9 +40,10 @@ public class HackerDetector {
 
     public HackerDetector() {
         checkList.add(new AutoblockCheck());
-        checkList.add(new KillAuraHeadsnapCheck());
-        checkList.add(new NoSlowdownCheck());
+        //checkList.add(new KillAuraSwitchCheck());// TODO remove debug
+        checkList.add(new SprintCheck());
         checkList.add(new OmniSprintCheck());
+        // TODO add kill aura check if player tracks entity while hitting it with good tracking, look at the 3D angle diff > a certain value
     }
 
     @SubscribeEvent
@@ -74,7 +78,8 @@ public class HackerDetector {
      */
     public void performChecksOnPlayer(EntityPlayer player) {
         if (mc.thePlayer == null ||
-                player == mc.thePlayer ||
+                player == mc.thePlayer ||// TODO remove debug
+                //!player.getName().equals("MacronDemlssion") ||
                 player.ticksExisted < 20 ||
                 player.isDead ||
                 player.capabilities.isFlying ||
@@ -99,12 +104,24 @@ public class HackerDetector {
                 player.posY - player.lastTickPosY,
                 player.posZ - player.lastTickPosZ
         );
+        data.dXdZVector2D = data.dXdYdZVector3D.getProjectionInXZPlane();
         data.isNotMoving = data.dXdYdZVector3D.isZero();
         if (!data.dXdYdZSampleList.isEmpty()) {
             final Vector3D lastdXdYdZ = data.dXdYdZSampleList.getFirst();
             data.directionDeltaXZList.add(data.dXdYdZVector3D.getXZAngleDiffWithVector(lastdXdYdZ));
         }
         data.dXdYdZSampleList.add(data.dXdYdZVector3D);
+        final Vector3D lookVector = Vector3D.getVectorFromRotation(player.rotationPitch, player.rotationYaw);
+        data.lookAngleDiff = lookVector.getAngleWithVector(data.lookVector);
+        data.lookVector = lookVector;
+        data.dYaw = player.rotationYaw - player.prevRotationYaw;
+        if (data.wasLastdYawPositive) {
+            data.lastTime_dYawChangedSign = data.dYaw < 0D ? 0 : data.lastTime_dYawChangedSign + 1;
+        } else {
+            data.lastTime_dYawChangedSign = data.dYaw >= 0D ? 0 : data.lastTime_dYawChangedSign + 1;
+        }
+        data.wasLastdYawPositive = data.dYaw >= 0D;
+        data.lastSwingTime = player.isSwingInProgress && player.swingProgressInt == 0 ? 0 : data.lastSwingTime + 1;
     }
 
     /**

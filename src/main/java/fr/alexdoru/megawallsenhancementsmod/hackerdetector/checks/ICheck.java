@@ -15,10 +15,17 @@ public interface ICheck {
     /** Performs the check on the player and prints a message if the player flags */
     void performCheck(EntityPlayer player, PlayerDataSamples data);
 
-    /** Performs the check on the player and returns true if the player fails the check */
+    /**
+     * Performs the check on the player and returns true if the player fails the check
+     * If you want to handle your violation levels manually, you have to update them in
+     * this method
+     */
     boolean check(EntityPlayer player, PlayerDataSamples data);
 
-    /** Checks the violation level and prints chat output if the player exceeds the violation level */
-    void checkViolationLevel(EntityPlayer player, ViolationLevelTracker tracker, boolean failedCheck);
+    /**
+     * Checks the violation level of each ViolationLevelTracker of this check
+     * and prints chat output if the player exceeds one of the violation levels
+     */
+    void checkViolationLevel(EntityPlayer player, boolean failedCheck, ViolationLevelTracker... tracker);
 
 }

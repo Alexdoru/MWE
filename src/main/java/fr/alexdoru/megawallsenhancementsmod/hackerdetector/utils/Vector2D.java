@@ -7,6 +7,11 @@ public class Vector2D {
     public final double u;
     public final double v;
 
+    public Vector2D() {
+        this.u = 0D;
+        this.v = 0D;
+    }
+
     public Vector2D(double u, double v) {
         if (u == -0.0D) {
             u = 0.0D;
