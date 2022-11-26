@@ -14,17 +14,21 @@ import net.minecraft.util.EnumChatFormatting;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nonnull;
+
 /**
  * Abstract class to hold util methods for the checks
  */
 public abstract class AbstractCheck implements ICheck {
 
-    private static final Logger logger = LogManager.getLogger("HackerDetector");
+    protected static final Logger logger = LogManager.getLogger("HackerDetector");
 
     @Override
-    public void checkViolationLevel(EntityPlayer player, ViolationLevelTracker tracker, boolean failedCheck) {
-        if (tracker.isFlagging(failedCheck)) {
-            flag(player, this.getCheatName(), this.getCheatDescription());
+    public final void checkViolationLevel(EntityPlayer player, boolean failedCheck, ViolationLevelTracker... trackers) {
+        for (final ViolationLevelTracker tracker : trackers) {
+            if (tracker.isFlagging(failedCheck)) {
+                flag(player, this.getCheatName(), this.getCheatDescription());
+            }
         }
     }
 
@@ -66,10 +70,11 @@ public abstract class AbstractCheck implements ICheck {
                 + EnumChatFormatting.GRAY + " check ");
     }
 
-    protected static void log(EntityPlayer player, String cheat, PlayerDataSamples data, String extramsg) { // TODO print toutes les variables
+    protected static void log(EntityPlayer player, String cheat, @Nonnull ViolationLevelTracker vl, PlayerDataSamples data, String extramsg) {
         logger.info(player.getName() + " failed " + cheat + " check "
                 + extramsg
-                + " | speedXZ (m/s) " + String.format("%.4f", data.dXdYdZVector3D.lengthVectorInXZPlane() * 20D)
+                + " | vl " + vl.getViolationLevel()
+                + " | speedXZ (m/s) " + String.format("%.4f", data.dXdZVector2D.lengthVector() * 20D)
                 + " | posX " + String.format("%.4f", player.posX)
                 + " | lastTickPosX " + String.format("%.4f", player.lastTickPosX)
                 + " | posY " + String.format("%.4f", player.posY)
@@ -81,6 +86,7 @@ public abstract class AbstractCheck implements ICheck {
                 + " | sprintTime " + data.sprintTime
                 + " | lastHurtTime " + data.lastHurtTime
                 + " | ticksExisted " + player.ticksExisted
+                + " | isRidingEntity " + player.isRiding()
         );
     }
 
