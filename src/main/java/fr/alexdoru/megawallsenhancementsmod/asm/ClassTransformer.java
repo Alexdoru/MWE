@@ -14,8 +14,6 @@ import java.util.List;
 
 public class ClassTransformer implements IClassTransformer {
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private final boolean DEBUG = false;
     private final HashMap<String, List<IMyClassTransformer>> transformerHashMap = new HashMap<>();
 
     /**
@@ -81,22 +79,23 @@ public class ClassTransformer implements IClassTransformer {
                 final ClassNode classNode = new ClassNode();
                 final ClassReader classReader = new ClassReader(basicClass);
                 classReader.accept(classNode, 0);
+                // TODO add default methods in IMyCLasstransformer to set the flags for each transformer to make transformation faster ?
+                //  benchmarck total time to apply all transformers
                 final ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
                 final InjectionStatus status = new InjectionStatus();
                 transformer.transform(classNode, status).accept(classWriter);
                 if (!status.isTransformationSuccessfull()) {
                     ASMLoadingPlugin.logger.error("Class transformation incomplete, transformer " + stripClassName(transformer.getClass().getName()) + " missing " + status.getInjectionCount() + " injections in " + transformedName);
-                } else if (DEBUG) {
-                    ASMLoadingPlugin.logger.info("Applied " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
+                } else {
+                    ASMLoadingPlugin.logger.debug("Applied " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
                 }
                 basicClass = classWriter.toByteArray();
             } catch (Exception e) {
                 ASMLoadingPlugin.logger.error("Failed to apply " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
             }
         }
-        if (DEBUG) {
-            ASMLoadingPlugin.logger.info("Transformed " + transformedName + " in " + (System.currentTimeMillis() - l) + "ms");
-        }
+        final long l2 = System.currentTimeMillis() - l;
+        ASMLoadingPlugin.logger.debug("Transformed " + transformedName + " in " + l2 + "ms");
         return basicClass;
     }
 
