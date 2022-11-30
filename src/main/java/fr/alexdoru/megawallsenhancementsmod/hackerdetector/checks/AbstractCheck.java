@@ -80,6 +80,7 @@ public abstract class AbstractCheck implements ICheck {
         logger.info(player.getName() + " failed " + cheat + " check "
                 + extramsg
                 + " | vl " + vl.getViolationLevel()
+                + " | onGround " + player.onGround
                 + " | speedXZ (m/s) " + String.format("%.4f", data.dXdZVector2D.lengthVector() * 20D)
                 + " | posX " + String.format("%.4f", player.posX)
                 + " | lastTickPosX " + String.format("%.4f", player.lastTickPosX)
@@ -88,7 +89,7 @@ public abstract class AbstractCheck implements ICheck {
                 + " | posZ " + String.format("%.4f", player.posZ)
                 + " | lastTickPosZ " + String.format("%.4f", player.lastTickPosZ)
                 + " | rotationPitch " + String.format("%.4f", player.rotationPitch)
-                + " | rotationYaw " + String.format("%.4f", player.rotationYaw)
+                + " | rotationYawHead " + String.format("%.4f", player.rotationYawHead)
                 + " | sprintTime " + data.sprintTime
                 + " | lastHurtTime " + data.lastHurtTime
                 + " | ticksExisted " + player.ticksExisted
