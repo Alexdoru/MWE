@@ -29,11 +29,9 @@ public class OmniSprintCheck extends AbstractCheck {
      * It happens when using sprint hacks, killaura or
      * some kind of bow hacks while running
      */
-    // TODO seems to have issues with frozen laggy players
-    //  frequently triggers on player in PIT, might be due to the slime block jump thing
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        if (player.hurtTime != 0 || data.isNotMoving || data.sprintTime < 15 || player.isRiding()) {
+        if (player.hurtTime != 0 || data.isNotMoving || data.sprintTime < 15 || player.isRiding() || !player.onGround) {
             // TODO data.sprintTime resets to 0 on every hit when using keepsprint
             //  could instead check the players acceleration and velocity if data.sprintTime < 15
             return false;
@@ -48,7 +46,7 @@ public class OmniSprintCheck extends AbstractCheck {
                 return false;
             }
         }
-        final Vector2D playersLook = Vector2D.getVectorFromRotation(player.rotationPitch, player.rotationYaw);
+        final Vector2D playersLook = Vector2D.getVectorFromRotation(player.rotationPitch, player.rotationYawHead);
         final double angularDiff = data.dXdZVector2D.getAngleWithVector(playersLook);
         if (angularDiff < 60d) {
             // TODO change the angle it checks here depending on the max angle directionDeltaXZ
