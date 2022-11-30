@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumChatFormatting;
 
 public class KillAuraSwitchCheck extends AbstractCheck {
 
@@ -13,7 +14,7 @@ public class KillAuraSwitchCheck extends AbstractCheck {
 
     @Override
     public String getCheatDescription() {
-        return "The player is headsnapping between targets";
+        return EnumChatFormatting.RED + "The player is headsnapping between targets";
     }
 
     @Override

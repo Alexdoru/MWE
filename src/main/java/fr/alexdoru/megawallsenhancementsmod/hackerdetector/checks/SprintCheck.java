@@ -5,6 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelT
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 
 public class SprintCheck extends AbstractCheck {
 
@@ -22,9 +23,9 @@ public class SprintCheck extends AbstractCheck {
 
     @Override
     public String getCheatDescription() {
-        return isNoslowCheck ?
+        return EnumChatFormatting.RED + (isNoslowCheck ?
                 "The player is running while using items (blocking sword, eat, drink, use bow...)" :
-                "The player is sprinting while using items (blocking sword, eat, drink, use bow...)";
+                "The player's sprint doesn't reset when using items (blocking sword, eat, drink, use bow...)");
     }
 
     @Override

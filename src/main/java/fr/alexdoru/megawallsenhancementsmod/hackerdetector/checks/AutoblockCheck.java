@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,7 +30,7 @@ public class AutoblockCheck extends AbstractCheck {
 
     @Override
     public String getCheatDescription() {
-        return "The player can attack while their sword is blocked";
+        return EnumChatFormatting.RED + "The player can attack while their sword is blocked";
     }
 
     @Override

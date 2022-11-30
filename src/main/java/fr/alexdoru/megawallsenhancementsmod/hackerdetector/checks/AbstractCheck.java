@@ -5,6 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSample
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -58,8 +59,13 @@ public abstract class AbstractCheck implements ICheck {
                 + EnumChatFormatting.YELLOW + " flags "
                 + EnumChatFormatting.RED + cheat)
                 .setChatStyle(new ChatStyle()
-                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                new ChatComponentText(EnumChatFormatting.YELLOW + cheatDescription))))// TODO make a click event to report
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(cheatDescription))))
+                .appendSibling(ChatUtil.getReportButtons(player.getName(),
+                        "cheating " + cheat.toLowerCase(),
+                        cheat.toLowerCase(),
+                        ClickEvent.Action.RUN_COMMAND,
+                        ClickEvent.Action.RUN_COMMAND)
+                )
         );
     }
 

@@ -4,6 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSample
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector2D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumChatFormatting;
 
 public class OmniSprintCheck extends AbstractCheck {
 
@@ -15,7 +16,7 @@ public class OmniSprintCheck extends AbstractCheck {
 
     @Override
     public String getCheatDescription() {
-        return "The player is sprinting in a different direction than the one they are looking at";
+        return EnumChatFormatting.RED + "The player is sprinting in a different direction than the one they are looking at";
     }
 
     @Override

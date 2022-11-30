@@ -234,7 +234,7 @@ public class ChatUtil {
                                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to open Plancke in browser")))));
     }
 
-    public static IChatComponent makeReportButtons(String playername, String cheatReport, String cheatWDR, ClickEvent.Action actionreport, ClickEvent.Action actionwdr) {
+    public static IChatComponent getReportButtons(String playername, String cheatReport, String cheatWDR, ClickEvent.Action actionreport, ClickEvent.Action actionwdr) {
         return getReportButton(playername, cheatReport, actionreport).appendSibling(getWDRButton(playername, cheatWDR, actionwdr));
     }
 
