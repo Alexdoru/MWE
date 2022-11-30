@@ -14,7 +14,7 @@ public class Vector3D extends Vec3 {
     }
 
     /**
-     * Creates a Vector3D from pitch and yaw
+     * Creates a normalized Vector3D from pitch and yaw
      */
     public static Vector3D getVectorFromRotation(float pitch, float yaw) {
         final float f = MathHelper.cos(-yaw * 0.017453292F - (float) Math.PI);
@@ -76,6 +76,13 @@ public class Vector3D extends Vec3 {
             return 0D;
         }
         return Math.toDegrees(Math.acos(cos));
+    }
+
+    /**
+     * Returns a new Vector3D that is the result of this * d
+     */
+    public Vector3D mulitply(double d) {
+        return new Vector3D(this.xCoord * d, this.yCoord * d, this.zCoord * d);
     }
 
 }
