@@ -47,7 +47,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new NetHandlerPlayClientTransformer_HandleTeams());
         registerTransformer(new NetHandlerPlayClientTransformer_PlayerMapTracker());
         registerTransformer(new NetworkPlayerInfoTransformer());
-        registerTransformer(new RenderGlobalTransformer());
+        registerTransformer(new RenderGlobalTransformer_LimitDroppedItems());
         registerTransformer(new RenderManagerTransformer());
         registerTransformer(new RenderPlayerTransformer());
         registerTransformer(new ScoreboardTransformer());

@@ -9,7 +9,7 @@ import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class RenderGlobalTransformer implements IMyClassTransformer {
+public class RenderGlobalTransformer_LimitDroppedItems implements IMyClassTransformer {
 
     @Override
     public String getTargetClassName() {
