@@ -57,7 +57,7 @@ public class AutoblockCheck extends AbstractCheck {
     }
 
     public static ViolationLevelTracker newViolationTracker() {
-        return new ViolationLevelTracker(1, 2, 30);
+        return new ViolationLevelTracker(2, 3, 60);
     }
 
 }

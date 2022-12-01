@@ -74,6 +74,23 @@ public class NetHandlerPlayClientHook {
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk" + command))));
     }
 
+    ///**
+    // * The client seems to receive a packet for blocks in a 32 blocks radius maximum
+    // */
+    //public static void handleBlockBreakAnim(S25PacketBlockBreakAnim packetIn) {
+    //    if (mc.theWorld != null) {
+    //        final Entity breakerEntity = mc.theWorld.getEntityByID(packetIn.getBreakerId());
+    //        if (breakerEntity instanceof EntityPlayerAccessor) {
+    //            final PlayerDataSamples data = ((EntityPlayerAccessor) breakerEntity).getPlayerDataSamples();
+    //            if (!data.lastBlockPos.equals(packetIn.getPosition())) {
+    //                data.lastBlockPos = packetIn.getPosition();
+    //                data.entityAgeAtLastBlockChange = breakerEntity.ticksExisted;
+    //            }
+    //            data.entityAgeAtLastInteractionWithBlock = breakerEntity.ticksExisted;
+    //        }
+    //    }
+    //}
+
     static class DisconnectedPlayer {
 
         public final long disconnectTime;

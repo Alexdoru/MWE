@@ -19,16 +19,16 @@ public class KillAuraSwitchCheck extends AbstractCheck {
 
     @Override
     public void performCheck(EntityPlayer player, PlayerDataSamples data) {
-        super.checkViolationLevel(player, this.check(player, data), data.killauraHeadsnapVL);
+        super.checkViolationLevel(player, this.check(player, data), data.killauraSwitchVL);
     }
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        //if (player.isSwingInProgress) {
+        //if (player.isSwingInProgress && player.swingProgressInt == 0) {
+        //    // TODO check on which tick it looks at the entity when hitting
         //    //if (player.swingProgressInt == 0) {
         //    //    final MovingObjectPosition movingObjectPosition = player.rayTrace(3.5, 1.F);
         //    //}
-        //    // TODO remove debug
         //}
         //logger.info("swingProgressInt " + player.swingProgressInt
         //        + " | lastSwingTime " + data.lastSwingTime
@@ -40,7 +40,7 @@ public class KillAuraSwitchCheck extends AbstractCheck {
     }
 
     public static ViolationLevelTracker newViolationTracker() {
-        return new ViolationLevelTracker(5, 1, 20);// TODO adjust
+        return new ViolationLevelTracker(100);// TODO adjust
     }
 
 }

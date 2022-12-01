@@ -3,9 +3,10 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.AutoblockCheck;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.FastbreakCheck;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.ICheck;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.OmniSprintCheck;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.SprintCheck;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.BrokenBlock;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
@@ -19,6 +20,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +35,8 @@ public class HackerDetector {
     private long timeElapsed = 0L;
     private int playersChecked = 0;
     private int playersCheckedTemp = 0;
+    /** Data about blocks broken during this tick */
+    public List<BrokenBlock> brokenBlocksList = new LinkedList<>();
 
     static {
         MinecraftForge.EVENT_BUS.register(INSTANCE);
@@ -40,10 +44,12 @@ public class HackerDetector {
 
     public HackerDetector() {
         checkList.add(new AutoblockCheck());
-        checkList.add(new KillAuraSwitchCheck());
+        checkList.add(new FastbreakCheck());
+        //checkList.add(new KillAuraSwitchCheck());
         checkList.add(new SprintCheck());
-        checkList.add(new OmniSprintCheck());
-        // TODO add kill aura check if player tracks entity while hitting it with good tracking, look at the 3D angle diff > a certain value
+        //checkList.add(new OmniSprintCheck());
+        // TODO add kill aura check if player tracks (the same ?) entity
+        //  while hitting it with good tracking, look at the 3D angle diff > a certain value
     }
 
     @SubscribeEvent
@@ -63,6 +69,7 @@ public class HackerDetector {
         if (event.phase == TickEvent.Phase.START) {
             playersCheckedTemp = 0;
         } else if (event.phase == TickEvent.Phase.END) {
+            brokenBlocksList.clear();
             if (mc.thePlayer != null && mc.thePlayer.ticksExisted % 20 == 0) {
                 timeElapsed = timeElapsedTemp;
                 timeElapsedTemp = 0L;
@@ -78,8 +85,7 @@ public class HackerDetector {
      */
     public void performChecksOnPlayer(EntityPlayer player) {
         if (mc.thePlayer == null ||
-                player == mc.thePlayer ||// TODO remove debug
-                //!player.getName().equals("MacronDemlssion") ||
+                player == mc.thePlayer ||
                 player.ticksExisted < 20 ||
                 player.isDead ||
                 player.capabilities.isFlying ||
@@ -90,12 +96,12 @@ public class HackerDetector {
         final long timeStart = System.nanoTime();
         playersCheckedTemp++;
         final PlayerDataSamples data = ((EntityPlayerAccessor) player).getPlayerDataSamples();
-        updateEntityData(player, data);
+        updatePlayerDataSamples(player, data);
         checkList.forEach(check -> check.performCheck(player, data));
         timeElapsedTemp += System.nanoTime() - timeStart;
     }
 
-    private void updateEntityData(EntityPlayer player, PlayerDataSamples data) {
+    private void updatePlayerDataSamples(EntityPlayer player, PlayerDataSamples data) {
         data.sprintTime = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getModifier(sprintingUUID) == null ? 0 : data.sprintTime + 1;
         data.useItemTime = player.isUsingItem() ? data.useItemTime + 1 : 0;
         data.lastHurtTime = player.hurtTime == 9 ? 0 : data.lastHurtTime + 1;
@@ -112,10 +118,10 @@ public class HackerDetector {
             data.directionDeltaXZList.add(data.dXdYdZVector3D.getXZAngleDiffWithVector(lastdXdYdZ));
         }
         data.dXdYdZSampleList.add(data.dXdYdZVector3D);
-        final Vector3D lookVector = Vector3D.getVectorFromRotation(player.rotationPitch, player.rotationYaw);
+        final Vector3D lookVector = Vector3D.getPlayersLookVec(player);
         data.lookAngleDiff = lookVector.getAngleWithVector(data.lookVector);
         data.lookVector = lookVector;
-        final double dYaw = player.rotationYaw - player.prevRotationYaw;
+        final double dYaw = player.rotationYawHead - player.prevRotationYawHead;
         if (dYaw != 0 && data.dYaw != 0) {
             data.lastTime_dYawChangedSign = dYaw * data.dYaw > 0 ? data.lastTime_dYawChangedSign + 1 : 0;
         } else if (dYaw != 0) {

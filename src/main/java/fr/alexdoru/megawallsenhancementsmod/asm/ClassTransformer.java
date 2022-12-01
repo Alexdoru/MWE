@@ -44,10 +44,12 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new MinecraftTransformer_DebugMessages());
         registerTransformer(new MinecraftTransformer_DropProtection());
         registerTransformer(new MinecraftTransformer_WarpProtection());
+        //registerTransformer(new NetHandlerPlayClient_BlockBreakListener());
         registerTransformer(new NetHandlerPlayClientTransformer_HandleTeams());
         registerTransformer(new NetHandlerPlayClientTransformer_PlayerMapTracker());
         registerTransformer(new NetworkPlayerInfoTransformer());
         registerTransformer(new RenderGlobalTransformer_LimitDroppedItems());
+        registerTransformer(new RenderGlobalTransformer_ListenDestroyedBlocks());
         registerTransformer(new RenderManagerTransformer());
         registerTransformer(new RenderPlayerTransformer());
         registerTransformer(new ScoreboardTransformer());

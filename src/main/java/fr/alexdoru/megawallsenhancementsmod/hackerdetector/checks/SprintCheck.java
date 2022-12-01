@@ -35,18 +35,22 @@ public class SprintCheck extends AbstractCheck {
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        if (data.isNotMoving) {
+        // TODO to detect lag backs, compute the angle (with a sign) between the velocity XZ and OX
+        //  and see if it changes by 180 degres in one tick while the speed remains at a great value
+        // FIXME it flags when players lag back when eating
+        //  check log for [00:20:39] [Client thread/INFO] [HackerDetector]: yTick_ failed NoSlowdown check
+        if (data.isNotMoving || player.isRiding()) {
             return false;
         }
         /* It takes 32 ticks to eat/drink one food/potion item */
         if (data.sprintTime > 40 && data.useItemTime > 8) {
             final ItemStack itemStack = player.getHeldItem();
             final Item item = itemStack.getItem();
-            fail(player, this.getCheatName()); // TODO remove debug
             /* If the player is moving slower than the base running speed, we consider it is keepsprint */
-            if (data.dXdZVector2D.lengthVector() < 0.20D) {
+            if (data.dXdZVector2D.norm() < 0.25D) {
+            //if (player.onGround) {// TODO check is on ground or speed ?
                 isNoslowCheck = false;
-                data.keepsprintUseItemVL.add(1);
+                data.keepsprintUseItemVL.add(2);
                 log(player, this.getCheatName(), data.keepsprintUseItemVL, data,
                         "sprintTime " + data.sprintTime
                                 + " useItemTime " + data.useItemTime
@@ -55,7 +59,7 @@ public class SprintCheck extends AbstractCheck {
                 );
             } else {
                 isNoslowCheck = true;
-                data.noslowdownVL.add(1);
+                data.noslowdownVL.add(2);
                 log(player, this.getCheatName(), data.noslowdownVL, data,
                         "sprintTime " + data.sprintTime
                                 + " useItemTime " + data.useItemTime
@@ -63,22 +67,23 @@ public class SprintCheck extends AbstractCheck {
                                 + (item != null ? " item held " + item.getRegistryName() : "")
                 );
             }
+            fail(player, this.getCheatName()); // TODO remove debug
             return true;
         } else if (player.hurtTime == 0 && data.sprintTime == 0 && data.useItemTime > 8 && !data.dXdZVector2D.isZero()) {
             // TODO test this condition
-            data.keepsprintUseItemVL.substract(2);
+            data.keepsprintUseItemVL.substract(3);
             return false;
         }
-        data.noslowdownVL.substract(2);
+        data.noslowdownVL.substract(3);
         return false;
     }
 
     public static ViolationLevelTracker newNoslowdownViolationTracker() {
-        return new ViolationLevelTracker(17);
+        return new ViolationLevelTracker(34);
     }
 
     public static ViolationLevelTracker newKeepsprintViolationTracker() {
-        return new ViolationLevelTracker(17);
+        return new ViolationLevelTracker(34);
     }
 
 }

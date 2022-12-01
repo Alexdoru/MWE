@@ -28,9 +28,9 @@ public class Vector2D {
     }
 
     /**
-     * Returns the length of the vector.
+     * Returns the norm of the vector.
      */
-    public double lengthVector() {
+    public double norm() {
         return Math.sqrt(this.u * this.u + this.v * this.v);
     }
 
@@ -41,7 +41,7 @@ public class Vector2D {
         if (this.u == 0 && this.v == 0) {
             return 0;
         }
-        final double lengthVector = this.lengthVector();
+        final double lengthVector = this.norm();
         if (lengthVector < 1.0000000116860974E-7D) {
             return 0;
         }
