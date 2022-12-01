@@ -2,6 +2,8 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.SampleList;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.block.state.IBlockState;
@@ -66,7 +68,7 @@ public abstract class AbstractCheck implements ICheck {
                 + extramsg
                 + " | vl " + vl.getViolationLevel()
                 + " | onGround " + player.onGround
-                + " | speedXZ (m/s) " + String.format("%.4f", data.dXdZVector2D.lengthVector() * 20D)
+                + " | speedXZ (m/s) " + String.format("%.4f", data.dXdZVector2D.norm() * 20D)
                 + " | posX " + String.format("%.4f", player.posX)
                 + " | lastTickPosX " + String.format("%.4f", player.lastTickPosX)
                 + " | posY " + String.format("%.4f", player.posY)
@@ -134,6 +136,35 @@ public abstract class AbstractCheck implements ICheck {
             }
         }
         return i == 1 ? i : i + 5;
+    }
+
+    protected float average(SampleList<Float> list) {
+        float sum = 0;
+        for (final Float f : list) {
+            sum += f;
+        }
+        return sum / list.size();
+    }
+
+    protected boolean isPlayerLookingAtBlock(EntityPlayer player, BlockPos pos) {
+        final Vector3D eyesToBlockCenter = new Vector3D(
+                pos.getX() + 0.5D - player.posX,
+                pos.getY() + 0.5D - (player.posY + player.getEyeHeight()),
+                pos.getZ() + 0.5D - player.posZ
+        );
+        /* (0.5*sqrt(3) + 4.5)^2 | Squared distance from center of the block to the corner + player's break reach */
+        final double distSq = eyesToBlockCenter.normSquared();
+        if (distSq > 28.79422863D) {
+            return false;
+            /* The player somehow has its head inside the block */
+        } else if (distSq < 0.25) {
+            return true;
+        }
+        /* Checks if the player's look vect is within a cone that starts from the player's eyes and
+         * whose base is a circle centered on the block's center and with 0.5*sqrt(3) radius */
+        final double angleWithVector = Vector3D.getPlayersLookVec(player).getAngleWithVector(eyesToBlockCenter);
+        final double maxAngle = Math.toDegrees(Math.atan(0.5D * Math.sqrt(3 / distSq)));
+        return angleWithVector < maxAngle;
     }
 
 }

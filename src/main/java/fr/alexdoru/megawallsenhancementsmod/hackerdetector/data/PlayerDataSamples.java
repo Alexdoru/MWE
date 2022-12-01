@@ -1,9 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.data;
 
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.AutoblockCheck;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.KillAuraSwitchCheck;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.OmniSprintCheck;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.SprintCheck;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.*;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector2D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
@@ -18,6 +15,9 @@ public class PlayerDataSamples {
     public int useItemTime = 0;
     /** Amount of ticks since the player took a hit */
     public int lastHurtTime = 0;// TODO comment out
+    /** Amount of ticks since the last sword swing started, used to check if the player is looking at an entity */
+    // TODO test if entity gets hurt for through blocks check
+    public int lastSwingTime = 0;
     /**
      * Holds the distance covered by the player in space during the last tick
      * This is proportional to the velocity of the entity
@@ -45,9 +45,9 @@ public class PlayerDataSamples {
     public boolean lastNonZerodYawPositive = true;
     /** Amount of ticks since dYaw changed sign */
     public int lastTime_dYawChangedSign = 0;
-    /** Amount of ticks since the last sword swing started, used to check if the player is looking at an entity */
-    // TODO test if entity gets hurt for through blocks check
-    public int lastSwingTime = 0;
+    /** Last time the player broke a block */
+    public long lastBreakBlockTime = System.currentTimeMillis();
+    public final SampleList<Float> breakTimeRatio = new SampleList<>(8);
     /**
      * Holds the changes in the direction of the player in the XZ plane
      * This is the angle in between the player's velocity vector and the one from the previous tick
@@ -55,7 +55,8 @@ public class PlayerDataSamples {
      */
     public final SampleList<Double> directionDeltaXZList = new SampleList<>(20);
     public final ViolationLevelTracker autoblockVL = AutoblockCheck.newViolationTracker();
-    public final ViolationLevelTracker killauraHeadsnapVL = KillAuraSwitchCheck.newViolationTracker();
+    public final ViolationLevelTracker fastbreakVL = FastbreakCheck.newViolationTracker();
+    public final ViolationLevelTracker killauraSwitchVL = KillAuraSwitchCheck.newViolationTracker();
     public final ViolationLevelTracker noslowdownVL = SprintCheck.newNoslowdownViolationTracker();
     public final ViolationLevelTracker keepsprintUseItemVL = SprintCheck.newKeepsprintViolationTracker();
     public final ViolationLevelTracker omnisprintVL = OmniSprintCheck.newViolationTracker();
