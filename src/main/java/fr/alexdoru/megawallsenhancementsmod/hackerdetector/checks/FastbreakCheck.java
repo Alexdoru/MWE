@@ -60,21 +60,19 @@ public class FastbreakCheck extends AbstractCheck {
                         data.breakTimeRatio.add(recordedBreakTime / expectedTimeToBreak);
                         if (data.breakTimeRatio.hasCollectedSample()) {
                             final float avg = average(data.breakTimeRatio);
-                            final boolean b;
                             if (avg < 0.8F) {
                                 data.fastbreakVL.add((int) Math.floor((0.8F - avg) * 10F));
-                                b = true;
                                 fail(player, this.getCheatName());
+                                logger.info("Player : " + player.getName() +
+                                        " | vl " + data.fastbreakVL.getViolationLevel() +
+                                        " | avg " + String.format("%.4f", avg) +
+                                        " | expectedTimeToBreak " + expectedTimeToBreak +
+                                        " | recordedBreakTime " + recordedBreakTime);
+                                return true;
                             } else {
                                 data.fastbreakVL.substract(1);
-                                b = false;
+                                return false;
                             }
-                            logger.info("Player : " + player.getName() +
-                                    " | vl " + data.fastbreakVL.getViolationLevel() +
-                                    " | avg " + String.format("%.4f", avg) +
-                                    " | expectedTimeToBreak " + expectedTimeToBreak +
-                                    " | recordedBreakTime " + recordedBreakTime);
-                            return b;
                         }
                         return false;
                     }

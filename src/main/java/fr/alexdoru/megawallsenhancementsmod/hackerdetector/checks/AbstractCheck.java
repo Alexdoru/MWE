@@ -79,6 +79,7 @@ public abstract class AbstractCheck implements ICheck {
                 + " | rotationYawHead " + String.format("%.4f", player.rotationYawHead)
                 + " | sprintTime " + data.sprintTime
                 + " | lastHurtTime " + data.lastHurtTime
+                + " | lastSwingTime " + data.lastSwingTime
                 + " | ticksExisted " + player.ticksExisted
                 + " | isRidingEntity " + player.isRiding()
         );

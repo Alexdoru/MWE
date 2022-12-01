@@ -37,8 +37,6 @@ public class SprintCheck extends AbstractCheck {
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
         // TODO to detect lag backs, compute the angle (with a sign) between the velocity XZ and OX
         //  and see if it changes by 180 degres in one tick while the speed remains at a great value
-        // FIXME it flags when players lag back when eating
-        //  check log for [00:20:39] [Client thread/INFO] [HackerDetector]: yTick_ failed NoSlowdown check
         if (data.isNotMoving || player.isRiding()) {
             return false;
         }
@@ -47,8 +45,7 @@ public class SprintCheck extends AbstractCheck {
             final ItemStack itemStack = player.getHeldItem();
             final Item item = itemStack.getItem();
             /* If the player is moving slower than the base running speed, we consider it is keepsprint */
-            if (data.dXdZVector2D.norm() < 0.25D) {
-            //if (player.onGround) {// TODO check is on ground or speed ?
+            if (player.hurtTime != 0 || data.dXdZVector2D.norm() < 0.25D) {
                 isNoslowCheck = false;
                 data.keepsprintUseItemVL.add(2);
                 log(player, this.getCheatName(), data.keepsprintUseItemVL, data,
