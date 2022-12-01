@@ -81,8 +81,6 @@ public class ClassTransformer implements IClassTransformer {
                 final ClassNode classNode = new ClassNode();
                 final ClassReader classReader = new ClassReader(basicClass);
                 classReader.accept(classNode, 0);
-                // TODO add default methods in IMyCLasstransformer to set the flags for each transformer to make transformation faster ?
-                //  benchmarck total time to apply all transformers
                 final ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
                 final InjectionStatus status = new InjectionStatus();
                 transformer.transform(classNode, status).accept(classWriter);
