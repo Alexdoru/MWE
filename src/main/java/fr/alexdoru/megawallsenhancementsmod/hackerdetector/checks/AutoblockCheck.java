@@ -42,12 +42,14 @@ public class AutoblockCheck extends AbstractCheck {
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
         // TODO check if player eat/drank something in the tick before to avoid flagging no hit glitch check
         //  print a log message in case it skips and flags
+        if (player.onGround && data.isNotMoving) {
+            return false;
+        }
         if (player.isSwingInProgress && data.useItemTime > 20) {
             final ItemStack itemStack = player.getHeldItem();
             if (itemStack != null && swordSet.contains(itemStack.getItem())) {
-                // TODO remove debug
                 fail(player, this.getCheatName());
-                log(player,this.getCheatName(), data.autoblockVL, data,
+                log(player, this.getCheatName(), data.autoblockVL, data,
                         "useItemTime " + data.useItemTime
                 );
                 return true;
@@ -57,7 +59,7 @@ public class AutoblockCheck extends AbstractCheck {
     }
 
     public static ViolationLevelTracker newViolationTracker() {
-        return new ViolationLevelTracker(2, 3, 60);
+        return new ViolationLevelTracker(5, 2, 100);
     }
 
 }
