@@ -7,6 +7,8 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelT
 
 public class PlayerDataSamples {
 
+    // TODO remove all useless fields, or fields that could be a local variable elsewhere
+
     /** True if the player's position in 3D space is identical to the last tick */
     public boolean isNotMoving = true;
     /** Amount of ticks since the player started sprinting */
@@ -18,6 +20,8 @@ public class PlayerDataSamples {
     /** Amount of ticks since the last sword swing started, used to check if the player is looking at an entity */
     // TODO test if entity gets hurt for through blocks check
     public int lastSwingTime = 0;
+    ///** Holds the position XYZ of the player over time */
+    //public SampleList<Vector3D> positionSampleList = new SampleList<>(40);
     /**
      * Holds the distance covered by the player in space during the last tick
      * This is proportional to the velocity of the entity
@@ -30,6 +34,12 @@ public class PlayerDataSamples {
      * To get the actual velocity one whould have to multiply the value by 20(tick/sec)
      */
     public Vector2D dXdZVector2D = new Vector2D();
+    /**
+     * Holds the changes in the direction of the player in the XZ plane
+     * This is the angle in between the player's velocity vector and the one from the previous tick
+     * Expressed in degres
+     */
+    public final SampleList<Double> directionDeltaXZList = new SampleList<>(20);
     /**
      * Holds the 'pos - prevPos' of the player for the last 20 ticks along the 3 axis
      * This is proportional to the velocity of the entity
@@ -48,12 +58,6 @@ public class PlayerDataSamples {
     /** Last time the player broke a block */
     public long lastBreakBlockTime = System.currentTimeMillis();
     public final SampleList<Float> breakTimeRatio = new SampleList<>(8);
-    /**
-     * Holds the changes in the direction of the player in the XZ plane
-     * This is the angle in between the player's velocity vector and the one from the previous tick
-     * Expressed in degres
-     */
-    public final SampleList<Double> directionDeltaXZList = new SampleList<>(20);
     public final ViolationLevelTracker autoblockVL = AutoblockCheck.newViolationTracker();
     public final ViolationLevelTracker fastbreakVL = FastbreakCheck.newViolationTracker();
     public final ViolationLevelTracker killauraSwitchVL = KillAuraSwitchCheck.newViolationTracker();

@@ -26,6 +26,8 @@ import java.util.UUID;
 
 public class HackerDetector {
 
+    // TODO is it possible to know who is the attacker of an entity
+
     public static final HackerDetector INSTANCE = new HackerDetector();
     /** Field stolen from EntityLivingBase */
     private static final UUID sprintingUUID = UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D");
@@ -108,6 +110,7 @@ public class HackerDetector {
         data.useItemTime = player.isUsingItem() ? data.useItemTime + 1 : 0;
         data.lastHurtTime = player.hurtTime == 9 ? 0 : data.lastHurtTime + 1;
         data.lastSwingTime = player.isSwingInProgress && player.swingProgressInt == 0 ? 0 : data.lastSwingTime + 1;
+        //data.positionSampleList.add(new Vector3D(player.posX, player.posY, player.posZ));
         data.dXdYdZVector3D = new Vector3D(
                 player.posX - player.lastTickPosX,
                 player.posY - player.lastTickPosY,
@@ -140,6 +143,20 @@ public class HackerDetector {
         }
         data.dYaw = dYaw;
     }
+
+    //private void checkForRubberBand(double directionDeltaXZ, PlayerDataSamples data, EntityPlayer player) {
+    //    if (directionDeltaXZ > 170D && data.dXdZVector2D.norm() > 0.6D) {
+    //        ChatUtil.debug("Detected Rubber band of " + player.getName());
+    //        AbstractCheck.logger.info("Detected Rubber band of " + player.getName()
+    //                + " | ticksExisted " + player.ticksExisted
+    //                + " | lastHurtTime " + data.lastHurtTime
+    //                + " | directionDeltaXZ " + String.format("%.4f", directionDeltaXZ)
+    //                + " | onGround " + player.onGround
+    //                + " | speedXZ (m/s) " + String.format("%.4f", data.dXdZVector2D.norm() * 20D)
+    //                + " | prev positions " + data.positionSampleList
+    //        );
+    //    }
+    //}
 
     /**
      * Used for debuging and testing
