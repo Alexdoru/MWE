@@ -91,6 +91,13 @@ public class NetHandlerPlayClientHook {
     //    }
     //}
 
+    //public static void onEntityTeleport(Entity entity) {
+    //    if (entity instanceof EntityPlayer) {
+    //        ChatUtil.debug("Detected Teleport of " + entity.getName());
+    //        AbstractCheck.logger.info("Detected Teleport of " + entity.getName() + " to x=" + entity.posX + " y=" + entity.posY + " z=" + entity.posZ);
+    //    }
+    //}
+
     static class DisconnectedPlayer {
 
         public final long disconnectTime;

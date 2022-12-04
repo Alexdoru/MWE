@@ -7,6 +7,7 @@ import static fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping.*;
 public enum FieldMapping {
 
     CLIENTCOMMANDHANDLER$INSTANCE(CLIENTCOMMANDHANDLER, "instance", CLIENTCOMMANDHANDLER),
+    ENTITY$ONGROUND(ENTITY, "C", "onGround", "Z"),
     ENTITYARROW$ISINGROUND(ENTITYARROW, "i", "inGround", "Z"),
     ENTITYPLAYER$GAMEPROFILE(ENTITYPLAYER, "bH", "gameProfile", GAMEPROFILE),
     ENTITYPLAYER$PLAYERDATASAMPLES(ENTITYPLAYER, "mwenhancements$PlayerDataSamples", PLAYERDATASAMPLES),

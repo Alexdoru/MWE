@@ -44,8 +44,9 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new MinecraftTransformer_DebugMessages());
         registerTransformer(new MinecraftTransformer_DropProtection());
         registerTransformer(new MinecraftTransformer_WarpProtection());
-        //registerTransformer(new NetHandlerPlayClient_BlockBreakListener());
-        registerTransformer(new NetHandlerPlayClientTransformer_HandleTeams());
+        //registerTransformer(new NetHandlerPlayClient_BlockBreakAnimListener());
+        //registerTransformer(new NetHandlerPlayClient_TeleportListener());
+        registerTransformer(new NetHandlerPlayClientTransformer_TeamsListener());
         registerTransformer(new NetHandlerPlayClientTransformer_PlayerMapTracker());
         registerTransformer(new NetworkPlayerInfoTransformer());
         registerTransformer(new RenderGlobalTransformer_LimitDroppedItems());
