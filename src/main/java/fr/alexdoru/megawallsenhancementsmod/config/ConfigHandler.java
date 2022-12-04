@@ -157,7 +157,7 @@ public class ConfigHandler {
         final Property pclearVision = config.get(CATEGORY_MWENh, "Clear Vision", true, "Hides particles too close to the camera");
         final Property pautomaticUpdate = config.get(CATEGORY_MWENh, "Automatic Update", true, "Updates the mod automatically");
         final Property pNickHider = config.get(CATEGORY_MWENh, "Nick Hider", true, "Shows your real name instead of your nick when in squad");
-        final Property phideTablistHeaderFooter = config.get(CATEGORY_MWENh, "Hide Header Footer Tablist", true, "Hides the header and footer text in the Tablist");
+        final Property phideTablistHeaderFooter = config.get(CATEGORY_MWENh, "Hide Header Footer Tablist", false, "Hides the header and footer text in the Tablist");
         final Property pshowPlayercountTablist = config.get(CATEGORY_MWENh, "Show playercount Tablist", true, "Shows the amount of players in the lobby at the top of the Tablist");
         final Property ptablistSize = config.get(CATEGORY_MWENh, "Tablist size", 100, "Amount of players displayed in the tablist (Vanilla 80)");
         final Property pfixActionbarTextOverlap = config.get(CATEGORY_MWENh, "Fix actionbar text overlap", true, "Prevents the actionbar text from overlapping with the armor bar");
