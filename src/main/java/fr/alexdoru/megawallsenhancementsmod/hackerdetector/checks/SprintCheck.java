@@ -39,7 +39,7 @@ public class SprintCheck extends AbstractCheck {
             return false;
         }
         /* It takes 32 ticks to eat/drink one food/potion item */
-        if (data.sprintTime > 40 && data.useItemTime > 8) {
+        if (data.sprintTime > 33 && data.useItemTime > 4) {
             final ItemStack itemStack = player.getHeldItem();
             final Item item = itemStack.getItem();
             /* If the player is moving slower than the base running speed, we consider it is keepsprint */
