@@ -90,6 +90,8 @@ public class HackerDetector {
                 player.isDead ||
                 player.capabilities.isFlying ||
                 player.capabilities.isCreativeMode ||
+                player.isInvisible() ||
+                player.isInvisibleToPlayer(mc.thePlayer) ||
                 NameUtil.filterNPC(player.getUniqueID())) {
             return;
         }
