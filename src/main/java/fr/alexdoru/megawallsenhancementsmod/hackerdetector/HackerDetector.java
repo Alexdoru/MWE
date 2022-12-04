@@ -118,11 +118,11 @@ public class HackerDetector {
         );
         data.dXdZVector2D = data.dXdYdZVector3D.getProjectionInXZPlane();
         data.isNotMoving = data.dXdYdZVector3D.isZero();
-        if (!data.dXdYdZSampleList.isEmpty()) {
-            final Vector3D lastdXdYdZ = data.dXdYdZSampleList.getFirst();
-            data.directionDeltaXZList.add(data.dXdYdZVector3D.getXZAngleDiffWithVector(lastdXdYdZ));
-        }
-        data.dXdYdZSampleList.add(data.dXdYdZVector3D);
+        //if (!data.dXdYdZSampleList.isEmpty()) {
+        //    final Vector3D lastdXdYdZ = data.dXdYdZSampleList.getFirst();
+        //    data.directionDeltaXZList.add(data.dXdYdZVector3D.getXZAngleDiffWithVector(lastdXdYdZ));
+        //}
+        //data.dXdYdZSampleList.add(data.dXdYdZVector3D);
         final Vector3D lookVector = Vector3D.getPlayersLookVec(player);
         data.lookAngleDiff = lookVector.getAngleWithVector(data.lookVector);
         data.lookVector = lookVector;
