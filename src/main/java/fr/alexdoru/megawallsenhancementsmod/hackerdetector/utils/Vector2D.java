@@ -80,4 +80,11 @@ public class Vector2D {
         return new Vector2D(f1 * f2, f * f2);
     }
 
+    @Override
+    public String toString() {
+        return "{u=" + String.format("%.4f", this.u) +
+                ", v=" + String.format("%.4f", this.v) +
+                '}';
+    }
+
 }
