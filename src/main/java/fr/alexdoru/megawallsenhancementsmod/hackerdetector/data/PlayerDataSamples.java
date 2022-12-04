@@ -1,6 +1,9 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.data;
 
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.*;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.AutoblockCheck;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.FastbreakCheck;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.KillAuraSwitchCheck;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.SprintCheck;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector2D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
@@ -34,18 +37,18 @@ public class PlayerDataSamples {
      * To get the actual velocity one whould have to multiply the value by 20(tick/sec)
      */
     public Vector2D dXdZVector2D = new Vector2D();
-    /**
-     * Holds the changes in the direction of the player in the XZ plane
-     * This is the angle in between the player's velocity vector and the one from the previous tick
-     * Expressed in degres
-     */
-    public final SampleList<Double> directionDeltaXZList = new SampleList<>(20);
-    /**
-     * Holds the 'pos - prevPos' of the player for the last 20 ticks along the 3 axis
-     * This is proportional to the velocity of the entity
-     * To get the actual velocity one whould have to multiply the values by 20(tick/sec)
-     */
-    public final SampleList<Vector3D> dXdYdZSampleList = new SampleList<>(20);// TODO inutile
+    ///**
+    // * Holds the changes in the direction of the player in the XZ plane
+    // * This is the angle in between the player's velocity vector and the one from the previous tick
+    // * Expressed in degres
+    // */
+    //public final SampleList<Double> directionDeltaXZList = new SampleList<>(20);
+    ///**
+    // * Holds the 'pos - prevPos' of the player for the last 20 ticks along the 3 axis
+    // * This is proportional to the velocity of the entity
+    // * To get the actual velocity one whould have to multiply the values by 20(tick/sec)
+    // */
+    //public final SampleList<Vector3D> dXdYdZSampleList = new SampleList<>(20);
     /** The player's look */
     public Vector3D lookVector = new Vector3D();
     /** The angle difference in 3D space of the player's look since last tick */
@@ -63,6 +66,6 @@ public class PlayerDataSamples {
     public final ViolationLevelTracker killauraSwitchVL = KillAuraSwitchCheck.newViolationTracker();
     public final ViolationLevelTracker noslowdownVL = SprintCheck.newNoslowdownViolationTracker();
     public final ViolationLevelTracker keepsprintUseItemVL = SprintCheck.newKeepsprintViolationTracker();
-    public final ViolationLevelTracker omnisprintVL = OmniSprintCheck.newViolationTracker();
+    //public final ViolationLevelTracker omnisprintVL = OmniSprintCheck.newViolationTracker();
 
 }
