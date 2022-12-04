@@ -32,17 +32,17 @@
 //        final boolean ignoreBlockWithoutBoundingBox = false;
 //        final boolean returnLastUncollidableBlock = true;
 //
-//        if (Double.isNaN(playersEyesPosition.xCoord) || Double.isNaN(playersEyesPosition.yCoord) || Double.isNaN(playersEyesPosition.zCoord)
-//                || Double.isNaN(playersLook.xCoord) || Double.isNaN(playersLook.yCoord) || Double.isNaN(playersLook.zCoord)) {
+//        if (Double.isNaN(playersEyesPosition.x) || Double.isNaN(playersEyesPosition.y) || Double.isNaN(playersEyesPosition.z)
+//                || Double.isNaN(playersLook.x) || Double.isNaN(playersLook.y) || Double.isNaN(playersLook.z)) {
 //            return;
 //        }
 //
-//        final int i = MathHelper.floor_double(playersLook.xCoord);
-//        final int j = MathHelper.floor_double(playersLook.yCoord);
-//        final int k = MathHelper.floor_double(playersLook.zCoord);
-//        int l = MathHelper.floor_double(playersEyesPosition.xCoord);
-//        int i1 = MathHelper.floor_double(playersEyesPosition.yCoord);
-//        int j1 = MathHelper.floor_double(playersEyesPosition.zCoord);
+//        final int i = MathHelper.floor_double(playersLook.x);
+//        final int j = MathHelper.floor_double(playersLook.y);
+//        final int k = MathHelper.floor_double(playersLook.z);
+//        int l = MathHelper.floor_double(playersEyesPosition.x);
+//        int i1 = MathHelper.floor_double(playersEyesPosition.y);
+//        int j1 = MathHelper.floor_double(playersEyesPosition.z);
 //        BlockPos blockpos = new BlockPos(l, i1, j1);
 //        final IBlockState iblockstate = world.getBlockState(blockpos);
 //        final Block block = iblockstate.getBlock();
@@ -59,7 +59,7 @@
 //        int k1 = 200;
 //
 //        while (k1-- >= 0) {
-//            if (Double.isNaN(playersEyesPosition.xCoord) || Double.isNaN(playersEyesPosition.yCoord) || Double.isNaN(playersEyesPosition.zCoord)) {
+//            if (Double.isNaN(playersEyesPosition.x) || Double.isNaN(playersEyesPosition.y) || Double.isNaN(playersEyesPosition.z)) {
 //                return;
 //            }
 //
@@ -101,20 +101,20 @@
 //            double d3 = 999.0D;
 //            double d4 = 999.0D;
 //            double d5 = 999.0D;
-//            final double d6 = playersLook.xCoord - playersEyesPosition.xCoord;
-//            final double d7 = playersLook.yCoord - playersEyesPosition.yCoord;
-//            final double d8 = playersLook.zCoord - playersEyesPosition.zCoord;
+//            final double d6 = playersLook.x - playersEyesPosition.x;
+//            final double d7 = playersLook.y - playersEyesPosition.y;
+//            final double d8 = playersLook.z - playersEyesPosition.z;
 //
 //            if (flag2) {
-//                d3 = (d0 - playersEyesPosition.xCoord) / d6;
+//                d3 = (d0 - playersEyesPosition.x) / d6;
 //            }
 //
 //            if (flag) {
-//                d4 = (d1 - playersEyesPosition.yCoord) / d7;
+//                d4 = (d1 - playersEyesPosition.y) / d7;
 //            }
 //
 //            if (flag1) {
-//                d5 = (d2 - playersEyesPosition.zCoord) / d8;
+//                d5 = (d2 - playersEyesPosition.z) / d8;
 //            }
 //
 //            if (d3 == -0.0D) {
@@ -133,18 +133,18 @@
 //
 //            if (d3 < d4 && d3 < d5) {
 //                enumfacing = i > l ? EnumFacing.WEST : EnumFacing.EAST;
-//                playersEyesPosition = new Vec3(d0, playersEyesPosition.yCoord + d7 * d3, playersEyesPosition.zCoord + d8 * d3);
+//                playersEyesPosition = new Vector3D(d0, playersEyesPosition.y + d7 * d3, playersEyesPosition.z + d8 * d3);
 //            } else if (d4 < d5) {
 //                enumfacing = j > i1 ? EnumFacing.DOWN : EnumFacing.UP;
-//                playersEyesPosition = new Vec3(playersEyesPosition.xCoord + d6 * d4, d1, playersEyesPosition.zCoord + d8 * d4);
+//                playersEyesPosition = new Vector3D(playersEyesPosition.x + d6 * d4, d1, playersEyesPosition.z + d8 * d4);
 //            } else {
 //                enumfacing = k > j1 ? EnumFacing.NORTH : EnumFacing.SOUTH;
-//                playersEyesPosition = new Vec3(playersEyesPosition.xCoord + d6 * d5, playersEyesPosition.yCoord + d7 * d5, d2);
+//                playersEyesPosition = new Vector3D(playersEyesPosition.x + d6 * d5, playersEyesPosition.y + d7 * d5, d2);
 //            }
 //
-//            l = MathHelper.floor_double(playersEyesPosition.xCoord) - (enumfacing == EnumFacing.EAST ? 1 : 0);
-//            i1 = MathHelper.floor_double(playersEyesPosition.yCoord) - (enumfacing == EnumFacing.UP ? 1 : 0);
-//            j1 = MathHelper.floor_double(playersEyesPosition.zCoord) - (enumfacing == EnumFacing.SOUTH ? 1 : 0);
+//            l = MathHelper.floor_double(playersEyesPosition.x) - (enumfacing == EnumFacing.EAST ? 1 : 0);
+//            i1 = MathHelper.floor_double(playersEyesPosition.y) - (enumfacing == EnumFacing.UP ? 1 : 0);
+//            j1 = MathHelper.floor_double(playersEyesPosition.z) - (enumfacing == EnumFacing.SOUTH ? 1 : 0);
 //            blockpos = new BlockPos(l, i1, j1);
 //            final IBlockState iblockstate1 = world.getBlockState(blockpos);
 //            final Block block1 = iblockstate1.getBlock();

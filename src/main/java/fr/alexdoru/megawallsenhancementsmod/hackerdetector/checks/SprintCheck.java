@@ -35,8 +35,6 @@ public class SprintCheck extends AbstractCheck {
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        // TODO to detect lag backs, compute the angle (with a sign) between the velocity XZ and OX
-        //  and see if it changes by 180 degres in one tick while the speed remains at a great value
         if (data.isNotMoving || player.isRiding()) {
             return false;
         }
@@ -67,7 +65,6 @@ public class SprintCheck extends AbstractCheck {
             fail(player, this.getCheatName()); // TODO remove debug
             return true;
         } else if (player.hurtTime == 0 && data.sprintTime == 0 && data.useItemTime > 8 && !data.dXdZVector2D.isZero()) {
-            // TODO test this condition
             data.keepsprintUseItemVL.substract(3);
             return false;
         }
