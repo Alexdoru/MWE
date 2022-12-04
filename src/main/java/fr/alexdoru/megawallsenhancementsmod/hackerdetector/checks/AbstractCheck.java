@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiScreenHook;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.SampleList;
@@ -41,11 +42,13 @@ public abstract class AbstractCheck implements ICheck {
 
     protected static void flag(EntityPlayer player, String cheat, String cheatDescription) {
         logger.warn(player.getName() + " flags " + cheat);// TODO remove debug
-        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RESET
+        final String msg = ChatUtil.getTagNoCheaters() + EnumChatFormatting.RESET
                 + NameUtil.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.YELLOW + " flags "
-                + EnumChatFormatting.RED + cheat)
+                + EnumChatFormatting.RED + cheat;
+        ChatUtil.addChatMessage(new ChatComponentText(msg)
                 .setChatStyle(new ChatStyle()
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.COPY_TO_CLIPBOARD_COMMAND + EnumChatFormatting.getTextWithoutFormattingCodes(msg)))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(cheatDescription))))
                 .appendSibling(ChatUtil.getReportButtons(player.getName(),
                         "cheating " + cheat.toLowerCase(),
