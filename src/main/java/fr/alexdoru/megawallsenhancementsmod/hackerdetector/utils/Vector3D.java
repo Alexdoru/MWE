@@ -59,7 +59,7 @@ public class Vector3D {
      * Returns the absolute angle in between
      * the 2Dvector resulting of the projection of this onto the XZ plane and
      * the 2Dvector resulting of the projection of otherVector onto the XZ plane
-     * Result is in degrees
+     * Result is in degrees in between 0 and 180
      */
     public double getXZAngleDiffWithVector(Vector3D otherVector) {
         final double den = Math.sqrt((this.x * this.x + this.z * this.z) * (otherVector.x * otherVector.x + otherVector.z * otherVector.z));
@@ -110,6 +110,14 @@ public class Vector3D {
      */
     public Vector3D mulitply(double d) {
         return new Vector3D(this.x * d, this.y * d, this.z * d);
+    }
+
+    @Override
+    public String toString() {
+        return "{x=" + String.format("%.4f", this.x)+
+                ", y=" + String.format("%.4f", this.y) +
+                ", z=" + String.format("%.4f", this.z) +
+                '}';
     }
 
 }
