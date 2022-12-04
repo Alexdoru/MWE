@@ -69,22 +69,6 @@ public class CommandReport extends MyAbstractCommand {
     }
 
     @Override
-    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        if (args.length == 1) {
-            if (FKCounterMod.isInMwGame && FKCounterMod.isitPrepPhase) {
-                return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
-            }
-            return null;
-        }
-        if (args.length > 1) {
-            final List<String> list = new ArrayList<>(Arrays.asList(cheatsArray));
-            list.add("boosting");
-            return getListOfStringsMatchingLastWord(args, list);
-        }
-        return null;
-    }
-
-    @Override
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length < 1) {
@@ -94,6 +78,11 @@ public class CommandReport extends MyAbstractCommand {
 
         if (args.length == 2 && args[1].equalsIgnoreCase("boosting")) {
             sendChatMessage("/report " + args[0] + " -b BOO -C");
+            return;
+        }
+
+        if (args.length == 2 && args[1].equalsIgnoreCase("crossteaming")) {
+            sendChatMessage("/report " + args[0] + " -b CTT -C");
             return;
         }
 
@@ -115,6 +104,23 @@ public class CommandReport extends MyAbstractCommand {
 
         sendChatMessage(msg.toString());
 
+    }
+
+    @Override
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+        if (args.length == 1) {
+            if (FKCounterMod.isInMwGame && FKCounterMod.isitPrepPhase) {
+                return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+            }
+            return null;
+        }
+        if (args.length > 1) {
+            final List<String> list = new ArrayList<>(Arrays.asList(cheatsArray));
+            list.add("boosting");
+            list.add("crossteaming");
+            return getListOfStringsMatchingLastWord(args, list);
+        }
+        return null;
     }
 
 }
