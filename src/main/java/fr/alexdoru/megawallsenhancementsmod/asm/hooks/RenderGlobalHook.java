@@ -47,9 +47,8 @@ public class RenderGlobalHook {
         renderManagerIn.renderEntitySimple(entityIn, partialTicks);
     }
 
-    // TODO check if hacker detector ON
     public static void listenDestroyedBlocks(IBlockState state, BlockPos blockPos) {
-        if (FKCounterMod.isInMwGame && "pickaxe".equals(state.getBlock().getHarvestTool(state))) {
+        if (ConfigHandler.hackerDetector && FKCounterMod.isInMwGame && "pickaxe".equals(state.getBlock().getHarvestTool(state))) {
             HackerDetector.INSTANCE.brokenBlocksList.add(new BrokenBlock(state.getBlock(), blockPos, System.currentTimeMillis()));
         }
     }

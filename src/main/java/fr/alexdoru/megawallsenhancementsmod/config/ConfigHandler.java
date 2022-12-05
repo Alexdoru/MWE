@@ -89,6 +89,11 @@ public class ConfigHandler {
     public static boolean deleteCheaterChatMsg;
 
     /**
+     * Hacker Detector Config
+     */
+    public static boolean hackerDetector;
+
+    /**
      * Hitbox Config
      */
     /*Used to remember if it was toggled after restarting the game*/
@@ -200,6 +205,9 @@ public class ConfigHandler {
         final Property pcensorCheaterChatMsg = config.get(CATEGORY_NOCHEATERS, "Censor Cheater Chat", false, "Censors chat messages sent by reported cheaters");
         final Property pdeleteCheaterChatMsg = config.get(CATEGORY_NOCHEATERS, "Delete Cheater Chat", false, "Deletes chat messages sent by reported cheaters");
 
+        final String CATEGORY_HACKERDETECTOR = "HackerDetector";
+        final Property phackerDetector = config.get(CATEGORY_HACKERDETECTOR, "Hacker Detector", true, "Detects cheaters in your game");
+
         final String CATEGORY_HITBOX = "Hitbox";
         final Property pisDebugHitboxOn = config.get(CATEGORY_HITBOX, "Toggle hitbox", false, "Toggle hitbox");
         final Property pdrawHitboxForPlayers = config.get(CATEGORY_HITBOX, "Hitbox for players", true, "Hitbox for players");
@@ -297,6 +305,10 @@ public class ConfigHandler {
         pOrderNOCHEATERS.add(pdeleteCheaterChatMsg.getName());
         config.setCategoryPropertyOrder(CATEGORY_NOCHEATERS, pOrderNOCHEATERS);
 
+        final List<String> pOrderHackerDetector = new ArrayList<>();
+        pOrderHackerDetector.add(phackerDetector.getName());
+        config.setCategoryPropertyOrder(CATEGORY_HACKERDETECTOR, pOrderHackerDetector);
+
         final List<String> pOrderHitbox = new ArrayList<>();
         pOrderHitbox.add(pisDebugHitboxOn.getName());
         pOrderHitbox.add(pdrawHitboxForPlayers.getName());
@@ -380,6 +392,8 @@ public class ConfigHandler {
             timeDeleteReport = 24L * 3600L * 1000L * ((long) ptimeDeleteReport.getInt());
             censorCheaterChatMsg = pcensorCheaterChatMsg.getBoolean();
             deleteCheaterChatMsg = pdeleteCheaterChatMsg.getBoolean();
+
+            hackerDetector = phackerDetector.getBoolean();
 
             isDebugHitboxOn = pisDebugHitboxOn.getBoolean();
             drawHitboxForPlayers = pdrawHitboxForPlayers.getBoolean();
@@ -485,6 +499,8 @@ public class ConfigHandler {
             ptimeDeleteReport.set((int) (timeDeleteReport / (24L * 3600L * 1000L)));
             pcensorCheaterChatMsg.set(censorCheaterChatMsg);
             pdeleteCheaterChatMsg.set(deleteCheaterChatMsg);
+
+            phackerDetector.set(hackerDetector);
 
             pisDebugHitboxOn.set(isDebugHitboxOn);
             pdrawHitboxForPlayers.set(drawHitboxForPlayers);

@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.AutoblockCheck;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.FastbreakCheck;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.ICheck;
@@ -56,7 +57,7 @@ public class HackerDetector {
 
     @SubscribeEvent
     public void onDrawDebugText(RenderGameOverlayEvent.Text event) {
-        if (mc.gameSettings.showDebugInfo) {
+        if (mc.gameSettings.showDebugInfo && ConfigHandler.hackerDetector) {
             event.left.add("");
             event.left.add("Hacker Detector:");
             event.left.add("Player" + (playersChecked > 1 ? "s" : "") + " checked: " + playersChecked);
