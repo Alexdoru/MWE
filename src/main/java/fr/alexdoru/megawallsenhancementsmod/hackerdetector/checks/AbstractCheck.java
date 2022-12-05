@@ -41,7 +41,7 @@ public abstract class AbstractCheck implements ICheck {
     }
 
     protected static void flag(EntityPlayer player, String cheat, String cheatDescription) {
-        logger.warn(player.getName() + " flags " + cheat);// TODO remove debug
+        //logger.warn(player.getName() + " flags " + cheat);
         final String msg = ChatUtil.getTagNoCheaters() + EnumChatFormatting.RESET
                 + NameUtil.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.YELLOW + " flags "
