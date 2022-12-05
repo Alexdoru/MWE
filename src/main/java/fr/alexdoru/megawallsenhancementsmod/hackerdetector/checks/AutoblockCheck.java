@@ -47,13 +47,11 @@ public class AutoblockCheck extends AbstractCheck {
         }
         if (player.isSwingInProgress && data.useItemTime > 20) {
             final ItemStack itemStack = player.getHeldItem();
-            if (itemStack != null && swordSet.contains(itemStack.getItem())) {
-                fail(player, this.getCheatName());
-                log(player, this.getCheatName(), data.autoblockVL, data,
-                        "useItemTime " + data.useItemTime
-                );
-                return true;
-            }
+            //fail(player, this.getCheatName());
+            //log(player, this.getCheatName(), data.autoblockVL, data,
+            //        "useItemTime " + data.useItemTime
+            //);
+            return itemStack != null && swordSet.contains(itemStack.getItem());
         }
         return false;
     }
