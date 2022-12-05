@@ -202,19 +202,17 @@ public class NameUtil {
                 extraPrefix = squadprefix;
                 iExtraPrefix = isquadprefix;
             } else {
-                if (wdr != null) {
-                    if (wdr.transformName()) {
-                        if (wdr.shouldPutGrayIcon()) {
-                            extraPrefix = prefix_old_report;
-                            iExtraPrefix = iprefix_old_report;
+                if (wdr != null && wdr.transformName()) {
+                    if (wdr.shouldPutGrayIcon()) {
+                        extraPrefix = prefix_old_report;
+                        iExtraPrefix = iprefix_old_report;
+                    } else {
+                        if (wdr.shouldPutRedIcon()) {
+                            extraPrefix = prefix_bhop;
+                            iExtraPrefix = iprefix_bhop;
                         } else {
-                            if (wdr.hacks.contains("bhop")) {
-                                extraPrefix = prefix_bhop;
-                                iExtraPrefix = iprefix_bhop;
-                            } else {
-                                extraPrefix = prefix;
-                                iExtraPrefix = iprefix;
-                            }
+                            extraPrefix = prefix;
+                            iExtraPrefix = iprefix;
                         }
                     }
                 } else {

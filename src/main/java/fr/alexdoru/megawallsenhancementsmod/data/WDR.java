@@ -52,6 +52,15 @@ public class WDR {
                 && isOlderThanMaxAutoreport((new Date()).getTime());
     }
 
+    public boolean shouldPutRedIcon() {
+        for (final String s : this.hacks) {
+            if ("bhop".equalsIgnoreCase(s) || "autoblock".equalsIgnoreCase(s) || "fastbreak".equalsIgnoreCase(s) || "noslowdown".equalsIgnoreCase(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isOnlyIgnored() {
         return hacks.size() == 1 && hacks.contains(IGNORED);
     }

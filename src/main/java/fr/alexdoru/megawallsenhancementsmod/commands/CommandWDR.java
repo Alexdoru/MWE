@@ -217,13 +217,13 @@ public class CommandWDR extends MyAbstractCommand {
 
         }
 
-            if (sendReport) {
-                if (mc.thePlayer != null) {
-                    sendChatMessage(message.toString());
-                }
+        if (sendReport) {
+            if (mc.thePlayer != null) {
+                sendChatMessage(message.toString());
             }
+        }
 
-        if (arraycheats.contains("bhop")) {
+        if (arraycheats.contains("bhop") || arraycheats.contains("autoblock") || arraycheats.contains("fastbreak") || arraycheats.contains("noslowdown")) {
             PartyDetection.printBoostingReportAdvice(playername);
         }
 
