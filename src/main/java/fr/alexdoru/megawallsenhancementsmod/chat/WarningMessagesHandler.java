@@ -194,7 +194,7 @@ public class WarningMessagesHandler {
             final IChatComponent allCheats = new ChatComponentText("");
 
             for (final String hack : wdr.hacks) {
-                if (hack.equalsIgnoreCase("bhop")) {
+                if ("bhop".equalsIgnoreCase(hack) || "autoblock".equalsIgnoreCase(hack) || "fastbreak".equalsIgnoreCase(hack) || "noslowdown".equalsIgnoreCase(hack)) {
                     allCheats.appendSibling(new ChatComponentText(" " + EnumChatFormatting.DARK_RED + hack));
                 } else if (hack.equalsIgnoreCase(WDR.NICK)) {
                     allCheats.appendSibling(new ChatComponentText(" " + EnumChatFormatting.DARK_PURPLE + hack));
