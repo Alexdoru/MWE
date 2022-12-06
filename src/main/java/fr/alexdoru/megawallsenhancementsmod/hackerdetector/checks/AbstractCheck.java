@@ -1,7 +1,11 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiScreenHook;
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.data.WDR;
+import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.SampleList;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
@@ -13,16 +17,16 @@ import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * Abstract class to hold util methods for the checks
@@ -36,6 +40,7 @@ public abstract class AbstractCheck implements ICheck {
         for (final ViolationLevelTracker tracker : trackers) {
             if (tracker.isFlagging(failedCheck)) {
                 flag(player, this.getCheatName(), this.getCheatDescription());
+                addToReportList(player, this.getCheatName().toLowerCase());
             }
         }
     }
@@ -46,17 +51,45 @@ public abstract class AbstractCheck implements ICheck {
                 + NameUtil.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.YELLOW + " flags "
                 + EnumChatFormatting.RED + cheat;
-        ChatUtil.addChatMessage(new ChatComponentText(msg)
+        final IChatComponent imsg = new ChatComponentText(msg)
                 .setChatStyle(new ChatStyle()
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.COPY_TO_CLIPBOARD_COMMAND + EnumChatFormatting.getTextWithoutFormattingCodes(msg)))
-                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(cheatDescription))))
-                .appendSibling(ChatUtil.getReportButtons(player.getName(),
-                        "cheating " + cheat.toLowerCase(),
-                        cheat.toLowerCase(),
-                        ClickEvent.Action.RUN_COMMAND,
-                        ClickEvent.Action.RUN_COMMAND)
-                )
-        );
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(cheatDescription))));
+        imsg.appendSibling(ChatUtil.getReportButton(player.getName(), "cheating " + cheat.toLowerCase(), ClickEvent.Action.RUN_COMMAND));
+        if (!ConfigHandler.addToReportList) {
+            imsg.appendSibling(ChatUtil.getWDRButton(player.getName(), cheat.toLowerCase(), ClickEvent.Action.RUN_COMMAND));
+        }
+        if (ConfigHandler.compactFlagMessages) {
+            ChatHandler.deleteMessageFromChat(imsg);
+        }
+        ChatUtil.addChatMessage(imsg);
+    }
+
+    protected static void addToReportList(EntityPlayer player, String cheat) {
+        if (ConfigHandler.addToReportList) {
+            final UUID uuid = player.getUniqueID();
+            final boolean isNicked = uuid.version() != 4;
+            final String uuidStr = isNicked ? player.getName() : uuid.toString().replace("-", "");
+            final WDR wdr = WdrData.getWdr(uuidStr);
+            if (wdr == null) {
+                final long time = (new Date()).getTime();
+                final ArrayList<String> hacks = new ArrayList<>();
+                hacks.add(cheat);
+                if (isNicked) {
+                    hacks.add(WDR.NICK);
+                }
+                WdrData.put(uuidStr, new WDR(time, time, hacks));
+                NameUtil.updateMWPlayerDataAndEntityData(player.getName(), false);
+            } else {
+                if (isNicked && !wdr.hacks.contains(WDR.NICK)) {
+                    wdr.hacks.add(WDR.NICK);
+                }
+                if (!wdr.hacks.contains(cheat)) {
+                    wdr.hacks.add(cheat);
+                    NameUtil.updateMWPlayerDataAndEntityData(player.getName(), false);
+                }
+            }
+        }
     }
 
     protected static void fail(EntityPlayer player, String cheat) {
