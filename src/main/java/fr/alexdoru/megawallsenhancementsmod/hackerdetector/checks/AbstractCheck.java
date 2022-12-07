@@ -6,10 +6,12 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.SampleList;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,6 +43,7 @@ public abstract class AbstractCheck implements ICheck {
             if (tracker.isFlagging(failedCheck)) {
                 flag(player, this.getCheatName(), this.getCheatDescription());
                 addToReportList(player, this.getCheatName().toLowerCase());
+                sendReport(player, this.getCheatName().toLowerCase());
             }
         }
     }
@@ -89,6 +92,12 @@ public abstract class AbstractCheck implements ICheck {
                     NameUtil.updateMWPlayerDataAndEntityData(player.getName(), false);
                 }
             }
+        }
+    }
+
+    protected static void sendReport(EntityPlayer player, String cheat) {
+        if (FKCounterMod.isInMwGame && ConfigHandler.autoreportFlaggedPlayers) {
+            ReportQueue.INSTANCE.addReportFromHackerDetector(player.getName(), cheat);
         }
     }
 

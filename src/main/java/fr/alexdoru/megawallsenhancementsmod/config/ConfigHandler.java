@@ -95,6 +95,7 @@ public class ConfigHandler {
     public static boolean hackerDetector;
     public static boolean addToReportList;
     public static boolean compactFlagMessages;
+    public static boolean autoreportFlaggedPlayers;
 
     /**
      * Hitbox Config
@@ -212,6 +213,7 @@ public class ConfigHandler {
         final Property phackerDetector = config.get(CATEGORY_HACKERDETECTOR, "Hacker Detector", true, "Detects cheaters in your game");
         final Property paddToReportList = config.get(CATEGORY_HACKERDETECTOR, "Add to report list", true, "Adds flagged players to your report list");
         final Property pcompactFlagMessages = config.get(CATEGORY_HACKERDETECTOR, "Compact alerts", true, "Compact flag messages with previous ones");
+        final Property pautoreportFlaggedPlayers = config.get(CATEGORY_HACKERDETECTOR, "Report flagged players", true, "Sends a report for flagged players");
 
         final String CATEGORY_HITBOX = "Hitbox";
         final Property pisDebugHitboxOn = config.get(CATEGORY_HITBOX, "Toggle hitbox", false, "Toggle hitbox");
@@ -314,6 +316,7 @@ public class ConfigHandler {
         pOrderHackerDetector.add(phackerDetector.getName());
         pOrderHackerDetector.add(paddToReportList.getName());
         pOrderHackerDetector.add(pcompactFlagMessages.getName());
+        pOrderHackerDetector.add(pautoreportFlaggedPlayers.getName());
         config.setCategoryPropertyOrder(CATEGORY_HACKERDETECTOR, pOrderHackerDetector);
 
         final List<String> pOrderHitbox = new ArrayList<>();
@@ -403,6 +406,7 @@ public class ConfigHandler {
             hackerDetector = phackerDetector.getBoolean();
             addToReportList = paddToReportList.getBoolean();
             compactFlagMessages = pcompactFlagMessages.getBoolean();
+            autoreportFlaggedPlayers = pautoreportFlaggedPlayers.getBoolean();
 
             isDebugHitboxOn = pisDebugHitboxOn.getBoolean();
             drawHitboxForPlayers = pdrawHitboxForPlayers.getBoolean();
@@ -512,6 +516,7 @@ public class ConfigHandler {
             phackerDetector.set(hackerDetector);
             paddToReportList.set(addToReportList);
             pcompactFlagMessages.set(compactFlagMessages);
+            pautoreportFlaggedPlayers.set(autoreportFlaggedPlayers);
 
             pisDebugHitboxOn.set(isDebugHitboxOn);
             pdrawHitboxForPlayers.set(drawHitboxForPlayers);
