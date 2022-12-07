@@ -2,9 +2,9 @@ package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
+import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -15,10 +15,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class ReportQueue {
 
@@ -37,7 +34,7 @@ public class ReportQueue {
     private int autoReportSent;
     private final List<ReportInQueue> queueList = new ArrayList<>();
     private final List<Long> timestampsLastReports = new ArrayList<>();
-    private final List<StringLong> playersReportedThisGame = new ArrayList<>();
+    private final Set<String> playersReportedThisGame = new HashSet<>();
     private final Random random = new Random();
 
     @SubscribeEvent
@@ -195,6 +192,20 @@ public class ReportQueue {
         return false;
     }
 
+    // TODO send cheat to server
+    public void addReportFromHackerDetector(String playername, String cheat) {
+        if (canReportPlayerThisGame(playername)) {
+            if ("bhop".equalsIgnoreCase(cheat) || "autoblock".equalsIgnoreCase(cheat) || "fastbreak".equalsIgnoreCase(cheat) || "noslowdown".equalsIgnoreCase(cheat)) {
+                PartyDetection.printBoostingReportAdvice(playername);
+            }
+            if (isReportQueueInactive()) {
+                MinecraftForge.EVENT_BUS.register(this);
+                counter = 0;
+            }
+            queueList.add(new ReportInQueue(null, playername, false));
+        }
+    }
+
     private boolean isReportQueueInactive() {
         return counter <= 0 && queueList.isEmpty();
     }
@@ -265,18 +276,14 @@ public class ReportQueue {
     }
 
     /**
-     * This is only a check for reports via the auto reports
+     * This is only a check for reports via the auto reports and reports via hacker detector
      * the check for report suggestions is in the ReportSuggestionHandler
      */
     private boolean canReportPlayerThisGame(String playername) {
-        final long timestamp = System.currentTimeMillis();
-        playersReportedThisGame.removeIf(o -> (o.timestamp + 40L * 60L * 1000L < timestamp));
-        for (final StringLong stringLong : playersReportedThisGame) {
-            if (stringLong.message != null && stringLong.message.equalsIgnoreCase(playername)) {
-                return false;
-            }
+        if (playersReportedThisGame.contains(playername)) {
+            return false;
         }
-        playersReportedThisGame.add(new StringLong(timestamp, playername));
+        playersReportedThisGame.add(playername);
         return true;
     }
 
@@ -288,10 +295,6 @@ public class ReportQueue {
                 && !thePlayer.movementInput.sneak
                 && !thePlayer.isUsingItem()
                 && !thePlayer.isSwingInProgress;
-    }
-
-    public List<StringLong> getPlayersReportedThisGame() {
-        return playersReportedThisGame;
     }
 
 }
