@@ -273,7 +273,7 @@ public class NameUtil {
 
     /**
      * Returns the formatted name of the player, additionnal icons and prestive V tag included
-     * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay}
+     * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay#getPlayerName}
      */
     public static String getFormattedName(String playername) {
         final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
@@ -285,7 +285,7 @@ public class NameUtil {
 
     /**
      * Returns the formatted name of the player, additionnal icons and prestive V tag included
-     * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay}
+     * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay#getPlayerName}
      */
     public static String getFormattedName(NetworkPlayerInfo networkPlayerInfo) {
         if (networkPlayerInfo.getDisplayName() == null) {
@@ -305,9 +305,19 @@ public class NameUtil {
         }
         final MWPlayerData.PlayerData mwPlayerData = MWPlayerData.get(networkPlayerInfo.getGameProfile().getId());
         if (mwPlayerData != null && mwPlayerData.P5Tag != null && mwPlayerData.originalP4Tag != null) {
-            return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername).replace(mwPlayerData.originalP4Tag, mwPlayerData.P5Tag);
+            return formatPlayerNameUnscrambled(networkPlayerInfo.getPlayerTeam(), playername).replace(mwPlayerData.originalP4Tag, mwPlayerData.P5Tag);
         }
-        return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playername);
+        return formatPlayerNameUnscrambled(networkPlayerInfo.getPlayerTeam(), playername);
+    }
+
+    /**
+     * Equivalent of {@link net.minecraft.scoreboard.ScorePlayerTeam#formatPlayerName}
+     */
+    private static String formatPlayerNameUnscrambled(ScorePlayerTeam team, String playername) {
+        if (team == null) {
+            return playername;
+        }
+        return deobfString(team.getColorPrefix()) + playername + team.getColorSuffix();
     }
 
     /**
