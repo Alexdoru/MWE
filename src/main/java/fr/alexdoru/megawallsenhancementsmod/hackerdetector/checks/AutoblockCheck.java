@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,11 +48,20 @@ public class AutoblockCheck extends AbstractCheck {
         }
         if (player.isSwingInProgress && data.useItemTime > 20) {
             final ItemStack itemStack = player.getHeldItem();
-            //fail(player, this.getCheatName());
-            //log(player, this.getCheatName(), data.autoblockVL, data,
-            //        "useItemTime " + data.useItemTime
-            //);
-            return itemStack != null && swordSet.contains(itemStack.getItem());
+            if (itemStack != null) {
+                if (swordSet.contains(itemStack.getItem())) {
+                    if (data.lastEatDrinkTime < 20) {
+                        // TODO remove debug
+                        ChatUtil.debug("no hit glitch player " + player.getName());
+                    }
+                    log(player, this.getCheatName(), data.autoblockVL, data,
+                            "useItemTime " + data.useItemTime
+                                    + " lastEatDrinkTime" + data.lastEatDrinkTime
+                    );
+                    return true;
+                }
+            }
+            return false;
         }
         return false;
     }

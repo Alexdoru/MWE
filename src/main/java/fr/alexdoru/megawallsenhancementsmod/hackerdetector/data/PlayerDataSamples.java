@@ -20,9 +20,10 @@ public class PlayerDataSamples {
     public int useItemTime = 0;
     /** Amount of ticks since the player took a hit */
     public int lastHurtTime = 0;// TODO comment out
-    /** Amount of ticks since the last sword swing started, used to check if the player is looking at an entity */
-    // TODO test if entity gets hurt for through blocks check
+    /** Amount of ticks since the last sword swing started */
     public int lastSwingTime = 0;
+    /** Amount of ticks since the list time the player eat or drank something */
+    public int lastEatDrinkTime = 20;
     ///** Holds the position XYZ of the player over time */
     //public SampleList<Vector3D> positionSampleList = new SampleList<>(40);
     /**

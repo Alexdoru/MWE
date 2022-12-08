@@ -15,6 +15,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
+import net.minecraft.item.ItemPotion;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -107,6 +111,17 @@ public class HackerDetector {
     }
 
     private void updatePlayerDataSamples(EntityPlayer player, PlayerDataSamples data) {
+        final ItemStack itemStack = player.getItemInUse();
+        if (itemStack != null) {
+            final Item item = itemStack.getItem();
+            if (item instanceof ItemFood || item instanceof ItemPotion) {
+                data.lastEatDrinkTime = 0;
+            } else {
+                data.lastEatDrinkTime += 1;
+            }
+        } else {
+            data.lastEatDrinkTime += 1;
+        }
         data.sprintTime = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getModifier(sprintingUUID) == null ? 0 : data.sprintTime + 1;
         data.useItemTime = player.isUsingItem() ? data.useItemTime + 1 : 0;
         data.lastHurtTime = player.hurtTime == 9 ? 0 : data.lastHurtTime + 1;
