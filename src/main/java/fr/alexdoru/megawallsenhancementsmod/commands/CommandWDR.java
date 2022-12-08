@@ -13,8 +13,9 @@ import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoGrabber;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoTracker;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
@@ -86,8 +87,8 @@ public class CommandWDR extends MyAbstractCommand {
         nbTimeMarks++;
         final String key = String.valueOf(nbTimeMarks);
         final long timestamp = (new Date()).getTime();
-        final String serverID = GameInfoGrabber.getGameIdFromScoreboard();
-        final String timerOnReplay = GameInfoGrabber.getTimeSinceGameStart(timestamp, serverID, 0);
+        final String serverID = ScoreboardUtils.getGameIdFromScoreboard();
+        final String timerOnReplay = GameInfoTracker.getTimeSinceGameStart(timestamp, serverID, 0);
         timestampsMap.put(key, new ReportTimestamp(timestamp, serverID, timerOnReplay));
         ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters()
                 + EnumChatFormatting.GREEN + "Added timestamp : " + EnumChatFormatting.GOLD + "#" + key + EnumChatFormatting.GREEN + ".")
@@ -160,8 +161,8 @@ public class CommandWDR extends MyAbstractCommand {
                     }
 
                     timestamp = time - longtimetosubtract * 1000; // Milliseconds
-                    serverID = GameInfoGrabber.getGameIdFromScoreboard();
-                    timerOnReplay = GameInfoGrabber.getTimeSinceGameStart(timestamp, serverID, (int) longtimetosubtract);
+                    serverID = ScoreboardUtils.getGameIdFromScoreboard();
+                    timerOnReplay = GameInfoTracker.getTimeSinceGameStart(timestamp, serverID, (int) longtimetosubtract);
                     message.append(" ").append(args[i]);
 
                 } else if (args[i].charAt(0) == TIMEMARK_REPORT_CHAR) { // process the command if you use a stored timestamp

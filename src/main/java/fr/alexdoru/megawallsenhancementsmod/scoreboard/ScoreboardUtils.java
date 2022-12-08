@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 public class ScoreboardUtils {
@@ -167,6 +168,20 @@ public class ScoreboardUtils {
             list.add(i, EnumChatFormatting.getTextWithoutFormattingCodes(ListIn.get(i)));
         }
         return list;
+    }
+
+    public static String getGameIdFromScoreboard() {
+        final List<String> scoresRaw = getUnformattedSidebarText();
+        if (scoresRaw.isEmpty()) {
+            return "?";
+        }
+        for (final String line : scoresRaw) {
+            final Matcher matcher = ScoreboardParser.GAME_ID_PATTERN.matcher(line);
+            if (matcher.find()) {
+                return matcher.group(1);
+            }
+        }
+        return "?";
     }
 
 }
