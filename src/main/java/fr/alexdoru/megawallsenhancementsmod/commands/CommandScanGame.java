@@ -11,7 +11,7 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoGrabber;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
@@ -46,7 +46,7 @@ public class CommandScanGame extends MyAbstractCommand {
             ChatUtil.printApikeySetupInfo();
             return;
         }
-        final String currentGameId = GameInfoGrabber.getGameIdFromScoreboard();
+        final String currentGameId = ScoreboardUtils.getGameIdFromScoreboard();
         if (currentGameId.equals("?")) {
             sendChatMessage("/locraw");
             ChatListener.interceptLocrawAndRunScangame();

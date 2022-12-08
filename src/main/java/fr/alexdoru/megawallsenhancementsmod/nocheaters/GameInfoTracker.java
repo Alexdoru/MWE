@@ -1,14 +1,12 @@
 package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardParser;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
 
-public class GameInfoGrabber {
+public class GameInfoTracker {
 
     private static final String TIME_WALLS_FALL = "Walls Fall"; // finish 6min after replay starts
     private static final String TIME_ENRAGE_OFF = "Enrage Off"; // lasts for 8mins
@@ -17,23 +15,9 @@ public class GameInfoGrabber {
     private static long gamestarttimestamp = 0;
     private static String gameID = "?";
 
-    public static String getGameIdFromScoreboard() {
-        final List<String> scoresRaw = ScoreboardUtils.getUnformattedSidebarText();
-        if (scoresRaw.isEmpty()) {
-            return "?";
-        }
-        for (final String line : scoresRaw) {
-            final Matcher matcher = ScoreboardParser.GAME_ID_PATTERN.matcher(line);
-            if (matcher.find()) {
-                return matcher.group(1);
-            }
-        }
-        return "?";
-    }
-
     public static void saveGameInfoOnGameStart() {
         gamestarttimestamp = (new Date()).getTime() + 1000L;
-        gameID = getGameIdFromScoreboard();
+        gameID = ScoreboardUtils.getGameIdFromScoreboard();
     }
 
     /**

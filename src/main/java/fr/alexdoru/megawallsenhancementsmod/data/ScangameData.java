@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.data;
 
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoGrabber;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -36,7 +36,7 @@ public class ScangameData {
     }
 
     private static void onGameStart() {
-        final String currentGameId = GameInfoGrabber.getGameIdFromScoreboard();
+        final String currentGameId = ScoreboardUtils.getGameIdFromScoreboard();
         if (!currentGameId.equals("?") && !currentGameId.equals(scanGameId)) {
             clearScanGameData();
         }
