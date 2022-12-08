@@ -95,6 +95,7 @@ public class ConfigHandler {
     public static boolean hackerDetector;
     public static boolean addToReportList;
     public static boolean compactFlagMessages;
+    public static boolean oneFlagMessagePerGame;
     public static boolean autoreportFlaggedPlayers;
 
     /**
@@ -213,6 +214,7 @@ public class ConfigHandler {
         final Property phackerDetector = config.get(CATEGORY_HACKERDETECTOR, "Hacker Detector", true, "Detects cheaters in your game");
         final Property paddToReportList = config.get(CATEGORY_HACKERDETECTOR, "Add to report list", true, "Adds flagged players to your report list");
         final Property pcompactFlagMessages = config.get(CATEGORY_HACKERDETECTOR, "Compact alerts", true, "Compact flag messages with previous ones");
+        final Property poneFlagMessagePerGame = config.get(CATEGORY_HACKERDETECTOR, "One flag per game", false, "Flags each player once per game");
         final Property pautoreportFlaggedPlayers = config.get(CATEGORY_HACKERDETECTOR, "Report flagged players", true, "Sends a report for flagged players");
 
         final String CATEGORY_HITBOX = "Hitbox";
@@ -316,6 +318,7 @@ public class ConfigHandler {
         pOrderHackerDetector.add(phackerDetector.getName());
         pOrderHackerDetector.add(paddToReportList.getName());
         pOrderHackerDetector.add(pcompactFlagMessages.getName());
+        pOrderHackerDetector.add(poneFlagMessagePerGame.getName());
         pOrderHackerDetector.add(pautoreportFlaggedPlayers.getName());
         config.setCategoryPropertyOrder(CATEGORY_HACKERDETECTOR, pOrderHackerDetector);
 
@@ -406,6 +409,7 @@ public class ConfigHandler {
             hackerDetector = phackerDetector.getBoolean();
             addToReportList = paddToReportList.getBoolean();
             compactFlagMessages = pcompactFlagMessages.getBoolean();
+            oneFlagMessagePerGame = poneFlagMessagePerGame.getBoolean();
             autoreportFlaggedPlayers = pautoreportFlaggedPlayers.getBoolean();
 
             isDebugHitboxOn = pisDebugHitboxOn.getBoolean();
@@ -516,6 +520,7 @@ public class ConfigHandler {
             phackerDetector.set(hackerDetector);
             paddToReportList.set(addToReportList);
             pcompactFlagMessages.set(compactFlagMessages);
+            poneFlagMessagePerGame.set(oneFlagMessagePerGame);
             pautoreportFlaggedPlayers.set(autoreportFlaggedPlayers);
 
             pisDebugHitboxOn.set(isDebugHitboxOn);
