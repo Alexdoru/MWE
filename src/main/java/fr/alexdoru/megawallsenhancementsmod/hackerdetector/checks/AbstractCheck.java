@@ -28,6 +28,7 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.UUID;
 
 /**
@@ -35,6 +36,7 @@ import java.util.UUID;
  */
 public abstract class AbstractCheck implements ICheck {
 
+    private static final HashSet<String> flagMessages = new HashSet<>();
     protected static final Logger logger = LogManager.getLogger("HackerDetector");
 
     @Override
@@ -54,6 +56,12 @@ public abstract class AbstractCheck implements ICheck {
                 + NameUtil.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.YELLOW + " flags "
                 + EnumChatFormatting.RED + cheat;
+        if (ConfigHandler.oneFlagMessagePerGame) {
+            if (flagMessages.contains(msg)) {
+                return;
+            }
+            flagMessages.add(msg);
+        }
         final IChatComponent imsg = new ChatComponentText(msg)
                 .setChatStyle(new ChatStyle()
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.COPY_TO_CLIPBOARD_COMMAND + EnumChatFormatting.getTextWithoutFormattingCodes(msg)))
@@ -211,6 +219,10 @@ public abstract class AbstractCheck implements ICheck {
         final double angleWithVector = Vector3D.getPlayersLookVec(player).getAngleWithVector(eyesToBlockCenter);
         final double maxAngle = Math.toDegrees(Math.atan(0.5D * Math.sqrt(3 / distSq)));
         return angleWithVector < maxAngle;
+    }
+
+    public static void clearFlagMessages() {
+        flagMessages.clear();
     }
 
 }

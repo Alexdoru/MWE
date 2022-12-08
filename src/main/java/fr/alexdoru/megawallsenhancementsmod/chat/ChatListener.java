@@ -16,6 +16,7 @@ import fr.alexdoru.megawallsenhancementsmod.gui.huds.ArrowHitHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.CreeperPrimedTNTHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.HunterStrengthHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.KillCooldownHUD;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.AbstractCheck;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoGrabber;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
@@ -85,6 +86,7 @@ public class ChatListener {
             if (msg.equals(GENERAL_START_MESSAGE)) {
                 GameInfoGrabber.saveGameInfoOnGameStart();
                 SquadHandler.formSquad();
+                AbstractCheck.clearFlagMessages();
                 return;
             }
 
