@@ -92,16 +92,15 @@ public abstract class AbstractCheck implements ICheck {
                     hacks.add(WDR.NICK);
                 }
                 WdrData.put(uuidStr, new WDR(time, time, hacks));
-                NameUtil.updateMWPlayerDataAndEntityData(player.getName(), false);
             } else {
                 if (isNicked && !wdr.hacks.contains(WDR.NICK)) {
                     wdr.hacks.add(WDR.NICK);
                 }
                 if (!wdr.hacks.contains(cheat)) {
                     wdr.hacks.add(cheat);
-                    NameUtil.updateMWPlayerDataAndEntityData(player.getName(), false);
                 }
             }
+            NameUtil.updateMWPlayerDataAndEntityData(player, false);
         }
     }
 
