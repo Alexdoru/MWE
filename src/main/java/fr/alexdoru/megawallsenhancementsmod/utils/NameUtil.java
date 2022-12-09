@@ -95,6 +95,17 @@ public class NameUtil {
         }
     }
 
+    public static void updateMWPlayerDataAndEntityData(EntityPlayer player, boolean refreshDisplayName) {
+        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(player.getName());
+        if (networkPlayerInfo != null) {
+            ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(updateAndGetMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
+        }
+        NameUtil.updateEntityPlayerFields(player, false);
+        if (refreshDisplayName) {
+            player.refreshDisplayName();
+        }
+    }
+
     /**
      * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
      */
