@@ -212,7 +212,7 @@ public abstract class AbstractCheck implements ICheck {
         final double distSq = eyesToBlockCenter.normSquared();
         if (distSq > 28.79422863D) {
             return false;
-            /* The player somehow has its head inside the block */
+            /* The player somehow has their head inside the block */
         } else if (distSq < 0.25) {
             return true;
         }
