@@ -69,7 +69,7 @@ public abstract class AbstractCheck implements ICheck {
                 .setChatStyle(new ChatStyle()
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.COPY_TO_CLIPBOARD_COMMAND + EnumChatFormatting.getTextWithoutFormattingCodes(msg)))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(cheatDescription))));
-        if (!ConfigHandler.autoreportFlaggedPlayers) {
+        if (!(FKCounterMod.isInMwGame && ConfigHandler.autoreportFlaggedPlayers)) {
             imsg.appendSibling(ChatUtil.getReportButton(player.getName(), "cheating " + cheat.toLowerCase(), ClickEvent.Action.RUN_COMMAND));
         }
         if (!ConfigHandler.addToReportList) {
