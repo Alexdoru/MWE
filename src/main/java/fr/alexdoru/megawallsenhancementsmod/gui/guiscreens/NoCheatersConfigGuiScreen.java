@@ -4,7 +4,6 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.WarningMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
-import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -32,7 +31,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     @Override
     public void initGui() {
         this.maxWidth = fontRendererObj.getStringWidth(msg);
-        this.maxHeight = (buttonsHeight + 4) * 12 + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * 10 + buttonsHeight;
         super.initGui();
         /*
          * Defines the button list
@@ -42,12 +41,12 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         buttonList.add(new GuiButton(1, xPos, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(1)));
         buttonList.add(reportSuggestionButton = new GuiButton(8, xPos, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(8)));
         buttonList.add(autoreportSuggestionButton = new GuiButton(9, xPos, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(9)));
-        buttonList.add(new GuiButton(2, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(2)));
-        buttonList.add(new GuiButton(11, xPos, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(11)));
-        buttonList.add(new GuiButton(6, xPos, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(6)));
-        buttonList.add(new GuiSlider(7, xPos, getButtonYPos(8), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
-        buttonList.add(new GuiButton(10, xPos, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(10)));
-        buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, getButtonDisplayString(3)));
+        //buttonList.add(new GuiButton(2, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(2)));
+        //buttonList.add(new GuiButton(11, xPos, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(11)));
+        buttonList.add(new GuiButton(6, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(6)));
+        buttonList.add(new GuiSlider(7, xPos, getButtonYPos(6), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
+        buttonList.add(new GuiButton(10, xPos, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(10)));
+        buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getButtonYPos(9), 150, buttonsHeight, getButtonDisplayString(3)));
     }
 
     @Override
@@ -72,10 +71,10 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 return "Report suggestions in chat : " + getSuffix(ConfigHandler.reportSuggestions);
             case 9:
                 return "Auto-report suggestions : " + getSuffix(ConfigHandler.autoreportSuggestions);
-            case 2:
-                return "Auto-report cheaters : " + getSuffix(ConfigHandler.toggleAutoreport);
-            case 11:
-                return "Stop report after a week : " + getSuffix(ConfigHandler.stopAutoreportAfterWeek);
+            //case 2:
+            //    return "Auto-report cheaters : " + getSuffix(ConfigHandler.toggleAutoreport);
+            //case 11:
+            //    return "Stop report after a week : " + getSuffix(ConfigHandler.stopAutoreportAfterWeek);
             case 6:
                 return "Delete old reports : " + getSuffix(ConfigHandler.deleteOldReports);
             case 10:
@@ -98,18 +97,18 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 textLines.add("");
                 textLines.add(EnumChatFormatting.GRAY + "Those messages have built in Compact Chat");
                 break;
-            case 2:
-                textLines.add(EnumChatFormatting.GREEN + "Every game it automatically reports players saved in NoCheaters");
-                textLines.add(EnumChatFormatting.GREEN + "It does it for a week before asking you if they are still cheating or not");
-                textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls, the reports are sent after the walls fall.");
-                textLines.add("");
-                textLines.add(EnumChatFormatting.DARK_RED + "Don't keep players that don't cheat anymore in your report list");
-                textLines.add(EnumChatFormatting.GREEN + "Use : " + EnumChatFormatting.YELLOW + "/unwdr playername" + EnumChatFormatting.GREEN + " to remove them from your report list");
-                break;
-            case 11:
-                textLines.add(EnumChatFormatting.GREEN + "Stop auto-reporting players for whom your last report is more than a week old");
-                textLines.add(EnumChatFormatting.GREEN + "The icon on their name will turn gray");
-                break;
+            //case 2:
+            //    textLines.add(EnumChatFormatting.GREEN + "Every game it automatically reports players saved in NoCheaters");
+            //    textLines.add(EnumChatFormatting.GREEN + "It does it for a week before asking you if they are still cheating or not");
+            //    textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls, the reports are sent after the walls fall.");
+            //    textLines.add("");
+            //    textLines.add(EnumChatFormatting.DARK_RED + "Don't keep players that don't cheat anymore in your report list");
+            //    textLines.add(EnumChatFormatting.GREEN + "Use : " + EnumChatFormatting.YELLOW + "/unwdr playername" + EnumChatFormatting.GREEN + " to remove them from your report list");
+            //    break;
+            //case 11:
+            //    textLines.add(EnumChatFormatting.GREEN + "Stop auto-reporting players for whom your last report is more than a week old");
+            //    textLines.add(EnumChatFormatting.GREEN + "The icon on their name will turn gray");
+            //    break;
             case 6:
                 textLines.add(EnumChatFormatting.GREEN + "Deletes reports older than the specified value");
                 textLines.add(EnumChatFormatting.GRAY + "The deletion occurs when you start minecraft");
@@ -178,20 +177,20 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 ConfigHandler.deleteCheaterChatMsg = false;
                 ConfigHandler.censorCheaterChatMsg = false;
                 break;
-            case 2:
-                ConfigHandler.toggleAutoreport = !ConfigHandler.toggleAutoreport;
-                NameUtil.refreshAllNamesInWorld();
-                break;
+            //case 2:
+            //    ConfigHandler.toggleAutoreport = !ConfigHandler.toggleAutoreport;
+            //    NameUtil.refreshAllNamesInWorld();
+            //    break;
             case 3:
                 mc.displayGuiScreen(parent);
                 break;
             case 6:
                 ConfigHandler.deleteOldReports = !ConfigHandler.deleteOldReports;
                 break;
-            case 11:
-                ConfigHandler.stopAutoreportAfterWeek = !ConfigHandler.stopAutoreportAfterWeek;
-                NameUtil.refreshAllNamesInWorld();
-                break;
+            //case 11:
+            //    ConfigHandler.stopAutoreportAfterWeek = !ConfigHandler.stopAutoreportAfterWeek;
+            //    NameUtil.refreshAllNamesInWorld();
+            //    break;
             default:
                 break;
         }
