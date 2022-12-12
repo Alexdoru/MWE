@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
+import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.SampleList;
@@ -108,7 +109,7 @@ public abstract class AbstractCheck implements ICheck {
     }
 
     private static void sendReport(EntityPlayer player, String cheat) {
-        if (FKCounterMod.isInMwGame && ConfigHandler.autoreportFlaggedPlayers) {
+        if (FKCounterMod.isInMwGame && ConfigHandler.autoreportFlaggedPlayers && SquadHandler.getSquad().get(player.getName()) == null) {
             ReportQueue.INSTANCE.addReportFromHackerDetector(player.getName(), cheat);
         }
     }
