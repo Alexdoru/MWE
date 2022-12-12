@@ -43,14 +43,14 @@ public abstract class AbstractCheck implements ICheck {
     public final void checkViolationLevel(EntityPlayer player, boolean failedCheck, ViolationLevelTracker... trackers) {
         for (final ViolationLevelTracker tracker : trackers) {
             if (tracker.isFlagging(failedCheck)) {
-                flag(player, this.getCheatName(), this.getCheatDescription());
+                printFlagMessage(player, this.getCheatName(), this.getCheatDescription());
                 addToReportList(player, this.getCheatName().toLowerCase());
                 sendReport(player, this.getCheatName().toLowerCase());
             }
         }
     }
 
-    protected static void flag(EntityPlayer player, String cheat, String cheatDescription) {
+    private static void printFlagMessage(EntityPlayer player, String cheat, String cheatDescription) {
         //logger.warn(player.getName() + " flags " + cheat);
         if (!ConfigHandler.showFlagMessages) {
             return;
@@ -81,7 +81,7 @@ public abstract class AbstractCheck implements ICheck {
         ChatUtil.addChatMessage(imsg);
     }
 
-    protected static void addToReportList(EntityPlayer player, String cheat) {
+    private static void addToReportList(EntityPlayer player, String cheat) {
         if (ConfigHandler.addToReportList) {
             final UUID uuid = player.getUniqueID();
             final boolean isNicked = uuid.version() != 4;
@@ -107,7 +107,7 @@ public abstract class AbstractCheck implements ICheck {
         }
     }
 
-    protected static void sendReport(EntityPlayer player, String cheat) {
+    private static void sendReport(EntityPlayer player, String cheat) {
         if (FKCounterMod.isInMwGame && ConfigHandler.autoreportFlaggedPlayers) {
             ReportQueue.INSTANCE.addReportFromHackerDetector(player.getName(), cheat);
         }
