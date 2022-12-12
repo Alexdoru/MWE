@@ -225,7 +225,15 @@ public class CommandWDR extends MyAbstractCommand {
             }
         }
 
-        if (arraycheats.contains("bhop") || arraycheats.contains("autoblock") || arraycheats.contains("fastbreak") || arraycheats.contains("noslowdown")) {
+        boolean printPartMsg = false;
+        for (final String cheat : arraycheats) {
+            if ("bhop".equalsIgnoreCase(cheat) || "autoblock".equalsIgnoreCase(cheat) || "fastbreak".equalsIgnoreCase(cheat) || "noslowdown".equalsIgnoreCase(cheat)) {
+                printPartMsg = true;
+                break;
+            }
+        }
+
+        if (printPartMsg) {
             PartyDetection.printBoostingReportAdvice(playername);
         }
 
