@@ -237,8 +237,6 @@ public class CommandWDR extends MyAbstractCommand {
             PartyDetection.printBoostingReportAdvice(playername);
         }
 
-        ReportQueue.INSTANCE.addReportTimestamp(true);
-
         if (FKCounterMod.preGameLobby) {
             ChatUtil.addChatMessage(ChatUtil.getChatReportingAdvice());
         }
