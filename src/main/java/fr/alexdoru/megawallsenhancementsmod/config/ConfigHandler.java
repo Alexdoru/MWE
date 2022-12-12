@@ -94,6 +94,7 @@ public class ConfigHandler {
     // TODO make config gui
     public static boolean hackerDetector;
     public static boolean addToReportList;
+    public static boolean showFlagMessages;
     public static boolean compactFlagMessages;
     public static boolean oneFlagMessagePerGame;
     public static boolean autoreportFlaggedPlayers;
@@ -213,6 +214,7 @@ public class ConfigHandler {
         final String CATEGORY_HACKERDETECTOR = "HackerDetector";
         final Property phackerDetector = config.get(CATEGORY_HACKERDETECTOR, "Hacker Detector", true, "Detects cheaters in your game");
         final Property paddToReportList = config.get(CATEGORY_HACKERDETECTOR, "Add to report list", true, "Adds flagged players to your report list");
+        final Property pshowFlagMessages = config.get(CATEGORY_HACKERDETECTOR, "Show flag messages", true, "Prints a message in chat when a player flags");
         final Property pcompactFlagMessages = config.get(CATEGORY_HACKERDETECTOR, "Compact alerts", true, "Compact flag messages with previous ones");
         final Property poneFlagMessagePerGame = config.get(CATEGORY_HACKERDETECTOR, "One flag per game", false, "Flags each player once per game");
         final Property pautoreportFlaggedPlayers = config.get(CATEGORY_HACKERDETECTOR, "Report flagged players", true, "Sends a report for flagged players");
@@ -317,6 +319,7 @@ public class ConfigHandler {
         final List<String> pOrderHackerDetector = new ArrayList<>();
         pOrderHackerDetector.add(phackerDetector.getName());
         pOrderHackerDetector.add(paddToReportList.getName());
+        pOrderHackerDetector.add(pshowFlagMessages.getName());
         pOrderHackerDetector.add(pcompactFlagMessages.getName());
         pOrderHackerDetector.add(poneFlagMessagePerGame.getName());
         pOrderHackerDetector.add(pautoreportFlaggedPlayers.getName());
@@ -408,6 +411,7 @@ public class ConfigHandler {
 
             hackerDetector = phackerDetector.getBoolean();
             addToReportList = paddToReportList.getBoolean();
+            showFlagMessages = pshowFlagMessages.getBoolean();
             compactFlagMessages = pcompactFlagMessages.getBoolean();
             oneFlagMessagePerGame = poneFlagMessagePerGame.getBoolean();
             autoreportFlaggedPlayers = pautoreportFlaggedPlayers.getBoolean();
@@ -519,6 +523,7 @@ public class ConfigHandler {
 
             phackerDetector.set(hackerDetector);
             paddToReportList.set(addToReportList);
+            pshowFlagMessages.set(showFlagMessages);
             pcompactFlagMessages.set(compactFlagMessages);
             poneFlagMessagePerGame.set(oneFlagMessagePerGame);
             pautoreportFlaggedPlayers.set(autoreportFlaggedPlayers);
