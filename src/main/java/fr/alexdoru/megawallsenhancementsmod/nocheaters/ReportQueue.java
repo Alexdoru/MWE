@@ -137,37 +137,6 @@ public class ReportQueue {
         }
     }
 
-    public void addPlayerToQueue(String playername, boolean printDelayMsg) {
-        if (canReportPlayerThisGame(playername)) {
-            if (isReportQueueInactive()) {
-                MinecraftForge.EVENT_BUS.register(this);
-                counter = random.nextInt(TIME_BETWEEN_REPORTS_MAX);
-            } else if (printDelayMsg) {
-                ChatUtil.addChatMessage(EnumChatFormatting.GRAY + "Sending report in a moment...");
-            }
-            queueList.add(new ReportInQueue(null, playername, false));
-        }
-    }
-
-    private void addPlayerToQueue(String suggestionSender, String playername, int tickDelay) {
-        if (isReportQueueInactive()) {
-            MinecraftForge.EVENT_BUS.register(this);
-        }
-        counter = tickDelay;
-        queueList.add(new ReportInQueue(suggestionSender, playername, true));
-    }
-
-    /**
-     * Called from the auto-report suggestions
-     * if an auto-report for that player is already in the queue, it prioritizes it
-     * Returns true if it adds the players to the report queue
-     */
-    public boolean addPlayerToQueueRandom(String suggestionSender, String reportedPlayer) {
-        queueList.removeIf(reportInQueue -> (reportInQueue.reportedPlayer.equalsIgnoreCase(reportedPlayer)));
-        addPlayerToQueue(suggestionSender, reportedPlayer, getTickDelay());
-        return true;
-    }
-
     /**
      * Gaussian
      * Min value : 5 seconds
@@ -178,21 +147,44 @@ public class ReportQueue {
     }
 
     /**
-     * Handles the auto report feature
-     *
-     * @return true if it sends a report
+     * Called from the auto-report suggestions
+     * if an auto-report for that player is already in the queue, it prioritizes it
+     * Returns true if it adds the players to the report queue
      */
-    public boolean addAutoReportToQueue(long datenow, String playerName, WDR wdr) {
-        if (autoReportSent < AUTOREPORT_PER_GAME && wdr.canBeAutoreported(datenow) && wdr.hasValidCheats()) {
-            wdr.timestamp = datenow;
-            addPlayerToQueue(playerName, false);
-            autoReportSent++;
+    public boolean addReportSuggestionToQueue(String suggestionSender, String reportedPlayer) {
+        if (canReportPlayerThisGame(reportedPlayer)) {
+            queueList.removeIf(reportInQueue -> (reportInQueue.reportedPlayer.equalsIgnoreCase(reportedPlayer)));
+            if (isReportQueueInactive()) {
+                MinecraftForge.EVENT_BUS.register(this);
+            }
+            counter = getTickDelay();
+            queueList.add(new ReportInQueue(suggestionSender, reportedPlayer, true));
             return true;
         }
         return false;
     }
 
-    // TODO send cheat to server
+    /**
+     * Handles the auto report feature
+     *
+     * @return true if it sends a report
+     */
+    public boolean addAutoReportToQueue(long datenow, String playername, WDR wdr) {
+        if (autoReportSent < AUTOREPORT_PER_GAME && wdr.canBeAutoreported(datenow) && wdr.hasValidCheats()) {
+            if (canReportPlayerThisGame(playername)) {
+                wdr.timestamp = datenow;
+                if (isReportQueueInactive()) {
+                    MinecraftForge.EVENT_BUS.register(this);
+                    counter = random.nextInt(TIME_BETWEEN_REPORTS_MAX);
+                }
+                queueList.add(new ReportInQueue(null, playername, false));
+                autoReportSent++;
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void addReportFromHackerDetector(String playername, String cheat) {
         if (canReportPlayerThisGame(playername)) {
             if ("bhop".equalsIgnoreCase(cheat) || "autoblock".equalsIgnoreCase(cheat) || "fastbreak".equalsIgnoreCase(cheat) || "noslowdown".equalsIgnoreCase(cheat)) {
@@ -275,9 +267,13 @@ public class ReportQueue {
         autoReportSent = 0;
     }
 
+    public void addPlayerReportedThisGame(String playername) {
+        playersReportedThisGame.add(playername);
+        queueList.removeIf(reportInQueue -> (reportInQueue.reportedPlayer.equalsIgnoreCase(playername)));
+    }
+
     /**
-     * This is only a check for reports via the auto reports and reports via hacker detector
-     * the check for report suggestions is in the ReportSuggestionHandler
+     * Check if a report was already sent for this player
      */
     private boolean canReportPlayerThisGame(String playername) {
         if (playersReportedThisGame.contains(playername)) {
