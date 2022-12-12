@@ -1,11 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.data;
 
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandReport;
-import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class WDR {
 
@@ -47,9 +44,10 @@ public class WDR {
     }
 
     public boolean shouldPutGrayIcon() {
-        return ConfigHandler.toggleAutoreport
-                && ConfigHandler.stopAutoreportAfterWeek
-                && isOlderThanMaxAutoreport((new Date()).getTime());
+        return false;
+        //return ConfigHandler.toggleAutoreport
+        //        && ConfigHandler.stopAutoreportAfterWeek
+        //        && isOlderThanMaxAutoreport((new Date()).getTime());
     }
 
     public boolean shouldPutRedIcon() {
@@ -82,11 +80,12 @@ public class WDR {
     }
 
     public boolean canBeAutoreported(long datenow) {
-        return ConfigHandler.toggleAutoreport
-                && FKCounterMod.isInMwGame
-                && !FKCounterMod.isitPrepPhase
-                && canBeReported(datenow)
-                && !isOlderThanMaxAutoreport(datenow);
+        return false;
+        //return ConfigHandler.toggleAutoreport
+        //        && FKCounterMod.isInMwGame
+        //        && !FKCounterMod.isitPrepPhase
+        //        && canBeReported(datenow)
+        //        && !isOlderThanMaxAutoreport(datenow);
     }
 
     /**
@@ -94,11 +93,12 @@ public class WDR {
      * to prevent chat spam while playing
      */
     public boolean shouldPrintBigText(long datenow) {
-        return FKCounterMod.isMWEnvironement
-                && !FKCounterMod.isInMwGame
-                && ConfigHandler.toggleAutoreport
-                && ConfigHandler.stopAutoreportAfterWeek
-                && isOlderThanMaxAutoreport(datenow);
+        return false;
+        //return FKCounterMod.isMWEnvironement
+        //        && !FKCounterMod.isInMwGame
+        //        && ConfigHandler.toggleAutoreport
+        //        && ConfigHandler.stopAutoreportAfterWeek
+        //        && isOlderThanMaxAutoreport(datenow);
     }
 
     public boolean hasValidCheats() {

@@ -2,11 +2,9 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.ClipboardUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
@@ -54,17 +52,17 @@ public class GuiScreenHook {
         if (wdr != null) {
             if (wdr.hasValidCheats()) {
                 final long time = (new Date()).getTime();
-                if (FKCounterMod.preGameLobby && ConfigHandler.toggleAutoreport) {
-                    wdr.timestamp = time - WDR.TIME_BETWEEN_AUTOREPORT;
-                    wdr.timeLastManualReport = time - WDR.TIME_BETWEEN_AUTOREPORT;
-                    ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Your cheating report against " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + " will be sent during the game.");
-                } else {
-                    wdr.timestamp = time;
-                    wdr.timeLastManualReport = time;
-                    if (Minecraft.getMinecraft().thePlayer != null) {
-                        Minecraft.getMinecraft().thePlayer.sendChatMessage("/wdr " + playername);
-                    }
+                //if (FKCounterMod.preGameLobby && ConfigHandler.toggleAutoreport) {
+                //    wdr.timestamp = time - WDR.TIME_BETWEEN_AUTOREPORT;
+                //    wdr.timeLastManualReport = time - WDR.TIME_BETWEEN_AUTOREPORT;
+                //    ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Your cheating report against " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + " will be sent during the game.");
+                //} else {
+                wdr.timestamp = time;
+                wdr.timeLastManualReport = time;
+                if (Minecraft.getMinecraft().thePlayer != null) {
+                    Minecraft.getMinecraft().thePlayer.sendChatMessage("/wdr " + playername);
                 }
+                //}
                 ChatHandler.deleteWarningMessagesFor(playername);
                 NameUtil.updateMWPlayerDataAndEntityData(playername, false);
             } else {
