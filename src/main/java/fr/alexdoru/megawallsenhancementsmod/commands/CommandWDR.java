@@ -221,6 +221,7 @@ public class CommandWDR extends MyAbstractCommand {
         if (sendReport) {
             if (mc.thePlayer != null) {
                 sendChatMessage(message.toString());
+                ReportQueue.INSTANCE.addPlayerReportedThisGame(playername);
             }
         }
 
