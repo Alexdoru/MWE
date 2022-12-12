@@ -54,8 +54,9 @@ public class ReportQueue {
                     final String playername = reportInQueue.reportedPlayer;
                     if (reportInQueue.isReportSuggestion || FKCounterMod.isInMwGame) {
                         mc.thePlayer.sendChatMessage("/wdr " + playername);
-                        addReportTimestamp(false);
-                        if (isDebugMode) ChatUtil.debug("sent report for " + playername);
+                        if (isDebugMode) {
+                            ChatUtil.debug("sent report for " + playername);
+                        }
                     }
                     counter = getNextCounterDelay();
                     standingStillLimit = 12 + random.nextInt(20);
