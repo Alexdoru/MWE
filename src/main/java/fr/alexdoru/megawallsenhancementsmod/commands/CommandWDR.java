@@ -53,7 +53,7 @@ public class CommandWDR extends MyAbstractCommand {
             ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
             return;
         }
-        handleWDRCommand(args, true, true);
+        handleWDRCommand(args, true, false);
     }
 
     @Override
@@ -304,10 +304,8 @@ public class CommandWDR extends MyAbstractCommand {
                 argsinWDR.addAll(arraycheats);
 
                 final WDR wdr = WdrData.getWdr(uuid);
-                boolean alreadyReported = false;
                 if (wdr != null) {
                     argsinWDR.addAll(wdr.hacks);
-                    alreadyReported = true;
                 }
 
                 if (isaNick && !argsinWDR.contains(WDR.NICK)) {
@@ -317,14 +315,12 @@ public class CommandWDR extends MyAbstractCommand {
                 final WDR newreport = new WDR(finalTimestamp, finalTimestamp, argsinWDR);
                 WdrData.put(uuid, newreport);
                 Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateMWPlayerDataAndEntityData(finalPlayername, false));
-                if (showReportMessage || !alreadyReported) {
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
-                            EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : ""))
-                            .appendSibling(WarningMessagesHandler.createPlayerNameWithHoverText(formattedPlayername, playernameInThread, uuid, newreport, EnumChatFormatting.RED)[0])
-                            .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " with a " + EnumChatFormatting.YELLOW +
-                                    "timestamp" + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
-                                    + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : "."))));
-                }
+                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+                        EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : ""))
+                        .appendSibling(WarningMessagesHandler.createPlayerNameWithHoverText(formattedPlayername, playernameInThread, uuid, newreport, EnumChatFormatting.RED)[0])
+                        .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " with a " + EnumChatFormatting.YELLOW +
+                                "timestamp" + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
+                                + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : "."))));
 
             } else {  // isn't a timestamped report
 
