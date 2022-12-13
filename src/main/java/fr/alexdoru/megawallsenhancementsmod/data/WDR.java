@@ -72,7 +72,8 @@ public class WDR {
     }
 
     public boolean canBeReported(long datenow) {
-        return datenow - timestamp - TIME_BETWEEN_AUTOREPORT > 0;
+        return false;
+        //return datenow - timestamp - TIME_BETWEEN_AUTOREPORT > 0;
     }
 
     public boolean isOlderThanMaxAutoreport(long datenow) {
