@@ -49,17 +49,19 @@ public class ReportQueue {
                 standingStillCounter++;
                 if (standingStillCounter >= standingStillLimit) {
                     movingCounter = 0;
-                    final int index = getIndexOfFirstReportSuggestion();
+                    final int index = getIndexOfNextReportToSend();
                     final ReportInQueue reportInQueue = queueList.remove(index == -1 ? 0 : index);
                     final String playername = reportInQueue.reportedPlayer;
-                    if (reportInQueue.isReportSuggestion || FKCounterMod.isInMwGame) {
-                        mc.thePlayer.sendChatMessage("/wdr " + playername);
+                    if (reportInQueue.isReportSuggestion || reportInQueue.isReportFromHackerDetector || FKCounterMod.isInMwGame) {
+                        final String msg = "/wdr " + playername + (reportInQueue.isReportFromHackerDetector ? " cheating " + reportInQueue.cheat : "");
+                        mc.thePlayer.sendChatMessage(msg);
                         if (isDebugMode) {
-                            ChatUtil.debug("sent report for " + playername);
+                            ChatUtil.debug("Sent '" + msg + "'");
                         }
                     }
                     counter = getNextCounterDelay();
                     standingStillLimit = 12 + random.nextInt(20);
+                    standingStillCounter = 0;
                     ChatHandler.deleteStopMovingInstruction();
                 } else {
                     incrementMovingCounter();
@@ -86,26 +88,27 @@ public class ReportQueue {
     }
 
     private int getNextCounterDelay() {
-        if (doesQueueHaveReportSuggestion()) {
-            return getTickDelay() + 20 * 20;
+        if (doesQueueHaveSpecialReport()) {
+            return 10 + random.nextInt(10);
         } else {
             final int i = TIME_BETWEEN_REPORTS_MAX - 12 * 20 * (queueList.isEmpty() ? 0 : queueList.size() - 1);
             return (int) ((10d * random.nextGaussian() / 6d) + Math.max(i, TIME_BETWEEN_REPORTS_MIN));
         }
     }
 
-    private int getIndexOfFirstReportSuggestion() {
+    private int getIndexOfNextReportToSend() {
         for (int i = 0; i < queueList.size(); i++) {
-            if (queueList.get(i).isReportSuggestion) {
+            final ReportInQueue reportInQueue = queueList.get(i);
+            if (reportInQueue.isReportSuggestion || reportInQueue.isReportFromHackerDetector) {
                 return i;
             }
         }
         return -1;
     }
 
-    private boolean doesQueueHaveReportSuggestion() {
+    private boolean doesQueueHaveSpecialReport() {
         for (final ReportInQueue reportInQueue : queueList) {
-            if (reportInQueue.isReportSuggestion) {
+            if (reportInQueue.isReportSuggestion || reportInQueue.isReportFromHackerDetector) {
                 return true;
             }
         }
@@ -178,7 +181,7 @@ public class ReportQueue {
                     MinecraftForge.EVENT_BUS.register(this);
                     counter = random.nextInt(TIME_BETWEEN_REPORTS_MAX);
                 }
-                queueList.add(new ReportInQueue(null, playername, false));
+                queueList.add(new ReportInQueue(playername));
                 autoReportSent++;
                 return true;
             }
@@ -195,7 +198,7 @@ public class ReportQueue {
                 MinecraftForge.EVENT_BUS.register(this);
                 counter = 0;
             }
-            queueList.add(new ReportInQueue(null, playername, false));
+            queueList.add(new ReportInQueue(playername, cheat));
         }
     }
 
@@ -301,11 +304,31 @@ class ReportInQueue {
     public final String messageSender;
     public final String reportedPlayer;
     public final boolean isReportSuggestion;
+    public final boolean isReportFromHackerDetector;
+    public final String cheat;
+
+    public ReportInQueue(String playername) {
+        this.messageSender = null;
+        this.reportedPlayer = playername;
+        this.isReportSuggestion = false;
+        this.isReportFromHackerDetector = false;
+        this.cheat = null;
+    }
+
+    public ReportInQueue(String playername, String cheat) {
+        this.messageSender = null;
+        this.reportedPlayer = playername;
+        this.isReportSuggestion = false;
+        this.isReportFromHackerDetector = true;
+        this.cheat = cheat;
+    }
 
     public ReportInQueue(String messageSender, String reportedPlayer, boolean isReportSuggestion) {
         this.messageSender = messageSender;
         this.reportedPlayer = reportedPlayer;
         this.isReportSuggestion = isReportSuggestion;
+        this.isReportFromHackerDetector = false;
+        this.cheat = null;
     }
 
 }
