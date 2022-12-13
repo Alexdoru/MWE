@@ -21,7 +21,7 @@ public class GeneralConfigGuiScreen extends MyGuiScreen {
         this.buttonList.add(new GuiButton(0, xPos, getButtonYPos(1), buttonsWidth, buttonsHeight, EnumChatFormatting.AQUA + "Final Kill Counter"));
         this.buttonList.add(new GuiButton(1, xPos, getButtonYPos(2), buttonsWidth, buttonsHeight, EnumChatFormatting.GREEN + "Mega Walls Enhancements"));
         this.buttonList.add(new GuiButton(5, xPos, getButtonYPos(3), buttonsWidth, buttonsHeight, EnumChatFormatting.DARK_PURPLE + "HUDs"));
-        this.buttonList.add(new GuiButton(2, xPos, getButtonYPos(4), buttonsWidth, buttonsHeight, EnumChatFormatting.RED + "No Cheaters"));
+        this.buttonList.add(new GuiButton(2, xPos, getButtonYPos(4), buttonsWidth, buttonsHeight, EnumChatFormatting.RED + "NoCheaters"));
         this.buttonList.add(new GuiButton(7, getxCenter() + buttonsWidth / 2 + 10, getButtonYPos(2), buttonsWidth, buttonsHeight, EnumChatFormatting.WHITE + "Automatic Updates : " + getSuffix(ConfigHandler.automaticUpdate)));
         this.buttonList.add(new GuiButton(6, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, EnumChatFormatting.DARK_RED + "Hacker Detector"));
         this.buttonList.add(new GuiButton(4, xPos, getButtonYPos(6), buttonsWidth, buttonsHeight, EnumChatFormatting.BLUE + "Hitboxes, better F3+b"));
