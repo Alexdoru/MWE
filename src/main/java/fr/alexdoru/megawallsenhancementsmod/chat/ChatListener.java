@@ -83,7 +83,7 @@ public class ChatListener {
                 return;
             }
 
-            if (msg.equals(GENERAL_START_MESSAGE)) {
+            if (!FKCounterMod.isInMwGame && msg.equals(GENERAL_START_MESSAGE)) {
                 GameInfoTracker.saveGameInfoOnGameStart();
                 SquadHandler.formSquad();
                 AbstractCheck.clearFlagMessages();
