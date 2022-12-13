@@ -88,10 +88,10 @@ public class ReportQueue {
     }
 
     private int getNextCounterDelay() {
-        if (doesQueueHaveSpecialReport()) {
+        if (doesQueueHaveSpecialReport() || queueList.isEmpty()) {
             return 10 + random.nextInt(10);
         } else {
-            final int i = TIME_BETWEEN_REPORTS_MAX - 12 * 20 * (queueList.isEmpty() ? 0 : queueList.size() - 1);
+            final int i = TIME_BETWEEN_REPORTS_MAX - 12 * 20 * (queueList.size() - 1);
             return (int) ((10d * random.nextGaussian() / 6d) + Math.max(i, TIME_BETWEEN_REPORTS_MIN));
         }
     }
