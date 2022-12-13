@@ -9,6 +9,8 @@ import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -288,7 +290,7 @@ public class ReportQueue {
     }
 
     private boolean isPlayerStandingStill(EntityPlayerSP thePlayer) {
-        return (mc.inGameHasFocus || mc.ingameGUI.getChatGUI().getChatOpen())
+        return (mc.inGameHasFocus || mc.currentScreen instanceof GuiChat || mc.currentScreen instanceof GuiIngameMenu)
                 && thePlayer.movementInput.moveForward == 0.0F
                 && thePlayer.movementInput.moveStrafe == 0.0F
                 && !thePlayer.movementInput.jump
