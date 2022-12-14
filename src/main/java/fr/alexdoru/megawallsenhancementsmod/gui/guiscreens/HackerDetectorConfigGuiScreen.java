@@ -64,17 +64,19 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
         final List<String> textLines = new ArrayList<>();
         switch (id) {
             case 0:
-                textLines.add(EnumChatFormatting.GREEN + "Detects players in your game using cheats");
+                textLines.add(EnumChatFormatting.GREEN + "Analyses movements and actions of players in your game and tells you if they are cheating");
+                textLines.add("");
+                textLines.add(EnumChatFormatting.GREEN + "Currently has checks for : " + EnumChatFormatting.YELLOW + "Autoblock, Fastbreak, Keepsprint, Noslowdown");
                 break;
             case 1:
                 textLines.add(EnumChatFormatting.GREEN + "Saves flagged players in NoCheaters");
                 break;
             case 2:
-                textLines.add(EnumChatFormatting.GREEN + "Sends a report to Hypixel when it flags a cheater");
+                textLines.add(EnumChatFormatting.GREEN + "Sends a report automatically to Hypixel when it flags a cheater");
                 textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls, sends one report per game per player");
                 break;
             case 3:
-                textLines.add(EnumChatFormatting.GREEN + "Prints a message in chat whenever it flags a cheater");
+                textLines.add(EnumChatFormatting.GREEN + "Prints a message in chat when it detects a player using cheats");
                 break;
             case 4:
                 textLines.add(EnumChatFormatting.GREEN + "Compacts identical flag messages together");
