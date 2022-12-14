@@ -289,6 +289,10 @@ public class ReportQueue {
         return true;
     }
 
+    public boolean wasPlayerReportedThisGame(String playername) {
+        return playersReportedThisGame.contains(playername);
+    }
+
     private boolean isPlayerStandingStill(EntityPlayerSP thePlayer) {
         return (mc.inGameHasFocus || mc.currentScreen instanceof GuiChat || mc.currentScreen instanceof GuiIngameMenu)
                 && thePlayer.movementInput.moveForward == 0.0F
