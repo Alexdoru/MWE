@@ -36,13 +36,15 @@ import java.util.regex.Pattern;
 public class ChatListener {
 
     private static final String BAN_MESSAGE = "A player has been removed from your game.";
+    private static final String COINS_DOUBLED_GUILD_REWARD = "Coins just earned DOUBLED as a Guild Level Reward!";
     private static final String HUNTER_STRENGTH_MESSAGE = "Your Force of Nature gave you a 5 second Strength I buff.";
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
     private static final String PREP_PHASE = "Prepare your defenses!";
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
     private static final Pattern BLOCKED_MESSAGE = Pattern.compile("^We blocked your comment \"(.+)\" as it is breaking our rules because[a-zA-Z\\s]+\\. https:\\/\\/www.hypixel.net\\/rules\\/.*");
-    private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Triple Coins \\+ EXP, |)(?:Active Booster, |)\\w+'s Network Booster\\)).*");
+    private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!.*");
+    private static final Pattern COINS_BOOSTER_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Triple Coins \\+ EXP, |)(?:Active Booster, |)\\w+'s Network Booster\\)).*");
     private static final Pattern DREADLORD_STRENGTH_PATTERN = Pattern.compile("\u00a74\u00a7lSOUL SIPHON \u00a7c\u00a7l85% ([0-9])s");
     private static final Pattern HEROBRINE_STRENGTH_PATTERN = Pattern.compile("\u00a7e\u00a7lPOWER \u00a7c\u00a7l85% ([0-9])s");
     private static final Pattern HUNTER_PRE_STRENGTH_PATTERN = Pattern.compile("\u00a7a\u00a7lF\\.O\\.N\\. \u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l([0-9]+)");
@@ -53,6 +55,7 @@ public class ChatListener {
     private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:|\\[SHOUT\\] |\\[SPECTATOR\\] )(?:|\\[[A-Z]{3,6}\\] )(?:|\\[((?:MV|VI)P\\+?\\+?)\\] )(\\w{2,16}):.*");
     private static final HashSet<String> MW_REPETITVE_MSG = new HashSet<>();
     private static final TimerUtil timerStrength = new TimerUtil(11000L);
+    private static boolean addGuildCoinsBonus;
     private static boolean interceptLocraw;
     private static long timeInterceptLocraw;
 
@@ -95,14 +98,34 @@ public class ChatListener {
                 return;
             }
 
-            /*
-             * shortens the coins messages removing the booster info
-             */
+            /* Shortens the coins messages by removing the booster info */
             if (ConfigHandler.shortCoinMessage) {
-                final Matcher matchercoins = COINS_PATTERN.matcher(msg);
-                if (matchercoins.matches()) {
-                    event.message = new ChatComponentText(fmsg.replace(matchercoins.group(1), ""));
+                if (msg.equals(COINS_DOUBLED_GUILD_REWARD)) {
+                    event.setCanceled(true);
+                    addGuildCoinsBonus = true;
                     return;
+                }
+                final Matcher matchercoins = COINS_BOOSTER_PATTERN.matcher(msg);
+                if (matchercoins.matches()) {
+                    if (addGuildCoinsBonus) {
+                        event.message = new ChatComponentText(fmsg
+                                .replaceFirst("coins!", "coins! (" + EnumChatFormatting.DARK_GREEN + "Guild " + EnumChatFormatting.GOLD + "bonus)")
+                                .replace(matchercoins.group(1), "")
+                        );
+                        addGuildCoinsBonus = false;
+                    } else {
+                        event.message = new ChatComponentText(fmsg.replace(matchercoins.group(1), ""));
+                    }
+                    return;
+                } else if (COINS_PATTERN.matcher(msg).matches()) {
+                    if (addGuildCoinsBonus) {
+                        event.message = new ChatComponentText(fmsg.replaceFirst("coins!", "coins! (" + EnumChatFormatting.DARK_GREEN + "Guild " + EnumChatFormatting.GOLD + "bonus)"));
+                        addGuildCoinsBonus = false;
+                        return;
+                    }
+                }
+                if (addGuildCoinsBonus) {
+                    addGuildCoinsBonus = false;
                 }
             }
 
