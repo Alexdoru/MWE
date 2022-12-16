@@ -82,7 +82,7 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
                 textLines.add(EnumChatFormatting.GREEN + "Compacts identical flag messages together");
                 break;
             case 5:
-                textLines.add(EnumChatFormatting.GREEN + "Prints a flag message for a player only once per game per game");
+                textLines.add(EnumChatFormatting.GREEN + "Print flag messages only once per game per player");
                 break;
         }
         return textLines;
