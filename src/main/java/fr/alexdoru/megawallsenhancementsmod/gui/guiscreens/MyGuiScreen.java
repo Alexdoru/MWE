@@ -26,12 +26,18 @@ public abstract class MyGuiScreen extends GuiScreen {
             mc.gameSettings.guiScale = usersGuiScale;
         }
         usersGuiScale = mc.gameSettings.guiScale;
-        mc.gameSettings.guiScale = 2;
         ScaledResolution scaledresolution = new ScaledResolution(this.mc);
         this.width = scaledresolution.getScaledWidth();
         this.height = scaledresolution.getScaledHeight();
-        if (this.maxHeight + this.height / 6 > this.height || this.maxWidth > this.width) {
-            mc.gameSettings.guiScale = 1;
+        while (this.maxHeight + this.height / 6 > this.height || this.maxWidth > this.width) {
+            if (mc.gameSettings.guiScale == 1) {
+                break;
+            }
+            if (mc.gameSettings.guiScale == 0) {
+                mc.gameSettings.guiScale = 3;
+            } else {
+                mc.gameSettings.guiScale--;
+            }
             scaledresolution = new ScaledResolution(this.mc);
             this.width = scaledresolution.getScaledWidth();
             this.height = scaledresolution.getScaledHeight();
