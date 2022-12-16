@@ -1,9 +1,11 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
@@ -44,6 +46,13 @@ public class CommandSquad extends MyAbstractCommand {
             if (args.length < 2) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : /squad <add> <playername>");
                 return;
+            }
+
+            if (SquadHandler.getSquad().isEmpty()) {
+                SquadHandler.addPlayer(Minecraft.getMinecraft().thePlayer.getName());
+                if (!ConfigHandler.hypixelNick.equals("")) {
+                    SquadHandler.addPlayer(ConfigHandler.hypixelNick, ConfigHandler.nickHider ? EnumChatFormatting.ITALIC + Minecraft.getMinecraft().thePlayer.getName() + EnumChatFormatting.RESET : ConfigHandler.hypixelNick);
+                }
             }
 
             if (args.length >= 4 && args[2].equalsIgnoreCase("as")) {
