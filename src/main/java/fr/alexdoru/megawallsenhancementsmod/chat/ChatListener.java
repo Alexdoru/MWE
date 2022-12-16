@@ -44,7 +44,7 @@ public class ChatListener {
     private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
     private static final Pattern BLOCKED_MESSAGE = Pattern.compile("^We blocked your comment \"(.+)\" as it is breaking our rules because[a-zA-Z\\s]+\\. https:\\/\\/www.hypixel.net\\/rules\\/.*");
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!.*");
-    private static final Pattern COINS_BOOSTER_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\((?:Triple Coins \\+ EXP, |)(?:Active Booster, |)\\w+'s Network Booster\\)).*");
+    private static final Pattern COINS_BOOSTER_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\([^\\(\\)]*(?:Coins \\+ EXP|Booster)[^\\(\\)]*\\)).*");
     private static final Pattern DREADLORD_STRENGTH_PATTERN = Pattern.compile("\u00a74\u00a7lSOUL SIPHON \u00a7c\u00a7l85% ([0-9])s");
     private static final Pattern HEROBRINE_STRENGTH_PATTERN = Pattern.compile("\u00a7e\u00a7lPOWER \u00a7c\u00a7l85% ([0-9])s");
     private static final Pattern HUNTER_PRE_STRENGTH_PATTERN = Pattern.compile("\u00a7a\u00a7lF\\.O\\.N\\. \u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l([0-9]+)");

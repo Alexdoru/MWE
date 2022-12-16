@@ -134,6 +134,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 0:
                 textLines.add(EnumChatFormatting.GREEN + "Makes the coin messages shorter by removing the network booster info");
+                textLines.add(EnumChatFormatting.GREEN + "And also compacts the guild bonus message and coin message into one");
                 textLines.add(EnumChatFormatting.GREEN + "It makes the assists messages in mega walls fit on one line instead of two");
                 textLines.add("");
                 textLines.add(EnumChatFormatting.GOLD + "+100 coins! (hypixel's Network booster)" + EnumChatFormatting.AQUA + " FINAL KILL");
