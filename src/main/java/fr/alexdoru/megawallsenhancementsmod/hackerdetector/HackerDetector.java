@@ -133,7 +133,7 @@ public class HackerDetector {
                 player.posZ - player.lastTickPosZ
         );
         data.dXdZVector2D = data.dXdYdZVector3D.getProjectionInXZPlane();
-        data.isNotMoving = data.dXdYdZVector3D.isZero();
+        data.isNotMoving = data.dXdZVector2D.isZero();
         //if (!data.dXdYdZSampleList.isEmpty()) {
         //    final Vector3D lastdXdYdZ = data.dXdYdZSampleList.getFirst();
         //    data.directionDeltaXZList.add(data.dXdYdZVector3D.getXZAngleDiffWithVector(lastdXdYdZ));

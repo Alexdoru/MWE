@@ -12,7 +12,7 @@ public class PlayerDataSamples {
 
     // TODO remove all useless fields, or fields that could be a local variable elsewhere
 
-    /** True if the player's position in 3D space is identical to the last tick */
+    /** True if the player's position in the XZ plane is identical to the last tick */
     public boolean isNotMoving = true;
     /** Amount of ticks since the player started sprinting */
     public int sprintTime = 0;
@@ -23,7 +23,8 @@ public class PlayerDataSamples {
     /** Amount of ticks since the last sword swing started */
     public int lastSwingTime = 0;
     /** Amount of ticks since the list time the player eat or drank something */
-    public int lastEatDrinkTime = 20;
+    public int lastEatDrinkTime = 40;
+    public boolean disabledAutoblockCheck = false;
     ///** Holds the position XYZ of the player over time */
     //public SampleList<Vector3D> positionSampleList = new SampleList<>(40);
     /**
