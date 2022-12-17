@@ -10,8 +10,6 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelT
 
 public class PlayerDataSamples {
 
-    // TODO remove all useless fields, or fields that could be a local variable elsewhere
-
     /** True if the player's position in the XZ plane is identical to the last tick */
     public boolean isNotMoving = true;
     /** Amount of ticks since the player started sprinting */
@@ -19,7 +17,7 @@ public class PlayerDataSamples {
     /** Amount of ticks since the player has been using an item */
     public int useItemTime = 0;
     /** Amount of ticks since the player took a hit */
-    public int lastHurtTime = 0;// TODO comment out
+    public int lastHurtTime = 0;
     /** Amount of ticks since the last sword swing started */
     public int lastSwingTime = 0;
     /** Amount of ticks since the list time the player eat or drank something */

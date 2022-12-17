@@ -45,7 +45,6 @@ public class FastbreakCheck extends AbstractCheck {
      */
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        // TODO will it flag on people double mining if it attributes all the blocks to one of the two players mining
         if (FKCounterMod.isInMwGame && player.isSwingInProgress && !HackerDetector.INSTANCE.brokenBlocksList.isEmpty()) {
             final ItemStack itemStack = player.getHeldItem();
             if (itemStack != null && itemStack.isItemEnchanted() && itemStack.getItem() == Items.diamond_pickaxe) {
