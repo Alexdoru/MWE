@@ -1,6 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 
-import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,33 +40,33 @@ public class AutoblockCheck extends AbstractCheck {
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        // TODO check if player eat/drank something in the tick before to avoid flagging no hit glitch check
-        //  print a log message in case it skips and flags
-        if (player.onGround && data.isNotMoving) {
+        if (data.isNotMoving) {
             return false;
         }
-        if (player.isSwingInProgress && data.useItemTime > 20) {
-            final ItemStack itemStack = player.getHeldItem();
-            if (itemStack != null) {
-                if (swordSet.contains(itemStack.getItem())) {
-                    if (data.lastEatDrinkTime < 20) {
-                        // TODO remove debug
-                        ChatUtil.debug("no hit glitch player " + player.getName());
+        final ItemStack itemStack = player.getHeldItem();
+        if (itemStack != null) {
+            if (swordSet.contains(itemStack.getItem())) {
+                if (data.disabledAutoblockCheck) {
+                    return false;
+                }
+                if (player.isSwingInProgress && data.useItemTime > 20) {
+                    if (data.lastEatDrinkTime < 30) {
+                        data.disabledAutoblockCheck = true;
+                        return false;
                     }
-                    log(player, this.getCheatName(), data.autoblockVL, data,
-                            "useItemTime " + data.useItemTime
-                                    + " lastEatDrinkTime" + data.lastEatDrinkTime
-                    );
                     return true;
                 }
+            } else {
+                data.disabledAutoblockCheck = false;
             }
-            return false;
+        } else {
+            data.disabledAutoblockCheck = false;
         }
         return false;
     }
 
     public static ViolationLevelTracker newViolationTracker() {
-        return new ViolationLevelTracker(5, 2, 100);
+        return new ViolationLevelTracker(5, 2, 150);
     }
 
 }
