@@ -146,10 +146,10 @@ public class ReportQueue {
     /**
      * Gaussian
      * Min value : 5 seconds
-     * Avg value : 17 seconds
+     * Avg value : 11 seconds
      */
     private int getTickDelay() {
-        return (int) (100d + Math.abs(100d * random.nextGaussian() + 240d));
+        return (int) (100d + Math.abs(50d * random.nextGaussian() + 120d));
     }
 
     /**
