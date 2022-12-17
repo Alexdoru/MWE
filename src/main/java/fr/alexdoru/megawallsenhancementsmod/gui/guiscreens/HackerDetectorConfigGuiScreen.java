@@ -11,6 +11,8 @@ import java.util.List;
 
 public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
 
+    private final String msg = EnumChatFormatting.WHITE + "Disclaimer : this is not 100% accurate and can sometimes flag legit players,";
+
     public HackerDetectorConfigGuiScreen(GuiScreen parent) {
         this.parent = parent;
     }
@@ -18,22 +20,27 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
     @Override
     public void initGui() {
         final int buttonsWidth = 200;
-        this.maxWidth = buttonsWidth;
-        this.maxHeight = (buttonsHeight + 4) * 9 + buttonsHeight;
+        this.maxWidth = fontRendererObj.getStringWidth(msg);
+        this.maxHeight = (buttonsHeight + 4) * 10 + buttonsHeight;
         super.initGui();
         final int xPos = getxCenter() - buttonsWidth / 2;
-        this.buttonList.add(new GuiButton(0, xPos, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(0)));
-        this.buttonList.add(new GuiButton(1, xPos, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(1)));
-        this.buttonList.add(new GuiButton(2, xPos, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(2)));
-        this.buttonList.add(new GuiButton(3, xPos, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(3)));
-        this.buttonList.add(new GuiButton(4, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(4)));
-        this.buttonList.add(new GuiButton(5, xPos, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(5)));
-        this.buttonList.add(new GuiButton(6, xPos, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(6)));
+        this.buttonList.add(new GuiButton(0, xPos, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(0)));
+        this.buttonList.add(new GuiButton(1, xPos, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(1)));
+        this.buttonList.add(new GuiButton(2, xPos, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(2)));
+        this.buttonList.add(new GuiButton(3, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(3)));
+        this.buttonList.add(new GuiButton(4, xPos, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(4)));
+        this.buttonList.add(new GuiButton(5, xPos, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(5)));
+        this.buttonList.add(new GuiButton(6, xPos, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(6)));
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawCenteredTitle(EnumChatFormatting.DARK_RED + "Hacker Detector", 2, getxCenter(), getButtonYPos(-1));
+        drawCenteredString(fontRendererObj, msg, getxCenter(), getButtonYPos(0), 0);
+        final String msg0 = EnumChatFormatting.WHITE + "it won't flag every cheater either, however players that";
+        drawCenteredString(fontRendererObj, msg0, getxCenter(), getButtonYPos(0) + fontRendererObj.FONT_HEIGHT, 0);
+        final String msg1 = EnumChatFormatting.WHITE + "are regularly flagging are definitely cheating";
+        drawCenteredString(fontRendererObj, msg1, getxCenter(), getButtonYPos(0) + 2 * fontRendererObj.FONT_HEIGHT, 0);
         super.drawScreen(mouseX, mouseY, partialTicks);
         drawTooltips(mouseX, mouseY);
     }
