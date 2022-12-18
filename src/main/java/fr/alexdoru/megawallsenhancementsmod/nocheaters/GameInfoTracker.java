@@ -22,6 +22,13 @@ public class GameInfoTracker {
 
     /**
      * Returns the time since the start of the game as a string. example : "24min54sec"
+     */
+    public static String getTimeSinceGameStart() {
+        return getTimeSinceGameStart((new Date()).getTime(), ScoreboardUtils.getGameIdFromScoreboard(), 0);
+    }
+
+    /**
+     * Returns the time since the start of the game as a string. example : "24min54sec"
      *
      * @param timestamp - date time in millisecond when you press the timestamp keybind
      * @param serverID  - current serverID when you press the timestamp keybind

@@ -27,6 +27,11 @@ public class SprintCheck extends AbstractCheck {
     }
 
     @Override
+    public boolean canSendTimestamp() {
+        return isNoslowCheck;
+    }
+
+    @Override
     public void performCheck(EntityPlayer player, PlayerDataSamples data) {
         super.checkViolationLevel(player, this.check(player, data), data.noslowdownVL, data.keepsprintUseItemVL);
     }

@@ -12,6 +12,9 @@ public interface ICheck {
     /** Returns a descritpion of the cheat that this check is for */
     String getCheatDescription();
 
+    /** Wether or not the reports sent for players failing this check should send a timestamp or not */
+    boolean canSendTimestamp();
+
     /** Performs the check on the player and prints a message if the player flags */
     void performCheck(EntityPlayer player, PlayerDataSamples data);
 
