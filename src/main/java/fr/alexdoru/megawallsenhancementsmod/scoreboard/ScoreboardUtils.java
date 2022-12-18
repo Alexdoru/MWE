@@ -4,6 +4,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.scoreboard.Score;
@@ -24,8 +25,24 @@ public class ScoreboardUtils {
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     public static boolean isPlayingHypixelPit() {
-        final String title = ScoreboardUtils.getUnformattedSidebarTitle();
+        final String title = getUnformattedSidebarTitle();
         return title != null && title.contains("THE HYPIXEL PIT");
+    }
+
+    public static boolean isMegaWallsMythicGame() {
+        if (!FKCounterMod.isMWEnvironement) {
+            return false;
+        }
+        final List<String> scoresRaw = getUnformattedSidebarText();
+        if (scoresRaw.isEmpty()) {
+            return false;
+        }
+        for (final String line : scoresRaw) {
+            if (line.contains("MYTHIC GAME!")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

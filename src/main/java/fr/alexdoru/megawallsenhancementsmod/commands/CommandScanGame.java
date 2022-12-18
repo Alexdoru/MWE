@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.GeneralInfo;
+import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatListener;
@@ -58,12 +59,18 @@ public class CommandScanGame extends MyAbstractCommand {
     public static void handleScangameCommand(String currentGameId) {
         final Collection<NetworkPlayerInfo> playerCollection = mc.getNetHandler().getPlayerInfoMap();
         int i = 0;
+        final boolean isMythicHour = ScoreboardUtils.isMegaWallsMythicGame();
         if (currentGameId.equals(ScangameData.getScanGameId())) {
             for (final NetworkPlayerInfo networkPlayerInfo : playerCollection) {
+                if (isUsingRandomDuringMythicHour(networkPlayerInfo, isMythicHour)) {
+                    i++;
+                    MultithreadingUtil.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo, true));
+                    continue;
+                }
                 final ScangameData.ScanResult scanResult = ScangameData.get(networkPlayerInfo.getGameProfile().getId());
                 if (scanResult == null) {
                     i++;
-                    MultithreadingUtil.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
+                    MultithreadingUtil.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo, false));
                 } else if (scanResult.msg != null) {
                     ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW()).appendSibling(NameUtil.getFormattedNameWithPlanckeClickEvent(networkPlayerInfo)).appendSibling(scanResult.msg));
                 }
@@ -74,10 +81,14 @@ public class CommandScanGame extends MyAbstractCommand {
             ScangameData.setScanGameId(currentGameId);
             for (final NetworkPlayerInfo networkPlayerInfo : playerCollection) {
                 i++;
-                MultithreadingUtil.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo));
+                MultithreadingUtil.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo, isUsingRandomDuringMythicHour(networkPlayerInfo, isMythicHour)));
             }
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " players...");
         }
+    }
+
+    private static boolean isUsingRandomDuringMythicHour(NetworkPlayerInfo networkPlayerInfo, boolean isMythicHour) {
+        return isMythicHour && NameUtil.isPlayerUsingRandom(networkPlayerInfo) || FKCounterMod.isInMwGame && ScangameData.didPlayerPickRandom(networkPlayerInfo.getGameProfile().getId());
     }
 
 }
@@ -85,9 +96,11 @@ public class CommandScanGame extends MyAbstractCommand {
 class ScanPlayerTask implements Callable<String> {
 
     final NetworkPlayerInfo networkPlayerInfo;
+    final boolean pickedRandom;
 
-    public ScanPlayerTask(NetworkPlayerInfo networkPlayerInfoIn) {
+    public ScanPlayerTask(NetworkPlayerInfo networkPlayerInfoIn, boolean pickedRandom) {
         this.networkPlayerInfo = networkPlayerInfoIn;
+        this.pickedRandom = pickedRandom;
     }
 
     @Override
@@ -104,6 +117,7 @@ class ScanPlayerTask implements Callable<String> {
             final String playername = networkPlayerInfo.getGameProfile().getName();
             final HypixelPlayerData playerdata = new HypixelPlayerData(uuid.toString());
             final MegaWallsStats megawallsstats = new MegaWallsStats(playerdata.getPlayerData());
+            final GeneralInfo generalInfo = new GeneralInfo(playerdata.getPlayerData());
             IChatComponent imsg = null;
 
             if (megawallsstats.getGames_played() > 500) {
@@ -121,9 +135,18 @@ class ScanPlayerTask implements Callable<String> {
                         + EnumChatFormatting.GRAY + " FK/game : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getFkpergame())
                         + EnumChatFormatting.GRAY + " W/L : " + EnumChatFormatting.GOLD + String.format("%.1f", megawallsstats.getWlr()));
 
+            } else if (this.pickedRandom && ((int) generalInfo.getNetworkLevel() + generalInfo.getCompletedQuests()) < 11) {
+
+                final LoginData loginData = new LoginData(playerdata.getPlayerData());
+                if (loginData.isNonRanked()) {
+                    imsg = new ChatComponentText(EnumChatFormatting.GRAY + " picked "
+                            + EnumChatFormatting.GOLD + "random"
+                            + EnumChatFormatting.GRAY + ", network lvl " + EnumChatFormatting.GOLD + ((int) generalInfo.getNetworkLevel())
+                            + EnumChatFormatting.GRAY + " and " + EnumChatFormatting.GOLD + generalInfo.getCompletedQuests() + EnumChatFormatting.GRAY + " quests");
+                }
+
             } else if (megawallsstats.getGames_played() < 15) {
 
-                final GeneralInfo generalInfo = new GeneralInfo(playerdata.getPlayerData());
                 final boolean firstGame = megawallsstats.getGames_played() == 0;
                 final boolean secondFlag = generalInfo.getCompletedQuests() < 20 && generalInfo.getNetworkLevel() > 30f;
                 final JsonObject classesdata = megawallsstats.getClassesdata();

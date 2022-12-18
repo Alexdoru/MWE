@@ -5,7 +5,6 @@ import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -78,17 +77,10 @@ public class SquadHandler {
             return;
         }
 
-        final Minecraft mc = Minecraft.getMinecraft();
-        if (mc.theWorld == null) {
-            return;
-        }
-
-        final Scoreboard scoreboard = mc.theWorld.getScoreboard();
-        if (scoreboard == null) {
-            return;
-        }
-
         final List<String> scoresRaw = ScoreboardUtils.getUnformattedSidebarText();
+        if (scoresRaw.isEmpty()) {
+            return;
+        }
         boolean found_teammates = false;
 
         final HashMap<String, String> newsquad = new HashMap<>();
