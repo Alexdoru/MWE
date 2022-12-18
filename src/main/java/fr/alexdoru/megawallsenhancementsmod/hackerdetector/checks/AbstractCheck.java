@@ -12,6 +12,7 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSample
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.SampleList;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoTracker;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.block.state.IBlockState;
@@ -46,7 +47,7 @@ public abstract class AbstractCheck implements ICheck {
             if (tracker.isFlagging(failedCheck)) {
                 printFlagMessage(player, this.getCheatName(), this.getCheatDescription());
                 addToReportList(player, this.getCheatName().toLowerCase());
-                sendReport(player, this.getCheatName().toLowerCase());
+                sendReport(player, this.getCheatName().toLowerCase(), this.canSendTimestamp());
             }
         }
     }
@@ -108,8 +109,14 @@ public abstract class AbstractCheck implements ICheck {
         }
     }
 
-    private static void sendReport(EntityPlayer player, String cheat) {
+    private static void sendReport(EntityPlayer player, String cheat, boolean sendTimestamp) {
         if (FKCounterMod.isInMwGame && ConfigHandler.autoreportFlaggedPlayers && SquadHandler.getSquad().get(player.getName()) == null) {
+            if (sendTimestamp) {
+                final String timestamp = GameInfoTracker.getTimeSinceGameStart();
+                if (!timestamp.equals("?")) {
+                    cheat = cheat + " flagged at " + timestamp + " since game start";
+                }
+            }
             ReportQueue.INSTANCE.addReportFromHackerDetector(player.getName(), cheat);
         }
     }

@@ -18,6 +18,11 @@ public class KillAuraSwitchCheck extends AbstractCheck {
     }
 
     @Override
+    public boolean canSendTimestamp() {
+        return false;
+    }
+
+    @Override
     public void performCheck(EntityPlayer player, PlayerDataSamples data) {
         super.checkViolationLevel(player, this.check(player, data), data.killauraSwitchVL);
     }
