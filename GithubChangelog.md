@@ -1,13 +1,14 @@
 Use `/mwenhancements` to open the config menu
 
+- NEW Hacker detector :
+  - detects players using certains cheats in your game : fastbreak, autoblock, keepsprint, noslowdown
+  - it will add them to NoCheaters and send one report to Hypixel
 - MWEnhancements : 
     - fix short coins not working with Christmas double coins bonus
     - compact guild coins bonus message with the coins message into one
     - fix scalling issues with config screens
     - add scangame flag for new accounts picking random during mythic hour
-
 - NoCheaters :
-    - Add Hacker detector : detects players using certains cheats in your game : fastbreak, autoblock, keepsprint, noslowdown
     - put red icon for autoblock, bhop, noslowdown, fastbreak
     - delete auto reporting system and gray icon system
     - reduce chat output from NoCheaters
