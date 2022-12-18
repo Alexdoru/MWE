@@ -62,7 +62,7 @@ public class ReportQueue {
                         }
                     }
                     counter = getNextCounterDelay();
-                    standingStillLimit = 12 + random.nextInt(20);
+                    standingStillLimit = 20 + random.nextInt(12);
                     standingStillCounter = 0;
                     ChatHandler.deleteStopMovingInstruction();
                 } else {
@@ -83,15 +83,15 @@ public class ReportQueue {
     }
 
     private void incrementMovingCounter() {
-        movingCounter++;
-        if (movingCounter % 5 == 0) {
+        if (movingCounter % 1800 == 0) {
             ChatHandler.printStopMovingInstruction();
         }
+        movingCounter++;
     }
 
     private int getNextCounterDelay() {
         if (doesQueueHaveSpecialReport() || queueList.isEmpty()) {
-            return 10 + random.nextInt(10);
+            return 5 + random.nextInt(5);
         } else {
             final int i = TIME_BETWEEN_REPORTS_MAX - 12 * 20 * (queueList.size() - 1);
             return (int) ((10d * random.nextGaussian() / 6d) + Math.max(i, TIME_BETWEEN_REPORTS_MIN));
