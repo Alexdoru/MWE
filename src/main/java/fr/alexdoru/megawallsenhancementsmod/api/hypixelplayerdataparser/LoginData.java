@@ -21,6 +21,7 @@ public class LoginData {
     private String displayname;
     private String formattedname;
     private String monthlyPackageRank;
+    private boolean isNonRanked;
 
     /**
      * Parses the player's login data
@@ -56,6 +57,7 @@ public class LoginData {
         final String monthlyRankColor = JsonUtil.getString(playerData, "monthlyRankColor");
 
         parseFormattedName(prefix, rankPlusColor, packageRank, newPackageRank, monthlyRankColor);
+        this.isNonRanked = this.formattedname.startsWith(EnumChatFormatting.GRAY.toString());
 
     }
 
@@ -221,6 +223,10 @@ public class LoginData {
         }
         final GameType gameType = GameType.fromId(this.mostRecentGameType);
         return gameType == GameType.UNKNOWN ? this.mostRecentGameType : gameType.toString();
+    }
+
+    public boolean isNonRanked() {
+        return isNonRanked;
     }
 
 }

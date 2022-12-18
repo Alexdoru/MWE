@@ -2,10 +2,14 @@ package fr.alexdoru.megawallsenhancementsmod.data;
 
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.HashSet;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,6 +18,7 @@ public class ScangameData {
     private static final ScangameData instance = new ScangameData();
     private static final ConcurrentHashMap<UUID, ScanResult> scangameMap = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<UUID, String> skipScanMap = new ConcurrentHashMap<>();
+    private static final HashSet<UUID> playersUsingRandom = new HashSet<>();
     private static String scanGameId;
 
     static {
@@ -33,6 +38,7 @@ public class ScangameData {
     public static void clearScanGameData() {
         scanGameId = null;
         scangameMap.clear();
+        playersUsingRandom.clear();
     }
 
     private static void onGameStart() {
@@ -40,6 +46,21 @@ public class ScangameData {
         if (!currentGameId.equals("?") && !currentGameId.equals(scanGameId)) {
             clearScanGameData();
         }
+    }
+
+    public static void fectchRandomClasses() {
+        playersUsingRandom.clear();
+        if (ScoreboardUtils.isMegaWallsMythicGame()) {
+            for (final NetworkPlayerInfo networkPlayerInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+                if (NameUtil.isPlayerUsingRandom(networkPlayerInfo)) {
+                    playersUsingRandom.add(networkPlayerInfo.getGameProfile().getId());
+                }
+            }
+        }
+    }
+
+    public static boolean didPlayerPickRandom(UUID uuid) {
+        return playersUsingRandom.contains(uuid);
     }
 
     public static boolean doesPlayerFlag(UUID uuid) {

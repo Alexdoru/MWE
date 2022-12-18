@@ -4,6 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
@@ -90,6 +91,7 @@ public class ChatListener {
                 GameInfoTracker.saveGameInfoOnGameStart();
                 SquadHandler.formSquad();
                 AbstractCheck.clearFlagMessages();
+                ScangameData.fectchRandomClasses();
                 return;
             }
 
