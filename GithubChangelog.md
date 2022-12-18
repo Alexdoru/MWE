@@ -1,30 +1,19 @@
-Send me a message on Discord if you have any crash, question or issue : Alexdoru#9395
-
-- Final Kill Counter :
-    - fix bug showing your finals from last game in tab
+Use `/mwenhancements` to open the config menu
 
 - MWEnhancements : 
-    - add Squad HUD, a mini-tablist for your squad
-    - make all config gui screens appear properly for all screen sizes and gui scales
-    - add creeper tnt cooldown HUD (by @mxntal)
-    - add energy display HUD (by @mxntal)
-    - add tab completion for names in the chat working all the time (not in commands)
-    - add setting to hide the ping in the tablist if all values are equal to 1
-    - add setting to change the amount of players in the tablist (if Patcher isn't loaded)
-    - add setting to add playercount at top of the tablist
-    - add setting to hide footer and header in the tablist
-    - play a notification at 5 mins before game ends
-    - make sidebar HUD integration work with Feather client
-    - fix tablist's background right row being one pixel off
-    - fix /scangame not working on certain maps during mythic/happy hour
+    - fix short coins not working with Christmas double coins bonus
+    - compact guild coins bonus message with the coins message into one
+    - fix scalling issues with config screens
+    - add scangame flag for new accounts picking random during mythic hour
 
 - NoCheaters :
-    - add "/report name boosting" as a one step command
-    - add setting to stop reporting cheaters after a week
-    - display team and class on ban message hover text
-    - display team and class on report suggestion messages
+    - Add Hacker detector : detects players using certains cheats in your game : fastbreak, autoblock, keepsprint, noslowdown
+    - put red icon for autoblock, bhop, noslowdown, fastbreak
+    - delete auto reporting system and gray icon system
+    - reduce chat output from NoCheaters
 
-To install the mod you need to use forge and drop the .jar file in your `.minecraft\mods` folder
+To install the mod you need to use forge and drop the .jar file in your `.minecraft\mods` folder. 
+Send me a message on Discord if you have any crash, question or issue : Alexdoru#9395
 
 ### Other Forge Mods I play with :
 
