@@ -139,7 +139,7 @@ public class ReportQueue {
     @SubscribeEvent
     public void onGameEnd(MegaWallsGameEvent event) {
         if (event.getType() == MegaWallsGameEvent.EventType.GAME_END) {
-            queueList.removeIf(reportInQueue -> !reportInQueue.isReportSuggestion);
+            queueList.removeIf(reportInQueue -> !reportInQueue.isReportSuggestion && !reportInQueue.isReportFromHackerDetector);
         }
     }
 
