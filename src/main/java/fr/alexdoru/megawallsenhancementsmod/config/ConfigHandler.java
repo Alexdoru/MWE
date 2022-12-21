@@ -77,6 +77,7 @@ public class ConfigHandler {
     /**
      * NoCheaters Config
      */
+    public static boolean isDebugMode;
     public static boolean iconsOnNames;
     public static boolean warningMessages;
     //public static boolean toggleAutoreport;

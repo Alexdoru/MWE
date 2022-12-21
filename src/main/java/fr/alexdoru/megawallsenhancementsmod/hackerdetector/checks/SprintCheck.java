@@ -1,8 +1,11 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
 public class SprintCheck extends AbstractCheck {
@@ -43,29 +46,34 @@ public class SprintCheck extends AbstractCheck {
         }
         /* It takes 32 ticks to eat/drink one food/potion item */
         if (data.sprintTime > 33 && data.useItemTime > 4) {
-            //final ItemStack itemStack = player.getHeldItem();
-            //final Item item = itemStack.getItem();
             /* If the player is moving slower than the base running speed, we consider it is keepsprint */
             if (player.hurtTime != 0 || data.dXdZVector2D.norm() < 0.25D) {
                 isNoslowCheck = false;
                 data.keepsprintUseItemVL.add(2);
-                //log(player, this.getCheatName(), data.keepsprintUseItemVL, data,
-                //        "sprintTime " + data.sprintTime
-                //                + " useItemTime " + data.useItemTime
-                //                + " isNoslowCheck " + isNoslowCheck
-                //                + (item != null ? " item held " + item.getRegistryName() : "")
-                //);
+                if (ConfigHandler.isDebugMode) {
+                    final ItemStack itemStack = player.getHeldItem();
+                    final Item item = itemStack == null ? null : itemStack.getItem();
+                    log(player, this.getCheatName(), data.keepsprintUseItemVL, data,
+                            "sprintTime " + data.sprintTime
+                                    + " useItemTime " + data.useItemTime
+                                    + " isNoslowCheck " + isNoslowCheck
+                                    + (item != null ? " item held " + item.getRegistryName() : "")
+                    );
+                }
             } else {
                 isNoslowCheck = true;
                 data.noslowdownVL.add(2);
-                //log(player, this.getCheatName(), data.noslowdownVL, data,
-                //        "sprintTime " + data.sprintTime
-                //                + " useItemTime " + data.useItemTime
-                //                + " isNoslowCheck " + isNoslowCheck
-                //                + (item != null ? " item held " + item.getRegistryName() : "")
-                //);
+                if (ConfigHandler.isDebugMode) {
+                    final ItemStack itemStack = player.getHeldItem();
+                    final Item item = itemStack == null ? null : itemStack.getItem();
+                    log(player, this.getCheatName(), data.noslowdownVL, data,
+                            "sprintTime " + data.sprintTime
+                                    + " useItemTime " + data.useItemTime
+                                    + " isNoslowCheck " + isNoslowCheck
+                                    + (item != null ? " item held " + item.getRegistryName() : "")
+                    );
+                }
             }
-            //fail(player, this.getCheatName());
             return true;
         } else if (player.hurtTime == 0 && data.sprintTime == 0 && data.useItemTime > 8 && !data.dXdZVector2D.isZero()) {
             data.keepsprintUseItemVL.substract(3);
