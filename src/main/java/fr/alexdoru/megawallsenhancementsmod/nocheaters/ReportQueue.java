@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
@@ -28,7 +29,6 @@ public class ReportQueue {
     private static final int TIME_BETWEEN_REPORTS_MIN = 3 * 60 * 20;
     private static final int AUTOREPORT_PER_GAME = 2;
 
-    public boolean isDebugMode = false;
     private int counter;
     private int standingStillCounter;
     private int standingStillLimit = 18;
@@ -57,7 +57,7 @@ public class ReportQueue {
                     if (reportInQueue.isReportSuggestion || reportInQueue.isReportFromHackerDetector || FKCounterMod.isInMwGame) {
                         final String msg = "/wdr " + playername + (reportInQueue.isReportFromHackerDetector ? " cheating " + reportInQueue.cheat : "");
                         mc.thePlayer.sendChatMessage(msg);
-                        if (isDebugMode) {
+                        if (ConfigHandler.isDebugMode) {
                             ChatUtil.debug("Sent '" + msg + "'");
                         }
                     }
@@ -119,7 +119,7 @@ public class ReportQueue {
 
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
-        if (isDebugMode && event.type == RenderGameOverlayEvent.ElementType.TEXT) {
+        if (ConfigHandler.isDebugMode && event.type == RenderGameOverlayEvent.ElementType.TEXT) {
             final int x = 0;
             int y = frObj.FONT_HEIGHT * 4;
             frObj.drawString(EnumChatFormatting.DARK_GREEN + "REPORT QUEUE", x, y, 0, true);

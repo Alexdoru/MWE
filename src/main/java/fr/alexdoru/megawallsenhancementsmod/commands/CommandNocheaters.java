@@ -9,6 +9,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangPlayernameToUUID;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.chat.ReportSuggestionHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.WarningMessagesHandler;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
@@ -329,13 +330,13 @@ public class CommandNocheaters extends MyAbstractCommand {
                 ReportQueue.INSTANCE.clearReportsFor(args[1]);
             }
 
-        } else if (args[0].equalsIgnoreCase("debugreportqueue")) {
+        } else if (args[0].equalsIgnoreCase("debug")) {
 
-            ReportQueue.INSTANCE.isDebugMode = !ReportQueue.INSTANCE.isDebugMode;
-            if (ReportQueue.INSTANCE.isDebugMode) {
-                ChatUtil.debug("enabled debug report queue");
+            ConfigHandler.isDebugMode = !ConfigHandler.isDebugMode;
+            if (ConfigHandler.isDebugMode) {
+                ChatUtil.debug("Enabled debug mode");
             } else {
-                ChatUtil.debug("disabled debug report queue");
+                ChatUtil.debug("Disabled debug mode");
             }
 
         } else if (args[0].equalsIgnoreCase("getscoreboard")) {
