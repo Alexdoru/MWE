@@ -39,7 +39,7 @@ import java.util.UUID;
 public abstract class AbstractCheck implements ICheck {
 
     private static final HashSet<String> flagMessages = new HashSet<>();
-    protected static final Logger logger = LogManager.getLogger("HackerDetector");
+    public static final Logger logger = LogManager.getLogger("HackerDetector");
 
     @Override
     public final void checkViolationLevel(EntityPlayer player, boolean failedCheck, ViolationLevelTracker... trackers) {

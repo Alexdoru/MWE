@@ -3,10 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.AutoblockCheck;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.FastbreakCheck;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.ICheck;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.SprintCheck;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.*;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.BrokenBlock;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
@@ -24,10 +21,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class HackerDetector {
 
@@ -44,6 +38,7 @@ public class HackerDetector {
     private int playersCheckedTemp = 0;
     /** Data about blocks broken during this tick */
     public List<BrokenBlock> brokenBlocksList = new LinkedList<>();
+    public HashSet<String> playersToLog = new HashSet<>();
 
     static {
         MinecraftForge.EVENT_BUS.register(INSTANCE);
@@ -106,6 +101,7 @@ public class HackerDetector {
         playersCheckedTemp++;
         final PlayerDataSamples data = ((EntityPlayerAccessor) player).getPlayerDataSamples();
         updatePlayerDataSamples(player, data);
+        if (ConfigHandler.isDebugMode && playersToLog.contains(player.getName())) log(player, data);
         checkList.forEach(check -> check.performCheck(player, data));
         timeElapsedTemp += System.nanoTime() - timeStart;
     }
@@ -192,6 +188,31 @@ public class HackerDetector {
             }
         }
         return closestPlayer;
+    }
+
+    private void log(EntityPlayer player, PlayerDataSamples data) {
+        AbstractCheck.logger.info(player.getName()
+                + " | onGround " + player.onGround
+                + " | speedXZ (m/s) " + String.format("%.4f", data.dXdZVector2D.norm() * 20D)
+                + " | speedXYZ (m/s) " + data.dXdYdZVector3D.mulitply(20)
+                + " | position " + new Vector3D(player.posX, player.posY, player.posZ)
+                + " | rotationPitch " + String.format("%.4f", player.rotationPitch)
+                + " | rotationYawHead " + String.format("%.4f", player.rotationYawHead)
+                + " | look Vector " + data.lookVector
+                + " | lookAngleDiff " + String.format("%.4f", data.lookAngleDiff)
+                + " | dYaw " + String.format("%.4f", data.dYaw)
+                + " | lastTime_dYawChangedSign " + data.lastTime_dYawChangedSign
+                + " | is sprinting " + (player.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getModifier(sprintingUUID) != null)
+                + " | sprintTime " + data.sprintTime
+                + " | lastHurtTime " + data.lastHurtTime
+                + " | isSwingInProgress " + player.isSwingInProgress
+                + " | useItemTime " + data.useItemTime
+                + " | lastSwingTime " + data.lastSwingTime
+                + " | lastEatDrinkTime " + data.lastEatDrinkTime
+                + " | isUsingItem " + player.isUsingItem()
+                + " | ticksExisted " + player.ticksExisted
+                + " | isRidingEntity " + player.isRiding()
+        );
     }
 
 }
