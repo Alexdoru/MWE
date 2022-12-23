@@ -14,6 +14,7 @@ import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiscreens.NoCheatersConfigGuiScreen;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
@@ -357,6 +358,19 @@ public class CommandNocheaters extends MyAbstractCommand {
             }
             ChatUtil.addChatMessage(stringBuilder.toString());
 
+        } else if (args[0].equalsIgnoreCase("log")) {
+
+            if (args.length == 2) {
+                final String name = args[1];
+                if (HackerDetector.INSTANCE.playersToLog.remove(name)) {
+                    ChatUtil.debug("Removed " + name + " from logged players");
+                } else {
+                    ConfigHandler.isDebugMode = true;
+                    HackerDetector.INSTANCE.playersToLog.add(name);
+                    ChatUtil.debug("Added " + name + " to players to log");
+                }
+            }
+
         } else {
 
             ChatUtil.addChatMessage(getCommandHelp());
@@ -387,7 +401,7 @@ public class CommandNocheaters extends MyAbstractCommand {
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, arguments);
         }
-        if (args.length == 2 && args[0].equals("ignore")) {
+        if (args.length == 2 && (args[0].equalsIgnoreCase("ignore") || args[0].equalsIgnoreCase("log"))) {
             return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
         }
         return null;

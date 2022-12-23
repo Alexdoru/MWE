@@ -59,12 +59,12 @@ public class AutoblockCheck extends AbstractCheck {
                     if (data.lastEatDrinkTime < 30) {
                         data.disabledAutoblockCheck = true;
                         if (ConfigHandler.isDebugMode) {
-                            logger.info("Disabled autoblock check for " + player.getName() + " lastEatDrinkTime" + data.lastEatDrinkTime);
+                            logger.info("Disabled autoblock check for " + player.getName() + " lastEatDrinkTime " + data.lastEatDrinkTime);
                         }
                         return false;
                     }
                     if (ConfigHandler.isDebugMode) {
-                        log(player, this.getCheatName(), data.autoblockVL, data, "useItemTime " + data.useItemTime + " lastEatDrinkTime" + data.lastEatDrinkTime);
+                        log(player, this.getCheatName(), data.autoblockVL, data, "useItemTime " + data.useItemTime + " lastEatDrinkTime " + data.lastEatDrinkTime);
                     }
                     return true;
                 }
