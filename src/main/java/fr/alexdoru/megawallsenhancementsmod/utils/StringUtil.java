@@ -107,6 +107,20 @@ public class StringUtil {
     }
 
     /**
+     * Returns the last color code character, only color codes, not formatting codes
+     * This only returns one character and not "§ + code"
+     * Returns '\0' if it can't find the last color code
+     */
+    public static char getLastColorCharOf(String text) {
+        final Matcher matcher = COLOR_CODE_PATTERN.matcher(text);
+        String s = null;
+        while (matcher.find()) {
+            s = matcher.group();
+        }
+        return s == null ? '\0' : s.charAt(1);
+    }
+
+    /**
      * Returns the last color code before a certain word in a String, only color codes, not formatting codes
      * This only returns one character and not "§ + code"
      * Returns "" if it can't find the last color code

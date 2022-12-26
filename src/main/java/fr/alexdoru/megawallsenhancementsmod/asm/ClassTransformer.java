@@ -23,6 +23,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new CommandHandlerTransformer());
         registerTransformer(new EntityArrowTransformer());
         registerTransformer(new EntityFXTransformer());
+        registerTransformer(new EntityOtherPlayerMPTransformer());
         registerTransformer(new EntityPlayerTransformer());
         registerTransformer(new EntityRendererTransformer());
         registerTransformer(new GuiChatTransformer());

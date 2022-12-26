@@ -37,24 +37,27 @@ public class MWPlayerData {
         public IChatComponent displayName;
         public String originalP4Tag;
         public String P5Tag;
+        public char teamColor;
 
-        public PlayerData(UUID id, WDR wdr, IChatComponent extraPrefix, String squadname, IChatComponent displayNameIn, String originalP4Tag, String P5Tag) {
+        public PlayerData(UUID id, WDR wdr, IChatComponent extraPrefix, String squadname, IChatComponent displayNameIn, String originalP4Tag, String P5Tag, char teamColor) {
             this.wdr = wdr;
             this.extraPrefix = extraPrefix;
             this.squadname = squadname;
             this.displayName = displayNameIn;
             this.originalP4Tag = originalP4Tag;
             this.P5Tag = P5Tag;
+            this.teamColor = teamColor;
             dataCache.put(id, this);
         }
 
-        public void setData(WDR wdr, IChatComponent extraPrefix, String squadname, IChatComponent displayNameIn, String originalP4Tag, String P5Tag) {
+        public void setData(WDR wdr, IChatComponent extraPrefix, String squadname, IChatComponent displayNameIn, String originalP4Tag, String P5Tag, char teamColor) {
             this.wdr = wdr;
             this.extraPrefix = extraPrefix;
             this.squadname = squadname;
             this.displayName = displayNameIn;
             this.originalP4Tag = originalP4Tag;
             this.P5Tag = P5Tag;
+            this.teamColor = teamColor;
         }
 
     }

@@ -120,6 +120,7 @@ public class ConfigHandler {
     public static boolean realSizeHitbox;
     public static boolean drawRangedHitbox;
     public static float hitboxDrawRange;
+    public static boolean teamColoredHitbox;
 
     public static void preinit(File file) {
         config = new Configuration(file);
@@ -237,6 +238,7 @@ public class ConfigHandler {
         final Property prealSizeHitbox = config.get(CATEGORY_HITBOX, "Real size hitbox", false, "Make hitbox their real size");
         final Property pdrawRangedHitbox = config.get(CATEGORY_HITBOX, "Don't render close hitbox", false, "Doesn't render the hitbox of entities close to you");
         final Property phitboxDrawRange = config.get(CATEGORY_HITBOX, "Hitbox render range", 6f, "Doesn't render the hitbox of entities closer than this");
+        final Property pteamColoredHitbox = config.get(CATEGORY_HITBOX, "Team colored hitbox", false, "Makes the player hitboxes take the color of the player's team");
 
         /*Set the Order in which the config entries appear in the config file */
         final List<String> pOrderFKC = new ArrayList<>();
@@ -343,6 +345,7 @@ public class ConfigHandler {
         pOrderHitbox.add(prealSizeHitbox.getName());
         pOrderHitbox.add(pdrawRangedHitbox.getName());
         pOrderHitbox.add(phitboxDrawRange.getName());
+        pOrderHitbox.add(pteamColoredHitbox.getName());
         config.setCategoryPropertyOrder(CATEGORY_HITBOX, pOrderHitbox);
 
         /*sets the fields of this class to the fields in the properties*/
@@ -433,6 +436,7 @@ public class ConfigHandler {
             realSizeHitbox = prealSizeHitbox.getBoolean();
             drawRangedHitbox = pdrawRangedHitbox.getBoolean();
             hitboxDrawRange = (float) phitboxDrawRange.getDouble();
+            teamColoredHitbox = pteamColoredHitbox.getBoolean();
 
         }
 
@@ -545,6 +549,7 @@ public class ConfigHandler {
             prealSizeHitbox.set(realSizeHitbox);
             pdrawRangedHitbox.set(drawRangedHitbox);
             phitboxDrawRange.set(hitboxDrawRange);
+            pteamColoredHitbox.set(teamColoredHitbox);
 
         }
 

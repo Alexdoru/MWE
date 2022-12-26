@@ -19,7 +19,7 @@ public class RenderManagerTransformer implements IMyClassTransformer {
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
 
-        status.setInjectionPoints(7);
+        status.setInjectionPoints(10);
 
         for (final MethodNode methodNode : classNode.methods) {
 
@@ -49,9 +49,12 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                 methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), getCancelRenderInsnList());
                 status.addInjection();
 
+                int count255 = -1;
+
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
                     if (checkVarInsnNode(insnNode, ALOAD, 12)) {
+                        count255 = 0;
                         /*
                          * Replaces line 451 :
                          * RenderGlobal.drawOutlinedBoundingBox(axisalignedbb1, 255, 255, 255, 255);
@@ -63,6 +66,25 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                         list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderManagerHook"), "getAxisAlignedBB", "(L" + ClassMapping.AXISALIGNEDBB + ";L" + ClassMapping.ENTITY + ";)L" + ClassMapping.AXISALIGNEDBB + ";", false));
                         methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
+                    }
+
+                    if (count255 > -1 && count255 < 3 && checkIntInsnNode(insnNode, SIPUSH, 255)) {
+                        if (count255 == 0) {
+                            final InsnList list = new InsnList();
+                            list.add(new VarInsnNode(ALOAD, 0));
+                            list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.RENDERMANAGER$TEXTRENDERER));
+                            list.add(new VarInsnNode(ALOAD, 1));
+                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderManagerHook"), "getRedHitboxColor", "(IL" + ClassMapping.FONTRENDERER + ";L" + ClassMapping.ENTITY + ";)I", false));
+                            methodNode.instructions.insert(insnNode, list);
+                            status.addInjection();
+                        } else if (count255 == 1) {
+                            methodNode.instructions.insert(insnNode, new MethodInsnNode(INVOKESTATIC, getHookClass("RenderManagerHook"), "getGreenHitboxColor", "(I)I", false));
+                            status.addInjection();
+                        } else {
+                            methodNode.instructions.insert(insnNode, new MethodInsnNode(INVOKESTATIC, getHookClass("RenderManagerHook"), "getBlueHitboxColor", "(I)I", false));
+                            status.addInjection();
+                        }
+                        count255++;
                     }
 
                     if (checkTypeInsnNode(insnNode, INSTANCEOF, ClassMapping.ENTITYLIVINGBASE)) {

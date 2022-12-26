@@ -31,7 +31,8 @@ public enum FieldMapping {
     NETWORKPLAYERINFO$GAMEPROFILE(NETWORKPLAYERINFO, "a", "gameProfile", GAMEPROFILE),
     POTION$NIGHTVISION(POTION, "r", "nightVision", POTION),
     RENDERGLOBAL$COUNTENTITIESRENDERED(RENDERGLOBAL, "S", "countEntitiesRendered", "I"),
-    RENDERMANAGER$DEBUGBOUNDINGBOX(RENDERMANAGER, "t", "debugBoundingBox", "Z");
+    RENDERMANAGER$DEBUGBOUNDINGBOX(RENDERMANAGER, "t", "debugBoundingBox", "Z"),
+    RENDERMANAGER$TEXTRENDERER(RENDERMANAGER, "n", "textRenderer", FONTRENDERER);
 
     public final String owner;
     public final String name;

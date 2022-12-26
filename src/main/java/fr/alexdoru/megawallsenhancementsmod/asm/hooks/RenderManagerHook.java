@@ -1,10 +1,12 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityArrowAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityOtherPlayerMPAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -48,6 +50,32 @@ public class RenderManagerHook {
             return !ConfigHandler.drawHitboxItemFrame;
         }
         return !ConfigHandler.drawHitboxForOtherEntity;
+    }
+
+    private static int greenHitboxColor = 255;
+    private static int blueHitboxColor = 255;
+
+    public static int getRedHitboxColor(int originalColor, FontRenderer fontRenderer, Entity entity) {
+        if (ConfigHandler.teamColoredHitbox && entity instanceof EntityOtherPlayerMPAccessor) {
+            final char teamColor = ((EntityOtherPlayerMPAccessor) entity).getPlayerTeamColor();
+            if (teamColor != '\0') {
+                final int colorCode = fontRenderer.getColorCode(teamColor);
+                greenHitboxColor = colorCode >> 8 & 255;
+                blueHitboxColor = colorCode & 255;
+                return colorCode >> 16 & 255;
+            }
+        }
+        greenHitboxColor = 255;
+        blueHitboxColor = 255;
+        return 255;
+    }
+
+    public static int getGreenHitboxColor(int originalColor) {
+        return greenHitboxColor;
+    }
+
+    public static int getBlueHitboxColor(int originalColor) {
+        return blueHitboxColor;
     }
 
     public static double getBlueVectLength(Entity entityIn) {
