@@ -17,6 +17,7 @@ public enum ClassMapping {
     ENTITYFX("beb", "net/minecraft/client/particle/EntityFX"),
     ENTITYITEM("uz", "net/minecraft/entity/item/EntityItem"),
     ENTITYLIVINGBASE("pr", "net/minecraft/entity/EntityLivingBase"),
+    ENTITYOTHERPLAYERMP("bex", "net/minecraft/client/entity/EntityOtherPlayerMP"),
     ENTITYPLAYER("wn", "net/minecraft/entity/player/EntityPlayer"),
     ENTITYPLAYERSP("bew", "net/minecraft/client/entity/EntityPlayerSP"),
     ENUMCHATFORMATTING("a", "net/minecraft/util/EnumChatFormatting"),

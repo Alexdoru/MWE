@@ -34,10 +34,11 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
         buttonList.add(new GuiButton(7, XleftColumn, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(7)));
         buttonList.add(new GuiButton(8, XleftColumn, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(8)));
 
-        buttonList.add(new GuiButton(14, XrightColumn, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(14)));
-        buttonList.add(new GuiButton(9, XrightColumn, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(9)));
-        buttonList.add(new GuiButton(15, XrightColumn, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(15)));
-        buttonList.add(new GuiSlider(16, XrightColumn, getButtonYPos(4), buttonsWidth, buttonsHeight, "Range : ", " m", 0d, 64d, ConfigHandler.hitboxDrawRange, false, true, this));
+        buttonList.add(new GuiButton(17, XrightColumn, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(17)));
+        buttonList.add(new GuiButton(14, XrightColumn, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(14)));
+        buttonList.add(new GuiButton(9, XrightColumn, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(9)));
+        buttonList.add(new GuiButton(15, XrightColumn, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(15)));
+        buttonList.add(new GuiSlider(16, XrightColumn, getButtonYPos(5), buttonsWidth, buttonsHeight, "Range : ", " m", 0d, 64d, ConfigHandler.hitboxDrawRange, false, true, this));
         buttonList.add(new GuiButton(10, XrightColumn, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(10)));
         buttonList.add(new GuiButton(11, XrightColumn, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(11)));
         buttonList.add(new GuiButton(12, XrightColumn, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(12)));
@@ -89,6 +90,8 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
                 return "Real size hitbox : " + getSuffix(ConfigHandler.realSizeHitbox);
             case 15:
                 return "Hide close hitbox : " + getSuffix(ConfigHandler.drawRangedHitbox);
+            case 17:
+                return "Team colored hitbox : " + getSuffix(ConfigHandler.teamColoredHitbox);
             default:
                 return "";
         }
@@ -144,6 +147,9 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
                 break;
             case 15:
                 ConfigHandler.drawRangedHitbox = !ConfigHandler.drawRangedHitbox;
+                break;
+            case 17:
+                ConfigHandler.teamColoredHitbox = !ConfigHandler.teamColoredHitbox;
                 break;
             default:
                 break;
