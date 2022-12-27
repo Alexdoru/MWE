@@ -206,7 +206,7 @@ public abstract class AbstractCheck implements ICheck {
         return i == 1 ? i : i + 5;
     }
 
-    protected float average(SampleList<Float> list) {
+    protected static float average(SampleList<Float> list) {
         float sum = 0;
         for (final Float f : list) {
             sum += f;
@@ -214,7 +214,7 @@ public abstract class AbstractCheck implements ICheck {
         return sum / list.size();
     }
 
-    protected boolean isPlayerLookingAtBlock(EntityPlayer player, BlockPos pos) {
+    protected static boolean isPlayerLookingAtBlock(EntityPlayer player, BlockPos pos) {
         final Vector3D eyesToBlockCenter = new Vector3D(
                 pos.getX() + 0.5D - player.posX,
                 pos.getY() + 0.5D - (player.posY + player.getEyeHeight()),
