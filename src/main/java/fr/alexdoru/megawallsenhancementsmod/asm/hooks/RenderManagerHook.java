@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityArrowAccessor;
-import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityOtherPlayerMPAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -56,8 +56,8 @@ public class RenderManagerHook {
     private static int blueHitboxColor = 255;
 
     public static int getRedHitboxColor(int originalColor, FontRenderer fontRenderer, Entity entity) {
-        if (ConfigHandler.teamColoredHitbox && entity instanceof EntityOtherPlayerMPAccessor) {
-            final char teamColor = ((EntityOtherPlayerMPAccessor) entity).getPlayerTeamColor();
+        if (ConfigHandler.teamColoredHitbox && entity instanceof EntityPlayerAccessor) {
+            final char teamColor = ((EntityPlayerAccessor) entity).getPlayerTeamColor();
             if (teamColor != '\0') {
                 final int colorCode = fontRenderer.getColorCode(teamColor);
                 greenHitboxColor = colorCode >> 8 & 255;

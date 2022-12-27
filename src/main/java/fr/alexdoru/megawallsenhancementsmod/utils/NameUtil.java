@@ -1,7 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
 import com.mojang.authlib.GameProfile;
-import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityOtherPlayerMPAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.NetworkPlayerInfoAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
@@ -13,7 +12,6 @@ import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.event.ClickEvent;
@@ -142,9 +140,7 @@ public class NameUtil {
                 final MWPlayerData.PlayerData mwPlayerData = updateAndGetMWPlayerData(networkPlayerInfo.getGameProfile(), true);
                 ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(mwPlayerData.displayName);
                 final EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
-                if (player instanceof EntityOtherPlayerMP) {
-                    ((EntityOtherPlayerMPAccessor) player).setPlayerTeamColor(mwPlayerData.teamColor);
-                }
+                ((EntityPlayerAccessor) player).setPlayerTeamColor(mwPlayerData.teamColor);
             }
         }
     }
@@ -164,9 +160,7 @@ public class NameUtil {
         ((EntityPlayerAccessor) player).setPrestige4Tag(mwPlayerData.originalP4Tag);
         ((EntityPlayerAccessor) player).setPrestige5Tag(mwPlayerData.P5Tag);
 
-        if (player instanceof EntityOtherPlayerMP) {
-            ((EntityOtherPlayerMPAccessor) player).setPlayerTeamColor(mwPlayerData.teamColor);
-        }
+        ((EntityPlayerAccessor) player).setPlayerTeamColor(mwPlayerData.teamColor);
 
         if (!onPlayerJoin) {
             player.getPrefixes().removeAll(allPrefix);
