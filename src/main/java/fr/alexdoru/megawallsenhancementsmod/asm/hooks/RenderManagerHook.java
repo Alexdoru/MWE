@@ -21,7 +21,7 @@ public class RenderManagerHook {
     public static boolean cancelHitboxRender(Entity entityIn) {
         if (ConfigHandler.drawRangedHitbox) {
             final EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
-            if (thePlayer != null && entityIn.getDistanceToEntity(thePlayer) <= ConfigHandler.hitboxDrawRange) {
+            if (thePlayer != null && entityIn.getDistanceSqToEntity(thePlayer) <= ConfigHandler.hitboxDrawRange * ConfigHandler.hitboxDrawRange) {
                 return true;
             }
         }
