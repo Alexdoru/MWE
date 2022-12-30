@@ -26,9 +26,17 @@ public class KeybindingListener {
             ConfigHandler.limitDroppedEntityRendered = !ConfigHandler.limitDroppedEntityRendered;
             ConfigHandler.saveConfig();
             if (ConfigHandler.limitDroppedEntityRendered) {
-                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.WHITE + "Limit dropped items rendered: " + EnumChatFormatting.GREEN + "On");
+                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Limit dropped items rendered: " + EnumChatFormatting.GREEN + "On");
             } else {
-                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.WHITE + "Limit dropped items rendered: " + EnumChatFormatting.RED + "Off");
+                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Limit dropped items rendered: " + EnumChatFormatting.RED + "Off");
+            }
+        } else if (MegaWallsEnhancementsMod.playerHitboxes.isPressed()) {
+            ConfigHandler.drawHitboxForPlayers = !ConfigHandler.drawHitboxForPlayers;
+            ConfigHandler.saveConfig();
+            if (ConfigHandler.drawHitboxForPlayers) {
+                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Draw hitboxes for players: " + EnumChatFormatting.GREEN + "On");
+            } else {
+                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Draw hitboxes for players: " + EnumChatFormatting.RED + "Off");
             }
         }
 

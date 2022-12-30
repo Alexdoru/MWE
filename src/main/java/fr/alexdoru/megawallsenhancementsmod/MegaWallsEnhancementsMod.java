@@ -42,6 +42,7 @@ public class MegaWallsEnhancementsMod {
     public static final String version = "2.9";
     public static final Logger logger = LogManager.getLogger(modName);
     public static final KeyBinding newNickKey = new KeyBinding("New Random Nick", 0, "MegaWallsEnhancements");
+    public static final KeyBinding playerHitboxes = new KeyBinding("Toggle player hitboxes", 0, "Hitboxes");
     public static final KeyBinding addTimestampKey = new KeyBinding("Add Timestamp", 0, "NoCheaters");
     public static final KeyBinding toggleDroppedItemLimit = new KeyBinding("Toggle dropped item limit", 0, "MegaWallsEnhancements");
     public static File configurationFile;
@@ -58,6 +59,7 @@ public class MegaWallsEnhancementsMod {
     public void init(FMLInitializationEvent event) {
 
         ClientRegistry.registerKeyBinding(newNickKey);
+        ClientRegistry.registerKeyBinding(playerHitboxes);
         ClientRegistry.registerKeyBinding(addTimestampKey);
         ClientRegistry.registerKeyBinding(toggleDroppedItemLimit);
 
