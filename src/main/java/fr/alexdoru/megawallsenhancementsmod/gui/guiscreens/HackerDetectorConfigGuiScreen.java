@@ -52,7 +52,7 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
             case 1:
                 return "Save in NoCheaters : " + getSuffix(ConfigHandler.addToReportList);
             case 2:
-                return "Report Flaged players : " + getSuffix(ConfigHandler.autoreportFlaggedPlayers);
+                return "Report Flagged players : " + getSuffix(ConfigHandler.autoreportFlaggedPlayers);
             case 3:
                 return "Show flag messages : " + getSuffix(ConfigHandler.showFlagMessages);
             case 4:
