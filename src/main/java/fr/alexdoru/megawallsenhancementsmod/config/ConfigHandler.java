@@ -217,7 +217,7 @@ public class ConfigHandler {
         final Property paddToReportList = config.get(CATEGORY_HACKERDETECTOR, "Add to report list", true, "Adds flagged players to your report list");
         final Property pshowFlagMessages = config.get(CATEGORY_HACKERDETECTOR, "Show flag messages", true, "Prints a message in chat when a player flags");
         final Property pcompactFlagMessages = config.get(CATEGORY_HACKERDETECTOR, "Compact alerts", true, "Compact flag messages with previous ones");
-        final Property poneFlagMessagePerGame = config.get(CATEGORY_HACKERDETECTOR, "One flag per game", true, "Flags each player once per game");
+        final Property poneFlagMessagePerGame = config.get(CATEGORY_HACKERDETECTOR, "One message per game", false, "Prints flag message for each player once per game");
         final Property pautoreportFlaggedPlayers = config.get(CATEGORY_HACKERDETECTOR, "Report flagged players", true, "Sends a report for flagged players");
 
         final String CATEGORY_HITBOX = "Hitbox";
