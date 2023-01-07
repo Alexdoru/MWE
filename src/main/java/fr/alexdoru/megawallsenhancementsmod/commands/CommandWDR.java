@@ -225,17 +225,7 @@ public class CommandWDR extends MyAbstractCommand {
             }
         }
 
-        boolean printPartMsg = false;
-        for (final String cheat : arraycheats) {
-            if ("bhop".equalsIgnoreCase(cheat) || "autoblock".equalsIgnoreCase(cheat) || "fastbreak".equalsIgnoreCase(cheat) || "noslowdown".equalsIgnoreCase(cheat)) {
-                printPartMsg = true;
-                break;
-            }
-        }
-
-        if (printPartMsg) {
-            PartyDetection.printBoostingReportAdvice(playername);
-        }
+        PartyDetection.printBoostingReportAdvice(playername);
 
         if (FKCounterMod.preGameLobby) {
             ChatUtil.addChatMessage(ChatUtil.getChatReportingAdvice());

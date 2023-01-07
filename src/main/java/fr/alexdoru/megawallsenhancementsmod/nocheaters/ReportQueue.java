@@ -193,9 +193,7 @@ public class ReportQueue {
 
     public void addReportFromHackerDetector(String playername, String cheat) {
         if (canReportPlayerThisGame(playername)) {
-            if ("bhop".equalsIgnoreCase(cheat) || "autoblock".equalsIgnoreCase(cheat) || "fastbreak".equalsIgnoreCase(cheat) || "noslowdown".equalsIgnoreCase(cheat)) {
-                PartyDetection.printBoostingReportAdvice(playername);
-            }
+            PartyDetection.printBoostingReportAdvice(playername);
             if (isReportQueueInactive()) {
                 MinecraftForge.EVENT_BUS.register(this);
                 counter = 0;
