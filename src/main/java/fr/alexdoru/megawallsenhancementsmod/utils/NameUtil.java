@@ -140,7 +140,9 @@ public class NameUtil {
                 final MWPlayerData.PlayerData mwPlayerData = updateAndGetMWPlayerData(networkPlayerInfo.getGameProfile(), true);
                 ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(mwPlayerData.displayName);
                 final EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
-                ((EntityPlayerAccessor) player).setPlayerTeamColor(mwPlayerData.teamColor);
+                if (player != null) {
+                    ((EntityPlayerAccessor) player).setPlayerTeamColor(mwPlayerData.teamColor);
+                }
             }
         }
     }
