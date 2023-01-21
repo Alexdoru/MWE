@@ -58,12 +58,12 @@ public class AutoblockCheck extends AbstractCheck {
                 if (player.isSwingInProgress && data.useItemTime > 20) {
                     if (data.lastEatDrinkTime < 30) {
                         data.disabledAutoblockCheck = true;
-                        if (ConfigHandler.isDebugMode) {
+                        if (ConfigHandler.debugLogging) {
                             logger.info("Disabled autoblock check for " + player.getName() + " lastEatDrinkTime " + data.lastEatDrinkTime);
                         }
                         return false;
                     }
-                    if (ConfigHandler.isDebugMode) {
+                    if (ConfigHandler.debugLogging) {
                         log(player, this.getCheatName(), data.autoblockVL, data, "useItemTime " + data.useItemTime + " lastEatDrinkTime " + data.lastEatDrinkTime);
                     }
                     return true;

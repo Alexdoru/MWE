@@ -53,7 +53,7 @@ public abstract class AbstractCheck implements ICheck {
     }
 
     private static void printFlagMessage(EntityPlayer player, String cheat, String cheatDescription) {
-        if (ConfigHandler.isDebugMode) {
+        if (ConfigHandler.debugLogging) {
             logger.info(player.getName() + " flags " + cheat);
         }
         if (!ConfigHandler.showFlagMessages) {

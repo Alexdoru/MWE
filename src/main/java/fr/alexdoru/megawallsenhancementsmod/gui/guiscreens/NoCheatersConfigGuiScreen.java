@@ -44,7 +44,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         //buttonList.add(new GuiButton(2, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(2)));
         //buttonList.add(new GuiButton(11, xPos, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(11)));
         buttonList.add(new GuiButton(6, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(6)));
-        buttonList.add(new GuiSlider(7, xPos, getButtonYPos(6), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport / (24f * 3600f * 1000f), false, true, this));
+        buttonList.add(new GuiSlider(7, xPos, getButtonYPos(6), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport, false, true, this));
         buttonList.add(new GuiButton(10, xPos, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(10)));
         buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getButtonYPos(9), 150, buttonsHeight, getButtonDisplayString(3)));
     }
@@ -201,7 +201,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     @Override
     public void onChangeSliderValue(GuiSlider slider) {
         if (slider.id == 7) {
-            ConfigHandler.timeDeleteReport = 24L * 3600L * 1000L * ((long) slider.getValue());
+            ConfigHandler.timeDeleteReport = (int) slider.getValue();
         }
     }
 
