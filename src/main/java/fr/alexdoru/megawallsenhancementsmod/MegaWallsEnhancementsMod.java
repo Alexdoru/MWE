@@ -49,7 +49,7 @@ public class MegaWallsEnhancementsMod {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        ConfigHandler.preinit(event.getSuggestedConfigurationFile());
+        ConfigHandler.preInit(event.getSuggestedConfigurationFile());
         jarFile = event.getSourceFile();
     }
 

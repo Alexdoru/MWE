@@ -2,7 +2,6 @@ package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
@@ -13,7 +12,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -29,6 +27,7 @@ public class ReportQueue {
     private static final int TIME_BETWEEN_REPORTS_MIN = 3 * 60 * 20;
     private static final int AUTOREPORT_PER_GAME = 2;
 
+    //private boolean debug;
     private int counter;
     private int standingStillCounter;
     private int standingStillLimit = 18;
@@ -57,9 +56,9 @@ public class ReportQueue {
                     if (reportInQueue.isReportSuggestion || reportInQueue.isReportFromHackerDetector || FKCounterMod.isInMwGame) {
                         final String msg = "/wdr " + playername + (reportInQueue.isReportFromHackerDetector ? " cheating " + reportInQueue.cheat : "");
                         mc.thePlayer.sendChatMessage(msg);
-                        if (ConfigHandler.isDebugMode) {
-                            ChatUtil.debug("Sent '" + msg + "'");
-                        }
+                        //if (debug) {
+                        //    ChatUtil.debug("Sent '" + msg + "'");
+                        //}
                     }
                     counter = getNextCounterDelay();
                     standingStillLimit = 20 + random.nextInt(12);
@@ -117,24 +116,24 @@ public class ReportQueue {
         return false;
     }
 
-    @SubscribeEvent
-    public void onRender(RenderGameOverlayEvent.Post event) {
-        if (ConfigHandler.isDebugMode && event.type == RenderGameOverlayEvent.ElementType.TEXT) {
-            final int x = 0;
-            int y = frObj.FONT_HEIGHT * 4;
-            frObj.drawString(EnumChatFormatting.DARK_GREEN + "REPORT QUEUE", x, y, 0, true);
-            y += frObj.FONT_HEIGHT;
-            boolean first = true;
-            for (final ReportInQueue reportInQueue : queueList) {
-                frObj.drawString((reportInQueue.isReportSuggestion ? EnumChatFormatting.RED : EnumChatFormatting.GREEN) + reportInQueue.reportedPlayer, x, y, 0, true);
-                if (first) {
-                    frObj.drawString(EnumChatFormatting.GOLD + " " + counter / 20 + "s", x + frObj.getStringWidth(reportInQueue.reportedPlayer), y, 0, true);
-                }
-                y += frObj.FONT_HEIGHT;
-                first = false;
-            }
-        }
-    }
+    //@SubscribeEvent
+    //public void onRender(RenderGameOverlayEvent.Post event) {
+    //    if (debug && event.type == RenderGameOverlayEvent.ElementType.TEXT) {
+    //        final int x = 0;
+    //        int y = frObj.FONT_HEIGHT * 4;
+    //        frObj.drawString(EnumChatFormatting.DARK_GREEN + "REPORT QUEUE", x, y, 0, true);
+    //        y += frObj.FONT_HEIGHT;
+    //        boolean first = true;
+    //        for (final ReportInQueue reportInQueue : queueList) {
+    //            frObj.drawString((reportInQueue.isReportSuggestion ? EnumChatFormatting.RED : EnumChatFormatting.GREEN) + reportInQueue.reportedPlayer, x, y, 0, true);
+    //            if (first) {
+    //                frObj.drawString(EnumChatFormatting.GOLD + " " + counter / 20 + "s", x + frObj.getStringWidth(reportInQueue.reportedPlayer), y, 0, true);
+    //            }
+    //            y += frObj.FONT_HEIGHT;
+    //            first = false;
+    //        }
+    //    }
+    //}
 
     @SubscribeEvent
     public void onGameEnd(MegaWallsGameEvent event) {

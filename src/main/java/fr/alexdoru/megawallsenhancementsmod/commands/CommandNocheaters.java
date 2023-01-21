@@ -333,8 +333,8 @@ public class CommandNocheaters extends MyAbstractCommand {
 
         } else if (args[0].equalsIgnoreCase("debug")) {
 
-            ConfigHandler.isDebugMode = !ConfigHandler.isDebugMode;
-            if (ConfigHandler.isDebugMode) {
+            ConfigHandler.debugLogging = !ConfigHandler.debugLogging;
+            if (ConfigHandler.debugLogging) {
                 ChatUtil.debug("Enabled debug mode");
             } else {
                 ChatUtil.debug("Disabled debug mode");
@@ -365,7 +365,7 @@ public class CommandNocheaters extends MyAbstractCommand {
                 if (HackerDetector.INSTANCE.playersToLog.remove(name)) {
                     ChatUtil.debug("Removed " + name + " from logged players");
                 } else {
-                    ConfigHandler.isDebugMode = true;
+                    ConfigHandler.debugLogging = true;
                     HackerDetector.INSTANCE.playersToLog.add(name);
                     ChatUtil.debug("Added " + name + " to players to log");
                 }

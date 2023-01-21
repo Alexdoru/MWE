@@ -29,7 +29,7 @@ public class EntityRendererTransformer implements IMyClassTransformer {
                                 final LabelNode labelNode = ((JumpInsnNode) thirdNode).label;
                                 final InsnList list = new InsnList();
                                 list.add(new JumpInsnNode(IFEQ, labelNode));
-                                list.add(getNewConfigFieldInsnNode("keepNightVisionEffect"));
+                                list.add(getNewConfigFieldInsnNode("cancelNightVisionEffect"));
                                 methodNode.instructions.insert(secondNode, list);
                                 status.addInjection();
                             }

@@ -101,7 +101,7 @@ public class HackerDetector {
         playersCheckedTemp++;
         final PlayerDataSamples data = ((EntityPlayerAccessor) player).getPlayerDataSamples();
         updatePlayerDataSamples(player, data);
-        if (ConfigHandler.isDebugMode && playersToLog.contains(player.getName())) log(player, data);
+        if (ConfigHandler.debugLogging && playersToLog.contains(player.getName())) log(player, data);
         checkList.forEach(check -> check.performCheck(player, data));
         timeElapsedTemp += System.nanoTime() - timeStart;
     }

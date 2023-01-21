@@ -50,7 +50,7 @@ public class SprintCheck extends AbstractCheck {
             if (player.hurtTime != 0 || data.dXdZVector2D.norm() < 0.25D) {
                 isNoslowCheck = false;
                 data.keepsprintUseItemVL.add(2);
-                if (ConfigHandler.isDebugMode) {
+                if (ConfigHandler.debugLogging) {
                     final ItemStack itemStack = player.getHeldItem();
                     final Item item = itemStack == null ? null : itemStack.getItem();
                     log(player, this.getCheatName(), data.keepsprintUseItemVL, data,
@@ -63,7 +63,7 @@ public class SprintCheck extends AbstractCheck {
             } else {
                 isNoslowCheck = true;
                 data.noslowdownVL.add(2);
-                if (ConfigHandler.isDebugMode) {
+                if (ConfigHandler.debugLogging) {
                     final ItemStack itemStack = player.getHeldItem();
                     final Item item = itemStack == null ? null : itemStack.getItem();
                     log(player, this.getCheatName(), data.noslowdownVL, data,

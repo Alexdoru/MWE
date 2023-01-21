@@ -89,7 +89,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 27:
                 return "Nick Hider : " + getSuffix(ConfigHandler.nickHider);
             case 18:
-                return "Cancel night vision effect : " + getSuffix(!ConfigHandler.keepNightVisionEffect);
+                return "Cancel night vision effect : " + getSuffix(!ConfigHandler.cancelNightVisionEffect);
             case 19:
                 return "Colored tablist health : " + getSuffix(ConfigHandler.useColoredScores);
             case 17:
@@ -255,7 +255,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 ConfigHandler.shortCoinMessage = !ConfigHandler.shortCoinMessage;
                 break;
             case 18:
-                ConfigHandler.keepNightVisionEffect = !ConfigHandler.keepNightVisionEffect;
+                ConfigHandler.cancelNightVisionEffect = !ConfigHandler.cancelNightVisionEffect;
                 break;
             case 19:
                 ConfigHandler.useColoredScores = !ConfigHandler.useColoredScores;
