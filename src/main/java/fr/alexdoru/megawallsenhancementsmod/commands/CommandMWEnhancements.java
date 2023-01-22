@@ -1,6 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
@@ -31,7 +30,7 @@ public class CommandMWEnhancements extends MyAbstractCommand {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length == 1 && args[0].equalsIgnoreCase("refreshconfig")) {
-            ConfigHandler.preinit(MegaWallsEnhancementsMod.configurationFile);
+            ConfigHandler.loadConfigFromFile();
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Reloaded values from the config file.");
             return;
         } else if (args.length >= 1 && args[0].equalsIgnoreCase("setapikey")) {

@@ -45,13 +45,11 @@ public class MegaWallsEnhancementsMod {
     public static final KeyBinding playerHitboxes = new KeyBinding("Toggle player hitboxes", 0, "Hitboxes");
     public static final KeyBinding addTimestampKey = new KeyBinding("Add Timestamp", 0, "NoCheaters");
     public static final KeyBinding toggleDroppedItemLimit = new KeyBinding("Toggle dropped item limit", 0, "MegaWallsEnhancements");
-    public static File configurationFile;
     public static File jarFile;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        configurationFile = event.getSuggestedConfigurationFile();
-        ConfigHandler.preinit(configurationFile);
+        ConfigHandler.preinit(event.getSuggestedConfigurationFile());
         jarFile = event.getSourceFile();
     }
 
