@@ -57,16 +57,16 @@ public class ConfigHandler extends AbstractConfig {
     public static boolean strengthParticules = true;
 
     @ConfigProperty(category = MWENHANCEMENTS, name = "Shorten coin message", comment = "Shorten the coins messages by removing the network booster info")
-    public static boolean shortCoinMessage = false;
+    public static boolean shortCoinMessage;
 
     @ConfigProperty(category = MWENHANCEMENTS, name = "Sound low HP", comment = "Plays a sound when your health falls below a certain threshold")
-    public static boolean playSoundLowHP = false;
+    public static boolean playSoundLowHP;
 
     @ConfigProperty(category = MWENHANCEMENTS, name = "Health Threshold", comment = "The health threshold at witch it will play a sound, value ranges from 0 to 1")
     public static double healthThreshold = 0.5d;
 
     @ConfigProperty(category = MWENHANCEMENTS, name = "Cancel Night Vision Effect", comment = "Removes the visual effets of night vision")
-    public static boolean cancelNightVisionEffect = false;
+    public static boolean cancelNightVisionEffect;
 
     @ConfigProperty(category = MWENHANCEMENTS, name = "Colored Tablist Scores", comment = "Makes the scores in the tablist use a greend to red color gradient depending of the value")
     public static boolean useColoredScores = true;
@@ -252,7 +252,7 @@ public class ConfigHandler extends AbstractConfig {
     public static boolean drawRedBox = true;
 
     @ConfigProperty(category = HITBOX, name = "Hide blue vector", comment = "Hide blue vector")
-    public static boolean hideBlueVect = false;
+    public static boolean hideBlueVect;
 
     @ConfigProperty(category = HITBOX, name = "Blue vect for players only", comment = "Blue vect for players only")
     public static boolean drawBlueVectForPlayersOnly;
