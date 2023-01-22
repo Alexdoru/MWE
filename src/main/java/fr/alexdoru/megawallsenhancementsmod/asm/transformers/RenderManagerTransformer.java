@@ -59,7 +59,13 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                          * Replaces line 451 :
                          * RenderGlobal.drawOutlinedBoundingBox(axisalignedbb1, 255, 255, 255, 255);
                          * With :
-                         * RenderGlobal.drawOutlinedBoundingBox(RenderManagerHook.getAxisAlignedBB(axisalignedbb1, entityIn), 255, 255, 255, 255);
+                         * RenderGlobal.drawOutlinedBoundingBox(
+                         *              RenderManagerHook.getAxisAlignedBB(axisalignedbb1, entityIn),
+                         *              RenderManagerHook.getRedHitboxColor(255, this.textRenderer, entityIn),
+                         *              RenderManagerHook.getGreenHitboxColor(255),
+                         *              RenderManagerHook.getBlueHitboxColor(255),
+                         *              255
+                         * );
                          */
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 1));
