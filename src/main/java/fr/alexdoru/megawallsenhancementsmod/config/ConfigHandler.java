@@ -124,6 +124,20 @@ public class ConfigHandler {
 
     public static void preinit(File file) {
         config = new Configuration(file);
+        loadConfigFromFile();
+    }
+
+    /**
+     * Saves the values of the config fields to the config file
+     */
+    public static void saveConfig() {
+        syncConfig(false, false, true);
+    }
+
+    /**
+     * Reads the config files and loads the values into the fields of this class
+     */
+    public static void loadConfigFromFile() {
         syncConfig(true, true, false);
     }
 
@@ -558,13 +572,6 @@ public class ConfigHandler {
             config.save();
         }
 
-    }
-
-    /*
-     * call this method to save to the config file after a modifications was made to the fields of this class
-     */
-    public static void saveConfig() {
-        syncConfig(false, false, true);
     }
 
 }
