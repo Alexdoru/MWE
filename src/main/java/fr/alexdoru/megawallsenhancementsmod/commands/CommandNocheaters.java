@@ -339,6 +339,7 @@ public class CommandNocheaters extends MyAbstractCommand {
             } else {
                 ChatUtil.debug("Disabled debug mode");
             }
+            ConfigHandler.saveConfig();
 
         } else if (args[0].equalsIgnoreCase("getscoreboard")) {
 
