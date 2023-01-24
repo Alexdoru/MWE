@@ -6,7 +6,6 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -55,15 +54,12 @@ public class RenderManagerHook {
     private static int greenHitboxColor = 255;
     private static int blueHitboxColor = 255;
 
-    public static int getRedHitboxColor(int originalColor, FontRenderer fontRenderer, Entity entity) {
+    public static int getRedHitboxColor(int originalColor, Entity entity) {
         if (ConfigHandler.teamColoredHitbox && entity instanceof EntityPlayerAccessor) {
-            final char teamColor = ((EntityPlayerAccessor) entity).getPlayerTeamColor();
-            if (teamColor != '\0') {
-                final int colorCode = fontRenderer.getColorCode(teamColor);
-                greenHitboxColor = colorCode >> 8 & 255;
-                blueHitboxColor = colorCode & 255;
-                return colorCode >> 16 & 255;
-            }
+            final int colorCode = ((EntityPlayerAccessor) entity).getPlayerTeamColorInt();
+            greenHitboxColor = colorCode >> 8 & 255;
+            blueHitboxColor = colorCode & 255;
+            return colorCode >> 16 & 255;
         }
         greenHitboxColor = 255;
         blueHitboxColor = 255;

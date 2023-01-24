@@ -1,8 +1,11 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
 
 public class ColorUtil {
+
+    private static final Minecraft mc = Minecraft.getMinecraft();
 
     public static EnumChatFormatting getPrestigeVColor(int classpoints) {
         if (classpoints < 2000) {
@@ -37,6 +40,13 @@ public class ColorUtil {
         } else {
             return EnumChatFormatting.DARK_RED;
         }
+    }
+
+    public static int getColorInt(char colorChar) {
+        if (colorChar == '\0') {
+            return 16777215;
+        }
+        return mc.fontRendererObj.getColorCode(colorChar);
     }
 
 }
