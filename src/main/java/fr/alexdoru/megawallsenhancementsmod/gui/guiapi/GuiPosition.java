@@ -7,15 +7,16 @@ public final class GuiPosition {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
 
+    /*The default relative x and y coordinates for this HUD. Ranging from 0 to 1.*/
+    private final double defaultX, defaultY;
     /*The relative x and y coordinates. Ranging from 0 to 1.*/
     private double x, y;
 
-    public GuiPosition(double x, double y) {
-        setRelative(x, y);
-    }
-
-    public GuiPosition(int x, int y) {
-        setAbsolute(x, y);
+    public GuiPosition(double defaultX, double defaultY) {
+        this.defaultX = defaultX;
+        this.defaultY = defaultY;
+        this.x = defaultX;
+        this.y = defaultY;
     }
 
     /**
@@ -78,6 +79,11 @@ public final class GuiPosition {
      */
     public double getRelativeY() {
         return y;
+    }
+
+    public void resetToDefault() {
+        this.x = this.defaultX;
+        this.y = this.defaultY;
     }
 
 }
