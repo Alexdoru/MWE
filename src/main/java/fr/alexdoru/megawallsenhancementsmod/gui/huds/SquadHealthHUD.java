@@ -193,11 +193,6 @@ public class SquadHealthHUD implements IRenderer {
     }
 
     @Override
-    public void save() {
-        ConfigHandler.saveConfig();
-    }
-
-    @Override
     public GuiPosition getHUDPosition() {
         return this.guiPosition;
     }
