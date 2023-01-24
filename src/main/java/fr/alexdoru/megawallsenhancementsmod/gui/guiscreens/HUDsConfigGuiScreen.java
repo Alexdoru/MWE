@@ -198,25 +198,25 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 mc.displayGuiScreen(new PositionEditGuiScreen(EnergyDisplayHUD.instance, this));
                 break;
             case 7:
-                KillCooldownHUD.instance.guiPosition.setRelative(0d, 0d);
+                KillCooldownHUD.instance.guiPosition.resetToDefault();
                 break;
             case 8:
-                ArrowHitHUD.instance.guiPosition.setRelative(0.5d, 9d / 20d);
+                ArrowHitHUD.instance.guiPosition.resetToDefault();
                 break;
             case 12:
-                LastWitherHPHUD.instance.guiPosition.setRelative(0.75d, 0.05d);
+                LastWitherHPHUD.instance.guiPosition.resetToDefault();
                 break;
             case 14:
-                HunterStrengthHUD.instance.guiPosition.setRelative(0.5d, 8d / 20d);
+                HunterStrengthHUD.instance.guiPosition.resetToDefault();
                 break;
             case 23:
-                SquadHealthHUD.instance.guiPosition.setRelative(0.25d, 0.0d);
+                SquadHealthHUD.instance.guiPosition.resetToDefault();
                 break;
             case 16:
-                CreeperPrimedTNTHUD.instance.guiPosition.setRelative(0.5d, 8d / 20d);
+                CreeperPrimedTNTHUD.instance.guiPosition.resetToDefault();
                 break;
             case 19:
-                EnergyDisplayHUD.instance.guiPosition.setRelative(0.5d, 10.5d / 20d);
+                EnergyDisplayHUD.instance.guiPosition.resetToDefault();
                 break;
             default:
                 break;
