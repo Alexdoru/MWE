@@ -10,4 +10,6 @@ public interface EntityPlayerAccessor {
     PlayerDataSamples getPlayerDataSamples();
     char getPlayerTeamColor();
     void setPlayerTeamColor(char color);
+    int getPlayerTeamColorInt();
+    void setPlayerTeamColorInt(int color);
 }

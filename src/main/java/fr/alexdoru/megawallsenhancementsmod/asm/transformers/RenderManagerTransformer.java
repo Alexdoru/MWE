@@ -77,10 +77,8 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                     if (count255 > -1 && count255 < 3 && checkIntInsnNode(insnNode, SIPUSH, 255)) {
                         if (count255 == 0) {
                             final InsnList list = new InsnList();
-                            list.add(new VarInsnNode(ALOAD, 0));
-                            list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.RENDERMANAGER$TEXTRENDERER));
                             list.add(new VarInsnNode(ALOAD, 1));
-                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderManagerHook"), "getRedHitboxColor", "(IL" + ClassMapping.FONTRENDERER + ";L" + ClassMapping.ENTITY + ";)I", false));
+                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderManagerHook"), "getRedHitboxColor", "(IL" + ClassMapping.ENTITY + ";)I", false));
                             methodNode.instructions.insert(insnNode, list);
                             status.addInjection();
                         } else if (count255 == 1) {
