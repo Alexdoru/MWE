@@ -1,6 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
-import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.ICachedHUDText;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.IRenderer;
@@ -48,11 +47,6 @@ public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDTe
     @Override
     public boolean isEnabled(long currentTimeMillis) {
         return true;
-    }
-
-    @Override
-    public void save() {
-        ConfigHandler.saveConfig();
     }
 
     @Override
