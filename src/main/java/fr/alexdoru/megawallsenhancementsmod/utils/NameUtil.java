@@ -141,7 +141,6 @@ public class NameUtil {
                 ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(mwPlayerData.displayName);
                 final EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
                 if (player != null) {
-                    ((EntityPlayerAccessor) player).setPlayerTeamColor(mwPlayerData.teamColor);
                     ((EntityPlayerAccessor) player).setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
                 }
             }
@@ -162,8 +161,6 @@ public class NameUtil {
 
         ((EntityPlayerAccessor) player).setPrestige4Tag(mwPlayerData.originalP4Tag);
         ((EntityPlayerAccessor) player).setPrestige5Tag(mwPlayerData.P5Tag);
-
-        ((EntityPlayerAccessor) player).setPlayerTeamColor(mwPlayerData.teamColor);
         ((EntityPlayerAccessor) player).setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
 
         if (!onPlayerJoin) {
