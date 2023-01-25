@@ -235,6 +235,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 29:
                 SpeeedHUD.instance.guiPosition.resetToDefault();
+                break;
             default:
                 break;
         }
