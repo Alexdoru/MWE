@@ -165,7 +165,7 @@ public class ConfigHandler extends AbstractConfig {
     public static boolean showSpeedHUD;
 
     @ConfigProperty(category = GUI, name = "Speed HUD position", comment = "position of the speed HUD")
-    public static final GuiPosition speedHUDPosition = new GuiPosition(0.1d, 1d);
+    public static final GuiPosition speedHUDPosition = new GuiPosition(1d, 1d);
 
     /**
      * NoCheaters Config
