@@ -161,6 +161,12 @@ public class ConfigHandler extends AbstractConfig {
     @ConfigProperty(category = GUI, name = "Threshold to make energy display aqua", comment = "The threshold number that when hit will cause the energy display to turn aqua")
     public static int aquaEnergyDisplayThreshold = 100;
 
+    @ConfigProperty(category = GUI, name = "Speed HUD", comment = "Displays your own speed")
+    public static boolean showSpeedHUD;
+
+    @ConfigProperty(category = GUI, name = "Speed HUD position", comment = "position of the speed HUD")
+    public static final GuiPosition speedHUDPosition = new GuiPosition(0.1d, 1d);
+
     /**
      * NoCheaters Config
      */

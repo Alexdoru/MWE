@@ -24,7 +24,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         final int buttonsWidth = 200;
         final int sideButtonsWidth = 90;
         this.maxWidth = sideButtonsWidth * 2 + buttonsWidth + 4 * 2;
-        this.maxHeight = (buttonsHeight + 4) * 11 + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * 12 + buttonsHeight;
         super.initGui();
         final int XposCenterButton = getxCenter() - buttonsWidth / 2;
         final int XposCenterLeftButton = getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth;
@@ -38,6 +38,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(15, XposCenterButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(15)));
         buttonList.add(new GuiButton(18, XposCenterButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(18)));
         buttonList.add(new GuiSlider(21, XposCenterButton, getButtonYPos(8), buttonsWidth, buttonsHeight, "Energy threshold : ", "", 1d, 160d, ConfigHandler.aquaEnergyDisplayThreshold, false, true, this));
+        buttonList.add(new GuiButton(28, XposCenterButton, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(28)));
 
         /* Buttons : Reset HUD position */
         buttonList.add(new GuiButton(8, XposCenterLeftButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(8)));
@@ -47,6 +48,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(12, XposCenterLeftButton, getButtonYPos(5), sideButtonsWidth, buttonsHeight, getButtonDisplayString(12)));
         buttonList.add(new GuiButton(19, XposCenterLeftButton, getButtonYPos(6), sideButtonsWidth, buttonsHeight, getButtonDisplayString(19)));
         buttonList.add(new GuiButton(16, XposCenterLeftButton, getButtonYPos(7), sideButtonsWidth, buttonsHeight, getButtonDisplayString(16)));
+        buttonList.add(new GuiButton(29, XposCenterLeftButton, getButtonYPos(9), sideButtonsWidth, buttonsHeight, getButtonDisplayString(29)));
         /* Buttons : Move HUD */
         buttonList.add(new GuiButton(6, XposCenterRightButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(6)));
         buttonList.add(new GuiButton(5, XposCenterRightButton, getButtonYPos(2), sideButtonsWidth, buttonsHeight, getButtonDisplayString(5)));
@@ -55,9 +57,10 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(10, XposCenterRightButton, getButtonYPos(5), sideButtonsWidth, buttonsHeight, getButtonDisplayString(10)));
         buttonList.add(new GuiButton(17, XposCenterRightButton, getButtonYPos(6), sideButtonsWidth, buttonsHeight, getButtonDisplayString(17)));
         buttonList.add(new GuiButton(20, XposCenterRightButton, getButtonYPos(7), sideButtonsWidth, buttonsHeight, getButtonDisplayString(20)));
+        buttonList.add(new GuiButton(30, XposCenterRightButton, getButtonYPos(9), sideButtonsWidth, buttonsHeight, getButtonDisplayString(30)));
 
         /* Exit button */
-        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(10), 150, buttonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, getButtonDisplayString(4)));
     }
 
     @Override
@@ -83,6 +86,8 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 return "Creeper primed TNT HUD : " + getSuffix(ConfigHandler.showPrimedTNTHUD);
             case 18:
                 return "Energy display HUD : " + getSuffix(ConfigHandler.showEnergyDisplayHUD);
+            case 28:
+                return "Speed HUD : " + getSuffix(ConfigHandler.showSpeedHUD);
             case 4:
                 return "Done";
             case 5:
@@ -92,6 +97,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 24:
             case 17:
             case 20:
+            case 30:
                 return "Move HUD";
             case 7:
             case 8:
@@ -100,6 +106,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 23:
             case 16:
             case 19:
+            case 29:
                 return "Reset position";
             default:
                 return "no display text for this button id";
@@ -132,6 +139,9 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 18:
                 textLines.add(EnumChatFormatting.GREEN + "Displays a HUD with the amount of energy you have");
                 textLines.add(EnumChatFormatting.GREEN + "Turns " + EnumChatFormatting.AQUA + EnumChatFormatting.BOLD + "aqua" + EnumChatFormatting.GREEN + " when your energy level exceeds the amount set below");
+                break;
+            case 28:
+                textLines.add(EnumChatFormatting.GREEN + "Displays you own speed");
                 break;
         }
         return textLines;
@@ -173,6 +183,8 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 18:
                 ConfigHandler.showEnergyDisplayHUD = !ConfigHandler.showEnergyDisplayHUD;
                 break;
+            case 28:
+                ConfigHandler.showSpeedHUD = !ConfigHandler.showSpeedHUD;
             case 4:
                 mc.displayGuiScreen(parent);
                 break;
@@ -197,6 +209,9 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 20:
                 mc.displayGuiScreen(new PositionEditGuiScreen(EnergyDisplayHUD.instance, this));
                 break;
+            case 30:
+                mc.displayGuiScreen(new PositionEditGuiScreen(SpeeedHUD.instance, this));
+                break;
             case 7:
                 KillCooldownHUD.instance.guiPosition.resetToDefault();
                 break;
@@ -218,6 +233,8 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 19:
                 EnergyDisplayHUD.instance.guiPosition.resetToDefault();
                 break;
+            case 29:
+                SpeeedHUD.instance.guiPosition.resetToDefault();
             default:
                 break;
         }
