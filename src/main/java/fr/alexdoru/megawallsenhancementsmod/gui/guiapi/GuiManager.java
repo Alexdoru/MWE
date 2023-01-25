@@ -12,7 +12,7 @@ import java.util.List;
 
 public final class GuiManager {
 
-    private final List<IRenderer> registeredRenderers = new ArrayList<>();
+    private final List<IRenderer> registeredRenderers = new ArrayList<>(9);
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     /**
@@ -27,6 +27,7 @@ public final class GuiManager {
         this.registeredRenderers.add(new LastWitherHPHUD());
         this.registeredRenderers.add(new EnergyDisplayHUD());
         this.registeredRenderers.add(new SquadHealthHUD());
+        this.registeredRenderers.add(new SpeeedHUD());
     }
 
     @SubscribeEvent
