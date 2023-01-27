@@ -106,6 +106,7 @@ public abstract class AbstractCheck implements ICheck {
                 if (!wdr.hacks.contains(cheat)) {
                     wdr.hacks.add(cheat);
                 }
+                wdr.timestamp = (new Date()).getTime();
             }
             NameUtil.updateMWPlayerDataAndEntityData(player, false);
         }
