@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
-import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.events.KeybindingListener;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.TimerUtil;
 import net.minecraft.client.Minecraft;
@@ -71,14 +71,14 @@ public class GuiScreenBookHook {
     }
 
     public static void onKeyTyped(int keycode) {
-        if (isOnNickGenerationPage && timer.update() && MegaWallsEnhancementsMod.newNickKey.getKeyCode() != 0 && MegaWallsEnhancementsMod.newNickKey.getKeyCode() == keycode) {
+        if (isOnNickGenerationPage && timer.update() && KeybindingListener.getNewNickKey().getKeyCode() != 0 && KeybindingListener.getNewNickKey().getKeyCode() == keycode) {
             Minecraft.getMinecraft().thePlayer.sendChatMessage("/nick help setrandom");
         }
     }
 
     public static void renderInstructions(int screenWidth, int y) {
         if (isOnNickGenerationPage) {
-            final int keyCode = MegaWallsEnhancementsMod.newNickKey.getKeyCode();
+            final int keyCode = KeybindingListener.getNewNickKey().getKeyCode();
             final String text;
             if (keyCode == 0) {
                 text = EnumChatFormatting.GREEN + "Go to " + EnumChatFormatting.GOLD + "Option -> Controls -> MegaWallsEnhancements" + EnumChatFormatting.GREEN + ", to set the keybind to get a random nick";
