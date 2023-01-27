@@ -15,10 +15,8 @@ import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.PlayerJoinListener;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.updater.ModUpdater;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -41,10 +39,6 @@ public class MegaWallsEnhancementsMod {
     public static final String modName = "MegaWallsEnhancements";
     public static final String version = "2.9";
     public static final Logger logger = LogManager.getLogger(modName);
-    public static final KeyBinding newNickKey = new KeyBinding("New Random Nick", 0, "MegaWallsEnhancements");
-    public static final KeyBinding playerHitboxes = new KeyBinding("Toggle player hitboxes", 0, "Hitboxes");
-    public static final KeyBinding addTimestampKey = new KeyBinding("Add Timestamp", 0, "NoCheaters");
-    public static final KeyBinding toggleDroppedItemLimit = new KeyBinding("Toggle dropped item limit", 0, "MegaWallsEnhancements");
     public static File jarFile;
 
     @EventHandler
@@ -55,11 +49,6 @@ public class MegaWallsEnhancementsMod {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-
-        ClientRegistry.registerKeyBinding(newNickKey);
-        ClientRegistry.registerKeyBinding(playerHitboxes);
-        ClientRegistry.registerKeyBinding(addTimestampKey);
-        ClientRegistry.registerKeyBinding(toggleDroppedItemLimit);
 
         MinecraftForge.EVENT_BUS.register(new GuiManager());
         MinecraftForge.EVENT_BUS.register(new ModUpdater());
