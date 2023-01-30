@@ -9,7 +9,7 @@ import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class NetHandlerPlayClient_TeleportListener implements IMyClassTransformer {
+public class NetHandlerPlayClientTransformer_TeleportListener implements IMyClassTransformer {
 
     @Override
     public String getTargetClassName() {
