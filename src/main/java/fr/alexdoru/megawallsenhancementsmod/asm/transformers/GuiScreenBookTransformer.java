@@ -29,7 +29,7 @@ public class GuiScreenBookTransformer implements IMyClassTransformer {
                 final InsnList list = new InsnList();
                 list.add(new VarInsnNode(ALOAD, 2));
                 list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiScreenBookHook"), "onBookInit", "(L" + ClassMapping.ITEMSTACK + ";)V", false));
-                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), list);
+                methodNode.instructions.insert(list);
                 status.addInjection();
             }
 
@@ -41,7 +41,7 @@ public class GuiScreenBookTransformer implements IMyClassTransformer {
                 final InsnList list = new InsnList();
                 list.add(new VarInsnNode(ILOAD, 2));
                 list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiScreenBookHook"), "onKeyTyped", "(I)V", false));
-                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), list);
+                methodNode.instructions.insert(list);
                 status.addInjection();
             }
 

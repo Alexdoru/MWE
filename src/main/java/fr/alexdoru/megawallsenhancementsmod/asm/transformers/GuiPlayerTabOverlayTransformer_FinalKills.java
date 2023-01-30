@@ -20,7 +20,7 @@ public class GuiPlayerTabOverlayTransformer_FinalKills implements IMyClassTransf
         status.setInjectionPoints(5);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.RENDERPLAYERLIST)) {
-                methodNode.instructions.insert(methodNode.instructions.getFirst(), new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "resetFinalsScoreWidth", "()V", false));
+                methodNode.instructions.insert(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "resetFinalsScoreWidth", "()V", false));
                 status.addInjection();
                 boolean injectedMax = false;
                 boolean lookFork5k2 = false;

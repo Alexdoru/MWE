@@ -28,7 +28,7 @@ public class GuiChatTransformer implements IMyClassTransformer {
                 list.add(new VarInsnNode(ALOAD, 2));
                 list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiChatHook"), "autoComplete", "(ZLjava/lang/String;Ljava/lang/String;)Z", false));
                 list.add(getNewFieldInsnNode(PUTFIELD, FieldMapping.GUICHAT$WAITINGONAUTOCOMPLETE));
-                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), list);
+                methodNode.instructions.insert(list);
                 status.addInjection();
             }
             if (checkMethodNode(methodNode, MethodMapping.GUICHAT$ONAUTOCOMPLETERESPONSE)) {
