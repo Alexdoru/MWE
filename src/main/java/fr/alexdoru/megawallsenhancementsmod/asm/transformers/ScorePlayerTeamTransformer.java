@@ -33,7 +33,7 @@ public class ScorePlayerTeamTransformer implements IMyClassTransformer {
                     list.add(new VarInsnNode(ALOAD, 2));
                     list.add(new InsnNode(ARETURN));
                     list.add(label);
-                    methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), list);
+                    methodNode.instructions.insert(list);
                     status.addInjection();
                 }
             }

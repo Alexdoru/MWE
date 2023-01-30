@@ -46,7 +46,7 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                  *     return;
                  * }
                  */
-                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), getCancelRenderInsnList());
+                methodNode.instructions.insert(getCancelRenderInsnList());
                 status.addInjection();
 
                 int count255 = -1;

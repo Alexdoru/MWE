@@ -26,7 +26,7 @@ public class EntityFXTransformer implements IMyClassTransformer {
                  *    return;
                  * }
                  */
-                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), hideParticleInsnList());
+                methodNode.instructions.insert(hideParticleInsnList());
                 status.addInjection();
                 break;
             }
