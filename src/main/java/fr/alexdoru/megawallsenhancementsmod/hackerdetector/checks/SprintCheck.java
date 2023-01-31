@@ -45,7 +45,7 @@ public class SprintCheck extends AbstractCheck {
             return false;
         }
         /* It takes 32 ticks to eat/drink one food/potion item */
-        if (data.sprintTime > 33 && data.useItemTime > 4) {
+        if (data.sprintTime > 70 && data.useItemTime > 4) {
             /* If the player is moving slower than the base running speed, we consider it is keepsprint */
             if (player.hurtTime != 0 || data.dXdZVector2D.norm() < 0.25D) {
                 isNoslowCheck = false;
