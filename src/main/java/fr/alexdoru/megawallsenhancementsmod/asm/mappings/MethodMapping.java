@@ -51,6 +51,7 @@ public enum MethodMapping {
     RENDERDEBUGBOUNDINGBOX("b", "renderDebugBoundingBox", "(L" + ENTITY + ";DDDFF)V"),
     RENDERENTITIES("a", "renderEntities", "(L" + ENTITY + ";L" + ICAMERA + ";F)V"),
     RENDERENTITYSIMPLE(INVOKEVIRTUAL, RENDERMANAGER, "a", "renderEntitySimple", "(L" + ENTITY + ";F)Z"),
+    RENDERERLIVINGENTITY$ROTATECORPSE("a", "rotateCorpse", "(L" + ENTITYLIVINGBASE + ";FFF)V"),
     RENDERGAMEOVERLAY("a", "renderGameOverlay", "(F)V"),
     RENDERGLOBAL$PLAYAUXSFX("a", "playAuxSFX", "(L" + ENTITYPLAYER + ";IL" + BLOCKPOS + ";I)V"),
     RENDERMANAGER$INIT("<init>", "(L" + TEXTUREMANAGER + ";L" + RENDERITEM + ";)V"),

@@ -8,7 +8,9 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,6 +60,8 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new SidebarmodReloaded_CustomSidebarTransformer());
         registerTransformer(new SidebarmodRevamp_GuiSidebarTransformer());
         registerTransformer(new WorldTransformer());
+        if ("01/04".equals(new SimpleDateFormat("dd/MM").format(new Date().getTime())))
+            registerTransformer(new RendererLivingEntityTransformer());
     }
 
     private void registerTransformer(IMyClassTransformer classTransformer) {
