@@ -87,7 +87,7 @@ public class NameUtil {
             }
             final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
-                NameUtil.updateEntityPlayerFields(player, false);
+                updateEntityPlayerFields(player, false);
                 if (refreshDisplayName) {
                     player.refreshDisplayName();
                 }
@@ -100,7 +100,7 @@ public class NameUtil {
         if (networkPlayerInfo != null) {
             ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(updateAndGetMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
         }
-        NameUtil.updateEntityPlayerFields(player, false);
+        updateEntityPlayerFields(player, false);
         if (refreshDisplayName) {
             player.refreshDisplayName();
         }
@@ -113,7 +113,7 @@ public class NameUtil {
         ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(updateAndGetMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
         final EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
         if (player != null) {
-            NameUtil.updateEntityPlayerFields(player, false);
+            updateEntityPlayerFields(player, false);
             if (refreshDisplayName) {
                 player.refreshDisplayName();
             }
@@ -123,7 +123,7 @@ public class NameUtil {
     public static void refreshAllNamesInWorld() {
         mc.getNetHandler().getPlayerInfoMap().forEach(p -> {
             if (p != null) {
-                NameUtil.updateMWPlayerDataAndEntityData(p, true);
+                updateMWPlayerDataAndEntityData(p, true);
             }
         });
     }
