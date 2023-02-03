@@ -24,13 +24,13 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
         this.maxHeight = (buttonsHeight + 4) * 10 + buttonsHeight;
         super.initGui();
         final int xPos = getxCenter() - buttonsWidth / 2;
-        this.buttonList.add(new GuiButton(0, xPos, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(0)));
-        this.buttonList.add(new GuiButton(1, xPos, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(1)));
-        this.buttonList.add(new GuiButton(2, xPos, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(2)));
-        this.buttonList.add(new GuiButton(3, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(3)));
-        this.buttonList.add(new GuiButton(4, xPos, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(4)));
-        this.buttonList.add(new GuiButton(5, xPos, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(5)));
-        this.buttonList.add(new GuiButton(6, xPos, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(6)));
+        this.buttonList.add(new GuiButton(0, xPos, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(0))); //hackerdetector toggle
+        this.buttonList.add(new GuiButton(1, xPos, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(1))); //save in nocheaters toggle
+        this.buttonList.add(new GuiButton(2, xPos, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(2))); //report flagged players toggle
+        this.buttonList.add(new GuiButton(3, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(3))); //show flag messages toggle
+        this.buttonList.add(new GuiButton(4, xPos, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(4))); //compact flag messages toggle
+        this.buttonList.add(new GuiButton(5, xPos, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(5))); //show single flag message toggle
+        this.buttonList.add(new GuiButton(6, xPos, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(6))); //done button
     }
 
     @Override
