@@ -38,15 +38,15 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
          */
         final int buttonsWidth = 200;
         final int xPos = getxCenter() - buttonsWidth / 2;
-        buttonList.add(new GuiButton(1, xPos, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(1)));
-        buttonList.add(reportSuggestionButton = new GuiButton(8, xPos, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(8)));
-        buttonList.add(autoreportSuggestionButton = new GuiButton(9, xPos, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(9)));
-        //buttonList.add(new GuiButton(2, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(2)));
-        //buttonList.add(new GuiButton(11, xPos, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(11)));
-        buttonList.add(new GuiButton(6, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(6)));
-        buttonList.add(new GuiSlider(7, xPos, getButtonYPos(6), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport, false, true, this));
-        buttonList.add(new GuiButton(10, xPos, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(10)));
-        buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getButtonYPos(9), 150, buttonsHeight, getButtonDisplayString(3)));
+        buttonList.add(new GuiButton(1, xPos, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(1))); //warning messages in chat
+        buttonList.add(reportSuggestionButton = new GuiButton(8, xPos, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(8))); //report suggestions in chat
+        buttonList.add(autoreportSuggestionButton = new GuiButton(9, xPos, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(9))); //auto report suggestions
+        //buttonList.add(new GuiButton(2, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(2))); //auto report cheaters
+        //buttonList.add(new GuiButton(11, xPos, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(11))); //stop report after a week
+        buttonList.add(new GuiButton(6, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(6))); //delete old reports
+        buttonList.add(new GuiSlider(7, xPos, getButtonYPos(6), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport, false, true, this)); //delete old reports time threshold slider
+        buttonList.add(new GuiButton(10, xPos, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(10))); //censor cheaters in chat
+        buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getButtonYPos(9), 150, buttonsHeight, getButtonDisplayString(3))); // close or done
     }
 
     @Override
