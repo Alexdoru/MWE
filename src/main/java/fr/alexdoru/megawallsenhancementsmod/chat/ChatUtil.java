@@ -16,7 +16,7 @@ public class ChatUtil {
     private static final FontRenderer frObj = mc.fontRendererObj;
 
     public static String getTagMW() {
-        return EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "MWEn" + EnumChatFormatting.GOLD + "] ";
+        return EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "MWE" + EnumChatFormatting.GOLD + "] ";
     }
 
     public static String getTagNoCheaters() {
