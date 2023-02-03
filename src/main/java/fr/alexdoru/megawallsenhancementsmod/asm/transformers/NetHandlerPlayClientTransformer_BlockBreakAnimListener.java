@@ -8,7 +8,7 @@ import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class NetHandlerPlayClient_BlockBreakAnimListener implements IMyClassTransformer {
+public class NetHandlerPlayClientTransformer_BlockBreakAnimListener implements IMyClassTransformer {
 
     @Override
     public String getTargetClassName() {
