@@ -24,26 +24,26 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
         final int XleftColumn = getxCenter() - buttonsWidth - 10;
         final int XrightColumn = getxCenter() + 10;
 
-        buttonList.add(new GuiButton(1, XleftColumn, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(1)));
-        buttonList.add(new GuiButton(2, XleftColumn, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(2)));
-        buttonList.add(new GuiButton(3, XleftColumn, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(3)));
-        buttonList.add(new GuiButton(13, XleftColumn, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(13)));
-        buttonList.add(new GuiButton(4, XleftColumn, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(4)));
-        buttonList.add(new GuiButton(5, XleftColumn, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(5)));
-        buttonList.add(new GuiButton(6, XleftColumn, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(6)));
-        buttonList.add(new GuiButton(7, XleftColumn, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(7)));
-        buttonList.add(new GuiButton(8, XleftColumn, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(8)));
+        buttonList.add(new GuiButton(1, XleftColumn, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(1))); //show hitboxes on players
+        buttonList.add(new GuiButton(2, XleftColumn, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(2))); //show hitboxes of grounded arrows
+        buttonList.add(new GuiButton(3, XleftColumn, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(3))); //show hitboxes of arrows in players
+        buttonList.add(new GuiButton(13, XleftColumn, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(13))); //show hitboxes of arrows in air
+        buttonList.add(new GuiButton(4, XleftColumn, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(4))); //show hitboxes of dropped items
+        buttonList.add(new GuiButton(5, XleftColumn, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(5))); //show hitboxes of passive mobs
+        buttonList.add(new GuiButton(6, XleftColumn, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(6))); //show hitboxes of hostile mobs
+        buttonList.add(new GuiButton(7, XleftColumn, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(7))); //show hitboxes of item frames
+        buttonList.add(new GuiButton(8, XleftColumn, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(8))); //show hitboxes of "other entities"
 
-        buttonList.add(new GuiButton(17, XrightColumn, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(17)));
-        buttonList.add(new GuiButton(14, XrightColumn, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(14)));
-        buttonList.add(new GuiButton(9, XrightColumn, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(9)));
-        buttonList.add(new GuiButton(15, XrightColumn, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(15)));
-        buttonList.add(new GuiSlider(16, XrightColumn, getButtonYPos(5), buttonsWidth, buttonsHeight, "Range : ", " m", 0d, 64d, ConfigHandler.hitboxDrawRange, false, true, this));
-        buttonList.add(new GuiButton(10, XrightColumn, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(10)));
-        buttonList.add(new GuiButton(11, XrightColumn, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(11)));
-        buttonList.add(new GuiButton(12, XrightColumn, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(12)));
+        buttonList.add(new GuiButton(17, XrightColumn, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(17))); //team color on hitboxes
+        buttonList.add(new GuiButton(14, XrightColumn, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(14))); //real size hitboxes
+        buttonList.add(new GuiButton(9, XrightColumn, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(9))); //red eyeline
+        buttonList.add(new GuiButton(15, XrightColumn, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(15))); //hide close hitboxes
+        buttonList.add(new GuiSlider(16, XrightColumn, getButtonYPos(5), buttonsWidth, buttonsHeight, "Range : ", " m", 0d, 64d, ConfigHandler.hitboxDrawRange, false, true, this)); //hitbox draw range slider
+        buttonList.add(new GuiButton(10, XrightColumn, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(10))); //draw blue vector
+        buttonList.add(new GuiButton(11, XrightColumn, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(11))); //draw blue vector on players only
+        buttonList.add(new GuiButton(12, XrightColumn, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(12))); //make red eyeline 3m
 
-        buttonList.add(new GuiButton(0, getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, getButtonDisplayString(0)));
+        buttonList.add(new GuiButton(0, getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, getButtonDisplayString(0))); //close button
     }
 
     @Override

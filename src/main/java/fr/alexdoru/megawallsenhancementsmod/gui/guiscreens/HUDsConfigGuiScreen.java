@@ -30,37 +30,37 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         final int XposCenterLeftButton = getxCenter() - buttonsWidth / 2 - 4 - sideButtonsWidth;
         final int XposCenterRightButton = getxCenter() + buttonsWidth / 2 + 4;
         /* HUD Buttons */
-        buttonList.add(new GuiButton(3, XposCenterButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(3)));
-        buttonList.add(new GuiButton(2, XposCenterButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(2)));
-        buttonList.add(new GuiButton(22, XposCenterButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(22)));
-        buttonList.add(new GuiButton(9, XposCenterButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(9)));
-        buttonList.add(new GuiButton(11, XposCenterButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(11)));
-        buttonList.add(new GuiButton(15, XposCenterButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(15)));
-        buttonList.add(new GuiButton(18, XposCenterButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(18)));
-        buttonList.add(new GuiSlider(21, XposCenterButton, getButtonYPos(8), buttonsWidth, buttonsHeight, "Energy threshold : ", "", 1d, 160d, ConfigHandler.aquaEnergyDisplayThreshold, false, true, this));
-        buttonList.add(new GuiButton(28, XposCenterButton, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(28)));
+        buttonList.add(new GuiButton(3, XposCenterButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(3))); //arrow hit hud
+        buttonList.add(new GuiButton(2, XposCenterButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(2))); // /kill cooldown hud
+        buttonList.add(new GuiButton(22, XposCenterButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(22))); //squad hud
+        buttonList.add(new GuiButton(9, XposCenterButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(9))); //strength hud
+        buttonList.add(new GuiButton(11, XposCenterButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(11))); //wither death time hud
+        buttonList.add(new GuiButton(15, XposCenterButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(15))); //creeper primed tnt hud
+        buttonList.add(new GuiButton(18, XposCenterButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(18))); //energy display hud
+        buttonList.add(new GuiSlider(21, XposCenterButton, getButtonYPos(8), buttonsWidth, buttonsHeight, "Energy threshold : ", "", 1d, 160d, ConfigHandler.aquaEnergyDisplayThreshold, false, true, this)); //energy display threshold slider
+        buttonList.add(new GuiButton(28, XposCenterButton, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(28))); //speed hud
 
         /* Buttons : Reset HUD position */
-        buttonList.add(new GuiButton(8, XposCenterLeftButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(8)));
-        buttonList.add(new GuiButton(7, XposCenterLeftButton, getButtonYPos(2), sideButtonsWidth, buttonsHeight, getButtonDisplayString(7)));
-        buttonList.add(new GuiButton(23, XposCenterLeftButton, getButtonYPos(3), sideButtonsWidth, buttonsHeight, getButtonDisplayString(23)));
-        buttonList.add(new GuiButton(14, XposCenterLeftButton, getButtonYPos(4), sideButtonsWidth, buttonsHeight, getButtonDisplayString(14)));
-        buttonList.add(new GuiButton(12, XposCenterLeftButton, getButtonYPos(5), sideButtonsWidth, buttonsHeight, getButtonDisplayString(12)));
-        buttonList.add(new GuiButton(19, XposCenterLeftButton, getButtonYPos(6), sideButtonsWidth, buttonsHeight, getButtonDisplayString(19)));
-        buttonList.add(new GuiButton(16, XposCenterLeftButton, getButtonYPos(7), sideButtonsWidth, buttonsHeight, getButtonDisplayString(16)));
-        buttonList.add(new GuiButton(29, XposCenterLeftButton, getButtonYPos(9), sideButtonsWidth, buttonsHeight, getButtonDisplayString(29)));
+        buttonList.add(new GuiButton(8, XposCenterLeftButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(8))); //arrow hit hud
+        buttonList.add(new GuiButton(7, XposCenterLeftButton, getButtonYPos(2), sideButtonsWidth, buttonsHeight, getButtonDisplayString(7))); // /kill cooldown hud
+        buttonList.add(new GuiButton(23, XposCenterLeftButton, getButtonYPos(3), sideButtonsWidth, buttonsHeight, getButtonDisplayString(23))); //squad hud
+        buttonList.add(new GuiButton(14, XposCenterLeftButton, getButtonYPos(4), sideButtonsWidth, buttonsHeight, getButtonDisplayString(14))); //strength hud
+        buttonList.add(new GuiButton(12, XposCenterLeftButton, getButtonYPos(5), sideButtonsWidth, buttonsHeight, getButtonDisplayString(12))); //wither death time hud
+        buttonList.add(new GuiButton(19, XposCenterLeftButton, getButtonYPos(6), sideButtonsWidth, buttonsHeight, getButtonDisplayString(19))); //creeper primed tnt hud
+        buttonList.add(new GuiButton(16, XposCenterLeftButton, getButtonYPos(7), sideButtonsWidth, buttonsHeight, getButtonDisplayString(16))); //energy display hud
+        buttonList.add(new GuiButton(29, XposCenterLeftButton, getButtonYPos(9), sideButtonsWidth, buttonsHeight, getButtonDisplayString(29))); //speed hud
         /* Buttons : Move HUD */
-        buttonList.add(new GuiButton(6, XposCenterRightButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(6)));
-        buttonList.add(new GuiButton(5, XposCenterRightButton, getButtonYPos(2), sideButtonsWidth, buttonsHeight, getButtonDisplayString(5)));
-        buttonList.add(new GuiButton(24, XposCenterRightButton, getButtonYPos(3), sideButtonsWidth, buttonsHeight, getButtonDisplayString(24)));
-        buttonList.add(new GuiButton(13, XposCenterRightButton, getButtonYPos(4), sideButtonsWidth, buttonsHeight, getButtonDisplayString(13)));
-        buttonList.add(new GuiButton(10, XposCenterRightButton, getButtonYPos(5), sideButtonsWidth, buttonsHeight, getButtonDisplayString(10)));
-        buttonList.add(new GuiButton(17, XposCenterRightButton, getButtonYPos(6), sideButtonsWidth, buttonsHeight, getButtonDisplayString(17)));
-        buttonList.add(new GuiButton(20, XposCenterRightButton, getButtonYPos(7), sideButtonsWidth, buttonsHeight, getButtonDisplayString(20)));
-        buttonList.add(new GuiButton(30, XposCenterRightButton, getButtonYPos(9), sideButtonsWidth, buttonsHeight, getButtonDisplayString(30)));
+        buttonList.add(new GuiButton(6, XposCenterRightButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(6))); //arrow hit hud
+        buttonList.add(new GuiButton(5, XposCenterRightButton, getButtonYPos(2), sideButtonsWidth, buttonsHeight, getButtonDisplayString(5))); // /kill cooldown hud
+        buttonList.add(new GuiButton(24, XposCenterRightButton, getButtonYPos(3), sideButtonsWidth, buttonsHeight, getButtonDisplayString(24))); //squad hud
+        buttonList.add(new GuiButton(13, XposCenterRightButton, getButtonYPos(4), sideButtonsWidth, buttonsHeight, getButtonDisplayString(13))); //strength hud
+        buttonList.add(new GuiButton(10, XposCenterRightButton, getButtonYPos(5), sideButtonsWidth, buttonsHeight, getButtonDisplayString(10))); //wither death time hud
+        buttonList.add(new GuiButton(17, XposCenterRightButton, getButtonYPos(6), sideButtonsWidth, buttonsHeight, getButtonDisplayString(17))); //creeper primed tnt hud
+        buttonList.add(new GuiButton(20, XposCenterRightButton, getButtonYPos(7), sideButtonsWidth, buttonsHeight, getButtonDisplayString(20))); //energy display hud
+        buttonList.add(new GuiButton(30, XposCenterRightButton, getButtonYPos(9), sideButtonsWidth, buttonsHeight, getButtonDisplayString(30))); //speed hud
 
         /* Exit button */
-        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, getButtonDisplayString(4))); //exit
     }
 
     @Override

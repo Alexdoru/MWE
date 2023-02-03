@@ -35,32 +35,32 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         final int XposLeftButton = getxCenter() - buttonsWidth - 10;
         final int XposRightButton = getxCenter() + 10;
 
-        buttonList.add(new GuiButton(18, XposLeftButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(18)));
-        buttonList.add(new GuiButton(26, XposLeftButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(26)));
-        buttonList.add(new GuiButton(19, XposLeftButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(19)));
-        buttonList.add(new GuiButton(31, XposLeftButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(31)));
-        buttonList.add(new GuiButton(25, XposLeftButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(25)));
-        buttonList.add(new GuiButton(28, XposLeftButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(28)));
-        buttonList.add(new GuiButton(32, XposLeftButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(32)));
-        buttonList.add(new GuiButton(15, XposLeftButton, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(15)));
-        buttonList.add(new GuiButton(27, XposLeftButton, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(27)));
+        buttonList.add(new GuiButton(18, XposLeftButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(18))); //cancel night vision effect
+        buttonList.add(new GuiButton(26, XposLeftButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(26))); //clear view
+        buttonList.add(new GuiButton(19, XposLeftButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(19))); //colored tablist health
+        buttonList.add(new GuiButton(31, XposLeftButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(31))); //fix action bar text overlap
+        buttonList.add(new GuiButton(25, XposLeftButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(25))); //hide repetitive chat messages
+        buttonList.add(new GuiButton(28, XposLeftButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(28))); //hide tablist header and footer
+        buttonList.add(new GuiButton(32, XposLeftButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(32))); //hide tablist ping
+        buttonList.add(new GuiButton(15, XposLeftButton, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(15))); //icons on names
+        buttonList.add(new GuiButton(27, XposLeftButton, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(27))); //nick hider
 
-        buttonList.add(new GuiButton(24, XposRightButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(24)));
-        buttonList.add(new GuiButton(21, XposRightButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(21)));
-        buttonList.add(new GuiButton(0, XposRightButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(0)));
-        buttonList.add(new GuiButton(29, XposRightButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(29)));
-        buttonList.add(new GuiButton(16, XposRightButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(16)));
-        buttonList.add(new GuiButton(17, XposRightButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(17)));
-        buttonList.add(new GuiSlider(20, XposRightButton, getButtonYPos(7), buttonsWidth, buttonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
-        buttonList.add(new GuiButton(22, XposRightButton, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(22)));
-        buttonList.add(new GuiSlider(23, XposRightButton, getButtonYPos(9), buttonsWidth, buttonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
+        buttonList.add(new GuiButton(24, XposRightButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(24))); //P5 tags
+        buttonList.add(new GuiButton(21, XposRightButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(21))); //safe inventory
+        buttonList.add(new GuiButton(0, XposRightButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(0))); //short coin messages
+        buttonList.add(new GuiButton(29, XposRightButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(29))); //show player count in tab
+        buttonList.add(new GuiButton(16, XposRightButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(16))); //strength particles on hbs and dreads
+        buttonList.add(new GuiButton(17, XposRightButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(17))); //low hp sound warning
+        buttonList.add(new GuiSlider(20, XposRightButton, getButtonYPos(7), buttonsWidth, buttonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this)); //low hp health threshold slider
+        buttonList.add(new GuiButton(22, XposRightButton, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(22))); //max dropped item entities
+        buttonList.add(new GuiSlider(23, XposRightButton, getButtonYPos(9), buttonsWidth, buttonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, ConfigHandler.maxDroppedEntityRendered, false, true, this)); // max dropped item entities slider
 
         if (isPatcherNotLoaded) {
-            buttonList.add(new GuiSlider(30, XposRightButton, getButtonYPos(10), buttonsWidth, buttonsHeight, "Tablist size : ", " players", 50d, 125d, ConfigHandler.tablistSize, false, true, this));
+            buttonList.add(new GuiSlider(30, XposRightButton, getButtonYPos(10), buttonsWidth, buttonsHeight, "Tablist size : ", " players", 50d, 125d, ConfigHandler.tablistSize, false, true, this)); //tablist size slider (if patcher is not present)
         }
 
         /* Exit button */
-        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(isPatcherNotLoaded ? 12 : 11), 150, buttonsHeight, getButtonDisplayString(4)));
+        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(isPatcherNotLoaded ? 12 : 11), 150, buttonsHeight, getButtonDisplayString(4))); //exit button
     }
 
     @Override
