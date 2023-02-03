@@ -8,7 +8,6 @@ import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.util.EnumChatFormatting;
@@ -22,7 +21,6 @@ public class ReportQueue {
 
     public static final ReportQueue INSTANCE = new ReportQueue();
     private static final Minecraft mc = Minecraft.getMinecraft();
-    private static final FontRenderer frObj = mc.fontRendererObj;
     private static final int TIME_BETWEEN_REPORTS_MAX = 5 * 60 * 20;
     private static final int TIME_BETWEEN_REPORTS_MIN = 3 * 60 * 20;
     private static final int AUTOREPORT_PER_GAME = 2;
@@ -120,16 +118,16 @@ public class ReportQueue {
     //public void onRender(RenderGameOverlayEvent.Post event) {
     //    if (debug && event.type == RenderGameOverlayEvent.ElementType.TEXT) {
     //        final int x = 0;
-    //        int y = frObj.FONT_HEIGHT * 4;
-    //        frObj.drawString(EnumChatFormatting.DARK_GREEN + "REPORT QUEUE", x, y, 0, true);
-    //        y += frObj.FONT_HEIGHT;
+    //        int y = mc.fontRendererObj.FONT_HEIGHT * 4;
+    //        mc.fontRendererObj.drawString(EnumChatFormatting.DARK_GREEN + "REPORT QUEUE", x, y, 0, true);
+    //        y += mc.fontRendererObj.FONT_HEIGHT;
     //        boolean first = true;
     //        for (final ReportInQueue reportInQueue : queueList) {
-    //            frObj.drawString((reportInQueue.isReportSuggestion ? EnumChatFormatting.RED : EnumChatFormatting.GREEN) + reportInQueue.reportedPlayer, x, y, 0, true);
+    //            mc.fontRendererObj.drawString((reportInQueue.isReportSuggestion ? EnumChatFormatting.RED : EnumChatFormatting.GREEN) + reportInQueue.reportedPlayer, x, y, 0, true);
     //            if (first) {
-    //                frObj.drawString(EnumChatFormatting.GOLD + " " + counter / 20 + "s", x + frObj.getStringWidth(reportInQueue.reportedPlayer), y, 0, true);
+    //                mc.fontRendererObj.drawString(EnumChatFormatting.GOLD + " " + counter / 20 + "s", x + mc.fontRendererObj.getStringWidth(reportInQueue.reportedPlayer), y, 0, true);
     //            }
-    //            y += frObj.FONT_HEIGHT;
+    //            y += mc.fontRendererObj.FONT_HEIGHT;
     //            first = false;
     //        }
     //    }
