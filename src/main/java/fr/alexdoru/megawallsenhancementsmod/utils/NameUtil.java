@@ -83,7 +83,7 @@ public class NameUtil {
         if (isValidMinecraftName(playername)) {
             final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
             if (networkPlayerInfo != null) {
-                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(updateAndGetMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
+                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(getMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
             }
             final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
@@ -98,7 +98,7 @@ public class NameUtil {
     public static void updateMWPlayerDataAndEntityData(EntityPlayer player, boolean refreshDisplayName) {
         final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(player.getName());
         if (networkPlayerInfo != null) {
-            ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(updateAndGetMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
+            ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(getMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
         }
         updateEntityPlayerFields(player, false);
         if (refreshDisplayName) {
@@ -110,7 +110,7 @@ public class NameUtil {
      * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
      */
     public static void updateMWPlayerDataAndEntityData(NetworkPlayerInfo networkPlayerInfo, boolean refreshDisplayName) {
-        ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(updateAndGetMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
+        ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(getMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
         final EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
         if (player != null) {
             updateEntityPlayerFields(player, false);
@@ -137,7 +137,7 @@ public class NameUtil {
         if (isValidMinecraftName(playername)) {
             final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
             if (networkPlayerInfo != null) {
-                final MWPlayerData.PlayerData mwPlayerData = updateAndGetMWPlayerData(networkPlayerInfo.getGameProfile(), true);
+                final MWPlayerData.PlayerData mwPlayerData = getMWPlayerData(networkPlayerInfo.getGameProfile(), true);
                 ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(mwPlayerData.displayName);
                 final EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
                 if (player != null) {
@@ -197,7 +197,7 @@ public class NameUtil {
      * a rerun all the code in the method to generate the MWPlayerData instance
      */
     @Nonnull
-    public static MWPlayerData.PlayerData updateAndGetMWPlayerData(GameProfile gameProfileIn, boolean forceRefresh) {
+    public static MWPlayerData.PlayerData getMWPlayerData(GameProfile gameProfileIn, boolean forceRefresh) {
 
         final UUID id = gameProfileIn.getId();
         MWPlayerData.PlayerData mwPlayerData = MWPlayerData.get(id);
