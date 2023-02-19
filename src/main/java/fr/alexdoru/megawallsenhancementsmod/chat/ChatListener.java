@@ -26,7 +26,6 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import tv.twitch.chat.Chat;
 
 import java.util.HashSet;
 import java.util.regex.Matcher;
