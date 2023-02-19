@@ -39,6 +39,8 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(18, XposCenterButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(18))); //energy display hud
         buttonList.add(new GuiSlider(21, XposCenterButton, getButtonYPos(8), buttonsWidth, buttonsHeight, "Energy threshold : ", "", 1d, 160d, ConfigHandler.aquaEnergyDisplayThreshold, false, true, this)); //energy display threshold slider
         buttonList.add(new GuiButton(28, XposCenterButton, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(28))); //speed hud
+        buttonList.add(new GuiButton(31, XposCenterButton, getButtonYPos(10), buttonsWidth, buttonsHeight, getButtonDisplayString(31))); //phx bond hud
+
 
         /* Buttons : Reset HUD position */
         buttonList.add(new GuiButton(8, XposCenterLeftButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(8))); //arrow hit hud
@@ -49,6 +51,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(19, XposCenterLeftButton, getButtonYPos(6), sideButtonsWidth, buttonsHeight, getButtonDisplayString(19))); //creeper primed tnt hud
         buttonList.add(new GuiButton(16, XposCenterLeftButton, getButtonYPos(7), sideButtonsWidth, buttonsHeight, getButtonDisplayString(16))); //energy display hud
         buttonList.add(new GuiButton(29, XposCenterLeftButton, getButtonYPos(9), sideButtonsWidth, buttonsHeight, getButtonDisplayString(29))); //speed hud
+        buttonList.add(new GuiButton(32, XposCenterLeftButton, getButtonYPos(10), sideButtonsWidth, buttonsHeight, getButtonDisplayString(32))); //phx bond hud
         /* Buttons : Move HUD */
         buttonList.add(new GuiButton(6, XposCenterRightButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(6))); //arrow hit hud
         buttonList.add(new GuiButton(5, XposCenterRightButton, getButtonYPos(2), sideButtonsWidth, buttonsHeight, getButtonDisplayString(5))); // /kill cooldown hud
@@ -58,6 +61,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(17, XposCenterRightButton, getButtonYPos(6), sideButtonsWidth, buttonsHeight, getButtonDisplayString(17))); //creeper primed tnt hud
         buttonList.add(new GuiButton(20, XposCenterRightButton, getButtonYPos(7), sideButtonsWidth, buttonsHeight, getButtonDisplayString(20))); //energy display hud
         buttonList.add(new GuiButton(30, XposCenterRightButton, getButtonYPos(9), sideButtonsWidth, buttonsHeight, getButtonDisplayString(30))); //speed hud
+        buttonList.add(new GuiButton(33, XposCenterRightButton, getButtonYPos(10), sideButtonsWidth, buttonsHeight, getButtonDisplayString(33))); //phx bond hud
 
         /* Exit button */
         buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, getButtonDisplayString(4))); //exit
@@ -88,6 +92,8 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 return "Energy display HUD : " + getSuffix(ConfigHandler.showEnergyDisplayHUD);
             case 28:
                 return "Speed HUD : " + getSuffix(ConfigHandler.showSpeedHUD);
+            case 31:
+                return "Phoenix bond HUD : " + getSuffix(ConfigHandler.showPhxBondHUD);
             case 4:
                 return "Done";
             case 5:
@@ -98,6 +104,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 17:
             case 20:
             case 30:
+            case 33:
                 return "Move HUD";
             case 7:
             case 8:
@@ -107,6 +114,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 16:
             case 19:
             case 29:
+            case 32:
                 return "Reset position";
             default:
                 return "no display text for this button id";
@@ -142,6 +150,9 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 28:
                 textLines.add(EnumChatFormatting.GREEN + "Displays you own speed");
+                break;
+            case 31:
+                textLines.add(EnumChatFormatting.GREEN + "Displays a HUD with the health healed from a Phoenix bond");
                 break;
         }
         return textLines;
@@ -185,6 +196,10 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 28:
                 ConfigHandler.showSpeedHUD = !ConfigHandler.showSpeedHUD;
+                break;
+            case 31:
+                ConfigHandler.showPhxBondHUD = !ConfigHandler.showPhxBondHUD;
+                break;
             case 4:
                 mc.displayGuiScreen(parent);
                 break;
@@ -212,6 +227,9 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 30:
                 mc.displayGuiScreen(new PositionEditGuiScreen(SpeeedHUD.instance, this));
                 break;
+            case 33:
+                mc.displayGuiScreen(new PositionEditGuiScreen(PhxBondHud.instance, this));
+                break;
             case 7:
                 KillCooldownHUD.instance.guiPosition.resetToDefault();
                 break;
@@ -235,6 +253,9 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 29:
                 SpeeedHUD.instance.guiPosition.resetToDefault();
+                break;
+            case 32:
+                PhxBondHud.instance.guiPosition.resetToDefault();
                 break;
             default:
                 break;
