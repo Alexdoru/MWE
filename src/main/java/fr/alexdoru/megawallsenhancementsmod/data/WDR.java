@@ -4,7 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.commands.CommandReport;
 
 import java.util.ArrayList;
 
-public class WDR {
+public class WDR implements Comparable<WDR> {
 
     public static final String NICK = "nick";
     public static final String IGNORED = "ignored";
@@ -31,6 +31,7 @@ public class WDR {
     /**
      * Compares the timestamp
      */
+    @Override
     public int compareTo(WDR wdr) {
         return compare(this, wdr);
     }
