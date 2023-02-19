@@ -1,6 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
-import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.gui.ScaledResolution;
