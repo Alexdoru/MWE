@@ -127,28 +127,31 @@ public class PhxBondHud extends MyCachedHUD {
 
 
 
-public static HashMap<String, Float> sortByValue(HashMap<String, Float> hm) {
-    List<Map.Entry<String, Float>> list = new LinkedList<>(hm.entrySet());
+    public static HashMap<String, Float> sortByValue(HashMap<String, Float> hm) {
+        List<Map.Entry<String, Float>> list = new LinkedList<>(hm.entrySet());
 
-    // sort the entries by value in descending order
-    Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
+        // sort the entries by value in descending order
+        Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
 
-    // create a new LinkedHashMap to hold the sorted entries
-    LinkedHashMap<String, Float> sortedMap = new LinkedHashMap<>();
+        // create a new LinkedHashMap to hold the sorted entries
+        LinkedHashMap<String, Float> sortedMap = new LinkedHashMap<>();
 
-    // loop through the sorted entries and put them into the new map
-    for (Map.Entry<String, Float> entry : list) {
-        if (entry.getKey().equals("$self")) {
-            // add the $self entry to the beginning of the map
-            sortedMap.put(entry.getKey(), entry.getValue());
-        } else {
-            // add all other entries to the end of the map
-            sortedMap.put(entry.getKey(), entry.getValue());
+        // add the $self entry to the beginning of the map
+        for (Map.Entry<String, Float> entry : list) {
+            if (entry.getKey().equals("$self")) {
+                sortedMap.put("$self", entry.getValue());
+            }
         }
-    }
 
-    return sortedMap;
-}
+        // loop through the sorted entries (except for $self) and put them into the new map
+        for (Map.Entry<String, Float> entry : list) {
+            if (!entry.getKey().equals("$self")) {
+                sortedMap.put(entry.getKey(), entry.getValue());
+            }
+        }
+
+        return sortedMap;
+    }
 
 
 
