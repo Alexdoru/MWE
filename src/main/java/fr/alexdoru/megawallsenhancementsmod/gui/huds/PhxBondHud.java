@@ -1,17 +1,28 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PhxBondHud extends MyCachedHUD {
 
     public static PhxBondHud instance;
 
+    private static final Pattern INCOMING_BOND_PATTERN = Pattern.compile("You were healed by \\w+'s Spirit Bond for (\\d+\\.?\\d*)[\u2764\u2665]\\.");
+    private static final Pattern OUTGOING_BOND_PATTERN = Pattern.compile("(\\w+)\\sfor\\s([0-9.]+)[\u2764\u2665]");
+    private static final Pattern SELF_HEAL_PATTERN = Pattern.compile("You are healed for\\s+(\\d+(?:\\.\\d+)?)[\u2764\u2665]");
+
+
     private static HashMap<String, Float> playersAndHeals = new HashMap<>();
     private static HashMap<String, Float> DUMMYplayersAndHeals = new HashMap<>();
+
+    private long bondtime;
 
     static {
         DUMMYplayersAndHeals.put("\u00a76[\u00a72S\u00a76] \u00a7a\u00a7lexample1 \u00a77[END]", 3.5f);
@@ -26,9 +37,46 @@ public class PhxBondHud extends MyCachedHUD {
         instance = this;
     }
 
+    public boolean processMessage(String msg) {
+
+        final Matcher matcherOutgoing = OUTGOING_BOND_PATTERN.matcher(msg);
+        final Matcher matcherSelf = SELF_HEAL_PATTERN.matcher(msg);
+
+        while (matcherOutgoing.find()) {
+            bondtime = System.currentTimeMillis();
+            final String playerName = matcherOutgoing.group(1);
+            final float heal = Float.parseFloat(matcherOutgoing.group(2));
+            if (!"healed".equalsIgnoreCase(playerName)) {
+                playersAndHeals.put(playerName, heal);
+            }
+            ChatUtil.debug("Found outgoing bond heal for " + playerName + " for " + heal);
+        }
+
+        if (matcherSelf.find()) {
+            bondtime = System.currentTimeMillis();
+            final float heal = Float.parseFloat(matcherSelf.group(1));
+            playersAndHeals.put("$self", heal);
+        }
+
+        final Matcher matcherIncoming = INCOMING_BOND_PATTERN.matcher(msg);
+
+        if (matcherIncoming.find()) {
+            bondtime = System.currentTimeMillis();
+            final float heal = Float.parseFloat(matcherIncoming.group(1));
+            playersAndHeals.put("$self", heal);
+            return true;
+        }
+
+        return false;
+    }
+
     public void drawLine(String name, float heal, int index, int[] absolutePos) {
 
-
+        if (name.equals("$self")) {
+            name = "\u00a7d\u00a7lYou";
+        } else {
+            name = NameUtil.getFormattedName(name);
+        }
 
         String lineText = getHealColor(heal) + "" + heal + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + name;
         drawString(frObj, lineText, absolutePos[0], absolutePos[1] + ((index + 1) * frObj.FONT_HEIGHT), 0);
@@ -39,7 +87,12 @@ public class PhxBondHud extends MyCachedHUD {
     @Override
     public void render(ScaledResolution resolution) {
         final int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
-
+        int index = 0;
+        Map<String, Float> sortedMap = sortByValue(playersAndHeals);
+        for (Map.Entry<String, Float> entry : sortedMap.entrySet()) {
+            drawLine(entry.getKey(), entry.getValue(), index, absolutePos);
+            index++;
+        }
     }
 
     @Override
@@ -55,7 +108,11 @@ public class PhxBondHud extends MyCachedHUD {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return ConfigHandler.showPhxBondHUD;
+        final boolean time = bondtime + 6000L > currentTimeMillis;
+        if (!time && !playersAndHeals.isEmpty()) {
+            playersAndHeals.clear();
+        }
+        return ConfigHandler.showPhxBondHUD && time;
     }
 
     private EnumChatFormatting getHealColor(float heal) {
@@ -71,18 +128,29 @@ public class PhxBondHud extends MyCachedHUD {
     }
 
 
-    public static HashMap<String, Float> sortByValue(HashMap<String, Float> hm) {
-        List<Map.Entry<String, Float> > list = new LinkedList<>(hm.entrySet());
 
-        Collections.sort(list, (o1, o2) -> (o2.getValue()).compareTo(o1.getValue()));
+public static HashMap<String, Float> sortByValue(HashMap<String, Float> hm) {
+    List<Map.Entry<String, Float>> list = new LinkedList<>(hm.entrySet());
 
-        HashMap<String, Float> temp = new LinkedHashMap<>();
-        for (Map.Entry<String, Float> aa : list) {
-            temp.put(aa.getKey(), aa.getValue());
+    // sort the entries by value in descending order
+    Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
+
+    // create a new LinkedHashMap to hold the sorted entries
+    LinkedHashMap<String, Float> sortedMap = new LinkedHashMap<>();
+
+    // loop through the sorted entries and put them into the new map
+    for (Map.Entry<String, Float> entry : list) {
+        if (entry.getKey().equals("$self")) {
+            // add the $self entry to the beginning of the map
+            sortedMap.put(entry.getKey(), entry.getValue());
+        } else {
+            // add all other entries to the end of the map
+            sortedMap.put(entry.getKey(), entry.getValue());
         }
-
-        return temp;
     }
+
+    return sortedMap;
+}
 
 
 
