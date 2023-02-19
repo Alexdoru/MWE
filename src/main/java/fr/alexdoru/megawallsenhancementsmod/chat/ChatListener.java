@@ -13,10 +13,7 @@ import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.ArrowHitHUD;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.CreeperPrimedTNTHUD;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.HunterStrengthHUD;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.KillCooldownHUD;
+import fr.alexdoru.megawallsenhancementsmod.gui.huds.*;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.AbstractCheck;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
@@ -29,6 +26,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import tv.twitch.chat.Chat;
 
 import java.util.HashSet;
 import java.util.regex.Matcher;
@@ -146,6 +144,11 @@ public class ChatListener {
                 return;
             }
 
+            if (PhxBondHud.instance.processMessage(msg)) {
+                return;
+            }
+
+
             final Matcher matcher = MESSAGE_PATTERN.matcher(msg);
             String senderRank = null;
             String messageSender = null;
@@ -227,6 +230,8 @@ public class ChatListener {
                     interceptLocraw = false;
                 }
             }
+
+
 
             /*Status messages*/
         } else if (event.type == 2) {
