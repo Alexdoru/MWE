@@ -13,7 +13,9 @@ public class PhxBondHud extends MyCachedHUD {
 
     public static PhxBondHud instance;
 
-    private static final Pattern INCOMING_BOND_PATTERN = Pattern.compile("You were healed by \\w+'s Spirit Bond for (\\d+\\.?\\d*)[\u2764\u2665]\\.");
+    private static final Pattern INCOMING_BOND_PATTERN = Pattern.compile("You were healed by \\w+'s Spirit Bond for (\\d+\\.?\\d*)[\u2764\u2665]");
+
+    private static final Pattern BOND_USED_PATTERN = Pattern.compile("^Your Spirit Bond healed");
     private static final Pattern OUTGOING_BOND_PATTERN = Pattern.compile("(\\w+)\\sfor\\s([0-9.]+)[\u2764\u2665]");
     private static final Pattern SELF_HEAL_PATTERN = Pattern.compile("You are healed for\\s+(\\d+(?:\\.\\d+)?)[\u2764\u2665]");
 
@@ -38,23 +40,28 @@ public class PhxBondHud extends MyCachedHUD {
 
     public boolean processMessage(String msg) {
 
+        final Matcher matcherBondUsed = BOND_USED_PATTERN.matcher(msg);
         final Matcher matcherOutgoing = OUTGOING_BOND_PATTERN.matcher(msg);
         final Matcher matcherSelf = SELF_HEAL_PATTERN.matcher(msg);
 
-        while (matcherOutgoing.find()) {
-            bondtime = System.currentTimeMillis();
-            final String playerName = matcherOutgoing.group(1);
-            final float heal = Float.parseFloat(matcherOutgoing.group(2));
-            if (!"healed".equalsIgnoreCase(playerName)) {
-                playersAndHeals.put(playerName, heal);
+        if (matcherBondUsed.find()) {
+            while (matcherOutgoing.find()) {
+                bondtime = System.currentTimeMillis();
+                final String playerName = matcherOutgoing.group(1);
+                final float heal = Float.parseFloat(matcherOutgoing.group(2));
+                if (!"healed".equalsIgnoreCase(playerName)) {
+                    playersAndHeals.put(playerName, heal);
+                }
             }
+
+            if (matcherSelf.find()) {
+                bondtime = System.currentTimeMillis();
+                final float heal = Float.parseFloat(matcherSelf.group(1));
+                playersAndHeals.put("$self", heal);
+            }
+            return true;
         }
 
-        if (matcherSelf.find()) {
-            bondtime = System.currentTimeMillis();
-            final float heal = Float.parseFloat(matcherSelf.group(1));
-            playersAndHeals.put("$self", heal);
-        }
 
         final Matcher matcherIncoming = INCOMING_BOND_PATTERN.matcher(msg);
 
@@ -76,7 +83,7 @@ public class PhxBondHud extends MyCachedHUD {
             name = NameUtil.getFormattedName(name);
         }
 
-        String lineText = getHealColor(heal) + "" + heal + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + name;
+        String lineText = getHealColor(heal) + "" + heal + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + name;
         drawString(frObj, lineText, absolutePos[0], absolutePos[1] + ((index + 1) * frObj.FONT_HEIGHT), 0);
 
     }
