@@ -2,9 +2,10 @@ package fr.alexdoru.megawallsenhancementsmod.data;
 
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandReport;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
-public class WDR {
+public class WDR implements Comparable<WDR> {
 
     public static final String NICK = "nick";
     public static final String IGNORED = "ignored";
@@ -31,7 +32,8 @@ public class WDR {
     /**
      * Compares the timestamp
      */
-    public int compareTo(WDR wdr) {
+    @Override
+    public int compareTo(@Nonnull WDR wdr) {
         return compare(this, wdr);
     }
 
