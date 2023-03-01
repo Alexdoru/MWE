@@ -1,8 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.enums;
 
+import java.util.HashMap;
 import java.util.Map;
-
-import com.google.common.collect.Maps;
 
 public enum GameType {
 
@@ -40,7 +39,7 @@ public enum GameType {
     public final String id; // game name on the API
     public final String friendlyName; // understandable game name
 
-    private static final Map<String, GameType> typeMap = Maps.newHashMap();
+    private static final Map<String, GameType> typeMap = new HashMap<>();
 
     static {
         for (final GameType game : values()) {
