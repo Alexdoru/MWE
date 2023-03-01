@@ -1,8 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.enums;
 
+import java.util.HashMap;
 import java.util.Map;
-
-import com.google.common.collect.Maps;
 
 public enum MWClass {
 
@@ -35,17 +34,18 @@ public enum MWClass {
     public final String tagLowerCase;
     public final String className;
 
+    private static final Map<String, MWClass> tagMap = new HashMap<>();
+
+    static {
+        for (final MWClass mwClass : values()) {
+            tagMap.put(mwClass.TAG, mwClass);
+        }
+    }
+
     MWClass(String TAG, String tagLowerCase, String className) {
         this.TAG = TAG;
         this.tagLowerCase = tagLowerCase;
         this.className = className;
-    }
-    private static final Map<String, MWClass> tagMap = Maps.newHashMap();
-
-    static {
-        for(final MWClass mwClass : values()) {
-            tagMap.put(mwClass.TAG, mwClass);
-        }
     }
 
     public static MWClass fromTagOrName(String nameIn) {

@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.data;
 
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandReport;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 public class WDR implements Comparable<WDR> {
@@ -32,7 +33,7 @@ public class WDR implements Comparable<WDR> {
      * Compares the timestamp
      */
     @Override
-    public int compareTo(WDR wdr) {
+    public int compareTo(@Nonnull WDR wdr) {
         return compare(this, wdr);
     }
 
