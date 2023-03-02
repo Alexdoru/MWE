@@ -8,6 +8,8 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 
+import java.util.List;
+
 public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDText {
 
     public static final Minecraft mc = Minecraft.getMinecraft();
@@ -54,10 +56,17 @@ public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDTe
         return this.guiPosition;
     }
 
-    public void drawMultilineString(String msg, int x, int y, boolean shadow) {
+    protected void drawMultilineString(String msg, int x, int y, boolean shadow) {
         for (final String line : msg.split("\n")) {
             frObj.drawString(line, x, y, 16777215, shadow);
             y += frObj.FONT_HEIGHT;
+        }
+    }
+
+    protected void drawStringList(List<String> list, int x, int y) {
+        for (final String line : list) {
+            drawCenteredString(mc.fontRendererObj, line, x, y, 0xFFFFFF);
+            y += mc.fontRendererObj.FONT_HEIGHT;
         }
     }
 

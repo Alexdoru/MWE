@@ -147,7 +147,6 @@ public class ChatListener {
                 return;
             }
 
-
             final Matcher matcher = MESSAGE_PATTERN.matcher(msg);
             String senderRank = null;
             String messageSender = null;
@@ -229,8 +228,6 @@ public class ChatListener {
                     interceptLocraw = false;
                 }
             }
-
-
 
             /*Status messages*/
         } else if (event.type == 2) {
