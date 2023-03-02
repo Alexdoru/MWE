@@ -11,7 +11,7 @@ import java.util.Map;
 public class ASMLoadingPlugin implements IFMLLoadingPlugin {
 
     public static final Logger logger = LogManager.getLogger("ASM MegaWallsEnhancements");
-    public static Boolean isObf;
+    public static boolean isObf;
 
     @Override
     public String[] getASMTransformerClass() {
