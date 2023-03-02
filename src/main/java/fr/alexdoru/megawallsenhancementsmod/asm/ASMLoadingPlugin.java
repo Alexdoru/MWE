@@ -30,7 +30,7 @@ public class ASMLoadingPlugin implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
-        isObf = (Boolean) data.get("runtimeDeobfuscationEnabled");
+        isObf = (boolean) data.get("runtimeDeobfuscationEnabled");
     }
 
     @Override
