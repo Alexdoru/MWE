@@ -13,25 +13,26 @@ import net.minecraft.util.BlockPos;
 @SuppressWarnings("unused")
 public class RenderGlobalHook {
 
-    private static int[] entityItemCount = new int[256];
+    private static final int[] entityItemCount = new int[256];
     private static int renderDistance = 256;
     private static int prevRenderDistance = renderDistance;
 
     public static void resetEntityItemCount() {
         if (ConfigHandler.limitDroppedEntityRendered) {
             int entityCount = 0;
+            boolean reachedLimit = false;
             for (int i = 0; i < entityItemCount.length; i++) {
                 entityCount += entityItemCount[i];
-                if (entityCount > ConfigHandler.maxDroppedEntityRendered) {
+                entityItemCount[i] = 0;
+                if (entityCount > ConfigHandler.maxDroppedEntityRendered && !reachedLimit) {
+                    reachedLimit = true;
                     renderDistance = i == 0 ? 1 : i;
-                    prevRenderDistance = renderDistance;
-                    entityItemCount = new int[256];
-                    return;
                 }
             }
-            renderDistance = 256;
+            if (!reachedLimit) {
+                renderDistance = 256;
+            }
             prevRenderDistance = renderDistance;
-            entityItemCount = new int[256];
         }
     }
 

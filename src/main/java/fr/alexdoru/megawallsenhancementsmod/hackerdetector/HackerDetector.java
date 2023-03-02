@@ -135,25 +135,25 @@ public class HackerDetector {
         //    data.directionDeltaXZList.add(data.dXdYdZVector3D.getXZAngleDiffWithVector(lastdXdYdZ));
         //}
         //data.dXdYdZSampleList.add(data.dXdYdZVector3D);
-        final Vector3D lookVector = Vector3D.getPlayersLookVec(player);
-        data.lookAngleDiff = lookVector.getAngleWithVector(data.lookVector);
-        data.lookVector = lookVector;
-        final double dYaw = player.rotationYawHead - player.prevRotationYawHead;
-        if (dYaw != 0 && data.dYaw != 0) {
-            data.lastTime_dYawChangedSign = dYaw * data.dYaw > 0 ? data.lastTime_dYawChangedSign + 1 : 0;
-        } else if (dYaw != 0) {
-            if (data.lastNonZerodYawPositive) {
-                data.lastTime_dYawChangedSign = dYaw > 0 ? data.lastTime_dYawChangedSign + 1 : 0;
-            } else {
-                data.lastTime_dYawChangedSign = dYaw < 0 ? data.lastTime_dYawChangedSign + 1 : 0;
-            }
-        } else {
-            data.lastTime_dYawChangedSign = data.lastTime_dYawChangedSign + 1;
-        }
-        if (dYaw != 0) {
-            data.lastNonZerodYawPositive = dYaw > 0;
-        }
-        data.dYaw = dYaw;
+        //final Vector3D lookVector = Vector3D.getPlayersLookVec(player);
+        //data.lookAngleDiff = lookVector.getAngleWithVector(data.lookVector);
+        //data.lookVector = lookVector;
+        //final double dYaw = player.rotationYawHead - player.prevRotationYawHead;
+        //if (dYaw != 0 && data.dYaw != 0) {
+        //    data.lastTime_dYawChangedSign = dYaw * data.dYaw > 0 ? data.lastTime_dYawChangedSign + 1 : 0;
+        //} else if (dYaw != 0) {
+        //    if (data.lastNonZerodYawPositive) {
+        //        data.lastTime_dYawChangedSign = dYaw > 0 ? data.lastTime_dYawChangedSign + 1 : 0;
+        //    } else {
+        //        data.lastTime_dYawChangedSign = dYaw < 0 ? data.lastTime_dYawChangedSign + 1 : 0;
+        //    }
+        //} else {
+        //    data.lastTime_dYawChangedSign = data.lastTime_dYawChangedSign + 1;
+        //}
+        //if (dYaw != 0) {
+        //    data.lastNonZerodYawPositive = dYaw > 0;
+        //}
+        //data.dYaw = dYaw;
     }
 
     //private void checkForRubberBand(double directionDeltaXZ, PlayerDataSamples data, EntityPlayer player) {
@@ -198,10 +198,10 @@ public class HackerDetector {
                 + " | position " + new Vector3D(player.posX, player.posY, player.posZ)
                 + " | rotationPitch " + String.format("%.4f", player.rotationPitch)
                 + " | rotationYawHead " + String.format("%.4f", player.rotationYawHead)
-                + " | look Vector " + data.lookVector
-                + " | lookAngleDiff " + String.format("%.4f", data.lookAngleDiff)
-                + " | dYaw " + String.format("%.4f", data.dYaw)
-                + " | lastTime_dYawChangedSign " + data.lastTime_dYawChangedSign
+                //+ " | look Vector " + data.lookVector
+                //+ " | lookAngleDiff " + String.format("%.4f", data.lookAngleDiff)
+                //+ " | dYaw " + String.format("%.4f", data.dYaw)
+                //+ " | lastTime_dYawChangedSign " + data.lastTime_dYawChangedSign
                 + " | is sprinting " + (player.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getModifier(sprintingUUID) != null)
                 + " | sprintTime " + data.sprintTime
                 + " | lastHurtTime " + data.lastHurtTime

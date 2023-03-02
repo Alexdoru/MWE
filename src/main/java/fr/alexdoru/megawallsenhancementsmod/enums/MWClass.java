@@ -1,5 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum MWClass {
 
     ARCANIST("ARC", "arc", "Arcanist"),
@@ -31,6 +34,14 @@ public enum MWClass {
     public final String tagLowerCase;
     public final String className;
 
+    private static final Map<String, MWClass> tagMap = new HashMap<>();
+
+    static {
+        for (final MWClass mwClass : values()) {
+            tagMap.put(mwClass.TAG, mwClass);
+        }
+    }
+
     MWClass(String TAG, String tagLowerCase, String className) {
         this.TAG = TAG;
         this.tagLowerCase = tagLowerCase;
@@ -47,12 +58,7 @@ public enum MWClass {
     }
 
     public static MWClass fromTag(String TAG) {
-        for (final MWClass mwClass : values()) {
-            if (TAG.equals(mwClass.TAG)) {
-                return mwClass;
-            }
-        }
-        return null;
+        return tagMap.get(TAG);
     }
 
 }
