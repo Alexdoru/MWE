@@ -1,5 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum GameType {
 
     QUAKECRAFT("QUAKECRAFT", "Quake"),
@@ -36,6 +39,14 @@ public enum GameType {
     public final String id; // game name on the API
     public final String friendlyName; // understandable game name
 
+    private static final Map<String, GameType> typeMap = new HashMap<>();
+
+    static {
+        for (final GameType game : values()) {
+            typeMap.put(game.id, game);
+        }
+    }
+
     GameType(String id, String friendlyName) {
         if (id == null) {
             id = name();
@@ -45,12 +56,7 @@ public enum GameType {
     }
 
     public static GameType fromId(String id) {
-        for (final GameType game : values()) {
-            if (id.equals(game.id)) {
-                return game;
-            }
-        }
-        return UNKNOWN;
+        return typeMap.getOrDefault(id, UNKNOWN);
     }
 
     @Override

@@ -18,7 +18,7 @@ public abstract class AbstractConfig {
     public static void preInit(File file) {
         config = new Configuration(file);
         try {
-            syncConfig(true, true, true, false);
+            syncConfig(true, true, false);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -29,7 +29,7 @@ public abstract class AbstractConfig {
      */
     public static void saveConfig() {
         try {
-            syncConfig(false, false, false, true);
+            syncConfig(false, false, true);
         } catch (IllegalAccessException e) {
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.DARK_RED + "Failed to save the config!");
             e.printStackTrace();
@@ -41,14 +41,14 @@ public abstract class AbstractConfig {
      */
     public static void loadConfigFromFile() {
         try {
-            syncConfig(false, true, true, false);
+            syncConfig(true, true, false);
         } catch (IllegalAccessException e) {
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.DARK_RED + "Failed to load the config!");
             e.printStackTrace();
         }
     }
 
-    private static void syncConfig(boolean isInit, boolean loadFromConfigFile, boolean readFieldsFromConfig, boolean saveFieldsToConfig) throws IllegalAccessException {
+    private static void syncConfig(boolean loadFromConfigFile, boolean readFieldsFromConfig, boolean saveFieldsToConfig) throws IllegalAccessException {
 
         if (config == null) {
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.DARK_RED + "Config didn't load when the game started, this shouldn't happen !");
@@ -57,9 +57,7 @@ public abstract class AbstractConfig {
 
         if (loadFromConfigFile) {
             config.load();
-        }
-
-        if (isInit) {
+            propertyMap.clear();
             final HashMap<String, List<String>> categoryOrderMap = new HashMap<>();
             for (final Field field : ConfigHandler.class.getDeclaredFields()) {
                 if (field.isAnnotationPresent(ConfigProperty.class)) {

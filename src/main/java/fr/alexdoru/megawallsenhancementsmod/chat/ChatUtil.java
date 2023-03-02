@@ -2,7 +2,6 @@ package fr.alexdoru.megawallsenhancementsmod.chat;
 
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
@@ -13,10 +12,9 @@ import net.minecraft.util.IChatComponent;
 public class ChatUtil {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
-    private static final FontRenderer frObj = mc.fontRendererObj;
 
     public static String getTagMW() {
-        return EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "MWEn" + EnumChatFormatting.GOLD + "] ";
+        return EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "MWE" + EnumChatFormatting.GOLD + "] ";
     }
 
     public static String getTagNoCheaters() {
@@ -88,7 +86,7 @@ public class ChatUtil {
     public static String bar() {
         final char separator = '-';
         final int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
-        final int separatorWidth = frObj.getCharWidth(separator);
+        final int separatorWidth = mc.fontRendererObj.getCharWidth(separator);
         return EnumChatFormatting.STRIKETHROUGH + new String(new char[chatWidth / separatorWidth]).replace("\0", "-");
     }
 
@@ -105,8 +103,8 @@ public class ChatUtil {
     public static String getSeparatorToCenter(String message) {
         final char space = ' ';
         final int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
-        final int separatorWidth = frObj.getCharWidth(space);
-        final int messageWidth = frObj.getStringWidth(message);
+        final int separatorWidth = mc.fontRendererObj.getCharWidth(space);
+        final int messageWidth = mc.fontRendererObj.getStringWidth(message);
         if (messageWidth >= chatWidth) {
             return "";
         }
@@ -121,7 +119,7 @@ public class ChatUtil {
 
         final char separator = ' ';
         final int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
-        final int separatorWidth = frObj.getCharWidth(separator);
+        final int separatorWidth = mc.fontRendererObj.getCharWidth(separator);
         int columnWidth = 0;
         int maxLineWidth = 0;
 
@@ -129,9 +127,9 @@ public class ChatUtil {
             final StringBuilder linemessage = new StringBuilder();
             for (final String msg : line) {
                 linemessage.append(msg);
-                columnWidth = Math.max(columnWidth, frObj.getStringWidth(msg));
+                columnWidth = Math.max(columnWidth, mc.fontRendererObj.getStringWidth(msg));
             }
-            maxLineWidth = Math.max(maxLineWidth, frObj.getStringWidth(linemessage.toString()));
+            maxLineWidth = Math.max(maxLineWidth, mc.fontRendererObj.getStringWidth(linemessage.toString()));
         }
 
         String leftSeparatorText = "";
@@ -147,7 +145,7 @@ public class ChatUtil {
 
                 if (j == 0) { // first element on the left
 
-                    final int messageWidth = frObj.getStringWidth(strings[j]);
+                    final int messageWidth = mc.fontRendererObj.getStringWidth(strings[j]);
                     message.append(leftSeparatorText).append(strings[j]).append(new String(new char[(columnWidth - messageWidth) / (separatorWidth)]).replace("\0", String.valueOf(separator)));
 
                 } else if (j == strings.length - 1) { // last element on the right
@@ -156,7 +154,7 @@ public class ChatUtil {
 
                 } else { // element in the middle
 
-                    final int messageWidth = frObj.getStringWidth(strings[j]);
+                    final int messageWidth = mc.fontRendererObj.getStringWidth(strings[j]);
                     message.append(strings[j]).append(new String(new char[(columnWidth - messageWidth) / (separatorWidth)]).replace("\0", String.valueOf(separator)));
 
                 }

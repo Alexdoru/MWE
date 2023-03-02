@@ -36,7 +36,7 @@ public class HttpClient {
                     if (status == 400) {
                         throw new ApiException("Missing one or more fields");
                     } else if (status == 403) {
-                        throw new ApiException("Invalid API key");
+                        throw new ApiException("Invalid API key, type \"/api new\" while on Hypixel to get a new API key");
                     } else if (status == 404) {
                         throw new ApiException("Page not found");
                     } else if (status == 422) {
