@@ -1,11 +1,13 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,25 +15,21 @@ public class PhxBondHud extends MyCachedHUD {
 
     public static PhxBondHud instance;
 
-    private static final Pattern INCOMING_BOND_PATTERN = Pattern.compile("You were healed by \\w+'s Spirit Bond for (\\d+\\.?\\d*)[\u2764\u2665]");
-
+    private static final Pattern INCOMING_BOND_PATTERN = Pattern.compile("^You were healed by (\\w{1,16})'s Spirit Bond for ([0-9]*[.]?[0-9]+)[\u2764\u2665]");
     private static final Pattern BOND_USED_PATTERN = Pattern.compile("^Your Spirit Bond healed");
-    private static final Pattern OUTGOING_BOND_PATTERN = Pattern.compile("(\\w+)\\sfor\\s([0-9.]+)[\u2764\u2665]");
-    private static final Pattern SELF_HEAL_PATTERN = Pattern.compile("You are healed for\\s+(\\d+(?:\\.\\d+)?)[\u2764\u2665]");
+    private static final Pattern PLAYERS_HEALED_PATTERN = Pattern.compile("(\\w{1,16})\\sfor\\s([0-9]*[.]?[0-9]+)[\u2764\u2665]");
+    private static final Pattern SELF_HEALED_PATTERN = Pattern.compile("You are healed for\\s([0-9]*[.]?[0-9]+)[\u2764\u2665]");
 
-
-    private static HashMap<String, Float> playersAndHeals = new HashMap<>();
-    private static HashMap<String, Float> DUMMYplayersAndHeals = new HashMap<>();
-
-    private long bondtime;
-
+    private static final List<String> dummyTextToRender = new ArrayList<>();
     static {
-        DUMMYplayersAndHeals.put("\u00a76[\u00a72S\u00a76] \u00a7a\u00a7lexample1 \u00a77[END]", 3.5f);
-        DUMMYplayersAndHeals.put("\u00a7a\u00a7lexample2 \u00a77[SPI]", 1f);
-        DUMMYplayersAndHeals.put("\u00a76[\u00a72S\u00a76] \u00a7a\u00a7lexample3 \u00a77[PIR]", 6f);
-        DUMMYplayersAndHeals.put("\u00a7a\u00a7lexample4 \u00a77[HUN]", 9.5f);
+        dummyTextToRender.add(getHealColor(9.5f) + "9.5" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + EnumChatFormatting.BOLD + "Player1" + EnumChatFormatting.GRAY + " [HUN]");
+        dummyTextToRender.add(getHealColor(6f) + "6.0" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + EnumChatFormatting.BOLD + "Player2" + EnumChatFormatting.GRAY + " [PIR]");
+        dummyTextToRender.add(getHealColor(3.5f) + "3.5" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + EnumChatFormatting.BOLD + "Player3" + EnumChatFormatting.GRAY + " [END]");
+        dummyTextToRender.add(getHealColor(1f) + "1.0" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + EnumChatFormatting.BOLD + "Player4" + EnumChatFormatting.GRAY + " [SPI]");
     }
 
+    private final List<String> textToRender = new ArrayList<>();
+    private long timeStartRender;
 
     public PhxBondHud() {
         super(ConfigHandler.phxBondHUDPosition);
@@ -40,87 +38,72 @@ public class PhxBondHud extends MyCachedHUD {
 
     public boolean processMessage(String msg) {
 
-        final Matcher matcherBondUsed = BOND_USED_PATTERN.matcher(msg);
-        final Matcher matcherOutgoing = OUTGOING_BOND_PATTERN.matcher(msg);
-        final Matcher matcherSelf = SELF_HEAL_PATTERN.matcher(msg);
+        if (!FKCounterMod.isInMwGame) {
+            return false;
+        }
 
-        if (matcherBondUsed.find()) {
-            while (matcherOutgoing.find()) {
-                bondtime = System.currentTimeMillis();
-                final String playerName = matcherOutgoing.group(1);
-                final float heal = Float.parseFloat(matcherOutgoing.group(2));
-                if (!"healed".equalsIgnoreCase(playerName)) {
-                    playersAndHeals.put(playerName, heal);
-                }
-            }
+        final Matcher incomingBondMatcher = INCOMING_BOND_PATTERN.matcher(msg);
 
-            if (matcherSelf.find()) {
-                bondtime = System.currentTimeMillis();
-                final float heal = Float.parseFloat(matcherSelf.group(1));
-                playersAndHeals.put("$self", heal);
-            }
+        if (incomingBondMatcher.find()) {
+            textToRender.clear();
+            timeStartRender = System.currentTimeMillis();
+            final String playerHealingYou = incomingBondMatcher.group(1);
+            final String amountHealed = incomingBondMatcher.group(2);
+            textToRender.add(getLine(playerHealingYou, amountHealed));
             return true;
         }
 
-
-        final Matcher matcherIncoming = INCOMING_BOND_PATTERN.matcher(msg);
-
-        if (matcherIncoming.find()) {
-            bondtime = System.currentTimeMillis();
-            final float heal = Float.parseFloat(matcherIncoming.group(1));
-            playersAndHeals.put("$self", heal);
+        if (BOND_USED_PATTERN.matcher(msg).find()) {
+            textToRender.clear();
+            timeStartRender = System.currentTimeMillis();
+            final Matcher selfHealedMatcher = SELF_HEALED_PATTERN.matcher(msg);
+            if (selfHealedMatcher.find()) {
+                final String amountHealed = selfHealedMatcher.group(1);
+                textToRender.add(getLine(null, amountHealed));
+                // to avoid matching "healed for x.x" as if "healed" was a playername
+                msg = msg.replace(selfHealedMatcher.group(), "");
+            }
+            final Matcher playerHealedMatcher = PLAYERS_HEALED_PATTERN.matcher(msg);
+            while (playerHealedMatcher.find()) {
+                final String playerName = playerHealedMatcher.group(1);
+                final String amountHealed = playerHealedMatcher.group(2);
+                textToRender.add(getLine(playerName, amountHealed));
+            }
             return true;
         }
 
         return false;
+
     }
 
-    public void drawLine(String name, float heal, int index, int[] absolutePos) {
-
-        if (name.equals("$self")) {
-            name = "\u00a7d\u00a7lYou";
+    private String getLine(String playername, String amountHealed) {
+        final String formattedName;
+        if (playername == null) { // myself
+            formattedName = EnumChatFormatting.AQUA.toString() + EnumChatFormatting.BOLD + "You";
         } else {
-            name = NameUtil.getFormattedName(name);
+            formattedName = NameUtil.getFormattedNameWithoutIcons(playername);
         }
-
-        String lineText = getHealColor(heal) + "" + heal + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + name;
-        drawString(frObj, lineText, absolutePos[0], absolutePos[1] + ((index + 1) * frObj.FONT_HEIGHT), 0);
-
+        return getHealColor(Float.parseFloat(amountHealed)) + amountHealed + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + formattedName;
     }
-
 
     @Override
     public void render(ScaledResolution resolution) {
-        final int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
-        int index = 0;
-        Map<String, Float> sortedMap = sortByValue(playersAndHeals);
-        for (Map.Entry<String, Float> entry : sortedMap.entrySet()) {
-            drawLine(entry.getKey(), entry.getValue(), index, absolutePos);
-            index++;
-        }
+        final int[] absolutePos = this.guiPosition.getAbsolutePosition();
+        drawStringList(textToRender, absolutePos[0], absolutePos[1]);
     }
 
     @Override
     public void renderDummy() {
         final int[] absolutePos = this.guiPosition.getAbsolutePosition();
-        int index = 0;
-        Map<String, Float> sortedMap = sortByValue(DUMMYplayersAndHeals);
-        for (Map.Entry<String, Float> entry : sortedMap.entrySet()) {
-            drawLine(entry.getKey(), entry.getValue(), index, absolutePos);
-            index++;
-        }
+        drawStringList(dummyTextToRender, absolutePos[0], absolutePos[1]);
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        final boolean time = bondtime + 6000L > currentTimeMillis;
-        if (!time && !playersAndHeals.isEmpty()) {
-            playersAndHeals.clear();
-        }
-        return ConfigHandler.showPhxBondHUD && time;
+        return ConfigHandler.showPhxBondHUD && timeStartRender + 5000L > currentTimeMillis;
     }
 
-    private EnumChatFormatting getHealColor(float heal) {
+    private static EnumChatFormatting getHealColor(float heal) {
         if (heal > 7.5) {
             return EnumChatFormatting.GREEN;
         } else if (heal > 4.5) {
@@ -131,39 +114,5 @@ public class PhxBondHud extends MyCachedHUD {
             return EnumChatFormatting.RED;
         }
     }
-
-
-
-    public static HashMap<String, Float> sortByValue(HashMap<String, Float> hm) {
-        List<Map.Entry<String, Float>> list = new LinkedList<>(hm.entrySet());
-
-        // sort the entries by value in descending order
-        Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
-
-        // create a new LinkedHashMap to hold the sorted entries
-        LinkedHashMap<String, Float> sortedMap = new LinkedHashMap<>();
-
-        // add the $self entry to the beginning of the map
-        for (Map.Entry<String, Float> entry : list) {
-            if (entry.getKey().equals("$self")) {
-                sortedMap.put("$self", entry.getValue());
-            }
-        }
-
-        // loop through the sorted entries (except for $self) and put them into the new map
-        for (Map.Entry<String, Float> entry : list) {
-            if (!entry.getKey().equals("$self")) {
-                sortedMap.put(entry.getKey(), entry.getValue());
-            }
-        }
-
-        return sortedMap;
-    }
-
-
-
-
-
-
 
 }

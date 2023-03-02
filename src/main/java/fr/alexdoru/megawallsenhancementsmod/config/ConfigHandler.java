@@ -171,7 +171,7 @@ public class ConfigHandler extends AbstractConfig {
     public static boolean showPhxBondHUD = true;
 
     @ConfigProperty(category = GUI, name = "Phoenix Bond HUD position", comment = "position of the phoenix bond HUD")
-    public static final GuiPosition phxBondHUDPosition = new GuiPosition(0.7d, 0.5d);
+    public static final GuiPosition phxBondHUDPosition = new GuiPosition(0.5d, 0.7d);
 
     /**
      * NoCheaters Config
