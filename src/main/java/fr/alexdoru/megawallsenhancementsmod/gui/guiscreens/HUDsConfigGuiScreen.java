@@ -185,6 +185,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 28:
                 ConfigHandler.showSpeedHUD = !ConfigHandler.showSpeedHUD;
+                break;
             case 4:
                 mc.displayGuiScreen(parent);
                 break;
