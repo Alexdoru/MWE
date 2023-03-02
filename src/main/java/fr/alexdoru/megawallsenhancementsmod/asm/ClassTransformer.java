@@ -92,7 +92,7 @@ public class ClassTransformer implements IClassTransformer {
                 if (!status.isTransformationSuccessfull()) {
                     ASMLoadingPlugin.logger.error("Class transformation incomplete, transformer " + stripClassName(transformer.getClass().getName()) + " missing " + status.getInjectionCount() + " injections in " + transformedName);
                 } else {
-                    ASMLoadingPlugin.logger.debug("Applied " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
+                    debugLog("Applied " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
                 }
                 basicClass = classWriter.toByteArray();
             } catch (Exception e) {
@@ -100,13 +100,21 @@ public class ClassTransformer implements IClassTransformer {
             }
         }
         final long l2 = System.currentTimeMillis() - l;
-        ASMLoadingPlugin.logger.debug("Transformed " + transformedName + " in " + l2 + "ms");
+        debugLog("Transformed " + transformedName + " in " + l2 + "ms");
         return basicClass;
     }
 
     private String stripClassName(String targetClassName) {
         final String[] split = targetClassName.split("\\.");
         return split[split.length - 1];
+    }
+
+    private void debugLog(String msg) {
+        if (ASMLoadingPlugin.isObf) {
+            ASMLoadingPlugin.logger.debug(msg);
+        } else {
+            ASMLoadingPlugin.logger.info(msg);
+        }
     }
 
 }
