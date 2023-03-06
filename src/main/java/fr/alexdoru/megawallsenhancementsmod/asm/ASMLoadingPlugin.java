@@ -38,20 +38,31 @@ public class ASMLoadingPlugin implements IFMLLoadingPlugin {
         return null;
     }
 
+    private static Boolean isPatcherLoaded;
+    private static Boolean isFeatherLoaded;
+
     public static boolean isPatcherLoaded() {
-        try {
-            final String PATCHER_CLASS = "club/sk1er/patcher/Patcher.class";
-            return ClassLoader.getSystemClassLoader().getResource(PATCHER_CLASS) != null;
-        } catch (Exception ignored) {}
-        return false;
+        if (isPatcherLoaded == null) {
+            try {
+                final String PATCHER_CLASS = "club/sk1er/patcher/Patcher.class";
+                isPatcherLoaded = ClassLoader.getSystemClassLoader().getResource(PATCHER_CLASS) != null;
+            } catch (Exception e) {
+                isPatcherLoaded = Boolean.FALSE;
+            }
+        }
+        return isPatcherLoaded;
     }
 
     public static boolean isFeatherLoaded() {
-        try {
-            final String FEATHER_CLASS = "net/digitalingot/featheropt/FeatherOptMixinPlugin.class";
-            return ClassLoader.getSystemClassLoader().getResource(FEATHER_CLASS) != null;
-        } catch (Exception ignored) {}
-        return false;
+        if (isFeatherLoaded == null) {
+            try {
+                final String FEATHER_CLASS = "net/digitalingot/featheropt/FeatherOptMixinPlugin.class";
+                isFeatherLoaded = ClassLoader.getSystemClassLoader().getResource(FEATHER_CLASS) != null;
+            } catch (Exception e) {
+                isFeatherLoaded = Boolean.FALSE;
+            }
+        }
+        return isFeatherLoaded;
     }
 
 }
