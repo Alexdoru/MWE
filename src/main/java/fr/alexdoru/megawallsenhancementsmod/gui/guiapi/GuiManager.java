@@ -12,7 +12,7 @@ import java.util.List;
 
 public final class GuiManager {
 
-    private final List<IRenderer> registeredRenderers = new ArrayList<>(9);
+    private final List<IRenderer> registeredRenderers = new ArrayList<>();
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     /**
