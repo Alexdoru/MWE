@@ -152,7 +152,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.GREEN + "Displays you own speed");
                 break;
             case 31:
-                textLines.add(EnumChatFormatting.GREEN + "Displays a HUD with the health healed from a Phoenix bond");
+                textLines.add(EnumChatFormatting.GREEN + "Displays a HUD with the hearts healed from a Phoenix bond");
                 break;
         }
         return textLines;
