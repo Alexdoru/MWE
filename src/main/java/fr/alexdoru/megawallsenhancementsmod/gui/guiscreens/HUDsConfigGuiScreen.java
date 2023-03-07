@@ -41,7 +41,6 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(28, XposCenterButton, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(28))); //speed hud
         buttonList.add(new GuiButton(31, XposCenterButton, getButtonYPos(10), buttonsWidth, buttonsHeight, getButtonDisplayString(31))); //phx bond hud
 
-
         /* Buttons : Reset HUD position */
         buttonList.add(new GuiButton(8, XposCenterLeftButton, getButtonYPos(1), sideButtonsWidth, buttonsHeight, getButtonDisplayString(8))); //arrow hit hud
         buttonList.add(new GuiButton(7, XposCenterLeftButton, getButtonYPos(2), sideButtonsWidth, buttonsHeight, getButtonDisplayString(7))); // /kill cooldown hud
