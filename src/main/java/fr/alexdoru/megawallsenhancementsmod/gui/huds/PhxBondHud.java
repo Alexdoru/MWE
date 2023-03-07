@@ -22,10 +22,10 @@ public class PhxBondHud extends MyCachedHUD {
 
     private static final List<String> dummyTextToRender = new ArrayList<>();
     static {
-        dummyTextToRender.add(getHealColor(9.5f) + "9.5" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + EnumChatFormatting.BOLD + "Player1" + EnumChatFormatting.GRAY + " [HUN]");
-        dummyTextToRender.add(getHealColor(6f) + "6.0" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + EnumChatFormatting.BOLD + "Player2" + EnumChatFormatting.GRAY + " [PIR]");
-        dummyTextToRender.add(getHealColor(3.5f) + "3.5" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + EnumChatFormatting.BOLD + "Player3" + EnumChatFormatting.GRAY + " [END]");
-        dummyTextToRender.add(getHealColor(1f) + "1.0" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + EnumChatFormatting.BOLD + "Player4" + EnumChatFormatting.GRAY + " [SPI]");
+        dummyTextToRender.add(getHealColor(9.5f) + "9.5" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + "Player1" + EnumChatFormatting.GRAY + " [HUN]");
+        dummyTextToRender.add(getHealColor(6f) + "6.0" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + "Player2" + EnumChatFormatting.GRAY + " [PIR]");
+        dummyTextToRender.add(getHealColor(3.5f) + "3.5" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + "Player3" + EnumChatFormatting.GRAY + " [END]");
+        dummyTextToRender.add(getHealColor(1f) + "1.0" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + "Player4" + EnumChatFormatting.GRAY + " [SPI]");
     }
 
     private final List<String> textToRender = new ArrayList<>();
