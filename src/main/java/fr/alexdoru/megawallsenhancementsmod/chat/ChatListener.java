@@ -13,10 +13,7 @@ import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.ArrowHitHUD;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.CreeperPrimedTNTHUD;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.HunterStrengthHUD;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.KillCooldownHUD;
+import fr.alexdoru.megawallsenhancementsmod.gui.huds.*;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.AbstractCheck;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
@@ -143,6 +140,10 @@ public class ChatListener {
 
             if (ArrowHitHUD.instance.processMessage(msg, fmsg)) {
                 event.setCanceled(true);
+                return;
+            }
+
+            if (PhxBondHud.instance.processMessage(msg)) {
                 return;
             }
 
