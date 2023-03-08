@@ -7,53 +7,55 @@ public final class GuiPosition {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
 
-    /*The default relative x and y coordinates for this HUD. Ranging from 0 to 1.*/
-    private final double defaultX, defaultY;
-    /*The relative x and y coordinates. Ranging from 0 to 1.*/
-    private double x, y;
+    /** The default relative x and y coordinates for this HUD. Ranging from 0 to 1 */
+    private final double defaultRelativeX, defaultRelativeY;
+    /** The relative x and y coordinates. Ranging from 0 to 1 */
+    private double relativeX, relativeY;
+    /** The absolute position to render this hud, needs to be updated before rendering */
+    private int absoluteRenderX, absoluteRenderY;
 
     public GuiPosition(double defaultX, double defaultY) {
-        this.defaultX = defaultX;
-        this.defaultY = defaultY;
-        this.x = defaultX;
-        this.y = defaultY;
+        this.defaultRelativeX = defaultX;
+        this.defaultRelativeY = defaultY;
+        this.relativeX = defaultX;
+        this.relativeY = defaultY;
     }
 
     /**
      * @param x The relative x coordinate to be set. Ranging from 0 to 1.
      * @param y The relative y coordinate to be set. Ranging from 0 to 1.
      */
-    public void setRelative(double x, double y) {
-        this.x = x;
-        this.y = y;
+    public void setRelativePosition(double x, double y) {
+        this.relativeX = x;
+        this.relativeY = y;
     }
 
     /**
+     * @param res scaled resolution
      * @param x The absolute x coordinate to be set.
      * @param y The absolute y coordinate to be set.
      */
-    public void setAbsolute(int x, int y) {
-        final ScaledResolution res = new ScaledResolution(mc);
-        this.x = ((double) x) / ((double) res.getScaledWidth());
-        this.y = ((double) y) / ((double) res.getScaledHeight());
+    public void setAbsolutePosition(ScaledResolution res, int x, int y) {
+        this.relativeX = ((double) x) / ((double) res.getScaledWidth());
+        this.relativeY = ((double) y) / ((double) res.getScaledHeight());
     }
 
     public int[] getAbsolutePosition() {
         final ScaledResolution res = new ScaledResolution(mc);
-        return new int[]{(int) (x * res.getScaledWidth()), (int) (y * res.getScaledHeight())};
+        return new int[]{(int) (relativeX * res.getScaledWidth()), (int) (relativeY * res.getScaledHeight())};
     }
 
     public int[] getAbsolutePosition(ScaledResolution res) {
-        return new int[]{(int) (x * res.getScaledWidth()), (int) (y * res.getScaledHeight())};
+        return new int[]{(int) (relativeX * res.getScaledWidth()), (int) (relativeY * res.getScaledHeight())};
     }
 
     /**
      * Returns x and y coordinates to start the render
      * so that the whole HUD fits within the screen
      */
-    public int[] getAbsolutePositionForRender(ScaledResolution res, int hudWidth, int hudHigth) {
-        int xRenderPos = (int) (x * res.getScaledWidth());
-        int yRenderPos = (int) (y * res.getScaledHeight());
+    public int[] getAdjustedAbsolutePosition(ScaledResolution res, int hudWidth, int hudHigth) {
+        int xRenderPos = (int) (relativeX * res.getScaledWidth());
+        int yRenderPos = (int) (relativeY * res.getScaledHeight());
         if (xRenderPos + hudWidth > res.getScaledWidth()) {
             xRenderPos = res.getScaledWidth() - hudWidth;
         }
@@ -63,27 +65,23 @@ public final class GuiPosition {
         return new int[]{xRenderPos, yRenderPos};
     }
 
-    public double[] getRelativePosition() {
-        return new double[]{x, y};
-    }
-
     /**
      * @return The relative x coordinate, ranging from 0 to 1.
      */
     public double getRelativeX() {
-        return x;
+        return relativeX;
     }
 
     /**
      * @return The relative y coordinate, ranging from 0 to 1.
      */
     public double getRelativeY() {
-        return y;
+        return relativeY;
     }
 
     public void resetToDefault() {
-        this.x = this.defaultX;
-        this.y = this.defaultY;
+        this.relativeX = this.defaultRelativeX;
+        this.relativeY = this.defaultRelativeY;
     }
 
 }
