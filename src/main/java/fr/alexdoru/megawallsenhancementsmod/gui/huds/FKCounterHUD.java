@@ -50,7 +50,7 @@ public class FKCounterHUD extends MyCachedHUD {
 
     @Override
     public int getWidth() {
-        return (int) (getMultilineWidth(getDisplayText()) * ConfigHandler.fkcounterHUDSize);
+        return (int) (getMultilineWidth(this.displayText) * ConfigHandler.fkcounterHUDSize);
     }
 
     @Override
@@ -66,9 +66,9 @@ public class FKCounterHUD extends MyCachedHUD {
             GlStateManager.translate(x, y, 0);
             GlStateManager.scale(ConfigHandler.fkcounterHUDSize, ConfigHandler.fkcounterHUDSize, 0d);
             if (ConfigHandler.fkcounterHUDCompact) {
-                frObj.drawString(getDisplayText(), 0, 0, 16777215, ConfigHandler.fkcounterHUDTextShadow);
+                frObj.drawString(this.displayText, 0, 0, 16777215, ConfigHandler.fkcounterHUDTextShadow);
             } else {
-                drawMultilineString(getDisplayText(), 0, 0, ConfigHandler.fkcounterHUDTextShadow);
+                drawMultilineString(this.displayText, 0, 0, ConfigHandler.fkcounterHUDTextShadow);
             }
         }
         GlStateManager.popMatrix();
