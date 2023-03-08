@@ -291,7 +291,7 @@ public class NameUtil {
     }
 
     /**
-     * Returns the formatted name of the player, additionnal icons and prestive V tag included
+     * Returns the formatted name of the player, additionnal icons, squadname, allias and prestive V tag included
      * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay#getPlayerName}
      */
     public static String getFormattedName(String playername) {
@@ -303,7 +303,7 @@ public class NameUtil {
     }
 
     /**
-     * Returns the formatted name of the player, additionnal icons and prestive V tag included
+     * Returns the formatted name of the player, additionnal icons, squadname, allias and prestive V tag included
      * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay#getPlayerName}
      */
     public static String getFormattedName(NetworkPlayerInfo networkPlayerInfo) {
@@ -314,7 +314,7 @@ public class NameUtil {
     }
 
     /**
-     * Returns the formatted team name with additionnaly a custom prestige V tag
+     * Returns the formatted team name with additionnaly a custom prestige V tag and a squadname
      * This doesn't return the icons in front that the player may have.
      */
     public static String getFormattedNameWithoutIcons(String playername) {
@@ -331,12 +331,13 @@ public class NameUtil {
 
     /**
      * Equivalent of {@link net.minecraft.scoreboard.ScorePlayerTeam#formatPlayerName}
+     * but with eventually a squadname
      */
     private static String formatPlayerNameUnscrambled(ScorePlayerTeam team, String playername) {
         if (team == null) {
-            return playername;
+            return SquadHandler.getSquadname(playername);
         }
-        return deobfString(team.getColorPrefix()) + playername + team.getColorSuffix();
+        return deobfString(team.getColorPrefix()) + SquadHandler.getSquadname(playername) + team.getColorSuffix();
     }
 
     /**
