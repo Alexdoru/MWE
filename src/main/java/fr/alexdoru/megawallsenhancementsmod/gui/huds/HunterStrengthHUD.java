@@ -21,16 +21,16 @@ public class HunterStrengthHUD extends MyCachedHUD {
 
     @Override
     public void render(ScaledResolution resolution) {
-        final int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
+        this.guiPosition.updateAbsolutePosition(resolution);
         final int timeLeft = (int) ((timeStartRender + renderDuration - System.currentTimeMillis()) / 1000L);
         displayText = (isStrengthRender ? STRENGTH_TEXT : PRE_STRENGTH_TEXT) + timeLeft;
-        drawCenteredString(frObj, displayText, absolutePos[0], absolutePos[1], 0);
+        drawCenteredString(mc.fontRendererObj, displayText, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
     public void renderDummy() {
-        final int[] absolutePos = this.guiPosition.getAbsolutePosition();
-        drawCenteredString(frObj, DUMMY_TEXT, absolutePos[0], absolutePos[1], 0);
+        this.guiPosition.updateAbsolutePosition();
+        drawCenteredString(mc.fontRendererObj, DUMMY_TEXT, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override

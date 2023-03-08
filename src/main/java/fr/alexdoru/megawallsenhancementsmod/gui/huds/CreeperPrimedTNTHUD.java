@@ -21,17 +21,17 @@ public class CreeperPrimedTNTHUD extends MyCachedHUD {
 
     @Override
     public void render(ScaledResolution resolution) {
-        final int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
+        this.guiPosition.updateAbsolutePosition(resolution);
         final long temp = (timeStartRender + renderDuration - System.currentTimeMillis());
         final String timeLeft = String.format("%.1f", (float) temp / 1000);
         displayText = EnumChatFormatting.GREEN + "Tnt " + (colorPrefix + timeLeft + "s");
-        drawCenteredString(frObj, displayText, absolutePos[0], absolutePos[1], 0);
+        drawCenteredString(mc.fontRendererObj, displayText, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
     public void renderDummy() {
-        final int[] absolutePos = this.guiPosition.getAbsolutePosition();
-        drawCenteredString(frObj, DUMMY_TEXT, absolutePos[0], absolutePos[1], 0);
+        this.guiPosition.updateAbsolutePosition();
+        drawCenteredString(mc.fontRendererObj, DUMMY_TEXT, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override

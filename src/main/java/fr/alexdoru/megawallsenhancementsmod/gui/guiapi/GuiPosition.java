@@ -32,37 +32,12 @@ public final class GuiPosition {
 
     /**
      * @param res scaled resolution
-     * @param x The absolute x coordinate to be set.
-     * @param y The absolute y coordinate to be set.
+     * @param x   The absolute x coordinate to be set.
+     * @param y   The absolute y coordinate to be set.
      */
     public void setAbsolutePosition(ScaledResolution res, int x, int y) {
         this.relativeX = ((double) x) / ((double) res.getScaledWidth());
         this.relativeY = ((double) y) / ((double) res.getScaledHeight());
-    }
-
-    public int[] getAbsolutePosition() {
-        final ScaledResolution res = new ScaledResolution(mc);
-        return new int[]{(int) (relativeX * res.getScaledWidth()), (int) (relativeY * res.getScaledHeight())};
-    }
-
-    public int[] getAbsolutePosition(ScaledResolution res) {
-        return new int[]{(int) (relativeX * res.getScaledWidth()), (int) (relativeY * res.getScaledHeight())};
-    }
-
-    /**
-     * Returns x and y coordinates to start the render
-     * so that the whole HUD fits within the screen
-     */
-    public int[] getAdjustedAbsolutePosition(ScaledResolution res, int hudWidth, int hudHigth) {
-        int xRenderPos = (int) (relativeX * res.getScaledWidth());
-        int yRenderPos = (int) (relativeY * res.getScaledHeight());
-        if (xRenderPos + hudWidth > res.getScaledWidth()) {
-            xRenderPos = res.getScaledWidth() - hudWidth;
-        }
-        if (yRenderPos + hudHigth > res.getScaledHeight()) {
-            yRenderPos = res.getScaledHeight() - hudHigth;
-        }
-        return new int[]{xRenderPos, yRenderPos};
     }
 
     /**
@@ -82,6 +57,46 @@ public final class GuiPosition {
     public void resetToDefault() {
         this.relativeX = this.defaultRelativeX;
         this.relativeY = this.defaultRelativeY;
+    }
+
+    /**
+     * Updates the position of the render : absoluteRenderX and absoluteRenderY
+     * Needs to be called before getAbsoluteRenderX() and getAbsoluteRenderY()
+     */
+    public void updateAbsolutePosition() {
+        updateAbsolutePosition(new ScaledResolution(mc));
+    }
+
+    /**
+     * Updates the position of the render : absoluteRenderX and absoluteRenderY
+     * Needs to be called before getAbsoluteRenderX() and getAbsoluteRenderY()
+     */
+    public void updateAbsolutePosition(ScaledResolution res) {
+        this.absoluteRenderX = (int) (relativeX * res.getScaledWidth());
+        this.absoluteRenderY = (int) (relativeY * res.getScaledHeight());
+    }
+
+    /**
+     * Updates the position of the render : absoluteRenderX and absoluteRenderY
+     * Needs to be called before getAbsoluteRenderX() and getAbsoluteRenderY()
+     * So that the whole HUD fits inside the screen
+     */
+    public void updateAdjustedAbsolutePosition(ScaledResolution res, int hudWidth, int hudHigth) {
+        updateAbsolutePosition(res);
+        if (this.absoluteRenderX + hudWidth > res.getScaledWidth()) {
+            this.absoluteRenderX = res.getScaledWidth() - hudWidth;
+        }
+        if (this.absoluteRenderY + hudHigth > res.getScaledHeight()) {
+            this.absoluteRenderY = res.getScaledHeight() - hudHigth;
+        }
+    }
+
+    public int getAbsoluteRenderX() {
+        return absoluteRenderX;
+    }
+
+    public int getAbsoluteRenderY() {
+        return absoluteRenderY;
     }
 
 }

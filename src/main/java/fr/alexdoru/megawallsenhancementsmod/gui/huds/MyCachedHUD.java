@@ -4,7 +4,6 @@ import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.ICachedHUDText;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.IRenderer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 
@@ -13,8 +12,6 @@ import java.util.List;
 public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDText {
 
     public static final Minecraft mc = Minecraft.getMinecraft();
-    public static final FontRenderer frObj = mc.fontRendererObj;
-
     public String displayText = "";
     public final GuiPosition guiPosition;
 

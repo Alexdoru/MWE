@@ -128,14 +128,14 @@ public class ArrowHitHUD extends MyCachedHUD {
 
     @Override
     public void render(ScaledResolution resolution) {
-        final int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
-        drawCenteredString(frObj, displayText, absolutePos[0], absolutePos[1] - frObj.FONT_HEIGHT, 0);
+        this.guiPosition.updateAbsolutePosition(resolution);
+        drawCenteredString(mc.fontRendererObj, displayText, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
     }
 
     @Override
     public void renderDummy() {
-        final int[] absolutePos = this.guiPosition.getAbsolutePosition();
-        drawCenteredString(frObj, DUMMY_TEXT, absolutePos[0], absolutePos[1] - frObj.FONT_HEIGHT, 0);
+        this.guiPosition.updateAbsolutePosition();
+        drawCenteredString(mc.fontRendererObj, DUMMY_TEXT, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
     }
 
     @Override

@@ -41,8 +41,8 @@ public class PositionEditGuiScreen extends GuiScreen {
 
     private void moveSelectedRendererBy(int offsetX, int offsetY) {
         final ScaledResolution res = new ScaledResolution(mc);
-        final int[] absolutePos = guiPosition.getAbsolutePosition(res);
-        guiPosition.setAbsolutePosition(res, absolutePos[0] + offsetX, absolutePos[1] + offsetY);
+        this.guiPosition.updateAbsolutePosition(res);
+        this.guiPosition.setAbsolutePosition(res, this.guiPosition.getAbsoluteRenderX() + offsetX, this.guiPosition.getAbsoluteRenderY() + offsetY);
         //adjustBounds();
     }
 

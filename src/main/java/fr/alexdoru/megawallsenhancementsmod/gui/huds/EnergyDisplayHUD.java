@@ -58,15 +58,15 @@ public class EnergyDisplayHUD extends MyCachedHUD {
             } else {
                 displayText = EnumChatFormatting.GREEN.toString() + energy;
             }
-            final int[] absolutePos = this.guiPosition.getAbsolutePosition(resolution);
-            drawCenteredString(frObj, displayText, absolutePos[0], absolutePos[1], 0);
+            this.guiPosition.updateAbsolutePosition(resolution);
+            drawCenteredString(mc.fontRendererObj, displayText, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
         }
     }
 
     @Override
     public void renderDummy() {
-        final int[] absolutePos = this.guiPosition.getAbsolutePosition();
-        drawCenteredString(frObj, DUMMY_TEXT, absolutePos[0], absolutePos[1], 0);
+        this.guiPosition.updateAbsolutePosition();
+        drawCenteredString(mc.fontRendererObj, DUMMY_TEXT, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
