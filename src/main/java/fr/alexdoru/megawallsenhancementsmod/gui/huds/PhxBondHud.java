@@ -2,13 +2,12 @@ package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.utils.MapUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -63,10 +62,15 @@ public class PhxBondHud extends MyCachedHUD {
                 msg = msg.replace(selfHealedMatcher.group(), "");
             }
             final Matcher playerHealedMatcher = PLAYERS_HEALED_PATTERN.matcher(msg);
+            final Map<String, Float> map = new HashMap<>();
             while (playerHealedMatcher.find()) {
                 final String playerName = playerHealedMatcher.group(1);
                 final String amountHealed = playerHealedMatcher.group(2);
-                textToRender.add(getLine(playerName, amountHealed));
+                map.put(playerName, Float.parseFloat(amountHealed));
+            }
+            final Map<String, Float> sortedMap = MapUtil.sortByDecreasingValue(map);
+            for (final Map.Entry<String, Float> entry : sortedMap.entrySet()) {
+                this.textToRender.add(getLine(entry.getKey(), entry.getValue().toString()));
             }
             return true;
         }
@@ -99,7 +103,7 @@ public class PhxBondHud extends MyCachedHUD {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return ConfigHandler.showPhxBondHUD && timeStartRender + 5000L > currentTimeMillis;
+        return ConfigHandler.showPhxBondHUD && timeStartRender + 3000L > currentTimeMillis;
     }
 
     private static EnumChatFormatting getHealColor(float heal) {
