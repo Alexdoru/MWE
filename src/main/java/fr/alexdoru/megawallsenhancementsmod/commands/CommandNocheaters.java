@@ -17,10 +17,7 @@ import fr.alexdoru.megawallsenhancementsmod.gui.guiscreens.NoCheatersConfigGuiSc
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
-import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
-import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
@@ -34,7 +31,7 @@ import java.util.concurrent.Future;
 
 public class CommandNocheaters extends MyAbstractCommand {
 
-    private static HashMap<String, WDR> sortedmap = new HashMap<>();
+    private static Map<String, WDR> sortedmap = new HashMap<>();
 
     @Override
     public String getCommandName() {
@@ -86,7 +83,7 @@ public class CommandNocheaters extends MyAbstractCommand {
 
                 if (args.length == 1 || sortedmap.isEmpty()) {
                     final HashMap<String, WDR> newmap = new HashMap<>(WdrData.getWdredMap());
-                    sortedmap = sortByValue(newmap);
+                    sortedmap = MapUtil.sortByDecreasingValue(newmap);
                 }
 
                 final IChatComponent imsgbody = new ChatComponentText("");
@@ -406,19 +403,6 @@ public class CommandNocheaters extends MyAbstractCommand {
             return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
         }
         return null;
-    }
-
-    /**
-     * Returns a sorted hashmap of reports from high to low
-     */
-    private static HashMap<String, WDR> sortByValue(HashMap<String, WDR> hashmapIn) {
-        final List<Map.Entry<String, WDR>> list = new LinkedList<>(hashmapIn.entrySet());
-        list.sort((o1, o2) -> (o1.getValue()).compareToInvert(o2.getValue()));
-        final HashMap<String, WDR> temp = new LinkedHashMap<>();
-        for (final Map.Entry<String, WDR> aa : list) {
-            temp.put(aa.getKey(), aa.getValue());
-        }
-        return temp;
     }
 
 }
