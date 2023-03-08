@@ -118,13 +118,13 @@ public class SquadHealthHUD implements IRenderer {
                     if (scoreobjective != null && networkplayerinfo.getGameType() != WorldSettings.GameType.SPECTATOR && scoreobjective.getRenderType() != IScoreObjectiveCriteria.EnumRenderType.HEARTS) {
                         final int scorePoints = scoreobjective.getScoreboard().getValueFromObjective(gameprofile.getName(), scoreobjective).getScorePoints();
                         final String scoreString = GuiPlayerTabOverlayHook.getColoredHP(scorePoints) + " " + scorePoints;
-                        this.mc.fontRendererObj.drawStringWithShadow(scoreString, xStartScoreDrawingPos, yDrawingPos, 16777215);
+                        this.mc.fontRendererObj.drawStringWithShadow(scoreString, xStartScoreDrawingPos, yDrawingPos, 0xFFFFFF);
                     }
                     if (FKCounterMod.isInMwGame) {
                         final int playersFinals = ((NetworkPlayerInfoAccessor) networkplayerinfo).getPlayerFinalkills();
                         if (playersFinals != 0) {
                             final String finalsString = EnumChatFormatting.GOLD + " " + playersFinals;
-                            mc.fontRendererObj.drawStringWithShadow(finalsString, xStartFinalDrawingPos, yDrawingPos, 16777215);
+                            mc.fontRendererObj.drawStringWithShadow(finalsString, xStartFinalDrawingPos, yDrawingPos, 0xFFFFFF);
                         }
                     }
                 }
@@ -178,9 +178,9 @@ public class SquadHealthHUD implements IRenderer {
                 if (maxScoreWidth + maxFinalWidth > 5) {
                     final int scorePoints = 12 + (i * 18 + 22) % 8;
                     final String scoreString = GuiPlayerTabOverlayHook.getColoredHP(scorePoints) + " " + scorePoints;
-                    this.mc.fontRendererObj.drawStringWithShadow(scoreString, xStartScoreDrawingPos, yDrawingPos, 16777215);
+                    this.mc.fontRendererObj.drawStringWithShadow(scoreString, xStartScoreDrawingPos, yDrawingPos, 0xFFFFFF);
                     final String finalsString = EnumChatFormatting.GOLD + " " + (3 + (i * 28 + 15) % 5);
-                    mc.fontRendererObj.drawStringWithShadow(finalsString, xStartFinalDrawingPos, yDrawingPos, 16777215);
+                    mc.fontRendererObj.drawStringWithShadow(finalsString, xStartFinalDrawingPos, yDrawingPos, 0xFFFFFF);
                 }
             }
         }
