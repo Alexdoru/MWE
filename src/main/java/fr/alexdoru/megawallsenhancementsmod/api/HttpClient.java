@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
+import fr.alexdoru.megawallsenhancementsmod.api.exceptions.RateLimitException;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 
@@ -42,7 +43,7 @@ public class HttpClient {
                     } else if (status == 422) {
                         throw new ApiException("Malformed UUID");
                     } else if (status == 429) {
-                        throw new ApiException("Exceeding amount of requests per minute allowed by Hypixel");
+                        throw new RateLimitException("Exceeding amount of requests per minute allowed by Hypixel");
                     } else if (status == 503) {
                         throw new ApiException("Leaderboard data has not yet been populated");
                     }
