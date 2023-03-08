@@ -52,8 +52,12 @@ public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDTe
     }
 
     protected void drawStringList(List<String> list, int x, int y, boolean dropShadow, boolean centered) {
+        if (centered) {
+            x = x - getMultilineWidth(list) / 2;
+            y = y - mc.fontRendererObj.FONT_HEIGHT * list.size();
+        }
         for (final String line : list) {
-            mc.fontRendererObj.drawString(line, (float) x, centered ? (float) (x - mc.fontRendererObj.getStringWidth(line) / 2) : (float) y, 0xFFFFFF, dropShadow);
+            mc.fontRendererObj.drawString(line, (float) x, (float) y, 0xFFFFFF, dropShadow);
             y += mc.fontRendererObj.FONT_HEIGHT;
         }
     }

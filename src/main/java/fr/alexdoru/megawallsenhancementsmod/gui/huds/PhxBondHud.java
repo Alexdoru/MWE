@@ -88,13 +88,13 @@ public class PhxBondHud extends MyCachedHUD {
     @Override
     public void render(ScaledResolution resolution) {
         final int[] absolutePos = this.guiPosition.getAbsolutePosition();
-        drawStringList(textToRender, absolutePos[0], absolutePos[1], true, false);
+        drawStringList(textToRender, absolutePos[0], absolutePos[1], true, true);
     }
 
     @Override
     public void renderDummy() {
         final int[] absolutePos = this.guiPosition.getAbsolutePosition();
-        drawStringList(dummyTextToRender, absolutePos[0], absolutePos[1], true, false);
+        drawStringList(dummyTextToRender, absolutePos[0], absolutePos[1], true, true);
     }
 
     @Override
