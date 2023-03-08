@@ -92,7 +92,7 @@ public abstract class AbstractConfig {
     private static void assignFieldToConfigValue(Field field, ConfigProperty configProperty) throws IllegalAccessException {
         if (field.getType() == GuiPosition.class) {
             final GuiPosition position = ((GuiPosition) field.get(null));
-            position.setRelative(
+            position.setRelativePosition(
                     propertyMap.get("Xpos " + configProperty.name()).getDouble(),
                     propertyMap.get("Ypos " + configProperty.name()).getDouble()
             );
@@ -111,9 +111,9 @@ public abstract class AbstractConfig {
 
     private static void saveFieldValueToConfig(Field field, ConfigProperty configProperty) throws IllegalAccessException {
         if (field.getType() == GuiPosition.class) {
-            final double[] relativePosition = ((GuiPosition) field.get(null)).getRelativePosition();
-            propertyMap.get("Xpos " + configProperty.name()).set(relativePosition[0]);
-            propertyMap.get("Ypos " + configProperty.name()).set(relativePosition[1]);
+            final GuiPosition guiPosition = (GuiPosition) field.get(null);
+            propertyMap.get("Xpos " + configProperty.name()).set(guiPosition.getRelativeX());
+            propertyMap.get("Ypos " + configProperty.name()).set(guiPosition.getRelativeY());
         } else if (field.getType() == String.class) {
             propertyMap.get(configProperty.name()).set((String) field.get(null));
         } else if (field.getType() == boolean.class) {

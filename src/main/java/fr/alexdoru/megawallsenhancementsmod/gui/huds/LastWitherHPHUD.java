@@ -53,7 +53,7 @@ public class LastWitherHPHUD extends MyCachedHUD {
 
     @Override
     public void render(ScaledResolution resolution) {
-        final int[] absolutePos = this.guiPosition.getAbsolutePositionForRender(resolution, frObj.getStringWidth(displayText), frObj.FONT_HEIGHT);
+        final int[] absolutePos = this.guiPosition.getAdjustedAbsolutePosition(resolution, frObj.getStringWidth(displayText), frObj.FONT_HEIGHT);
         frObj.drawStringWithShadow(displayText, absolutePos[0], absolutePos[1], 0);
     }
 

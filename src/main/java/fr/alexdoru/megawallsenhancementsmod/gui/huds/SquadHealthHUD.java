@@ -87,7 +87,7 @@ public class SquadHealthHUD implements IRenderer {
             final int listSize = playerlistToRender.size();
             final int hudWidth = maxLineWidth + 2;
             final int hudHight = listSize * 9 + 1;
-            final int[] absolutePos = this.guiPosition.getAbsolutePositionForRender(resolution, hudWidth, hudHight);
+            final int[] absolutePos = this.guiPosition.getAdjustedAbsolutePosition(resolution, hudWidth, hudHight);
             final int hudXpos = absolutePos[0];
             final int hudYpos = absolutePos[1];
             Gui.drawRect(hudXpos, hudYpos, hudXpos + hudWidth, hudYpos + hudHight, Integer.MIN_VALUE);
