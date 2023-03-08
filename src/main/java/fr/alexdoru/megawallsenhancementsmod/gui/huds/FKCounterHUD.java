@@ -4,6 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
+import fr.alexdoru.megawallsenhancementsmod.utils.MapUtil;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
@@ -11,8 +12,8 @@ import net.minecraft.util.EnumChatFormatting;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class FKCounterHUD extends MyCachedHUD {
@@ -133,7 +134,7 @@ public class FKCounterHUD extends MyCachedHUD {
         }
 
         this.textToRender.clear();
-        final HashMap<Integer, Integer> sortedmap = KillCounter.getSortedTeamKillsMap();
+        final Map<Integer, Integer> sortedmap = KillCounter.getSortedTeamKillsMap();
 
         if (ConfigHandler.fkcounterHUDCompact) {
 
@@ -155,7 +156,7 @@ public class FKCounterHUD extends MyCachedHUD {
                 final StringBuilder strBuilder = new StringBuilder();
                 final int team = teamEntry.getKey();
                 strBuilder.append(KillCounter.getColorPrefixFromTeam(team)).append(KillCounter.getTeamNameFromTeam(team).charAt(0)).append(EnumChatFormatting.WHITE).append(" ").append(KillCounter.getKills(team));
-                final HashMap<String, Integer> teamKillMap = KillCounter.sortByDecreasingValue1(KillCounter.getPlayers(team));
+                final Map<String, Integer> teamKillMap = MapUtil.sortByDecreasingValue(KillCounter.getPlayers(team));
                 if (!teamKillMap.isEmpty()) {
                     int playerAmount = 0;
                     boolean first = true;

@@ -37,10 +37,6 @@ public class WDR implements Comparable<WDR> {
         return compare(this, wdr);
     }
 
-    public int compareToInvert(WDR wdr) {
-        return compare(wdr, this);
-    }
-
     public boolean transformName() {
         return !(hacks.size() == 1 && hacks.contains(IGNORED));
     }

@@ -2,16 +2,18 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiscreens.FKConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
+import fr.alexdoru.megawallsenhancementsmod.utils.MapUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter.*;
 
 public class CommandFKCounter extends MyAbstractCommand {
 
@@ -34,18 +36,19 @@ public class CommandFKCounter extends MyAbstractCommand {
 
         } else if (args.length > 0 && (args[0].equalsIgnoreCase("players") || args[0].equalsIgnoreCase("player") || args[0].equalsIgnoreCase("p"))) {
 
-            if (KillCounter.getGameId() == null) {
+            if (getGameId() == null) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + "This is not available right now");
                 return;
             }
 
             final StringBuilder strBuilder = new StringBuilder();
-            for (int TEAM = KillCounter.RED_TEAM; TEAM <= KillCounter.BLUE_TEAM; TEAM++) {
-                strBuilder.append(KillCounter.getColorPrefixFromTeam(TEAM))
-                        .append(KillCounter.getTeamNameFromTeam(TEAM))
+            for (int TEAM = RED_TEAM; TEAM <= BLUE_TEAM; TEAM++) {
+                strBuilder.append(getColorPrefixFromTeam(TEAM))
+                        .append(getTeamNameFromTeam(TEAM))
                         .append(EnumChatFormatting.WHITE)
                         .append(": ");
-                for (final Iterator<Map.Entry<String, Integer>> iterator = KillCounter.sortByDecreasingValue1(KillCounter.getPlayers(TEAM)).entrySet().iterator(); iterator.hasNext(); ) {
+                final Iterator<Map.Entry<String, Integer>> iterator = MapUtil.sortByDecreasingValue(getPlayers(TEAM)).entrySet().iterator();
+                while (iterator.hasNext()) {
                     final Map.Entry<String, Integer> entry = iterator.next();
                     strBuilder.append(SquadHandler.getSquadname(entry.getKey())).append(" (").append(entry.getValue()).append(")");
                     if (iterator.hasNext()) {
@@ -61,7 +64,7 @@ public class CommandFKCounter extends MyAbstractCommand {
             removePlayer(args[1]);
         } else if (args.length > 0 && args[0].equalsIgnoreCase("say")) {
 
-            if (KillCounter.getGameId() == null) {
+            if (getGameId() == null) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + "This is not available right now");
                 return;
             }
@@ -70,24 +73,24 @@ public class CommandFKCounter extends MyAbstractCommand {
 
             if (args.length == 1) {
 
-                final HashMap<Integer, Integer> sortedmap = KillCounter.getSortedTeamKillsMap();
+                final Map<Integer, Integer> sortedmap = getSortedTeamKillsMap();
                 int i = 0;
                 for (final Map.Entry<Integer, Integer> entry : sortedmap.entrySet()) {
                     if (i != 0) {
                         strBuilder.append(", ");
                     }
-                    strBuilder.append(KillCounter.getTeamNameFromTeam(entry.getKey())).append(": ").append(entry.getValue());
+                    strBuilder.append(getTeamNameFromTeam(entry.getKey())).append(": ").append(entry.getValue());
                     i++;
                 }
 
             } else if (args.length == 2 && args[1].equalsIgnoreCase("red")) {
-                strBuilder.append(KillCounter.getTeamNameFromTeam(KillCounter.RED_TEAM)).append(": ").append(KillCounter.sortByDecreasingValue1(KillCounter.getPlayers(KillCounter.RED_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
+                strBuilder.append(getTeamNameFromTeam(RED_TEAM)).append(": ").append(MapUtil.sortByDecreasingValue(getPlayers(RED_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
             } else if (args.length == 2 && args[1].equalsIgnoreCase("green")) {
-                strBuilder.append(KillCounter.getTeamNameFromTeam(KillCounter.GREEN_TEAM)).append(": ").append(KillCounter.sortByDecreasingValue1(KillCounter.getPlayers(KillCounter.GREEN_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
+                strBuilder.append(getTeamNameFromTeam(GREEN_TEAM)).append(": ").append(MapUtil.sortByDecreasingValue(getPlayers(GREEN_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
             } else if (args.length == 2 && args[1].equalsIgnoreCase("yellow")) {
-                strBuilder.append(KillCounter.getTeamNameFromTeam(KillCounter.YELLOW_TEAM)).append(": ").append(KillCounter.sortByDecreasingValue1(KillCounter.getPlayers(KillCounter.YELLOW_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
+                strBuilder.append(getTeamNameFromTeam(YELLOW_TEAM)).append(": ").append(MapUtil.sortByDecreasingValue(getPlayers(YELLOW_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
             } else if (args.length == 2 && args[1].equalsIgnoreCase("blue")) {
-                strBuilder.append(KillCounter.getTeamNameFromTeam(KillCounter.BLUE_TEAM)).append(": ").append(KillCounter.sortByDecreasingValue1(KillCounter.getPlayers(KillCounter.BLUE_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
+                strBuilder.append(getTeamNameFromTeam(BLUE_TEAM)).append(": ").append(MapUtil.sortByDecreasingValue(getPlayers(BLUE_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
             }
 
             sendChatMessage(strBuilder.toString());
@@ -101,14 +104,14 @@ public class CommandFKCounter extends MyAbstractCommand {
                     + EnumChatFormatting.RED + "/fks settings : opens the settings GUI");
 
         } else {
-            if (KillCounter.getGameId() == null) {
+            if (getGameId() == null) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + "This is not available right now");
                 return;
             }
-            final String strBuilder = KillCounter.getColorPrefixFromTeam(KillCounter.RED_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.RED_TEAM) + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.RED_TEAM) + "\n" +
-                    KillCounter.getColorPrefixFromTeam(KillCounter.GREEN_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.GREEN_TEAM) + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.GREEN_TEAM) + "\n" +
-                    KillCounter.getColorPrefixFromTeam(KillCounter.YELLOW_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.YELLOW_TEAM) + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.YELLOW_TEAM) + "\n" +
-                    KillCounter.getColorPrefixFromTeam(KillCounter.BLUE_TEAM) + KillCounter.getTeamNameFromTeam(KillCounter.BLUE_TEAM) + EnumChatFormatting.WHITE + ": " + KillCounter.getKills(KillCounter.BLUE_TEAM);
+            final String strBuilder = getColorPrefixFromTeam(RED_TEAM) + getTeamNameFromTeam(RED_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(RED_TEAM) + "\n" +
+                    getColorPrefixFromTeam(GREEN_TEAM) + getTeamNameFromTeam(GREEN_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(GREEN_TEAM) + "\n" +
+                    getColorPrefixFromTeam(YELLOW_TEAM) + getTeamNameFromTeam(YELLOW_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(YELLOW_TEAM) + "\n" +
+                    getColorPrefixFromTeam(BLUE_TEAM) + getTeamNameFromTeam(BLUE_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(BLUE_TEAM);
             ChatUtil.addChatMessage(strBuilder);
 
         }
@@ -124,7 +127,6 @@ public class CommandFKCounter extends MyAbstractCommand {
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         final String[] fksarguments = {"players", "remove", "say", "settings", "help"};
         final String[] colors = {"red", "green", "yellow", "blue"};
-
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, fksarguments);
         }
@@ -139,15 +141,15 @@ public class CommandFKCounter extends MyAbstractCommand {
     }
 
     private void removePlayer(String playerName) {
-        final HashMap<String, Integer>[] teamKillsArray = KillCounter.getTeamKillsArray();
+        final HashMap<String, Integer>[] teamKillsArray = getTeamKillsArray();
         if (teamKillsArray != null) {
-            for (int team = 0; team < KillCounter.TEAMS; team++) {
+            for (int team = 0; team < TEAMS; team++) {
                 final Integer kills = teamKillsArray[team].get(playerName);
                 if (kills != null) {
-                    KillCounter.removeKilledPlayer(playerName, team);
+                    removeKilledPlayer(playerName, team);
                     FKCounterHUD.instance.updateDisplayText();
-                    ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Removed " + KillCounter.getColorPrefixFromTeam(team) + playerName
-                            + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + kills + EnumChatFormatting.GREEN + " final" + (kills > 1 ? "s" : "") + " from the " + KillCounter.getColorPrefixFromTeam(team) + KillCounter.getTeamNameFromTeam(team) + EnumChatFormatting.GREEN + " team.");
+                    ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Removed " + getColorPrefixFromTeam(team) + playerName
+                            + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + kills + EnumChatFormatting.GREEN + " final" + (kills > 1 ? "s" : "") + " from the " + getColorPrefixFromTeam(team) + getTeamNameFromTeam(team) + EnumChatFormatting.GREEN + " team.");
                     return;
                 }
             }
@@ -157,7 +159,7 @@ public class CommandFKCounter extends MyAbstractCommand {
 
     private ArrayList<String> getPlayerListinKillCounter() {
         final ArrayList<String> playerList = new ArrayList<>();
-        final HashMap<String, Integer>[] teamKillsArray = KillCounter.getTeamKillsArray();
+        final HashMap<String, Integer>[] teamKillsArray = getTeamKillsArray();
         if (teamKillsArray == null) {
             return playerList;
         }

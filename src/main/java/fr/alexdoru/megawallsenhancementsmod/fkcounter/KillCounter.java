@@ -12,6 +12,7 @@ import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
+import fr.alexdoru.megawallsenhancementsmod.utils.MapUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -237,15 +238,15 @@ public class KillCounter {
     }
 
     /**
-     * Returns a sorted hashmap where the Keys are the Team interger, and the values are the amounts of finals for that team
+     * Returns a sorted hashmap where the Keys are the Team integer, and the values are the amounts of finals for that team
      */
-    public static HashMap<Integer, Integer> getSortedTeamKillsMap() {
-        final HashMap<Integer, Integer> hashmap = new HashMap<>();
+    public static Map<Integer, Integer> getSortedTeamKillsMap() {
+        final Map<Integer, Integer> hashmap = new HashMap<>();
         hashmap.put(RED_TEAM, getKills(RED_TEAM));
         hashmap.put(GREEN_TEAM, getKills(GREEN_TEAM));
         hashmap.put(YELLOW_TEAM, getKills(YELLOW_TEAM));
         hashmap.put(BLUE_TEAM, getKills(BLUE_TEAM));
-        return sortByDecreasingValue2(hashmap);
+        return MapUtil.sortByDecreasingValue(hashmap);
     }
 
     public static HashMap<String, Integer> getPlayers(int team) {
@@ -371,26 +372,6 @@ public class KillCounter {
 
     private static boolean isNotValidTeam(int team) {
         return (team < 0 || team >= TEAMS);
-    }
-
-    public static HashMap<String, Integer> sortByDecreasingValue1(HashMap<String, Integer> hashmapIn) {
-        final List<Map.Entry<String, Integer>> list = new LinkedList<>(hashmapIn.entrySet());
-        list.sort((o1, o2) -> (o2.getValue()).compareTo(o1.getValue()));
-        final HashMap<String, Integer> temp = new LinkedHashMap<>();
-        for (final Map.Entry<String, Integer> aa : list) {
-            temp.put(aa.getKey(), aa.getValue());
-        }
-        return temp;
-    }
-
-    private static HashMap<Integer, Integer> sortByDecreasingValue2(HashMap<Integer, Integer> hashmapIn) {
-        final List<Map.Entry<Integer, Integer>> list = new LinkedList<>(hashmapIn.entrySet());
-        list.sort((o1, o2) -> (o2.getValue()).compareTo(o1.getValue()));
-        final HashMap<Integer, Integer> temp = new LinkedHashMap<>();
-        for (final Map.Entry<Integer, Integer> aa : list) {
-            temp.put(aa.getKey(), aa.getValue());
-        }
-        return temp;
     }
 
     private static void spawnParticles(String killer) {
