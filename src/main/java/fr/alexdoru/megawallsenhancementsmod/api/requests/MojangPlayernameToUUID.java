@@ -7,6 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 public class MojangPlayernameToUUID {
 
@@ -16,6 +17,9 @@ public class MojangPlayernameToUUID {
 
     public MojangPlayernameToUUID(String playername) throws ApiException {
         final String lowerCaseName = playername.toLowerCase();
+        if (!Pattern.compile("\\w{1,16}").matcher(lowerCaseName).matches()) {
+            throw new ApiException(ChatUtil.invalidMinecraftNameMsg(playername));
+        }
         final NameUuidData cachedData = nameUuidCache.get(lowerCaseName);
         if (cachedData != null) {
             this.name = cachedData.name;
@@ -27,7 +31,7 @@ public class MojangPlayernameToUUID {
         this.name = JsonUtil.getString(obj, "name");
         final String id = JsonUtil.getString(obj, "id");
         if (this.name == null || id == null) {
-            throw new ApiException(ChatUtil.invalidPlayernameMsg(playername));
+            throw new ApiException(ChatUtil.inexistantMinecraftNameMsg(playername));
         }
         this.uuid = id.replace("-", "");
         nameUuidCache.put(lowerCaseName, new NameUuidData(this.name, this.uuid));
