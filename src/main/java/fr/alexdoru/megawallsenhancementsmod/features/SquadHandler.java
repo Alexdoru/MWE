@@ -9,6 +9,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +60,8 @@ public class SquadHandler {
      * Returns the input name if the player is not in the squad
      * Returns the alias if the player is in the squad
      */
-    public static String getSquadname(String playername) {
+    @Nonnull
+    public static String getSquadname(@Nonnull String playername) {
         final String squadname = squadmap.get(playername);
         if (squadname == null) {
             return playername;
