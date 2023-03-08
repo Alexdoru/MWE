@@ -11,7 +11,7 @@ import net.minecraft.util.EnumChatFormatting;
 public class SpeeedHUD implements IRenderer {
 
     public static SpeeedHUD instance;
-    public final GuiPosition guiPosition;
+    private final GuiPosition guiPosition;
     private final Minecraft mc = Minecraft.getMinecraft();
     private static final String DUMMY_TEXT = EnumChatFormatting.DARK_GREEN + "Speed: " + EnumChatFormatting.WHITE + "5.65m/s";
 
@@ -50,7 +50,7 @@ public class SpeeedHUD implements IRenderer {
     }
 
     @Override
-    public GuiPosition getHUDPosition() {
+    public GuiPosition getGuiPosition() {
         return this.guiPosition;
     }
 

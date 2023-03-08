@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 public class SquadHealthHUD implements IRenderer {
 
     public static SquadHealthHUD instance;
-    public final GuiPosition guiPosition;
+    private final GuiPosition guiPosition;
     private final Minecraft mc = Minecraft.getMinecraft();
     private static final Ordering<NetworkPlayerInfo> ordering = Ordering.from(new SquadHealthHUD.PlayerComparator());
 
@@ -193,7 +193,7 @@ public class SquadHealthHUD implements IRenderer {
     }
 
     @Override
-    public GuiPosition getHUDPosition() {
+    public GuiPosition getGuiPosition() {
         return this.guiPosition;
     }
 

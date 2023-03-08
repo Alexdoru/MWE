@@ -11,9 +11,9 @@ import java.util.List;
 
 public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDText {
 
-    public static final Minecraft mc = Minecraft.getMinecraft();
+    protected static final Minecraft mc = Minecraft.getMinecraft();
     public String displayText = "";
-    public final GuiPosition guiPosition;
+    protected final GuiPosition guiPosition;
 
     public MyCachedHUD(GuiPosition guiPosition) {
         this.guiPosition = guiPosition;
@@ -44,7 +44,7 @@ public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDTe
     }
 
     @Override
-    public GuiPosition getHUDPosition() {
+    public GuiPosition getGuiPosition() {
         return this.guiPosition;
     }
 
