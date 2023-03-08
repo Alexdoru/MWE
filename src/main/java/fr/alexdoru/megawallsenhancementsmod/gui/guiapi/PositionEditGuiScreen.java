@@ -15,7 +15,7 @@ public class PositionEditGuiScreen extends GuiScreen {
 
     public PositionEditGuiScreen(IRenderer renderer, GuiScreen parent) {
         this.renderer = renderer;
-        this.guiPosition = renderer.getHUDPosition();
+        this.guiPosition = renderer.getGuiPosition();
         this.parent = parent;
         adjustBounds();
     }

@@ -230,31 +230,31 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 mc.displayGuiScreen(new PositionEditGuiScreen(PhxBondHud.instance, this));
                 break;
             case 7:
-                KillCooldownHUD.instance.guiPosition.resetToDefault();
+                KillCooldownHUD.instance.getGuiPosition().resetToDefault();
                 break;
             case 8:
-                ArrowHitHUD.instance.guiPosition.resetToDefault();
+                ArrowHitHUD.instance.getGuiPosition().resetToDefault();
                 break;
             case 12:
-                LastWitherHPHUD.instance.guiPosition.resetToDefault();
+                LastWitherHPHUD.instance.getGuiPosition().resetToDefault();
                 break;
             case 14:
-                HunterStrengthHUD.instance.guiPosition.resetToDefault();
+                HunterStrengthHUD.instance.getGuiPosition().resetToDefault();
                 break;
             case 23:
-                SquadHealthHUD.instance.guiPosition.resetToDefault();
+                SquadHealthHUD.instance.getGuiPosition().resetToDefault();
                 break;
             case 16:
-                CreeperPrimedTNTHUD.instance.guiPosition.resetToDefault();
+                CreeperPrimedTNTHUD.instance.getGuiPosition().resetToDefault();
                 break;
             case 19:
-                EnergyDisplayHUD.instance.guiPosition.resetToDefault();
+                EnergyDisplayHUD.instance.getGuiPosition().resetToDefault();
                 break;
             case 29:
-                SpeeedHUD.instance.guiPosition.resetToDefault();
+                SpeeedHUD.instance.getGuiPosition().resetToDefault();
                 break;
             case 32:
-                PhxBondHud.instance.guiPosition.resetToDefault();
+                PhxBondHud.instance.getGuiPosition().resetToDefault();
                 break;
             default:
                 break;

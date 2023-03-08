@@ -49,14 +49,8 @@ public interface IRenderer {
     }
 
     /**
-     * Creates a new HUDPosition object based on relative coordinates.
-     * From 0 to 1. Example: 0.3 being 30% of the screen size.
-     *
-     * @return The initial ScreenPosition position.
-     * This is where the HUD will be rendered when opening a screen.
-     * Preferably load the values from a configuration file.
-     * Can be null.
+     * Returns the GuiPosition of the Renderer
      */
-    GuiPosition getHUDPosition();
+    GuiPosition getGuiPosition();
 
 }
