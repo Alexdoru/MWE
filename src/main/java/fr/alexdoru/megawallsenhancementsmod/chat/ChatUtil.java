@@ -76,8 +76,12 @@ public class ChatUtil {
                 + EnumChatFormatting.YELLOW + "\"/mwenhancements setapikey <key>\"");
     }
 
-    public static String invalidPlayernameMsg(String playername) {
+    public static String inexistantMinecraftNameMsg(String playername) {
         return EnumChatFormatting.RED + "The name " + EnumChatFormatting.YELLOW + playername + EnumChatFormatting.RED + " doesn't exist, it might be a nick.";
+    }
+
+    public static String invalidMinecraftNameMsg(String playername) {
+        return EnumChatFormatting.RED + "The name " + EnumChatFormatting.YELLOW + playername + EnumChatFormatting.RED + " isn't a valid Minecraft username.";
     }
 
     /**
