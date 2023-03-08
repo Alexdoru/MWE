@@ -38,7 +38,7 @@ public class GuiPlayerTabOverlayHook {
             return;
         }
         final String s1 = EnumChatFormatting.GOLD + " " + playerFinalkills;
-        mc.fontRendererObj.drawStringWithShadow(s1, j2 + i + 1, k2, 16777215);
+        mc.fontRendererObj.drawStringWithShadow(s1, j2 + i + 1, k2, 0xFFFFFF);
     }
 
     public static boolean shouldRenderHeader() {

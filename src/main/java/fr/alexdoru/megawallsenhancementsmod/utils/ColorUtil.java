@@ -44,7 +44,7 @@ public class ColorUtil {
 
     public static int getColorInt(char colorChar) {
         if (colorChar == '\0') {
-            return 16777215;
+            return 0xFFFFFF;
         }
         return mc.fontRendererObj.getColorCode(colorChar);
     }
