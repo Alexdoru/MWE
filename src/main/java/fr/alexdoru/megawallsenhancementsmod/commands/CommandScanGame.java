@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
+import fr.alexdoru.megawallsenhancementsmod.api.exceptions.RateLimitException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.GeneralInfo;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
@@ -204,6 +205,10 @@ class ScanPlayerTask implements Callable<String> {
                 return null;
             }
 
+        } catch (RateLimitException e) {
+            // return here to not fill the data map with requests
+            // that failed and have a chance to retry later
+            return null;
         } catch (Exception ignored) {}
 
         ScangameData.put(uuid, null);
