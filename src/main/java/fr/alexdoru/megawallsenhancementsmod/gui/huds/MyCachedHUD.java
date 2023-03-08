@@ -27,12 +27,12 @@ public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDTe
 
     @Override
     public int getHeight() {
-        return frObj.FONT_HEIGHT;
+        return mc.fontRendererObj.FONT_HEIGHT;
     }
 
     @Override
     public int getWidth() {
-        return frObj.getStringWidth(displayText);
+        return mc.fontRendererObj.getStringWidth(displayText);
     }
 
     @Override
@@ -51,24 +51,17 @@ public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDTe
         return this.guiPosition;
     }
 
-    protected void drawMultilineString(String msg, int x, int y, boolean shadow) {
-        for (final String line : msg.split("\n")) {
-            frObj.drawString(line, x, y, 16777215, shadow);
-            y += frObj.FONT_HEIGHT;
-        }
-    }
-
-    protected void drawStringList(List<String> list, int x, int y) {
+    protected void drawStringList(List<String> list, int x, int y, boolean dropShadow, boolean centered) {
         for (final String line : list) {
-            drawCenteredString(mc.fontRendererObj, line, x, y, 0xFFFFFF);
+            mc.fontRendererObj.drawString(line, (float) x, centered ? (float) (x - mc.fontRendererObj.getStringWidth(line) / 2) : (float) y, 0xFFFFFF, dropShadow);
             y += mc.fontRendererObj.FONT_HEIGHT;
         }
     }
 
-    public int getMultilineWidth(String string) {
+    protected int getMultilineWidth(List<String> list) {
         int maxwidth = 0;
-        for (final String line : string.split("\n")) {
-            final int width = frObj.getStringWidth(line);
+        for (final String line : list) {
+            final int width = mc.fontRendererObj.getStringWidth(line);
             if (width > maxwidth) {
                 maxwidth = width;
             }

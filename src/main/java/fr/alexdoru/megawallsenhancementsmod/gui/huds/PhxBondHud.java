@@ -7,6 +7,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,13 +21,11 @@ public class PhxBondHud extends MyCachedHUD {
     private static final Pattern PLAYERS_HEALED_PATTERN = Pattern.compile("(\\w{1,16})\\sfor\\s([0-9]*[.]?[0-9]+)[\u2764\u2665]");
     private static final Pattern SELF_HEALED_PATTERN = Pattern.compile("You are healed for\\s([0-9]*[.]?[0-9]+)[\u2764\u2665]");
 
-    private static final List<String> dummyTextToRender = new ArrayList<>();
-    static {
-        dummyTextToRender.add(getHealColor(9.5f) + "9.5" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + "Player1" + EnumChatFormatting.GRAY + " [HUN]");
-        dummyTextToRender.add(getHealColor(6f) + "6.0" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + "Player2" + EnumChatFormatting.GRAY + " [PIR]");
-        dummyTextToRender.add(getHealColor(3.5f) + "3.5" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + "Player3" + EnumChatFormatting.GRAY + " [END]");
-        dummyTextToRender.add(getHealColor(1f) + "1.0" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + "Player4" + EnumChatFormatting.GRAY + " [SPI]");
-    }
+    private static final List<String> dummyTextToRender = Arrays.asList(
+            getHealColor(9.5f) + "9.5" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + "Player1" + EnumChatFormatting.GRAY + " [HUN]",
+            getHealColor(6f) + "6.0" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + "Player2" + EnumChatFormatting.GRAY + " [PIR]",
+            getHealColor(3.5f) + "3.5" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + "Player3" + EnumChatFormatting.GRAY + " [END]",
+            getHealColor(1f) + "1.0" + EnumChatFormatting.RED + "\u2764" + EnumChatFormatting.DARK_GRAY + " - " + EnumChatFormatting.GREEN + "Player4" + EnumChatFormatting.GRAY + " [SPI]");
 
     private final List<String> textToRender = new ArrayList<>();
     private long timeStartRender;
@@ -89,13 +88,13 @@ public class PhxBondHud extends MyCachedHUD {
     @Override
     public void render(ScaledResolution resolution) {
         final int[] absolutePos = this.guiPosition.getAbsolutePosition();
-        drawStringList(textToRender, absolutePos[0], absolutePos[1]);
+        drawStringList(textToRender, absolutePos[0], absolutePos[1], true, false);
     }
 
     @Override
     public void renderDummy() {
         final int[] absolutePos = this.guiPosition.getAbsolutePosition();
-        drawStringList(dummyTextToRender, absolutePos[0], absolutePos[1]);
+        drawStringList(dummyTextToRender, absolutePos[0], absolutePos[1], true, false);
     }
 
     @Override
