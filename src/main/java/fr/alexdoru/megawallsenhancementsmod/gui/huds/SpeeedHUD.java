@@ -34,14 +34,14 @@ public class SpeeedHUD implements IRenderer {
     public void render(ScaledResolution resolution) {
         final double velocity = new Vector2D(mc.thePlayer.motionX, mc.thePlayer.motionZ).norm() * 20d;
         final String displayText = EnumChatFormatting.DARK_GREEN + "Speed: " + EnumChatFormatting.WHITE + String.format("%.2f", velocity) + "m/s";
-        final int[] absolutePos = this.guiPosition.getAdjustedAbsolutePosition(resolution, mc.fontRendererObj.getStringWidth(displayText), mc.fontRendererObj.FONT_HEIGHT);
-        mc.fontRendererObj.drawStringWithShadow(displayText, absolutePos[0], absolutePos[1], 0);
+        this.guiPosition.updateAdjustedAbsolutePosition(resolution, mc.fontRendererObj.getStringWidth(displayText), mc.fontRendererObj.FONT_HEIGHT);
+        mc.fontRendererObj.drawStringWithShadow(displayText, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
     public void renderDummy() {
-        final int[] absolutePos = this.guiPosition.getAbsolutePosition();
-        mc.fontRendererObj.drawStringWithShadow(DUMMY_TEXT, absolutePos[0], absolutePos[1], 0);
+        this.guiPosition.updateAbsolutePosition();
+        mc.fontRendererObj.drawStringWithShadow(DUMMY_TEXT, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override

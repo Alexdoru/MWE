@@ -60,9 +60,9 @@ public class FKCounterHUD extends MyCachedHUD {
 
     @Override
     public void render(ScaledResolution resolution) {
-        final int[] absolutePos = this.guiPosition.getAdjustedAbsolutePosition(resolution, getWidth(), getHeight());
-        final int x = absolutePos[0];
-        final int y = absolutePos[1];
+        this.guiPosition.updateAdjustedAbsolutePosition(resolution, getWidth(), getHeight());
+        final int x = this.guiPosition.getAbsoluteRenderX();
+        final int y = this.guiPosition.getAbsoluteRenderY();
         GlStateManager.pushMatrix();
         {
             if (ConfigHandler.fkcounterHUDDrawBackground) {
@@ -82,9 +82,9 @@ public class FKCounterHUD extends MyCachedHUD {
     @Override
     public void renderDummy() {
 
-        final int[] absolutePos = this.guiPosition.getAbsolutePosition();
-        final int x = absolutePos[0];
-        final int y = absolutePos[1];
+        this.guiPosition.updateAbsolutePosition();
+        final int x = this.guiPosition.getAbsoluteRenderX();
+        final int y = this.guiPosition.getAbsoluteRenderY();
 
         final int width;
         if (ConfigHandler.fkcounterHUDCompact) {
