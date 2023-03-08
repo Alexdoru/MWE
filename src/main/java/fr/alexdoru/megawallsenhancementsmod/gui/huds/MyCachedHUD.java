@@ -23,11 +23,6 @@ public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDTe
     }
 
     @Override
-    public String getDisplayText() {
-        return displayText;
-    }
-
-    @Override
     public void updateDisplayText() {}
 
     @Override
