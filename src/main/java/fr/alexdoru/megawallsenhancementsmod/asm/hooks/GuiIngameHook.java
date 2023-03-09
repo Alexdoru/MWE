@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.LastWitherHPHUD;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
+import net.minecraft.client.gui.FontRenderer;
 
 @SuppressWarnings("unused")
 public class GuiIngameHook {
@@ -25,6 +26,16 @@ public class GuiIngameHook {
             return FKCounterHUD.instance.displayText;
         }
         return textIn;
+    }
+
+    public static int getSidebarTextLineWidth(int width, FontRenderer fontRenderer) {
+        if (ConfigHandler.witherHUDinSidebar && ConfigHandler.showLastWitherHUD && FKCounterMod.isInMwGame && ScoreboardTracker.getMwScoreboardParser().isOnlyOneWitherAlive()) {
+            width = Math.max(width, fontRenderer.getStringWidth(LastWitherHPHUD.instance.displayText + ": 12"));
+        }
+        if (ConfigHandler.fkcounterHUDinSidebar && ConfigHandler.showfkcounterHUD && FKCounterMod.isInMwGame && KillCounter.getGameId() != null) {
+            width = Math.max(width, fontRenderer.getStringWidth(FKCounterHUD.instance.displayText + ": 11"));
+        }
+        return width;
     }
 
 }
