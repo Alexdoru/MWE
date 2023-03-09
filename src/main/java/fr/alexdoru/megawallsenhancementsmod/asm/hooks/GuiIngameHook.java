@@ -28,12 +28,12 @@ public class GuiIngameHook {
         return textIn;
     }
 
-    public static int getSidebarTextLineWidth(int width, FontRenderer fontRenderer) {
+    public static int getSidebarTextLineWidth(int width, FontRenderer fontRenderer, boolean redNumbers) {
         if (ConfigHandler.witherHUDinSidebar && ConfigHandler.showLastWitherHUD && FKCounterMod.isInMwGame && ScoreboardTracker.getMwScoreboardParser().isOnlyOneWitherAlive()) {
-            width = Math.max(width, fontRenderer.getStringWidth(LastWitherHPHUD.instance.displayText + ": 12"));
+            width = Math.max(width, fontRenderer.getStringWidth(LastWitherHPHUD.instance.displayText + (redNumbers ? ": 12" : "")));
         }
         if (ConfigHandler.fkcounterHUDinSidebar && ConfigHandler.showfkcounterHUD && FKCounterMod.isInMwGame && KillCounter.getGameId() != null) {
-            width = Math.max(width, fontRenderer.getStringWidth(FKCounterHUD.instance.displayText + ": 11"));
+            width = Math.max(width, fontRenderer.getStringWidth(FKCounterHUD.instance.displayText + (redNumbers ? ": 11" : "")));
         }
         return width;
     }
