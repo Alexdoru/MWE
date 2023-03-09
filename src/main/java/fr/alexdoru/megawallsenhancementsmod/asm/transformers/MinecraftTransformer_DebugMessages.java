@@ -79,7 +79,7 @@ public class MinecraftTransformer_DebugMessages implements IMyClassTransformer {
                         list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.MINECRAFT$GAMESETTINGS));
                         list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.GAMESETTINGS$PAUSEONLOSTFOCUS));
                         list.add(new LdcInsnNode("Pause on lost focus"));
-                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/MinecraftHook", "onSettingChange", "(L" + ClassMapping.MINECRAFT + ";ZLjava/lang/String;)V", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("MinecraftHook"), "onSettingChange", "(L" + ClassMapping.MINECRAFT + ";ZLjava/lang/String;)V", false));
                         methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
                     }
