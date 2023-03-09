@@ -7,6 +7,7 @@ import org.objectweb.asm.tree.*;
 import static org.objectweb.asm.Opcodes.*;
 
 public class SidebarmodRevamp_GuiSidebarTransformer implements IMyClassTransformer {
+
     @Override
     public String getTargetClassName() {
         return "revamp.sidebarmod.gui.GuiSidebar";
@@ -14,11 +15,29 @@ public class SidebarmodRevamp_GuiSidebarTransformer implements IMyClassTransform
 
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
-        status.setInjectionPoints(1);
+        status.setInjectionPoints(2);
         for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals("drawSidebar")) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if (insnNode.getOpcode() == INVOKESTATIC && insnNode instanceof MethodInsnNode
+
+                    if (insnNode instanceof MethodInsnNode && insnNode.getOpcode() == INVOKEVIRTUAL
+                            && ((MethodInsnNode) insnNode).owner.equals("net/minecraft/scoreboard/ScoreObjective")
+                            && ((MethodInsnNode) insnNode).name.equals("func_96678_d")
+                            && ((MethodInsnNode) insnNode).desc.equals("()Ljava/lang/String;")) {
+                        final AbstractInsnNode nextNode = insnNode.getNext();
+                        if (nextNode instanceof MethodInsnNode && nextNode.getOpcode() == INVOKEVIRTUAL
+                                && ((MethodInsnNode) nextNode).owner.equals("net/minecraft/client/gui/FontRenderer")
+                                && ((MethodInsnNode) nextNode).name.equals("func_78256_a")
+                                && ((MethodInsnNode) nextNode).desc.equals("(Ljava/lang/String;)I")) {
+                            final InsnList list = new InsnList();
+                            list.add(new VarInsnNode(ALOAD, 3));
+                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiIngameHook"), "getSidebarTextLineWidth", "(ILnet/minecraft/client/gui/FontRenderer;)I", false));
+                            methodNode.instructions.insert(nextNode, list);
+                            status.addInjection();
+                        }
+                    }
+
+                    if (insnNode instanceof MethodInsnNode && insnNode.getOpcode() == INVOKESTATIC
                             && ((MethodInsnNode) insnNode).owner.equals("net/minecraft/scoreboard/ScorePlayerTeam")
                             && ((MethodInsnNode) insnNode).name.equals("func_96667_a")
                             && ((MethodInsnNode) insnNode).desc.equals("(Lnet/minecraft/scoreboard/Team;Ljava/lang/String;)Ljava/lang/String;")) {
@@ -35,9 +54,11 @@ public class SidebarmodRevamp_GuiSidebarTransformer implements IMyClassTransform
                             status.addInjection();
                         }
                     }
+
                 }
             }
         }
         return classNode;
     }
+
 }
