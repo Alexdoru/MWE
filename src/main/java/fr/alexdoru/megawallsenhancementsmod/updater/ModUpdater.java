@@ -56,7 +56,7 @@ public class ModUpdater {
     }
 
     private static void checkForgeVersion() {
-        if (ForgeVersion.buildVersion < 2318) {
+        if (!ForgeVersion.getVersion().contains("2318")) {
             final String forgeUrl = "https://files.minecraftforge.net/net/minecraftforge/forge/index_1.8.9.html";
             ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + "You are using an outdated version of forge, " +
                     "things might not work properly! Click this message to open the download page for Forge.")
