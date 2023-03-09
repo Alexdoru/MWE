@@ -28,7 +28,7 @@ public class GuiIngameTransformer_Sidebar implements IMyClassTransformer {
                         */
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ILOAD, 11));
-                        list.add(new MethodInsnNode(INVOKESTATIC, "fr/alexdoru/megawallsenhancementsmod/asm/hooks/GuiIngameHook", "getSidebarTextLine", "(Ljava/lang/String;I)Ljava/lang/String;", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiIngameHook"), "getSidebarTextLine", "(Ljava/lang/String;I)Ljava/lang/String;", false));
                         methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
                     }
