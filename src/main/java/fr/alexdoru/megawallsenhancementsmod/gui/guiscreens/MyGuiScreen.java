@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 
+import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -7,7 +8,9 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.ForgeVersion;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,9 +45,15 @@ public abstract class MyGuiScreen extends GuiScreen {
             this.width = scaledresolution.getScaledWidth();
             this.height = scaledresolution.getScaledHeight();
         }
-        try {
+        if (ForgeVersion.getVersion().contains("2318")) {
             mc.entityRenderer.loadShader(SHADER);
-        } catch (Exception ignored) {}
+        } else {
+            try {
+                final Method m = mc.entityRenderer.getClass().getDeclaredMethod(ASMLoadingPlugin.isObf ? "func_175069_a" : "loadShader", ResourceLocation.class);
+                m.setAccessible(true);
+                m.invoke(mc.entityRenderer, SHADER);
+            } catch (Exception ignored) {}
+        }
         super.initGui();
     }
 
