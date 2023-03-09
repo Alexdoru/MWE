@@ -30,28 +30,15 @@ public final class GuiPosition {
         this.relativeY = y;
     }
 
-    /**
-     * @param res scaled resolution
-     * @param x   The absolute x coordinate to be set.
-     * @param y   The absolute y coordinate to be set.
-     */
-    public void setAbsolutePosition(ScaledResolution res, int x, int y) {
-        this.relativeX = ((double) x) / ((double) res.getScaledWidth());
-        this.relativeY = ((double) y) / ((double) res.getScaledHeight());
+    public void setAbsolutePositionForRender(int x, int y) {
+        this.absoluteRenderX = x;
+        this.absoluteRenderY = y;
     }
 
-    /**
-     * @return The relative x coordinate, ranging from 0 to 1.
-     */
-    public double getRelativeX() {
-        return relativeX;
-    }
-
-    /**
-     * @return The relative y coordinate, ranging from 0 to 1.
-     */
-    public double getRelativeY() {
-        return relativeY;
+    public void saveAbsoluteToRelative() {
+        final ScaledResolution res = new ScaledResolution(mc);
+        this.relativeX = ((double) this.absoluteRenderX) / ((double) res.getScaledWidth());
+        this.relativeY = ((double) this.absoluteRenderY) / ((double) res.getScaledHeight());
     }
 
     public void resetToDefault() {
@@ -89,6 +76,20 @@ public final class GuiPosition {
         if (this.absoluteRenderY + hudHigth > res.getScaledHeight()) {
             this.absoluteRenderY = res.getScaledHeight() - hudHigth;
         }
+    }
+
+    /**
+     * @return The relative x coordinate, ranging from 0 to 1.
+     */
+    public double getRelativeX() {
+        return relativeX;
+    }
+
+    /**
+     * @return The relative y coordinate, ranging from 0 to 1.
+     */
+    public double getRelativeY() {
+        return relativeY;
     }
 
     public int getAbsoluteRenderX() {

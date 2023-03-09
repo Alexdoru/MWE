@@ -82,7 +82,6 @@ public class FKCounterHUD extends MyCachedHUD {
     @Override
     public void renderDummy() {
 
-        this.guiPosition.updateAbsolutePosition();
         final int x = this.guiPosition.getAbsoluteRenderX();
         final int y = this.guiPosition.getAbsoluteRenderY();
 

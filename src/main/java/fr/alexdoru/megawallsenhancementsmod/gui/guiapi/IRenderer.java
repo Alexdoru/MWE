@@ -1,6 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.guiapi;
 
-import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.gui.ScaledResolution;
 
 public interface IRenderer {
@@ -39,14 +38,6 @@ public interface IRenderer {
      * it from the API.
      */
     boolean isEnabled(long currentTimeMillis);
-
-    /**
-     * Is called for each HUD when the configuration screen is closed
-     * in order to save the now Gui position to the settings.
-     */
-    default void save() {
-        ConfigHandler.saveConfig();
-    }
 
     /**
      * Returns the GuiPosition of the Renderer

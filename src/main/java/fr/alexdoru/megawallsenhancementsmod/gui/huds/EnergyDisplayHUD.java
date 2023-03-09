@@ -65,7 +65,6 @@ public class EnergyDisplayHUD extends MyCachedHUD {
 
     @Override
     public void renderDummy() {
-        this.guiPosition.updateAbsolutePosition();
         drawCenteredString(mc.fontRendererObj, DUMMY_TEXT, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 

@@ -154,7 +154,6 @@ public class SquadHealthHUD implements IRenderer {
     public void renderDummy() {
         GlStateManager.pushMatrix();
         {
-            this.guiPosition.updateAbsolutePosition();
             final int hudXpos = this.guiPosition.getAbsoluteRenderX();
             final int hudYpos = this.guiPosition.getAbsoluteRenderY();
             final int listSize = 4;
