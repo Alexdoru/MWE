@@ -31,7 +31,9 @@ public class SidebarmodRevamp_GuiSidebarTransformer implements IMyClassTransform
                                 && ((MethodInsnNode) nextNode).desc.equals("(Ljava/lang/String;)I")) {
                             final InsnList list = new InsnList();
                             list.add(new VarInsnNode(ALOAD, 3));
-                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiIngameHook"), "getSidebarTextLineWidth", "(ILnet/minecraft/client/gui/FontRenderer;)I", false));
+                            list.add(new VarInsnNode(ALOAD, 0));
+                            list.add(new FieldInsnNode(GETFIELD, "revamp/sidebarmod/gui/GuiSidebar", "redNumbers", "Z"));
+                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiIngameHook"), "getSidebarTextLineWidth", "(ILnet/minecraft/client/gui/FontRenderer;Z)I", false));
                             methodNode.instructions.insert(nextNode, list);
                             status.addInjection();
                         }

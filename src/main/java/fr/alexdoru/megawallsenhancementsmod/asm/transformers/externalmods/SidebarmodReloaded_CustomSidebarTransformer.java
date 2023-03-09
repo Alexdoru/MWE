@@ -32,7 +32,9 @@ public class SidebarmodReloaded_CustomSidebarTransformer implements IMyClassTran
                             final InsnList list = new InsnList();
                             list.add(new VarInsnNode(ALOAD, 0));
                             list.add(new FieldInsnNode(GETFIELD, "fr/alexdoru/sidebarmod/gui/CustomSidebar", "fontRendererObj", "Lnet/minecraft/client/gui/FontRenderer;"));
-                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiIngameHook"), "getSidebarTextLineWidth", "(ILnet/minecraft/client/gui/FontRenderer;)I", false));
+                            list.add(new VarInsnNode(ALOAD, 0));
+                            list.add(new FieldInsnNode(GETFIELD, "fr/alexdoru/sidebarmod/gui/CustomSidebar", "redNumbers", "Z"));
+                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiIngameHook"), "getSidebarTextLineWidth", "(ILnet/minecraft/client/gui/FontRenderer;Z)I", false));
                             methodNode.instructions.insert(nextNode, list);
                             status.addInjection();
                         }

@@ -28,7 +28,8 @@ public class GuiIngameTransformer_Sidebar implements IMyClassTransformer {
                             final InsnList list = new InsnList();
                             list.add(new VarInsnNode(ALOAD, 0));
                             list.add(getNewMethodInsnNode(MethodMapping.GUIINGAME$GETFONTRENDERER));
-                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiIngameHook"), "getSidebarTextLineWidth", "(IL" + ClassMapping.FONTRENDERER + ";)I", false));
+                            list.add(new InsnNode(ICONST_1));
+                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiIngameHook"), "getSidebarTextLineWidth", "(IL" + ClassMapping.FONTRENDERER + ";Z)I", false));
                             methodNode.instructions.insert(nextNode, list);
                             status.addInjection();
                         }
