@@ -1,9 +1,11 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.guiapi;
 
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
+
+import java.io.IOException;
 
 public class PositionEditGuiScreen extends GuiScreen {
 
@@ -11,62 +13,56 @@ public class PositionEditGuiScreen extends GuiScreen {
     private final IRenderer renderer;
     private final GuiPosition guiPosition;
     private final GuiScreen parent;
+    private boolean dragging;
     private int prevX, prevY;
 
     public PositionEditGuiScreen(IRenderer renderer, GuiScreen parent) {
         this.renderer = renderer;
         this.guiPosition = renderer.getGuiPosition();
         this.parent = parent;
-        adjustBounds();
     }
 
     @Override
-    public void drawScreen(int x, int y, float partialTicks) {
+    public void initGui() {
+        this.guiPosition.updateAbsolutePosition();
+    }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawDefaultBackground();
         renderer.renderDummy();
+        if (this.dragging) {
+            this.guiPosition.setAbsolutePositionForRender(
+                    this.guiPosition.getAbsoluteRenderX() + mouseX - this.prevX,
+                    this.guiPosition.getAbsoluteRenderY() + mouseY - this.prevY
+            );
+        }
+        this.prevX = mouseX;
+        this.prevY = mouseY;
     }
 
     @Override
-    protected void mouseClicked(int x, int y, int button) {
-        this.prevX = x;
-        this.prevY = y;
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+        this.dragging = true;
     }
 
     @Override
-    protected void mouseClickMove(int x, int y, int button, long time) {
-        moveSelectedRendererBy(x - prevX, y - prevY);
-        this.prevX = x;
-        this.prevY = y;
-    }
-
-    private void moveSelectedRendererBy(int offsetX, int offsetY) {
-        final ScaledResolution res = new ScaledResolution(mc);
-        this.guiPosition.updateAbsolutePosition(res);
-        this.guiPosition.setAbsolutePosition(res, this.guiPosition.getAbsoluteRenderX() + offsetX, this.guiPosition.getAbsoluteRenderY() + offsetY);
-        //adjustBounds();
+    protected void mouseReleased(int mouseX, int mouseY, int state) {
+        super.mouseReleased(mouseX, mouseY, state);
+        this.dragging = false;
     }
 
     @Override
     public void onGuiClosed() {
-        renderer.save();
+        this.guiPosition.saveAbsoluteToRelative();
+        ConfigHandler.saveConfig();
         new DelayedTask(() -> mc.displayGuiScreen(parent), 0);
     }
 
     @Override
     public boolean doesGuiPauseGame() {
         return false;
-    }
-
-    /**
-     * Makes sure the HUD can't get out of the screen
-     */
-    private void adjustBounds() {
-        final ScaledResolution res = new ScaledResolution(mc);
-        final int screenWidth = res.getScaledWidth();
-        final int screenHeight = res.getScaledHeight();
-        final int absoluteX = Math.max(0, Math.min((int) (guiPosition.getRelativeX() * res.getScaledWidth()), Math.max(screenWidth - this.renderer.getWidth(), 0)));
-        final int absoluteY = Math.max(0, Math.min((int) (guiPosition.getRelativeY() * res.getScaledHeight()), Math.max(screenHeight - this.renderer.getHeight(), 0)));
-        this.guiPosition.setAbsolutePosition(res, absoluteX, absoluteY);
     }
 
 }

@@ -97,7 +97,6 @@ public class PhxBondHud extends MyCachedHUD {
 
     @Override
     public void renderDummy() {
-        this.guiPosition.updateAbsolutePosition();
         drawStringList(dummyTextToRender, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), true, true);
     }
 
