@@ -27,7 +27,7 @@ public final class GuiManager {
         this.registeredRenderers.add(new LastWitherHPHUD());
         this.registeredRenderers.add(new EnergyDisplayHUD());
         this.registeredRenderers.add(new SquadHealthHUD());
-        this.registeredRenderers.add(new SpeeedHUD());
+        this.registeredRenderers.add(new SpeedHUD());
         this.registeredRenderers.add(new PhxBondHud());
     }
 
