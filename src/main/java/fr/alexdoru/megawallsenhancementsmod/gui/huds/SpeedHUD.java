@@ -8,14 +8,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
-public class SpeeedHUD implements IRenderer {
+public class SpeedHUD implements IRenderer {
 
-    public static SpeeedHUD instance;
+    public static SpeedHUD instance;
     private final GuiPosition guiPosition;
     private final Minecraft mc = Minecraft.getMinecraft();
     private static final String DUMMY_TEXT = EnumChatFormatting.DARK_GREEN + "Speed: " + EnumChatFormatting.WHITE + "5.65m/s";
 
-    public SpeeedHUD() {
+    public SpeedHUD() {
         instance = this;
         guiPosition = ConfigHandler.speedHUDPosition;
     }

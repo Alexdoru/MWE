@@ -224,7 +224,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 mc.displayGuiScreen(new PositionEditGuiScreen(EnergyDisplayHUD.instance, this));
                 break;
             case 30:
-                mc.displayGuiScreen(new PositionEditGuiScreen(SpeeedHUD.instance, this));
+                mc.displayGuiScreen(new PositionEditGuiScreen(SpeedHUD.instance, this));
                 break;
             case 33:
                 mc.displayGuiScreen(new PositionEditGuiScreen(PhxBondHud.instance, this));
@@ -251,7 +251,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 EnergyDisplayHUD.instance.getGuiPosition().resetToDefault();
                 break;
             case 29:
-                SpeeedHUD.instance.getGuiPosition().resetToDefault();
+                SpeedHUD.instance.getGuiPosition().resetToDefault();
                 break;
             case 32:
                 PhxBondHud.instance.getGuiPosition().resetToDefault();
