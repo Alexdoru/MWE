@@ -139,7 +139,12 @@ public class NameUtil {
             if (networkPlayerInfo != null) {
                 final MWPlayerData.PlayerData mwPlayerData = getMWPlayerData(networkPlayerInfo.getGameProfile(), true);
                 ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(mwPlayerData.displayName);
-                final EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
+                final EntityPlayer player;
+                if (playername.equals(ConfigHandler.hypixelNick)) {
+                    player = mc.thePlayer;
+                } else {
+                    player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
+                }
                 if (player != null) {
                     ((EntityPlayerAccessor) player).setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
                 }
@@ -271,6 +276,13 @@ public class NameUtil {
                                     + (formattedPrestigeVstring != null ? formattedPrestigeVstring : colorSuffix)
                                     + (isobf || alias == null ? "" : EnumChatFormatting.RESET + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.RESET + ")")
                     );
+                }
+            } else if (mc.thePlayer != null && mc.thePlayer.getName().equals(username)) {
+                if (!ConfigHandler.hypixelNick.equals("")) {
+                    final ScorePlayerTeam teamNick = mc.theWorld.getScoreboard().getPlayersTeam(ConfigHandler.hypixelNick);
+                    if (teamNick != null) {
+                        teamColor = StringUtil.getLastColorCharOf(teamNick.getColorPrefix());
+                    }
                 }
             }
         }
