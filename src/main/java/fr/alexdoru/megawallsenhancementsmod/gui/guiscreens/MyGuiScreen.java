@@ -10,6 +10,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeVersion;
 
+import java.awt.*;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +85,14 @@ public abstract class MyGuiScreen extends GuiScreen {
             mc.fontRendererObj.drawStringWithShadow(title, 0, 0, 0);
         }
         GlStateManager.popMatrix();
+    }
+
+    protected void drawColoredRectWithOutline(int top, int bottom, int left, int right, int rgbColor) {
+        drawHorizontalLine(left, right, top, Color.BLACK.getRGB());
+        drawHorizontalLine(left, right, bottom, Color.BLACK.getRGB());
+        drawVerticalLine(left, top, bottom, Color.BLACK.getRGB());
+        drawVerticalLine(right, top, bottom, Color.BLACK.getRGB());
+        drawRect(left + 1, top + 1, right, bottom, 255 << 24 | rgbColor);
     }
 
     /**
