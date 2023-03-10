@@ -63,15 +63,15 @@ public class RenderManagerHook {
         }
         greenHitboxColor = 255;
         blueHitboxColor = 255;
-        return 255;
+        return originalColor;
     }
 
     public static int getGreenHitboxColor(int originalColor) {
-        return greenHitboxColor;
+        return greenHitboxColor == 255 ? originalColor : greenHitboxColor;
     }
 
     public static int getBlueHitboxColor(int originalColor) {
-        return blueHitboxColor;
+        return blueHitboxColor == 255 ? originalColor : blueHitboxColor;
     }
 
     public static double getBlueVectLength(Entity entityIn) {
