@@ -60,6 +60,10 @@ public class RenderManagerHook {
             greenHitboxColor = colorCode >> 8 & 255;
             blueHitboxColor = colorCode & 255;
             return colorCode >> 16 & 255;
+        } else if (ConfigHandler.hitboxColor != 0xFFFFFF) {
+            greenHitboxColor = ConfigHandler.hitboxColor >> 8 & 255;
+            blueHitboxColor = ConfigHandler.hitboxColor & 255;
+            return ConfigHandler.hitboxColor >> 16 & 255;
         }
         greenHitboxColor = 255;
         blueHitboxColor = 255;
