@@ -48,7 +48,7 @@ public class HttpClient {
                         throw new ApiException("Leaderboard data has not yet been populated");
                     }
                 } else if (url.contains("api.mojang.com")) {
-                    if (status == 204) {
+                    if (status == 204 || status == 404) {
                         throw new ApiException(ChatUtil.inexistantMinecraftNameMsg(stripLastElementOfUrl(url)));
                     } else if (status == 400) {
                         throw new ApiException(ChatUtil.invalidMinecraftNameMsg(stripLastElementOfUrl(url)));
