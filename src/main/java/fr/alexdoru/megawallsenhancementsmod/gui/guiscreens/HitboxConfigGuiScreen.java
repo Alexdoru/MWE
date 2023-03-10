@@ -20,7 +20,7 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
     @Override
     public void initGui() {
         this.maxWidth = (10 + buttonsWidth) * 2;
-        this.maxHeight = (buttonsHeight + 4) * 13 + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * 12 + buttonsHeight;
         super.initGui();
         final int xLeftColumn = getxCenter() - buttonsWidth - 10;
         final int xRightColumn = getxCenter() + 10;
@@ -39,13 +39,13 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
         buttonList.add(new GuiButton(18, xRightColumn, getButtonYPos(2), buttonsWidth - 25, buttonsHeight, getButtonDisplayString(18))); //select custom hitbox color
         buttonList.add(new GuiButton(14, xRightColumn, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(14))); //real size hitboxes
         buttonList.add(new GuiButton(9, xRightColumn, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(9))); //red eyeline
-        buttonList.add(new GuiButton(15, xRightColumn, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(15))); //hide close hitboxes
-        buttonList.add(new GuiSlider(16, xRightColumn, getButtonYPos(6), buttonsWidth, buttonsHeight, "Range : ", " m", 0d, 64d, ConfigHandler.hitboxDrawRange, false, true, this)); //hitbox draw range slider
-        buttonList.add(new GuiButton(10, xRightColumn, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(10))); //draw blue vector
-        buttonList.add(new GuiButton(11, xRightColumn, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(11))); //draw blue vector on players only
-        buttonList.add(new GuiButton(12, xRightColumn, getButtonYPos(10), buttonsWidth, buttonsHeight, getButtonDisplayString(12))); //make red eyeline 3m
+        buttonList.add(new GuiButton(10, xRightColumn, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(10))); //draw blue vector
+        buttonList.add(new GuiButton(11, xRightColumn, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(11))); //draw blue vector on players only
+        buttonList.add(new GuiButton(12, xRightColumn, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(12))); //make red eyeline 3m
+        buttonList.add(new GuiButton(15, xRightColumn, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(15))); //hide close hitboxes
+        buttonList.add(new GuiSlider(16, xRightColumn, getButtonYPos(9), buttonsWidth, buttonsHeight, "Range : ", " m", 0d, 64d, ConfigHandler.hitboxDrawRange, false, true, this)); //hitbox draw range slider
 
-        buttonList.add(new GuiButton(0, getxCenter() - 150 / 2, getButtonYPos(12), 150, buttonsHeight, getButtonDisplayString(0))); //close button
+        buttonList.add(new GuiButton(0, getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, getButtonDisplayString(0))); //close button
     }
 
     @Override
@@ -54,7 +54,7 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
         final String msg = EnumChatFormatting.GRAY + "You obviously need to press f3+b to enable hitboxes";
         drawCenteredString(fontRendererObj, msg, getxCenter(), getButtonYPos(-1) + 2 * fontRendererObj.FONT_HEIGHT, 0);
         drawCenteredTitle(EnumChatFormatting.WHITE + "Draw Hitbox for :", 1, getxCenter() - buttonsWidth / 2.0f - 10, getButtonYPos(1) - buttonsHeight / 2.0f);
-        drawCenteredTitle(EnumChatFormatting.BLUE + "Blue vector :", 1, getxCenter() + buttonsWidth / 2.0f + 10, getButtonYPos(8) - buttonsHeight / 2.0f);
+        //drawCenteredTitle(EnumChatFormatting.BLUE + "Blue vector :", 1, getxCenter() + buttonsWidth / 2.0f + 10, getButtonYPos(8) - buttonsHeight / 2.0f);
         final int top = getButtonYPos(2);
         final int bottom = top + 20;
         final int left = getxCenter() + 10 + buttonsWidth - 25 + 4;
