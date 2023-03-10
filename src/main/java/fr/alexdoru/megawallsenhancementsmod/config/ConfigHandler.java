@@ -282,6 +282,6 @@ public class ConfigHandler extends AbstractConfig {
     public static double hitboxDrawRange = 6f;
 
     @ConfigProperty(category = HITBOX, name = "Team colored hitbox", comment = "Makes the player hitboxes take the color of the player's team")
-    public static boolean teamColoredHitbox;
+    public static boolean teamColoredHitbox = true;
 
 }
