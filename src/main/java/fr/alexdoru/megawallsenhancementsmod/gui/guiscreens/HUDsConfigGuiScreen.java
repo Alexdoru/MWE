@@ -244,10 +244,10 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 23:
                 SquadHealthHUD.instance.getGuiPosition().resetToDefault();
                 break;
-            case 16:
+            case 19:
                 CreeperPrimedTNTHUD.instance.getGuiPosition().resetToDefault();
                 break;
-            case 19:
+            case 16:
                 EnergyDisplayHUD.instance.getGuiPosition().resetToDefault();
                 break;
             case 29:
