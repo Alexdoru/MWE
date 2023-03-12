@@ -102,7 +102,7 @@ public class PhxBondHud extends MyCachedHUD {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return ConfigHandler.showPhxBondHUD && timeStartRender + 3000L > currentTimeMillis;
+        return ConfigHandler.showPhxBondHUD && timeStartRender + 5000L > currentTimeMillis;
     }
 
     private static EnumChatFormatting getHealColor(float heal) {
