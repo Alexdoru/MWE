@@ -4,12 +4,31 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerJoinListener {
+
+    private long lastDeathTime;
+
+    @SubscribeEvent
+    public void onWorldLoad(WorldEvent.Load event) {
+        if (System.currentTimeMillis() - lastDeathTime > 5000L) {
+            NameUtil.clearWarningMessagesPrinted();
+        }
+    }
+
+    @SubscribeEvent
+    public void onGuiScreen(GuiScreenEvent.InitGuiEvent event) {
+        if (event.gui instanceof GuiGameOver) {
+            lastDeathTime = System.currentTimeMillis();
+        }
+    }
 
     @SubscribeEvent
     public void onPlayerJoin(EntityJoinWorldEvent event) {
