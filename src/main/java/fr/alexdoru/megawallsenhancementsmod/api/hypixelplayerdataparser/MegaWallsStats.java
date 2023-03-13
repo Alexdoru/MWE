@@ -40,12 +40,13 @@ public class MegaWallsStats {
     private int deaths;
     private int final_kills;
     //private int final_kills_standard; // useless
-    //private int final_assists; // useless
+    private int final_assists; // useless
     //private int final_assists_standard; // useless
     private int final_deaths;
     private float kdr;
     private float fkdr;
     private float wlr;
+    private float fkadr;
     private float wither_damage_game;
     private float def_kill_game;
     private int time_played;
@@ -88,13 +89,14 @@ public class MegaWallsStats {
         deaths = JsonUtil.getInt(megaWallsStatsObj, "deaths");
         final_kills = JsonUtil.getInt(megaWallsStatsObj, "final_kills");
         //final_kills_standard = JsonUtil.getInt(megaWallsStatsObj,"final_kills_standard");
-        //final_assists = JsonUtil.getInt(megaWallsStatsObj,"final_assists");
+        final_assists = JsonUtil.getInt(megaWallsStatsObj, "final_assists");
         //final_assists_standard = JsonUtil.getInt(megaWallsStatsObj,"final_assists_standard");
         final_deaths = JsonUtil.getInt(megaWallsStatsObj, "final_deaths") + JsonUtil.getInt(megaWallsStatsObj, "finalDeaths");
 
         kdr = (float) kills / (deaths == 0 ? 1 : (float) deaths);
         fkdr = (float) final_kills / (final_deaths == 0 ? 1 : (float) final_deaths);
         wlr = (float) wins / (losses == 0 ? 1 : (float) losses);
+        fkadr = (float) (final_kills + final_assists) / (final_deaths == 0 ? 1 : (float) final_deaths);
 
         time_played = JsonUtil.getInt(megaWallsStatsObj, "time_played") + JsonUtil.getInt(megaWallsStatsObj, "time_played_standard"); // additionner les deux / en minutes
         games_played = wins + losses; // doesn't count the draws
@@ -202,6 +204,12 @@ public class MegaWallsStats {
                         EnumChatFormatting.AQUA + "Wins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wins) + " ",
                         EnumChatFormatting.AQUA + "Losses : " + EnumChatFormatting.RED + ChatUtil.formatInt(losses) + " ",
                         EnumChatFormatting.AQUA + "W/L Ratio : " + (wlr > 0.25f ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.3f", wlr)
+                },
+
+                {
+                        EnumChatFormatting.AQUA + "FA : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(final_assists) + " ",
+                        EnumChatFormatting.AQUA + "FKA/D Ratio : " + (fkadr > 1f ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + String.format("%.1f", fkadr),
+                        ""
                 }
         };
 
