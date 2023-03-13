@@ -3,9 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityArrowAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -24,10 +22,9 @@ public class RenderManagerHook {
         renderNametag = b;
     }
 
-    public static boolean cancelHitboxRender(Entity entityIn) {
+    public static boolean cancelHitboxRender(Entity entityIn, Entity viewingEntity) {
         if (ConfigHandler.drawRangedHitbox) {
-            final EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
-            if (thePlayer != null && entityIn.getDistanceSqToEntity(thePlayer) <= ConfigHandler.hitboxDrawRange * ConfigHandler.hitboxDrawRange) {
+            if (entityIn.getDistanceSqToEntity(viewingEntity) <= ConfigHandler.hitboxDrawRange * ConfigHandler.hitboxDrawRange) {
                 return true;
             }
         }

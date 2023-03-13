@@ -32,6 +32,7 @@ public enum FieldMapping {
     POTION$NIGHTVISION(POTION, "r", "nightVision", POTION),
     RENDERGLOBAL$COUNTENTITIESRENDERED(RENDERGLOBAL, "S", "countEntitiesRendered", "I"),
     RENDERMANAGER$DEBUGBOUNDINGBOX(RENDERMANAGER, "t", "debugBoundingBox", "Z"),
+    RENDERMANAGER$LIVINGENTITY(RENDERMANAGER, "c", "livingPlayer", ENTITY),
     RENDERMANAGER$TEXTRENDERER(RENDERMANAGER, "n", "textRenderer", FONTRENDERER);
 
     public final String owner;

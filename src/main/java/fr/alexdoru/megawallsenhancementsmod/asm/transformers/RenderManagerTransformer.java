@@ -132,7 +132,9 @@ public class RenderManagerTransformer implements IMyClassTransformer {
         final InsnList list = new InsnList();
         final LabelNode notCancelled = new LabelNode();
         list.add(new VarInsnNode(ALOAD, 1)); // load entity
-        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderManagerHook"), "cancelHitboxRender", "(L" + ClassMapping.ENTITY + ";)Z", false)); // load the boolean
+        list.add(new VarInsnNode(ALOAD, 0));
+        list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.RENDERMANAGER$LIVINGENTITY));
+        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderManagerHook"), "cancelHitboxRender", "(L" + ClassMapping.ENTITY + ";L" + ClassMapping.ENTITY + ";)Z", false)); // load the boolean
         list.add(new JumpInsnNode(IFEQ, notCancelled)); // if (true) { return;} else {jump to notCancelled label}
         list.add(new InsnNode(RETURN)); // return;
         list.add(notCancelled);
