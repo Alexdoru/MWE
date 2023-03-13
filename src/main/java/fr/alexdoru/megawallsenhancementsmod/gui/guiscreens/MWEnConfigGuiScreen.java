@@ -27,7 +27,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         final boolean isPatcherNotLoaded = !ASMLoadingPlugin.isPatcherLoaded();
         final int buttonsWidth = 210;
         this.maxWidth = (10 + buttonsWidth) * 2;
-        this.maxHeight = (buttonsHeight + 4) * ((isPatcherNotLoaded ? 11 : 10) + 1) + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * (11 + 1) + buttonsHeight;
         super.initGui();
         /*
          * Defines the button list
@@ -41,9 +41,10 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(31, XposLeftButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(31))); //fix action bar text overlap
         buttonList.add(new GuiButton(25, XposLeftButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(25))); //hide repetitive chat messages
         buttonList.add(new GuiButton(28, XposLeftButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(28))); //hide tablist header and footer
-        buttonList.add(new GuiButton(32, XposLeftButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(32))); //hide tablist ping
-        buttonList.add(new GuiButton(15, XposLeftButton, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(15))); //icons on names
-        buttonList.add(new GuiButton(27, XposLeftButton, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(27))); //nick hider
+        buttonList.add(new GuiButton(33, XposLeftButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(33))); //show tablist header and footer outside mw
+        buttonList.add(new GuiButton(32, XposLeftButton, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(32))); //hide tablist ping
+        buttonList.add(new GuiButton(15, XposLeftButton, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(15))); //icons on names
+        buttonList.add(new GuiButton(27, XposLeftButton, getButtonYPos(10), buttonsWidth, buttonsHeight, getButtonDisplayString(27))); //nick hider
 
         buttonList.add(new GuiButton(24, XposRightButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(24))); //P5 tags
         buttonList.add(new GuiButton(21, XposRightButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(21))); //safe inventory
@@ -60,7 +61,7 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         }
 
         /* Exit button */
-        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(isPatcherNotLoaded ? 12 : 11), 150, buttonsHeight, getButtonDisplayString(4))); //exit button
+        buttonList.add(new GuiButton(4, getxCenter() - 150 / 2, getButtonYPos(12), 150, buttonsHeight, getButtonDisplayString(4))); //exit button
     }
 
     @Override
@@ -98,6 +99,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 return "Limit dropped item rendered : " + getSuffix(ConfigHandler.limitDroppedEntityRendered);
             case 28:
                 return "Hide tablist header/footer : " + getSuffix(ConfigHandler.hideTablistHeaderFooter);
+            case 33:
+                return "Show header/footer outside MW : " + getSuffix(ConfigHandler.showHeaderFooterOutsideMW);
             case 29:
                 return "Show playercount tablist : " + getSuffix(ConfigHandler.showPlayercountTablist);
             case 31:
@@ -197,6 +200,10 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 28:
                 textLines.add(EnumChatFormatting.GREEN + "Hides the header and footer text located at the top and bottom of the tablist");
                 break;
+            case 33:
+                textLines.add(EnumChatFormatting.GREEN + "Shows the header and footer text located at the top");
+                textLines.add(EnumChatFormatting.GREEN + "and bottom of the tablist when you are not in mega walls");
+                break;
             case 29:
                 textLines.add(EnumChatFormatting.GREEN + "Displays the amount of players in the lobby at the top of the tablist");
                 break;
@@ -271,6 +278,9 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 break;
             case 28:
                 ConfigHandler.hideTablistHeaderFooter = !ConfigHandler.hideTablistHeaderFooter;
+                break;
+            case 33:
+                ConfigHandler.showHeaderFooterOutsideMW = !ConfigHandler.showHeaderFooterOutsideMW;
                 break;
             case 29:
                 ConfigHandler.showPlayercountTablist = !ConfigHandler.showPlayercountTablist;
