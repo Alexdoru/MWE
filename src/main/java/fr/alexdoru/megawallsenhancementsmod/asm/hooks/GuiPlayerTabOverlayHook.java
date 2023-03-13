@@ -42,10 +42,13 @@ public class GuiPlayerTabOverlayHook {
     }
 
     public static boolean shouldRenderHeader() {
-        return ConfigHandler.showPlayercountTablist || !ConfigHandler.hideTablistHeaderFooter;
+        return ConfigHandler.showPlayercountTablist || !shouldHideFooter();
     }
 
     public static boolean shouldHideFooter() {
+        if (ConfigHandler.showHeaderFooterOutsideMW && !FKCounterMod.isMWEnvironement) {
+            return false;
+        }
         return ConfigHandler.hideTablistHeaderFooter;
     }
 
@@ -64,10 +67,10 @@ public class GuiPlayerTabOverlayHook {
         }
         final int i = mc.thePlayer.sendQueue.getPlayerInfoMap().size();
         if (i < 2) {
-            return ConfigHandler.hideTablistHeaderFooter ? new ArrayList<>() : listIn;
+            return shouldHideFooter() ? new ArrayList<>() : listIn;
         }
         final List<String> list;
-        if (ConfigHandler.hideTablistHeaderFooter) {
+        if (shouldHideFooter()) {
             list = new ArrayList<>();
         } else {
             list = new ArrayList<>(listIn);

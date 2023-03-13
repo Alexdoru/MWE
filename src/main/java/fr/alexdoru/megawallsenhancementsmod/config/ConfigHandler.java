@@ -98,6 +98,9 @@ public class ConfigHandler extends AbstractConfig {
     @ConfigProperty(category = MWENHANCEMENTS, name = "Hide Header Footer Tablist", comment = "Hides the header and footer text in the Tablist")
     public static boolean hideTablistHeaderFooter;
 
+    @ConfigProperty(category = MWENHANCEMENTS, name = "Show Header Footer outside MW", comment = "Show Header Footer outside of mega walls")
+    public static boolean showHeaderFooterOutsideMW;
+
     @ConfigProperty(category = MWENHANCEMENTS, name = "Show playercount Tablist", comment = "Shows the amount of players in the lobby at the top of the Tablist")
     public static boolean showPlayercountTablist = true;
 
