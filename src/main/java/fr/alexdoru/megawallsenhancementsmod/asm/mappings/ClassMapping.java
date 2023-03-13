@@ -24,6 +24,7 @@ public enum ClassMapping {
     FONTRENDERER("avn", "net/minecraft/client/gui/FontRenderer"),
     GAMEPROFILE("com/mojang/authlib/GameProfile"),
     GAMESETTINGS("avh", "net/minecraft/client/settings/GameSettings"),
+    GLSTATEMANAGER("bfl", "net/minecraft/client/renderer/GlStateManager"),
     GUICHAT("awv", "net/minecraft/client/gui/GuiChat"),
     GUICONTAINER("ayl", "net/minecraft/client/gui/inventory/GuiContainer"),
     GUIINGAME("avo", "net/minecraft/client/gui/GuiIngame"),
