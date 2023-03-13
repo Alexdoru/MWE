@@ -4,6 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 
 import java.io.IOException;
 
@@ -25,6 +26,7 @@ public class PositionEditGuiScreen extends GuiScreen {
     @Override
     public void initGui() {
         this.guiPosition.updateAbsolutePosition();
+        this.adjustBounds();
     }
 
     @Override
@@ -63,6 +65,18 @@ public class PositionEditGuiScreen extends GuiScreen {
     @Override
     public boolean doesGuiPauseGame() {
         return false;
+    }
+
+    /**
+     * Makes sure the HUD can't get out of the screen
+     */
+    private void adjustBounds() {
+        final ScaledResolution res = new ScaledResolution(mc);
+        final int screenWidth = res.getScaledWidth();
+        final int screenHeight = res.getScaledHeight();
+        final int absoluteX = Math.max(0, Math.min(guiPosition.getAbsoluteRenderX(), Math.max(screenWidth - this.renderer.getWidth(), 0)));
+        final int absoluteY = Math.max(0, Math.min(guiPosition.getAbsoluteRenderY(), Math.max(screenHeight - this.renderer.getHeight(), 0)));
+        this.guiPosition.setAbsolutePositionForRender(absoluteX, absoluteY);
     }
 
 }
