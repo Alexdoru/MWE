@@ -23,10 +23,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,6 +68,7 @@ public class NameUtil {
     private static final List<IChatComponent> allPrefix = Arrays.asList(iprefix_old_report, iprefix, iprefix_bhop, iprefix_scan, isquadprefix);
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static final Pattern PATTERN_CLASS_TAG = Pattern.compile("\\[([A-Z]{3})\\]");
+    private static final HashSet<UUID> warningMsgPrinted = new HashSet<>();
 
     /**
      * This updates the infos storred in MWPlayerData.dataCache for the player : playername
@@ -181,19 +179,26 @@ public class NameUtil {
             final String playerName = player.getName();
             final boolean gotautoreported = ReportQueue.INSTANCE.addAutoReportToQueue(datenow, playerName, mwPlayerData.wdr);
             if (ConfigHandler.warningMessages || mwPlayerData.wdr.shouldPrintBigText(datenow)) {
-                final String uuid = player.getUniqueID().toString().replace("-", "");
-                ChatHandler.deleteWarningMessagesFor(playerName);
-                WarningMessagesHandler.printWarningMessage(
-                        datenow,
-                        uuid,
-                        (!FKCounterMod.isInMwGame || FKCounterMod.isitPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(player.getTeam(), playerName),
-                        playerName,
-                        mwPlayerData.wdr,
-                        gotautoreported
-                );
+                if (!warningMsgPrinted.contains(player.getUniqueID())) {
+                    warningMsgPrinted.add(player.getUniqueID());
+                    final String uuid = player.getUniqueID().toString().replace("-", "");
+                    ChatHandler.deleteWarningMessagesFor(playerName);
+                    WarningMessagesHandler.printWarningMessage(
+                            datenow,
+                            uuid,
+                            (!FKCounterMod.isInMwGame || FKCounterMod.isitPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(player.getTeam(), playerName),
+                            playerName,
+                            mwPlayerData.wdr,
+                            gotautoreported
+                    );
+                }
             }
         }
 
+    }
+
+    public static void clearWarningMessagesPrinted() {
+        warningMsgPrinted.clear();
     }
 
     /**
