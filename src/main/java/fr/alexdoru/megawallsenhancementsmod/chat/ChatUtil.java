@@ -21,6 +21,10 @@ public class ChatUtil {
         return EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "NoCheaters" + EnumChatFormatting.GOLD + "] ";
     }
 
+    public static String getTagHitboxes() {
+        return EnumChatFormatting.BLUE + "[Hitbox] ";
+    }
+
     public static void addChatMessage(String msg) {
         addChatMessage(new ChatComponentText(msg));
     }
