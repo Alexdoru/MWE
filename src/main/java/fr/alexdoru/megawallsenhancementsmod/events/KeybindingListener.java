@@ -46,9 +46,9 @@ public class KeybindingListener {
             ConfigHandler.drawHitboxForPlayers = !ConfigHandler.drawHitboxForPlayers;
             ConfigHandler.saveConfig();
             if (ConfigHandler.drawHitboxForPlayers) {
-                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Draw hitboxes for players: " + EnumChatFormatting.GREEN + "On");
+                ChatUtil.addChatMessage(ChatUtil.getTagHitboxes() + EnumChatFormatting.WHITE + "Draw hitboxes for players: " + EnumChatFormatting.GREEN + "On");
             } else {
-                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Draw hitboxes for players: " + EnumChatFormatting.RED + "Off");
+                ChatUtil.addChatMessage(ChatUtil.getTagHitboxes() + EnumChatFormatting.WHITE + "Draw hitboxes for players: " + EnumChatFormatting.RED + "Off");
             }
         }
 
