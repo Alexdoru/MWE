@@ -12,7 +12,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "2.9"
+version = "3.0"
 group = "fr.alexdoru"
 archivesBaseName = "[1.8.9] MegaWallsEnhancements"
 

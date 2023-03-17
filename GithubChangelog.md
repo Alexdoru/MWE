@@ -1,17 +1,15 @@
 Use `/mwenhancements` to open the config menu
 
-- NEW Hacker detector :
-  - detects players using certains cheats in your game : fastbreak, autoblock, keepsprint, noslowdown
-  - it will add them to NoCheaters and send one report to Hypixel
+- Hitboxes, better F3+b :
+  - add setting to make the hitboxes take the color of the player's team
+  - add setting to choose a custom color for hitboxes
+  - add keybind to toggle player hitbox
 - MWEnhancements : 
-    - fix short coins not working with Christmas double coins bonus
-    - compact guild coins bonus message with the coins message into one
-    - fix scalling issues with config screens
-    - add scangame flag for new accounts picking random during mythic hour
-- NoCheaters :
-    - put red icon for autoblock, bhop, noslowdown, fastbreak
-    - delete auto reporting system and gray icon system
-    - reduce chat output from NoCheaters
+    - add hud with heart healed from pheonix bond
+    - add hud to display your own speed
+    - add setting to hide the tablist header and footer only in mega walls
+- Hacker Detector :
+  - resolve some false flags
 
 To install the mod you need to use forge and drop the .jar file in your `.minecraft\mods` folder. 
 Send me a message on Discord if you have any crash, question or issue : Alexdoru#9395
