@@ -55,7 +55,11 @@ public class FKCounterHUD extends MyCachedHUD {
 
     @Override
     public int getWidth() {
-        return (int) (getMultilineWidth(this.textToRender) * ConfigHandler.fkcounterHUDSize);
+        if (ConfigHandler.fkcounterHUDCompact) {
+            return (int) (mc.fontRendererObj.getStringWidth(this.displayText) * ConfigHandler.fkcounterHUDSize);
+        } else {
+            return (int) (getMultilineWidth(this.textToRender) * ConfigHandler.fkcounterHUDSize);
+        }
     }
 
     @Override
