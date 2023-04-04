@@ -99,6 +99,14 @@ public class KillCounter {
             "(\\w{1,16}) was chemically cheesed by (\\w{1,16}).*",
             "(\\w{1,16}) was turned into cheese whiz by (\\w{1,16}).*",
             "(\\w{1,16}) was magically squeaked by (\\w{1,16}).*",
+            /*Bunny messages*/
+            "(\\w{1,16}) was hit by a flying bunny by (\\w{1,16}).*",
+            "(\\w{1,16}) was hit by a bunny thrown by (\\w{1,16}).*",
+            "(\\w{1,16}) was turned into a carrot by (\\w{1,16}).*",
+            "(\\w{1,16}) was hit by a carrot from (\\w{1,16}).*",
+            "(\\w{1,16}) was bitten by a bunny from (\\w{1,16}).*",
+            "(\\w{1,16}) was magically turned into a bunny by (\\w{1,16}).*",
+            "(\\w{1,16}) was fed to a bunny by (\\w{1,16}).*",
             /*Natural deaths messages*/
             "(\\w{1,16}) starved to death\\.",
             "(\\w{1,16}) hit the ground too hard\\.",
