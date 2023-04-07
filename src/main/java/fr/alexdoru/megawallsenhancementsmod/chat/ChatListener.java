@@ -143,7 +143,7 @@ public class ChatListener {
                 return;
             }
 
-            if (PhxBondHud.instance.processMessage(msg)) {
+            if (PhoenixBondHUD.instance.processMessage(msg)) {
                 return;
             }
 
@@ -263,7 +263,7 @@ public class ChatListener {
             if (ConfigHandler.showPrimedTNTHUD) {
                 final Matcher creeperMatcher = CREEPER_FISSION_HEART_PATTERN.matcher(fmsg);
                 if (creeperMatcher.find()) {
-                    CreeperPrimedTNTHUD.instance.setCooldownRenderStart(creeperMatcher.group(1));
+                    CreeperPrimedTntHUD.instance.setCooldownRenderStart(creeperMatcher.group(1));
                 }
             }
 

@@ -218,7 +218,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 mc.displayGuiScreen(new PositionEditGuiScreen(SquadHealthHUD.instance, this));
                 break;
             case 17:
-                mc.displayGuiScreen(new PositionEditGuiScreen(CreeperPrimedTNTHUD.instance, this));
+                mc.displayGuiScreen(new PositionEditGuiScreen(CreeperPrimedTntHUD.instance, this));
                 break;
             case 20:
                 mc.displayGuiScreen(new PositionEditGuiScreen(EnergyDisplayHUD.instance, this));
@@ -227,7 +227,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 mc.displayGuiScreen(new PositionEditGuiScreen(SpeedHUD.instance, this));
                 break;
             case 33:
-                mc.displayGuiScreen(new PositionEditGuiScreen(PhxBondHud.instance, this));
+                mc.displayGuiScreen(new PositionEditGuiScreen(PhoenixBondHUD.instance, this));
                 break;
             case 7:
                 KillCooldownHUD.instance.getGuiPosition().resetToDefault();
@@ -245,7 +245,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 SquadHealthHUD.instance.getGuiPosition().resetToDefault();
                 break;
             case 19:
-                CreeperPrimedTNTHUD.instance.getGuiPosition().resetToDefault();
+                CreeperPrimedTntHUD.instance.getGuiPosition().resetToDefault();
                 break;
             case 16:
                 EnergyDisplayHUD.instance.getGuiPosition().resetToDefault();
@@ -254,7 +254,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 SpeedHUD.instance.getGuiPosition().resetToDefault();
                 break;
             case 32:
-                PhxBondHud.instance.getGuiPosition().resetToDefault();
+                PhoenixBondHUD.instance.getGuiPosition().resetToDefault();
                 break;
             default:
                 break;

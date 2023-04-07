@@ -4,9 +4,9 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
-public class CreeperPrimedTNTHUD extends MyCachedHUD {
+public class CreeperPrimedTntHUD extends MyCachedHUD {
 
-    public static CreeperPrimedTNTHUD instance;
+    public static CreeperPrimedTntHUD instance;
 
     private static final String DUMMY_TEXT = EnumChatFormatting.GREEN + "Tnt " + EnumChatFormatting.RED + "3.0s";
     private long timeStartRender;
@@ -14,7 +14,7 @@ public class CreeperPrimedTNTHUD extends MyCachedHUD {
     private String lastCountdownNum = "";
     private EnumChatFormatting colorPrefix = EnumChatFormatting.GREEN;
 
-    public CreeperPrimedTNTHUD() {
+    public CreeperPrimedTntHUD() {
         super(ConfigHandler.creeperTNTHUDPosition);
         instance = this;
     }
