@@ -11,9 +11,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PhxBondHud extends MyCachedHUD {
+public class PhoenixBondHUD extends MyCachedHUD {
 
-    public static PhxBondHud instance;
+    public static PhoenixBondHUD instance;
 
     private static final Pattern INCOMING_BOND_PATTERN = Pattern.compile("^You were healed by (\\w{1,16})'s Spirit Bond for ([0-9]*[.]?[0-9]+)[\u2764\u2665]");
     private static final Pattern BOND_USED_PATTERN = Pattern.compile("^Your Spirit Bond healed");
@@ -29,7 +29,7 @@ public class PhxBondHud extends MyCachedHUD {
     private final List<String> textToRender = new ArrayList<>();
     private long timeStartRender;
 
-    public PhxBondHud() {
+    public PhoenixBondHUD() {
         super(ConfigHandler.phxBondHUDPosition);
         instance = this;
     }
