@@ -55,7 +55,7 @@ public class PrestigeVCache {
                 final CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(uuid);
                 final MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwClass.className);
                 final PlayerPrestigeData playerPrestigeData = new PlayerPrestigeData();
-                playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints(), mwclassstats.getCoins());
+                playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints());
                 prestigeDataMap.put(uuid, playerPrestigeData);
                 Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateMWPlayerDataAndEntityData(playername, false));
             } catch (ApiException e) {
@@ -70,17 +70,17 @@ public class PrestigeVCache {
 
     private static void createClassData(String uuid, MWClass mwClass, PlayerPrestigeData playerPrestigeData, String playername) {
 
-        playerPrestigeData.addClass(mwClass, 0, 0);
+        playerPrestigeData.addClass(mwClass, 0);
 
         MultithreadingUtil.addTaskToQueue(() -> {
 
             try {
                 final CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(uuid);
                 final MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwClass.className);
-                playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints(), mwclassstats.getCoins());
+                playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints());
                 Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateMWPlayerDataAndEntityData(playername, false));
             } catch (ApiException e) {
-                playerPrestigeData.addClass(mwClass, 0, 0);
+                playerPrestigeData.addClass(mwClass, 0);
             }
 
             return null;
@@ -95,8 +95,8 @@ class PlayerPrestigeData {
 
     public final HashMap<MWClass, EnumChatFormatting> playersPrestigeColors = new HashMap<>();
 
-    public void addClass(MWClass mwClass, int classpoints, int coins) {
-        if (coins < 1000000 || classpoints < 10000) {
+    public void addClass(MWClass mwClass, int classpoints) {
+        if (classpoints < 10000) {
             playersPrestigeColors.put(mwClass, EnumChatFormatting.GOLD);
         } else if (classpoints < 13000) {
             playersPrestigeColors.put(mwClass, EnumChatFormatting.DARK_PURPLE);
