@@ -9,8 +9,8 @@ public enum MWClass {
     ASSASSIN("ASN", "asn", "Assassin"),
     AUTOMATON("ATN", "atn", "Automaton"),
     BLAZE("BLA", "bla", "Blaze"),
-    CREEPER("CRE", "cre", "Creeper"),
     COW("COW", "cow", "Cow"),
+    CREEPER("CRE", "cre", "Creeper"),
     DREADLORD("DRE", "dre", "Dreadlord"),
     ENDERMAN("END", "end", "Enderman"),
     GOLEM("GOL", "gol", "Golem"),
@@ -18,6 +18,7 @@ public enum MWClass {
     HUNTER("HUN", "hun", "Hunter"),
     MOLEMAN("MOL", "mol", "Moleman"),
     PHOENIX("PHX", "phx", "Phoenix"),
+    PIGMAN("PIG", "pig", "Pigman"),
     PIRATE("PIR", "pir", "Pirate"),
     RENEGADE("REN", "ren", "Renegade"),
     SHAMAN("SHA", "sha", "Shaman"),
@@ -26,7 +27,6 @@ public enum MWClass {
     SNOWMAN("SNO", "sno", "Snowman"),
     SPIDER("SPI", "spi", "Spider"),
     SQUID("SQU", "squ", "Squid"),
-    PIGMAN("PIG", "pig", "Pigman"),
     WEREWOLF("WER", "wer", "Werewolf"),
     ZOMBIE("ZOM", "zom", "Zombie");
 
