@@ -1,15 +1,10 @@
 Use `/mwenhancements` to open the config menu
 
-- Hitboxes, better F3+b :
-  - add setting to make the hitboxes take the color of the player's team
-  - add setting to choose a custom color for hitboxes
-  - add keybind to toggle player hitbox
+- Final kill Counter :
+  - add support for bunny kill messages
+  - fix not drawing the background properly in compact mode
 - MWEnhancements : 
-    - add hud with heart healed from pheonix bond
-    - add hud to display your own speed
-    - add setting to hide the tablist header and footer only in mega walls
-- Hacker Detector :
-  - resolve some false flags
+    - remove coins requirement for Prestige 5 tags
 
 To install the mod you need to use forge and drop the .jar file in your `.minecraft\mods` folder. 
 Send me a message on Discord if you have any crash, question or issue : Alexdoru#9395
