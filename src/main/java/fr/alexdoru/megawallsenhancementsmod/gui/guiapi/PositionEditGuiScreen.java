@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui.guiapi;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 
@@ -31,6 +32,7 @@ public class PositionEditGuiScreen extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.renderCrosshair();
         super.drawDefaultBackground();
         renderer.renderDummy();
         if (this.dragging) {
@@ -77,6 +79,11 @@ public class PositionEditGuiScreen extends GuiScreen {
         final int absoluteX = Math.max(0, Math.min(guiPosition.getAbsoluteRenderX(), Math.max(screenWidth - this.renderer.getWidth(), 0)));
         final int absoluteY = Math.max(0, Math.min(guiPosition.getAbsoluteRenderY(), Math.max(screenHeight - this.renderer.getHeight(), 0)));
         this.guiPosition.setAbsolutePositionForRender(absoluteX, absoluteY);
+    }
+
+    private void renderCrosshair() {
+        mc.getTextureManager().bindTexture(Gui.icons);
+        drawTexturedModalRect(this.width / 2 - 7, this.height / 2 - 7, 0, 0, 16, 16);
     }
 
 }
