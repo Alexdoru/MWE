@@ -12,7 +12,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 public class CommandMWEnhancements extends MyAbstractCommand {
@@ -75,7 +75,7 @@ public class CommandMWEnhancements extends MyAbstractCommand {
 
     @Override
     public List<String> getCommandAliases() {
-        return Collections.singletonList("megawallsenhancements");
+        return Arrays.asList("mwe", "megawallsenhancements");
     }
 
 }
