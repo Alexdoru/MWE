@@ -30,7 +30,7 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
         this.buttonList.add(new GuiButton(3, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(3))); //show flag messages toggle
         this.buttonList.add(new GuiButton(4, xPos, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(4))); //compact flag messages toggle
         this.buttonList.add(new GuiButton(5, xPos, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(5))); //show single flag message toggle
-        this.buttonList.add(new GuiButton(6, xPos, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(6))); //done button
+        this.buttonList.add(new GuiButton(6, getxCenter() - 150 / 2, getButtonYPos(9), 150, buttonsHeight, getButtonDisplayString(6))); //done button
     }
 
     @Override
