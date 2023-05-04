@@ -123,11 +123,20 @@ public class CommandSquad extends MyAbstractCommand {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         final String[] args1 = {"add", "disband", "list", "remove"};
-        return args.length == 1 ? getListOfStringsMatchingLastWord(args, args1) : args.length >= 2 ? getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName()) : null;
+        if (args.length == 1) {
+            return getListOfStringsMatchingLastWord(args, args1);
+        }
+        if (args.length >= 2) {
+            if (args[0].equalsIgnoreCase("add")) {
+                return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+            } else if (args[0].equalsIgnoreCase("remove")) {
+                return getListOfStringsMatchingLastWord(args, SquadHandler.getSquad().keySet());
+            }
+        }
+        return null;
     }
 
     private IChatComponent getCommandHelp() {
-
         return new ChatComponentText(EnumChatFormatting.GREEN + ChatUtil.bar() + "\n"
                 + ChatUtil.centerLine(EnumChatFormatting.GOLD + "Squad Help\n\n")
                 + EnumChatFormatting.YELLOW + "/squad add <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "add a player to the squad\n"
@@ -137,7 +146,6 @@ public class CommandSquad extends MyAbstractCommand {
                 + EnumChatFormatting.YELLOW + "/squad disband" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "disband the squad\n"
                 + EnumChatFormatting.GREEN + ChatUtil.bar()
         );
-
     }
 
 }
