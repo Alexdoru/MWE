@@ -3,6 +3,8 @@ package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.SimpleGuiButton;
+import fr.alexdoru.megawallsenhancementsmod.gui.elements.UIElement;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -25,6 +27,7 @@ public abstract class MyGuiScreen extends GuiScreen {
     private int usersGuiScale = -1;
     protected int maxWidth;
     protected int maxHeight;
+    protected List<UIElement> elementList = new ArrayList<>();
 
     @Override
     public void initGui() {
@@ -58,6 +61,20 @@ public abstract class MyGuiScreen extends GuiScreen {
             } catch (Exception ignored) {}
         }
         super.initGui();
+    }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        for (final UIElement element : this.elementList) {
+            element.render();
+        }
+        super.drawScreen(mouseX, mouseY, partialTicks);
+    }
+
+    @Override
+    public void setWorldAndResolution(Minecraft mc, int width, int height) {
+        this.elementList.clear();
+        super.setWorldAndResolution(mc, width, height);
     }
 
     @Override
