@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.gui.elements.SimpleGuiButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -11,6 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeVersion;
 
 import java.awt.*;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +73,13 @@ public abstract class MyGuiScreen extends GuiScreen {
     @Override
     public boolean doesGuiPauseGame() {
         return false;
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) throws IOException {
+        if (button instanceof SimpleGuiButton) {
+            ((SimpleGuiButton) button).onButtonPressed();
+        }
     }
 
     protected String getSuffix(boolean enabled) {
