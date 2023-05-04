@@ -88,11 +88,6 @@ public abstract class MyGuiScreen extends GuiScreen {
     }
 
     @Override
-    public boolean doesGuiPauseGame() {
-        return false;
-    }
-
-    @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         if (button instanceof SimpleGuiButton) {
             ((SimpleGuiButton) button).onButtonPressed();
