@@ -51,6 +51,9 @@ public class FancyGuiButton extends SimpleGuiButton {
         final List<String> list = new ArrayList<>();
         for (int i = 0; i < tooltip.size(); i++) {
             final String line = tooltip.get(i);
+            if (line == null) {
+                continue;
+            }
             if (i >= firstWrappedLine) {
                 list.addAll(StringUtil.wrap(line, wrapLength));
             } else {
