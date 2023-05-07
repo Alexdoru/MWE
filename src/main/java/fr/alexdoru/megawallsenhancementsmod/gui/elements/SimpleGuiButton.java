@@ -4,10 +4,6 @@ import net.minecraft.client.gui.GuiButton;
 
 public class SimpleGuiButton extends GuiButton {
 
-    // tooltip
-    // action when pressed
-    // text when updated
-
     private final Runnable action;
 
     public SimpleGuiButton(int x, int y, String buttonText, Runnable action) {

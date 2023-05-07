@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.gui.elements.FancyGuiButton;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.SimpleGuiButton;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.UIElement;
 import net.minecraft.client.Minecraft;
@@ -23,6 +24,7 @@ public abstract class MyGuiScreen extends GuiScreen {
 
     private static final ResourceLocation SHADER = new ResourceLocation("fkcounter", "shaders/blur.json");
     protected final int buttonsHeight = 20;
+    protected final int BUTTON_WIDTH = 200;
     protected GuiScreen parent = null;
     private int usersGuiScale = -1;
     protected int maxWidth;
@@ -69,6 +71,14 @@ public abstract class MyGuiScreen extends GuiScreen {
             element.render();
         }
         super.drawScreen(mouseX, mouseY, partialTicks);
+        for (final GuiButton button : this.buttonList) {
+            if (button instanceof FancyGuiButton && button.isMouseOver()) {
+                if (((FancyGuiButton) button).getTooltip() != null) {
+                    this.drawHoveringText(((FancyGuiButton) button).getTooltip(), mouseX, mouseY + 20);
+                }
+                return;
+            }
+        }
     }
 
     @Override
@@ -122,7 +132,7 @@ public abstract class MyGuiScreen extends GuiScreen {
     protected void drawTooltips(int mouseX, int mouseY) {
         for (final GuiButton button : this.buttonList) {
             if (button.isMouseOver()) {
-                drawHoveringText(getTooltipText(button.id), mouseX, mouseY);
+                this.drawHoveringText(getTooltipText(button.id), mouseX, mouseY + 20);
                 return;
             }
         }
