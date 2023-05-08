@@ -75,9 +75,9 @@ public class FKCounterHUD extends MyCachedHUD {
             GlStateManager.translate(x, y, 0);
             GlStateManager.scale(ConfigHandler.fkcounterHUDSize, ConfigHandler.fkcounterHUDSize, 1d);
             if (ConfigHandler.fkcounterHUDCompact) {
-                mc.fontRendererObj.drawString(this.displayText, 0, 0, 0xFFFFFF, ConfigHandler.fkcounterHUDTextShadow);
+                mc.fontRendererObj.drawStringWithShadow(this.displayText, 0, 0, 0xFFFFFF);
             } else {
-                drawStringList(this.textToRender, 0, 0, ConfigHandler.fkcounterHUDTextShadow, false);
+                drawStringList(this.textToRender, 0, 0, false);
             }
         }
         GlStateManager.popMatrix();
@@ -113,11 +113,11 @@ public class FKCounterHUD extends MyCachedHUD {
             GlStateManager.translate(x, y, 0);
             GlStateManager.scale(ConfigHandler.fkcounterHUDSize, ConfigHandler.fkcounterHUDSize, 1d);
             if (ConfigHandler.fkcounterHUDCompact) {
-                mc.fontRendererObj.drawString(DUMMY_TEXT_COMPACT, 0, 0, 0xFFFFFF, ConfigHandler.fkcounterHUDTextShadow);
+                mc.fontRendererObj.drawStringWithShadow(DUMMY_TEXT_COMPACT, 0, 0, 0xFFFFFF);
             } else if (ConfigHandler.fkcounterHUDShowPlayers) {
-                drawStringList(DUMMY_TEXT_PLAYERS, 0, 0, ConfigHandler.fkcounterHUDTextShadow, false);
+                drawStringList(DUMMY_TEXT_PLAYERS, 0, 0, false);
             } else {
-                drawStringList(DUMMY_TEXT, 0, 0, ConfigHandler.fkcounterHUDTextShadow, false);
+                drawStringList(DUMMY_TEXT, 0, 0, false);
             }
         }
         GlStateManager.popMatrix();

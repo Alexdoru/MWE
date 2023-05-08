@@ -92,12 +92,12 @@ public class PhoenixBondHUD extends MyCachedHUD {
     @Override
     public void render(ScaledResolution resolution) {
         this.guiPosition.updateAbsolutePosition();
-        drawStringList(textToRender, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), true, true);
+        drawStringList(textToRender, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), true);
     }
 
     @Override
     public void renderDummy() {
-        drawStringList(dummyTextToRender, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), true, true);
+        drawStringList(dummyTextToRender, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), true);
     }
 
     @Override
