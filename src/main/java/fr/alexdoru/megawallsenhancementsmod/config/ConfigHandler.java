@@ -52,12 +52,6 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = FKCOUNTER,
-            name = "Text shadow",
-            comment = "Draws text shadow")
-    public static boolean fkcounterHUDTextShadow = true;
-
-    @ConfigProperty(
-            category = FKCOUNTER,
             name = "HUD Size",
             comment = "Size of the final kill counter HUD")
     public static double fkcounterHUDSize = 1.0d;

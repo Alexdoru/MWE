@@ -1,29 +1,13 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.gui.elements.ButtonFancy;
-import fr.alexdoru.megawallsenhancementsmod.gui.elements.ButtonToggle;
-import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
+import fr.alexdoru.megawallsenhancementsmod.gui.elements.*;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
 public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
-
-    private static final ResourceLocation BACKGROUND = new ResourceLocation("fkcounter", "background.png");
-    private static final int columns = 4;
-    private static final int rows = 2;
-    private static final int buttonSize = 50;
-    private static final int widthBetweenButtons = 10;
-    private static final int heightBetweenButtons = 30;
-
-    private ButtonToggle buttoncompacthud;
-    private ButtonToggle buttonsidebar;
-    private ButtonToggle buttonshowplayers;
 
     public FKConfigGuiScreen(GuiScreen parent) {
         this.parent = parent;
@@ -31,119 +15,92 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
 
     @Override
     public void initGui() {
-        this.maxWidth = findMenuWidth();
+        this.maxWidth = 90 * 2 + BUTTON_WIDTH + 4 * 2;
         this.maxHeight = (buttonsHeight + 4) * 10 + buttonsHeight;
         super.initGui();
-        buttonList.add(new ButtonFancy(100, getxCenter() + widthBetweenButtons / 2 + (widthBetweenButtons + buttonSize) + 10, getButtonYPos(4) - findMenuHeight() / 2 + heightBetweenButtons + buttonSize + 10, 30, 14, "Move HUD", 0.5));
-
-        buttonList.add(addSettingButton(ConfigHandler.showfkcounterHUD, 0, 0, 0, "Show HUD"));
-        buttonList.add(buttoncompacthud = addSettingButton(ConfigHandler.fkcounterHUDCompact, 1, 0, 1, "Compact HUD"));
-        buttonList.add(buttonsidebar = addSettingButton(ConfigHandler.fkcounterHUDinSidebar, 7, 0, 2, "HUD in Sidebar"));
-        buttonList.add(addSettingButton(ConfigHandler.fkcounterHUDTablist, 8, 0, 3, "FK in tablist"));
-        buttonList.add(addSettingButton(ConfigHandler.fkcounterHUDDrawBackground, 3, 1, 0, "HUD Background"));
-        buttonList.add(addSettingButton(ConfigHandler.fkcounterHUDTextShadow, 4, 1, 1, "Text Shadow"));
-        buttonList.add(buttonshowplayers = addSettingButton(ConfigHandler.fkcounterHUDShowPlayers, 2, 1, 2, "Show Players"));
-
-        buttonList.add(new GuiSlider(5, getxCenter() - 150 / 2, getButtonYPos(7), "HUD Size : ", 0.1d, 4d, ConfigHandler.fkcounterHUDSize, this));
-        buttonList.add(new GuiSlider(6, getxCenter() - 150 / 2, getButtonYPos(8), 150, buttonsHeight, "Player amount : ", "", 1d, 10d, ConfigHandler.fkcounterHUDPlayerAmount, false, true, this));
-        buttonList.add(new GuiButton(200, getxCenter() - 150 / 2, getButtonYPos(9), 150, buttonsHeight, "Done"));
-    }
-
-    private ButtonToggle addSettingButton(boolean setting, int buttonid, int row, int column, String buttonText) {
-        final int x;
-        final int i = (widthBetweenButtons + buttonSize) * (column - columns / 2);
-        //if (columns % 2 == 0) { // even
-        x = getxCenter() + widthBetweenButtons / 2 + i;
-        //} else { // odd
-        //    x = getxCenter() - buttonSize / 2 + i;
-        //}
-        final int y = getButtonYPos(4) - findMenuHeight() / 2 + heightBetweenButtons + row * buttonSize;
-        return new ButtonToggle(setting, buttonid, x + 10, y + 10, buttonText);
-    }
-
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        final int rectWidth = findMenuWidth();
-        final int rectHeight = findMenuHeight();
-        GlStateManager.enableBlend();
-        GlStateManager.color(1, 1, 1, 0.7F);
-        mc.getTextureManager().bindTexture(BACKGROUND);
-        drawModalRectWithCustomSizedTexture(getxCenter() - rectWidth / 2, getButtonYPos(4) - rectHeight / 2, 0, 0, rectWidth, rectHeight, rectWidth, rectHeight);
+        final int xPos = getxCenter() - 200 / 2;
         final String msg0 = "Final Kill Counter";
-        drawCenteredTitle(EnumChatFormatting.AQUA + msg0, 2, getxCenter(), getButtonYPos(-1));
         final String msg1 = "for Mega Walls";
-        drawString(fontRendererObj, EnumChatFormatting.GRAY + msg1, getxCenter() + fontRendererObj.getStringWidth(msg0) - fontRendererObj.getStringWidth(msg1), getButtonYPos(-1) + 2 * fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-        super.drawScreen(mouseX, mouseY, partialTicks);
-    }
+        this.elementList.add(new TextElement(EnumChatFormatting.AQUA + msg0, getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
+        this.elementList.add(new TextElement(EnumChatFormatting.GRAY + msg1, getxCenter() + fontRendererObj.getStringWidth(msg0) - fontRendererObj.getStringWidth(msg1), getButtonYPos(-1) + 2 * fontRendererObj.FONT_HEIGHT));
+        new HUDSettingGuiButtons(
+                getxCenter(), getButtonYPos(1),
+                "Show Final Kill Counter",
+                (b) -> ConfigHandler.showfkcounterHUD = b,
+                () -> ConfigHandler.showfkcounterHUD,
+                ConfigHandler.fkcounterHUDPosition,
+                FKCounterHUD.instance,
+                this,
+                EnumChatFormatting.GRAY + "Displays the amount of final kills per team in Mega Walls",
+                EnumChatFormatting.RED + "This will only work if you have your Hypixel language set to English")
+                .accept(this.buttonList);
+        this.buttonList.add(new FancyGuiButton(
+                getxCenter() - 100, getButtonYPos(2),
+                () -> {
+                    // Normal mode
+                    if (!ConfigHandler.fkcounterHUDShowPlayers && !ConfigHandler.fkcounterHUDCompact && !ConfigHandler.fkcounterHUDinSidebar) {
+                        return "Display mode : " + EnumChatFormatting.GREEN + "Classic";
+                        // Player mode
+                    } else if (ConfigHandler.fkcounterHUDShowPlayers && !ConfigHandler.fkcounterHUDCompact && !ConfigHandler.fkcounterHUDinSidebar) {
+                        return "Display mode : " + EnumChatFormatting.GREEN + "Player";
+                        // Compact mode
+                    } else if (!ConfigHandler.fkcounterHUDShowPlayers && ConfigHandler.fkcounterHUDCompact && !ConfigHandler.fkcounterHUDinSidebar) {
+                        return "Display mode : " + EnumChatFormatting.GREEN + "Compact";
+                        // Compact mode in sidebar
+                    } else if (!ConfigHandler.fkcounterHUDShowPlayers && ConfigHandler.fkcounterHUDCompact /*&& ConfigHandler.fkcounterHUDinSidebar*/) {
+                        return "Display mode : " + EnumChatFormatting.GREEN + "Compact in sidebar";
+                    } else {
+                        // force normal mode if you have weird boolean states
+                        return "Display mode : " + EnumChatFormatting.RED + "ERROR, click the button";
+                    }
+                },
+                () -> {
 
-    @Override
-    public void actionPerformed(GuiButton button) {
-        switch (button.id) {
-            case 100:
-                mc.displayGuiScreen(new PositionEditGuiScreen(FKCounterHUD.instance, this));
-                break;
-            case 200:
-                mc.displayGuiScreen(parent);
-                break;
-            case 0:
-                ConfigHandler.showfkcounterHUD = !ConfigHandler.showfkcounterHUD;
-                ((ButtonToggle) button).setting = ConfigHandler.showfkcounterHUD;
-                break;
-            case 1:
-                ConfigHandler.fkcounterHUDCompact = !ConfigHandler.fkcounterHUDCompact;
-                ((ButtonToggle) button).setting = ConfigHandler.fkcounterHUDCompact;
-                if (ConfigHandler.fkcounterHUDCompact) {
-                    ConfigHandler.fkcounterHUDShowPlayers = false;
-                    buttonshowplayers.setting = false;
-                } else {
-                    ConfigHandler.fkcounterHUDinSidebar = false;
-                    buttonsidebar.setting = false;
-                }
-                break;
-            case 2:
-                ConfigHandler.fkcounterHUDShowPlayers = !ConfigHandler.fkcounterHUDShowPlayers;
-                ((ButtonToggle) button).setting = ConfigHandler.fkcounterHUDShowPlayers;
-                if (ConfigHandler.fkcounterHUDShowPlayers) {
-                    ConfigHandler.fkcounterHUDCompact = false;
-                    buttoncompacthud.setting = false;
-                    ConfigHandler.fkcounterHUDinSidebar = false;
-                    buttonsidebar.setting = false;
-                }
-                break;
-            case 3:
-                ConfigHandler.fkcounterHUDDrawBackground = !ConfigHandler.fkcounterHUDDrawBackground;
-                ((ButtonToggle) button).setting = ConfigHandler.fkcounterHUDDrawBackground;
-                break;
-            case 4:
-                ConfigHandler.fkcounterHUDTextShadow = !ConfigHandler.fkcounterHUDTextShadow;
-                ((ButtonToggle) button).setting = ConfigHandler.fkcounterHUDTextShadow;
-                break;
-            case 7:
-                ConfigHandler.fkcounterHUDinSidebar = !ConfigHandler.fkcounterHUDinSidebar;
-                ((ButtonToggle) button).setting = ConfigHandler.fkcounterHUDinSidebar;
-                if (ConfigHandler.fkcounterHUDinSidebar) {
-                    ConfigHandler.fkcounterHUDShowPlayers = false;
-                    buttonshowplayers.setting = false;
-                    ConfigHandler.fkcounterHUDCompact = true;
-                    buttoncompacthud.setting = true;
-                }
-                break;
-            case 8:
-                ConfigHandler.fkcounterHUDTablist = !ConfigHandler.fkcounterHUDTablist;
-                ((ButtonToggle) button).setting = ConfigHandler.fkcounterHUDTablist;
-                break;
-        }
-        if (button instanceof ButtonToggle) {
-            FKCounterHUD.instance.updateDisplayText();
-        }
-    }
+                    // Normal mode
+                    if (!ConfigHandler.fkcounterHUDShowPlayers && !ConfigHandler.fkcounterHUDCompact && !ConfigHandler.fkcounterHUDinSidebar) {
+                        ConfigHandler.fkcounterHUDShowPlayers = true;
+                        // Player mode
+                    } else if (ConfigHandler.fkcounterHUDShowPlayers && !ConfigHandler.fkcounterHUDCompact && !ConfigHandler.fkcounterHUDinSidebar) {
+                        ConfigHandler.fkcounterHUDShowPlayers = false;
+                        ConfigHandler.fkcounterHUDCompact = true;
+                        // Compact mode
+                    } else if (!ConfigHandler.fkcounterHUDShowPlayers && ConfigHandler.fkcounterHUDCompact && !ConfigHandler.fkcounterHUDinSidebar) {
+                        ConfigHandler.fkcounterHUDinSidebar = true;
+                        // Compact mode in sidebar
+                    } else if (!ConfigHandler.fkcounterHUDShowPlayers && ConfigHandler.fkcounterHUDCompact /*&& ConfigHandler.fkcounterHUDinSidebar*/) {
+                        ConfigHandler.fkcounterHUDCompact = false;
+                        ConfigHandler.fkcounterHUDinSidebar = false;
+                    } else {
+                        // force normal mode if you have weird boolean states
+                        ConfigHandler.fkcounterHUDShowPlayers = false;
+                        ConfigHandler.fkcounterHUDCompact = false;
+                        ConfigHandler.fkcounterHUDinSidebar = false;
+                    }
+                    FKCounterHUD.instance.updateDisplayText();
 
-    private int findMenuWidth() {
-        return buttonSize * columns + widthBetweenButtons * (columns - 1);
-    }
-
-    private int findMenuHeight() {
-        return heightBetweenButtons + buttonSize * rows;
+                },
+                EnumChatFormatting.YELLOW + "Change the look of the HUD :",
+                EnumChatFormatting.DARK_GRAY + "\u25AA " + EnumChatFormatting.GREEN + "Classic mode" + EnumChatFormatting.GRAY + " : draws the names of each teams with the amount of finals",
+                EnumChatFormatting.DARK_GRAY + "\u25AA " + EnumChatFormatting.GREEN + "Player mode" + EnumChatFormatting.GRAY + " : draws the names of each teams, along with the names and amounts of finals of each player that has finals, you can change the amount of playernames it draws per team with the slider below",
+                EnumChatFormatting.DARK_GRAY + "\u25AA " + EnumChatFormatting.GREEN + "Compact mode" + EnumChatFormatting.GRAY + " : only draws 4 colored numbers that represent the finals of each teams",
+                EnumChatFormatting.DARK_GRAY + "\u25AA " + EnumChatFormatting.GREEN + "Compact mode in sidebar" + EnumChatFormatting.GRAY + " : subtly places the compact HUD in the sidebar"
+        ));
+        this.buttonList.add(new GuiSlider(6, xPos, getButtonYPos(3), 200, buttonsHeight, "Player amount : ", "", 1d, 10d, ConfigHandler.fkcounterHUDPlayerAmount, false, true, this));
+        this.buttonList.add(new GuiSlider(5, xPos, getButtonYPos(4), 200, buttonsHeight, "HUD Size : ", "", 0.1d, 4d, ConfigHandler.fkcounterHUDSize, true, true, this));
+        this.buttonList.add(new OptionGuiButton(
+                xPos, getButtonYPos(5),
+                "Draw background",
+                (b) -> ConfigHandler.fkcounterHUDDrawBackground = b,
+                () -> ConfigHandler.fkcounterHUDDrawBackground,
+                EnumChatFormatting.GRAY + "Renders a background behind the final kill counter HUD"));
+        this.buttonList.add(new OptionGuiButton(
+                xPos, getButtonYPos(6),
+                "Finals in tablist",
+                (b) -> ConfigHandler.fkcounterHUDTablist = b,
+                () -> ConfigHandler.fkcounterHUDTablist,
+                EnumChatFormatting.GRAY + "Renders in the tablist next to their names the amount of final kills that each player has",
+                EnumChatFormatting.RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements"));
+        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(8), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
 
     @Override
