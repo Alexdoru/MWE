@@ -1,26 +1,27 @@
-package fr.alexdoru.megawallsenhancementsmod.gui.guiapi;
+package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 
-import fr.alexdoru.megawallsenhancementsmod.gui.guiscreens.MyGuiScreen;
-import net.minecraft.client.gui.GuiButton;
+import fr.alexdoru.megawallsenhancementsmod.gui.elements.ColoredSquareElement;
+import fr.alexdoru.megawallsenhancementsmod.gui.elements.SimpleGuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
-import java.io.IOException;
 import java.util.function.Consumer;
 
-public final class ColorSelectionScreen extends MyGuiScreen {
+public class ColorSelectionGuiScreen extends MyGuiScreen {
 
     private final GuiScreen parent;
     private final int initialColor;
-    private final Consumer<Integer> consumer;
+    private final int defaultColor;
+    private final Consumer<Integer> setter;
     private GuiSlider sliderRed;
     private GuiSlider sliderGreen;
     private GuiSlider sliderBlue;
 
-    public ColorSelectionScreen(GuiScreen parent, int currentColor, Consumer<Integer> consumer) {
+    public ColorSelectionGuiScreen(GuiScreen parent, int currentColor, int defaultColor, Consumer<Integer> setter) {
         this.parent = parent;
         this.initialColor = currentColor;
-        this.consumer = consumer;
+        this.defaultColor = defaultColor;
+        this.setter = setter;
     }
 
     @Override
@@ -28,39 +29,37 @@ public final class ColorSelectionScreen extends MyGuiScreen {
         this.maxWidth = 150 * 2;
         this.maxHeight = (buttonsHeight + 4) * 7 + buttonsHeight;
         super.initGui();
+        this.elementList.add(new ColoredSquareElement(getxCenter() + 10, getButtonYPos(2) - 10, 10 + (20 + 4) * 3 + 20 + 10, this::getCurrentColor));
         this.buttonList.add(this.sliderRed = new GuiSlider(1, getxCenter() - 150, getButtonYPos(2), 150, buttonsHeight, "Red: ", "", 0.0D, 255.0D, (this.initialColor >> 16 & 0xFF), false, true));
         this.buttonList.add(this.sliderGreen = new GuiSlider(2, getxCenter() - 150, getButtonYPos(3), 150, buttonsHeight, "Green: ", "", 0.0D, 255.0D, (this.initialColor >> 8 & 0xFF), false, true));
         this.buttonList.add(this.sliderBlue = new GuiSlider(3, getxCenter() - 150, getButtonYPos(4), 150, buttonsHeight, "Blue: ", "", 0.0D, 255.0D, (this.initialColor & 0xFF), false, true));
-        this.buttonList.add(new GuiButton(200, getxCenter() - 150 / 2, getButtonYPos(6), 150, buttonsHeight, "Done"));
+        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150, getButtonYPos(5), 150, buttonsHeight, "Reset default color", this::resetDefaultColor));
+        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(7), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        final int top = getButtonYPos(2) - 10;
-        final int bottom = getButtonYPos(4) + buttonsHeight + 10;
-        final int left = getxCenter() + 10;
-        final int right = left + bottom - top;
-        drawColoredRectWithOutline(top, bottom, left, right, getCurrentColor());
-        this.consumer.accept(getCurrentColor());
+        this.setter.accept(getCurrentColor());
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) throws IOException {
-        if (button.id == 200) {
-            mc.displayGuiScreen(parent);
-        }
-        super.actionPerformed(button);
-    }
-
-    @Override
     public void onGuiClosed() {
-        this.consumer.accept(getCurrentColor());
+        this.setter.accept(getCurrentColor());
         super.onGuiClosed();
     }
 
     private int getCurrentColor() {
         return this.sliderRed.getValueInt() << 16 | this.sliderGreen.getValueInt() << 8 | this.sliderBlue.getValueInt();
+    }
+
+    private void resetDefaultColor() {
+        this.sliderRed.setValue(this.defaultColor >> 16 & 0xFF);
+        this.sliderRed.updateSlider();
+        this.sliderGreen.setValue(this.defaultColor >> 8 & 0xFF);
+        this.sliderGreen.updateSlider();
+        this.sliderBlue.setValue(this.defaultColor & 0xFF);
+        this.sliderBlue.updateSlider();
     }
 
 }

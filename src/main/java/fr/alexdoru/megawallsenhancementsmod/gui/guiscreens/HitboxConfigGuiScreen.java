@@ -1,7 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.ColorSelectionScreen;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
@@ -161,7 +160,7 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
                 ConfigHandler.teamColoredHitbox = !ConfigHandler.teamColoredHitbox;
                 break;
             case 18:
-                mc.displayGuiScreen(new ColorSelectionScreen(this, ConfigHandler.hitboxColor, color -> ConfigHandler.hitboxColor = color));
+                mc.displayGuiScreen(new ColorSelectionGuiScreen(this, ConfigHandler.hitboxColor, 0xFFFFFF, color -> ConfigHandler.hitboxColor = color));
                 break;
             default:
                 break;
