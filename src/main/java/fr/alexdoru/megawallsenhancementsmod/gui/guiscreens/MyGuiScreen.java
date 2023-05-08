@@ -76,7 +76,6 @@ public abstract class MyGuiScreen extends GuiScreen {
                 if (((FancyGuiButton) button).getTooltip() != null) {
                     this.drawHoveringText(((FancyGuiButton) button).getTooltip(), mouseX, mouseY + 20);
                 }
-                return;
             }
         }
     }
