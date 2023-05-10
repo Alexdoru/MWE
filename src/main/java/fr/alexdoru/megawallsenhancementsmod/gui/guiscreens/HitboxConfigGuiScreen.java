@@ -1,16 +1,15 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import net.minecraft.client.gui.GuiButton;
+import fr.alexdoru.megawallsenhancementsmod.gui.elements.ColoredSquareElement;
+import fr.alexdoru.megawallsenhancementsmod.gui.elements.OptionGuiButton;
+import fr.alexdoru.megawallsenhancementsmod.gui.elements.SimpleGuiButton;
+import fr.alexdoru.megawallsenhancementsmod.gui.elements.TextElement;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
-import java.io.IOException;
-
 public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
-
-    private final int buttonsWidth = 170;
 
     public HitboxConfigGuiScreen(GuiScreen parent) {
         this.parent = parent;
@@ -18,155 +17,126 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
 
     @Override
     public void initGui() {
+        final int buttonsWidth = 170;
         this.maxWidth = (10 + buttonsWidth) * 2;
         this.maxHeight = (buttonsHeight + 4) * 12 + buttonsHeight;
         super.initGui();
-        final int xLeftColumn = getxCenter() - buttonsWidth - 10;
-        final int xRightColumn = getxCenter() + 10;
-
-        buttonList.add(new GuiButton(1, xLeftColumn, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(1))); //show hitboxes on players
-        buttonList.add(new GuiButton(2, xLeftColumn, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(2))); //show hitboxes of grounded arrows
-        buttonList.add(new GuiButton(3, xLeftColumn, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(3))); //show hitboxes of arrows in players
-        buttonList.add(new GuiButton(13, xLeftColumn, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(13))); //show hitboxes of arrows in air
-        buttonList.add(new GuiButton(4, xLeftColumn, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(4))); //show hitboxes of dropped items
-        buttonList.add(new GuiButton(5, xLeftColumn, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(5))); //show hitboxes of passive mobs
-        buttonList.add(new GuiButton(6, xLeftColumn, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(6))); //show hitboxes of hostile mobs
-        buttonList.add(new GuiButton(7, xLeftColumn, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(7))); //show hitboxes of item frames
-        buttonList.add(new GuiButton(8, xLeftColumn, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(8))); //show hitboxes of "other entities"
-
-        buttonList.add(new GuiButton(17, xRightColumn, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(17))); //team color on hitboxes
-        buttonList.add(new GuiButton(18, xRightColumn, getButtonYPos(2), buttonsWidth - 25, buttonsHeight, getButtonDisplayString(18))); //select custom hitbox color
-        buttonList.add(new GuiButton(14, xRightColumn, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(14))); //real size hitboxes
-        buttonList.add(new GuiButton(9, xRightColumn, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(9))); //red eyeline
-        buttonList.add(new GuiButton(10, xRightColumn, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(10))); //draw blue vector
-        buttonList.add(new GuiButton(11, xRightColumn, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(11))); //draw blue vector on players only
-        buttonList.add(new GuiButton(12, xRightColumn, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(12))); //make red eyeline 3m
-        buttonList.add(new GuiButton(15, xRightColumn, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(15))); //hide close hitboxes
-        buttonList.add(new GuiSlider(16, xRightColumn, getButtonYPos(9), buttonsWidth, buttonsHeight, "Range : ", " m", 0d, 64d, ConfigHandler.hitboxDrawRange, false, true, this)); //hitbox draw range slider
-
-        buttonList.add(new GuiButton(0, getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, getButtonDisplayString(0))); //close button
-    }
-
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredTitle(EnumChatFormatting.BLUE + "Hitboxes", 2, getxCenter(), getButtonYPos(-1));
-        final String msg = EnumChatFormatting.GRAY + "You obviously need to press f3+b to enable hitboxes";
-        drawCenteredString(fontRendererObj, msg, getxCenter(), getButtonYPos(-1) + 2 * fontRendererObj.FONT_HEIGHT, 0);
-        drawCenteredTitle(EnumChatFormatting.WHITE + "Draw Hitbox for :", 1, getxCenter() - buttonsWidth / 2.0f - 10, getButtonYPos(1) - buttonsHeight / 2.0f);
-        //drawCenteredTitle(EnumChatFormatting.BLUE + "Blue vector :", 1, getxCenter() + buttonsWidth / 2.0f + 10, getButtonYPos(8) - buttonsHeight / 2.0f);
-        final int top = getButtonYPos(2);
-        final int bottom = top + 20;
-        final int left = getxCenter() + 10 + buttonsWidth - 25 + 4;
-        final int right = left + bottom - top;
-        drawColoredRectWithOutline(top, bottom, left, right, ConfigHandler.hitboxColor);
-        super.drawScreen(mouseX, mouseY, partialTicks);
-    }
-
-    private String getButtonDisplayString(int id) {
-        switch (id) {
-            case 0:
-                return parent == null ? "Close" : "Done";
-            case 1:
-                return "Players : " + getSuffix(ConfigHandler.drawHitboxForPlayers);
-            case 2:
-                return "Arrows on ground : " + getSuffix(ConfigHandler.drawHitboxForGroundedArrows);
-            case 3:
-                return "Arrows in players : " + getSuffix(ConfigHandler.drawHitboxForPinnedArrows);
-            case 13:
-                return "Flying arrows : " + getSuffix(ConfigHandler.drawHitboxForFlyingArrows);
-            case 4:
-                return "Dropped items : " + getSuffix(ConfigHandler.drawHitboxForDroppedItems);
-            case 5:
-                return "Passive mobs : " + getSuffix(ConfigHandler.drawHitboxForPassiveMobs);
-            case 6:
-                return "Aggressive mobs : " + getSuffix(ConfigHandler.drawHitboxForAggressiveMobs);
-            case 7:
-                return "Item frame : " + getSuffix(ConfigHandler.drawHitboxItemFrame);
-            case 8:
-                return "Other entities : " + getSuffix(ConfigHandler.drawHitboxForOtherEntity);
-            case 9:
-                return "Red eyeline : " + getSuffix(ConfigHandler.drawRedBox);
-            case 10:
-                return "Draw blue vector : " + getSuffix(!ConfigHandler.hideBlueVect);
-            case 11:
-                return "For players only : " + getSuffix(ConfigHandler.drawBlueVectForPlayersOnly);
-            case 12:
-                return "Make vector 3 meters : " + getSuffix(ConfigHandler.makeBlueVect3Meters);
-            case 14:
-                return "Real size hitbox : " + getSuffix(ConfigHandler.realSizeHitbox);
-            case 15:
-                return "Hide close hitbox : " + getSuffix(ConfigHandler.drawRangedHitbox);
-            case 17:
-                return "Team colored hitbox : " + getSuffix(ConfigHandler.teamColoredHitbox);
-            case 18:
-                return "Select custom hitbox color";
-            default:
-                return "";
-        }
-    }
-
-    @Override
-    protected void actionPerformed(GuiButton button) throws IOException {
-        switch (button.id) {
-            case 0:
-                mc.displayGuiScreen(parent);
-                break;
-            case 1:
-                ConfigHandler.drawHitboxForPlayers = !ConfigHandler.drawHitboxForPlayers;
-                break;
-            case 2:
-                ConfigHandler.drawHitboxForGroundedArrows = !ConfigHandler.drawHitboxForGroundedArrows;
-                break;
-            case 3:
-                ConfigHandler.drawHitboxForPinnedArrows = !ConfigHandler.drawHitboxForPinnedArrows;
-                break;
-            case 13:
-                ConfigHandler.drawHitboxForFlyingArrows = !ConfigHandler.drawHitboxForFlyingArrows;
-                break;
-            case 4:
-                ConfigHandler.drawHitboxForDroppedItems = !ConfigHandler.drawHitboxForDroppedItems;
-                break;
-            case 5:
-                ConfigHandler.drawHitboxForPassiveMobs = !ConfigHandler.drawHitboxForPassiveMobs;
-                break;
-            case 6:
-                ConfigHandler.drawHitboxForAggressiveMobs = !ConfigHandler.drawHitboxForAggressiveMobs;
-                break;
-            case 7:
-                ConfigHandler.drawHitboxItemFrame = !ConfigHandler.drawHitboxItemFrame;
-                break;
-            case 8:
-                ConfigHandler.drawHitboxForOtherEntity = !ConfigHandler.drawHitboxForOtherEntity;
-                break;
-            case 9:
-                ConfigHandler.drawRedBox = !ConfigHandler.drawRedBox;
-                break;
-            case 10:
-                ConfigHandler.hideBlueVect = !ConfigHandler.hideBlueVect;
-                break;
-            case 11:
-                ConfigHandler.drawBlueVectForPlayersOnly = !ConfigHandler.drawBlueVectForPlayersOnly;
-                break;
-            case 12:
-                ConfigHandler.makeBlueVect3Meters = !ConfigHandler.makeBlueVect3Meters;
-                break;
-            case 14:
-                ConfigHandler.realSizeHitbox = !ConfigHandler.realSizeHitbox;
-                break;
-            case 15:
-                ConfigHandler.drawRangedHitbox = !ConfigHandler.drawRangedHitbox;
-                break;
-            case 17:
-                ConfigHandler.teamColoredHitbox = !ConfigHandler.teamColoredHitbox;
-                break;
-            case 18:
-                mc.displayGuiScreen(new ColorSelectionGuiScreen(this, ConfigHandler.hitboxColor, 0xFFFFFF, color -> ConfigHandler.hitboxColor = color));
-                break;
-            default:
-                break;
-        }
-        button.displayString = getButtonDisplayString(button.id);
-        super.actionPerformed(button);
+        final int xLeftCol = getxCenter() - buttonsWidth - 10;
+        final int xRightCol = getxCenter() + 10;
+        this.elementList.add(new TextElement(EnumChatFormatting.BLUE + "Hitboxes", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
+        this.elementList.add(new TextElement(EnumChatFormatting.GRAY + "You obviously need to press f3+b to enable hitboxes", getxCenter(), getButtonYPos(-1) + 2 * fontRendererObj.FONT_HEIGHT).makeCentered());
+        this.elementList.add(new TextElement(EnumChatFormatting.WHITE + "Draw Hitbox for :", getxCenter() - buttonsWidth / 2 - 10, getButtonYPos(1) - buttonsHeight / 2).makeCentered());
+        this.elementList.add(new ColoredSquareElement(getxCenter() + 10 + buttonsWidth - 25 + 4, getButtonYPos(2), 20, () -> ConfigHandler.hitboxColor));
+        this.buttonList.add(new OptionGuiButton(
+                xLeftCol, getButtonYPos(1),
+                buttonsWidth, 20,
+                "Players",
+                (b) -> ConfigHandler.drawHitboxForPlayers = b,
+                () -> ConfigHandler.drawHitboxForPlayers));
+        this.buttonList.add(new OptionGuiButton(
+                xLeftCol, getButtonYPos(2),
+                buttonsWidth, 20,
+                "Arrows on ground",
+                (b) -> ConfigHandler.drawHitboxForGroundedArrows = b,
+                () -> ConfigHandler.drawHitboxForGroundedArrows));
+        this.buttonList.add(new OptionGuiButton(
+                xLeftCol, getButtonYPos(3),
+                buttonsWidth, 20,
+                "Arrows in players",
+                (b) -> ConfigHandler.drawHitboxForPinnedArrows = b,
+                () -> ConfigHandler.drawHitboxForPinnedArrows));
+        this.buttonList.add(new OptionGuiButton(
+                xLeftCol, getButtonYPos(4),
+                buttonsWidth, 20,
+                "Flying arrows",
+                (b) -> ConfigHandler.drawHitboxForFlyingArrows = b,
+                () -> ConfigHandler.drawHitboxForFlyingArrows));
+        this.buttonList.add(new OptionGuiButton(
+                xLeftCol, getButtonYPos(5),
+                buttonsWidth, 20,
+                "Dropped items",
+                (b) -> ConfigHandler.drawHitboxForDroppedItems = b,
+                () -> ConfigHandler.drawHitboxForDroppedItems));
+        this.buttonList.add(new OptionGuiButton(
+                xLeftCol, getButtonYPos(6),
+                buttonsWidth, 20,
+                "Passive mobs",
+                (b) -> ConfigHandler.drawHitboxForPassiveMobs = b,
+                () -> ConfigHandler.drawHitboxForPassiveMobs));
+        this.buttonList.add(new OptionGuiButton(
+                xLeftCol, getButtonYPos(7),
+                buttonsWidth, 20,
+                "Aggressive mobs",
+                (b) -> ConfigHandler.drawHitboxForAggressiveMobs = b,
+                () -> ConfigHandler.drawHitboxForAggressiveMobs));
+        this.buttonList.add(new OptionGuiButton(
+                xLeftCol, getButtonYPos(8),
+                buttonsWidth, 20,
+                "Item frame",
+                (b) -> ConfigHandler.drawHitboxItemFrame = b,
+                () -> ConfigHandler.drawHitboxItemFrame));
+        this.buttonList.add(new OptionGuiButton(
+                xLeftCol, getButtonYPos(9),
+                buttonsWidth, 20,
+                "Other entities",
+                (b) -> ConfigHandler.drawHitboxForOtherEntity = b,
+                () -> ConfigHandler.drawHitboxForOtherEntity));
+        this.buttonList.add(new OptionGuiButton(
+                xRightCol, getButtonYPos(1),
+                buttonsWidth, 20,
+                "Team colored hitbox",
+                (b) -> ConfigHandler.teamColoredHitbox = b,
+                () -> ConfigHandler.teamColoredHitbox,
+                EnumChatFormatting.GRAY + "For players, the hitbox will take the color of the player's team"));
+        this.buttonList.add(new SimpleGuiButton(
+                xRightCol, getButtonYPos(2),
+                buttonsWidth - 25, 20,
+                "Select custom hitbox color",
+                () -> mc.displayGuiScreen(new ColorSelectionGuiScreen(this, ConfigHandler.hitboxColor, 0xFFFFFF, color -> ConfigHandler.hitboxColor = color))));
+        this.buttonList.add(new OptionGuiButton(
+                xRightCol, getButtonYPos(3),
+                buttonsWidth, 20,
+                "Real size hitbox",
+                (b) -> ConfigHandler.realSizeHitbox = b,
+                () -> ConfigHandler.realSizeHitbox,
+                EnumChatFormatting.GRAY + "The hitbox will be larger and represent the area where you can attack entities"));
+        this.buttonList.add(new OptionGuiButton(
+                xRightCol, getButtonYPos(4),
+                buttonsWidth, 20,
+                "Red eyeline",
+                (b) -> ConfigHandler.drawRedBox = b,
+                () -> ConfigHandler.drawRedBox,
+                EnumChatFormatting.GRAY + "Draw a red square at the eye level of entities"));
+        this.buttonList.add(new OptionGuiButton(
+                xRightCol, getButtonYPos(5),
+                buttonsWidth, 20,
+                "Draw blue vector",
+                (b) -> ConfigHandler.drawBlueVect = b,
+                () -> ConfigHandler.drawBlueVect,
+                EnumChatFormatting.GRAY + "Draw a blue line comming out of the eyes of entities that represent where they look at"));
+        this.buttonList.add(new OptionGuiButton(
+                xRightCol, getButtonYPos(6),
+                buttonsWidth, 20,
+                "For players only",
+                (b) -> ConfigHandler.drawBlueVectForPlayersOnly = b,
+                () -> ConfigHandler.drawBlueVectForPlayersOnly,
+                EnumChatFormatting.GRAY + "Draw blue vector for players only"));
+        this.buttonList.add(new OptionGuiButton(
+                xRightCol, getButtonYPos(7),
+                buttonsWidth, 20,
+                "Make vector 3 meters",
+                (b) -> ConfigHandler.makeBlueVect3Meters = b,
+                () -> ConfigHandler.makeBlueVect3Meters,
+                EnumChatFormatting.GRAY + "Make the blue vector 3 meters long, just like the player's attack reach"));
+        this.buttonList.add(new OptionGuiButton(
+                xRightCol, getButtonYPos(8),
+                buttonsWidth, 20,
+                "Hide close hitbox",
+                (b) -> ConfigHandler.hideCloseHitbox = b,
+                () -> ConfigHandler.hideCloseHitbox,
+                EnumChatFormatting.GRAY + "Stops rendering the hitboxes that are closer than the range set below"));
+        this.buttonList.add(new GuiSlider(16, xRightCol, getButtonYPos(9), buttonsWidth, buttonsHeight, "Range : ", " m", 0d, 64d, ConfigHandler.hitboxDrawRange, false, true, this)); //hitbox draw range slider
+        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
 
     @Override
