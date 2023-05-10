@@ -3,22 +3,20 @@ package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.WarningMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.gui.elements.FancyGuiButton;
+import fr.alexdoru.megawallsenhancementsmod.gui.elements.OptionGuiButton;
+import fr.alexdoru.megawallsenhancementsmod.gui.elements.SimpleGuiButton;
+import fr.alexdoru.megawallsenhancementsmod.gui.elements.TextElement;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
-    private GuiButton reportSuggestionButton;
-    private GuiButton autoreportSuggestionButton;
-    private final String msg = EnumChatFormatting.WHITE + "NoCheaters saves players reported via " + EnumChatFormatting.YELLOW + "/wdr playername" + EnumChatFormatting.WHITE + " (not /report)";
+    private FancyGuiButton reportSuggestionButton;
+    private FancyGuiButton autoreportSuggestionButton;
 
     public NoCheatersConfigGuiScreen() {
         this.parent = null;
@@ -30,172 +28,87 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
 
     @Override
     public void initGui() {
+        final String msg = EnumChatFormatting.WHITE + "NoCheaters saves players reported via " + EnumChatFormatting.YELLOW + "/wdr playername" + EnumChatFormatting.WHITE + " (not /report)";
         this.maxWidth = fontRendererObj.getStringWidth(msg);
         this.maxHeight = (buttonsHeight + 4) * 10 + buttonsHeight;
         super.initGui();
-        /*
-         * Defines the button list
-         */
-        final int buttonsWidth = 200;
-        final int xPos = getxCenter() - buttonsWidth / 2;
-        buttonList.add(new GuiButton(1, xPos, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(1))); //warning messages in chat
-        buttonList.add(reportSuggestionButton = new GuiButton(8, xPos, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(8))); //report suggestions in chat
-        buttonList.add(autoreportSuggestionButton = new GuiButton(9, xPos, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(9))); //auto report suggestions
-        //buttonList.add(new GuiButton(2, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(2))); //auto report cheaters
-        //buttonList.add(new GuiButton(11, xPos, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(11))); //stop report after a week
-        buttonList.add(new GuiButton(6, xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(6))); //delete old reports
-        buttonList.add(new GuiSlider(7, xPos, getButtonYPos(6), buttonsWidth, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport, false, true, this)); //delete old reports time threshold slider
-        buttonList.add(new GuiButton(10, xPos, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(10))); //censor cheaters in chat
-        buttonList.add(new GuiButton(3, getxCenter() - 150 / 2, getButtonYPos(9), 150, buttonsHeight, getButtonDisplayString(3))); // close or done
-    }
-
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredTitle(EnumChatFormatting.RED + "NoCheaters", 2, getxCenter(), getButtonYPos(-1));
-        drawCenteredString(fontRendererObj, msg, getxCenter(), getButtonYPos(0), 0);
-        final String msg0 = EnumChatFormatting.WHITE + "and warns you about them ingame (icon on name, chat message)";
-        drawCenteredString(fontRendererObj, msg0, getxCenter(), getButtonYPos(0) + fontRendererObj.FONT_HEIGHT, 0);
-        final String msg1 = EnumChatFormatting.WHITE + "If you want to remove a player from your report list use :";
-        drawCenteredString(fontRendererObj, msg1, getxCenter(), getButtonYPos(0) + 2 * fontRendererObj.FONT_HEIGHT, 0);
-        final String msg2 = EnumChatFormatting.YELLOW + "/unwdr playername" + EnumChatFormatting.WHITE + " or click the name on the warning message";
-        drawCenteredString(fontRendererObj, msg2, getxCenter(), getButtonYPos(0) + 3 * fontRendererObj.FONT_HEIGHT, 0);
-        super.drawScreen(mouseX, mouseY, partialTicks);
-        drawTooltips(mouseX, mouseY);
-    }
-
-    private String getButtonDisplayString(int id) {
-        switch (id) {
-            case 1:
-                return "Warning messages in chat : " + getSuffix(ConfigHandler.warningMessages);
-            case 8:
-                return "Report suggestions in chat : " + getSuffix(ConfigHandler.reportSuggestions);
-            case 9:
-                return "Auto-report suggestions : " + getSuffix(ConfigHandler.autoreportSuggestions);
-            //case 2:
-            //    return "Auto-report cheaters : " + getSuffix(ConfigHandler.toggleAutoreport);
-            //case 11:
-            //    return "Stop report after a week : " + getSuffix(ConfigHandler.stopAutoreportAfterWeek);
-            case 6:
-                return "Delete old reports : " + getSuffix(ConfigHandler.deleteOldReports);
-            case 10:
-                return "Censor cheaters in chat : " + (ConfigHandler.deleteCheaterChatMsg ? EnumChatFormatting.GREEN + "Delete" : (ConfigHandler.censorCheaterChatMsg ? EnumChatFormatting.YELLOW + "Censor" : EnumChatFormatting.RED + "Disabled"));
-            case 3:
-                return parent == null ? "Close" : "Done";
-            default:
-                return "invalid button id";
-        }
-    }
-
-    @Override
-    protected List<String> getTooltipText(int id) {
-        final List<String> textLines = new ArrayList<>();
-        switch (id) {
-            case 1:
-                textLines.add(EnumChatFormatting.GREEN + "Prints a warning message in chat when a reported player joins your world");
-                textLines.add("");
-                textLines.add(EnumChatFormatting.RED + "Warning : " + EnumChatFormatting.LIGHT_PURPLE + "player" + EnumChatFormatting.GRAY + " joined, Cheats : " + EnumChatFormatting.GOLD + "cheat");
-                textLines.add("");
-                textLines.add(EnumChatFormatting.GRAY + "Those messages have built in Compact Chat");
-                break;
-            //case 2:
-            //    textLines.add(EnumChatFormatting.GREEN + "Every game it automatically reports players saved in NoCheaters");
-            //    textLines.add(EnumChatFormatting.GREEN + "It does it for a week before asking you if they are still cheating or not");
-            //    textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls, the reports are sent after the walls fall.");
-            //    textLines.add("");
-            //    textLines.add(EnumChatFormatting.DARK_RED + "Don't keep players that don't cheat anymore in your report list");
-            //    textLines.add(EnumChatFormatting.GREEN + "Use : " + EnumChatFormatting.YELLOW + "/unwdr playername" + EnumChatFormatting.GREEN + " to remove them from your report list");
-            //    break;
-            //case 11:
-            //    textLines.add(EnumChatFormatting.GREEN + "Stop auto-reporting players for whom your last report is more than a week old");
-            //    textLines.add(EnumChatFormatting.GREEN + "The icon on their name will turn gray");
-            //    break;
-            case 6:
-                textLines.add(EnumChatFormatting.GREEN + "Deletes reports older than the specified value");
-                textLines.add(EnumChatFormatting.GRAY + "The deletion occurs when you start minecraft");
-                break;
-            case 8:
-                textLines.add(EnumChatFormatting.GREEN + "When there is a message that respects the following patterns,");
-                textLines.add(EnumChatFormatting.GREEN + "it will print a report suggestion in chat");
-                textLines.add("");
-                textLines.add(EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "playername is bhoping");
-                textLines.add(EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "wdr playername cheat");
-                textLines.add(EnumChatFormatting.BLUE + "[TEAM] " + EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "report playername cheat");
-                break;
-            case 9:
-                textLines.add(EnumChatFormatting.GREEN + "Automatically sends the report command to the server");
-                textLines.add(EnumChatFormatting.GREEN + "when there is a report suggestion in chat");
-                textLines.add(EnumChatFormatting.GRAY + "Only works in Mega Walls after the walls fall");
-                textLines.add(EnumChatFormatting.GRAY + "Ignores command suggestions sent by ignored players, reported players, scangame players and nicked players");
-                textLines.add(EnumChatFormatting.GRAY + "You can ignore players by using " + EnumChatFormatting.YELLOW + "/nocheaters ignore <playername>");
-                break;
-            case 10:
-                textLines.add(EnumChatFormatting.GREEN + "Deletes or censors chat messages sent by reported players");
-                break;
-        }
-        return textLines;
-    }
-
-    @Override
-    protected void actionPerformed(GuiButton button) throws IOException {
-        switch (button.id) {
-            case 1:
-                ConfigHandler.warningMessages = !ConfigHandler.warningMessages;
-                if (ConfigHandler.warningMessages) {
-                    WarningMessagesHandler.printReportMessagesForWorld(false);
-                } else {
-                    ChatHandler.deleteAllWarningMessages();
-                }
-                break;
-            case 8:
-                ConfigHandler.reportSuggestions = !ConfigHandler.reportSuggestions;
-                if (ConfigHandler.reportSuggestions) {
-                    SoundUtil.playReportSuggestionSound();
-                }
-                if (!ConfigHandler.reportSuggestions) {
-                    ConfigHandler.autoreportSuggestions = false;
-                    autoreportSuggestionButton.displayString = getButtonDisplayString(9);
-                }
-                break;
-            case 9:
-                ConfigHandler.autoreportSuggestions = !ConfigHandler.autoreportSuggestions;
-                if (ConfigHandler.autoreportSuggestions) {
-                    ConfigHandler.reportSuggestions = true;
-                    reportSuggestionButton.displayString = getButtonDisplayString(8);
-                } else {
-                    ReportQueue.INSTANCE.clearSuggestionsInReportQueue();
-                }
-                break;
-            case 10:
-                if (ConfigHandler.censorCheaterChatMsg && !ConfigHandler.deleteCheaterChatMsg) {
-                    ConfigHandler.deleteCheaterChatMsg = true;
-                    break;
-                }
-                if (!ConfigHandler.censorCheaterChatMsg && !ConfigHandler.deleteCheaterChatMsg) {
-                    ConfigHandler.censorCheaterChatMsg = true;
-                    break;
-                }
-                ConfigHandler.deleteCheaterChatMsg = false;
-                ConfigHandler.censorCheaterChatMsg = false;
-                break;
-            //case 2:
-            //    ConfigHandler.toggleAutoreport = !ConfigHandler.toggleAutoreport;
-            //    NameUtil.refreshAllNamesInWorld();
-            //    break;
-            case 3:
-                mc.displayGuiScreen(parent);
-                break;
-            case 6:
-                ConfigHandler.deleteOldReports = !ConfigHandler.deleteOldReports;
-                break;
-            //case 11:
-            //    ConfigHandler.stopAutoreportAfterWeek = !ConfigHandler.stopAutoreportAfterWeek;
-            //    NameUtil.refreshAllNamesInWorld();
-            //    break;
-            default:
-                break;
-        }
-        button.displayString = getButtonDisplayString(button.id);
-        super.actionPerformed(button);
+        final int xPos = getxCenter() - BUTTON_WIDTH / 2;
+        this.elementList.add(new TextElement(EnumChatFormatting.RED + "NoCheaters", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
+        this.elementList.add(new TextElement(msg, getxCenter(), getButtonYPos(0)).makeCentered());
+        this.elementList.add(new TextElement(EnumChatFormatting.WHITE + "and warns you about them ingame (icon on name, chat message)", getxCenter(), getButtonYPos(0) + fontRendererObj.FONT_HEIGHT).makeCentered());
+        this.elementList.add(new TextElement(EnumChatFormatting.WHITE + "If you want to remove a player from your report list use :", getxCenter(), getButtonYPos(0) + 2 * fontRendererObj.FONT_HEIGHT).makeCentered());
+        this.elementList.add(new TextElement(EnumChatFormatting.YELLOW + "/unwdr playername" + EnumChatFormatting.WHITE + " or click the name on the warning message", getxCenter(), getButtonYPos(0) + 3 * fontRendererObj.FONT_HEIGHT).makeCentered());
+        this.buttonList.add(new FancyGuiButton(
+                xPos, getButtonYPos(2),
+                () -> "Warning messages in chat : " + getSuffix(ConfigHandler.warningMessages),
+                () -> {
+                    ConfigHandler.warningMessages = !ConfigHandler.warningMessages;
+                    if (ConfigHandler.warningMessages) {
+                        WarningMessagesHandler.printReportMessagesForWorld(false);
+                    } else {
+                        ChatHandler.deleteAllWarningMessages();
+                    }
+                }, EnumChatFormatting.GREEN + "Warning messages in chat",
+                EnumChatFormatting.GRAY + "Prints a warning message in chat when a reported player joins your world, those messages have built in compact chat."));
+        this.buttonList.add(reportSuggestionButton = new FancyGuiButton(
+                xPos, getButtonYPos(3),
+                () -> "Report suggestions in chat : " + getSuffix(ConfigHandler.reportSuggestions),
+                () -> {
+                    ConfigHandler.reportSuggestions = !ConfigHandler.reportSuggestions;
+                    if (ConfigHandler.reportSuggestions) {
+                        SoundUtil.playReportSuggestionSound();
+                    }
+                    if (!ConfigHandler.reportSuggestions) {
+                        ConfigHandler.autoreportSuggestions = false;
+                        autoreportSuggestionButton.updateDisplayText();
+                    }
+                }, EnumChatFormatting.GREEN + "Report suggestions in chat",
+                EnumChatFormatting.GRAY + "When there is a message that respects the following patterns, it will print a report suggestion in chat",
+                EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "playername is bhoping",
+                EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "wdr playername cheat",
+                EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "report playername cheat"));
+        this.buttonList.add(autoreportSuggestionButton = new FancyGuiButton(
+                xPos, getButtonYPos(4),
+                () -> "Auto-report suggestions : " + getSuffix(ConfigHandler.autoreportSuggestions),
+                () -> {
+                    ConfigHandler.autoreportSuggestions = !ConfigHandler.autoreportSuggestions;
+                    if (ConfigHandler.autoreportSuggestions) {
+                        ConfigHandler.reportSuggestions = true;
+                        reportSuggestionButton.updateDisplayText();
+                    } else {
+                        ReportQueue.INSTANCE.clearSuggestionsInReportQueue();
+                    }
+                },
+                EnumChatFormatting.GREEN + "Auto-report suggestions",
+                EnumChatFormatting.GRAY + "Automatically sends the report command to the server when there is a report suggestion in chat." +
+                        EnumChatFormatting.YELLOW + " Only works in Mega Walls after the walls fall.",
+                EnumChatFormatting.GRAY + "Ignores command suggestions sent by ignored players, reported players and scangame players." +
+                        EnumChatFormatting.GRAY + " You can ignore players by using " + EnumChatFormatting.YELLOW + "/nocheaters ignore <playername>"));
+        this.buttonList.add(new OptionGuiButton(
+                xPos, getButtonYPos(5),
+                "Delete old reports",
+                (b) -> ConfigHandler.deleteOldReports = b,
+                () -> ConfigHandler.deleteOldReports,
+                EnumChatFormatting.GRAY + "Deletes reports older than the specified value, the deletion occurs when you start Minecraft."));
+        this.buttonList.add(new GuiSlider(7, xPos, getButtonYPos(6), BUTTON_WIDTH, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport, false, true, this));
+        this.buttonList.add(new FancyGuiButton(
+                xPos, getButtonYPos(7),
+                () -> "Censor cheaters in chat : " + (ConfigHandler.deleteCheaterChatMsg ? EnumChatFormatting.GREEN + "Delete" : (ConfigHandler.censorCheaterChatMsg ? EnumChatFormatting.YELLOW + "Censor" : EnumChatFormatting.RED + "Disabled")),
+                () -> {
+                    if (ConfigHandler.censorCheaterChatMsg && !ConfigHandler.deleteCheaterChatMsg) {
+                        ConfigHandler.deleteCheaterChatMsg = true;
+                        return;
+                    }
+                    if (!ConfigHandler.censorCheaterChatMsg && !ConfigHandler.deleteCheaterChatMsg) {
+                        ConfigHandler.censorCheaterChatMsg = true;
+                        return;
+                    }
+                    ConfigHandler.deleteCheaterChatMsg = false;
+                    ConfigHandler.censorCheaterChatMsg = false;
+                },
+                EnumChatFormatting.GREEN + "Censor cheaters in chat",
+                EnumChatFormatting.GRAY + "Deletes or censors chat messages sent by reported players"));
+        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(9), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
 
     @Override

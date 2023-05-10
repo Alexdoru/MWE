@@ -38,6 +38,10 @@ public class FancyGuiButton extends SimpleGuiButton {
     @Override
     public void onButtonPressed() {
         super.onButtonPressed();
+        this.updateDisplayText();
+    }
+
+    public void updateDisplayText() {
         this.displayString = textSupplier.get();
     }
 
