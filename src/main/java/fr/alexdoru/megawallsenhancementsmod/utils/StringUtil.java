@@ -182,6 +182,8 @@ public class StringUtil {
                 offset++;
                 continue;
             }
+            // FIXME it counts the formatting codes in the length of the message when cutting
+            //  possible fix : make own imlementation of lastIndexOf method
             int spaceToWrapAt = str.lastIndexOf(' ', wrapLength + offset);
 
             if (spaceToWrapAt >= offset) {
