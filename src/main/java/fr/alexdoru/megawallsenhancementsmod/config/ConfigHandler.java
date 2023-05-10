@@ -496,9 +496,9 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = HITBOX,
-            name = "Hide blue vector",
-            comment = "Hide blue vector")
-    public static boolean hideBlueVect;
+            name = "Draw blue vector",
+            comment = "Draw blue vector")
+    public static boolean drawBlueVect = true;
 
     @ConfigProperty(
             category = HITBOX,
@@ -522,7 +522,7 @@ public class ConfigHandler extends AbstractConfig {
             category = HITBOX,
             name = "Don't render close hitbox",
             comment = "Doesn't render the hitbox of entities close to you")
-    public static boolean drawRangedHitbox;
+    public static boolean hideCloseHitbox;
 
     @ConfigProperty(
             category = HITBOX,

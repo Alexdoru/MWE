@@ -23,7 +23,7 @@ public class RenderManagerHook {
     }
 
     public static boolean cancelHitboxRender(Entity entityIn, Entity viewingEntity) {
-        if (ConfigHandler.drawRangedHitbox) {
+        if (ConfigHandler.hideCloseHitbox) {
             if (entityIn.getDistanceSqToEntity(viewingEntity) <= ConfigHandler.hitboxDrawRange * ConfigHandler.hitboxDrawRange) {
                 return true;
             }
@@ -83,7 +83,7 @@ public class RenderManagerHook {
     }
 
     public static double getBlueVectLength(Entity entityIn) {
-        if (ConfigHandler.hideBlueVect) {
+        if (!ConfigHandler.drawBlueVect) {
             return 0;
         }
         if (ConfigHandler.drawBlueVectForPlayersOnly) {
