@@ -105,11 +105,10 @@ public class GuiPlayerTabOverlayHook {
     public static EnumChatFormatting getColoredHP(int healthPoints) {
         if (ConfigHandler.useColoredScores) {
             final float maxHealthPoints;
-            final float playerHealth = mc.thePlayer.getMaxHealth();
-            if (FKCounterMod.isInMwGame && playerHealth == 20f) {
-                maxHealthPoints = 40f;
+            if (FKCounterMod.isInMwGame) {
+                maxHealthPoints = 44f;
             } else {
-                maxHealthPoints = playerHealth;
+                maxHealthPoints = mc.thePlayer.getMaxHealth();
             }
             return ColorUtil.getHPColor(maxHealthPoints, healthPoints);
         } else {
