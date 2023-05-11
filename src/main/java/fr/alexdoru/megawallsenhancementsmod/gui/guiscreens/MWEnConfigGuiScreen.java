@@ -1,11 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
-import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
-import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -39,18 +36,13 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         buttonList.add(new GuiButton(26, XposLeftButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(26))); //clear view
         buttonList.add(new GuiButton(19, XposLeftButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(19))); //colored tablist health
         buttonList.add(new GuiButton(31, XposLeftButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(31))); //fix action bar text overlap
-        buttonList.add(new GuiButton(25, XposLeftButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(25))); //hide repetitive chat messages
         buttonList.add(new GuiButton(28, XposLeftButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(28))); //hide tablist header and footer
         buttonList.add(new GuiButton(33, XposLeftButton, getButtonYPos(7), buttonsWidth, buttonsHeight, getButtonDisplayString(33))); //show tablist header and footer outside mw
         buttonList.add(new GuiButton(32, XposLeftButton, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(32))); //hide tablist ping
-        buttonList.add(new GuiButton(15, XposLeftButton, getButtonYPos(9), buttonsWidth, buttonsHeight, getButtonDisplayString(15))); //icons on names
-        buttonList.add(new GuiButton(27, XposLeftButton, getButtonYPos(10), buttonsWidth, buttonsHeight, getButtonDisplayString(27))); //nick hider
 
-        buttonList.add(new GuiButton(24, XposRightButton, getButtonYPos(1), buttonsWidth, buttonsHeight, getButtonDisplayString(24))); //P5 tags
         buttonList.add(new GuiButton(21, XposRightButton, getButtonYPos(2), buttonsWidth, buttonsHeight, getButtonDisplayString(21))); //safe inventory
         buttonList.add(new GuiButton(0, XposRightButton, getButtonYPos(3), buttonsWidth, buttonsHeight, getButtonDisplayString(0))); //short coin messages
         buttonList.add(new GuiButton(29, XposRightButton, getButtonYPos(4), buttonsWidth, buttonsHeight, getButtonDisplayString(29))); //show player count in tab
-        buttonList.add(new GuiButton(16, XposRightButton, getButtonYPos(5), buttonsWidth, buttonsHeight, getButtonDisplayString(16))); //strength particles on hbs and dreads
         buttonList.add(new GuiButton(17, XposRightButton, getButtonYPos(6), buttonsWidth, buttonsHeight, getButtonDisplayString(17))); //low hp sound warning
         buttonList.add(new GuiSlider(20, XposRightButton, getButtonYPos(7), buttonsWidth, buttonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this)); //low hp health threshold slider
         buttonList.add(new GuiButton(22, XposRightButton, getButtonYPos(8), buttonsWidth, buttonsHeight, getButtonDisplayString(22))); //max dropped item entities
@@ -75,20 +67,10 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         switch (id) {
             case 21:
                 return "Safe inventory : " + getSuffix(ConfigHandler.safeInventory);
-            case 16:
-                return "Strength particule HBR DRE : " + getSuffix(ConfigHandler.strengthParticules);
-            case 15:
-                return "Icons on names : " + getSuffix(ConfigHandler.iconsOnNames);
             case 0:
                 return "Short coin messages : " + getSuffix(ConfigHandler.shortCoinMessage);
-            case 24:
-                return "Prestige V tags : " + getSuffix(ConfigHandler.prestigeV);
-            case 25:
-                return "Hide repetitive MW msg : " + getSuffix(ConfigHandler.hideRepetitiveMWChatMsg);
             case 26:
                 return "Clear view : " + getSuffix(ConfigHandler.clearVision);
-            case 27:
-                return "Nick Hider : " + getSuffix(ConfigHandler.nickHider);
             case 18:
                 return "Cancel night vision effect : " + getSuffix(!ConfigHandler.cancelNightVisionEffect);
             case 19:
@@ -123,18 +105,6 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.GREEN + "Prevents hotkeying important kit items out of your inventory");
                 textLines.add(EnumChatFormatting.GRAY + "The later only works in Mega Walls");
                 break;
-            case 16:
-                textLines.add(EnumChatFormatting.GREEN + "Spawns angry villager particles when the player gets a final kill");
-                break;
-            case 15:
-                textLines.add(EnumChatFormatting.GREEN + "Toggles all icons on nametags and in the tablist");
-                textLines.add("");
-                textLines.add(NameUtil.squadprefix + EnumChatFormatting.YELLOW + "Players in your squad");
-                textLines.add(NameUtil.prefix_bhop + EnumChatFormatting.YELLOW + "Players reported for bhop");
-                textLines.add(NameUtil.prefix + EnumChatFormatting.YELLOW + "Players reported for other cheats");
-                textLines.add(NameUtil.prefix_scan + EnumChatFormatting.YELLOW + "Players flagged by the /scangame command");
-                textLines.add(NameUtil.prefix_old_report + EnumChatFormatting.YELLOW + "Players no longer getting auto-reported");
-                break;
             case 0:
                 textLines.add(EnumChatFormatting.GREEN + "Makes the coin messages shorter by removing the network booster info");
                 textLines.add(EnumChatFormatting.GREEN + "And also compacts the guild bonus message and coin message into one");
@@ -143,31 +113,6 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.GOLD + "+100 coins! (hypixel's Network booster)" + EnumChatFormatting.AQUA + " FINAL KILL");
                 textLines.add("Will become : ");
                 textLines.add(EnumChatFormatting.GOLD + "+100 coins!" + EnumChatFormatting.AQUA + " FINAL KILL");
-                break;
-            case 24:
-                textLines.add(EnumChatFormatting.GREEN + "Adds the prestige V colored tags in mega walls");
-                textLines.add(EnumChatFormatting.GREEN + "You need at least," + EnumChatFormatting.GOLD + " 10 000 classpoints" + EnumChatFormatting.GREEN + ",");
-                textLines.add(EnumChatFormatting.GREEN + "and a " + EnumChatFormatting.DARK_RED + "working API Key" + EnumChatFormatting.GREEN + ". This will send api requests and store the data");
-                textLines.add(EnumChatFormatting.GREEN + "in a cache until you close your game.");
-                textLines.add(EnumChatFormatting.GREEN + "Type " + EnumChatFormatting.YELLOW + "/mwenhancements clearcache" + EnumChatFormatting.GREEN + " to force update the data");
-                textLines.add("");
-                textLines.add(EnumChatFormatting.GOLD + "Prestige Colors :");
-                textLines.add(EnumChatFormatting.GOLD + "10000 classpoints : " + EnumChatFormatting.DARK_PURPLE + "[TAG]");
-                textLines.add(EnumChatFormatting.GOLD + "13000 classpoints : " + EnumChatFormatting.DARK_BLUE + "[TAG]");
-                textLines.add(EnumChatFormatting.GOLD + "19000 classpoints : " + EnumChatFormatting.DARK_AQUA + "[TAG]");
-                textLines.add(EnumChatFormatting.GOLD + "28000 classpoints : " + EnumChatFormatting.DARK_GREEN + "[TAG]");
-                textLines.add(EnumChatFormatting.GOLD + "40000 classpoints : " + EnumChatFormatting.DARK_RED + "[TAG]");
-                break;
-            case 25:
-                textLines.add(EnumChatFormatting.GREEN + "Hides the following messages in mega walls");
-                textLines.add("");
-                textLines.add(EnumChatFormatting.RED + "Get to the middle to stop the hunger!");
-                textLines.add(EnumChatFormatting.GREEN + "You broke your protected chest");
-                textLines.add(EnumChatFormatting.GREEN + "You broke your protected trapped chest");
-                textLines.add(EnumChatFormatting.YELLOW + "Your Salvaging skill returned your arrow to you!");
-                textLines.add(EnumChatFormatting.YELLOW + "Your Efficiency skill got you an extra drop!");
-                textLines.add(EnumChatFormatting.GREEN + "Your " + EnumChatFormatting.AQUA + "Ability name " + EnumChatFormatting.GREEN + "skill is ready!");
-                textLines.add(EnumChatFormatting.GREEN + "Click your sword or bow to activate your skill!");
                 break;
             case 26:
                 textLines.add(EnumChatFormatting.GREEN + "Stops rendering particles that are too close (75cm)");
@@ -193,9 +138,6 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 textLines.add(EnumChatFormatting.GREEN + "Dynamically modifies the render distance for dropped items entities to preserve performance");
                 textLines.add(EnumChatFormatting.GREEN + "It starts reducing the render distance when exceeding the threshold set below");
                 textLines.add(EnumChatFormatting.GRAY + "There is a keybind (ESC -> options -> controls -> MegaWallsEnhancements) to toggle it on the fly");
-                break;
-            case 27:
-                textLines.add(EnumChatFormatting.GREEN + "Shows your real name instead of your nick when forming the squad in Mega Walls");
                 break;
             case 28:
                 textLines.add(EnumChatFormatting.GREEN + "Hides the header and footer text located at the top and bottom of the tablist");
@@ -229,34 +171,8 @@ public class MWEnConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
             case 21:
                 ConfigHandler.safeInventory = !ConfigHandler.safeInventory;
                 break;
-            case 16:
-                ConfigHandler.strengthParticules = !ConfigHandler.strengthParticules;
-                break;
-            case 15:
-                ConfigHandler.iconsOnNames = !ConfigHandler.iconsOnNames;
-                NameUtil.refreshAllNamesInWorld();
-                break;
-            case 24:
-                if (ConfigHandler.prestigeV) {
-                    ConfigHandler.prestigeV = false;
-                    NameUtil.refreshAllNamesInWorld();
-                } else {
-                    if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                        ChatUtil.printApikeySetupInfo();
-                    } else {
-                        ConfigHandler.prestigeV = true;
-                        NameUtil.refreshAllNamesInWorld();
-                    }
-                }
-                break;
-            case 25:
-                ConfigHandler.hideRepetitiveMWChatMsg = !ConfigHandler.hideRepetitiveMWChatMsg;
-                break;
             case 26:
                 ConfigHandler.clearVision = !ConfigHandler.clearVision;
-                break;
-            case 27:
-                ConfigHandler.nickHider = !ConfigHandler.nickHider;
                 break;
             case 0:
                 ConfigHandler.shortCoinMessage = !ConfigHandler.shortCoinMessage;

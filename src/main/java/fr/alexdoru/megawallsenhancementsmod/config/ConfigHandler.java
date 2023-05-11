@@ -151,6 +151,12 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = MWENHANCEMENTS,
+            name = "Hide hunger title in MW",
+            comment = "Hide hunger title in MW")
+    public static boolean hideHungerTitleInMW = true;
+
+    @ConfigProperty(
+            category = MWENHANCEMENTS,
             name = "Clear Vision",
             comment = "Hides particles too close to the camera")
     public static boolean clearVision = true;

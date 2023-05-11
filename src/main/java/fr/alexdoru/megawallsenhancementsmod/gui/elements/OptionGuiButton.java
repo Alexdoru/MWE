@@ -9,6 +9,18 @@ import java.util.function.Supplier;
 
 public class OptionGuiButton extends FancyGuiButton {
 
+    public OptionGuiButton(int x, int y, String optionName, Consumer<Boolean> setter, Supplier<Boolean> getter, List<String> tooltip) {
+        this(x, y, 200, 20, optionName, setter, getter, tooltip);
+    }
+
+    public OptionGuiButton(int x, int y, int widthIn, int heightIn, String optionName, Consumer<Boolean> setter, Supplier<Boolean> getter, List<String> tooltip) {
+        super(x, y,
+                widthIn, heightIn,
+                () -> optionName + " : " + (getter.get() ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled"),
+                () -> setter.accept(!getter.get()),
+                tooltip);
+    }
+
     public OptionGuiButton(int x, int y, String optionName, Consumer<Boolean> setter, Supplier<Boolean> getter, String... tooltipLines) {
         this(x, y, 200, 20, optionName, setter, getter, tooltipLines);
     }
