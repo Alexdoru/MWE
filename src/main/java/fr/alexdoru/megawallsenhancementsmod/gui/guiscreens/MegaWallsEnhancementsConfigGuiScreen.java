@@ -62,7 +62,7 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
         iconsTooltip.add(NameUtil.prefix_bhop + EnumChatFormatting.GRAY + " : players reported for blatant cheats");
         iconsTooltip.add(NameUtil.prefix + EnumChatFormatting.GRAY + " : players reported for other cheats");
         iconsTooltip.add(NameUtil.prefix_scan + EnumChatFormatting.GRAY + " : players flagged by the /scangame command");
-        this.buttonList.add(new FancyGuiButton( // TODO add the same button in nocheaters gui
+        this.buttonList.add(new FancyGuiButton(
                 xPos, getButtonYPos(3),
                 () -> "Icons on names : " + getSuffix(ConfigHandler.iconsOnNames),
                 () -> {

@@ -8,10 +8,14 @@ import fr.alexdoru.megawallsenhancementsmod.gui.elements.OptionGuiButton;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.SimpleGuiButton;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.TextElement;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
@@ -30,7 +34,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     public void initGui() {
         final String msg = EnumChatFormatting.WHITE + "NoCheaters saves players reported via " + EnumChatFormatting.YELLOW + "/wdr playername" + EnumChatFormatting.WHITE + " (not /report)";
         this.maxWidth = fontRendererObj.getStringWidth(msg);
-        this.maxHeight = (buttonsHeight + 4) * 10 + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * 11 + buttonsHeight;
         super.initGui();
         final int xPos = getxCenter() - BUTTON_WIDTH / 2;
         this.elementList.add(new TextElement(EnumChatFormatting.RED + "NoCheaters", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
@@ -108,7 +112,24 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 },
                 EnumChatFormatting.GREEN + "Censor cheaters in chat",
                 EnumChatFormatting.GRAY + "Deletes or censors chat messages sent by reported players"));
-        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(9), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
+        final List<String> iconsTooltip = new ArrayList<>();
+        iconsTooltip.add(EnumChatFormatting.GREEN + "Icons on names");
+        iconsTooltip.add("");
+        iconsTooltip.add(EnumChatFormatting.GRAY + "Toggles all icons in front of names, on nametags and in the tablist");
+        iconsTooltip.add("");
+        iconsTooltip.add(NameUtil.squadprefix + EnumChatFormatting.GRAY + " : players in your squad");
+        iconsTooltip.add(NameUtil.prefix_bhop + EnumChatFormatting.GRAY + " : players reported for blatant cheats");
+        iconsTooltip.add(NameUtil.prefix + EnumChatFormatting.GRAY + " : players reported for other cheats");
+        iconsTooltip.add(NameUtil.prefix_scan + EnumChatFormatting.GRAY + " : players flagged by the /scangame command");
+        this.buttonList.add(new FancyGuiButton(
+                xPos, getButtonYPos(8),
+                () -> "Icons on names : " + getSuffix(ConfigHandler.iconsOnNames),
+                () -> {
+                    ConfigHandler.iconsOnNames = !ConfigHandler.iconsOnNames;
+                    NameUtil.refreshAllNamesInWorld();
+                },
+                iconsTooltip));
+        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(10), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
 
     @Override
