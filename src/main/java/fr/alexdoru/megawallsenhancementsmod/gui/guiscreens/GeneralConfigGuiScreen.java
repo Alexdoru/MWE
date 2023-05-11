@@ -17,7 +17,7 @@ public class GeneralConfigGuiScreen extends MyGuiScreen {
         final int xPos = this.getxCenter() - buttonsWidth / 2;
         this.elementList.add(new TextElement(EnumChatFormatting.GREEN + "Config", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
         this.buttonList.add(new SimpleGuiButton(xPos, getButtonYPos(1), buttonsWidth, buttonsHeight, EnumChatFormatting.AQUA + "Final Kill Counter", () -> mc.displayGuiScreen(new FKConfigGuiScreen(this))));
-        this.buttonList.add(new SimpleGuiButton(xPos, getButtonYPos(2), buttonsWidth, buttonsHeight, EnumChatFormatting.GREEN + "Mega Walls Enhancements", () -> mc.displayGuiScreen(new MWEnConfigGuiScreen(this))));
+        this.buttonList.add(new SimpleGuiButton(xPos, getButtonYPos(2), buttonsWidth, buttonsHeight, EnumChatFormatting.GREEN + "Mega Walls Enhancements", () -> mc.displayGuiScreen(new MegaWallsEnhancementsConfigGuiScreen(this))));
         this.buttonList.add(new OptionGuiButton(
                 getxCenter() + buttonsWidth / 2 + 10, getButtonYPos(2),
                 buttonsWidth, buttonsHeight,
