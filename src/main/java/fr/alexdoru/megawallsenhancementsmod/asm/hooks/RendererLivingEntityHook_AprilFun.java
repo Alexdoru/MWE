@@ -6,7 +6,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityZombie;
 
 @SuppressWarnings("unused")
-public class RendererLivingEntityHook {
+public class RendererLivingEntityHook_AprilFun {
 
     public static void doFunny(EntityLivingBase entity) {
         GlStateManager.translate(0.0F, getVisibleHeight(entity) + 0.1F, 0.0F);

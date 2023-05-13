@@ -62,7 +62,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new SidebarmodRevamp_GuiSidebarTransformer());
         registerTransformer(new WorldTransformer());
         if ("01/04".equals(new SimpleDateFormat("dd/MM").format(new Date().getTime())))
-            registerTransformer(new RendererLivingEntityTransformer());
+            registerTransformer(new RendererLivingEntityTransformer_AprilFun());
     }
 
     private void registerTransformer(IMyClassTransformer classTransformer) {
