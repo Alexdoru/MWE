@@ -10,4 +10,6 @@ public interface EntityPlayerAccessor {
     PlayerDataSamples getPlayerDataSamples();
     int getPlayerTeamColorInt();
     void setPlayerTeamColorInt(int color);
+    boolean getmwe$RenderNametag();
+    void setmwe$RenderNametag(boolean b);
 }

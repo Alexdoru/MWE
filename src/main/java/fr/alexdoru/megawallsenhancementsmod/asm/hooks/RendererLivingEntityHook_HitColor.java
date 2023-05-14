@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.EntityLivingBase;
 
 @SuppressWarnings("unused")
@@ -9,10 +10,8 @@ public class RendererLivingEntityHook_HitColor {
 
     private static int hitColor;
 
-    // FIXME unfair advantage since you can see the color outside of nametag render range
-
     public static float getRed(float r, EntityLivingBase entity) {
-        if (ConfigHandler.useTeamColorWhenHurt && entity instanceof EntityPlayerAccessor) {
+        if (ConfigHandler.useTeamColorWhenHurt && entity instanceof EntityPlayerAccessor && (((EntityPlayerAccessor) entity).getmwe$RenderNametag() || entity instanceof EntityPlayerSP)) {
             hitColor = ((EntityPlayerAccessor) entity).getPlayerTeamColorInt();
         } else {
             hitColor = ConfigHandler.hitColor;
