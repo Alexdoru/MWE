@@ -18,6 +18,7 @@ public enum MethodMapping {
     DRAWSTRINGWITHSHADOW(INVOKEVIRTUAL, FONTRENDERER, "a", "drawStringWithShadow", "(Ljava/lang/String;FFI)I"),
     DROPONEITEM(INVOKEVIRTUAL, ENTITYPLAYERSP, "a", "dropOneItem", "(Z)L" + ENTITYITEM + ";"),
     EFFECTRENDERER$ADDBLOCKDESTROYEFFECTS(INVOKEVIRTUAL, EFFECTRENDERER, "a", "addBlockDestroyEffects", "(L" + BLOCKPOS + ";L" + IBLOCKSTATE + ";)V"),
+    FLOATBUFFER$PUT(INVOKEVIRTUAL, FLOATBUFFER, "put", "(F)L" + FLOATBUFFER + ";"),
     FONTRENDERER$GETSTRINGWIDTH(INVOKEVIRTUAL, FONTRENDERER, "a", "getStringWidth", "(Ljava/lang/String;)I"),
     FORMATPLAYERNAME(INVOKESTATIC, SCOREPLAYERTEAM, "a", "formatPlayerName", "(L" + TEAM + ";Ljava/lang/String;)Ljava/lang/String;"),
     GETCURRENTITEM(INVOKEVIRTUAL, INVENTORYPLAYER, "h", "getCurrentItem", "()L" + ITEMSTACK + ";"),
@@ -36,6 +37,7 @@ public enum MethodMapping {
     HANDLEMOUSECLICK(INVOKEVIRTUAL, GUICONTAINER, "a", "handleMouseClick", "(L" + SLOT + ";III)V"),
     ISDEBUGBOUNDINGBOX(INVOKEVIRTUAL, RENDERMANAGER, "b", "isDebugBoundingBox", "()Z"),
     ISPOTIONACTIVE("a", "isPotionActive", "(L" + POTION + ";)Z"),
+    LAYERARMORBASE$SHOULDCOMBINETEXTURES("b", "shouldCombineTextures", "()Z"),
     LISTFORMATTEDSTRINGTOWIDTH(INVOKEVIRTUAL, FONTRENDERER, "c", "listFormattedStringToWidth", "(Ljava/lang/String;I)Ljava/util/List;"),
     LOADRENDERER(INVOKEVIRTUAL, RENDERGLOBAL, "a", "loadRenderers", "()V"),
     MAP$PUT(INVOKEINTERFACE, MAP, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"),
@@ -56,6 +58,7 @@ public enum MethodMapping {
     RENDERENTITYSIMPLE(INVOKEVIRTUAL, RENDERMANAGER, "a", "renderEntitySimple", "(L" + ENTITY + ";F)Z"),
     RENDERERLIVINGENTITY$RENDERNAME("b", "renderName", "(L" + ENTITYLIVINGBASE + ";DDD)V"),
     RENDERERLIVINGENTITY$ROTATECORPSE("a", "rotateCorpse", "(L" + ENTITYLIVINGBASE + ";FFF)V"),
+    RENDERERLIVINGENTITY$SETBRIGHTNESS("a", "setBrightness", "(L" + ENTITYLIVINGBASE + ";FZ)Z"),
     RENDERGAMEOVERLAY("a", "renderGameOverlay", "(F)V"),
     RENDERGLOBAL$PLAYAUXSFX("a", "playAuxSFX", "(L" + ENTITYPLAYER + ";IL" + BLOCKPOS + ";I)V"),
     RENDERMANAGER$INIT("<init>", "(L" + TEXTUREMANAGER + ";L" + RENDERITEM + ";)V"),
@@ -108,6 +111,13 @@ public enum MethodMapping {
         this.opcode = opcode;
         this.owner = owner.toString();
         this.name = ASMLoadingPlugin.isObf ? obfName : mcpName;
+        this.desc = desc;
+    }
+
+    MethodMapping(int opcode, String owner, String mcpName, String desc) {
+        this.opcode = opcode;
+        this.owner = owner;
+        this.name = mcpName;
         this.desc = desc;
     }
 

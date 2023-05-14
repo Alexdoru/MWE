@@ -43,6 +43,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new GuiScreenBookTransformer());
         registerTransformer(new GuiScreenTransformer());
         registerTransformer(new LayerArrowTransformer());
+        registerTransformer(new LayerArmorBaseTransformer_HitColor());
         registerTransformer(new MinecraftTransformer_DebugMessages());
         registerTransformer(new MinecraftTransformer_DropProtection());
         registerTransformer(new MinecraftTransformer_WarpProtection());
@@ -52,6 +53,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new NetHandlerPlayClientTransformer_PlayerMapTracker());
         registerTransformer(new NetworkPlayerInfoTransformer());
         registerTransformer(new RendererLivingEntityTransformer_NametagRange());
+        registerTransformer(new RendererLivingEntity_HitColor());
         registerTransformer(new RenderGlobalTransformer_LimitDroppedItems());
         registerTransformer(new RenderGlobalTransformer_ListenDestroyedBlocks());
         registerTransformer(new RenderManagerTransformer());

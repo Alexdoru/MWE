@@ -26,7 +26,7 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
         this.elementList.add(new TextElement(EnumChatFormatting.BLUE + "Hitboxes", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
         this.elementList.add(new TextElement(EnumChatFormatting.GRAY + "You obviously need to press f3+b to enable hitboxes", getxCenter(), getButtonYPos(-1) + 2 * fontRendererObj.FONT_HEIGHT).makeCentered());
         this.elementList.add(new TextElement(EnumChatFormatting.WHITE + "Draw Hitbox for :", getxCenter() - buttonsWidth / 2 - 10, getButtonYPos(1) - buttonsHeight / 2).makeCentered());
-        this.elementList.add(new ColoredSquareElement(getxCenter() + 10 + buttonsWidth - 25 + 4, getButtonYPos(2), 20, () -> ConfigHandler.hitboxColor));
+        this.elementList.add(new ColoredSquareElement(xRightCol + buttonsWidth - 25 + 4, getButtonYPos(2), 20, () -> ConfigHandler.hitboxColor));
         this.buttonList.add(new OptionGuiButton(
                 xLeftCol, getButtonYPos(1),
                 buttonsWidth, 20,
