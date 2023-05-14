@@ -9,13 +9,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeVersion;
 
-import java.awt.*;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +94,7 @@ public abstract class MyGuiScreen extends GuiScreen {
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) throws IOException {
+    protected void actionPerformed(GuiButton button) {
         if (button instanceof SimpleGuiButton) {
             ((SimpleGuiButton) button).onButtonPressed();
         }
@@ -107,45 +104,8 @@ public abstract class MyGuiScreen extends GuiScreen {
         return enabled ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled";
     }
 
-    protected void drawCenteredTitle(String title, int dilatation, float xPos, float yPos) {
-        GlStateManager.pushMatrix();
-        {
-            GlStateManager.translate(xPos - (mc.fontRendererObj.getStringWidth(title) * dilatation) / 2.0f, yPos, 0);
-            GlStateManager.scale(dilatation, dilatation, dilatation);
-            mc.fontRendererObj.drawStringWithShadow(title, 0, 0, 0);
-        }
-        GlStateManager.popMatrix();
-    }
-
-    protected void drawColoredRectWithOutline(int top, int bottom, int left, int right, int rgbColor) {
-        drawHorizontalLine(left, right, top, Color.BLACK.getRGB());
-        drawHorizontalLine(left, right, bottom, Color.BLACK.getRGB());
-        drawVerticalLine(left, top, bottom, Color.BLACK.getRGB());
-        drawVerticalLine(right, top, bottom, Color.BLACK.getRGB());
-        drawRect(left + 1, top + 1, right, bottom, 255 << 24 | rgbColor);
-    }
-
-    /**
-     * Call this at the end of the drawScreen method to draw the tooltips defined in getTooltopText
-     */
-    protected void drawTooltips(int mouseX, int mouseY) {
-        for (final GuiButton button : this.buttonList) {
-            if (button.isMouseOver()) {
-                this.drawHoveringText(getTooltipText(button.id), mouseX, mouseY + 20);
-                return;
-            }
-        }
-    }
-
     protected int getButtonYPos(int i) {
         return this.height / 8 + (buttonsHeight + 4) * (i + 1);
-    }
-
-    /**
-     * Override this method and make a switch with all the buttons tooltips
-     */
-    protected List<String> getTooltipText(int id) {
-        return new ArrayList<>();
     }
 
     protected int getxCenter() {
