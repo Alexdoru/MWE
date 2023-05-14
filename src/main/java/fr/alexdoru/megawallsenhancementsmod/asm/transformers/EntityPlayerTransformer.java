@@ -22,13 +22,16 @@ public class EntityPlayerTransformer implements IMyClassTransformer {
         final String PRESTIGE_4_TAG_FIELD_NAME = "mwenhancements$Prestige4Tag";
         final String PRESTIGE_5_TAG_FIELD_NAME = "mwenhancements$Prestige5Tag";
         final String TEAM_COLOR_INT_FIELD_NAME = "mwenhancements$PlayerTeamColorInt";
+        final String RENDER_NAMETAG_FIELD_NAME = "mwenhancements$renderNametag";
         classNode.visitField(ACC_PRIVATE, PRESTIGE_4_TAG_FIELD_NAME, "Ljava/lang/String;", null, null).visitEnd();
         classNode.visitField(ACC_PRIVATE, PRESTIGE_5_TAG_FIELD_NAME, "Ljava/lang/String;", null, null).visitEnd();
         classNode.visitField(ACC_PRIVATE, FieldMapping.ENTITYPLAYER$PLAYERDATASAMPLES.name, FieldMapping.ENTITYPLAYER$PLAYERDATASAMPLES.desc, null, null).visitEnd();
         classNode.visitField(ACC_PRIVATE, TEAM_COLOR_INT_FIELD_NAME, "I", null, 0xFFFFFF).visitEnd(); // HEX int to do white color
+        classNode.visitField(ACC_PRIVATE, RENDER_NAMETAG_FIELD_NAME, "Z", null, false).visitEnd();
         addGetterAndSetterMethod(classNode, "Prestige4Tag", ClassMapping.ENTITYPLAYER, PRESTIGE_4_TAG_FIELD_NAME, "Ljava/lang/String;", null);
         addGetterAndSetterMethod(classNode, "Prestige5Tag", ClassMapping.ENTITYPLAYER, PRESTIGE_5_TAG_FIELD_NAME, "Ljava/lang/String;", null);
         addGetterAndSetterMethod(classNode, "PlayerTeamColorInt", ClassMapping.ENTITYPLAYER, TEAM_COLOR_INT_FIELD_NAME, "I", null);
+        addGetterAndSetterMethod(classNode, "mwe$RenderNametag", ClassMapping.ENTITYPLAYER, RENDER_NAMETAG_FIELD_NAME, "Z", null);
         addGetterMethod(classNode, "getPlayerDataSamples", FieldMapping.ENTITYPLAYER$PLAYERDATASAMPLES, null);
         status.setInjectionPoints(2);
         for (final MethodNode methodNode : classNode.methods) {

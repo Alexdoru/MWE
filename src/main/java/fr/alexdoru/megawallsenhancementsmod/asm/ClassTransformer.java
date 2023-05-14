@@ -42,8 +42,8 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new GuiPlayerTabOverlayTransformer_PlayerCount());
         registerTransformer(new GuiScreenBookTransformer());
         registerTransformer(new GuiScreenTransformer());
-        registerTransformer(new LayerArrowTransformer());
         registerTransformer(new LayerArmorBaseTransformer_HitColor());
+        registerTransformer(new LayerArrowTransformer());
         registerTransformer(new MinecraftTransformer_DebugMessages());
         registerTransformer(new MinecraftTransformer_DropProtection());
         registerTransformer(new MinecraftTransformer_WarpProtection());

@@ -15,13 +15,6 @@ import net.minecraft.util.AxisAlignedBB;
 @SuppressWarnings("unused")
 public class RenderManagerHook {
 
-    private static boolean renderNametag;
-
-    // this is actually called from RendererLivingEntityTransformer_NametagRange
-    public static void setRenderNametag(boolean b) {
-        renderNametag = b;
-    }
-
     public static boolean cancelHitboxRender(Entity entityIn, Entity viewingEntity) {
         if (ConfigHandler.hideCloseHitbox) {
             if (entityIn.getDistanceSqToEntity(viewingEntity) <= ConfigHandler.hitboxDrawRange * ConfigHandler.hitboxDrawRange) {
@@ -58,7 +51,7 @@ public class RenderManagerHook {
     private static int hitboxColor = 0xFFFFFF;
 
     public static int getRedHitboxColor(int r, Entity entity) {
-        if (ConfigHandler.teamColoredHitbox && renderNametag && entity instanceof EntityPlayerAccessor) {
+        if (ConfigHandler.teamColoredHitbox && entity instanceof EntityPlayerAccessor && ((EntityPlayerAccessor) entity).getmwe$RenderNametag()) {
             hitboxColor = ((EntityPlayerAccessor) entity).getPlayerTeamColorInt();
         } else {
             hitboxColor = ConfigHandler.hitboxColor;
