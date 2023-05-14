@@ -206,6 +206,24 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Don't render the ping in the tablist if all values are equal to 1")
     public static boolean hidePingTablist = true;
 
+    @ConfigProperty(
+            category = MWENHANCEMENTS,
+            name = "Color when an entity gets hurt",
+            comment = "Color when an entity gets hurt")
+    public static int hitColor = 0x4CFF0000;
+
+    @ConfigProperty(
+            category = MWENHANCEMENTS,
+            name = "Color armor when hurt",
+            comment = "Color armor when hurt")
+    public static boolean colorArmorWhenHurt = true;
+
+    @ConfigProperty(
+            category = MWENHANCEMENTS,
+            name = "Use team color when hurt",
+            comment = "Use team color when hurt")
+    public static boolean useTeamColorWhenHurt;
+
     /**
      * HUD config
      */
