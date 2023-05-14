@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatListener;
 import fr.alexdoru.megawallsenhancementsmod.chat.ReportSuggestionHandler;
 import fr.alexdoru.megawallsenhancementsmod.commands.*;
@@ -56,12 +56,12 @@ public class MegaWallsEnhancementsMod {
         MinecraftForge.EVENT_BUS.register(new ChatListener());
         MinecraftForge.EVENT_BUS.register(new SquadHandler());
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
-        MinecraftForge.EVENT_BUS.register(new RenderPlayerHook());
         MinecraftForge.EVENT_BUS.register(new ScoreboardTracker());
         MinecraftForge.EVENT_BUS.register(new PlayerJoinListener());
         MinecraftForge.EVENT_BUS.register(new KeybindingListener());
         MinecraftForge.EVENT_BUS.register(new MegaWallsEndGameStats());
         MinecraftForge.EVENT_BUS.register(new ReportSuggestionHandler());
+        MinecraftForge.EVENT_BUS.register(new RenderPlayerHook_RenegadeArrowCount());
 
         ClientCommandHandler.instance.registerCommand(new CommandWDR());
         ClientCommandHandler.instance.registerCommand(new CommandName());

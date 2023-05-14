@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GuiNewChatAccessor;
-import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
@@ -58,7 +58,7 @@ public class ArrowHitHUD extends MyCachedHUD {
             final String playername = matcherRenegadeHit.group(1);
             final String hitValue = matcherRenegadeHit.group(2);
             final String arrowsPinned = matcherRenegadeHit.group(3);
-            RenderPlayerHook.addArrowOnPlayer(playername, hitTime, Integer.parseInt(arrowsPinned));
+            RenderPlayerHook_RenegadeArrowCount.addArrowOnPlayer(playername, hitTime, Integer.parseInt(arrowsPinned));
             final boolean bool = Float.parseFloat(hitValue) > (Float.parseFloat(arrowsPinned)) * 2.0f;
             displayText = getColor(hitValue) + hitValue + EnumChatFormatting.GRAY + " (" + (bool ? EnumChatFormatting.GREEN : EnumChatFormatting.GOLD) + arrowsPinned + EnumChatFormatting.GRAY + ")";
             ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg);
@@ -94,7 +94,7 @@ public class ArrowHitHUD extends MyCachedHUD {
                 final float damage = Float.parseFloat(matcherRend2.group(1));
                 final String playername = matcherRend2.group(2);
                 totalDamage += damage;
-                RenderPlayerHook.removeArrowsFrom(playername, (int) (damage / 2));
+                RenderPlayerHook_RenegadeArrowCount.removeArrowsFrom(playername, (int) (damage / 2));
                 fmsg = FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg;
             }
             displayText = EnumChatFormatting.GREEN + "-" + totalDamage;

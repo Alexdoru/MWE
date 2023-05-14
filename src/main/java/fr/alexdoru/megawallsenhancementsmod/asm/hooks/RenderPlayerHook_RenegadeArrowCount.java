@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.TimerUtil;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.util.EnumChatFormatting;
@@ -12,18 +13,21 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class RenderPlayerHook {
+public class RenderPlayerHook_RenegadeArrowCount {
 
     private static final TimerUtil timer = new TimerUtil(1000L);
     private static final HashMap<String, List<Long>> arrowHitMap = new HashMap<>();
 
     @SuppressWarnings("unused")
     public static String getArrowCount(AbstractClientPlayer entityIn) {
-        final List<Long> list = arrowHitMap.get(entityIn.getName());
-        if (list == null || list.isEmpty()) {
-            return "";
+        if (ConfigHandler.renegadeArrowCount) {
+            final List<Long> list = arrowHitMap.get(entityIn.getName());
+            if (list == null || list.isEmpty()) {
+                return "";
+            }
+            return EnumChatFormatting.RESET + "  " + list.size() + EnumChatFormatting.GREEN + " \u27B9";
         }
-        return EnumChatFormatting.RESET + "  " + list.size() + EnumChatFormatting.GREEN + " \u27B9";
+        return "";
     }
 
     @SubscribeEvent
