@@ -55,31 +55,23 @@ public class RenderManagerHook {
         return !ConfigHandler.drawHitboxForOtherEntity;
     }
 
-    private static int greenHitboxColor = 255;
-    private static int blueHitboxColor = 255;
+    private static int hitboxColor = 0xFFFFFF;
 
-    public static int getRedHitboxColor(int originalColor, Entity entity) {
+    public static int getRedHitboxColor(int r, Entity entity) {
         if (ConfigHandler.teamColoredHitbox && renderNametag && entity instanceof EntityPlayerAccessor) {
-            final int colorCode = ((EntityPlayerAccessor) entity).getPlayerTeamColorInt();
-            greenHitboxColor = colorCode >> 8 & 255;
-            blueHitboxColor = colorCode & 255;
-            return colorCode >> 16 & 255;
-        } else if (ConfigHandler.hitboxColor != 0xFFFFFF) {
-            greenHitboxColor = ConfigHandler.hitboxColor >> 8 & 255;
-            blueHitboxColor = ConfigHandler.hitboxColor & 255;
-            return ConfigHandler.hitboxColor >> 16 & 255;
+            hitboxColor = ((EntityPlayerAccessor) entity).getPlayerTeamColorInt();
+        } else {
+            hitboxColor = ConfigHandler.hitboxColor;
         }
-        greenHitboxColor = 255;
-        blueHitboxColor = 255;
-        return originalColor;
+        return hitboxColor >> 16 & 255;
     }
 
-    public static int getGreenHitboxColor(int originalColor) {
-        return greenHitboxColor == 255 ? originalColor : greenHitboxColor;
+    public static int getGreenHitboxColor(int g) {
+        return hitboxColor >> 8 & 255;
     }
 
-    public static int getBlueHitboxColor(int originalColor) {
-        return blueHitboxColor == 255 ? originalColor : blueHitboxColor;
+    public static int getBlueHitboxColor(int b) {
+        return hitboxColor & 255;
     }
 
     public static double getBlueVectLength(Entity entityIn) {
