@@ -57,7 +57,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new RenderGlobalTransformer_LimitDroppedItems());
         registerTransformer(new RenderGlobalTransformer_ListenDestroyedBlocks());
         registerTransformer(new RenderManagerTransformer());
-        registerTransformer(new RenderPlayerTransformer());
+        registerTransformer(new RenderPlayerTransformer_RenegadeArrowCount());
         registerTransformer(new ScoreboardTransformer());
         registerTransformer(new ScorePlayerTeamTransformer());
         registerTransformer(new SidebarmodReloaded_CustomSidebarTransformer());

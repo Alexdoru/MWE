@@ -224,6 +224,12 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Use team color when hurt")
     public static boolean useTeamColorWhenHurt;
 
+    @ConfigProperty(
+            category = MWENHANCEMENTS,
+            name = "Show pined arrows as renegade",
+            comment = "Show pined arrows as renegade above player heads")
+    public static boolean renegadeArrowCount = true;
+
     /**
      * HUD config
      */

@@ -2,7 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.fkcounter;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessor.NetworkPlayerInfoAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
-import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
@@ -183,7 +183,7 @@ public class KillCounter {
                 if (matcher.groupCount() == 2) {
                     final String killedPlayer = matcher.group(1);
                     final String killer = matcher.group(2);
-                    RenderPlayerHook.removeArrowsFrom(killedPlayer, -1);
+                    RenderPlayerHook_RenegadeArrowCount.removeArrowsFrom(killedPlayer, -1);
                     final String killedTeamColor = StringUtil.getLastColorCodeBefore(formattedText, killedPlayer);
                     final String killerTeamColor = StringUtil.getLastColorCodeBefore(formattedText.replaceFirst(killedPlayer, ""), killer);
                     if (!killedTeamColor.equals("") && !killerTeamColor.equals("")) {
@@ -203,7 +203,7 @@ public class KillCounter {
 
                 if (matcher.groupCount() == 1) {
                     final String killedPlayer = matcher.group(1);
-                    RenderPlayerHook.removeArrowsFrom(killedPlayer, -1);
+                    RenderPlayerHook_RenegadeArrowCount.removeArrowsFrom(killedPlayer, -1);
                     final String killedTeamColor = StringUtil.getLastColorCodeBefore(formattedText, killedPlayer);
                     if (!killedTeamColor.equals("")) {
                         if (removeKilledPlayer(killedPlayer, killedTeamColor)) {
