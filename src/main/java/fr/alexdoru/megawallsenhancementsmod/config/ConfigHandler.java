@@ -68,6 +68,12 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Draws the finals in the tablist")
     public static boolean fkcounterHUDTablist = true;
 
+    @ConfigProperty(
+            category = FKCOUNTER,
+            name = "Kill diff in Chat",
+            comment = "Kill diff in Chat")
+    public static boolean showKillDiffInChat = true;
+
     /**
      * MWEnhancements config
      */
