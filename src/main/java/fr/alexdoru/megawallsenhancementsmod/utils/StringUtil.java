@@ -7,8 +7,6 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -160,65 +158,6 @@ public class StringUtil {
             stringBuilder.append("\\u").append(Integer.toHexString(c | 0x10000).substring(1));
         }
         return stringBuilder.toString();
-    }
-
-    /**
-     * See {@link org.apache.commons.lang3.text.WordUtils#wrap(String, int, String, boolean)}
-     */
-    public static List<String> wrap(final String str, int wrapLength) {
-        if (str == null) {
-            return null;
-        }
-        if (wrapLength < 1) {
-            wrapLength = 1;
-        }
-        final int inputLineLength = str.length();
-        int offset = 0;
-        final StringBuilder wrappedLine = new StringBuilder(wrapLength + 8);
-        final List<String> wrappedLinesList = new ArrayList<>();
-
-        while (inputLineLength - offset > wrapLength) {
-            if (str.charAt(offset) == ' ') {
-                offset++;
-                continue;
-            }
-            // FIXME it counts the formatting codes in the length of the message when cutting
-            //  possible fix : make own imlementation of lastIndexOf method
-            int spaceToWrapAt = str.lastIndexOf(' ', wrapLength + offset);
-
-            if (spaceToWrapAt >= offset) {
-                // normal case
-                wrappedLine.append(str, offset, spaceToWrapAt);
-                final String line = wrappedLine.toString();
-                final String formattingCode = getLastFormattingCodeOf(line);
-                wrappedLinesList.add(line);
-                wrappedLine.setLength(0);
-                wrappedLine.append(formattingCode);
-                offset = spaceToWrapAt + 1;
-
-            } else {
-                // do not wrap really long word, just extend beyond limit
-                spaceToWrapAt = str.indexOf(' ', wrapLength + offset);
-                if (spaceToWrapAt >= 0) {
-                    wrappedLine.append(str, offset, spaceToWrapAt);
-                    final String line = wrappedLine.toString();
-                    final String formattingCode = getLastFormattingCodeOf(line);
-                    wrappedLinesList.add(line);
-                    wrappedLine.setLength(0);
-                    wrappedLine.append(formattingCode);
-                    offset = spaceToWrapAt + 1;
-                } else {
-                    wrappedLine.append(str.substring(offset));
-                    offset = inputLineLength;
-                }
-            }
-        }
-
-        // Whatever is left in line is short enough to just pass through
-        wrappedLine.append(str.substring(offset));
-        wrappedLinesList.add(wrappedLine.toString());
-
-        return wrappedLinesList;
     }
 
     //private static final Pattern FORMATTING_CODE_END_OF_STRING_PATTERN = Pattern.compile('\u00a7' + "[0-9A-FK-OR]$");
