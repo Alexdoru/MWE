@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.elements;
 
-import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
+import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +66,7 @@ public class FancyGuiButton extends SimpleGuiButton {
             return null;
         }
         final int firstWrappedLine = 1;
-        final int wrapLength = 40;
+        final int wrapLength = 160;
         final List<String> list = new ArrayList<>();
         for (int i = 0; i < tooltip.size(); i++) {
             final String line = tooltip.get(i);
@@ -74,7 +74,7 @@ public class FancyGuiButton extends SimpleGuiButton {
                 continue;
             }
             if (i >= firstWrappedLine) {
-                list.addAll(StringUtil.wrap(line, wrapLength));
+                list.addAll(Minecraft.getMinecraft().fontRendererObj.listFormattedStringToWidth(line, wrapLength));
             } else {
                 list.add(line);
             }
