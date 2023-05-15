@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.*;
+import fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods.OrangeSimpleMod_SprintRenderer;
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods.SidebarmodReloaded_CustomSidebarTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods.SidebarmodRevamp_GuiSidebarTransformer;
 import net.minecraft.launchwrapper.IClassTransformer;
@@ -60,6 +61,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new RenderPlayerTransformer_RenegadeArrowCount());
         registerTransformer(new ScoreboardTransformer());
         registerTransformer(new ScorePlayerTeamTransformer());
+        registerTransformer(new OrangeSimpleMod_SprintRenderer());
         registerTransformer(new SidebarmodReloaded_CustomSidebarTransformer());
         registerTransformer(new SidebarmodRevamp_GuiSidebarTransformer());
         registerTransformer(new WorldTransformer());
