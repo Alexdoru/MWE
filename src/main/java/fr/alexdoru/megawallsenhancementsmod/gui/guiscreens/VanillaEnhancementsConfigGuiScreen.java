@@ -7,6 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
+import net.minecraftforge.fml.common.Loader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
     @Override
     public void initGui() {
         final boolean isPatcherNotLoaded = !ASMLoadingPlugin.isPatcherLoaded();
+        final boolean isOrangeSimpleModLoaded = Loader.isModLoaded("orangesimplemod");
         final int buttonWidth = 210;
         this.maxWidth = (10 + buttonWidth) * 2;
         this.maxHeight = (buttonsHeight + 4) * 12 + buttonsHeight;
@@ -72,6 +74,15 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                 EnumChatFormatting.GRAY + "Dynamically modifies the render distance for dropped items entities to preserve performance. It starts reducing the render distance when exceeding the threshold set below.",
                 EnumChatFormatting.GRAY + "There is a keybind (ESC -> options -> controls -> MegaWallsEnhancements) to toggle it on the fly"));
         this.buttonList.add(new GuiSlider(23, xPosLeft, getButtonYPos(7), buttonWidth, buttonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
+        if(isOrangeSimpleModLoaded) {
+            this.buttonList.add(new OptionGuiButton(
+                    xPosLeft, getButtonYPos(8),
+                    buttonWidth, buttonsHeight,
+                    "Hide Toggle Sprint HUD",
+                    (b) -> ConfigHandler.hideToggleSprintText = b,
+                    () -> ConfigHandler.hideToggleSprintText,
+                    EnumChatFormatting.GRAY + "Hides the Toggle Sprint HUD from Orange's Marshall Simple Mod"));
+        }
         this.buttonList.add(new FancyGuiButton(
                 xPosRight, getButtonYPos(1),
                 buttonWidth - 25, buttonsHeight,

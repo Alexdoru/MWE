@@ -230,6 +230,13 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Show pined arrows as renegade above player heads")
     public static boolean renegadeArrowCount = true;
 
+
+    @ConfigProperty(
+            category = MWENHANCEMENTS,
+            name = "Hide Orange's Toggle Sprint text",
+            comment = "Hide Orange's Toggle Sprint text")
+    public static boolean hideToggleSprintText;
+
     /**
      * HUD config
      */
