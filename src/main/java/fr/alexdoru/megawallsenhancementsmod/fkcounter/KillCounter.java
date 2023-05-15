@@ -180,38 +180,46 @@ public class KillCounter {
 
             if (matcher.matches()) {
 
+                // "player1 killed by player 2" format
                 if (matcher.groupCount() == 2) {
                     final String killedPlayer = matcher.group(1);
                     final String killer = matcher.group(2);
                     RenderPlayerHook_RenegadeArrowCount.removeArrowsFrom(killedPlayer, -1);
                     final String killedTeamColor = StringUtil.getLastColorCodeBefore(formattedText, killedPlayer);
                     final String killerTeamColor = StringUtil.getLastColorCodeBefore(formattedText.replaceFirst(killedPlayer, ""), killer);
+                    int killsOfKilledPlayer = 0;
+                    int killGainForKiller = 0;
                     if (!killedTeamColor.equals("") && !killerTeamColor.equals("")) {
-                        if (removeKilledPlayer(killedPlayer, killedTeamColor)) {
+                        killsOfKilledPlayer = removeKilledPlayer(killedPlayer, killedTeamColor);
+                        if (killsOfKilledPlayer != -1) {
                             addKill(killer, killerTeamColor);
+                            killGainForKiller += 1;
                             playersPresentInGame.add(killedPlayer);
                             playersPresentInGame.add(killer);
                         }
                         FKCounterHUD.instance.updateDisplayText();
                     }
-                    if (ConfigHandler.strengthParticules) {
-                        spawnParticles(killer);
-                    }
-                    ChatUtil.addChatMessage(formattedText.replace(killer, SquadHandler.getSquadname(killer)).replace(killedPlayer, SquadHandler.getSquadname(killedPlayer)));
+                    spawnParticles(killer);
+                    final String s = formattedText.replace(killer, SquadHandler.getSquadname(killer)).replace(killedPlayer, SquadHandler.getSquadname(killedPlayer));
+                    ChatUtil.addChatMessage(s + getKillDiffString(killsOfKilledPlayer, killedTeamColor, killGainForKiller, killerTeamColor));
                     return true;
                 }
 
+                // "player1 died on his own" format
                 if (matcher.groupCount() == 1) {
                     final String killedPlayer = matcher.group(1);
                     RenderPlayerHook_RenegadeArrowCount.removeArrowsFrom(killedPlayer, -1);
                     final String killedTeamColor = StringUtil.getLastColorCodeBefore(formattedText, killedPlayer);
+                    int killsOfKilledPlayer = 0;
                     if (!killedTeamColor.equals("")) {
-                        if (removeKilledPlayer(killedPlayer, killedTeamColor)) {
+                        killsOfKilledPlayer = removeKilledPlayer(killedPlayer, killedTeamColor);
+                        if (killsOfKilledPlayer != -1) {
                             playersPresentInGame.add(killedPlayer);
                         }
                         FKCounterHUD.instance.updateDisplayText();
                     }
-                    ChatUtil.addChatMessage(formattedText.replace(killedPlayer, SquadHandler.getSquadname(killedPlayer)));
+                    final String s = formattedText.replace(killedPlayer, SquadHandler.getSquadname(killedPlayer));
+                    ChatUtil.addChatMessage(s + getKillDiffString(killsOfKilledPlayer, killedTeamColor));
                     return true;
                 }
 
@@ -221,6 +229,31 @@ public class KillCounter {
 
         return false;
 
+    }
+
+    private static String getKillDiffString(int killsOfKilledPlayer, String killedTeamColor) {
+        return getKillDiffString(killsOfKilledPlayer, killedTeamColor, 0, "");
+    }
+
+    private static String getKillDiffString(int killsOfKilledPlayer, String killedTeamColor, int killGainForKiller, String killerTeamColor) {
+        if (!ConfigHandler.showKillDiffInChat) {
+            return "";
+        }
+        if (killsOfKilledPlayer < 1 && killGainForKiller < 1) {
+            return "";
+        }
+        final StringBuilder str = new StringBuilder().append(EnumChatFormatting.WHITE).append(" (");
+        if (killsOfKilledPlayer > 0) {
+            str.append('\u00a7').append(killedTeamColor).append("-").append(killsOfKilledPlayer);
+            if (killGainForKiller > 0) {
+                str.append(EnumChatFormatting.WHITE).append(", ");
+            }
+        }
+        if (killGainForKiller > 0) {
+            str.append('\u00a7').append(killerTeamColor).append("+").append(killGainForKiller);
+        }
+        str.append(EnumChatFormatting.WHITE).append(")");
+        return str.toString();
     }
 
     public static String getGameId() {
@@ -291,23 +324,24 @@ public class KillCounter {
     }
 
     /**
-     * Removes a player from the fkcounter and returns true when successfull
+     * Removes a player from the fkcounter and returns the amount of finals the
+     * player had when successfull, returns -1 otherwise.
      * i.e. if the players was in final kill and if the player wasn't already dead,
      * it sometime happens when a player gets double tapped
      */
-    private static boolean removeKilledPlayer(String player, String color) {
+    private static int removeKilledPlayer(String player, String color) {
         final int team = getTeamFromColor(color);
         if (isNotValidTeam(team)) {
-            return false;
+            return -1;
         }
         if (isWitherDead(color)) {
-            teamKillsArray[team].remove(player);
+            final Integer kills = teamKillsArray[team].remove(player);
             allPlayerKills.remove(player);
             deadPlayers.add(player);
             updateNetworkPlayerinfo(player, 0);
-            return true;
+            return kills == null ? 0 : kills;
         }
-        return false;
+        return -1;
     }
 
     private static void addKill(String playerGettingTheKill, String color) {
@@ -383,6 +417,9 @@ public class KillCounter {
     }
 
     private static void spawnParticles(String killer) {
+        if (!ConfigHandler.strengthParticules) {
+            return;
+        }
         final WorldClient world = Minecraft.getMinecraft().theWorld;
         if (world == null) {
             return;

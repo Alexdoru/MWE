@@ -100,7 +100,13 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                 () -> ConfigHandler.fkcounterHUDTablist,
                 EnumChatFormatting.GRAY + "Renders in the tablist next to their names the amount of final kills that each player has",
                 EnumChatFormatting.RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements"));
-        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(8), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
+        this.buttonList.add(new OptionGuiButton(
+                xPos, getButtonYPos(7),
+                "Show kill diff in chat",
+                (b) -> ConfigHandler.showKillDiffInChat = b,
+                () -> ConfigHandler.showKillDiffInChat,
+                EnumChatFormatting.GRAY + "Adds at the end of kill messages the final kill difference for every kill"));
+        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(9), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
 
     @Override
