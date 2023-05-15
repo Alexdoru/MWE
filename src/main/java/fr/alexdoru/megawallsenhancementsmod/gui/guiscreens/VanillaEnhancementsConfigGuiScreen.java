@@ -88,6 +88,7 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                 buttonWidth - 25, buttonsHeight,
                 () -> "Select custom hit color",
                 () -> mc.displayGuiScreen(new ColorSelectionGuiScreen(this, ConfigHandler.hitColor, 0x4CFF0000, color -> ConfigHandler.hitColor = color)),
+                EnumChatFormatting.GREEN + "Custom hit color",
                 EnumChatFormatting.GRAY + "Change the color entities take when they get hit"));
         this.elementList.add(new ColoredSquareElement(xPosRight + buttonWidth - 25 + 4, getButtonYPos(1), 20, () -> ConfigHandler.hitColor));
         this.buttonList.add(new FancyGuiButton(
@@ -116,12 +117,12 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
         final List<String> shortCoinsList = new ArrayList<>();
         shortCoinsList.add(EnumChatFormatting.GREEN + "Short coin messages");
         shortCoinsList.add("");
-        shortCoinsList.add(EnumChatFormatting.GRAY + "Makes the coin messages shorter by removing the network booster info.");
-        shortCoinsList.add(EnumChatFormatting.GRAY + "And also compacts the guild bonus message and coin message into one.");
+        shortCoinsList.add(EnumChatFormatting.GRAY + "Makes the coin messages shorter by removing the network booster info. It also compacts the guild bonus message and coin message into one.");
+        shortCoinsList.add("");
         shortCoinsList.add(EnumChatFormatting.GRAY + "It makes the assists messages in mega walls fit on one line instead of two.");
         shortCoinsList.add("");
         shortCoinsList.add(EnumChatFormatting.GOLD + "+100 coins! (hypixel's Network booster)" + EnumChatFormatting.AQUA + " FINAL KILL");
-        shortCoinsList.add("Will become : ");
+        shortCoinsList.add(EnumChatFormatting.WHITE + "Will become : ");
         shortCoinsList.add(EnumChatFormatting.GOLD + "+100 coins!" + EnumChatFormatting.AQUA + " FINAL KILL");
         this.buttonList.add(new OptionGuiButton(
                 xPosRight, getButtonYPos(4),

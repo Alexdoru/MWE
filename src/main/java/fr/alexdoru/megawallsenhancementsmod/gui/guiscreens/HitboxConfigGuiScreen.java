@@ -1,10 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.gui.elements.ColoredSquareElement;
-import fr.alexdoru.megawallsenhancementsmod.gui.elements.OptionGuiButton;
-import fr.alexdoru.megawallsenhancementsmod.gui.elements.SimpleGuiButton;
-import fr.alexdoru.megawallsenhancementsmod.gui.elements.TextElement;
+import fr.alexdoru.megawallsenhancementsmod.gui.elements.*;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
@@ -88,11 +85,13 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
                 (b) -> ConfigHandler.teamColoredHitbox = b,
                 () -> ConfigHandler.teamColoredHitbox,
                 EnumChatFormatting.GRAY + "For players, the hitbox will take the color of the player's team"));
-        this.buttonList.add(new SimpleGuiButton(
+        this.buttonList.add(new FancyGuiButton(
                 xRightCol, getButtonYPos(2),
-                buttonsWidth - 25, 20,
-                "Select custom hitbox color",
-                () -> mc.displayGuiScreen(new ColorSelectionGuiScreen(this, ConfigHandler.hitboxColor, 0xFFFFFF, color -> ConfigHandler.hitboxColor = color))));
+                buttonsWidth - 25, buttonsHeight,
+                () -> "Select custom hitbox color",
+                () -> mc.displayGuiScreen(new ColorSelectionGuiScreen(this, ConfigHandler.hitboxColor, 0xFFFFFF, color -> ConfigHandler.hitboxColor = color)),
+                EnumChatFormatting.GREEN + "Custom hitbox color",
+                EnumChatFormatting.GRAY + "Change the color of the entity hitboxes"));
         this.buttonList.add(new OptionGuiButton(
                 xRightCol, getButtonYPos(3),
                 buttonsWidth, 20,

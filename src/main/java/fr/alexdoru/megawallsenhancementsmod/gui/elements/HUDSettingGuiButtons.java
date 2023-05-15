@@ -13,28 +13,31 @@ import java.util.function.Supplier;
 
 public class HUDSettingGuiButtons {
 
+    private static final int SIDE_BUTTON_WIDTH = 78;
+    private static final int CENTER_BUTTON_WIDTH = 200;
+
     private final SimpleGuiButton resetButton;
     private final FancyGuiButton actionButton;
     private final SimpleGuiButton moveButton;
 
     public HUDSettingGuiButtons(int xCenter, int y, Supplier<String> buttonTextSupplier, Runnable action, GuiPosition position, IRenderer renderer, GuiScreen parent, String... tooltipLines) {
         this.resetButton = new SimpleGuiButton(
-                xCenter - 200 / 2 - 4 - 90,
+                xCenter - CENTER_BUTTON_WIDTH / 2 - 4 - SIDE_BUTTON_WIDTH,
                 y,
-                90,
+                SIDE_BUTTON_WIDTH,
                 20,
                 "Reset position",
                 position::resetToDefault);
         this.actionButton = new FancyGuiButton(
-                xCenter - 200 / 2,
+                xCenter - CENTER_BUTTON_WIDTH / 2,
                 y,
                 buttonTextSupplier,
                 action,
                 tooltipLines);
         this.moveButton = new SimpleGuiButton(
-                xCenter + 200 / 2 + 4,
+                xCenter + CENTER_BUTTON_WIDTH / 2 + 4,
                 y,
-                90,
+                SIDE_BUTTON_WIDTH,
                 20,
                 "Move HUD",
                 () -> Minecraft.getMinecraft().displayGuiScreen(new PositionEditGuiScreen(renderer, parent)));
@@ -42,23 +45,23 @@ public class HUDSettingGuiButtons {
 
     public HUDSettingGuiButtons(int xCenter, int y, String optionName, Consumer<Boolean> setter, Supplier<Boolean> getter, GuiPosition position, IRenderer renderer, GuiScreen parent, String... tooltipLines) {
         this.resetButton = new SimpleGuiButton(
-                xCenter - 200 / 2 - 4 - 90,
+                xCenter - CENTER_BUTTON_WIDTH / 2 - 4 - SIDE_BUTTON_WIDTH,
                 y,
-                90,
+                SIDE_BUTTON_WIDTH,
                 20,
                 "Reset position",
                 position::resetToDefault);
         this.actionButton = new OptionGuiButton(
-                xCenter - 200 / 2,
+                xCenter - CENTER_BUTTON_WIDTH / 2,
                 y,
                 optionName,
                 setter,
                 getter,
                 tooltipLines);
         this.moveButton = new SimpleGuiButton(
-                xCenter + 200 / 2 + 4,
+                xCenter + CENTER_BUTTON_WIDTH / 2 + 4,
                 y,
-                90,
+                SIDE_BUTTON_WIDTH,
                 20,
                 "Move HUD",
                 () -> Minecraft.getMinecraft().displayGuiScreen(new PositionEditGuiScreen(renderer, parent)));
