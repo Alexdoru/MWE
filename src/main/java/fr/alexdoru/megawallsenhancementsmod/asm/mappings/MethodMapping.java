@@ -77,6 +77,8 @@ public enum MethodMapping {
     SENDCHATMESSAGE(INVOKEVIRTUAL, GUISCREEN, "b", "sendChatMessage", "(Ljava/lang/String;Z)V"),
     SETDEBUGBOUNDINGBOX(INVOKEVIRTUAL, RENDERMANAGER, "b", "setDebugBoundingBox", "(Z)V"),
     STRINGBUILDER$TOSTRING(INVOKEVIRTUAL, STRINGBUILDER, "toString", "()Ljava/lang/String;"),
+    TESSELLATOR$DRAW(INVOKEVIRTUAL, TESSELLATOR, "b", "draw", "()V"),
+    TESSELLATOR$GETINSTANCE(INVOKESTATIC, TESSELLATOR, "a", "getInstance", "()L" + TESSELLATOR + ";"),
     UPDATEFOGCOLOR("i", "updateFogColor", "(F)V"),
     UPDATELIGHTMAP("g", "updateLightmap", "(F)V"),
     WORLD$UPDATEENTITYWITHOPTIONALFORCE("a", "updateEntityWithOptionalForce", "(L" + ENTITY + ";Z)V");

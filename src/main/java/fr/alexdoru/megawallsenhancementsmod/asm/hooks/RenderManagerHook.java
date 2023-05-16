@@ -68,17 +68,19 @@ public class RenderManagerHook {
         return hitboxColor & 255;
     }
 
-    public static double getBlueVectLength(Entity entityIn) {
-        if (!ConfigHandler.drawBlueVect) {
-            return 0;
-        }
-        if (ConfigHandler.drawBlueVectForPlayersOnly) {
-            if (entityIn instanceof AbstractClientPlayer) {
-                return ConfigHandler.makeBlueVect3Meters ? 3.0d : 2.0d;
+    public static boolean shouldRenderBlueVect(Entity entityIn) {
+        if (ConfigHandler.drawBlueVect) {
+            if (ConfigHandler.drawBlueVectForPlayersOnly) {
+                return entityIn instanceof AbstractClientPlayer;
             } else {
-                return 0;
+                return true;
             }
+        } else {
+            return false;
         }
+    }
+
+    public static double getBlueVectLength() {
         return ConfigHandler.makeBlueVect3Meters ? 3.0d : 2.0d;
     }
 
