@@ -105,9 +105,9 @@ public class SquadHealthHUD implements IRenderer {
                 if (flag) {
                     final EntityPlayer entityplayer = this.mc.theWorld.getPlayerEntityByUUID(gameprofile.getId());
                     this.mc.getTextureManager().bindTexture(networkplayerinfo.getLocationSkin());
-                    Gui.drawScaledCustomSizeModalRect(xDrawingPos, yDrawingPos, 8.0F, (float) 8, 8, 8, 8, 8, 64.0F, 64.0F);
+                    Gui.drawScaledCustomSizeModalRect(xDrawingPos, yDrawingPos, 8, 8, 8, 8, 8, 8, 64.0F, 64.0F);
                     if (entityplayer == null || entityplayer.isWearing(EnumPlayerModelParts.HAT)) {
-                        Gui.drawScaledCustomSizeModalRect(xDrawingPos, yDrawingPos, 40.0F, 8, 8, 8, 8, 8, 64.0F, 64.0F);
+                        Gui.drawScaledCustomSizeModalRect(xDrawingPos, yDrawingPos, 40, 8, 8, 8, 8, 8, 64.0F, 64.0F);
                     }
                     xDrawingPos += 9;
                 }
