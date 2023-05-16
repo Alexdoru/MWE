@@ -17,7 +17,7 @@ public class RendererLivingEntity_HitColor implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(4);
         int ordinal = 0;
         for (final MethodNode methodNode : classNode.methods) {
@@ -55,7 +55,6 @@ public class RendererLivingEntity_HitColor implements IMyClassTransformer {
                 }
             }
         }
-        return classNode;
     }
 
 }

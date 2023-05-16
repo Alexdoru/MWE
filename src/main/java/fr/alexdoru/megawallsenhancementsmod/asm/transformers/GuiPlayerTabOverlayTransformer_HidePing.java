@@ -15,7 +15,7 @@ public class GuiPlayerTabOverlayTransformer_HidePing implements IMyClassTransfor
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(2);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.RENDERPLAYERLIST)) {
@@ -48,7 +48,6 @@ public class GuiPlayerTabOverlayTransformer_HidePing implements IMyClassTransfor
                 }
             }
         }
-        return classNode;
     }
 
 }

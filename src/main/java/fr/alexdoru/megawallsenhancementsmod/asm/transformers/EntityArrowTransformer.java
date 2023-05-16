@@ -16,7 +16,7 @@ public class EntityArrowTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(0);
         addInterface(classNode, "EntityArrowAccessor");
         classNode.visitField(ACC_PUBLIC, "pinnedToPlayer", "Z", null, 0).visitEnd();
@@ -34,7 +34,6 @@ public class EntityArrowTransformer implements IMyClassTransformer {
                 "Z",
                 null
         );
-        return classNode;
     }
 
 }

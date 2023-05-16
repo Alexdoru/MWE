@@ -14,7 +14,7 @@ public class GuiNewChatTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(0);
         addInterface(classNode, "GuiNewChatAccessor");
         addGetterMethod(
@@ -29,7 +29,6 @@ public class GuiNewChatTransformer implements IMyClassTransformer {
                 FieldMapping.GUINEWCHAT$DRAWNCHATLINES,
                 "()Ljava/util/List<L" + ClassMapping.CHATLINE + ";>;"
         );
-        return classNode;
     }
 
 }

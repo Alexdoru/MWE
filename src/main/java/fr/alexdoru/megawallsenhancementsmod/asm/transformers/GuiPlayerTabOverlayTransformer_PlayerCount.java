@@ -18,7 +18,7 @@ public class GuiPlayerTabOverlayTransformer_PlayerCount implements IMyClassTrans
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.RENDERPLAYERLIST)) {
@@ -31,7 +31,6 @@ public class GuiPlayerTabOverlayTransformer_PlayerCount implements IMyClassTrans
                 }
             }
         }
-        return classNode;
     }
 
 }

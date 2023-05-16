@@ -20,7 +20,7 @@ public interface IMyClassTransformer {
     /**
      * Returns the transformed ClassNode
      */
-    ClassNode transform(ClassNode classNode, InjectionStatus status);
+    void transform(ClassNode classNode, InjectionStatus status);
 
     default void addInterface(ClassNode classNode, String interfaceName) {
         classNode.interfaces.add("fr/alexdoru/megawallsenhancementsmod/asm/accessors/" + interfaceName);

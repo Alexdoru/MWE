@@ -17,7 +17,7 @@ public class NetHandlerPlayClientTransformer_TeamsListener implements IMyClassTr
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.NETHANDLERPLAYCLIENT$HANDLETEAMS)) {
@@ -33,7 +33,6 @@ public class NetHandlerPlayClientTransformer_TeamsListener implements IMyClassTr
                 }
             }
         }
-        return classNode;
     }
 
 }

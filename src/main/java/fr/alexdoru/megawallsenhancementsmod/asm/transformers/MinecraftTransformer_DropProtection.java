@@ -17,7 +17,7 @@ public class MinecraftTransformer_DropProtection implements IMyClassTransformer 
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(3);
 
         for (final MethodNode methodNode : classNode.methods) {
@@ -53,8 +53,6 @@ public class MinecraftTransformer_DropProtection implements IMyClassTransformer 
                 }
             }
         }
-
-        return classNode;
 
     }
 

@@ -16,7 +16,7 @@ public class RendererLivingEntityTransformer_AprilFun implements IMyClassTransfo
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.RENDERERLIVINGENTITY$ROTATECORPSE)) {
@@ -35,7 +35,6 @@ public class RendererLivingEntityTransformer_AprilFun implements IMyClassTransfo
                 }
             }
         }
-        return classNode;
     }
 
 }

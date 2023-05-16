@@ -16,7 +16,7 @@ public class LayerArrowTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.DORENDERLAYER)) {
@@ -36,7 +36,6 @@ public class LayerArrowTransformer implements IMyClassTransformer {
                 }
             }
         }
-        return classNode;
     }
 
 }

@@ -16,7 +16,7 @@ public class GuiIngameTransformer_Sidebar implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(2);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.RENDERSCOREBOARD)) {
@@ -51,7 +51,6 @@ public class GuiIngameTransformer_Sidebar implements IMyClassTransformer {
                 }
             }
         }
-        return classNode;
     }
 
 }

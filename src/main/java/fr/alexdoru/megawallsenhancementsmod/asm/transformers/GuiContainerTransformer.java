@@ -17,7 +17,7 @@ public class GuiContainerTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.CHECKHOTBARKEYS)) {
@@ -35,7 +35,6 @@ public class GuiContainerTransformer implements IMyClassTransformer {
                 }
             }
         }
-        return classNode;
     }
 
     private InsnList getInsnList() {

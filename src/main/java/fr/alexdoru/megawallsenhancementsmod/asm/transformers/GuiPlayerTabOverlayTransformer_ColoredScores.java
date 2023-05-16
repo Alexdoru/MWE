@@ -17,7 +17,7 @@ public class GuiPlayerTabOverlayTransformer_ColoredScores implements IMyClassTra
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.DRAWSCOREBOARDVALUES)) {
@@ -39,7 +39,6 @@ public class GuiPlayerTabOverlayTransformer_ColoredScores implements IMyClassTra
                 }
             }
         }
-        return classNode;
     }
 
 }

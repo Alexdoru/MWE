@@ -17,7 +17,7 @@ public class EntityPlayerTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         addInterface(classNode, "EntityPlayerAccessor");
         final String PRESTIGE_4_TAG_FIELD_NAME = "mwenhancements$Prestige4Tag";
         final String PRESTIGE_5_TAG_FIELD_NAME = "mwenhancements$Prestige5Tag";
@@ -66,7 +66,6 @@ public class EntityPlayerTransformer implements IMyClassTransformer {
                 }
             }
         }
-        return classNode;
     }
 
 }

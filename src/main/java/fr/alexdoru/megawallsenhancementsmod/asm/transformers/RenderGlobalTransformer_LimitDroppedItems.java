@@ -17,7 +17,7 @@ public class RenderGlobalTransformer_LimitDroppedItems implements IMyClassTransf
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(2);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.RENDERENTITIES)) {
@@ -55,7 +55,6 @@ public class RenderGlobalTransformer_LimitDroppedItems implements IMyClassTransf
                 }
             }
         }
-        return classNode;
     }
 
 }

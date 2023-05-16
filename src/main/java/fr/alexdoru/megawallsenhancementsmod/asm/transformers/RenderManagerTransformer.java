@@ -17,7 +17,7 @@ public class RenderManagerTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(11);
         for (final MethodNode methodNode : classNode.methods) {
 
@@ -146,7 +146,6 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                 }
             }
         }
-        return classNode;
     }
 
     private InsnList getShouldRenderInsnList() {

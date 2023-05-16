@@ -17,7 +17,7 @@ public class MinecraftTransformer_DebugMessages implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(4);
 
         for (final MethodNode methodNode : classNode.methods) {
@@ -87,8 +87,6 @@ public class MinecraftTransformer_DebugMessages implements IMyClassTransformer {
                 }
             }
         }
-
-        return classNode;
 
     }
 
