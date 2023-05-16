@@ -17,7 +17,7 @@ public class GuiScreenBookTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(3);
         for (final MethodNode methodNode : classNode.methods) {
 
@@ -66,7 +66,6 @@ public class GuiScreenBookTransformer implements IMyClassTransformer {
             }
 
         }
-        return classNode;
     }
 
 }

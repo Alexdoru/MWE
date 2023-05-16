@@ -93,7 +93,8 @@ public class ClassTransformer implements IClassTransformer {
                 classReader.accept(classNode, 0);
                 final ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
                 final InjectionStatus status = new InjectionStatus();
-                transformer.transform(classNode, status).accept(classWriter);
+                transformer.transform(classNode, status);
+                classNode.accept(classWriter);
                 if (!status.isTransformationSuccessfull()) {
                     ASMLoadingPlugin.logger.error("Class transformation incomplete, transformer " + stripClassName(transformer.getClass().getName()) + " missing " + status.getInjectionCount() + " injections in " + transformedName);
                 } else {

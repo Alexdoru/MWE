@@ -15,7 +15,7 @@ public class OrangeSimpleMod_SprintRenderer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals("render")) {
@@ -29,7 +29,6 @@ public class OrangeSimpleMod_SprintRenderer implements IMyClassTransformer {
                 status.addInjection();
             }
         }
-        return classNode;
     }
 
 }

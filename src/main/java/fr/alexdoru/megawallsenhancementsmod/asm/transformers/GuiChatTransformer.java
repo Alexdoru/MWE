@@ -16,7 +16,7 @@ public class GuiChatTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(2);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.GUICHAT$SENDAUTOCOMPLETEREQUEST)) {
@@ -44,7 +44,6 @@ public class GuiChatTransformer implements IMyClassTransformer {
                 }
             }
         }
-        return classNode;
     }
 
 }

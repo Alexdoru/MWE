@@ -14,7 +14,7 @@ public class SidebarmodRevamp_GuiSidebarTransformer implements IMyClassTransform
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(2);
         for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals("drawSidebar")) {
@@ -60,7 +60,6 @@ public class SidebarmodRevamp_GuiSidebarTransformer implements IMyClassTransform
                 }
             }
         }
-        return classNode;
     }
 
 }

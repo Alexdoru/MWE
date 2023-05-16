@@ -18,7 +18,7 @@ public class NetworkPlayerInfoTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         addInterface(classNode, "NetworkPlayerInfoAccessor");
         final String FIELD_NAME_FINAL_KILLS = "mwenhancements$playerFinalkills";
@@ -104,7 +104,6 @@ public class NetworkPlayerInfoTransformer implements IMyClassTransformer {
             }
 
         }
-        return classNode;
     }
 
 }

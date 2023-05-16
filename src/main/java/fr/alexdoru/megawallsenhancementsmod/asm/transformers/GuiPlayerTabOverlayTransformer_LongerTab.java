@@ -20,7 +20,7 @@ public class GuiPlayerTabOverlayTransformer_LongerTab implements IMyClassTransfo
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         final boolean isPatcherLoaded = ASMLoadingPlugin.isPatcherLoaded();
         status.setInjectionPoints(isPatcherLoaded ? 1 : 2);
         for (final MethodNode methodNode : classNode.methods) {
@@ -39,7 +39,6 @@ public class GuiPlayerTabOverlayTransformer_LongerTab implements IMyClassTransfo
                 }
             }
         }
-        return classNode;
     }
 
 }

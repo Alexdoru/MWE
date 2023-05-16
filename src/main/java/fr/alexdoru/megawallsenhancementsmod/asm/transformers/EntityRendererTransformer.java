@@ -16,7 +16,7 @@ public class EntityRendererTransformer implements IMyClassTransformer {
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(2);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.UPDATELIGHTMAP) || checkMethodNode(methodNode, MethodMapping.UPDATEFOGCOLOR)) {
@@ -38,7 +38,6 @@ public class EntityRendererTransformer implements IMyClassTransformer {
                 }
             }
         }
-        return classNode;
     }
 
 }

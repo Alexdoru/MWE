@@ -16,7 +16,7 @@ public class RenderPlayerTransformer_RenegadeArrowCount implements IMyClassTrans
     }
 
     @Override
-    public ClassNode transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.RENDEROFFSETLIVINGLABEL)) {
@@ -38,7 +38,6 @@ public class RenderPlayerTransformer_RenegadeArrowCount implements IMyClassTrans
                 }
             }
         }
-        return classNode;
     }
 
 }
