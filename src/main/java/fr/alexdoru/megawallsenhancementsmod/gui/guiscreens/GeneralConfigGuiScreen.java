@@ -26,7 +26,8 @@ public class GeneralConfigGuiScreen extends MyGuiScreen {
                 (b) -> ConfigHandler.automaticUpdate = b,
                 () -> ConfigHandler.automaticUpdate,
                 EnumChatFormatting.GRAY + "When your game starts, it will check and notify you if an update is available. If this setting is turned " +
-                        EnumChatFormatting.GREEN + "ON" + EnumChatFormatting.GRAY + " it will also download the updated mod and install it in your mods folder when closing your game."));
+                        EnumChatFormatting.GREEN + "ON" + EnumChatFormatting.GRAY + " it will also download the updated mod and install it in your mods folder when closing your game.",
+                EnumChatFormatting.YELLOW + "The automatic installation doesn't work with " + EnumChatFormatting.RED + "Feather client" + EnumChatFormatting.YELLOW + ", you have to manually download the updated mod and place it in your mods folder."));
         this.buttonList.add(new SimpleGuiButton(xPos, getButtonYPos(4), buttonsWidth, buttonsHeight, EnumChatFormatting.DARK_PURPLE + "HUDs", () -> mc.displayGuiScreen(new HUDsConfigGuiScreen(this))));
         this.buttonList.add(new SimpleGuiButton(xPos, getButtonYPos(5), buttonsWidth, buttonsHeight, EnumChatFormatting.RED + "NoCheaters", () -> mc.displayGuiScreen(new NoCheatersConfigGuiScreen(this))));
         this.buttonList.add(new SimpleGuiButton(xPos, getButtonYPos(6), buttonsWidth, buttonsHeight, EnumChatFormatting.DARK_RED + "Hacker Detector", () -> mc.displayGuiScreen(new HackerDetectorConfigGuiScreen(this))));
