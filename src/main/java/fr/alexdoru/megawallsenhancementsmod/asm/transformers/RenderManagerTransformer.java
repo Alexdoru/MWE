@@ -42,11 +42,11 @@ public class RenderManagerTransformer implements IMyClassTransformer {
             if (checkMethodNode(methodNode, MethodMapping.RENDERDEBUGBOUNDINGBOX)) {
                 /*
                  * Injects at head :
-                 * if (RenderManagerHook.cancelHitboxRender(entityIn)) {
+                 * if (!RenderManagerHook.shouldRenderHitbox(entityIn)) {
                  *     return;
                  * }
                  */
-                methodNode.instructions.insert(getCancelRenderInsnList());
+                methodNode.instructions.insert(getShouldRenderInsnList());
                 status.addInjection();
 
                 int count255 = -1;
@@ -149,16 +149,16 @@ public class RenderManagerTransformer implements IMyClassTransformer {
         return classNode;
     }
 
-    private InsnList getCancelRenderInsnList() {
+    private InsnList getShouldRenderInsnList() {
         final InsnList list = new InsnList();
-        final LabelNode notCancelled = new LabelNode();
-        list.add(new VarInsnNode(ALOAD, 1)); // load entity
+        final LabelNode label = new LabelNode();
+        list.add(new VarInsnNode(ALOAD, 1));
         list.add(new VarInsnNode(ALOAD, 0));
         list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.RENDERMANAGER$LIVINGENTITY));
-        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderManagerHook"), "cancelHitboxRender", "(L" + ClassMapping.ENTITY + ";L" + ClassMapping.ENTITY + ";)Z", false)); // load the boolean
-        list.add(new JumpInsnNode(IFEQ, notCancelled)); // if (true) { return;} else {jump to notCancelled label}
-        list.add(new InsnNode(RETURN)); // return;
-        list.add(notCancelled);
+        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderManagerHook"), "shouldRenderHitbox", "(L" + ClassMapping.ENTITY + ";L" + ClassMapping.ENTITY + ";)Z", false));
+        list.add(new JumpInsnNode(IFNE, label));
+        list.add(new InsnNode(RETURN));
+        list.add(label);
         return list;
     }
 
