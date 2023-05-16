@@ -18,23 +18,23 @@ public class RenderManagerTransformer implements IMyClassTransformer {
 
     @Override
     public ClassNode transform(ClassNode classNode, InjectionStatus status) {
-
-        status.setInjectionPoints(10);
-
+        status.setInjectionPoints(11);
         for (final MethodNode methodNode : classNode.methods) {
 
             if (checkMethodNode(methodNode, MethodMapping.RENDERMANAGER$INIT)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if (checkInsnNode(insnNode, ICONST_0) && checkFieldInsnNode(insnNode.getNext(), PUTFIELD, FieldMapping.RENDERMANAGER$DEBUGBOUNDINGBOX)) {
-                        /*
-                         * Replaces in the constructor :
-                         * this.debugBoundingBox = false;
-                         * With :
-                         * this.debugBoundingBox = ConfigHandler.isDebugHitboxOn;
-                         */
-                        methodNode.instructions.insert(insnNode, getNewConfigFieldInsnNode("isDebugHitboxOn"));
-                        methodNode.instructions.remove(insnNode);
-                        status.addInjection();
+                    if (checkInsnNode(insnNode, ICONST_0)) {
+                        if (checkFieldInsnNode(insnNode.getNext(), PUTFIELD, FieldMapping.RENDERMANAGER$DEBUGBOUNDINGBOX)) {
+                            /*
+                             * Replaces in the constructor :
+                             * this.debugBoundingBox = false;
+                             * With :
+                             * this.debugBoundingBox = ConfigHandler.isDebugHitboxOn;
+                             */
+                            methodNode.instructions.insert(insnNode, getNewConfigFieldInsnNode("isDebugHitboxOn"));
+                            methodNode.instructions.remove(insnNode);
+                            status.addInjection();
+                        }
                     }
                 }
             }
@@ -42,7 +42,7 @@ public class RenderManagerTransformer implements IMyClassTransformer {
             if (checkMethodNode(methodNode, MethodMapping.RENDERDEBUGBOUNDINGBOX)) {
                 /*
                  * Injects at head :
-                 * if(RenderManagerHook.cancelHitboxRender(entityIn)) {
+                 * if (RenderManagerHook.cancelHitboxRender(entityIn)) {
                  *     return;
                  * }
                  */
@@ -50,6 +50,7 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                 status.addInjection();
 
                 int count255 = -1;
+                AbstractInsnNode injectionStartForIf = null;
 
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
@@ -109,20 +110,40 @@ public class RenderManagerTransformer implements IMyClassTransformer {
                         }
                     }
 
-                    if (insnNode instanceof LdcInsnNode && ((LdcInsnNode) insnNode).cst.equals(new Double("2.0"))) {
+                    if (checkLdcInsnNode(insnNode, new Double("2.0"))) {
                         /*
                          * Line 464
-                         * Replaces the 2.0D with RenderManagerHook.getBlueVectLength(entityIn);
+                         * Replaces the 2.0D with RenderManagerHook.getBlueVectLength();
                          */
-                        final InsnList list = new InsnList();
-                        list.add(new VarInsnNode(ALOAD, 1)); // load entity
-                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderManagerHook"), "getBlueVectLength", "(L" + ClassMapping.ENTITY + ";)D", false));
-                        methodNode.instructions.insertBefore(insnNode, list);
+                        methodNode.instructions.insertBefore(insnNode, new MethodInsnNode(INVOKESTATIC, getHookClass("RenderManagerHook"), "getBlueVectLength", "()D", false));
                         methodNode.instructions.remove(insnNode);
                         status.addInjection();
                     }
-                }
 
+                    if (checkMethodInsnNode(insnNode, MethodMapping.TESSELLATOR$GETINSTANCE)) {
+                        injectionStartForIf = insnNode;
+                    }
+
+                    if (injectionStartForIf != null && checkMethodInsnNode(insnNode, MethodMapping.TESSELLATOR$DRAW)) {
+                        /*
+                         * Surround the blue vector render code (7 lines of code) with an if statement
+                         *   if (shouldRenderBlueVect(entityIn)) {
+                         *         Tessellator tessellator = Tessellator.getInstance();
+                         *         .....
+                         *         tessellator.draw();
+                         *   }
+                         */
+                        final InsnList list = new InsnList();
+                        final LabelNode label = new LabelNode();
+                        list.add(new VarInsnNode(ALOAD, 1));
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderManagerHook"), "shouldRenderBlueVect", "(L" + ClassMapping.ENTITY + ";)Z", false));
+                        list.add(new JumpInsnNode(IFEQ, label));
+                        methodNode.instructions.insertBefore(injectionStartForIf, list);
+                        methodNode.instructions.insert(insnNode, label);
+                        status.addInjection();
+                    }
+
+                }
             }
         }
         return classNode;

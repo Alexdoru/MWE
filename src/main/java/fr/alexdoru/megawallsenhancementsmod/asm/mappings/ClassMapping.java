@@ -65,6 +65,7 @@ public enum ClassMapping {
     SLOT("yg", "net/minecraft/inventory/Slot"),
     STRINGBUILDER("java/lang/StringBuilder"),
     TEAM("auq", "net/minecraft/scoreboard/Team"),
+    TESSELLATOR("bfx", "net/minecraft/client/renderer/Tessellator"),
     TEXTUREMANAGER("bmj", "net/minecraft/client/renderer/texture/TextureManager"),
     WORLD("adm", "net/minecraft/world/World"),
     WORLDRENDERER("bfd", "net/minecraft/client/renderer/WorldRenderer"),
