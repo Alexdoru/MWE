@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityPlayerAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.*;

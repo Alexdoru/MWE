@@ -23,7 +23,7 @@ public interface IMyClassTransformer {
     ClassNode transform(ClassNode classNode, InjectionStatus status);
 
     default void addInterface(ClassNode classNode, String interfaceName) {
-        classNode.interfaces.add("fr/alexdoru/megawallsenhancementsmod/asm/accessor/" + interfaceName);
+        classNode.interfaces.add("fr/alexdoru/megawallsenhancementsmod/asm/accessors/" + interfaceName);
     }
 
     default String getHookClass(String className) {

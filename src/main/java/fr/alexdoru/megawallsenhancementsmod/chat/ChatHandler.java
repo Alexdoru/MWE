@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.chat;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GuiNewChatAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessors.GuiNewChatAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
