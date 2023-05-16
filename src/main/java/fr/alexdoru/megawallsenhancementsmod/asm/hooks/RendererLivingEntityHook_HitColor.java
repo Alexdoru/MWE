@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.accessor.EntityPlayerAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.EntityLivingBase;

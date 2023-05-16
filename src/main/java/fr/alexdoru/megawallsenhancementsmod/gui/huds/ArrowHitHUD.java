@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.accessor.GuiNewChatAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessors.GuiNewChatAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;

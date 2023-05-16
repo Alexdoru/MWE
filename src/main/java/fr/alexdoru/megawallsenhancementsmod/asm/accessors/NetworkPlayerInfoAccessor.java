@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.asm.accessor;
+package fr.alexdoru.megawallsenhancementsmod.asm.accessors;
 
 import net.minecraft.util.IChatComponent;
 

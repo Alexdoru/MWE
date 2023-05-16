@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.asm.accessor;
+package fr.alexdoru.megawallsenhancementsmod.asm.accessors;
 
 public interface EntityArrowAccessor {
     boolean isInGround();
