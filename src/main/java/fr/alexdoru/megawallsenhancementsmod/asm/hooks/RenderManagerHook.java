@@ -16,37 +16,37 @@ import net.minecraft.util.AxisAlignedBB;
 @SuppressWarnings("unused")
 public class RenderManagerHook {
 
-    public static boolean cancelHitboxRender(Entity entityIn, Entity viewingEntity) {
+    public static boolean shouldRenderHitbox(Entity entityIn, Entity viewingEntity) {
         if (ConfigHandler.hideCloseHitbox) {
             if (entityIn.getDistanceSqToEntity(viewingEntity) <= ConfigHandler.hitboxDrawRange * ConfigHandler.hitboxDrawRange) {
-                return true;
+                return false;
             }
         }
         if (entityIn instanceof AbstractClientPlayer) {
-            return !ConfigHandler.drawHitboxForPlayers;
+            return ConfigHandler.drawHitboxForPlayers;
         }
         if (entityIn instanceof EntityArrow) {
             if (((EntityArrowAccessor) entityIn).isInGround()) {
-                return !ConfigHandler.drawHitboxForGroundedArrows;
+                return ConfigHandler.drawHitboxForGroundedArrows;
             }
             if (((EntityArrowAccessor) entityIn).isPinnedToPlayer()) {
-                return !ConfigHandler.drawHitboxForPinnedArrows;
+                return ConfigHandler.drawHitboxForPinnedArrows;
             }
-            return !ConfigHandler.drawHitboxForFlyingArrows;
+            return ConfigHandler.drawHitboxForFlyingArrows;
         }
         if (entityIn instanceof EntityItem) {
-            return !ConfigHandler.drawHitboxForDroppedItems;
+            return ConfigHandler.drawHitboxForDroppedItems;
         }
         if (entityIn instanceof EntityAnimal) {
-            return !ConfigHandler.drawHitboxForPassiveMobs;
+            return ConfigHandler.drawHitboxForPassiveMobs;
         }
         if (entityIn instanceof EntityMob) {
-            return !ConfigHandler.drawHitboxForAggressiveMobs;
+            return ConfigHandler.drawHitboxForAggressiveMobs;
         }
         if (entityIn instanceof EntityItemFrame) {
-            return !ConfigHandler.drawHitboxItemFrame;
+            return ConfigHandler.drawHitboxItemFrame;
         }
-        return !ConfigHandler.drawHitboxForOtherEntity;
+        return ConfigHandler.drawHitboxForOtherEntity;
     }
 
     private static int hitboxColor = 0xFFFFFF;
