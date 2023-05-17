@@ -337,7 +337,7 @@ public class NameUtil {
     public static String getFormattedNameWithoutIcons(String playername) {
         final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
         if (networkPlayerInfo == null) {
-            return playername;
+            return SquadHandler.getSquadname(playername);
         }
         final MWPlayerData.PlayerData mwPlayerData = MWPlayerData.get(networkPlayerInfo.getGameProfile().getId());
         if (mwPlayerData != null && mwPlayerData.P5Tag != null && mwPlayerData.originalP4Tag != null) {
