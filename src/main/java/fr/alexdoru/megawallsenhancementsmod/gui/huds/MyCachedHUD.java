@@ -1,13 +1,12 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
-import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.ICachedHUDText;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.IRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 
-public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDText {
+public abstract class MyCachedHUD extends Gui implements IRenderer {
 
     protected static final Minecraft mc = Minecraft.getMinecraft();
     public String displayText = "";
@@ -16,9 +15,6 @@ public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDTe
     public MyCachedHUD(GuiPosition guiPosition) {
         this.guiPosition = guiPosition;
     }
-
-    @Override
-    public void updateDisplayText() {}
 
     @Override
     public int getHeight() {

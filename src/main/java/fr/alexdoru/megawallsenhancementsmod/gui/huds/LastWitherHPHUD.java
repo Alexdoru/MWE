@@ -33,7 +33,9 @@ public class LastWitherHPHUD extends MyCachedHUD {
         if (ScoreboardTracker.getMwScoreboardParser().isOnlyOneWitherAlive()) {
             color = "\u00a7" + ScoreboardTracker.getMwScoreboardParser().getAliveWithers().get(0);
         }
-        updateDisplayText();
+        final long time = System.currentTimeMillis();
+        final int timeToDie = (witherHp / 8) * 5 + (thirdWitherDeathTime + 55000L - time > 0 ? (int) ((thirdWitherDeathTime + 55000L - time) / 1000L) - 4 : (int) ((lastWitherHPUpdate - time) / 1000L) + 3);
+        displayText = color + "Wither dies in " + Math.max(0, timeToDie) + "s";
     }
 
     @SubscribeEvent
@@ -42,13 +44,6 @@ public class LastWitherHPHUD extends MyCachedHUD {
             thirdWitherDeathTime = System.currentTimeMillis();
             color = "\u00a7" + ScoreboardTracker.getMwScoreboardParser().getAliveWithers().get(0);
         }
-    }
-
-    @Override
-    public void updateDisplayText() {
-        final long time = System.currentTimeMillis();
-        final int timeToDie = (witherHp / 8) * 5 + (thirdWitherDeathTime + 55000L - time > 0 ? (int) ((thirdWitherDeathTime + 55000L - time) / 1000L) - 4 : (int) ((lastWitherHPUpdate - time) / 1000L) + 3);
-        displayText = color + "Wither dies in " + Math.max(0, timeToDie) + "s";
     }
 
     @Override

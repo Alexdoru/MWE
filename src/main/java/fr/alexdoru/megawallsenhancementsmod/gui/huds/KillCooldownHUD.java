@@ -34,15 +34,10 @@ public class KillCooldownHUD extends MyCachedHUD {
     }
 
     @Override
-    public void updateDisplayText() {
-        final int timeleft = 60 - ((int) (System.currentTimeMillis() - lastkilltime)) / 1000;
-        displayText = EnumChatFormatting.DARK_RED + "/kill cooldown : " + timeleft + "s";
-    }
-
-    @Override
     public void render(ScaledResolution resolution) {
         if (timerUpdateText.update()) {
-            updateDisplayText();
+            final int timeleft = 60 - ((int) (System.currentTimeMillis() - lastkilltime)) / 1000;
+            displayText = EnumChatFormatting.DARK_RED + "/kill cooldown : " + timeleft + "s";
         }
         this.guiPosition.updateAdjustedAbsolutePosition(resolution, mc.fontRendererObj.getStringWidth(displayText), mc.fontRendererObj.FONT_HEIGHT);
         mc.fontRendererObj.drawStringWithShadow(displayText, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
