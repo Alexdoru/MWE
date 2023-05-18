@@ -129,7 +129,6 @@ public class FKCounterHUD extends MyCachedHUD {
         return !ConfigHandler.fkcounterHUDinSidebar && ConfigHandler.showfkcounterHUD && FKCounterMod.isInMwGame && KillCounter.getGameId() != null;
     }
 
-    @Override
     public void updateDisplayText() {
 
         if (KillCounter.getGameId() == null) {
