@@ -77,7 +77,7 @@ public class FKCounterHUD extends MyCachedHUD {
             if (ConfigHandler.fkcounterHUDCompact) {
                 mc.fontRendererObj.drawStringWithShadow(this.displayText, 0, 0, 0xFFFFFF);
             } else {
-                drawStringList(this.textToRender, 0, 0, false);
+                drawStringList(this.textToRender);
             }
         }
         GlStateManager.popMatrix();
@@ -115,9 +115,9 @@ public class FKCounterHUD extends MyCachedHUD {
             if (ConfigHandler.fkcounterHUDCompact) {
                 mc.fontRendererObj.drawStringWithShadow(DUMMY_TEXT_COMPACT, 0, 0, 0xFFFFFF);
             } else if (ConfigHandler.fkcounterHUDShowPlayers) {
-                drawStringList(DUMMY_TEXT_PLAYERS, 0, 0, false);
+                drawStringList(DUMMY_TEXT_PLAYERS);
             } else {
-                drawStringList(DUMMY_TEXT, 0, 0, false);
+                drawStringList(DUMMY_TEXT);
             }
         }
         GlStateManager.popMatrix();
@@ -194,6 +194,25 @@ public class FKCounterHUD extends MyCachedHUD {
 
         }
 
+    }
+
+    private void drawStringList(List<String> list) {
+        int y = 0;
+        for (final String line : list) {
+            mc.fontRendererObj.drawStringWithShadow(line, (float) 0, (float) y, 0xFFFFFF);
+            y += mc.fontRendererObj.FONT_HEIGHT;
+        }
+    }
+
+    private int getMultilineWidth(List<String> list) {
+        int maxwidth = 0;
+        for (final String line : list) {
+            final int width = mc.fontRendererObj.getStringWidth(line);
+            if (width > maxwidth) {
+                maxwidth = width;
+            }
+        }
+        return maxwidth;
     }
 
 }

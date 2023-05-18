@@ -7,8 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 
-import java.util.List;
-
 public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDText {
 
     protected static final Minecraft mc = Minecraft.getMinecraft();
@@ -46,28 +44,6 @@ public abstract class MyCachedHUD extends Gui implements IRenderer, ICachedHUDTe
     @Override
     public GuiPosition getGuiPosition() {
         return this.guiPosition;
-    }
-
-    protected void drawStringList(List<String> list, int x, int y, boolean centered) {
-        if (centered) {
-            x = x - getMultilineWidth(list) / 2;
-            y = y - mc.fontRendererObj.FONT_HEIGHT * list.size() / 2;
-        }
-        for (final String line : list) {
-            mc.fontRendererObj.drawStringWithShadow(line, (float) x, (float) y, 0xFFFFFF);
-            y += mc.fontRendererObj.FONT_HEIGHT;
-        }
-    }
-
-    protected int getMultilineWidth(List<String> list) {
-        int maxwidth = 0;
-        for (final String line : list) {
-            final int width = mc.fontRendererObj.getStringWidth(line);
-            if (width > maxwidth) {
-                maxwidth = width;
-            }
-        }
-        return maxwidth;
     }
 
 }
