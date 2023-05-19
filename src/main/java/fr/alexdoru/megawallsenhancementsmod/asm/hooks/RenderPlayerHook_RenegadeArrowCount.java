@@ -19,15 +19,15 @@ public class RenderPlayerHook_RenegadeArrowCount {
     private static final HashMap<String, List<Long>> arrowHitMap = new HashMap<>();
 
     @SuppressWarnings("unused")
-    public static String getArrowCount(AbstractClientPlayer entityIn) {
+    public static StringBuilder getArrowCount(StringBuilder str, AbstractClientPlayer entityIn) {
         if (ConfigHandler.renegadeArrowCount) {
             final List<Long> list = arrowHitMap.get(entityIn.getName());
             if (list == null || list.isEmpty()) {
-                return "";
+                return str;
             }
-            return EnumChatFormatting.RESET + "  " + list.size() + EnumChatFormatting.GREEN + " \u27B9";
+            return str.append(EnumChatFormatting.RESET).append("  ").append(list.size()).append(EnumChatFormatting.GREEN).append(" \u27B9");
         }
-        return "";
+        return str;
     }
 
     @SubscribeEvent

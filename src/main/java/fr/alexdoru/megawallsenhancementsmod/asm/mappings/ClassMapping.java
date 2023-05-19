@@ -59,6 +59,7 @@ public enum ClassMapping {
     S38PACKETPLAYERLISTITEM$ADDPLAYERDATA("gz$b", "net/minecraft/network/play/server/S38PacketPlayerListItem$AddPlayerData"),
     S3EPACKETTEAMS("hr", "net/minecraft/network/play/server/S3EPacketTeams"),
     SCALEDRESOLUTION("avr", "net/minecraft/client/gui/ScaledResolution"),
+    SCORE("aum", "net/minecraft/scoreboard/Score"),
     SCOREBOARD("auo", "net/minecraft/scoreboard/Scoreboard"),
     SCOREOBJECTIVE("auk", "net/minecraft/scoreboard/ScoreObjective"),
     SCOREPLAYERTEAM("aul", "net/minecraft/scoreboard/ScorePlayerTeam"),

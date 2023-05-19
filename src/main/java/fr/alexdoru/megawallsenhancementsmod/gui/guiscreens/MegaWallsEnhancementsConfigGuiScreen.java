@@ -119,7 +119,8 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
                 "Renegade arrow count",
                 (b) -> ConfigHandler.renegadeArrowCount = b,
                 () -> ConfigHandler.renegadeArrowCount,
-                EnumChatFormatting.GRAY + "Renders above player heads the amount of arrows pinned in each player when playing renegade"));
+                EnumChatFormatting.GRAY + "Renders above player heads the amount of arrows pinned in each player when playing renegade",
+                EnumChatFormatting.YELLOW + "This can have a negative impact on performance, keep it off if you don't play Renegade"));
         this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(9), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
 
