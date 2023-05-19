@@ -4,7 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
-public class CreeperPrimedTntHUD extends MyCachedHUD {
+public class CreeperPrimedTntHUD extends AbstractRenderer {
 
     public static CreeperPrimedTntHUD instance;
 
