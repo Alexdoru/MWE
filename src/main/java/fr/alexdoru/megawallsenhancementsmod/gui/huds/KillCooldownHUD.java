@@ -11,10 +11,8 @@ public class KillCooldownHUD extends AbstractRenderer {
     public static KillCooldownHUD instance;
 
     private static final String DUMMY_TEXT = EnumChatFormatting.DARK_RED + "/kill cooldown : 60s";
-    private String displayText = "";
     private long lastkilltime = 0;
     private final TimerUtil timerKillCooldown = new TimerUtil(60000L);
-    private final TimerUtil timerUpdateText = new TimerUtil(1000L);
 
     public KillCooldownHUD() {
         super(ConfigHandler.killCooldownHUDPosition);
@@ -36,10 +34,8 @@ public class KillCooldownHUD extends AbstractRenderer {
 
     @Override
     public void render(ScaledResolution resolution) {
-        if (timerUpdateText.update()) {
-            final int timeleft = 60 - ((int) (System.currentTimeMillis() - lastkilltime)) / 1000;
-            displayText = EnumChatFormatting.DARK_RED + "/kill cooldown : " + timeleft + "s";
-        }
+        final int timeleft = 60 - ((int) (System.currentTimeMillis() - lastkilltime)) / 1000;
+        final String displayText = EnumChatFormatting.DARK_RED + "/kill cooldown : " + timeleft + "s";
         this.guiPosition.updateAdjustedAbsolutePosition(resolution, mc.fontRendererObj.getStringWidth(displayText), mc.fontRendererObj.FONT_HEIGHT);
         mc.fontRendererObj.drawStringWithShadow(displayText, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
