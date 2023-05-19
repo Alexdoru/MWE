@@ -76,8 +76,8 @@ public class PositionEditGuiScreen extends GuiScreen {
         final ScaledResolution res = new ScaledResolution(mc);
         final int screenWidth = res.getScaledWidth();
         final int screenHeight = res.getScaledHeight();
-        final int absoluteX = Math.max(0, Math.min(guiPosition.getAbsoluteRenderX(), Math.max(screenWidth - this.renderer.getWidth(), 0)));
-        final int absoluteY = Math.max(0, Math.min(guiPosition.getAbsoluteRenderY(), Math.max(screenHeight - this.renderer.getHeight(), 0)));
+        final int absoluteX = Math.max(0, Math.min(guiPosition.getAbsoluteRenderX(), screenWidth));
+        final int absoluteY = Math.max(0, Math.min(guiPosition.getAbsoluteRenderY(), screenHeight));
         this.guiPosition.setAbsolutePositionForRender(absoluteX, absoluteY);
     }
 

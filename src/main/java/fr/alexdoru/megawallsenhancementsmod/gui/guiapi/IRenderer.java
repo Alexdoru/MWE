@@ -5,20 +5,6 @@ import net.minecraft.client.gui.ScaledResolution;
 public interface IRenderer {
 
     /**
-     * Returns the height of the HUD.
-     *
-     * @return The height in pixel.
-     */
-    int getHeight();
-
-    /**
-     * Returns the width of the HUD.
-     *
-     * @return The width in pixel.
-     */
-    int getWidth();
-
-    /**
      * Renders the HUD.
      *
      * @param resolution - Screen's resolution
