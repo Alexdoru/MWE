@@ -53,6 +53,7 @@ public class EnergyDisplayHUD extends AbstractRenderer {
             return;
         }
         if (this.timeStartRender + 2500L - currentTime > 0L) {
+            final String displayText;
             if (energy >= ConfigHandler.aquaEnergyDisplayThreshold) {
                 displayText = EnumChatFormatting.AQUA.toString() + EnumChatFormatting.BOLD + energy;
             } else {

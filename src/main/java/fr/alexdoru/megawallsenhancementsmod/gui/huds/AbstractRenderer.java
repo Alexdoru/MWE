@@ -8,7 +8,6 @@ import net.minecraft.client.gui.Gui;
 public abstract class AbstractRenderer extends Gui implements IRenderer {
 
     protected static final Minecraft mc = Minecraft.getMinecraft();
-    public String displayText = "";
     protected final GuiPosition guiPosition;
 
     public AbstractRenderer(GuiPosition guiPosition) {
