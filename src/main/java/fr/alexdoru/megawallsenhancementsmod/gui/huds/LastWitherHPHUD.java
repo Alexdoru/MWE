@@ -14,6 +14,7 @@ public class LastWitherHPHUD extends AbstractRenderer {
     public static LastWitherHPHUD instance;
 
     private static final String DUMMY_TEXT = EnumChatFormatting.GREEN + "Wither dies in 148s";
+    public String displayText = "";
     private String color = "";
     private long lastWitherHPUpdate = 0;
     private long thirdWitherDeathTime = 0;

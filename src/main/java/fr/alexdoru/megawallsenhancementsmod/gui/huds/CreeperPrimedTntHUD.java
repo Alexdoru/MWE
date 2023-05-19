@@ -24,7 +24,7 @@ public class CreeperPrimedTntHUD extends AbstractRenderer {
         this.guiPosition.updateAbsolutePosition(resolution);
         final long temp = (timeStartRender + renderDuration - System.currentTimeMillis());
         final String timeLeft = String.format("%.1f", (float) temp / 1000);
-        displayText = EnumChatFormatting.GREEN + "Tnt " + (colorPrefix + timeLeft + "s");
+        final String displayText = EnumChatFormatting.GREEN + "Tnt " + (colorPrefix + timeLeft + "s");
         drawCenteredString(mc.fontRendererObj, displayText, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 

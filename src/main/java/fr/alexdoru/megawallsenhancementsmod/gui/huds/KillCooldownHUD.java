@@ -11,6 +11,7 @@ public class KillCooldownHUD extends AbstractRenderer {
     public static KillCooldownHUD instance;
 
     private static final String DUMMY_TEXT = EnumChatFormatting.DARK_RED + "/kill cooldown : 60s";
+    private String displayText = "";
     private long lastkilltime = 0;
     private final TimerUtil timerKillCooldown = new TimerUtil(60000L);
     private final TimerUtil timerUpdateText = new TimerUtil(1000L);
