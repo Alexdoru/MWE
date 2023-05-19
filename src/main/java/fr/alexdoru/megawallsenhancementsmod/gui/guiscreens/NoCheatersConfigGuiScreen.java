@@ -135,7 +135,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     @Override
     public void onChangeSliderValue(GuiSlider slider) {
         if (slider.id == 7) {
-            ConfigHandler.timeDeleteReport = (int) slider.getValue();
+            ConfigHandler.timeDeleteReport = slider.getValueInt();
         }
     }
 

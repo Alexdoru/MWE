@@ -86,7 +86,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                 EnumChatFormatting.DARK_GRAY + "\u25AA " + EnumChatFormatting.GREEN + "Compact mode in sidebar" + EnumChatFormatting.GRAY + " : subtly places the compact HUD in the sidebar"
         ));
         this.buttonList.add(new GuiSlider(6, xPos, getButtonYPos(3), 200, buttonsHeight, "Player amount : ", "", 1d, 10d, ConfigHandler.fkcounterHUDPlayerAmount, false, true, this));
-        this.buttonList.add(new GuiSlider(5, xPos, getButtonYPos(4), 200, buttonsHeight, "HUD Size : ", "", 0.1d, 4d, ConfigHandler.fkcounterHUDSize, true, true, this));
+        this.buttonList.add(new GuiSlider(5, xPos, getButtonYPos(4), 200, buttonsHeight, "HUD Size : ", "%", 1d, 400d, ConfigHandler.fkcounterHUDSize * 100d, false, true, this));
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(5),
                 "Draw background",
@@ -113,12 +113,10 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
     public void onChangeSliderValue(GuiSlider slider) {
         switch (slider.id) {
             case 5:
-                final double newvalue = Math.floor(slider.getValue() * 20d) / 20d;
-                ConfigHandler.fkcounterHUDSize = newvalue;
-                slider.setValue(newvalue);
+                ConfigHandler.fkcounterHUDSize = slider.getValueInt() / 100d;
                 break;
             case 6:
-                ConfigHandler.fkcounterHUDPlayerAmount = (int) slider.getValue();
+                ConfigHandler.fkcounterHUDPlayerAmount = slider.getValueInt();
                 FKCounterHUD.instance.updateDisplayText();
                 break;
         }

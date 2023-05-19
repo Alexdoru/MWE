@@ -141,7 +141,7 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
     @Override
     public void onChangeSliderValue(GuiSlider slider) {
         if (slider.id == 16) {
-            ConfigHandler.hitboxDrawRange = (float) slider.getValue();
+            ConfigHandler.hitboxDrawRange = slider.getValue();
         }
     }
 
