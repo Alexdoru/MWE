@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class FKCounterHUD extends MyCachedHUD {
+public class FKCounterHUD extends AbstractRenderer {
 
     public static FKCounterHUD instance;
 

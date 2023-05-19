@@ -3,7 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.gui.ScaledResolution;
 
-public class HunterStrengthHUD extends MyCachedHUD {
+public class HunterStrengthHUD extends AbstractRenderer {
 
     public static HunterStrengthHUD instance;
 

@@ -6,7 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.utils.TimerUtil;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
-public class KillCooldownHUD extends MyCachedHUD {
+public class KillCooldownHUD extends AbstractRenderer {
 
     public static KillCooldownHUD instance;
 

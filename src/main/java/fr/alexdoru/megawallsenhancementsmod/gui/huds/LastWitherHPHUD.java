@@ -9,7 +9,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class LastWitherHPHUD extends MyCachedHUD {
+public class LastWitherHPHUD extends AbstractRenderer {
 
     public static LastWitherHPHUD instance;
 

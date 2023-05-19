@@ -10,7 +10,7 @@ import net.minecraft.util.EnumChatFormatting;
 
 import java.util.HashSet;
 
-public class EnergyDisplayHUD extends MyCachedHUD {
+public class EnergyDisplayHUD extends AbstractRenderer {
 
     public static EnergyDisplayHUD instance;
 

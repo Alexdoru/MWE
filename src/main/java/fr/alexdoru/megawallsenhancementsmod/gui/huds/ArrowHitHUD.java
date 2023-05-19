@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ArrowHitHUD extends MyCachedHUD {
+public class ArrowHitHUD extends AbstractRenderer {
 
     public static ArrowHitHUD instance;
 
