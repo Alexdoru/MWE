@@ -4,11 +4,8 @@ import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
-import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.IRenderer;
 import fr.alexdoru.megawallsenhancementsmod.utils.MapUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.SkinUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -23,11 +20,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PhoenixBondHUD implements IRenderer {
+public class PhoenixBondHUD extends AbstractRenderer {
 
     public static PhoenixBondHUD instance;
-    private final GuiPosition guiPosition;
-    private final Minecraft mc = Minecraft.getMinecraft();
     private final List<PhxHealLine> textToRender = new ArrayList<>();
     private final List<PhxHealLine> dummyTextToRender = new ArrayList<>();
     private long timeStartRender;
@@ -38,7 +33,7 @@ public class PhoenixBondHUD implements IRenderer {
     private static final Pattern SELF_HEALED_PATTERN = Pattern.compile("You are healed for\\s([0-9]*[.]?[0-9]+)[\u2764\u2665]");
 
     public PhoenixBondHUD() {
-        this.guiPosition = ConfigHandler.phxBondHUDPosition;
+        super(ConfigHandler.phxBondHUDPosition);
         instance = this;
         this.dummyTextToRender.add(getLine(EnumChatFormatting.GREEN + "Player1", "10.5"));
         this.dummyTextToRender.add(getLine(EnumChatFormatting.GREEN + "Player2", "6.0"));
@@ -157,11 +152,6 @@ public class PhoenixBondHUD implements IRenderer {
     @Override
     public boolean isEnabled(long currentTimeMillis) {
         return ConfigHandler.showPhxBondHUD && timeStartRender + 5000L > currentTimeMillis;
-    }
-
-    @Override
-    public GuiPosition getGuiPosition() {
-        return this.guiPosition;
     }
 
     private EnumChatFormatting getHealColor(float heal) {

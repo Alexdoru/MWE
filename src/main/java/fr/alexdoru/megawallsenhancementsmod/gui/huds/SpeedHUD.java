@@ -1,23 +1,18 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
-import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.IRenderer;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector2D;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
-public class SpeedHUD implements IRenderer {
+public class SpeedHUD extends AbstractRenderer {
 
     public static SpeedHUD instance;
-    private final GuiPosition guiPosition;
-    private final Minecraft mc = Minecraft.getMinecraft();
     private static final String DUMMY_TEXT = EnumChatFormatting.DARK_GREEN + "Speed: " + EnumChatFormatting.WHITE + "5.65m/s";
 
     public SpeedHUD() {
+        super(ConfigHandler.speedHUDPosition);
         instance = this;
-        guiPosition = ConfigHandler.speedHUDPosition;
     }
 
     @Override
@@ -36,11 +31,6 @@ public class SpeedHUD implements IRenderer {
     @Override
     public boolean isEnabled(long currentTimeMillis) {
         return ConfigHandler.showSpeedHUD;
-    }
-
-    @Override
-    public GuiPosition getGuiPosition() {
-        return this.guiPosition;
     }
 
 }

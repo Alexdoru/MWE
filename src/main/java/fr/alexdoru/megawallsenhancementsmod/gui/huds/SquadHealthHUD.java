@@ -9,10 +9,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
-import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.IRenderer;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -34,21 +31,19 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class SquadHealthHUD implements IRenderer {
+public class SquadHealthHUD extends AbstractRenderer {
 
     public static SquadHealthHUD instance;
-    private final GuiPosition guiPosition;
-    private final Minecraft mc = Minecraft.getMinecraft();
     private static final Ordering<NetworkPlayerInfo> ordering = Ordering.from(new SquadHealthHUD.PlayerComparator());
 
     public SquadHealthHUD() {
+        super(ConfigHandler.squadHUDPosition);
         instance = this;
-        this.guiPosition = ConfigHandler.squadHUDPosition;
     }
 
     @Override
     public void render(ScaledResolution resolution) {
-        final Scoreboard scoreboard = this.mc.theWorld.getScoreboard();
+        final Scoreboard scoreboard = mc.theWorld.getScoreboard();
         final ScoreObjective scoreobjective = scoreboard.getObjectiveInDisplaySlot(0);
         if (mc.isIntegratedServerRunning() && scoreobjective == null) {
             return;
@@ -69,20 +64,20 @@ public class SquadHealthHUD implements IRenderer {
         int maxScoreWidth = 0;
         int maxFinalWidth = 0;
         for (final NetworkPlayerInfo networkplayerinfo : playerlistToRender) {
-            maxNameWidth = Math.max(maxNameWidth, this.mc.fontRendererObj.getStringWidth(this.getPlayerName(networkplayerinfo)));
+            maxNameWidth = Math.max(maxNameWidth, mc.fontRendererObj.getStringWidth(this.getPlayerName(networkplayerinfo)));
             if (scoreobjective != null && scoreobjective.getRenderType() != IScoreObjectiveCriteria.EnumRenderType.HEARTS) {
-                maxScoreWidth = Math.max(maxScoreWidth, this.mc.fontRendererObj.getStringWidth(" " + scoreboard.getValueFromObjective(networkplayerinfo.getGameProfile().getName(), scoreobjective).getScorePoints()));
+                maxScoreWidth = Math.max(maxScoreWidth, mc.fontRendererObj.getStringWidth(" " + scoreboard.getValueFromObjective(networkplayerinfo.getGameProfile().getName(), scoreobjective).getScorePoints()));
             }
             if (FKCounterMod.isInMwGame) {
                 final int playerFinalkills = ((NetworkPlayerInfoAccessor) networkplayerinfo).getPlayerFinalkills();
                 if (playerFinalkills != 0) {
-                    maxFinalWidth = Math.max(maxFinalWidth, this.mc.fontRendererObj.getStringWidth(" " + playerFinalkills));
+                    maxFinalWidth = Math.max(maxFinalWidth, mc.fontRendererObj.getStringWidth(" " + playerFinalkills));
                 }
             }
         }
         GlStateManager.pushMatrix();
         {
-            final boolean flag = this.mc.isIntegratedServerRunning() || this.mc.getNetHandler().getNetworkManager().getIsencrypted();
+            final boolean flag = mc.isIntegratedServerRunning() || mc.getNetHandler().getNetworkManager().getIsencrypted();
             final int maxLineWidth = (flag ? 9 : 0) + maxNameWidth + maxFinalWidth + maxScoreWidth;
             final int listSize = playerlistToRender.size();
             final int hudWidth = maxLineWidth + 2;
@@ -103,22 +98,22 @@ public class SquadHealthHUD implements IRenderer {
                 final String formattedName = this.getPlayerName(networkplayerinfo);
                 final GameProfile gameprofile = networkplayerinfo.getGameProfile();
                 if (flag) {
-                    final EntityPlayer entityplayer = this.mc.theWorld.getPlayerEntityByUUID(gameprofile.getId());
-                    this.mc.getTextureManager().bindTexture(networkplayerinfo.getLocationSkin());
+                    final EntityPlayer entityplayer = mc.theWorld.getPlayerEntityByUUID(gameprofile.getId());
+                    mc.getTextureManager().bindTexture(networkplayerinfo.getLocationSkin());
                     Gui.drawScaledCustomSizeModalRect(xDrawingPos, yDrawingPos, 8, 8, 8, 8, 8, 8, 64.0F, 64.0F);
                     if (entityplayer == null || entityplayer.isWearing(EnumPlayerModelParts.HAT)) {
                         Gui.drawScaledCustomSizeModalRect(xDrawingPos, yDrawingPos, 40, 8, 8, 8, 8, 8, 64.0F, 64.0F);
                     }
                     xDrawingPos += 9;
                 }
-                this.mc.fontRendererObj.drawStringWithShadow(formattedName, (float) xDrawingPos, (float) yDrawingPos, -1);
+                mc.fontRendererObj.drawStringWithShadow(formattedName, (float) xDrawingPos, (float) yDrawingPos, -1);
                 final int xStartFinalDrawingPos = xDrawingPos + maxNameWidth + 1;
                 final int xStartScoreDrawingPos = xStartFinalDrawingPos + maxFinalWidth;
                 if (maxScoreWidth + maxFinalWidth > 5) {
                     if (scoreobjective != null && networkplayerinfo.getGameType() != WorldSettings.GameType.SPECTATOR && scoreobjective.getRenderType() != IScoreObjectiveCriteria.EnumRenderType.HEARTS) {
                         final int scorePoints = scoreobjective.getScoreboard().getValueFromObjective(gameprofile.getName(), scoreobjective).getScorePoints();
                         final String scoreString = GuiPlayerTabOverlayHook.getColoredHP(scorePoints) + " " + scorePoints;
-                        this.mc.fontRendererObj.drawStringWithShadow(scoreString, xStartScoreDrawingPos, yDrawingPos, 0xFFFFFF);
+                        mc.fontRendererObj.drawStringWithShadow(scoreString, xStartScoreDrawingPos, yDrawingPos, 0xFFFFFF);
                     }
                     if (FKCounterMod.isInMwGame) {
                         final int playersFinals = ((NetworkPlayerInfoAccessor) networkplayerinfo).getPlayerFinalkills();
@@ -161,13 +156,13 @@ public class SquadHealthHUD implements IRenderer {
                 GlStateManager.enableBlend();
                 GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
                 final String formattedName = EnumChatFormatting.GREEN + mc.thePlayer.getName();
-                this.mc.fontRendererObj.drawStringWithShadow(formattedName, (float) xDrawingPos, (float) yDrawingPos, -1);
+                mc.fontRendererObj.drawStringWithShadow(formattedName, (float) xDrawingPos, (float) yDrawingPos, -1);
                 final int xStartFinalDrawingPos = xDrawingPos + maxNameWidth + 1;
                 final int xStartScoreDrawingPos = xStartFinalDrawingPos + maxFinalWidth;
                 if (maxScoreWidth + maxFinalWidth > 5) {
                     final int scorePoints = 12 + (i * 18 + 22) % 8;
                     final String scoreString = GuiPlayerTabOverlayHook.getColoredHP(scorePoints) + " " + scorePoints;
-                    this.mc.fontRendererObj.drawStringWithShadow(scoreString, xStartScoreDrawingPos, yDrawingPos, 0xFFFFFF);
+                    mc.fontRendererObj.drawStringWithShadow(scoreString, xStartScoreDrawingPos, yDrawingPos, 0xFFFFFF);
                     final String finalsString = EnumChatFormatting.GOLD + " " + (3 + (i * 28 + 15) % 5);
                     mc.fontRendererObj.drawStringWithShadow(finalsString, xStartFinalDrawingPos, yDrawingPos, 0xFFFFFF);
                 }
@@ -179,11 +174,6 @@ public class SquadHealthHUD implements IRenderer {
     @Override
     public boolean isEnabled(long currentTimeMillis) {
         return ConfigHandler.showSquadHUD && SquadHandler.getSquad().size() > 1;
-    }
-
-    @Override
-    public GuiPosition getGuiPosition() {
-        return this.guiPosition;
     }
 
     @SideOnly(Side.CLIENT)
