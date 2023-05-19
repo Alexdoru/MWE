@@ -246,6 +246,12 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Hide Orange's Toggle Sprint text")
     public static boolean hideToggleSprintText;
 
+    @ConfigProperty(
+            category = MWENHANCEMENTS,
+            name = "Colored scores above head",
+            comment = "Colored scores above head")
+    public static boolean coloredScoreAboveHead;
+
     /**
      * HUD config
      */
