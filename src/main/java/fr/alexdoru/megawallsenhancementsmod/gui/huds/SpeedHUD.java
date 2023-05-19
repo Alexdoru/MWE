@@ -21,16 +21,6 @@ public class SpeedHUD implements IRenderer {
     }
 
     @Override
-    public int getHeight() {
-        return mc.fontRendererObj.FONT_HEIGHT;
-    }
-
-    @Override
-    public int getWidth() {
-        return mc.fontRendererObj.getStringWidth(DUMMY_TEXT);
-    }
-
-    @Override
     public void render(ScaledResolution resolution) {
         final double velocity = new Vector2D(mc.thePlayer.motionX, mc.thePlayer.motionZ).norm() * 20d;
         final String displayText = EnumChatFormatting.DARK_GREEN + "Speed: " + EnumChatFormatting.WHITE + String.format("%.2f", velocity) + "m/s";

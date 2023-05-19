@@ -44,8 +44,7 @@ public class FKCounterHUD extends AbstractRenderer {
         instance = this;
     }
 
-    @Override
-    public int getHeight() {
+    private int getHeight() {
         if (ConfigHandler.fkcounterHUDCompact) {
             return (int) (mc.fontRendererObj.FONT_HEIGHT * ConfigHandler.fkcounterHUDSize);
         } else {
@@ -53,8 +52,7 @@ public class FKCounterHUD extends AbstractRenderer {
         }
     }
 
-    @Override
-    public int getWidth() {
+    private int getWidth() {
         if (ConfigHandler.fkcounterHUDCompact) {
             return (int) (mc.fontRendererObj.getStringWidth(this.displayText) * ConfigHandler.fkcounterHUDSize);
         } else {

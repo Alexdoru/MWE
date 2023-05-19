@@ -40,10 +40,10 @@ public class PhoenixBondHUD implements IRenderer {
     public PhoenixBondHUD() {
         this.guiPosition = ConfigHandler.phxBondHUDPosition;
         instance = this;
-        this.dummyTextToRender.add(getLine("Player1", "10.5"));
-        this.dummyTextToRender.add(getLine("Player2", "6.0"));
-        this.dummyTextToRender.add(getLine("Player3", "3.5"));
-        this.dummyTextToRender.add(getLine("Player4", "1.0"));
+        this.dummyTextToRender.add(getLine(EnumChatFormatting.GREEN + "Player1", "10.5"));
+        this.dummyTextToRender.add(getLine(EnumChatFormatting.GREEN + "Player2", "6.0"));
+        this.dummyTextToRender.add(getLine(EnumChatFormatting.GREEN + "Player3", "3.5"));
+        this.dummyTextToRender.add(getLine(EnumChatFormatting.GREEN + "Player4", "1.0"));
     }
 
     public boolean processMessage(String msg) {
@@ -112,16 +112,6 @@ public class PhoenixBondHUD implements IRenderer {
             return SquadHandler.getSquadname(playername);
         }
         return networkPlayerInfo.getPlayerTeam().getColorPrefix() + SquadHandler.getSquadname(playername);
-    }
-
-    @Override
-    public int getHeight() {
-        return 0;
-    }
-
-    @Override
-    public int getWidth() {
-        return 0;
     }
 
     @Override

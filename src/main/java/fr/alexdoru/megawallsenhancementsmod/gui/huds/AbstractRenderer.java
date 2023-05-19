@@ -20,14 +20,4 @@ public abstract class AbstractRenderer extends Gui implements IRenderer {
         return this.guiPosition;
     }
 
-    @Override
-    public int getHeight() {
-        return mc.fontRendererObj.FONT_HEIGHT;
-    }
-
-    @Override
-    public int getWidth() {
-        return mc.fontRendererObj.getStringWidth(displayText);
-    }
-
 }
