@@ -54,6 +54,8 @@ public class RenderManagerHook {
     public static int getRedHitboxColor(int r, Entity entity) {
         if (ConfigHandler.teamColoredHitbox && entity instanceof EntityPlayerAccessor && (((EntityPlayerAccessor) entity).getmwe$RenderNametag() || entity instanceof EntityPlayerSP)) {
             hitboxColor = ((EntityPlayerAccessor) entity).getPlayerTeamColorInt();
+        } else if (ConfigHandler.teamColoredHitbox && entity instanceof EntityArrow && ((EntityArrow) entity).shootingEntity instanceof EntityPlayerAccessor) {
+            hitboxColor = ((EntityPlayerAccessor) ((EntityArrow) entity).shootingEntity).getPlayerTeamColorInt();
         } else {
             hitboxColor = ConfigHandler.hitboxColor;
         }
