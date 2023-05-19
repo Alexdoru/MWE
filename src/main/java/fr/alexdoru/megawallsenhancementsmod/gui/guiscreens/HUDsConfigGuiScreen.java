@@ -136,7 +136,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
     @Override
     public void onChangeSliderValue(GuiSlider slider) {
         if (slider.id == 21) {
-            ConfigHandler.aquaEnergyDisplayThreshold = (int) slider.getValue();
+            ConfigHandler.aquaEnergyDisplayThreshold = slider.getValueInt();
         }
     }
 

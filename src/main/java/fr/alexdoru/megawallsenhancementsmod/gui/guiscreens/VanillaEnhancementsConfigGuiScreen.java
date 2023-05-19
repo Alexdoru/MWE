@@ -216,13 +216,13 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
     public void onChangeSliderValue(GuiSlider slider) {
         switch (slider.id) {
             case 20:
-                ConfigHandler.healthThreshold = Math.floor(slider.getValue()) / 100d;
+                ConfigHandler.healthThreshold = slider.getValueInt() / 100d;
                 break;
             case 23:
-                ConfigHandler.maxDroppedEntityRendered = (int) slider.getValue();
+                ConfigHandler.maxDroppedEntityRendered = slider.getValueInt();
                 break;
             case 30:
-                ConfigHandler.tablistSize = (int) slider.getValue();
+                ConfigHandler.tablistSize = slider.getValueInt();
                 break;
         }
     }
