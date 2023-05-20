@@ -35,7 +35,9 @@ public final class GuiManager {
     public void onRenderGUI(RenderGameOverlayEvent.Post event) {
         if (event.type == ElementType.TEXT && !(mc.currentScreen instanceof PositionEditGuiScreen)) {
             final long time = System.currentTimeMillis();
-            registeredRenderers.forEach(registeredRenderer -> callRenderer(registeredRenderer, event.resolution, time));
+            mc.mcProfiler.startSection("MWE HUD");
+            registeredRenderers.forEach(renderer -> callRenderer(renderer, event.resolution, time));
+            mc.mcProfiler.endSection();
         }
     }
 
