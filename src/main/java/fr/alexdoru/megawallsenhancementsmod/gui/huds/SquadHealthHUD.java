@@ -58,7 +58,6 @@ public class SquadHealthHUD extends AbstractRenderer {
         if (list.size() <= 1) {
             return;
         }
-        mc.mcProfiler.startSection("SquadHealthHUD");
         final List<NetworkPlayerInfo> playerlistToRender = new ArrayList<>(ordering.sortedCopy(list));
         int maxNameWidth = 0;
         int maxScoreWidth = 0;
@@ -126,7 +125,6 @@ public class SquadHealthHUD extends AbstractRenderer {
             }
         }
         GlStateManager.popMatrix();
-        mc.mcProfiler.endSection();
     }
 
     private static final Pattern squadSuffixPattern = Pattern.compile("^" + EnumChatFormatting.GOLD + "\\[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "\\] ");
