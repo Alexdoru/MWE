@@ -88,7 +88,7 @@ public class SquadHealthHUD extends AbstractRenderer {
             for (int i = 0; i < listSize; i++) {
                 int xDrawingPos = hudXpos + 1;
                 final int yDrawingPos = hudYpos + 1 + i * 9;
-                Gui.drawRect(xDrawingPos, yDrawingPos, hudXpos + maxLineWidth + 1, yDrawingPos + 8, 553648127);
+                Gui.drawRect(xDrawingPos, yDrawingPos, hudXpos + maxLineWidth + 1, yDrawingPos + 8, 0x20FFFFFF);
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 GlStateManager.enableAlpha();
                 GlStateManager.enableBlend();
@@ -148,7 +148,7 @@ public class SquadHealthHUD extends AbstractRenderer {
             for (int i = 0; i < listSize; i++) {
                 final int xDrawingPos = hudXpos + 1;
                 final int yDrawingPos = hudYpos + 1 + i * 9;
-                Gui.drawRect(xDrawingPos, yDrawingPos, hudXpos + maxLineWidth + 1, yDrawingPos + 8, 553648127);
+                Gui.drawRect(xDrawingPos, yDrawingPos, hudXpos + maxLineWidth + 1, yDrawingPos + 8, 0x20FFFFFF);
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 GlStateManager.enableAlpha();
                 GlStateManager.enableBlend();

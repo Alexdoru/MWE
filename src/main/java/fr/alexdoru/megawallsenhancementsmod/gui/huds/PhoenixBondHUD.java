@@ -12,6 +12,7 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -120,11 +121,11 @@ public class PhoenixBondHUD extends AbstractRenderer {
         this.renderPhxHUD(this.dummyTextToRender);
     }
 
-    private void renderPhxHUD(List<PhxHealLine> dummyTextToRender) {
+    private void renderPhxHUD(List<PhxHealLine> toRenderList) {
         int maxLeft = 0;
         int maxRight = 0;
         int maxTotal = 0;
-        for (final PhxHealLine phxHealLine : dummyTextToRender) {
+        for (final PhxHealLine phxHealLine : toRenderList) {
             final int leftWidth = mc.fontRendererObj.getStringWidth(phxHealLine.hpHealed);
             final int rightWidth = mc.fontRendererObj.getStringWidth(phxHealLine.name);
             maxLeft = Math.max(maxLeft, leftWidth);
@@ -133,13 +134,16 @@ public class PhoenixBondHUD extends AbstractRenderer {
         }
         maxTotal += 10;
         final int x = this.guiPosition.getAbsoluteRenderX() - maxTotal / 2;
-        int y = this.guiPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT * dummyTextToRender.size() / 2;
+        int y = this.guiPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT * toRenderList.size() / 2;
         GlStateManager.pushMatrix();
         {
-            for (final PhxHealLine phxHealLine : dummyTextToRender) {
+            for (final PhxHealLine phxHealLine : toRenderList) {
                 mc.fontRendererObj.drawStringWithShadow(phxHealLine.hpHealed, x + maxLeft - mc.fontRendererObj.getStringWidth(phxHealLine.hpHealed) - 1, y, 0xFFFFFF);
                 mc.fontRendererObj.drawStringWithShadow(phxHealLine.name, x + maxLeft + 9, y, 0xFFFFFF);
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                GlStateManager.enableAlpha();
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
                 mc.getTextureManager().bindTexture(phxHealLine.skin);
                 Gui.drawScaledCustomSizeModalRect(x + maxLeft, y, 8, 8, 8, 8, 8, 8, 64.0F, 64.0F);
                 Gui.drawScaledCustomSizeModalRect(x + maxLeft, y, 40, 8, 8, 8, 8, 8, 64.0F, 64.0F);
