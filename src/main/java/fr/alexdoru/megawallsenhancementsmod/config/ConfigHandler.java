@@ -251,6 +251,12 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Colored scores above head")
     public static boolean coloredScoreAboveHead;
 
+    @ConfigProperty(
+            category = MWENHANCEMENTS,
+            name = "Pink squadmates",
+            comment = "Colors your squadmates' nametag, hitbox and hit color pink")
+    public static boolean pinkSquamates = true;
+
     /**
      * HUD config
      */

@@ -25,7 +25,7 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
     @Override
     public void initGui() {
         this.maxWidth = BUTTON_WIDTH;
-        this.maxHeight = (buttonsHeight + 4) * 10 + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * 11 + buttonsHeight;
         super.initGui();
         final int xPos = getxCenter() - BUTTON_WIDTH / 2;
         this.elementList.add(new TextElement(EnumChatFormatting.GREEN + "Mega Walls Enhancements", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
@@ -121,7 +121,16 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
                 () -> ConfigHandler.renegadeArrowCount,
                 EnumChatFormatting.GRAY + "Renders above player heads the amount of arrows pinned in each player when playing renegade",
                 EnumChatFormatting.YELLOW + "This can have a negative impact on performance, keep it off if you don't play Renegade"));
-        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(9), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
+        this.buttonList.add(new FancyGuiButton(
+                xPos, getButtonYPos(8),
+                () -> "Pink squadmates : " + getSuffix(ConfigHandler.pinkSquamates),
+                () -> {
+                    ConfigHandler.pinkSquamates = !ConfigHandler.pinkSquamates;
+                    NameUtil.refreshAllNamesInWorld();
+                },
+                EnumChatFormatting.GREEN + "Pink squadmates",
+                EnumChatFormatting.GRAY + "Your squadmates will have a pink nametag, hitbox and hitcolor"));
+        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(10), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
 
 }

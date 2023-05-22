@@ -164,7 +164,11 @@ public class NameUtil {
 
         ((EntityPlayerAccessor) player).setPrestige4Tag(mwPlayerData.originalP4Tag);
         ((EntityPlayerAccessor) player).setPrestige5Tag(mwPlayerData.P5Tag);
-        ((EntityPlayerAccessor) player).setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
+        if (ConfigHandler.pinkSquamates && mwPlayerData.squadname != null) {
+            ((EntityPlayerAccessor) player).setPlayerTeamColorInt(ColorUtil.getColorInt('d'));
+        } else {
+            ((EntityPlayerAccessor) player).setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
+        }
 
         if (!onPlayerJoin) {
             player.getPrefixes().removeAll(allPrefix);
