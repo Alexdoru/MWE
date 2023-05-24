@@ -257,6 +257,12 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Colors your squadmates' nametag, hitbox and hit color pink")
     public static boolean pinkSquamates = true;
 
+    @ConfigProperty(
+            category = MWENHANCEMENTS,
+            name = "Keep first letter squadnames",
+            comment = "Keeps the first letter of squadnames to be able to track them with compass")
+    public static boolean keepFirstLetterSquadnames = true;
+
     /**
      * HUD config
      */

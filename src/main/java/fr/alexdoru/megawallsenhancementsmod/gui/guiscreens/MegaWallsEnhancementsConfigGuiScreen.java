@@ -25,7 +25,7 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
     @Override
     public void initGui() {
         this.maxWidth = BUTTON_WIDTH;
-        this.maxHeight = (buttonsHeight + 4) * 11 + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * 12 + buttonsHeight;
         super.initGui();
         final int xPos = getxCenter() - BUTTON_WIDTH / 2;
         this.elementList.add(new TextElement(EnumChatFormatting.GREEN + "Mega Walls Enhancements", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
@@ -130,7 +130,15 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
                 },
                 EnumChatFormatting.GREEN + "Pink squadmates",
                 EnumChatFormatting.GRAY + "Your squadmates will have a pink nametag, hitbox and hitcolor"));
-        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(10), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
+        this.buttonList.add(new OptionGuiButton(
+                xPos, getButtonYPos(9),
+                "Keep first letter squadname",
+                (b) -> ConfigHandler.keepFirstLetterSquadnames = b,
+                () -> ConfigHandler.keepFirstLetterSquadnames,
+                EnumChatFormatting.GRAY + "When adding a player to the squad with a custom name of your choice, using"
+                        + EnumChatFormatting.YELLOW + " /squad add <name> as <custom name>"
+                        + EnumChatFormatting.GRAY + ", it will keep the first letter of their real name so that you can track them on the compass"));
+        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
 
 }
