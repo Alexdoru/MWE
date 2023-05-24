@@ -58,9 +58,21 @@ public class CommandSquad extends MyAbstractCommand {
             if (args.length >= 4 && args[2].equalsIgnoreCase("as")) {
                 final StringBuilder stringBuilder = new StringBuilder();
                 for (int i = 3; i < args.length; i++) {
-                    stringBuilder.append(args[i]).append((i == args.length - 1) ? "" : " ");
+                    stringBuilder.append(args[i]);
+                    if (i != args.length - 1) {
+                        stringBuilder.append(" ");
+                    }
                 }
-                final String alias = stringBuilder.toString();
+                String alias = stringBuilder.toString();
+                if (!args[1].equals(Minecraft.getMinecraft().thePlayer.getName()) && !args[1].equals(ConfigHandler.hypixelNick)) {
+                    if (ConfigHandler.keepFirstLetterSquadnames) {
+                        if (args[1].length() > 0 && alias.length() > 0) {
+                            if (args[1].charAt(0) != alias.charAt(0)) {
+                                alias = args[1].charAt(0) + " \u2758 " + alias;
+                            }
+                        }
+                    }
+                }
                 SquadHandler.addPlayer(args[1], alias);
                 ChatUtil.addChatMessage(ChatUtil.getTagMW() +
                         EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[1] + EnumChatFormatting.GREEN + " as " +
