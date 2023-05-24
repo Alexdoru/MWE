@@ -72,7 +72,7 @@ public class ConfigHandler extends AbstractConfig {
             category = FKCOUNTER,
             name = "Kill diff in Chat",
             comment = "Kill diff in Chat")
-    public static boolean showKillDiffInChat = true;
+    public static boolean showKillDiffInChat;
 
     /**
      * MWEnhancements config
