@@ -255,7 +255,7 @@ public class ConfigHandler extends AbstractConfig {
             category = MWENHANCEMENTS,
             name = "Pink squadmates",
             comment = "Colors your squadmates' nametag, hitbox and hit color pink")
-    public static boolean pinkSquamates = true;
+    public static boolean pinkSquadmates = true;
 
     @ConfigProperty(
             category = MWENHANCEMENTS,
