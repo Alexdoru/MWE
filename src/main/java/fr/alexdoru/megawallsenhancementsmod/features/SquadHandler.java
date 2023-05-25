@@ -22,7 +22,7 @@ public class SquadHandler {
     public void onNameFormat(NameFormat event) {
         final String squadname = squadmap.get(event.username);
         if (squadname != null) {
-            event.displayname = ConfigHandler.pinkSquamates ? EnumChatFormatting.LIGHT_PURPLE + squadname : squadname;
+            event.displayname = ConfigHandler.pinkSquadmates ? EnumChatFormatting.LIGHT_PURPLE + squadname : squadname;
         }
     }
 

@@ -123,9 +123,9 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
                 EnumChatFormatting.YELLOW + "This can have a negative impact on performance, keep it off if you don't play Renegade"));
         this.buttonList.add(new FancyGuiButton(
                 xPos, getButtonYPos(8),
-                () -> "Pink squadmates : " + getSuffix(ConfigHandler.pinkSquamates),
+                () -> "Pink squadmates : " + getSuffix(ConfigHandler.pinkSquadmates),
                 () -> {
-                    ConfigHandler.pinkSquamates = !ConfigHandler.pinkSquamates;
+                    ConfigHandler.pinkSquadmates = !ConfigHandler.pinkSquadmates;
                     NameUtil.refreshAllNamesInWorld();
                 },
                 EnumChatFormatting.GREEN + "Pink squadmates",

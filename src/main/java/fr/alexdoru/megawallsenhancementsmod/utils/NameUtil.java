@@ -164,7 +164,7 @@ public class NameUtil {
 
         ((EntityPlayerAccessor) player).setPrestige4Tag(mwPlayerData.originalP4Tag);
         ((EntityPlayerAccessor) player).setPrestige5Tag(mwPlayerData.P5Tag);
-        if (ConfigHandler.pinkSquamates && mwPlayerData.squadname != null) {
+        if (ConfigHandler.pinkSquadmates && mwPlayerData.squadname != null) {
             ((EntityPlayerAccessor) player).setPlayerTeamColorInt(ColorUtil.getColorInt('d'));
         } else {
             ((EntityPlayerAccessor) player).setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
