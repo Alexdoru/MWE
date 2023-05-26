@@ -50,7 +50,7 @@ public class SquadHealthHUD extends AbstractRenderer {
         }
         final List<NetworkPlayerInfo> list = new ArrayList<>();
         for (final String squadmateName : SquadHandler.getSquad().keySet()) {
-            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(squadmateName);
+            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(squadmateName);
             if (networkPlayerInfo != null) {
                 list.add(networkPlayerInfo);
             }

@@ -136,7 +136,7 @@ public class ReportSuggestionHandler {
 
         } else if (messageSender != null) {
 
-            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(messageSender);
+            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(messageSender);
             if (networkPlayerInfo != null) {
                 isSenderInTablist = true;
                 final UUID id = networkPlayerInfo.getGameProfile().getId();
@@ -400,7 +400,7 @@ public class ReportSuggestionHandler {
     }
 
     private static boolean isNameValid(String playername) {
-        return NetHandlerPlayClientHook.playerInfoMap.get(playername) != null || isPlayerMyself(playername) || KillCounter.wasPlayerInThisGame(playername);
+        return NetHandlerPlayClientHook.getPlayerInfo(playername) != null || isPlayerMyself(playername) || KillCounter.wasPlayerInThisGame(playername);
     }
 
     private static boolean isPlayerMyself(@Nullable String name) {
@@ -464,7 +464,7 @@ public class ReportSuggestionHandler {
     }
 
     private static void sendShoutWithUUID(String blockedMessgae, String reportText, String reportedPlayer) {
-        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(reportedPlayer);
+        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(reportedPlayer);
         if (networkPlayerInfo == null) return;
         final String uuid = networkPlayerInfo.getGameProfile().getId().toString();
         if (mc.thePlayer != null) {

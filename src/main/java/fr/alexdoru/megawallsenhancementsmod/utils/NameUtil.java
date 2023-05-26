@@ -79,7 +79,7 @@ public class NameUtil {
      */
     public static void updateMWPlayerDataAndEntityData(String playername, boolean refreshDisplayName) {
         if (isValidMinecraftName(playername)) {
-            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
             if (networkPlayerInfo != null) {
                 ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(getMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
             }
@@ -94,7 +94,7 @@ public class NameUtil {
     }
 
     public static void updateMWPlayerDataAndEntityData(EntityPlayer player, boolean refreshDisplayName) {
-        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(player.getName());
+        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(player.getName());
         if (networkPlayerInfo != null) {
             ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(getMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
         }
@@ -133,7 +133,7 @@ public class NameUtil {
 
     public static void onScoreboardPacket(String playername) {
         if (isValidMinecraftName(playername)) {
-            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
             if (networkPlayerInfo != null) {
                 final MWPlayerData.PlayerData mwPlayerData = getMWPlayerData(networkPlayerInfo.getGameProfile(), true);
                 ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(mwPlayerData.displayName);
@@ -316,7 +316,7 @@ public class NameUtil {
      * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay#getPlayerName}
      */
     public static String getFormattedName(String playername) {
-        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
         if (networkPlayerInfo == null) {
             return playername;
         }
@@ -339,7 +339,7 @@ public class NameUtil {
      * This doesn't return the icons in front that the player may have.
      */
     public static String getFormattedNameWithoutIcons(String playername) {
-        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
         if (networkPlayerInfo == null) {
             return SquadHandler.getSquadname(playername);
         }

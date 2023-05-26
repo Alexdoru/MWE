@@ -20,7 +20,7 @@ import java.util.List;
 @SuppressWarnings({"unused", "UnstableApiUsage"})
 public class NetHandlerPlayClientHook {
 
-    public static final HashMap<String, NetworkPlayerInfo> playerInfoMap = new HashMap<>();
+    private static final HashMap<String, NetworkPlayerInfo> playerInfoMap = new HashMap<>();
     private static final EvictingQueue<DisconnectedPlayer> latestDisconnected = EvictingQueue.create(20);
 
     public static void putPlayerInMap(String playerName, NetworkPlayerInfo networkplayerinfo) {
@@ -40,6 +40,10 @@ public class NetHandlerPlayClientHook {
         playerInfoMap.clear();
         latestDisconnected.clear();
         MWPlayerData.clearData();
+    }
+
+    public static NetworkPlayerInfo getPlayerInfo(String playername) {
+        return playerInfoMap.get(playername);
     }
 
     public static void handleTeamPacket(S3EPacketTeams packetIn, ScorePlayerTeam scoreplayerteam) {

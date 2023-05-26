@@ -363,7 +363,7 @@ public class KillCounter {
     }
 
     private static void updateNetworkPlayerinfo(String playername, int finals) {
-        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
         if (networkPlayerInfo instanceof NetworkPlayerInfoAccessor) {
             ((NetworkPlayerInfoAccessor) networkPlayerInfo).setPlayerFinalkills(finals);
         }
