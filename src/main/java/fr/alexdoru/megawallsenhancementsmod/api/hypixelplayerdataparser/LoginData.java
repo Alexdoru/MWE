@@ -186,7 +186,7 @@ public class LoginData {
     }
 
     public boolean isStaffonHypixel() { // for moderators, admins etc
-        return rank != null && lastLogout == 0 && lastLogin == 0;
+        return rank != null && !"NORMAL".equals(rank) && lastLogout == 0 && lastLogin == 0;
     }
 
     public boolean isnotMVPPlusPlus() {
