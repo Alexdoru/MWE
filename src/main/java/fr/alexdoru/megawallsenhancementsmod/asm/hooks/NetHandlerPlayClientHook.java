@@ -23,8 +23,8 @@ public class NetHandlerPlayClientHook {
     private static final HashMap<String, NetworkPlayerInfo> playerInfoMap = new HashMap<>();
     private static final EvictingQueue<DisconnectedPlayer> latestDisconnected = EvictingQueue.create(20);
 
-    public static void putPlayerInMap(String playerName, NetworkPlayerInfo networkplayerinfo) {
-        playerInfoMap.put(playerName, networkplayerinfo);
+    public static void putPlayerInMap(NetworkPlayerInfo networkplayerinfo) {
+        playerInfoMap.put(networkplayerinfo.getGameProfile().getName(), networkplayerinfo);
     }
 
     public static void removePlayerFromMap(Object o) {

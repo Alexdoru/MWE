@@ -61,9 +61,7 @@ public class NetHandlerPlayClientTransformer_PlayerMapTracker implements IMyClas
                      * With :
                      * NetHandlerPlayClientHook.removePlayerFromMap(this.playerInfoMap.remove(s38packetplayerlistitem$addplayerdata.getProfile().getId()));
                      */
-                    final InsnList listRemove = new InsnList();
-                    listRemove.add(new MethodInsnNode(INVOKESTATIC, getHookClass("NetHandlerPlayClientHook"), "removePlayerFromMap", "(Ljava/lang/Object;)V", false));
-                    methodNode.instructions.insertBefore(targetNodeRemoveInjection, listRemove);
+                    methodNode.instructions.insertBefore(targetNodeRemoveInjection, new MethodInsnNode(INVOKESTATIC, getHookClass("NetHandlerPlayClientHook"), "removePlayerFromMap", "(Ljava/lang/Object;)V", false));
                     methodNode.instructions.remove(targetNodeRemoveInjection);
                     status.addInjection();
                     /*
@@ -72,10 +70,7 @@ public class NetHandlerPlayClientTransformer_PlayerMapTracker implements IMyClas
                      */
                     final InsnList listPut = new InsnList();
                     listPut.add(new VarInsnNode(ALOAD, 4));
-                    listPut.add(getNewMethodInsnNode(MethodMapping.NETWORKPLAYERINFO$GETGAMEPROFILE));
-                    listPut.add(new MethodInsnNode(INVOKEVIRTUAL, "com/mojang/authlib/GameProfile", "getName", "()Ljava/lang/String;", false));
-                    listPut.add(new VarInsnNode(ALOAD, 4));
-                    listPut.add(new MethodInsnNode(INVOKESTATIC, getHookClass("NetHandlerPlayClientHook"), "putPlayerInMap", "(Ljava/lang/String;L" + ClassMapping.NETWORKPLAYERINFO + ";)V", false));
+                    listPut.add(new MethodInsnNode(INVOKESTATIC, getHookClass("NetHandlerPlayClientHook"), "putPlayerInMap", "(L" + ClassMapping.NETWORKPLAYERINFO + ";)V", false));
                     methodNode.instructions.insertBefore(targetNodePutInjection, listPut);
                     status.addInjection();
                 }
