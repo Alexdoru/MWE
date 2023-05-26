@@ -66,7 +66,7 @@ public class PartyDetection {
     public static void printBoostingReportAdvice(String playername) {
         final List<String> partyList = partysMap.get(playername);
         if (partyList != null) {
-            final NetworkPlayerInfo infoPlayername = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+            final NetworkPlayerInfo infoPlayername = NetHandlerPlayClientHook.getPlayerInfo(playername);
             if (infoPlayername == null) {
                 return;
             }
@@ -75,7 +75,7 @@ public class PartyDetection {
             boolean containsPlayers = false;
             for (final String player : partyList) {
                 if (!player.equals(playername)) {
-                    final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(player);
+                    final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(player);
                     if (networkPlayerInfo != null) {
                         final String teamColorPlayer = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), player), player);
                         if (!teamColorPlayername.equals("") && teamColorPlayername.equals(teamColorPlayer)) {

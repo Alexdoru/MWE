@@ -171,7 +171,7 @@ public class ChatListener {
 
             // Chat Censoring
             if (ConfigHandler.censorCheaterChatMsg && messageSender != null) {
-                final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(messageSender);
+                final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(messageSender);
                 if (networkPlayerInfo != null) {
                     final String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
                     final WDR wdr = WdrData.getWdr(uuid, messageSender);

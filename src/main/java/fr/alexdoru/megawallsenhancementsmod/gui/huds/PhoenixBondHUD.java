@@ -94,7 +94,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
             networkPlayerInfo = mc.thePlayer == null ? null : mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID());
             formattedName = EnumChatFormatting.AQUA.toString() + EnumChatFormatting.BOLD + "You";
         } else {
-            networkPlayerInfo = NetHandlerPlayClientHook.playerInfoMap.get(playername);
+            networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
             formattedName = getColoredName(playername, networkPlayerInfo);
         }
         return new PhxHealLine(
