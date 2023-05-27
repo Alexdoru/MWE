@@ -162,12 +162,13 @@ public class NameUtil {
             return;
         }
 
-        ((EntityPlayerAccessor) player).setPrestige4Tag(mwPlayerData.originalP4Tag);
-        ((EntityPlayerAccessor) player).setPrestige5Tag(mwPlayerData.P5Tag);
+        final EntityPlayerAccessor playerAccessor = (EntityPlayerAccessor) player;
+        playerAccessor.setPrestige4Tag(mwPlayerData.originalP4Tag);
+        playerAccessor.setPrestige5Tag(mwPlayerData.P5Tag);
         if (ConfigHandler.pinkSquadmates && mwPlayerData.squadname != null) {
-            ((EntityPlayerAccessor) player).setPlayerTeamColorInt(ColorUtil.getColorInt('d'));
+            playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt('d'));
         } else {
-            ((EntityPlayerAccessor) player).setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
+            playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
         }
 
         if (!onPlayerJoin) {
@@ -265,7 +266,7 @@ public class NameUtil {
                 final String teamprefix = team.getColorPrefix();
                 colorSuffix = team.getColorSuffix();
                 teamColor = StringUtil.getLastColorCharOf(teamprefix);
-                if (ConfigHandler.prestigeV && colorSuffix != null && colorSuffix.contains(EnumChatFormatting.GOLD.toString())) {
+                if (ConfigHandler.prestigeV && colorSuffix.contains(EnumChatFormatting.GOLD.toString())) {
                     final Matcher matcher = PATTERN_CLASS_TAG.matcher(colorSuffix);
                     if (matcher.find()) {
                         final String tag = matcher.group(1);
