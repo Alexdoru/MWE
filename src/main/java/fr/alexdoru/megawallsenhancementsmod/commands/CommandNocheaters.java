@@ -328,16 +328,6 @@ public class CommandNocheaters extends MyAbstractCommand {
                 ReportQueue.INSTANCE.clearReportsFor(args[1]);
             }
 
-        } else if (args[0].equalsIgnoreCase("debug")) {
-
-            ConfigHandler.debugLogging = !ConfigHandler.debugLogging;
-            if (ConfigHandler.debugLogging) {
-                ChatUtil.debug("Enabled debug mode");
-            } else {
-                ChatUtil.debug("Disabled debug mode");
-            }
-            ConfigHandler.saveConfig();
-
         } else if (args[0].equalsIgnoreCase("getscoreboard")) {
 
             ScoreboardUtils.debugGetScoreboard();
