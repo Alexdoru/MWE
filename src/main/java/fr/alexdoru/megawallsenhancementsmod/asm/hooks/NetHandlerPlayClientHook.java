@@ -17,16 +17,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@SuppressWarnings({"unused", "UnstableApiUsage"})
+@SuppressWarnings("UnstableApiUsage")
 public class NetHandlerPlayClientHook {
 
     private static final HashMap<String, NetworkPlayerInfo> playerInfoMap = new HashMap<>();
     private static final EvictingQueue<DisconnectedPlayer> latestDisconnected = EvictingQueue.create(20);
 
+    @SuppressWarnings("unused")
     public static void putPlayerInMap(NetworkPlayerInfo networkplayerinfo) {
         playerInfoMap.put(networkplayerinfo.getGameProfile().getName(), networkplayerinfo);
     }
 
+    @SuppressWarnings("unused")
     public static void removePlayerFromMap(Object o) {
         if (o instanceof NetworkPlayerInfo) {
             final String playerName = ((NetworkPlayerInfo) o).getGameProfile().getName();
@@ -36,6 +38,7 @@ public class NetHandlerPlayClientHook {
         }
     }
 
+    @SuppressWarnings("unused")
     public static void clearPlayerMap() {
         playerInfoMap.clear();
         latestDisconnected.clear();
@@ -46,6 +49,7 @@ public class NetHandlerPlayClientHook {
         return playerInfoMap.get(playername);
     }
 
+    @SuppressWarnings("unused")
     public static void handleTeamPacket(S3EPacketTeams packetIn, ScorePlayerTeam scoreplayerteam) {
         if (packetIn.getAction() == 2) {
             scoreplayerteam.getMembershipCollection().forEach(NameUtil::onScoreboardPacket);
