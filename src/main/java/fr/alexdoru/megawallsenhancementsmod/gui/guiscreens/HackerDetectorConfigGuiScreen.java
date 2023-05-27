@@ -15,13 +15,13 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
 
     @Override
     public void initGui() {
-        final String msg = EnumChatFormatting.WHITE + "Disclaimer : this is not 100% accurate and can sometimes flag legit players,";
-        this.maxWidth = fontRendererObj.getStringWidth(msg);
+        final int sideButtonWidth = 90;
+        this.maxWidth = BUTTON_WIDTH + (10 + sideButtonWidth) * 2;
         this.maxHeight = (buttonsHeight + 4) * 10 + buttonsHeight;
         super.initGui();
         final int xPos = getxCenter() - BUTTON_WIDTH / 2;
         this.elementList.add(new TextElement(EnumChatFormatting.DARK_RED + "Hacker Detector", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
-        this.elementList.add(new TextElement(msg, getxCenter(), getButtonYPos(0)).makeCentered());
+        this.elementList.add(new TextElement(EnumChatFormatting.WHITE + "Disclaimer : this is not 100% accurate and can sometimes flag legit players,", getxCenter(), getButtonYPos(0)).makeCentered());
         this.elementList.add(new TextElement(EnumChatFormatting.WHITE + "it won't flag every cheater either, however players that", getxCenter(), getButtonYPos(0) + fontRendererObj.FONT_HEIGHT).makeCentered());
         this.elementList.add(new TextElement(EnumChatFormatting.WHITE + "are regularly flagging are definitely cheating", getxCenter(), getButtonYPos(0) + 2 * fontRendererObj.FONT_HEIGHT).makeCentered());
         this.buttonList.add(new OptionGuiButton(
@@ -43,6 +43,13 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
                 () -> ConfigHandler.autoreportFlaggedPlayers,
                 EnumChatFormatting.GRAY + "Sends a report automatically to Hypixel when it flags a cheater",
                 EnumChatFormatting.YELLOW + "Only works in Mega Walls, sends one report per game per player"));
+        this.buttonList.add(new OptionGuiButton(
+                xPos + BUTTON_WIDTH + 10, getButtonYPos(4),
+                sideButtonWidth, 20,
+                "Debug",
+                (b) -> ConfigHandler.debugLogging = b,
+                () -> ConfigHandler.debugLogging,
+                EnumChatFormatting.GRAY + "Logs every hacker detector related action in the .minecraft/logs/fml-client-latest.log"));
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(5),
                 "Show flag messages",
