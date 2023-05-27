@@ -7,14 +7,13 @@ public class FKCounterMod {
      * False in the pre game lobby
      */
     public static boolean isInMwGame = false;
-    /**
-     * True in the pre game lobby in mega walls
-     */
+    /** True in the pre game lobby in mega walls */
     public static boolean preGameLobby = false;
-    /**
-     * True during the preparation phase of a mega walls game
-     */
+    /** True during the preparation phase of a mega walls game */
     public static boolean isitPrepPhase = false;
+    /** True in mega walls lobbys, games etc */
     public static boolean isMWEnvironement = false;
+    /** True when in the Replay Mode */
+    public static boolean isReplayMode = false;
 
 }

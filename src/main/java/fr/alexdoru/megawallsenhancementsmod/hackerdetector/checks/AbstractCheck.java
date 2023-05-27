@@ -86,7 +86,7 @@ public abstract class AbstractCheck implements ICheck {
     }
 
     private static void addToReportList(EntityPlayer player, String cheat) {
-        if (ConfigHandler.addToReportList && SquadHandler.getSquad().get(player.getName()) == null) {
+        if (!FKCounterMod.isReplayMode && ConfigHandler.addToReportList && SquadHandler.getSquad().get(player.getName()) == null) {
             final UUID uuid = player.getUniqueID();
             final boolean isNicked = uuid.version() != 4;
             final String uuidStr = isNicked ? player.getName() : uuid.toString().replace("-", "");
