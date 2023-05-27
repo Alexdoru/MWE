@@ -39,6 +39,7 @@ public class ScoreboardTracker {
             FKCounterMod.isMWEnvironement = false;
             FKCounterMod.preGameLobby = false;
             FKCounterMod.isitPrepPhase = false;
+            FKCounterMod.isReplayMode = false;
             return;
         }
 
@@ -48,6 +49,7 @@ public class ScoreboardTracker {
             FKCounterMod.isMWEnvironement = false;
             FKCounterMod.preGameLobby = false;
             FKCounterMod.isitPrepPhase = false;
+            FKCounterMod.isReplayMode = false;
             return;
         }
 
@@ -60,6 +62,7 @@ public class ScoreboardTracker {
         FKCounterMod.isMWEnvironement = mwScoreboardParser.isMWEnvironement();
         FKCounterMod.preGameLobby = mwScoreboardParser.isPreGameLobby();
         FKCounterMod.isitPrepPhase = mwScoreboardParser.isitPrepPhase();
+        FKCounterMod.isReplayMode = mwScoreboardParser.isReplayMode();
 
         if (gameId == null) { // not in MW game
 

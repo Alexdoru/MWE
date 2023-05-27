@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.*;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.BrokenBlock;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
@@ -81,8 +82,8 @@ public class HackerDetector {
     }
 
     /**
-     * This gets called once per entity per tick
-     * only gets called when the client plays on a server
+     * This gets called once per entity per tick.
+     * Only gets called when the client plays on a server.
      * Hook is injected at end of {@link net.minecraft.world.World#updateEntityWithOptionalForce}
      */
     public void performChecksOnPlayer(EntityPlayer player) {
@@ -93,7 +94,7 @@ public class HackerDetector {
                 player.capabilities.isFlying ||
                 player.capabilities.isCreativeMode ||
                 player.isInvisible() ||
-                NameUtil.filterNPC(player.getUniqueID())) {
+                (!FKCounterMod.isReplayMode && NameUtil.filterNPC(player.getUniqueID()))) {
             return;
         }
         final long timeStart = System.nanoTime();

@@ -31,6 +31,7 @@ public class ScoreboardParser {
     private String gameId = null;
     private boolean isInMwGame = false;
     private boolean isMWEnvironement = false;
+    private boolean isReplayMode = false;
     private boolean preGameLobby = false;
     private boolean isitPrepPhase = false;
     private boolean hasGameEnded = false;
@@ -50,6 +51,8 @@ public class ScoreboardParser {
         final String title = ScoreboardUtils.getUnformattedSidebarTitle(scoreboard);
         if (MW_TITLE_PATTERN.matcher(title).find()) {
             isMWEnvironement = true;
+        } else if (title.contains("REPLAY")) {
+            isReplayMode = true;
         } else {
             return;
         }
@@ -180,6 +183,10 @@ public class ScoreboardParser {
 
     public boolean isMWEnvironement() {
         return isMWEnvironement;
+    }
+
+    public boolean isReplayMode() {
+        return isReplayMode;
     }
 
     public boolean isInMwGame() {
