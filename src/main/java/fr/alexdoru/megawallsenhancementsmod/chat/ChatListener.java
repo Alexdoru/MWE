@@ -8,11 +8,11 @@ import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
+import fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter;
 import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.*;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.AbstractCheck;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoTracker;
@@ -133,7 +133,7 @@ public class ChatListener {
                 return;
             }
 
-            if (KillCounter.processMessage(fmsg, msg)) {
+            if (FinalKillCounter.processMessage(fmsg, msg)) {
                 event.setCanceled(true);
                 return;
             }

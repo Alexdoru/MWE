@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.fkcounter;
+package fr.alexdoru.megawallsenhancementsmod.features;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.NetworkPlayerInfoAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
@@ -7,7 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
-import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
+import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
@@ -27,7 +27,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class KillCounter {
+public class FinalKillCounter {
 
     public static final int TEAMS = 4;
     public static final int RED_TEAM = 0;
@@ -136,7 +136,7 @@ public class KillCounter {
     private static HashMap<String, Integer>[] teamKillsArray;
     private static Random rand;
 
-    public KillCounter() {
+    public FinalKillCounter() {
         rand = new Random();
         KILL_PATTERNS = new Pattern[KILL_MESSAGES.length];
         for (int i = 0; i < KILL_MESSAGES.length; i++) {

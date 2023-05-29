@@ -13,7 +13,7 @@ import net.minecraft.util.EnumChatFormatting;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter.*;
+import static fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter.*;
 
 public class CommandFKCounter extends MyAbstractCommand {
 

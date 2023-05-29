@@ -10,9 +10,9 @@ import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
+import fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
@@ -400,7 +400,7 @@ public class ReportSuggestionHandler {
     }
 
     private static boolean isNameValid(String playername) {
-        return NetHandlerPlayClientHook.getPlayerInfo(playername) != null || isPlayerMyself(playername) || KillCounter.wasPlayerInThisGame(playername);
+        return NetHandlerPlayClientHook.getPlayerInfo(playername) != null || isPlayerMyself(playername) || FinalKillCounter.wasPlayerInThisGame(playername);
     }
 
     private static boolean isPlayerMyself(@Nullable String name) {
