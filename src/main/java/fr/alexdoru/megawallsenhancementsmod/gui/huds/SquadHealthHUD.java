@@ -8,7 +8,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiPlayerTabOverlayHook;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -67,7 +67,7 @@ public class SquadHealthHUD extends AbstractRenderer {
             if (scoreobjective != null && scoreobjective.getRenderType() != IScoreObjectiveCriteria.EnumRenderType.HEARTS) {
                 maxScoreWidth = Math.max(maxScoreWidth, mc.fontRendererObj.getStringWidth(" " + scoreboard.getValueFromObjective(networkplayerinfo.getGameProfile().getName(), scoreobjective).getScorePoints()));
             }
-            if (FKCounterMod.isInMwGame) {
+            if (ScoreboardTracker.isInMwGame) {
                 final int playerFinalkills = ((NetworkPlayerInfoAccessor) networkplayerinfo).getPlayerFinalkills();
                 if (playerFinalkills != 0) {
                     maxFinalWidth = Math.max(maxFinalWidth, mc.fontRendererObj.getStringWidth(" " + playerFinalkills));
@@ -114,7 +114,7 @@ public class SquadHealthHUD extends AbstractRenderer {
                         final String scoreString = GuiPlayerTabOverlayHook.getColoredHP(scorePoints) + " " + scorePoints;
                         mc.fontRendererObj.drawStringWithShadow(scoreString, xStartScoreDrawingPos, yDrawingPos, 0xFFFFFF);
                     }
-                    if (FKCounterMod.isInMwGame) {
+                    if (ScoreboardTracker.isInMwGame) {
                         final int playersFinals = ((NetworkPlayerInfoAccessor) networkplayerinfo).getPlayerFinalkills();
                         if (playersFinals != 0) {
                             final String finalsString = EnumChatFormatting.GOLD + " " + playersFinals;

@@ -2,7 +2,6 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.LastWitherHPHUD;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
@@ -11,10 +10,10 @@ import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 public class ScorePlayerTeamHook {
 
     public static String spoofSidebarLine(String playername) {
-        if (ConfigHandler.witherHUDinSidebar && ConfigHandler.showLastWitherHUD && FKCounterMod.isInMwGame && "\ud83d\udc7d".equals(playername) && ScoreboardTracker.getMwScoreboardParser().isOnlyOneWitherAlive()) {
+        if (ConfigHandler.witherHUDinSidebar && ConfigHandler.showLastWitherHUD && ScoreboardTracker.isInMwGame && "\ud83d\udc7d".equals(playername) && ScoreboardTracker.getParser().isOnlyOneWitherAlive()) {
             return LastWitherHPHUD.instance.displayText;
         }
-        if (ConfigHandler.fkcounterHUDinSidebar && ConfigHandler.showfkcounterHUD && FKCounterMod.isInMwGame && "\ud83d\udd2e".equals(playername) && FinalKillCounter.getGameId() != null) {
+        if (ConfigHandler.fkcounterHUDinSidebar && ConfigHandler.showfkcounterHUD && ScoreboardTracker.isInMwGame && "\ud83d\udd2e".equals(playername) && FinalKillCounter.getGameId() != null) {
             return FKCounterHUD.instance.displayText;
         }
         return null;

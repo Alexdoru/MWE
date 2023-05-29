@@ -2,7 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.enchantment.Enchantment;
@@ -63,7 +63,7 @@ public class GuiContainerHook {
      * kit bow except if you have enchanted bows on you (pirate bows)
      */
     private static boolean isItemImportant(Slot theSlot, int i) {
-        if (FKCounterMod.isInMwGame && ConfigHandler.safeInventory) {
+        if (ScoreboardTracker.isInMwGame && ConfigHandler.safeInventory) {
             /*Targeted inventory for the hotkeying*/
             if (theSlot.inventory instanceof InventoryPlayer) {
                 return false;

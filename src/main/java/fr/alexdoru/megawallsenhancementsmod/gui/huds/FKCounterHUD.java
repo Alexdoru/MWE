@@ -3,7 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.MapUtil;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -125,7 +125,7 @@ public class FKCounterHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return !ConfigHandler.fkcounterHUDinSidebar && ConfigHandler.showfkcounterHUD && FKCounterMod.isInMwGame && FinalKillCounter.getGameId() != null;
+        return !ConfigHandler.fkcounterHUDinSidebar && ConfigHandler.showfkcounterHUD && ScoreboardTracker.isInMwGame && FinalKillCounter.getGameId() != null;
     }
 
     public void updateDisplayText() {

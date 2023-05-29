@@ -114,7 +114,7 @@ public class Vector3D {
 
     @Override
     public String toString() {
-        return "{x=" + String.format("%.4f", this.x)+
+        return "{x=" + String.format("%.4f", this.x) +
                 ", y=" + String.format("%.4f", this.y) +
                 ", z=" + String.format("%.4f", this.z) +
                 '}';

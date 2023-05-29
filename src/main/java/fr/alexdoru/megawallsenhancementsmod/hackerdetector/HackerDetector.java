@@ -3,11 +3,11 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.*;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.BrokenBlock;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -94,7 +94,7 @@ public class HackerDetector {
                 player.capabilities.isFlying ||
                 player.capabilities.isCreativeMode ||
                 player.isInvisible() ||
-                (!FKCounterMod.isReplayMode && NameUtil.filterNPC(player.getUniqueID()))) {
+                (!ScoreboardTracker.isReplayMode && NameUtil.filterNPC(player.getUniqueID()))) {
             return;
         }
         final long timeStart = System.nanoTime();

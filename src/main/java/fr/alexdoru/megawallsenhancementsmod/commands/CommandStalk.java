@@ -8,7 +8,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerStatus;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangPlayernameToUUID;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
@@ -143,7 +143,7 @@ class StalkTask implements Callable<String> {
                         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.RED + " Latest activity : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(latestActivityTime) + EnumChatFormatting.GRAY + " ago " + latestActivity + EnumChatFormatting.RED + "."));
                     }
 
-                    if (FKCounterMod.isMWEnvironement) {
+                    if (ScoreboardTracker.isMWEnvironement) {
                         imsg.appendSibling(new ChatComponentText(
                                 EnumChatFormatting.GREEN + " Selected class : "
                                         + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass())
@@ -156,7 +156,7 @@ class StalkTask implements Callable<String> {
 
                 } else if (logindata.isOnline()) { // player is online but hiding their session, that doesn't work anymore
 
-                    if (FKCounterMod.isMWEnvironement && logindata.getMostRecentGameType().equals("Mega Walls")) { // online and in MW
+                    if (ScoreboardTracker.isMWEnvironement && logindata.getMostRecentGameType().equals("Mega Walls")) { // online and in MW
 
                         final MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
                         ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW())

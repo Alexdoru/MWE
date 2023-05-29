@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.TimerUtil;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
@@ -47,7 +47,7 @@ public class KillCooldownHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return currentTimeMillis - lastkilltime < 60000L && FKCounterMod.isInMwGame;
+        return currentTimeMillis - lastkilltime < 60000L && ScoreboardTracker.isInMwGame;
     }
 
 }

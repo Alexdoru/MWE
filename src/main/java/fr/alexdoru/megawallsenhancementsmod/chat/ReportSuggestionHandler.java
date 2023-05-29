@@ -12,8 +12,8 @@ import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
@@ -202,7 +202,7 @@ public class ReportSuggestionHandler {
                 messageSender == null ||
                 isSenderIgnored ||
                 isSenderCheating ||
-                !FKCounterMod.isInMwGame ||
+                !ScoreboardTracker.isInMwGame ||
                 isTargetMyself) {
             return false;
         }
@@ -221,7 +221,7 @@ public class ReportSuggestionHandler {
             );
         }
 
-        if (FKCounterMod.isPrepPhase) {
+        if (ScoreboardTracker.isPrepPhase) {
             if (isSenderMyself) {
                 new DelayedTask(() -> ChatUtil.addChatMessage(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " Cannot share a report before the walls fall!"), 0);
                 return true;
@@ -332,7 +332,7 @@ public class ReportSuggestionHandler {
         if (isSenderFlaging) {
             final String newFmsg = StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.LIGHT_PURPLE + " (Scangame)", "", true);
             final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
-            if (FKCounterMod.isMWEnvironement && !isSenderMyself) {
+            if (ScoreboardTracker.isMWEnvironement && !isSenderMyself) {
                 imsg.appendSibling(ChatUtil.getIgnoreButton(messageSender));
             }
             addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
@@ -342,7 +342,7 @@ public class ReportSuggestionHandler {
 
         final String newFmsg = getReportTextWithFormattedName(fmsg, reportText, reportedPlayer);
         final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
-        if (FKCounterMod.isMWEnvironement && !isSenderMyself) {
+        if (ScoreboardTracker.isMWEnvironement && !isSenderMyself) {
             imsg.appendSibling(ChatUtil.getIgnoreButton(messageSender));
         }
         addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
@@ -351,7 +351,7 @@ public class ReportSuggestionHandler {
     }
 
     private static String getReportTextWithFormattedName(String fmsg, String reportText, String reportedPlayer) {
-        if (FKCounterMod.isInMwGame) {
+        if (ScoreboardTracker.isInMwGame) {
             final String newReportText = EnumChatFormatting.DARK_RED + reportText.replace(reportedPlayer, NameUtil.getFormattedNameWithoutIcons(reportedPlayer) + EnumChatFormatting.DARK_RED);
             return StringUtil.replaceTargetWith(fmsg, reportText, newReportText);
         }

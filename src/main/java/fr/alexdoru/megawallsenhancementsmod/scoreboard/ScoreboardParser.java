@@ -4,6 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.LastWitherHPHUD;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.opengl.Display;
@@ -32,8 +33,8 @@ public class ScoreboardParser {
     private boolean isInMwGame = false;
     private boolean isMWEnvironement = false;
     private boolean isReplayMode = false;
-    private boolean preGameLobby = false;
-    private boolean isitPrepPhase = false;
+    private boolean isPreGameLobby = false;
+    private boolean isPrepPhase = false;
     private boolean hasGameEnded = false;
 
     public static void onGameStart() {
@@ -42,8 +43,13 @@ public class ScoreboardParser {
     }
 
     /* This runs on every tick to parse the scoreboard data */
-    public ScoreboardParser(Scoreboard scoreboard) {
+    public ScoreboardParser() {
 
+        if (Minecraft.getMinecraft().theWorld == null) {
+            return;
+        }
+
+        final Scoreboard scoreboard = Minecraft.getMinecraft().theWorld.getScoreboard();
         if (scoreboard == null) {
             return;
         }
@@ -86,13 +92,13 @@ public class ScoreboardParser {
 
         final Matcher wallsFallMatcher = WALLS_FALL_PATTERN.matcher(unformattedSidebarLines.get(1));
         if (wallsFallMatcher.find()) {
-            isitPrepPhase = true;
+            isPrepPhase = true;
             if (!triggeredWallsFallAlert && wallsFallMatcher.group(1).equals("00") && wallsFallMatcher.group(2).equals("10") && !Display.isActive()) {
                 SoundUtil.playGameStartSound();
                 triggeredWallsFallAlert = true;
             }
         } else if (GATES_OPEN_PATTERN.matcher(unformattedSidebarLines.get(1)).find()) {
-            isitPrepPhase = true;
+            isPrepPhase = true;
         } else if (!triggeredGameEndAlert && "Game End: 05:00".equals(unformattedSidebarLines.get(1))) {
             SoundUtil.playNotePling();
             ChatUtil.addChatMessage(EnumChatFormatting.YELLOW + "Game ends in 5 minutes!");
@@ -145,7 +151,7 @@ public class ScoreboardParser {
         for (final String line : unformattedSidebarLines) {
             if (PREGAME_LOBBY_PATTERN.matcher(line).find()) {
                 gameId = null;
-                preGameLobby = true;
+                isPreGameLobby = true;
                 isInMwGame = false;
                 return true;
             }
@@ -173,8 +179,8 @@ public class ScoreboardParser {
         return hasGameEnded;
     }
 
-    public boolean isitPrepPhase() {
-        return isitPrepPhase;
+    public boolean isPrepPhase() {
+        return isPrepPhase;
     }
 
     public boolean isOnlyOneWitherAlive() {
@@ -194,7 +200,7 @@ public class ScoreboardParser {
     }
 
     public boolean isPreGameLobby() {
-        return preGameLobby;
+        return isPreGameLobby;
     }
 
 }

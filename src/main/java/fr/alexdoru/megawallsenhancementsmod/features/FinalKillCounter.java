@@ -7,7 +7,6 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
@@ -170,7 +169,7 @@ public class FinalKillCounter {
 
     public static boolean processMessage(String formattedText, String unformattedText) {
 
-        if (!FKCounterMod.isInMwGame) {
+        if (!ScoreboardTracker.isInMwGame) {
             return false;
         }
 
@@ -298,11 +297,11 @@ public class FinalKillCounter {
     }
 
     private static boolean isWitherDead(String color) {
-        return !ScoreboardTracker.getMwScoreboardParser().isWitherAlive(color);
+        return !ScoreboardTracker.getParser().isWitherAlive(color);
     }
 
     private static boolean areAllWithersAlive() {
-        return ScoreboardTracker.getMwScoreboardParser().areAllWithersAlive();
+        return ScoreboardTracker.getParser().areAllWithersAlive();
     }
 
     /**
@@ -478,7 +477,7 @@ public class FinalKillCounter {
          * to fix the bug where the FKCounter doesn't work properly if you play two games in a row on a server with the same serverID
          */
         if (event.getType() == MegaWallsGameEvent.EventType.GAME_START) {
-            final String currentGameId = ScoreboardTracker.getMwScoreboardParser().getGameId();
+            final String currentGameId = ScoreboardTracker.getParser().getGameId();
             if (currentGameId != null) {
                 ResetKillCounterTo(currentGameId);
             }
@@ -487,7 +486,7 @@ public class FinalKillCounter {
         }
 
         if (event.getType() == MegaWallsGameEvent.EventType.CONNECT) {
-            final String currentGameId = ScoreboardTracker.getMwScoreboardParser().getGameId(); // this is not null due to how the event is defined/posted
+            final String currentGameId = ScoreboardTracker.getParser().getGameId(); // this is not null due to how the event is defined/posted
             if (gameId == null || !gameId.equals(currentGameId)) {
                 ResetKillCounterTo(currentGameId);
             }

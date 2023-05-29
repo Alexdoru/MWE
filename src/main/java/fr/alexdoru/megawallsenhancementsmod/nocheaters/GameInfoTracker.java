@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 
 import java.util.Date;
@@ -35,7 +35,7 @@ public class GameInfoTracker {
      */
     public static String getTimeSinceGameStart(long timestamp, String serverID, int delay) {
 
-        if (FKCounterMod.isInMwGame) {
+        if (ScoreboardTracker.isInMwGame) {
 
             final List<String> scoresRaw = ScoreboardUtils.getUnformattedSidebarText();
 

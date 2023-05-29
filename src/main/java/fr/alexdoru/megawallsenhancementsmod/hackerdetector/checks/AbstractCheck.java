@@ -7,13 +7,13 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.SampleList;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoTracker;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -73,7 +73,7 @@ public abstract class AbstractCheck implements ICheck {
                 .setChatStyle(new ChatStyle()
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.COPY_TO_CLIPBOARD_COMMAND + EnumChatFormatting.getTextWithoutFormattingCodes(msg)))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(cheatDescription))));
-        if (!(FKCounterMod.isInMwGame && ConfigHandler.autoreportFlaggedPlayers)) {
+        if (!(ScoreboardTracker.isInMwGame && ConfigHandler.autoreportFlaggedPlayers)) {
             imsg.appendSibling(ChatUtil.getReportButton(player.getName(), "cheating " + cheat.toLowerCase(), ClickEvent.Action.RUN_COMMAND));
         }
         if (!ConfigHandler.addToReportList) {
@@ -86,7 +86,7 @@ public abstract class AbstractCheck implements ICheck {
     }
 
     private static void addToReportList(EntityPlayer player, String cheat) {
-        if (!FKCounterMod.isReplayMode && ConfigHandler.addToReportList && SquadHandler.getSquad().get(player.getName()) == null) {
+        if (!ScoreboardTracker.isReplayMode && ConfigHandler.addToReportList && SquadHandler.getSquad().get(player.getName()) == null) {
             final UUID uuid = player.getUniqueID();
             final boolean isNicked = uuid.version() != 4;
             final String uuidStr = isNicked ? player.getName() : uuid.toString().replace("-", "");
@@ -113,7 +113,7 @@ public abstract class AbstractCheck implements ICheck {
     }
 
     private static void sendReport(EntityPlayer player, String cheat, boolean sendTimestamp) {
-        if (FKCounterMod.isInMwGame && ConfigHandler.autoreportFlaggedPlayers && SquadHandler.getSquad().get(player.getName()) == null) {
+        if (ScoreboardTracker.isInMwGame && ConfigHandler.autoreportFlaggedPlayers && SquadHandler.getSquad().get(player.getName()) == null) {
             if (sendTimestamp) {
                 final String timestamp = GameInfoTracker.getTimeSinceGameStart();
                 if (!timestamp.equals("?")) {

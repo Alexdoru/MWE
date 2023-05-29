@@ -12,7 +12,7 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatListener;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
@@ -89,7 +89,7 @@ public class CommandScanGame extends MyAbstractCommand {
     }
 
     private static boolean isUsingRandomDuringMythicHour(NetworkPlayerInfo networkPlayerInfo, boolean isMythicHour) {
-        return isMythicHour && NameUtil.isPlayerUsingRandom(networkPlayerInfo) || FKCounterMod.isInMwGame && ScangameData.didPlayerPickRandom(networkPlayerInfo.getGameProfile().getId());
+        return isMythicHour && NameUtil.isPlayerUsingRandom(networkPlayerInfo) || ScoreboardTracker.isInMwGame && ScangameData.didPlayerPickRandom(networkPlayerInfo.getGameProfile().getId());
     }
 
 }
@@ -152,7 +152,7 @@ class ScanPlayerTask implements Callable<String> {
                 final boolean secondFlag = generalInfo.getCompletedQuests() < 20 && generalInfo.getNetworkLevel() > 30f;
                 final JsonObject classesdata = megawallsstats.getClassesdata();
                 if (classesdata != null) {
-                    if (FKCounterMod.isInMwGame) {
+                    if (ScoreboardTracker.isInMwGame) {
                         final ScorePlayerTeam team = Minecraft.getMinecraft().theWorld.getScoreboard().getPlayersTeam(playername);
                         final String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replace("[", "").replace("]", "").replace(" ", ""));
                         final MWClass mwClass = MWClass.fromTag(classTag);

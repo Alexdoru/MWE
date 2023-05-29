@@ -12,9 +12,9 @@ import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoTracker;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
@@ -69,8 +69,8 @@ public class CommandWDR extends MyAbstractCommand {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
-            if (FKCounterMod.isInMwGame) {
-                if (FKCounterMod.isPrepPhase) {
+            if (ScoreboardTracker.isInMwGame) {
+                if (ScoreboardTracker.isPrepPhase) {
                     return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
                 } else {
                     final List<String> playersInThisGame = FinalKillCounter.getPlayersInThisGame();
@@ -227,7 +227,7 @@ public class CommandWDR extends MyAbstractCommand {
 
         PartyDetection.printBoostingReportAdvice(playername);
 
-        if (FKCounterMod.isPreGameLobby) {
+        if (ScoreboardTracker.isPreGameLobby) {
             ChatUtil.addChatMessage(ChatUtil.getChatReportingAdvice());
         }
 

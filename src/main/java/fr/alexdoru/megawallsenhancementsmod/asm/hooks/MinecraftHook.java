@@ -3,7 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.TimerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -55,7 +55,7 @@ public class MinecraftHook {
     }
 
     public static boolean shouldCancelRightClick(ItemStack itemStack) {
-        if (FKCounterMod.isInMwGame && itemStack != null && itemStack.getItem() == Items.paper) {
+        if (ScoreboardTracker.isInMwGame && itemStack != null && itemStack.getItem() == Items.paper) {
             final NBTTagCompound tagCompound = itemStack.getTagCompound();
             if (tagCompound != null && tagCompound.hasKey("display", 10)) {
                 final NBTTagCompound displayTag = tagCompound.getCompoundTag("display");

@@ -5,7 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
@@ -51,7 +51,7 @@ public class ReportQueue {
                     final int index = getIndexOfNextReportToSend();
                     final ReportInQueue reportInQueue = queueList.remove(index == -1 ? 0 : index);
                     final String playername = reportInQueue.reportedPlayer;
-                    if (reportInQueue.isReportSuggestion || reportInQueue.isReportFromHackerDetector || FKCounterMod.isInMwGame) {
+                    if (reportInQueue.isReportSuggestion || reportInQueue.isReportFromHackerDetector || ScoreboardTracker.isInMwGame) {
                         final String msg = "/wdr " + playername + (reportInQueue.isReportFromHackerDetector ? " cheating " + reportInQueue.cheat : "");
                         mc.thePlayer.sendChatMessage(msg);
                         //if (debug) {
