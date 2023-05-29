@@ -221,7 +221,7 @@ public class ReportSuggestionHandler {
             );
         }
 
-        if (FKCounterMod.isitPrepPhase) {
+        if (FKCounterMod.isPrepPhase) {
             if (isSenderMyself) {
                 new DelayedTask(() -> ChatUtil.addChatMessage(EnumChatFormatting.RED + "\u2716" + EnumChatFormatting.GRAY + " Cannot share a report before the walls fall!"), 0);
                 return true;

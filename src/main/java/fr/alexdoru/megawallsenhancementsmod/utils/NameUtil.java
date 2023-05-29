@@ -191,7 +191,7 @@ public class NameUtil {
                     WarningMessagesHandler.printWarningMessage(
                             datenow,
                             uuid,
-                            (!FKCounterMod.isInMwGame || FKCounterMod.isitPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(player.getTeam(), playerName),
+                            (!FKCounterMod.isInMwGame || FKCounterMod.isPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(player.getTeam(), playerName),
                             playerName,
                             mwPlayerData.wdr,
                             gotautoreported

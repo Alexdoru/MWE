@@ -109,7 +109,7 @@ public class CommandReport extends MyAbstractCommand {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
-            if (FKCounterMod.isInMwGame && FKCounterMod.isitPrepPhase) {
+            if (FKCounterMod.isInMwGame && FKCounterMod.isPrepPhase) {
                 return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
             }
             return null;

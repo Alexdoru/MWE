@@ -307,7 +307,7 @@ public class ChatUtil {
     public static String getReportingAdvice() {
         final String s = "\n\n" + EnumChatFormatting.RED + "To make reporting efficient, be sure to report" + EnumChatFormatting.DARK_RED + " when you are ingame with\n"
                 + EnumChatFormatting.DARK_RED + "the cheater" + EnumChatFormatting.RED + " and not before the game starts or in the lobby.";
-        return FKCounterMod.preGameLobby ? s : "";
+        return FKCounterMod.isPreGameLobby ? s : "";
     }
 
     public static String getChatReportingAdvice() {

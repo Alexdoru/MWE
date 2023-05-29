@@ -42,7 +42,7 @@ public class CommandHypixelShout extends MyAbstractCommand {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length >= 2 && isKeywordreport(2, args)) {
-            if (FKCounterMod.isitPrepPhase) {
+            if (FKCounterMod.isPrepPhase) {
                 return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
             } else if (FKCounterMod.isInMwGame) {
                 final List<String> playersInThisGame = KillCounter.getPlayersInThisGame();
@@ -53,7 +53,7 @@ public class CommandHypixelShout extends MyAbstractCommand {
         if (args.length >= 3 && (isKeywordreport(3, args))) {
             return getListOfStringsMatchingLastWord(args, CommandReport.cheatsArray);
         }
-        if (FKCounterMod.isitPrepPhase) {
+        if (FKCounterMod.isPrepPhase) {
             return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
         }
         return null;

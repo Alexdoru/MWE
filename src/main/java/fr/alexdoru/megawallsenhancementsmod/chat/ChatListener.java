@@ -202,7 +202,7 @@ public class ChatListener {
                 return;
             }
 
-            if (FKCounterMod.preGameLobby) {
+            if (FKCounterMod.isPreGameLobby) {
                 final Matcher playerJoinMatcher = PLAYER_JOIN_PATTERN.matcher(msg);
                 if (playerJoinMatcher.matches()) {
                     PartyDetection.onPlayerJoin(playerJoinMatcher.group(1), System.currentTimeMillis());
