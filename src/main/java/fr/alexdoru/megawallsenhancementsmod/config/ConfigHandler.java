@@ -263,6 +263,12 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Keeps the first letter of squadnames to be able to track them with compass")
     public static boolean keepFirstLetterSquadnames = true;
 
+    @ConfigProperty(
+            category = MWENHANCEMENTS,
+            name = "Chat Heads",
+            comment = "Renders heads of players in front of chat messages")
+    public static boolean chatHeads = true;
+
     /**
      * HUD config
      */
