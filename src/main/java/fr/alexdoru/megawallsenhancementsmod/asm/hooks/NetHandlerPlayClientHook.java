@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import com.google.common.collect.EvictingQueue;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessors.ChatComponentTextAccessor;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
@@ -9,9 +10,7 @@ import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.network.play.server.S3EPacketTeams;
 import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,7 +32,12 @@ public class NetHandlerPlayClientHook {
         if (o instanceof NetworkPlayerInfo) {
             final String playerName = ((NetworkPlayerInfo) o).getGameProfile().getName();
             final NetworkPlayerInfo removedInfo = playerInfoMap.remove(playerName);
-            latestDisconnected.add(new DisconnectedPlayer(System.currentTimeMillis(), playerName, removedInfo == null ? playerName : NameUtil.getFormattedName(removedInfo)));
+            latestDisconnected.add(new DisconnectedPlayer(
+                    System.currentTimeMillis(),
+                    playerName,
+                    removedInfo == null ? playerName : NameUtil.getFormattedName(removedInfo),
+                    ((NetworkPlayerInfo) o).getLocationSkin()
+            ));
             MWPlayerData.remove(((NetworkPlayerInfo) o).getGameProfile().getId());
         }
     }
@@ -61,12 +65,16 @@ public class NetHandlerPlayClientHook {
         final StringBuilder commandBuilder = new StringBuilder();
         final StringBuilder messageBuilder = new StringBuilder();
         final long timenow = System.currentTimeMillis();
+        ResourceLocation skin = null;
         for (final DisconnectedPlayer disconnectedPlayer : latestDisconnected) {
             final String playername = disconnectedPlayer.playername;
             if (playername != null && timenow - disconnectedPlayer.disconnectTime <= 1000L && !disconnectList.contains(playername)) {
                 disconnectList.add(playername);
                 commandBuilder.append(" ").append(playername);
                 messageBuilder.append(" ").append(disconnectedPlayer.formattedName);
+                if (skin == null) {
+                    skin = disconnectedPlayer.skin;
+                }
             }
         }
         if (disconnectList.isEmpty()) {
@@ -74,12 +82,16 @@ public class NetHandlerPlayClientHook {
         }
         final String command = commandBuilder.toString();
         final String formattedString = messageBuilder.toString();
-        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player" + (disconnectList.size() == 1 ? "" : "s") + " disconnected :" + EnumChatFormatting.AQUA + command)
+        final IChatComponent msg = new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player" + (disconnectList.size() == 1 ? "" : "s") + " disconnected :" + EnumChatFormatting.AQUA + command)
                 .setChatStyle(new ChatStyle()
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
                                 EnumChatFormatting.GREEN + "Player" + (disconnectList.size() == 1 ? "" : "s") + " disconnected in the last second :" + formattedString + "\n\n" +
                                         EnumChatFormatting.YELLOW + "Click this message to run : \n" + EnumChatFormatting.YELLOW + "/stalk" + command)))
-                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk" + command))));
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk" + command)));
+        if (skin != null && msg instanceof ChatComponentTextAccessor) {
+            ((ChatComponentTextAccessor) msg).setSkin(skin);
+        }
+        ChatUtil.addChatMessage(msg);
     }
 
     ///**
@@ -111,11 +123,13 @@ public class NetHandlerPlayClientHook {
         public final long disconnectTime;
         public final String playername;
         public final String formattedName;
+        public final ResourceLocation skin;
 
-        public DisconnectedPlayer(long disconnectTime, String playername, String formattedName) {
+        public DisconnectedPlayer(long disconnectTime, String playername, String formattedName, ResourceLocation skin) {
             this.disconnectTime = disconnectTime;
             this.playername = playername;
             this.formattedName = formattedName;
+            this.skin = skin;
         }
 
     }

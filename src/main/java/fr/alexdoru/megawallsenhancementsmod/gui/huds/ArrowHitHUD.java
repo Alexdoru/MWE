@@ -48,7 +48,8 @@ public class ArrowHitHUD extends AbstractRenderer {
             } else {
                 displayText = getColor(hitValue) + hitValue;
             }
-            ChatUtil.addChatMessage(ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg);
+            final String s = ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg;
+            ChatUtil.addChatMessage(s, playername);
             return true;
         }
 
@@ -62,7 +63,8 @@ public class ArrowHitHUD extends AbstractRenderer {
             RenderPlayerHook_RenegadeArrowCount.addArrowOnPlayer(playername, hitTime, Integer.parseInt(arrowsPinned));
             final boolean bool = Float.parseFloat(hitValue) > (Float.parseFloat(arrowsPinned)) * 2.0f;
             displayText = getColor(hitValue) + hitValue + EnumChatFormatting.GRAY + " (" + (bool ? EnumChatFormatting.GREEN : EnumChatFormatting.GOLD) + arrowsPinned + EnumChatFormatting.GRAY + ")";
-            ChatUtil.addChatMessage(ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg);
+            final String s = ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg;
+            ChatUtil.addChatMessage(s, playername);
             return true;
         }
 
@@ -81,7 +83,8 @@ public class ArrowHitHUD extends AbstractRenderer {
             hitTime = System.currentTimeMillis() + 1000L;
             final String playername = matcherLeapDirectHit.group(1);
             displayText = EnumChatFormatting.GREEN + "-" + 2f * Float.parseFloat(matcherLeapDirectHit.group(2));
-            ChatUtil.addChatMessage(ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg);
+            final String s = ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg;
+            ChatUtil.addChatMessage(s, playername);
             return true;
         }
 
