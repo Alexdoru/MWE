@@ -74,7 +74,7 @@ public class ReportSuggestionHandler {
                             "bhop",
                             reportedPlayerOrUUID.equals(reportedPlayer) ? fmsgIn : fmsgIn.replace(reportedPlayerOrUUID, reportedPlayer));
                 } else {
-                    ChatUtil.addChatMessage(getIChatComponentWithSquadnameAsSender(fmsgIn, messageSender, squadname));
+                    ChatUtil.addChatMessage(getIChatComponentWithSquadnameAsSender(fmsgIn, messageSender, squadname), messageSender);
                 }
                 return true;
             } else if (matcher2.find()) {
@@ -92,7 +92,7 @@ public class ReportSuggestionHandler {
                             cheat,
                             reportedPlayerOrUUID.equals(reportedPlayer) ? fmsgIn : fmsgIn.replace(reportedPlayerOrUUID, reportedPlayer));
                 } else {
-                    ChatUtil.addChatMessage(getIChatComponentWithSquadnameAsSender(fmsgIn, messageSender, squadname));
+                    ChatUtil.addChatMessage(getIChatComponentWithSquadnameAsSender(fmsgIn, messageSender, squadname), messageSender);
                 }
                 return true;
             }
@@ -299,7 +299,7 @@ public class ReportSuggestionHandler {
             @Nullable String senderUUID) {
 
         if (!ConfigHandler.reportSuggestions) {
-            ChatUtil.addChatMessage(getIChatComponentWithSquadnameAsSender(fmsg, messageSender, squadname));
+            ChatUtil.addChatMessage(getIChatComponentWithSquadnameAsSender(fmsg, messageSender, squadname), messageSender);
             return;
         }
 
@@ -311,7 +311,7 @@ public class ReportSuggestionHandler {
             final String newFmsg = getReportTextWithFormattedName(fmsg, reportText, reportedPlayer);
             final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
             addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
-            ChatUtil.addChatMessage(imsg);
+            ChatUtil.addChatMessage(imsg, messageSender);
             return;
         }
 
@@ -320,12 +320,13 @@ public class ReportSuggestionHandler {
             if (senderUUID != null) {
                 imsg.appendSibling(ChatUtil.getUnIgnoreButton(senderUUID, messageSender));
             }
-            ChatUtil.addChatMessage(imsg);
+            ChatUtil.addChatMessage(imsg, messageSender);
             return;
         }
 
         if (isSenderCheating) {
-            ChatUtil.addChatMessage(StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.YELLOW + " (Cheater)", EnumChatFormatting.GRAY + EnumChatFormatting.STRIKETHROUGH.toString(), true));
+            final String msg = StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.YELLOW + " (Cheater)", EnumChatFormatting.GRAY + EnumChatFormatting.STRIKETHROUGH.toString(), true);
+            ChatUtil.addChatMessage(msg, messageSender);
             return;
         }
 
@@ -336,7 +337,7 @@ public class ReportSuggestionHandler {
                 imsg.appendSibling(ChatUtil.getIgnoreButton(messageSender));
             }
             addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
-            ChatUtil.addChatMessage(imsg);
+            ChatUtil.addChatMessage(imsg, messageSender);
             return;
         }
 
@@ -346,7 +347,7 @@ public class ReportSuggestionHandler {
             imsg.appendSibling(ChatUtil.getIgnoreButton(messageSender));
         }
         addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
-        ChatUtil.addChatMessage(imsg);
+        ChatUtil.addChatMessage(imsg, messageSender);
 
     }
 

@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
@@ -11,6 +12,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -42,7 +44,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
         this.dummyTextToRender.add(getLine(EnumChatFormatting.GREEN + "Player4", "1.0"));
     }
 
-    public boolean processMessage(String msg) {
+    public boolean processMessage(IChatComponent component, String msg) {
 
         if (!ScoreboardTracker.isInMwGame) {
             return false;
@@ -56,6 +58,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
             final String playerHealingYou = incomingBondMatcher.group(1);
             final String amountHealed = incomingBondMatcher.group(2);
             this.textToRender.add(getLine(playerHealingYou, amountHealed));
+            ChatUtil.addSkinToComponent(component, playerHealingYou);
             return true;
         }
 

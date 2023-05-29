@@ -143,7 +143,7 @@ public class ChatListener {
                 return;
             }
 
-            if (PhoenixBondHUD.instance.processMessage(msg)) {
+            if (PhoenixBondHUD.instance.processMessage(event.message, msg)) {
                 return;
             }
 
@@ -177,7 +177,7 @@ public class ChatListener {
                     final WDR wdr = WdrData.getWdr(uuid, messageSender);
                     if (wdr != null && wdr.hasValidCheats()) {
                         if (!ConfigHandler.deleteCheaterChatMsg) {
-                            ChatUtil.addChatMessage(StringUtil.censorChatMessage(fmsg, messageSender));
+                            ChatUtil.addChatMessage(StringUtil.censorChatMessage(fmsg, messageSender), messageSender);
                         }
                         event.setCanceled(true);
                         return;
@@ -187,6 +187,10 @@ public class ChatListener {
 
             if (squadname != null && messageSender != null) {
                 event.message = new ChatComponentText(fmsg.replaceFirst(messageSender, squadname));
+            }
+
+            if (messageSender != null) {
+                ChatUtil.addSkinToComponent(event.message, messageSender);
             }
 
             if (MegaWallsEndGameStats.processMessage(msg)) {
@@ -205,7 +209,9 @@ public class ChatListener {
             if (ScoreboardTracker.isPreGameLobby) {
                 final Matcher playerJoinMatcher = PLAYER_JOIN_PATTERN.matcher(msg);
                 if (playerJoinMatcher.matches()) {
-                    PartyDetection.onPlayerJoin(playerJoinMatcher.group(1), System.currentTimeMillis());
+                    final String playername = playerJoinMatcher.group(1);
+                    PartyDetection.onPlayerJoin(playername, System.currentTimeMillis());
+                    ChatUtil.addSkinToComponent(event.message, playername);
                     return;
                 }
             }

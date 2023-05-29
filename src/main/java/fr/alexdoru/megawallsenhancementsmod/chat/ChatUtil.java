@@ -1,7 +1,10 @@
 package fr.alexdoru.megawallsenhancementsmod.chat;
 
+import fr.alexdoru.megawallsenhancementsmod.asm.accessors.ChatComponentTextAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
@@ -29,6 +32,15 @@ public class ChatUtil {
         addChatMessage(new ChatComponentText(msg));
     }
 
+    public static void addChatMessage(String msg, String playername) {
+        addChatMessage(new ChatComponentText(msg), playername);
+    }
+
+    public static void addChatMessage(IChatComponent component, String playername) {
+        addSkinToComponent(component, playername);
+        addChatMessage(component);
+    }
+
     public static void addChatMessage(IChatComponent msg) {
         addChatMessage(msg, mc.isCallingFromMinecraftThread());
     }
@@ -44,6 +56,18 @@ public class ChatUtil {
                     mc.thePlayer.addChatMessage(msg);
                 }
             });
+        }
+    }
+
+    public static void addSkinToComponent(IChatComponent msg, String playername) {
+        if (msg instanceof ChatComponentTextAccessor) {
+            if (((ChatComponentTextAccessor) msg).getSkin() != null) {
+                return;
+            }
+            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
+            if (networkPlayerInfo != null) {
+                ((ChatComponentTextAccessor) msg).setSkin(networkPlayerInfo.getLocationSkin());
+            }
         }
     }
 

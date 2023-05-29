@@ -197,8 +197,10 @@ public class FinalKillCounter {
                         FKCounterHUD.instance.updateDisplayText();
                     }
                     spawnParticles(killer);
-                    final String s = formattedText.replace(killer, SquadHandler.getSquadname(killer)).replace(killedPlayer, SquadHandler.getSquadname(killedPlayer));
-                    ChatUtil.addChatMessage(s + getKillDiffString(killsOfKilledPlayer, killedTeamColor));
+                    final String s = formattedText.replace(killer, SquadHandler.getSquadname(killer))
+                            .replace(killedPlayer, SquadHandler.getSquadname(killedPlayer))
+                            + getKillDiffString(killsOfKilledPlayer, killedTeamColor);
+                    ChatUtil.addChatMessage(s, killedPlayer);
                     return true;
                 }
 
@@ -215,8 +217,9 @@ public class FinalKillCounter {
                         }
                         FKCounterHUD.instance.updateDisplayText();
                     }
-                    final String s = formattedText.replace(killedPlayer, SquadHandler.getSquadname(killedPlayer));
-                    ChatUtil.addChatMessage(s + getKillDiffString(killsOfKilledPlayer, killedTeamColor));
+                    final String s = formattedText.replace(killedPlayer, SquadHandler.getSquadname(killedPlayer))
+                            + getKillDiffString(killsOfKilledPlayer, killedTeamColor);
+                    ChatUtil.addChatMessage(s, killedPlayer);
                     return true;
                 }
 
