@@ -37,8 +37,8 @@ public class ScoreboardTracker {
         if (mc.theWorld == null) {
             FKCounterMod.isInMwGame = false;
             FKCounterMod.isMWEnvironement = false;
-            FKCounterMod.preGameLobby = false;
-            FKCounterMod.isitPrepPhase = false;
+            FKCounterMod.isPreGameLobby = false;
+            FKCounterMod.isPrepPhase = false;
             FKCounterMod.isReplayMode = false;
             return;
         }
@@ -47,8 +47,8 @@ public class ScoreboardTracker {
         if (scoreboard == null) {
             FKCounterMod.isInMwGame = false;
             FKCounterMod.isMWEnvironement = false;
-            FKCounterMod.preGameLobby = false;
-            FKCounterMod.isitPrepPhase = false;
+            FKCounterMod.isPreGameLobby = false;
+            FKCounterMod.isPrepPhase = false;
             FKCounterMod.isReplayMode = false;
             return;
         }
@@ -60,8 +60,8 @@ public class ScoreboardTracker {
         final int amountWitherAlive = mwScoreboardParser.getAliveWithers().size();
         FKCounterMod.isInMwGame = mwScoreboardParser.isInMwGame();
         FKCounterMod.isMWEnvironement = mwScoreboardParser.isMWEnvironement();
-        FKCounterMod.preGameLobby = mwScoreboardParser.isPreGameLobby();
-        FKCounterMod.isitPrepPhase = mwScoreboardParser.isitPrepPhase();
+        FKCounterMod.isPreGameLobby = mwScoreboardParser.isPreGameLobby();
+        FKCounterMod.isPrepPhase = mwScoreboardParser.isitPrepPhase();
         FKCounterMod.isReplayMode = mwScoreboardParser.isReplayMode();
 
         if (gameId == null) { // not in MW game

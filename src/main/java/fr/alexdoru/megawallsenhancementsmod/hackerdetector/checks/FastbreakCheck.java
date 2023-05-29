@@ -126,7 +126,7 @@ public class FastbreakCheck extends AbstractCheck {
         }
         if (player.isPotionActive(Potion.digSpeed)) {
             f *= 1.0F + (float) (player.getActivePotionEffect(Potion.digSpeed).getAmplifier() + 1) * 0.2F;
-        } else if (FKCounterMod.isitPrepPhase) {
+        } else if (FKCounterMod.isPrepPhase) {
             /* Hardcode it to haste 2 during preparation time*/
             f *= 1.4F;
         }

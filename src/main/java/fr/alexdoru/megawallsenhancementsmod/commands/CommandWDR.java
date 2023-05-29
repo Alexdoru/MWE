@@ -70,7 +70,7 @@ public class CommandWDR extends MyAbstractCommand {
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
             if (FKCounterMod.isInMwGame) {
-                if (FKCounterMod.isitPrepPhase) {
+                if (FKCounterMod.isPrepPhase) {
                     return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
                 } else {
                     final List<String> playersInThisGame = KillCounter.getPlayersInThisGame();
@@ -227,7 +227,7 @@ public class CommandWDR extends MyAbstractCommand {
 
         PartyDetection.printBoostingReportAdvice(playername);
 
-        if (FKCounterMod.preGameLobby) {
+        if (FKCounterMod.isPreGameLobby) {
             ChatUtil.addChatMessage(ChatUtil.getChatReportingAdvice());
         }
 
