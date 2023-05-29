@@ -1,9 +1,9 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.utils.MapUtil;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -125,17 +125,17 @@ public class FKCounterHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return !ConfigHandler.fkcounterHUDinSidebar && ConfigHandler.showfkcounterHUD && FKCounterMod.isInMwGame && KillCounter.getGameId() != null;
+        return !ConfigHandler.fkcounterHUDinSidebar && ConfigHandler.showfkcounterHUD && FKCounterMod.isInMwGame && FinalKillCounter.getGameId() != null;
     }
 
     public void updateDisplayText() {
 
-        if (KillCounter.getGameId() == null) {
+        if (FinalKillCounter.getGameId() == null) {
             return;
         }
 
         this.textToRender.clear();
-        final Map<Integer, Integer> sortedmap = KillCounter.getSortedTeamKillsMap();
+        final Map<Integer, Integer> sortedmap = FinalKillCounter.getSortedTeamKillsMap();
 
         if (ConfigHandler.fkcounterHUDCompact) {
 
@@ -147,7 +147,7 @@ public class FKCounterHUD extends AbstractRenderer {
                 } else {
                     strBuilder.append(EnumChatFormatting.DARK_GRAY).append(" / ");
                 }
-                strBuilder.append(KillCounter.getColorPrefixFromTeam(entry.getKey())).append(entry.getValue());
+                strBuilder.append(FinalKillCounter.getColorPrefixFromTeam(entry.getKey())).append(entry.getValue());
             }
             this.displayText = strBuilder.toString();
 
@@ -156,8 +156,8 @@ public class FKCounterHUD extends AbstractRenderer {
             for (final Entry<Integer, Integer> teamEntry : sortedmap.entrySet()) {
                 final StringBuilder strBuilder = new StringBuilder();
                 final int team = teamEntry.getKey();
-                strBuilder.append(KillCounter.getColorPrefixFromTeam(team)).append(KillCounter.getTeamNameFromTeam(team).charAt(0)).append(EnumChatFormatting.WHITE).append(" ").append(KillCounter.getKills(team));
-                final Map<String, Integer> teamKillMap = MapUtil.sortByDecreasingValue(KillCounter.getPlayers(team));
+                strBuilder.append(FinalKillCounter.getColorPrefixFromTeam(team)).append(FinalKillCounter.getTeamNameFromTeam(team).charAt(0)).append(EnumChatFormatting.WHITE).append(" ").append(FinalKillCounter.getKills(team));
+                final Map<String, Integer> teamKillMap = MapUtil.sortByDecreasingValue(FinalKillCounter.getPlayers(team));
                 if (!teamKillMap.isEmpty()) {
                     int playerAmount = 0;
                     boolean first = true;
@@ -183,10 +183,10 @@ public class FKCounterHUD extends AbstractRenderer {
             for (final Entry<Integer, Integer> entry : sortedmap.entrySet()) {
                 final StringBuilder strBuilder = new StringBuilder();
                 final int team = entry.getKey();
-                strBuilder.append(KillCounter.getColorPrefixFromTeam(team))
-                        .append(KillCounter.getTeamNameFromTeam(team))
+                strBuilder.append(FinalKillCounter.getColorPrefixFromTeam(team))
+                        .append(FinalKillCounter.getTeamNameFromTeam(team))
                         .append(EnumChatFormatting.WHITE).append(": ")
-                        .append(KillCounter.getKills(team));
+                        .append(FinalKillCounter.getKills(team));
                 this.textToRender.add(strBuilder.toString());
             }
 

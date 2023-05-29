@@ -1,8 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.LastWitherHPHUD;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
@@ -14,7 +14,7 @@ public class ScorePlayerTeamHook {
         if (ConfigHandler.witherHUDinSidebar && ConfigHandler.showLastWitherHUD && FKCounterMod.isInMwGame && "\ud83d\udc7d".equals(playername) && ScoreboardTracker.getMwScoreboardParser().isOnlyOneWitherAlive()) {
             return LastWitherHPHUD.instance.displayText;
         }
-        if (ConfigHandler.fkcounterHUDinSidebar && ConfigHandler.showfkcounterHUD && FKCounterMod.isInMwGame && "\ud83d\udd2e".equals(playername) && KillCounter.getGameId() != null) {
+        if (ConfigHandler.fkcounterHUDinSidebar && ConfigHandler.showfkcounterHUD && FKCounterMod.isInMwGame && "\ud83d\udd2e".equals(playername) && FinalKillCounter.getGameId() != null) {
             return FKCounterHUD.instance.displayText;
         }
         return null;

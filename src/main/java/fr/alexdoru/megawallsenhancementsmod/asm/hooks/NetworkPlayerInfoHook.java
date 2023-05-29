@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import com.mojang.authlib.GameProfile;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
+import fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.util.IChatComponent;
 
@@ -13,7 +13,7 @@ public class NetworkPlayerInfoHook {
     }
 
     public static int getPlayersFinals(String playername) {
-        return KillCounter.getPlayersFinals(playername);
+        return FinalKillCounter.getPlayersFinals(playername);
     }
 
 }

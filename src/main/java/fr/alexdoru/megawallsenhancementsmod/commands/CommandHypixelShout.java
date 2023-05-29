@@ -2,8 +2,8 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.chat.ReportSuggestionHandler;
+import fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
@@ -45,7 +45,7 @@ public class CommandHypixelShout extends MyAbstractCommand {
             if (FKCounterMod.isPrepPhase) {
                 return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
             } else if (FKCounterMod.isInMwGame) {
-                final List<String> playersInThisGame = KillCounter.getPlayersInThisGame();
+                final List<String> playersInThisGame = FinalKillCounter.getPlayersInThisGame();
                 playersInThisGame.removeAll(TabCompletionUtil.getOnlinePlayersByName());
                 return getListOfStringsMatchingLastWord(args, playersInThisGame);
             }

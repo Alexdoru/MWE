@@ -10,9 +10,9 @@ import fr.alexdoru.megawallsenhancementsmod.chat.WarningMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.ReportTimestamp;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
+import fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.KillCounter;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoTracker;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
@@ -73,7 +73,7 @@ public class CommandWDR extends MyAbstractCommand {
                 if (FKCounterMod.isPrepPhase) {
                     return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
                 } else {
-                    final List<String> playersInThisGame = KillCounter.getPlayersInThisGame();
+                    final List<String> playersInThisGame = FinalKillCounter.getPlayersInThisGame();
                     playersInThisGame.removeAll(TabCompletionUtil.getOnlinePlayersByName());
                     return getListOfStringsMatchingLastWord(args, playersInThisGame);
                 }
