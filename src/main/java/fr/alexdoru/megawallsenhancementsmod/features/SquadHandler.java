@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.features;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
@@ -75,7 +75,7 @@ public class SquadHandler {
      */
     public static void formSquad() {
 
-        if (!FKCounterMod.isMWEnvironement) {
+        if (!ScoreboardTracker.isMWEnvironement) {
             return;
         }
 

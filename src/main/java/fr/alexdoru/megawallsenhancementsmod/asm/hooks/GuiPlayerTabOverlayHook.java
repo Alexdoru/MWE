@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -22,7 +22,7 @@ public class GuiPlayerTabOverlayHook {
     }
 
     public static void computeFKScoreWidth(int playerFinalkills) {
-        if (FKCounterMod.isInMwGame && ConfigHandler.fkcounterHUDTablist) {
+        if (ScoreboardTracker.isInMwGame && ConfigHandler.fkcounterHUDTablist) {
             if (playerFinalkills != 0) {
                 finalsScoreWidth = Math.max(finalsScoreWidth, mc.fontRendererObj.getStringWidth(" " + playerFinalkills));
             }
@@ -34,7 +34,7 @@ public class GuiPlayerTabOverlayHook {
     }
 
     public static void renderFinals(int playerFinalkills, int j2, int i, int k2) {
-        if (!ConfigHandler.fkcounterHUDTablist || playerFinalkills == 0 || !FKCounterMod.isInMwGame) {
+        if (!ConfigHandler.fkcounterHUDTablist || playerFinalkills == 0 || !ScoreboardTracker.isInMwGame) {
             return;
         }
         final String s1 = EnumChatFormatting.GOLD + " " + playerFinalkills;
@@ -46,7 +46,7 @@ public class GuiPlayerTabOverlayHook {
     }
 
     public static boolean shouldHideFooter() {
-        if (ConfigHandler.showHeaderFooterOutsideMW && !FKCounterMod.isMWEnvironement) {
+        if (ConfigHandler.showHeaderFooterOutsideMW && !ScoreboardTracker.isMWEnvironement) {
             return false;
         }
         return ConfigHandler.hideTablistHeaderFooter;
@@ -83,7 +83,7 @@ public class GuiPlayerTabOverlayHook {
 
     public static int getPingWidth(List<NetworkPlayerInfo> list) { // called once per frame
         if (ConfigHandler.hidePingTablist) {
-            if (FKCounterMod.isInMwGame) {
+            if (ScoreboardTracker.isInMwGame) {
                 drawPing = false;
                 return 0;
             }
@@ -105,7 +105,7 @@ public class GuiPlayerTabOverlayHook {
     public static EnumChatFormatting getColoredHP(int healthPoints) {
         if (ConfigHandler.useColoredScores) {
             final float maxHealthPoints;
-            if (FKCounterMod.isInMwGame) {
+            if (ScoreboardTracker.isInMwGame) {
                 maxHealthPoints = 44f;
             } else {
                 maxHealthPoints = mc.thePlayer.getMaxHealth();

@@ -9,8 +9,8 @@ import fr.alexdoru.megawallsenhancementsmod.chat.WarningMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.*;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
@@ -191,7 +191,7 @@ public class NameUtil {
                     WarningMessagesHandler.printWarningMessage(
                             datenow,
                             uuid,
-                            (!FKCounterMod.isInMwGame || FKCounterMod.isPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(player.getTeam(), playerName),
+                            (!ScoreboardTracker.isInMwGame || ScoreboardTracker.isPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(player.getTeam(), playerName),
                             playerName,
                             mwPlayerData.wdr,
                             gotautoreported
@@ -382,9 +382,9 @@ public class NameUtil {
     /**
      * Returns true if it's the uuid of an NPC
      * from experimentation, on Hypixel :
-     *  - nicked players are v1
-     *  - NPCs are v2
-     *  - real players are v4
+     * - nicked players are v1
+     * - NPCs are v2
+     * - real players are v4
      */
     public static boolean filterNPC(UUID uuid) {
         return uuid.version() == 2;

@@ -81,8 +81,8 @@ public class WDR implements Comparable<WDR> {
     public boolean canBeAutoreported(long datenow) {
         return false;
         //return ConfigHandler.toggleAutoreport
-        //        && FKCounterMod.isInMwGame
-        //        && !FKCounterMod.isitPrepPhase
+        //        && ScoreboardTracker.isInMwGame
+        //        && !ScoreboardTracker.isitPrepPhase
         //        && canBeReported(datenow)
         //        && !isOlderThanMaxAutoreport(datenow);
     }
@@ -93,8 +93,8 @@ public class WDR implements Comparable<WDR> {
      */
     public boolean shouldPrintBigText(long datenow) {
         return false;
-        //return FKCounterMod.isMWEnvironement
-        //        && !FKCounterMod.isInMwGame
+        //return ScoreboardTracker.isMWEnvironement
+        //        && !ScoreboardTracker.isInMwGame
         //        && ConfigHandler.toggleAutoreport
         //        && ConfigHandler.stopAutoreportAfterWeek
         //        && isOlderThanMaxAutoreport(datenow);

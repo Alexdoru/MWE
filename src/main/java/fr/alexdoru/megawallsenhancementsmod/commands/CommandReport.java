@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
@@ -109,7 +109,7 @@ public class CommandReport extends MyAbstractCommand {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
-            if (FKCounterMod.isInMwGame && FKCounterMod.isPrepPhase) {
+            if (ScoreboardTracker.isInMwGame && ScoreboardTracker.isPrepPhase) {
                 return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
             }
             return null;

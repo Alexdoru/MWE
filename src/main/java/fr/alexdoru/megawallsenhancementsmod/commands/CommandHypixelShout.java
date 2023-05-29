@@ -3,7 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.chat.ReportSuggestionHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
@@ -42,9 +42,9 @@ public class CommandHypixelShout extends MyAbstractCommand {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length >= 2 && isKeywordreport(2, args)) {
-            if (FKCounterMod.isPrepPhase) {
+            if (ScoreboardTracker.isPrepPhase) {
                 return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
-            } else if (FKCounterMod.isInMwGame) {
+            } else if (ScoreboardTracker.isInMwGame) {
                 final List<String> playersInThisGame = FinalKillCounter.getPlayersInThisGame();
                 playersInThisGame.removeAll(TabCompletionUtil.getOnlinePlayersByName());
                 return getListOfStringsMatchingLastWord(args, playersInThisGame);
@@ -53,7 +53,7 @@ public class CommandHypixelShout extends MyAbstractCommand {
         if (args.length >= 3 && (isKeywordreport(3, args))) {
             return getListOfStringsMatchingLastWord(args, CommandReport.cheatsArray);
         }
-        if (FKCounterMod.isPrepPhase) {
+        if (ScoreboardTracker.isPrepPhase) {
             return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
         }
         return null;

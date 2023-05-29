@@ -2,7 +2,6 @@ package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
@@ -31,8 +30,8 @@ public class LastWitherHPHUD extends AbstractRenderer {
             lastWitherHPUpdate = System.currentTimeMillis();
         }
         witherHp = witherHPIn;
-        if (ScoreboardTracker.getMwScoreboardParser().isOnlyOneWitherAlive()) {
-            color = "\u00a7" + ScoreboardTracker.getMwScoreboardParser().getAliveWithers().get(0);
+        if (ScoreboardTracker.getParser().isOnlyOneWitherAlive()) {
+            color = "\u00a7" + ScoreboardTracker.getParser().getAliveWithers().get(0);
         }
         final long time = System.currentTimeMillis();
         final int timeToDie = (witherHp / 8) * 5 + (thirdWitherDeathTime + 55000L - time > 0 ? (int) ((thirdWitherDeathTime + 55000L - time) / 1000L) - 4 : (int) ((lastWitherHPUpdate - time) / 1000L) + 3);
@@ -43,7 +42,7 @@ public class LastWitherHPHUD extends AbstractRenderer {
     public void onMWEvent(MegaWallsGameEvent event) {
         if (event.getType() == MegaWallsGameEvent.EventType.THIRD_WITHER_DEATH) {
             thirdWitherDeathTime = System.currentTimeMillis();
-            color = "\u00a7" + ScoreboardTracker.getMwScoreboardParser().getAliveWithers().get(0);
+            color = "\u00a7" + ScoreboardTracker.getParser().getAliveWithers().get(0);
         }
     }
 
@@ -60,7 +59,7 @@ public class LastWitherHPHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return !ConfigHandler.witherHUDinSidebar && ConfigHandler.showLastWitherHUD && FKCounterMod.isInMwGame && ScoreboardTracker.getMwScoreboardParser().isOnlyOneWitherAlive();
+        return !ConfigHandler.witherHUDinSidebar && ConfigHandler.showLastWitherHUD && ScoreboardTracker.isInMwGame && ScoreboardTracker.getParser().isOnlyOneWitherAlive();
     }
 
 }

@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -71,7 +71,7 @@ public class EnergyDisplayHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return ConfigHandler.showEnergyDisplayHUD && FKCounterMod.isInMwGame && mc.thePlayer != null;
+        return ConfigHandler.showEnergyDisplayHUD && ScoreboardTracker.isInMwGame && mc.thePlayer != null;
     }
 
 }

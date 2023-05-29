@@ -3,7 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.MapUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.SkinUtil;
 import net.minecraft.client.gui.Gui;
@@ -44,7 +44,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
 
     public boolean processMessage(String msg) {
 
-        if (!FKCounterMod.isInMwGame) {
+        if (!ScoreboardTracker.isInMwGame) {
             return false;
         }
 

@@ -3,8 +3,8 @@ package fr.alexdoru.megawallsenhancementsmod.chat;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiScreenHook;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -42,7 +42,7 @@ public class WarningMessagesHandler {
                 printWarningMessage(
                         datenow,
                         uuid,
-                        (!FKCounterMod.isInMwGame || FKCounterMod.isPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playerName),
+                        (!ScoreboardTracker.isInMwGame || ScoreboardTracker.isPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playerName),
                         playerName,
                         wdr,
                         gotautoreported
@@ -74,13 +74,13 @@ public class WarningMessagesHandler {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.RED + " It's been " + EnumChatFormatting.GRAY + DateUtil.timeSince(wdr.timeLastManualReport) + EnumChatFormatting.RED + " since you last manually reported that player for :"))
                     .appendSibling(allCheats)
                     .appendSibling(new ChatComponentText(EnumChatFormatting.RED + ", either remove them from your report list or report them again."));
-        } else if (!disableReportButton && FKCounterMod.isInMwGame && !FKCounterMod.isPrepPhase && wdr.canBeReported(datenow)) {
+        } else if (!disableReportButton && ScoreboardTracker.isInMwGame && !ScoreboardTracker.isPrepPhase && wdr.canBeReported(datenow)) {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " [Report again]").setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click here to report this player again")))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.SEND_REPORT_AGAIN + wdrmapKey + " " + playername))));
         }
 
-        if (!FKCounterMod.isPreGameLobby) {
+        if (!ScoreboardTracker.isPreGameLobby) {
             allCheats.setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
                             + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " cheating" + ChatUtil.getReportingAdvice())))

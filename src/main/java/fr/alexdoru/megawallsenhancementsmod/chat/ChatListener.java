@@ -12,10 +12,10 @@ import fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter;
 import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.*;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.AbstractCheck;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoTracker;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
@@ -79,12 +79,12 @@ public class ChatListener {
             final String msg = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
             final String fmsg = event.message.getFormattedText();
 
-            if (FKCounterMod.isInMwGame && ConfigHandler.hideRepetitiveMWChatMsg && MW_REPETITVE_MSG.contains(msg)) {
+            if (ScoreboardTracker.isInMwGame && ConfigHandler.hideRepetitiveMWChatMsg && MW_REPETITVE_MSG.contains(msg)) {
                 event.setCanceled(true);
                 return;
             }
 
-            if (!FKCounterMod.isInMwGame && msg.equals(GENERAL_START_MESSAGE)) {
+            if (!ScoreboardTracker.isInMwGame && msg.equals(GENERAL_START_MESSAGE)) {
                 GameInfoTracker.saveGameInfoOnGameStart();
                 SquadHandler.formSquad();
                 AbstractCheck.clearFlagMessages();
@@ -202,7 +202,7 @@ public class ChatListener {
                 return;
             }
 
-            if (FKCounterMod.isPreGameLobby) {
+            if (ScoreboardTracker.isPreGameLobby) {
                 final Matcher playerJoinMatcher = PLAYER_JOIN_PATTERN.matcher(msg);
                 if (playerJoinMatcher.matches()) {
                     PartyDetection.onPlayerJoin(playerJoinMatcher.group(1), System.currentTimeMillis());

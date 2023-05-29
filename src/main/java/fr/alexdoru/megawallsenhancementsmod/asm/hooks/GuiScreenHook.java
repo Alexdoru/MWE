@@ -52,7 +52,7 @@ public class GuiScreenHook {
         if (wdr != null) {
             if (wdr.hasValidCheats()) {
                 final long time = (new Date()).getTime();
-                //if (FKCounterMod.preGameLobby && ConfigHandler.toggleAutoreport) {
+                //if (ScoreboardTracker.preGameLobby && ConfigHandler.toggleAutoreport) {
                 //    wdr.timestamp = time - WDR.TIME_BETWEEN_AUTOREPORT;
                 //    wdr.timeLastManualReport = time - WDR.TIME_BETWEEN_AUTOREPORT;
                 //    ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Your cheating report against " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + " will be sent during the game.");

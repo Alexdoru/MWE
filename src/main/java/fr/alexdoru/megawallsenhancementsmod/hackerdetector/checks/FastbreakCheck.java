@@ -1,11 +1,11 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.BrokenBlock;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,7 +51,7 @@ public class FastbreakCheck extends AbstractCheck {
      */
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        if (FKCounterMod.isInMwGame && player.isSwingInProgress && !HackerDetector.INSTANCE.brokenBlocksList.isEmpty()) {
+        if (ScoreboardTracker.isInMwGame && player.isSwingInProgress && !HackerDetector.INSTANCE.brokenBlocksList.isEmpty()) {
             final ItemStack itemStack = player.getHeldItem();
             if (itemStack != null && itemStack.isItemEnchanted() && itemStack.getItem() == Items.diamond_pickaxe) {
                 final Iterator<BrokenBlock> iterator = HackerDetector.INSTANCE.brokenBlocksList.iterator();
@@ -126,7 +126,7 @@ public class FastbreakCheck extends AbstractCheck {
         }
         if (player.isPotionActive(Potion.digSpeed)) {
             f *= 1.0F + (float) (player.getActivePotionEffect(Potion.digSpeed).getAmplifier() + 1) * 0.2F;
-        } else if (FKCounterMod.isPrepPhase) {
+        } else if (ScoreboardTracker.isPrepPhase) {
             /* Hardcode it to haste 2 during preparation time*/
             f *= 1.4F;
         }

@@ -1,9 +1,9 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.BrokenBlock;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -49,7 +49,7 @@ public class RenderGlobalHook {
     }
 
     public static void listenDestroyedBlocks(IBlockState state, BlockPos blockPos) {
-        if (ConfigHandler.hackerDetector && FKCounterMod.isInMwGame && "pickaxe".equals(state.getBlock().getHarvestTool(state))) {
+        if (ConfigHandler.hackerDetector && ScoreboardTracker.isInMwGame && "pickaxe".equals(state.getBlock().getHarvestTool(state))) {
             HackerDetector.INSTANCE.brokenBlocksList.add(new BrokenBlock(state.getBlock(), blockPos, System.currentTimeMillis()));
         }
     }

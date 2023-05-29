@@ -4,7 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.accessors.GuiNewChatAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.ColorUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.gui.ChatLine;
@@ -48,7 +48,7 @@ public class ArrowHitHUD extends AbstractRenderer {
             } else {
                 displayText = getColor(hitValue) + hitValue;
             }
-            ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg);
+            ChatUtil.addChatMessage(ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg);
             return true;
         }
 
@@ -62,7 +62,7 @@ public class ArrowHitHUD extends AbstractRenderer {
             RenderPlayerHook_RenegadeArrowCount.addArrowOnPlayer(playername, hitTime, Integer.parseInt(arrowsPinned));
             final boolean bool = Float.parseFloat(hitValue) > (Float.parseFloat(arrowsPinned)) * 2.0f;
             displayText = getColor(hitValue) + hitValue + EnumChatFormatting.GRAY + " (" + (bool ? EnumChatFormatting.GREEN : EnumChatFormatting.GOLD) + arrowsPinned + EnumChatFormatting.GRAY + ")";
-            ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg);
+            ChatUtil.addChatMessage(ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg);
             return true;
         }
 
@@ -81,7 +81,7 @@ public class ArrowHitHUD extends AbstractRenderer {
             hitTime = System.currentTimeMillis() + 1000L;
             final String playername = matcherLeapDirectHit.group(1);
             displayText = EnumChatFormatting.GREEN + "-" + 2f * Float.parseFloat(matcherLeapDirectHit.group(2));
-            ChatUtil.addChatMessage(FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg);
+            ChatUtil.addChatMessage(ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg);
             return true;
         }
 
@@ -96,7 +96,7 @@ public class ArrowHitHUD extends AbstractRenderer {
                 final String playername = matcherRend2.group(2);
                 totalDamage += damage;
                 RenderPlayerHook_RenegadeArrowCount.removeArrowsFrom(playername, (int) (damage / 2));
-                fmsg = FKCounterMod.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg;
+                fmsg = ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg;
             }
             displayText = EnumChatFormatting.GREEN + "-" + totalDamage;
             ChatUtil.addChatMessage(fmsg);

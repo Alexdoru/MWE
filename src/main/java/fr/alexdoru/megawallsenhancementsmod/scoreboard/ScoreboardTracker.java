@@ -1,23 +1,34 @@
 package fr.alexdoru.megawallsenhancementsmod.scoreboard;
 
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
-import net.minecraft.client.Minecraft;
-import net.minecraft.scoreboard.Scoreboard;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class ScoreboardTracker {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
-    private static ScoreboardParser mwScoreboardParser = new ScoreboardParser(null);
-    private static String prevGameId = null;
-    private static boolean prevHasGameEnded = false;
-    private static int prevAmountWitherAlive = 4;
+    /**
+     * Turns true from the moment the player gets tp to the cage to the end of the game
+     * False in the pre game lobby
+     */
+    public static boolean isInMwGame = false;
+    /** True in the pre game lobby in mega walls */
+    public static boolean isPreGameLobby = false;
+    /** True during the preparation phase of a mega walls game */
+    public static boolean isPrepPhase = false;
+    /** True in mega walls lobbys, games etc */
+    public static boolean isMWEnvironement = false;
+    /** True when in the Replay Mode */
+    public static boolean isReplayMode = false;
 
-    public static ScoreboardParser getMwScoreboardParser() {
-        return mwScoreboardParser;
+    private static ScoreboardParser parser = new ScoreboardParser();
+
+    private String prevGameId = null;
+    private boolean prevHasGameEnded = false;
+    private int prevAmountWitherAlive = 4;
+
+    public static ScoreboardParser getParser() {
+        return parser;
     }
 
     @SubscribeEvent
@@ -34,39 +45,26 @@ public class ScoreboardTracker {
             return;
         }
 
-        if (mc.theWorld == null) {
-            FKCounterMod.isInMwGame = false;
-            FKCounterMod.isMWEnvironement = false;
-            FKCounterMod.isPreGameLobby = false;
-            FKCounterMod.isPrepPhase = false;
-            FKCounterMod.isReplayMode = false;
-            return;
-        }
+        parser = new ScoreboardParser();
 
-        final Scoreboard scoreboard = mc.theWorld.getScoreboard();
-        if (scoreboard == null) {
-            FKCounterMod.isInMwGame = false;
-            FKCounterMod.isMWEnvironement = false;
-            FKCounterMod.isPreGameLobby = false;
-            FKCounterMod.isPrepPhase = false;
-            FKCounterMod.isReplayMode = false;
-            return;
-        }
+        ScoreboardTracker.isInMwGame = parser.isInMwGame();
+        ScoreboardTracker.isMWEnvironement = parser.isMWEnvironement();
+        ScoreboardTracker.isPreGameLobby = parser.isPreGameLobby();
+        ScoreboardTracker.isPrepPhase = parser.isPrepPhase();
+        ScoreboardTracker.isReplayMode = parser.isReplayMode();
 
-        mwScoreboardParser = new ScoreboardParser(scoreboard);
+        this.fireScoreboardRelatedEvents();
 
-        final String gameId = mwScoreboardParser.getGameId();
-        final boolean hasgameended = mwScoreboardParser.hasGameEnded();
-        final int amountWitherAlive = mwScoreboardParser.getAliveWithers().size();
-        FKCounterMod.isInMwGame = mwScoreboardParser.isInMwGame();
-        FKCounterMod.isMWEnvironement = mwScoreboardParser.isMWEnvironement();
-        FKCounterMod.isPreGameLobby = mwScoreboardParser.isPreGameLobby();
-        FKCounterMod.isPrepPhase = mwScoreboardParser.isitPrepPhase();
-        FKCounterMod.isReplayMode = mwScoreboardParser.isReplayMode();
+    }
+
+    private void fireScoreboardRelatedEvents() {
+        final String gameId = parser.getGameId();
+        final boolean hasgameended = parser.hasGameEnded();
+        final int amountWitherAlive = parser.getAliveWithers().size();
 
         if (gameId == null) { // not in MW game
 
-            if (prevGameId != null) {
+            if (this.prevGameId != null) {
                 MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.EventType.DISCONNECT));
             }
 
@@ -78,20 +76,19 @@ public class ScoreboardTracker {
                 MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.EventType.DEATHMATCH_START));
             }
 
-            if (!gameId.equals(prevGameId)) {
+            if (!gameId.equals(this.prevGameId)) {
                 MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.EventType.CONNECT));
             }
 
         }
 
-        if (hasgameended && !prevHasGameEnded) {
+        if (hasgameended && !this.prevHasGameEnded) {
             MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.EventType.GAME_END));
         }
 
-        prevGameId = gameId;
-        prevHasGameEnded = hasgameended;
-        prevAmountWitherAlive = amountWitherAlive;
-
+        this.prevGameId = gameId;
+        this.prevHasGameEnded = hasgameended;
+        this.prevAmountWitherAlive = amountWitherAlive;
     }
 
 }

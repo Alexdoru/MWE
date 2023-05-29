@@ -4,7 +4,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.scoreboard.Score;
@@ -30,7 +29,7 @@ public class ScoreboardUtils {
     }
 
     public static boolean isMegaWallsMythicGame() {
-        if (!FKCounterMod.isMWEnvironement) {
+        if (!ScoreboardTracker.isMWEnvironement) {
             return false;
         }
         final List<String> scoresRaw = getUnformattedSidebarText();

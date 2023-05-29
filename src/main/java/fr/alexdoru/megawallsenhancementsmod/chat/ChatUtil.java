@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.chat;
 
-import fr.alexdoru.megawallsenhancementsmod.fkcounter.FKCounterMod;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -307,7 +307,7 @@ public class ChatUtil {
     public static String getReportingAdvice() {
         final String s = "\n\n" + EnumChatFormatting.RED + "To make reporting efficient, be sure to report" + EnumChatFormatting.DARK_RED + " when you are ingame with\n"
                 + EnumChatFormatting.DARK_RED + "the cheater" + EnumChatFormatting.RED + " and not before the game starts or in the lobby.";
-        return FKCounterMod.isPreGameLobby ? s : "";
+        return ScoreboardTracker.isPreGameLobby ? s : "";
     }
 
     public static String getChatReportingAdvice() {
