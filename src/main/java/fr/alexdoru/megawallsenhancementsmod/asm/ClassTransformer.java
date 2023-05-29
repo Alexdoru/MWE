@@ -23,6 +23,7 @@ public class ClassTransformer implements IClassTransformer {
      * Register the IMyClassTransformer(s) here
      */
     public ClassTransformer() {
+        registerTransformer(new ChatComponentTextTransformer_ChatHeads());
         registerTransformer(new CommandHandlerTransformer());
         registerTransformer(new EntityArrowTransformer());
         registerTransformer(new EntityFXTransformer());
@@ -33,6 +34,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new GuiIngameForgeTransformer());
         registerTransformer(new GuiIngameTransformer_CancelHunger());
         registerTransformer(new GuiIngameTransformer_Sidebar());
+        registerTransformer(new GuiNewChatTransformer_ChatHeads());
         registerTransformer(new GuiNewChatTransformer());
         registerTransformer(new GuiPlayerTabOverlayTransformer_ColoredScores());
         registerTransformer(new GuiPlayerTabOverlayTransformer_FinalKills());
@@ -43,6 +45,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new GuiPlayerTabOverlayTransformer_PlayerCount());
         registerTransformer(new GuiScreenBookTransformer());
         registerTransformer(new GuiScreenTransformer());
+        registerTransformer(new GuiUtilRenderComponentsTransformer_ChatHeads());
         registerTransformer(new LayerArmorBaseTransformer_HitColor());
         registerTransformer(new LayerArrowTransformer());
         registerTransformer(new MinecraftTransformer_DebugMessages());
