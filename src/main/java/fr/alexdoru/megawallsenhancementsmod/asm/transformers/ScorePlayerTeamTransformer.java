@@ -18,7 +18,7 @@ public class ScorePlayerTeamTransformer implements IMyClassTransformer {
     @Override
     public void transform(ClassNode classNode, InjectionStatus status) {
         if (!ASMLoadingPlugin.isFeatherLoaded()) {
-            status.setInjectionPoints(0);
+            status.skipTransformation();
             return;
         }
         status.setInjectionPoints(1);
