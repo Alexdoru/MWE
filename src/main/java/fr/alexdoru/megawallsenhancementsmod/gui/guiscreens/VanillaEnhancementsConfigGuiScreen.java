@@ -158,6 +158,8 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
         coloredScoresTabList.add(EnumChatFormatting.RED + "OrangeMarshall " + EnumChatFormatting.GRAY + "[ZOM] " + EnumChatFormatting.YELLOW + "25");
         coloredScoresTabList.add(EnumChatFormatting.RED + "OrangeMarshall " + EnumChatFormatting.GRAY + "[ZOM] " + EnumChatFormatting.RED + "15");
         coloredScoresTabList.add(EnumChatFormatting.RED + "OrangeMarshall " + EnumChatFormatting.GRAY + "[ZOM]  " + EnumChatFormatting.DARK_RED + "5");
+        coloredScoresTabList.add("");
+        coloredScoresTabList.add(EnumChatFormatting.RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements");
         this.buttonList.add(new OptionGuiButton(
                 xPosRight, getButtonYPos(5),
                 buttonWidth, buttonsHeight,
@@ -191,21 +193,24 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                 EnumChatFormatting.GREEN + "Hide header/footer in tab",
                 EnumChatFormatting.DARK_GRAY + "\u25AA " + EnumChatFormatting.GREEN + "Enabled" + EnumChatFormatting.GRAY + " : will hide the text at top and bottom of the tablist",
                 EnumChatFormatting.DARK_GRAY + "\u25AA " + EnumChatFormatting.GREEN + "Only in MW" + EnumChatFormatting.GRAY + " : will hide the text at top and bottom of the tablist only in Mega Walls since that text can contain usefull information in other games such as Bedwars or Skyblock",
-                EnumChatFormatting.DARK_GRAY + "\u25AA " + EnumChatFormatting.RED + "Disabled" + EnumChatFormatting.GRAY + " : will always render the text at top and bottom of the tablist"));
+                EnumChatFormatting.DARK_GRAY + "\u25AA " + EnumChatFormatting.RED + "Disabled" + EnumChatFormatting.GRAY + " : will always render the text at top and bottom of the tablist",
+                EnumChatFormatting.RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements"));
         this.buttonList.add(new OptionGuiButton(
                 xPosRight, getButtonYPos(7),
                 buttonWidth, buttonsHeight,
                 "Show playercount in tab",
                 (b) -> ConfigHandler.showPlayercountTablist = b,
                 () -> ConfigHandler.showPlayercountTablist,
-                EnumChatFormatting.GRAY + "Displays the amount of players in the lobby at the top of the tablist"));
+                EnumChatFormatting.GRAY + "Displays the amount of players in the lobby at the top of the tablist",
+                EnumChatFormatting.RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements"));
         this.buttonList.add(new OptionGuiButton(
                 xPosRight, getButtonYPos(8),
                 buttonWidth, buttonsHeight,
                 "Hide ping in tab",
                 (b) -> ConfigHandler.hidePingTablist = b,
                 () -> ConfigHandler.hidePingTablist,
-                EnumChatFormatting.GRAY + "Stops rendering the ping in the tablist when all values are equal to 1"));
+                EnumChatFormatting.GRAY + "Stops rendering the ping in the tablist when all values are equal to 1",
+                EnumChatFormatting.RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements"));
         if (isPatcherNotLoaded) {
             buttonList.add(new GuiSlider(30, xPosRight, getButtonYPos(9), buttonWidth, buttonsHeight, "Tablist size : ", " players", 50d, 125d, ConfigHandler.tablistSize, false, true, this));
         }
