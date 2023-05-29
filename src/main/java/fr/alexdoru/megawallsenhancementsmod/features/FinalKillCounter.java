@@ -187,12 +187,10 @@ public class FinalKillCounter {
                     final String killedTeamColor = StringUtil.getLastColorCodeBefore(formattedText, killedPlayer);
                     final String killerTeamColor = StringUtil.getLastColorCodeBefore(formattedText.replaceFirst(killedPlayer, ""), killer);
                     int killsOfKilledPlayer = 0;
-                    int killGainForKiller = 0;
                     if (!killedTeamColor.equals("") && !killerTeamColor.equals("")) {
                         killsOfKilledPlayer = removeKilledPlayer(killedPlayer, killedTeamColor);
                         if (killsOfKilledPlayer != -1) {
                             addKill(killer, killerTeamColor);
-                            killGainForKiller += 1;
                             playersPresentInGame.add(killedPlayer);
                             playersPresentInGame.add(killer);
                         }
@@ -200,7 +198,7 @@ public class FinalKillCounter {
                     }
                     spawnParticles(killer);
                     final String s = formattedText.replace(killer, SquadHandler.getSquadname(killer)).replace(killedPlayer, SquadHandler.getSquadname(killedPlayer));
-                    ChatUtil.addChatMessage(s + getKillDiffString(killsOfKilledPlayer, killedTeamColor, killGainForKiller, killerTeamColor));
+                    ChatUtil.addChatMessage(s + getKillDiffString(killsOfKilledPlayer, killedTeamColor));
                     return true;
                 }
 
@@ -231,28 +229,10 @@ public class FinalKillCounter {
     }
 
     private static String getKillDiffString(int killsOfKilledPlayer, String killedTeamColor) {
-        return getKillDiffString(killsOfKilledPlayer, killedTeamColor, 0, "");
-    }
-
-    private static String getKillDiffString(int killsOfKilledPlayer, String killedTeamColor, int killGainForKiller, String killerTeamColor) {
-        if (!ConfigHandler.showKillDiffInChat) {
+        if (!ConfigHandler.showKillDiffInChat || killsOfKilledPlayer < 1) {
             return "";
         }
-        if (killsOfKilledPlayer < 1 && killGainForKiller < 1) {
-            return "";
-        }
-        final StringBuilder str = new StringBuilder().append(EnumChatFormatting.WHITE).append(" (");
-        if (killsOfKilledPlayer > 0) {
-            str.append('\u00a7').append(killedTeamColor).append("-").append(killsOfKilledPlayer);
-            if (killGainForKiller > 0) {
-                str.append(EnumChatFormatting.WHITE).append(", ");
-            }
-        }
-        if (killGainForKiller > 0) {
-            str.append('\u00a7').append(killerTeamColor).append("+").append(killGainForKiller);
-        }
-        str.append(EnumChatFormatting.WHITE).append(")");
-        return str.toString();
+        return EnumChatFormatting.WHITE + " (" + '\u00a7' + killedTeamColor + "-" + killsOfKilledPlayer + EnumChatFormatting.WHITE + ")";
     }
 
     public static String getGameId() {
