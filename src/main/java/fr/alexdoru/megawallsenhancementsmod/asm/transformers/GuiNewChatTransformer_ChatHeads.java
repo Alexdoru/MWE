@@ -29,11 +29,12 @@ public class GuiNewChatTransformer_ChatHeads implements IMyClassTransformer {
                     if (checkMethodInsnNode(insnNode, MethodMapping.GLSTATEMANAGER$ENABLEBLEND)) {
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 10)); // chatline
+                        list.add(new VarInsnNode(ILOAD, 14)); // l1 (alpha)
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
                                 getHookClass("GuiNewChatHook_ChatHeads"),
                                 "preBlendCall",
-                                "(L" + ClassMapping.CHATLINE + ";)V",
+                                "(L" + ClassMapping.CHATLINE + ";I)V",
                                 false
                         ));
                         methodNode.instructions.insertBefore(insnNode, list);
