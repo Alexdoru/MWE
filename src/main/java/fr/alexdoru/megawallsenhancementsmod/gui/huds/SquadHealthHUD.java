@@ -105,7 +105,7 @@ public class SquadHealthHUD extends AbstractRenderer {
                     }
                     xDrawingPos += 9;
                 }
-                mc.fontRendererObj.drawStringWithShadow(formattedName, (float) xDrawingPos, (float) yDrawingPos, -1);
+                mc.fontRendererObj.drawStringWithShadow(formattedName, (float) xDrawingPos, (float) yDrawingPos, 0xFFFFFF);
                 final int xStartFinalDrawingPos = xDrawingPos + maxNameWidth + 1;
                 final int xStartScoreDrawingPos = xStartFinalDrawingPos + maxFinalWidth;
                 if (maxScoreWidth + maxFinalWidth > 5) {
