@@ -181,6 +181,25 @@ public class MegaWallsStats {
             imsg.appendSibling(new ChatComponentText(" : " + ColorUtil.getPrestigeVColor(classpoints) + classpoints + "\n"));
         }
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "Total : " + EnumChatFormatting.GOLD + total_classpoints + "\n"));
+        int cpMissing = MWClass.values().length * 2_000;
+        int coinsMissing = MWClass.values().length * 2_000_000 - this.coins;
+        for (final Map.Entry<String, Integer[]> entry : classpointsMap.entrySet()) {
+            cpMissing -= Math.min(entry.getValue()[1], 2000);
+            final int prestige = entry.getValue()[0];
+            if (prestige == 4) {
+                coinsMissing -= 2_000_000;
+            } else if (prestige == 3) {
+                coinsMissing -= 1_250_000;
+            } else if (prestige == 2) {
+                coinsMissing -= 750_000;
+            } else if (prestige == 1) {
+                coinsMissing -= 250_000;
+            }
+        }
+        coinsMissing = Math.max(0, coinsMissing);
+        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "Missing : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(cpMissing) + " cp"
+                + EnumChatFormatting.GREEN + ", "
+                + EnumChatFormatting.GOLD + ChatUtil.formatInt(coinsMissing) + " coins\n"));
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
         return imsg;
     }
