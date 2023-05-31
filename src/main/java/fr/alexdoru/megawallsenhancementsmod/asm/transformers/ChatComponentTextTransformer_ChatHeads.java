@@ -24,8 +24,9 @@ public class ChatComponentTextTransformer_ChatHeads implements IMyClassTransform
         status.setInjectionPoints(0);
         addInterface(classNode, "ChatComponentTextAccessor");
         final String SKIN_FIELD_NAME = "mwe$skin";
-        classNode.visitField(ACC_PRIVATE, SKIN_FIELD_NAME, "L" + ClassMapping.RESOURCELOCATION + ";", null, null).visitEnd();
-        addGetterAndSetterMethod(classNode, "Skin", ClassMapping.CHATCOMPONENTTEXT, SKIN_FIELD_NAME, "L" + ClassMapping.RESOURCELOCATION + ";", null);
+        final String SKIN_DESC = "L" + ClassMapping.SKINCHATHEAD + ";";
+        classNode.visitField(ACC_PRIVATE, SKIN_FIELD_NAME, SKIN_DESC, null, null).visitEnd();
+        addGetterAndSetterMethod(classNode, "SkinChatHead", ClassMapping.CHATCOMPONENTTEXT, SKIN_FIELD_NAME, SKIN_DESC, null);
     }
 
 }

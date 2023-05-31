@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 import com.google.common.collect.EvictingQueue;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.ChatComponentTextAccessor;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.chat.SkinChatHead;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -89,7 +90,7 @@ public class NetHandlerPlayClientHook {
                                         EnumChatFormatting.YELLOW + "Click this message to run : \n" + EnumChatFormatting.YELLOW + "/stalk" + command)))
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk" + command)));
         if (skin != null && msg instanceof ChatComponentTextAccessor) {
-            ((ChatComponentTextAccessor) msg).setSkin(skin);
+            ((ChatComponentTextAccessor) msg).setSkinChatHead(new SkinChatHead(skin));
         }
         ChatUtil.addChatMessage(msg);
     }

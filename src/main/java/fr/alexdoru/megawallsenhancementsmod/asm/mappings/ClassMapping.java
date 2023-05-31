@@ -65,6 +65,7 @@ public enum ClassMapping {
     SCOREBOARD("auo", "net/minecraft/scoreboard/Scoreboard"),
     SCOREOBJECTIVE("auk", "net/minecraft/scoreboard/ScoreObjective"),
     SCOREPLAYERTEAM("aul", "net/minecraft/scoreboard/ScorePlayerTeam"),
+    SKINCHATHEAD("fr/alexdoru/megawallsenhancementsmod/chat/SkinChatHead"),
     SLOT("yg", "net/minecraft/inventory/Slot"),
     STRINGBUILDER("java/lang/StringBuilder"),
     TEAM("auq", "net/minecraft/scoreboard/Team"),
