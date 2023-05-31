@@ -5,10 +5,16 @@ import fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods.Orange
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods.SidebarmodReloaded_CustomSidebarTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods.SidebarmodRevamp_GuiSidebarTransformer;
 import net.minecraft.launchwrapper.IClassTransformer;
+import net.minecraft.launchwrapper.Launch;
+import org.apache.commons.io.FileUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,12 +23,14 @@ import java.util.List;
 
 public class ClassTransformer implements IClassTransformer {
 
+    private File outputDir = null;
     private final HashMap<String, List<IMyClassTransformer>> transformerHashMap = new HashMap<>();
 
     /**
      * Register the IMyClassTransformer(s) here
      */
     public ClassTransformer() {
+        emptyClassOutputFolder();
         registerTransformer(new ChatComponentTextTransformer_ChatHeads());
         registerTransformer(new CommandHandlerTransformer());
         registerTransformer(new EntityArrowTransformer());
@@ -116,6 +124,7 @@ public class ClassTransformer implements IClassTransformer {
         }
         final long l2 = System.currentTimeMillis() - l;
         debugLog("Transformed " + transformedName + " in " + l2 + "ms");
+        saveTransformedClass(basicClass, transformedName);
         return basicClass;
     }
 
@@ -129,6 +138,39 @@ public class ClassTransformer implements IClassTransformer {
             ASMLoadingPlugin.logger.debug(msg);
         } else {
             ASMLoadingPlugin.logger.info(msg);
+        }
+    }
+
+    private void emptyClassOutputFolder() {
+        if (!ASMLoadingPlugin.isObf) {
+            outputDir = new File(Launch.minecraftHome, "ASM_MWE");
+            try {
+                FileUtils.deleteDirectory(outputDir);
+            } catch (IOException ignored) {}
+            if (!outputDir.exists()) {
+                outputDir.mkdirs();
+            }
+        }
+    }
+
+    private void saveTransformedClass(final byte[] data, final String transformedName) {
+        if (ASMLoadingPlugin.isObf || outputDir == null) {
+            return;
+        }
+        final File outFile = new File(outputDir, transformedName.replace('.', File.separatorChar) + ".class");
+        final File outDir = outFile.getParentFile();
+        if (!outDir.exists()) {
+            outDir.mkdirs();
+        }
+        if (outFile.exists()) {
+            outFile.delete();
+        }
+        try {
+            final OutputStream output = new FileOutputStream(outFile);
+            output.write(data);
+            output.close();
+        } catch (IOException ex) {
+            ASMLoadingPlugin.logger.error("Could not save transformed class " + transformedName);
         }
     }
 

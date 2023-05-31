@@ -10,7 +10,7 @@ import java.util.Map;
 @IFMLLoadingPlugin.TransformerExclusions({"fr.alexdoru.megawallsenhancementsmod.asm"})
 public class ASMLoadingPlugin implements IFMLLoadingPlugin {
 
-    public static final Logger logger = LogManager.getLogger("ASM MegaWallsEnhancements");
+    public static final Logger logger = LogManager.getLogger("ASM MWE");
     public static boolean isObf;
 
     @Override
