@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.chat;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.ChatComponentTextAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessors.NetworkPlayerInfoAccessor_ChatHeads;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
@@ -65,8 +66,10 @@ public class ChatUtil {
                 return;
             }
             final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
-            if (networkPlayerInfo != null) {
-                ((ChatComponentTextAccessor) msg).setSkinChatHead(new SkinChatHead(networkPlayerInfo.getLocationSkin()));
+            if (networkPlayerInfo instanceof NetworkPlayerInfoAccessor_ChatHeads) {
+                final SkinChatHead skinChatHead = new SkinChatHead(networkPlayerInfo.getLocationSkin());
+                ((ChatComponentTextAccessor) msg).setSkinChatHead(skinChatHead);
+                ((NetworkPlayerInfoAccessor_ChatHeads) networkPlayerInfo).setSkinChatHead(skinChatHead);
             }
         }
     }
