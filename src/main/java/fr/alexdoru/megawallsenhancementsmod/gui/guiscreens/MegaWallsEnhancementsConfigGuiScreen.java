@@ -141,6 +141,14 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
                         + EnumChatFormatting.YELLOW + " /squad add <name> as <custom name>"
                         + EnumChatFormatting.GRAY + ", it will keep the first letter of their real name so that you can track them on the compass"));
         if (!ASMLoadingPlugin.isFeatherLoaded()) {
+            final List<String> chatHeadTooltip = new ArrayList<>();
+            chatHeadTooltip.add(EnumChatFormatting.GREEN + "Chat Heads");
+            chatHeadTooltip.add("");
+            chatHeadTooltip.add(EnumChatFormatting.GRAY + "Renders heads of players in front of chat messages");
+            if (ASMLoadingPlugin.isPatcherLoaded()) {
+                chatHeadTooltip.add("");
+                chatHeadTooltip.add(EnumChatFormatting.YELLOW + "If you are using HUD Caching from Patcher, the heads might not fade away properly");
+            }
             this.buttonList.add(new FancyGuiButton(
                     xPosRight, getButtonYPos(5),
                     () -> "Chat Heads : " + getSuffix(ConfigHandler.chatHeads),
@@ -148,7 +156,7 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
                         ConfigHandler.chatHeads = !ConfigHandler.chatHeads;
                         mc.ingameGUI.getChatGUI().refreshChat();
                     },
-                    EnumChatFormatting.GRAY + "Renders heads of players in front of chat messages"));
+                    chatHeadTooltip));
         }
         this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(7), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
