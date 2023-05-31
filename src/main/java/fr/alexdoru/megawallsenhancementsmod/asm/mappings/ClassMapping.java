@@ -47,6 +47,7 @@ public enum ClassMapping {
     NETHANDLERPLAYCLIENT("bcy", "net/minecraft/client/network/NetHandlerPlayClient"),
     NETWORKMANAGER("ek", "net/minecraft/network/NetworkManager"),
     NETWORKPLAYERINFO("bdc", "net/minecraft/client/network/NetworkPlayerInfo"),
+    NETWORKPLAYERINFO$1("bdc$1", "net/minecraft/client/network/NetworkPlayerInfo$1"),
     PLAYERDATASAMPLES("fr/alexdoru/megawallsenhancementsmod/hackerdetector/data/PlayerDataSamples"),
     POTION("pe", "net/minecraft/potion/Potion"),
     PROFILER("nt", "net/minecraft/profiler/Profiler"),

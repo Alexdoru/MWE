@@ -30,6 +30,24 @@ public interface IMyClassTransformer {
         return "fr/alexdoru/megawallsenhancementsmod/asm/hooks/" + className;
     }
 
+    default void NodeToString(AbstractInsnNode insnNode) {
+        if (insnNode instanceof FieldInsnNode) {
+            final FieldInsnNode fieldInsnNode = (FieldInsnNode) insnNode;
+            ASMLoadingPlugin.logger.info("FieldInsnNode :"
+                    + " opcode '" + fieldInsnNode.getOpcode()
+                    + "' name '" + fieldInsnNode.name
+                    + "' owner '" + fieldInsnNode.owner
+                    + "' desc '" + fieldInsnNode.desc + "'");
+        } else if (insnNode instanceof MethodInsnNode) {
+            final MethodInsnNode methodInsnNode = (MethodInsnNode) insnNode;
+            ASMLoadingPlugin.logger.info("MethodInsnNode :"
+                    + " opcode '" + methodInsnNode.getOpcode()
+                    + "' name '" + methodInsnNode.name
+                    + "' owner '" + methodInsnNode.owner
+                    + "' desc '" + methodInsnNode.desc + "'");
+        }
+    }
+
     default boolean isConstructorMethod(MethodNode methodNode) {
         return methodNode.name.startsWith("<init>");
     }
