@@ -22,7 +22,7 @@ public class GuiNewChatTransformer_ChatHeads implements IMyClassTransformer {
             status.skipTransformation();
             return;
         }
-        status.setInjectionPoints(3);
+        status.setInjectionPoints(4);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.GUINEWCHAT$DRAWCHAT)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
@@ -64,6 +64,18 @@ public class GuiNewChatTransformer_ChatHeads implements IMyClassTransformer {
                         status.addInjection();
                     }
                 }
+            } else if (checkMethodNode(methodNode, MethodMapping.GUINEWCHAT$PRINTCHATMESSAGE)) {
+                final InsnList list = new InsnList();
+                list.add(new VarInsnNode(ALOAD, 1));
+                list.add(new MethodInsnNode(
+                        INVOKESTATIC,
+                        getHookClass("GuiNewChatHook_ChatHeads"),
+                        "tryAddHeadToMessage",
+                        "(L" + ClassMapping.ICHATCOMPONENT + ";)V",
+                        false
+                ));
+                methodNode.instructions.insert(list);
+                status.addInjection();
             }
         }
     }

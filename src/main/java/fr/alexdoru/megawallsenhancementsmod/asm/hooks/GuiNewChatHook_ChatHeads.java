@@ -1,12 +1,20 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.ChatComponentTextAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessors.NetworkPlayerInfoAccessor_ChatHeads;
+import fr.alexdoru.megawallsenhancementsmod.chat.SkinChatHead;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import org.lwjgl.opengl.GL11;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("unused")
 public class GuiNewChatHook_ChatHeads {
@@ -36,6 +44,28 @@ public class GuiNewChatHook_ChatHeads {
     public static void postRenderStringCall() {
         if (isHeadLine) {
             GlStateManager.translate(-9F, 0F, 0F);
+        }
+    }
+
+    private static final Pattern NAME_PATTERN = Pattern.compile("\\w{2,16}");
+
+    public static void tryAddHeadToMessage(IChatComponent message) {
+        if (message instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) message).getSkinChatHead() == null) {
+            String msg = message.getFormattedText().split("\n")[0];
+            msg = EnumChatFormatting.getTextWithoutFormattingCodes(msg);
+            final Matcher matcher = NAME_PATTERN.matcher(msg);
+            int i = 0;
+            while (matcher.find() && i < 3) {
+                i++;
+                final String potentialName = matcher.group();
+                final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(potentialName);
+                if (networkPlayerInfo instanceof NetworkPlayerInfoAccessor_ChatHeads) {
+                    final SkinChatHead skinChatHead = new SkinChatHead(networkPlayerInfo.getLocationSkin());
+                    ((ChatComponentTextAccessor) message).setSkinChatHead(skinChatHead);
+                    ((NetworkPlayerInfoAccessor_ChatHeads) networkPlayerInfo).setSkinChatHead(skinChatHead);
+                    return;
+                }
+            }
         }
     }
 
