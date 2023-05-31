@@ -1,8 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.accessors;
 
-import net.minecraft.util.ResourceLocation;
+import fr.alexdoru.megawallsenhancementsmod.chat.SkinChatHead;
 
 public interface ChatComponentTextAccessor {
-    ResourceLocation getSkin();
-    void setSkin(ResourceLocation skin);
+    SkinChatHead getSkinChatHead();
+    void setSkinChatHead(SkinChatHead skinChatHead);
 }

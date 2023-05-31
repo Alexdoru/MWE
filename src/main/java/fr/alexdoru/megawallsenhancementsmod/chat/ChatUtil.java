@@ -61,12 +61,12 @@ public class ChatUtil {
 
     public static void addSkinToComponent(IChatComponent msg, String playername) {
         if (msg instanceof ChatComponentTextAccessor) {
-            if (((ChatComponentTextAccessor) msg).getSkin() != null) {
+            if (((ChatComponentTextAccessor) msg).getSkinChatHead() != null) {
                 return;
             }
             final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
             if (networkPlayerInfo != null) {
-                ((ChatComponentTextAccessor) msg).setSkin(networkPlayerInfo.getLocationSkin());
+                ((ChatComponentTextAccessor) msg).setSkinChatHead(new SkinChatHead(networkPlayerInfo.getLocationSkin()));
             }
         }
     }

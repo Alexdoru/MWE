@@ -11,9 +11,9 @@ public class GuiUtilRenderComponentsHook_ChatHeads {
     private static boolean offsetLine = false;
 
     public static ChatComponentText getStarterChatComponent(ChatComponentText newMsg, IChatComponent fullMessage) {
-        if (fullMessage instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) fullMessage).getSkin() != null) {
+        if (fullMessage instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) fullMessage).getSkinChatHead() != null) {
             offsetLine = ConfigHandler.chatHeads;
-            ((ChatComponentTextAccessor) newMsg).setSkin(((ChatComponentTextAccessor) fullMessage).getSkin());
+            ((ChatComponentTextAccessor) newMsg).setSkinChatHead(((ChatComponentTextAccessor) fullMessage).getSkinChatHead());
             return newMsg;
         }
         offsetLine = false;
