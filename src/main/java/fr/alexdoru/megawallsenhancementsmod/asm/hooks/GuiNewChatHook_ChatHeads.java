@@ -53,6 +53,9 @@ public class GuiNewChatHook_ChatHeads {
         if (message instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) message).getSkinChatHead() == null) {
             String msg = message.getFormattedText().split("\n")[0];
             msg = EnumChatFormatting.getTextWithoutFormattingCodes(msg);
+            if (msg.startsWith("   ")) {
+                return;
+            }
             final Matcher matcher = NAME_PATTERN.matcher(msg);
             int i = 0;
             while (matcher.find() && i < 3) {
