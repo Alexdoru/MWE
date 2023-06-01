@@ -30,7 +30,6 @@ public class ClassTransformer implements IClassTransformer {
      * Register the IMyClassTransformer(s) here
      */
     public ClassTransformer() {
-        emptyClassOutputFolder();
         registerTransformer(new ChatComponentTextTransformer_ChatHeads());
         registerTransformer(new CommandHandlerTransformer());
         registerTransformer(new EntityArrowTransformer());
@@ -142,20 +141,21 @@ public class ClassTransformer implements IClassTransformer {
     }
 
     private void emptyClassOutputFolder() {
-        if (!ASMLoadingPlugin.isObf) {
-            outputDir = new File(Launch.minecraftHome, "ASM_MWE");
-            try {
-                FileUtils.deleteDirectory(outputDir);
-            } catch (IOException ignored) {}
-            if (!outputDir.exists()) {
-                outputDir.mkdirs();
-            }
+        outputDir = new File(Launch.minecraftHome, "ASM_MWE");
+        try {
+            FileUtils.deleteDirectory(outputDir);
+        } catch (IOException ignored) {}
+        if (!outputDir.exists()) {
+            outputDir.mkdirs();
         }
     }
 
     private void saveTransformedClass(final byte[] data, final String transformedName) {
-        if (ASMLoadingPlugin.isObf || outputDir == null) {
+        if (ASMLoadingPlugin.isObf) {
             return;
+        }
+        if (outputDir == null) {
+            emptyClassOutputFolder();
         }
         final File outFile = new File(outputDir, transformedName.replace('.', File.separatorChar) + ".class");
         final File outDir = outFile.getParentFile();
