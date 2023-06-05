@@ -15,8 +15,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 import javax.annotation.Nullable;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class MegaWallsStats {
 
@@ -52,7 +51,7 @@ public class MegaWallsStats {
     private int time_played;
     private int nbprestiges;
     private int total_classpoints;
-    private int legendary_skins;
+    private Set<String> legendarySkinsSet = null;
 
     private int games_played;
     private float fkpergame;
@@ -134,7 +133,10 @@ public class MegaWallsStats {
                 }
                 final String achievementName = jsonElement.getAsString();
                 if (achievementName != null && achievementName.startsWith("walls3_legendary_")) {
-                    legendary_skins++;
+                    if (legendarySkinsSet == null) {
+                        legendarySkinsSet = new HashSet<>();
+                    }
+                    legendarySkinsSet.add(achievementName.replace("walls3_legendary_", ""));
                 }
             }
         } catch (Exception ignored) {}
@@ -158,7 +160,10 @@ public class MegaWallsStats {
     }
 
     public int getLegSkins() {
-        return legendary_skins;
+        if (legendarySkinsSet == null) {
+            return 0;
+        }
+        return legendarySkinsSet.size();
     }
 
     @Nullable
@@ -204,7 +209,7 @@ public class MegaWallsStats {
         return imsg;
     }
 
-    public IChatComponent getFormattedMessage(String formattedname, String playername) {
+    public IChatComponent getGeneralStatsMessage(String formattedname, String playername) {
 
         final String[][] matrix1 = {
                 {
@@ -250,7 +255,7 @@ public class MegaWallsStats {
 
                 {
                         EnumChatFormatting.AQUA + "Wither kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wither_kills) + "     ",
-                        EnumChatFormatting.AQUA + "Leg skins : " + (legendary_skins == 24 ? EnumChatFormatting.GOLD : EnumChatFormatting.GREEN) + legendary_skins + EnumChatFormatting.GOLD + "/24"
+                        EnumChatFormatting.AQUA + "Leg skins : " + (getLegSkins() == 24 ? EnumChatFormatting.GOLD : EnumChatFormatting.GREEN) + getLegSkins() + EnumChatFormatting.GOLD + "/24"
                 },
 
                 {
@@ -276,6 +281,34 @@ public class MegaWallsStats {
                                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for this class' stats")))
                                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + (chosen_class == null ? "None" : chosen_class)))))
                 .appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
+    }
+
+    public IChatComponent getLegendaryMessage(String formattedname, String playername) {
+        final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
+                .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls Legendary skins\n"));
+        final List<String> obtainedLegs = new ArrayList<>();
+        final List<String> missingLegs = new ArrayList<>();
+        for (final MWClass mwClass : MWClass.values()) {
+            if (legendarySkinsSet != null && legendarySkinsSet.contains(mwClass.className.toLowerCase())) {
+                obtainedLegs.add(mwClass.className);
+            } else {
+                missingLegs.add(mwClass.className);
+            }
+        }
+        if (!obtainedLegs.isEmpty()) {
+            imsg.appendSibling(new ChatComponentText("\n" + EnumChatFormatting.GOLD + "Obtained (" + obtainedLegs.size() + ")\n"));
+            for (final String s : obtainedLegs) {
+                imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + s + "\n"));
+            }
+        }
+        if (!missingLegs.isEmpty()) {
+            imsg.appendSibling(new ChatComponentText("\n" + EnumChatFormatting.GOLD + "Missing (" + missingLegs.size() + ")\n"));
+            for (final String s : missingLegs) {
+                imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + s + "\n"));
+            }
+        }
+        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
+        return imsg;
     }
 
 }

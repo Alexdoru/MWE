@@ -103,14 +103,19 @@ public class CommandPlancke extends MyAbstractCommand {
                     if (args.length == 2) {
 
                         final MegaWallsStats mwstats = new MegaWallsStats(playerdata.getPlayerData());
-                        ChatUtil.addChatMessage(mwstats.getFormattedMessage(formattedName, playername));
+                        ChatUtil.addChatMessage(mwstats.getGeneralStatsMessage(formattedName, playername));
 
                     } else {
 
-                        if (args[2].equals("cp") || args[2].equals("classpoint") || args[2].equals("classpoints")) {
+                        if (args[2].equalsIgnoreCase("cp") || args[2].equalsIgnoreCase("classpoint") || args[2].equalsIgnoreCase("classpoints")) {
 
                             final MegaWallsStats mwstats = new MegaWallsStats(playerdata.getPlayerData());
                             ChatUtil.addChatMessage(mwstats.getClassPointsMessage(formattedName, playername));
+
+                        } else if (args[2].equalsIgnoreCase("leg") || args[2].equalsIgnoreCase("legendary") || args[2].equalsIgnoreCase("legendaries")) {
+
+                            final MegaWallsStats mwstats = new MegaWallsStats(playerdata.getPlayerData());
+                            ChatUtil.addChatMessage(mwstats.getLegendaryMessage(formattedName, playername));
 
                         } else {
 
@@ -164,7 +169,7 @@ public class CommandPlancke extends MyAbstractCommand {
             return getListOfStringsMatchingLastWord(args, games);
         }
         if (args.length == 3 && (args[1].equalsIgnoreCase("mw") || args[1].equalsIgnoreCase("megawalls"))) {
-            final String[] mwargs = {"arcanist", "assassin", "automaton", "blaze", "classpoint", "cow", "creeper", "dreadlord", "enderman", "golem", "herobrine", "hunter", "moleman", "phoenix", "pirate", "renegade", "shaman", "shark", "skeleton", "snowman", "spider", "squid", "pigman", "werewolf", "zombie"};
+            final String[] mwargs = {"arcanist", "assassin", "automaton", "blaze", "classpoint", "cow", "creeper", "dreadlord", "enderman", "golem", "herobrine", "hunter", "legendary", "moleman", "phoenix", "pirate", "renegade", "shaman", "shark", "skeleton", "snowman", "spider", "squid", "pigman", "werewolf", "zombie"};
             return getListOfStringsMatchingLastWord(args, mwargs);
         }
         return null;
