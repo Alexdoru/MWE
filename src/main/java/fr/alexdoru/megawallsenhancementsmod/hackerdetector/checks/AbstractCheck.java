@@ -45,14 +45,14 @@ public abstract class AbstractCheck implements ICheck {
     public final void checkViolationLevel(EntityPlayer player, boolean failedCheck, ViolationLevelTracker... trackers) {
         for (final ViolationLevelTracker tracker : trackers) {
             if (tracker.isFlagging(failedCheck)) {
-                printFlagMessage(player, this.getCheatName(), this.getCheatDescription());
-                addToReportList(player, this.getCheatName().toLowerCase());
-                sendReport(player, this.getCheatName().toLowerCase(), this.canSendTimestamp());
+                this.printFlagMessage(player, this.getCheatName(), this.getCheatDescription());
+                this.addToReportList(player, this.getCheatName().toLowerCase());
+                this.sendReport(player, this.getCheatName().toLowerCase(), this.canSendTimestamp());
             }
         }
     }
 
-    private static void printFlagMessage(EntityPlayer player, String cheat, String cheatDescription) {
+    private void printFlagMessage(EntityPlayer player, String cheat, String cheatDescription) {
         if (ConfigHandler.debugLogging) {
             logger.info(player.getName() + " flags " + cheat);
         }
@@ -85,7 +85,7 @@ public abstract class AbstractCheck implements ICheck {
         ChatUtil.addChatMessage(imsg);
     }
 
-    private static void addToReportList(EntityPlayer player, String cheat) {
+    private void addToReportList(EntityPlayer player, String cheat) {
         if (!ScoreboardTracker.isReplayMode && ConfigHandler.addToReportList && SquadHandler.getSquad().get(player.getName()) == null) {
             final UUID uuid = player.getUniqueID();
             final boolean isNicked = uuid.version() != 4;
@@ -112,7 +112,7 @@ public abstract class AbstractCheck implements ICheck {
         }
     }
 
-    private static void sendReport(EntityPlayer player, String cheat, boolean sendTimestamp) {
+    private void sendReport(EntityPlayer player, String cheat, boolean sendTimestamp) {
         if (ScoreboardTracker.isInMwGame && ConfigHandler.autoreportFlaggedPlayers && SquadHandler.getSquad().get(player.getName()) == null) {
             if (sendTimestamp) {
                 final String timestamp = GameInfoTracker.getTimeSinceGameStart();
@@ -124,14 +124,14 @@ public abstract class AbstractCheck implements ICheck {
         }
     }
 
-    protected static void fail(EntityPlayer player, String cheat) {
+    protected void fail(EntityPlayer player, String cheat) {
         ChatUtil.debug(NameUtil.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.GRAY + " failed "
                 + EnumChatFormatting.RED + cheat
                 + EnumChatFormatting.GRAY + " check ");
     }
 
-    protected static void log(EntityPlayer player, String cheat, @Nonnull ViolationLevelTracker vl, PlayerDataSamples data, String extramsg) {
+    protected void log(EntityPlayer player, String cheat, @Nonnull ViolationLevelTracker vl, PlayerDataSamples data, String extramsg) {
         logger.info(player.getName() + " failed " + cheat + " check "
                 + extramsg
                 + " | vl " + vl.getViolationLevel()
@@ -163,7 +163,7 @@ public abstract class AbstractCheck implements ICheck {
      * That makes normal sprinting ~21% slower than sprint while jumping
      * Result is in meters per tick
      */
-    protected static double getBaseSprintingSpeed(EntityPlayer player) {
+    protected double getBaseSprintingSpeed(EntityPlayer player) {
         int speedAmplifier = 0;
         if (player.isPotionActive(Potion.moveSpeed)) {
             final PotionEffect activePotionEffect = player.getActivePotionEffect(Potion.moveSpeed);
@@ -172,7 +172,7 @@ public abstract class AbstractCheck implements ICheck {
         return getBaseSprintingSpeed(speedAmplifier);
     }
 
-    protected static double getBaseSprintingSpeed(int speedAmplifier) {
+    protected double getBaseSprintingSpeed(int speedAmplifier) {
         return 0.2806d * (1.0d + 0.2d * speedAmplifier);
     }
 
@@ -182,7 +182,7 @@ public abstract class AbstractCheck implements ICheck {
      * This accounts for the 5 ticks cooldown there is after breaking a bloc
      * Returns -1 if the block isn't harvestable
      */
-    protected static int getTimeToHarvestBlock(IBlockState state, EntityPlayer player, World world, BlockPos pos) {
+    protected int getTimeToHarvestBlock(IBlockState state, EntityPlayer player, World world, BlockPos pos) {
         return getTimeToHarvestBlock(ForgeHooks.blockStrength(state, player, world, pos));
     }
 
@@ -192,7 +192,7 @@ public abstract class AbstractCheck implements ICheck {
      * This accounts for the 5 ticks cooldown there is after breaking a bloc
      * Returns -1 if the block isn't harvestable
      */
-    protected static int getTimeToHarvestBlock(float blockStrength) {
+    protected int getTimeToHarvestBlock(float blockStrength) {
         if (blockStrength <= 0) {
             return -1;
         }
@@ -207,7 +207,7 @@ public abstract class AbstractCheck implements ICheck {
         return i == 1 ? i : i + 5;
     }
 
-    protected static float average(SampleList<Float> list) {
+    protected float average(SampleList<Float> list) {
         float sum = 0;
         for (final Float f : list) {
             sum += f;
@@ -215,7 +215,7 @@ public abstract class AbstractCheck implements ICheck {
         return sum / list.size();
     }
 
-    protected static boolean isPlayerLookingAtBlock(EntityPlayer player, BlockPos pos) {
+    protected boolean isPlayerLookingAtBlock(EntityPlayer player, BlockPos pos) {
         final Vector3D eyesToBlockCenter = new Vector3D(
                 pos.getX() + 0.5D - player.posX,
                 pos.getY() + 0.5D - (player.posY + player.getEyeHeight()),

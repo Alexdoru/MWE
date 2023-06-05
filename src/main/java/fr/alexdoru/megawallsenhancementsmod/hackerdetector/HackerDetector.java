@@ -22,7 +22,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
 
 public class HackerDetector {
 
@@ -38,16 +41,16 @@ public class HackerDetector {
     private int playersChecked = 0;
     private int playersCheckedTemp = 0;
     /** Data about blocks broken during this tick */
-    public List<BrokenBlock> brokenBlocksList = new LinkedList<>();
+    public List<BrokenBlock> brokenBlocksList = new ArrayList<>();
     public HashSet<String> playersToLog = new HashSet<>();
 
     static {
         MinecraftForge.EVENT_BUS.register(INSTANCE);
     }
 
-    public HackerDetector() {
+    private HackerDetector() {
         checkList.add(new AutoblockCheck());
-        checkList.add(new FastbreakCheck());
+        checkList.add(FastbreakCheck.INSTANCE);
         //checkList.add(new KillAuraSwitchCheck());
         checkList.add(new SprintCheck());
         //checkList.add(new OmniSprintCheck());
@@ -72,7 +75,9 @@ public class HackerDetector {
         if (event.phase == TickEvent.Phase.START) {
             playersCheckedTemp = 0;
         } else if (event.phase == TickEvent.Phase.END) {
-            brokenBlocksList.clear();
+            final long timeStart = System.nanoTime();
+            FastbreakCheck.INSTANCE.onTickEnd();
+            timeElapsedTemp += System.nanoTime() - timeStart;
             if (mc.thePlayer != null && mc.thePlayer.ticksExisted % 20 == 0) {
                 timeElapsed = timeElapsedTemp;
                 timeElapsedTemp = 0L;
@@ -88,7 +93,6 @@ public class HackerDetector {
      */
     public void performChecksOnPlayer(EntityPlayer player) {
         if (mc.thePlayer == null ||
-                player == mc.thePlayer ||
                 player.ticksExisted < 20 ||
                 player.isDead ||
                 player.capabilities.isFlying ||
@@ -98,6 +102,11 @@ public class HackerDetector {
             return;
         }
         final long timeStart = System.nanoTime();
+        if (player == mc.thePlayer) {
+            FastbreakCheck.INSTANCE.checkPlayerSP(player);
+            timeElapsedTemp += System.nanoTime() - timeStart;
+            return;
+        }
         playersCheckedTemp++;
         final PlayerDataSamples data = ((EntityPlayerAccessor) player).getPlayerDataSamples();
         updatePlayerDataSamples(player, data);
