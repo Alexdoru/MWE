@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 
+import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.BrokenBlock;
@@ -8,6 +9,7 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelT
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -15,9 +17,11 @@ import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 
-import java.util.Iterator;
-
 public class FastbreakCheck extends AbstractCheck {
+
+    public static final FastbreakCheck INSTANCE = new FastbreakCheck();
+
+    private FastbreakCheck() {}
 
     @Override
     public String getCheatName() {
@@ -36,7 +40,7 @@ public class FastbreakCheck extends AbstractCheck {
 
     @Override
     public void performCheck(EntityPlayer player, PlayerDataSamples data) {
-        super.checkViolationLevel(player, this.check(player, data), data.fastbreakVL);
+        this.check(player, data);
     }
 
     /**
@@ -44,48 +48,87 @@ public class FastbreakCheck extends AbstractCheck {
      * Since we can't see enchantements of other players on Hypixel
      * This check is hardcoded for a diamond pickaxe with efficiency III
      * <p>
-     * If the block broken is in < 30 m radius of the player,
+     * If the broken block is in < 30 m radius of the player,
      * we can retrieve the ID of the entity breaking the block
      * by listening to the handleBlockBreakAnim hook, but we're not
      * doing that here
      */
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
+        checkPlayerBreakingBlocks(player);
+        return false;
+    }
+
+    /**
+     * Checks if the player is breaking some blocks
+     *
+     * @param player - it's mc.thePlayer
+     */
+    public void checkPlayerSP(EntityPlayer player) {
+        checkPlayerBreakingBlocks(player);
+    }
+
+    private void checkPlayerBreakingBlocks(EntityPlayer player) {
         if (ScoreboardTracker.isInMwGame && player.isSwingInProgress && !HackerDetector.INSTANCE.brokenBlocksList.isEmpty()) {
             final ItemStack itemStack = player.getHeldItem();
             if (itemStack != null && itemStack.isItemEnchanted() && itemStack.getItem() == Items.diamond_pickaxe) {
-                final Iterator<BrokenBlock> iterator = HackerDetector.INSTANCE.brokenBlocksList.iterator();
-                while (iterator.hasNext()) {
-                    final BrokenBlock brokenBlock = iterator.next();
-                    if (isPlayerLookingAtBlock(player, brokenBlock.blockPos)) {
-                        iterator.remove();
+                for (final BrokenBlock brokenBlock : HackerDetector.INSTANCE.brokenBlocksList) {
+                    if (this.isPlayerLookingAtBlock(player, brokenBlock.blockPos)) {
+                        brokenBlock.addPlayer(player);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Method to resolve conflicts when multiple players are looking
+     * at the same block when breaking it, for example when double-mining
+     */
+    public void onTickEnd() {
+        final Minecraft mc = Minecraft.getMinecraft();
+        if (ConfigHandler.hackerDetector && mc.theWorld != null && mc.thePlayer != null && mc.theWorld.isRemote && ScoreboardTracker.isInMwGame) {
+            for (final BrokenBlock brokenBlock : HackerDetector.INSTANCE.brokenBlocksList) {
+                if (brokenBlock.playersList != null) {
+                    long oldestTime = System.currentTimeMillis();
+                    EntityPlayer playerBreaking = null;
+                    for (final EntityPlayer player : brokenBlock.playersList) {
+                        if (player instanceof EntityPlayerAccessor) {
+                            final PlayerDataSamples data = ((EntityPlayerAccessor) player).getPlayerDataSamples();
+                            if (data.lastBreakBlockTime - oldestTime < 0) {
+                                oldestTime = data.lastBreakBlockTime;
+                                playerBreaking = player;
+                            }
+                        }
+                    }
+                    if (playerBreaking != null && playerBreaking != mc.thePlayer) {
+                        final PlayerDataSamples data = ((EntityPlayerAccessor) playerBreaking).getPlayerDataSamples();
                         final long recordedBreakTime = brokenBlock.breakTime - data.lastBreakBlockTime;
                         data.lastBreakBlockTime = brokenBlock.breakTime;
-                        final float expectedTimeToBreak = 50F * getTimeToHarvestBlock(getBlockStrengthMW(player, brokenBlock.blockPos, brokenBlock.block));
+                        final float expectedTimeToBreak = 50F * getTimeToHarvestBlock(getBlockStrengthMW(playerBreaking, brokenBlock.blockPos, brokenBlock.block));
                         data.breakTimeRatio.add(recordedBreakTime / expectedTimeToBreak);
                         if (data.breakTimeRatio.hasCollectedSample()) {
                             final float avg = average(data.breakTimeRatio);
                             if (avg < 0.8F) {
                                 data.fastbreakVL.add((int) Math.floor((0.8F - avg) * 10F));
                                 if (ConfigHandler.debugLogging) {
-                                    logger.info(player.getName() + " failed Fastbreak check" +
+                                    logger.info(playerBreaking.getName() + " failed Fastbreak check" +
                                             " | vl " + data.fastbreakVL.getViolationLevel() +
                                             " | avg " + String.format("%.4f", avg) +
                                             " | expectedTimeToBreak " + expectedTimeToBreak +
                                             " | recordedBreakTime " + recordedBreakTime);
                                 }
-                                return true;
+                                super.checkViolationLevel(playerBreaking, true, data.fastbreakVL);
                             } else {
                                 data.fastbreakVL.substract(1);
-                                return false;
+                                super.checkViolationLevel(playerBreaking, false, data.fastbreakVL);
                             }
                         }
-                        return false;
                     }
                 }
             }
         }
-        return false;
+        HackerDetector.INSTANCE.brokenBlocksList.clear();
     }
 
     public static ViolationLevelTracker newViolationTracker() {
