@@ -399,6 +399,9 @@ public class NameUtil {
      */
     public static boolean isPlayerUsingRandom(NetworkPlayerInfo networkPlayerInfo) {
         final String randomSkinLocation = "512a44f6c022dfaa6f61274c85aa1594cb304f0136fd5d1d3a27c1379e875692";
+        if (!networkPlayerInfo.hasLocationSkin()) {
+            return false;
+        }
         return randomSkinLocation.equals(networkPlayerInfo.getLocationSkin().toString().substring(16));
     }
 

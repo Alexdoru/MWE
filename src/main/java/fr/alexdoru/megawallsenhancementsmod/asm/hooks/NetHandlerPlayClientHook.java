@@ -31,15 +31,16 @@ public class NetHandlerPlayClientHook {
     @SuppressWarnings("unused")
     public static void removePlayerFromMap(Object o) {
         if (o instanceof NetworkPlayerInfo) {
-            final String playerName = ((NetworkPlayerInfo) o).getGameProfile().getName();
+            final NetworkPlayerInfo networkPlayerInfo = (NetworkPlayerInfo) o;
+            final String playerName = networkPlayerInfo.getGameProfile().getName();
             final NetworkPlayerInfo removedInfo = playerInfoMap.remove(playerName);
             latestDisconnected.add(new DisconnectedPlayer(
                     System.currentTimeMillis(),
                     playerName,
                     removedInfo == null ? playerName : NameUtil.getFormattedName(removedInfo),
-                    ((NetworkPlayerInfo) o).getLocationSkin()
+                    networkPlayerInfo.hasLocationSkin() ? networkPlayerInfo.getLocationSkin() : null
             ));
-            MWPlayerData.remove(((NetworkPlayerInfo) o).getGameProfile().getId());
+            MWPlayerData.remove(networkPlayerInfo.getGameProfile().getId());
         }
     }
 
