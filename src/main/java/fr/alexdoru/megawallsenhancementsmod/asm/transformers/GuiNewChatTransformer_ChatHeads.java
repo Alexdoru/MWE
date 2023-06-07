@@ -70,7 +70,7 @@ public class GuiNewChatTransformer_ChatHeads implements IMyClassTransformer {
                 list.add(new MethodInsnNode(
                         INVOKESTATIC,
                         getHookClass("GuiNewChatHook_ChatHeads"),
-                        "tryAddHeadToMessage",
+                        "addHeadToMessage",
                         "(L" + ClassMapping.ICHATCOMPONENT + ";)V",
                         false
                 ));
