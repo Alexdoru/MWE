@@ -72,7 +72,7 @@ public class ConfigHandler extends AbstractConfig {
             category = FKCOUNTER,
             name = "Kill diff in Chat",
             comment = "Kill diff in Chat")
-    public static boolean showKillDiffInChat;
+    public static boolean showKillDiffInChat = true;
 
     /**
      * MWEnhancements config
@@ -225,7 +225,7 @@ public class ConfigHandler extends AbstractConfig {
             category = MWENHANCEMENTS,
             name = "Color armor when hurt",
             comment = "Color armor when hurt")
-    public static boolean colorArmorWhenHurt = true;
+    public static boolean colorArmorWhenHurt;
 
     @ConfigProperty(
             category = MWENHANCEMENTS,
