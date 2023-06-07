@@ -11,6 +11,7 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.util.regex.Matcher;
@@ -49,7 +50,7 @@ public class GuiNewChatHook_ChatHeads {
 
     private static final Pattern NAME_PATTERN = Pattern.compile("\\w{2,16}");
 
-    public static void tryAddHeadToMessage(IChatComponent message) {
+    public static void addHeadToMessage(IChatComponent message) {
         if (message instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) message).getSkinChatHead() == null) {
             String msg = message.getFormattedText().split("\n")[0];
             msg = EnumChatFormatting.getTextWithoutFormattingCodes(msg);
@@ -67,6 +68,11 @@ public class GuiNewChatHook_ChatHeads {
                     ((ChatComponentTextAccessor) message).setSkinChatHead(skinChatHead);
                     ((NetworkPlayerInfoAccessor_ChatHeads) networkPlayerInfo).setSkinChatHead(skinChatHead);
                     return;
+                } else {
+                    final ResourceLocation resourceLocation = NetHandlerPlayClientHook.getPlayerSkin(potentialName);
+                    if (resourceLocation != null) {
+                        ((ChatComponentTextAccessor) message).setSkinChatHead(new SkinChatHead(resourceLocation));
+                    }
                 }
             }
         }

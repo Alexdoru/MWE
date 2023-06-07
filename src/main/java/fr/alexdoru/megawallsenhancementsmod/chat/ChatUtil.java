@@ -8,10 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.*;
 
 public class ChatUtil {
 
@@ -70,6 +67,11 @@ public class ChatUtil {
                 final SkinChatHead skinChatHead = new SkinChatHead(networkPlayerInfo.getLocationSkin());
                 ((ChatComponentTextAccessor) msg).setSkinChatHead(skinChatHead);
                 ((NetworkPlayerInfoAccessor_ChatHeads) networkPlayerInfo).setSkinChatHead(skinChatHead);
+            } else {
+                final ResourceLocation resourceLocation = NetHandlerPlayClientHook.getPlayerSkin(playername);
+                if (resourceLocation != null) {
+                    ((ChatComponentTextAccessor) msg).setSkinChatHead(new SkinChatHead(resourceLocation));
+                }
             }
         }
     }

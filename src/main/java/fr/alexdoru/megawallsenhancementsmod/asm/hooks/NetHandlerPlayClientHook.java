@@ -21,6 +21,7 @@ import java.util.List;
 public class NetHandlerPlayClientHook {
 
     private static final HashMap<String, NetworkPlayerInfo> playerInfoMap = new HashMap<>();
+    private static final HashMap<String, ResourceLocation> skinMap = new HashMap<>();
     private static final EvictingQueue<DisconnectedPlayer> latestDisconnected = EvictingQueue.create(20);
 
     @SuppressWarnings("unused")
@@ -33,26 +34,33 @@ public class NetHandlerPlayClientHook {
         if (o instanceof NetworkPlayerInfo) {
             final NetworkPlayerInfo networkPlayerInfo = (NetworkPlayerInfo) o;
             final String playerName = networkPlayerInfo.getGameProfile().getName();
-            final NetworkPlayerInfo removedInfo = playerInfoMap.remove(playerName);
+            playerInfoMap.remove(playerName);
             latestDisconnected.add(new DisconnectedPlayer(
                     System.currentTimeMillis(),
                     playerName,
-                    removedInfo == null ? playerName : NameUtil.getFormattedName(removedInfo),
-                    networkPlayerInfo.hasLocationSkin() ? networkPlayerInfo.getLocationSkin() : null
+                    NameUtil.getFormattedName(networkPlayerInfo)
             ));
             MWPlayerData.remove(networkPlayerInfo.getGameProfile().getId());
+            if (networkPlayerInfo.hasLocationSkin()) {
+                skinMap.put(playerName, networkPlayerInfo.getLocationSkin());
+            }
         }
     }
 
     @SuppressWarnings("unused")
     public static void clearPlayerMap() {
         playerInfoMap.clear();
+        skinMap.clear();
         latestDisconnected.clear();
         MWPlayerData.clearData();
     }
 
     public static NetworkPlayerInfo getPlayerInfo(String playername) {
         return playerInfoMap.get(playername);
+    }
+
+    public static ResourceLocation getPlayerSkin(String playername) {
+        return skinMap.get(playername);
     }
 
     @SuppressWarnings("unused")
@@ -69,13 +77,12 @@ public class NetHandlerPlayClientHook {
         final long timenow = System.currentTimeMillis();
         ResourceLocation skin = null;
         for (final DisconnectedPlayer disconnectedPlayer : latestDisconnected) {
-            final String playername = disconnectedPlayer.playername;
-            if (playername != null && timenow - disconnectedPlayer.disconnectTime <= 1000L && !disconnectList.contains(playername)) {
-                disconnectList.add(playername);
-                commandBuilder.append(" ").append(playername);
+            if (disconnectedPlayer.playername != null && timenow - disconnectedPlayer.disconnectTime <= 1000L && !disconnectList.contains(disconnectedPlayer.playername)) {
+                disconnectList.add(disconnectedPlayer.playername);
+                commandBuilder.append(" ").append(disconnectedPlayer.playername);
                 messageBuilder.append(" ").append(disconnectedPlayer.formattedName);
                 if (skin == null) {
-                    skin = disconnectedPlayer.skin;
+                    skin = skinMap.get(disconnectedPlayer.playername);
                 }
             }
         }
@@ -120,18 +127,16 @@ public class NetHandlerPlayClientHook {
     //    }
     //}
 
-    static class DisconnectedPlayer {
+    private static class DisconnectedPlayer {
 
         public final long disconnectTime;
         public final String playername;
         public final String formattedName;
-        public final ResourceLocation skin;
 
-        public DisconnectedPlayer(long disconnectTime, String playername, String formattedName, ResourceLocation skin) {
+        public DisconnectedPlayer(long disconnectTime, String playername, String formattedName) {
             this.disconnectTime = disconnectTime;
             this.playername = playername;
             this.formattedName = formattedName;
-            this.skin = skin;
         }
 
     }
