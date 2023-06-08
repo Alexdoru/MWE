@@ -101,27 +101,29 @@ public class FastbreakCheck extends AbstractCheck {
                             }
                         }
                     }
-                    if (playerBreaking != null && playerBreaking != mc.thePlayer) {
+                    if (playerBreaking != null) {
                         final PlayerDataSamples data = ((EntityPlayerAccessor) playerBreaking).getPlayerDataSamples();
                         final long recordedBreakTime = brokenBlock.breakTime - data.lastBreakBlockTime;
                         data.lastBreakBlockTime = brokenBlock.breakTime;
-                        final float expectedTimeToBreak = 50F * getTimeToHarvestBlock(getBlockStrengthMW(playerBreaking, brokenBlock.blockPos, brokenBlock.block));
-                        data.breakTimeRatio.add(recordedBreakTime / expectedTimeToBreak);
-                        if (data.breakTimeRatio.hasCollectedSample()) {
-                            final float avg = average(data.breakTimeRatio);
-                            if (avg < 0.8F) {
-                                data.fastbreakVL.add((int) Math.floor((0.8F - avg) * 10F));
-                                if (ConfigHandler.debugLogging) {
-                                    logger.info(playerBreaking.getName() + " failed Fastbreak check" +
-                                            " | vl " + data.fastbreakVL.getViolationLevel() +
-                                            " | avg " + String.format("%.4f", avg) +
-                                            " | expectedTimeToBreak " + expectedTimeToBreak +
-                                            " | recordedBreakTime " + recordedBreakTime);
+                        if (playerBreaking != mc.thePlayer) {
+                            final float expectedTimeToBreak = 50F * getTimeToHarvestBlock(getBlockStrengthMW(playerBreaking, brokenBlock.blockPos, brokenBlock.block));
+                            data.breakTimeRatio.add(recordedBreakTime / expectedTimeToBreak);
+                            if (data.breakTimeRatio.hasCollectedSample()) {
+                                final float avg = average(data.breakTimeRatio);
+                                if (avg < 0.8F) {
+                                    data.fastbreakVL.add((int) Math.floor((0.8F - avg) * 10F));
+                                    if (ConfigHandler.debugLogging) {
+                                        logger.info(playerBreaking.getName() + " failed Fastbreak check" +
+                                                " | vl " + data.fastbreakVL.getViolationLevel() +
+                                                " | avg " + String.format("%.4f", avg) +
+                                                " | expectedTimeToBreak " + expectedTimeToBreak +
+                                                " | recordedBreakTime " + recordedBreakTime);
+                                    }
+                                    super.checkViolationLevel(playerBreaking, true, data.fastbreakVL);
+                                } else {
+                                    data.fastbreakVL.substract(1);
+                                    super.checkViolationLevel(playerBreaking, false, data.fastbreakVL);
                                 }
-                                super.checkViolationLevel(playerBreaking, true, data.fastbreakVL);
-                            } else {
-                                data.fastbreakVL.substract(1);
-                                super.checkViolationLevel(playerBreaking, false, data.fastbreakVL);
                             }
                         }
                     }
