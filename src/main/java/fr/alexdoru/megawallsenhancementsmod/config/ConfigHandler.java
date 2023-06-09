@@ -607,6 +607,12 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = HITBOX,
+            name = "Team colored arrow hitbox",
+            comment = "Makes the hitbox of arrows take the color of the shooter's team")
+    public static boolean teamColoredArrowHitbox = true;
+
+    @ConfigProperty(
+            category = HITBOX,
             name = "Hitbox Color",
             comment = "A custom color for the hitboxes")
     public static int hitboxColor = 0xFFFFFF;
