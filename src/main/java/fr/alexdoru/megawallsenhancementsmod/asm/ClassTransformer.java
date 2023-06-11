@@ -30,6 +30,7 @@ public class ClassTransformer implements IClassTransformer {
      * Register the IMyClassTransformer(s) here
      */
     public ClassTransformer() {
+        registerTransformer(new ChatComponentStyleTransformer_ChatHeads());
         registerTransformer(new ChatComponentTextTransformer_ChatHeads());
         registerTransformer(new CommandHandlerTransformer());
         registerTransformer(new EntityArrowTransformer());

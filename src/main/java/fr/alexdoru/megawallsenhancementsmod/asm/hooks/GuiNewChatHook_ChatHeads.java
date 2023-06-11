@@ -49,6 +49,7 @@ public class GuiNewChatHook_ChatHeads {
     }
 
     private static final Pattern NAME_PATTERN = Pattern.compile("\\w{2,16}");
+    private static final Pattern CHAT_TIMESTAMP_PATTERN = Pattern.compile("^(?:\\[\\d\\d:\\d\\d(:\\d\\d)?(?: AM| PM|)]|<\\d\\d:\\d\\d>) ");
 
     public static void addHeadToMessage(IChatComponent message) {
         if (message instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) message).getSkinChatHead() == null) {
@@ -57,6 +58,7 @@ public class GuiNewChatHook_ChatHeads {
             if (msg.startsWith("   ")) {
                 return;
             }
+            msg = CHAT_TIMESTAMP_PATTERN.matcher(msg).replaceAll("").trim();
             final Matcher matcher = NAME_PATTERN.matcher(msg);
             int i = 0;
             while (matcher.find() && i < 3) {
