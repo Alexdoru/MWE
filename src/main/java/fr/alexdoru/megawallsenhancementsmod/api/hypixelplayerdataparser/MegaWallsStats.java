@@ -297,14 +297,16 @@ public class MegaWallsStats {
         }
         if (!obtainedLegs.isEmpty()) {
             imsg.appendSibling(new ChatComponentText("\n" + EnumChatFormatting.GOLD + "Obtained (" + obtainedLegs.size() + ")\n"));
-            for (final String s : obtainedLegs) {
-                imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + s + "\n"));
+            for (int i = 0; i < obtainedLegs.size(); i++) {
+                final String s = EnumChatFormatting.GREEN + obtainedLegs.get(i) + (i == obtainedLegs.size() - 1 ? "" : ", ");
+                imsg.appendSibling(new ChatComponentText(s));
             }
         }
         if (!missingLegs.isEmpty()) {
-            imsg.appendSibling(new ChatComponentText("\n" + EnumChatFormatting.GOLD + "Missing (" + missingLegs.size() + ")\n"));
-            for (final String s : missingLegs) {
-                imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + s + "\n"));
+            imsg.appendSibling(new ChatComponentText("\n\n" + EnumChatFormatting.GOLD + "Missing (" + missingLegs.size() + ")\n"));
+            for (int i = 0; i < missingLegs.size(); i++) {
+                final String s = EnumChatFormatting.GREEN + missingLegs.get(i) + (i == missingLegs.size() - 1 ? "" : ", ");
+                imsg.appendSibling(new ChatComponentText(s));
             }
         }
         imsg.appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
