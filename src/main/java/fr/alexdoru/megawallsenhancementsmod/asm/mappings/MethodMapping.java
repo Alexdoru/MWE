@@ -8,6 +8,7 @@ import static org.objectweb.asm.Opcodes.*;
 public enum MethodMapping {
 
     CHANGECURRENTITEM(INVOKEVIRTUAL, INVENTORYPLAYER, "d", "changeCurrentItem", "(I)V"),
+    CHATCOMPONENTSTYLE$APPENDSIBLING("a", "appendSibling", "(L" + ICHATCOMPONENT + ";)L" + ICHATCOMPONENT + ";"),
     CHATCOMPONENTTEXT$INIT(INVOKESPECIAL, CHATCOMPONENTTEXT, "<init>", "(Ljava/lang/String;)V"),
     CHECKHOTBARKEYS("b", "checkHotbarKeys", "(I)Z"),
     CLICKEVENT$GETVALUE(INVOKEVIRTUAL, CLICKEVENT, "b", "getValue", "()Ljava/lang/String;"),
