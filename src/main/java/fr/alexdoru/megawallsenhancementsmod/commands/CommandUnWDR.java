@@ -38,36 +38,7 @@ public class CommandUnWDR extends MyAbstractCommand {
 
         if (args.length == 1) { // if you use /unwdr <playername>
 
-            MultithreadingUtil.addTaskToQueue(() -> {
-
-                final MojangPlayernameToUUID apireq;
-                String playername = args[0];
-                String uuid;
-                try {
-                    apireq = (new MojangPlayernameToUUID(playername));
-                    playername = apireq.getName();
-                    uuid = apireq.getUuid();
-                } catch (ApiException e) {
-                    uuid = playername;
-                }
-
-                final WDR wdr = WdrData.getWdr(uuid);
-
-                if (wdr == null) {
-                    ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list.");
-                } else {
-                    removeOrUpdateWDR(wdr, uuid);
-                    final String finalPlayername = playername;
-                    Minecraft.getMinecraft().addScheduledTask(() -> {
-                        ChatHandler.deleteWarningMessagesFor(finalPlayername);
-                        NameUtil.updateMWPlayerDataAndEntityData(finalPlayername, false);
-                    });
-                    ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + ".");
-                }
-
-                return null;
-
-            });
+            unwdrPlayer(args);
 
         } else if (args.length == 2) { // when you click the message it does /unwdr <UUID> <playername>
 
@@ -85,6 +56,39 @@ public class CommandUnWDR extends MyAbstractCommand {
 
         }
 
+    }
+
+    private void unwdrPlayer(String[] args) {
+        MultithreadingUtil.addTaskToQueue(() -> {
+
+            final MojangPlayernameToUUID apireq;
+            String playername = args[0];
+            String uuid;
+            try {
+                apireq = new MojangPlayernameToUUID(playername);
+                playername = apireq.getName();
+                uuid = apireq.getUuid();
+            } catch (ApiException e) {
+                uuid = playername;
+            }
+
+            final WDR wdr = WdrData.getWdr(uuid);
+
+            if (wdr == null) {
+                ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list.");
+            } else {
+                removeOrUpdateWDR(wdr, uuid);
+                final String finalPlayername = playername;
+                Minecraft.getMinecraft().addScheduledTask(() -> {
+                    ChatHandler.deleteWarningMessagesFor(finalPlayername);
+                    NameUtil.updateMWPlayerDataAndEntityData(finalPlayername, false);
+                });
+                ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + ".");
+            }
+
+            return null;
+
+        });
     }
 
     private void removeOrUpdateWDR(WDR wdr, String uuid) {
