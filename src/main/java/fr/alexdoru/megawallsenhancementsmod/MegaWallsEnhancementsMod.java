@@ -65,7 +65,6 @@ public class MegaWallsEnhancementsMod {
 
         ClientCommandHandler.instance.registerCommand(new CommandWDR());
         ClientCommandHandler.instance.registerCommand(new CommandName());
-        ClientCommandHandler.instance.registerCommand(new CommandKill());
         ClientCommandHandler.instance.registerCommand(new CommandUnWDR());
         ClientCommandHandler.instance.registerCommand(new CommandSquad());
         ClientCommandHandler.instance.registerCommand(new CommandStalk());
