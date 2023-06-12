@@ -22,10 +22,6 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     private FancyGuiButton reportSuggestionButton;
     private FancyGuiButton autoreportSuggestionButton;
 
-    public NoCheatersConfigGuiScreen() {
-        this.parent = null;
-    }
-
     public NoCheatersConfigGuiScreen(GuiScreen parent) {
         this.parent = parent;
     }

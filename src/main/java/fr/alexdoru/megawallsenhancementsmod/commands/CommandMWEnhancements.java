@@ -64,7 +64,7 @@ public class CommandMWEnhancements extends MyAbstractCommand {
             }
             return;
         }
-        new DelayedTask(() -> mc.displayGuiScreen(new GeneralConfigGuiScreen()), 1);
+        new DelayedTask(() -> mc.displayGuiScreen(new GeneralConfigGuiScreen()));
     }
 
     @Override

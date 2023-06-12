@@ -32,7 +32,7 @@ public class CommandFKCounter extends MyAbstractCommand {
 
         if (args.length > 0 && args[0].equalsIgnoreCase("settings")) {
 
-            new DelayedTask(() -> mc.displayGuiScreen(new FKConfigGuiScreen(null)), 1);
+            new DelayedTask(() -> mc.displayGuiScreen(new FKConfigGuiScreen(null)));
 
         } else if (args.length > 0 && (args[0].equalsIgnoreCase("players") || args[0].equalsIgnoreCase("player") || args[0].equalsIgnoreCase("p"))) {
 

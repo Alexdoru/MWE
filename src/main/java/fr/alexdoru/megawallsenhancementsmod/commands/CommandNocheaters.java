@@ -54,7 +54,7 @@ public class CommandNocheaters extends MyAbstractCommand {
 
         if (args.length == 1 && args[0].equalsIgnoreCase("config")) {
 
-            new DelayedTask(() -> mc.displayGuiScreen(new NoCheatersConfigGuiScreen()), 1);
+            new DelayedTask(() -> mc.displayGuiScreen(new NoCheatersConfigGuiScreen(null)));
 
         } else if (args[0].equalsIgnoreCase("reportlist") || args[0].equalsIgnoreCase("debugreportlist")) {
 
