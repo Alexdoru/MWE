@@ -29,11 +29,10 @@ public class GuiChatHook {
             tabCompleteOptions = TabCompletionUtil.getOnlinePlayersByName();
             new DelayedTask(() -> {
                 if (Minecraft.getMinecraft().currentScreen instanceof GuiChat) {
-                    final GuiChat guichat = (GuiChat) Minecraft.getMinecraft().currentScreen;
-                    guichat.onAutocompleteResponse(tabCompleteOptions.toArray(new String[0]));
+                    ((GuiChat) Minecraft.getMinecraft().currentScreen).onAutocompleteResponse(tabCompleteOptions.toArray(new String[0]));
                     tabCompleteOptions = null;
                 }
-            }, 1);
+            });
             return true;
         }
     }

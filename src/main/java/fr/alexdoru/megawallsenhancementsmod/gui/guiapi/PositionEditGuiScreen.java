@@ -61,7 +61,7 @@ public class PositionEditGuiScreen extends GuiScreen {
     public void onGuiClosed() {
         this.guiPosition.saveAbsoluteToRelative();
         ConfigHandler.saveConfig();
-        new DelayedTask(() -> mc.displayGuiScreen(parent), 0);
+        new DelayedTask(() -> mc.displayGuiScreen(parent));
     }
 
     @Override
