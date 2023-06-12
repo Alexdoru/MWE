@@ -22,6 +22,12 @@ public class GuiChatHook {
             if (leftOfCursor.charAt(0) != '/') {
                 final String[] args = leftOfCursor.split(" ", -1);
                 tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+            } else {
+                final String lowerCase = leftOfCursor.toLowerCase();
+                if (lowerCase.startsWith("/msg ") || lowerCase.startsWith("/w ") || lowerCase.startsWith("/r ")) {
+                    final String[] args = leftOfCursor.split(" ", -1);
+                    tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+                }
             }
             return waitingOnAutocompleteIn;
         } else {
