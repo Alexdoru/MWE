@@ -240,7 +240,6 @@ public class CommandWDR extends MyAbstractCommand {
         MultithreadingUtil.addTaskToQueue(() -> {
 
             String uuid = null;
-            boolean isaNick = false;
             String formattedPlayername = null;
             String playernameInThread = playername;
 
@@ -249,6 +248,8 @@ public class CommandWDR extends MyAbstractCommand {
                 uuid = apireq.getUuid();
                 playernameInThread = apireq.getName();
                 if (uuid != null && !HypixelApiKeyUtil.apiKeyIsNotSetup()) {
+                    // FIXME if not valid api key it says it's a nick,
+                    //  maybe if the api is laggging as well
                     final CachedHypixelPlayerData playerdata;
                     try {
                         playerdata = new CachedHypixelPlayerData(uuid);
@@ -265,96 +266,130 @@ public class CommandWDR extends MyAbstractCommand {
                 }
             } catch (ApiException ignored) {}
 
-            if (uuid == null) {  // The playername doesn't exist or never joined hypixel
+            final String finalUuid = uuid;
+            final String finalFormattedPlayername = formattedPlayername;
+            final String finalPlayernameInThread = playernameInThread;
 
-                for (final NetworkPlayerInfo networkplayerinfo : mc.getNetHandler().getPlayerInfoMap()) { // search for the player's gameprofile in the tablist
-                    if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(args[0])) {
-                        uuid = networkplayerinfo.getGameProfile().getName();
-                        formattedPlayername = ScorePlayerTeam.formatPlayerName(networkplayerinfo.getPlayerTeam(), networkplayerinfo.getGameProfile().getName());
-                        playernameInThread = uuid;
-                        isaNick = true;
-                    }
-                }
-
-                if (!isaNick) { // couldn't find the nicked player in the tab list
-                    ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + ChatUtil.inexistantMinecraftNameMsg(args[0]) + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist");
-                    return null;
-                }
-
-            }
-
-            final String finalPlayername = playernameInThread;
-            final ArrayList<String> argsinWDR = new ArrayList<>();
-            if (finalUsesTimestamp || finalUsesTimeMark) { // format for timestamps reports : UUID timestamplastreport -serverID timeonreplay playernameduringgame timestampforcheat specialcheat cheat1 cheat2 cheat3 etc
-
-                argsinWDR.add("-" + finalServerID);
-                argsinWDR.add(finalTimerOnReplay);
-                argsinWDR.add(finalPlayername);
-                argsinWDR.add(Long.toString(finalTimestamp));
-                argsinWDR.addAll(arraycheats);
-
-                final WDR wdr = WdrData.getWdr(uuid);
-                if (wdr != null) {
-                    argsinWDR.addAll(wdr.hacks);
-                }
-
-                if (isaNick && !argsinWDR.contains(WDR.NICK)) {
-                    argsinWDR.add(WDR.NICK);
-                }
-
-                final WDR newreport = new WDR(finalTimestamp, finalTimestamp, argsinWDR);
-                WdrData.put(uuid, newreport);
-                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateMWPlayerDataAndEntityData(finalPlayername, false));
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
-                        EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : ""))
-                        .appendSibling(WarningMessagesHandler.createPlayerNameWithHoverText(formattedPlayername, playernameInThread, uuid, newreport, EnumChatFormatting.RED)[0])
-                        .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " with a " + EnumChatFormatting.YELLOW +
-                                "timestamp" + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
-                                + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : "."))));
-
-            } else {  // isn't a timestamped report
-
-                final WDR wdr = WdrData.getWdr(uuid);
-                boolean alreadyReported = false;
-
-                if (wdr != null) {
-
-                    argsinWDR.addAll(wdr.hacks);
-                    alreadyReported = true;
-
-                    for (final String arraycheat : arraycheats) {
-                        boolean doublon = false;
-                        for (final String arg : argsinWDR) {
-                            if (arraycheat.equals(arg)) {
-                                doublon = true;
-                                break;
-                            }
-                        }
-                        if (!doublon) {
-                            argsinWDR.add(arraycheat);
-                        }
-                    }
-
-                } else {
-                    argsinWDR.addAll(arraycheats);
-                }
-
-                if (isaNick && !argsinWDR.contains(WDR.NICK)) {
-                    argsinWDR.add(WDR.NICK);
-                }
-                WdrData.put(uuid, new WDR(time, time, argsinWDR));
-                Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateMWPlayerDataAndEntityData(finalPlayername, false));
-                if (showReportMessage || !alreadyReported) {
-                    ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() +
-                            EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
-                            + EnumChatFormatting.RED + (formattedPlayername == null ? playernameInThread : EnumChatFormatting.RESET + formattedPlayername) + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
-                            + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : "."));
-                }
-            }
+            Minecraft.getMinecraft().addScheduledTask(() -> finishOnMainThread(args,
+                    showReportMessage,
+                    arraycheats,
+                    time,
+                    finalUsesTimestamp,
+                    finalUsesTimeMark,
+                    finalServerID,
+                    finalTimerOnReplay,
+                    finalTimestamp,
+                    finalUuid,
+                    finalFormattedPlayername,
+                    finalPlayernameInThread
+            ));
 
             return null;
 
         });
+    }
+
+    private static void finishOnMainThread(String[] args,
+                                           boolean showReportMessage,
+                                           ArrayList<String> arraycheats,
+                                           long time,
+                                           boolean usesTimestamp,
+                                           boolean usesTimeMark,
+                                           String serverID,
+                                           String timerOnReplay,
+                                           long timestamp,
+                                           String uuid,
+                                           String formattedPlayername,
+                                           String playername) {
+
+        boolean isaNick = false;
+
+        if (uuid == null) {  // The playername doesn't exist or never joined hypixel
+
+            for (final NetworkPlayerInfo networkplayerinfo : mc.getNetHandler().getPlayerInfoMap()) { // search for the player's gameprofile in the tablist
+                    if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(args[0])) {
+                        uuid = networkplayerinfo.getGameProfile().getName();
+                        formattedPlayername = ScorePlayerTeam.formatPlayerName(networkplayerinfo.getPlayerTeam(), networkplayerinfo.getGameProfile().getName());
+                        playername = uuid;
+                    isaNick = true;
+                }
+            }
+
+            if (!isaNick) { // couldn't find the nicked player in the tab list
+                ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + ChatUtil.inexistantMinecraftNameMsg(args[0])
+                        + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist");
+                return;
+            }
+
+        }
+
+        final ArrayList<String> argsinWDR = new ArrayList<>();
+        if (usesTimestamp || usesTimeMark) {
+            // format for timestamps reports : UUID timestamplastreport -serverID timeonreplay playernameduringgame timestampforcheat specialcheat cheat1 cheat2 cheat3 etc
+            argsinWDR.add("-" + serverID);
+            argsinWDR.add(timerOnReplay);
+            argsinWDR.add(playername);
+            argsinWDR.add(Long.toString(timestamp));
+            argsinWDR.addAll(arraycheats);
+
+            final WDR wdr = WdrData.getWdr(uuid);
+            if (wdr != null) {
+                argsinWDR.addAll(wdr.hacks);
+            }
+
+            if (isaNick && !argsinWDR.contains(WDR.NICK)) {
+                argsinWDR.add(WDR.NICK);
+            }
+
+            final WDR newreport = new WDR(timestamp, timestamp, argsinWDR);
+            WdrData.put(uuid, newreport);
+            NameUtil.updateMWPlayerDataAndEntityData(playername, false);
+            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
+                    EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : ""))
+                    .appendSibling(WarningMessagesHandler.createPlayerNameWithHoverText(formattedPlayername, playername, uuid, newreport, EnumChatFormatting.RED)[0])
+                    .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " with a " + EnumChatFormatting.YELLOW +
+                            "timestamp" + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
+                            + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : "."))));
+            return;
+        }
+
+        // isn't a timestamped report
+        final WDR wdr = WdrData.getWdr(uuid);
+        boolean alreadyReported = false;
+
+        if (wdr != null) {
+
+            argsinWDR.addAll(wdr.hacks);
+            alreadyReported = true;
+
+            for (final String arraycheat : arraycheats) {
+                boolean doublon = false;
+                for (final String arg : argsinWDR) {
+                    if (arraycheat.equals(arg)) {
+                        doublon = true;
+                        break;
+                    }
+                }
+                if (!doublon) {
+                    argsinWDR.add(arraycheat);
+                }
+            }
+
+        } else {
+            argsinWDR.addAll(arraycheats);
+        }
+
+        if (isaNick && !argsinWDR.contains(WDR.NICK)) {
+            argsinWDR.add(WDR.NICK);
+        }
+        WdrData.put(uuid, new WDR(time, time, argsinWDR));
+        NameUtil.updateMWPlayerDataAndEntityData(playername, false);
+        if (showReportMessage || !alreadyReported) {
+            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() +
+                    EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
+                    + EnumChatFormatting.RED + (formattedPlayername == null ? playername : EnumChatFormatting.RESET + formattedPlayername) + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
+                    + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : "."));
+        }
     }
 
 }
