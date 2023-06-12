@@ -344,11 +344,19 @@ public class NameUtil {
         if (networkPlayerInfo == null) {
             return SquadHandler.getSquadname(playername);
         }
+        return getFormattedNameWithoutIcons(networkPlayerInfo);
+    }
+
+    /**
+     * Returns the formatted team name with additionnaly a custom prestige V tag and a squadname
+     * This doesn't return the icons in front that the player may have.
+     */
+    public static String getFormattedNameWithoutIcons(NetworkPlayerInfo networkPlayerInfo) {
         final MWPlayerData.PlayerData mwPlayerData = MWPlayerData.get(networkPlayerInfo.getGameProfile().getId());
         if (mwPlayerData != null && mwPlayerData.P5Tag != null && mwPlayerData.originalP4Tag != null) {
-            return formatPlayerNameUnscrambled(networkPlayerInfo.getPlayerTeam(), playername).replace(mwPlayerData.originalP4Tag, mwPlayerData.P5Tag);
+            return formatPlayerNameUnscrambled(networkPlayerInfo.getPlayerTeam(), networkPlayerInfo.getGameProfile().getName()).replace(mwPlayerData.originalP4Tag, mwPlayerData.P5Tag);
         }
-        return formatPlayerNameUnscrambled(networkPlayerInfo.getPlayerTeam(), playername);
+        return formatPlayerNameUnscrambled(networkPlayerInfo.getPlayerTeam(), networkPlayerInfo.getGameProfile().getName());
     }
 
     /**
