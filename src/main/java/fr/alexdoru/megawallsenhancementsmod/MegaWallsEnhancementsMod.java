@@ -76,9 +76,7 @@ public class MegaWallsEnhancementsMod {
         ClientCommandHandler.instance.registerCommand(new CommandFKCounter());
         ClientCommandHandler.instance.registerCommand(new CommandNocheaters());
         ClientCommandHandler.instance.registerCommand(new CommandHypixelShout());
-        ClientCommandHandler.instance.registerCommand(new CommandHypixelReply());
         ClientCommandHandler.instance.registerCommand(new CommandMWEnhancements());
-        ClientCommandHandler.instance.registerCommand(new CommandHypixelMessage());
 
         WdrData.init();
 
