@@ -36,6 +36,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new EntityArrowTransformer());
         registerTransformer(new EntityFXTransformer());
         registerTransformer(new EntityPlayerTransformer());
+        registerTransformer(new EntityPlayerSPTransformer());
         registerTransformer(new EntityRendererTransformer());
         registerTransformer(new GuiChatTransformer());
         registerTransformer(new GuiContainerTransformer());
@@ -147,6 +148,7 @@ public class ClassTransformer implements IClassTransformer {
             FileUtils.deleteDirectory(outputDir);
         } catch (IOException ignored) {}
         if (!outputDir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
             outputDir.mkdirs();
         }
     }
@@ -161,9 +163,11 @@ public class ClassTransformer implements IClassTransformer {
         final File outFile = new File(outputDir, transformedName.replace('.', File.separatorChar) + ".class");
         final File outDir = outFile.getParentFile();
         if (!outDir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
             outDir.mkdirs();
         }
         if (outFile.exists()) {
+            //noinspection ResultOfMethodCallIgnored
             outFile.delete();
         }
         try {
