@@ -307,10 +307,10 @@ public class CommandWDR extends MyAbstractCommand {
         if (uuid == null) {  // The playername doesn't exist or never joined hypixel
 
             for (final NetworkPlayerInfo networkplayerinfo : mc.getNetHandler().getPlayerInfoMap()) { // search for the player's gameprofile in the tablist
-                    if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(args[0])) {
-                        uuid = networkplayerinfo.getGameProfile().getName();
-                        formattedPlayername = ScorePlayerTeam.formatPlayerName(networkplayerinfo.getPlayerTeam(), networkplayerinfo.getGameProfile().getName());
-                        playername = uuid;
+                if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(args[0])) {
+                    uuid = networkplayerinfo.getGameProfile().getName();
+                    formattedPlayername = ScorePlayerTeam.formatPlayerName(networkplayerinfo.getPlayerTeam(), networkplayerinfo.getGameProfile().getName());
+                    playername = uuid;
                     isaNick = true;
                 }
             }
