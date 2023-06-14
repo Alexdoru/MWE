@@ -160,6 +160,13 @@ public class StringUtil {
         return stringBuilder.toString();
     }
 
+    public static String uppercaseFirstLetter(String string) {
+        if (string == null) {
+            return null;
+        }
+        return string.substring(0, 1).toUpperCase() + string.substring(1);
+    }
+
     //private static final Pattern FORMATTING_CODE_END_OF_STRING_PATTERN = Pattern.compile('\u00a7' + "[0-9A-FK-OR]$");
     ///* NEEDS TO BE TESTED
     // * Removes all formatting codes located directly before the target string

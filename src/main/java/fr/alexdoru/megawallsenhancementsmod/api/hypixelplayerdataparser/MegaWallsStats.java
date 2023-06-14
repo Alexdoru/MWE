@@ -7,6 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.utils.ColorUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
@@ -175,7 +176,7 @@ public class MegaWallsStats {
         final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls Classpoints\n\n"));
         for (final Map.Entry<String, Integer[]> entry : classpointsMap.entrySet()) {
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + ChatUtil.capitalizeFirstLetter(entry.getKey()))
+            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + StringUtil.uppercaseFirstLetter(entry.getKey()))
                     .setChatStyle(new ChatStyle()
                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for " + entry.getKey() + " stats")))
                             .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + entry.getKey()))));

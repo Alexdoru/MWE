@@ -203,13 +203,6 @@ public class ChatUtil {
 
     }
 
-    public static String capitalizeFirstLetter(String string) {
-        if (string == null) {
-            return null;
-        }
-        return string.substring(0, 1).toUpperCase() + string.substring(1);
-    }
-
     /**
      * Returns the integer as a String with a space for thousands delimiter
      */
