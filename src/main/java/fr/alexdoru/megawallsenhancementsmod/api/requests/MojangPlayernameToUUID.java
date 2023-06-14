@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
@@ -43,6 +44,16 @@ public class MojangPlayernameToUUID {
 
     public String getUuid() {
         return this.uuid;
+    }
+
+    public UUID getUUID() {
+        // 8 - 4 - 4 - 4 - 12
+        final StringBuilder sb = new StringBuilder(this.uuid);
+        sb.insert(8 + 4 + 4 + 4, '-');
+        sb.insert(8 + 4 + 4, '-');
+        sb.insert(8 + 4, '-');
+        sb.insert(8, '-');
+        return UUID.fromString(sb.toString());
     }
 
     static class NameUuidData {
