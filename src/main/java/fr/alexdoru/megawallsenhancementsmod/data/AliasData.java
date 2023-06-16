@@ -13,10 +13,10 @@ import java.util.List;
 public class AliasData {
 
     private static final HashMap<String, String> aliasMap = new HashMap<>();
-    private static File alliasDataFile;
+    private static File aliasDataFile;
 
     public static void init() {
-        alliasDataFile = new File(Minecraft.getMinecraft().mcDataDir, "config/alliasData.json");
+        aliasDataFile = new File(Minecraft.getMinecraft().mcDataDir, "config/aliasData.json");
         readDataFromFile();
         Runtime.getRuntime().addShutdownHook(new Thread(AliasData::writeDataToFile));
     }
@@ -38,12 +38,12 @@ public class AliasData {
     }
 
     private static void readDataFromFile() {
-        if (!alliasDataFile.exists()) {
+        if (!aliasDataFile.exists()) {
             return;
         }
         try {
             final Gson gson = new Gson();
-            final HashMap<String, String> hashMap = gson.fromJson(new FileReader(alliasDataFile), new TypeToken<HashMap<String, String>>() {}.getType());
+            final HashMap<String, String> hashMap = gson.fromJson(new FileReader(aliasDataFile), new TypeToken<HashMap<String, String>>() {}.getType());
             if (hashMap != null) {
                 aliasMap.putAll(hashMap);
             }
@@ -56,7 +56,7 @@ public class AliasData {
         try {
             final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
             final String jsonString = gson.toJson(aliasMap);
-            final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(alliasDataFile));
+            final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(aliasDataFile));
             bufferedWriter.write(jsonString);
             bufferedWriter.close();
         } catch (IOException e) {

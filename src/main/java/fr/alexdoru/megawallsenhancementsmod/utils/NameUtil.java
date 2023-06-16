@@ -313,7 +313,7 @@ public class NameUtil {
     }
 
     /**
-     * Returns the formatted name of the player, additionnal icons, squadname, allias and prestive V tag included
+     * Returns the formatted name of the player, additionnal icons, squadname, alias and prestive V tag included
      * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay#getPlayerName}
      */
     public static String getFormattedName(String playername) {
@@ -325,7 +325,7 @@ public class NameUtil {
     }
 
     /**
-     * Returns the formatted name of the player, additionnal icons, squadname, allias and prestive V tag included
+     * Returns the formatted name of the player, additionnal icons, squadname, alias and prestive V tag included
      * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay#getPlayerName}
      */
     public static String getFormattedName(NetworkPlayerInfo networkPlayerInfo) {
