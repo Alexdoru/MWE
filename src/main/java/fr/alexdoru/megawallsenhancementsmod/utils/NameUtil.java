@@ -277,7 +277,7 @@ public class NameUtil {
                     }
                 }
                 final boolean isobf = teamprefix.contains("\u00a7k");
-                final String alias = AliasData.getAlias(username);
+                final String alias = AliasData.getAlias(id.version() == 1 ? username : uuid);
                 if (iExtraPrefix != null || isSquadMate || formattedPrestigeVstring != null || alias != null) {
                     displayName = new ChatComponentText(
                             (isobf ? "" : extraPrefix)
