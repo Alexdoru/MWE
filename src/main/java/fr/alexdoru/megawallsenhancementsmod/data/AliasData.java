@@ -6,13 +6,11 @@ import com.google.gson.reflect.TypeToken;
 import net.minecraft.client.Minecraft;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class AliasData {
 
-    private static final HashMap<String, String> aliasMap = new HashMap<>();
+    private static final Map<String, String> aliasMap = new LinkedHashMap<>();
     private static File aliasDataFile;
 
     public static void init() {
@@ -25,16 +23,20 @@ public class AliasData {
         return new ArrayList<>(aliasMap.keySet());
     }
 
-    public static String getAlias(String playername) {
-        return aliasMap.get(playername);
+    public static Map<String, String> getAliasMap() {
+        return aliasMap;
     }
 
-    public static void putAlias(String playername, String alias) {
-        aliasMap.put(playername, alias);
+    public static String getAlias(String key) {
+        return aliasMap.get(key);
     }
 
-    public static void removeAlias(String playername) {
-        aliasMap.remove(playername);
+    public static void putAlias(String key, String alias) {
+        aliasMap.put(key, alias);
+    }
+
+    public static void removeAlias(String key) {
+        aliasMap.remove(key);
     }
 
     private static void readDataFromFile() {
