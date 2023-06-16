@@ -2,7 +2,6 @@ package fr.alexdoru.megawallsenhancementsmod.api.requests;
 
 import com.google.gson.JsonObject;
 import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
-import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 
@@ -12,7 +11,7 @@ public class HypixelPlayerData {
     private final String uuid;
 
     public HypixelPlayerData(String uuid) throws ApiException {
-        final HttpClient httpClient = new HttpClient("https://api.hypixel.net/player?key=" + HypixelApiKeyUtil.getApiKey() + "&uuid=" + uuid);
+        final HttpClient httpClient = new HttpClient("https://api.hypixel.net/player?uuid=" + uuid);
         final JsonObject obj = httpClient.getJsonResponse();
         final JsonObject playerdata = JsonUtil.getJsonObject(obj, "player");
         if (playerdata == null) {
