@@ -29,6 +29,9 @@ public class MegaWallsClassSkinData {
     }
 
     public String getCurrentmwskin() {
+        if (this.chosen_skin_class == null) {
+            return this.chosen_class;
+        }
         return this.chosen_skin_class;
     }
 

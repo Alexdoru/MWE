@@ -94,7 +94,7 @@ class StalkTask implements Callable<String> {
                                             (apistatus.getMap() == null ? "" : (EnumChatFormatting.GREEN + " on " + EnumChatFormatting.YELLOW + apistatus.getMap()))
                                             + EnumChatFormatting.GREEN + " playing "
                                             + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass())
-                                            + EnumChatFormatting.GREEN + " with the " + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwskin() == null ? (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass()) : mwclassskindata.getCurrentmwskin()) + EnumChatFormatting.GREEN + " skin."))
+                                            + EnumChatFormatting.GREEN + " with the " + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwskin() == null ? "?" : mwclassskindata.getCurrentmwskin()) + EnumChatFormatting.GREEN + " skin."))
                     );
 
                 } else { // player isn't in MW
@@ -147,7 +147,7 @@ class StalkTask implements Callable<String> {
                         imsg.appendSibling(new ChatComponentText(
                                 EnumChatFormatting.GREEN + " Selected class : "
                                         + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass())
-                                        + EnumChatFormatting.GREEN + " with the " + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwskin() == null ? (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass()) : mwclassskindata.getCurrentmwskin()) + EnumChatFormatting.GREEN + " skin."
+                                        + EnumChatFormatting.GREEN + " with the " + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwskin() == null ? "?" : mwclassskindata.getCurrentmwskin()) + EnumChatFormatting.GREEN + " skin."
                         ));
                     }
 
@@ -164,7 +164,7 @@ class StalkTask implements Callable<String> {
                                 .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType()
                                         + EnumChatFormatting.GREEN + " playing "
                                         + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass())
-                                        + EnumChatFormatting.GREEN + " with the " + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwskin() == null ? (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass()) : mwclassskindata.getCurrentmwskin()) + EnumChatFormatting.GREEN + " skin."
+                                        + EnumChatFormatting.GREEN + " with the " + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwskin() == null ? "?" : mwclassskindata.getCurrentmwskin()) + EnumChatFormatting.GREEN + " skin."
                                         + EnumChatFormatting.DARK_GRAY + " (This player hides their session.)" + "\n"
                                 )));
 
