@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.RateLimitException;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
@@ -30,10 +31,14 @@ public class HttpClient {
             connection.setConnectTimeout(10000);
             connection.setReadTimeout(10000);
             connection.addRequestProperty("User-Agent", "Alexdoru's Mega Walls Enhancements Mod");
+            final boolean isHypixelApi = url.contains("api.hypixel.net");
+            if (isHypixelApi) {
+                connection.addRequestProperty("Api-Key", HypixelApiKeyUtil.getApiKey());
+            }
             final int status = connection.getResponseCode();
 
             if (status != 200) {
-                if (url.contains("api.hypixel.net")) {
+                if (isHypixelApi) {
                     if (status == 400) {
                         throw new ApiException("Missing one or more fields");
                     } else if (status == 403) {
