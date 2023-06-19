@@ -64,15 +64,10 @@ public class CommandReport extends MyAbstractCommand {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/report <player> <cheats>";
-    }
-
-    @Override
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length < 1) {
-            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + " <player> <cheats>");
             return;
         }
 

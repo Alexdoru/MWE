@@ -23,11 +23,6 @@ public class CommandMWEnhancements extends MyAbstractCommand {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/mwenhancements";
-    }
-
-    @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length == 1 && args[0].equalsIgnoreCase("refreshconfig")) {
             ConfigHandler.loadConfigFromFile();

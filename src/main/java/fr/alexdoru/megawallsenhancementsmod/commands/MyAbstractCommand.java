@@ -13,6 +13,11 @@ public abstract class MyAbstractCommand extends CommandBase {
         return true;
     }
 
+    @Override
+    public String getCommandUsage(ICommandSender sender) {
+        return "/" + this.getCommandName();
+    }
+
     protected void printCommandHelp() {}
 
     protected static void sendChatMessage(String msg) {

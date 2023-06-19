@@ -25,11 +25,6 @@ public class CommandPlancke extends MyAbstractCommand {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/plancke <playername> <args(optional)>";
-    }
-
-    @Override
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length < 1) {

@@ -20,11 +20,6 @@ public class CommandName extends MyAbstractCommand {
         return "name";
     }
 
-    @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/name <playername>";
-    }
-
     /**
      * Displays name history for a player
      */
@@ -32,7 +27,7 @@ public class CommandName extends MyAbstractCommand {
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length < 1) {
-            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + " <playername>");
             return;
         }
 

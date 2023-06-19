@@ -47,11 +47,6 @@ public class CommandWDR extends MyAbstractCommand {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/wdr <player> <cheats(optional)>";
-    }
-
-    @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length == 0) {
             sendChatMessage("/wdr");
