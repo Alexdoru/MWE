@@ -84,10 +84,12 @@ public class CommandAddAlias extends MyAbstractCommand {
     }
 
     private void listAlias(String[] args) {
+
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
             this.listAliasInLobby();
             return;
         }
+
         final int displaypage;
         if (args.length > 1) {
             try {
@@ -103,50 +105,45 @@ public class CommandAddAlias extends MyAbstractCommand {
         final ArrayList<Map.Entry<String, String>> entryList = new ArrayList<>(AliasData.getAliasMap().entrySet());
         Collections.reverse(entryList);
 
-        MultithreadingUtil.addTaskToQueue(() -> {
+        final List<Future<IChatComponent>> futureList = new ArrayList<>();
+        int nbAlias = 1;
+        int nbpage = 1;
+        boolean warning = true;
 
-            final IChatComponent imsgbody = new ChatComponentText("");
-            final List<Future<IChatComponent>> futureList = new ArrayList<>();
-            int nbAlias = 1;
-            int nbpage = 1;
-            boolean warning = true;
-
-            for (final Map.Entry<String, String> entry : entryList) {
-                if (nbAlias == 11) {
-                    nbAlias = 1;
-                    nbpage++;
-                }
-                if (nbpage == displaypage) {
-                    warning = false;
-                    futureList.add(MultithreadingUtil.addTaskToQueueAndGetFuture(new ListAliasLineTask(entry.getKey(), entry.getValue())));
-                } else if (nbpage > displaypage) {
-                    break;
-                }
-                nbAlias++;
+        for (final Map.Entry<String, String> entry : entryList) {
+            if (nbAlias == 11) {
+                nbAlias = 1;
+                nbpage++;
             }
+            if (nbpage == displaypage) {
+                warning = false;
+                futureList.add(MultithreadingUtil.addTaskToQueueAndGetFuture(new ListAliasLineTask(entry.getKey(), entry.getValue())));
+            }
+            nbAlias++;
+        }
 
+        if (warning) {
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "No alias to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available.");
+            return;
+        }
+
+        final int finalNbpage = nbpage;
+        MultithreadingUtil.addTaskToQueue(() -> {
+            final IChatComponent imsgbody = new ChatComponentText("");
             for (final Future<IChatComponent> iChatComponentFuture : futureList) {
                 imsgbody.appendSibling(iChatComponentFuture.get()).appendSibling(new ChatComponentText("\n"));
             }
-
-            if (warning) {
-                ChatUtil.addChatMessage(EnumChatFormatting.RED + "No alias to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available.");
-                return null;
-            }
-
             ChatUtil.printIChatList(
                     "Alias list",
                     imsgbody,
                     displaypage,
-                    nbpage,
+                    finalNbpage,
                     getCommandUsage(null) + " list",
                     EnumChatFormatting.GREEN,
                     null,
                     null
             );
-
             return null;
-
         });
 
     }
