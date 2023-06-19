@@ -145,8 +145,8 @@ public class CommandNocheaters extends MyAbstractCommand {
     }
 
     private void printReportList(String[] args) {
-        final boolean doStalk = args[0].equalsIgnoreCase("reportlist");
 
+        final boolean doStalk = args[0].equalsIgnoreCase("reportlist");
         if (doStalk) {
             if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
                 ChatUtil.printApikeySetupInfo();
@@ -155,7 +155,6 @@ public class CommandNocheaters extends MyAbstractCommand {
         }
 
         final int displaypage;
-
         if (args.length > 1) {
             try {
                 displaypage = parseInt(args[1]);
@@ -168,136 +167,117 @@ public class CommandNocheaters extends MyAbstractCommand {
         }
 
         final Map<String, WDR> sortedMap = MapUtil.sortByDecreasingValue(WdrData.getWdredMap());
+        final long timeNow = (new Date()).getTime();
+        final List<Future<IChatComponent>> futureList = new ArrayList<>();
+        int nbreport = 1; // pour compter le nb de report et en afficher que 8 par page
+        int nbpage = 1;
+        boolean warning = true;
 
-        MultithreadingUtil.addTaskToQueue(() -> {
-
-            final IChatComponent imsgbody = new ChatComponentText("");
-            final long timeNow = (new Date()).getTime();
-            final List<Future<IChatComponent>> futureList = new ArrayList<>();
-
-            int nbreport = 1; // pour compter le nb de report et en afficher que 8 par page
-            int nbpage = 1;
-            boolean warning = true;
-
-            for (final Map.Entry<String, WDR> entry : sortedMap.entrySet()) {
-
-                final String uuid = entry.getKey();
-                final WDR wdr = entry.getValue();
-
-                if (wdr.isOnlyIgnored()) {
-                    continue;
-                }
-
-                if (nbreport == 11) {
-                    nbreport = 1;
-                    nbpage++;
-                }
-
-                if (nbpage == displaypage) {
-                    warning = false;
-                    futureList.add(MultithreadingUtil.addTaskToQueueAndGetFuture(new CreateReportLineTask(uuid, wdr, doStalk, timeNow)));
-                }
-
-                nbreport++;
-
+        for (final Map.Entry<String, WDR> entry : sortedMap.entrySet()) {
+            if (entry.getValue().isOnlyIgnored()) {
+                continue;
             }
+            if (nbreport == 11) {
+                nbreport = 1;
+                nbpage++;
+            }
+            if (nbpage == displaypage) {
+                warning = false;
+                futureList.add(MultithreadingUtil.addTaskToQueueAndGetFuture(new CreateReportLineTask(entry.getKey(), entry.getValue(), doStalk, timeNow)));
+            }
+            nbreport++;
+        }
 
+        if (warning) {
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "No reports to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available.");
+            return;
+        }
+
+        final int finalNbpage = nbpage;
+        MultithreadingUtil.addTaskToQueue(() -> {
+            final IChatComponent imsgbody = new ChatComponentText("");
             for (final Future<IChatComponent> iChatComponentFuture : futureList) {
                 imsgbody.appendSibling(iChatComponentFuture.get());
             }
-
-            if (warning) {
-                ChatUtil.addChatMessage(EnumChatFormatting.RED + "No reports to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available.");
-                return null;
-            }
-
             ChatUtil.printIChatList(
                     "Report list",
                     imsgbody,
                     displaypage,
-                    nbpage,
+                    finalNbpage,
                     doStalk ? getCommandUsage(null) + " reportlist" : getCommandUsage(null) + " debugreportlist",
                     EnumChatFormatting.RED,
                     null,
                     null
             );
-
             return null;
-
         });
     }
 
     private void printIgnoreList(String[] args) {
+
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
             ChatUtil.printApikeySetupInfo();
             return;
         }
 
+        final int displaypage;
+        if (args.length > 1) {
+            try {
+                displaypage = parseInt(args[1]);
+            } catch (NumberInvalidException e) {
+                ChatUtil.addChatMessage(EnumChatFormatting.RED + "Not a valid number");
+                return;
+            }
+        } else {
+            displaypage = 1;
+        }
+
+        boolean warning = true;
+        final List<Future<IChatComponent>> futureList = new ArrayList<>();
+        int nbreport = 1; // pour compter le nb de report et en afficher que 8 par page
+        int nbpage = 1;
+
+        for (final Map.Entry<String, WDR> entry : WdrData.getWdredMap().entrySet()) {
+            if (entry.getValue().isIgnored()) {
+                if (nbreport == 11) {
+                    nbreport = 1;
+                    nbpage++;
+                }
+                if (nbpage == displaypage) {
+                    futureList.add(MultithreadingUtil.addTaskToQueueAndGetFuture(new IgnoreLineTask(entry.getKey(), entry.getValue().isNicked())));
+                    warning = false;
+                }
+                nbreport++;
+            }
+        }
+
+        if (warning && nbreport == 1) {
+            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "No one in your ignore list");
+            return;
+        }
+        if (warning) {
+            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "No ignored players to display, "
+                    + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available.");
+            return;
+        }
+
+        final int finalNbpage = nbpage;
         MultithreadingUtil.addTaskToQueue(() -> {
-
-            int displaypage = 1;
-            int nbreport = 1; // pour compter le nb de report et en afficher que 8 par page
-            int nbpage = 1;
-
-            if (args.length > 1) {
-                try {
-                    displaypage = parseInt(args[1]);
-                } catch (NumberInvalidException e) {
-                    ChatUtil.addChatMessage(EnumChatFormatting.RED + "Not a valid number");
-                    return null;
-                }
-            }
-
             final IChatComponent imsgbody = new ChatComponentText("");
-            boolean warning = true;
-            final List<Future<IChatComponent>> futureList = new ArrayList<>();
-
-            for (final Map.Entry<String, WDR> entry : WdrData.getWdredMap().entrySet()) {
-
-                if (entry.getValue().isIgnored()) {
-
-                    final String uuid = entry.getKey();
-                    final WDR wdr = entry.getValue();
-
-                    if (nbreport == 11) {
-                        nbreport = 1;
-                        nbpage++;
-                    }
-
-                    if (nbpage == displaypage) {
-                        futureList.add(MultithreadingUtil.addTaskToQueueAndGetFuture(new IgnoreLineTask(uuid, wdr)));
-                        warning = false;
-                    }
-
-                    nbreport++;
-
-                }
-
-            }
-
             for (final Future<IChatComponent> iChatComponentFuture : futureList) {
                 imsgbody.appendSibling(iChatComponentFuture.get());
             }
-
-            if (warning && nbreport == 1) {
-                ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "No one in your ignore list");
-            } else if (warning) {
-                ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "No ignored players to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available.");
-            } else {
-                ChatUtil.printIChatList(
-                        "Ignore list",
-                        imsgbody,
-                        displaypage,
-                        nbpage,
-                        getCommandUsage(null) + " ignorelist",
-                        EnumChatFormatting.DARK_GRAY,
-                        null,
-                        null
-                );
-            }
-
+            ChatUtil.printIChatList(
+                    "Ignore list",
+                    imsgbody,
+                    displaypage,
+                    finalNbpage,
+                    getCommandUsage(null) + " ignorelist",
+                    EnumChatFormatting.DARK_GRAY,
+                    null,
+                    null
+            );
             return null;
-
         });
     }
 
@@ -493,11 +473,11 @@ class CreateReportLineTask implements Callable<IChatComponent> {
 class IgnoreLineTask implements Callable<IChatComponent> {
 
     private final String uuid;
-    private final WDR wdr;
+    private final boolean isNicked;
 
-    public IgnoreLineTask(String uuid, WDR wdr) {
+    public IgnoreLineTask(String uuid, boolean isNicked) {
         this.uuid = uuid;
-        this.wdr = wdr;
+        this.isNicked = isNicked;
     }
 
     @Override
@@ -506,7 +486,7 @@ class IgnoreLineTask implements Callable<IChatComponent> {
         try {
 
             final String formattedName;
-            if (wdr.isNicked()) {
+            if (this.isNicked) {
                 formattedName = EnumChatFormatting.GOLD + "uuid";
                 return new ChatComponentText(formattedName + "\n").setChatStyle(new ChatStyle()
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to un-ignore " + formattedName)))
