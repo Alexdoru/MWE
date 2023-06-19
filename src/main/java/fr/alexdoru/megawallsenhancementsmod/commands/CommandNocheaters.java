@@ -328,10 +328,8 @@ public class CommandNocheaters extends MyAbstractCommand {
                     uuid = apireq.getUuid();
                     playername = apireq.getName();
                     if (uuid != null && !HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                        final CachedHypixelPlayerData playerdata;
                         try {
-                            playerdata = new CachedHypixelPlayerData(uuid);
-                            final LoginData loginData = new LoginData(playerdata.getPlayerData());
+                            final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(uuid));
                             if (loginData.hasNeverJoinedHypixel()) {
                                 uuid = null;
                             } else if (!playername.equals(loginData.getdisplayname())) {

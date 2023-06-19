@@ -52,8 +52,7 @@ public class PrestigeVCache {
         MultithreadingUtil.addTaskToQueue(() -> {
 
             try {
-                final CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(uuid);
-                final MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwClass.className);
+                final MegaWallsClassStats mwclassstats = new MegaWallsClassStats(CachedHypixelPlayerData.getPlayerData(uuid), mwClass.className);
                 final PlayerPrestigeData playerPrestigeData = new PlayerPrestigeData();
                 playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints());
                 prestigeDataMap.put(uuid, playerPrestigeData);
@@ -75,8 +74,7 @@ public class PrestigeVCache {
         MultithreadingUtil.addTaskToQueue(() -> {
 
             try {
-                final CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(uuid);
-                final MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata.getPlayerData(), mwClass.className);
+                final MegaWallsClassStats mwclassstats = new MegaWallsClassStats(CachedHypixelPlayerData.getPlayerData(uuid), mwClass.className);
                 playerPrestigeData.addClass(mwClass, mwclassstats.getClasspoints());
                 Minecraft.getMinecraft().addScheduledTask(() -> NameUtil.updateMWPlayerDataAndEntityData(playername, false));
             } catch (ApiException e) {
