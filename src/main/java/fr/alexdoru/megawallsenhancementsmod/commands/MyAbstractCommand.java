@@ -13,6 +13,8 @@ public abstract class MyAbstractCommand extends CommandBase {
         return true;
     }
 
+    protected void printCommandHelp() {}
+
     protected static void sendChatMessage(String msg) {
         if (mc.thePlayer != null) {
             mc.thePlayer.sendChatMessage(msg);

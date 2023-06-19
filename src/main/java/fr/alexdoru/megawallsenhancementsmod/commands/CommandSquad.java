@@ -37,7 +37,7 @@ public class CommandSquad extends MyAbstractCommand {
         }
 
         if (args.length < 1) {
-            ChatUtil.addChatMessage(getCommandHelp());
+            this.printCommandHelp();
             return;
         }
 
@@ -127,7 +127,7 @@ public class CommandSquad extends MyAbstractCommand {
             }
 
         } else {
-            ChatUtil.addChatMessage(getCommandHelp());
+            this.printCommandHelp();
         }
 
     }
@@ -148,15 +148,17 @@ public class CommandSquad extends MyAbstractCommand {
         return null;
     }
 
-    private IChatComponent getCommandHelp() {
-        return new ChatComponentText(EnumChatFormatting.GREEN + ChatUtil.bar() + "\n"
-                + ChatUtil.centerLine(EnumChatFormatting.GOLD + "Squad Help\n\n")
-                + EnumChatFormatting.YELLOW + "/squad add <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "add a player to the squad\n"
-                + EnumChatFormatting.YELLOW + "/squad add <player> as Nickname" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "add a player to the squad and change their name\n"
-                + EnumChatFormatting.YELLOW + "/squad remove <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "remove a player from the squad\n"
-                + EnumChatFormatting.YELLOW + "/squad list" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "list players in the squad\n"
-                + EnumChatFormatting.YELLOW + "/squad disband" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "disband the squad\n"
-                + EnumChatFormatting.GREEN + ChatUtil.bar()
+    @Override
+    protected void printCommandHelp() {
+        ChatUtil.addChatMessage(
+                EnumChatFormatting.GREEN + ChatUtil.bar() + "\n"
+                        + ChatUtil.centerLine(EnumChatFormatting.GOLD + "Squad Help\n\n")
+                        + EnumChatFormatting.YELLOW + "/squad add <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "add a player to the squad\n"
+                        + EnumChatFormatting.YELLOW + "/squad add <player> as Nickname" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "add a player to the squad and change their name\n"
+                        + EnumChatFormatting.YELLOW + "/squad remove <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "remove a player from the squad\n"
+                        + EnumChatFormatting.YELLOW + "/squad list" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "list players in the squad\n"
+                        + EnumChatFormatting.YELLOW + "/squad disband" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "disband the squad\n"
+                        + EnumChatFormatting.GREEN + ChatUtil.bar()
         );
     }
 
