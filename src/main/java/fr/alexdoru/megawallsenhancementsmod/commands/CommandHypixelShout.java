@@ -21,11 +21,6 @@ public class CommandHypixelShout extends MyAbstractCommand {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/shout <message>";
-    }
-
-    @Override
     public void processCommand(ICommandSender sender, String[] args) {
         final String msg = buildString(args, 0);
         if (ReportSuggestionHandler.shouldCancelShout(msg)) {

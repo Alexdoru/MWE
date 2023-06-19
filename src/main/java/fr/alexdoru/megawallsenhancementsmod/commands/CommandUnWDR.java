@@ -24,15 +24,10 @@ public class CommandUnWDR extends MyAbstractCommand {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/unwdr <playername>";
-    }
-
-    @Override
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length < 1 || args.length > 3) {
-            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + " <playername>");
             return;
         }
 

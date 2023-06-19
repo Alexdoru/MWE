@@ -38,11 +38,6 @@ public class CommandScanGame extends MyAbstractCommand {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/scangame";
-    }
-
-    @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
             ChatUtil.printApikeySetupInfo();

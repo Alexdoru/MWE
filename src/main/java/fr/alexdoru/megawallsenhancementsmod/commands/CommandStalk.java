@@ -29,15 +29,10 @@ public class CommandStalk extends MyAbstractCommand {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/stalk <playernames>";
-    }
-
-    @Override
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length < 1) {
-            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + " <playernames...>");
             return;
         }
 

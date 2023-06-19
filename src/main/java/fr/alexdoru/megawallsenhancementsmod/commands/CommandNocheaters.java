@@ -40,11 +40,6 @@ public class CommandNocheaters extends MyAbstractCommand {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/nocheaters";
-    }
-
-    @Override
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length == 0) {

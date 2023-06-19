@@ -36,11 +36,6 @@ public class CommandAddAlias extends MyAbstractCommand {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/addalias";
-    }
-
-    @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length < 1) {
             this.printCommandHelp();

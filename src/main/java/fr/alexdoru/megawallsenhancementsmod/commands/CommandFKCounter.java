@@ -23,11 +23,6 @@ public class CommandFKCounter extends MyAbstractCommand {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/fks <help|p|players|say|settings>";
-    }
-
-    @Override
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length > 0 && args[0].equalsIgnoreCase("settings")) {

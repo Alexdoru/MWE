@@ -24,11 +24,6 @@ public class CommandSquad extends MyAbstractCommand {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/squad <add|disband|list|remove>";
-    }
-
-    @Override
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (ScoreboardUtils.isPlayingHypixelPit()) {
