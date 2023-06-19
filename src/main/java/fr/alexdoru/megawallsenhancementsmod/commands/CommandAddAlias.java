@@ -216,8 +216,7 @@ public class CommandAddAlias extends MyAbstractCommand {
                 final MojangPlayernameToUUID mojangReq = new MojangPlayernameToUUID(playername);
                 if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
                     try {
-                        final CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(mojangReq.getUuid());
-                        final LoginData loginData = new LoginData(playerdata.getPlayerData());
+                        final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(mojangReq.getUuid()));
                         if (!loginData.hasNeverJoinedHypixel() && mojangReq.getName().equals(loginData.getdisplayname())) {
                             // real player
                             mc.addScheduledTask(() -> this.addAlias(mojangReq.getUuid(), mojangReq.getName(), alias, loginData.getFormattedName()));
@@ -272,8 +271,7 @@ public class CommandAddAlias extends MyAbstractCommand {
                 final MojangPlayernameToUUID mojangReq = new MojangPlayernameToUUID(playername);
                 if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
                     try {
-                        final CachedHypixelPlayerData playerdata = new CachedHypixelPlayerData(mojangReq.getUuid());
-                        final LoginData loginData = new LoginData(playerdata.getPlayerData());
+                        final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(mojangReq.getUuid()));
                         if (!loginData.hasNeverJoinedHypixel() && mojangReq.getName().equals(loginData.getdisplayname())) {
                             // real player
                             mc.addScheduledTask(() -> this.removeAlias(mojangReq.getUuid(), mojangReq.getName(), loginData.getFormattedName()));

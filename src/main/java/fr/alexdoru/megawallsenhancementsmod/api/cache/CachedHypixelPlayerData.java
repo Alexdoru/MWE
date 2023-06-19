@@ -7,20 +7,16 @@ import fr.alexdoru.megawallsenhancementsmod.utils.TimerUtil;
 
 public class CachedHypixelPlayerData {
 
+    private static final TimerUtil timer = new TimerUtil(60000L);
     private static JsonObject playerData;
     private static String uuid;
-    private static final TimerUtil timer = new TimerUtil(60000L);
 
-    public CachedHypixelPlayerData(String uuidIn) throws ApiException {
-        if (!timer.update() && uuid != null && uuid.equals(uuidIn)) {
-            return;
+    public static synchronized JsonObject getPlayerData(String uuidIn) throws ApiException {
+        if (!timer.update() && uuidIn.equals(uuid)) {
+            return playerData;
         }
-        final HypixelPlayerData hypixelPlayerData = new HypixelPlayerData(uuidIn);
-        playerData = hypixelPlayerData.getPlayerData();
+        playerData = new HypixelPlayerData(uuidIn).getPlayerData();
         uuid = uuidIn;
-    }
-
-    public JsonObject getPlayerData() {
         return playerData;
     }
 
