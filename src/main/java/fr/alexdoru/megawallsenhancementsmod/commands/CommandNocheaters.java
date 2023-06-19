@@ -313,6 +313,7 @@ public class CommandNocheaters extends MyAbstractCommand {
                     WdrData.remove(uuid);
                 } else {
                     wdr.hacks.remove(WDR.IGNORED);
+                    wdr.hacks.trimToSize();
                 }
                 ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GOLD + playername
                         + EnumChatFormatting.GREEN + " has been removed from your ignore list, you will now receive report suggestions from that player.");
@@ -390,6 +391,7 @@ public class CommandNocheaters extends MyAbstractCommand {
 
             if (!wdr.isIgnored()) {
                 wdr.hacks.add(WDR.IGNORED);
+                wdr.hacks.trimToSize();
             }
 
         } else { // the player wasn't reported before

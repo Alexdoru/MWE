@@ -20,6 +20,7 @@ public class WDR implements Comparable<WDR> {
         this.timestamp = timestamp;
         this.timeLastManualReport = timeLastManualReport;
         this.hacks = hacks;
+        this.hacks.trimToSize();
     }
 
     /**
