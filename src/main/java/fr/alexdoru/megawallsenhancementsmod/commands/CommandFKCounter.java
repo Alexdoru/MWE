@@ -97,22 +97,18 @@ public class CommandFKCounter extends MyAbstractCommand {
 
         } else if (args.length > 0 && args[0].equalsIgnoreCase("help")) {
 
-            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + "\n"
-                    + EnumChatFormatting.RED + "/fks : prints the amount of finals per team in the chat \n"
-                    + EnumChatFormatting.RED + "/fks p or players : prints the amount of finals per player in the chat \n "
-                    + EnumChatFormatting.RED + "/fks say : makes you send a message in the chat with the amount of finals per team \n"
-                    + EnumChatFormatting.RED + "/fks settings : opens the settings GUI");
+            this.printCommandHelp();
 
         } else {
             if (getGameId() == null) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + "This is not available right now");
                 return;
             }
-            final String strBuilder = getColorPrefixFromTeam(RED_TEAM) + getTeamNameFromTeam(RED_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(RED_TEAM) + "\n" +
+            final String msg = getColorPrefixFromTeam(RED_TEAM) + getTeamNameFromTeam(RED_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(RED_TEAM) + "\n" +
                     getColorPrefixFromTeam(GREEN_TEAM) + getTeamNameFromTeam(GREEN_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(GREEN_TEAM) + "\n" +
                     getColorPrefixFromTeam(YELLOW_TEAM) + getTeamNameFromTeam(YELLOW_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(YELLOW_TEAM) + "\n" +
                     getColorPrefixFromTeam(BLUE_TEAM) + getTeamNameFromTeam(BLUE_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(BLUE_TEAM);
-            ChatUtil.addChatMessage(strBuilder);
+            ChatUtil.addChatMessage(msg);
 
         }
 
@@ -132,12 +128,25 @@ public class CommandFKCounter extends MyAbstractCommand {
         }
         if (args.length == 2) {
             if (args[0].equals("remove")) {
-                return getListOfStringsMatchingLastWord(args, getPlayerListinKillCounter());
+                return getListOfStringsMatchingLastWord(args, getPlayerListInKillCounter());
             } else {
                 return getListOfStringsMatchingLastWord(args, colors);
             }
         }
         return null;
+    }
+
+    @Override
+    protected void printCommandHelp() {
+        ChatUtil.addChatMessage(
+                EnumChatFormatting.AQUA + ChatUtil.bar() + "\n"
+                        + ChatUtil.centerLine(EnumChatFormatting.GOLD + "Fks Help") + "\n\n"
+                        + EnumChatFormatting.YELLOW + "/fks" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the amount of finals per team in the chat\n"
+                        + EnumChatFormatting.YELLOW + "/fks players" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the amount of finals per player in the chat\n"
+                        + EnumChatFormatting.YELLOW + "/fks say" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "sends a message in the chat with the amount of finals per team\n"
+                        + EnumChatFormatting.YELLOW + "/fks settings" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "opens the settings GUI\n"
+                        + EnumChatFormatting.AQUA + ChatUtil.bar()
+        );
     }
 
     private void removePlayer(String playerName) {
@@ -157,7 +166,7 @@ public class CommandFKCounter extends MyAbstractCommand {
         ChatUtil.addChatMessage(EnumChatFormatting.RED + "Cannot find " + playerName + " in the FKCounter.");
     }
 
-    private ArrayList<String> getPlayerListinKillCounter() {
+    private ArrayList<String> getPlayerListInKillCounter() {
         final ArrayList<String> playerList = new ArrayList<>();
         final HashMap<String, Integer>[] teamKillsArray = getTeamKillsArray();
         if (teamKillsArray == null) {

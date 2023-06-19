@@ -43,7 +43,7 @@ public class CommandAddAlias extends MyAbstractCommand {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length < 1) {
-            ChatUtil.addChatMessage(getCommandHelp());
+            this.printCommandHelp();
             return;
         }
         if (args[0].equalsIgnoreCase("list")) {
@@ -74,6 +74,18 @@ public class CommandAddAlias extends MyAbstractCommand {
     @Override
     public List<String> getCommandAliases() {
         return Collections.singletonList("ad");
+    }
+
+    @Override
+    protected void printCommandHelp() {
+        ChatUtil.addChatMessage(
+                EnumChatFormatting.GREEN + ChatUtil.bar() + "\n"
+                        + ChatUtil.centerLine(EnumChatFormatting.GOLD + "AddAlias Help\n\n")
+                        + EnumChatFormatting.YELLOW + "/addalias <player> <alias>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Adds an alias for the player\n"
+                        + EnumChatFormatting.YELLOW + "/addalias <remove> <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Removes the alias for the player\n"
+                        + EnumChatFormatting.YELLOW + "/addalias list" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Prints list of alias\n"
+                        + EnumChatFormatting.GREEN + ChatUtil.bar()
+        );
     }
 
     private void listAlias(String[] args) {
@@ -297,16 +309,6 @@ public class CommandAddAlias extends MyAbstractCommand {
         }
         NameUtil.updateMWPlayerDataAndEntityData(playername, false);
         ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Removed alias for " + EnumChatFormatting.GOLD + formatedName);
-    }
-
-    private IChatComponent getCommandHelp() {
-        return new ChatComponentText(EnumChatFormatting.GREEN + ChatUtil.bar() + "\n"
-                + ChatUtil.centerLine(EnumChatFormatting.GOLD + "AddAlias Help\n\n")
-                + EnumChatFormatting.YELLOW + "/addalias <player> <alias>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Adds an alias for the player\n"
-                + EnumChatFormatting.YELLOW + "/addalias <remove> <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Removes the alias for the player\n"
-                + EnumChatFormatting.YELLOW + "/addalias list" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Prints list of alias\n"
-                + EnumChatFormatting.GREEN + ChatUtil.bar()
-        );
     }
 
 }
