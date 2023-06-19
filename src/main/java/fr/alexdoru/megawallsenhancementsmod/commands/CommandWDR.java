@@ -20,7 +20,6 @@ import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.event.ClickEvent;
@@ -48,9 +47,14 @@ public class CommandWDR extends MyAbstractCommand {
     }
 
     @Override
+    public String getCommandUsage(ICommandSender sender) {
+        return "/wdr <player> <cheats(optional)>";
+    }
+
+    @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length == 0) {
-            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender));
+            sendChatMessage("/wdr");
             return;
         }
         handleWDRCommand(args, true, false);
@@ -59,11 +63,6 @@ public class CommandWDR extends MyAbstractCommand {
     @Override
     public List<String> getCommandAliases() {
         return Collections.singletonList("wdr");
-    }
-
-    @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return "/wdr <player> <cheats(optional)> <timestamp(optional)>";
     }
 
     @Override
@@ -103,16 +102,76 @@ public class CommandWDR extends MyAbstractCommand {
     }
 
     public static void handleWDRCommand(String[] args, boolean sendReport, boolean showReportMessage) {
-        boolean usesTimestamp = false;
-        boolean usesTimeMark = false;
-        final ArrayList<String> arraycheats = new ArrayList<>();
         final String playername = args[0];
+        for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
+            if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
+                if (netInfo.getGameProfile().getId().version() == 4) {
+                    handleWDRCommand(
+                            netInfo.getGameProfile().getId().toString(),
+                            netInfo.getGameProfile().getName(),
+                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()),
+                            args,
+                            sendReport,
+                            showReportMessage
+                    );
+                } else if (netInfo.getGameProfile().getId().version() == 1) {
+                    handleWDRCommand(
+                            null,
+                            netInfo.getGameProfile().getName(),
+                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()),
+                            args,
+                            sendReport,
+                            showReportMessage
+                    );
+                }
+                return;
+            }
+        }
+        MultithreadingUtil.addTaskToQueue(() -> {
+            try {
+                final MojangPlayernameToUUID mojangReq = new MojangPlayernameToUUID(playername);
+                if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
+                    try {
+                        final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(mojangReq.getUuid()));
+                        if (!loginData.hasNeverJoinedHypixel() && mojangReq.getName().equals(loginData.getdisplayname())) {
+                            // real player
+                            mc.addScheduledTask(() ->
+                                    handleWDRCommand(
+                                            mojangReq.getUuid(),
+                                            mojangReq.getName(),
+                                            loginData.getFormattedName(),
+                                            args,
+                                            sendReport,
+                                            showReportMessage
+                                    )
+                            );
+                            return null;
+                        }
+                    } catch (ApiException ignored) {}
+                }
+            } catch (ApiException ignored) {}
+            // nicked player
+            mc.addScheduledTask(() -> sendChatMessage("/wdr ", args));
+            return null;
+        });
+    }
+
+    private static void handleWDRCommand(String uuid, String playername, String formattedPlayername, String[] args, boolean sendReport, boolean showReportMessage) {
+        final boolean isaNick = uuid == null;
+        if (uuid == null) {
+            uuid = playername;
+        } else {
+            uuid = uuid.replace("-", "");
+        }
+        final ArrayList<String> arraycheats = new ArrayList<>();
         final StringBuilder message = new StringBuilder("/wdr " + playername);
         String serverID = "?";
         String timerOnReplay = "?";
         long longtimetosubtract = 0;
         long timestamp = 0;
         final long time = (new Date()).getTime();
+        boolean usesTimestamp = false;
+        boolean usesTimeMark = false;
 
         if (args.length == 1) {
 
@@ -219,108 +278,14 @@ public class CommandWDR extends MyAbstractCommand {
         }
 
         if (sendReport) {
-            if (mc.thePlayer != null) {
-                sendChatMessage(message.toString());
-                ReportQueue.INSTANCE.addPlayerReportedThisGame(playername);
-            }
+            sendChatMessage(message.toString());
+            ReportQueue.INSTANCE.addPlayerReportedThisGame(playername);
         }
 
         PartyDetection.printBoostingReportAdvice(playername);
 
         if (ScoreboardTracker.isPreGameLobby) {
             ChatUtil.addChatMessage(ChatUtil.getChatReportingAdvice());
-        }
-
-        final boolean finalUsesTimestamp = usesTimestamp;
-        final boolean finalUsesTimeMark = usesTimeMark;
-        final String finalServerID = serverID;
-        final String finalTimerOnReplay = timerOnReplay;
-        final long finalTimestamp = timestamp;
-
-        MultithreadingUtil.addTaskToQueue(() -> {
-
-            String uuid = null;
-            String formattedPlayername = null;
-            String playernameInThread = playername;
-
-            try {
-                final MojangPlayernameToUUID apireq = new MojangPlayernameToUUID(playernameInThread);
-                uuid = apireq.getUuid();
-                playernameInThread = apireq.getName();
-                if (uuid != null && !HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                    // FIXME if not valid api key it says it's a nick,
-                    //  maybe if the api is laggging as well
-                    final CachedHypixelPlayerData playerdata;
-                    try {
-                        playerdata = new CachedHypixelPlayerData(uuid);
-                        final LoginData loginData = new LoginData(playerdata.getPlayerData());
-                        formattedPlayername = loginData.getFormattedName();
-                        if (loginData.hasNeverJoinedHypixel()) {
-                            uuid = null;
-                        } else if (!playernameInThread.equals(loginData.getdisplayname())) {
-                            uuid = null;
-                        }
-                    } catch (ApiException e) {
-                        uuid = null;
-                    }
-                }
-            } catch (ApiException ignored) {}
-
-            final String finalUuid = uuid;
-            final String finalFormattedPlayername = formattedPlayername;
-            final String finalPlayernameInThread = playernameInThread;
-
-            Minecraft.getMinecraft().addScheduledTask(() -> finishOnMainThread(args,
-                    showReportMessage,
-                    arraycheats,
-                    time,
-                    finalUsesTimestamp,
-                    finalUsesTimeMark,
-                    finalServerID,
-                    finalTimerOnReplay,
-                    finalTimestamp,
-                    finalUuid,
-                    finalFormattedPlayername,
-                    finalPlayernameInThread
-            ));
-
-            return null;
-
-        });
-    }
-
-    private static void finishOnMainThread(String[] args,
-                                           boolean showReportMessage,
-                                           ArrayList<String> arraycheats,
-                                           long time,
-                                           boolean usesTimestamp,
-                                           boolean usesTimeMark,
-                                           String serverID,
-                                           String timerOnReplay,
-                                           long timestamp,
-                                           String uuid,
-                                           String formattedPlayername,
-                                           String playername) {
-
-        boolean isaNick = false;
-
-        if (uuid == null) {  // The playername doesn't exist or never joined hypixel
-
-            for (final NetworkPlayerInfo networkplayerinfo : mc.getNetHandler().getPlayerInfoMap()) { // search for the player's gameprofile in the tablist
-                if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(args[0])) {
-                    uuid = networkplayerinfo.getGameProfile().getName();
-                    formattedPlayername = ScorePlayerTeam.formatPlayerName(networkplayerinfo.getPlayerTeam(), networkplayerinfo.getGameProfile().getName());
-                    playername = uuid;
-                    isaNick = true;
-                }
-            }
-
-            if (!isaNick) { // couldn't find the nicked player in the tab list
-                ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + ChatUtil.inexistantMinecraftNameMsg(args[0])
-                        + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist");
-                return;
-            }
-
         }
 
         final ArrayList<String> argsinWDR = new ArrayList<>();
