@@ -6,10 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -46,6 +43,13 @@ public class WdrData {
         }
         wdr = wdrMap.get(playername);
         return wdr;
+    }
+
+    public static WDR getWdr(UUID uuid, String playername) {
+        if (uuid.version() == 4) {
+            return wdrMap.get(uuid.toString().replace("-", ""));
+        }
+        return wdrMap.get(playername);
     }
 
     public static void put(String uuid, WDR wdr) {

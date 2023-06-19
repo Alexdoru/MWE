@@ -173,8 +173,7 @@ public class ChatListener {
             if (ConfigHandler.censorCheaterChatMsg && messageSender != null) {
                 final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(messageSender);
                 if (networkPlayerInfo != null) {
-                    final String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-                    final WDR wdr = WdrData.getWdr(uuid, messageSender);
+                    final WDR wdr = WdrData.getWdr(networkPlayerInfo.getGameProfile().getId(), messageSender);
                     if (wdr != null && wdr.hasValidCheats()) {
                         if (!ConfigHandler.deleteCheaterChatMsg) {
                             ChatUtil.addChatMessage(StringUtil.censorChatMessage(fmsg, messageSender), messageSender);
