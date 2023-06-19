@@ -90,6 +90,7 @@ public class CommandUnWDR extends MyAbstractCommand {
         if (wdr.isIgnored()) {
             wdr.hacks.clear();
             wdr.hacks.add(WDR.IGNORED);
+            wdr.hacks.trimToSize();
         } else {
             WdrData.remove(uuid);
         }
