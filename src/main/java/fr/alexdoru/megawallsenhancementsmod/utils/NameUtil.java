@@ -223,7 +223,7 @@ public class NameUtil {
 
         final String username = gameProfileIn.getName();
         final String uuid = id.toString().replace("-", "");
-        final WDR wdr = WdrData.getWdr(uuid, username);
+        final WDR wdr = WdrData.getWdr(id.version() == 1 ? username : uuid);
         String extraPrefix = "";
         IChatComponent iExtraPrefix = null;
         final String squadname = SquadHandler.getSquad().get(username);
