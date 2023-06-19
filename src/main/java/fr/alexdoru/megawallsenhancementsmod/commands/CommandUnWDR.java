@@ -33,7 +33,7 @@ public class CommandUnWDR extends MyAbstractCommand {
 
         if (args.length == 1) { // if you use /unwdr <playername>
 
-            unwdrPlayer(args);
+            this.unwdrPlayer(args);
 
         } else if (args.length == 2) { // when you click the message it does /unwdr <UUID> <playername>
 
@@ -43,7 +43,7 @@ public class CommandUnWDR extends MyAbstractCommand {
             if (wdr == null) {
                 ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list.");
             } else {
-                removeOrUpdateWDR(wdr, uuid);
+                this.removeOrUpdateWDR(wdr, uuid);
                 Minecraft.getMinecraft().addScheduledTask(() -> ChatHandler.deleteWarningMessagesFor(args[1]));
                 NameUtil.updateMWPlayerDataAndEntityData(args[1], false);
                 ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + args[1] + EnumChatFormatting.GREEN + ".");
@@ -53,37 +53,34 @@ public class CommandUnWDR extends MyAbstractCommand {
 
     }
 
+    @Override
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+        return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+    }
+
     private void unwdrPlayer(String[] args) {
         MultithreadingUtil.addTaskToQueue(() -> {
-
-            final MojangPlayernameToUUID apireq;
-            String playername = args[0];
-            String uuid;
+            final String playername = args[0];
             try {
-                apireq = new MojangPlayernameToUUID(playername);
-                playername = apireq.getName();
-                uuid = apireq.getUuid();
+                final MojangPlayernameToUUID apireq = new MojangPlayernameToUUID(playername);
+                mc.addScheduledTask(() -> this.unwdr(apireq.getUuid(), apireq.getName()));
             } catch (ApiException e) {
-                uuid = playername;
+                mc.addScheduledTask(() -> this.unwdr(playername, playername));
             }
-
-            final WDR wdr = WdrData.getWdr(uuid);
-
-            if (wdr == null) {
-                ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list.");
-            } else {
-                removeOrUpdateWDR(wdr, uuid);
-                final String finalPlayername = playername;
-                Minecraft.getMinecraft().addScheduledTask(() -> {
-                    ChatHandler.deleteWarningMessagesFor(finalPlayername);
-                    NameUtil.updateMWPlayerDataAndEntityData(finalPlayername, false);
-                });
-                ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + ".");
-            }
-
             return null;
-
         });
+    }
+
+    private void unwdr(String uuid, String playername) {
+        final WDR wdr = WdrData.getWdr(uuid);
+        if (wdr == null) {
+            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list.");
+            return;
+        }
+        this.removeOrUpdateWDR(wdr, uuid);
+        ChatHandler.deleteWarningMessagesFor(playername);
+        NameUtil.updateMWPlayerDataAndEntityData(playername, false);
+        ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + ".");
     }
 
     private void removeOrUpdateWDR(WDR wdr, String uuid) {
@@ -94,11 +91,6 @@ public class CommandUnWDR extends MyAbstractCommand {
         } else {
             WdrData.remove(uuid);
         }
-    }
-
-    @Override
-    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
     }
 
 }
