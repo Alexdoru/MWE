@@ -77,14 +77,24 @@ public class ChatUtil {
     }
 
     public static void printIChatList(String listtitle, IChatComponent imessagebody, int displaypage, int nbpage, String command, EnumChatFormatting barColor, IChatComponent titleHoverText, String titleURL) {
-        final IChatComponent imsg = new ChatComponentText(barColor + bar() + "\n" + "             ");
+        final IChatComponent titleLine = getListTitleLine(listtitle, displaypage, nbpage, command, titleHoverText, titleURL);
+        addChatMessage(new ChatComponentText(barColor + bar() + "\n")
+                .appendSibling(titleLine)
+                .appendSibling(new ChatComponentText("\n"))
+                .appendSibling(imessagebody)
+                .appendSibling(new ChatComponentText(barColor + bar()))
+        );
+    }
+
+    public static IChatComponent getListTitleLine(String listtitle, int displaypage, int nbpage, String command, IChatComponent titleHoverText, String titleURL) {
+        final IChatComponent titleLine = new ChatComponentText("             ");
         if (displaypage > 1) {
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + " <<")
+            titleLine.appendSibling(new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + " <<")
                     .setChatStyle(new ChatStyle()
                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to view page " + (displaypage - 1))))
                             .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command + " " + (displaypage - 1)))));
         } else {
-            imsg.appendSibling(new ChatComponentText("   "));
+            titleLine.appendSibling(new ChatComponentText("   "));
         }
         final IChatComponent titleComponent = new ChatComponentText(EnumChatFormatting.GOLD + " " + listtitle + " (Page " + displaypage + " of " + nbpage + ")");
         if (titleHoverText != null && titleURL != null) {
@@ -92,14 +102,14 @@ public class ChatUtil {
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, titleHoverText))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, titleURL)));
         }
-        imsg.appendSibling(titleComponent);
+        titleLine.appendSibling(titleComponent);
         if (displaypage < nbpage) {
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + " >>")
+            titleLine.appendSibling(new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + " >>")
                     .setChatStyle(new ChatStyle()
                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to view page " + (displaypage + 1))))
                             .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command + " " + (displaypage + 1)))));
         }
-        addChatMessage(imsg.appendSibling(new ChatComponentText("\n")).appendSibling(imessagebody).appendSibling(new ChatComponentText(barColor + bar())));
+        return titleLine;
     }
 
     public static void printApikeySetupInfo() {
