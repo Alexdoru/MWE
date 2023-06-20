@@ -9,7 +9,6 @@ import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
@@ -25,32 +24,15 @@ public class CommandUnWDR extends MyAbstractCommand {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-
         if (args.length < 1 || args.length > 3) {
             ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + " <playername>");
             return;
         }
-
         if (args.length == 1) { // if you use /unwdr <playername>
-
             this.unwdrPlayer(args);
-
         } else if (args.length == 2) { // when you click the message it does /unwdr <UUID> <playername>
-
-            final String uuid = args[0];
-            final WDR wdr = WdrData.getWdr(uuid);
-
-            if (wdr == null) {
-                ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list.");
-            } else {
-                this.removeOrUpdateWDR(wdr, uuid);
-                Minecraft.getMinecraft().addScheduledTask(() -> ChatHandler.deleteWarningMessagesFor(args[1]));
-                NameUtil.updateMWPlayerDataAndEntityData(args[1], false);
-                ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + args[1] + EnumChatFormatting.GREEN + ".");
-            }
-
+            this.unwdr(args[0], args[1]);
         }
-
     }
 
     @Override
