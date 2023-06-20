@@ -46,7 +46,7 @@ public class CommandAddAlias extends MyAbstractCommand {
             return;
         }
         if (args.length != 2) {
-            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : /addalias <playername> <alias>");
+            this.printCommandHelp();
             return;
         }
         if (args[0].equalsIgnoreCase("remove")) {
