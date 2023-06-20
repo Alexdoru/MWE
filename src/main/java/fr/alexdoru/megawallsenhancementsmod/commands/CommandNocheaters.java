@@ -57,7 +57,7 @@ public class CommandNocheaters extends MyAbstractCommand {
 
         } else if (args[0].equalsIgnoreCase("ignore")) {
 
-            addPlayerToIgnoreList(sender, args);
+            addPlayerToIgnoreList(args);
 
         } else if (args[0].equalsIgnoreCase("ignorelist")) {
 
@@ -303,87 +303,62 @@ public class CommandNocheaters extends MyAbstractCommand {
         }
     }
 
-    private void addPlayerToIgnoreList(ICommandSender sender, String[] args) {
+    private void addPlayerToIgnoreList(String[] args) {
+
         if (args.length == 1) {
-            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + getCommandUsage(sender) + " ignore <playername>");
-        } else {
-
-            ReportQueue.INSTANCE.clearReportsSentBy(args[1]);
-
-            MultithreadingUtil.addTaskToQueue(() -> {
-
-                String uuid = null;
-                String playername = args[1];
-
-                try {
-                    final MojangPlayernameToUUID apireq = new MojangPlayernameToUUID(playername);
-                    uuid = apireq.getUuid();
-                    playername = apireq.getName();
-                    if (uuid != null && !HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                        try {
-                            final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(uuid));
-                            if (loginData.hasNeverJoinedHypixel()) {
-                                uuid = null;
-                            } else if (!playername.equals(loginData.getdisplayname())) {
-                                uuid = null;
-                            }
-                        } catch (ApiException e) {
-                            uuid = null;
-                        }
-                    }
-                } catch (ApiException ignored) {}
-
-                final String finalUuid = uuid;
-                final String finalPlayername = playername;
-
-                mc.addScheduledTask(() -> finishAddingToIgnoreList(sender, args, finalUuid, finalPlayername));
-
-                return null;
-
-            });
-
+            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + getCommandUsage(null) + " ignore <playername>");
+            return;
         }
-    }
 
-    private void finishAddingToIgnoreList(ICommandSender sender, String[] args, String uuid, String playername) {
-        if (uuid == null) {  // The playername doesn't exist or never joined hypixel
+        final String playername = args[1];
+        ReportQueue.INSTANCE.clearReportsSentBy(playername);
 
-            boolean isaNick = false;
-            // search for the player's gameprofile in the tablist
-            for (final NetworkPlayerInfo networkplayerinfo : mc.getNetHandler().getPlayerInfoMap()) {
-                if (networkplayerinfo.getGameProfile().getName().equalsIgnoreCase(args[0])) {
-                    uuid = networkplayerinfo.getGameProfile().getName();
-                    playername = uuid;
-                    isaNick = true;
+        for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
+            if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
+                if (netInfo.getGameProfile().getId().version() == 4) {
+                    this.addPlayerToIgnoreList(netInfo.getGameProfile().getId().toString().replace("-", ""), playername);
+                } else if (netInfo.getGameProfile().getId().version() == 1) {
+                    this.addPlayerToIgnoreList(playername, playername);
                 }
             }
-
-            if (!isaNick) { // couldn't find the nicked player in the tab list
-                ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + ChatUtil.inexistantMinecraftNameMsg(args[0]) + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist");
-                return;
-            }
-
         }
 
+        MultithreadingUtil.addTaskToQueue(() -> {
+            try {
+                final MojangPlayernameToUUID mojangReq = new MojangPlayernameToUUID(playername);
+                if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
+                    try {
+                        final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(mojangReq.getUuid()));
+                        if (!loginData.hasNeverJoinedHypixel() && mojangReq.getName().equals(loginData.getdisplayname())) {
+                            mc.addScheduledTask(() -> this.addPlayerToIgnoreList(mojangReq.getUuid(), mojangReq.getName()));
+                            return null;
+                        }
+                    } catch (ApiException ignored) {}
+                }
+            } catch (ApiException ignored) {}
+            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + ChatUtil.inexistantMinecraftNameMsg(playername)
+                    + EnumChatFormatting.RED + " Couldn't find the " + EnumChatFormatting.DARK_PURPLE + "nicked" + EnumChatFormatting.RED + " player in the tablist");
+            return null;
+        });
+
+    }
+
+    private void addPlayerToIgnoreList(String uuid, String playername) {
         final WDR wdr = WdrData.getWdr(uuid);
-
         if (wdr != null) { // the player was already reported before
-
             if (!wdr.isIgnored()) {
                 wdr.hacks.add(WDR.IGNORED);
                 wdr.hacks.trimToSize();
             }
-
         } else { // the player wasn't reported before
             final long time = (new Date()).getTime();
             final ArrayList<String> hacks = new ArrayList<>();
             hacks.add(WDR.IGNORED);
             WdrData.put(uuid, new WDR(time, time, hacks));
         }
-
         ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You added " + EnumChatFormatting.RED + playername
                 + EnumChatFormatting.GREEN + " to your ignore list, it will ignore all report suggestions from that player. Use : "
-                + EnumChatFormatting.YELLOW + getCommandUsage(sender) + " ignorelist" + EnumChatFormatting.GREEN + " to list and remove poeple from the list.");
+                + EnumChatFormatting.YELLOW + getCommandUsage(null) + " ignorelist" + EnumChatFormatting.GREEN + " to list and remove poeple from the list.");
     }
 
 }
