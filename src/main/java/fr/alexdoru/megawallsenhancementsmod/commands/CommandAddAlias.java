@@ -117,7 +117,7 @@ public class CommandAddAlias extends MyAbstractCommand {
             }
             if (nbpage == displaypage) {
                 warning = false;
-                futureList.add(MultithreadingUtil.addTaskToQueueAndGetFuture(new ListAliasLineTask(entry.getKey(), entry.getValue())));
+                futureList.add(MultithreadingUtil.addTaskToQueue(new ListAliasLineTask(entry.getKey(), entry.getValue())));
             }
             nbAlias++;
         }

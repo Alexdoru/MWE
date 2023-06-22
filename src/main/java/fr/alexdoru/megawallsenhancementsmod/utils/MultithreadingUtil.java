@@ -1,7 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
-import net.minecraft.util.IChatComponent;
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -11,11 +9,7 @@ public class MultithreadingUtil {
 
     private static final ExecutorService service = Executors.newFixedThreadPool(10);
 
-    public static void addTaskToQueue(Callable<String> c) {
-        service.submit(c);
-    }
-
-    public static Future<IChatComponent> addTaskToQueueAndGetFuture(Callable<IChatComponent> c) {
+    public static <V> Future<V> addTaskToQueue(Callable<V> c) {
         return service.submit(c);
     }
 

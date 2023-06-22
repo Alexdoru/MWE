@@ -183,7 +183,7 @@ public class CommandNocheaters extends MyAbstractCommand {
             }
             if (nbpage == displaypage) {
                 warning = false;
-                futureList.add(MultithreadingUtil.addTaskToQueueAndGetFuture(new CreateReportLineTask(entry.getKey(), entry.getValue(), doStalk, timeNow)));
+                futureList.add(MultithreadingUtil.addTaskToQueue(new CreateReportLineTask(entry.getKey(), entry.getValue(), doStalk, timeNow)));
             }
             nbreport++;
         }
@@ -244,7 +244,7 @@ public class CommandNocheaters extends MyAbstractCommand {
                     nbpage++;
                 }
                 if (nbpage == displaypage) {
-                    futureList.add(MultithreadingUtil.addTaskToQueueAndGetFuture(new IgnoreLineTask(entry.getKey(), entry.getValue().isNicked())));
+                    futureList.add(MultithreadingUtil.addTaskToQueue(new IgnoreLineTask(entry.getKey(), entry.getValue().isNicked())));
                     warning = false;
                 }
                 nbreport++;
