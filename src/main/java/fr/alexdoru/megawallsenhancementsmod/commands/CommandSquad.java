@@ -152,6 +152,9 @@ public class CommandSquad extends MyAbstractCommand {
         }
         final char myColor = this.getTeamColor(playerInfo);
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
+            if (netInfo.getGameProfile().getId().equals(mc.thePlayer.getUniqueID())) {
+                continue;
+            }
             if (myColor == this.getTeamColor(netInfo)) {
                 if (SquadHandler.getSquad().isEmpty()) {
                     SquadHandler.addPlayer(Minecraft.getMinecraft().thePlayer.getName());
