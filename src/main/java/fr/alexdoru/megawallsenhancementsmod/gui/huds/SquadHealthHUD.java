@@ -14,6 +14,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraft.scoreboard.IScoreObjectiveCriteria;
@@ -22,8 +23,6 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.WorldSettings;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -58,7 +57,7 @@ public class SquadHealthHUD extends AbstractRenderer {
         if (list.size() <= 1) {
             return;
         }
-        final List<NetworkPlayerInfo> playerlistToRender = new ArrayList<>(ordering.sortedCopy(list));
+        final List<NetworkPlayerInfo> playerlistToRender = ordering.sortedCopy(list);
         int maxNameWidth = 0;
         int maxScoreWidth = 0;
         int maxFinalWidth = 0;
@@ -94,7 +93,6 @@ public class SquadHealthHUD extends AbstractRenderer {
                 GlStateManager.enableBlend();
                 GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
                 final NetworkPlayerInfo networkplayerinfo = playerlistToRender.get(i);
-                final String formattedName = this.getPlayerName(networkplayerinfo);
                 final GameProfile gameprofile = networkplayerinfo.getGameProfile();
                 if (flag) {
                     final EntityPlayer entityplayer = mc.theWorld.getPlayerEntityByUUID(gameprofile.getId());
@@ -105,7 +103,7 @@ public class SquadHealthHUD extends AbstractRenderer {
                     }
                     xDrawingPos += 9;
                 }
-                mc.fontRendererObj.drawStringWithShadow(formattedName, (float) xDrawingPos, (float) yDrawingPos, 0xFFFFFF);
+                mc.fontRendererObj.drawStringWithShadow(this.getPlayerName(networkplayerinfo), (float) xDrawingPos, (float) yDrawingPos, 0xFFFFFF);
                 final int xStartFinalDrawingPos = xDrawingPos + maxNameWidth + 1;
                 final int xStartScoreDrawingPos = xStartFinalDrawingPos + maxFinalWidth;
                 if (maxScoreWidth + maxFinalWidth > 5) {
@@ -143,16 +141,20 @@ public class SquadHealthHUD extends AbstractRenderer {
             final int maxNameWidth = mc.fontRendererObj.getStringWidth(mc.thePlayer.getName());
             final int maxScoreWidth = mc.fontRendererObj.getStringWidth(" 00");
             final int maxFinalWidth = mc.fontRendererObj.getStringWidth(" 0");
-            final int maxLineWidth = maxNameWidth + maxFinalWidth + maxScoreWidth;
+            final int maxLineWidth = maxNameWidth + maxFinalWidth + maxScoreWidth + 9;
             Gui.drawRect(hudXpos, hudYpos, hudXpos + maxLineWidth + 2, hudYpos + listSize * 9 + 1, Integer.MIN_VALUE);
             for (int i = 0; i < listSize; i++) {
-                final int xDrawingPos = hudXpos + 1;
+                int xDrawingPos = hudXpos + 1;
                 final int yDrawingPos = hudYpos + 1 + i * 9;
                 Gui.drawRect(xDrawingPos, yDrawingPos, hudXpos + maxLineWidth + 1, yDrawingPos + 8, 0x20FFFFFF);
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 GlStateManager.enableAlpha();
                 GlStateManager.enableBlend();
                 GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+                mc.getTextureManager().bindTexture(DefaultPlayerSkin.getDefaultSkinLegacy());
+                Gui.drawScaledCustomSizeModalRect(xDrawingPos, yDrawingPos, 8, 8, 8, 8, 8, 8, 64.0F, 64.0F);
+                Gui.drawScaledCustomSizeModalRect(xDrawingPos, yDrawingPos, 40, 8, 8, 8, 8, 8, 64.0F, 64.0F);
+                xDrawingPos += 9;
                 final String formattedName = EnumChatFormatting.GREEN + mc.thePlayer.getName();
                 mc.fontRendererObj.drawStringWithShadow(formattedName, (float) xDrawingPos, (float) yDrawingPos, -1);
                 final int xStartFinalDrawingPos = xDrawingPos + maxNameWidth + 1;
@@ -174,8 +176,7 @@ public class SquadHealthHUD extends AbstractRenderer {
         return ConfigHandler.showSquadHUD && SquadHandler.getSquad().size() > 1;
     }
 
-    @SideOnly(Side.CLIENT)
-    static class PlayerComparator implements Comparator<NetworkPlayerInfo> {
+    private static class PlayerComparator implements Comparator<NetworkPlayerInfo> {
         private PlayerComparator() {}
         @Override
         public int compare(NetworkPlayerInfo p_compare_1_, NetworkPlayerInfo p_compare_2_) {
