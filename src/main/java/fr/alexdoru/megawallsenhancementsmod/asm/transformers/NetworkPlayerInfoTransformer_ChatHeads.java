@@ -41,20 +41,20 @@ public class NetworkPlayerInfoTransformer_ChatHeads implements IMyClassTransform
 
         final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "onFinishedSkinLoading", "()V", null, null);
         mv.visitCode();
-        Label l0 = new Label();
-        Label l3 = new Label();
+        final Label l0 = new Label();
+        final Label l3 = new Label();
         mv.visitLabel(l0);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, ClassMapping.NETWORKPLAYERINFO.name, SKIN_FIELD_NAME, SKIN_FIELD_DESC);
         mv.visitJumpInsn(IFNULL, l3);
-        Label l1 = new Label();
+        final Label l1 = new Label();
         mv.visitLabel(l1);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, ClassMapping.NETWORKPLAYERINFO.name, SKIN_FIELD_NAME, SKIN_FIELD_DESC);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, ClassMapping.NETWORKPLAYERINFO.name, FieldMapping.NETWORKPLAYERINFO$LOCATIONSKIN.name, FieldMapping.NETWORKPLAYERINFO$LOCATIONSKIN.desc);
         mv.visitMethodInsn(INVOKEVIRTUAL, ClassMapping.SKINCHATHEAD.name, "setSkin", "(L" + ClassMapping.RESOURCELOCATION + ";)V", false);
-        Label l2 = new Label();
+        final Label l2 = new Label();
         mv.visitLabel(l2);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitInsn(ACONST_NULL);
