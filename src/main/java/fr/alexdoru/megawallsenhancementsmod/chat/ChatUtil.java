@@ -80,9 +80,9 @@ public class ChatUtil {
         final IChatComponent titleLine = getListTitleLine(listtitle, displaypage, nbpage, command, titleHoverText, titleURL);
         addChatMessage(new ChatComponentText(barColor + bar() + "\n")
                 .appendSibling(titleLine)
-                .appendSibling(new ChatComponentText("\n"))
+                .appendText("\n")
                 .appendSibling(imessagebody)
-                .appendSibling(new ChatComponentText(barColor + bar()))
+                .appendText(barColor + bar())
         );
     }
 
@@ -94,7 +94,7 @@ public class ChatUtil {
                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to view page " + (displaypage - 1))))
                             .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command + " " + (displaypage - 1)))));
         } else {
-            titleLine.appendSibling(new ChatComponentText("   "));
+            titleLine.appendText("   ");
         }
         final IChatComponent titleComponent = new ChatComponentText(EnumChatFormatting.GOLD + " " + listtitle + " (Page " + displaypage + " of " + nbpage + ")");
         if (titleHoverText != null && titleURL != null) {

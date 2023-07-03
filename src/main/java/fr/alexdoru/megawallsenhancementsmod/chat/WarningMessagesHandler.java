@@ -60,7 +60,7 @@ public class WarningMessagesHandler {
         final IChatComponent[] imsgArray = createPlayerNameWithHoverText(formattedName, playername, wdrmapKey, wdr, EnumChatFormatting.LIGHT_PURPLE);
         final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ").appendSibling(imsgArray[0]);
         final IChatComponent allCheats = imsgArray[1];
-        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " joined,"));
+        imsg.appendText(EnumChatFormatting.GRAY + " joined,");
         final boolean olderThanMaxAutoreport = wdr.shouldPrintBigText(datenow);
 
         if (olderThanMaxAutoreport) {
@@ -71,9 +71,9 @@ public class WarningMessagesHandler {
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click here to remove this player from your report list\n"
                             + EnumChatFormatting.YELLOW + "and stop auto-reporting them every game")))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + wdrmapKey + " " + playername))));
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.RED + " It's been " + EnumChatFormatting.GRAY + DateUtil.timeSince(wdr.timeLastManualReport) + EnumChatFormatting.RED + " since you last manually reported that player for :"))
+            imsg.appendText(EnumChatFormatting.RED + " It's been " + EnumChatFormatting.GRAY + DateUtil.timeSince(wdr.timeLastManualReport) + EnumChatFormatting.RED + " since you last manually reported that player for :")
                     .appendSibling(allCheats)
-                    .appendSibling(new ChatComponentText(EnumChatFormatting.RED + ", either remove them from your report list or report them again."));
+                    .appendText(EnumChatFormatting.RED + ", either remove them from your report list or report them again.");
         } else if (!disableReportButton && ScoreboardTracker.isInMwGame && !ScoreboardTracker.isPrepPhase && wdr.canBeReported(datenow)) {
             imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GREEN + " [Report again]").setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click here to report this player again")))
@@ -88,7 +88,8 @@ public class WarningMessagesHandler {
         }
 
         if (!olderThanMaxAutoreport) {
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Cheats :")).appendSibling(allCheats);
+            imsg.appendText(EnumChatFormatting.GRAY + " Cheats :");
+            imsg.appendSibling(allCheats);
         }
 
         ChatUtil.addChatMessage(imsg);
@@ -128,18 +129,18 @@ public class WarningMessagesHandler {
 
                     if (serverID.equals(oldgameID) && Math.abs(timestamphackreport - oldtimestamp) < 3000000 && playernamewhenreported.equals(oldname)) { // if it is same server ID and reports
 
-                        hoverText.appendSibling(new ChatComponentText("\n"
+                        hoverText.appendText("\n"
                                 + EnumChatFormatting.GREEN + "Reported at (EST - server time) : " + EnumChatFormatting.YELLOW + DateUtil.ESTformatTimestamp(timestamphackreport) + "\n"
                                 + EnumChatFormatting.GREEN + "Timer on replay (approx.) : " + EnumChatFormatting.GOLD + timeronreplay + "\n"
-                                + EnumChatFormatting.GREEN + "Timestamp for : " + EnumChatFormatting.GOLD + cheats + ((i == wdr.hacks.size() - 1) ? "" : "\n")));
+                                + EnumChatFormatting.GREEN + "Timestamp for : " + EnumChatFormatting.GOLD + cheats + ((i == wdr.hacks.size() - 1) ? "" : "\n"));
 
                     } else {
 
-                        hoverText.appendSibling(new ChatComponentText("\n"
+                        hoverText.appendText("\n"
                                 + EnumChatFormatting.GREEN + "Reported at (EST - server time) : " + EnumChatFormatting.YELLOW + DateUtil.ESTformatTimestamp(timestamphackreport) + "\n"
                                 + EnumChatFormatting.GREEN + "Playername at the moment of the report : " + EnumChatFormatting.RED + playernamewhenreported + "\n"
                                 + EnumChatFormatting.GREEN + "ServerID : " + EnumChatFormatting.GOLD + serverID + EnumChatFormatting.GREEN + " Timer on replay (approx.) : " + EnumChatFormatting.GOLD + timeronreplay + "\n"
-                                + EnumChatFormatting.GREEN + "Timestamp for : " + EnumChatFormatting.GOLD + cheats + ((i == wdr.hacks.size() - 1) ? "" : "\n")));
+                                + EnumChatFormatting.GREEN + "Timestamp for : " + EnumChatFormatting.GOLD + cheats + ((i == wdr.hacks.size() - 1) ? "" : "\n"));
 
                     }
 
@@ -195,11 +196,11 @@ public class WarningMessagesHandler {
 
             for (final String hack : wdr.hacks) {
                 if ("bhop".equalsIgnoreCase(hack) || "autoblock".equalsIgnoreCase(hack) || "fastbreak".equalsIgnoreCase(hack) || "noslowdown".equalsIgnoreCase(hack)) {
-                    allCheats.appendSibling(new ChatComponentText(" " + EnumChatFormatting.DARK_RED + hack));
+                    allCheats.appendText(" " + EnumChatFormatting.DARK_RED + hack);
                 } else if (hack.equalsIgnoreCase(WDR.NICK)) {
-                    allCheats.appendSibling(new ChatComponentText(" " + EnumChatFormatting.DARK_PURPLE + hack));
+                    allCheats.appendText(" " + EnumChatFormatting.DARK_PURPLE + hack);
                 } else if (!hack.equals(WDR.IGNORED)) {
-                    allCheats.appendSibling(new ChatComponentText(" " + EnumChatFormatting.GOLD + hack));
+                    allCheats.appendText(" " + EnumChatFormatting.GOLD + hack);
                 }
             }
 

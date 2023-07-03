@@ -88,7 +88,7 @@ public class PartyDetection {
                     }
                 }
             }
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "you can click their name to report them for boosting."));
+            imsg.appendText(EnumChatFormatting.GREEN + "you can click their name to report them for boosting.");
             if (containsPlayers) {
                 new DelayedTask(() -> ChatUtil.addChatMessage(imsg), 10);
             }

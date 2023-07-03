@@ -70,14 +70,13 @@ public class BlitzStats {
 
         return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedName, playername, " - Blitz stats"))
-                .appendSibling(new ChatComponentText("\n" + "\n"))
-                .appendSibling(new ChatComponentText(ChatUtil.alignText(matrix)))
-                .appendSibling(new ChatComponentText(ChatUtil.alignText(matrix2) + "\n"))
-                .appendSibling(new ChatComponentText(
-                        defaultkit == null ? "" : ChatUtil.centerLine(EnumChatFormatting.GREEN + "Selected Kit : " + EnumChatFormatting.GOLD + defaultkit + "\n")
-                                + ChatUtil.centerLine(EnumChatFormatting.GREEN + " Playtime : " + EnumChatFormatting.GOLD + String.format("%.2f", time_played / 3600f) + "h") + "\n"
-                                + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Coins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(coins))))
-                .appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
+                .appendText("\n" + "\n")
+                .appendText(ChatUtil.alignText(matrix))
+                .appendText(ChatUtil.alignText(matrix2) + "\n")
+                .appendText(defaultkit == null ? "" : ChatUtil.centerLine(EnumChatFormatting.GREEN + "Selected Kit : " + EnumChatFormatting.GOLD + defaultkit + "\n")
+                        + ChatUtil.centerLine(EnumChatFormatting.GREEN + " Playtime : " + EnumChatFormatting.GOLD + String.format("%.2f", time_played / 3600f) + "h") + "\n"
+                        + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Coins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(coins)))
+                .appendText(EnumChatFormatting.AQUA + ChatUtil.bar());
 
     }
 

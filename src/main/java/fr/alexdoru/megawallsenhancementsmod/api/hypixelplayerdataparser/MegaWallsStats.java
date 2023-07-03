@@ -181,12 +181,12 @@ public class MegaWallsStats {
                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for " + entry.getKey() + " stats")))
                             .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + entry.getKey()))));
             if (entry.getValue()[0] != 0) {
-                imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + " P" + ChatUtil.intToRoman(entry.getValue()[0])));
+                imsg.appendText(EnumChatFormatting.GOLD + " P" + ChatUtil.intToRoman(entry.getValue()[0]));
             }
             final Integer classpoints = entry.getValue()[1];
-            imsg.appendSibling(new ChatComponentText(" : " + ColorUtil.getPrestigeVColor(classpoints) + classpoints + "\n"));
+            imsg.appendText(" : " + ColorUtil.getPrestigeVColor(classpoints) + classpoints + "\n");
         }
-        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "Total : " + EnumChatFormatting.GOLD + total_classpoints + "\n"));
+        imsg.appendText(EnumChatFormatting.GREEN + "Total : " + EnumChatFormatting.GOLD + total_classpoints + "\n");
         int cpMissing = MWClass.values().length * 2_000;
         int coinsMissing = MWClass.values().length * 2_000_000 - this.coins;
         for (final Map.Entry<String, Integer[]> entry : classpointsMap.entrySet()) {
@@ -203,10 +203,10 @@ public class MegaWallsStats {
             }
         }
         coinsMissing = Math.max(0, coinsMissing);
-        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "Missing : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(cpMissing) + " cp"
+        imsg.appendText(EnumChatFormatting.GREEN + "Missing : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(cpMissing) + " cp"
                 + EnumChatFormatting.GREEN + ", "
-                + EnumChatFormatting.GOLD + ChatUtil.formatInt(coinsMissing) + " coins\n"));
-        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
+                + EnumChatFormatting.GOLD + ChatUtil.formatInt(coinsMissing) + " coins\n");
+        imsg.appendText(EnumChatFormatting.AQUA + ChatUtil.bar());
         return imsg;
     }
 
@@ -272,16 +272,16 @@ public class MegaWallsStats {
 
         return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls stats"))
-                .appendSibling(new ChatComponentText("\n" + "\n" + ChatUtil.alignText(matrix1) + "\n" + ChatUtil.alignText(matrix2) + "\n"))
-                .appendSibling(new ChatComponentText(ChatUtil.centerLine(EnumChatFormatting.GREEN + "Prestiges : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(nbprestiges) + " "
-                        + EnumChatFormatting.GREEN + " Playtime (approx.) : " + EnumChatFormatting.GOLD + String.format("%.2f", time_played / 60f) + "h") + "\n"))
+                .appendText("\n" + "\n" + ChatUtil.alignText(matrix1) + "\n" + ChatUtil.alignText(matrix2) + "\n")
+                .appendText(ChatUtil.centerLine(EnumChatFormatting.GREEN + "Prestiges : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(nbprestiges) + " "
+                        + EnumChatFormatting.GREEN + " Playtime (approx.) : " + EnumChatFormatting.GOLD + String.format("%.2f", time_played / 60f) + "h") + "\n")
                 .appendSibling(new ChatComponentText(
                         ChatUtil.centerLine(EnumChatFormatting.GREEN + "Selected class : " + EnumChatFormatting.GOLD + (chosen_class == null ? "None" : chosen_class) + " "
                                 + EnumChatFormatting.GREEN + " Selected skin : " + EnumChatFormatting.GOLD + (chosen_skin_class == null ? (chosen_class == null ? "None" : chosen_class) : chosen_skin_class)) + "\n")
                         .setChatStyle(new ChatStyle()
                                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for this class' stats")))
                                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + (chosen_class == null ? "None" : chosen_class)))))
-                .appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
+                .appendText(EnumChatFormatting.AQUA + ChatUtil.bar());
     }
 
     public IChatComponent getLegendaryMessage(String formattedname, String playername) {
@@ -297,20 +297,20 @@ public class MegaWallsStats {
             }
         }
         if (!obtainedLegs.isEmpty()) {
-            imsg.appendSibling(new ChatComponentText("\n" + EnumChatFormatting.GOLD + "Obtained (" + obtainedLegs.size() + ")\n"));
+            imsg.appendText("\n" + EnumChatFormatting.GOLD + "Obtained (" + obtainedLegs.size() + ")\n");
             for (int i = 0; i < obtainedLegs.size(); i++) {
                 final String s = EnumChatFormatting.GREEN + obtainedLegs.get(i) + (i == obtainedLegs.size() - 1 ? "" : ", ");
-                imsg.appendSibling(new ChatComponentText(s));
+                imsg.appendText(s);
             }
         }
         if (!missingLegs.isEmpty()) {
-            imsg.appendSibling(new ChatComponentText("\n\n" + EnumChatFormatting.GOLD + "Missing (" + missingLegs.size() + ")\n"));
+            imsg.appendText("\n\n" + EnumChatFormatting.GOLD + "Missing (" + missingLegs.size() + ")\n");
             for (int i = 0; i < missingLegs.size(); i++) {
                 final String s = EnumChatFormatting.GREEN + missingLegs.get(i) + (i == missingLegs.size() - 1 ? "" : ", ");
-                imsg.appendSibling(new ChatComponentText(s));
+                imsg.appendText(s);
             }
         }
-        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
+        imsg.appendText(EnumChatFormatting.AQUA + ChatUtil.bar());
         return imsg;
     }
 

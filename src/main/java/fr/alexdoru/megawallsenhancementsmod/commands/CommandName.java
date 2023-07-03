@@ -52,7 +52,7 @@ public class CommandName extends MyAbstractCommand {
                             .setChatStyle(new ChatStyle()
                                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, namesMC_URL))
                                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + namesMC_URL)))))
-                    .appendSibling(new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar()));
+                    .appendText(EnumChatFormatting.BLUE + ChatUtil.bar());
             ChatUtil.addChatMessage(imsg);
 
             return null;

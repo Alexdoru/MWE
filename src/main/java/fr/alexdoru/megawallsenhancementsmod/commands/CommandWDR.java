@@ -307,9 +307,9 @@ public class CommandWDR extends MyAbstractCommand {
             ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagNoCheaters() +
                     EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : ""))
                     .appendSibling(WarningMessagesHandler.createPlayerNameWithHoverText(formattedPlayername, playername, uuid, newreport, EnumChatFormatting.RED)[0])
-                    .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " with a " + EnumChatFormatting.YELLOW +
+                    .appendText(EnumChatFormatting.GREEN + " with a " + EnumChatFormatting.YELLOW +
                             "timestamp" + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
-                            + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : "."))));
+                            + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : ".")));
             return;
         }
 
