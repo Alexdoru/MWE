@@ -198,8 +198,8 @@ public class CommandSquad extends MyAbstractCommand {
         for (final Entry<String, String> entry : SquadHandler.getSquad().entrySet()) {
             final String displayname = entry.getKey();
             final String squadname = entry.getValue();
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + "- " + EnumChatFormatting.GOLD + displayname
-                    + (displayname.equals(squadname) ? "" : EnumChatFormatting.GREEN + " renamed as : " + EnumChatFormatting.GOLD + entry.getValue()) + "\n"));
+            imsg.appendText(EnumChatFormatting.DARK_GRAY + "- " + EnumChatFormatting.GOLD + displayname
+                    + (displayname.equals(squadname) ? "" : EnumChatFormatting.GREEN + " renamed as : " + EnumChatFormatting.GOLD + entry.getValue()) + "\n");
         }
         ChatUtil.addChatMessage(imsg);
     }

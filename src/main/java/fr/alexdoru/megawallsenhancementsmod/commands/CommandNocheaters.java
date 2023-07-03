@@ -404,16 +404,16 @@ class CreateReportLineTask implements Callable<IChatComponent> {
                         final long latestActivityTime = logindata.getLatestActivityTime();
                         final String latestActivity = logindata.getLatestActivity();
                         final boolean isProbBanned = isProbBanned(latestActivityTime);
-                        ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " " + latestActivity + " " + (isProbBanned ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.YELLOW) + DateUtil.timeSince(latestActivityTime)));
+                        ismgStatus.appendText(EnumChatFormatting.GRAY + " " + latestActivity + " " + (isProbBanned ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.YELLOW) + DateUtil.timeSince(latestActivityTime));
 
                     } else if (logindata.isOnline()) { // player is online
 
-                        ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + "    Online"));
+                        ismgStatus.appendText(EnumChatFormatting.GREEN + "    Online");
 
                     } else { // print lastlogout
 
                         final boolean isProbBanned = isProbBanned(logindata.getLastLogout());
-                        ismgStatus.appendSibling(new ChatComponentText(EnumChatFormatting.GRAY + " Lastlogout " + (isProbBanned ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.YELLOW) + DateUtil.timeSince(logindata.getLastLogout())));
+                        ismgStatus.appendText(EnumChatFormatting.GRAY + " Lastlogout " + (isProbBanned ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.YELLOW) + DateUtil.timeSince(logindata.getLastLogout()));
 
                     }
 
@@ -431,7 +431,7 @@ class CreateReportLineTask implements Callable<IChatComponent> {
 
             }
 
-            return imsg.appendSibling(new ChatComponentText("\n"));
+            return imsg.appendText("\n");
 
         } catch (ApiException e) {
             return new ChatComponentText(EnumChatFormatting.RED + e.getMessage() + "\n");

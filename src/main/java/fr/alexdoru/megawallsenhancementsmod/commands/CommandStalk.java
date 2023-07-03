@@ -85,19 +85,19 @@ class StalkTask implements Callable<String> {
                     ChatUtil.addChatMessage(
                             new ChatComponentText(ChatUtil.getTagMW())
                                     .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
-                                    .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + apistatus.getGamemode() + " " + apistatus.getMode() +
+                                    .appendText(EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + apistatus.getGamemode() + " " + apistatus.getMode() +
                                             (apistatus.getMap() == null ? "" : (EnumChatFormatting.GREEN + " on " + EnumChatFormatting.YELLOW + apistatus.getMap()))
                                             + EnumChatFormatting.GREEN + " playing "
                                             + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass())
-                                            + EnumChatFormatting.GREEN + " with the " + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwskin() == null ? "?" : mwclassskindata.getCurrentmwskin()) + EnumChatFormatting.GREEN + " skin."))
+                                            + EnumChatFormatting.GREEN + " with the " + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwskin() == null ? "?" : mwclassskindata.getCurrentmwskin()) + EnumChatFormatting.GREEN + " skin.")
                     );
 
                 } else { // player isn't in MW
                     ChatUtil.addChatMessage(
                             new ChatComponentText(ChatUtil.getTagMW())
                                     .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
-                                    .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + apistatus.getGamemode() + " " + apistatus.getMode() +
-                                            (apistatus.getMap() == null ? "" : (EnumChatFormatting.GREEN + " on " + EnumChatFormatting.YELLOW + apistatus.getMap()))))
+                                    .appendText(EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + apistatus.getGamemode() + " " + apistatus.getMode() +
+                                            (apistatus.getMap() == null ? "" : (EnumChatFormatting.GREEN + " on " + EnumChatFormatting.YELLOW + apistatus.getMap())))
                     );
                 }
 
@@ -119,8 +119,8 @@ class StalkTask implements Callable<String> {
 
                     ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW())
                             .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
-                            .appendSibling(new ChatComponentText(EnumChatFormatting.RED + " is completely hiding their online status from the API."
-                                    + EnumChatFormatting.DARK_GRAY + " It happens for staff members.")));
+                            .appendText(EnumChatFormatting.RED + " is completely hiding their online status from the API."
+                                    + EnumChatFormatting.DARK_GRAY + " It happens for staff members."));
                     return null;
 
                 } else if (logindata.isHidingFromAPI()) { // player is blocking their API
@@ -132,18 +132,18 @@ class StalkTask implements Callable<String> {
                     final MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
                     final IChatComponent imsg = new ChatComponentText(ChatUtil.getTagMW())
                             .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
-                            .appendSibling(new ChatComponentText(EnumChatFormatting.RED + " is blocking their API."));
+                            .appendText(EnumChatFormatting.RED + " is blocking their API.");
 
                     if (latestActivityTime != 0 && latestActivity != null) {
-                        imsg.appendSibling(new ChatComponentText(EnumChatFormatting.RED + " Latest activity : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(latestActivityTime) + EnumChatFormatting.GRAY + " ago " + latestActivity + EnumChatFormatting.RED + "."));
+                        imsg.appendText(EnumChatFormatting.RED + " Latest activity : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(latestActivityTime) + EnumChatFormatting.GRAY + " ago " + latestActivity + EnumChatFormatting.RED + ".");
                     }
 
                     if (ScoreboardTracker.isMWEnvironement) {
-                        imsg.appendSibling(new ChatComponentText(
+                        imsg.appendText(
                                 EnumChatFormatting.GREEN + " Selected class : "
                                         + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass())
                                         + EnumChatFormatting.GREEN + " with the " + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwskin() == null ? "?" : mwclassskindata.getCurrentmwskin()) + EnumChatFormatting.GREEN + " skin."
-                        ));
+                        );
                     }
 
                     ChatUtil.addChatMessage(imsg);
@@ -156,18 +156,18 @@ class StalkTask implements Callable<String> {
                         final MegaWallsClassSkinData mwclassskindata = new MegaWallsClassSkinData(playerdata.getPlayerData());
                         ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW())
                                 .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
-                                .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType()
+                                .appendText(EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType()
                                         + EnumChatFormatting.GREEN + " playing "
                                         + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwclass() == null ? "?" : mwclassskindata.getCurrentmwclass())
                                         + EnumChatFormatting.GREEN + " with the " + EnumChatFormatting.YELLOW + (mwclassskindata.getCurrentmwskin() == null ? "?" : mwclassskindata.getCurrentmwskin()) + EnumChatFormatting.GREEN + " skin."
                                         + EnumChatFormatting.DARK_GRAY + " (This player hides their session.)" + "\n"
-                                )));
+                                ));
 
                     } else { // online not in MW
                         ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW())
                                 .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
-                                .appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType()
-                                        + EnumChatFormatting.GREEN + "." + EnumChatFormatting.DARK_GRAY + " (This player hides their session.)")));
+                                .appendText(EnumChatFormatting.GREEN + " is in " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType()
+                                        + EnumChatFormatting.GREEN + "." + EnumChatFormatting.DARK_GRAY + " (This player hides their session.)"));
                     }
                     return null;
 
@@ -175,8 +175,8 @@ class StalkTask implements Callable<String> {
                     final String offlinesince = DateUtil.timeSince(logindata.getLastLogout());
                     ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW())
                             .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
-                            .appendSibling(new ChatComponentText(EnumChatFormatting.RED + " has been offline for " + EnumChatFormatting.YELLOW + offlinesince
-                                    + EnumChatFormatting.RED + "." + (logindata.getMostRecentGameType().equals("?") ? "" : EnumChatFormatting.RED + " Last seen in : " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType()))));
+                            .appendText(EnumChatFormatting.RED + " has been offline for " + EnumChatFormatting.YELLOW + offlinesince
+                                    + EnumChatFormatting.RED + "." + (logindata.getMostRecentGameType().equals("?") ? "" : EnumChatFormatting.RED + " Last seen in : " + EnumChatFormatting.YELLOW + logindata.getMostRecentGameType())));
                     return null;
                 }
 

@@ -222,15 +222,15 @@ public class MegaWallsClassStats {
         };
 
         final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar() + "\n")
-                .appendSibling(new ChatComponentText(ChatUtil.centerLine(formattedname + EnumChatFormatting.GOLD + " - Game stats - " + classnameuppercase) + "\n"))
-                .appendSibling(new ChatComponentText(ChatUtil.centerLine(EnumChatFormatting.GREEN + "Game Duration : " + EnumChatFormatting.GOLD + gameDuration)));
+                .appendText(ChatUtil.centerLine(formattedname + EnumChatFormatting.GOLD + " - Game stats - " + classnameuppercase) + "\n")
+                .appendText(ChatUtil.centerLine(EnumChatFormatting.GREEN + "Game Duration : " + EnumChatFormatting.GOLD + gameDuration));
 
         if (games_played != 1) {
-            imsg.appendSibling(new ChatComponentText("\n" + ChatUtil.centerLine(EnumChatFormatting.DARK_RED + "These stats are for " + games_played + " games, not one.")));
+            imsg.appendText("\n" + ChatUtil.centerLine(EnumChatFormatting.DARK_RED + "These stats are for " + games_played + " games, not one."));
         }
 
-        imsg.appendSibling(new ChatComponentText("\n" + "\n" + ChatUtil.alignText(matrix1)))
-                .appendSibling(new ChatComponentText(EnumChatFormatting.BLUE + ChatUtil.bar()));
+        imsg.appendText("\n" + "\n" + ChatUtil.alignText(matrix1));
+        imsg.appendText(EnumChatFormatting.BLUE + ChatUtil.bar());
         return imsg;
     }
 
@@ -294,7 +294,7 @@ public class MegaWallsClassStats {
                     .appendSibling(new ChatComponentText("\n" + "\n" + ChatUtil.alignText(matrix1) + "\n")
                             .setChatStyle(new ChatStyle()
                                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GRAY + "Disclaimer : Class Final K/D Ratio's are not accurate for some players, as final-deaths for classes weren't tracked prior to the Mythic update.")))))
-                    .appendSibling(new ChatComponentText(ChatUtil.alignText(matrix2) + "\n"
+                    .appendText(ChatUtil.alignText(matrix2) + "\n"
                             + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Classpoints : " + EnumChatFormatting.GOLD + classpoints + " "
                             + EnumChatFormatting.GREEN + " Playtime (approx.) : " + EnumChatFormatting.GOLD + String.format("%.2f", classname_time_played / 60f) + "h") + "\n"
                             + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Kit : "
@@ -306,7 +306,7 @@ public class MegaWallsClassStats {
                             + EnumChatFormatting.GREEN + "Prestige : " + (prestige == 0 ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.GOLD) + ChatUtil.intToRoman(prestige) + " "
                             + EnumChatFormatting.GREEN + "Echest rows : " + (enderchest_rows == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + enderchest_rows) + "\n"
                             + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Selected skin : " + EnumChatFormatting.GOLD + (chosen_skin_class == null ? (classnameuppercase == null ? "None" : classnameuppercase) : chosen_skin_class)) + "\n"
-                            + EnumChatFormatting.AQUA + ChatUtil.bar()));
+                            + EnumChatFormatting.AQUA + ChatUtil.bar());
 
         } else {
 

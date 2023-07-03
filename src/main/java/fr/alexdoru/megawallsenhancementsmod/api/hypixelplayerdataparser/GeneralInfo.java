@@ -78,7 +78,7 @@ public class GeneralInfo extends LoginData {
 
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, this.getdisplayname(), " - General info"))
 
-                .appendSibling(new ChatComponentText("\n" + "\n"
+                .appendText("\n" + "\n"
 
                         + (guildname == null ? "" : ChatUtil.centerLine(EnumChatFormatting.GREEN + "Guild : " + EnumChatFormatting.GOLD + guildname) + "\n")
 
@@ -94,13 +94,13 @@ public class GeneralInfo extends LoginData {
                         + (this.isStaffonHypixel() || this.isHidingFromAPI() ? "" : EnumChatFormatting.GREEN + "Status : " + (this.isOnline() ? EnumChatFormatting.DARK_GREEN + "Online" :
                         EnumChatFormatting.RED + "Offline " + EnumChatFormatting.DARK_GRAY + "for " + EnumChatFormatting.YELLOW + DateUtil.timeSince(this.getLastLogout())))) + "\n"
 
-                        + (this.mcVersionRp == null ? "" : ChatUtil.centerLine(EnumChatFormatting.GREEN + "Minecraft version : " + EnumChatFormatting.GOLD + this.mcVersionRp) + "\n")));
+                        + (this.mcVersionRp == null ? "" : ChatUtil.centerLine(EnumChatFormatting.GREEN + "Minecraft version : " + EnumChatFormatting.GOLD + this.mcVersionRp) + "\n"));
 
         String str = "";
 
         str += (this.DISCORD != null ? "Discord " : "") + (this.TWITCH != null ? "Twitch " : "") + (this.TWITTER != null ? "Twitter " : "") + (this.YOUTUBE != null ? "Youtube" : "");
 
-        msg.appendSibling(new ChatComponentText(ChatUtil.getSeparatorToCenter(str)));
+        msg.appendText(ChatUtil.getSeparatorToCenter(str));
 
         if (this.DISCORD != null) {
 
@@ -142,7 +142,7 @@ public class GeneralInfo extends LoginData {
 
         }
 
-        msg.appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
+        msg.appendText(EnumChatFormatting.AQUA + ChatUtil.bar());
 
 
         return msg;

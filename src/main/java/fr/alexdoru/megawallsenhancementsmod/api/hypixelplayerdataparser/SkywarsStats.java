@@ -239,16 +239,16 @@ public class SkywarsStats {
 
         return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(levelFormatted == null ? formattedName : formattedName + EnumChatFormatting.GOLD + " - " + levelFormatted, playername, " - Skywars stats"))
-                .appendSibling(new ChatComponentText("\n" + "\n"))
-                .appendSibling(new ChatComponentText(ChatUtil.centerLine(formatSkywarsLevel(skywars_experience)) + "\n" + "\n"))
-                .appendSibling(new ChatComponentText(ChatUtil.alignText(matrix) + "\n"))
-                .appendSibling(new ChatComponentText(
+                .appendText("\n" + "\n")
+                .appendText(ChatUtil.centerLine(formatSkywarsLevel(skywars_experience)) + "\n" + "\n")
+                .appendText(ChatUtil.alignText(matrix) + "\n")
+                .appendText(
                         ChatUtil.centerLine(EnumChatFormatting.GREEN + "Coins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(coins)
                                 + EnumChatFormatting.GREEN + " Souls : " + EnumChatFormatting.AQUA + ChatUtil.formatInt(souls)) + "\n"
                                 + ChatUtil.centerLine(EnumChatFormatting.GREEN + " Playtime : " + EnumChatFormatting.GOLD + String.format("%.2f", time_played / 3600f) + "h"
                                 + EnumChatFormatting.GREEN + " Heads : " + EnumChatFormatting.DARK_PURPLE + ChatUtil.formatInt(heads)
-                                + EnumChatFormatting.GREEN + " Shards : " + EnumChatFormatting.AQUA + ChatUtil.formatInt(shard))))
-                .appendSibling(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar()));
+                                + EnumChatFormatting.GREEN + " Shards : " + EnumChatFormatting.AQUA + ChatUtil.formatInt(shard)))
+                .appendText(EnumChatFormatting.AQUA + ChatUtil.bar());
 
     }
 

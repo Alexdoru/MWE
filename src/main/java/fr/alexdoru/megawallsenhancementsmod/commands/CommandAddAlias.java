@@ -131,7 +131,7 @@ public class CommandAddAlias extends MyAbstractCommand {
         MultithreadingUtil.addTaskToQueue(() -> {
             final IChatComponent imsgbody = new ChatComponentText("");
             for (final Future<IChatComponent> iChatComponentFuture : futureList) {
-                imsgbody.appendSibling(iChatComponentFuture.get()).appendSibling(new ChatComponentText("\n"));
+                imsgbody.appendSibling(iChatComponentFuture.get()).appendText("\n");
             }
             ChatUtil.printIChatList(
                     "Alias list",
