@@ -160,11 +160,9 @@ public class CommandAddAlias extends MyAbstractCommand {
 
         @Override
         public IChatComponent call() {
-
             if (uuid.length() <= 16) {
                 return new ChatComponentText(EnumChatFormatting.GOLD + uuid + EnumChatFormatting.WHITE + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.WHITE + ")");
             }
-
             try {
                 final HypixelPlayerData playerdata = new HypixelPlayerData(uuid);
                 final LoginData logindata = new LoginData(playerdata.getPlayerData());
@@ -172,7 +170,6 @@ public class CommandAddAlias extends MyAbstractCommand {
             } catch (ApiException e) {
                 return new ChatComponentText(EnumChatFormatting.GOLD + uuid + EnumChatFormatting.WHITE + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.WHITE + ")");
             }
-
         }
 
     }
@@ -235,18 +232,18 @@ public class CommandAddAlias extends MyAbstractCommand {
         });
     }
 
-    private void addAlias(String uuid, String playername, String alias, String formatedName) {
-        if (formatedName == null) {
-            formatedName = playername;
+    private void addAlias(String uuid, String playername, String alias, String formattedName) {
+        if (formattedName == null) {
+            formattedName = playername;
         }
         if (uuid == null) {
             AliasData.putAlias(playername, alias);
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Added alias for the " + EnumChatFormatting.DARK_PURPLE + "nicked " + EnumChatFormatting.GREEN + "player "
-                    + EnumChatFormatting.GOLD + formatedName + EnumChatFormatting.WHITE + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.WHITE + ")");
+                    + EnumChatFormatting.GOLD + formattedName + EnumChatFormatting.WHITE + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.WHITE + ")");
         } else {
             AliasData.putAlias(uuid.replace("-", ""), alias);
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Added alias for "
-                    + EnumChatFormatting.GOLD + formatedName + EnumChatFormatting.WHITE + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.WHITE + ")");
+                    + EnumChatFormatting.GOLD + formattedName + EnumChatFormatting.WHITE + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.WHITE + ")");
         }
         NameUtil.updateMWPlayerDataAndEntityData(playername, false);
     }
@@ -290,9 +287,9 @@ public class CommandAddAlias extends MyAbstractCommand {
         });
     }
 
-    private void removeAlias(String uuid, String playername, String formatedName) {
-        if (formatedName == null) {
-            formatedName = playername;
+    private void removeAlias(String uuid, String playername, String formattedName) {
+        if (formattedName == null) {
+            formattedName = playername;
         }
         if (uuid == null) {
             AliasData.removeAlias(playername);
@@ -300,7 +297,7 @@ public class CommandAddAlias extends MyAbstractCommand {
             AliasData.removeAlias(uuid.replace("-", ""));
         }
         NameUtil.updateMWPlayerDataAndEntityData(playername, false);
-        ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Removed alias for " + EnumChatFormatting.GOLD + formatedName);
+        ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Removed alias for " + EnumChatFormatting.GOLD + formattedName);
     }
 
 }
