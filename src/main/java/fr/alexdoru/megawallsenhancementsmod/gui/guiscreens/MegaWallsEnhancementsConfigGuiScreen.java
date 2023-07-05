@@ -145,10 +145,6 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
             chatHeadTooltip.add(EnumChatFormatting.GREEN + "Chat Heads");
             chatHeadTooltip.add("");
             chatHeadTooltip.add(EnumChatFormatting.GRAY + "Renders heads of players in front of chat messages");
-            if (ASMLoadingPlugin.isPatcherLoaded()) {
-                chatHeadTooltip.add("");
-                chatHeadTooltip.add(EnumChatFormatting.YELLOW + "If you are using HUD Caching from Patcher, the heads might not fade away properly");
-            }
             this.buttonList.add(new FancyGuiButton(
                     xPosRight, getButtonYPos(5),
                     () -> "Chat Heads : " + getSuffix(ConfigHandler.chatHeads),

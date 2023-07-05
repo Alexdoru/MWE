@@ -22,7 +22,7 @@ public class GuiNewChatTransformer_ChatHeads implements IMyClassTransformer {
             status.skipTransformation();
             return;
         }
-        status.setInjectionPoints(4);
+        status.setInjectionPoints(3);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.GUINEWCHAT$DRAWCHAT)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
@@ -30,27 +30,16 @@ public class GuiNewChatTransformer_ChatHeads implements IMyClassTransformer {
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 10)); // chatline
                         list.add(new VarInsnNode(ILOAD, 14)); // l1 (alpha)
+                        list.add(new VarInsnNode(ILOAD, 15)); // int i2
+                        list.add(new VarInsnNode(ILOAD, 16)); // int j2
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
                                 getHookClass("GuiNewChatHook_ChatHeads"),
-                                "preBlendCall",
-                                "(L" + ClassMapping.CHATLINE + ";I)V",
+                                "preRenderStringCall",
+                                "(L" + ClassMapping.CHATLINE + ";III)V",
                                 false
                         ));
-                        methodNode.instructions.insertBefore(insnNode, list);
-                        status.addInjection();
-                        final InsnList list1 = new InsnList();
-                        list1.add(new VarInsnNode(ALOAD, 10)); // chatline
-                        list1.add(new VarInsnNode(ILOAD, 15)); // int i2
-                        list1.add(new VarInsnNode(ILOAD, 16)); // int j2
-                        list1.add(new MethodInsnNode(
-                                INVOKESTATIC,
-                                getHookClass("GuiNewChatHook_ChatHeads"),
-                                "postBlendCall",
-                                "(L" + ClassMapping.CHATLINE + ";II)V",
-                                false
-                        ));
-                        methodNode.instructions.insert(insnNode, list1);
+                        methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
                     } else if (checkMethodInsnNode(insnNode, MethodMapping.FONTRENDERER$DRAWSTRINGWITHSHADOW)) {
                         final AbstractInsnNode nextNode = insnNode.getNext();
