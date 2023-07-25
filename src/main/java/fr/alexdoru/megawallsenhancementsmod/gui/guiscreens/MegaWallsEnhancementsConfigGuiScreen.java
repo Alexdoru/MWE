@@ -82,11 +82,19 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
         prestige5Tooltip.add(EnumChatFormatting.GRAY + "Type " + EnumChatFormatting.YELLOW + "/mwenhancements clearcache" + EnumChatFormatting.GRAY + " to force update the data.");
         prestige5Tooltip.add("");
         prestige5Tooltip.add(EnumChatFormatting.GOLD + "Prestige Colors :");
-        prestige5Tooltip.add(EnumChatFormatting.GOLD + "10000 classpoints : " + EnumChatFormatting.DARK_PURPLE + "[TAG]");
-        prestige5Tooltip.add(EnumChatFormatting.GOLD + "13000 classpoints : " + EnumChatFormatting.DARK_BLUE + "[TAG]");
-        prestige5Tooltip.add(EnumChatFormatting.GOLD + "19000 classpoints : " + EnumChatFormatting.DARK_AQUA + "[TAG]");
-        prestige5Tooltip.add(EnumChatFormatting.GOLD + "28000 classpoints : " + EnumChatFormatting.DARK_GREEN + "[TAG]");
-        prestige5Tooltip.add(EnumChatFormatting.GOLD + "40000 classpoints : " + EnumChatFormatting.DARK_RED + "[TAG]");
+        prestige5Tooltip.add(EnumChatFormatting.GOLD + " 6000 classpoints : " + EnumChatFormatting.AQUA + "[TAG]");
+        prestige5Tooltip.add(EnumChatFormatting.GOLD + " 8000 classpoints : " + EnumChatFormatting.LIGHT_PURPLE + "[TAG]");
+        prestige5Tooltip.add(EnumChatFormatting.GOLD + " 10000 classpoints : " + EnumChatFormatting.RED + "[TAG]");
+        prestige5Tooltip.add(EnumChatFormatting.GOLD + " 12500 classpoints : " + EnumChatFormatting.WHITE + "[TAG]");
+        prestige5Tooltip.add(EnumChatFormatting.GOLD + " 15000 classpoints : " + EnumChatFormatting.BLUE + "[TAG]");
+        prestige5Tooltip.add(EnumChatFormatting.GOLD + " 20000 classpoints : " + EnumChatFormatting.YELLOW + "[TAG]");
+        prestige5Tooltip.add(EnumChatFormatting.GOLD + " 25000 classpoints : " + EnumChatFormatting.DARK_GREEN + "[TAG]");
+        prestige5Tooltip.add(EnumChatFormatting.GOLD + " 30000 classpoints : " + EnumChatFormatting.DARK_AQUA + "[TAG]");
+        prestige5Tooltip.add(EnumChatFormatting.GOLD + " 35000 classpoints : " + EnumChatFormatting.DARK_PURPLE + "[TAG]");
+        prestige5Tooltip.add(EnumChatFormatting.GOLD + " 40000 classpoints : " + EnumChatFormatting.DARK_RED + "[TAG]");
+        prestige5Tooltip.add(EnumChatFormatting.GOLD + " 50000 classpoints : " + EnumChatFormatting.DARK_GRAY + "[TAG]");
+        prestige5Tooltip.add(EnumChatFormatting.GOLD + " 65000 classpoints : " + EnumChatFormatting.DARK_BLUE + "[TAG]");
+        prestige5Tooltip.add(EnumChatFormatting.GOLD + " 80000 classpoints : " + EnumChatFormatting.BLACK + "[TAG]");
         this.buttonList.add(new FancyGuiButton(
                 xPosLeft, getButtonYPos(4),
                 () -> "Prestige 5 tags : " + getSuffix(ConfigHandler.prestigeV),
