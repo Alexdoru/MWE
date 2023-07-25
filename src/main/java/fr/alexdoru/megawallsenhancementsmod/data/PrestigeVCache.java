@@ -5,6 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.cache.CachedHypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassStats;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
+import fr.alexdoru.megawallsenhancementsmod.utils.ColorUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
@@ -60,7 +61,7 @@ public class PrestigeVCache {
     }
 
     private static void createClassData(String uuid, MWClass mwClass, PlayerPrestigeData playerPrestigeData, String playername) {
-        playerPrestigeData.addClass(mwClass, 0);
+        playerPrestigeData.addClass(mwClass, 2_000);
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
                 final MegaWallsClassStats mwclassstats = new MegaWallsClassStats(CachedHypixelPlayerData.getPlayerData(uuid), mwClass.className);
@@ -70,33 +71,21 @@ public class PrestigeVCache {
                 });
             } catch (ApiException e) {
                 Minecraft.getMinecraft().addScheduledTask(() ->
-                        playerPrestigeData.addClass(mwClass, 0)
+                        playerPrestigeData.addClass(mwClass, 2_000)
                 );
             }
             return null;
         });
     }
 
-}
+    private static class PlayerPrestigeData {
 
-class PlayerPrestigeData {
+        private final HashMap<MWClass, EnumChatFormatting> playersPrestigeColors = new HashMap<>();
 
-    public final HashMap<MWClass, EnumChatFormatting> playersPrestigeColors = new HashMap<>();
-
-    public void addClass(MWClass mwClass, int classpoints) {
-        if (classpoints < 10000) {
-            playersPrestigeColors.put(mwClass, EnumChatFormatting.GOLD);
-        } else if (classpoints < 13000) {
-            playersPrestigeColors.put(mwClass, EnumChatFormatting.DARK_PURPLE);
-        } else if (classpoints < 19000) {
-            playersPrestigeColors.put(mwClass, EnumChatFormatting.DARK_BLUE);
-        } else if (classpoints < 28000) {
-            playersPrestigeColors.put(mwClass, EnumChatFormatting.DARK_AQUA);
-        } else if (classpoints < 40000) {
-            playersPrestigeColors.put(mwClass, EnumChatFormatting.DARK_GREEN);
-        } else {
-            playersPrestigeColors.put(mwClass, EnumChatFormatting.DARK_RED);
+        private void addClass(MWClass mwClass, int classpoints) {
+            this.playersPrestigeColors.put(mwClass, ColorUtil.getPrestigeVColor(classpoints));
         }
+
     }
 
 }
