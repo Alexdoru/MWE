@@ -5,7 +5,6 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 
 public class SkywarsStats {
 
@@ -191,7 +190,7 @@ public class SkywarsStats {
                 + EnumChatFormatting.DARK_GRAY + " [" + EnumChatFormatting.AQUA + str1 + EnumChatFormatting.GRAY + str2 + EnumChatFormatting.DARK_GRAY + "]";
     }
 
-    public IChatComponent getFormattedMessage(String formattedName, String playername) {
+    public void printMessage(String formattedName, String playername) {
 
         final String[][] matrix = {
                 {
@@ -237,7 +236,7 @@ public class SkywarsStats {
                 }
         };
 
-        return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
+        ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(levelFormatted == null ? formattedName : formattedName + EnumChatFormatting.GOLD + " - " + levelFormatted, playername, " - Skywars stats"))
                 .appendText("\n" + "\n")
                 .appendText(ChatUtil.centerLine(formatSkywarsLevel(skywars_experience)) + "\n" + "\n")
@@ -248,7 +247,7 @@ public class SkywarsStats {
                                 + ChatUtil.centerLine(EnumChatFormatting.GREEN + " Playtime : " + EnumChatFormatting.GOLD + String.format("%.2f", time_played / 3600f) + "h"
                                 + EnumChatFormatting.GREEN + " Heads : " + EnumChatFormatting.DARK_PURPLE + ChatUtil.formatInt(heads)
                                 + EnumChatFormatting.GREEN + " Shards : " + EnumChatFormatting.AQUA + ChatUtil.formatInt(shard)))
-                .appendText(EnumChatFormatting.AQUA + ChatUtil.bar());
+                .appendText(EnumChatFormatting.AQUA + ChatUtil.bar()));
 
     }
 

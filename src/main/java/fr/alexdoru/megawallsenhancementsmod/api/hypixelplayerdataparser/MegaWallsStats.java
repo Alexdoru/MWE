@@ -172,7 +172,7 @@ public class MegaWallsStats {
         return classesdata;
     }
 
-    public IChatComponent getClassPointsMessage(String formattedname, String playername) {
+    public void printClassPointsMessage(String formattedname, String playername) {
         final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls Classpoints\n\n"));
         for (final Map.Entry<String, Integer[]> entry : classpointsMap.entrySet()) {
@@ -207,10 +207,10 @@ public class MegaWallsStats {
                 + EnumChatFormatting.GREEN + ", "
                 + EnumChatFormatting.GOLD + ChatUtil.formatInt(coinsMissing) + " coins\n");
         imsg.appendText(EnumChatFormatting.AQUA + ChatUtil.bar());
-        return imsg;
+        ChatUtil.addChatMessage(imsg);
     }
 
-    public IChatComponent getGeneralStatsMessage(String formattedname, String playername) {
+    public void printGeneralStatsMessage(String formattedname, String playername) {
 
         final String[][] matrix1 = {
                 {
@@ -270,7 +270,7 @@ public class MegaWallsStats {
                 }
         };
 
-        return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
+        ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls stats"))
                 .appendText("\n" + "\n" + ChatUtil.alignText(matrix1) + "\n" + ChatUtil.alignText(matrix2) + "\n")
                 .appendText(ChatUtil.centerLine(EnumChatFormatting.GREEN + "Prestiges : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(nbprestiges) + " "
@@ -281,10 +281,10 @@ public class MegaWallsStats {
                         .setChatStyle(new ChatStyle()
                                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for this class' stats")))
                                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + (chosen_class == null ? "None" : chosen_class)))))
-                .appendText(EnumChatFormatting.AQUA + ChatUtil.bar());
+                .appendText(EnumChatFormatting.AQUA + ChatUtil.bar()));
     }
 
-    public IChatComponent getLegendaryMessage(String formattedname, String playername) {
+    public void printLegendaryMessage(String formattedname, String playername) {
         final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls Legendary skins\n"));
         final List<String> obtainedLegs = new ArrayList<>();
@@ -311,7 +311,7 @@ public class MegaWallsStats {
             }
         }
         imsg.appendText(EnumChatFormatting.AQUA + ChatUtil.bar());
-        return imsg;
+        ChatUtil.addChatMessage(imsg);
     }
 
 }

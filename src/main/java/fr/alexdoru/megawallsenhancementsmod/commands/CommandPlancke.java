@@ -75,7 +75,7 @@ public class CommandPlancke extends MyAbstractCommand {
 
                 final HypixelGuild hypixelGuild = new HypixelGuild(uuid);
                 final String guildTag = hypixelGuild.getFormattedGuildTag();
-                ChatUtil.addChatMessage(generalstats.getFormattedMessage(formattedName + (guildTag == null ? "" : guildTag), hypixelGuild.getGuildName()));
+                generalstats.printMessage(formattedName + (guildTag == null ? "" : guildTag), hypixelGuild.getGuildName());
 
             } else {
 
@@ -85,8 +85,7 @@ public class CommandPlancke extends MyAbstractCommand {
 
                 } else if (args[1].equalsIgnoreCase("bsg") || args[1].equalsIgnoreCase("blitz")) { // general stats for blitz survival games
 
-                    final BlitzStats bsgstats = new BlitzStats(playerdata);
-                    ChatUtil.addChatMessage(bsgstats.getFormattedMessage(formattedName, playername));
+                    new BlitzStats(playerdata).printMessage(formattedName, playername);
 
                 } else if (args[1].equalsIgnoreCase("duel") || args[1].equalsIgnoreCase("duels")) { // general stats for duels
 
@@ -96,20 +95,17 @@ public class CommandPlancke extends MyAbstractCommand {
 
                     if (args.length == 2) {
 
-                        final MegaWallsStats mwstats = new MegaWallsStats(playerdata);
-                        ChatUtil.addChatMessage(mwstats.getGeneralStatsMessage(formattedName, playername));
+                        new MegaWallsStats(playerdata).printGeneralStatsMessage(formattedName, playername);
 
                     } else {
 
                         if (args[2].equalsIgnoreCase("cp") || args[2].equalsIgnoreCase("classpoint") || args[2].equalsIgnoreCase("classpoints")) {
 
-                            final MegaWallsStats mwstats = new MegaWallsStats(playerdata);
-                            ChatUtil.addChatMessage(mwstats.getClassPointsMessage(formattedName, playername));
+                            new MegaWallsStats(playerdata).printClassPointsMessage(formattedName, playername);
 
                         } else if (args[2].equalsIgnoreCase("leg") || args[2].equalsIgnoreCase("legendary") || args[2].equalsIgnoreCase("legendaries")) {
 
-                            final MegaWallsStats mwstats = new MegaWallsStats(playerdata);
-                            ChatUtil.addChatMessage(mwstats.getLegendaryMessage(formattedName, playername));
+                            new MegaWallsStats(playerdata).printLegendaryMessage(formattedName, playername);
 
                         } else {
 
@@ -118,8 +114,7 @@ public class CommandPlancke extends MyAbstractCommand {
                                 ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + args[2] + EnumChatFormatting.RED + " isn't a valid mega walls class name.");
                                 return null;
                             }
-                            final MegaWallsClassStats mwclassstats = new MegaWallsClassStats(playerdata, mwclass.className);
-                            ChatUtil.addChatMessage(mwclassstats.getFormattedMessage(formattedName, playername));
+                            new MegaWallsClassStats(playerdata, mwclass.className).printMessage(formattedName, playername);
 
                         }
 
@@ -127,8 +122,7 @@ public class CommandPlancke extends MyAbstractCommand {
 
                 } else if (args[1].equalsIgnoreCase("sw") || args[1].equalsIgnoreCase("skywars")) { // general stats for skywars
 
-                    final SkywarsStats skywarsStats = new SkywarsStats(playerdata);
-                    ChatUtil.addChatMessage(skywarsStats.getFormattedMessage(formattedName, playername));
+                    new SkywarsStats(playerdata).printMessage(formattedName, playername);
 
                 } else if (args[1].equalsIgnoreCase("tnt") || args[1].equalsIgnoreCase("tntgames")) { // general stats for tnt games
 
@@ -136,8 +130,7 @@ public class CommandPlancke extends MyAbstractCommand {
 
                 } else if (args[1].equalsIgnoreCase("uhc")) { // general stats for UHC champions
 
-                    final UHCStats uhcStats = new UHCStats(playerdata);
-                    ChatUtil.addChatMessage(uhcStats.getFormattedMessage(formattedName, playername));
+                    new UHCStats(playerdata).printMessage(formattedName, playername);
 
                 } else {
 

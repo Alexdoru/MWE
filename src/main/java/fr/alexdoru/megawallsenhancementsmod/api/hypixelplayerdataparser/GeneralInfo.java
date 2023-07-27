@@ -72,7 +72,7 @@ public class GeneralInfo extends LoginData {
 
     }
 
-    public IChatComponent getFormattedMessage(String formattedname, String guildname) {
+    public void printMessage(String formattedname, String guildname) {
 
         final IChatComponent msg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
 
@@ -143,9 +143,8 @@ public class GeneralInfo extends LoginData {
         }
 
         msg.appendText(EnumChatFormatting.AQUA + ChatUtil.bar());
+        ChatUtil.addChatMessage(msg);
 
-
-        return msg;
     }
 
     public float getNetworkLevel() {

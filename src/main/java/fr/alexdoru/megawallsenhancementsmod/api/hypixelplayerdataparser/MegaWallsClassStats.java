@@ -234,7 +234,7 @@ public class MegaWallsClassStats {
         return imsg;
     }
 
-    public IChatComponent getFormattedMessage(String formattedname, String playername) {
+    public void printMessage(String formattedname, String playername) {
 
         final String[][] matrix1 = {
                 {
@@ -317,7 +317,7 @@ public class MegaWallsClassStats {
 
         }
 
-        return msg;
+        ChatUtil.addChatMessage(msg);
 
     }
 
