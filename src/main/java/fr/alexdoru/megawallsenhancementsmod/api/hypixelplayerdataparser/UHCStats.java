@@ -5,7 +5,6 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 
 public class UHCStats {
 
@@ -101,7 +100,7 @@ public class UHCStats {
         }
     }
 
-    public IChatComponent getFormattedMessage(String formattedName, String playername) {
+    public void printMessage(String formattedName, String playername) {
 
         final String[][] matrix = {
                 {
@@ -141,11 +140,11 @@ public class UHCStats {
                 }
         };
 
-        return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
+        ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(EnumChatFormatting.GOLD + "[" + getStarLevel(score) + '\u272B' + "] " + formattedName, playername, " - UHC stats"))
                 .appendText("\n" + "\n" + ChatUtil.alignText(matrix) + "\n")
                 .appendText(ChatUtil.centerLine(EnumChatFormatting.GREEN + "Score : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(score) + EnumChatFormatting.GREEN + " Coins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(coins) + "\n"))
-                .appendText(EnumChatFormatting.AQUA + ChatUtil.bar());
+                .appendText(EnumChatFormatting.AQUA + ChatUtil.bar()));
     }
 
 }

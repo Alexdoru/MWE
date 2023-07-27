@@ -5,7 +5,6 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 
 public class BlitzStats {
 
@@ -51,7 +50,7 @@ public class BlitzStats {
 
     }
 
-    public IChatComponent getFormattedMessage(String formattedName, String playername) {
+    public void printMessage(String formattedName, String playername) {
 
         final String[][] matrix = {
                 {
@@ -68,7 +67,7 @@ public class BlitzStats {
                 }
         };
 
-        return new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
+        ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedName, playername, " - Blitz stats"))
                 .appendText("\n" + "\n")
                 .appendText(ChatUtil.alignText(matrix))
@@ -76,7 +75,7 @@ public class BlitzStats {
                 .appendText(defaultkit == null ? "" : ChatUtil.centerLine(EnumChatFormatting.GREEN + "Selected Kit : " + EnumChatFormatting.GOLD + defaultkit + "\n")
                         + ChatUtil.centerLine(EnumChatFormatting.GREEN + " Playtime : " + EnumChatFormatting.GOLD + String.format("%.2f", time_played / 3600f) + "h") + "\n"
                         + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Coins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(coins)))
-                .appendText(EnumChatFormatting.AQUA + ChatUtil.bar());
+                .appendText(EnumChatFormatting.AQUA + ChatUtil.bar()));
 
     }
 
