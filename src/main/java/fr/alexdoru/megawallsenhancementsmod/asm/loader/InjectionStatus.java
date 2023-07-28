@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.asm;
+package fr.alexdoru.megawallsenhancementsmod.asm.loader;
 
 public class InjectionStatus {
 

@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.mappings;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.ASMLoadingPlugin;
+import fr.alexdoru.megawallsenhancementsmod.asm.loader.ASMLoadingPlugin;
 
 import static fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping.*;
 
