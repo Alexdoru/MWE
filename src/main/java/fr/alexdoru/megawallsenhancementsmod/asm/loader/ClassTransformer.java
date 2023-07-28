@@ -24,7 +24,7 @@ import java.util.List;
 public class ClassTransformer implements IClassTransformer {
 
     private File outputDir = null;
-    private final HashMap<String, List<IMyClassTransformer>> transformerHashMap = new HashMap<>();
+    private final HashMap<String, List<MWETransformer>> transformerHashMap = new HashMap<>();
 
     /**
      * Register the IMyClassTransformer(s) here
@@ -84,10 +84,10 @@ public class ClassTransformer implements IClassTransformer {
             registerTransformer(new RendererLivingEntityTransformer_AprilFun());
     }
 
-    private void registerTransformer(IMyClassTransformer classTransformer) {
-        final List<IMyClassTransformer> list = transformerHashMap.get(classTransformer.getTargetClassName());
+    private void registerTransformer(MWETransformer classTransformer) {
+        final List<MWETransformer> list = transformerHashMap.get(classTransformer.getTargetClassName());
         if (list == null) {
-            final List<IMyClassTransformer> newList = new ArrayList<>();
+            final List<MWETransformer> newList = new ArrayList<>();
             newList.add(classTransformer);
             transformerHashMap.put(classTransformer.getTargetClassName(), newList);
         } else {
@@ -98,10 +98,10 @@ public class ClassTransformer implements IClassTransformer {
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         if (basicClass == null) return null;
-        final List<IMyClassTransformer> transformerList = transformerHashMap.get(transformedName);
+        final List<MWETransformer> transformerList = transformerHashMap.get(transformedName);
         if (transformerList == null) return basicClass;
         final long l = System.currentTimeMillis();
-        for (final IMyClassTransformer transformer : transformerList) {
+        for (final MWETransformer transformer : transformerList) {
             try {
                 final ClassNode classNode = new ClassNode();
                 final ClassReader classReader = new ClassReader(basicClass);

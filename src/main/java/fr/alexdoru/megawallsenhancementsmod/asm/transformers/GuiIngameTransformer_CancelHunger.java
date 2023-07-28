@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.loader.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.InjectionStatus;
+import fr.alexdoru.megawallsenhancementsmod.asm.loader.MWETransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.FieldMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -11,7 +11,7 @@ import org.objectweb.asm.tree.MethodNode;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class GuiIngameTransformer_CancelHunger implements IMyClassTransformer {
+public class GuiIngameTransformer_CancelHunger implements MWETransformer {
 
     @Override
     public String getTargetClassName() {

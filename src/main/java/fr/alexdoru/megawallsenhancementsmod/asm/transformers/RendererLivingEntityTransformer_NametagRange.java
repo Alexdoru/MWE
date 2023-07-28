@@ -1,14 +1,14 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.loader.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.InjectionStatus;
+import fr.alexdoru.megawallsenhancementsmod.asm.loader.MWETransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class RendererLivingEntityTransformer_NametagRange implements IMyClassTransformer {
+public class RendererLivingEntityTransformer_NametagRange implements MWETransformer {
 
     @Override
     public String getTargetClassName() {

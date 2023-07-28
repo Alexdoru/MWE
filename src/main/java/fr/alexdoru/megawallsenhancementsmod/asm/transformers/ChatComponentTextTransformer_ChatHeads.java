@@ -1,14 +1,14 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.ASMLoadingPlugin;
-import fr.alexdoru.megawallsenhancementsmod.asm.loader.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.InjectionStatus;
+import fr.alexdoru.megawallsenhancementsmod.asm.loader.MWETransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping;
 import org.objectweb.asm.tree.ClassNode;
 
 import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
 
-public class ChatComponentTextTransformer_ChatHeads implements IMyClassTransformer {
+public class ChatComponentTextTransformer_ChatHeads implements MWETransformer {
 
     @Override
     public String getTargetClassName() {
