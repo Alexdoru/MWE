@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.asm;
+package fr.alexdoru.megawallsenhancementsmod.asm.loader;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.*;
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods.OrangeSimpleMod_SprintRenderer;

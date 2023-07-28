@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.asm;
+package fr.alexdoru.megawallsenhancementsmod.asm.loader;
 
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.apache.logging.log4j.LogManager;
@@ -7,7 +7,11 @@ import org.apache.logging.log4j.Logger;
 import java.util.Map;
 
 @IFMLLoadingPlugin.MCVersion("1.8.9")
-@IFMLLoadingPlugin.TransformerExclusions({"fr.alexdoru.megawallsenhancementsmod.asm"})
+@IFMLLoadingPlugin.TransformerExclusions({
+        "fr.alexdoru.megawallsenhancementsmod.asm.loader",
+        "fr.alexdoru.megawallsenhancementsmod.asm.mappings",
+        "fr.alexdoru.megawallsenhancementsmod.asm.transformers",
+})
 public class ASMLoadingPlugin implements IFMLLoadingPlugin {
 
     public static final Logger logger = LogManager.getLogger("ASM MWE");
