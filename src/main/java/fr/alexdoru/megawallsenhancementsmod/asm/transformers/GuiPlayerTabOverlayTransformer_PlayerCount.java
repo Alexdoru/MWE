@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.loader.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.InjectionStatus;
+import fr.alexdoru.megawallsenhancementsmod.asm.loader.MWETransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -10,7 +10,7 @@ import org.objectweb.asm.tree.MethodNode;
 
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 
-public class GuiPlayerTabOverlayTransformer_PlayerCount implements IMyClassTransformer {
+public class GuiPlayerTabOverlayTransformer_PlayerCount implements MWETransformer {
 
     @Override
     public String getTargetClassName() {

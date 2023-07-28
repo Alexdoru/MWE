@@ -9,7 +9,7 @@ import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public interface IMyClassTransformer {
+public interface MWETransformer {
 
     /**
      * Returns the de-obfuscated name of the targeted class.
@@ -30,7 +30,7 @@ public interface IMyClassTransformer {
         return "fr/alexdoru/megawallsenhancementsmod/asm/hooks/" + className;
     }
 
-    default void NodeToString(AbstractInsnNode insnNode) {
+    default void nodeToString(AbstractInsnNode insnNode) {
         if (insnNode instanceof FieldInsnNode) {
             final FieldInsnNode fieldInsnNode = (FieldInsnNode) insnNode;
             ASMLoadingPlugin.logger.info("FieldInsnNode :"

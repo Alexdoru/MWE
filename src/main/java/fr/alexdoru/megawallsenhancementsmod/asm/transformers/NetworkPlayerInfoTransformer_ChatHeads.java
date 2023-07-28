@@ -1,8 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.ASMLoadingPlugin;
-import fr.alexdoru.megawallsenhancementsmod.asm.loader.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.InjectionStatus;
+import fr.alexdoru.megawallsenhancementsmod.asm.loader.MWETransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.FieldMapping;
 import org.objectweb.asm.Label;
@@ -11,7 +11,7 @@ import org.objectweb.asm.tree.ClassNode;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class NetworkPlayerInfoTransformer_ChatHeads implements IMyClassTransformer {
+public class NetworkPlayerInfoTransformer_ChatHeads implements MWETransformer {
 
     @Override
     public String getTargetClassName() {

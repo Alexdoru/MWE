@@ -1,12 +1,12 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.loader.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.InjectionStatus;
+import fr.alexdoru.megawallsenhancementsmod.asm.loader.MWETransformer;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class SidebarmodReloaded_CustomSidebarTransformer implements IMyClassTransformer {
+public class SidebarmodReloaded_CustomSidebarTransformer implements MWETransformer {
 
     @Override
     public String getTargetClassName() {

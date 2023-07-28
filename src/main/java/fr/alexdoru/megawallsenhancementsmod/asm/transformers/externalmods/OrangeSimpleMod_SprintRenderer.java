@@ -1,13 +1,13 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.loader.IMyClassTransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.InjectionStatus;
+import fr.alexdoru.megawallsenhancementsmod.asm.loader.MWETransformer;
 import org.objectweb.asm.tree.*;
 
 import static org.objectweb.asm.Opcodes.IFEQ;
 import static org.objectweb.asm.Opcodes.RETURN;
 
-public class OrangeSimpleMod_SprintRenderer implements IMyClassTransformer {
+public class OrangeSimpleMod_SprintRenderer implements MWETransformer {
 
     @Override
     public String getTargetClassName() {
