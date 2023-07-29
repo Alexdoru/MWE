@@ -26,16 +26,9 @@ public class WDR implements Comparable<WDR> {
     /**
      * Compares the timestamp
      */
-    private static int compare(WDR wdr1, WDR wdr2) {
-        return Long.compare(wdr1.timestamp, wdr2.timestamp);
-    }
-
-    /**
-     * Compares the timestamp
-     */
     @Override
     public int compareTo(@Nonnull WDR wdr) {
-        return compare(this, wdr);
+        return Long.compare(this.timestamp, wdr.timestamp);
     }
 
     public boolean transformName() {
