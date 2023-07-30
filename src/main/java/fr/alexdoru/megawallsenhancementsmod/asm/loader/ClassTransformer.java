@@ -24,7 +24,7 @@ import java.util.List;
 public class ClassTransformer implements IClassTransformer {
 
     private File outputDir = null;
-    private final HashMap<String, List<MWETransformer>> transformerHashMap = new HashMap<>();
+    private final HashMap<String, List<MWETransformer>> transformerMap = new HashMap<>();
 
     /**
      * Register the IMyClassTransformer(s) here
@@ -85,20 +85,15 @@ public class ClassTransformer implements IClassTransformer {
     }
 
     private void registerTransformer(MWETransformer classTransformer) {
-        final List<MWETransformer> list = transformerHashMap.get(classTransformer.getTargetClassName());
-        if (list == null) {
-            final List<MWETransformer> newList = new ArrayList<>();
-            newList.add(classTransformer);
-            transformerHashMap.put(classTransformer.getTargetClassName(), newList);
-        } else {
-            list.add(classTransformer);
+        for (final String clazz : classTransformer.getTargetClassName()) {
+            transformerMap.computeIfAbsent(clazz, k -> new ArrayList<>()).add(classTransformer);
         }
     }
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         if (basicClass == null) return null;
-        final List<MWETransformer> transformerList = transformerHashMap.get(transformedName);
+        final List<MWETransformer> transformerList = transformerMap.get(transformedName);
         if (transformerList == null) return basicClass;
         final long l = System.currentTimeMillis();
         for (final MWETransformer transformer : transformerList) {

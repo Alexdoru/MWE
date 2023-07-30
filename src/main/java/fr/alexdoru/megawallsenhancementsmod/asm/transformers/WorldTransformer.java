@@ -12,8 +12,8 @@ import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 public class WorldTransformer implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.world.World";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.world.World"};
     }
 
     @Override

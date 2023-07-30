@@ -12,8 +12,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class RenderManagerTransformer implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.client.renderer.entity.RenderManager";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.renderer.entity.RenderManager"};
     }
 
     @Override

@@ -13,8 +13,8 @@ import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 public class ChatComponentStyleTransformer_ChatHeads implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.util.ChatComponentStyle";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.util.ChatComponentStyle"};
     }
 
     @Override

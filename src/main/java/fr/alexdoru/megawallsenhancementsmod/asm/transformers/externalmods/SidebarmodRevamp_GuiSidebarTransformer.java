@@ -9,8 +9,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class SidebarmodRevamp_GuiSidebarTransformer implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "revamp.sidebarmod.gui.GuiSidebar";
+    public String[] getTargetClassName() {
+        return new String[]{"revamp.sidebarmod.gui.GuiSidebar"};
     }
 
     @Override

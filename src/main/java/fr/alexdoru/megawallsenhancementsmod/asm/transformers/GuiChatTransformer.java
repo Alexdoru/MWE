@@ -11,8 +11,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class GuiChatTransformer implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.client.gui.GuiChat";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.gui.GuiChat"};
     }
 
     @Override

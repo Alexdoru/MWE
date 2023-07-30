@@ -11,8 +11,8 @@ import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 public class EntityPlayerSPTransformer implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.client.entity.EntityPlayerSP";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.entity.EntityPlayerSP"};
     }
 
     @Override

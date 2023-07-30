@@ -12,8 +12,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class GuiPlayerTabOverlayTransformer_ColoredScores implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.client.gui.GuiPlayerTabOverlay";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.gui.GuiPlayerTabOverlay"};
     }
 
     @Override

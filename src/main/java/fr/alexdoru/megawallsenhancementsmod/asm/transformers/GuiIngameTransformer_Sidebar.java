@@ -11,8 +11,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class GuiIngameTransformer_Sidebar implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.client.gui.GuiIngame";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.gui.GuiIngame"};
     }
 
     @Override

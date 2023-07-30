@@ -11,8 +11,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class RenderGlobalTransformer_ListenDestroyedBlocks implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.client.renderer.RenderGlobal";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.renderer.RenderGlobal"};
     }
 
     @Override

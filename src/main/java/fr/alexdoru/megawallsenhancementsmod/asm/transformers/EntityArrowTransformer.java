@@ -11,8 +11,8 @@ import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 public class EntityArrowTransformer implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.entity.projectile.EntityArrow";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.entity.projectile.EntityArrow"};
     }
 
     @Override

@@ -11,8 +11,8 @@ import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
 public class ChatComponentTextTransformer_ChatHeads implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.util.ChatComponentText";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.util.ChatComponentText"};
     }
 
     @Override

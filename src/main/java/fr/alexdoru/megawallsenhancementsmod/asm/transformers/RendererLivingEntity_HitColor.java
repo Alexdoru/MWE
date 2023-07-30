@@ -12,8 +12,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class RendererLivingEntity_HitColor implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.client.renderer.entity.RendererLivingEntity";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.renderer.entity.RendererLivingEntity"};
     }
 
     @Override

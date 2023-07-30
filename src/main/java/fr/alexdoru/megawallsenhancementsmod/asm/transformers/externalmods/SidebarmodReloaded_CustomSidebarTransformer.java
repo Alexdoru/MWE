@@ -9,8 +9,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class SidebarmodReloaded_CustomSidebarTransformer implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "fr.alexdoru.sidebarmod.gui.CustomSidebar";
+    public String[] getTargetClassName() {
+        return new String[]{"fr.alexdoru.sidebarmod.gui.CustomSidebar"};
     }
 
     @Override

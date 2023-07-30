@@ -12,8 +12,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class NetHandlerPlayClientTransformer_TeleportListener implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.client.network.NetHandlerPlayClient";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.network.NetHandlerPlayClient"};
     }
 
     @Override

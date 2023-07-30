@@ -10,8 +10,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class ScoreboardTransformer implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.scoreboard.Scoreboard";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.scoreboard.Scoreboard"};
     }
 
     @Override

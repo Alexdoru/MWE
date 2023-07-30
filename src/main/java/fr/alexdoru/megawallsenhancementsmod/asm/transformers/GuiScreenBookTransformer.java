@@ -12,8 +12,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class GuiScreenBookTransformer implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.client.gui.GuiScreenBook";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.gui.GuiScreenBook"};
     }
 
     @Override

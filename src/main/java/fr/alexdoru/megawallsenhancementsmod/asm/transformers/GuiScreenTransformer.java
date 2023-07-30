@@ -10,8 +10,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class GuiScreenTransformer implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.client.gui.GuiScreen";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.gui.GuiScreen"};
     }
 
     @Override

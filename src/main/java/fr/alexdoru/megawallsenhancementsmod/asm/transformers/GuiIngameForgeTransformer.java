@@ -10,8 +10,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class GuiIngameForgeTransformer implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraftforge.client.GuiIngameForge";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraftforge.client.GuiIngameForge"};
     }
 
     @Override

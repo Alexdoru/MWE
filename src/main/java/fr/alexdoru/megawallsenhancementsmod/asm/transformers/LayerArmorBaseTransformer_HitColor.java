@@ -10,8 +10,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class LayerArmorBaseTransformer_HitColor implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.client.renderer.entity.layers.LayerArmorBase";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.renderer.entity.layers.LayerArmorBase"};
     }
 
     @Override

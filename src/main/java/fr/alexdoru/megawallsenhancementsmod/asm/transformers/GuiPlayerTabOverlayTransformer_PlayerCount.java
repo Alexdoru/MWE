@@ -13,8 +13,8 @@ import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 public class GuiPlayerTabOverlayTransformer_PlayerCount implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.client.gui.GuiPlayerTabOverlay";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.gui.GuiPlayerTabOverlay"};
     }
 
     @Override

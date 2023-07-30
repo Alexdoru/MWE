@@ -12,8 +12,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class EntityPlayerTransformer implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.entity.player.EntityPlayer";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.entity.player.EntityPlayer"};
     }
 
     @Override

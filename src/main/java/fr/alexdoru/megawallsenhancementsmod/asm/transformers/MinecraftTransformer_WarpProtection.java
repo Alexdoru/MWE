@@ -11,8 +11,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class MinecraftTransformer_WarpProtection implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.client.Minecraft";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.Minecraft"};
     }
 
     @Override

@@ -10,8 +10,8 @@ import static org.objectweb.asm.Opcodes.RETURN;
 public class OrangeSimpleMod_SprintRenderer implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "com.orangemarshall.simplemod.togglesprint.SprintRenderer";
+    public String[] getTargetClassName() {
+        return new String[]{"com.orangemarshall.simplemod.togglesprint.SprintRenderer"};
     }
 
     @Override
