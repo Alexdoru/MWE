@@ -12,10 +12,10 @@ import static org.objectweb.asm.Opcodes.*;
 public interface MWETransformer {
 
     /**
-     * Returns the de-obfuscated name of the targeted class.
+     * Returns the de-obfuscated names of the classes targeted by this transformer
      * Example : "net.minecraft.client.Minecraft"
      */
-    String getTargetClassName();
+    String[] getTargetClassName();
 
     /**
      * Returns the transformed ClassNode

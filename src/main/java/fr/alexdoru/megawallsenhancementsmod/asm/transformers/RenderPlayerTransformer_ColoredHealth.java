@@ -12,8 +12,8 @@ import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 public class RenderPlayerTransformer_ColoredHealth implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.client.renderer.entity.RenderPlayer";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.renderer.entity.RenderPlayer"};
     }
 
     @Override

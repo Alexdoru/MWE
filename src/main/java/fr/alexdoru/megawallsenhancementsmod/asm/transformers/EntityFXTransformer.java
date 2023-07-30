@@ -11,8 +11,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class EntityFXTransformer implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.client.particle.EntityFX";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.particle.EntityFX"};
     }
 
     @Override

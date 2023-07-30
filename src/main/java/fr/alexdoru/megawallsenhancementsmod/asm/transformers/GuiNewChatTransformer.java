@@ -9,8 +9,8 @@ import org.objectweb.asm.tree.ClassNode;
 public class GuiNewChatTransformer implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.client.gui.GuiNewChat";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.gui.GuiNewChat"};
     }
 
     @Override

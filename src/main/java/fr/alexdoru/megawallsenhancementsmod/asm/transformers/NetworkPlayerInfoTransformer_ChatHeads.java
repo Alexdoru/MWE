@@ -14,8 +14,8 @@ import static org.objectweb.asm.Opcodes.*;
 public class NetworkPlayerInfoTransformer_ChatHeads implements MWETransformer {
 
     @Override
-    public String getTargetClassName() {
-        return "net.minecraft.client.network.NetworkPlayerInfo";
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.network.NetworkPlayerInfo"};
     }
 
     @Override
