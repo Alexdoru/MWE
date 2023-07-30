@@ -26,123 +26,104 @@ public class CommandPlancke extends MyAbstractCommand {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-
         if (args.length < 1) {
             this.printCommandHelp();
             return;
         }
-
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
             ChatUtil.printApikeySetupInfo();
             return;
         }
-
         MultithreadingUtil.addTaskToQueue(() -> {
-
-            final MojangPlayernameToUUID apiname;
             try {
-                apiname = new MojangPlayernameToUUID(args[0]);
+                final MojangPlayernameToUUID apiname = new MojangPlayernameToUUID(args[0]);
+                final JsonObject playerdata = CachedHypixelPlayerData.getPlayerData(apiname.getUuid());
+                final HypixelGuild hypixelGuild = args.length == 1 ? new HypixelGuild(apiname.getUuid()) : null;
+                mc.addScheduledTask(() -> this.plancke(args, apiname, playerdata, hypixelGuild));
             } catch (ApiException e) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + e.getMessage());
                 return null;
             }
+            return null;
+        });
+    }
 
-            final String uuid = apiname.getUuid();
-            final String playername = apiname.getName();
-            final JsonObject playerdata;
-            final GeneralInfo generalstats;
-            try {
-                playerdata = CachedHypixelPlayerData.getPlayerData(uuid);
-                generalstats = new GeneralInfo(playerdata);
-                if (!playername.equals(generalstats.getdisplayname())) {
-                    ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "This player never joined Hypixel, it might be a nick.");
-                    return null;
-                }
-            } catch (ApiException e) {
-                ChatUtil.addChatMessage(EnumChatFormatting.RED + e.getMessage());
-                return null;
-            }
+    private void plancke(String[] args, MojangPlayernameToUUID apiname, JsonObject playerdata, HypixelGuild hypixelGuild) {
 
-            final String formattedName = generalstats.getFormattedName();
+        final LoginData loginData = new LoginData(playerdata);
 
-            if (generalstats.hasNeverJoinedHypixel()) { // player never joined hypixel
+        if (!apiname.getName().equals(loginData.getdisplayname()) || loginData.hasNeverJoinedHypixel()) {
+            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "This player never joined Hypixel, it might be a nick.");
+            return;
+        }
 
-                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + args[0] + EnumChatFormatting.RED + " has never joined Hypixel.");
-                return null;
-            }
+        final String playername = apiname.getName();
+        final String formattedName = loginData.getFormattedName();
 
-            if (args.length == 1) {
+        if (args.length == 1) {
+            final String guildTag = hypixelGuild.getFormattedGuildTag();
+            new GeneralInfo(playerdata).printMessage(formattedName + (guildTag == null ? "" : guildTag), hypixelGuild.getGuildName());
+            return;
+        }
 
-                final HypixelGuild hypixelGuild = new HypixelGuild(uuid);
-                final String guildTag = hypixelGuild.getFormattedGuildTag();
-                generalstats.printMessage(formattedName + (guildTag == null ? "" : guildTag), hypixelGuild.getGuildName());
+        if (args[1].equalsIgnoreCase("bw") || args[1].equalsIgnoreCase("bedwars")) { // general stats for bedwars
+
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "WIP bedwars");
+
+        } else if (args[1].equalsIgnoreCase("bsg") || args[1].equalsIgnoreCase("blitz")) { // general stats for blitz survival games
+
+            new BlitzStats(playerdata).printMessage(formattedName, playername);
+
+        } else if (args[1].equalsIgnoreCase("duel") || args[1].equalsIgnoreCase("duels")) { // general stats for duels
+
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "WIP duels");
+
+        } else if (args[1].equalsIgnoreCase("mw") || args[1].equalsIgnoreCase("megawalls")) { // stats for mega walls
+
+            if (args.length == 2) {
+
+                new MegaWallsStats(playerdata).printGeneralStatsMessage(formattedName, playername);
 
             } else {
 
-                if (args[1].equalsIgnoreCase("bw") || args[1].equalsIgnoreCase("bedwars")) { // general stats for bedwars
+                if (args[2].equalsIgnoreCase("cp") || args[2].equalsIgnoreCase("classpoint") || args[2].equalsIgnoreCase("classpoints")) {
 
-                    ChatUtil.addChatMessage(EnumChatFormatting.RED + "WIP bedwars");
+                    new MegaWallsStats(playerdata).printClassPointsMessage(formattedName, playername);
 
-                } else if (args[1].equalsIgnoreCase("bsg") || args[1].equalsIgnoreCase("blitz")) { // general stats for blitz survival games
+                } else if (args[2].equalsIgnoreCase("leg") || args[2].equalsIgnoreCase("legendary") || args[2].equalsIgnoreCase("legendaries")) {
 
-                    new BlitzStats(playerdata).printMessage(formattedName, playername);
-
-                } else if (args[1].equalsIgnoreCase("duel") || args[1].equalsIgnoreCase("duels")) { // general stats for duels
-
-                    ChatUtil.addChatMessage(EnumChatFormatting.RED + "WIP duels");
-
-                } else if (args[1].equalsIgnoreCase("mw") || args[1].equalsIgnoreCase("megawalls")) { // stats for mega walls
-
-                    if (args.length == 2) {
-
-                        new MegaWallsStats(playerdata).printGeneralStatsMessage(formattedName, playername);
-
-                    } else {
-
-                        if (args[2].equalsIgnoreCase("cp") || args[2].equalsIgnoreCase("classpoint") || args[2].equalsIgnoreCase("classpoints")) {
-
-                            new MegaWallsStats(playerdata).printClassPointsMessage(formattedName, playername);
-
-                        } else if (args[2].equalsIgnoreCase("leg") || args[2].equalsIgnoreCase("legendary") || args[2].equalsIgnoreCase("legendaries")) {
-
-                            new MegaWallsStats(playerdata).printLegendaryMessage(formattedName, playername);
-
-                        } else {
-
-                            final MWClass mwclass = MWClass.fromTagOrName(args[2]);
-                            if (mwclass == null) {
-                                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + args[2] + EnumChatFormatting.RED + " isn't a valid mega walls class name.");
-                                return null;
-                            }
-                            new MegaWallsClassStats(playerdata, mwclass.className).printMessage(formattedName, playername);
-
-                        }
-
-                    }
-
-                } else if (args[1].equalsIgnoreCase("sw") || args[1].equalsIgnoreCase("skywars")) { // general stats for skywars
-
-                    new SkywarsStats(playerdata).printMessage(formattedName, playername);
-
-                } else if (args[1].equalsIgnoreCase("tnt") || args[1].equalsIgnoreCase("tntgames")) { // general stats for tnt games
-
-                    ChatUtil.addChatMessage(EnumChatFormatting.RED + "WIP tntgames");
-
-                } else if (args[1].equalsIgnoreCase("uhc")) { // general stats for UHC champions
-
-                    new UHCStats(playerdata).printMessage(formattedName, playername);
+                    new MegaWallsStats(playerdata).printLegendaryMessage(formattedName, playername);
 
                 } else {
 
-                    ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + args[1] + EnumChatFormatting.RED + " isn't a valid/supported game name.");
+                    final MWClass mwclass = MWClass.fromTagOrName(args[2]);
+                    if (mwclass == null) {
+                        ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + args[2] + EnumChatFormatting.RED + " isn't a valid mega walls class name.");
+                        return;
+                    }
+                    new MegaWallsClassStats(playerdata, mwclass.className).printMessage(formattedName, playername);
 
                 }
 
             }
 
-            return null;
+        } else if (args[1].equalsIgnoreCase("sw") || args[1].equalsIgnoreCase("skywars")) { // general stats for skywars
 
-        });
+            new SkywarsStats(playerdata).printMessage(formattedName, playername);
+
+        } else if (args[1].equalsIgnoreCase("tnt") || args[1].equalsIgnoreCase("tntgames")) { // general stats for tnt games
+
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "WIP tntgames");
+
+        } else if (args[1].equalsIgnoreCase("uhc")) { // general stats for UHC champions
+
+            new UHCStats(playerdata).printMessage(formattedName, playername);
+
+        } else {
+
+            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + args[1] + EnumChatFormatting.RED + " isn't a valid/supported game name.");
+
+        }
 
     }
 
