@@ -1,15 +1,11 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityArrowAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessors.IHitboxRender;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.util.AxisAlignedBB;
 
@@ -22,29 +18,8 @@ public class RenderManagerHook {
                 return false;
             }
         }
-        if (entityIn instanceof AbstractClientPlayer) {
-            return ConfigHandler.drawHitboxForPlayers;
-        }
-        if (entityIn instanceof EntityArrow) {
-            if (((EntityArrowAccessor) entityIn).isInGround()) {
-                return ConfigHandler.drawHitboxForGroundedArrows;
-            }
-            if (((EntityArrowAccessor) entityIn).isPinnedToPlayer()) {
-                return ConfigHandler.drawHitboxForPinnedArrows;
-            }
-            return ConfigHandler.drawHitboxForFlyingArrows;
-        }
-        if (entityIn instanceof EntityItem) {
-            return ConfigHandler.drawHitboxForDroppedItems;
-        }
-        if (entityIn instanceof EntityAnimal) {
-            return ConfigHandler.drawHitboxForPassiveMobs;
-        }
-        if (entityIn instanceof EntityMob) {
-            return ConfigHandler.drawHitboxForAggressiveMobs;
-        }
-        if (entityIn instanceof EntityItemFrame) {
-            return ConfigHandler.drawHitboxItemFrame;
+        if (entityIn instanceof IHitboxRender) {
+            return ((IHitboxRender) entityIn).mwe$shouldRenderHitbox();
         }
         return ConfigHandler.drawHitboxForOtherEntity;
     }

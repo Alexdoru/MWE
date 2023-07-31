@@ -9,6 +9,7 @@ public enum FieldMapping {
     CLIENTCOMMANDHANDLER$INSTANCE(CLIENTCOMMANDHANDLER, "instance", CLIENTCOMMANDHANDLER),
     ENTITY$ONGROUND(ENTITY, "C", "onGround", "Z"),
     ENTITYARROW$ISINGROUND(ENTITYARROW, "i", "inGround", "Z"),
+    ENTITYARROW$PINNEDTOPLAYER(ENTITYARROW, "pinnedToPlayer", "Z"),
     ENTITYPLAYER$GAMEPROFILE(ENTITYPLAYER, "bH", "gameProfile", GAMEPROFILE),
     ENTITYPLAYER$PLAYERDATASAMPLES(ENTITYPLAYER, "mwenhancements$PlayerDataSamples", PLAYERDATASAMPLES),
     ENUMCHATFORMATTING$YELLOW(ENUMCHATFORMATTING, "o", "YELLOW", ENUMCHATFORMATTING),
@@ -41,6 +42,12 @@ public enum FieldMapping {
     public final String owner;
     public final String name;
     public final String desc;
+
+    FieldMapping(ClassMapping owner, String mcpName, String desc) {
+        this.owner = owner.toString();
+        this.name = mcpName;
+        this.desc = desc;
+    }
 
     FieldMapping(ClassMapping owner, String mcpName, ClassMapping desc) {
         this.owner = owner.toString();
