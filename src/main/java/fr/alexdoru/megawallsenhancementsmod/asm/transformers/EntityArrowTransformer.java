@@ -2,7 +2,6 @@ package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.InjectionStatus;
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.MWETransformer;
-import fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.FieldMapping;
 import org.objectweb.asm.tree.ClassNode;
 
@@ -19,7 +18,7 @@ public class EntityArrowTransformer implements MWETransformer {
     public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(0);
         addInterface(classNode, "EntityArrowAccessor");
-        classNode.visitField(ACC_PUBLIC, "pinnedToPlayer", "Z", null, 0).visitEnd();
+        classNode.visitField(ACC_PUBLIC, FieldMapping.ENTITYARROW$PINNEDTOPLAYER.name, FieldMapping.ENTITYARROW$PINNEDTOPLAYER.desc, null, 0).visitEnd();
         addGetterMethod(
                 classNode,
                 "isInGround",
@@ -29,9 +28,7 @@ public class EntityArrowTransformer implements MWETransformer {
         addGetterMethod(
                 classNode,
                 "isPinnedToPlayer",
-                ClassMapping.ENTITYARROW,
-                "pinnedToPlayer",
-                "Z",
+                FieldMapping.ENTITYARROW$PINNEDTOPLAYER,
                 null
         );
     }
