@@ -49,7 +49,10 @@ public class RenderGlobalHook {
     }
 
     public static void listenDestroyedBlocks(IBlockState state, BlockPos blockPos) {
-        if (ConfigHandler.hackerDetector && ScoreboardTracker.isInMwGame && "pickaxe".equals(state.getBlock().getHarvestTool(state))) {
+        if (ConfigHandler.hackerDetector
+                && ScoreboardTracker.isInMwGame
+                && state.getBlock().getBlockHardness(null, blockPos) >= 0.8f
+                && "pickaxe".equals(state.getBlock().getHarvestTool(state))) {
             HackerDetector.INSTANCE.brokenBlocksList.add(new BrokenBlock(state.getBlock(), blockPos, System.currentTimeMillis()));
         }
     }
