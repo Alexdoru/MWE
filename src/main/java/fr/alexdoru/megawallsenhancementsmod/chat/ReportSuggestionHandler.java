@@ -24,6 +24,7 @@ import net.minecraft.event.ClickEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nullable;
@@ -52,6 +53,7 @@ public class ReportSuggestionHandler {
     }
 
     public static boolean parseReportMessage(
+            ClientChatReceivedEvent event,
             @Nullable String senderRank,
             @Nullable String messageSender,
             @Nullable String squadname,
@@ -66,6 +68,7 @@ public class ReportSuggestionHandler {
                 final String reportedPlayer = reportedPlayerOrUUID.length() == 36 ? getNameFromUUID(reportedPlayerOrUUID) : reportedPlayerOrUUID;
                 if (reportedPlayer != null && isNameValid(reportedPlayer)) {
                     handleReportSuggestion(
+                            event,
                             reportedPlayer,
                             senderRank,
                             messageSender,
@@ -74,7 +77,7 @@ public class ReportSuggestionHandler {
                             "bhop",
                             reportedPlayerOrUUID.equals(reportedPlayer) ? fmsgIn : fmsgIn.replace(reportedPlayerOrUUID, reportedPlayer));
                 } else {
-                    ChatUtil.addChatMessage(getIChatComponentWithSquadnameAsSender(fmsgIn, messageSender, squadname), messageSender);
+                    event.message = getIChatComponentWithSquadnameAsSender(fmsgIn, messageSender, squadname);
                 }
                 return true;
             } else if (matcher2.find()) {
@@ -84,6 +87,7 @@ public class ReportSuggestionHandler {
                 final String cheat = matcher2.group(2).toLowerCase();
                 if (reportedPlayer != null && isCheatValid(cheat) && isNameValid(reportedPlayer)) {
                     handleReportSuggestion(
+                            event,
                             reportedPlayer,
                             senderRank,
                             messageSender,
@@ -92,7 +96,7 @@ public class ReportSuggestionHandler {
                             cheat,
                             reportedPlayerOrUUID.equals(reportedPlayer) ? fmsgIn : fmsgIn.replace(reportedPlayerOrUUID, reportedPlayer));
                 } else {
-                    ChatUtil.addChatMessage(getIChatComponentWithSquadnameAsSender(fmsgIn, messageSender, squadname), messageSender);
+                    event.message = getIChatComponentWithSquadnameAsSender(fmsgIn, messageSender, squadname);
                 }
                 return true;
             }
@@ -110,6 +114,7 @@ public class ReportSuggestionHandler {
      * reportedPlayer is necessarily in the tablist
      */
     private static void handleReportSuggestion(
+            ClientChatReceivedEvent event,
             String reportedPlayer,
             @Nullable String senderRank,
             @Nullable String messageSender,
@@ -168,6 +173,7 @@ public class ReportSuggestionHandler {
                 isSenderFlaging,
                 isSenderRankValid);
         printCustomReportSuggestionChatText(
+                event,
                 fmsg,
                 messageSender,
                 reportedPlayer,
@@ -283,6 +289,7 @@ public class ReportSuggestionHandler {
     }
 
     private static void printCustomReportSuggestionChatText(
+            ClientChatReceivedEvent event,
             String fmsg,
             @Nullable String messageSender,
             String reportedPlayer,
@@ -299,7 +306,7 @@ public class ReportSuggestionHandler {
             @Nullable String senderUUID) {
 
         if (!ConfigHandler.reportSuggestions) {
-            ChatUtil.addChatMessage(getIChatComponentWithSquadnameAsSender(fmsg, messageSender, squadname), messageSender);
+            event.message = getIChatComponentWithSquadnameAsSender(fmsg, messageSender, squadname);
             return;
         }
 
@@ -311,7 +318,7 @@ public class ReportSuggestionHandler {
             final String newFmsg = getReportTextWithFormattedName(fmsg, reportText, reportedPlayer);
             final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
             addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
-            ChatUtil.addChatMessage(imsg, messageSender);
+            event.message = imsg;
             return;
         }
 
@@ -320,13 +327,13 @@ public class ReportSuggestionHandler {
             if (senderUUID != null) {
                 imsg.appendSibling(ChatUtil.getUnIgnoreButton(senderUUID, messageSender));
             }
-            ChatUtil.addChatMessage(imsg, messageSender);
+            event.message = imsg;
             return;
         }
 
         if (isSenderCheating) {
             final String msg = StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.YELLOW + " (Cheater)", EnumChatFormatting.GRAY + EnumChatFormatting.STRIKETHROUGH.toString(), true);
-            ChatUtil.addChatMessage(msg, messageSender);
+            event.message = new ChatComponentText(msg);
             return;
         }
 
@@ -337,7 +344,7 @@ public class ReportSuggestionHandler {
                 imsg.appendSibling(ChatUtil.getIgnoreButton(messageSender));
             }
             addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
-            ChatUtil.addChatMessage(imsg, messageSender);
+            event.message = imsg;
             return;
         }
 
@@ -347,7 +354,7 @@ public class ReportSuggestionHandler {
             imsg.appendSibling(ChatUtil.getIgnoreButton(messageSender));
         }
         addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
-        ChatUtil.addChatMessage(imsg, messageSender);
+        event.message = imsg;
 
     }
 
@@ -413,7 +420,7 @@ public class ReportSuggestionHandler {
     }
 
     /**
-     * Mirrors the {@link ReportSuggestionHandler#parseReportMessage(String, String, String, String, String)}
+     * Mirrors the {@link ReportSuggestionHandler#parseReportMessage}
      * method and returns true if this method would parse the shout as a report suggestion
      * but the player can't be found in the tablist.
      * Although it only checks one regex pattern because the other one would conflict
