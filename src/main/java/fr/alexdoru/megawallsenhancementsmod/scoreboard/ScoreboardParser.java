@@ -33,6 +33,7 @@ public class ScoreboardParser {
     private boolean isInMwGame = false;
     private boolean isMWEnvironement = false;
     private boolean isReplayMode = false;
+    private boolean isInSkyblock = false;
     private boolean isPreGameLobby = false;
     private boolean isPrepPhase = false;
     private boolean hasGameEnded = false;
@@ -59,6 +60,8 @@ public class ScoreboardParser {
             isMWEnvironement = true;
         } else if (title.contains("REPLAY")) {
             isReplayMode = true;
+        } else if (title.contains("SKYBLOCK")) {
+            isInSkyblock = true;
         } else {
             return;
         }
@@ -193,6 +196,10 @@ public class ScoreboardParser {
 
     public boolean isReplayMode() {
         return isReplayMode;
+    }
+
+    public boolean isInSkyblock() {
+        return isInSkyblock;
     }
 
     public boolean isInMwGame() {

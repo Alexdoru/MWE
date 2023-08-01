@@ -75,9 +75,11 @@ public class HackerDetector {
         if (event.phase == TickEvent.Phase.START) {
             playersCheckedTemp = 0;
         } else if (event.phase == TickEvent.Phase.END) {
-            final long timeStart = System.nanoTime();
-            FastbreakCheck.INSTANCE.onTickEnd();
-            timeElapsedTemp += System.nanoTime() - timeStart;
+            if (ScoreboardTracker.isInMwGame) {
+                final long timeStart = System.nanoTime();
+                FastbreakCheck.INSTANCE.onTickEnd();
+                timeElapsedTemp += System.nanoTime() - timeStart;
+            }
             if (mc.thePlayer != null && mc.thePlayer.ticksExisted % 20 == 0) {
                 timeElapsed = timeElapsedTemp;
                 timeElapsedTemp = 0L;
@@ -98,6 +100,7 @@ public class HackerDetector {
                 player.capabilities.isFlying ||
                 player.capabilities.isCreativeMode ||
                 player.isInvisible() ||
+                ScoreboardTracker.isInSkyblock ||
                 (!ScoreboardTracker.isReplayMode && NameUtil.filterNPC(player.getUniqueID()))) {
             return;
         }
