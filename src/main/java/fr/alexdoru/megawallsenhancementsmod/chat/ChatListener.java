@@ -133,13 +133,11 @@ public class ChatListener {
                 return;
             }
 
-            if (FinalKillCounter.processMessage(fmsg, msg)) {
-                event.setCanceled(true);
+            if (FinalKillCounter.processMessage(event, fmsg, msg)) {
                 return;
             }
 
-            if (ArrowHitHUD.instance.processMessage(msg, fmsg)) {
-                event.setCanceled(true);
+            if (ArrowHitHUD.instance.processMessage(event, msg, fmsg)) {
                 return;
             }
 
@@ -164,8 +162,8 @@ public class ChatListener {
                 return;
             }
 
-            if (ReportSuggestionHandler.parseReportMessage(senderRank, messageSender, squadname, msg, fmsg)) {
-                event.setCanceled(true);
+            if (ReportSuggestionHandler.parseReportMessage(event, senderRank, messageSender, squadname, msg, fmsg)) {
+                ChatUtil.addSkinToComponent(event.message, messageSender);
                 return;
             }
 
@@ -175,10 +173,12 @@ public class ChatListener {
                 if (networkPlayerInfo != null) {
                     final WDR wdr = WdrData.getWdr(networkPlayerInfo.getGameProfile().getId(), messageSender);
                     if (wdr != null && wdr.hasValidCheats()) {
-                        if (!ConfigHandler.deleteCheaterChatMsg) {
-                            ChatUtil.addChatMessage(StringUtil.censorChatMessage(fmsg, messageSender), messageSender);
+                        if (ConfigHandler.deleteCheaterChatMsg) {
+                            event.setCanceled(true);
+                        } else {
+                            event.message = StringUtil.censorChatMessage(fmsg, messageSender);
+                            ChatUtil.addSkinToComponent(event.message, messageSender);
                         }
-                        event.setCanceled(true);
                         return;
                     }
                 }

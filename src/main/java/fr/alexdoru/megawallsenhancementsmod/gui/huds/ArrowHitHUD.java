@@ -9,7 +9,9 @@ import fr.alexdoru.megawallsenhancementsmod.utils.ColorUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -35,7 +37,7 @@ public class ArrowHitHUD extends AbstractRenderer {
         instance = this;
     }
 
-    public boolean processMessage(String msg, String fmsg) {
+    public boolean processMessage(ClientChatReceivedEvent event, String msg, String fmsg) {
 
         final Matcher matcherArrowHit = PATTERN_ARROW_HIT.matcher(msg);
 
@@ -49,7 +51,8 @@ public class ArrowHitHUD extends AbstractRenderer {
                 displayText = getColor(hitValue) + hitValue;
             }
             final String s = ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg;
-            ChatUtil.addChatMessage(s, playername);
+            event.message = new ChatComponentText(s);
+            ChatUtil.addSkinToComponent(event.message, playername);
             return true;
         }
 
@@ -64,7 +67,8 @@ public class ArrowHitHUD extends AbstractRenderer {
             final boolean bool = Float.parseFloat(hitValue) > (Float.parseFloat(arrowsPinned)) * 2.0f;
             displayText = getColor(hitValue) + hitValue + EnumChatFormatting.GRAY + " (" + (bool ? EnumChatFormatting.GREEN : EnumChatFormatting.GOLD) + arrowsPinned + EnumChatFormatting.GRAY + ")";
             final String s = ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg;
-            ChatUtil.addChatMessage(s, playername);
+            event.message = new ChatComponentText(s);
+            ChatUtil.addSkinToComponent(event.message, playername);
             return true;
         }
 
@@ -73,7 +77,6 @@ public class ArrowHitHUD extends AbstractRenderer {
         if (matcherLeapHit.matches()) {
             hitTime = System.currentTimeMillis() + 1000L;
             displayText = EnumChatFormatting.GREEN + "-" + 2f * Float.parseFloat(matcherLeapHit.group(1));
-            ChatUtil.addChatMessage(fmsg);
             return true;
         }
 
@@ -84,7 +87,8 @@ public class ArrowHitHUD extends AbstractRenderer {
             final String playername = matcherLeapDirectHit.group(1);
             displayText = EnumChatFormatting.GREEN + "-" + 2f * Float.parseFloat(matcherLeapDirectHit.group(2));
             final String s = ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg;
-            ChatUtil.addChatMessage(s, playername);
+            event.message = new ChatComponentText(s);
+            ChatUtil.addSkinToComponent(event.message, playername);
             return true;
         }
 
@@ -102,7 +106,6 @@ public class ArrowHitHUD extends AbstractRenderer {
                 fmsg = ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg;
             }
             displayText = EnumChatFormatting.GREEN + "-" + totalDamage;
-            ChatUtil.addChatMessage(fmsg);
             return true;
         }
 
