@@ -44,7 +44,10 @@ public class WDR implements Comparable<WDR> {
 
     public boolean shouldPutRedIcon() {
         for (final String s : this.hacks) {
-            if ("bhop".equalsIgnoreCase(s) || "autoblock".equalsIgnoreCase(s) || "fastbreak".equalsIgnoreCase(s) || "noslowdown".equalsIgnoreCase(s)) {
+            if (s.startsWith("bhop")
+                    || s.startsWith("autoblock")
+                    || s.startsWith("fastbreak")
+                    || s.startsWith("noslowdown")) {
                 return true;
             }
         }
