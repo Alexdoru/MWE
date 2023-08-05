@@ -10,28 +10,127 @@
 </a>
 </p>
 
-# Mega Walls Enhancements
+**This is a mod for Minecraft Forge 1.8.9 that contains numerous features and improvements for pvp players and for Hypixel's Mega Walls. Use `/mwe` to open the config menu.**
 
-**This is a mod for Minecraft Forge 1.8.9 that contains many improvements and features for Hypixel and Hypixel's Mega Walls. Use `/mwe` to open the config menu.**
+## Download
 
-[Link to the Hypixel post](https://hypixel.net/threads/forge-1-8-9-mega-walls-enhancements-mod-a-mod-for-mega-walls.4470633/) with detailed information.
+Download the latest release from the **[releases page](https://github.com/Alexdoru/MegaWallsEnhancements/releases)**
 
-## Final Kill Counter:
+## Installation
 
-A mod to track final kills in Hypixel game Mega Walls. This final kill counter has a lot more features and improvements over [the original one](https://github.com/BasicallyLouis/FinalKill-Counter).
+1. Be sure you have Java 8 64-bits installed
+2. Download and run the installer of the latest [forge 1.8.9 version](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.8.9.html)
+3. Open your `.minecraft` folder, create a `mods` folder and place the mod inside
+4. Open the minecraft launcher, select the forge 1.8.9 installation and start the game
 
-## Mega Walls Enhancements:
-
-A mod with various enhancements for Hypixel and Hypixel's Mega Walls
-
-## NoCheaters 2.0:
-
-A mod that saves the names of all the players you report with `/wdr` (not /report), and gives you warning about those players when you come across them ingame.
-
-## Other Forge Mods I play with :
-
+#### Other mods I recommend using :
 - **[Optifine](https://optifine.net/downloads)** - Enhances performances
 - **[Sk1er's Patcher](https://sk1er.club/mods/patcher)** - `/patcher` Minecraft QOLs, performance improvements and vanilla bug fixes
-- **[Sk1er's Old Animation](https://discord.gg/sk1er)** - `/oldanimations` Brings 1.7 animations, available in beta on their discord server
+- **[Sk1er's Old Animation](https://discord.gg/sk1er)** - `/oldanimations` Brings back 1.7 animations, available in beta on their discord server
 - **[Orange's Simple Mods-1.2 ](https://legacy.curseforge.com/minecraft/mc-mods/oranges-simplemods-collection/files)** - `/simpleconfig /simplehud` Armor Status HUD, Status effect HUD and Toggle Sprint
 - **[My Sidebar Mod](https://github.com/Alexdoru/SidebarMod/releases/)** - `/sidebarmod` Enhances the sidebar
+
+Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, the chat and tablist related features from this mod will not work.
+
+## Feature list
+
+### Enhancements
+
+- **Arrow hit HUD** - HUD that displays the health of players when shooting them with a bow
+- **Squad HUD** - A mini tablist that will display only members of your squad
+- **Speed HUD** - HUD displaying your speed
+- **Chat heads** - Display heads of players in front of chat messages
+- **Cancel night vision** - Remove the blueish tint from night vision
+- **Clear view** - Stop rendering particles that are too close (75cm) to the screen for a better visibility
+- **Sound warning low HP** - Play a sound when your health drops below a certain threshold
+- **Limit dropped items** - Dynamically modify the render distance for dropped items entities to preserve performance
+- **Safe Inventory** - Prevent you from dropping your sword or from hotkeying important kit item in outside inventories in Mega Walls
+- **Custom hurt color** - Change the color entities take when they get hurt
+- **Color armor** - For players, their armor will be colored as well when they get hurt, as it does in 1.7
+- **Team colored hit color** - For players, the hurt color will be the color of their team
+- **Short coins messages** - On Hypixel, remove the booster info in the coins messages to make the message smaller
+- **Ban reveal** - Reveals the name of the player getting banned when playing on hypixel
+- **Colored scores above head** - Render the scores/health in colour, according to the score value/health and the player's maximum health points
+- **Colored scores in tablist** - Render the scores/health in colour, according to the score value/health and the player's maximum health points
+- **Hide tablist header/footer** - Hide the header and footer text of the tablist
+- **Hide tablist ping** - Hide the ping values in the tablist if all the values are equal to 1
+- **Display playercount in tablist** - Display the amount of players in your current lobby at the top of the tablist
+- **Change tablist size** - Change the amount of players displayed in the tablist
+- **Tabcomplete player names** - Ability to tab complete player names in the chat all the time
+- **Hide toggle sprint HUD** - Hide the toggle sprint HUD from OrangeMarshall's SimpleMod
+- **Fix tablist rect background** - Fix the background of the tablist not being symetric and sometimes missing pixels on one side
+- **Fix actionbar text overlap** - Prevent the actionbar text from overlapping with the armor bar if the player has more than 2 rows of health
+- **Fix case commands tabcomplete** - Fix not being able to tabcomplete commands if the command contains uppercased letters
+
+### Hitbox mod, better f3+b:
+
+Allows you to customize the look of the f3+b hitboxes.
+- **Enable hitboxes for certain entity types** - players, grounded arrows, pinned arrows, flying arrows, dropped items, passive mobs, aggressive mobs, item frames, other entities
+- **Team colored player hitbox** - The player hitbox will take the color of the player's team
+- **Team colored arrow hitbox** - The arrow hitbox will take the color of the shooter's team
+- **Custom hitbox color** - Select a custom color for all the hitboxes
+- **Real size hitbox** - Render the actual hitbox of the player which is a bit larger than what default f3+b shows
+- **Draw red eyeline** - Draw a red square at the eye level of entities
+- **Draw blue vector** - Draw a blue line representing the look direction of entities
+- **Blue line for players only** - Draws the blue line for players only
+- **3m blue line** - Make the blue line 3 meters long, to match the reach of players
+- **Hide close hitboxes** - Stop rendering hitboxes that are closer than a certain distance that you can choose
+- **Hitboxes remain enable after restart** - unlike vanilla minecraft you won't need to enable it everytime you play
+
+### Mega Walls features
+
+- **Creeper primed TNT HUD** - Displays the cooldown of the primed tnt when playing Creeper
+- **Energy display HUD** - Displays the amount of energy you have
+- **Kill cooldown HUD** - Displays the cooldown on the `/kill` command
+- **Phoenix bond HUD** - Displays the amount of hearts healed from a Phoenix bond
+- **Strength HUD** - Displays the duration of the strength in Mega Walls when playing Dreadlord, Herobrine, Hunter, Zombie. Plays a sound and shows the countdown before getting strength with Hunter.
+- **Wither death time HUD** - Displays the time left before the last wither standing automatically dies, HUD can be placed in the sidebar
+- **Prestige 5 tags** - Change the color of golden class tags to a new color according to the amount of classpoints on the class
+- **Hide hunger title** - Stop rendering the hunger message in the middle of the screen during deathmatch
+- **Hide repetitive msg** - Hide certain messages that spam the chat in Mega Walls
+- **More strength particles** - Spawn particles around the player when a dreadlord or herobrine gets strength on kill
+- **Renegade arrow count** - Display above player heads the amount of arrows you have pinned in them when playing Renegade
+- **Nick hider** - Display to yourself your own name when you are nicked in Mega Walls
+- **Pink Squadmates** - Squadmates' nametags will apear pink as well as their hitboxes
+- Notification at 5 mins before a game ends, and 10 seconds before the walls fall if you are not on the game
+- Shows your stats for the game when a game ends
+- Shows class and kit in the chat message when you hit an arrow
+- Prevent clicking the "Play Again" button if you are in a party
+
+#### Final Kill Counter:
+
+Tracks final kills in Hypixel's Mega Walls.
+- **Select HUD style** - Final kill HUD can take 3 form, classic (show finals per team), players (show finals per player), compact (show 4 colored numbers) and compact in sidebar
+- **Final in tablist** - Display the amount of final kills per player in the tablist next to their name
+- **Kill diff in chat** - When a player with final kills dies, it appends at the end of the chat message the amount of finals lost
+- `/fks say` - Sends a chat message with the current final score for your teamates to see
+
+### Commands
+
+Most commands require a working Hypixel Api Key, use `/mwe set <key>` to set your key.
+
+- `/addalias` - Give nicknames to players that will show in the tablist behind their name, use `/addalias` for details
+- `/mwe` - Open the config menu
+- `/nocheaters` - Shows reported players in chat, use `/nocheaters help` for details
+- `/plancke` - Checks stats of players for different games, use `/plancke` for details
+- `/scangame` - In Mega Walls, releaves which accouns are alt accounts with high stats, most likely cheaters
+- `/squad` - Add and remove players from your squad, use `/squad` for details
+- `/stalk <name>` - Reveals what a player is currently doing on the Hypixel Network
+
+### Hacker Detector:
+
+Detects players using certain cheats and warns you about those players. It can also automatically report them and save those players in NoCheaters.
+- **Autoblock check**
+- **Fastbreak check**
+- **Keepsprint check**
+- **Noslodown check**
+
+### NoCheaters:
+
+Saves all the players you report with `/wdr` (not /report), and gives you warnings about those players when you come across them ingame. Use `/unwdr <name>` to remove a player.
+- **Icons on names** - Add an icon in front of nametags and in the tablist for players you have reported
+- **Warning message** - Print a warning message in chat when a reported player joins your lobby
+- **Report suggestion** - Highlight certain chat messages sent by players that warn about other players cheating
+- **Censor cheaters in chat** - Deletes or censors chat messages sent by players you have reported for cheating
+- You can use `/report name boosting` & `/report name crossteaming` as a one step command to report on Hypixel instead of using the book
+- Shows who joined in party with a certain player when you `/wdr` them, to report the other members for boosting
