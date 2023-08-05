@@ -12,7 +12,7 @@
 
 # Mega Walls Enhancements
 
-**This is a mod for Minecraft Forge 1.8.9 that contains many improvements and features for Hypixel and Hypixel's Mega Walls. Use `/mwenhancements` to open the config menu.**
+**This is a mod for Minecraft Forge 1.8.9 that contains many improvements and features for Hypixel and Hypixel's Mega Walls. Use `/mwe` to open the config menu.**
 
 [Link to the Hypixel post](https://hypixel.net/threads/forge-1-8-9-mega-walls-enhancements-mod-a-mod-for-mega-walls.4470633/) with detailed information.
 
@@ -31,8 +31,7 @@ A mod that saves the names of all the players you report with `/wdr` (not /repor
 ## Other Forge Mods I play with :
 
 - **[Optifine](https://optifine.net/downloads)** - Enhances performances
-- **[Sk1er's Patcher](https://sk1er.club/mods/patcher)** - Minecraft optimizations and bug fixes
-- **[Sk1er's Old Animation](https://discord.gg/sk1er)** - Available in beta on their discord server
-- **[Orange's Simple Mods-1.2 ](https://www.curseforge.com/minecraft/mc-mods/oranges-simplemods-collection/files)** - Status effect, Toggle Sprint, Armor Status
-- **[My Sidebar Mod](https://github.com/Alexdoru/SidebarMod/releases/)** - Enhances the sidebar
-- **[ItemPhysic Lite 1.3](https://www.curseforge.com/minecraft/mc-mods/itemphysic-lite)** - Enhances the look of dropped items
+- **[Sk1er's Patcher](https://sk1er.club/mods/patcher)** - `/patcher` Minecraft QOLs, performance improvements and vanilla bug fixes
+- **[Sk1er's Old Animation](https://discord.gg/sk1er)** - `/oldanimations` Brings 1.7 animations, available in beta on their discord server
+- **[Orange's Simple Mods-1.2 ](https://legacy.curseforge.com/minecraft/mc-mods/oranges-simplemods-collection/files)** - `/simpleconfig /simplehud` Armor Status HUD, Status effect HUD and Toggle Sprint
+- **[My Sidebar Mod](https://github.com/Alexdoru/SidebarMod/releases/)** - `/sidebarmod` Enhances the sidebar
