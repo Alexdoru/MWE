@@ -75,4 +75,11 @@ public class GuiNewChatHook_ChatHeads {
         }
     }
 
+    public static int fixComponentHover(ChatLine chatLine) {
+        if (ConfigHandler.chatHeads && chatLine.getChatComponent() instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) chatLine.getChatComponent()).getSkinChatHead() != null) {
+            return -9;
+        }
+        return 0;
+    }
+
 }

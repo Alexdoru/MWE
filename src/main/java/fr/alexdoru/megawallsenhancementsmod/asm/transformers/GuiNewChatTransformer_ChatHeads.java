@@ -22,7 +22,7 @@ public class GuiNewChatTransformer_ChatHeads implements MWETransformer {
             status.skipTransformation();
             return;
         }
-        status.setInjectionPoints(3);
+        status.setInjectionPoints(4);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.GUINEWCHAT$DRAWCHAT)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
@@ -65,6 +65,29 @@ public class GuiNewChatTransformer_ChatHeads implements MWETransformer {
                 ));
                 methodNode.instructions.insert(list);
                 status.addInjection();
+            } else if (checkMethodNode(methodNode, MethodMapping.GUINEWCHAT$GETCHATCOMPONENT)) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                    if (checkVarInsnNode(insnNode, ILOAD, 11)) {
+                        final AbstractInsnNode secondNode = insnNode.getNext();
+                        if (checkVarInsnNode(secondNode, ILOAD, 6)) {
+                            final AbstractInsnNode thirdNode = secondNode.getNext();
+                            if (checkJumpInsnNode(thirdNode, IF_ICMPLE)) {
+                                final InsnList list = new InsnList();
+                                list.add(new VarInsnNode(ALOAD, 10));
+                                list.add(new MethodInsnNode(
+                                        INVOKESTATIC,
+                                        getHookClass("GuiNewChatHook_ChatHeads"),
+                                        "fixComponentHover",
+                                        "(L" + ClassMapping.CHATLINE + ";)I",
+                                        false
+                                ));
+                                list.add(new InsnNode(IADD));
+                                methodNode.instructions.insert(secondNode, list);
+                                status.addInjection();
+                            }
+                        }
+                    }
+                }
             }
         }
     }

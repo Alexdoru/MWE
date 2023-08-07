@@ -36,6 +36,7 @@ public enum MethodMapping {
     GUICHAT$SENDAUTOCOMPLETEREQUEST("a", "sendAutocompleteRequest", "(Ljava/lang/String;Ljava/lang/String;)V"),
     GUIINGAME$GETFONTRENDERER(INVOKEVIRTUAL, GUIINGAME, "f", "getFontRenderer", "()L" + FONTRENDERER + ";"),
     GUINEWCHAT$DRAWCHAT("a", "drawChat", "(I)V"),
+    GUINEWCHAT$GETCHATCOMPONENT("a", "getChatComponent", "(II)L" + ICHATCOMPONENT + ";"),
     GUINEWCHAT$PRINTCHATMESSAGE(INVOKEVIRTUAL, GUINEWCHAT, "a", "printChatMessage", "(L" + ICHATCOMPONENT + ";)V"),
     GUIPLAYERTABOVERLAY$DRAWPING(INVOKEVIRTUAL, GUIPLAYERTABOVERLAY, "a", "drawPing", "(IIIL" + NETWORKPLAYERINFO + ";)V"),
     GUISCREENBOOK$DRAWSCREEN("a", "drawScreen", "(IIF)V"),
