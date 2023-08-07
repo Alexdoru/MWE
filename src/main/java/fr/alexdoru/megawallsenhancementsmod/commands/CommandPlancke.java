@@ -155,6 +155,7 @@ public class CommandPlancke extends MyAbstractCommand {
                         + EnumChatFormatting.YELLOW + "/plancke <player> mw" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "General Mega Walls stats\n"
                         + EnumChatFormatting.YELLOW + "/plancke <player> mw classname" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Class specific Mega Walls stats\n"
                         + EnumChatFormatting.YELLOW + "/plancke <player> mw cp" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Mega Walls classpoints\n"
+                        + EnumChatFormatting.YELLOW + "/plancke <player> mw leg" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Mega Walls legendary skins\n"
                         + EnumChatFormatting.AQUA + ChatUtil.bar()
         );
     }
