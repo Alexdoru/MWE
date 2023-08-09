@@ -25,7 +25,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -53,11 +52,10 @@ public class CommandScanGame extends MyAbstractCommand {
     }
 
     public static void handleScangameCommand(String currentGameId) {
-        final Collection<NetworkPlayerInfo> playerCollection = mc.getNetHandler().getPlayerInfoMap();
         int i = 0;
         final boolean isMythicHour = ScoreboardUtils.isMegaWallsMythicGame();
         if (currentGameId.equals(ScangameData.getScanGameId())) {
-            for (final NetworkPlayerInfo networkPlayerInfo : playerCollection) {
+            for (final NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
                 if (isUsingRandomDuringMythicHour(networkPlayerInfo, isMythicHour)) {
                     i++;
                     MultithreadingUtil.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo, true));
@@ -75,7 +73,7 @@ public class CommandScanGame extends MyAbstractCommand {
         } else {
             ScangameData.clearScanGameData();
             ScangameData.setScanGameId(currentGameId);
-            for (final NetworkPlayerInfo networkPlayerInfo : playerCollection) {
+            for (final NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
                 i++;
                 MultithreadingUtil.addTaskToQueue(new ScanPlayerTask(networkPlayerInfo, isUsingRandomDuringMythicHour(networkPlayerInfo, isMythicHour)));
             }
