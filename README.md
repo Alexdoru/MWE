@@ -5,9 +5,6 @@
 <a href="https://github.com/Alexdoru/MegaWallsEnhancements/releases" target="_blank">
 <img alt="downloads" src="https://img.shields.io/github/downloads/Alexdoru/MegaWallsEnhancements/total?color=0843B2&style=for-the-badge" />
 </a>
-<a href="https://github.com/Alexdoru/MegaWallsEnhancements/">
-<img alt="lines" src="https://img.shields.io/tokei/lines/github/Alexdoru/MegaWallsEnhancements?color=0843B2&style=for-the-badge" />
-</a>
 </p>
 
 **This is a mod for Minecraft Forge 1.8.9 that contains numerous features and improvements for pvp players and for Hypixel's Mega Walls. Use `/mwe` to open the config menu.**
