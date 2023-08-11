@@ -11,7 +11,6 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSample
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.SampleList;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoTracker;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
@@ -47,7 +46,7 @@ public abstract class AbstractCheck implements ICheck {
             if (tracker.isFlagging(failedCheck)) {
                 this.printFlagMessage(player, this.getCheatName(), this.getCheatDescription());
                 this.addToReportList(player, this.getCheatName().toLowerCase());
-                this.sendReport(player, this.getCheatName().toLowerCase(), this.canSendTimestamp());
+                this.sendReport(player, this.getCheatName().toLowerCase());
             }
         }
     }
@@ -114,14 +113,8 @@ public abstract class AbstractCheck implements ICheck {
         }
     }
 
-    private void sendReport(EntityPlayer player, String cheat, boolean sendTimestamp) {
+    private void sendReport(EntityPlayer player, String cheat) {
         if (ScoreboardTracker.isInMwGame && ConfigHandler.autoreportFlaggedPlayers && SquadHandler.getSquad().get(player.getName()) == null) {
-            if (sendTimestamp) {
-                final String timestamp = GameInfoTracker.getTimeSinceGameStart();
-                if (!timestamp.equals("?")) {
-                    cheat = cheat + " flagged at " + timestamp + " since game start";
-                }
-            }
             ReportQueue.INSTANCE.addReportFromHackerDetector(player.getName(), cheat);
         }
     }
