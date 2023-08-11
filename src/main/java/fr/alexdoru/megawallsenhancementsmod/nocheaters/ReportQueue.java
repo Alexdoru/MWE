@@ -28,7 +28,7 @@ public class ReportQueue {
     //private boolean debug;
     private int counter;
     private int standingStillCounter;
-    private int standingStillLimit = 18;
+    private int standingStillLimit = 35;
     private int movingCounter;
     private int autoReportSent;
     private final List<ReportInQueue> queueList = new ArrayList<>();
@@ -52,14 +52,14 @@ public class ReportQueue {
                     final ReportInQueue reportInQueue = queueList.remove(index == -1 ? 0 : index);
                     final String playername = reportInQueue.reportedPlayer;
                     if (reportInQueue.isReportSuggestion || reportInQueue.isReportFromHackerDetector || ScoreboardTracker.isInMwGame) {
-                        final String msg = "/wdr " + playername + (reportInQueue.isReportFromHackerDetector ? " cheating " + reportInQueue.cheat : "");
+                        final String msg = "/wdr " + playername;
                         mc.thePlayer.sendChatMessage(msg);
                         //if (debug) {
                         //    ChatUtil.debug("Sent '" + msg + "'");
                         //}
                     }
                     counter = getNextCounterDelay();
-                    standingStillLimit = 20 + random.nextInt(12);
+                    standingStillLimit = 30 + random.nextInt(12);
                     standingStillCounter = 0;
                     ChatHandler.deleteStopMovingInstruction();
                 } else {
