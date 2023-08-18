@@ -1,6 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.chat;
 
-import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
@@ -39,7 +38,6 @@ public class ChatListener {
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
     private static final String PREP_PHASE = "Prepare your defenses!";
-    private static final Pattern API_KEY_PATTERN = Pattern.compile("^Your new API key is ([a-zA-Z0-9-]+)");
     private static final Pattern BLOCKED_MESSAGE = Pattern.compile("^We blocked your comment \"(.+)\" as it is breaking our rules because[a-zA-Z\\s]+\\. https:\\/\\/www.hypixel.net\\/rules\\/.*");
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!.*");
     private static final Pattern COINS_BOOSTER_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\([^\\(\\)]*(?:Coins \\+ EXP|Booster)[^\\(\\)]*\\)).*");
@@ -201,10 +199,6 @@ public class ChatListener {
                 return;
             }
 
-            if (parseAPIKey(msg)) {
-                return;
-            }
-
             if (ScoreboardTracker.isPreGameLobby) {
                 final Matcher playerJoinMatcher = PLAYER_JOIN_PATTERN.matcher(msg);
                 if (playerJoinMatcher.matches()) {
@@ -274,18 +268,6 @@ public class ChatListener {
 
         }
 
-    }
-
-    /*
-     * automatically sets up the api key on hypixel when you type /api new
-     */
-    private boolean parseAPIKey(String msg) {
-        final Matcher matcherapikey = API_KEY_PATTERN.matcher(msg);
-        if (matcherapikey.matches()) {
-            HypixelApiKeyUtil.setApiKey(matcherapikey.group(1));
-            return true;
-        }
-        return false;
     }
 
     public static void interceptLocrawAndRunScangame() {
