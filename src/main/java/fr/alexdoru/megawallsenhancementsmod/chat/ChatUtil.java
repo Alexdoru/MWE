@@ -113,10 +113,9 @@ public class ChatUtil {
     }
 
     public static void printApikeySetupInfo() {
-        addChatMessage(getTagMW() + EnumChatFormatting.RED + "You didn't set up your Api key. Connect to Hypixel and type "
-                + EnumChatFormatting.YELLOW + "\"/api new\""
-                + EnumChatFormatting.RED + " to get an Api key, the mod should automatically detect the key and save it. If you want to use a key that you already have, type "
-                + EnumChatFormatting.YELLOW + "\"/mwenhancements setapikey <key>\"");
+        addChatMessage(getTagMW() + EnumChatFormatting.RED + "You didn't set up your Api key. If you have an Api Key, use "
+                + EnumChatFormatting.YELLOW + "\"/mwe setapikey <key>\""
+                + EnumChatFormatting.RED + " to use it with the mod.");
     }
 
     public static String inexistantMinecraftNameMsg(String playername) {
