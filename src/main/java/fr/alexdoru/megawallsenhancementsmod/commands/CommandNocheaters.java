@@ -16,6 +16,7 @@ import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiscreens.NoCheatersConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.*;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -97,16 +98,7 @@ public class CommandNocheaters extends MyAbstractCommand {
 
         } else if (args[0].equalsIgnoreCase("log")) {
 
-            if (args.length == 2) {
-                final String name = args[1];
-                if (HackerDetector.INSTANCE.playersToLog.remove(name)) {
-                    ChatUtil.debug("Removed " + name + " from logged players");
-                } else {
-                    ConfigHandler.debugLogging = true;
-                    HackerDetector.INSTANCE.playersToLog.add(name);
-                    ChatUtil.debug("Added " + name + " to players to log");
-                }
-            }
+            this.logPlayer(args);
 
         } else {
 
@@ -300,6 +292,28 @@ public class CommandNocheaters extends MyAbstractCommand {
             }
         } else {
             ChatUtil.addChatMessage(EnumChatFormatting.DARK_RED + "This shouldn't happen");
+        }
+    }
+
+    private void logPlayer(String[] args) {
+        if (args.length == 2) {
+            String name = args[1];
+            if (ScoreboardTracker.isReplayMode) {
+                for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
+                    if (netInfo.getGameProfile().getName().contains(name)) {
+                        // in replay mode for some reason the names of players are
+                        // Playername§r
+                        name = netInfo.getGameProfile().getName();
+                    }
+                }
+            }
+            if (HackerDetector.INSTANCE.playersToLog.remove(name)) {
+                ChatUtil.debug("Removed " + name + " from logged players");
+            } else {
+                ConfigHandler.debugLogging = true;
+                HackerDetector.INSTANCE.playersToLog.add(name);
+                ChatUtil.debug("Added " + name + " to players to log");
+            }
         }
     }
 
