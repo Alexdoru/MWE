@@ -30,8 +30,7 @@ public class CommandMWEnhancements extends MyAbstractCommand {
             return;
         } else if (args.length >= 1 && args[0].equalsIgnoreCase("setapikey")) {
             if (args.length != 2) {
-                ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + " setapikey <key>" + "\n"
-                        + EnumChatFormatting.RED + "Connect on Hypixel and type \"/api new\" to get an Api key");
+                ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + " setapikey <key>");
             } else {
                 HypixelApiKeyUtil.setApiKey(args[1]);
             }
