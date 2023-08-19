@@ -41,6 +41,7 @@ public enum ClassMapping {
     ICAMERA("bia", "net/minecraft/client/renderer/culling/ICamera"),
     ICHATCOMPONENT("eu", "net/minecraft/util/IChatComponent"),
     ICOMMANDSENDER("m", "net/minecraft/command/ICommandSender"),
+    INETHANDLER("ep", "net/minecraft/network/INetHandler"),
     INVENTORYPLAYER("wm", "net/minecraft/entity/player/InventoryPlayer"),
     ITEMSTACK("zx", "net/minecraft/item/ItemStack"),
     MAP("java/util/Map"),
@@ -50,6 +51,7 @@ public enum ClassMapping {
     NETWORKMANAGER("ek", "net/minecraft/network/NetworkManager"),
     NETWORKPLAYERINFO("bdc", "net/minecraft/client/network/NetworkPlayerInfo"),
     NETWORKPLAYERINFO$1("bdc$1", "net/minecraft/client/network/NetworkPlayerInfo$1"),
+    PACKET("ff", "net/minecraft/network/Packet"),
     PLAYERDATASAMPLES("fr/alexdoru/megawallsenhancementsmod/hackerdetector/data/PlayerDataSamples"),
     POTION("pe", "net/minecraft/potion/Potion"),
     PROFILER("nt", "net/minecraft/profiler/Profiler"),
@@ -74,6 +76,7 @@ public enum ClassMapping {
     TEAM("auq", "net/minecraft/scoreboard/Team"),
     TESSELLATOR("bfx", "net/minecraft/client/renderer/Tessellator"),
     TEXTUREMANAGER("bmj", "net/minecraft/client/renderer/texture/TextureManager"),
+    THREADQUICKEXITEXCEPTION("ki", "net/minecraft/network/ThreadQuickExitException"),
     WORLD("adm", "net/minecraft/world/World"),
     WORLDRENDERER("bfd", "net/minecraft/client/renderer/WorldRenderer"),
     WORLDSETTINGS$GAMETYPE("adp$a", "net/minecraft/world/WorldSettings$GameType");
