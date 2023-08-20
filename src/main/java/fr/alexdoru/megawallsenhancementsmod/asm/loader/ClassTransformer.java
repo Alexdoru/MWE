@@ -76,6 +76,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new RenderManagerTransformer());
         registerTransformer(new RenderPlayerTransformer_ColoredHealth());
         registerTransformer(new RenderPlayerTransformer_RenegadeArrowCount());
+        registerTransformer(new S19PacketEntityStatusTransformer());
         registerTransformer(new ScoreboardTransformer());
         registerTransformer(new ScorePlayerTeamTransformer());
         registerTransformer(new OrangeSimpleMod_SprintRenderer());

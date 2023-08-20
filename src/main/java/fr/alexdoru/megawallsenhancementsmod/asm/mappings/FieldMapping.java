@@ -37,7 +37,8 @@ public enum FieldMapping {
     RENDERGLOBAL$COUNTENTITIESRENDERED(RENDERGLOBAL, "S", "countEntitiesRendered", "I"),
     RENDERMANAGER$DEBUGBOUNDINGBOX(RENDERMANAGER, "t", "debugBoundingBox", "Z"),
     RENDERMANAGER$LIVINGENTITY(RENDERMANAGER, "c", "livingPlayer", ENTITY),
-    RENDERMANAGER$TEXTRENDERER(RENDERMANAGER, "n", "textRenderer", FONTRENDERER);
+    RENDERMANAGER$TEXTRENDERER(RENDERMANAGER, "n", "textRenderer", FONTRENDERER),
+    S19PACKETENTITYSTATUS$ENTITYID(S19PACKETENTITYSTATUS, "a", "entityId", "I");
 
     public final String owner;
     public final String name;
