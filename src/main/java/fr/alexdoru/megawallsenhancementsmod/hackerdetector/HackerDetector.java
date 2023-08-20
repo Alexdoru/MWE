@@ -21,6 +21,8 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,9 +31,8 @@ import java.util.UUID;
 
 public class HackerDetector {
 
-    // TODO is it possible to know who is the attacker of an entity
-
     public static final HackerDetector INSTANCE = new HackerDetector();
+    public static final Logger logger = LogManager.getLogger("HackerDetector");
     /** Field stolen from EntityLivingBase */
     private static final UUID sprintingUUID = UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D");
     private final Minecraft mc = Minecraft.getMinecraft();
@@ -203,7 +204,7 @@ public class HackerDetector {
     }
 
     private void log(EntityPlayer player, PlayerDataSamples data) {
-        AbstractCheck.logger.info(player.getName()
+        logger.info(player.getName()
                 + " | onGround " + player.onGround
                 + " | speedXZ (m/s) " + String.format("%.4f", data.dXdZVector2D.norm() * 20D)
                 + " | speedXYZ (m/s) " + data.dXdYdZVector3D.mulitply(20)
