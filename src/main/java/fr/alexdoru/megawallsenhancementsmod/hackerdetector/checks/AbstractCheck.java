@@ -7,6 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.SampleList;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
@@ -23,8 +24,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -38,22 +37,21 @@ import java.util.UUID;
 public abstract class AbstractCheck implements ICheck {
 
     private static final HashSet<String> flagMessages = new HashSet<>();
-    public static final Logger logger = LogManager.getLogger("HackerDetector");
 
     @Override
     public final void checkViolationLevel(EntityPlayer player, boolean failedCheck, ViolationLevelTracker... trackers) {
         for (final ViolationLevelTracker tracker : trackers) {
             if (tracker.isFlagging(failedCheck)) {
-                this.printFlagMessage(player, this.getCheatName(), this.getCheatDescription());
-                this.addToReportList(player, this.getCheatName().toLowerCase());
-                this.sendReport(player, this.getCheatName().toLowerCase());
+                this.printFlagMessage(player);
+                this.addToReportList(player);
+                this.sendReport(player);
             }
         }
     }
 
-    private void printFlagMessage(EntityPlayer player, String cheat, String cheatDescription) {
+    private void printFlagMessage(EntityPlayer player) {
         if (ConfigHandler.debugLogging) {
-            logger.info(player.getName() + " flags " + cheat);
+            HackerDetector.logger.info(player.getName() + " flags " + this.getCheatName());
         }
         if (!ConfigHandler.showFlagMessages) {
             return;
@@ -61,7 +59,7 @@ public abstract class AbstractCheck implements ICheck {
         final String msg = ChatUtil.getTagNoCheaters() + EnumChatFormatting.RESET
                 + NameUtil.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.YELLOW + " flags "
-                + EnumChatFormatting.RED + cheat;
+                + EnumChatFormatting.RED + this.getCheatName();
         if (ConfigHandler.oneFlagMessagePerGame) {
             if (flagMessages.contains(msg)) {
                 return;
@@ -71,12 +69,12 @@ public abstract class AbstractCheck implements ICheck {
         final IChatComponent imsg = new ChatComponentText(msg)
                 .setChatStyle(new ChatStyle()
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.COPY_TO_CLIPBOARD_COMMAND + EnumChatFormatting.getTextWithoutFormattingCodes(msg)))
-                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(cheatDescription))));
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(this.getCheatDescription()))));
         if (!(ScoreboardTracker.isInMwGame && ConfigHandler.autoreportFlaggedPlayers)) {
-            imsg.appendSibling(ChatUtil.getReportButton(player.getName(), "cheating " + cheat.toLowerCase(), ClickEvent.Action.RUN_COMMAND));
+            imsg.appendSibling(ChatUtil.getReportButton(player.getName(), "cheating " + this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
         }
         if (!ConfigHandler.addToReportList) {
-            imsg.appendSibling(ChatUtil.getWDRButton(player.getName(), cheat.toLowerCase(), ClickEvent.Action.RUN_COMMAND));
+            imsg.appendSibling(ChatUtil.getWDRButton(player.getName(), this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
         }
         if (ConfigHandler.compactFlagMessages) {
             ChatHandler.deleteMessageFromChat(imsg);
@@ -84,9 +82,9 @@ public abstract class AbstractCheck implements ICheck {
         ChatUtil.addChatMessage(imsg);
     }
 
-    private void addToReportList(EntityPlayer player, String cheat) {
+    private void addToReportList(EntityPlayer player) {
         if (!ScoreboardTracker.isReplayMode && ConfigHandler.addToReportList && SquadHandler.getSquad().get(player.getName()) == null) {
-            cheat = cheat + "[H]";
+            final String cheat = this.getCheatName().toLowerCase() + "[H]";
             final UUID uuid = player.getUniqueID();
             final boolean isNicked = uuid.version() != 4;
             final String uuidStr = isNicked ? player.getName() : uuid.toString().replace("-", "");
@@ -113,9 +111,9 @@ public abstract class AbstractCheck implements ICheck {
         }
     }
 
-    private void sendReport(EntityPlayer player, String cheat) {
+    private void sendReport(EntityPlayer player) {
         if (ScoreboardTracker.isInMwGame && ConfigHandler.autoreportFlaggedPlayers && SquadHandler.getSquad().get(player.getName()) == null) {
-            ReportQueue.INSTANCE.addReportFromHackerDetector(player.getName(), cheat);
+            ReportQueue.INSTANCE.addReportFromHackerDetector(player.getName(), this.getCheatName().toLowerCase());
         }
     }
 
@@ -127,7 +125,7 @@ public abstract class AbstractCheck implements ICheck {
     }
 
     protected void log(EntityPlayer player, String cheat, @Nonnull ViolationLevelTracker vl, PlayerDataSamples data, String extramsg) {
-        logger.info(player.getName() + " failed " + cheat + " check "
+        HackerDetector.logger.info(player.getName() + " failed " + cheat + " check "
                 + extramsg
                 + " | vl " + vl.getViolationLevel()
                 + " | onGround " + player.onGround

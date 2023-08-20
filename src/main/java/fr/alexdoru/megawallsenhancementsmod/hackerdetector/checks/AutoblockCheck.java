@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,7 +60,7 @@ public class AutoblockCheck extends AbstractCheck {
                     if (data.lastEatDrinkTime < 30) {
                         data.disabledAutoblockCheck = true;
                         if (ConfigHandler.debugLogging) {
-                            logger.info("Disabled autoblock check for " + player.getName() + " lastEatDrinkTime " + data.lastEatDrinkTime);
+                            HackerDetector.logger.info("Disabled autoblock check for " + player.getName() + " lastEatDrinkTime " + data.lastEatDrinkTime);
                         }
                         return false;
                     }
