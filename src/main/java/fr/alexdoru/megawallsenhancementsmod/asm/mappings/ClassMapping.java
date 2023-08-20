@@ -61,6 +61,7 @@ public enum ClassMapping {
     RENDERMANAGER("biu", "net/minecraft/client/renderer/entity/RenderManager"),
     RESOURCELOCATION("jy", "net/minecraft/util/ResourceLocation"),
     S18PACKETENTITYTELEPORT("hz", "net/minecraft/network/play/server/S18PacketEntityTeleport"),
+    S19PACKETENTITYSTATUS("gi", "net/minecraft/network/play/server/S19PacketEntityStatus"),
     S25PACKETBLOCKBREAKANIM("fs", "net/minecraft/network/play/server/S25PacketBlockBreakAnim"),
     S38PACKETPLAYERLISTITEM("gz", "net/minecraft/network/play/server/S38PacketPlayerListItem"),
     S38PACKETPLAYERLISTITEM$ADDPLAYERDATA("gz$b", "net/minecraft/network/play/server/S38PacketPlayerListItem$AddPlayerData"),
