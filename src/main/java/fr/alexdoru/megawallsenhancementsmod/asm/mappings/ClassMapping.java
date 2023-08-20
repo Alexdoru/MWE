@@ -60,6 +60,7 @@ public enum ClassMapping {
     RENDERITEM("bjh", "net/minecraft/client/renderer/entity/RenderItem"),
     RENDERMANAGER("biu", "net/minecraft/client/renderer/entity/RenderManager"),
     RESOURCELOCATION("jy", "net/minecraft/util/ResourceLocation"),
+    S04PACKETENTITYEQUIPMENT("hn", "net/minecraft/network/play/server/S04PacketEntityEquipment"),
     S18PACKETENTITYTELEPORT("hz", "net/minecraft/network/play/server/S18PacketEntityTeleport"),
     S19PACKETENTITYSTATUS("gi", "net/minecraft/network/play/server/S19PacketEntityStatus"),
     S25PACKETBLOCKBREAKANIM("fs", "net/minecraft/network/play/server/S25PacketBlockBreakAnim"),
