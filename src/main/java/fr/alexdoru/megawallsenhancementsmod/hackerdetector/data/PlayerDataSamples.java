@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.SprintCheck;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector2D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class PlayerDataSamples {
 
@@ -21,6 +22,14 @@ public class PlayerDataSamples {
     public int lastSwingTime = 0;
     /** Amount of ticks since the list time the player eat or drank something */
     public int lastEatDrinkTime = 40;
+    /** True if a player's armor has been damaged during this tick, for instance when being attacked */
+    public boolean armorDamaged = false;
+    /** True if the player has attacked another player during this tick */
+    public boolean hasAttacked = false;
+    /** Player attacked during this tick, should always be only one */
+    public EntityPlayer targetedPlayer;
+    /** True if the player has beend attacked by another player during this tick */
+    public boolean hasBeenAttacked = false;
     public boolean disabledAutoblockCheck = false;
     ///** Holds the position XYZ of the player over time */
     //public SampleList<Vector3D> positionSampleList = new SampleList<>(40);
