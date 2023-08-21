@@ -22,7 +22,9 @@ public class PlayerDataSamples {
     public int lastSwingTime = 0;
     /** Amount of ticks since the list time the player eat or drank something */
     public int lastEatDrinkTime = 40;
-    /** True if a player's armor has been damaged during this tick, for instance when being attacked */
+    /** True if the player's armor has been damaged during this tick, for instance when being attacked
+     * Disabled as of right now, always false
+     */
     public boolean armorDamaged = false;
     /** True if the player has attacked another player during this tick */
     public boolean hasAttacked = false;
