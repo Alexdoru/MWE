@@ -144,6 +144,7 @@ public class NameUtil {
                     player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
                 }
                 if (player != null) {
+                    ((EntityPlayerAccessor) player).setPlayerTeamColor(mwPlayerData.teamColor);
                     ((EntityPlayerAccessor) player).setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
                 }
             }
@@ -165,6 +166,7 @@ public class NameUtil {
         final EntityPlayerAccessor playerAccessor = (EntityPlayerAccessor) player;
         playerAccessor.setPrestige4Tag(mwPlayerData.originalP4Tag);
         playerAccessor.setPrestige5Tag(mwPlayerData.P5Tag);
+        playerAccessor.setPlayerTeamColor(mwPlayerData.teamColor);
         if (ConfigHandler.pinkSquadmates && mwPlayerData.squadname != null) {
             playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt('d'));
         } else {

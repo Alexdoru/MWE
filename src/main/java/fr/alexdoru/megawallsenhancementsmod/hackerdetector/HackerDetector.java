@@ -3,7 +3,10 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.*;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.AutoblockCheck;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.FastbreakCheck;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.ICheck;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.SprintCheck;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.BrokenBlock;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
@@ -11,12 +14,12 @@ import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
-import net.minecraft.item.ItemPotion;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
+import net.minecraft.network.play.server.S04PacketEntityEquipment;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -24,10 +27,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class HackerDetector {
 
@@ -35,7 +35,7 @@ public class HackerDetector {
     public static final Logger logger = LogManager.getLogger("HackerDetector");
     /** Field stolen from EntityLivingBase */
     private static final UUID sprintingUUID = UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D");
-    private final Minecraft mc = Minecraft.getMinecraft();
+    private static final Minecraft mc = Minecraft.getMinecraft();
     private final List<ICheck> checkList = new ArrayList<>();
     private long timeElapsedTemp = 0L;
     private long timeElapsed = 0L;
@@ -44,6 +44,7 @@ public class HackerDetector {
     /** Data about blocks broken during this tick */
     public List<BrokenBlock> brokenBlocksList = new ArrayList<>();
     public HashSet<String> playersToLog = new HashSet<>();
+    private final Queue<Runnable> scheduledTasks = new ArrayDeque<>();
 
     static {
         MinecraftForge.EVENT_BUS.register(INSTANCE);
@@ -52,11 +53,7 @@ public class HackerDetector {
     private HackerDetector() {
         checkList.add(new AutoblockCheck());
         checkList.add(FastbreakCheck.INSTANCE);
-        //checkList.add(new KillAuraSwitchCheck());
         checkList.add(new SprintCheck());
-        //checkList.add(new OmniSprintCheck());
-        // TODO add kill aura check if player tracks (the same ?) entity
-        //  while hitting it with good tracking, look at the 3D angle diff > a certain value
     }
 
     @SubscribeEvent
@@ -74,7 +71,9 @@ public class HackerDetector {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
-            playersCheckedTemp = 0;
+            final long timeStart = System.nanoTime();
+            onTickStart();
+            timeElapsedTemp += System.nanoTime() - timeStart;
         } else if (event.phase == TickEvent.Phase.END) {
             if (ScoreboardTracker.isInMwGame) {
                 final long timeStart = System.nanoTime();
@@ -87,6 +86,31 @@ public class HackerDetector {
             }
             playersChecked = playersCheckedTemp;
         }
+    }
+
+    private void onTickStart() {
+
+        playersCheckedTemp = 0;
+        if (!ConfigHandler.hackerDetector) return;
+
+        if (mc.theWorld != null) {
+            for (final Entity entity : mc.theWorld.loadedEntityList) {
+                if (entity instanceof EntityPlayerAccessor) {
+                    final PlayerDataSamples data = ((EntityPlayerAccessor) entity).getPlayerDataSamples();
+                    data.armorDamaged = false;
+                    data.hasAttacked = false;
+                    data.targetedPlayer = null;
+                    data.hasBeenAttacked = false;
+                }
+            }
+        }
+
+        synchronized (this.scheduledTasks) {
+            while (!this.scheduledTasks.isEmpty()) {
+                this.scheduledTasks.poll().run();
+            }
+        }
+
     }
 
     /**
@@ -226,6 +250,134 @@ public class HackerDetector {
                 + " | ticksExisted " + player.ticksExisted
                 + " | isRidingEntity " + player.isRiding()
         );
+    }
+
+    public static void addScheduledTask(Runnable runnable) {
+        if (runnable == null) return;
+        synchronized (INSTANCE.scheduledTasks) {
+            INSTANCE.scheduledTasks.add(runnable);
+        }
+    }
+
+    public static void checkPlayerAttack(int attackerID, int targetId, int attackType) {
+        HackerDetector.addScheduledTask(() -> {
+            if (mc.theWorld == null) return;
+            final Entity attacker = mc.theWorld.getEntityByID(attackerID);
+            final Entity target = mc.theWorld.getEntityByID(targetId);
+            if (!(attacker instanceof EntityPlayer) || !(target instanceof EntityPlayer) || attacker == target) {
+                return;
+            }
+            if (attacker.getDistanceSqToEntity(target) > 64d) {
+                return;
+            }
+            if (ScoreboardTracker.isInMwGame && ((EntityPlayerAccessor) attacker).getPlayerTeamColor() != '\0' && ((EntityPlayerAccessor) attacker).getPlayerTeamColor() == ((EntityPlayerAccessor) target).getPlayerTeamColor()) {
+                return;
+            }
+            if (attackType == 1) { // swing and hurt packet received consecutively
+                onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target);
+                //logger.info(
+                //        attacker.getName() + " (" + attacker.getEntityId() + ")" +
+                //                " attacked " +
+                //                target.getName() + " (" + target.getEntityId() + ")" +
+                //                " distance " + target.getDistanceToEntity(attacker) +
+                //                " [attack] " +
+                //                " swing time " + ((EntityPlayer) attacker).swingProgressInt +
+                //                " hurt time " + ((EntityPlayer) target).hurtTime
+                //);
+                //ChatUtil.debug(
+                //        NameUtil.getFormattedNameWithoutIcons(attacker.getName()) +
+                //                EnumChatFormatting.RESET + " attacked " +
+                //                NameUtil.getFormattedNameWithoutIcons(target.getName()) +
+                //                EnumChatFormatting.RESET + " [attack] " +
+                //                " distance " + target.getDistanceToEntity(attacker) +
+                //                " swing time " + ((EntityPlayer) attacker).swingProgressInt +
+                //                " hurt time " + ((EntityPlayer) target).hurtTime
+                //);
+            } else if (attackType == 2) { // target hurt
+                if (((EntityPlayer) attacker).swingProgressInt == -1 && ((EntityPlayer) target).hurtTime == 10) {
+                    onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target);
+                    //logger.info(
+                    //        attacker.getName() + " (" + attacker.getEntityId() + ")" +
+                    //                " attacked " +
+                    //                target.getName() + " (" + target.getEntityId() + ")" +
+                    //                " [hurt] " +
+                    //                " distance " + target.getDistanceToEntity(attacker)
+                    //);
+                    //ChatUtil.debug(
+                    //        NameUtil.getFormattedNameWithoutIcons(attacker.getName()) +
+                    //                EnumChatFormatting.RESET + " attacked " +
+                    //                NameUtil.getFormattedNameWithoutIcons(target.getName()) +
+                    //                EnumChatFormatting.RESET + " [hurt] " +
+                    //                " distance " + target.getDistanceToEntity(attacker)
+                    //);
+                }
+            } else if (attackType == 4) { // target has crit particles
+                if (((EntityPlayer) attacker).swingProgressInt == -1 && !attacker.onGround && attacker.ridingEntity == null) {
+                    onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target);
+                    //logger.info(
+                    //        attacker.getName() + " (" + attacker.getEntityId() + ")" +
+                    //                " attacked " +
+                    //                target.getName() + " (" + target.getEntityId() + ")" +
+                    //                " [crit] " +
+                    //                " distance " + target.getDistanceToEntity(attacker)
+                    //);
+                    //ChatUtil.debug(
+                    //        NameUtil.getFormattedNameWithoutIcons(attacker.getName())
+                    //                + EnumChatFormatting.RESET + " attacked "
+                    //                + NameUtil.getFormattedNameWithoutIcons(target.getName())
+                    //                + EnumChatFormatting.RESET + " [crit] " +
+                    //                " distance " + target.getDistanceToEntity(attacker)
+                    //);
+                }
+            } else if (attackType == 5) { // target has sharp particles
+                if (((EntityPlayer) attacker).swingProgressInt == -1) {
+                    final ItemStack heldItem = ((EntityPlayer) attacker).getHeldItem();
+                    if (heldItem != null) {
+                        final Item item = heldItem.getItem();
+                        if ((item instanceof ItemSword || item instanceof ItemTool) && heldItem.isItemEnchanted()) {
+                            onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target);
+                            //logger.info(
+                            //        attacker.getName() + " (" + attacker.getEntityId() + ")" +
+                            //                " attacked " +
+                            //                target.getName() + " (" + target.getEntityId() + ")" +
+                            //                " [sharp] " +
+                            //                " distance " + target.getDistanceToEntity(attacker)
+                            //);
+                            //ChatUtil.debug(
+                            //        NameUtil.getFormattedNameWithoutIcons(attacker.getName()) +
+                            //                EnumChatFormatting.RESET + " attacked " +
+                            //                NameUtil.getFormattedNameWithoutIcons(target.getName()) +
+                            //                EnumChatFormatting.RESET + " [sharp] " +
+                            //                " distance " + target.getDistanceToEntity(attacker)
+                            //);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private static void onPlayerAttack(EntityPlayer attacker, EntityPlayer target) {
+        final PlayerDataSamples dataAttacked = ((EntityPlayerAccessor) attacker).getPlayerDataSamples();
+        dataAttacked.hasAttacked = true;
+        dataAttacked.targetedPlayer = target;
+        ((EntityPlayerAccessor) target).getPlayerDataSamples().hasBeenAttacked = true;
+    }
+
+    public static void onEquipmentPacket(EntityPlayer player, S04PacketEntityEquipment packet) {
+        final long timeStart = System.nanoTime();
+        final ItemStack currentItemStack = player.inventory.armorInventory[packet.getEquipmentSlot() - 1];
+        final ItemStack newItemStack = packet.getItemStack();
+        if (currentItemStack != null && newItemStack != null) {
+            if (currentItemStack.getItem() == newItemStack.getItem()) {
+                final int newItemDamage = newItemStack.getItemDamage();
+                final int currentItemDamage = currentItemStack.getItemDamage();
+                if (newItemDamage > currentItemDamage || (newItemDamage == 0 && newItemDamage == currentItemDamage)) {
+                    HackerDetector.addScheduledTask(() -> ((EntityPlayerAccessor) player).getPlayerDataSamples().armorDamaged = true);
+                }
+            }
+        }
+        INSTANCE.timeElapsedTemp += System.nanoTime() - timeStart;
     }
 
 }

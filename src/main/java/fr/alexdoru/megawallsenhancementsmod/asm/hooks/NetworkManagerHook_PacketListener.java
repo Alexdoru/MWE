@@ -1,14 +1,10 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.S19PacketEntityStatusAccessor;
-import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.*;
-import net.minecraft.util.EnumChatFormatting;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,12 +13,14 @@ public class NetworkManagerHook_PacketListener {
 
     private static final Logger logger = LogManager.getLogger("PacketListener");
     private static boolean lastPacketWasSwing;
-    private static int attackingEntityID;
+    private static int attackerID;
 
-    // Carefull, this code isn't called from the main thread
+    // Careful, this code isn't called from the main thread
+    // Only listens packets that throw a ThreadQuickExitException
     public static void listen(@SuppressWarnings("rawtypes") Packet packet) {
+        if (!ConfigHandler.hackerDetector) return;
         try { // We need a try catch block to prevent any exception from being throwned, it would discard the packet
-
+            lookForAttacks(packet);
         } catch (Throwable ignored) {}
     }
 
@@ -65,49 +63,33 @@ public class NetworkManagerHook_PacketListener {
         }
     }
 
-    private static void checkAttackEvent(int attackingEntityID, int targetId) {
-        Minecraft.getMinecraft().addScheduledTask(() -> {
-            // TODO pour le player SP regarder le paquet S06PacketUpdateHealth handleUpdateHealth mais
-            //  que quand ca fait baisser la vie dans {@link EntityPlayerSP#setPlayerSPHealth}
-            if (Minecraft.getMinecraft().theWorld != null) {
-                final Entity attacker = Minecraft.getMinecraft().theWorld.getEntityByID(attackingEntityID);
-                final Entity target = Minecraft.getMinecraft().theWorld.getEntityByID(targetId);
-                if (attacker instanceof EntityPlayer && target instanceof EntityPlayer && attacker != target) {
-                    logger.info(
-                            attacker.getName() + " (" + attacker.getEntityId() + ")" +
-                                    " attacked " +
-                                    target.getName() + " (" + target.getEntityId() + ")" +
-                                    " distance " + target.getDistanceToEntity(attacker)
-                    );
-                    ChatUtil.debug(
-                            NameUtil.getFormattedNameWithoutIcons(attacker.getName())
-                                    + EnumChatFormatting.RESET + " attacked "
-                                    + NameUtil.getFormattedNameWithoutIcons(target.getName())
-                    );
-                }
-            }
-        });
-    }
-
     private static String stripClassName(String targetClassName) {
         final String[] split = targetClassName.split("\\.");
         return split[split.length - 1];
     }
 
     private static void lookForAttacks(@SuppressWarnings("rawtypes") Packet packet) {
-        if (lastPacketWasSwing) {
-            if (packet instanceof S19PacketEntityStatusAccessor && ((S19PacketEntityStatus) packet).getOpCode() == 2) { // Entity gets hurt
-                checkAttackEvent(attackingEntityID, ((S19PacketEntityStatusAccessor) packet).getEntityId());
-            } else if (packet instanceof S0BPacketAnimation && (((S0BPacketAnimation) packet).getAnimationType() == 4 || ((S0BPacketAnimation) packet).getAnimationType() == 5)) { // crit particle packet
-                checkAttackEvent(attackingEntityID, ((S0BPacketAnimation) packet).getEntityID());
+        if (packet instanceof S19PacketEntityStatusAccessor && ((S19PacketEntityStatus) packet).getOpCode() == 2) { // Entity gets hurt
+            if (lastPacketWasSwing) {
+                HackerDetector.checkPlayerAttack(attackerID, ((S19PacketEntityStatusAccessor) packet).getEntityId(), 1);
+            } else {
+                HackerDetector.checkPlayerAttack(attackerID, ((S19PacketEntityStatusAccessor) packet).getEntityId(), 2);
+            }
+        } else if (packet instanceof S0BPacketAnimation) {
+            if (((S0BPacketAnimation) packet).getAnimationType() == 0) { // Swing packet
+                lastPacketWasSwing = true;
+                attackerID = ((S0BPacketAnimation) packet).getEntityID();
+                return;
+            }
+            if (((S0BPacketAnimation) packet).getAnimationType() == 4 || ((S0BPacketAnimation) packet).getAnimationType() == 5) { // crit particle packet
+                if (lastPacketWasSwing) {
+                    HackerDetector.checkPlayerAttack(attackerID, ((S0BPacketAnimation) packet).getEntityID(), 1);
+                } else {
+                    HackerDetector.checkPlayerAttack(attackerID, ((S0BPacketAnimation) packet).getEntityID(), ((S0BPacketAnimation) packet).getAnimationType());
+                }
             }
         }
-        if (packet instanceof S0BPacketAnimation && ((S0BPacketAnimation) packet).getAnimationType() == 0) { // Swing packet
-            lastPacketWasSwing = true;
-            attackingEntityID = ((S0BPacketAnimation) packet).getEntityID();
-        } else {
-            lastPacketWasSwing = false;
-        }
+        lastPacketWasSwing = false;
     }
 
 }
