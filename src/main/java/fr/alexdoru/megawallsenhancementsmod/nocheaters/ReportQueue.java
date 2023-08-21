@@ -294,8 +294,10 @@ public class ReportQueue {
                 && thePlayer.movementInput.moveStrafe == 0.0F
                 && !thePlayer.movementInput.jump
                 && !thePlayer.movementInput.sneak
-                && !thePlayer.isUsingItem()
-                && !thePlayer.isSwingInProgress;
+                && !mc.gameSettings.keyBindAttack.isKeyDown()
+                && !mc.gameSettings.keyBindUseItem.isKeyDown()
+                && mc.mouseHelper.deltaX == 0
+                && mc.mouseHelper.deltaY == 0;
     }
 
 }
