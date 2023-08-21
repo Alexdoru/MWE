@@ -8,7 +8,7 @@ import org.objectweb.asm.tree.*;
 import static org.objectweb.asm.Opcodes.ALOAD;
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 
-public class EntityPlayerSPTransformer implements MWETransformer {
+public class EntityPlayerSPTransformer_CommandListener implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {
@@ -22,7 +22,13 @@ public class EntityPlayerSPTransformer implements MWETransformer {
             if (checkMethodNode(methodNode, MethodMapping.ENTITYPLAYERSP$SENDCHATMESSAGE)) {
                 final InsnList list = new InsnList();
                 list.add(new VarInsnNode(ALOAD, 1));
-                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("EntityPlayerSPHook"), "onMessageSent", "(Ljava/lang/String;)V", false));
+                list.add(new MethodInsnNode(
+                        INVOKESTATIC,
+                        getHookClass("EntityPlayerSPHook_CommandListener"),
+                        "onMessageSent",
+                        "(Ljava/lang/String;)V",
+                        false
+                ));
                 methodNode.instructions.insert(list);
                 status.addInjection();
             }
