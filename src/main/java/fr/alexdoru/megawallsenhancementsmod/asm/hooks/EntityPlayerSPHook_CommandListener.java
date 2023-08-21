@@ -6,7 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 
 @SuppressWarnings("unused")
-public class EntityPlayerSPHook {
+public class EntityPlayerSPHook_CommandListener {
 
     public static void onMessageSent(String message) {
         if (StringUtil.isNullOrEmpty(message)) {
