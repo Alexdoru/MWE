@@ -9,6 +9,17 @@
 
 **This is a mod for Minecraft Forge 1.8.9 that contains numerous features and improvements for pvp players and for Hypixel's Mega Walls. Use `/mwe` to open the config menu.**
 
+## Summary
+- [Download](https://github.com/Alexdoru/MegaWallsEnhancements#download)
+- [Installation](https://github.com/Alexdoru/MegaWallsEnhancements#installation)
+- [Feature list](https://github.com/Alexdoru/MegaWallsEnhancements#feature-list)
+  - [Enhancements](https://github.com/Alexdoru/MegaWallsEnhancements#enhancements)
+  - [Hitbox Mod, Better f3+b](https://github.com/Alexdoru/MegaWallsEnhancements#hitbox-mod-better-f3b)
+  - [Mega Walls features](https://github.com/Alexdoru/MegaWallsEnhancements#mega-walls-features)
+  - [Hacker Detector](https://github.com/Alexdoru/MegaWallsEnhancements#hacker-detector)
+  - [NoCheaters](https://github.com/Alexdoru/MegaWallsEnhancements#nocheaters)
+  - [Commands](https://github.com/Alexdoru/MegaWallsEnhancements#commands)
+
 ## Download
 
 Download the latest release from the **[releases page](https://github.com/Alexdoru/MegaWallsEnhancements/releases)**
@@ -102,18 +113,6 @@ Tracks final kills in Hypixel's Mega Walls.
 - **Kill diff in chat** - When a player with final kills dies, it appends at the end of the chat message the amount of finals lost
 - `/fks say` - Sends a chat message with the current final score for your teamates to see
 
-### Commands
-
-Most commands require a working Hypixel Api Key, use `/mwe set <key>` to set your key.
-
-- `/addalias` - Give nicknames to players that will show in the tablist behind their name, use `/addalias` for details
-- `/mwe` - Open the config menu
-- `/nocheaters` - Shows reported players in chat, use `/nocheaters help` for details
-- `/plancke` - Checks stats of players for different games, use `/plancke` for details
-- `/scangame` - In Mega Walls, releaves which accouns are alt accounts with high stats, most likely cheaters
-- `/squad` - Add and remove players from your squad, use `/squad` for details
-- `/stalk <name>` - Reveals what a player is currently doing on the Hypixel Network
-
 ### Hacker Detector:
 
 Detects players using certain cheats and warns you about those players. It can also automatically report them and save those players in NoCheaters.
@@ -131,3 +130,15 @@ Saves all the players you report with `/wdr` (not /report), and gives you warnin
 - **Censor cheaters in chat** - Deletes or censors chat messages sent by players you have reported for cheating
 - You can use `/report name boosting` & `/report name crossteaming` as a one step command to report on Hypixel instead of using the book
 - Shows who joined in party with a certain player when you `/wdr` them, to report the other members for boosting
+
+### Commands
+
+Most commands require a working Hypixel Api Key, use `/mwe set <key>` to set your key.
+
+- `/addalias` - Give nicknames to players that will show in the tablist behind their name, use `/addalias` for details
+- `/mwe` - Open the config menu
+- `/nocheaters` - Shows reported players in chat, use `/nocheaters help` for details
+- `/plancke` - Checks stats of players for different games, use `/plancke` for details
+- `/scangame` - In Mega Walls, releaves which accouns are alt accounts with high stats, most likely cheaters
+- `/squad` - Add and remove players from your squad, use `/squad` for details
+- `/stalk <name>` - Reveals what a player is currently doing on the Hypixel Network
