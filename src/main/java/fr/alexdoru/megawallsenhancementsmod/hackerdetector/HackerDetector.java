@@ -71,15 +71,14 @@ public class HackerDetector {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
+            playersCheckedTemp = 0;
             final long timeStart = System.nanoTime();
-            onTickStart();
+            this.onTickStart();
             timeElapsedTemp += System.nanoTime() - timeStart;
         } else if (event.phase == TickEvent.Phase.END) {
-            if (ScoreboardTracker.isInMwGame) {
-                final long timeStart = System.nanoTime();
-                FastbreakCheck.INSTANCE.onTickEnd();
-                timeElapsedTemp += System.nanoTime() - timeStart;
-            }
+            final long timeStart = System.nanoTime();
+            this.onTickEnd();
+            timeElapsedTemp += System.nanoTime() - timeStart;
             if (mc.thePlayer != null && mc.thePlayer.ticksExisted % 20 == 0) {
                 timeElapsed = timeElapsedTemp;
                 timeElapsedTemp = 0L;
@@ -90,7 +89,6 @@ public class HackerDetector {
 
     private void onTickStart() {
 
-        playersCheckedTemp = 0;
         if (!ConfigHandler.hackerDetector) return;
 
         if (mc.theWorld != null) {
@@ -111,6 +109,11 @@ public class HackerDetector {
             }
         }
 
+    }
+
+    private void onTickEnd() {
+        if (!ConfigHandler.hackerDetector) return;
+        FastbreakCheck.INSTANCE.onTickEnd();
     }
 
     /**

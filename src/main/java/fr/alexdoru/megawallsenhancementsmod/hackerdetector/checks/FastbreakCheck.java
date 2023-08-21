@@ -87,7 +87,7 @@ public class FastbreakCheck extends AbstractCheck {
      */
     public void onTickEnd() {
         final Minecraft mc = Minecraft.getMinecraft();
-        if (ConfigHandler.hackerDetector && mc.theWorld != null && mc.thePlayer != null && mc.theWorld.isRemote) {
+        if (ScoreboardTracker.isInMwGame && mc.theWorld != null && mc.thePlayer != null && mc.theWorld.isRemote) {
             for (final BrokenBlock brokenBlock : HackerDetector.INSTANCE.brokenBlocksList) {
                 if (brokenBlock.playersList != null) {
                     long oldestTime = System.currentTimeMillis();
