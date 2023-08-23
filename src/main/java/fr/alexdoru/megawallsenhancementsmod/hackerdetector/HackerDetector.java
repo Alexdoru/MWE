@@ -198,14 +198,16 @@ public class HackerDetector {
                 return;
             }
             if (attackType == 1) { // swing and hurt packet received consecutively
-                onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target);
+                onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target, "attack");
             } else if (attackType == 2) { // target hurt
+                // when an ability does damage to multiple players, this can fire multiple times
+                // on different players for the same attacker
                 if (((EntityPlayer) attacker).swingProgressInt == -1 && ((EntityPlayer) target).hurtTime == 10) {
-                    onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target);
+                    onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target, "hurt");
                 }
             } else if (attackType == 4) { // target has crit particles
                 if (((EntityPlayer) attacker).swingProgressInt == -1 && !attacker.onGround && attacker.ridingEntity == null) {
-                    onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target);
+                    onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target, "critical");
                 }
             } else if (attackType == 5) { // target has sharp particles
                 if (((EntityPlayer) attacker).swingProgressInt == -1) {
@@ -213,7 +215,7 @@ public class HackerDetector {
                     if (heldItem != null) {
                         final Item item = heldItem.getItem();
                         if ((item instanceof ItemSword || item instanceof ItemTool) && heldItem.isItemEnchanted()) {
-                            onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target);
+                            onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target, "sharpness");
                         }
                     }
                 }
@@ -221,7 +223,7 @@ public class HackerDetector {
         });
     }
 
-    private static void onPlayerAttack(EntityPlayer attacker, EntityPlayer target) {
+    private static void onPlayerAttack(EntityPlayer attacker, EntityPlayer target, String attackType) {
         final PlayerDataSamples dataAttacked = ((EntityPlayerAccessor) attacker).getPlayerDataSamples();
         if (dataAttacked.hasAttackedMultiTarget) {
             return;
@@ -236,6 +238,15 @@ public class HackerDetector {
         dataAttacked.hasAttacked = true;
         dataAttacked.targetedPlayer = target;
         ((EntityPlayerAccessor) target).getPlayerDataSamples().hasBeenAttacked = true;
+        if (ConfigHandler.debugLogging) {
+            log(attacker.getName() + " attacked " + target.getName() + " [" + attackType + "]");
+            //ChatUtil.debug(System.currentTimeMillis() % 1000 + " " +
+            //        NameUtil.getFormattedNameWithoutIcons(attacker.getName())
+            //        + EnumChatFormatting.RESET + " attacked "
+            //        + NameUtil.getFormattedNameWithoutIcons(target.getName())
+            //        + EnumChatFormatting.RESET + " [" + attackType + "]"
+            //);
+        }
     }
 
     public static void onEquipmentPacket(EntityPlayer player, S04PacketEntityEquipment packet) {
