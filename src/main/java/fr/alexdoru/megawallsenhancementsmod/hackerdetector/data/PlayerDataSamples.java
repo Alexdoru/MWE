@@ -38,9 +38,12 @@ public class PlayerDataSamples {
      * Disabled as of right now, always false
      */
     public boolean armorDamaged = false;
+    /** Used to filter hurt events from an ability damaging multiple players at
+     * the same time and mistaken for a player attacking multiple eneities */
+    public boolean hasAttackedMultiTarget = false;
     /** True if the player has attacked another player during this tick */
     public boolean hasAttacked = false;
-    /** Player attacked during this tick, should always be only one */
+    /** Player attacked during this tick if any */
     public EntityPlayer targetedPlayer;
     /** True if the player has beend attacked by another player during this tick */
     public boolean hasBeenAttacked = false;
@@ -94,6 +97,7 @@ public class PlayerDataSamples {
         this.updatedThisTick = false;
         this.customSwing = false;
         this.armorDamaged = false;
+        this.hasAttackedMultiTarget = false;
         this.hasAttacked = false;
         this.targetedPlayer = null;
         this.hasBeenAttacked = false;
