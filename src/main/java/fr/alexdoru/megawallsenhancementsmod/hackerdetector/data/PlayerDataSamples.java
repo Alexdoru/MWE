@@ -20,6 +20,9 @@ public class PlayerDataSamples {
     public int lastHurtTime = 0;
     /** Amount of ticks since the last sword swing started */
     public int lastSwingTime = 0;
+    /** True when we receive a swing packet from this entity during the last tick */
+    public boolean customSwing = false;
+    public int lastCustomSwingTime = -1;
     /** Amount of ticks since the list time the player eat or drank something */
     public int lastEatDrinkTime = 40;
     /** True if the player's armor has been damaged during this tick, for instance when being attacked
