@@ -90,6 +90,15 @@ public class PlayerDataSamples {
     public final ViolationLevelTracker keepsprintUseItemVL = SprintCheck.newKeepsprintViolationTracker();
     //public final ViolationLevelTracker omnisprintVL = OmniSprintCheck.newViolationTracker();
 
+    public void ontickStart() {
+        this.updatedThisTick = false;
+        this.customSwing = false;
+        this.armorDamaged = false;
+        this.hasAttacked = false;
+        this.targetedPlayer = null;
+        this.hasBeenAttacked = false;
+    }
+
     public void onTick(EntityPlayer player) {
         final ItemStack itemStack = player.getItemInUse();
         if (itemStack != null) {
