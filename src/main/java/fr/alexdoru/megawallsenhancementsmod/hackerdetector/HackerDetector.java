@@ -19,7 +19,6 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.*;
 import net.minecraft.network.play.server.S04PacketEntityEquipment;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -109,6 +108,40 @@ public class HackerDetector {
             }
         }
 
+        this.checkPlayerSpDamaged();
+
+    }
+
+    private float prevPlayerSPHealth;
+
+    private void checkPlayerSpDamaged() {
+        if (mc.thePlayer == null || mc.theWorld == null) {
+            return;
+        }
+        final float playerHP = mc.thePlayer.getHealth() + mc.thePlayer.getAbsorptionAmount();
+        final boolean flag = playerHP < prevPlayerSPHealth;
+        prevPlayerSPHealth = playerHP;
+        if (!flag) return;
+        final List<EntityPlayer> list = mc.theWorld.getPlayers(EntityPlayer.class, player -> {
+            if (player == mc.thePlayer) {
+                return false;
+            }
+            if (player.swingProgressInt > 0) {
+                return false;
+            }
+            if (player.getDistanceSqToEntity(mc.thePlayer) > 64d) {
+                // TODO changer le range check en fonction de la speed du mec et ma speed,
+                //  si je prend du kb je vais voir que je me fait taper de 18 000 blocks?
+                return false;
+            }
+            return !ScoreboardTracker.isInMwGame || ((EntityPlayerAccessor) player).getPlayerTeamColor() == '\0' || ((EntityPlayerAccessor) player).getPlayerTeamColor() != ((EntityPlayerAccessor) mc.thePlayer).getPlayerTeamColor();
+        });
+        if (list.isEmpty()) return;
+        if (list.size() == 1) {
+            if (!((EntityPlayerAccessor) list.get(0)).getPlayerDataSamples().hasAttacked) {
+                onPlayerAttack(list.get(0), mc.thePlayer);
+            }
+        }
     }
 
     private void onTickEnd() {
