@@ -18,7 +18,7 @@ public class GuiIngameForgeTransformer implements MWETransformer {
     public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.RENDERGAMEOVERLAY)) {
+            if (checkMethodNode(methodNode, MethodMapping.GUIINGAME$RENDERGAMEOVERLAY)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkVarInsnNode(insnNode, ILOAD)) {
                         final AbstractInsnNode secondNode = insnNode.getNext();

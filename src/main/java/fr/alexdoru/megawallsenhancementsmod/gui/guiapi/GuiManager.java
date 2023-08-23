@@ -31,6 +31,9 @@ public final class GuiManager {
         this.registeredRenderers.add(new PhoenixBondHUD());
     }
 
+    /**
+     * If you have HUD Caching this method will only run 20 times per second
+     */
     @SubscribeEvent
     public void onRenderGUI(RenderGameOverlayEvent.Post event) {
         if (event.type == ElementType.TEXT && !(mc.currentScreen instanceof PositionEditGuiScreen)) {
@@ -41,7 +44,16 @@ public final class GuiManager {
         }
     }
 
-    private void callRenderer(IRenderer renderer, ScaledResolution resolution, long currentTimeMillis) {
+    /**
+     * This will run once per frame even with HUD Caching
+     * Hook injected in {@link net.minecraft.client.renderer.EntityRenderer#updateCameraAndRender}
+     * after this.mc.ingameGUI.renderGameOverlay(partialTicks) call
+     */
+    public static void onPostRenderGameOverlay(float partialTicks) {
+
+    }
+
+    private static void callRenderer(IRenderer renderer, ScaledResolution resolution, long currentTimeMillis) {
         if (renderer.isEnabled(currentTimeMillis)) {
             renderer.render(resolution);
         }
