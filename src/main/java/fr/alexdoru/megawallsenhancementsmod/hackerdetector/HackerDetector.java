@@ -183,20 +183,6 @@ public class HackerDetector {
         timeElapsedTemp += System.nanoTime() - timeStart;
     }
 
-    //private void checkForRubberBand(double directionDeltaXZ, PlayerDataSamples data, EntityPlayer player) {
-    //    if (directionDeltaXZ > 170D && data.dXdZVector2D.norm() > 0.6D) {
-    //        ChatUtil.debug("Detected Rubber band of " + player.getName());
-    //        AbstractCheck.logger.info("Detected Rubber band of " + player.getName()
-    //                + " | ticksExisted " + player.ticksExisted
-    //                + " | lastHurtTime " + data.lastHurtTime
-    //                + " | directionDeltaXZ " + String.format("%.4f", directionDeltaXZ)
-    //                + " | onGround " + player.onGround
-    //                + " | speedXZ (m/s) " + String.format("%.4f", data.dXdZVector2D.norm() * 20D)
-    //                + " | prev positions " + data.positionSampleList
-    //        );
-    //    }
-    //}
-
     /**
      * Used for debuging and testing
      */
@@ -277,59 +263,13 @@ public class HackerDetector {
             }
             if (attackType == 1) { // swing and hurt packet received consecutively
                 onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target);
-                //logger.info(
-                //        attacker.getName() + " (" + attacker.getEntityId() + ")" +
-                //                " attacked " +
-                //                target.getName() + " (" + target.getEntityId() + ")" +
-                //                " distance " + target.getDistanceToEntity(attacker) +
-                //                " [attack] " +
-                //                " swing time " + ((EntityPlayer) attacker).swingProgressInt +
-                //                " hurt time " + ((EntityPlayer) target).hurtTime
-                //);
-                //ChatUtil.debug(
-                //        NameUtil.getFormattedNameWithoutIcons(attacker.getName()) +
-                //                EnumChatFormatting.RESET + " attacked " +
-                //                NameUtil.getFormattedNameWithoutIcons(target.getName()) +
-                //                EnumChatFormatting.RESET + " [attack] " +
-                //                " distance " + target.getDistanceToEntity(attacker) +
-                //                " swing time " + ((EntityPlayer) attacker).swingProgressInt +
-                //                " hurt time " + ((EntityPlayer) target).hurtTime
-                //);
             } else if (attackType == 2) { // target hurt
                 if (((EntityPlayer) attacker).swingProgressInt == -1 && ((EntityPlayer) target).hurtTime == 10) {
                     onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target);
-                    //logger.info(
-                    //        attacker.getName() + " (" + attacker.getEntityId() + ")" +
-                    //                " attacked " +
-                    //                target.getName() + " (" + target.getEntityId() + ")" +
-                    //                " [hurt] " +
-                    //                " distance " + target.getDistanceToEntity(attacker)
-                    //);
-                    //ChatUtil.debug(
-                    //        NameUtil.getFormattedNameWithoutIcons(attacker.getName()) +
-                    //                EnumChatFormatting.RESET + " attacked " +
-                    //                NameUtil.getFormattedNameWithoutIcons(target.getName()) +
-                    //                EnumChatFormatting.RESET + " [hurt] " +
-                    //                " distance " + target.getDistanceToEntity(attacker)
-                    //);
                 }
             } else if (attackType == 4) { // target has crit particles
                 if (((EntityPlayer) attacker).swingProgressInt == -1 && !attacker.onGround && attacker.ridingEntity == null) {
                     onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target);
-                    //logger.info(
-                    //        attacker.getName() + " (" + attacker.getEntityId() + ")" +
-                    //                " attacked " +
-                    //                target.getName() + " (" + target.getEntityId() + ")" +
-                    //                " [crit] " +
-                    //                " distance " + target.getDistanceToEntity(attacker)
-                    //);
-                    //ChatUtil.debug(
-                    //        NameUtil.getFormattedNameWithoutIcons(attacker.getName())
-                    //                + EnumChatFormatting.RESET + " attacked "
-                    //                + NameUtil.getFormattedNameWithoutIcons(target.getName())
-                    //                + EnumChatFormatting.RESET + " [crit] " +
-                    //                " distance " + target.getDistanceToEntity(attacker)
-                    //);
                 }
             } else if (attackType == 5) { // target has sharp particles
                 if (((EntityPlayer) attacker).swingProgressInt == -1) {
@@ -338,20 +278,6 @@ public class HackerDetector {
                         final Item item = heldItem.getItem();
                         if ((item instanceof ItemSword || item instanceof ItemTool) && heldItem.isItemEnchanted()) {
                             onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target);
-                            //logger.info(
-                            //        attacker.getName() + " (" + attacker.getEntityId() + ")" +
-                            //                " attacked " +
-                            //                target.getName() + " (" + target.getEntityId() + ")" +
-                            //                " [sharp] " +
-                            //                " distance " + target.getDistanceToEntity(attacker)
-                            //);
-                            //ChatUtil.debug(
-                            //        NameUtil.getFormattedNameWithoutIcons(attacker.getName()) +
-                            //                EnumChatFormatting.RESET + " attacked " +
-                            //                NameUtil.getFormattedNameWithoutIcons(target.getName()) +
-                            //                EnumChatFormatting.RESET + " [sharp] " +
-                            //                " distance " + target.getDistanceToEntity(attacker)
-                            //);
                         }
                     }
                 }
