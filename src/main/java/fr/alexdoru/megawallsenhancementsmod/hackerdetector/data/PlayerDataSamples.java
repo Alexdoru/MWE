@@ -10,6 +10,8 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class PlayerDataSamples {
 
+    /** Used to update the data only once per tick, since the world.entity lists might contain duplicate items  */
+    public boolean updatedThisTick = false;
     /** True if the player's position in the XZ plane is identical to the last tick */
     public boolean isNotMoving = true;
     /** Amount of ticks since the player started sprinting */

@@ -94,6 +94,7 @@ public class HackerDetector {
         if (mc.theWorld != null) {
             for (final EntityPlayer player : mc.theWorld.playerEntities) {
                 final PlayerDataSamples data = ((EntityPlayerAccessor) player).getPlayerDataSamples();
+                data.updatedThisTick = false;
                 data.customSwing = false;
                 data.armorDamaged = false;
                 data.hasAttacked = false;
@@ -137,8 +138,9 @@ public class HackerDetector {
             timeElapsedTemp += System.nanoTime() - timeStart;
             return;
         }
-        playersCheckedTemp++;
         final PlayerDataSamples data = ((EntityPlayerAccessor) player).getPlayerDataSamples();
+        playersCheckedTemp++;
+        if (data.updatedThisTick) return;
         updatePlayerDataSamples(player, data);
         if (ConfigHandler.debugLogging && playersToLog.contains(player.getName())) log(player, data);
         checkList.forEach(check -> check.performCheck(player, data));
