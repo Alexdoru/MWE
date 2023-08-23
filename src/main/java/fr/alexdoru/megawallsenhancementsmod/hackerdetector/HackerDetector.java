@@ -92,14 +92,13 @@ public class HackerDetector {
         if (!ConfigHandler.hackerDetector) return;
 
         if (mc.theWorld != null) {
-            for (final Entity entity : mc.theWorld.loadedEntityList) {
-                if (entity instanceof EntityPlayerAccessor) {
-                    final PlayerDataSamples data = ((EntityPlayerAccessor) entity).getPlayerDataSamples();
-                    data.armorDamaged = false;
-                    data.hasAttacked = false;
-                    data.targetedPlayer = null;
-                    data.hasBeenAttacked = false;
-                }
+            for (final EntityPlayer player : mc.theWorld.playerEntities) {
+                final PlayerDataSamples data = ((EntityPlayerAccessor) player).getPlayerDataSamples();
+                data.customSwing = false;
+                data.armorDamaged = false;
+                data.hasAttacked = false;
+                data.targetedPlayer = null;
+                data.hasBeenAttacked = false;
             }
         }
 
@@ -162,6 +161,7 @@ public class HackerDetector {
         data.useItemTime = player.isUsingItem() ? data.useItemTime + 1 : 0;
         data.lastHurtTime = player.hurtTime == 9 ? 0 : data.lastHurtTime + 1;
         data.lastSwingTime = player.isSwingInProgress && player.swingProgressInt == 0 ? 0 : data.lastSwingTime + 1;
+        data.lastCustomSwingTime++;
         //data.positionSampleList.add(new Vector3D(player.posX, player.posY, player.posZ));
         data.dXdYdZVector3D = new Vector3D(
                 player.posX - player.lastTickPosX,
@@ -260,6 +260,18 @@ public class HackerDetector {
         synchronized (INSTANCE.scheduledTasks) {
             INSTANCE.scheduledTasks.add(runnable);
         }
+    }
+
+    public static void onEntitySwing(int attackerID) {
+        HackerDetector.addScheduledTask(() -> {
+            if (mc.theWorld == null) return;
+            final Entity attacker = mc.theWorld.getEntityByID(attackerID);
+            if (attacker instanceof EntityPlayerAccessor) {
+                final PlayerDataSamples data = ((EntityPlayerAccessor) attacker).getPlayerDataSamples();
+                data.customSwing = true;
+                data.lastCustomSwingTime = -1;
+            }
+        });
     }
 
     public static void checkPlayerAttack(int attackerID, int targetId, int attackType) {

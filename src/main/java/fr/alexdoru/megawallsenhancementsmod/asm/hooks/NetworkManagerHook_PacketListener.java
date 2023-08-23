@@ -79,6 +79,7 @@ public class NetworkManagerHook_PacketListener {
             if (((S0BPacketAnimation) packet).getAnimationType() == 0) { // Swing packet
                 lastPacketWasSwing = true;
                 attackerID = ((S0BPacketAnimation) packet).getEntityID();
+                HackerDetector.onEntitySwing(attackerID);
                 return;
             }
             if (((S0BPacketAnimation) packet).getAnimationType() == 4 || ((S0BPacketAnimation) packet).getAnimationType() == 5) { // crit particle packet
