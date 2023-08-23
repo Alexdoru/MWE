@@ -1,16 +1,22 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.data;
 
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.AutoblockCheck;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.FastbreakCheck;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.SprintCheck;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector2D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
+import net.minecraft.item.ItemPotion;
+import net.minecraft.item.ItemStack;
 
 public class PlayerDataSamples {
 
-    /** Used to update the data only once per tick, since the world.entity lists might contain duplicate items  */
+    /** Used to update the data only once per tick, since the world.entity lists might contain duplicate items */
     public boolean updatedThisTick = false;
     /** True if the player's position in the XZ plane is identical to the last tick */
     public boolean isNotMoving = true;
@@ -27,7 +33,8 @@ public class PlayerDataSamples {
     public int lastCustomSwingTime = -1;
     /** Amount of ticks since the list time the player eat or drank something */
     public int lastEatDrinkTime = 40;
-    /** True if the player's armor has been damaged during this tick, for instance when being attacked
+    /**
+     * True if the player's armor has been damaged during this tick, for instance when being attacked
      * Disabled as of right now, always false
      */
     public boolean armorDamaged = false;
@@ -82,5 +89,56 @@ public class PlayerDataSamples {
     public final ViolationLevelTracker noslowdownVL = SprintCheck.newNoslowdownViolationTracker();
     public final ViolationLevelTracker keepsprintUseItemVL = SprintCheck.newKeepsprintViolationTracker();
     //public final ViolationLevelTracker omnisprintVL = OmniSprintCheck.newViolationTracker();
+
+    public void onTick(EntityPlayer player) {
+        final ItemStack itemStack = player.getItemInUse();
+        if (itemStack != null) {
+            final Item item = itemStack.getItem();
+            if (item instanceof ItemFood || item instanceof ItemPotion) {
+                this.lastEatDrinkTime = 0;
+            } else {
+                this.lastEatDrinkTime += 1;
+            }
+        } else {
+            this.lastEatDrinkTime += 1;
+        }
+        this.sprintTime = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getModifier(HackerDetector.sprintingUUID) == null ? 0 : this.sprintTime + 1;
+        this.useItemTime = player.isUsingItem() ? this.useItemTime + 1 : 0;
+        this.lastHurtTime = player.hurtTime == 9 ? 0 : this.lastHurtTime + 1;
+        this.lastSwingTime = player.isSwingInProgress && player.swingProgressInt == 0 ? 0 : this.lastSwingTime + 1;
+        this.lastCustomSwingTime++;
+        //this.positionSampleList.add(new Vector3D(player.posX, player.posY, player.posZ));
+        this.dXdYdZVector3D = new Vector3D(
+                player.posX - player.lastTickPosX,
+                player.posY - player.lastTickPosY,
+                player.posZ - player.lastTickPosZ
+        );
+        this.dXdZVector2D = this.dXdYdZVector3D.getProjectionInXZPlane();
+        this.isNotMoving = this.dXdZVector2D.isZero();
+        //if (!this.dXdYdZSampleList.isEmpty()) {
+        //    final Vector3D lastdXdYdZ = this.dXdYdZSampleList.getFirst();
+        //    this.directionDeltaXZList.add(this.dXdYdZVector3D.getXZAngleDiffWithVector(lastdXdYdZ));
+        //}
+        //this.dXdYdZSampleList.add(this.dXdYdZVector3D);
+        //final Vector3D lookVector = Vector3D.getPlayersLookVec(player);
+        //this.lookAngleDiff = lookVector.getAngleWithVector(this.lookVector);
+        //this.lookVector = lookVector;
+        //final double dYaw = player.rotationYawHead - player.prevRotationYawHead;
+        //if (dYaw != 0 && this.dYaw != 0) {
+        //    this.lastTime_dYawChangedSign = dYaw * this.dYaw > 0 ? this.lastTime_dYawChangedSign + 1 : 0;
+        //} else if (dYaw != 0) {
+        //    if (this.lastNonZerodYawPositive) {
+        //        this.lastTime_dYawChangedSign = dYaw > 0 ? this.lastTime_dYawChangedSign + 1 : 0;
+        //    } else {
+        //        this.lastTime_dYawChangedSign = dYaw < 0 ? this.lastTime_dYawChangedSign + 1 : 0;
+        //    }
+        //} else {
+        //    this.lastTime_dYawChangedSign = this.lastTime_dYawChangedSign + 1;
+        //}
+        //if (dYaw != 0) {
+        //    this.lastNonZerodYawPositive = dYaw > 0;
+        //}
+        //this.dYaw = dYaw;
+    }
 
 }

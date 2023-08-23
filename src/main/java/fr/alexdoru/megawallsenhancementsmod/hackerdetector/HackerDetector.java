@@ -17,7 +17,10 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
 import net.minecraft.network.play.server.S04PacketEntityEquipment;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,7 +36,7 @@ public class HackerDetector {
     public static final HackerDetector INSTANCE = new HackerDetector();
     public static final Logger logger = LogManager.getLogger("HackerDetector");
     /** Field stolen from EntityLivingBase */
-    private static final UUID sprintingUUID = UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D");
+    public static final UUID sprintingUUID = UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D");
     private static final Minecraft mc = Minecraft.getMinecraft();
     private final List<ICheck> checkList = new ArrayList<>();
     private long timeElapsedTemp = 0L;
@@ -174,61 +177,10 @@ public class HackerDetector {
         final PlayerDataSamples data = ((EntityPlayerAccessor) player).getPlayerDataSamples();
         playersCheckedTemp++;
         if (data.updatedThisTick) return;
-        updatePlayerDataSamples(player, data);
+        data.onTick(player);
         if (ConfigHandler.debugLogging && playersToLog.contains(player.getName())) log(player, data);
         checkList.forEach(check -> check.performCheck(player, data));
         timeElapsedTemp += System.nanoTime() - timeStart;
-    }
-
-    private void updatePlayerDataSamples(EntityPlayer player, PlayerDataSamples data) {
-        final ItemStack itemStack = player.getItemInUse();
-        if (itemStack != null) {
-            final Item item = itemStack.getItem();
-            if (item instanceof ItemFood || item instanceof ItemPotion) {
-                data.lastEatDrinkTime = 0;
-            } else {
-                data.lastEatDrinkTime += 1;
-            }
-        } else {
-            data.lastEatDrinkTime += 1;
-        }
-        data.sprintTime = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getModifier(sprintingUUID) == null ? 0 : data.sprintTime + 1;
-        data.useItemTime = player.isUsingItem() ? data.useItemTime + 1 : 0;
-        data.lastHurtTime = player.hurtTime == 9 ? 0 : data.lastHurtTime + 1;
-        data.lastSwingTime = player.isSwingInProgress && player.swingProgressInt == 0 ? 0 : data.lastSwingTime + 1;
-        data.lastCustomSwingTime++;
-        //data.positionSampleList.add(new Vector3D(player.posX, player.posY, player.posZ));
-        data.dXdYdZVector3D = new Vector3D(
-                player.posX - player.lastTickPosX,
-                player.posY - player.lastTickPosY,
-                player.posZ - player.lastTickPosZ
-        );
-        data.dXdZVector2D = data.dXdYdZVector3D.getProjectionInXZPlane();
-        data.isNotMoving = data.dXdZVector2D.isZero();
-        //if (!data.dXdYdZSampleList.isEmpty()) {
-        //    final Vector3D lastdXdYdZ = data.dXdYdZSampleList.getFirst();
-        //    data.directionDeltaXZList.add(data.dXdYdZVector3D.getXZAngleDiffWithVector(lastdXdYdZ));
-        //}
-        //data.dXdYdZSampleList.add(data.dXdYdZVector3D);
-        //final Vector3D lookVector = Vector3D.getPlayersLookVec(player);
-        //data.lookAngleDiff = lookVector.getAngleWithVector(data.lookVector);
-        //data.lookVector = lookVector;
-        //final double dYaw = player.rotationYawHead - player.prevRotationYawHead;
-        //if (dYaw != 0 && data.dYaw != 0) {
-        //    data.lastTime_dYawChangedSign = dYaw * data.dYaw > 0 ? data.lastTime_dYawChangedSign + 1 : 0;
-        //} else if (dYaw != 0) {
-        //    if (data.lastNonZerodYawPositive) {
-        //        data.lastTime_dYawChangedSign = dYaw > 0 ? data.lastTime_dYawChangedSign + 1 : 0;
-        //    } else {
-        //        data.lastTime_dYawChangedSign = dYaw < 0 ? data.lastTime_dYawChangedSign + 1 : 0;
-        //    }
-        //} else {
-        //    data.lastTime_dYawChangedSign = data.lastTime_dYawChangedSign + 1;
-        //}
-        //if (dYaw != 0) {
-        //    data.lastNonZerodYawPositive = dYaw > 0;
-        //}
-        //data.dYaw = dYaw;
     }
 
     //private void checkForRubberBand(double directionDeltaXZ, PlayerDataSamples data, EntityPlayer player) {
