@@ -51,7 +51,7 @@ public abstract class AbstractCheck implements ICheck {
 
     private void printFlagMessage(EntityPlayer player) {
         if (ConfigHandler.debugLogging) {
-            HackerDetector.logger.info(player.getName() + " flags " + this.getCheatName());
+            HackerDetector.log(player.getName() + " flags " + this.getCheatName());
         }
         if (!ConfigHandler.showFlagMessages) {
             return;
@@ -125,7 +125,7 @@ public abstract class AbstractCheck implements ICheck {
     }
 
     protected void log(EntityPlayer player, String cheat, @Nonnull ViolationLevelTracker vl, PlayerDataSamples data, String extramsg) {
-        HackerDetector.logger.info(player.getName() + " failed " + cheat + " check "
+        HackerDetector.log(player.getName() + " failed " + cheat + " check "
                 + extramsg
                 + " | vl " + vl.getViolationLevel()
                 + " | onGround " + player.onGround

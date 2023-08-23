@@ -26,15 +26,15 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
+import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class HackerDetector {
 
     public static final HackerDetector INSTANCE = new HackerDetector();
-    public static final Logger logger = LogManager.getLogger("HackerDetector");
+    private static PrintStream printStream;
     /** Field stolen from EntityLivingBase */
     public static final UUID sprintingUUID = UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D");
     private static final Minecraft mc = Minecraft.getMinecraft();
@@ -50,6 +50,7 @@ public class HackerDetector {
 
     static {
         MinecraftForge.EVENT_BUS.register(INSTANCE);
+        initPrintStream();
     }
 
     private HackerDetector() {
@@ -163,31 +164,6 @@ public class HackerDetector {
         return closestPlayer;
     }
 
-    private void log(EntityPlayer player, PlayerDataSamples data) {
-        logger.info(player.getName()
-                + " | onGround " + player.onGround
-                + " | speedXZ (m/s) " + String.format("%.4f", data.dXdZVector2D.norm() * 20D)
-                + " | speedXYZ (m/s) " + data.dXdYdZVector3D.mulitply(20)
-                + " | position " + new Vector3D(player.posX, player.posY, player.posZ)
-                + " | rotationPitch " + String.format("%.4f", player.rotationPitch)
-                + " | rotationYawHead " + String.format("%.4f", player.rotationYawHead)
-                //+ " | look Vector " + data.lookVector
-                //+ " | lookAngleDiff " + String.format("%.4f", data.lookAngleDiff)
-                //+ " | dYaw " + String.format("%.4f", data.dYaw)
-                //+ " | lastTime_dYawChangedSign " + data.lastTime_dYawChangedSign
-                + " | is sprinting " + (player.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getModifier(sprintingUUID) != null)
-                + " | sprintTime " + data.sprintTime
-                + " | lastHurtTime " + data.lastHurtTime
-                + " | isSwingInProgress " + player.isSwingInProgress
-                + " | useItemTime " + data.useItemTime
-                + " | lastSwingTime " + data.lastSwingTime
-                + " | lastEatDrinkTime " + data.lastEatDrinkTime
-                + " | isUsingItem " + player.isUsingItem()
-                + " | ticksExisted " + player.ticksExisted
-                + " | isRidingEntity " + player.isRiding()
-        );
-    }
-
     public static void addScheduledTask(Runnable runnable) {
         if (runnable == null) return;
         synchronized (INSTANCE.scheduledTasks) {
@@ -266,6 +242,61 @@ public class HackerDetector {
             }
         }
         INSTANCE.timeElapsedTemp += System.nanoTime() - timeStart;
+    }
+
+    private static void initPrintStream() {
+        final File logsFolder = new File(Minecraft.getMinecraft().mcDataDir, "logs");
+        //noinspection ResultOfMethodCallIgnored
+        logsFolder.mkdirs();
+        final File logFile = new File(logsFolder, "HackerDetector.log");
+        if (logFile.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            logFile.delete();
+        }
+        if (!logFile.exists()) {
+            try {
+                //noinspection ResultOfMethodCallIgnored
+                logFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            printStream = new PrintStream(new FileOutputStream(logFile, true));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void log(String message) {
+        if (printStream == null) return;
+        final String time = new SimpleDateFormat("HH:mm:ss.SSS").format(System.currentTimeMillis());
+        printStream.println("[" + time + "] " + message);
+    }
+
+    private static void log(EntityPlayer player, PlayerDataSamples data) {
+        log(player.getName()
+                + " | onGround " + player.onGround
+                + " | speedXZ (m/s) " + String.format("%.4f", data.dXdZVector2D.norm() * 20D)
+                + " | speedXYZ (m/s) " + data.dXdYdZVector3D.mulitply(20)
+                + " | position " + new Vector3D(player.posX, player.posY, player.posZ)
+                + " | rotationPitch " + String.format("%.4f", player.rotationPitch)
+                + " | rotationYawHead " + String.format("%.4f", player.rotationYawHead)
+                //+ " | look Vector " + data.lookVector
+                //+ " | lookAngleDiff " + String.format("%.4f", data.lookAngleDiff)
+                //+ " | dYaw " + String.format("%.4f", data.dYaw)
+                //+ " | lastTime_dYawChangedSign " + data.lastTime_dYawChangedSign
+                + " | is sprinting " + (player.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getModifier(sprintingUUID) != null)
+                + " | sprintTime " + data.sprintTime
+                + " | lastHurtTime " + data.lastHurtTime
+                + " | isSwingInProgress " + player.isSwingInProgress
+                + " | useItemTime " + data.useItemTime
+                + " | lastSwingTime " + data.lastSwingTime
+                + " | lastEatDrinkTime " + data.lastEatDrinkTime
+                + " | isUsingItem " + player.isUsingItem()
+                + " | ticksExisted " + player.ticksExisted
+                + " | isRidingEntity " + player.isRiding()
+        );
     }
 
 }

@@ -60,7 +60,7 @@ public class AutoblockCheck extends AbstractCheck {
                     if (data.lastEatDrinkTime < 30) {
                         data.disabledAutoblockCheck = true;
                         if (ConfigHandler.debugLogging) {
-                            HackerDetector.logger.info("Disabled autoblock check for " + player.getName() + " lastEatDrinkTime " + data.lastEatDrinkTime);
+                            HackerDetector.log("Disabled autoblock check for " + player.getName() + " lastEatDrinkTime " + data.lastEatDrinkTime);
                         }
                         return false;
                     }
