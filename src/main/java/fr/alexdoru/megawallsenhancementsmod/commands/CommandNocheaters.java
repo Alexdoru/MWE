@@ -309,10 +309,16 @@ public class CommandNocheaters extends MyAbstractCommand {
             }
             if (HackerDetector.INSTANCE.playersToLog.remove(name)) {
                 ChatUtil.debug("Removed " + name + " from logged players");
+                if (HackerDetector.INSTANCE.playersToLog.isEmpty()) {
+                    ConfigHandler.debugLogging = false;
+                    ChatUtil.debug("Turned off debug logging");
+                    ConfigHandler.saveConfig();
+                }
             } else {
                 ConfigHandler.debugLogging = true;
                 HackerDetector.INSTANCE.playersToLog.add(name);
                 ChatUtil.debug("Added " + name + " to players to log");
+                ConfigHandler.saveConfig();
             }
         }
     }
