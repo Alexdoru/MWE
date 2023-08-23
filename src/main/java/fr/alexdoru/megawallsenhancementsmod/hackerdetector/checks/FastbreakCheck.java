@@ -113,7 +113,7 @@ public class FastbreakCheck extends AbstractCheck {
                                 if (avg < 0.8F) {
                                     data.fastbreakVL.add((int) Math.floor((0.8F - avg) * 10F));
                                     if (ConfigHandler.debugLogging) {
-                                        HackerDetector.logger.info(playerBreaking.getName() + " failed Fastbreak check" +
+                                        HackerDetector.log(playerBreaking.getName() + " failed Fastbreak check" +
                                                 " | vl " + data.fastbreakVL.getViolationLevel() +
                                                 " | avg " + String.format("%.4f", avg) +
                                                 " | expectedTimeToBreak " + expectedTimeToBreak +
