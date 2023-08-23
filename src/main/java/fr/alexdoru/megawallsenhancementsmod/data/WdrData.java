@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.data;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.utils.ListUtil;
 import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -159,21 +160,11 @@ public class WdrData {
                     hacks.add(split[i]);
                 }
             }
-            return removeDuplicates(hacks);
+            return (ArrayList<String>) ListUtil.removeDuplicates(hacks);
         } else {
             hacks.addAll(Arrays.asList(split));
             return hacks;
         }
-    }
-
-    private static <T> ArrayList<T> removeDuplicates(ArrayList<T> list) {
-        final ArrayList<T> newList = new ArrayList<>();
-        for (final T element : list) {
-            if (!newList.contains(element)) {
-                newList.add(element);
-            }
-        }
-        return newList;
     }
 
 }
