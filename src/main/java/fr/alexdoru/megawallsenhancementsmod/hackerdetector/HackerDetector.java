@@ -95,13 +95,7 @@ public class HackerDetector {
 
         if (mc.theWorld != null) {
             for (final EntityPlayer player : mc.theWorld.playerEntities) {
-                final PlayerDataSamples data = ((EntityPlayerAccessor) player).getPlayerDataSamples();
-                data.updatedThisTick = false;
-                data.customSwing = false;
-                data.armorDamaged = false;
-                data.hasAttacked = false;
-                data.targetedPlayer = null;
-                data.hasBeenAttacked = false;
+                ((EntityPlayerAccessor) player).getPlayerDataSamples().ontickStart();
             }
         }
 
