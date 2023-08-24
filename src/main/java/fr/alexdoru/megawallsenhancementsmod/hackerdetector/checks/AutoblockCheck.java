@@ -47,7 +47,7 @@ public class AutoblockCheck extends AbstractCheck {
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        if (data.isNotMoving) {
+        if (data.isNotMovingXZ()) {
             return false;
         }
         final ItemStack itemStack = player.getHeldItem();

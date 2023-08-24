@@ -177,8 +177,8 @@ public class HackerDetector {
             final Entity attacker = mc.theWorld.getEntityByID(attackerID);
             if (attacker instanceof EntityPlayerAccessor) {
                 final PlayerDataSamples data = ((EntityPlayerAccessor) attacker).getPlayerDataSamples();
-                data.customSwing = true;
-                data.lastCustomSwingTime = -1;
+                data.hasSwung = true;
+                data.lastSwingTime = -1;
             }
         });
     }
@@ -298,8 +298,8 @@ public class HackerDetector {
     private static void log(EntityPlayer player, PlayerDataSamples data) {
         log(player.getName()
                 + " | onGround " + player.onGround
-                + " | speedXZ (m/s) " + String.format("%.4f", data.dXdZVector2D.norm() * 20D)
-                + " | speedXYZ (m/s) " + data.dXdYdZVector3D.mulitply(20)
+                + " | speedXZ (m/s) " + String.format("%.4f", data.getSpeedXZ())
+                + " | speedXYZ (m/s) " + data.speedToString()
                 + " | position " + new Vector3D(player.posX, player.posY, player.posZ)
                 + " | rotationPitch " + String.format("%.4f", player.rotationPitch)
                 + " | rotationYawHead " + String.format("%.4f", player.rotationYawHead)
