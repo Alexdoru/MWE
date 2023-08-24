@@ -14,6 +14,7 @@ public final class GuiManager {
 
     private final List<IRenderer> registeredRenderers = new ArrayList<>();
     private static final Minecraft mc = Minecraft.getMinecraft();
+    private static final PlayerRenderHUD playerRenderHUD = new PlayerRenderHUD();
 
     /**
      * Register your Guis here
@@ -50,7 +51,12 @@ public final class GuiManager {
      * after this.mc.ingameGUI.renderGameOverlay(partialTicks) call
      */
     public static void onPostRenderGameOverlay(float partialTicks) {
-
+        mc.mcProfiler.startSection("MWE HUD");
+        if (playerRenderHUD.isEnabled(0L)) {
+            playerRenderHUD.setPartialTickTime(partialTicks);
+            playerRenderHUD.render(new ScaledResolution(mc));
+        }
+        mc.mcProfiler.endSection();
     }
 
     private static void callRenderer(IRenderer renderer, ScaledResolution resolution, long currentTimeMillis) {
