@@ -85,7 +85,7 @@ public class PlayerDataSamples {
     //public int lastTime_dYawChangedSign = 0;
     /** Last time the player broke a block */
     public long lastBreakBlockTime = System.currentTimeMillis();
-    public final SampleList<Float> breakTimeRatio = new SampleList<>(8);
+    public final SampleListF breakTimeRatio = new SampleListF(8);
     public final ViolationLevelTracker autoblockVL = AutoblockCheck.newViolationTracker();
     public final ViolationLevelTracker fastbreakVL = FastbreakCheck.newViolationTracker();
     //public final ViolationLevelTracker killauraSwitchVL = KillAuraSwitchCheck.newViolationTracker();
