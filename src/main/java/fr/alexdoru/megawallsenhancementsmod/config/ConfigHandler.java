@@ -449,12 +449,6 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Deletes chat messages sent by reported cheaters")
     public static boolean deleteCheaterChatMsg;
 
-    @ConfigProperty(
-            category = NOCHEATERS,
-            name = "Player render HUD position",
-            comment = "position of the player render HUD")
-    public static GuiPosition playerRendererGuiPosition = new GuiPosition(0.15d, 0.15d);
-
     /**
      * Hacker Detector Config
      */

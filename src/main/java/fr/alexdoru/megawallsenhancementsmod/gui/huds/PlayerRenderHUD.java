@@ -1,9 +1,12 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
+import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.IRenderer;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -13,11 +16,13 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumChatFormatting;
 
 public class PlayerRenderHUD implements IRenderer {
 
     private final Minecraft mc = Minecraft.getMinecraft();
     private float partialTicks;
+    private final GuiPosition guiPosition = new GuiPosition(0.15d, 0.15d);
 
     public void setPartialTickTime(float partialTicks) {
         this.partialTicks = partialTicks;
@@ -53,7 +58,7 @@ public class PlayerRenderHUD implements IRenderer {
 
     @Override
     public GuiPosition getGuiPosition() {
-        return ConfigHandler.playerRendererGuiPosition;
+        return this.guiPosition;
     }
 
     private int renderPlayerHUD(int x, int y, EntityPlayer player) {
@@ -61,9 +66,39 @@ public class PlayerRenderHUD implements IRenderer {
         final int extraBorder = (int) (50 / 1.8F);
         final int rectwidth = scale + extraBorder;
         final int rectHight = scale * 2 + extraBorder;
-        Gui.drawRect(x, y, x + rectwidth, y + rectHight, Integer.MIN_VALUE);
+        final int textHight = mc.fontRendererObj.FONT_HEIGHT * 8;
+        Gui.drawRect(x, y, x + rectwidth, y + rectHight + textHight, 0xC0000000);
         GlStateManager.color(1F, 1F, 1F, 1F);
         drawEntityOnScreen(x + rectwidth / 2, y + rectHight - extraBorder / 2, scale, player);
+
+        x += 1;
+        y += rectHight;
+        final PlayerDataSamples data = ((EntityPlayerAccessor) player).getPlayerDataSamples();
+
+        final String targetText = EnumChatFormatting.BLUE + "Target " + (data.targetedPlayer == null ? "" : EnumChatFormatting.RESET + NameUtil.getFormattedNameWithoutIcons(data.targetedPlayer.getName()));
+        mc.fontRendererObj.drawStringWithShadow(targetText, x, y, 0xFFFFFF);
+        y += mc.fontRendererObj.FONT_HEIGHT;
+
+        final String usingItem = EnumChatFormatting.BLUE + "UsingItem " + (player.isUsingItem() ? EnumChatFormatting.GREEN + "true" : EnumChatFormatting.RED + "false");
+        mc.fontRendererObj.drawStringWithShadow(usingItem, x, y, 0xFFFFFF);
+        y += mc.fontRendererObj.FONT_HEIGHT;
+
+        final String srpintText = EnumChatFormatting.BLUE + "Sprinting " + (data.sprintTime == 0 ? EnumChatFormatting.RED + "false" : EnumChatFormatting.GREEN + "true");
+        mc.fontRendererObj.drawStringWithShadow(srpintText, x, y, 0xFFFFFF);
+        y += mc.fontRendererObj.FONT_HEIGHT;
+
+        final String swingText = EnumChatFormatting.BLUE + "Swinging " + (player.isSwingInProgress ? EnumChatFormatting.GREEN + "true" : EnumChatFormatting.RED + "false");
+        mc.fontRendererObj.drawStringWithShadow(swingText, x, y, 0xFFFFFF);
+        y += mc.fontRendererObj.FONT_HEIGHT;
+
+        final String swingPerSecText = EnumChatFormatting.BLUE + "Swing/s " + EnumChatFormatting.RESET + data.swingList.sum();
+        mc.fontRendererObj.drawStringWithShadow(swingPerSecText, x, y, 0xFFFFFF);
+        y += mc.fontRendererObj.FONT_HEIGHT;
+
+        final String attackPerSecText = EnumChatFormatting.BLUE + "Attack/s " + EnumChatFormatting.RESET + data.attackList.sum();
+        mc.fontRendererObj.drawStringWithShadow(attackPerSecText, x, y, 0xFFFFFF);
+
+        x -= 1;
         x += rectwidth + scale / 2;
         return x;
     }

@@ -30,26 +30,28 @@ public class PlayerDataSamples {
     public int lastSwingTime = 0;
     /** True when we receive a swing packet from this entity during the last tick */
     public boolean customSwing = false;
+    public final SampleListZ swingList = new SampleListZ(20);
     public int lastCustomSwingTime = -1;
-    /** Amount of ticks since the list time the player eat or drank something */
+    /** Amount of ticks since the list time the player ate or drank something */
     public int lastEatDrinkTime = 40;
     /**
      * True if the player's armor has been damaged during this tick, for instance when being attacked
      * Disabled as of right now, always false
      */
     public boolean armorDamaged = false;
-    /** Used to filter hurt events from an ability damaging multiple players at
-     * the same time and mistaken for a player attacking multiple eneities */
+    /**
+     * Used to filter hurt events from an ability damaging multiple players at
+     * the same time and mistaken for a player attacking multiple entities
+     */
     public boolean hasAttackedMultiTarget = false;
     /** True if the player has attacked another player during this tick */
     public boolean hasAttacked = false;
     /** Player attacked during this tick if any */
     public EntityPlayer targetedPlayer;
+    public SampleListZ attackList = new SampleListZ(20);
     /** True if the player has beend attacked by another player during this tick */
     public boolean hasBeenAttacked = false;
     public boolean disabledAutoblockCheck = false;
-    ///** Holds the position XYZ of the player over time */
-    //public SampleList<Vector3D> positionSampleList = new SampleList<>(40);
     /**
      * Holds the distance covered by the player in space during the last tick
      * This is proportional to the velocity of the entity
@@ -88,10 +90,8 @@ public class PlayerDataSamples {
     public final SampleListF breakTimeRatio = new SampleListF(8);
     public final ViolationLevelTracker autoblockVL = AutoblockCheck.newViolationTracker();
     public final ViolationLevelTracker fastbreakVL = FastbreakCheck.newViolationTracker();
-    //public final ViolationLevelTracker killauraSwitchVL = KillAuraSwitchCheck.newViolationTracker();
     public final ViolationLevelTracker noslowdownVL = SprintCheck.newNoslowdownViolationTracker();
     public final ViolationLevelTracker keepsprintUseItemVL = SprintCheck.newKeepsprintViolationTracker();
-    //public final ViolationLevelTracker omnisprintVL = OmniSprintCheck.newViolationTracker();
 
     public void ontickStart() {
         this.updatedThisTick = false;
@@ -107,11 +107,7 @@ public class PlayerDataSamples {
         final ItemStack itemStack = player.getItemInUse();
         if (itemStack != null) {
             final Item item = itemStack.getItem();
-            if (item instanceof ItemFood || item instanceof ItemPotion) {
-                this.lastEatDrinkTime = 0;
-            } else {
-                this.lastEatDrinkTime += 1;
-            }
+            this.lastEatDrinkTime = item instanceof ItemFood || item instanceof ItemPotion ? 0 : this.lastEatDrinkTime + 1;
         } else {
             this.lastEatDrinkTime += 1;
         }
@@ -119,8 +115,9 @@ public class PlayerDataSamples {
         this.useItemTime = player.isUsingItem() ? this.useItemTime + 1 : 0;
         this.lastHurtTime = player.hurtTime == 9 ? 0 : this.lastHurtTime + 1;
         this.lastSwingTime = player.isSwingInProgress && player.swingProgressInt == 0 ? 0 : this.lastSwingTime + 1;
+        this.swingList.add(this.customSwing);
+        this.attackList.add(this.hasAttacked);
         this.lastCustomSwingTime++;
-        //this.positionSampleList.add(new Vector3D(player.posX, player.posY, player.posZ));
         this.dXdYdZVector3D = new Vector3D(
                 player.posX - player.lastTickPosX,
                 player.posY - player.lastTickPosY,
