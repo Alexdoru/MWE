@@ -128,7 +128,7 @@ public abstract class AbstractCheck implements ICheck {
                 + extramsg
                 + " | vl " + vl.getViolationLevel()
                 + " | onGround " + player.onGround
-                + " | speedXZ (m/s) " + String.format("%.4f", data.dXdZVector2D.norm() * 20D)
+                + " | speedXZ (m/s) " + String.format("%.4f", data.getSpeedXZ())
                 + " | posX " + String.format("%.4f", player.posX)
                 + " | lastTickPosX " + String.format("%.4f", player.lastTickPosX)
                 + " | posY " + String.format("%.4f", player.posY)

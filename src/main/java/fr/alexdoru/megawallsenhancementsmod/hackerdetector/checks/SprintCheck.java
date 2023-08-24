@@ -41,13 +41,13 @@ public class SprintCheck extends AbstractCheck {
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        if (data.isNotMoving || player.isRiding()) {
+        if (data.isNotMovingXZ() || player.isRiding()) {
             return false;
         }
         /* It takes 32 ticks to eat/drink one food/potion item */
         if (data.sprintTime > 70 && data.useItemTime > 4) {
             /* If the player is moving slower than the base running speed, we consider it is keepsprint */
-            if (player.hurtTime != 0 || data.dXdZVector2D.norm() < 0.25D) {
+            if (player.hurtTime != 0 || data.getSpeedXZ() < 4D) {
                 isNoslowCheck = false;
                 data.keepsprintUseItemVL.add(2);
                 if (ConfigHandler.debugLogging) {
@@ -75,7 +75,7 @@ public class SprintCheck extends AbstractCheck {
                 }
             }
             return true;
-        } else if (player.hurtTime == 0 && data.sprintTime == 0 && data.useItemTime > 8 && !data.dXdZVector2D.isZero()) {
+        } else if (player.hurtTime == 0 && data.sprintTime == 0 && data.useItemTime > 8) {
             data.keepsprintUseItemVL.substract(3);
             return false;
         }
