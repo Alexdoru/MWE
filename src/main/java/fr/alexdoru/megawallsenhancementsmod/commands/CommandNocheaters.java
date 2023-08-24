@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangPlayernameToUUID;
+import fr.alexdoru.megawallsenhancementsmod.asm.loader.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.chat.ReportSuggestionHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.WarningMessagesHandler;
@@ -26,10 +27,7 @@ import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
@@ -114,7 +112,7 @@ public class CommandNocheaters extends MyAbstractCommand {
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, arguments);
         }
-        if (args.length == 2 && (args[0].equalsIgnoreCase("ignore") || args[0].equalsIgnoreCase("log"))) {
+        if (args.length == 2 && args[0].equalsIgnoreCase("ignore") || args.length >= 2 && args[0].equalsIgnoreCase("log")) {
             return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
         }
         return null;
@@ -296,30 +294,34 @@ public class CommandNocheaters extends MyAbstractCommand {
     }
 
     private void logPlayer(String[] args) {
-        if (args.length == 2) {
-            String name = args[1];
+        if (ASMLoadingPlugin.isObf && !mc.thePlayer.getUniqueID().equals(UUID.fromString("57715d32-a685-4e2e-ae68-54c19808b58d"))) {
+            return;
+        }
+        for (int i = 1, argsLength = args.length; i < argsLength; i++) {
+            String name = args[i];
             if (ScoreboardTracker.isReplayMode) {
                 for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
                     if (netInfo.getGameProfile().getName().contains(name)) {
-                        // in replay mode for some reason the names of players are
-                        // Playername§r
+                        // in replay mode for some reason the names
+                        // of players contains color codes :
+                        // ex : Playername§r
                         name = netInfo.getGameProfile().getName();
                     }
                 }
             }
             if (HackerDetector.INSTANCE.playersToLog.remove(name)) {
-                ChatUtil.debug("Removed " + name + " from logged players");
-                if (HackerDetector.INSTANCE.playersToLog.isEmpty()) {
-                    ConfigHandler.debugLogging = false;
-                    ChatUtil.debug("Turned off debug logging");
-                    ConfigHandler.saveConfig();
-                }
+                ChatUtil.debug("Removed " + name + " players to log");
             } else {
-                ConfigHandler.debugLogging = true;
                 HackerDetector.INSTANCE.playersToLog.add(name);
                 ChatUtil.debug("Added " + name + " to players to log");
-                ConfigHandler.saveConfig();
             }
+        }
+        ConfigHandler.debugLogging = !HackerDetector.INSTANCE.playersToLog.isEmpty();
+        ConfigHandler.saveConfig();
+        if (ConfigHandler.debugLogging) {
+            ChatUtil.debug("Enabled debug logging for " + HackerDetector.INSTANCE.playersToLog);
+        } else {
+            ChatUtil.debug("Turned off debug logging");
         }
     }
 
