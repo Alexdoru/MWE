@@ -296,8 +296,8 @@ public class ReportQueue {
                 && !thePlayer.movementInput.sneak
                 && !mc.gameSettings.keyBindAttack.isKeyDown()
                 && !mc.gameSettings.keyBindUseItem.isKeyDown()
-                && mc.mouseHelper.deltaX == 0
-                && mc.mouseHelper.deltaY == 0;
+                && mc.thePlayer.prevRotationYawHead == mc.thePlayer.rotationYawHead
+                && mc.thePlayer.prevRotationPitch == mc.thePlayer.rotationPitch;
     }
 
 }
