@@ -49,7 +49,7 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
                 "Debug",
                 (b) -> ConfigHandler.debugLogging = b,
                 () -> ConfigHandler.debugLogging,
-                EnumChatFormatting.GRAY + "Logs every hacker detector related action in the .minecraft/logs/fml-client-latest.log"));
+                EnumChatFormatting.GRAY + "Logs every hacker detector related action in .minecraft/logs/HackerDetector.log"));
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(5),
                 "Show flag messages",
