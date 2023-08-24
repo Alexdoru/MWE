@@ -44,8 +44,8 @@ public class HackerDetector {
     private int playersChecked = 0;
     private int playersCheckedTemp = 0;
     /** Data about blocks broken during this tick */
-    public List<BrokenBlock> brokenBlocksList = new ArrayList<>();
-    public HashSet<String> playersToLog = new HashSet<>();
+    public final List<BrokenBlock> brokenBlocksList = new ArrayList<>();
+    public final HashSet<String> playersToLog = new HashSet<>();
     private final Queue<Runnable> scheduledTasks = new ArrayDeque<>();
 
     static {
