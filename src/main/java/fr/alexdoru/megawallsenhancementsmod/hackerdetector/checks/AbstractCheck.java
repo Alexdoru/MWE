@@ -9,7 +9,6 @@ import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.SampleList;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
@@ -198,14 +197,6 @@ public abstract class AbstractCheck implements ICheck {
             }
         }
         return i == 1 ? i : i + 5;
-    }
-
-    protected float average(SampleList<Float> list) {
-        float sum = 0;
-        for (final Float f : list) {
-            sum += f;
-        }
-        return sum / list.size();
     }
 
     protected boolean isPlayerLookingAtBlock(EntityPlayer player, BlockPos pos) {
