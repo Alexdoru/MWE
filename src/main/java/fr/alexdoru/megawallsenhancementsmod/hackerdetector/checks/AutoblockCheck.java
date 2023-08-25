@@ -36,7 +36,7 @@ public class AutoblockCheck extends AbstractCheck {
     }
 
     @Override
-    public boolean canSendTimestamp() {
+    public boolean canSendReport() {
         return true;
     }
 
