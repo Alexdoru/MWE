@@ -7,7 +7,6 @@ import fr.alexdoru.megawallsenhancementsmod.gui.elements.FancyGuiButton;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.OptionGuiButton;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.SimpleGuiButton;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.TextElement;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import net.minecraft.client.gui.GuiScreen;
@@ -19,9 +18,6 @@ import java.util.List;
 
 public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
-    private FancyGuiButton reportSuggestionButton;
-    private FancyGuiButton autoreportSuggestionButton;
-
     public NoCheatersConfigGuiScreen(GuiScreen parent) {
         this.parent = parent;
     }
@@ -30,7 +26,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     public void initGui() {
         final String msg = EnumChatFormatting.WHITE + "NoCheaters saves players reported via " + EnumChatFormatting.YELLOW + "/wdr playername" + EnumChatFormatting.WHITE + " (not /report)";
         this.maxWidth = fontRendererObj.getStringWidth(msg);
-        this.maxHeight = (buttonsHeight + 4) * 11 + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * 10 + buttonsHeight;
         super.initGui();
         final int xPos = getxCenter() - BUTTON_WIDTH / 2;
         this.elementList.add(new TextElement(EnumChatFormatting.RED + "NoCheaters", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
@@ -50,7 +46,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                     }
                 }, EnumChatFormatting.GREEN + "Warning messages in chat",
                 EnumChatFormatting.GRAY + "Prints a warning message in chat when a reported player joins your world, those messages have built in compact chat."));
-        this.buttonList.add(reportSuggestionButton = new FancyGuiButton(
+        this.buttonList.add(new FancyGuiButton(
                 xPos, getButtonYPos(3),
                 () -> "Report suggestions in chat : " + getSuffix(ConfigHandler.reportSuggestions),
                 () -> {
@@ -58,41 +54,20 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                     if (ConfigHandler.reportSuggestions) {
                         SoundUtil.playReportSuggestionSound();
                     }
-                    if (!ConfigHandler.reportSuggestions) {
-                        ConfigHandler.autoreportSuggestions = false;
-                        autoreportSuggestionButton.updateDisplayText();
-                    }
                 }, EnumChatFormatting.GREEN + "Report suggestions in chat",
                 EnumChatFormatting.GRAY + "When there is a message that respects the following patterns, it will print a report suggestion in chat",
                 EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "playername is bhoping",
                 EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "wdr playername cheat",
                 EnumChatFormatting.GREEN + "Player: " + EnumChatFormatting.WHITE + "report playername cheat"));
-        this.buttonList.add(autoreportSuggestionButton = new FancyGuiButton(
-                xPos, getButtonYPos(4),
-                () -> "Auto-report suggestions : " + getSuffix(ConfigHandler.autoreportSuggestions),
-                () -> {
-                    ConfigHandler.autoreportSuggestions = !ConfigHandler.autoreportSuggestions;
-                    if (ConfigHandler.autoreportSuggestions) {
-                        ConfigHandler.reportSuggestions = true;
-                        reportSuggestionButton.updateDisplayText();
-                    } else {
-                        ReportQueue.INSTANCE.clearSuggestionsInReportQueue();
-                    }
-                },
-                EnumChatFormatting.GREEN + "Auto-report suggestions",
-                EnumChatFormatting.GRAY + "Automatically sends the report command to the server when there is a report suggestion in chat." +
-                        EnumChatFormatting.YELLOW + " Only works in Mega Walls after the walls fall.",
-                EnumChatFormatting.GRAY + "Ignores command suggestions sent by ignored players, reported players and scangame players." +
-                        EnumChatFormatting.GRAY + " You can ignore players by using " + EnumChatFormatting.YELLOW + "/nocheaters ignore <playername>"));
         this.buttonList.add(new OptionGuiButton(
-                xPos, getButtonYPos(5),
+                xPos, getButtonYPos(4),
                 "Delete old reports",
                 (b) -> ConfigHandler.deleteOldReports = b,
                 () -> ConfigHandler.deleteOldReports,
                 EnumChatFormatting.GRAY + "Deletes reports older than the specified value, the deletion occurs when you start Minecraft."));
-        this.buttonList.add(new GuiSlider(7, xPos, getButtonYPos(6), BUTTON_WIDTH, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport, false, true, this));
+        this.buttonList.add(new GuiSlider(7, xPos, getButtonYPos(5), BUTTON_WIDTH, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport, false, true, this));
         this.buttonList.add(new FancyGuiButton(
-                xPos, getButtonYPos(7),
+                xPos, getButtonYPos(6),
                 () -> "Censor cheaters in chat : " + (ConfigHandler.deleteCheaterChatMsg ? EnumChatFormatting.GREEN + "Delete" : (ConfigHandler.censorCheaterChatMsg ? EnumChatFormatting.YELLOW + "Censor" : EnumChatFormatting.RED + "Disabled")),
                 () -> {
                     if (ConfigHandler.censorCheaterChatMsg && !ConfigHandler.deleteCheaterChatMsg) {
@@ -118,14 +93,14 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         iconsTooltip.add(NameUtil.prefix + EnumChatFormatting.GRAY + " : players reported for other cheats");
         iconsTooltip.add(NameUtil.prefix_scan + EnumChatFormatting.GRAY + " : players flagged by the /scangame command");
         this.buttonList.add(new FancyGuiButton(
-                xPos, getButtonYPos(8),
+                xPos, getButtonYPos(7),
                 () -> "Icons on names : " + getSuffix(ConfigHandler.iconsOnNames),
                 () -> {
                     ConfigHandler.iconsOnNames = !ConfigHandler.iconsOnNames;
                     NameUtil.refreshAllNamesInWorld();
                 },
                 iconsTooltip));
-        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(10), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
+        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(9), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
 
     @Override

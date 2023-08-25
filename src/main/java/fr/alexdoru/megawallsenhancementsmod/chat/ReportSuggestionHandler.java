@@ -323,11 +323,7 @@ public class ReportSuggestionHandler {
         }
 
         if (isSenderIgnored) {
-            final IChatComponent imsg = new ChatComponentText(StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.GRAY + " (Ignored)", EnumChatFormatting.GRAY + EnumChatFormatting.STRIKETHROUGH.toString(), true));
-            if (senderUUID != null) {
-                imsg.appendSibling(ChatUtil.getUnIgnoreButton(senderUUID, messageSender));
-            }
-            event.message = imsg;
+            event.message = new ChatComponentText(StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.GRAY + " (Ignored)", EnumChatFormatting.GRAY + EnumChatFormatting.STRIKETHROUGH.toString(), true));
             return;
         }
 
@@ -340,9 +336,6 @@ public class ReportSuggestionHandler {
         if (isSenderFlaging) {
             final String newFmsg = StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.LIGHT_PURPLE + " (Scangame)", "", true);
             final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
-            if (ScoreboardTracker.isMWEnvironement && !isSenderMyself) {
-                imsg.appendSibling(ChatUtil.getIgnoreButton(messageSender));
-            }
             addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
             event.message = imsg;
             return;
@@ -350,9 +343,6 @@ public class ReportSuggestionHandler {
 
         final String newFmsg = getReportTextWithFormattedName(fmsg, reportText, reportedPlayer);
         final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
-        if (ScoreboardTracker.isMWEnvironement && !isSenderMyself) {
-            imsg.appendSibling(ChatUtil.getIgnoreButton(messageSender));
-        }
         addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
         event.message = imsg;
 
