@@ -5,12 +5,15 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
+import fr.alexdoru.megawallsenhancementsmod.gui.huds.PendingReportHUD;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -25,13 +28,12 @@ public class ReportQueue {
     private static final int TIME_BETWEEN_REPORTS_MIN = 3 * 60 * 20;
     private static final int AUTOREPORT_PER_GAME = 2;
 
-    //private boolean debug;
     private int counter;
-    private int standingStillCounter;
-    private int standingStillLimit = 35;
+    public int standingStillCounter;
+    public int standingStillLimit = 35;
     private int movingCounter;
     private int autoReportSent;
-    private final List<ReportInQueue> queueList = new ArrayList<>();
+    public final List<ReportInQueue> queueList = new ArrayList<>();
     private final List<Long> timestampsLastReports = new ArrayList<>();
     private final Set<String> playersReportedThisGame = new HashSet<>();
     private final Random random = new Random();
@@ -54,9 +56,6 @@ public class ReportQueue {
                     if (reportInQueue.isReportSuggestion || reportInQueue.isReportFromHackerDetector || ScoreboardTracker.isInMwGame) {
                         final String msg = "/wdr " + playername;
                         mc.thePlayer.sendChatMessage(msg);
-                        //if (debug) {
-                        //    ChatUtil.debug("Sent '" + msg + "'");
-                        //}
                     }
                     counter = getNextCounterDelay();
                     standingStillLimit = 30 + random.nextInt(12);
@@ -95,7 +94,7 @@ public class ReportQueue {
         }
     }
 
-    private int getIndexOfNextReportToSend() {
+    public int getIndexOfNextReportToSend() {
         for (int i = 0; i < queueList.size(); i++) {
             final ReportInQueue reportInQueue = queueList.get(i);
             if (reportInQueue.isReportSuggestion || reportInQueue.isReportFromHackerDetector) {
@@ -114,24 +113,16 @@ public class ReportQueue {
         return false;
     }
 
-    //@SubscribeEvent
-    //public void onRender(RenderGameOverlayEvent.Post event) {
-    //    if (debug && event.type == RenderGameOverlayEvent.ElementType.TEXT) {
-    //        final int x = 0;
-    //        int y = mc.fontRendererObj.FONT_HEIGHT * 4;
-    //        mc.fontRendererObj.drawString(EnumChatFormatting.DARK_GREEN + "REPORT QUEUE", x, y, 0, true);
-    //        y += mc.fontRendererObj.FONT_HEIGHT;
-    //        boolean first = true;
-    //        for (final ReportInQueue reportInQueue : queueList) {
-    //            mc.fontRendererObj.drawString((reportInQueue.isReportSuggestion ? EnumChatFormatting.RED : EnumChatFormatting.GREEN) + reportInQueue.reportedPlayer, x, y, 0, true);
-    //            if (first) {
-    //                mc.fontRendererObj.drawString(EnumChatFormatting.GOLD + " " + counter / 20 + "s", x + mc.fontRendererObj.getStringWidth(reportInQueue.reportedPlayer), y, 0, true);
-    //            }
-    //            y += mc.fontRendererObj.FONT_HEIGHT;
-    //            first = false;
-    //        }
-    //    }
-    //}
+    @SubscribeEvent
+    public void onRender(RenderGameOverlayEvent.Post event) {
+        if (event.type == RenderGameOverlayEvent.ElementType.TEXT && !(mc.currentScreen instanceof PositionEditGuiScreen)) {
+            mc.mcProfiler.startSection("MWE HUD");
+            if (PendingReportHUD.instance.isEnabled(0L)) {
+                PendingReportHUD.instance.render(event.resolution);
+            }
+            mc.mcProfiler.endSection();
+        }
+    }
 
     @SubscribeEvent
     public void onGameEnd(MegaWallsGameEvent event) {
@@ -300,38 +291,38 @@ public class ReportQueue {
                 && mc.thePlayer.prevRotationPitch == mc.thePlayer.rotationPitch;
     }
 
-}
+    public static class ReportInQueue {
 
-class ReportInQueue {
+        public final String messageSender;
+        public final String reportedPlayer;
+        public final boolean isReportSuggestion;
+        public final boolean isReportFromHackerDetector;
+        public final String cheat;
 
-    public final String messageSender;
-    public final String reportedPlayer;
-    public final boolean isReportSuggestion;
-    public final boolean isReportFromHackerDetector;
-    public final String cheat;
+        public ReportInQueue(String playername) {
+            this.messageSender = null;
+            this.reportedPlayer = playername;
+            this.isReportSuggestion = false;
+            this.isReportFromHackerDetector = false;
+            this.cheat = null;
+        }
 
-    public ReportInQueue(String playername) {
-        this.messageSender = null;
-        this.reportedPlayer = playername;
-        this.isReportSuggestion = false;
-        this.isReportFromHackerDetector = false;
-        this.cheat = null;
-    }
+        public ReportInQueue(String playername, String cheat) {
+            this.messageSender = null;
+            this.reportedPlayer = playername;
+            this.isReportSuggestion = false;
+            this.isReportFromHackerDetector = true;
+            this.cheat = cheat;
+        }
 
-    public ReportInQueue(String playername, String cheat) {
-        this.messageSender = null;
-        this.reportedPlayer = playername;
-        this.isReportSuggestion = false;
-        this.isReportFromHackerDetector = true;
-        this.cheat = cheat;
-    }
+        public ReportInQueue(String messageSender, String reportedPlayer, boolean isReportSuggestion) {
+            this.messageSender = messageSender;
+            this.reportedPlayer = reportedPlayer;
+            this.isReportSuggestion = isReportSuggestion;
+            this.isReportFromHackerDetector = false;
+            this.cheat = null;
+        }
 
-    public ReportInQueue(String messageSender, String reportedPlayer, boolean isReportSuggestion) {
-        this.messageSender = messageSender;
-        this.reportedPlayer = reportedPlayer;
-        this.isReportSuggestion = isReportSuggestion;
-        this.isReportFromHackerDetector = false;
-        this.cheat = null;
     }
 
 }
