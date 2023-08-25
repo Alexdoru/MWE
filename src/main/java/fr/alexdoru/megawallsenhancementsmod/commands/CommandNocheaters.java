@@ -54,18 +54,6 @@ public class CommandNocheaters extends MyAbstractCommand {
 
             printReportList(args);
 
-        } else if (args[0].equalsIgnoreCase("ignore")) {
-
-            addPlayerToIgnoreList(args);
-
-        } else if (args[0].equalsIgnoreCase("ignorelist")) {
-
-            printIgnoreList(args);
-
-        } else if (args[0].equalsIgnoreCase("ignoreremove")) {
-
-            removePlayerFromIgnoreList(args);
-
         } else if (args[0].equalsIgnoreCase("clearreportqueue")) {
 
             ReportQueue.INSTANCE.clearSuggestionsInReportQueue();
@@ -108,11 +96,11 @@ public class CommandNocheaters extends MyAbstractCommand {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        final String[] arguments = {"autoreporthistory", "clearreportqueue", "config", "help", "ignore", "ignorelist", "reportlist"};
+        final String[] arguments = {"autoreporthistory", "clearreportqueue", "config", "help", "reportlist"};
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, arguments);
         }
-        if (args.length == 2 && args[0].equalsIgnoreCase("ignore") || args.length >= 2 && args[0].equalsIgnoreCase("log")) {
+        if (args.length >= 2 && args[0].equalsIgnoreCase("log")) {
             return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
         }
         return null;
@@ -125,8 +113,6 @@ public class CommandNocheaters extends MyAbstractCommand {
                         + ChatUtil.centerLine(EnumChatFormatting.GOLD + "NoCheaters Help\n\n")
                         + EnumChatFormatting.YELLOW + getCommandUsage(null) + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the list of reported players in your current world\n"
                         + EnumChatFormatting.YELLOW + getCommandUsage(null) + " config" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "opens the config gui\n"
-                        + EnumChatFormatting.YELLOW + getCommandUsage(null) + " ignore <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "ignores all future report suggestions from that player\n"
-                        + EnumChatFormatting.YELLOW + getCommandUsage(null) + " ignorelist" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the list of ignored players\n"
                         + EnumChatFormatting.YELLOW + getCommandUsage(null) + " reportlist" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the list of reported players\n"
                         + EnumChatFormatting.YELLOW + getCommandUsage(null) + " clearreportqueue" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "cancels all reports suggestions about to be sent\n"
                         + EnumChatFormatting.YELLOW + getCommandUsage(null) + " autoreporthistory" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints all players reported during the ongoing game\n"

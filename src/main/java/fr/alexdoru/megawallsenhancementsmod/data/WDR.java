@@ -63,7 +63,8 @@ public class WDR implements Comparable<WDR> {
     }
 
     public boolean isIgnored() {
-        return hacks.contains(IGNORED);
+        return false;
+        //return hacks.contains(IGNORED);
     }
 
     public boolean canBeReported(long datenow) {
