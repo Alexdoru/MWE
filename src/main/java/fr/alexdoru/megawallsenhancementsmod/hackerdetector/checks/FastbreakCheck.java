@@ -34,7 +34,7 @@ public class FastbreakCheck extends AbstractCheck {
     }
 
     @Override
-    public boolean canSendTimestamp() {
+    public boolean canSendReport() {
         return true;
     }
 

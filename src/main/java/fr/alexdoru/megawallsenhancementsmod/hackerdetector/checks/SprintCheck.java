@@ -30,7 +30,7 @@ public class SprintCheck extends AbstractCheck {
     }
 
     @Override
-    public boolean canSendTimestamp() {
+    public boolean canSendReport() {
         return isNoslowCheck;
     }
 
