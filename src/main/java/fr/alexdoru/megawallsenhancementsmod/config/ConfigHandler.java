@@ -445,6 +445,24 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Deletes chat messages sent by reported cheaters")
     public static boolean deleteCheaterChatMsg;
 
+    @ConfigProperty(
+            category = NOCHEATERS,
+            name = "Report HUD",
+            comment = "Displays when the mod has reports to send")
+    public static boolean showReportHUD = true;
+
+    @ConfigProperty(
+            category = NOCHEATERS,
+            name = "Report HUD in chat only",
+            comment = "Displays report hud only in chat")
+    public static boolean showReportHUDonlyInChat = false;
+
+    @ConfigProperty(
+            category = NOCHEATERS,
+            name = "Report HUD position",
+            comment = "position of the report HUD")
+    public static final GuiPosition reportHUDPosition = new GuiPosition(0d, 1d);
+
     /**
      * Hacker Detector Config
      */
