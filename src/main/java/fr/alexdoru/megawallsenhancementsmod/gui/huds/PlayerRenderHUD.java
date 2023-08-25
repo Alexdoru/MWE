@@ -97,13 +97,34 @@ public class PlayerRenderHUD implements IRenderer {
 
         final String attackPerSecText = EnumChatFormatting.BLUE + "Attack/s " + EnumChatFormatting.RESET + data.attackList.sum();
         mc.fontRendererObj.drawStringWithShadow(attackPerSecText, x, y, 0xFFFFFF);
+        y += mc.fontRendererObj.FONT_HEIGHT;
+
+        if (data.speedXList.size() > 1) {
+            final double currentSpeed = data.getSpeedXZ();
+            final double lastSpeed = data.getSpeedXZ(1);
+            final String ratioText;
+            if (lastSpeed == 0D) {
+                ratioText = "";
+            } else {
+                final double ratio = (currentSpeed / lastSpeed - 1D) * 100D;
+                if (currentSpeed >= lastSpeed) {
+                    ratioText = EnumChatFormatting.GREEN + String.format("%.0f", ratio) + "%";
+                } else {
+                    ratioText = EnumChatFormatting.RED + String.format("%.0f", ratio) + "%";
+                }
+            }
+            final String speedText = EnumChatFormatting.BLUE + "m/s " + EnumChatFormatting.RESET + String.format("%.2f", currentSpeed);
+            mc.fontRendererObj.drawStringWithShadow(speedText, x, y, 0xFFFFFF);
+            final int xRatioText = x + mc.fontRendererObj.getStringWidth("m/s 00.00 +00%") - mc.fontRendererObj.getStringWidth(ratioText);
+            mc.fontRendererObj.drawStringWithShadow(ratioText, xRatioText, y, 0xFFFFFF);
+        }
 
         x -= 1;
         x += rectwidth + scale / 2;
         return x;
     }
 
-    private void drawEntityOnScreen(int Xcenter, int Ycenter, int scale, EntityLivingBase entity) {
+    private void drawEntityOnScreen(int Xcenter, int Ycenter, @SuppressWarnings("SameParameterValue") int scale, EntityLivingBase entity) {
         GlStateManager.enableColorMaterial();
         GlStateManager.pushMatrix();
         GlStateManager.translate((float) Xcenter, (float) Ycenter, 50.0F);

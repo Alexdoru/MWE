@@ -122,6 +122,12 @@ public class PlayerDataSamples {
         return Math.sqrt(vx * vx + vz * vz);
     }
 
+    public double getSpeedXZ(int index) {
+        final double vx = this.speedXList.get(index);
+        final double vz = this.speedZList.get(index);
+        return Math.sqrt(vx * vx + vz * vz);
+    }
+
     public String speedToString() {
         return "{x=" + String.format("%.4f", this.speedXList.get(0)) +
                 ", y=" + String.format("%.4f", this.speedYList.get(0)) +
