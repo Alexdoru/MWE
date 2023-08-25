@@ -27,7 +27,6 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 "Arrow Hit HUD",
                 (b) -> ConfigHandler.showArrowHitHUD = b,
                 () -> ConfigHandler.showArrowHitHUD,
-                ConfigHandler.arrowHitHUDPosition,
                 ArrowHitHUD.instance,
                 this,
                 EnumChatFormatting.GRAY + "Displays the health of your opponent on arrow hits")
@@ -37,7 +36,6 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 "Creeper primed TNT HUD",
                 (b) -> ConfigHandler.showPrimedTNTHUD = b,
                 () -> ConfigHandler.showPrimedTNTHUD,
-                ConfigHandler.creeperTNTHUDPosition,
                 CreeperPrimedTntHUD.instance,
                 this,
                 EnumChatFormatting.GRAY + "Displays the cooldown of the primed TNT when playing Creeper" + EnumChatFormatting.YELLOW + " in Mega Walls")
@@ -47,7 +45,6 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 "Energy display HUD",
                 (b) -> ConfigHandler.showEnergyDisplayHUD = b,
                 () -> ConfigHandler.showEnergyDisplayHUD,
-                ConfigHandler.energyDisplayHUDPosition,
                 EnergyDisplayHUD.instance,
                 this,
                 EnumChatFormatting.GRAY + "Displays a HUD with the amount of energy you have" + EnumChatFormatting.YELLOW + " in Mega Walls" + EnumChatFormatting.GRAY + ". Turns "
@@ -59,7 +56,6 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 "Kill cooldown HUD",
                 (b) -> ConfigHandler.showKillCooldownHUD = b,
                 () -> ConfigHandler.showKillCooldownHUD,
-                ConfigHandler.killCooldownHUDPosition,
                 KillCooldownHUD.instance,
                 this,
                 EnumChatFormatting.GRAY + "Displays the cooldown of the /kill command in " + EnumChatFormatting.YELLOW + "Mega Walls")
@@ -69,7 +65,6 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 "Phoenix bond HUD",
                 (b) -> ConfigHandler.showPhxBondHUD = b,
                 () -> ConfigHandler.showPhxBondHUD,
-                ConfigHandler.phxBondHUDPosition,
                 PhoenixBondHUD.instance,
                 this,
                 EnumChatFormatting.GRAY + "Displays the hearts healed from a Phoenix bond" + EnumChatFormatting.YELLOW + " in Mega Walls")
@@ -79,7 +74,6 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 "Squad HUD",
                 (b) -> ConfigHandler.showSquadHUD = b,
                 () -> ConfigHandler.showSquadHUD,
-                ConfigHandler.squadHUDPosition,
                 SquadHealthHUD.instance,
                 this,
                 EnumChatFormatting.GRAY + "Displays a mini tablist with just your squadmates")
@@ -89,7 +83,6 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 "Speed HUD",
                 (b) -> ConfigHandler.showSpeedHUD = b,
                 () -> ConfigHandler.showSpeedHUD,
-                ConfigHandler.speedHUDPosition,
                 SpeedHUD.instance,
                 this,
                 EnumChatFormatting.GRAY + "Displays your own speed in the XZ plane")
@@ -103,7 +96,6 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                         SoundUtil.playStrengthSound();
                     }
                 },
-                ConfigHandler.hunterStrengthHUDPosition,
                 HunterStrengthHUD.instance,
                 this,
                 EnumChatFormatting.GREEN + "Strength HUD",
@@ -124,7 +116,6 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                     ConfigHandler.witherHUDinSidebar = false;
                     ConfigHandler.showLastWitherHUD = false;
                 },
-                ConfigHandler.lastWitherHUDPosition,
                 LastWitherHPHUD.instance,
                 this,
                 EnumChatFormatting.GREEN + "Wither death time HUD",

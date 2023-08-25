@@ -65,7 +65,6 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
                     ConfigHandler.showReportHUD = false;
                     ConfigHandler.showReportHUDonlyInChat = false;
                 },
-                ConfigHandler.reportHUDPosition,
                 PendingReportHUD.instance,
                 this,
                 EnumChatFormatting.GREEN + "Pending reports HUD",
