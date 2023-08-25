@@ -1,6 +1,5 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.elements;
 
-import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.IRenderer;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;
 import net.minecraft.client.Minecraft;
@@ -20,14 +19,14 @@ public class HUDSettingGuiButtons {
     private final FancyGuiButton actionButton;
     private final SimpleGuiButton moveButton;
 
-    public HUDSettingGuiButtons(int xCenter, int y, Supplier<String> buttonTextSupplier, Runnable action, GuiPosition position, IRenderer renderer, GuiScreen parent, String... tooltipLines) {
+    public HUDSettingGuiButtons(int xCenter, int y, Supplier<String> buttonTextSupplier, Runnable action, IRenderer renderer, GuiScreen parent, String... tooltipLines) {
         this.resetButton = new SimpleGuiButton(
                 xCenter - CENTER_BUTTON_WIDTH / 2 - 4 - SIDE_BUTTON_WIDTH,
                 y,
                 SIDE_BUTTON_WIDTH,
                 20,
                 "Reset position",
-                position::resetToDefault);
+                () -> renderer.getGuiPosition().resetToDefault());
         this.actionButton = new FancyGuiButton(
                 xCenter - CENTER_BUTTON_WIDTH / 2,
                 y,
@@ -43,14 +42,14 @@ public class HUDSettingGuiButtons {
                 () -> Minecraft.getMinecraft().displayGuiScreen(new PositionEditGuiScreen(renderer, parent)));
     }
 
-    public HUDSettingGuiButtons(int xCenter, int y, String optionName, Consumer<Boolean> setter, Supplier<Boolean> getter, GuiPosition position, IRenderer renderer, GuiScreen parent, String... tooltipLines) {
+    public HUDSettingGuiButtons(int xCenter, int y, String optionName, Consumer<Boolean> setter, Supplier<Boolean> getter, IRenderer renderer, GuiScreen parent, String... tooltipLines) {
         this.resetButton = new SimpleGuiButton(
                 xCenter - CENTER_BUTTON_WIDTH / 2 - 4 - SIDE_BUTTON_WIDTH,
                 y,
                 SIDE_BUTTON_WIDTH,
                 20,
                 "Reset position",
-                position::resetToDefault);
+                () -> renderer.getGuiPosition().resetToDefault());
         this.actionButton = new OptionGuiButton(
                 xCenter - CENTER_BUTTON_WIDTH / 2,
                 y,

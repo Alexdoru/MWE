@@ -28,7 +28,6 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                 "Show Final Kill Counter",
                 (b) -> ConfigHandler.showfkcounterHUD = b,
                 () -> ConfigHandler.showfkcounterHUD,
-                ConfigHandler.fkcounterHUDPosition,
                 FKCounterHUD.instance,
                 this,
                 EnumChatFormatting.GRAY + "Displays the amount of final kills per team in Mega Walls",
