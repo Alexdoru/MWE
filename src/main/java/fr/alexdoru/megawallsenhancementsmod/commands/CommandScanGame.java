@@ -42,6 +42,10 @@ public class CommandScanGame extends MyAbstractCommand {
             ChatUtil.printApikeySetupInfo();
             return;
         }
+        if (!ScoreboardTracker.isInMwGame || !ScoreboardTracker.isPreGameLobby) {
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "This is only available in Mega Walls!");
+            return;
+        }
         final String currentGameId = ScoreboardUtils.getGameIdFromScoreboard();
         if (currentGameId.equals("?")) {
             sendChatMessage("/locraw");
