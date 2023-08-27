@@ -50,9 +50,11 @@ public class HackerDetector {
         initPrintStream();
     }
 
+    private final FastbreakCheck fastbreakCheck;
+
     private HackerDetector() {
         this.checkList.add(new AutoblockCheck());
-        this.checkList.add(FastbreakCheck.INSTANCE);
+        this.checkList.add(this.fastbreakCheck = new FastbreakCheck());
         this.checkList.add(new KeepsprintCheck());
         this.checkList.add(new NoSlowdownCheck());
     }
@@ -108,7 +110,7 @@ public class HackerDetector {
 
     private void onTickEnd() {
         if (!ConfigHandler.hackerDetector) return;
-        FastbreakCheck.INSTANCE.onTickEnd();
+        this.fastbreakCheck.onTickEnd();
     }
 
     /**
@@ -129,7 +131,7 @@ public class HackerDetector {
         }
         final long timeStart = System.nanoTime();
         if (player == mc.thePlayer) {
-            FastbreakCheck.INSTANCE.checkPlayerSP(player);
+            this.fastbreakCheck.checkPlayerSP(player);
             timeElapsedTemp += System.nanoTime() - timeStart;
             return;
         }
