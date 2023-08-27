@@ -185,12 +185,18 @@ public class HackerDetector {
 
     public static void checkPlayerAttack(int attackerID, int targetId, int attackType) {
         HackerDetector.addScheduledTask(() -> {
-            if (mc.theWorld == null) return;
+            if (mc.theWorld == null || mc.thePlayer == null) return;
             final Entity attacker = mc.theWorld.getEntityByID(attackerID);
             final Entity target = mc.theWorld.getEntityByID(targetId);
             if (!(attacker instanceof EntityPlayer) || !(target instanceof EntityPlayer) || attacker == target) {
                 return;
             }
+            // discard attacks when the target is near the
+            // entity render distance since the attacker might
+            // not be loaded on my client
+            final double xDiff = mc.thePlayer.posX - target.posX;
+            final double zDiff = mc.thePlayer.posZ - target.posZ;
+            if (xDiff < -56D || xDiff > 56D || zDiff < -56D || zDiff > 56D) return;
             if (attacker.getDistanceSqToEntity(target) > 64d) {
                 return;
             }
