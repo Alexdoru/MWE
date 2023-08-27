@@ -3,7 +3,8 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector.data;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.AutoblockCheck;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.FastbreakCheck;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.SprintCheck;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.KeepsprintCheck;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.NoSlowdownCheck;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,8 +52,8 @@ public class PlayerDataSamples {
     public final SampleListF breakTimeRatio = new SampleListF(8);
     public final ViolationLevelTracker autoblockVL = AutoblockCheck.newViolationTracker();
     public final ViolationLevelTracker fastbreakVL = FastbreakCheck.newViolationTracker();
-    public final ViolationLevelTracker noslowdownVL = SprintCheck.newNoslowdownViolationTracker();
-    public final ViolationLevelTracker keepsprintUseItemVL = SprintCheck.newKeepsprintViolationTracker();
+    public final ViolationLevelTracker noSlowdownVL = NoSlowdownCheck.newViolationTracker();
+    public final ViolationLevelTracker keepsprintVL = KeepsprintCheck.newViolationTracker();
     ///** The player's look */
     //public Vector3D lookVector = new Vector3D();
     ///** The angle difference in 3D space of the player's look since last tick */
