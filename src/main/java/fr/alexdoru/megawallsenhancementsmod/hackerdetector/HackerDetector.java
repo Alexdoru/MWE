@@ -3,10 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.AutoblockCheck;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.FastbreakCheck;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.ICheck;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.SprintCheck;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.*;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.BrokenBlock;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
@@ -54,9 +51,10 @@ public class HackerDetector {
     }
 
     private HackerDetector() {
-        checkList.add(new AutoblockCheck());
-        checkList.add(FastbreakCheck.INSTANCE);
-        checkList.add(new SprintCheck());
+        this.checkList.add(new AutoblockCheck());
+        this.checkList.add(FastbreakCheck.INSTANCE);
+        this.checkList.add(new KeepsprintCheck());
+        this.checkList.add(new NoSlowdownCheck());
     }
 
     @SubscribeEvent
