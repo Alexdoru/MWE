@@ -109,11 +109,11 @@ public class FastbreakCheck extends AbstractCheck {
                                 if (avg < 0.8F) {
                                     data.fastbreakVL.add((int) Math.floor((0.8F - avg) * 10F));
                                     if (ConfigHandler.debugLogging) {
-                                        HackerDetector.log(playerBreaking.getName() + " failed Fastbreak check" +
-                                                " | vl " + data.fastbreakVL.getViolationLevel() +
+                                        this.log(playerBreaking, data, data.fastbreakVL,
                                                 " | avg " + String.format("%.4f", avg) +
-                                                " | expectedTimeToBreak " + expectedTimeToBreak +
-                                                " | recordedBreakTime " + recordedBreakTime);
+                                                        " | expectedTimeToBreak " + expectedTimeToBreak +
+                                                        " | recordedBreakTime " + recordedBreakTime +
+                                                        " | block " + brokenBlock.block.getRegistryName());
                                     }
                                     super.checkViolationLevel(playerBreaking, true, data.fastbreakVL);
                                 } else {
@@ -127,6 +127,17 @@ public class FastbreakCheck extends AbstractCheck {
             }
         }
         HackerDetector.INSTANCE.brokenBlocksList.clear();
+    }
+
+    @Override
+    protected void log(EntityPlayer player, PlayerDataSamples data, ViolationLevelTracker vl, String extramsg) {
+        if (player.isPotionActive(Potion.digSpeed)) {
+            extramsg += " | haste level " + (player.getActivePotionEffect(Potion.digSpeed).getAmplifier() + 1);
+        }
+        if (player.isPotionActive(Potion.digSlowdown)) {
+            extramsg += " | mining fatigue level " + (player.getActivePotionEffect(Potion.digSlowdown).getAmplifier() + 1);
+        }
+        HackerDetector.log(player.getName() + " failed " + this.getCheatName() + " check" + extramsg);
     }
 
     public static ViolationLevelTracker newViolationTracker() {

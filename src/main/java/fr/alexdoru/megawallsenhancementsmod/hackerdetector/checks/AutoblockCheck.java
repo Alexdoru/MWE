@@ -65,7 +65,7 @@ public class AutoblockCheck extends AbstractCheck {
                         return false;
                     }
                     if (ConfigHandler.debugLogging) {
-                        log(player, this.getCheatName(), data.autoblockVL, data, "useItemTime " + data.useItemTime + " lastEatDrinkTime " + data.lastEatDrinkTime);
+                        this.log(player, data, data.autoblockVL, "useItemTime " + data.useItemTime + " lastEatDrinkTime " + data.lastEatDrinkTime);
                     }
                     return true;
                 }
