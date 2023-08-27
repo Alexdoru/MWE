@@ -19,10 +19,6 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class FastbreakCheck extends AbstractCheck {
 
-    public static final FastbreakCheck INSTANCE = new FastbreakCheck();
-
-    private FastbreakCheck() {}
-
     @Override
     public String getCheatName() {
         return "Fastbreak";
