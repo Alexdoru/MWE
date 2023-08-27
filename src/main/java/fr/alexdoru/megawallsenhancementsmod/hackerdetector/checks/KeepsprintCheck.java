@@ -39,15 +39,7 @@ public class KeepsprintCheck extends AbstractCheck {
             /* If the player is moving slower than the base running speed, we consider it is keepsprint */
             if (player.hurtTime == 0 && data.getSpeedXZ() < 4D) {
                 data.keepsprintVL.add(2);
-                if (ConfigHandler.debugLogging) {
-                    final ItemStack itemStack = player.getHeldItem();
-                    final Item item = itemStack == null ? null : itemStack.getItem();
-                    log(player, this.getCheatName(), data.keepsprintVL, data,
-                            "sprintTime " + data.sprintTime
-                                    + " useItemTime " + data.useItemTime
-                                    + (item != null ? " item held " + item.getRegistryName() : "")
-                    );
-                }
+                if (ConfigHandler.debugLogging) this.log(player, data, data.keepsprintVL, null);
             }
             return true;
         } else if (data.sprintTime == 0 && data.useItemTime > 4) {
@@ -55,6 +47,18 @@ public class KeepsprintCheck extends AbstractCheck {
             return false;
         }
         return false;
+    }
+
+    @Override
+    protected void log(EntityPlayer player, PlayerDataSamples data, ViolationLevelTracker vl, String extramsg) {
+        final ItemStack itemStack = player.getHeldItem();
+        final Item item = itemStack == null ? null : itemStack.getItem();
+        super.log(player, data, data.keepsprintVL,
+                "sprintTime " + data.sprintTime
+                        + " useItemTime " + data.useItemTime
+                        + " speedXZ " + data.getSpeedXZ()
+                        + (item != null ? " item held " + item.getRegistryName() : "")
+        );
     }
 
     public static ViolationLevelTracker newViolationTracker() {

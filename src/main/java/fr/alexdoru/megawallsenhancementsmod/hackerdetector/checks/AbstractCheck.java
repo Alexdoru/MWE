@@ -24,7 +24,6 @@ import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -116,25 +115,22 @@ public abstract class AbstractCheck implements ICheck {
         }
     }
 
-    protected void fail(EntityPlayer player, String cheat) {
+    protected void fail(EntityPlayer player) {
         ChatUtil.debug(NameUtil.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.GRAY + " failed "
-                + EnumChatFormatting.RED + cheat
+                + EnumChatFormatting.RED + this.getCheatName()
                 + EnumChatFormatting.GRAY + " check ");
     }
 
-    protected void log(EntityPlayer player, String cheat, @Nonnull ViolationLevelTracker vl, PlayerDataSamples data, String extramsg) {
-        HackerDetector.log(player.getName() + " failed " + cheat + " check "
-                + extramsg
+    protected void log(EntityPlayer player, PlayerDataSamples data, ViolationLevelTracker vl, String extramsg) {
+        HackerDetector.log(player.getName() + " failed " + this.getCheatName() + " check "
+                + (extramsg == null ? "" : extramsg)
                 + " | vl " + vl.getViolationLevel()
                 + " | onGround " + player.onGround
                 + " | speedXZ (m/s) " + String.format("%.4f", data.getSpeedXZ())
                 + " | posX " + String.format("%.4f", player.posX)
-                + " | lastTickPosX " + String.format("%.4f", player.lastTickPosX)
                 + " | posY " + String.format("%.4f", player.posY)
-                + " | lastTickPosY " + String.format("%.4f", player.lastTickPosY)
                 + " | posZ " + String.format("%.4f", player.posZ)
-                + " | lastTickPosZ " + String.format("%.4f", player.lastTickPosZ)
                 + " | rotationPitch " + String.format("%.4f", player.rotationPitch)
                 + " | rotationYawHead " + String.format("%.4f", player.rotationYawHead)
                 + " | sprintTime " + data.sprintTime
