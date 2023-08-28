@@ -9,18 +9,14 @@ import net.minecraft.util.IChatComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
 public class ScangameData {
 
     private static final ScangameData instance = new ScangameData();
-    private static final ConcurrentHashMap<UUID, ScanResult> scangameMap = new ConcurrentHashMap<>();
-    private static final Set<UUID> skipScanSet = Collections.synchronizedSet(new HashSet<>());
-    private static final HashSet<UUID> playersUsingRandom = new HashSet<>();
+    private static final Map<UUID, ScanResult> scangameMap = new HashMap<>();
+    private static final Set<UUID> skipScanSet = new HashSet<>();
+    private static final Set<UUID> randomKitSet = new HashSet<>();
     private static String scanGameId;
 
     static {
@@ -40,7 +36,7 @@ public class ScangameData {
     public static void clearScanGameData() {
         scanGameId = null;
         scangameMap.clear();
-        playersUsingRandom.clear();
+        randomKitSet.clear();
     }
 
     private static void onGameStart() {
@@ -51,18 +47,18 @@ public class ScangameData {
     }
 
     public static void fectchRandomClasses() {
-        playersUsingRandom.clear();
+        randomKitSet.clear();
         if (ScoreboardUtils.isMegaWallsMythicGame()) {
-            for (final NetworkPlayerInfo networkPlayerInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
-                if (NameUtil.isPlayerUsingRandom(networkPlayerInfo)) {
-                    playersUsingRandom.add(networkPlayerInfo.getGameProfile().getId());
+            for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+                if (NameUtil.isPlayerUsingRandom(netInfo)) {
+                    randomKitSet.add(netInfo.getGameProfile().getId());
                 }
             }
         }
     }
 
     public static boolean didPlayerPickRandom(UUID uuid) {
-        return playersUsingRandom.contains(uuid);
+        return randomKitSet.contains(uuid);
     }
 
     public static boolean doesPlayerFlag(UUID uuid) {
@@ -72,6 +68,10 @@ public class ScangameData {
 
     public static void put(UUID uuid, IChatComponent msg) {
         scangameMap.put(uuid, new ScanResult(msg));
+    }
+
+    public static void put(UUID uuid, int networkLvl, int questsCompleted) {
+        scangameMap.put(uuid, new ScanResult(networkLvl, questsCompleted));
     }
 
     public static ScanResult get(UUID uuid) {
@@ -96,10 +96,27 @@ public class ScangameData {
 
     public static class ScanResult {
 
-        public final IChatComponent msg;
+        public IChatComponent msg;
+        public final int networkLvl;
+        public final int questamount;
 
         public ScanResult(IChatComponent msg) {
             this.msg = msg;
+            this.networkLvl = -1;
+            this.questamount = -1;
+        }
+
+        public ScanResult(int networkLvl, int questamount) {
+            this.msg = null;
+            this.networkLvl = networkLvl;
+            this.questamount = questamount;
+        }
+
+        public boolean isLowLevelAccount() {
+            if (networkLvl == -1 && questamount == -1) {
+                return false;
+            }
+            return networkLvl + questamount < 11;
         }
 
     }
