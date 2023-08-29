@@ -128,6 +128,7 @@ Saves all the players you report with `/wdr` (not /report), and gives you warnin
 - **Warning message** - Print a warning message in chat when a reported player joins your lobby
 - **Report suggestion** - Highlight certain chat messages sent by players that warn about other players cheating
 - **Censor cheaters in chat** - Deletes or censors chat messages sent by players you have reported for cheating
+- **Report HUD** - displays a small text when the mod has a report to send, and which report it is typing
 - You can use `/report name boosting` & `/report name crossteaming` as a one step command to report on Hypixel instead of using the book
 - Shows who joined in party with a certain player when you `/wdr` them, to report the other members for boosting
 
