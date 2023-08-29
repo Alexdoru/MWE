@@ -1,7 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,39 +46,27 @@ public class AutoblockCheck extends AbstractCheck {
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        if (data.isNotMovingXZ()) {
-            return false;
-        }
-        final ItemStack itemStack = player.getHeldItem();
-        if (itemStack != null) {
-            if (swordSet.contains(itemStack.getItem())) {
-                if (data.disabledAutoblockCheck) {
-                    return false;
-                }
-                if (player.isSwingInProgress && data.useItemTime > 20) {
-                    if (data.lastEatDrinkTime < 30) {
-                        data.disabledAutoblockCheck = true;
+        if (data.hasAttacked) {
+            final ItemStack itemStack = player.getHeldItem();
+            if (itemStack != null) {
+                if (swordSet.contains(itemStack.getItem())) {
+                    if (data.useItemTime > 5) {
+                        data.autoblockVL.add(1);
                         if (ConfigHandler.debugLogging) {
-                            HackerDetector.log("Disabled autoblock check for " + player.getName() + " lastEatDrinkTime " + data.lastEatDrinkTime);
+                            this.log(player, data, data.autoblockVL, "useItemTime " + data.useItemTime + " target " + data.targetedPlayer.getName());
                         }
-                        return false;
+                        return true;
+                    } else {
+                        data.autoblockVL.substract(1);
                     }
-                    if (ConfigHandler.debugLogging) {
-                        this.log(player, data, data.autoblockVL, "useItemTime " + data.useItemTime + " lastEatDrinkTime " + data.lastEatDrinkTime);
-                    }
-                    return true;
                 }
-            } else {
-                data.disabledAutoblockCheck = false;
             }
-        } else {
-            data.disabledAutoblockCheck = false;
         }
         return false;
     }
 
     public static ViolationLevelTracker newViolationTracker() {
-        return new ViolationLevelTracker(5, 2, 150);
+        return new ViolationLevelTracker(4);
     }
 
 }

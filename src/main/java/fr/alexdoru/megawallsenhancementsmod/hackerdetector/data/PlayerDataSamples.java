@@ -43,7 +43,6 @@ public class PlayerDataSamples {
     public SampleListZ attackList = new SampleListZ(20);
     /** True if the player has beend attacked by another player during this tick */
     public boolean hasBeenAttacked = false;
-    public boolean disabledAutoblockCheck = false;
     public SampleListD speedXList = new SampleListD(20);
     public SampleListD speedYList = new SampleListD(20);
     public SampleListD speedZList = new SampleListD(20);
