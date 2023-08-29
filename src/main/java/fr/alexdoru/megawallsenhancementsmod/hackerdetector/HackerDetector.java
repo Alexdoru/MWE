@@ -246,12 +246,6 @@ public class HackerDetector {
         ((EntityPlayerAccessor) target).getPlayerDataSamples().hasBeenAttacked = true;
         if (ConfigHandler.debugLogging) {
             log(attacker.getName() + " attacked " + target.getName() + " [" + attackType + "]");
-            //ChatUtil.debug(System.currentTimeMillis() % 1000 + " " +
-            //        NameUtil.getFormattedNameWithoutIcons(attacker.getName())
-            //        + EnumChatFormatting.RESET + " attacked "
-            //        + NameUtil.getFormattedNameWithoutIcons(target.getName())
-            //        + EnumChatFormatting.RESET + " [" + attackType + "]"
-            //);
         }
     }
 
