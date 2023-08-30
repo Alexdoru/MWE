@@ -110,7 +110,8 @@ public class FastbreakCheck extends AbstractCheck {
                                     data.fastbreakVL.add((int) Math.floor((0.8F - avg) * 10F));
                                     if (ConfigHandler.debugLogging) {
                                         this.log(playerBreaking, data, data.fastbreakVL,
-                                                " | avg " + String.format("%.4f", avg) +
+                                                " | vl " + data.fastbreakVL.getViolationLevel() +
+                                                        " | avg " + String.format("%.4f", avg) +
                                                         " | expectedTimeToBreak " + expectedTimeToBreak +
                                                         " | recordedBreakTime " + recordedBreakTime +
                                                         " | block " + brokenBlock.block.getRegistryName());
@@ -141,7 +142,7 @@ public class FastbreakCheck extends AbstractCheck {
     }
 
     public static ViolationLevelTracker newViolationTracker() {
-        return new ViolationLevelTracker(40);
+        return new ViolationLevelTracker(15);
     }
 
     /**
