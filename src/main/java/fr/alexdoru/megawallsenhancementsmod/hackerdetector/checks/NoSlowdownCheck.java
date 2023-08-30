@@ -31,19 +31,21 @@ public class NoSlowdownCheck extends AbstractCheck {
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        if (data.isNotMovingXZ() || player.isRiding()) {
-            return false;
-        }
-        /* It takes 32 ticks to eat/drink one food/potion item */
-        if (data.sprintTime > 70 && data.useItemTime > 4) {
-            /* If the player is moving slower than the base running speed, we consider it is keepsprint */
-            if (player.hurtTime == 0 && data.getSpeedXZ() >= 4D) {
-                data.noSlowdownVL.add(2);
-                if (ConfigHandler.debugLogging) this.log(player, data, data.noSlowdownVL, null);
+        /* If the player is moving slower than the base running speed, we consider it is keepsprint */
+        if (!player.isRiding() && player.hurtTime == 0 && data.getSpeedXZ() >= 4D) {
+            /* It takes 32 ticks to eat/drink one food/potion item */
+            if (data.useItemTime > 5) {
+                if (data.sprintTime > 70) {
+                    data.noSlowdownVL.add(2);
+                    if (ConfigHandler.debugLogging) {
+                        this.log(player, data, data.noSlowdownVL, null);
+                    }
+                    return true;
+                } else if (data.sprintTime == 0) {
+                    data.noSlowdownVL.substract(3);
+                }
             }
-            return true;
         }
-        data.noSlowdownVL.substract(3);
         return false;
     }
 
