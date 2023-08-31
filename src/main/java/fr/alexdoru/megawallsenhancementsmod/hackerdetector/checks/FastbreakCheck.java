@@ -15,7 +15,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
 
 public class FastbreakCheck extends AbstractCheck {
 
@@ -26,7 +25,7 @@ public class FastbreakCheck extends AbstractCheck {
 
     @Override
     public String getCheatDescription() {
-        return EnumChatFormatting.RED + "The player can break blocks faster than normal";
+        return "The player can break blocks faster than normal";
     }
 
     @Override
