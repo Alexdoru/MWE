@@ -1,6 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 
 public class Vector3D {
@@ -21,6 +23,14 @@ public class Vector3D {
         this.z = z;
     }
 
+    public static Vector3D getVectToEntity(Entity from, Entity to) {
+        return new Vector3D(to.posX - from.posX, to.posY - from.posY, to.posZ - from.posZ);
+    }
+
+    public static Vector3D getPlayersEyePos(EntityPlayer player) {
+        return new Vector3D(player.posX, player.posY + player.getEyeHeight(), player.posZ);
+    }
+
     public static Vector3D getPlayersLookVec(EntityPlayer player) {
         return getVectorFromRotation(player.rotationPitch, player.rotationYawHead);
     }
@@ -34,6 +44,17 @@ public class Vector3D {
         final float f2 = -MathHelper.cos(-pitch * 0.017453292F);
         final float f3 = MathHelper.sin(-pitch * 0.017453292F);
         return new Vector3D(f1 * f2, f3, f * f2);
+    }
+
+    /**
+     * Returns true is the coordinates x, y, z are within the AxisAlignedBB provided
+     */
+    public boolean isVectInside(AxisAlignedBB bb) {
+        return (this.x > bb.minX && this.x < bb.maxX) && (this.y > bb.minY && this.y < bb.maxY) && (this.z > bb.minZ && this.z < bb.maxZ);
+    }
+
+    public Vector3D addVector(double x1, double y1, double z1) {
+        return new Vector3D(this.x + x1, this.y + y1, this.z + z1);
     }
 
     public boolean isZero() {
