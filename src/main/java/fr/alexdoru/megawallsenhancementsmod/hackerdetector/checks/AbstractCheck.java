@@ -15,6 +15,7 @@ import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -34,6 +35,7 @@ import java.util.UUID;
  */
 public abstract class AbstractCheck implements ICheck {
 
+    protected static final Minecraft mc = Minecraft.getMinecraft();
     private static final HashSet<String> flagMessages = new HashSet<>();
 
     @Override
@@ -119,7 +121,7 @@ public abstract class AbstractCheck implements ICheck {
         ChatUtil.debug(NameUtil.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.GRAY + " failed "
                 + EnumChatFormatting.RED + this.getCheatName()
-                + EnumChatFormatting.GRAY + " check ");
+                + EnumChatFormatting.GRAY + " check");
     }
 
     protected void log(EntityPlayer player, PlayerDataSamples data, ViolationLevelTracker vl, String extramsg) {
