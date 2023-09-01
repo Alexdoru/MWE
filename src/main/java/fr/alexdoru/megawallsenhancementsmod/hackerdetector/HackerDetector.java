@@ -204,28 +204,38 @@ public class HackerDetector {
             if (ScoreboardTracker.isInMwGame && ((EntityPlayerAccessor) attacker).getPlayerTeamColor() != '\0' && ((EntityPlayerAccessor) attacker).getPlayerTeamColor() == ((EntityPlayerAccessor) target).getPlayerTeamColor()) {
                 return;
             }
-            if (attackType == 1) { // swing and hurt packet received consecutively
-                onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target, "attack");
-            } else if (attackType == 2) { // target hurt
-                // when an ability does damage to multiple players, this can fire multiple times
-                // on different players for the same attacker
-                if (((EntityPlayer) attacker).swingProgressInt == -1 && ((EntityPlayer) target).hurtTime == 10) {
-                    onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target, "hurt");
-                }
-            } else if (attackType == 4) { // target has crit particles
-                if (((EntityPlayer) attacker).swingProgressInt == -1 && !attacker.onGround && attacker.ridingEntity == null) {
-                    onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target, "critical");
-                }
-            } else if (attackType == 5) { // target has sharp particles
-                if (((EntityPlayer) attacker).swingProgressInt == -1) {
-                    final ItemStack heldItem = ((EntityPlayer) attacker).getHeldItem();
-                    if (heldItem != null) {
-                        final Item item = heldItem.getItem();
-                        if ((item instanceof ItemSword || item instanceof ItemTool) && heldItem.isItemEnchanted()) {
-                            onPlayerAttack(((EntityPlayer) attacker), (EntityPlayer) target, "sharpness");
+            switch (attackType) {
+                case 0:  // velocity packet
+                    if (mc.thePlayer == target) {
+                        onPlayerAttack((EntityPlayer) attacker, mc.thePlayer, "velocity");
+                    }
+                    break;
+                case 1:  // swing and hurt packet received consecutively
+                    onPlayerAttack((EntityPlayer) attacker, (EntityPlayer) target, "attack");
+                    break;
+                case 2:  // target hurt
+                    // when an ability does damage to multiple players, this can fire multiple times
+                    // on different players for the same attacker
+                    if (((EntityPlayer) attacker).swingProgressInt == -1 && ((EntityPlayer) target).hurtTime == 10) {
+                        onPlayerAttack((EntityPlayer) attacker, (EntityPlayer) target, "hurt");
+                    }
+                    break;
+                case 4:  // target has crit particles
+                    if (((EntityPlayer) attacker).swingProgressInt == -1 && !attacker.onGround && attacker.ridingEntity == null) {
+                        onPlayerAttack((EntityPlayer) attacker, (EntityPlayer) target, "critical");
+                    }
+                    break;
+                case 5:  // target has sharp particles
+                    if (((EntityPlayer) attacker).swingProgressInt == -1) {
+                        final ItemStack heldItem = ((EntityPlayer) attacker).getHeldItem();
+                        if (heldItem != null) {
+                            final Item item = heldItem.getItem();
+                            if ((item instanceof ItemSword || item instanceof ItemTool) && heldItem.isItemEnchanted()) {
+                                onPlayerAttack((EntityPlayer) attacker, (EntityPlayer) target, "sharpness");
+                            }
                         }
                     }
-                }
+                    break;
             }
         });
     }

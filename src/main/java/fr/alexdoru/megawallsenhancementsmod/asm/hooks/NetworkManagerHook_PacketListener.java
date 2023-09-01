@@ -19,14 +19,47 @@ public class NetworkManagerHook_PacketListener {
 
     // Careful, this code isn't called from the main thread
     // Only listens packets that throw a ThreadQuickExitException
-    public static void listen(@SuppressWarnings("rawtypes") Packet packet) {
+    public static void listen(Packet<?> packet) {
         if (!ConfigHandler.hackerDetector) return;
         try { // We need a try catch block to prevent any exception from being throwned, it would discard the packet
             lookForAttacks(packet);
         } catch (Throwable ignored) {}
     }
 
-    private static void logPacket(@SuppressWarnings("rawtypes") Packet packet) {
+    private static void lookForAttacks(Packet<?> packet) {
+        if (packet instanceof S19PacketEntityStatusAccessor && ((S19PacketEntityStatus) packet).getOpCode() == 2) { // Entity gets hurt
+            if (lastPacketWasSwing) {
+                HackerDetector.checkPlayerAttack(attackerID, ((S19PacketEntityStatusAccessor) packet).getEntityId(), 1);
+                //log("Attacker : " + attackerID + " target : " + ((S19PacketEntityStatusAccessor) packet).getEntityId() + " [attack]" + " | time diff " + (System.currentTimeMillis() - lastSwingTime) + "ms");
+            } else {
+                HackerDetector.checkPlayerAttack(attackerID, ((S19PacketEntityStatusAccessor) packet).getEntityId(), 2);
+                //log("Attacker : " + attackerID + " target : " + ((S19PacketEntityStatusAccessor) packet).getEntityId() + " [hurt]" + " | time diff " + (System.currentTimeMillis() - lastSwingTime) + "ms");
+            }
+        } else if (packet instanceof S0BPacketAnimation) {
+            if (((S0BPacketAnimation) packet).getAnimationType() == 0) { // Swing packet
+                lastPacketWasSwing = true;
+                attackerID = ((S0BPacketAnimation) packet).getEntityID();
+                HackerDetector.onEntitySwing(attackerID);
+                return;
+            }
+            if (((S0BPacketAnimation) packet).getAnimationType() == 4 || ((S0BPacketAnimation) packet).getAnimationType() == 5) { // crit particle packet
+                if (lastPacketWasSwing) {
+                    HackerDetector.checkPlayerAttack(attackerID, ((S0BPacketAnimation) packet).getEntityID(), 1);
+                } else {
+                    HackerDetector.checkPlayerAttack(attackerID, ((S0BPacketAnimation) packet).getEntityID(), ((S0BPacketAnimation) packet).getAnimationType());
+                }
+                //log("Attacker : " + attackerID + " target : " + ((S0BPacketAnimation) packet).getEntityID() + " [crit/sharp]" + " | time diff " + (System.currentTimeMillis() - lastSwingTime) + "ms");
+            }
+        } else if (packet instanceof S12PacketEntityVelocity) {
+            final S12PacketEntityVelocity packetVelo = (S12PacketEntityVelocity) packet;
+            if (packetVelo.getMotionX() != 0 || packetVelo.getMotionY() != 0 || packetVelo.getMotionZ() != 0) {
+                HackerDetector.checkPlayerAttack(attackerID, packetVelo.getEntityID(), 0);
+            }
+        }
+        lastPacketWasSwing = false;
+    }
+
+    private static void logPacket(Packet<?> packet) {
         if (packet instanceof S14PacketEntity) {
             final S14PacketEntity packetEntity = (S14PacketEntity) packet;
             log(
@@ -115,31 +148,6 @@ public class NetworkManagerHook_PacketListener {
     private static void log(String message) {
         final String time = new SimpleDateFormat("HH:mm:ss.SSS").format(System.currentTimeMillis());
         logger.info("[" + time + "] " + message);
-    }
-
-    private static void lookForAttacks(@SuppressWarnings("rawtypes") Packet packet) {
-        if (packet instanceof S19PacketEntityStatusAccessor && ((S19PacketEntityStatus) packet).getOpCode() == 2) { // Entity gets hurt
-            if (lastPacketWasSwing) {
-                HackerDetector.checkPlayerAttack(attackerID, ((S19PacketEntityStatusAccessor) packet).getEntityId(), 1);
-            } else {
-                HackerDetector.checkPlayerAttack(attackerID, ((S19PacketEntityStatusAccessor) packet).getEntityId(), 2);
-            }
-        } else if (packet instanceof S0BPacketAnimation) {
-            if (((S0BPacketAnimation) packet).getAnimationType() == 0) { // Swing packet
-                lastPacketWasSwing = true;
-                attackerID = ((S0BPacketAnimation) packet).getEntityID();
-                HackerDetector.onEntitySwing(attackerID);
-                return;
-            }
-            if (((S0BPacketAnimation) packet).getAnimationType() == 4 || ((S0BPacketAnimation) packet).getAnimationType() == 5) { // crit particle packet
-                if (lastPacketWasSwing) {
-                    HackerDetector.checkPlayerAttack(attackerID, ((S0BPacketAnimation) packet).getEntityID(), 1);
-                } else {
-                    HackerDetector.checkPlayerAttack(attackerID, ((S0BPacketAnimation) packet).getEntityID(), ((S0BPacketAnimation) packet).getAnimationType());
-                }
-            }
-        }
-        lastPacketWasSwing = false;
     }
 
 }
