@@ -15,6 +15,7 @@ public class NetworkManagerHook_PacketListener {
 
     private static final Logger logger = LogManager.getLogger("PacketListener");
     private static boolean lastPacketWasSwing;
+    private static long lastSwingTime;
     private static int attackerID;
 
     // Careful, this code isn't called from the main thread
@@ -28,32 +29,40 @@ public class NetworkManagerHook_PacketListener {
 
     private static void lookForAttacks(Packet<?> packet) {
         if (packet instanceof S19PacketEntityStatusAccessor && ((S19PacketEntityStatus) packet).getOpCode() == 2) { // Entity gets hurt
-            if (lastPacketWasSwing) {
-                HackerDetector.checkPlayerAttack(attackerID, ((S19PacketEntityStatusAccessor) packet).getEntityId(), 1);
-                //log("Attacker : " + attackerID + " target : " + ((S19PacketEntityStatusAccessor) packet).getEntityId() + " [attack]" + " | time diff " + (System.currentTimeMillis() - lastSwingTime) + "ms");
-            } else {
-                HackerDetector.checkPlayerAttack(attackerID, ((S19PacketEntityStatusAccessor) packet).getEntityId(), 2);
-                //log("Attacker : " + attackerID + " target : " + ((S19PacketEntityStatusAccessor) packet).getEntityId() + " [hurt]" + " | time diff " + (System.currentTimeMillis() - lastSwingTime) + "ms");
+            final long timeDiff = System.currentTimeMillis() - lastSwingTime;
+            if (timeDiff < 2) {
+                if (lastPacketWasSwing) {
+                    HackerDetector.checkPlayerAttack(attackerID, ((S19PacketEntityStatusAccessor) packet).getEntityId(), 1);
+                } else {
+                    HackerDetector.checkPlayerAttack(attackerID, ((S19PacketEntityStatusAccessor) packet).getEntityId(), 2);
+                }
             }
         } else if (packet instanceof S0BPacketAnimation) {
-            if (((S0BPacketAnimation) packet).getAnimationType() == 0) { // Swing packet
+            final S0BPacketAnimation packetAnimation = (S0BPacketAnimation) packet;
+            final int animationType = packetAnimation.getAnimationType();
+            if (animationType == 0) { // Swing packet
                 lastPacketWasSwing = true;
-                attackerID = ((S0BPacketAnimation) packet).getEntityID();
+                lastSwingTime = System.currentTimeMillis();
+                attackerID = packetAnimation.getEntityID();
                 HackerDetector.onEntitySwing(attackerID);
                 return;
-            }
-            if (((S0BPacketAnimation) packet).getAnimationType() == 4 || ((S0BPacketAnimation) packet).getAnimationType() == 5) { // crit particle packet
-                if (lastPacketWasSwing) {
-                    HackerDetector.checkPlayerAttack(attackerID, ((S0BPacketAnimation) packet).getEntityID(), 1);
-                } else {
-                    HackerDetector.checkPlayerAttack(attackerID, ((S0BPacketAnimation) packet).getEntityID(), ((S0BPacketAnimation) packet).getAnimationType());
+            } else if (animationType == 4 || animationType == 5) { // crit particle packet
+                final long timeDiff = System.currentTimeMillis() - lastSwingTime;
+                if (timeDiff < 2) {
+                    if (lastPacketWasSwing) {
+                        HackerDetector.checkPlayerAttack(attackerID, packetAnimation.getEntityID(), 1);
+                    } else {
+                        HackerDetector.checkPlayerAttack(attackerID, packetAnimation.getEntityID(), animationType);
+                    }
                 }
-                //log("Attacker : " + attackerID + " target : " + ((S0BPacketAnimation) packet).getEntityID() + " [crit/sharp]" + " | time diff " + (System.currentTimeMillis() - lastSwingTime) + "ms");
             }
         } else if (packet instanceof S12PacketEntityVelocity) {
-            final S12PacketEntityVelocity packetVelo = (S12PacketEntityVelocity) packet;
-            if (packetVelo.getMotionX() != 0 || packetVelo.getMotionY() != 0 || packetVelo.getMotionZ() != 0) {
-                HackerDetector.checkPlayerAttack(attackerID, packetVelo.getEntityID(), 0);
+            final long timeDiff = System.currentTimeMillis() - lastSwingTime;
+            if (timeDiff < 2) {
+                final S12PacketEntityVelocity packetVelo = (S12PacketEntityVelocity) packet;
+                if (packetVelo.getMotionX() != 0 || packetVelo.getMotionY() != 0 || packetVelo.getMotionZ() != 0) {
+                    HackerDetector.checkPlayerAttack(attackerID, packetVelo.getEntityID(), 0);
+                }
             }
         }
         lastPacketWasSwing = false;
