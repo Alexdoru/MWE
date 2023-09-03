@@ -241,19 +241,19 @@ public class HackerDetector {
     }
 
     private static void onPlayerAttack(EntityPlayer attacker, EntityPlayer target, String attackType) {
-        final PlayerDataSamples dataAttacked = ((EntityPlayerAccessor) attacker).getPlayerDataSamples();
-        if (dataAttacked.hasAttackedMultiTarget) {
+        final PlayerDataSamples dataAttacker = ((EntityPlayerAccessor) attacker).getPlayerDataSamples();
+        if (dataAttacker.hasAttackedMultiTarget) {
             return;
         }
-        if (dataAttacked.targetedPlayer != null && dataAttacked.targetedPlayer != target) {
-            dataAttacked.hasAttackedMultiTarget = true;
-            dataAttacked.hasAttacked = false;
-            dataAttacked.targetedPlayer = null;
+        if (dataAttacker.targetedPlayer != null && dataAttacker.targetedPlayer != target) {
+            dataAttacker.hasAttackedMultiTarget = true;
+            dataAttacker.hasAttacked = false;
+            dataAttacker.targetedPlayer = null;
             ((EntityPlayerAccessor) target).getPlayerDataSamples().hasBeenAttacked = false;
             return;
         }
-        dataAttacked.hasAttacked = true;
-        dataAttacked.targetedPlayer = target;
+        dataAttacker.hasAttacked = true;
+        dataAttacker.targetedPlayer = target;
         ((EntityPlayerAccessor) target).getPlayerDataSamples().hasBeenAttacked = true;
         if (ConfigHandler.debugLogging) {
             log(attacker.getName() + " attacked " + target.getName() + " [" + attackType + "]");
