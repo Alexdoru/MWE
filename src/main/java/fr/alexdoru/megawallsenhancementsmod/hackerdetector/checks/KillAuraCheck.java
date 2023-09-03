@@ -4,12 +4,14 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
+import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
+
+import java.util.List;
 
 public class KillAuraCheck extends AbstractCheck {
 
@@ -71,6 +73,14 @@ public class KillAuraCheck extends AbstractCheck {
 
                 // point is inside the target's hitbox
                 if ((dx > targetAABB.minX && dx < targetAABB.maxX) && (dy > targetAABB.minY && dy < targetAABB.maxY) && (dz > targetAABB.minZ && dz < targetAABB.maxZ)) {
+                    //final String playerList = this.checkThroughEntity(player, data.targetedPlayer, i * STEP_SIZE);
+                    //if (!playerList.equals("")) {
+                    //    ChatUtil.debug(
+                    //            NameUtil.getFormattedNameWithoutIcons(player.getName()) + EnumChatFormatting.RESET
+                    //                    + " attacked " + NameUtil.getFormattedNameWithoutIcons(data.targetedPlayer.getName()) + EnumChatFormatting.RESET
+                    //                    + " dist " + String.format("%.4f", (i * STEP_SIZE)) + " through " + playerList
+                    //    );
+                    //}
                     if (timesInsideBlock > 0) {
                         data.killAuraVL.add(Math.min(timesInsideBlock, 10));
                         if (ConfigHandler.debugLogging) {
@@ -107,6 +117,37 @@ public class KillAuraCheck extends AbstractCheck {
 
         return false;
 
+    }
+
+    private String checkThroughEntity(EntityPlayer player, EntityPlayer target, double distance) {
+        final Vec3 positionEyes = player.getPositionEyes(1F);
+        final Vec3 lookVect = player.getLook(1F);
+        final Vec3 lookEndVect = positionEyes.addVector(lookVect.xCoord * distance, lookVect.yCoord * distance, lookVect.zCoord * distance);
+        final float f = 1.0F;
+        final List<Entity> list = mc.theWorld.getEntitiesInAABBexcluding(
+                player,
+                player.getEntityBoundingBox().addCoord(lookVect.xCoord * distance, lookVect.yCoord * distance, lookVect.zCoord * distance).expand(f, f, f),
+                e -> e != target && e != mc.thePlayer && (e instanceof EntityPlayer) && !((EntityPlayer) e).isSpectator() && e.canBeCollidedWith());
+        final StringBuilder str = new StringBuilder();
+        int timesInside = 0;
+        for (final Entity otherPlayer : list) {
+            final float f1 = otherPlayer.getCollisionBorderSize();
+            final AxisAlignedBB entityAABB = otherPlayer.getEntityBoundingBox().expand(f1, f1, f1);
+            if (entityAABB.isVecInside(positionEyes)) {
+                timesInside++;
+                str.append(NameUtil.getFormattedNameWithoutIcons(otherPlayer.getName())).append(EnumChatFormatting.RESET).append(" (inside) ");
+            } else {
+                final MovingObjectPosition movingobjectposition = entityAABB.calculateIntercept(positionEyes, lookEndVect);
+                if (movingobjectposition != null) {
+                    final double d3 = positionEyes.distanceTo(movingobjectposition.hitVec);
+                    if (d3 < distance) {
+                        timesInside++;
+                        str.append(NameUtil.getFormattedNameWithoutIcons(otherPlayer.getName())).append(EnumChatFormatting.RESET).append(" dist ").append(String.format("%.4f", d3)).append(" ");
+                    }
+                }
+            }
+        }
+        return str.toString();
     }
 
     public static ViolationLevelTracker newViolationTracker() {
