@@ -18,7 +18,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
-import net.minecraft.network.play.server.S04PacketEntityEquipment;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -258,22 +257,6 @@ public class HackerDetector {
         if (ConfigHandler.debugLogging) {
             log(attacker.getName() + " attacked " + target.getName() + " [" + attackType + "]");
         }
-    }
-
-    public static void onEquipmentPacket(EntityPlayer player, S04PacketEntityEquipment packet) {
-        final long timeStart = System.nanoTime();
-        final ItemStack currentItemStack = player.inventory.armorInventory[packet.getEquipmentSlot() - 1];
-        final ItemStack newItemStack = packet.getItemStack();
-        if (currentItemStack != null && newItemStack != null) {
-            if (currentItemStack.getItem() == newItemStack.getItem()) {
-                final int newItemDamage = newItemStack.getItemDamage();
-                final int currentItemDamage = currentItemStack.getItemDamage();
-                if (newItemDamage > currentItemDamage || (newItemDamage == 0 && newItemDamage == currentItemDamage)) {
-                    HackerDetector.addScheduledTask(() -> ((EntityPlayerAccessor) player).getPlayerDataSamples().armorDamaged = true);
-                }
-            }
-        }
-        INSTANCE.timeElapsedTemp += System.nanoTime() - timeStart;
     }
 
     private static void initPrintStream() {

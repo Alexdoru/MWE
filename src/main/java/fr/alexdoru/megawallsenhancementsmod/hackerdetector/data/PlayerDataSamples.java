@@ -21,9 +21,6 @@ public class PlayerDataSamples {
     /** True when we receive a swing packet from this entity during the last tick */
     public boolean hasSwung = false;
     public final SampleListZ swingList = new SampleListZ(20);
-    /** True if the player's armor has been damaged during this tick, for instance when being attacked
-     * Disabled as of right now, always false */
-    public boolean armorDamaged = false;
     /** Used to filter hurt events from an ability damaging multiple players at
      * the same time and mistaken for a player attacking multiple entities */
     public boolean hasAttackedMultiTarget = false;
@@ -49,7 +46,6 @@ public class PlayerDataSamples {
     public void ontickStart() {
         this.updatedThisTick = false;
         this.hasSwung = false;
-        this.armorDamaged = false;
         this.hasAttackedMultiTarget = false;
         this.hasAttacked = false;
         this.targetedPlayer = null;
