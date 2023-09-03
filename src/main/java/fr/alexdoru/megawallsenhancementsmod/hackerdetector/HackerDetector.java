@@ -324,7 +324,6 @@ public class HackerDetector {
                 + " | isSwingInProgress " + player.isSwingInProgress
                 + " | useItemTime " + data.useItemTime
                 + " | lastSwingTime " + data.lastSwingTime
-                + " | lastEatDrinkTime " + data.lastEatDrinkTime
                 + " | isUsingItem " + player.isUsingItem()
                 + " | ticksExisted " + player.ticksExisted
                 + " | isRidingEntity " + player.isRiding()
