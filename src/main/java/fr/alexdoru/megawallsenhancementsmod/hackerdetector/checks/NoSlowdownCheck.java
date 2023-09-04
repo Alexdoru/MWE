@@ -32,9 +32,9 @@ public class NoSlowdownCheck extends AbstractCheck {
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
         /* If the player is moving slower than the base running speed, we consider it is keepsprint */
-        if (!player.isRiding() && player.hurtTime == 0 && data.getSpeedXZ() >= 4D) {
+        if (!player.isRiding() && player.hurtTime == 0) {
             /* It takes 32 ticks to eat/drink one food/potion item */
-            if (data.useItemTime > 5) {
+            if (data.useItemTime > 5 && data.getSpeedXZ() >= 4D) {
                 if (data.sprintTime > 70) {
                     data.noSlowdownVL.add(2);
                     if (ConfigHandler.debugLogging) {
