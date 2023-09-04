@@ -63,4 +63,33 @@ public class SampleListF {
         return this.sum() / this.size;
     }
 
+    @Override
+    public String toString() {
+        if (this.size == 0) {
+            return "[]";
+        }
+        final StringBuilder b = new StringBuilder();
+        b.append('[');
+        for (int i = 0; ; i++) {
+            b.append(this.get(i));
+            if (i == this.size - 1) {
+                return b.append(']').toString();
+            }
+            b.append(", ");
+        }
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        final SampleListF list = (SampleListF) other;
+        if (size != list.size) return false;
+        if (size == 0) return true;
+        for (int i = 0; ; i++) {
+            if (this.get(i) != list.get(i)) return false;
+            if (i == this.size - 1) return true;
+        }
+    }
+
 }

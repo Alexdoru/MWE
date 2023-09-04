@@ -1,5 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.data;
 
+import java.util.Objects;
+
 public class SampleList<T> {
 
     private final Object[] data;
@@ -53,6 +55,35 @@ public class SampleList<T> {
 
     public boolean hasCollected() {
         return size == capacity;
+    }
+
+    @Override
+    public String toString() {
+        if (this.size == 0) {
+            return "[]";
+        }
+        final StringBuilder b = new StringBuilder();
+        b.append('[');
+        for (int i = 0; ; i++) {
+            b.append(this.get(i));
+            if (i == this.size - 1) {
+                return b.append(']').toString();
+            }
+            b.append(", ");
+        }
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        final SampleList<?> list = (SampleList<?>) other;
+        if (size != list.size) return false;
+        if (size == 0) return true;
+        for (int i = 0; ; i++) {
+            if (!Objects.equals(this.get(i), list.get(i))) return false;
+            if (i == this.size - 1) return true;
+        }
     }
 
 }
