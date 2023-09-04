@@ -6,13 +6,11 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.*;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.BrokenBlock;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -139,7 +137,6 @@ public class HackerDetector {
         playersCheckedTemp++;
         if (data.updatedThisTick) return;
         data.onTick(player);
-        if (ConfigHandler.debugLogging && playersToLog.contains(player.getName())) log(player, data);
         checkList.forEach(check -> check.performCheck(player, data));
         timeElapsedTemp += System.nanoTime() - timeStart;
     }
@@ -287,30 +284,6 @@ public class HackerDetector {
         if (printStream == null) return;
         final String time = new SimpleDateFormat("HH:mm:ss.SSS").format(System.currentTimeMillis());
         printStream.println("[" + time + "] " + message);
-    }
-
-    private static void log(EntityPlayer player, PlayerDataSamples data) {
-        log(player.getName()
-                + " | onGround " + player.onGround
-                + " | speedXZ (m/s) " + String.format("%.4f", data.getSpeedXZ())
-                + " | speedXYZ (m/s) " + data.speedToString()
-                + " | position " + new Vector3D(player.posX, player.posY, player.posZ)
-                + " | rotationPitch " + String.format("%.4f", player.rotationPitch)
-                + " | rotationYawHead " + String.format("%.4f", player.rotationYawHead)
-                //+ " | look Vector " + data.lookVector
-                //+ " | lookAngleDiff " + String.format("%.4f", data.lookAngleDiff)
-                //+ " | dYaw " + String.format("%.4f", data.dYaw)
-                //+ " | lastTime_dYawChangedSign " + data.lastTime_dYawChangedSign
-                + " | is sprinting " + (player.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getModifier(sprintingUUID) != null)
-                + " | sprintTime " + data.sprintTime
-                + " | lastHurtTime " + data.lastHurtTime
-                + " | isSwingInProgress " + player.isSwingInProgress
-                + " | useItemTime " + data.useItemTime
-                + " | lastSwingTime " + data.lastSwingTime
-                + " | isUsingItem " + player.isUsingItem()
-                + " | ticksExisted " + player.ticksExisted
-                + " | isRidingEntity " + player.isRiding()
-        );
     }
 
 }
