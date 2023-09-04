@@ -63,4 +63,33 @@ public class SampleListZ {
         return this.sum() / (float) this.size;
     }
 
+    @Override
+    public String toString() {
+        if (this.size == 0) {
+            return "[]";
+        }
+        final StringBuilder b = new StringBuilder();
+        b.append('[');
+        for (int i = 0; ; i++) {
+            b.append(this.get(i));
+            if (i == this.size - 1) {
+                return b.append(']').toString();
+            }
+            b.append(", ");
+        }
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        final SampleListZ list = (SampleListZ) other;
+        if (size != list.size) return false;
+        if (size == 0) return true;
+        for (int i = 0; ; i++) {
+            if (this.get(i) != list.get(i)) return false;
+            if (i == this.size - 1) return true;
+        }
+    }
+
 }
