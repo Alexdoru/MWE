@@ -153,7 +153,7 @@ public abstract class AbstractCheck implements ICheck {
      * That makes normal sprinting ~21% slower than sprint while jumping
      * Result is in meters per tick
      */
-    protected double getBaseSprintingSpeed(EntityPlayer player) {
+    protected static double getBaseSprintingSpeed(EntityPlayer player) {
         int speedAmplifier = 0;
         if (player.isPotionActive(Potion.moveSpeed)) {
             final PotionEffect activePotionEffect = player.getActivePotionEffect(Potion.moveSpeed);
@@ -162,7 +162,7 @@ public abstract class AbstractCheck implements ICheck {
         return getBaseSprintingSpeed(speedAmplifier);
     }
 
-    protected double getBaseSprintingSpeed(int speedAmplifier) {
+    protected static double getBaseSprintingSpeed(int speedAmplifier) {
         return 0.2806d * (1.0d + 0.2d * speedAmplifier);
     }
 
@@ -172,7 +172,7 @@ public abstract class AbstractCheck implements ICheck {
      * This accounts for the 5 ticks cooldown there is after breaking a bloc
      * Returns -1 if the block isn't harvestable
      */
-    protected int getTimeToHarvestBlock(IBlockState state, EntityPlayer player, World world, BlockPos pos) {
+    protected static int getTimeToHarvestBlock(IBlockState state, EntityPlayer player, World world, BlockPos pos) {
         return getTimeToHarvestBlock(ForgeHooks.blockStrength(state, player, world, pos));
     }
 
@@ -182,7 +182,7 @@ public abstract class AbstractCheck implements ICheck {
      * This accounts for the 5 ticks cooldown there is after breaking a bloc
      * Returns -1 if the block isn't harvestable
      */
-    protected int getTimeToHarvestBlock(float blockStrength) {
+    protected static int getTimeToHarvestBlock(float blockStrength) {
         if (blockStrength <= 0) {
             return -1;
         }
@@ -197,7 +197,7 @@ public abstract class AbstractCheck implements ICheck {
         return i == 1 ? i : i + 5;
     }
 
-    protected boolean isPlayerLookingAtBlock(EntityPlayer player, BlockPos pos) {
+    protected static boolean isPlayerLookingAtBlock(EntityPlayer player, BlockPos pos) {
         final Vector3D eyesToBlockCenter = new Vector3D(
                 pos.getX() + 0.5D - player.posX,
                 pos.getY() + 0.5D - (player.posY + player.getEyeHeight()),
@@ -216,6 +216,227 @@ public abstract class AbstractCheck implements ICheck {
         final double angleWithVector = Vector3D.getPlayersLookVec(player).getAngleWithVector(eyesToBlockCenter);
         final double maxAngle = Math.toDegrees(Math.atan(0.5D * Math.sqrt(3 / distSq)));
         return angleWithVector < maxAngle;
+    }
+
+    /**
+     * Returns true if the coordinates provided are inside the hitbox of the player
+     */
+    protected static boolean isInsideHitbox(EntityPlayer player, Vec3 vec) {
+        return vec.xCoord > player.posX - 0.4 && vec.xCoord < player.posX + 0.4
+                && vec.yCoord > player.posY - 0.1 && vec.yCoord < player.posY + 1.9
+                && vec.zCoord > player.posZ - 0.4 && vec.zCoord < player.posZ + 0.4;
+    }
+
+    /**
+     * Returns true if the coordinates provided are inside the hitbox of the player
+     */
+    protected static boolean isInsideHitbox(EntityPlayer player, double x, double y, double z) {
+        return x > player.posX - 0.4 && x < player.posX + 0.4 && y > player.posY - 0.1 && y < player.posY + 1.9 && z > player.posZ - 0.4 && z < player.posZ + 0.4;
+    }
+
+    /**
+     * Given a player's position, two points in space, A and B, this method returns the coordinates
+     * of the point where the ray going from A to B hits the player's hitbox. Returns null if it doesn't hit the box.
+     */
+    protected static Vec3 getHitVectOnPlayer(EntityPlayer player, Vec3 vecA, Vec3 vecB) {
+        return getHitVectOnPlayer(player.posX, player.posY, player.posZ, vecA, vecB);
+    }
+
+    /**
+     * Given a player's coordinates X Y Z, two points in space, A and B, this method returns the coordinates
+     * of the point where the ray going from A to B hits the player's hitbox. Returns null if it doesn't hit the box.
+     */
+    protected static Vec3 getHitVectOnPlayer(double playerX, double playerY, double playerZ, Vec3 vecA, Vec3 vecB) {
+
+        final double boxMinX = playerX - 0.4;
+        final double boxMaxX = playerX + 0.4;
+        final double boxMinY = playerY - 0.1;
+        final double boxMaxY = playerY + 1.9;
+        final double boxMinZ = playerZ - 0.4;
+        final double boxMaxZ = playerZ + 0.4;
+
+        Vec3 interMinX = vecA.getIntermediateWithXValue(vecB, boxMinX);
+        Vec3 interMaxX = vecA.getIntermediateWithXValue(vecB, boxMaxX);
+        Vec3 interMinY = vecA.getIntermediateWithYValue(vecB, boxMinY);
+        Vec3 interMaxY = vecA.getIntermediateWithYValue(vecB, boxMaxY);
+        Vec3 interMinZ = vecA.getIntermediateWithZValue(vecB, boxMinZ);
+        Vec3 interMaxZ = vecA.getIntermediateWithZValue(vecB, boxMaxZ);
+
+        if (interMinX == null || interMinX.yCoord < boxMinY || interMinX.yCoord > boxMaxY || interMinX.zCoord < boxMinZ || interMinX.zCoord > boxMaxZ) {
+            interMinX = null;
+        }
+
+        if (interMaxX == null || interMaxX.yCoord < boxMinY || interMaxX.yCoord > boxMaxY || interMaxX.zCoord < boxMinZ || interMaxX.zCoord > boxMaxZ) {
+            interMaxX = null;
+        }
+
+        if (interMinY == null || interMinY.xCoord < boxMinX || interMinY.xCoord > boxMaxX || interMinY.zCoord < boxMinZ || interMinY.zCoord > boxMaxZ) {
+            interMinY = null;
+        }
+
+        if (interMaxY == null || interMaxY.xCoord < boxMinX || interMaxY.xCoord > boxMaxX || interMaxY.zCoord < boxMinZ || interMaxY.zCoord > boxMaxZ) {
+            interMaxY = null;
+        }
+
+        if (interMinZ == null || interMinZ.xCoord < boxMinX || interMinZ.xCoord > boxMaxX || interMinZ.yCoord < boxMinY || interMinZ.yCoord > boxMaxY) {
+            interMinZ = null;
+        }
+
+        if (interMaxZ == null || interMaxZ.xCoord < boxMinX || interMaxZ.xCoord > boxMaxX || interMaxZ.yCoord < boxMinY || interMaxZ.yCoord > boxMaxY) {
+            interMaxZ = null;
+        }
+
+        Vec3 closestHitVect = null;
+
+        if (interMinX != null) {
+            closestHitVect = interMinX;
+        }
+
+        if (interMaxX != null && (closestHitVect == null || vecA.squareDistanceTo(interMaxX) < vecA.squareDistanceTo(closestHitVect))) {
+            closestHitVect = interMaxX;
+        }
+
+        if (interMinY != null && (closestHitVect == null || vecA.squareDistanceTo(interMinY) < vecA.squareDistanceTo(closestHitVect))) {
+            closestHitVect = interMinY;
+        }
+
+        if (interMaxY != null && (closestHitVect == null || vecA.squareDistanceTo(interMaxY) < vecA.squareDistanceTo(closestHitVect))) {
+            closestHitVect = interMaxY;
+        }
+
+        if (interMinZ != null && (closestHitVect == null || vecA.squareDistanceTo(interMinZ) < vecA.squareDistanceTo(closestHitVect))) {
+            closestHitVect = interMinZ;
+        }
+
+        if (interMaxZ != null && (closestHitVect == null || vecA.squareDistanceTo(interMaxZ) < vecA.squareDistanceTo(closestHitVect))) {
+            closestHitVect = interMaxZ;
+        }
+
+        return closestHitVect;
+
+    }
+
+    /**
+     * Given a player's coordinates X Y Z, two points in space, A and B, this method returns the distance
+     * that the ray between A and B spent inside the players hitbox. Returns 0 if it doesn't hit the box.
+     */
+    protected static double getDistanceInHitbox(EntityPlayer player, Vec3 vecA, Vec3 vecB) {
+        return getDistanceInHitbox(player.posX, player.posY, player.posZ, vecA, vecB);
+    }
+
+    /**
+     * Given a player's coordinates X Y Z, two points in space, A and B, this method returns the distance
+     * that the ray between A and B spent inside the players hitbox. Returns 0 if it doesn't hit the box.
+     */
+    protected static double getDistanceInHitbox(double playerX, double playerY, double playerZ, Vec3 vecA, Vec3 vecB) {
+
+        final double boxMinX = playerX - 0.4;
+        final double boxMaxX = playerX + 0.4;
+        final double boxMinY = playerY - 0.1;
+        final double boxMaxY = playerY + 1.9;
+        final double boxMinZ = playerZ - 0.4;
+        final double boxMaxZ = playerZ + 0.4;
+
+        Vec3 interMinX = vecA.getIntermediateWithXValue(vecB, boxMinX);
+        Vec3 interMaxX = vecA.getIntermediateWithXValue(vecB, boxMaxX);
+        Vec3 interMinY = vecA.getIntermediateWithYValue(vecB, boxMinY);
+        Vec3 interMaxY = vecA.getIntermediateWithYValue(vecB, boxMaxY);
+        Vec3 interMinZ = vecA.getIntermediateWithZValue(vecB, boxMinZ);
+        Vec3 interMaxZ = vecA.getIntermediateWithZValue(vecB, boxMaxZ);
+
+        if (interMinX == null || interMinX.yCoord < boxMinY || interMinX.yCoord > boxMaxY || interMinX.zCoord < boxMinZ || interMinX.zCoord > boxMaxZ) {
+            interMinX = null;
+        }
+
+        if (interMaxX == null || interMaxX.yCoord < boxMinY || interMaxX.yCoord > boxMaxY || interMaxX.zCoord < boxMinZ || interMaxX.zCoord > boxMaxZ) {
+            interMaxX = null;
+        }
+
+        if (interMinY == null || interMinY.xCoord < boxMinX || interMinY.xCoord > boxMaxX || interMinY.zCoord < boxMinZ || interMinY.zCoord > boxMaxZ) {
+            interMinY = null;
+        }
+
+        if (interMaxY == null || interMaxY.xCoord < boxMinX || interMaxY.xCoord > boxMaxX || interMaxY.zCoord < boxMinZ || interMaxY.zCoord > boxMaxZ) {
+            interMaxY = null;
+        }
+
+        if (interMinZ == null || interMinZ.xCoord < boxMinX || interMinZ.xCoord > boxMaxX || interMinZ.yCoord < boxMinY || interMinZ.yCoord > boxMaxY) {
+            interMinZ = null;
+        }
+
+        if (interMaxZ == null || interMaxZ.xCoord < boxMinX || interMaxZ.xCoord > boxMaxX || interMaxZ.yCoord < boxMinY || interMaxZ.yCoord > boxMaxY) {
+            interMaxZ = null;
+        }
+
+        Vec3 closestHitVect = null;
+        Vec3 furthestHitVect = null;
+
+        if (interMinX != null) {
+            closestHitVect = interMinX;
+            furthestHitVect = interMinX;
+        }
+
+        if (interMaxX != null) {
+            if (closestHitVect == null) {
+                closestHitVect = interMaxX;
+                furthestHitVect = interMaxX;
+            } else if (vecA.squareDistanceTo(interMaxX) < vecA.squareDistanceTo(closestHitVect)) {
+                closestHitVect = interMaxX;
+            } else {
+                furthestHitVect = interMaxX;
+            }
+        }
+
+        if (interMinY != null) {
+            if (closestHitVect == null) {
+                closestHitVect = interMinY;
+                furthestHitVect = interMinY;
+            } else if (vecA.squareDistanceTo(interMinY) < vecA.squareDistanceTo(closestHitVect)) {
+                closestHitVect = interMinY;
+            } else {
+                furthestHitVect = interMinY;
+            }
+        }
+
+        if (interMaxY != null) {
+            if (closestHitVect == null) {
+                closestHitVect = interMaxY;
+                furthestHitVect = interMaxY;
+            } else if (vecA.squareDistanceTo(interMaxY) < vecA.squareDistanceTo(closestHitVect)) {
+                closestHitVect = interMaxY;
+            } else {
+                furthestHitVect = interMaxY;
+            }
+        }
+
+        if (interMinZ != null) {
+            if (closestHitVect == null) {
+                closestHitVect = interMinZ;
+                furthestHitVect = interMinZ;
+            } else if (vecA.squareDistanceTo(interMinZ) < vecA.squareDistanceTo(closestHitVect)) {
+                closestHitVect = interMinZ;
+            } else {
+                furthestHitVect = interMinZ;
+            }
+        }
+
+        if (interMaxZ != null) {
+            if (closestHitVect == null) {
+                closestHitVect = interMaxZ;
+                furthestHitVect = interMaxZ;
+            } else if (vecA.squareDistanceTo(interMaxZ) < vecA.squareDistanceTo(closestHitVect)) {
+                closestHitVect = interMaxZ;
+            } else {
+                furthestHitVect = interMaxZ;
+            }
+        }
+
+        if (closestHitVect == null) {
+            return 0D;
+        }
+
+        return closestHitVect.distanceTo(furthestHitVect);
+
     }
 
     public static void clearFlagMessages() {
