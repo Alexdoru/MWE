@@ -1,8 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.block.Block;
@@ -41,21 +41,20 @@ public class KillAuraCheck extends AbstractCheck {
         if (data.hasAttacked) {
 
             // check if eyes of the attacker are inside the target's hitbox
-            final float f1 = data.targetedPlayer.getCollisionBorderSize();
-            final AxisAlignedBB targetAABB = data.targetedPlayer.getEntityBoundingBox().expand(f1, f1, f1);
-            final Vector3D playersEyePos = Vector3D.getPlayersEyePos(player);
-            if (playersEyePos.isVectInside(targetAABB)) {
+            final Vec3 attackerEyePos = player.getPositionEyes(1F);
+            if (isInsideHitbox(data.targetedPlayer, attackerEyePos)) {
                 return false;
             }
 
-            final Vector3D playersLookVec = Vector3D.getPlayersLookVec(player);
-            final Vector3D vectToTarget = Vector3D.getVectToEntity(player, data.targetedPlayer);
-            // return if target is behind the look of the attacker
-            if (vectToTarget.dotProduct(playersLookVec) < 0D) {
+            final Vec3 lookVect = player.getLook(1F);
+            final Vec3 lookEndPos = attackerEyePos.addVector(lookVect.xCoord * 8D, lookVect.yCoord * 8D, lookVect.zCoord * 8D);
+            final Vec3 hitOnPlayerPos = getHitVectOnPlayer(data.targetedPlayer, attackerEyePos, lookEndPos);
+            // doesn't look at the target's hitbox
+            if (hitOnPlayerPos == null) {
                 return false;
             }
 
-            final float distanceToRayTrace = player.getDistanceToEntity(data.targetedPlayer) + 1F;
+            final double distanceToRayTrace = attackerEyePos.distanceTo(hitOnPlayerPos);
             final double STEP_SIZE = 0.1D;
             final int iterMax = (int) (distanceToRayTrace / STEP_SIZE);
 
@@ -65,35 +64,14 @@ public class KillAuraCheck extends AbstractCheck {
             boolean canHitThroughBlock = false;
             int timesInsideBlock = 0;
 
-            for (int i = 1; i < iterMax + 1; i++) {
+            // TODO just put the list of entites here and check on each loop iteration of inside one of the entities
+            //  compléxité d'un tel algo ?
 
-                final double dx = playersEyePos.x + i * STEP_SIZE * playersLookVec.x;
-                final double dy = playersEyePos.y + i * STEP_SIZE * playersLookVec.y;
-                final double dz = playersEyePos.z + i * STEP_SIZE * playersLookVec.z;
+            for (int i = 0; i < iterMax + 1; i++) {
 
-                // point is inside the target's hitbox
-                if ((dx > targetAABB.minX && dx < targetAABB.maxX) && (dy > targetAABB.minY && dy < targetAABB.maxY) && (dz > targetAABB.minZ && dz < targetAABB.maxZ)) {
-                    //final String playerList = this.checkThroughEntity(player, data.targetedPlayer, i * STEP_SIZE);
-                    //if (!playerList.equals("")) {
-                    //    ChatUtil.debug(
-                    //            NameUtil.getFormattedNameWithoutIcons(player.getName()) + EnumChatFormatting.RESET
-                    //                    + " attacked " + NameUtil.getFormattedNameWithoutIcons(data.targetedPlayer.getName()) + EnumChatFormatting.RESET
-                    //                    + " dist " + String.format("%.4f", (i * STEP_SIZE)) + " through " + playerList
-                    //    );
-                    //}
-                    if (timesInsideBlock > 0) {
-                        data.killAuraVL.add(Math.min(timesInsideBlock, 10));
-                        if (ConfigHandler.debugLogging) {
-                            final String msg = "target : " + data.targetedPlayer.getName() + " timesInsideBlock " + timesInsideBlock;
-                            this.log(player, data, data.killAuraVL, msg);
-                        }
-                        return true;
-                    } else {
-                        data.killAuraVL.substract(10);
-                        return false;
-                    }
-                }
-
+                final double dx = attackerEyePos.xCoord + i * STEP_SIZE * lookVect.xCoord;
+                final double dy = attackerEyePos.yCoord + i * STEP_SIZE * lookVect.yCoord;
+                final double dz = attackerEyePos.zCoord + i * STEP_SIZE * lookVect.zCoord;
                 final int xpos = MathHelper.floor_double(dx);
                 final int ypos = MathHelper.floor_double(dy);
                 final int zpos = MathHelper.floor_double(dz);
@@ -113,15 +91,29 @@ public class KillAuraCheck extends AbstractCheck {
 
             }
 
+            if (timesInsideBlock > 0) {
+                data.killAuraVL.add(Math.min(timesInsideBlock, 10));
+                if (ConfigHandler.debugLogging) {
+                    final String msg = "target : " + data.targetedPlayer.getName() + " timesInsideBlock " + timesInsideBlock;
+                    this.fail(player);
+                    this.log(player, data, data.killAuraVL, msg);
+                }
+                return true;
+            } else {
+                data.killAuraVL.substract(10);
+                return false;
+            }
+
         }
 
         return false;
 
     }
 
-    private String checkThroughEntity(EntityPlayer player, EntityPlayer target, double distance) {
-        final Vec3 positionEyes = player.getPositionEyes(1F);
-        final Vec3 lookVect = player.getLook(1F);
+    // TODO ca utilise les coordonées de certain players qui ont étés update onTick et d'autres pas encore
+    // TODO est ce que au tick où on recoit l'attaque, les joueurs avait la position
+    //  d'au moins le tick d'avant quand ils se sont attaqués, et encore plus avec le ping
+    private void checkThroughEntity(EntityPlayer player, EntityPlayer target, Vec3 positionEyes, Vec3 lookVect, double distance) {
         final Vec3 lookEndVect = positionEyes.addVector(lookVect.xCoord * distance, lookVect.yCoord * distance, lookVect.zCoord * distance);
         final float f = 1.0F;
         final List<Entity> list = mc.theWorld.getEntitiesInAABBexcluding(
@@ -147,7 +139,14 @@ public class KillAuraCheck extends AbstractCheck {
                 }
             }
         }
-        return str.toString();
+        final String s = str.toString();
+        if (!s.equals("")) {
+            ChatUtil.debug(
+                    NameUtil.getFormattedNameWithoutIcons(player.getName()) + EnumChatFormatting.RESET
+                            + " attacked " + NameUtil.getFormattedNameWithoutIcons(target.getName()) + EnumChatFormatting.RESET
+                            + " dist " + String.format("%.4f", distance) + " through " + s
+            );
+        }
     }
 
     public static ViolationLevelTracker newViolationTracker() {

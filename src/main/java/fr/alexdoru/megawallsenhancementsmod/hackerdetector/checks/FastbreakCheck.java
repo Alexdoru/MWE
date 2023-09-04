@@ -68,7 +68,7 @@ public class FastbreakCheck extends AbstractCheck {
             final ItemStack itemStack = player.getHeldItem();
             if (itemStack != null && itemStack.isItemEnchanted() && itemStack.getItem() == Items.diamond_pickaxe) {
                 for (final BrokenBlock brokenBlock : HackerDetector.INSTANCE.brokenBlocksList) {
-                    if (this.isPlayerLookingAtBlock(player, brokenBlock.blockPos)) {
+                    if (isPlayerLookingAtBlock(player, brokenBlock.blockPos)) {
                         brokenBlock.addPlayer(player);
                     }
                 }
@@ -148,7 +148,7 @@ public class FastbreakCheck extends AbstractCheck {
      * Returns the block strenght for the provided block and player
      * Harcoded to diamond pickaxe efficiency III
      */
-    private float getBlockStrengthMW(EntityPlayer player, BlockPos pos, Block block) {
+    private static float getBlockStrengthMW(EntityPlayer player, BlockPos pos, Block block) {
         final float hardness = block.getBlockHardness(null, pos);
         if (hardness < 0.0F) {
             return 0.0F;
@@ -160,7 +160,7 @@ public class FastbreakCheck extends AbstractCheck {
         }
     }
 
-    private boolean canHarvestBlock(Block block) {
+    private static boolean canHarvestBlock(Block block) {
         if (block.getMaterial().isToolNotRequired()) {
             return true;
         }
@@ -170,7 +170,7 @@ public class FastbreakCheck extends AbstractCheck {
         return toolLevel >= block.getHarvestLevel(state);
     }
 
-    private float getBreakSpeed(EntityPlayer player, Block block) {
+    private static float getBreakSpeed(EntityPlayer player, Block block) {
         float f = Items.diamond_pickaxe.getStrVsBlock(null, block);
         if (f > 1.0F) {
             final int efficiencyModifier = 3;
