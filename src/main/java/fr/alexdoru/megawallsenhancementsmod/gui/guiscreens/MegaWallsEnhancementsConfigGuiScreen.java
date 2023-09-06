@@ -77,7 +77,7 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
         prestige5Tooltip.add("");
         prestige5Tooltip.add(EnumChatFormatting.GRAY + "Adds the prestige V colored tags in mega walls.");
         prestige5Tooltip.add("");
-        prestige5Tooltip.add(EnumChatFormatting.GRAY + "You need at least," + EnumChatFormatting.GOLD + " 10 000 classpoints" + EnumChatFormatting.GRAY + ", and a "
+        prestige5Tooltip.add(EnumChatFormatting.GRAY + "You need at least," + EnumChatFormatting.GOLD + " 6000 classpoints" + EnumChatFormatting.GRAY + ", and a "
                 + EnumChatFormatting.RED + "working API Key" + EnumChatFormatting.GRAY + ". This will send api requests and store the data in a cache until you close your game.");
         prestige5Tooltip.add(EnumChatFormatting.GRAY + "Type " + EnumChatFormatting.YELLOW + "/mwenhancements clearcache" + EnumChatFormatting.GRAY + " to force update the data.");
         prestige5Tooltip.add("");
