@@ -9,7 +9,6 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSample
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -72,29 +71,44 @@ public class HackerDetector {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
-            playersCheckedTemp = 0;
+            this.playersCheckedTemp = 0;
             final long timeStart = System.nanoTime();
             this.onTickStart();
-            timeElapsedTemp += System.nanoTime() - timeStart;
-        } else if (event.phase == TickEvent.Phase.END) {
+            this.timeElapsedTemp += System.nanoTime() - timeStart;
+            return;
+        }
+        if (event.phase == TickEvent.Phase.END) {
             final long timeStart = System.nanoTime();
             this.onTickEnd();
-            timeElapsedTemp += System.nanoTime() - timeStart;
+            this.timeElapsedTemp += System.nanoTime() - timeStart;
             if (mc.thePlayer != null && mc.thePlayer.ticksExisted % 20 == 0) {
-                timeElapsed = timeElapsedTemp;
-                timeElapsedTemp = 0L;
+                this.timeElapsed = this.timeElapsedTemp;
+                this.timeElapsedTemp = 0L;
             }
-            playersChecked = playersCheckedTemp;
+            this.playersChecked = this.playersCheckedTemp;
         }
     }
 
     private void onTickStart() {
 
-        if (!ConfigHandler.hackerDetector) return;
+        if (!ConfigHandler.hackerDetector || ScoreboardTracker.isInSkyblock || mc.theWorld == null || mc.thePlayer == null || !mc.theWorld.isRemote) {
+            synchronized (this.scheduledTasks) {
+                this.scheduledTasks.clear();
+            }
+            return;
+        }
 
-        if (mc.theWorld != null) {
-            for (final EntityPlayer player : mc.theWorld.playerEntities) {
-                ((EntityPlayerAccessor) player).getPlayerDataSamples().ontickStart();
+        final List<EntityPlayer> playerList = new ArrayList<>(mc.theWorld.playerEntities.size());
+
+        for (final EntityPlayer player : mc.theWorld.playerEntities) {
+            if (player.ticksExisted >= 20 &&
+                    !player.isDead &&
+                    !player.capabilities.isFlying &&
+                    !player.capabilities.isCreativeMode &&
+                    !player.isInvisible() &&
+                    (ScoreboardTracker.isReplayMode || !NameUtil.filterNPC(player.getUniqueID()))) {
+                playerList.add(player);
+                ((EntityPlayerAccessor) player).getPlayerDataSamples().onTickStart();
             }
         }
 
@@ -104,64 +118,32 @@ public class HackerDetector {
             }
         }
 
+        for (final EntityPlayer player : playerList) {
+            this.performChecksOnPlayer(player);
+        }
+
     }
 
     private void onTickEnd() {
-        if (!ConfigHandler.hackerDetector) return;
-        this.fastbreakCheck.onTickEnd();
+        if (ConfigHandler.hackerDetector) {
+            this.fastbreakCheck.onTickEnd();
+        }
     }
 
-    /**
-     * This gets called once per entity per tick.
-     * Only gets called when the client plays on a server.
-     * Hook is injected at end of {@link net.minecraft.world.World#updateEntityWithOptionalForce}
-     */
-    public void performChecksOnPlayer(EntityPlayer player) {
-        if (mc.thePlayer == null ||
-                player.ticksExisted < 20 ||
-                player.isDead ||
-                player.capabilities.isFlying ||
-                player.capabilities.isCreativeMode ||
-                player.isInvisible() ||
-                ScoreboardTracker.isInSkyblock ||
-                (!ScoreboardTracker.isReplayMode && NameUtil.filterNPC(player.getUniqueID()))) {
-            return;
-        }
-        final long timeStart = System.nanoTime();
+    private void performChecksOnPlayer(EntityPlayer player) {
         if (player == mc.thePlayer) {
             this.fastbreakCheck.checkPlayerSP(player);
-            timeElapsedTemp += System.nanoTime() - timeStart;
             return;
         }
         final PlayerDataSamples data = ((EntityPlayerAccessor) player).getPlayerDataSamples();
-        playersCheckedTemp++;
-        if (data.updatedThisTick) return;
         data.onTick(player);
-        checkList.forEach(check -> check.performCheck(player, data));
-        timeElapsedTemp += System.nanoTime() - timeStart;
-    }
-
-    /**
-     * Used for debuging and testing
-     */
-    @SuppressWarnings("unused")
-    private EntityPlayer getClosestPlayer() {
-        EntityPlayer closestPlayer = null;
-        double distance = 1000D;
-        for (final EntityPlayer player : mc.theWorld.playerEntities) {
-            if (player instanceof EntityPlayerSP || player.ticksExisted < 60 || player.capabilities.isFlying || player.capabilities.isCreativeMode || NameUtil.filterNPC(player.getUniqueID())) {
-                continue;
-            }
-            final float distanceToEntity = mc.thePlayer.getDistanceToEntity(player);
-            if (distanceToEntity < distance) {
-                closestPlayer = player;
-                distance = distanceToEntity;
-            }
+        for (final ICheck check : this.checkList) {
+            check.performCheck(player, data);
         }
-        return closestPlayer;
+        this.playersCheckedTemp++;
     }
 
-    public static void addScheduledTask(Runnable runnable) {
+    private static void addScheduledTask(Runnable runnable) {
         if (runnable == null) return;
         synchronized (INSTANCE.scheduledTasks) {
             INSTANCE.scheduledTasks.add(runnable);
@@ -170,7 +152,6 @@ public class HackerDetector {
 
     public static void onEntitySwing(int attackerID) {
         HackerDetector.addScheduledTask(() -> {
-            if (mc.theWorld == null) return;
             final Entity attacker = mc.theWorld.getEntityByID(attackerID);
             if (attacker instanceof EntityPlayerAccessor) {
                 final PlayerDataSamples data = ((EntityPlayerAccessor) attacker).getPlayerDataSamples();
@@ -182,7 +163,6 @@ public class HackerDetector {
 
     public static void checkPlayerAttack(int attackerID, int targetId, int attackType) {
         HackerDetector.addScheduledTask(() -> {
-            if (mc.theWorld == null || mc.thePlayer == null) return;
             final Entity attacker = mc.theWorld.getEntityByID(attackerID);
             final Entity target = mc.theWorld.getEntityByID(targetId);
             if (!(attacker instanceof EntityPlayer) || !(target instanceof EntityPlayer) || attacker == target) {
