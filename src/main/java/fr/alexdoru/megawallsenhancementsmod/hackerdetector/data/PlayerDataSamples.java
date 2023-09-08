@@ -8,8 +8,6 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class PlayerDataSamples {
 
-    /** Used to update the data only once per tick, since the world.entity lists might contain duplicate items */
-    public boolean updatedThisTick = false;
     /** Amount of ticks since the player started sprinting */
     public int sprintTime = 0;
     /** Amount of ticks since the player has been using an item */
@@ -43,8 +41,7 @@ public class PlayerDataSamples {
     public final ViolationLevelTracker killAuraVL = KillAuraCheck.newViolationTracker();
     public final ViolationLevelTracker noSlowdownVL = NoSlowdownCheck.newViolationTracker();
 
-    public void ontickStart() {
-        this.updatedThisTick = false;
+    public void onTickStart() {
         this.hasSwung = false;
         this.hasAttackedMultiTarget = false;
         this.hasAttacked = false;
@@ -55,7 +52,7 @@ public class PlayerDataSamples {
     public void onTick(EntityPlayer player) {
         this.sprintTime = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getModifier(HackerDetector.sprintingUUID) == null ? 0 : this.sprintTime + 1;
         this.useItemTime = player.isUsingItem() ? this.useItemTime + 1 : 0;
-        this.lastHurtTime = player.hurtTime == 9 ? 0 : this.lastHurtTime + 1;
+        this.lastHurtTime = player.hurtTime == 10 ? 0 : this.lastHurtTime + 1;
         this.lastSwingTime++;
         this.swingList.add(this.hasSwung);
         this.attackList.add(this.hasAttacked);

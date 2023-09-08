@@ -9,7 +9,6 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelT
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -81,7 +80,6 @@ public class FastbreakCheck extends AbstractCheck {
      * at the same block when breaking it, for example when double-mining
      */
     public void onTickEnd() {
-        final Minecraft mc = Minecraft.getMinecraft();
         if (ScoreboardTracker.isInMwGame && mc.theWorld != null && mc.thePlayer != null && mc.theWorld.isRemote) {
             for (final BrokenBlock brokenBlock : HackerDetector.INSTANCE.brokenBlocksList) {
                 if (brokenBlock.playersList != null) {

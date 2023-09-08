@@ -86,7 +86,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new OrangeSimpleMod_SprintRenderer());
         registerTransformer(new SidebarmodReloaded_CustomSidebarTransformer());
         registerTransformer(new SidebarmodRevamp_GuiSidebarTransformer());
-        registerTransformer(new WorldTransformer());
+        //registerTransformer(new WorldTransformer());
         if ("01/04".equals(new SimpleDateFormat("dd/MM").format(new Date().getTime())))
             registerTransformer(new RendererLivingEntityTransformer_AprilFun());
     }
