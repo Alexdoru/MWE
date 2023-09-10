@@ -38,7 +38,7 @@ Download the latest release from the **[releases page](https://github.com/Alexdo
 - **[Orange's Simple Mods-1.2 ](https://legacy.curseforge.com/minecraft/mc-mods/oranges-simplemods-collection/files)** - `/simpleconfig /simplehud` Armor Status HUD, Status effect HUD and Toggle Sprint
 - **[My Sidebar Mod](https://github.com/Alexdoru/SidebarMod/releases/)** - `/sidebarmod` Enhances the sidebar
 
-Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, the chat and tablist related features from this mod will not work.
+Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, the chat, tablist and hitbox related features from this mod will not work.
 
 ## Feature list
 
@@ -47,7 +47,7 @@ Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, th
 - **Arrow hit HUD** - HUD that displays the health of players when shooting them with a bow
 - **Squad HUD** - A mini tablist that will display only members of your squad
 - **Speed HUD** - HUD displaying your speed
-- **Chat heads** - Display heads of players in front of chat messages
+- **Chat heads** - Display heads of players in front of chat messages (disabled with Feather client)
 - **Cancel night vision** - Remove the blueish tint from night vision
 - **Clear view** - Stop rendering particles that are too close (75cm) to the screen for a better visibility
 - **Sound warning low HP** - Play a sound when your health drops below a certain threshold
@@ -63,7 +63,7 @@ Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, th
 - **Hide tablist header/footer** - Hide the header and footer text of the tablist
 - **Hide tablist ping** - Hide the ping values in the tablist if all the values are equal to 1
 - **Display playercount in tablist** - Display the amount of players in your current lobby at the top of the tablist
-- **Change tablist size** - Change the amount of players displayed in the tablist
+- **Change tablist size** - Change the amount of players displayed in the tablist (disabled with Patcher)
 - **Tabcomplete player names** - Ability to tab complete player names in the chat all the time
 - **Hide toggle sprint HUD** - Hide the toggle sprint HUD from OrangeMarshall's SimpleMod
 - **Fix tablist rect background** - Fix the background of the tablist not being symetric and sometimes missing pixels on one side
