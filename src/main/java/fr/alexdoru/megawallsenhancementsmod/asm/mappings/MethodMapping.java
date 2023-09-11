@@ -20,6 +20,8 @@ public enum MethodMapping {
     DROPONEITEM(INVOKEVIRTUAL, ENTITYPLAYERSP, "a", "dropOneItem", "(Z)L" + ENTITYITEM + ";"),
     EFFECTRENDERER$ADDBLOCKDESTROYEFFECTS(INVOKEVIRTUAL, EFFECTRENDERER, "a", "addBlockDestroyEffects", "(L" + BLOCKPOS + ";L" + IBLOCKSTATE + ";)V"),
     ENTITY$SETCURRENTITEMORARMOR(INVOKEVIRTUAL, ENTITY, "c", "setCurrentItemOrArmor", "(IL" + ITEMSTACK + ";)V"),
+    ENTITY$SETPOSITIONANDROTATION2("a", "setPositionAndRotation2", "(DDDFFIZ)V"),
+    ENTITY$SETROTATIONYAWHEAD("f", "setRotationYawHead", "(F)V"),
     ENTITYPLAYERSP$SENDCHATMESSAGE("e", "sendChatMessage", "(Ljava/lang/String;)V"),
     ENTITYPLAYERSP$SETPLAYERSPHEALTH("n", "setPlayerSPHealth", "(F)V"),
     ENTITYRENDERER$UPDATECAMERAANDRENDER("a", "updateCameraAndRender", "(FJ)V"),

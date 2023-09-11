@@ -143,7 +143,7 @@ public class HackerDetector {
         this.playersCheckedTemp++;
     }
 
-    private static void addScheduledTask(Runnable runnable) {
+    public static void addScheduledTask(Runnable runnable) {
         if (runnable == null) return;
         synchronized (INSTANCE.scheduledTasks) {
             INSTANCE.scheduledTasks.add(runnable);
