@@ -287,7 +287,7 @@ public class ReportQueue {
                 && !thePlayer.movementInput.sneak
                 && !mc.gameSettings.keyBindAttack.isKeyDown()
                 && !mc.gameSettings.keyBindUseItem.isKeyDown()
-                && mc.thePlayer.prevRotationYawHead == mc.thePlayer.rotationYawHead
+                && mc.thePlayer.prevRotationYaw == mc.thePlayer.rotationYaw
                 && mc.thePlayer.prevRotationPitch == mc.thePlayer.rotationPitch;
     }
 

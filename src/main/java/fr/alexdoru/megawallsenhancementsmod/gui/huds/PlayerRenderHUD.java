@@ -132,7 +132,7 @@ public class PlayerRenderHUD implements IRenderer {
         GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
         GlStateManager.rotate(135.0F, 0.0F, 1.0F, 0.0F);
         RenderHelper.enableStandardItemLighting();
-        float f = mc.thePlayer.prevRotationYawHead + (mc.thePlayer.rotationYawHead - mc.thePlayer.prevRotationYawHead) * this.partialTicks;
+        float f = mc.thePlayer.prevRotationYaw + (mc.thePlayer.rotationYaw - mc.thePlayer.prevRotationYaw) * this.partialTicks;
         if (mc.thePlayer != entity) f -= 180F;
         GlStateManager.rotate(-135.0F + f, 0.0F, 1.0F, 0.0F);
         final RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
