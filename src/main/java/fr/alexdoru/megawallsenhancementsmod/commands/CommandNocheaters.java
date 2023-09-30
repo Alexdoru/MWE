@@ -302,13 +302,13 @@ public class CommandNocheaters extends MyAbstractCommand {
                 ChatUtil.debug("Added " + name + " to players to log");
             }
         }
-        ConfigHandler.debugLogging = !HackerDetector.INSTANCE.playersToLog.isEmpty();
-        ConfigHandler.saveConfig();
-        if (ConfigHandler.debugLogging) {
-            ChatUtil.debug("Enabled debug logging for " + HackerDetector.INSTANCE.playersToLog);
+        if (HackerDetector.INSTANCE.playersToLog.isEmpty()) {
+            ChatUtil.debug("Stopped logging");
         } else {
-            ChatUtil.debug("Turned off debug logging");
+            ConfigHandler.debugLogging = true;
+            ChatUtil.debug("Now logging for " + HackerDetector.INSTANCE.playersToLog);
         }
+        ConfigHandler.saveConfig();
     }
 
     private void addPlayerToIgnoreList(String[] args) {
