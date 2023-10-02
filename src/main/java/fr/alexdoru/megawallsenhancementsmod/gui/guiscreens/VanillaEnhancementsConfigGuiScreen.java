@@ -51,7 +51,7 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                 "Fix actionbar text overlap",
                 (b) -> ConfigHandler.fixActionbarTextOverlap = b,
                 () -> ConfigHandler.fixActionbarTextOverlap,
-                EnumChatFormatting.GRAY + "Prevents the actionbar text from overlapping with the armor bar if the player has more that 2 rows of health"));
+                EnumChatFormatting.GRAY + "Prevents the actionbar text from overlapping with the armor bar if the player has more than 2 rows of health"));
         this.buttonList.add(new FancyGuiButton(
                 xPosLeft, getButtonYPos(4),
                 buttonWidth, buttonsHeight,
@@ -71,7 +71,7 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                 "Limit dropped item rendered",
                 (b) -> ConfigHandler.limitDroppedEntityRendered = b,
                 () -> ConfigHandler.limitDroppedEntityRendered,
-                EnumChatFormatting.GRAY + "Dynamically modifies the render distance for dropped items entities to preserve performance. It starts reducing the render distance when exceeding the threshold set below.",
+                EnumChatFormatting.GRAY + "Dynamically modifies the render distance of dropped items entities to preserve performance. It starts reducing the render distance when exceeding the threshold set below.",
                 EnumChatFormatting.GRAY + "There is a keybind (ESC -> options -> controls -> MegaWallsEnhancements) to toggle it on the fly"));
         this.buttonList.add(new GuiSlider(23, xPosLeft, getButtonYPos(7), buttonWidth, buttonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
         this.buttonList.add(new OptionGuiButton(
@@ -80,7 +80,7 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                 "Safe inventory",
                 (b) -> ConfigHandler.safeInventory = b,
                 () -> ConfigHandler.safeInventory,
-                EnumChatFormatting.GRAY + "Prevents dropping the sword you are holding in your hotbar. Prevents hotkeying important kit items out of your inventory (only in Mega Walls)."));
+                EnumChatFormatting.GRAY + "Prevents dropping the sword you are holding in your hotbar. Prevents hotkeying important kit items out of your inventory (in Mega Walls)."));
         if (isOrangeSimpleModLoaded) {
             this.buttonList.add(new OptionGuiButton(
                     xPosLeft, getButtonYPos(9),
@@ -93,10 +93,10 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
         this.buttonList.add(new FancyGuiButton(
                 xPosRight, getButtonYPos(1),
                 buttonWidth - 25, buttonsHeight,
-                () -> "Select custom hit color",
+                () -> "Select custom hurt color",
                 () -> mc.displayGuiScreen(new ColorSelectionGuiScreen(this, ConfigHandler.hitColor, 0x4CFF0000, color -> ConfigHandler.hitColor = color)),
-                EnumChatFormatting.GREEN + "Custom hit color",
-                EnumChatFormatting.GRAY + "Change the color entities take when they get hit"));
+                EnumChatFormatting.GREEN + "Custom hurt color",
+                EnumChatFormatting.GRAY + "Change the color entities take when they get hurt"));
         this.elementList.add(new ColoredSquareElement(xPosRight + buttonWidth - 25 + 4, getButtonYPos(1), 20, () -> ConfigHandler.hitColor));
         this.buttonList.add(new FancyGuiButton(
                 xPosRight, getButtonYPos(2),
@@ -104,7 +104,7 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                 () -> "Color armor : " + (ConfigHandler.colorArmorWhenHurt ? EnumChatFormatting.GREEN + "On" : EnumChatFormatting.RED + "Off"),
                 () -> ConfigHandler.colorArmorWhenHurt = !ConfigHandler.colorArmorWhenHurt,
                 EnumChatFormatting.GREEN + "Color armor",
-                EnumChatFormatting.GRAY + "The armor will be colored as well when a player gets hit, like it does in 1.7.",
+                EnumChatFormatting.GRAY + "The armor will be colored as well when a player is hurt, like it does in 1.7.",
                 EnumChatFormatting.GRAY + "If you have a 1.7 Old animation mod (such as " + EnumChatFormatting.YELLOW + "Sk1er's 1.7 Old Animation mod" + EnumChatFormatting.GRAY + "), you might need to turn off their \"Red Armor\" setting for this one to take effect."));
         this.buttonList.add(new FancyGuiButton(
                 xPosRight + buttonWidth / 2 + 2, getButtonYPos(2),
@@ -112,7 +112,7 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                 () -> "Use team color : " + (ConfigHandler.useTeamColorWhenHurt ? EnumChatFormatting.GREEN + "On" : EnumChatFormatting.RED + "Off"),
                 () -> ConfigHandler.useTeamColorWhenHurt = !ConfigHandler.useTeamColorWhenHurt,
                 EnumChatFormatting.GREEN + "Use team color",
-                EnumChatFormatting.GRAY + "When hit the players will take the color of their team, other entities will take the custom color defined above.",
+                EnumChatFormatting.GRAY + "When hurt the players will take the color of their team, other entities will take the custom color defined above.",
                 EnumChatFormatting.YELLOW + "When this is enabled, it still uses the alpha level defined in the custom color."));
         final List<String> shortCoinsList = new ArrayList<>();
         shortCoinsList.add(EnumChatFormatting.GREEN + "Short coin messages");
@@ -134,7 +134,7 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
         final List<String> coloredScoresHead = new ArrayList<>();
         coloredScoresHead.add(EnumChatFormatting.GREEN + "Colored scores above head");
         coloredScoresHead.add("");
-        coloredScoresHead.add(EnumChatFormatting.GRAY + "Renders the scores/health in colour, according to the score value and the player's maximum health points");
+        coloredScoresHead.add(EnumChatFormatting.GRAY + "Renders the scores/health in color, according to the score value and the player's maximum health points");
         coloredScoresHead.add("");
         coloredScoresHead.add(EnumChatFormatting.DARK_GREEN + "44" + EnumChatFormatting.RED + " \u2764");
         coloredScoresHead.add(EnumChatFormatting.GREEN + "35" + EnumChatFormatting.RED + " \u2764");
@@ -151,7 +151,7 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
         final List<String> coloredScoresTabList = new ArrayList<>();
         coloredScoresTabList.add(EnumChatFormatting.GREEN + "Colored scores in tab");
         coloredScoresTabList.add("");
-        coloredScoresTabList.add(EnumChatFormatting.GRAY + "Renders the scores/health in colour, according to the score value and the player's maximum health points");
+        coloredScoresTabList.add(EnumChatFormatting.GRAY + "Renders the scores/health in color, according to the score value and the player's maximum health points");
         coloredScoresTabList.add("");
         coloredScoresTabList.add(EnumChatFormatting.RED + "OrangeMarshall " + EnumChatFormatting.GRAY + "[ZOM] " + EnumChatFormatting.DARK_GREEN + "44");
         coloredScoresTabList.add(EnumChatFormatting.RED + "OrangeMarshall " + EnumChatFormatting.GRAY + "[ZOM] " + EnumChatFormatting.GREEN + "35");
