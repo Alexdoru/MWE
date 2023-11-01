@@ -51,22 +51,22 @@ public enum FieldMapping {
         this.desc = desc;
     }
 
-    FieldMapping(ClassMapping owner, String mcpName, ClassMapping desc) {
+    FieldMapping(ClassMapping owner, String mcpName, ClassMapping classMapping) {
         this.owner = owner.toString();
         this.name = mcpName;
-        this.desc = "L" + desc + ";";
+        this.desc = "L" + classMapping + ";";
     }
 
     FieldMapping(ClassMapping owner, String obfName, String mcpName, String desc) {
         this.owner = owner.toString();
-        this.name = ASMLoadingPlugin.isObf ? obfName : mcpName;
+        this.name = ASMLoadingPlugin.isObf() ? obfName : mcpName;
         this.desc = desc;
     }
 
-    FieldMapping(ClassMapping owner, String obfName, String mcpName, ClassMapping desc) {
+    FieldMapping(ClassMapping owner, String obfName, String mcpName, ClassMapping classMapping) {
         this.owner = owner.toString();
-        this.name = ASMLoadingPlugin.isObf ? obfName : mcpName;
-        this.desc = "L" + desc + ";";
+        this.name = ASMLoadingPlugin.isObf() ? obfName : mcpName;
+        this.desc = "L" + classMapping + ";";
     }
 
 }

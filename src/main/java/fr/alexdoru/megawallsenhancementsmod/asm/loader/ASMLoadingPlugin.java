@@ -15,11 +15,11 @@ import java.util.Map;
 public class ASMLoadingPlugin implements IFMLLoadingPlugin {
 
     public static final Logger logger = LogManager.getLogger("ASM MWE");
-    public static boolean isObf;
+    private static boolean isObf;
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[]{ClassTransformer.class.getName()};
+        return new String[]{MWEClassTransformer.class.getName()};
     }
 
     @Override
@@ -67,6 +67,10 @@ public class ASMLoadingPlugin implements IFMLLoadingPlugin {
             }
         }
         return isFeatherLoaded;
+    }
+
+    public static boolean isObf() {
+        return isObf;
     }
 
 }

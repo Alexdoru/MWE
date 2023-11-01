@@ -90,7 +90,7 @@ public enum ClassMapping {
     }
 
     ClassMapping(String obfName, String clearName) {
-        this.name = ASMLoadingPlugin.isObf ? obfName : clearName;
+        this.name = ASMLoadingPlugin.isObf() ? obfName : clearName;
     }
 
     @Override

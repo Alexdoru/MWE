@@ -54,7 +54,7 @@ public abstract class MyGuiScreen extends GuiScreen {
             mc.entityRenderer.loadShader(SHADER);
         } else {
             try {
-                final Method m = mc.entityRenderer.getClass().getDeclaredMethod(ASMLoadingPlugin.isObf ? "func_175069_a" : "loadShader", ResourceLocation.class);
+                final Method m = mc.entityRenderer.getClass().getDeclaredMethod(ASMLoadingPlugin.isObf() ? "func_175069_a" : "loadShader", ResourceLocation.class);
                 m.setAccessible(true);
                 m.invoke(mc.entityRenderer, SHADER);
             } catch (Exception ignored) {}
