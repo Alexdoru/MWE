@@ -9,8 +9,6 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.ClassNode;
 
-import static org.objectweb.asm.Opcodes.*;
-
 public class NetworkPlayerInfoTransformer_ChatHeads implements MWETransformer {
 
     @Override

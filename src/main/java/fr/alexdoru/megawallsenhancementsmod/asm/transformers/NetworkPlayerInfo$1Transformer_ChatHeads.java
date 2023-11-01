@@ -8,8 +8,6 @@ import fr.alexdoru.megawallsenhancementsmod.asm.mappings.FieldMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
-import static org.objectweb.asm.Opcodes.*;
-
 public class NetworkPlayerInfo$1Transformer_ChatHeads implements MWETransformer {
 
     @Override

@@ -5,8 +5,6 @@ import fr.alexdoru.megawallsenhancementsmod.asm.loader.MWETransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.FieldMapping;
 import org.objectweb.asm.tree.ClassNode;
 
-import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
-
 public class EntityArrowTransformer implements MWETransformer {
 
     @Override
