@@ -23,7 +23,7 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
     @Override
     public void initGui() {
         final boolean isPatcherNotLoaded = !ASMLoadingPlugin.isPatcherLoaded();
-        final boolean isOrangeSimpleModLoaded = Loader.isModLoaded("orangesimplemod") || !ASMLoadingPlugin.isObf;
+        final boolean isOrangeSimpleModLoaded = Loader.isModLoaded("orangesimplemod") || !ASMLoadingPlugin.isObf();
         final int buttonWidth = 210;
         this.maxWidth = (10 + buttonWidth) * 2;
         this.maxHeight = (buttonsHeight + 4) * 12 + buttonsHeight;

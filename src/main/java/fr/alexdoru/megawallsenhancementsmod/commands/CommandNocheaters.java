@@ -280,7 +280,7 @@ public class CommandNocheaters extends MyAbstractCommand {
     }
 
     private void logPlayer(String[] args) {
-        if (ASMLoadingPlugin.isObf && !mc.thePlayer.getUniqueID().equals(UUID.fromString("57715d32-a685-4e2e-ae68-54c19808b58d"))) {
+        if (ASMLoadingPlugin.isObf() && !mc.thePlayer.getUniqueID().equals(UUID.fromString("57715d32-a685-4e2e-ae68-54c19808b58d"))) {
             return;
         }
         for (int i = 1, argsLength = args.length; i < argsLength; i++) {

@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class ClassTransformer implements IClassTransformer {
+public class MWEClassTransformer implements IClassTransformer {
 
     private File outputDir = null;
     private final HashMap<String, List<MWETransformer>> transformerMap = new HashMap<>();
@@ -29,7 +29,7 @@ public class ClassTransformer implements IClassTransformer {
     /**
      * Register the IMyClassTransformer(s) here
      */
-    public ClassTransformer() {
+    public MWEClassTransformer() {
         registerTransformer(new ChatComponentStyleTransformer_ChatHeads());
         registerTransformer(new ChatComponentTextTransformer_ChatHeads());
         registerTransformer(new CommandHandlerTransformer());
@@ -139,7 +139,7 @@ public class ClassTransformer implements IClassTransformer {
     }
 
     private void debugLog(String msg) {
-        if (ASMLoadingPlugin.isObf) {
+        if (ASMLoadingPlugin.isObf()) {
             ASMLoadingPlugin.logger.debug(msg);
         } else {
             ASMLoadingPlugin.logger.info(msg);
@@ -158,7 +158,7 @@ public class ClassTransformer implements IClassTransformer {
     }
 
     private void saveTransformedClass(final byte[] data, final String transformedName) {
-        if (ASMLoadingPlugin.isObf) {
+        if (ASMLoadingPlugin.isObf()) {
             return;
         }
         if (outputDir == null) {

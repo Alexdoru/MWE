@@ -23,7 +23,7 @@ public class NetworkPlayerInfo$1Transformer_ChatHeads implements MWETransformer 
         }
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
-            if (methodNode.name.equals(ASMLoadingPlugin.isObf ? "a" : "skinAvailable")) {
+            if (methodNode.name.equals(MethodMapping.NETWORKPLAYERINFO$1$SKINAVAILABLE.name)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkMethodInsnNode(insnNode, MethodMapping.NETWORKPLAYERINFO$ACCESS002)) {
                         final AbstractInsnNode nextNode = insnNode.getNext();
