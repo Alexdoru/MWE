@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping.*;
-import static org.objectweb.asm.Opcodes.*;
 
 public class HitboxRenderTransformer implements MWETransformer {
 

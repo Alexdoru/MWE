@@ -6,8 +6,6 @@ import fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
-import static org.objectweb.asm.Opcodes.*;
-
 public class GuiIngameTransformer_Sidebar implements MWETransformer {
 
     @Override

@@ -5,9 +5,6 @@ import fr.alexdoru.megawallsenhancementsmod.asm.loader.MWETransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
-import static org.objectweb.asm.Opcodes.FLOAD;
-import static org.objectweb.asm.Opcodes.INVOKESTATIC;
-
 public class EntityRendererTransformer_RenderOverlayHook implements MWETransformer {
 
     @Override

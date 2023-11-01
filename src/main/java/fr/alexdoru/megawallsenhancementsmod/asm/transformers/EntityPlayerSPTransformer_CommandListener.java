@@ -5,9 +5,6 @@ import fr.alexdoru.megawallsenhancementsmod.asm.loader.MWETransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
-import static org.objectweb.asm.Opcodes.ALOAD;
-import static org.objectweb.asm.Opcodes.INVOKESTATIC;
-
 public class EntityPlayerSPTransformer_CommandListener implements MWETransformer {
 
     @Override

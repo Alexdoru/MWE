@@ -8,8 +8,6 @@ import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.*;
 
-import static org.objectweb.asm.Opcodes.*;
-
 public class NetworkPlayerInfoTransformer implements MWETransformer {
 
     @Override

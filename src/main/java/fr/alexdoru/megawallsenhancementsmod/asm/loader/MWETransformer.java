@@ -5,20 +5,20 @@ import fr.alexdoru.megawallsenhancementsmod.asm.mappings.FieldMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
-import static org.objectweb.asm.Opcodes.*;
-
-public interface MWETransformer {
+public interface MWETransformer extends Opcodes {
 
     /**
      * Returns the de-obfuscated names of the classes targeted by this transformer
+     * <p>
      * Example : "net.minecraft.client.Minecraft"
      */
     String[] getTargetClassName();
 
     /**
-     * Returns the transformed ClassNode
+     * Performs transformations to the ClassNode
      */
     void transform(ClassNode classNode, InjectionStatus status);
 

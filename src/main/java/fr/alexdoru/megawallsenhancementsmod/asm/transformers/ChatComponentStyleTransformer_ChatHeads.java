@@ -7,9 +7,6 @@ import fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
-import static org.objectweb.asm.Opcodes.ALOAD;
-import static org.objectweb.asm.Opcodes.INVOKESTATIC;
-
 public class ChatComponentStyleTransformer_ChatHeads implements MWETransformer {
 
     @Override
