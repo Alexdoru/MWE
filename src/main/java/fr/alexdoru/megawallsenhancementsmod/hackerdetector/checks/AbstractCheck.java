@@ -16,6 +16,7 @@ import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -25,10 +26,8 @@ import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Abstract class to hold util methods for the checks
@@ -216,6 +215,15 @@ public abstract class AbstractCheck implements ICheck {
         final double angleWithVector = Vector3D.getPlayersLookVec(player).getAngleWithVector(eyesToBlockCenter);
         final double maxAngle = Math.toDegrees(Math.atan(0.5D * Math.sqrt(3 / distSq)));
         return angleWithVector < maxAngle;
+    }
+
+    /**
+     * Returns true if the coordinates provided (Vec3) are inside the hitbox of the player of position playerX, playerY, playerZ
+     */
+    protected static boolean isInsideHitbox(double playerX, double playerY, double playerZ, Vec3 vec) {
+        return vec.xCoord > playerX - 0.4 && vec.xCoord < playerX + 0.4
+                && vec.yCoord > playerY - 0.1 && vec.yCoord < playerY + 1.9
+                && vec.zCoord > playerZ - 0.4 && vec.zCoord < playerZ + 0.4;
     }
 
     /**
@@ -437,6 +445,16 @@ public abstract class AbstractCheck implements ICheck {
 
         return closestHitVect.distanceTo(furthestHitVect);
 
+    }
+
+    protected static List<EntityPlayer> getPlayersInAABBexcluding(Entity entity, AxisAlignedBB aabb, Predicate<? super EntityPlayer> predicate) {
+        final List<EntityPlayer> list = new ArrayList<>();
+        for (final EntityPlayer player : mc.theWorld.playerEntities) {
+            if (player != entity && player.getEntityBoundingBox().intersectsWith(aabb) && predicate.test(player)) {
+                list.add(player);
+            }
+        }
+        return list;
     }
 
     public static void clearFlagMessages() {
