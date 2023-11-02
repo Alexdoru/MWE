@@ -17,7 +17,7 @@ public class InjectionStatus {
         return injectionCount;
     }
 
-    public boolean isTransformationSuccessfull() {
+    public boolean isTransformationSuccessful() {
         return injectionCount == 0;
     }
 

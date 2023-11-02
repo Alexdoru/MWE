@@ -12,9 +12,9 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,10 +24,10 @@ import java.util.List;
 public class MWEClassTransformer implements IClassTransformer {
 
     private File outputDir = null;
-    private final HashMap<String, List<MWETransformer>> transformerMap = new HashMap<>();
+    private final HashMap<String, List<MWETransformer>> transformers = new HashMap<>();
 
     /**
-     * Register the IMyClassTransformer(s) here
+     * Register the MWETransformer(s) here
      */
     public MWEClassTransformer() {
         registerTransformer(new ChatComponentStyleTransformer_ChatHeads());
@@ -95,37 +95,44 @@ public class MWEClassTransformer implements IClassTransformer {
 
     private void registerTransformer(MWETransformer classTransformer) {
         for (final String clazz : classTransformer.getTargetClassName()) {
-            transformerMap.computeIfAbsent(clazz, k -> new ArrayList<>()).add(classTransformer);
+            transformers.computeIfAbsent(clazz, k -> new ArrayList<>()).add(classTransformer);
         }
     }
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         if (basicClass == null) return null;
-        final List<MWETransformer> transformerList = transformerMap.get(transformedName);
+        final List<MWETransformer> transformerList = transformers.get(transformedName);
         if (transformerList == null) return basicClass;
         final long l = System.currentTimeMillis();
-        for (final MWETransformer transformer : transformerList) {
-            try {
-                final ClassNode classNode = new ClassNode();
-                final ClassReader classReader = new ClassReader(basicClass);
-                classReader.accept(classNode, 0);
-                final ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+        try {
+            final ClassReader classReader = new ClassReader(basicClass);
+            final ClassNode classNode = new ClassNode();
+            classReader.accept(classNode, 0);
+            boolean skip = true;
+            for (final MWETransformer transformer : transformerList) {
                 final InjectionStatus status = new InjectionStatus();
                 transformer.transform(classNode, status);
                 if (status.isSkippingTransformation()) {
+                    debugLog("Skipping application of " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
                     continue;
                 }
-                classNode.accept(classWriter);
-                if (!status.isTransformationSuccessfull()) {
-                    ASMLoadingPlugin.logger.error("Class transformation incomplete, transformer " + stripClassName(transformer.getClass().getName()) + " missing " + status.getInjectionCount() + " injections in " + transformedName);
-                } else {
+                skip = false;
+                if (status.isTransformationSuccessful()) {
                     debugLog("Applied " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
+                } else {
+                    ASMLoadingPlugin.logger.error("Class transformation incomplete, transformer " + stripClassName(transformer.getClass().getName()) + " missing " + status.getInjectionCount() + " injections in " + transformedName);
                 }
-                basicClass = classWriter.toByteArray();
-            } catch (Exception e) {
-                ASMLoadingPlugin.logger.error("Failed to apply " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
             }
+            if (skip) {
+                debugLog("Skipping transformation of " + transformedName);
+                return basicClass;
+            }
+            final ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+            classNode.accept(classWriter);
+            basicClass = classWriter.toByteArray();
+        } catch (Throwable t) {
+            ASMLoadingPlugin.logger.error("Failed to transform " + transformedName, t);
         }
         final long l2 = System.currentTimeMillis() - l;
         debugLog("Transformed " + transformedName + " in " + l2 + "ms");
@@ -133,12 +140,12 @@ public class MWEClassTransformer implements IClassTransformer {
         return basicClass;
     }
 
-    private String stripClassName(String targetClassName) {
+    private static String stripClassName(String targetClassName) {
         final String[] split = targetClassName.split("\\.");
         return split[split.length - 1];
     }
 
-    private void debugLog(String msg) {
+    private static void debugLog(String msg) {
         if (ASMLoadingPlugin.isObf()) {
             ASMLoadingPlugin.logger.debug(msg);
         } else {
@@ -175,11 +182,11 @@ public class MWEClassTransformer implements IClassTransformer {
             outFile.delete();
         }
         try {
-            final OutputStream output = new FileOutputStream(outFile);
+            final OutputStream output = Files.newOutputStream(outFile.toPath());
             output.write(data);
             output.close();
-        } catch (IOException ex) {
-            ASMLoadingPlugin.logger.error("Could not save transformed class " + transformedName);
+        } catch (IOException e) {
+            ASMLoadingPlugin.logger.error("Could not save transformed class " + transformedName, e);
         }
     }
 

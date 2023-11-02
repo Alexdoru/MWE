@@ -69,6 +69,7 @@ public class NetworkPlayerInfoTransformer implements MWETransformer {
 
             if (checkMethodNode(methodNode, MethodMapping.NETWORKPLAYERINFO$GETDISPLAYNAME)) {
                 methodNode.instructions.clear();
+                methodNode.localVariables.clear();
                 /*
                  * public IChatComponent getDisplayName() {
                  *     return this.displayName != null ? this.displayName : this.mwenhancements$displayName;

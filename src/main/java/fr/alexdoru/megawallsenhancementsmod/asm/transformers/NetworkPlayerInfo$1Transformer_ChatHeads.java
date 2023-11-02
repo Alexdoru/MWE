@@ -28,11 +28,11 @@ public class NetworkPlayerInfo$1Transformer_ChatHeads implements MWETransformer 
                     if (checkMethodInsnNode(insnNode, MethodMapping.NETWORKPLAYERINFO$ACCESS002)) {
                         final AbstractInsnNode nextNode = insnNode.getNext();
                         if (checkInsnNode(nextNode, POP)) {
-                            // call this.networkplayerinfo.onFinishedSkinLoading();
+                            // call this.networkplayerinfo.mwe$onFinishedSkinLoading();
                             final InsnList list = new InsnList();
                             list.add(new VarInsnNode(ALOAD, 0));
                             list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.NETWORKPLAYERINFO$1$INSTANCE));
-                            list.add(new MethodInsnNode(INVOKEVIRTUAL, ClassMapping.NETWORKPLAYERINFO.name, "onFinishedSkinLoading", "()V", false));
+                            list.add(new MethodInsnNode(INVOKEVIRTUAL, ClassMapping.NETWORKPLAYERINFO.name, "mwe$onFinishedSkinLoading", "()V", false));
                             methodNode.instructions.insert(nextNode, list);
                             status.addInjection();
                         }

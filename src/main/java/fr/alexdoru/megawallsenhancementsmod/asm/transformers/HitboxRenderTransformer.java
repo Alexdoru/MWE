@@ -37,6 +37,7 @@ public class HitboxRenderTransformer implements MWETransformer {
             classNode.methods.add(methodNode);
             methodNode.instructions.add(getNewConfigFieldInsnNode(map.get(classNode.name)));
             methodNode.instructions.add(new InsnNode(IRETURN));
+            methodNode.visitMaxs(1, 1);
         } else if (ENTITYARROW.name.equals(classNode.name)) {
             final MethodNode methodNode = new MethodNode(ACC_PUBLIC, "mwe$shouldRenderHitbox", "()Z", null, null);
             classNode.methods.add(methodNode);
@@ -56,6 +57,7 @@ public class HitboxRenderTransformer implements MWETransformer {
             methodNode.instructions.add(l1);
             methodNode.instructions.add(getNewConfigFieldInsnNode("drawHitboxForFlyingArrows"));
             methodNode.instructions.add(new InsnNode(IRETURN));
+            methodNode.visitMaxs(1, 1);
         }
     }
 
