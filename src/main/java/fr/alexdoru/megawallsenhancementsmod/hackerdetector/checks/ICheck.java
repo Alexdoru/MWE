@@ -12,6 +12,10 @@ public interface ICheck {
     /** Returns a descritpion of the cheat that this check is for */
     String getCheatDescription();
 
+    default String getFlagType() {
+        return "";
+    }
+
     /** Wether or not this check should send a report to the server */
     boolean canSendReport();
 

@@ -50,7 +50,7 @@ public abstract class AbstractCheck implements ICheck {
 
     private void printFlagMessage(EntityPlayer player) {
         if (ConfigHandler.debugLogging) {
-            HackerDetector.log(player.getName() + " flags " + this.getCheatName());
+            HackerDetector.log(player.getName() + " flags " + this.getCheatName() + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")"));
         }
         if (!ConfigHandler.showFlagMessages) {
             return;
@@ -58,7 +58,8 @@ public abstract class AbstractCheck implements ICheck {
         final String msg = ChatUtil.getTagNoCheaters() + EnumChatFormatting.RESET
                 + NameUtil.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.YELLOW + " flags "
-                + EnumChatFormatting.RED + this.getCheatName();
+                + EnumChatFormatting.RED + this.getCheatName()
+                + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")");
         if (ConfigHandler.oneFlagMessagePerGame) {
             if (flagMessages.contains(msg)) {
                 return;
@@ -120,11 +121,12 @@ public abstract class AbstractCheck implements ICheck {
         ChatUtil.debug(NameUtil.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.GRAY + " failed "
                 + EnumChatFormatting.RED + this.getCheatName()
+                + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")")
                 + EnumChatFormatting.GRAY + " check");
     }
 
     protected void log(EntityPlayer player, PlayerDataSamples data, ViolationLevelTracker vl, String extramsg) {
-        HackerDetector.log(player.getName() + " failed " + this.getCheatName() + " check "
+        HackerDetector.log(player.getName() + " failed " + this.getCheatName() + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")") + " check "
                 + (extramsg == null ? "" : extramsg)
                 + " | vl " + vl.getViolationLevel()
                 + " | onGround " + player.onGround
