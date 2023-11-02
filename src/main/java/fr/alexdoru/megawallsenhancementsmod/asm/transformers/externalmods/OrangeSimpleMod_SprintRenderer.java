@@ -22,6 +22,7 @@ public class OrangeSimpleMod_SprintRenderer implements MWETransformer {
                 list.add(new JumpInsnNode(IFEQ, notCanceled));
                 list.add(new InsnNode(RETURN));
                 list.add(notCanceled);
+                list.add(new FrameNode(F_SAME, 0, null, 0, null));
                 methodNode.instructions.insert(list);
                 status.addInjection();
             }

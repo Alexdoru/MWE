@@ -30,14 +30,14 @@ public class NetworkPlayerInfoTransformer_ChatHeads implements MWETransformer {
         addSetterMethod(classNode, "setSkinChatHead", ClassMapping.NETWORKPLAYERINFO, SKIN_FIELD_NAME, SKIN_FIELD_DESC, null);
 
         // add method :
-        // public void onFinishedSkinLoading() {
+        // public void mwe$onFinishedSkinLoading() {
         //     if(this.mwe$skin != null) {
         //      this.mwe$skin.setSkin(this.locationSkin);
         //      this.mwe$skin = null;
         //     }
         // }
 
-        final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "onFinishedSkinLoading", "()V", null, null);
+        final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "mwe$onFinishedSkinLoading", "()V", null, null);
         mv.visitCode();
         final Label l0 = new Label();
         final Label l3 = new Label();
@@ -60,6 +60,7 @@ public class NetworkPlayerInfoTransformer_ChatHeads implements MWETransformer {
         mv.visitLabel(l3);
         mv.visitInsn(RETURN);
         mv.visitLocalVariable("this", "L" + ClassMapping.NETWORKPLAYERINFO + ";", null, l0, l3, 0);
+        mv.visitMaxs(2, 1);
         mv.visitEnd();
 
     }
