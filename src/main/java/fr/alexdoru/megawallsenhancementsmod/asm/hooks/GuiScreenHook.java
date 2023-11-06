@@ -2,9 +2,9 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.data.WDR;
-import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.WDR;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.utils.ClipboardUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;

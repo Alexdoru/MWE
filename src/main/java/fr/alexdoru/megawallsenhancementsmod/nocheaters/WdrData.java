@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.data;
+package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.ListUtil;
