@@ -1,18 +1,16 @@
-package fr.alexdoru.megawallsenhancementsmod.chat;
+package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandHypixelShout;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandReport;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandWDR;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
-import fr.alexdoru.megawallsenhancementsmod.data.WDR;
-import fr.alexdoru.megawallsenhancementsmod.data.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;

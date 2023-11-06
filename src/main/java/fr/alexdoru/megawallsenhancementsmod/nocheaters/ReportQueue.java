@@ -2,7 +2,6 @@ package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.data.WDR;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.PositionEditGuiScreen;

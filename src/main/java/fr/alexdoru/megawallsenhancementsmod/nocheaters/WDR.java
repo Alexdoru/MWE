@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.data;
+package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandReport;
 import net.minecraft.util.ChatComponentText;
