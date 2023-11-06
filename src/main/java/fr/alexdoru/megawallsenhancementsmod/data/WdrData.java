@@ -113,8 +113,7 @@ public class WdrData {
                     }
 
                     final ArrayList<String> hacks = filterTimestampedReports(
-                            Arrays.copyOfRange(split, oldDataFormat ? 2 : 3, split.length),
-                            datenow
+                            Arrays.copyOfRange(split, oldDataFormat ? 2 : 3, split.length)
                     );
 
                     if (hacks.contains(WDR.NICK) && (datenow > timestamp + TIME_TRANSFORM_NICKED_REPORT)) {
@@ -149,9 +148,9 @@ public class WdrData {
     /**
      * Transforms the timestamped reports older into normal reports
      */
-    private static ArrayList<String> filterTimestampedReports(String[] split, long datenow) {
+    private static ArrayList<String> filterTimestampedReports(String[] split) {
         final ArrayList<String> hacks = new ArrayList<>();
-        if (split[0].charAt(0) == '-' && datenow - Long.parseLong(split[3]) - TIME_TRANSFORM_TIMESTAMPED_REPORT > 0) {
+        if (split[0].charAt(0) == '-') {
             int j = 0; // indice of timestamp
             for (int i = 0; i < split.length; i++) {
                 if (split[i].charAt(0) == '-') { // serverID

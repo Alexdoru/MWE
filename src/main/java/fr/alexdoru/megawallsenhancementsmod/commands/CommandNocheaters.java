@@ -396,13 +396,13 @@ class CreateReportLineTask implements Callable<IChatComponent> {
 
                 if (wdr.isNicked()) {
 
-                    imsg = WarningMessagesHandler.createPlayerNameWithHoverText(EnumChatFormatting.DARK_PURPLE + "[Nick] " + EnumChatFormatting.GOLD + uuid, uuid, uuid, wdr, EnumChatFormatting.WHITE)[0];
+                    imsg = WarningMessagesHandler.createPlayerNameWithHoverText(EnumChatFormatting.DARK_PURPLE + "[Nick] " + EnumChatFormatting.GOLD + uuid, uuid, uuid, wdr, EnumChatFormatting.WHITE);
 
                 } else {
 
                     final HypixelPlayerData playerdata = new HypixelPlayerData(uuid);
                     final LoginData logindata = new LoginData(playerdata.getPlayerData());
-                    imsg = WarningMessagesHandler.createPlayerNameWithHoverText(logindata.getFormattedName(), logindata.getdisplayname(), uuid, wdr, EnumChatFormatting.WHITE)[0];
+                    imsg = WarningMessagesHandler.createPlayerNameWithHoverText(logindata.getFormattedName(), logindata.getdisplayname(), uuid, wdr, EnumChatFormatting.WHITE);
 
                     final IChatComponent ismgStatus = new ChatComponentText("");
 

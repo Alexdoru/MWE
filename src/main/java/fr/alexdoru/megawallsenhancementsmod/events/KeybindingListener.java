@@ -1,7 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.events;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.commands.CommandWDR;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -15,13 +14,11 @@ public class KeybindingListener {
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static final KeyBinding newNickKey = new KeyBinding("New Random Nick", 0, "MegaWallsEnhancements");
     private static final KeyBinding playerHitboxes = new KeyBinding("Toggle player hitboxes", 0, "Hitboxes");
-    private static final KeyBinding addTimestampKey = new KeyBinding("Add Timestamp", 0, "NoCheaters");
     private static final KeyBinding toggleDroppedItemLimit = new KeyBinding("Toggle dropped item limit", 0, "MegaWallsEnhancements");
 
     public KeybindingListener() {
         ClientRegistry.registerKeyBinding(newNickKey);
         ClientRegistry.registerKeyBinding(playerHitboxes);
-        ClientRegistry.registerKeyBinding(addTimestampKey);
         ClientRegistry.registerKeyBinding(toggleDroppedItemLimit);
     }
 
@@ -32,9 +29,7 @@ public class KeybindingListener {
             return;
         }
 
-        if (addTimestampKey.isPressed()) {
-            CommandWDR.addTimeMark();
-        } else if (toggleDroppedItemLimit.isPressed()) {
+        if (toggleDroppedItemLimit.isPressed()) {
             ConfigHandler.limitDroppedEntityRendered = !ConfigHandler.limitDroppedEntityRendered;
             ConfigHandler.saveConfig();
             if (ConfigHandler.limitDroppedEntityRendered) {
