@@ -57,9 +57,8 @@ public class WarningMessagesHandler {
     public static void printWarningMessage(long datenow, String uuid, String formattedName, String playername, WDR wdr, boolean disableReportButton) {
 
         final String wdrmapKey = wdr.isNicked() ? playername : uuid;
-        final IChatComponent[] imsgArray = createPlayerNameWithHoverText(formattedName, playername, wdrmapKey, wdr, EnumChatFormatting.LIGHT_PURPLE);
-        final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ").appendSibling(imsgArray[0]);
-        final IChatComponent allCheats = imsgArray[1];
+        final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ").appendSibling(createPlayerNameWithHoverText(formattedName, playername, wdrmapKey, wdr, EnumChatFormatting.LIGHT_PURPLE));
+        final IChatComponent allCheats = wdr.getFormattedHacks();
         imsg.appendText(EnumChatFormatting.GRAY + " joined,");
         final boolean olderThanMaxAutoreport = wdr.shouldPrintBigText(datenow);
 
@@ -97,119 +96,18 @@ public class WarningMessagesHandler {
     }
 
     /**
-     * Returns an array with new IChatComponent[]{playernameWithHoverText,allCheats};
-     * "playernameWithHoverText" is a message with the player name and a hover event on top with the report info
-     * "allCheats" is a list of all the hacks for this player
+     * Returns a message with the player name and a hover event on top with the report info
      */
-    public static IChatComponent[] createPlayerNameWithHoverText(String formattedNameIn, String playername, String wdrmapKey, WDR wdr, EnumChatFormatting namecolor) {
-
+    public static IChatComponent createPlayerNameWithHoverText(String formattedNameIn, String playername, String wdrmapKey, WDR wdr, EnumChatFormatting namecolor) {
         final String formattedName = formattedNameIn == null ? namecolor.toString() + playername : formattedNameIn;
-
-        if (wdr.hacks.get(0).charAt(0) == '-') {
-            StringBuilder cheats = new StringBuilder();
-            long timestamphackreport = 0L;
-            final StringBuilder allCheats = new StringBuilder();
-            String serverID = "";
-            String timeronreplay = "";
-            String playernamewhenreported = "";
-            String oldname = "";
-            long oldtimestamp = 0L;
-            String oldgameID = "";
-            final IChatComponent hoverText = new ChatComponentText(formattedName);
-
-            int j = 0;
-            for (int i = 0; i < wdr.hacks.size(); i++) {
-
-                if ((wdr.hacks.get(i).charAt(0) == '-' && i != 0) || i == wdr.hacks.size() - 1) {
-
-                    if (i == wdr.hacks.size() - 1) {
-                        cheats.append(" ").append(wdr.hacks.get(i));
-                        allCheats.append(allCheats.toString().contains(wdr.hacks.get(i)) ? "" : " " + wdr.hacks.get(i));
-                    }
-
-                    if (serverID.equals(oldgameID) && Math.abs(timestamphackreport - oldtimestamp) < 3000000 && playernamewhenreported.equals(oldname)) { // if it is same server ID and reports
-
-                        hoverText.appendText("\n"
-                                + EnumChatFormatting.GREEN + "Reported at (EST - server time) : " + EnumChatFormatting.YELLOW + DateUtil.ESTformatTimestamp(timestamphackreport) + "\n"
-                                + EnumChatFormatting.GREEN + "Timer on replay (approx.) : " + EnumChatFormatting.GOLD + timeronreplay + "\n"
-                                + EnumChatFormatting.GREEN + "Timestamp for : " + EnumChatFormatting.GOLD + cheats + ((i == wdr.hacks.size() - 1) ? "" : "\n"));
-
-                    } else {
-
-                        hoverText.appendText("\n"
-                                + EnumChatFormatting.GREEN + "Reported at (EST - server time) : " + EnumChatFormatting.YELLOW + DateUtil.ESTformatTimestamp(timestamphackreport) + "\n"
-                                + EnumChatFormatting.GREEN + "Playername at the moment of the report : " + EnumChatFormatting.RED + playernamewhenreported + "\n"
-                                + EnumChatFormatting.GREEN + "ServerID : " + EnumChatFormatting.GOLD + serverID + EnumChatFormatting.GREEN + " Timer on replay (approx.) : " + EnumChatFormatting.GOLD + timeronreplay + "\n"
-                                + EnumChatFormatting.GREEN + "Timestamp for : " + EnumChatFormatting.GOLD + cheats + ((i == wdr.hacks.size() - 1) ? "" : "\n"));
-
-                    }
-
-                }
-
-                if (wdr.hacks.get(i).charAt(0) == '-') { // serverID
-
-                    j = i;
-                    oldgameID = serverID;
-                    serverID = wdr.hacks.get(i).substring(1);
-                    cheats = new StringBuilder();
-
-                } else if (i == j + 1) { // timer on replay
-
-                    timeronreplay = wdr.hacks.get(i);
-
-                } else if (i == j + 2) { // playernameduringgame
-
-                    oldname = playernamewhenreported;
-                    playernamewhenreported = wdr.hacks.get(i);
-
-                } else if (i == j + 3) { // timestampforcheat
-
-                    oldtimestamp = timestamphackreport;
-                    timestamphackreport = Long.parseLong(wdr.hacks.get(i));
-
-                } else if (i > j + 3 && i != wdr.hacks.size() - 1) { // cheats
-
-                    cheats.append(" ").append(wdr.hacks.get(i));
-                    allCheats.append(allCheats.toString().contains(wdr.hacks.get(i)) ? "" : " " + wdr.hacks.get(i));
-
-                }
-
-            }
-
-            final IChatComponent imsg = new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
-                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText)));
-
-            return new IChatComponent[]{imsg, new ChatComponentText(EnumChatFormatting.DARK_BLUE + allCheats.toString())};
-
-        } else {
-
-            final IChatComponent imsg = new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
-                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + wdrmapKey + " " + playername))
-                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
-                            formattedName + "\n"
-                                    //+ EnumChatFormatting.GREEN + "Last auto report : " + EnumChatFormatting.YELLOW + DateUtil.localformatTimestamp(wdr.timestamp) + "\n"
-                                    + EnumChatFormatting.GREEN + "Last reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.timeLastManualReport) + " ago, on " + DateUtil.localformatTimestamp(wdr.timeLastManualReport) + "\n"
-                                    + EnumChatFormatting.GREEN + "Reported for :" + EnumChatFormatting.GOLD + wdr.hacksToString() + "\n\n"
-                                    + EnumChatFormatting.YELLOW + "Click here to remove this player from your report list"))));
-
-            final IChatComponent allCheats = new ChatComponentText("");
-
-            for (final String hack : wdr.hacks) {
-                if (hack.startsWith("bhop")
-                        || hack.startsWith("autoblock")
-                        || hack.startsWith("fastbreak")
-                        || hack.startsWith("noslowdown")) {
-                    allCheats.appendText(" " + EnumChatFormatting.DARK_RED + hack);
-                } else if (hack.equalsIgnoreCase(WDR.NICK)) {
-                    allCheats.appendText(" " + EnumChatFormatting.DARK_PURPLE + hack);
-                } else if (!hack.equals(WDR.IGNORED)) {
-                    allCheats.appendText(" " + EnumChatFormatting.GOLD + hack);
-                }
-            }
-
-            return new IChatComponent[]{imsg, allCheats};
-
-        }
+        return new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
+                .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + wdrmapKey + " " + playername))
+                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
+                        formattedName + "\n"
+                                //+ EnumChatFormatting.GREEN + "Last auto report : " + EnumChatFormatting.YELLOW + DateUtil.localformatTimestamp(wdr.timestamp) + "\n"
+                                + EnumChatFormatting.GREEN + "Last reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.timeLastManualReport) + " ago, on " + DateUtil.localformatTimestamp(wdr.timeLastManualReport) + "\n"
+                                + EnumChatFormatting.GREEN + "Reported for :" + EnumChatFormatting.GOLD + wdr.hacksToString() + "\n\n"
+                                + EnumChatFormatting.YELLOW + "Click here to remove this player from your report list"))));
 
     }
 

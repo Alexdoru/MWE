@@ -1,6 +1,9 @@
 package fr.alexdoru.megawallsenhancementsmod.data;
 
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandReport;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -113,6 +116,23 @@ public class WDR implements Comparable<WDR> {
             cheats.append(" ").append(hack);
         }
         return cheats.toString();
+    }
+
+    public IChatComponent getFormattedHacks() {
+        final IChatComponent allCheats = new ChatComponentText("");
+        for (final String hack : this.hacks) {
+            if (hack.startsWith("bhop")
+                    || hack.startsWith("autoblock")
+                    || hack.startsWith("fastbreak")
+                    || hack.startsWith("noslowdown")) {
+                allCheats.appendText(" " + EnumChatFormatting.DARK_RED + hack);
+            } else if (hack.equalsIgnoreCase(WDR.NICK)) {
+                allCheats.appendText(" " + EnumChatFormatting.DARK_PURPLE + hack);
+            } else if (!hack.equals(WDR.IGNORED)) {
+                allCheats.appendText(" " + EnumChatFormatting.GOLD + hack);
+            }
+        }
+        return allCheats;
     }
 
 }
