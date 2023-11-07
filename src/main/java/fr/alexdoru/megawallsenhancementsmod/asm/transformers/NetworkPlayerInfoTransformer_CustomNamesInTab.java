@@ -8,7 +8,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.*;
 
-public class NetworkPlayerInfoTransformer implements MWETransformer {
+public class NetworkPlayerInfoTransformer_CustomNamesInTab implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {

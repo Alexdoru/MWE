@@ -5,7 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.loader.MWETransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
-public class GuiIngameForgeTransformer implements MWETransformer {
+public class GuiIngameForgeTransformer_FixActionBar implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {
@@ -22,7 +22,7 @@ public class GuiIngameForgeTransformer implements MWETransformer {
                         final AbstractInsnNode secondNode = insnNode.getNext();
                         if (checkVarInsnNode(secondNode, ILOAD)) {
                             final AbstractInsnNode thirdNode = secondNode.getNext();
-                            if (checkVarInsnNode(thirdNode, FLOAD) && checkMethodInsnNode(thirdNode.getNext(), MethodMapping.RENDERRECORDOVERLAY)) {
+                            if (checkVarInsnNode(thirdNode, FLOAD) && checkMethodInsnNode(thirdNode.getNext(), MethodMapping.GUIINGAMEFORGE$RENDERRECORDOVERLAY)) {
                                 /*
                                  * Replaces line 150 :
                                  * renderRecordOverlay(width, height, partialTicks);

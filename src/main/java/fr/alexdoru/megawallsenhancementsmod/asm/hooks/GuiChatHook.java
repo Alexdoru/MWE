@@ -18,7 +18,7 @@ public class GuiChatHook {
 
     public static boolean autoComplete(boolean waitingOnAutocompleteIn, String leftOfCursor, String full) {
         tabCompleteOptions = null;
-        if (leftOfCursor.length() >= 1) {
+        if (!leftOfCursor.isEmpty()) {
             if (leftOfCursor.charAt(0) != '/') {
                 final String[] args = leftOfCursor.split(" ", -1);
                 tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());

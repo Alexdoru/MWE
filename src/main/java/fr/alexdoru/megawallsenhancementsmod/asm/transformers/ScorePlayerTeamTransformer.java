@@ -21,7 +21,7 @@ public class ScorePlayerTeamTransformer implements MWETransformer {
         }
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.FORMATPLAYERNAME)) {
+            if (checkMethodNode(methodNode, MethodMapping.SCOREPLAYERTEAM$FORMATPLAYERNAME)) {
                 final InsnList list = new InsnList();
                 list.add(new VarInsnNode(ALOAD, 1));
                 list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("ScorePlayerTeamHook"), "spoofSidebarLine", "(Ljava/lang/String;)Ljava/lang/String;", false));

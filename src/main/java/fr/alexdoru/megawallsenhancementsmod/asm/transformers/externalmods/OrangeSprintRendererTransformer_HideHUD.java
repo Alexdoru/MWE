@@ -4,7 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.loader.InjectionStatus;
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.MWETransformer;
 import org.objectweb.asm.tree.*;
 
-public class OrangeSimpleMod_SprintRenderer implements MWETransformer {
+public class OrangeSprintRendererTransformer_HideHUD implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {

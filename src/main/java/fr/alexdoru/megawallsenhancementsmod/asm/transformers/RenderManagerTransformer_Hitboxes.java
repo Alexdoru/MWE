@@ -7,7 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.mappings.FieldMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
-public class RenderManagerTransformer implements MWETransformer {
+public class RenderManagerTransformer_Hitboxes implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {
@@ -37,7 +37,7 @@ public class RenderManagerTransformer implements MWETransformer {
                 }
             }
 
-            if (checkMethodNode(methodNode, MethodMapping.RENDERDEBUGBOUNDINGBOX)) {
+            if (checkMethodNode(methodNode, MethodMapping.RENDERMANAGER$RENDERDEBUGBOUNDINGBOX)) {
                 /*
                  * Injects at head :
                  * if (!RenderManagerHook.shouldRenderHitbox(entityIn)) {

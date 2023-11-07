@@ -41,8 +41,8 @@ public class GuiScreenBookHook {
                         Matcher matcher = nickSuccessPagePattern.matcher(pagetext);
                         if (matcher.find()) {
                             final String newNick = matcher.group(1);
-                            if (newNick != null && !newNick.equals("")) {
-                                if (!ConfigHandler.hypixelNick.equals("")) {
+                            if (newNick != null && !newNick.isEmpty()) {
+                                if (!ConfigHandler.hypixelNick.isEmpty()) {
                                     final String oldAliasForNick = SquadHandler.getSquad().remove(ConfigHandler.hypixelNick);
                                     if (oldAliasForNick != null) {
                                         if (oldAliasForNick.equals(ConfigHandler.hypixelNick)) {
@@ -65,8 +65,8 @@ public class GuiScreenBookHook {
                     }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Throwable t) {
+            t.printStackTrace();
         }
     }
 

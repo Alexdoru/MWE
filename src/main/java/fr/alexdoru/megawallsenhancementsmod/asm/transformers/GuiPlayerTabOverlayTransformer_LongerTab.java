@@ -21,7 +21,7 @@ public class GuiPlayerTabOverlayTransformer_LongerTab implements MWETransformer 
         final boolean isPatcherLoaded = ASMLoadingPlugin.isPatcherLoaded();
         status.setInjectionPoints(isPatcherLoaded ? 1 : 2);
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.RENDERPLAYERLIST)) {
+            if (checkMethodNode(methodNode, MethodMapping.GUIPLAYERTABOVERLAY$RENDERPLAYERLIST)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkIntInsnNode(insnNode, BIPUSH, 20)) {
                         methodNode.instructions.insertBefore(insnNode, new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "getTablistHeight", "()I", false));

@@ -17,7 +17,7 @@ public class GuiPlayerTabOverlayTransformer_FinalKills implements MWETransformer
     public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(5);
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.RENDERPLAYERLIST)) {
+            if (checkMethodNode(methodNode, MethodMapping.GUIPLAYERTABOVERLAY$RENDERPLAYERLIST)) {
                 methodNode.instructions.insert(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "resetFinalsScoreWidth", "()V", false));
                 status.addInjection();
                 boolean injectedMax = false;
@@ -73,7 +73,7 @@ public class GuiPlayerTabOverlayTransformer_FinalKills implements MWETransformer
                     } else if (ordinal_getGameType < 2 && checkMethodInsnNode(insnNode, MethodMapping.NETWORKPLAYERINFO$GETGAMETYPE)) {
                         ordinal_getGameType++;
                         lookFork5k2 = ordinal_getGameType == 2;
-                    } else if (checkMethodInsnNode(insnNode, MethodMapping.DRAWSCOREBOARDVALUES)) {
+                    } else if (checkMethodInsnNode(insnNode, MethodMapping.GUIPLAYERTABOVERLAY$DRAWSCOREBOARDVALUES)) {
                         lookFork5k2 = false;
                         final AbstractInsnNode previousNode = insnNode.getPrevious();
                         if (checkVarInsnNode(previousNode, ALOAD)) {

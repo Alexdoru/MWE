@@ -8,7 +8,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
-public class CommandHandlerTransformer implements MWETransformer {
+public class CommandHandlerTransformer_CaseCommand implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {
@@ -19,7 +19,7 @@ public class CommandHandlerTransformer implements MWETransformer {
     public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.GETTABCOMPLETIONOPTION)) {
+            if (checkMethodNode(methodNode, MethodMapping.COMMANDHANDLER$GETTABCOMPLETIONOPTION)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkInsnNode(insnNode, ICONST_0)) {
                         final AbstractInsnNode nextNode = insnNode.getNext();

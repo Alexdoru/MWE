@@ -49,9 +49,9 @@ public class EntityPlayerTransformer implements MWETransformer {
                         status.addInjection();
                     }
                 }
-            } else if (checkMethodNode(methodNode, MethodMapping.GETDISPLAYNAME)) {
+            } else if (checkMethodNode(methodNode, MethodMapping.ENTITYPLAYER$GETDISPLAYNAME)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if (checkMethodInsnNode(insnNode, MethodMapping.FORMATPLAYERNAME)) {
+                    if (checkMethodInsnNode(insnNode, MethodMapping.SCOREPLAYERTEAM$FORMATPLAYERNAME)) {
                         /*
                          * Replaces line 2422 :
                          * ichatcomponent.appendSibling(new ChatComponentText(ScorePlayerTeam.formatPlayerName(this.getTeam(), this.getDisplayNameString())));

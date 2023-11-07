@@ -7,7 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.mappings.FieldMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
-public class GuiScreenBookTransformer implements MWETransformer {
+public class GuiScreenBookTransformer_NewNickKey implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {

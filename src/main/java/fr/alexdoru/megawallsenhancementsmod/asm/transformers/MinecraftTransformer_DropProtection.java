@@ -19,10 +19,10 @@ public class MinecraftTransformer_DropProtection implements MWETransformer {
         status.setInjectionPoints(3);
 
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.RUNTICK)) {
+            if (checkMethodNode(methodNode, MethodMapping.MINECRAFT$RUNTICK)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
-                    if (checkMethodInsnNode(insnNode, MethodMapping.CHANGECURRENTITEM) ||
+                    if (checkMethodInsnNode(insnNode, MethodMapping.INVENTORYPLAYER$CHANGECURRENTITEM) ||
                             checkFieldInsnNode(insnNode, PUTFIELD, FieldMapping.INVENTORYPLAYER$CURRENTITEM)) {
                         /*
                          * Injects after line 1869 & 2077
@@ -45,7 +45,7 @@ public class MinecraftTransformer_DropProtection implements MWETransformer {
                         classNode.visitField(ACC_PUBLIC + ACC_STATIC + ACC_SYNTHETIC, "field_110184_bpa", "Z", null, false);
                     }
 
-                    if (checkMethodInsnNode(insnNode, MethodMapping.DROPONEITEM)) {
+                    if (checkMethodInsnNode(insnNode, MethodMapping.ENTITYPLAYERSP$DROPONEITEM)) {
                         /*
                          * Replaces line 2101 :
                          * this.thePlayer.dropOneItem(GuiScreen.isCtrlKeyDown());

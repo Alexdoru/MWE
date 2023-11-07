@@ -6,7 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
-public class GuiIngameTransformer_Sidebar implements MWETransformer {
+public class GuiIngameTransformer_CustomSidebarLines implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {
@@ -17,7 +17,7 @@ public class GuiIngameTransformer_Sidebar implements MWETransformer {
     public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(2);
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.RENDERSCOREBOARD)) {
+            if (checkMethodNode(methodNode, MethodMapping.GUIINGAME$RENDERSCOREBOARD)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
                     if (checkMethodInsnNode(insnNode, MethodMapping.SCOREOBJECTIVE$GETDISPLAYNAME)) {
@@ -33,7 +33,7 @@ public class GuiIngameTransformer_Sidebar implements MWETransformer {
                         }
                     }
 
-                    if (checkMethodInsnNode(insnNode, MethodMapping.FORMATPLAYERNAME) && checkVarInsnNode(insnNode.getNext(), ASTORE, 15)) {
+                    if (checkMethodInsnNode(insnNode, MethodMapping.SCOREPLAYERTEAM$FORMATPLAYERNAME) && checkVarInsnNode(insnNode.getNext(), ASTORE, 15)) {
                        /*
                        Transforms line 579 :
                        Original line : String s1 = ScorePlayerTeam.formatPlayerName(scoreplayerteam1, score1.getPlayerName());
