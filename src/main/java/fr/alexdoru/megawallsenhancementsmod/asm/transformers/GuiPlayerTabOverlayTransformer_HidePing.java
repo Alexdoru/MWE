@@ -16,7 +16,7 @@ public class GuiPlayerTabOverlayTransformer_HidePing implements MWETransformer {
     public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(2);
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.RENDERPLAYERLIST)) {
+            if (checkMethodNode(methodNode, MethodMapping.GUIPLAYERTABOVERLAY$RENDERPLAYERLIST)) {
                 AbstractInsnNode latestAload0 = null;
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkInsnNode(insnNode, IADD)) {

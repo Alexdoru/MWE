@@ -18,7 +18,7 @@ public class RenderGlobalTransformer_LimitDroppedItems implements MWETransformer
     public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(2);
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.RENDERENTITIES)) {
+            if (checkMethodNode(methodNode, MethodMapping.RENDERGLOBAL$RENDERENTITIES)) {
                 int ordinal = 0;
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkInsnNode(insnNode, ICONST_0)) {
@@ -31,7 +31,7 @@ public class RenderGlobalTransformer_LimitDroppedItems implements MWETransformer
                             methodNode.instructions.insert(nextNode, new MethodInsnNode(INVOKESTATIC, getHookClass("RenderGlobalHook"), "resetEntityItemCount", "()V", false));
                             status.addInjection();
                         }
-                    } else if (checkMethodInsnNode(insnNode, MethodMapping.RENDERENTITYSIMPLE)) {
+                    } else if (checkMethodInsnNode(insnNode, MethodMapping.RENDERMANAGER$RENDERENTITYSIMPLE)) {
                         ordinal++;
                         /* Replace line 672 :
                          * this.renderManager.renderEntitySimple(entity2, partialTicks);

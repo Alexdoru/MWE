@@ -17,7 +17,7 @@ public class GuiPlayerTabOverlayTransformer_HideHeaderFooter implements MWETrans
     public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(2);
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.RENDERPLAYERLIST)) {
+            if (checkMethodNode(methodNode, MethodMapping.GUIPLAYERTABOVERLAY$RENDERPLAYERLIST)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkVarInsnNode(insnNode, ALOAD, 0)) {
                         final AbstractInsnNode secondNode = insnNode.getNext();

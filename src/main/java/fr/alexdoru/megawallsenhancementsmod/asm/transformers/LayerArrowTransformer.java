@@ -17,7 +17,7 @@ public class LayerArrowTransformer implements MWETransformer {
     public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.DORENDERLAYER)) {
+            if (checkMethodNode(methodNode, MethodMapping.LAYERARROW$DORENDERLAYER)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkVarInsnNode(insnNode, ASTORE, 10)) {
                         /*

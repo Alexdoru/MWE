@@ -6,7 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.mappings.FieldMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
-public class GuiChatTransformer implements MWETransformer {
+public class GuiChatTransformer_TabCompletePlayers implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {

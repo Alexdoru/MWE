@@ -17,7 +17,7 @@ public class RenderPlayerTransformer_ColoredHealth implements MWETransformer {
     public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.RENDEROFFSETLIVINGLABEL)) {
+            if (checkMethodNode(methodNode, MethodMapping.RENDERPLAYER$RENDEROFFSETLIVINGLABEL)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkMethodInsnNode(insnNode, MethodMapping.SCORE$GETSCOREPOINTS)) {
                         final AbstractInsnNode nextNode = insnNode.getNext();

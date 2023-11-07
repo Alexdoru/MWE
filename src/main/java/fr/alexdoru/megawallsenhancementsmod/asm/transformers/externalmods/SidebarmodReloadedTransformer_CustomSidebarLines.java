@@ -4,7 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.loader.InjectionStatus;
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.MWETransformer;
 import org.objectweb.asm.tree.*;
 
-public class SidebarmodReloaded_CustomSidebarTransformer implements MWETransformer {
+public class SidebarmodReloadedTransformer_CustomSidebarLines implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {

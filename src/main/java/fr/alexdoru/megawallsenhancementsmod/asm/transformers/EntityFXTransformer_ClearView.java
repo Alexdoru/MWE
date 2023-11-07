@@ -6,7 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
-public class EntityFXTransformer implements MWETransformer {
+public class EntityFXTransformer_ClearView implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {
@@ -17,7 +17,7 @@ public class EntityFXTransformer implements MWETransformer {
     public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.RENDERPARTICLE)) {
+            if (checkMethodNode(methodNode, MethodMapping.ENTITYFX$RENDERPARTICLE)) {
                 /*
                  * Injects at HEAD:
                  * if(EntityFXHook.shouldHideParticle(this, entityIn)) {

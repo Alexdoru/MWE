@@ -16,7 +16,7 @@ public class GuiPlayerTabOverlayTransformer_FixMissplacedDrawRect implements MWE
     public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(3);
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.RENDERPLAYERLIST)) {
+            if (checkMethodNode(methodNode, MethodMapping.GUIPLAYERTABOVERLAY$RENDERPLAYERLIST)) {
                 //    ILOAD 16 <-- capture var
                 //    ICONST_2
                 //    IDIV

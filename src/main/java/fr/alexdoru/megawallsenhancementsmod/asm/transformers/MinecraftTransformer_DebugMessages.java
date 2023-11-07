@@ -19,10 +19,10 @@ public class MinecraftTransformer_DebugMessages implements MWETransformer {
         status.setInjectionPoints(4);
 
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.RUNTICK)) {
+            if (checkMethodNode(methodNode, MethodMapping.MINECRAFT$RUNTICK)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
-                    if (checkMethodInsnNode(insnNode, MethodMapping.LOADRENDERER)) {
+                    if (checkMethodInsnNode(insnNode, MethodMapping.RENDERGLOBAL$LOADRENDERER)) {
                         /*
                          * Injects after line 1989 :
                          * MinecraftHook.onSettingChange(this.gameSettings.advancedItemTooltips, "Advanced Item Tooltips");
@@ -50,7 +50,7 @@ public class MinecraftTransformer_DebugMessages implements MWETransformer {
                         status.addInjection();
                     }
 
-                    if (checkMethodInsnNode(insnNode, MethodMapping.SETDEBUGBOUNDINGBOX)) {
+                    if (checkMethodInsnNode(insnNode, MethodMapping.RENDERMANAGER$SETDEBUGBOUNDINGBOX)) {
                         /*
                          * Injects after line 2000 :
                          * MinecraftHook.onSettingChange(this.renderManager.isDebugBoundingBox(), "Hitboxes");
@@ -59,7 +59,7 @@ public class MinecraftTransformer_DebugMessages implements MWETransformer {
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.MINECRAFT$RENDERMANAGER));
-                        list.add(getNewMethodInsnNode(MethodMapping.ISDEBUGBOUNDINGBOX));
+                        list.add(getNewMethodInsnNode(MethodMapping.RENDERMANAGER$ISDEBUGBOUNDINGBOX));
                         list.add(new LdcInsnNode("Hitboxes"));
                         list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("MinecraftHook"), "onSettingChange", "(L" + ClassMapping.MINECRAFT + ";ZLjava/lang/String;)V", false));
                         methodNode.instructions.insert(insnNode, list);

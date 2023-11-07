@@ -5,7 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.loader.MWETransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
-public class GuiScreenTransformer implements MWETransformer {
+public class GuiScreenTransformer_ExecuteChatCommands implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {
@@ -16,7 +16,7 @@ public class GuiScreenTransformer implements MWETransformer {
     public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.HANDLECOMPONENTCLICK)) {
+            if (checkMethodNode(methodNode, MethodMapping.GUISCREEN$HANDLECOMPONENTCLICK)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkVarInsnNode(insnNode, ALOAD, 0)) {
                         final AbstractInsnNode secondNode = insnNode.getNext();
@@ -26,10 +26,10 @@ public class GuiScreenTransformer implements MWETransformer {
                                 final AbstractInsnNode fourthNode = thirdNode.getNext();
                                 if (checkInsnNode(fourthNode, ICONST_0)) {
                                     final AbstractInsnNode fifthNode = fourthNode.getNext();
-                                    if (checkMethodInsnNode(fifthNode, MethodMapping.SENDCHATMESSAGE)) {
+                                    if (checkMethodInsnNode(fifthNode, MethodMapping.GUISCREEN$SENDCHATMESSAGE)) {
                                         /*
                                          * Inject before line 450 :
-                                         * if(GuiScreenHook.handleMWEnCustomChatCommand(clickevent.getValue())) {
+                                         * if (GuiScreenHook.handleMWEnCustomChatCommand(clickevent.getValue())) {
                                          *     return true;
                                          * }
                                          */

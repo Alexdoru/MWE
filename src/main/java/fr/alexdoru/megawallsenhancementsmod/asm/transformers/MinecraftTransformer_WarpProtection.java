@@ -17,10 +17,10 @@ public class MinecraftTransformer_WarpProtection implements MWETransformer {
     public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.RIGHTCLICKMOUSE)) {
+            if (checkMethodNode(methodNode, MethodMapping.MINECRAFT$RIGHTCLICKMOUSE)) {
                 int ordinal = 0;
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if (checkMethodInsnNode(insnNode, MethodMapping.GETCURRENTITEM)) {
+                    if (checkMethodInsnNode(insnNode, MethodMapping.INVENTORYPLAYER$GETCURRENTITEM)) {
                         final AbstractInsnNode nextNode = insnNode.getNext();
                         if (ordinal == 0 && checkVarInsnNode(nextNode, ASTORE)) {
                             final InsnList list = new InsnList();

@@ -7,7 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.mappings.FieldMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
-public class GuiContainerTransformer implements MWETransformer {
+public class GuiContainerTransformer_SafeInventory implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {
@@ -18,12 +18,12 @@ public class GuiContainerTransformer implements MWETransformer {
     public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
-            if (checkMethodNode(methodNode, MethodMapping.CHECKHOTBARKEYS)) {
+            if (checkMethodNode(methodNode, MethodMapping.GUICONTAINER$CHECKHOTBARKEYS)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if (checkMethodInsnNode(insnNode, MethodMapping.HANDLEMOUSECLICK)) {
+                    if (checkMethodInsnNode(insnNode, MethodMapping.GUICONTAINER$HANDLEMOUSECLICK)) {
                         /*
                          * Insert before line 720 :
-                         * if(GuiContainerHook.shouldCancelHotkey(this.theSlot, i)) {
+                         * if (GuiContainerHook.shouldCancelHotkey(this.theSlot, i)) {
                          *    return true;
                          * }
                          */
