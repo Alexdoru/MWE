@@ -21,8 +21,8 @@ public class NetworkPlayerInfoTransformer_CustomNamesInTab implements MWETransfo
         addInterface(classNode, "NetworkPlayerInfoAccessor");
         final String FIELD_NAME_FINAL_KILLS = "mwenhancements$playerFinalkills";
         final String FIELD_NAME_DISPLAYNAME = "mwenhancements$displayName";
-        classNode.visitField(ACC_PUBLIC, FIELD_NAME_FINAL_KILLS, "I", null, 0).visitEnd();
-        classNode.visitField(ACC_PRIVATE, FIELD_NAME_DISPLAYNAME, "L" + ClassMapping.ICHATCOMPONENT + ";", null, null).visitEnd();
+        classNode.visitField(ACC_PUBLIC, FIELD_NAME_FINAL_KILLS, "I", null, 0);
+        classNode.visitField(ACC_PRIVATE, FIELD_NAME_DISPLAYNAME, "L" + ClassMapping.ICHATCOMPONENT + ";", null, null);
         addGetterAndSetterMethod(
                 classNode,
                 "PlayerFinalkills",

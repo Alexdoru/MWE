@@ -23,7 +23,7 @@ public class ChatComponentTextTransformer_ChatHeads implements MWETransformer {
         addInterface(classNode, "ChatComponentTextAccessor");
         final String SKIN_FIELD_NAME = "mwe$skin";
         final String SKIN_DESC = "L" + ClassMapping.SKINCHATHEAD + ";";
-        classNode.visitField(ACC_PRIVATE, SKIN_FIELD_NAME, SKIN_DESC, null, null).visitEnd();
+        classNode.visitField(ACC_PRIVATE, SKIN_FIELD_NAME, SKIN_DESC, null, null);
         addGetterAndSetterMethod(classNode, "SkinChatHead", ClassMapping.CHATCOMPONENTTEXT, SKIN_FIELD_NAME, SKIN_DESC, null);
     }
 
