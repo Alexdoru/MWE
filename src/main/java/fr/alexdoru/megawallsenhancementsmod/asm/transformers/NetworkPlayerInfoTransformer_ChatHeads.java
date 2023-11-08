@@ -26,7 +26,7 @@ public class NetworkPlayerInfoTransformer_ChatHeads implements MWETransformer {
         addInterface(classNode, "NetworkPlayerInfoAccessor_ChatHeads");
         final String SKIN_FIELD_NAME = "mwe$skin";
         final String SKIN_FIELD_DESC = "L" + ClassMapping.SKINCHATHEAD + ";";
-        classNode.visitField(ACC_PRIVATE, SKIN_FIELD_NAME, SKIN_FIELD_DESC, null, null).visitEnd();
+        classNode.visitField(ACC_PRIVATE, SKIN_FIELD_NAME, SKIN_FIELD_DESC, null, null);
         addSetterMethod(classNode, "setSkinChatHead", ClassMapping.NETWORKPLAYERINFO, SKIN_FIELD_NAME, SKIN_FIELD_DESC, null);
 
         // add method :

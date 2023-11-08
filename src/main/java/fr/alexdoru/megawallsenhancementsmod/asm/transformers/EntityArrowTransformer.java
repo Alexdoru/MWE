@@ -16,7 +16,7 @@ public class EntityArrowTransformer implements MWETransformer {
     public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(0);
         addInterface(classNode, "EntityArrowAccessor");
-        classNode.visitField(ACC_PUBLIC, FieldMapping.ENTITYARROW$PINNEDTOPLAYER.name, FieldMapping.ENTITYARROW$PINNEDTOPLAYER.desc, null, 0).visitEnd();
+        classNode.visitField(ACC_PUBLIC, FieldMapping.ENTITYARROW$PINNEDTOPLAYER.name, FieldMapping.ENTITYARROW$PINNEDTOPLAYER.desc, null, 0);
         addGetterMethod(
                 classNode,
                 "isInGround",
