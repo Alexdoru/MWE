@@ -407,12 +407,6 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Gives warning messages in chat for reported players")
     public static boolean warningMessages;
 
-    //public static boolean toggleAutoreport;
-    //public static boolean stopAutoreportAfterWeek;@ConfigProperty(
-    // category = "",
-    // name = "",
-    // comment = "")
-
     @ConfigProperty(
             category = NOCHEATERS,
             name = "Report suggestion",

@@ -25,15 +25,12 @@ public class ReportQueue {
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static final int TIME_BETWEEN_REPORTS_MAX = 5 * 60 * 20;
     private static final int TIME_BETWEEN_REPORTS_MIN = 3 * 60 * 20;
-    private static final int AUTOREPORT_PER_GAME = 2;
 
     private int counter;
     public int standingStillCounter;
     public int standingStillLimit = 35;
     private int movingCounter;
-    private int autoReportSent;
     public final List<ReportInQueue> queueList = new ArrayList<>();
-    private final List<Long> timestampsLastReports = new ArrayList<>();
     private final Set<String> playersReportedThisGame = new HashSet<>();
     private final Random random = new Random();
 
@@ -157,27 +154,6 @@ public class ReportQueue {
         return false;
     }
 
-    /**
-     * Handles the auto report feature
-     *
-     * @return true if it sends a report
-     */
-    public boolean addAutoReportToQueue(long datenow, String playername, WDR wdr) {
-        if (autoReportSent < AUTOREPORT_PER_GAME && wdr.canBeAutoreported(datenow) && wdr.hasValidCheats()) {
-            if (canReportPlayerThisGame(playername)) {
-                wdr.timestamp = datenow;
-                if (isReportQueueInactive()) {
-                    MinecraftForge.EVENT_BUS.register(this);
-                    counter = random.nextInt(TIME_BETWEEN_REPORTS_MAX);
-                }
-                queueList.add(new ReportInQueue(playername));
-                autoReportSent++;
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void addReportFromHackerDetector(String playername, String cheat) {
         if (canReportPlayerThisGame(playername)) {
             PartyDetection.printBoostingReportAdvice(playername);
@@ -204,7 +180,7 @@ public class ReportQueue {
             }
         }
         final String msg = stringBuilder.toString();
-        if (!msg.equals("")) {
+        if (!msg.isEmpty()) {
             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed reports targeting :" + EnumChatFormatting.GOLD + msg);
         }
     }
@@ -220,7 +196,7 @@ public class ReportQueue {
             }
         }
         final String msg = stringBuilder.toString();
-        if (!msg.equals("")) {
+        if (!msg.isEmpty()) {
             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed reports targeting :" + EnumChatFormatting.GOLD + msg);
         }
     }
@@ -236,26 +212,13 @@ public class ReportQueue {
             }
         }
         final String msg = stringBuilder.toString();
-        if (!msg.equals("")) {
+        if (!msg.isEmpty()) {
             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Removed all reports targeting :" + EnumChatFormatting.GOLD + msg);
         }
     }
 
-    /**
-     * Called everytime a report is sent to check that the player doesn't send too many reports in a short time
-     */
-    public void addReportTimestamp(boolean manualReport) {
-        final long l = System.currentTimeMillis();
-        timestampsLastReports.removeIf(o -> (o + 2 * 60 * 1000L < l));
-        if (manualReport && timestampsLastReports.size() > 4) {
-            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Don't report too many players at once or Hypixel will ignore your reports thinking you are a bot trying to flood their system");
-        }
-        timestampsLastReports.add(l);
-    }
-
     public void clearPlayersReportedThisGame() {
         playersReportedThisGame.clear();
-        autoReportSent = 0;
     }
 
     public void addPlayerReportedThisGame(String playername) {
@@ -296,14 +259,6 @@ public class ReportQueue {
         public final boolean isReportSuggestion;
         public final boolean isReportFromHackerDetector;
         public final String cheat;
-
-        public ReportInQueue(String playername) {
-            this.messageSender = null;
-            this.reportedPlayer = playername;
-            this.isReportSuggestion = false;
-            this.isReportFromHackerDetector = false;
-            this.cheat = null;
-        }
 
         public ReportInQueue(String playername, String cheat) {
             this.messageSender = null;

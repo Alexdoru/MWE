@@ -11,7 +11,6 @@ import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.data.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.WarningMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.WdrData;
@@ -28,7 +27,10 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -187,21 +189,17 @@ public class NameUtil {
         }
 
         if (onPlayerJoin && mwPlayerData.wdr != null && mwPlayerData.wdr.transformName()) { // player was reported
-            final long datenow = (new Date()).getTime();
             final String playerName = player.getName();
-            final boolean gotautoreported = ReportQueue.INSTANCE.addAutoReportToQueue(datenow, playerName, mwPlayerData.wdr);
-            if (ConfigHandler.warningMessages || mwPlayerData.wdr.shouldPrintBigText(datenow)) {
+            if (ConfigHandler.warningMessages) {
                 if (!warningMsgPrinted.contains(player.getUniqueID())) {
                     warningMsgPrinted.add(player.getUniqueID());
                     final String uuid = player.getUniqueID().toString().replace("-", "");
                     ChatHandler.deleteWarningMessagesFor(playerName);
                     WarningMessagesHandler.printWarningMessage(
-                            datenow,
                             uuid,
                             (!ScoreboardTracker.isInMwGame || ScoreboardTracker.isPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(player.getTeam(), playerName),
                             playerName,
-                            mwPlayerData.wdr,
-                            gotautoreported
+                            mwPlayerData.wdr
                     );
                 }
             }
@@ -242,17 +240,12 @@ public class NameUtil {
                 iExtraPrefix = isquadprefix;
             } else {
                 if (wdr != null && wdr.transformName()) {
-                    if (wdr.shouldPutGrayIcon()) {
-                        extraPrefix = prefix_old_report;
-                        iExtraPrefix = iprefix_old_report;
+                    if (wdr.shouldPutRedIcon()) {
+                        extraPrefix = prefix_bhop;
+                        iExtraPrefix = iprefix_bhop;
                     } else {
-                        if (wdr.shouldPutRedIcon()) {
-                            extraPrefix = prefix_bhop;
-                            iExtraPrefix = iprefix_bhop;
-                        } else {
-                            extraPrefix = prefix;
-                            iExtraPrefix = iprefix;
-                        }
+                        extraPrefix = prefix;
+                        iExtraPrefix = iprefix;
                     }
                 } else {
                     if (ScangameData.doesPlayerFlag(id)) {
@@ -295,7 +288,7 @@ public class NameUtil {
                     );
                 }
             } else if (mc.thePlayer != null && mc.thePlayer.getName().equals(username)) {
-                if (!ConfigHandler.hypixelNick.equals("")) {
+                if (!ConfigHandler.hypixelNick.isEmpty()) {
                     final ScorePlayerTeam teamNick = mc.theWorld.getScoreboard().getPlayersTeam(ConfigHandler.hypixelNick);
                     if (teamNick != null) {
                         teamColor = StringUtil.getLastColorCharOf(teamNick.getColorPrefix());
