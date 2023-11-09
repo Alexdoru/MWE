@@ -27,7 +27,7 @@ public class EntityOtherPlayerMPTransformer_PositionTracker implements MWETransf
                 list.add(new VarInsnNode(FLOAD, 8));
                 list.add(new MethodInsnNode(
                         INVOKESTATIC,
-                        getHookClass("EntityOtherPlayerMPHook_PositionTracker"),
+                        getHookClass("EntityOtherPlayerMPHook"),
                         "setPositionAndRotation",
                         "(L" + ClassMapping.ENTITYOTHERPLAYERMP + ";DDDFF)V",
                         false
