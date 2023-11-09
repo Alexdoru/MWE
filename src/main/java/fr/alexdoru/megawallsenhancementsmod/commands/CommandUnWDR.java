@@ -59,20 +59,10 @@ public class CommandUnWDR extends MyAbstractCommand {
             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list.");
             return;
         }
-        this.removeOrUpdateWDR(wdr, uuid);
+        WdrData.remove(uuid);
         ChatHandler.deleteWarningMessagesFor(playername);
         NameUtil.updateMWPlayerDataAndEntityData(playername, false);
         ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + ".");
-    }
-
-    private void removeOrUpdateWDR(WDR wdr, String uuid) {
-        if (wdr.isIgnored()) {
-            wdr.hacks.clear();
-            wdr.hacks.add(WDR.IGNORED);
-            wdr.hacks.trimToSize();
-        } else {
-            WdrData.remove(uuid);
-        }
     }
 
 }

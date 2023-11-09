@@ -14,13 +14,14 @@ public class WdrData {
 
     private static final Logger logger = LogManager.getLogger("NoCheaters");
     private static final long TIME_TRANSFORM_NICKED_REPORT = 86400000L; // 24hours
-    private static final long TIME_TRANSFORM_TIMESTAMPED_REPORT = 14L * 24L * 60L * 60L * 1000L; //14 days
     private static final Map<String, WDR> wdrMap = new HashMap<>();
     /**
      * In the wdred file the data is saved with the following pattern
      * uuid timestamp timeLastManualReport hack1 hack2 hack3 hack4 hack5
      */
     private static File wdrsFile;
+    // used for backwards compat
+    private static final String IGNORED = "ignored";
 
     public static void init() {
         wdrsFile = new File(Minecraft.getMinecraft().mcDataDir, "config/wdred.txt");
@@ -106,10 +107,7 @@ public class WdrData {
                     }
 
                     if (ConfigHandler.deleteOldReports && datenow > timestamp + ConfigHandler.timeDeleteReport * 24f * 3600f * 1000f) {
-                        final ArrayList<String> hacks = transformOldReports(Arrays.copyOfRange(split, oldDataFormat ? 2 : 3, split.length));
-                        if (hacks.isEmpty()) {
-                            continue;
-                        }
+                        continue;
                     }
 
                     final ArrayList<String> hacks = filterTimestampedReports(
@@ -117,6 +115,11 @@ public class WdrData {
                     );
 
                     if (hacks.contains(WDR.NICK) && (datenow > timestamp + TIME_TRANSFORM_NICKED_REPORT)) {
+                        continue;
+                    }
+
+                    // remove reports for players that are only ignored
+                    if (hacks.remove(IGNORED) && hacks.isEmpty()) {
                         continue;
                     }
 
@@ -131,18 +134,6 @@ public class WdrData {
             logger.error("Failed to read the wdr file");
         }
 
-    }
-
-    /**
-     * Deletes old reports exept if they are ignored players
-     */
-    private static ArrayList<String> transformOldReports(String[] split) {
-        final ArrayList<String> hacks = new ArrayList<>();
-        final List<String> splitList = Arrays.asList(split);
-        if (splitList.contains(WDR.IGNORED) && !splitList.contains(WDR.NICK)) {
-            hacks.add(WDR.IGNORED);
-        }
-        return hacks;
     }
 
     /**

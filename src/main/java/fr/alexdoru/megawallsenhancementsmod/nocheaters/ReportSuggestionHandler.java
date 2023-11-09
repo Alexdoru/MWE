@@ -126,12 +126,11 @@ public class ReportSuggestionHandler {
         boolean isSenderInTablist = false;
         boolean isSenderNicked = false;
         boolean isSenderFlaging = false;
-        boolean isSenderIgnored = false;
         boolean isSenderCheating = false;
-        /*Only accepts MVP, MVP+, MVP++*/
+        /*Only accepts VIP+, MVP, MVP+, MVP++*/
         boolean isSenderRankValid = false;
 
-        String senderUUID = null;
+        final String senderUUID;
 
         if (isSenderMyself) {
 
@@ -148,7 +147,6 @@ public class ReportSuggestionHandler {
                 isSenderFlaging = ScangameData.doesPlayerFlag(id);
                 final WDR wdr = WdrData.getWdr(senderUUID, messageSender);
                 if (wdr != null) {
-                    isSenderIgnored = wdr.isIgnored();
                     isSenderCheating = wdr.hasValidCheats();
                 }
             }
@@ -166,7 +164,6 @@ public class ReportSuggestionHandler {
                 isSenderMyself,
                 isTargetMyself,
                 isSenderInTablist,
-                isSenderIgnored,
                 isSenderCheating,
                 isSenderFlaging,
                 isSenderRankValid);
@@ -181,11 +178,10 @@ public class ReportSuggestionHandler {
                 isSenderMyself,
                 isTargetMyself,
                 isSenderInTablist,
-                isSenderIgnored,
                 isSenderCheating,
                 isSenderFlaging,
-                gotAutoreported,
-                senderUUID);
+                gotAutoreported
+        );
 
     }
 
@@ -196,7 +192,6 @@ public class ReportSuggestionHandler {
             boolean isSenderMyself,
             boolean isTargetMyself,
             boolean isSenderInTablist,
-            boolean isSenderIgnored,
             boolean isSenderCheating,
             boolean isSenderFlaging,
             boolean isSenderRankValid) {
@@ -204,7 +199,6 @@ public class ReportSuggestionHandler {
         if (!ConfigHandler.autoreportSuggestions ||
                 !isSenderInTablist ||
                 messageSender == null ||
-                isSenderIgnored ||
                 isSenderCheating ||
                 !ScoreboardTracker.isInMwGame ||
                 isTargetMyself) {
@@ -297,18 +291,16 @@ public class ReportSuggestionHandler {
             boolean isSenderMyself,
             boolean isTargetMyself,
             boolean isSenderInTablist,
-            boolean isSenderIgnored,
             boolean isSenderCheating,
             boolean isSenderFlaging,
-            boolean gotAutoreported,
-            @Nullable String senderUUID) {
+            boolean gotAutoreported) {
 
         if (!ConfigHandler.reportSuggestions) {
             event.message = getIChatComponentWithSquadnameAsSender(fmsg, messageSender, squadname);
             return;
         }
 
-        if (!isSenderIgnored && !isSenderCheating && !isSenderFlaging) {
+        if (!isSenderCheating && !isSenderFlaging) {
             SoundUtil.playReportSuggestionSound();
         }
 
@@ -317,11 +309,6 @@ public class ReportSuggestionHandler {
             final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
             addButtons(imsg, reportedPlayer, cheat, isSenderMyself, isTargetMyself, gotAutoreported);
             event.message = imsg;
-            return;
-        }
-
-        if (isSenderIgnored) {
-            event.message = new ChatComponentText(StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.GRAY + " (Ignored)", EnumChatFormatting.GRAY + EnumChatFormatting.STRIKETHROUGH.toString(), true));
             return;
         }
 
@@ -400,7 +387,7 @@ public class ReportSuggestionHandler {
     }
 
     private static boolean isPlayerMyself(@Nullable String name) {
-        return (mc.thePlayer != null && mc.thePlayer.getName().equalsIgnoreCase(name)) || (!ConfigHandler.hypixelNick.equals("") && ConfigHandler.hypixelNick.equals(name));
+        return (mc.thePlayer != null && mc.thePlayer.getName().equalsIgnoreCase(name)) || (!ConfigHandler.hypixelNick.isEmpty() && ConfigHandler.hypixelNick.equals(name));
     }
 
     private static void clearReportSuggestionHistory() {

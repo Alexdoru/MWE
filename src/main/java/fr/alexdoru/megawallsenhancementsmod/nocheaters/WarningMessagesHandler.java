@@ -32,14 +32,12 @@ public class WarningMessagesHandler {
                 continue;
             }
             foundReport = true;
-            if (wdr.transformName()) {
-                printWarningMessage(
-                        uuid,
-                        (!ScoreboardTracker.isInMwGame || ScoreboardTracker.isPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playerName),
-                        playerName,
-                        wdr
-                );
-            }
+            printWarningMessage(
+                    uuid,
+                    (!ScoreboardTracker.isInMwGame || ScoreboardTracker.isPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playerName),
+                    playerName,
+                    wdr
+            );
         }
         if (callFromCommand && !foundReport) {
             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "No reported player here !");
