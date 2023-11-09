@@ -35,6 +35,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new CommandHandlerTransformer());
         registerTransformer(new EntityArrowTransformer());
         registerTransformer(new EntityFXTransformer());
+        registerTransformer(new EntityOtherPlayerMPTransformer_FixAutoblockBypass());
         registerTransformer(new EntityPlayerTransformer());
         registerTransformer(new EntityPlayerSPTransformer_CommandListener());
         //registerTransformer(new EntityPlayerSPTransformer_HealthListener());
