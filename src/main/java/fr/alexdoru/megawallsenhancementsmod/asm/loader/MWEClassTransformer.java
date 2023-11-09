@@ -34,9 +34,9 @@ public class MWEClassTransformer implements IClassTransformer {
         registerTransformer(new ChatComponentTextTransformer_ChatHeads());
         registerTransformer(new CommandHandlerTransformer_CaseCommand());
         registerTransformer(new EntityArrowTransformer());
-        registerTransformer(new EntityOtherPlayerMPTransformer_FixAutoblockBypass());
         registerTransformer(new EntityFXTransformer_ClearView());
         registerTransformer(new EntityLivingBaseTransformer_RotationTracker());
+        registerTransformer(new EntityOtherPlayerMPTransformer_FixAutoblockBypass());
         registerTransformer(new EntityOtherPlayerMPTransformer_PositionTracker());
         registerTransformer(new EntityPlayerTransformer());
         registerTransformer(new EntityPlayerSPTransformer_CommandListener());
