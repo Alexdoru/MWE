@@ -4,24 +4,10 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import java.util.HashSet;
-import java.util.Set;
+import net.minecraft.item.ItemSword;
 
 public class AutoblockCheck extends AbstractCheck {
-
-    private static final Set<Item> swordSet = new HashSet<>();
-
-    static {
-        swordSet.add(Items.wooden_sword);
-        swordSet.add(Items.stone_sword);
-        swordSet.add(Items.golden_sword);
-        swordSet.add(Items.iron_sword);
-        swordSet.add(Items.diamond_sword);
-    }
 
     @Override
     public String getCheatName() {
@@ -47,17 +33,15 @@ public class AutoblockCheck extends AbstractCheck {
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
         if (data.hasAttacked) {
             final ItemStack itemStack = player.getHeldItem();
-            if (itemStack != null) {
-                if (swordSet.contains(itemStack.getItem())) {
-                    if (data.useItemTime > 5) {
-                        data.autoblockVL.add(1);
-                        if (ConfigHandler.debugLogging) {
-                            this.log(player, data, data.autoblockVL, "useItemTime " + data.useItemTime + " target " + data.targetedPlayer.getName());
-                        }
-                        return true;
-                    } else {
-                        data.autoblockVL.substract(1);
+            if (itemStack != null && itemStack.getItem() instanceof ItemSword) {
+                if (data.useItemTime > 5) {
+                    data.autoblockVL.add(1);
+                    if (ConfigHandler.debugLogging) {
+                        this.log(player, data, data.autoblockVL, "useItemTime " + data.useItemTime + " target " + data.targetedPlayer.getName());
                     }
+                    return true;
+                } else {
+                    data.autoblockVL.substract(1);
                 }
             }
         }
