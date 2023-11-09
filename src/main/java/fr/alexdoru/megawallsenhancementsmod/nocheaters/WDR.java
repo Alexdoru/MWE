@@ -11,7 +11,6 @@ import java.util.ArrayList;
 public class WDR implements Comparable<WDR> {
 
     public static final String NICK = "nick";
-    public static final String IGNORED = "ignored";
 
     public long timestamp;
     public long timeLastManualReport;
@@ -32,10 +31,6 @@ public class WDR implements Comparable<WDR> {
         return Long.compare(this.timestamp, wdr.timestamp);
     }
 
-    public boolean transformName() {
-        return !(hacks.size() == 1 && hacks.contains(IGNORED));
-    }
-
     public boolean shouldPutRedIcon() {
         for (final String s : this.hacks) {
             if (s.startsWith("bhop")
@@ -48,17 +43,8 @@ public class WDR implements Comparable<WDR> {
         return false;
     }
 
-    public boolean isOnlyIgnored() {
-        return hacks.size() == 1 && hacks.contains(IGNORED);
-    }
-
     public boolean isNicked() {
         return hacks.contains(NICK);
-    }
-
-    public boolean isIgnored() {
-        return false;
-        //return hacks.contains(IGNORED);
     }
 
     public boolean hasValidCheats() {
@@ -88,7 +74,7 @@ public class WDR implements Comparable<WDR> {
                 allCheats.appendText(" " + EnumChatFormatting.DARK_RED + hack);
             } else if (hack.equalsIgnoreCase(WDR.NICK)) {
                 allCheats.appendText(" " + EnumChatFormatting.DARK_PURPLE + hack);
-            } else if (!hack.equals(WDR.IGNORED)) {
+            } else {
                 allCheats.appendText(" " + EnumChatFormatting.GOLD + hack);
             }
         }

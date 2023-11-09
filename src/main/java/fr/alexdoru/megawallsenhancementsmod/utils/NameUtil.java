@@ -188,7 +188,7 @@ public class NameUtil {
             player.addPrefix(mwPlayerData.extraPrefix);
         }
 
-        if (onPlayerJoin && mwPlayerData.wdr != null && mwPlayerData.wdr.transformName()) { // player was reported
+        if (onPlayerJoin && mwPlayerData.wdr != null) {
             final String playerName = player.getName();
             if (ConfigHandler.warningMessages) {
                 if (!warningMsgPrinted.contains(player.getUniqueID())) {
@@ -239,7 +239,7 @@ public class NameUtil {
                 extraPrefix = squadprefix;
                 iExtraPrefix = isquadprefix;
             } else {
-                if (wdr != null && wdr.transformName()) {
+                if (wdr != null) {
                     if (wdr.shouldPutRedIcon()) {
                         extraPrefix = prefix_bhop;
                         iExtraPrefix = iprefix_bhop;
