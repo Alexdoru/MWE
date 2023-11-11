@@ -145,11 +145,11 @@ public class ChatListener {
             }
 
             final Matcher matcher = MESSAGE_PATTERN.matcher(msg);
-            String senderRank = null;
+            //String senderRank = null;
             String messageSender = null;
             String squadname = null;
             if (matcher.matches()) {
-                senderRank = matcher.group(1);
+                //senderRank = matcher.group(1);
                 messageSender = matcher.group(2);
                 squadname = SquadHandler.getSquad().get(messageSender);
             }
@@ -161,7 +161,7 @@ public class ChatListener {
                 return;
             }
 
-            if (ReportSuggestionHandler.parseReportMessage(event, senderRank, messageSender, squadname, msg, fmsg)) {
+            if (ReportSuggestionHandler.parseReportMessage(event, messageSender, squadname, msg, fmsg)) {
                 ChatUtil.addSkinToComponent(event.message, messageSender);
                 return;
             }

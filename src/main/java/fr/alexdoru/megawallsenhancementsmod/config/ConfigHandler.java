@@ -413,8 +413,6 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Give report suggestions in the chat based on messages in shouts")
     public static boolean reportSuggestions = true;
 
-    public static boolean autoreportSuggestions = false;
-
     @ConfigProperty(
             category = NOCHEATERS,
             name = "Delete Old Report",
