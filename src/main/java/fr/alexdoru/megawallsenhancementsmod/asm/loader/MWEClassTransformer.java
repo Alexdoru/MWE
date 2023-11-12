@@ -10,10 +10,14 @@ import org.apache.commons.io.FileUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.util.ASMifier;
+import org.objectweb.asm.util.Textifier;
+import org.objectweb.asm.util.TraceClassVisitor;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -165,28 +169,49 @@ public class MWEClassTransformer implements IClassTransformer {
     }
 
     private void saveTransformedClass(final byte[] data, final String transformedName) {
-        if (ASMLoadingPlugin.isObf()) {
+        if (!ASMLoadingPlugin.dumpClasses()) {
             return;
         }
         if (outputDir == null) {
             emptyClassOutputFolder();
         }
-        final File outFile = new File(outputDir, transformedName.replace('.', File.separatorChar) + ".class");
-        final File outDir = outFile.getParentFile();
+        final String fileName = transformedName.replace('.', File.separatorChar);
+        final File classFile = new File(outputDir, fileName + ".class");
+        final File bytecodeFile = new File(outputDir, fileName + "_BYTE.txt");
+        final File asmifiedFile = new File(outputDir, fileName + "_ASM.txt");
+        final File outDir = classFile.getParentFile();
         if (!outDir.exists()) {
             //noinspection ResultOfMethodCallIgnored
             outDir.mkdirs();
         }
-        if (outFile.exists()) {
+        if (classFile.exists()) {
             //noinspection ResultOfMethodCallIgnored
-            outFile.delete();
+            classFile.delete();
         }
-        try {
-            final OutputStream output = Files.newOutputStream(outFile.toPath());
+        try (final OutputStream output = Files.newOutputStream(classFile.toPath())) {
             output.write(data);
-            output.close();
         } catch (IOException e) {
-            ASMLoadingPlugin.logger.error("Could not save transformed class " + transformedName, e);
+            ASMLoadingPlugin.logger.error("Could not save transformed class (byte[]) " + transformedName, e);
+        }
+        if (bytecodeFile.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            bytecodeFile.delete();
+        }
+        try (final OutputStream output = Files.newOutputStream(bytecodeFile.toPath())) {
+            final ClassReader classReader = new ClassReader(data);
+            classReader.accept(new TraceClassVisitor(null, new Textifier(), new PrintWriter(output)), 0);
+        } catch (IOException e) {
+            ASMLoadingPlugin.logger.error("Could not save transformed class (bytecode) " + transformedName, e);
+        }
+        if (asmifiedFile.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            asmifiedFile.delete();
+        }
+        try (final OutputStream output = Files.newOutputStream(asmifiedFile.toPath())) {
+            final ClassReader classReader = new ClassReader(data);
+            classReader.accept(new TraceClassVisitor(null, new ASMifier(), new PrintWriter(output)), 0);
+        } catch (IOException e) {
+            ASMLoadingPlugin.logger.error("Could not save transformed class (ASM) " + transformedName, e);
         }
     }
 
