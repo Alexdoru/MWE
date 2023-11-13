@@ -8,6 +8,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.RateLimitException;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import net.minecraft.client.Minecraft;
 
@@ -43,7 +44,12 @@ public class HttpClient {
                     if (status == 400) {
                         throw new ApiException("Missing one or more fields");
                     } else if (status == 403) {
-                        Minecraft.getMinecraft().addScheduledTask(HypixelApiKeyUtil::deleteApiKey);
+                        Minecraft.getMinecraft().addScheduledTask(() -> {
+                            ConfigHandler.prestigeV = false;
+                            ConfigHandler.APIKey = "";
+                            ConfigHandler.saveConfig();
+                            return null;
+                        });
                         throw new ApiException("Invalid API key");
                     } else if (status == 404) {
                         throw new ApiException("Page not found");

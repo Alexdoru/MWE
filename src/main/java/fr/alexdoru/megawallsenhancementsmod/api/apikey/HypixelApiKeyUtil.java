@@ -16,13 +16,8 @@ public class HypixelApiKeyUtil {
         ConfigHandler.saveConfig();
     }
 
-    public static void deleteApiKey() {
-        ConfigHandler.APIKey = "";
-        ConfigHandler.saveConfig();
-    }
-
     public static boolean apiKeyIsNotSetup() {
-        return ConfigHandler.APIKey == null || ConfigHandler.APIKey.equals("");
+        return ConfigHandler.APIKey == null || ConfigHandler.APIKey.isEmpty();
     }
 
 }
