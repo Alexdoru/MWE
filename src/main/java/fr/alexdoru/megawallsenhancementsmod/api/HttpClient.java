@@ -70,13 +70,13 @@ public class HttpClient {
                 throw new ApiException("Http error code : " + status);
             }
 
-            final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
             final StringBuilder responseContent = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                responseContent.append(line);
+            try (final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    responseContent.append(line);
+                }
             }
-            reader.close();
 
             if (url.contains("api.github.com")) {
                 final JsonElement element = new JsonParser().parse(responseContent.toString());
