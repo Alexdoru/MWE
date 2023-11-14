@@ -55,12 +55,10 @@ public class AliasData {
     }
 
     private static void writeDataToFile() {
-        try {
+        try (final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(aliasDataFile))) {
             final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
             final String jsonString = gson.toJson(aliasMap);
-            final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(aliasDataFile));
             bufferedWriter.write(jsonString);
-            bufferedWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

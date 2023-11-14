@@ -62,14 +62,12 @@ public class WdrData {
     }
 
     private static void saveReportedPlayers() {
-        try {
-            final BufferedWriter writer = new BufferedWriter(new FileWriter(wdrsFile));
+        try (final BufferedWriter writer = new BufferedWriter(new FileWriter(wdrsFile))) {
             for (final Entry<String, WDR> entry : wdrMap.entrySet()) {
                 final String uuid = entry.getKey();
                 final WDR wdr = entry.getValue();
                 writer.write(uuid + " " + wdr.timestamp + " " + wdr.timeLastManualReport + wdr.hacksToString() + "\n");
             }
-            writer.close();
         } catch (IOException e) {
             logger.error("Failed to write data to the wdr file");
         }
@@ -80,10 +78,9 @@ public class WdrData {
             logger.info("Couldn't find existing wdr file");
             return;
         }
-        try {
+        try (final BufferedReader reader = new BufferedReader(new FileReader(wdrsFile))) {
 
             final long datenow = (new Date()).getTime();
-            final BufferedReader reader = new BufferedReader(new FileReader(wdrsFile));
 
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 final String[] split = line.split(" ");
@@ -127,8 +124,6 @@ public class WdrData {
 
                 }
             }
-
-            reader.close();
 
         } catch (Exception e) {
             logger.error("Failed to read the wdr file");
