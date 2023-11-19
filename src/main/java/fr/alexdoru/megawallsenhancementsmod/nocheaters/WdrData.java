@@ -66,7 +66,7 @@ public class WdrData {
             for (final Entry<String, WDR> entry : wdrMap.entrySet()) {
                 final String uuid = entry.getKey();
                 final WDR wdr = entry.getValue();
-                writer.write(uuid + " " + wdr.timestamp + " " + wdr.timeLastManualReport + wdr.hacksToString() + "\n");
+                writer.write(uuid + " " + wdr.time + wdr.hacksToString() + "\n");
             }
         } catch (IOException e) {
             logger.error("Failed to write data to the wdr file");
@@ -89,14 +89,12 @@ public class WdrData {
                     boolean oldDataFormat = false;
                     final String uuid = split[0];
                     long timestamp = 0L;
-                    long timeManualReport = 0L;
 
                     try {
                         timestamp = Long.parseLong(split[1]);
                         try {
-                            timeManualReport = Long.parseLong(split[2]);
+                            Long.parseLong(split[2]);
                         } catch (Exception e) {
-                            timeManualReport = timestamp;
                             oldDataFormat = true;
                         }
                     } catch (Exception e) {
@@ -120,7 +118,7 @@ public class WdrData {
                         continue;
                     }
 
-                    wdrMap.put(uuid, new WDR(timestamp, timeManualReport, hacks));
+                    wdrMap.put(uuid, new WDR(timestamp, hacks));
 
                 }
             }
