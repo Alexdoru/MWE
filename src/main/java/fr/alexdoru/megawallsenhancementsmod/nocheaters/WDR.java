@@ -12,13 +12,11 @@ public class WDR implements Comparable<WDR> {
 
     public static final String NICK = "nick";
 
-    public long timestamp;
-    public long timeLastManualReport;
+    public long time;
     public final ArrayList<String> hacks;
 
-    public WDR(long timestamp, long timeLastManualReport, ArrayList<String> hacks) {
-        this.timestamp = timestamp;
-        this.timeLastManualReport = timeLastManualReport;
+    public WDR(long time, ArrayList<String> hacks) {
+        this.time = time;
         this.hacks = hacks;
         this.hacks.trimToSize();
     }
@@ -28,7 +26,7 @@ public class WDR implements Comparable<WDR> {
      */
     @Override
     public int compareTo(@Nonnull WDR wdr) {
-        return Long.compare(this.timestamp, wdr.timestamp);
+        return Long.compare(this.time, wdr.time);
     }
 
     public boolean shouldPutRedIcon() {

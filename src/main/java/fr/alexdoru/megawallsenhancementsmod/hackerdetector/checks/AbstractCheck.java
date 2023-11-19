@@ -96,7 +96,7 @@ public abstract class AbstractCheck implements ICheck {
                 if (isNicked) {
                     hacks.add(WDR.NICK);
                 }
-                WdrData.put(uuidStr, new WDR(time, time, hacks));
+                WdrData.put(uuidStr, new WDR(time, hacks));
             } else {
                 if (isNicked && !wdr.hacks.contains(WDR.NICK)) {
                     wdr.hacks.add(WDR.NICK);
@@ -104,7 +104,7 @@ public abstract class AbstractCheck implements ICheck {
                 if (!wdr.hacks.contains(cheat)) {
                     wdr.hacks.add(cheat);
                 }
-                wdr.timestamp = (new Date()).getTime();
+                wdr.time = new Date().getTime();
                 wdr.hacks.trimToSize();
             }
             NameUtil.updateMWPlayerDataAndEntityData(player, false);

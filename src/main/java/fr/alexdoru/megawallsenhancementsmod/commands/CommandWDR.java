@@ -165,7 +165,7 @@ public class CommandWDR extends MyAbstractCommand {
         final WDR wdr = WdrData.getWdr(uuid);
 
         if (wdr == null) {
-            WdrData.put(uuid, new WDR(time, time, cheats));
+            WdrData.put(uuid, new WDR(time, cheats));
         } else {
             cheats.removeAll(wdr.hacks);
             wdr.hacks.addAll(cheats);

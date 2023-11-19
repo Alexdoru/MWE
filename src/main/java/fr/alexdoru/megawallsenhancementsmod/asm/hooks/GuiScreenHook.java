@@ -51,9 +51,7 @@ public class GuiScreenHook {
         final WDR wdr = WdrData.getWdr(uuid);
         if (wdr != null) {
             if (wdr.hasValidCheats()) {
-                final long time = (new Date()).getTime();
-                wdr.timestamp = time;
-                wdr.timeLastManualReport = time;
+                wdr.time = new Date().getTime();
                 if (Minecraft.getMinecraft().thePlayer != null) {
                     Minecraft.getMinecraft().thePlayer.sendChatMessage("/wdr " + playername);
                 }
