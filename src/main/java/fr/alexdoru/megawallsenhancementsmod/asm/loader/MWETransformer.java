@@ -103,7 +103,7 @@ public interface MWETransformer extends Opcodes {
     }
 
     default MethodInsnNode getNewMethodInsnNode(MethodMapping method) {
-        return new MethodInsnNode(method.opcode, method.owner, method.name, method.desc, false);
+        return new MethodInsnNode(method.opcode, method.owner, method.name, method.desc, method.opcode == INVOKEINTERFACE);
     }
 
     default FieldInsnNode getNewFieldInsnNode(int opcode, FieldMapping field) {
