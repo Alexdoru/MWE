@@ -7,11 +7,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 
-public class AutoblockCheck extends AbstractCheck {
+public class AutoblockCheckB extends AbstractCheck {
 
     @Override
     public String getCheatName() {
         return "Autoblock";
+    }
+
+    @Override
+    public String getFlagType() {
+        return "B";
     }
 
     @Override
@@ -26,7 +31,7 @@ public class AutoblockCheck extends AbstractCheck {
 
     @Override
     public void performCheck(EntityPlayer player, PlayerDataSamples data) {
-        super.checkViolationLevel(player, this.check(player, data), data.autoblockVL);
+        super.checkViolationLevel(player, this.check(player, data), data.autoblockBVL);
     }
 
     @Override
@@ -35,13 +40,13 @@ public class AutoblockCheck extends AbstractCheck {
             final ItemStack itemStack = player.getHeldItem();
             if (itemStack != null && itemStack.getItem() instanceof ItemSword) {
                 if (data.useItemTime > 5) {
-                    data.autoblockVL.add(1);
+                    data.autoblockBVL.add(1);
                     if (ConfigHandler.debugLogging) {
-                        this.log(player, data, data.autoblockVL, "useItemTime " + data.useItemTime + " target " + data.targetedPlayer.getName());
+                        this.log(player, data, data.autoblockBVL, "useItemTime " + data.useItemTime + " target " + data.targetedPlayer.getName());
                     }
                     return true;
                 } else {
-                    data.autoblockVL.substract(1);
+                    data.autoblockBVL.substract(1);
                 }
             }
         }

@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 
-public class AutoblockCheckOld extends AbstractCheck {
+public class AutoblockCheckA extends AbstractCheck {
 
     @Override
     public String getCheatName() {
@@ -16,7 +16,7 @@ public class AutoblockCheckOld extends AbstractCheck {
 
     @Override
     public String getFlagType() {
-        return "Old";
+        return "A";
     }
 
     @Override
@@ -26,25 +26,22 @@ public class AutoblockCheckOld extends AbstractCheck {
 
     @Override
     public boolean canSendReport() {
-        return false;
+        return true;
     }
 
     @Override
     public void performCheck(EntityPlayer player, PlayerDataSamples data) {
-        super.checkViolationLevel(player, this.check(player, data), data.autoblockVLOld);
+        super.checkViolationLevel(player, this.check(player, data), data.autoblockAVL);
     }
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        if (data.isNotMovingXZ()) {
-            return false;
-        }
         final ItemStack itemStack = player.getHeldItem();
         if (itemStack != null) {
             if (itemStack.getItem() instanceof ItemSword) {
                 if (player.isSwingInProgress && data.useItemTime > 20) {
                     if (ConfigHandler.debugLogging) {
-                        this.log(player, data, data.autoblockVLOld, "useItemTime " + data.useItemTime);
+                        this.log(player, data, data.autoblockAVL, "useItemTime " + data.useItemTime);
                     }
                     return true;
                 }

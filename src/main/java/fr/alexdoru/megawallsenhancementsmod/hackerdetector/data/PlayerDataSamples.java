@@ -66,8 +66,8 @@ public class PlayerDataSamples {
     /** Last time the player broke a block */
     public long lastBreakBlockTime = System.currentTimeMillis();
     public final SampleListF breakTimeRatio = new SampleListF(8);
-    public final ViolationLevelTracker autoblockVL = AutoblockCheck.newViolationTracker();
-    public final ViolationLevelTracker autoblockVLOld = AutoblockCheckOld.newViolationTracker();
+    public final ViolationLevelTracker autoblockAVL = AutoblockCheckA.newViolationTracker();
+    public final ViolationLevelTracker autoblockBVL = AutoblockCheckB.newViolationTracker();
     public final ViolationLevelTracker fastbreakVL = FastbreakCheck.newViolationTracker();
     public final ViolationLevelTracker keepsprintVL = KeepsprintCheck.newViolationTracker();
     public final ViolationLevelTracker killAuraVL = KillAuraCheck.newViolationTracker();
