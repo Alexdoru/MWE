@@ -46,7 +46,7 @@ public class CommandScanGame extends MyAbstractCommand {
             return;
         }
         final String currentGameId = ScoreboardUtils.getGameIdFromScoreboard();
-        if (currentGameId.equals("?")) {
+        if (currentGameId == null) {
             sendChatMessage("/locraw");
             ChatListener.interceptLocrawAndRunScangame();
         } else {
@@ -57,6 +57,7 @@ public class CommandScanGame extends MyAbstractCommand {
     public static void handleScangameCommand(String currentGameId) {
         if (!currentGameId.equals(ScangameData.getScanGameId())) {
             ScangameData.clearScanGameData();
+            if (ScoreboardTracker.isPreGameLobby) ScangameData.clearRandomKits();
             ScangameData.setScanGameId(currentGameId);
         }
         int i = 0;
@@ -75,22 +76,20 @@ public class CommandScanGame extends MyAbstractCommand {
         }
 
         final ScangameData.ScanResult scanResult = ScangameData.get(uuid);
+        final boolean doRandomKitCheck = isMythicHourInPreGameLobby && NameUtil.isPlayerUsingRandom(netInfo) || ScangameData.didPlayerPickRandom(uuid);
         if (scanResult != null) {
             if (scanResult.msg != null) {
                 addScanMessageToChat(netInfo, scanResult.msg);
                 return false;
-            } else if (scanResult.isLowLevelAccount()) {
-                if (isMythicHourInPreGameLobby && NameUtil.isPlayerUsingRandom(netInfo)) {
-                    addScanMessageToChat(netInfo, getMythicRandomMsg(scanResult.networkLvl, scanResult.questamount));
-                } else if (ScangameData.didPlayerPickRandom(uuid)) {
-                    scanResult.msg = getMythicRandomMsg(scanResult.networkLvl, scanResult.questamount);
-                    addScanMessageToChat(netInfo, scanResult.msg);
-                }
+            } else if (scanResult.isLowLevelAccount() && doRandomKitCheck) {
+                scanResult.msg = getMythicRandomMsg(scanResult.networkLvl, scanResult.questamount);
+                addScanMessageToChat(netInfo, scanResult.msg);
+                NameUtil.updateMWPlayerDataAndEntityData(netInfo, false);
             }
             return false;
         }
 
-        fetchPlayerData(netInfo, isMythicHourInPreGameLobby && NameUtil.isPlayerUsingRandom(netInfo));
+        fetchPlayerData(netInfo, doRandomKitCheck);
         return true;
 
     }

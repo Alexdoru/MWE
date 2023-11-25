@@ -189,7 +189,7 @@ public class ScoreboardUtils {
     public static String getGameIdFromScoreboard() {
         final List<String> scoresRaw = getUnformattedSidebarText();
         if (scoresRaw.isEmpty()) {
-            return "?";
+            return null;
         }
         for (final String line : scoresRaw) {
             final Matcher matcher = ScoreboardParser.GAME_ID_PATTERN.matcher(line);
@@ -197,7 +197,7 @@ public class ScoreboardUtils {
                 return matcher.group(1);
             }
         }
-        return "?";
+        return null;
     }
 
 }
