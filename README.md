@@ -119,7 +119,7 @@ Detects players using certain cheats and warns you about those players. It can a
 - **Autoblock check**
 - **Fastbreak check**
 - **Keepsprint check**
-- **Noslodown check**
+- **Noslowdown check**
 
 ### NoCheaters:
 
