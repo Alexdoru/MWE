@@ -11,7 +11,6 @@ import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.*;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.AbstractCheck;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.GameInfoTracker;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportSuggestionHandler;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.WdrData;
@@ -84,7 +83,6 @@ public class ChatListener {
             }
 
             if (!ScoreboardTracker.isInMwGame && msg.equals(GENERAL_START_MESSAGE)) {
-                GameInfoTracker.saveGameInfoOnGameStart();
                 SquadHandler.formSquad();
                 AbstractCheck.clearFlagMessages();
                 ScangameData.fectchRandomClasses();
