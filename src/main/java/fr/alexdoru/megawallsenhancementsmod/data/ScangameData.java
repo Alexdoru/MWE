@@ -36,12 +36,15 @@ public class ScangameData {
     public static void clearScanGameData() {
         scanGameId = null;
         scangameMap.clear();
+    }
+
+    public static void clearRandomKits() {
         randomKitSet.clear();
     }
 
     private static void onGameStart() {
         final String currentGameId = ScoreboardUtils.getGameIdFromScoreboard();
-        if (!currentGameId.equals("?") && !currentGameId.equals(scanGameId)) {
+        if (currentGameId != null && !currentGameId.equals(scanGameId)) {
             clearScanGameData();
         }
     }
