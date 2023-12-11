@@ -139,7 +139,7 @@ public class FastbreakCheck extends AbstractCheck {
     }
 
     public static ViolationLevelTracker newViolationTracker() {
-        return new ViolationLevelTracker(15);
+        return new ViolationLevelTracker(20);
     }
 
     /**
