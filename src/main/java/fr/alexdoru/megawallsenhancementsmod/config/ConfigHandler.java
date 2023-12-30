@@ -269,6 +269,12 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Renders heads of players in front of chat messages")
     public static boolean chatHeads = true;
 
+    @ConfigProperty(
+            category = MWENHANCEMENTS,
+            name = "Hide Optifine Hats",
+            comment = "Stops rendering the hats added by Optifine")
+    public static boolean hideOptifineHats;
+
     /**
      * HUD config
      */

@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.loader;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.*;
+import fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods.OptifinePlayerItemsLayerTransformer_RemoveHats;
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods.OrangeSprintRendererTransformer_HideHUD;
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods.SidebarmodReloadedTransformer_CustomSidebarLines;
 import fr.alexdoru.megawallsenhancementsmod.asm.transformers.externalmods.SidebarmodRevampTransformer_CustomSidebarLines;
@@ -90,6 +91,7 @@ public class MWEClassTransformer implements IClassTransformer {
         registerTransformer(new S19PacketEntityStatusTransformer());
         registerTransformer(new ScoreboardTransformer());
         registerTransformer(new ScorePlayerTeamTransformer());
+        registerTransformer(new OptifinePlayerItemsLayerTransformer_RemoveHats());
         registerTransformer(new OrangeSprintRendererTransformer_HideHUD());
         registerTransformer(new SidebarmodReloadedTransformer_CustomSidebarLines());
         registerTransformer(new SidebarmodRevampTransformer_CustomSidebarLines());
