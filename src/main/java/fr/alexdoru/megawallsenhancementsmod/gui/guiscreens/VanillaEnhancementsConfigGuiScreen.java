@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.gui.elements.*;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.config.GuiSlider;
 import net.minecraftforge.fml.common.Loader;
 
@@ -24,6 +25,7 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
     public void initGui() {
         final boolean isPatcherNotLoaded = !ASMLoadingPlugin.isPatcherLoaded();
         final boolean isOrangeSimpleModLoaded = Loader.isModLoaded("orangesimplemod") || !ASMLoadingPlugin.isObf();
+        final boolean hasOptifine = FMLClientHandler.instance().hasOptifine() || !ASMLoadingPlugin.isObf();
         final int buttonWidth = 210;
         this.maxWidth = (10 + buttonWidth) * 2;
         this.maxHeight = (buttonsHeight + 4) * 12 + buttonsHeight;
@@ -89,6 +91,16 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                     (b) -> ConfigHandler.hideToggleSprintText = b,
                     () -> ConfigHandler.hideToggleSprintText,
                     EnumChatFormatting.GRAY + "Hides the Toggle Sprint HUD from Orange's Marshall Simple Mod"));
+        }
+        if (hasOptifine) {
+            this.buttonList.add(new OptionGuiButton(
+                    xPosLeft, getButtonYPos(isOrangeSimpleModLoaded ? 10 : 9),
+                    buttonWidth, buttonsHeight,
+                    "Hide Optifine hats",
+                    (b) -> ConfigHandler.hideOptifineHats = b,
+                    () -> ConfigHandler.hideOptifineHats,
+                    EnumChatFormatting.GRAY + "Hides the hats added by Optifine during Halloween and Christmas",
+                    EnumChatFormatting.DARK_RED + "Requires game restart to be fully effective"));
         }
         this.buttonList.add(new FancyGuiButton(
                 xPosRight, getButtonYPos(1),
