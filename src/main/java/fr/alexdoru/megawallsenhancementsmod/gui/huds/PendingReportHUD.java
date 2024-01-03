@@ -44,12 +44,12 @@ public class PendingReportHUD implements IRenderer {
         this.getGuiPosition().updateAdjustedAbsolutePosition(resolution, mc.fontRendererObj.getStringWidth(text), mc.fontRendererObj.FONT_HEIGHT);
         final int x = this.getGuiPosition().getAbsoluteRenderX();
         final int y = this.getGuiPosition().getAbsoluteRenderY();
-        mc.fontRendererObj.drawStringWithShadow(text, x, y, 0xFFFF55);
+        mc.fontRendererObj.drawStringWithShadow(text, x + 1, y, 0xFFFF55);
     }
 
     @Override
     public void renderDummy() {
-        mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.RED + "1 report to send..", this.getGuiPosition().getAbsoluteRenderX(), this.getGuiPosition().getAbsoluteRenderY(), 0xFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.RED + "1 report to send..", this.getGuiPosition().getAbsoluteRenderX() + 1, this.getGuiPosition().getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
