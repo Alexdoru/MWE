@@ -106,16 +106,14 @@ public class NetHandlerPlayClientHook {
     ///**
     // * The client seems to receive a packet for blocks in a 32 blocks radius maximum
     // */
+    //@SuppressWarnings("unused")
     //public static void handleBlockBreakAnim(S25PacketBlockBreakAnim packetIn) {
+    //    final Minecraft mc = Minecraft.getMinecraft();
     //    if (mc.theWorld != null) {
     //        final Entity breakerEntity = mc.theWorld.getEntityByID(packetIn.getBreakerId());
-    //        if (breakerEntity instanceof EntityPlayerAccessor) {
+    //        if (breakerEntity instanceof EntityOtherPlayerMP) {
     //            final PlayerDataSamples data = ((EntityPlayerAccessor) breakerEntity).getPlayerDataSamples();
-    //            if (!data.lastBlockPos.equals(packetIn.getPosition())) {
-    //                data.lastBlockPos = packetIn.getPosition();
-    //                data.entityAgeAtLastBlockChange = breakerEntity.ticksExisted;
-    //            }
-    //            data.entityAgeAtLastInteractionWithBlock = breakerEntity.ticksExisted;
+    //            final BlockPos brokeBlockPos = packetIn.getPosition();
     //        }
     //    }
     //}
