@@ -193,6 +193,7 @@ public class MWEClassTransformer implements IClassTransformer {
         }
         try (final OutputStream output = Files.newOutputStream(classFile.toPath())) {
             output.write(data);
+            ASMLoadingPlugin.logger.info("Saved transformed class (byte[]) to " + classFile.toPath());
         } catch (IOException e) {
             ASMLoadingPlugin.logger.error("Could not save transformed class (byte[]) " + transformedName, e);
         }
@@ -203,6 +204,7 @@ public class MWEClassTransformer implements IClassTransformer {
         try (final OutputStream output = Files.newOutputStream(bytecodeFile.toPath())) {
             final ClassReader classReader = new ClassReader(data);
             classReader.accept(new TraceClassVisitor(null, new Textifier(), new PrintWriter(output)), 0);
+            ASMLoadingPlugin.logger.info("Saved transformed class (bytecode) to " + bytecodeFile.toPath());
         } catch (IOException e) {
             ASMLoadingPlugin.logger.error("Could not save transformed class (bytecode) " + transformedName, e);
         }
@@ -213,6 +215,7 @@ public class MWEClassTransformer implements IClassTransformer {
         try (final OutputStream output = Files.newOutputStream(asmifiedFile.toPath())) {
             final ClassReader classReader = new ClassReader(data);
             classReader.accept(new TraceClassVisitor(null, new ASMifier(), new PrintWriter(output)), 0);
+            ASMLoadingPlugin.logger.info("Saved transformed class (ASM) to " + asmifiedFile.toPath());
         } catch (IOException e) {
             ASMLoadingPlugin.logger.error("Could not save transformed class (ASM) " + transformedName, e);
         }
