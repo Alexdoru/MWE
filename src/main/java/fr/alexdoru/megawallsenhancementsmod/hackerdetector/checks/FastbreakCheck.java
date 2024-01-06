@@ -14,6 +14,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.MathHelper;
 
 public class FastbreakCheck extends AbstractCheck {
 
@@ -69,6 +70,10 @@ public class FastbreakCheck extends AbstractCheck {
                 for (final BrokenBlock brokenBlock : HackerDetector.INSTANCE.brokenBlocksList) {
                     if (isPlayerLookingAtBlock(player, brokenBlock.blockPos)) {
                         brokenBlock.addPlayer(player);
+                        // return after one block, otherwise it can false flag when a golem
+                        // uses their ability, it does 6 or more breaking block animations
+                        // in the same area
+                        return;
                     }
                 }
             }
@@ -104,7 +109,7 @@ public class FastbreakCheck extends AbstractCheck {
                             if (data.breakTimeRatio.hasCollected()) {
                                 final float avg = data.breakTimeRatio.average();
                                 if (avg < 0.8F) {
-                                    data.fastbreakVL.add((int) Math.floor((0.8F - avg) * 10F));
+                                    data.fastbreakVL.add(MathHelper.clamp_int(MathHelper.floor_float((0.8F - avg) * 10F), 0, 6));
                                     if (ConfigHandler.debugLogging) {
                                         this.log(playerBreaking, data, data.fastbreakVL,
                                                 " | vl " + data.fastbreakVL.getViolationLevel() +
