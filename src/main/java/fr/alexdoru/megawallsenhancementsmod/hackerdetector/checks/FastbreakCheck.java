@@ -41,7 +41,7 @@ public class FastbreakCheck extends AbstractCheck {
     /**
      * See {@link net.minecraft.client.multiplayer.PlayerControllerMP#onPlayerDamageBlock}
      * Since we can't see enchantements of other players on Hypixel
-     * This check is hardcoded for a diamond pickaxe with efficiency III
+     * This check is hardcoded for a diamond pickaxe with efficiency III with haste II
      * <p>
      * If the broken block is in < 30 m radius of the player,
      * we can retrieve the ID of the entity breaking the block
@@ -108,13 +108,13 @@ public class FastbreakCheck extends AbstractCheck {
                             data.breakTimeRatio.add(recordedBreakTime / expectedTimeToBreak);
                             if (data.breakTimeRatio.hasCollected()) {
                                 final float avg = data.breakTimeRatio.average();
-                                if (avg < 0.8F) {
-                                    data.fastbreakVL.add(MathHelper.clamp_int(MathHelper.floor_float((0.8F - avg) * 10F), 0, 6));
+                                if (avg < 0.9F) {
+                                    data.fastbreakVL.add(MathHelper.clamp_int(MathHelper.floor_float((0.9F - avg) * 10F), 0, 6));
                                     if (ConfigHandler.debugLogging) {
                                         this.log(playerBreaking, data, data.fastbreakVL,
                                                 " | vl " + data.fastbreakVL.getViolationLevel() +
                                                         " | avg " + String.format("%.4f", avg) +
-                                                        " | expectedTimeToBreak " + expectedTimeToBreak +
+                                                        " | expectedTimeToBreak (haste II)" + expectedTimeToBreak +
                                                         " | recordedBreakTime " + recordedBreakTime +
                                                         " | block " + brokenBlock.block.getRegistryName());
                                     }
@@ -149,7 +149,7 @@ public class FastbreakCheck extends AbstractCheck {
 
     /**
      * Returns the block strenght for the provided block and player
-     * Harcoded to diamond pickaxe efficiency III
+     * Harcoded to diamond pickaxe efficiency III with haste II
      */
     private static float getBlockStrengthMW(EntityPlayer player, BlockPos pos, Block block) {
         final float hardness = block.getBlockHardness(null, pos);
@@ -181,8 +181,8 @@ public class FastbreakCheck extends AbstractCheck {
         }
         if (player.isPotionActive(Potion.digSpeed)) {
             f *= 1.0F + (float) (player.getActivePotionEffect(Potion.digSpeed).getAmplifier() + 1) * 0.2F;
-        } else if (ScoreboardTracker.isPrepPhase) {
-            /* Hardcode it to haste 2 during preparation time*/
+        } else {
+            /* Hardcode it to haste 2 to prevent false flags if the client doesn't receive the potion effect of another player*/
             f *= 1.4F;
         }
         if (player.isPotionActive(Potion.digSlowdown)) {
