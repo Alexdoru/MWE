@@ -36,14 +36,17 @@ public class AutoblockCheckA extends AbstractCheck {
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        final ItemStack itemStack = player.getHeldItem();
-        if (itemStack != null) {
-            if (itemStack.getItem() instanceof ItemSword) {
-                if (player.isSwingInProgress && data.useItemTime > 20) {
+        if (player.isSwingInProgress) {
+            final ItemStack itemStack = player.getHeldItem();
+            if (itemStack != null && itemStack.getItem() instanceof ItemSword) {
+                if (data.useItemTime > 6) {
+                    data.autoblockAVL.add(5);
                     if (ConfigHandler.debugLogging) {
                         this.log(player, data, data.autoblockAVL, "useItemTime " + data.useItemTime);
                     }
                     return true;
+                } else {
+                    data.autoblockAVL.substract(2);
                 }
             }
         }
@@ -51,7 +54,7 @@ public class AutoblockCheckA extends AbstractCheck {
     }
 
     public static ViolationLevelTracker newViolationTracker() {
-        return new ViolationLevelTracker(5, 2, 150);
+        return new ViolationLevelTracker(150);
     }
 
 }
