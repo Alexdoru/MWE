@@ -1,5 +1,10 @@
 package fr.alexdoru.megawallsenhancementsmod.enums;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.util.EnumChatFormatting;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,6 +64,19 @@ public enum MWClass {
 
     public static MWClass fromTag(String TAG) {
         return tagMap.get(TAG);
+    }
+
+    public static MWClass ofPlayer(String playername) {
+        final WorldClient world = Minecraft.getMinecraft().theWorld;
+        if (world == null) {
+            return null;
+        }
+        final ScorePlayerTeam team = world.getScoreboard().getPlayersTeam(playername);
+        if (team == null) {
+            return null;
+        }
+        final String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replaceAll("[\\[\\]\\s]", ""));
+        return MWClass.fromTag(classTag);
     }
 
 }
