@@ -1,11 +1,11 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.RateLimitException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.GeneralInfo;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
+import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassStats;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatListener;
@@ -14,7 +14,6 @@ import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
-import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
@@ -24,7 +23,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-import java.util.Map;
 import java.util.UUID;
 
 public class CommandScanGame extends MyAbstractCommand {
@@ -122,7 +120,7 @@ public class CommandScanGame extends MyAbstractCommand {
         final GeneralInfo generalInfo = new GeneralInfo(playerdata.getPlayerData());
 
         IChatComponent imsg = checkPlayerFkd(megaWallsStats);
-        if (imsg == null) imsg = checkMaxKits(playername, megaWallsStats, generalInfo);
+        if (imsg == null) imsg = checkMaxKits(playername, playerdata.getPlayerData(), megaWallsStats, generalInfo);
         if (imsg == null) imsg = checkLegendarySkins(megaWallsStats);
         if (imsg == null && doRandomKitCheck) imsg = checkRandomKit(generalInfo, playerdata);
 
@@ -149,7 +147,7 @@ public class CommandScanGame extends MyAbstractCommand {
         return null;
     }
 
-    private static IChatComponent checkMaxKits(String playername, MegaWallsStats megaWallsStats, GeneralInfo generalInfo) {
+    private static IChatComponent checkMaxKits(String playername, JsonObject playerData, MegaWallsStats megaWallsStats, GeneralInfo generalInfo) {
         if (megaWallsStats.getGames_played() >= 15 || generalInfo.getNetworkLevel() > 100F) {
             return null;
         }
@@ -163,73 +161,56 @@ public class CommandScanGame extends MyAbstractCommand {
         if (ScoreboardTracker.isInMwGame) {
             final MWClass mwClass = MWClass.ofPlayer(playername);
             if (mwClass != null) {
-                final JsonObject entryclassobj = JsonUtil.getJsonObject(classesdata, mwClass.className.toLowerCase());
-                if (entryclassobj != null) {
-                    if (firstGame) {
-                        imsg = getMaxKitMsgFirstGame(mwClass.className, entryclassobj);
-                    } else if (secondFlag) {
-                        imsg = getMaxKitMsg(mwClass.className, entryclassobj, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megaWallsStats.getGames_played());
-                    }
+                final MegaWallsClassStats classStats = new MegaWallsClassStats(playerData, mwClass.className);
+                if (firstGame) {
+                    imsg = getMaxKitMsgFirstGame(mwClass.className, classStats);
+                } else if (secondFlag) {
+                    imsg = getMaxKitMsg(mwClass.className, classStats, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megaWallsStats.getGames_played());
                 }
             }
             return imsg;
         }
-        for (final Map.Entry<String, JsonElement> entry : classesdata.entrySet()) {
-            if (entry.getValue() instanceof JsonObject) {
-                final JsonObject entryclassobj = entry.getValue().getAsJsonObject();
-                if (imsg == null) {
-                    if (firstGame) {
-                        imsg = getMaxKitMsgFirstGame(entry.getKey(), entryclassobj);
-                    } else if (secondFlag) {
-                        imsg = getMaxKitMsg(entry.getKey(), entryclassobj, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megaWallsStats.getGames_played());
-                    }
-                } else {
-                    final IChatComponent classMsg = getFormattedClassMsg(entry.getKey(), entryclassobj, firstGame);
-                    if (classMsg != null) {
-                        imsg.appendSibling(classMsg);
-                    }
+        for (final MWClass mwClass : MWClass.values()) {
+            final MegaWallsClassStats classStats = new MegaWallsClassStats(playerData, mwClass.className);
+            if (imsg == null) {
+                if (firstGame) {
+                    imsg = getMaxKitMsgFirstGame(mwClass.className, classStats);
+                } else if (secondFlag) {
+                    imsg = getMaxKitMsg(mwClass.className, classStats, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megaWallsStats.getGames_played());
+                }
+            } else {
+                final IChatComponent classMsg = getFormattedClassMsg(mwClass.className, classStats, firstGame);
+                if (classMsg != null) {
+                    imsg.appendSibling(classMsg);
                 }
             }
         }
         return imsg;
     }
 
-    private static IChatComponent getMaxKitMsgFirstGame(String className, JsonObject entryclassobj) {
-        final int skill_level_a = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_a"), 1); //skill
-        final int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"), 1); //kit
-        if (skill_level_a >= 4 || skill_level_d >= 4) {
-            return new ChatComponentText(EnumChatFormatting.GRAY + " never played and has :").appendSibling(getFormattedClassMsg(className, entryclassobj, true));
+    private static IChatComponent getMaxKitMsgFirstGame(String className, MegaWallsClassStats classStats) {
+        final int[] upgrades = classStats.getKitUpgrades();
+        if (upgrades[0] >= 4 || upgrades[1] >= 4) {
+            return new ChatComponentText(EnumChatFormatting.GRAY + " never played and has :").appendSibling(getFormattedClassMsg(className, classStats, true));
         }
         return null;
     }
 
-    private static IChatComponent getMaxKitMsg(String className, JsonObject entryclassobj, int quests, int networklevel, int gameplayed) {
-        final int skill_level_a = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_a"), 1); //skill
-        final int skill_level_b = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_b"), 1); //passive1
-        final int skill_level_c = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_c"), 1); //passive2
-        final int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"), 1); //kit
-        if (skill_level_a == 5 && skill_level_b == 3 && skill_level_c == 3 && skill_level_d == 5) {
+    private static IChatComponent getMaxKitMsg(String className, MegaWallsClassStats classStats, int quests, int networklevel, int gameplayed) {
+        final int[] upgrades = classStats.getKitUpgrades();
+        if (upgrades[0] == 5 && upgrades[1] == 5 && upgrades[2] == 3 && upgrades[3] == 3) {
             return new ChatComponentText(EnumChatFormatting.GRAY + " played " + EnumChatFormatting.GOLD + gameplayed + EnumChatFormatting.GRAY + " games"
                     + EnumChatFormatting.GRAY + ", network lvl " + EnumChatFormatting.GOLD + networklevel
                     + EnumChatFormatting.GRAY + ", with " + EnumChatFormatting.GOLD + quests + EnumChatFormatting.GRAY + " quests"
-                    + EnumChatFormatting.GRAY + " and has :").appendSibling(getFormattedClassMsg(className, entryclassobj, false));
+                    + EnumChatFormatting.GRAY + " and has :").appendSibling(getFormattedClassMsg(className, classStats, false));
         }
         return null;
     }
 
-    private static IChatComponent getFormattedClassMsg(String className, JsonObject entryclassobj, boolean firstgame) {
-        final int skill_level_a = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_a"), 1); //skill
-        final int skill_level_b = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_b"), 1); //passive1
-        final int skill_level_c = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_c"), 1); //passive2
-        final int skill_level_d = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_d"), 1); //kit
-        final int skill_level_g = Math.max(JsonUtil.getInt(entryclassobj, "skill_level_g"), 1); //gathering
-        if (firstgame ? skill_level_a >= 4 || skill_level_d >= 4 : skill_level_a == 5 && skill_level_b == 3 && skill_level_c == 3 && skill_level_d == 5) {
-            return new ChatComponentText(" " + EnumChatFormatting.GOLD + className + " "
-                    + (skill_level_d == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_d) + " "
-                    + (skill_level_a == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_a) + " "
-                    + (skill_level_b == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_b) + " "
-                    + (skill_level_c == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_c) + " "
-                    + (skill_level_g == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_g));
+    private static IChatComponent getFormattedClassMsg(String className, MegaWallsClassStats classStats, boolean firstgame) {
+        final int[] upgrades = classStats.getKitUpgrades();
+        if (firstgame ? upgrades[0] >= 4 || upgrades[1] >= 4 : upgrades[0] == 5 && upgrades[1] == 5 && upgrades[2] == 3 && upgrades[3] == 3) {
+            return new ChatComponentText(" " + EnumChatFormatting.GOLD + className + " " + classStats.getFormattedKitUpgrades());
         }
         return null;
     }
