@@ -39,8 +39,8 @@ public class AutoblockCheckB extends AbstractCheck {
         if (data.hasAttacked) {
             final ItemStack itemStack = player.getHeldItem();
             if (itemStack != null && itemStack.getItem() instanceof ItemSword) {
-                if (data.useItemTime > 5) {
-                    data.autoblockBVL.add(1);
+                if (data.useItemTime > 6) {
+                    data.autoblockBVL.add(2);
                     if (ConfigHandler.debugLogging) {
                         this.log(player, data, data.autoblockBVL, "useItemTime " + data.useItemTime + " target " + data.targetedPlayer.getName());
                     }
@@ -54,7 +54,7 @@ public class AutoblockCheckB extends AbstractCheck {
     }
 
     public static ViolationLevelTracker newViolationTracker() {
-        return new ViolationLevelTracker(4);
+        return new ViolationLevelTracker(8);
     }
 
 }
