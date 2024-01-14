@@ -14,10 +14,8 @@ import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.MapUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
@@ -403,19 +401,12 @@ public class FinalKillCounter {
     }
 
     private static void spawnParticles(String killer) {
+
         if (!ConfigHandler.strengthParticules) {
             return;
         }
-        final WorldClient world = Minecraft.getMinecraft().theWorld;
-        if (world == null) {
-            return;
-        }
-        final ScorePlayerTeam team = world.getScoreboard().getPlayersTeam(killer); // O(1)
-        if (team == null) {
-            return;
-        }
-        final String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replace("[", "").replace("]", "").replace(" ", ""));
-        final MWClass mwClass = MWClass.fromTag(classTag);
+
+        final MWClass mwClass = MWClass.ofPlayer(killer);
         if (mwClass == null) {
             return;
         }
@@ -429,30 +420,30 @@ public class FinalKillCounter {
             return;
         }
 
-        final EntityPlayer player = world.getPlayerEntityByName(killer); // O(N)
+        final EntityPlayer player = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(killer); // O(N)
         if (player == null) {
             return;
         }
 
         for (int i = 0; i < duration / 10; i++) {
-
             new DelayedTask(() -> {
                 for (int j = 0; j < 5; ++j) {
                     final double d0 = rand.nextGaussian() * 0.02D;
                     final double d1 = rand.nextGaussian() * 0.02D;
                     final double d2 = rand.nextGaussian() * 0.02D;
-                    world.spawnParticle(
-                            EnumParticleTypes.VILLAGER_ANGRY,
-                            player.posX + (double) (rand.nextFloat() * player.width * 2.0F) - (double) player.width,
-                            player.posY + 1.0D + (double) (rand.nextFloat() * player.height),
-                            player.posZ + (double) (rand.nextFloat() * player.width * 2.0F) - (double) player.width,
-                            d0,
-                            d1,
-                            d2
-                    );
+                    if (Minecraft.getMinecraft().theWorld != null) {
+                        Minecraft.getMinecraft().theWorld.spawnParticle(
+                                EnumParticleTypes.VILLAGER_ANGRY,
+                                player.posX + (double) (rand.nextFloat() * player.width * 2.0F) - (double) player.width,
+                                player.posY + 1.0D + (double) (rand.nextFloat() * player.height),
+                                player.posZ + (double) (rand.nextFloat() * player.width * 2.0F) - (double) player.width,
+                                d0,
+                                d1,
+                                d2
+                        );
+                    }
                 }
             }, i * 10);
-
         }
 
     }

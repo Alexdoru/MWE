@@ -20,7 +20,6 @@ import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
@@ -162,9 +161,7 @@ public class CommandScanGame extends MyAbstractCommand {
             return null;
         }
         if (ScoreboardTracker.isInMwGame) {
-            final ScorePlayerTeam team = Minecraft.getMinecraft().theWorld.getScoreboard().getPlayersTeam(playername);
-            final String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replace("[", "").replace("]", "").replace(" ", ""));
-            final MWClass mwClass = MWClass.fromTag(classTag);
+            final MWClass mwClass = MWClass.ofPlayer(playername);
             if (mwClass != null) {
                 final JsonObject entryclassobj = JsonUtil.getJsonObject(classesdata, mwClass.className.toLowerCase());
                 if (entryclassobj != null) {
