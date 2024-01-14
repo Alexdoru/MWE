@@ -17,7 +17,6 @@ public class MegaWallsClassStats {
     private String classnameuppercase;
     private String chosen_skin_class;
     // in the mwdata
-    private int coins;
     private int classname_kills;
     private int classname_final_assists;
     private int classname_deaths;
@@ -85,8 +84,6 @@ public class MegaWallsClassStats {
         classname = classnameIn.toLowerCase();
         classnameuppercase = classnameIn;
         chosen_skin_class = JsonUtil.getString(megaWallsStatsObj, "chosen_skin_" + classnameuppercase);
-
-        coins = JsonUtil.getInt(megaWallsStatsObj, "coins");
 
         classname_kills = JsonUtil.getInt(megaWallsStatsObj, classname + "_kills");
         classname_final_assists = JsonUtil.getInt(megaWallsStatsObj, classname + "_final_assists");
@@ -287,7 +284,7 @@ public class MegaWallsClassStats {
 
         final IChatComponent msg;
 
-        if (unlocked || classname.equals("hunter") || classname.equals("shark") || classname.equals("cow")) {
+        if (this.isUnlocked()) {
 
             msg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                     .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls " + classnameuppercase + " stats"))
@@ -297,12 +294,7 @@ public class MegaWallsClassStats {
                     .appendText(ChatUtil.alignText(matrix2) + "\n"
                             + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Classpoints : " + EnumChatFormatting.GOLD + classpoints + " "
                             + EnumChatFormatting.GREEN + " Playtime (approx.) : " + EnumChatFormatting.GOLD + String.format("%.2f", classname_time_played / 60f) + "h") + "\n"
-                            + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Kit : "
-                            + (skill_level_d == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_d) + " "
-                            + (skill_level_a == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_a) + " "
-                            + (skill_level_b == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_b) + " "
-                            + (skill_level_c == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_c) + " "
-                            + (skill_level_g == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_g) + " "
+                            + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Kit : " + this.getFormattedKitUpgrades() + " "
                             + EnumChatFormatting.GREEN + "Prestige : " + (prestige == 0 ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.GOLD) + ChatUtil.intToRoman(prestige) + " "
                             + EnumChatFormatting.GREEN + "Echest rows : " + (enderchest_rows == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + enderchest_rows) + "\n"
                             + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Selected skin : " + EnumChatFormatting.GOLD + (chosen_skin_class == null ? (classnameuppercase == null ? "None" : classnameuppercase) : chosen_skin_class)) + "\n"
@@ -321,12 +313,38 @@ public class MegaWallsClassStats {
 
     }
 
-    public int getClasspoints() {
-        return classpoints;
+    public boolean isUnlocked() {
+        return unlocked || classname.equals("hunter") || classname.equals("shark") || classname.equals("cow");
     }
 
-    public int getCoins() {
-        return coins;
+    /**
+     * Returns an array with :
+     * - kit level
+     * - ability level
+     * - passive 1 level
+     * - passive 2 level
+     * - gathering level
+     */
+    public int[] getKitUpgrades () {
+        return new int[]{
+                skill_level_d,
+                skill_level_a,
+                skill_level_b,
+                skill_level_c,
+                skill_level_g
+        };
+    }
+
+    public String getFormattedKitUpgrades() {
+        return (skill_level_d == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_d) + " "
+                + (skill_level_a == 5 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_a) + " "
+                + (skill_level_b == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_b) + " "
+                + (skill_level_c == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_c) + " "
+                + (skill_level_g == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_g);
+    }
+
+    public int getClasspoints() {
+        return classpoints;
     }
 
 }
