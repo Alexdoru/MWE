@@ -72,7 +72,7 @@ public class ConfigHandler extends AbstractConfig {
             category = FKCOUNTER,
             name = "Kill diff in Chat",
             comment = "Kill diff in Chat")
-    public static boolean showKillDiffInChat;
+    public static boolean showKillDiffInChat = true;
 
     /**
      * MWEnhancements config
@@ -360,7 +360,7 @@ public class ConfigHandler extends AbstractConfig {
             category = GUI,
             name = "Energy Display HUD",
             comment = "Displays HUD showing your current energy when you hit someone")
-    public static boolean showEnergyDisplayHUD;
+    public static boolean showEnergyDisplayHUD = true;
 
     @ConfigProperty(
             category = GUI,
@@ -453,7 +453,7 @@ public class ConfigHandler extends AbstractConfig {
             category = NOCHEATERS,
             name = "Report HUD in chat only",
             comment = "Displays report hud only in chat")
-    public static boolean showReportHUDonlyInChat = false;
+    public static boolean showReportHUDonlyInChat;
 
     @ConfigProperty(
             category = NOCHEATERS,
