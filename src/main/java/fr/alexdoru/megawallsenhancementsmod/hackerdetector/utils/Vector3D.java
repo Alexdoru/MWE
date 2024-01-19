@@ -85,11 +85,13 @@ public class Vector3D {
     public double getXZAngleDiffWithVector(Vector3D otherVector) {
         final double den = Math.sqrt((this.x * this.x + this.z * this.z) * (otherVector.x * otherVector.x + otherVector.z * otherVector.z));
         if (den < 1.0000000116860974E-7D) {
-            return 0;
+            return 0D;
         }
         final double cos = (this.x * otherVector.x + this.z * otherVector.z) / den;
-        if (cos > 1 || cos < -1) {
-            return 0;
+        if (cos > 1) {
+            return 0D;
+        } else if (cos < -1) {
+            return 180D;
         }
         return Math.toDegrees(Math.acos(cos));
     }
@@ -120,8 +122,10 @@ public class Vector3D {
             return 0D;
         }
         final double cos = this.dotProduct(otherVector) / den;
-        if (cos > 1D || cos < -1D) {
+        if (cos > 1D) {
             return 0D;
+        } else if (cos < -1D) {
+            return 180D;
         }
         return Math.toDegrees(Math.acos(cos));
     }
@@ -135,9 +139,9 @@ public class Vector3D {
 
     @Override
     public String toString() {
-        return "{x=" + String.format("%.4f", this.x) +
-                ", y=" + String.format("%.4f", this.y) +
-                ", z=" + String.format("%.4f", this.z) +
+        return "{" + String.format("%.4f", this.x) +
+                ", " + String.format("%.4f", this.y) +
+                ", " + String.format("%.4f", this.z) +
                 '}';
     }
 

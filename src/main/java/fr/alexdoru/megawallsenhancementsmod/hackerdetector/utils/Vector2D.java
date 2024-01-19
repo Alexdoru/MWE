@@ -38,14 +38,17 @@ public class Vector2D {
      * In degres
      */
     public double getAngleWithOrigin() {
-        if (this.u == 0 && this.v == 0) {
-            return 0;
-        }
         final double lengthVector = this.norm();
         if (lengthVector < 1.0000000116860974E-7D) {
-            return 0;
+            return 0D;
         }
-        return Math.toDegrees(Math.acos(this.u / lengthVector));
+        final double cos = this.u / lengthVector;
+        if (cos > 1) {
+            return 0D;
+        } else if (cos < -1) {
+            return 180D;
+        }
+        return Math.toDegrees(Math.acos(cos));
     }
 
     /**
@@ -64,8 +67,10 @@ public class Vector2D {
             return 0D;
         }
         final double cos = this.dotProduct(otherVector) / den;
-        if (cos > 1D || cos < -1D) {
+        if (cos > 1) {
             return 0D;
+        } else if (cos < -1) {
+            return 180D;
         }
         return Math.toDegrees(Math.acos(cos));
     }
@@ -82,8 +87,8 @@ public class Vector2D {
 
     @Override
     public String toString() {
-        return "{u=" + String.format("%.4f", this.u) +
-                ", v=" + String.format("%.4f", this.v) +
+        return "{" + String.format("%.4f", this.u) +
+                ", " + String.format("%.4f", this.v) +
                 '}';
     }
 
