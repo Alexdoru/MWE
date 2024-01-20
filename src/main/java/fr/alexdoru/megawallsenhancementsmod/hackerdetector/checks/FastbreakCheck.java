@@ -105,7 +105,7 @@ public class FastbreakCheck extends AbstractCheck {
                         data.lastBreakBlockTime = brokenBlock.breakTime;
                         if (playerBreaking != mc.thePlayer) {
                             final float expectedTimeToBreak = 50F * getTimeToHarvestBlock(getBlockStrengthMW(playerBreaking, brokenBlock.blockPos, brokenBlock.block));
-                            data.breakTimeRatio.add(recordedBreakTime / expectedTimeToBreak);
+                            data.breakTimeRatio.add(Math.min(recordedBreakTime / expectedTimeToBreak, 1.1F));
                             if (data.breakTimeRatio.hasCollected()) {
                                 final float avg = data.breakTimeRatio.average();
                                 if (avg < 0.9F) {
