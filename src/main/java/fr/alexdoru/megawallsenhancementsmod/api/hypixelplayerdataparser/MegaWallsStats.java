@@ -98,7 +98,7 @@ public class MegaWallsStats {
         wlr = (float) wins / (losses == 0 ? 1 : (float) losses);
         fkadr = (float) (final_kills + final_assists) / (final_deaths == 0 ? 1 : (float) final_deaths);
 
-        time_played = JsonUtil.getInt(megaWallsStatsObj, "time_played") + JsonUtil.getInt(megaWallsStatsObj, "time_played_standard"); // additionner les deux / en minutes
+        time_played = JsonUtil.getInt(megaWallsStatsObj, "time_played"); // in minutes
         games_played = wins + losses; // doesn't count the draws
         fkpergame = (float) final_kills / (games_played == 0 ? 1 : (float) games_played);
         wither_damage_game = wither_damage / (games_played == 0 ? 1 : (float) games_played);
