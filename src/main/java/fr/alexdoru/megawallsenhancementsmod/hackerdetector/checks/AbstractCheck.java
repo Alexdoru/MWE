@@ -198,12 +198,19 @@ public abstract class AbstractCheck implements ICheck {
         return i == 1 ? i : i + 5;
     }
 
-    protected static boolean isPlayerLookingAtBlock(EntityPlayer player, BlockPos pos) {
-        final Vector3D eyesToBlockCenter = new Vector3D(
-                pos.getX() + 0.5D - player.posX,
-                pos.getY() + 0.5D - (player.posY + player.getEyeHeight()),
-                pos.getZ() + 0.5D - player.posZ
-        );
+    protected static boolean isPlayerLookingAtBlock(EntityPlayer player, PlayerDataSamples data, BlockPos pos) {
+        final Vector3D eyesToBlockCenter;
+        if (player == mc.thePlayer) {
+            eyesToBlockCenter = new Vector3D(
+                    pos.getX() + 0.5D - player.posX,
+                    pos.getY() + 0.5D - (player.posY + player.getEyeHeight()),
+                    pos.getZ() + 0.5D - player.posZ);
+        } else {
+            eyesToBlockCenter = new Vector3D(
+                    pos.getX() + 0.5D - data.serverPosX,
+                    pos.getY() + 0.5D - (data.serverPosY + player.getEyeHeight()),
+                    pos.getZ() + 0.5D - data.serverPosZ);
+        }
         /* (0.5*sqrt(3) + 4.5)^2 | Squared distance from center of the block to the corner + player's break reach */
         final double distSq = eyesToBlockCenter.normSquared();
         if (distSq > 28.79422863D) {
@@ -214,8 +221,14 @@ public abstract class AbstractCheck implements ICheck {
         }
         /* Checks if the player's look vect is within a cone that starts from the player's eyes and
          * whose base is a circle centered on the block's center and with 0.5*sqrt(3) radius */
-        final double angleWithVector = Vector3D.getPlayersLookVec(player).getAngleWithVector(eyesToBlockCenter);
-        final double maxAngle = Math.toDegrees(Math.atan(0.5D * Math.sqrt(3 / distSq)));
+        final Vector3D lookVect;
+        if (player == mc.thePlayer) {
+            lookVect = Vector3D.getPlayersLookVec(player);
+        } else {
+            lookVect = Vector3D.getVectorFromRotation(data.serverRotationPitch, data.serverRotationYawHead);
+        }
+        final double angleWithVector = lookVect.getAngleWithVector(eyesToBlockCenter);
+        final double maxAngle = Math.toDegrees(Math.atan(0.5D * Math.sqrt(3D / distSq))) * 1.33D;
         return angleWithVector < maxAngle;
     }
 

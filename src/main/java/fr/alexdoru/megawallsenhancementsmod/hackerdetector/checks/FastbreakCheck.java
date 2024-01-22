@@ -50,7 +50,7 @@ public class FastbreakCheck extends AbstractCheck {
      */
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        checkPlayerBreakingBlocks(player);
+        checkPlayerBreakingBlocks(player, data);
         return false;
     }
 
@@ -60,15 +60,15 @@ public class FastbreakCheck extends AbstractCheck {
      * @param player - it's mc.thePlayer
      */
     public void checkPlayerSP(EntityPlayer player) {
-        checkPlayerBreakingBlocks(player);
+        checkPlayerBreakingBlocks(player, null);
     }
 
-    private void checkPlayerBreakingBlocks(EntityPlayer player) {
+    private void checkPlayerBreakingBlocks(EntityPlayer player, PlayerDataSamples data) {
         if (ScoreboardTracker.isInMwGame && player.isSwingInProgress && !HackerDetector.INSTANCE.brokenBlocksList.isEmpty()) {
             final ItemStack itemStack = player.getHeldItem();
             if (itemStack != null && itemStack.isItemEnchanted() && itemStack.getItem() == Items.diamond_pickaxe) {
                 for (final BrokenBlock brokenBlock : HackerDetector.INSTANCE.brokenBlocksList) {
-                    if (isPlayerLookingAtBlock(player, brokenBlock.blockPos)) {
+                    if (isPlayerLookingAtBlock(player, data, brokenBlock.blockPos)) {
                         brokenBlock.addPlayer(player);
                         // return after one block, otherwise it can false flag when a golem
                         // uses their ability, it does 6 or more breaking block animations
