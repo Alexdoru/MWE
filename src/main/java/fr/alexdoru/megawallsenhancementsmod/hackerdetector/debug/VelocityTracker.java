@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.hackerdetector;
+package fr.alexdoru.megawallsenhancementsmod.hackerdetector.debug;
 
 import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
