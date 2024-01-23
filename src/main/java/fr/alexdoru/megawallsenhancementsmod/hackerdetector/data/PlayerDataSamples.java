@@ -5,6 +5,8 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.*;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 
 public class PlayerDataSamples {
 
@@ -26,41 +28,39 @@ public class PlayerDataSamples {
     public boolean hasAttacked = false;
     /** Player attacked during this tick if any */
     public EntityPlayer targetedPlayer;
-    public SampleListZ attackList = new SampleListZ(20);
-    /** True if the player has been attacked by another player during this tick */
-    public boolean hasBeenAttacked = false;
+    public final SampleListZ attackList = new SampleListZ(20);
 
     /* ----- Samples of rotations/positions "emulated/delayed" by the client ----- */
-    public SampleListD posXList = new SampleListD(5);
-    public SampleListD posYList = new SampleListD(5);
-    public SampleListD posZList = new SampleListD(5);
-    public SampleListD speedXList = new SampleListD(5);
-    public SampleListD speedYList = new SampleListD(5);
-    public SampleListD speedZList = new SampleListD(5);
+    public final SampleListD posXList = new SampleListD(5);
+    public final SampleListD posYList = new SampleListD(5);
+    public final SampleListD posZList = new SampleListD(5);
+    public final SampleListD speedXList = new SampleListD(5);
+    public final SampleListD speedYList = new SampleListD(5);
+    public final SampleListD speedZList = new SampleListD(5);
     /* ----- Client samples end ----- */
 
     /* ----- Samples of rotations/positions received from the server ----- */
-    /** True if we received a position/rotation packet for this player during this tick */
+    /** Not 0 if we received a position/rotation packet for this player during this tick */
     public int updatedServerData = 0;
-    public SampleListI updatedServerDataList = new SampleListI(5);
-    /** True if we received a S19PacketEntityHeadLook packet for this player during this tick */
+    public final SampleListI updatedServerDataList = new SampleListI(5);
+    /** Not 0 if we received a S19PacketEntityHeadLook packet for this player during this tick */
     public int updatedYawHead = 0;
-    public SampleListI updatedYawHeadList = new SampleListI(5);
+    public final SampleListI updatedYawHeadList = new SampleListI(5);
     public double serverPosX;
     public double serverPosY;
     public double serverPosZ;
-    /** Pitch of the player's head */
+    /** Pitch of the player's head [-90, 90] */
     public float serverRotationPitch;
-    /** Yaw of the player's body */
+    /** Yaw of the player's body [-180, 180] */
     public float serverRotationYaw;
-    /** Yaw of the player's head */
+    /** Yaw of the player's head [-180, 180] */
     public float serverRotationYawHead;
-    public SampleListD serverPosXList = new SampleListD(5);
-    public SampleListD serverPosYList = new SampleListD(5);
-    public SampleListD serverPosZList = new SampleListD(5);
-    public SampleListF serverRotationPitchList = new SampleListF(5);
-    public SampleListF serverRotationYawList = new SampleListF(5);
-    public SampleListF serverRotationYawHeadList = new SampleListF(5); // values are directly equals to player.rotationYawHead
+    public final SampleListD serverPosXList = new SampleListD(5);
+    public final SampleListD serverPosYList = new SampleListD(5);
+    public final SampleListD serverPosZList = new SampleListD(5);
+    public final SampleListF serverRotationPitchList = new SampleListF(5); // Pitch of the head
+    public final SampleListF serverRotationYawList = new SampleListF(5);// Yaw of the body
+    public final SampleListF serverRotationYawHeadList = new SampleListF(5); // Yaw of the head, directly equals to player.rotationYawHead
     /* ----- Server samples end ----- */
 
     /** Last time the player broke a block */
@@ -78,7 +78,6 @@ public class PlayerDataSamples {
         this.hasAttackedMultiTarget = false;
         this.hasAttacked = false;
         this.targetedPlayer = null;
-        this.hasBeenAttacked = false;
         this.updatedServerData = 0;
         this.updatedYawHead = 0;
     }
@@ -106,6 +105,20 @@ public class PlayerDataSamples {
         this.serverRotationYawHeadList.add(this.serverRotationYawHead);
     }
 
+    public void setPositionAndRotation(double x, double y, double z, float yaw, float pitch) {
+        this.updatedServerData++;
+        this.serverPosX = x;
+        this.serverPosY = y;
+        this.serverPosZ = z;
+        this.serverRotationYaw = yaw;
+        this.serverRotationPitch = pitch;
+    }
+
+    public void setRotationYawHead(float yawHead) {
+        this.updatedYawHead++;
+        this.serverRotationYawHead = yawHead;
+    }
+
     /** True if the player's position in the XZ plane is identical to the last tick */
     public boolean isNotMovingXZ() {
         return this.speedXList.get(0) == 0D && this.speedZList.get(0) == 0D;
@@ -123,25 +136,23 @@ public class PlayerDataSamples {
         return Math.sqrt(vx * vx + vz * vz);
     }
 
-    public String speedToString() {
-        return "{x=" + String.format("%.4f", this.speedXList.get(0)) +
-                ", y=" + String.format("%.4f", this.speedYList.get(0)) +
-                ", z=" + String.format("%.4f", this.speedZList.get(0)) +
-                '}';
+    public Vec3 getPositionEyesServer(EntityPlayer player) {
+        return new Vec3(this.serverPosX, this.serverPosY + (double) player.getEyeHeight(), this.serverPosZ);
     }
 
-    public void setPositionAndRotation(double x, double y, double z, float yaw, float pitch) {
-        this.updatedServerData++;
-        this.serverPosX = x;
-        this.serverPosY = y;
-        this.serverPosZ = z;
-        this.serverRotationPitch = yaw % 360.0F;
-        this.serverRotationYaw = pitch % 360.0F;
+    public Vec3 getLookServer() {
+        return getVectorForRotation(this.serverRotationPitch, this.serverRotationYawHead);
     }
 
-    public void setRotationYawHead(float yawHead) {
-        this.updatedYawHead++;
-        this.serverRotationYawHead = yawHead;
+    /**
+     * Creates a Vec3 using the pitch and yaw of the entities' rotation.
+     */
+    private static Vec3 getVectorForRotation(float pitch, float yaw) {
+        final float f = MathHelper.cos(-yaw * 0.017453292F - (float) Math.PI);
+        final float f1 = MathHelper.sin(-yaw * 0.017453292F - (float) Math.PI);
+        final float f2 = -MathHelper.cos(-pitch * 0.017453292F);
+        final float f3 = MathHelper.sin(-pitch * 0.017453292F);
+        return new Vec3(f1 * f2, f3, f * f2);
     }
 
 }
