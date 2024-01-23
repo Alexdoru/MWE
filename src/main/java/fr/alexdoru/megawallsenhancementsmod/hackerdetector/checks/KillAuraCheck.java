@@ -22,12 +22,12 @@ public class KillAuraCheck extends AbstractCheck {
 
     @Override
     public String getCheatDescription() {
-        return "The player can attack through solid blocks";
+        return "The player can attack through blocks/entities";
     }
 
     @Override
     public boolean canSendReport() {
-        return true;
+        return false;// TODO change once it's done
     }
 
     @Override
@@ -41,12 +41,11 @@ public class KillAuraCheck extends AbstractCheck {
         if (data.hasAttacked) {
 
             // check if eyes of the attacker are inside the target's hitbox
-            final Vec3 attackerEyePos = player.getPositionEyes(1F);
+            final Vec3 attackerEyePos = data.getPositionEyesServer(player);
             if (isInsideHitbox(data.targetedPlayer, attackerEyePos)) {
                 return false;
             }
-
-            final Vec3 lookVect = player.getLook(1F);
+            final Vec3 lookVect = data.getLookServer();
             final Vec3 lookEndPos = attackerEyePos.addVector(lookVect.xCoord * 8D, lookVect.yCoord * 8D, lookVect.zCoord * 8D);
             final Vec3 hitOnPlayerPos = getHitVectOnPlayer(data.targetedPlayer, attackerEyePos, lookEndPos);
             // doesn't look at the target's hitbox
@@ -63,9 +62,17 @@ public class KillAuraCheck extends AbstractCheck {
             int blockZpos = -1;
             boolean canHitThroughBlock = false;
             int timesInsideBlock = 0;
+            int timesInsidePlayer = 0;
 
-            // TODO just put the list of entites here and check on each loop iteration of inside one of the entities
-            //  compléxité d'un tel algo ?
+            // TODO compléxité d'un tel algo ?
+            // TODO est ce que l'autre algo serait moins complexe
+            // TODO arreter de regarder à travers les blocs
+            // TODO faire avec les pos des enemis sur 4-5 ticks
+
+            final float f = 1.0F;
+            final List<EntityPlayer> list = getPlayersInAABBexcluding(player,
+                    player.getEntityBoundingBox().addCoord(lookVect.xCoord * distanceToRayTrace, lookVect.yCoord * distanceToRayTrace, lookVect.zCoord * distanceToRayTrace).expand(f, f, f),
+                    p -> p != data.targetedPlayer && p != mc.thePlayer && !p.isSpectator() && p.canBeCollidedWith());
 
             for (int i = 0; i < iterMax + 1; i++) {
 
@@ -85,34 +92,36 @@ public class KillAuraCheck extends AbstractCheck {
                     blockZpos = zpos;
                 }
 
+                for (final EntityPlayer entity : list) {
+                    if (isInsideHitbox(entity, dx, dy, dz)) {
+                        timesInsidePlayer++;
+                        break;
+                    }
+                }
+
                 if (!canHitThroughBlock) {
                     timesInsideBlock++;
                 }
 
             }
 
-            if (timesInsideBlock > 0) {
-                data.killAuraVL.add(Math.min(timesInsideBlock, 10));
+            if (timesInsideBlock + timesInsidePlayer > 0) {
+                data.killAuraVL.add(Math.min(timesInsideBlock, 10) * 2 + timesInsidePlayer);
                 if (ConfigHandler.debugLogging) {
-                    final String msg = "target : " + data.targetedPlayer.getName() + " timesInsideBlock " + timesInsideBlock;
-                    this.fail(player);
+                    final String msg = "target : " + data.targetedPlayer.getName() + " timesInsideBlock " + timesInsideBlock + " timesInsidePlayer " + timesInsidePlayer;
                     this.log(player, data, data.killAuraVL, msg);
                 }
                 return true;
             } else {
-                data.killAuraVL.substract(10);
+                data.killAuraVL.substract(15);
                 return false;
             }
-
         }
 
         return false;
 
     }
 
-    // TODO ca utilise les coordonées de certain players qui ont étés update onTick et d'autres pas encore
-    // TODO est ce que au tick où on recoit l'attaque, les joueurs avait la position
-    //  d'au moins le tick d'avant quand ils se sont attaqués, et encore plus avec le ping
     private void checkThroughEntity(EntityPlayer player, EntityPlayer target, Vec3 positionEyes, Vec3 lookVect, double distance) {
         final Vec3 lookEndVect = positionEyes.addVector(lookVect.xCoord * distance, lookVect.yCoord * distance, lookVect.zCoord * distance);
         final float f = 1.0F;
@@ -140,7 +149,7 @@ public class KillAuraCheck extends AbstractCheck {
             }
         }
         final String s = str.toString();
-        if (!s.equals("")) {
+        if (!s.isEmpty()) {
             ChatUtil.debug(
                     NameUtil.getFormattedNameWithoutIcons(player.getName()) + EnumChatFormatting.RESET
                             + " attacked " + NameUtil.getFormattedNameWithoutIcons(target.getName()) + EnumChatFormatting.RESET
@@ -150,7 +159,7 @@ public class KillAuraCheck extends AbstractCheck {
     }
 
     public static ViolationLevelTracker newViolationTracker() {
-        return new ViolationLevelTracker(25);
+        return new ViolationLevelTracker(25 * 2);
     }
 
 }

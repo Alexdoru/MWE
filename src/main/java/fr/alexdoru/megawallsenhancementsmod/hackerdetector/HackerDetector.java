@@ -226,12 +226,10 @@ public class HackerDetector {
             dataAttacker.hasAttackedMultiTarget = true;
             dataAttacker.hasAttacked = false;
             dataAttacker.targetedPlayer = null;
-            ((EntityPlayerAccessor) target).getPlayerDataSamples().hasBeenAttacked = false;
             return;
         }
         dataAttacker.hasAttacked = true;
         dataAttacker.targetedPlayer = target;
-        ((EntityPlayerAccessor) target).getPlayerDataSamples().hasBeenAttacked = true;
         if (ConfigHandler.debugLogging) {
             log(attacker.getName() + " attacked " + target.getName() + " [" + attackType + "]");
         }
