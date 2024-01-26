@@ -77,7 +77,8 @@ public class MWEClassTransformer implements IClassTransformer {
         registerTransformer(new NetHandlerPlayClientTransformer_PlayerMapTracker());
         registerTransformer(new NetHandlerPlayClientTransformer_TeamsListener());
         //registerTransformer(new NetHandlerPlayClientTransformer_TeleportListener());
-        registerTransformer(new NetworkManagerTransformer_PacketListener());
+        //registerTransformer(new NetworkManagerTransformer_ClientPacketListener());
+        registerTransformer(new NetworkManagerTransformer_ServerPacketListener());
         registerTransformer(new NetworkPlayerInfo$1Transformer_ChatHeads());
         registerTransformer(new NetworkPlayerInfoTransformer_ChatHeads());
         registerTransformer(new NetworkPlayerInfoTransformer_CustomNamesInTab());

@@ -8,9 +8,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.text.SimpleDateFormat;
 
-public class PacketLogger {
+public class ServerPacketLogger {
 
-    private static final Logger logger = LogManager.getLogger("PacketListener");
+    private static final Logger logger = LogManager.getLogger("ServerPacketListener");
 
     public static void logPacket(Packet<?> packet) {
         if (packet instanceof S14PacketEntity) {
@@ -96,7 +96,7 @@ public class PacketLogger {
     }
 
     private static String formatXYZ(double x, double y, double z) {
-        return "{x=" + String.format("%.4f", x) + ", y=" + String.format("%.4f", y) + ", z=" + String.format("%.4f", z) + '}';
+        return "{x=" + String.format("%.2f", x) + ", y=" + String.format("%.2f", y) + ", z=" + String.format("%.2f", z) + '}';
     }
 
     private static void log(String message) {

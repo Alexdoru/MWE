@@ -6,7 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
-public class NetworkManagerTransformer_PacketListener implements MWETransformer {
+public class NetworkManagerTransformer_ServerPacketListener implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {

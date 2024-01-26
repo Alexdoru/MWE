@@ -73,6 +73,7 @@ public enum MethodMapping {
     NETHANDLERPLAYCLIENT$HANDLETEAMS("a", "handleTeams", "(L" + S3EPACKETTEAMS + ";)V"),
     NETHANDLERPLAYCLIENT$INIT("<init>", "(L" + MINECRAFT + ";L" + GUISCREEN + ";L" + NETWORKMANAGER + ";L" + GAMEPROFILE + ";)V"),
     NETWORKMANAGER$CHANNELREAD0("a", "channelRead0", "(Lio/netty/channel/ChannelHandlerContext;L" + PACKET + ";)V"),
+    NETWORKMANAGER$SENDPACKET("a", "sendPacket", "(L" + PACKET + ";)V"),
     NETWORKPLAYERINFO$1$SKINAVAILABLE("a", "skinAvailable", null),
     NETWORKPLAYERINFO$ACCESS002(INVOKESTATIC, NETWORKPLAYERINFO, "a", "access$002", "(L" + NETWORKPLAYERINFO + ";L" + RESOURCELOCATION + ";)L" + RESOURCELOCATION + ";"),
     NETWORKPLAYERINFO$GETDISPLAYNAME("k", "getDisplayName", "()L" + ICHATCOMPONENT + ";"),
