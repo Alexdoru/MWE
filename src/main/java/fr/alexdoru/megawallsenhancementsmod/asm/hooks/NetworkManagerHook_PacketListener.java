@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.S19PacketEntityStatusAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.debug.ClientPacketLogger;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S0BPacketAnimation;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
@@ -19,9 +20,15 @@ public class NetworkManagerHook_PacketListener {
     // Only listens packets that throw a ThreadQuickExitException
     public static void listen(Packet<?> packet) {
         if (!ConfigHandler.hackerDetector) return;
-        try { // We need a try catch block to prevent any exception from being throwned, it would discard the packet
-            //PacketLogger.logPacket(packet);
+        try {
+            //ServerPacketLogger.logPacket(packet);
             lookForAttacks(packet);
+        } catch (Throwable ignored) {}
+    }
+
+    public static void listenSentPacket(Packet<?> packet) {
+        try {
+            ClientPacketLogger.logPacket(packet);
         } catch (Throwable ignored) {}
     }
 
