@@ -109,13 +109,12 @@ public class FastbreakCheck extends AbstractCheck {
                             if (data.breakTimeRatio.hasCollected()) {
                                 final float avg = data.breakTimeRatio.average();
                                 if (avg < 0.9F) {
-                                    data.fastbreakVL.add(MathHelper.clamp_int(MathHelper.floor_float((0.9F - avg) * 10F), 0, 6));
+                                    data.fastbreakVL.add(MathHelper.clamp_int(MathHelper.floor_float((0.9F - avg) * 10F), 1, 6));
                                     if (ConfigHandler.debugLogging) {
                                         this.log(playerBreaking, data, data.fastbreakVL,
-                                                " | vl " + data.fastbreakVL.getViolationLevel() +
                                                         " | avg " + String.format("%.4f", avg) +
-                                                        " | expectedTimeToBreak (haste II)" + expectedTimeToBreak +
                                                         " | recordedBreakTime " + recordedBreakTime +
+                                                        " | expectedTimeToBreak (haste II)" + expectedTimeToBreak +
                                                         " | block " + brokenBlock.block.getRegistryName());
                                     }
                                     super.checkViolationLevel(playerBreaking, true, data.fastbreakVL);
@@ -140,7 +139,7 @@ public class FastbreakCheck extends AbstractCheck {
         if (player.isPotionActive(Potion.digSlowdown)) {
             extramsg += " | mining fatigue level " + (player.getActivePotionEffect(Potion.digSlowdown).getAmplifier() + 1);
         }
-        HackerDetector.log(player.getName() + " failed " + this.getCheatName() + " check" + extramsg);
+        HackerDetector.log(player.getName() + " failed " + this.getCheatName() + " check" + " | vl " + vl.getViolationLevel() + extramsg);
     }
 
     public static ViolationLevelTracker newViolationTracker() {
