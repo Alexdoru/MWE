@@ -176,12 +176,12 @@ public class ScoreboardUtils {
     /**
      * Strips the color control codes of all the lines of the input list
      *
-     * @param ListIn - String list with chat color control codes
+     * @param listIn - String list with chat color control codes
      */
-    public static List<String> stripControlCodes(List<String> ListIn) {
-        final List<String> list = new ArrayList<>();
-        for (int i = 0; i < ListIn.size(); i++) {
-            list.add(i, EnumChatFormatting.getTextWithoutFormattingCodes(ListIn.get(i)));
+    public static List<String> stripControlCodes(List<String> listIn) {
+        final List<String> list = new ArrayList<>(listIn.size());
+        for (final String line : listIn) {
+            list.add(EnumChatFormatting.getTextWithoutFormattingCodes(line));
         }
         return list;
     }

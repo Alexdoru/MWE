@@ -33,6 +33,7 @@ public class ScoreboardParser {
     private boolean isInMwGame = false;
     private boolean isMWEnvironement = false;
     private boolean isReplayMode = false;
+    private boolean isMWReplay = false;
     private boolean isInSkyblock = false;
     private boolean isPreGameLobby = false;
     private boolean isPrepPhase = false;
@@ -58,14 +59,17 @@ public class ScoreboardParser {
         final String title = ScoreboardUtils.getUnformattedSidebarTitle(scoreboard);
         if (MW_TITLE_PATTERN.matcher(title).find()) {
             isMWEnvironement = true;
+            this.parseMegaWallsScoreboard(scoreboard);
         } else if (title.contains("REPLAY")) {
             isReplayMode = true;
+            this.parseReplayScoreboard(scoreboard);
         } else if (title.contains("SKYBLOCK")) {
             isInSkyblock = true;
-        } else {
-            return;
         }
 
+    }
+
+    private void parseMegaWallsScoreboard(Scoreboard scoreboard) {
         final List<String> formattedSidebarLines = ScoreboardUtils.getFormattedSidebarText(scoreboard);
         final List<String> unformattedSidebarLines = ScoreboardUtils.stripControlCodes(formattedSidebarLines);
 
@@ -147,7 +151,20 @@ public class ScoreboardParser {
         if (isOnlyOneWitherAlive()) {
             LastWitherHPHUD.instance.updateWitherHP(witherHP);
         }
+    }
 
+    private void parseReplayScoreboard(Scoreboard scoreboard) {
+        final List<String> formattedLines = ScoreboardUtils.getFormattedSidebarText(scoreboard);
+        final List<String> unformattedLines = ScoreboardUtils.stripControlCodes(formattedLines);
+        if (unformattedLines.isEmpty()) {
+            return;
+        }
+        for (final String line : unformattedLines) {
+            if (line.contains("Game: Mega Walls")) {
+                isMWReplay = true;
+                return;
+            }
+        }
     }
 
     private boolean checkPreGameLobby(List<String> unformattedSidebarLines) {
@@ -196,6 +213,10 @@ public class ScoreboardParser {
 
     public boolean isReplayMode() {
         return isReplayMode;
+    }
+
+    public boolean isMWReplay() {
+        return isMWReplay;
     }
 
     public boolean isInSkyblock() {

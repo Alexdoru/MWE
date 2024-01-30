@@ -20,6 +20,8 @@ public class ScoreboardTracker {
     public static boolean isMWEnvironement = false;
     /** True when in the Replay Mode */
     public static boolean isReplayMode = false;
+    /** True when in a mega walls replay **/
+    public static boolean isMWReplay = false;
     /** True when is Skyblock */
     public static boolean isInSkyblock = false;
 
@@ -54,6 +56,7 @@ public class ScoreboardTracker {
         ScoreboardTracker.isPreGameLobby = parser.isPreGameLobby();
         ScoreboardTracker.isPrepPhase = parser.isPrepPhase();
         ScoreboardTracker.isReplayMode = parser.isReplayMode();
+        ScoreboardTracker.isMWReplay = parser.isMWReplay();
         ScoreboardTracker.isInSkyblock = parser.isInSkyblock();
 
         this.fireScoreboardRelatedEvents();
