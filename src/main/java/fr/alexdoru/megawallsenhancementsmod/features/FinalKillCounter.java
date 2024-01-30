@@ -148,7 +148,7 @@ public class FinalKillCounter {
      * Resets the Killcounter and assigns it to a new game ID
      */
     @SuppressWarnings("unchecked")
-    public static void ResetKillCounterTo(String gameIdIn) {
+    private static void resetKillCounterTo(String gameIdIn) {
         playersPresentInGame.clear();
         gameId = gameIdIn;
         prefixes = new String[TEAMS];
@@ -457,7 +457,7 @@ public class FinalKillCounter {
         if (event.getType() == MegaWallsGameEvent.EventType.GAME_START) {
             final String currentGameId = ScoreboardTracker.getParser().getGameId();
             if (currentGameId != null) {
-                ResetKillCounterTo(currentGameId);
+                resetKillCounterTo(currentGameId);
             }
             setTeamPrefixes();
             return;
@@ -466,7 +466,7 @@ public class FinalKillCounter {
         if (event.getType() == MegaWallsGameEvent.EventType.CONNECT) {
             final String currentGameId = ScoreboardTracker.getParser().getGameId(); // this is not null due to how the event is defined/posted
             if (gameId == null || !gameId.equals(currentGameId)) {
-                ResetKillCounterTo(currentGameId);
+                resetKillCounterTo(currentGameId);
             }
             /*
              * this is here to fix the bug where the killcounter doesn't work if you re-start your minecraft during a game of MW

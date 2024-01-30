@@ -64,7 +64,7 @@ public class FastbreakCheck extends AbstractCheck {
     }
 
     private void checkPlayerBreakingBlocks(EntityPlayer player, PlayerDataSamples data) {
-        if (ScoreboardTracker.isInMwGame && player.isSwingInProgress && !HackerDetector.INSTANCE.brokenBlocksList.isEmpty()) {
+        if (isCheckActive() && player.isSwingInProgress && !HackerDetector.INSTANCE.brokenBlocksList.isEmpty()) {
             final ItemStack itemStack = player.getHeldItem();
             if (itemStack != null && itemStack.isItemEnchanted() && itemStack.getItem() == Items.diamond_pickaxe) {
                 for (final BrokenBlock brokenBlock : HackerDetector.INSTANCE.brokenBlocksList) {
@@ -85,7 +85,7 @@ public class FastbreakCheck extends AbstractCheck {
      * at the same block when breaking it, for example when double-mining
      */
     public void onTickEnd() {
-        if (ScoreboardTracker.isInMwGame && mc.theWorld != null && mc.thePlayer != null && mc.theWorld.isRemote) {
+        if (isCheckActive() && mc.theWorld != null && mc.thePlayer != null && mc.theWorld.isRemote) {
             for (final BrokenBlock brokenBlock : HackerDetector.INSTANCE.brokenBlocksList) {
                 if (brokenBlock.playersList != null) {
                     long oldestTime = System.currentTimeMillis();
@@ -144,6 +144,10 @@ public class FastbreakCheck extends AbstractCheck {
 
     public static ViolationLevelTracker newViolationTracker() {
         return new ViolationLevelTracker(20);
+    }
+
+    public static boolean isCheckActive() {
+        return ScoreboardTracker.isInMwGame || ScoreboardTracker.isMWReplay;
     }
 
     /**
