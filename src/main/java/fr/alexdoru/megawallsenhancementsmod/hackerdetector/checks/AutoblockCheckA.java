@@ -15,11 +15,6 @@ public class AutoblockCheckA extends AbstractCheck {
     }
 
     @Override
-    public String getFlagType() {
-        return "A";
-    }
-
-    @Override
     public String getCheatDescription() {
         return "The player can attack while their sword is blocked";
     }
@@ -54,7 +49,7 @@ public class AutoblockCheckA extends AbstractCheck {
     }
 
     public static ViolationLevelTracker newViolationTracker() {
-        return new ViolationLevelTracker(150);
+        return new ViolationLevelTracker(120);
     }
 
 }
