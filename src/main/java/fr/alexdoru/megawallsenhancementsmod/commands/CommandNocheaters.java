@@ -90,7 +90,7 @@ public class CommandNocheaters extends MyAbstractCommand {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        final String[] arguments = {"autoreporthistory", "clearreportqueue", "config", "help", "reportlist"};
+        final String[] arguments = {"help", "reportlist"};
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, arguments);
         }
@@ -106,10 +106,7 @@ public class CommandNocheaters extends MyAbstractCommand {
                 EnumChatFormatting.RED + ChatUtil.bar() + "\n"
                         + ChatUtil.centerLine(EnumChatFormatting.GOLD + "NoCheaters Help\n\n")
                         + EnumChatFormatting.YELLOW + getCommandUsage(null) + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the list of reported players in your current world\n"
-                        + EnumChatFormatting.YELLOW + getCommandUsage(null) + " config" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "opens the config gui\n"
                         + EnumChatFormatting.YELLOW + getCommandUsage(null) + " reportlist" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the list of reported players\n"
-                        + EnumChatFormatting.YELLOW + getCommandUsage(null) + " clearreportqueue" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "cancels all reports suggestions about to be sent\n"
-                        + EnumChatFormatting.YELLOW + getCommandUsage(null) + " autoreporthistory" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints all players reported during the ongoing game\n"
                         + EnumChatFormatting.RED + ChatUtil.bar()
         );
     }
