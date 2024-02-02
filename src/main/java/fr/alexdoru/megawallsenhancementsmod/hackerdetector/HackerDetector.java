@@ -7,6 +7,7 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.*;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.BrokenBlock;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
+import fr.alexdoru.megawallsenhancementsmod.utils.FileLogger;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,14 +16,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class HackerDetector {
 
     public static final HackerDetector INSTANCE = new HackerDetector();
-    private static PrintStream printStream;
+    private static final FileLogger logger = new FileLogger("HackerDetector.log", "HH:mm:ss.SSS");
     /** Field stolen from EntityLivingBase */
     public static final UUID sprintingUUID = UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D");
     private static final Minecraft mc = Minecraft.getMinecraft();
@@ -38,7 +37,6 @@ public class HackerDetector {
 
     static {
         MinecraftForge.EVENT_BUS.register(INSTANCE);
-        initPrintStream();
     }
 
     private final FastbreakCheck fastbreakCheck;
@@ -145,34 +143,8 @@ public class HackerDetector {
         }
     }
 
-    private static void initPrintStream() {
-        final File logsFolder = new File(Minecraft.getMinecraft().mcDataDir, "logs");
-        //noinspection ResultOfMethodCallIgnored
-        logsFolder.mkdirs();
-        final File logFile = new File(logsFolder, "HackerDetector.log");
-        if (logFile.exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            logFile.delete();
-        }
-        if (!logFile.exists()) {
-            try {
-                //noinspection ResultOfMethodCallIgnored
-                logFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        try {
-            printStream = new PrintStream(new FileOutputStream(logFile, true));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void log(String message) {
-        if (printStream == null) return;
-        final String time = new SimpleDateFormat("HH:mm:ss.SSS").format(System.currentTimeMillis());
-        printStream.println("[" + time + "] " + message);
+        logger.log(message);
     }
 
 }
