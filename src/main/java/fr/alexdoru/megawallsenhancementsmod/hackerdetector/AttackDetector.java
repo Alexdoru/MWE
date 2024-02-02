@@ -48,6 +48,15 @@ public class AttackDetector {
                 attackerID = packetAnimation.getEntityID();
                 onEntitySwing(attackerID);
                 return;
+            } else if (animationType == 1) { // hurt animation
+                final long timeDiff = System.currentTimeMillis() - lastSwingTime;
+                if (timeDiff < 2) {
+                    if (lastPacketWasSwing) {
+                        checkPlayerAttack(attackerID, packetAnimation.getEntityID(), AttackType.ATTACK);
+                    } else {
+                        checkPlayerAttack(attackerID, packetAnimation.getEntityID(), AttackType.HURT);
+                    }
+                }
             } else if (animationType == 4 || animationType == 5) { // critical (4) / enchant particle (5)
                 final long timeDiff = System.currentTimeMillis() - lastSwingTime;
                 if (timeDiff < 2) {
@@ -82,7 +91,6 @@ public class AttackDetector {
     }
 
     private static void checkPlayerAttack(int attackerID, int targetId, AttackType attackType) {
-        // TODO ca register plus les attaques
         HackerDetector.addScheduledTask(() -> {
             final Entity attacker = mc.theWorld.getEntityByID(attackerID);
             final Entity target = mc.theWorld.getEntityByID(targetId);
@@ -92,9 +100,9 @@ public class AttackDetector {
             // discard attacks when the target is near the
             // entity render distance since the attacker might
             // not be loaded on my client
-            final double xDiff = mc.thePlayer.posX - target.posX;
-            final double zDiff = mc.thePlayer.posZ - target.posZ;
-            if (xDiff < -56D || xDiff > 56D || zDiff < -56D || zDiff > 56D) return;
+            final double xDiff = Math.abs(mc.thePlayer.posX - target.posX);
+            final double zDiff = Math.abs(mc.thePlayer.posZ - target.posZ);
+            if (xDiff > 56D || zDiff > 56D) return;
             if (attacker.getDistanceSqToEntity(target) > 64d) {
                 // TODO changer le range check en fonction de la speed du mec et ma speed,
                 //  si je prend du kb je vais voir que je me fait taper de 18 000 blocks?
@@ -112,28 +120,22 @@ public class AttackDetector {
                     }
                     break;
                 case ATTACK:  // swing and hurt packet received consecutively
-                    onPlayerAttack((EntityPlayer) attacker, (EntityPlayer) target, attackType);
-                    break;
                 case HURT:  // target hurt
                     // when an ability does damage to multiple players, this can fire multiple times
                     // on different players for the same attacker
-                    if (((EntityPlayer) attacker).swingProgressInt == -1 && ((EntityPlayer) target).hurtTime == 10) {// FIXME swingProgressInt == -1 isn't always true
-                        onPlayerAttack((EntityPlayer) attacker, (EntityPlayer) target, attackType);
-                    }
+                    onPlayerAttack((EntityPlayer) attacker, (EntityPlayer) target, attackType);
                     break;
                 case CRITICAL:  // target has crit particles
-                    if (((EntityPlayer) attacker).swingProgressInt == -1 && !attacker.onGround && attacker.ridingEntity == null) {
+                    if (attacker.ridingEntity == null) {
                         onPlayerAttack((EntityPlayer) attacker, (EntityPlayer) target, attackType);
                     }
                     break;
                 case SHARPNESS:  // target has sharp particles
-                    if (((EntityPlayer) attacker).swingProgressInt == -1) {
-                        final ItemStack heldItem = ((EntityPlayer) attacker).getHeldItem();
-                        if (heldItem != null) {
-                            final Item item = heldItem.getItem();
-                            if ((item instanceof ItemSword || item instanceof ItemTool) && heldItem.isItemEnchanted()) {
-                                onPlayerAttack((EntityPlayer) attacker, (EntityPlayer) target, attackType);
-                            }
+                    final ItemStack heldItem = ((EntityPlayer) attacker).getHeldItem();
+                    if (heldItem != null) {
+                        final Item item = heldItem.getItem();
+                        if ((item instanceof ItemSword || item instanceof ItemTool) && heldItem.isItemEnchanted()) {
+                            onPlayerAttack((EntityPlayer) attacker, (EntityPlayer) target, attackType);
                         }
                     }
                     break;
