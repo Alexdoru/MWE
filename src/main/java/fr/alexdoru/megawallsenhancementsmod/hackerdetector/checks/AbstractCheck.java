@@ -125,6 +125,14 @@ public abstract class AbstractCheck implements ICheck {
                 + EnumChatFormatting.GRAY + " check");
     }
 
+    protected void fail(EntityPlayer player, String extramsg) {
+        ChatUtil.debug(NameUtil.getFormattedNameWithoutIcons(player.getName())
+                + EnumChatFormatting.GRAY + " failed "
+                + EnumChatFormatting.RED + this.getCheatName()
+                + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")")
+                + EnumChatFormatting.GRAY + " check" + extramsg);
+    }
+
     protected void log(EntityPlayer player, PlayerDataSamples data, ViolationLevelTracker vl, String extramsg) {
         HackerDetector.log(player.getName() + " failed " + this.getCheatName() + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")") + " check "
                 + (extramsg == null ? "" : extramsg)
@@ -255,6 +263,13 @@ public abstract class AbstractCheck implements ICheck {
      */
     protected static boolean isInsideHitbox(EntityPlayer player, double x, double y, double z) {
         return x > player.posX - 0.4 && x < player.posX + 0.4 && y > player.posY - 0.1 && y < player.posY + 1.9 && z > player.posZ - 0.4 && z < player.posZ + 0.4;
+    }
+
+    /**
+     * Returns true if the coordinates (x,y,z) provided are inside the hitbox of the player of coordinates (playerX,playerY,playerZ)
+     */
+    protected static boolean isInsideHitbox(double playerX, double playerY, double playerZ, double x, double y, double z) {
+        return x > playerX - 0.4 && x < playerX + 0.4 && y > playerY - 0.1 && y < playerY + 1.9 && z > playerZ - 0.4 && z < playerZ + 0.4;
     }
 
     /**
