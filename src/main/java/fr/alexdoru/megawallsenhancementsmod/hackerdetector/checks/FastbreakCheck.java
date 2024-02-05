@@ -112,7 +112,7 @@ public class FastbreakCheck extends AbstractCheck {
                                     data.fastbreakVL.add(MathHelper.clamp_int(MathHelper.floor_float((0.9F - avg) * 10F), 1, 6));
                                     if (ConfigHandler.debugLogging) {
                                         this.log(playerBreaking, data, data.fastbreakVL,
-                                                        " | avg " + String.format("%.4f", avg) +
+                                                " | avg " + String.format("%.4f", avg) +
                                                         " | recordedBreakTime " + recordedBreakTime +
                                                         " | expectedTimeToBreak (haste II)" + expectedTimeToBreak +
                                                         " | block " + brokenBlock.block.getRegistryName());
@@ -139,7 +139,7 @@ public class FastbreakCheck extends AbstractCheck {
         if (player.isPotionActive(Potion.digSlowdown)) {
             extramsg += " | mining fatigue level " + (player.getActivePotionEffect(Potion.digSlowdown).getAmplifier() + 1);
         }
-        HackerDetector.log(player.getName() + " failed " + this.getCheatName() + " check" + " | vl " + vl.getViolationLevel() + extramsg);
+        super.log(player, data, vl, extramsg);
     }
 
     public static ViolationLevelTracker newViolationTracker() {

@@ -118,11 +118,7 @@ public abstract class AbstractCheck implements ICheck {
     }
 
     protected void fail(EntityPlayer player) {
-        ChatUtil.debug(NameUtil.getFormattedNameWithoutIcons(player.getName())
-                + EnumChatFormatting.GRAY + " failed "
-                + EnumChatFormatting.RED + this.getCheatName()
-                + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")")
-                + EnumChatFormatting.GRAY + " check");
+        this.fail(player, "");
     }
 
     protected void fail(EntityPlayer player, String extramsg) {
@@ -134,26 +130,11 @@ public abstract class AbstractCheck implements ICheck {
     }
 
     protected void log(EntityPlayer player, PlayerDataSamples data, ViolationLevelTracker vl, String extramsg) {
-        HackerDetector.log(player.getName() + " failed " + this.getCheatName() + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")") + " check "
-                + (extramsg == null ? "" : extramsg)
+        HackerDetector.log(player.getName() + " failed " + this.getCheatName()
+                + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")") + " check "
                 + " | vl " + vl.getViolationLevel()
-                + " | onGround " + player.onGround
-                + " | speedXZ (m/s) " + String.format("%.4f", data.getSpeedXZ())
-                + " | posX " + String.format("%.4f", player.posX)
-                + " | posY " + String.format("%.4f", player.posY)
-                + " | posZ " + String.format("%.4f", player.posZ)
-                + " | rotationPitch " + String.format("%.4f", player.rotationPitch)
-                + " | rotationYawHead " + String.format("%.4f", player.rotationYawHead)
-                + " | sprintTime " + data.sprintTime
-                + " | lastHurtTime " + data.lastHurtTime
-                + " | lastSwingTime " + data.lastSwingTime
-                + " | ticksExisted " + player.ticksExisted
-                + " | isRidingEntity " + player.isRiding()
+                + (extramsg == null ? "" : extramsg)
         );
-    }
-
-    protected static void debug(String msg) {
-        ChatUtil.debug(msg);
     }
 
     /**

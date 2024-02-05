@@ -37,7 +37,7 @@ public class AutoblockCheckA extends AbstractCheck {
                 if (data.useItemTime > 6) {
                     data.autoblockAVL.add(5);
                     if (ConfigHandler.debugLogging) {
-                        this.log(player, data, data.autoblockAVL, "useItemTime " + data.useItemTime);
+                        this.log(player, data, data.autoblockAVL, " | useItemTime " + data.useItemTime);
                     }
                     return true;
                 } else {
