@@ -39,7 +39,9 @@ public class KeepsprintCheck extends AbstractCheck {
             /* If the player is moving slower than the base running speed, we consider it is keepsprint */
             if (player.hurtTime == 0 && data.getSpeedXZ() < 4D) {
                 data.keepsprintVL.add(2);
-                if (ConfigHandler.debugLogging) this.log(player, data, data.keepsprintVL, null);
+                if (ConfigHandler.debugLogging) {
+                    this.log(player, data, data.keepsprintVL, null);
+                }
             }
             return true;
         } else if (data.sprintTime == 0 && data.useItemTime > 4) {
@@ -54,9 +56,9 @@ public class KeepsprintCheck extends AbstractCheck {
         final ItemStack itemStack = player.getHeldItem();
         final Item item = itemStack == null ? null : itemStack.getItem();
         super.log(player, data, data.keepsprintVL,
-                "sprintTime " + data.sprintTime
-                        + " useItemTime " + data.useItemTime
-                        + " speedXZ " + data.getSpeedXZ()
+                " | sprintTime " + data.sprintTime
+                        + " | useItemTime " + data.useItemTime
+                        + " | speedXZ " + data.getSpeedXZ()
                         + (item != null ? " item held " + item.getRegistryName() : "")
         );
     }

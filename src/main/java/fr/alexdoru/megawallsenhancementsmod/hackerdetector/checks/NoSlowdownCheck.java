@@ -54,9 +54,9 @@ public class NoSlowdownCheck extends AbstractCheck {
         final ItemStack itemStack = player.getHeldItem();
         final Item item = itemStack == null ? null : itemStack.getItem();
         super.log(player, data, data.noSlowdownVL,
-                "sprintTime " + data.sprintTime
-                        + " useItemTime " + data.useItemTime
-                        + " speedXZ " + data.getSpeedXZ()
+                " | sprintTime " + data.sprintTime
+                        + " | useItemTime " + data.useItemTime
+                        + " | speedXZ " + data.getSpeedXZ()
                         + (item != null ? " item held " + item.getRegistryName() : "")
         );
     }
