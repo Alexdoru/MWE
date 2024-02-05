@@ -22,8 +22,6 @@ public class HackerDetector {
 
     public static final HackerDetector INSTANCE = new HackerDetector();
     private static final FileLogger logger = new FileLogger("HackerDetector.log", "HH:mm:ss.SSS");
-    /** Field stolen from EntityLivingBase */
-    public static final UUID sprintingUUID = UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D");
     private static final Minecraft mc = Minecraft.getMinecraft();
     private final List<ICheck> checkList = new ArrayList<>();
     private long timeElapsedTemp = 0L;

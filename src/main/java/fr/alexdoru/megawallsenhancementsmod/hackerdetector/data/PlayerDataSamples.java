@@ -1,9 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.data;
 
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.*;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -82,8 +80,8 @@ public class PlayerDataSamples {
     }
 
     public void onTick(EntityPlayer player) {
-        this.sprintTime = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getModifier(HackerDetector.sprintingUUID) == null ? 0 : this.sprintTime + 1;
-        this.useItemTime = player.isUsingItem() ? this.useItemTime + 1 : 0;
+        this.sprintTime = player.isSprinting() ? this.sprintTime + 1 : 0;
+        this.useItemTime = player.isEating() && player.getHeldItem() != null ? this.useItemTime + 1 : 0;
         this.lastHurtTime = player.hurtTime == 10 ? 0 : this.lastHurtTime + 1;
         this.lastSwingTime++;
         this.swingList.add(this.hasSwung);
