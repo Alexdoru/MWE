@@ -29,9 +29,9 @@ public class PlayerDataSamples {
     public final SampleListZ attackList = new SampleListZ(20);
 
     /* ----- Samples of rotations/positions "emulated/delayed" by the client ----- */
-    public final SampleListD posXList = new SampleListD(5);
-    public final SampleListD posYList = new SampleListD(5);
-    public final SampleListD posZList = new SampleListD(5);
+    public final SampleListD posXList = new SampleListD(10);
+    public final SampleListD posYList = new SampleListD(10);
+    public final SampleListD posZList = new SampleListD(10);
     public final SampleListD speedXList = new SampleListD(5);
     public final SampleListD speedYList = new SampleListD(5);
     public final SampleListD speedZList = new SampleListD(5);
