@@ -44,6 +44,7 @@ public class MWEClassTransformer implements IClassTransformer {
         registerTransformer(new EntityOtherPlayerMPTransformer_FixAutoblockBypass());
         registerTransformer(new EntityOtherPlayerMPTransformer_PositionTracker());
         registerTransformer(new EntityPlayerTransformer());
+        registerTransformer(new EntityPlayerTransformer_FixAutoblockBypass());
         registerTransformer(new EntityPlayerSPTransformer_CommandListener());
         //registerTransformer(new EntityPlayerSPTransformer_HealthListener());
         registerTransformer(new EntityRendererTransformer_CancelNightVision());
