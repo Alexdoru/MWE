@@ -19,6 +19,7 @@ public enum MethodMapping {
     ENTITYFX$RENDERPARTICLE("a", "renderParticle", "(L" + WORLDRENDERER + ";L" + ENTITY + ";FFFFFF)V"),
     ENTITYLIVINGBASE$ISPOTIONACTIVE("a", "isPotionActive", "(L" + POTION + ";)Z"),
     ENTITYPLAYER$GETDISPLAYNAME("f_", "getDisplayName", "()L" + ICHATCOMPONENT + ";"),
+    ENTITYPLAYER$ONUPDATE("t_", "onUpdate", "()V"),
     ENTITYPLAYERSP$DROPONEITEM(INVOKEVIRTUAL, ENTITYPLAYERSP, "a", "dropOneItem", "(Z)L" + ENTITYITEM + ";"),
     ENTITYPLAYERSP$SENDCHATMESSAGE("e", "sendChatMessage", "(Ljava/lang/String;)V"),
     ENTITYPLAYERSP$SETPLAYERSPHEALTH("n", "setPlayerSPHealth", "(F)V"),
