@@ -69,6 +69,8 @@ Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, th
 - **Fix tablist rect background** - Fix the background of the tablist not being symetric and sometimes missing pixels on one side
 - **Fix actionbar text overlap** - Prevent the actionbar text from overlapping with the armor bar if the player has more than 2 rows of health
 - **Fix case commands tabcomplete** - Fix not being able to tabcomplete commands if the command contains uppercased letters
+- **Hide Optifine hats** - Hide cosmetic hats added by Optifine during certain seasons
+- **Command keybinds** - Keybinds to run the commands `/kill` & `/surface`
 
 ### Hitbox mod, better f3+b:
 
