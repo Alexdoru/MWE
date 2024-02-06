@@ -2,7 +2,9 @@ package fr.alexdoru.megawallsenhancementsmod.events;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -12,11 +14,15 @@ import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 public class KeybindingListener {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
+    private static final KeyBinding killKey = new KeyBinding("/Kill", 0, "MegaWallsEnhancements");
+    private static final KeyBinding surfaceKey = new KeyBinding("/Surface", 0, "MegaWallsEnhancements");
     private static final KeyBinding newNickKey = new KeyBinding("New Random Nick", 0, "MegaWallsEnhancements");
     private static final KeyBinding playerHitboxes = new KeyBinding("Toggle player hitboxes", 0, "Hitboxes");
     private static final KeyBinding toggleDroppedItemLimit = new KeyBinding("Toggle dropped item limit", 0, "MegaWallsEnhancements");
 
     public KeybindingListener() {
+        ClientRegistry.registerKeyBinding(killKey);
+        ClientRegistry.registerKeyBinding(surfaceKey);
         ClientRegistry.registerKeyBinding(newNickKey);
         ClientRegistry.registerKeyBinding(playerHitboxes);
         ClientRegistry.registerKeyBinding(toggleDroppedItemLimit);
@@ -29,7 +35,11 @@ public class KeybindingListener {
             return;
         }
 
-        if (toggleDroppedItemLimit.isPressed()) {
+        if (killKey.isPressed() && !(mc.currentScreen instanceof GuiGameOver)) {
+            mc.thePlayer.sendChatMessage("/kill");
+        } else if (ScoreboardTracker.isPrepPhase && surfaceKey.isPressed()) {
+            mc.thePlayer.sendChatMessage("/surface");
+        } else if (toggleDroppedItemLimit.isPressed()) {
             ConfigHandler.limitDroppedEntityRendered = !ConfigHandler.limitDroppedEntityRendered;
             ConfigHandler.saveConfig();
             if (ConfigHandler.limitDroppedEntityRendered) {
