@@ -41,7 +41,6 @@ public enum ClassMapping {
     ICAMERA("bia", "net/minecraft/client/renderer/culling/ICamera"),
     ICHATCOMPONENT("eu", "net/minecraft/util/IChatComponent"),
     ICOMMANDSENDER("m", "net/minecraft/command/ICommandSender"),
-    INETHANDLER("ep", "net/minecraft/network/INetHandler"),
     INVENTORYPLAYER("wm", "net/minecraft/entity/player/InventoryPlayer"),
     ITEMSTACK("zx", "net/minecraft/item/ItemStack"),
     MAP("java/util/Map"),
