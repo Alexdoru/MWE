@@ -97,20 +97,21 @@ public class AttackDetector {
             if (!(attacker instanceof EntityPlayer) || !(target instanceof EntityPlayer) || attacker == target) {
                 return;
             }// TODO sur le death packet du coup le players n'est ptet plus la
-            // discard attacks when the target is near the
-            // entity render distance since the attacker might
-            // not be loaded on my client
             final double xDiff = Math.abs(mc.thePlayer.posX - target.posX);
             final double zDiff = Math.abs(mc.thePlayer.posZ - target.posZ);
-            if (xDiff > 56D || zDiff > 56D) return;
-            if (attacker.getDistanceSqToEntity(target) > 64d) {
-                // TODO changer le range check en fonction de la speed du mec et ma speed,
-                //  si je prend du kb je vais voir que je me fait taper de 18 000 blocks?
-                //  >>OU<< regarder si la position de la target dans les 4-5 derniers ticks (equivalent au potentiel ping de l'attaquer)
-                //  se trouve in range de l'attacker, devant lui, mois de 5 blocks
+            if (xDiff > 56D || zDiff > 56D) {
+                // discard attacks when the target is near the
+                // entity render distance since the attacker might
+                // not be loaded on my client
                 return;
             }
-            if (ScoreboardTracker.isInMwGame && ((EntityPlayerAccessor) attacker).getPlayerTeamColor() != '\0' && ((EntityPlayerAccessor) attacker).getPlayerTeamColor() == ((EntityPlayerAccessor) target).getPlayerTeamColor()) {
+            if (attacker.getDistanceSqToEntity(target) > 64d) {
+                return;
+            }
+            if ((ScoreboardTracker.isInMwGame || ScoreboardTracker.isMWReplay)
+                    && ((EntityPlayerAccessor) attacker).getPlayerTeamColor() != '\0'
+                    && ((EntityPlayerAccessor) attacker).getPlayerTeamColor() == ((EntityPlayerAccessor) target).getPlayerTeamColor()) {
+                // discard attack if both players are on the same team
                 return;
             }
             switch (attackType) {
