@@ -79,11 +79,11 @@ public class PlayerRenderHUD implements IRenderer {
         mc.fontRendererObj.drawStringWithShadow(targetText, x, y, 0xFFFFFF);
         y += mc.fontRendererObj.FONT_HEIGHT;
 
-        final String usingItem = EnumChatFormatting.BLUE + "UsingItem " + (player.isUsingItem() ? EnumChatFormatting.GREEN + "true" : EnumChatFormatting.RED + "false");
+        final String usingItem = EnumChatFormatting.BLUE + "UsingItem " + (player.isEating() ? EnumChatFormatting.GREEN + "true" : EnumChatFormatting.RED + "false");
         mc.fontRendererObj.drawStringWithShadow(usingItem, x, y, 0xFFFFFF);
         y += mc.fontRendererObj.FONT_HEIGHT;
 
-        final String srpintText = EnumChatFormatting.BLUE + "Sprinting " + (data.sprintTime == 0 ? EnumChatFormatting.RED + "false" : EnumChatFormatting.GREEN + "true");
+        final String srpintText = EnumChatFormatting.BLUE + "Sprinting " + (player.isSprinting() ? EnumChatFormatting.GREEN + "true" : EnumChatFormatting.RED + "false");
         mc.fontRendererObj.drawStringWithShadow(srpintText, x, y, 0xFFFFFF);
         y += mc.fontRendererObj.FONT_HEIGHT;
 
