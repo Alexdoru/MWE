@@ -27,10 +27,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,20 +59,18 @@ import java.util.regex.Pattern;
  */
 public class NameUtil {
 
-    private static final IChatComponent iprefix_old_report = new ChatComponentText(EnumChatFormatting.GRAY + "" + EnumChatFormatting.BOLD + "\u26a0 ");
-    public static final String prefix_old_report = iprefix_old_report.getFormattedText();
-    private static final IChatComponent iprefix = new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + "\u26a0 ");
-    public static final String prefix = iprefix.getFormattedText();
-    private static final IChatComponent iprefix_bhop = new ChatComponentText(EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD + "\u26a0 ");
-    public static final String prefix_bhop = iprefix_bhop.getFormattedText();
-    private static final IChatComponent iprefix_scan = new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE + "" + EnumChatFormatting.BOLD + "\u26a0 ");
-    public static final String prefix_scan = iprefix_scan.getFormattedText();
-    private static final IChatComponent isquadprefix = new ChatComponentText(EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] ");
-    public static final String squadprefix = isquadprefix.getFormattedText();
-    private static final List<IChatComponent> allPrefix = Arrays.asList(iprefix_old_report, iprefix, iprefix_bhop, iprefix_scan, isquadprefix);
     private static final Minecraft mc = Minecraft.getMinecraft();
+    public static final String prefix = EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.BOLD + "\u26a0 " + EnumChatFormatting.RESET;
+    public static final String prefix_bhop = EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.BOLD + "\u26a0 " + EnumChatFormatting.RESET;
+    public static final String prefix_scan = EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD + "\u26a0 " + EnumChatFormatting.RESET;
+    public static final String squadprefix = EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] " + EnumChatFormatting.RESET;
+    private static final IChatComponent iprefix = new ChatComponentText(prefix);
+    private static final IChatComponent iprefix_bhop = new ChatComponentText(prefix_bhop);
+    private static final IChatComponent iprefix_scan = new ChatComponentText(prefix_scan);
+    private static final IChatComponent isquadprefix = new ChatComponentText(squadprefix);
+    private static final List<IChatComponent> allPrefix = Arrays.asList(iprefix, iprefix_bhop, iprefix_scan, isquadprefix);
     private static final Pattern PATTERN_CLASS_TAG = Pattern.compile("\\[([A-Z]{3})\\]");
-    private static final HashSet<UUID> warningMsgPrinted = new HashSet<>();
+    private static final Set<UUID> warningMsgPrinted = new HashSet<>();
 
     /**
      * This updates the infos storred in MWPlayerData.dataCache for the player : playername
@@ -134,8 +129,10 @@ public class NameUtil {
     }
 
     private static final Pattern MINECRAFT_NAME_PATTERN = Pattern.compile("\\w{1,16}");
+
     public static boolean isValidMinecraftName(String playername) {
-        return !StringUtil.isNullOrEmpty(playername) && MINECRAFT_NAME_PATTERN.matcher(playername).matches();
+        return !StringUtil.isNullOrEmpty(playername) &&
+                (MINECRAFT_NAME_PATTERN.matcher(playername).matches() || ScoreboardTracker.isReplayMode);
     }
 
     public static void onScoreboardPacket(String playername) {
@@ -308,6 +305,7 @@ public class NameUtil {
     }
 
     private static final Pattern obfPattern = Pattern.compile("\u00a7k[OX]*");
+
     private static String deobfString(String obfText) {
         return obfPattern.matcher(obfText).replaceAll("");
     }
