@@ -178,6 +178,12 @@ public class ServerPacketLogger {
                 }
             }
             return stripClassName(packet.getClass().getName()) + formatEntityName(entity) + str;
+        } else if (packet instanceof S25PacketBlockBreakAnim) {
+            final S25PacketBlockBreakAnim packetBlockBreakAnim = (S25PacketBlockBreakAnim) packet;
+            return stripClassName(packet.getClass().getName())
+                    + formatEntityID(packetBlockBreakAnim.getBreakerId())
+                    + " | position " + packetBlockBreakAnim.getPosition()
+                    + " | progress " + packetBlockBreakAnim.getProgress();
         } else {
             return stripClassName(packet.getClass().getName());
         }
