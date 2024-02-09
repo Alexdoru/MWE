@@ -73,7 +73,7 @@ public abstract class AbstractCheck implements ICheck {
         if (!(ScoreboardTracker.isInMwGame && ConfigHandler.autoreportFlaggedPlayers)) {
             imsg.appendSibling(ChatUtil.getReportButton(player.getName(), "cheating " + this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
         }
-        if (!ConfigHandler.addToReportList) {
+        if (ScoreboardTracker.isReplayMode || !ConfigHandler.addToReportList) {
             imsg.appendSibling(ChatUtil.getWDRButton(player.getName(), this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
         }
         if (ConfigHandler.compactFlagMessages) {
