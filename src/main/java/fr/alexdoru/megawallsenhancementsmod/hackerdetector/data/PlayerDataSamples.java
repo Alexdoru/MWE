@@ -22,13 +22,11 @@ public class PlayerDataSamples {
     /** Used to filter hurt events from an ability damaging multiple players at
      * the same time and mistaken for a player attacking multiple entities */
     public boolean hasAttackedMultiTarget = false;
-    /** True if the player has attacked another player during this tick */
-    public boolean hasAttacked = false;
     /** Player attacked during this tick if any */
     public EntityPlayer targetedPlayer;
     public final SampleListZ attackList = new SampleListZ(20);
 
-    /* ----- Samples of rotations/positions "emulated/delayed" by the client ----- */
+    /* ----- Samples of rotations/positions interpolated by the client ----- */
     public final SampleListD posXList = new SampleListD(10);
     public final SampleListD posYList = new SampleListD(10);
     public final SampleListD posZList = new SampleListD(10);
@@ -38,27 +36,21 @@ public class PlayerDataSamples {
     /* ----- Client samples end ----- */
 
     /* ----- Samples of rotations/positions received from the server ----- */
-    /** Not 0 if we received a position/rotation packet for this player during this tick */
-    public int updatedServerData = 0;
-    public final SampleListI updatedServerDataList = new SampleListI(5);
-    /** Not 0 if we received a S19PacketEntityHeadLook packet for this player during this tick */
-    public int updatedYawHead = 0;
-    public final SampleListI updatedYawHeadList = new SampleListI(5);
     public double serverPosX;
     public double serverPosY;
     public double serverPosZ;
     /** Pitch of the player's head [-90, 90] */
-    public float serverRotationPitch;
-    /** Yaw of the player's body [-180, 180] */
-    public float serverRotationYaw;
+    public float serverPitch;
     /** Yaw of the player's head [-180, 180] */
-    public float serverRotationYawHead;
+    public float serverYawHead;
+    /** Yaw of the player's body [-180, 180] */
+    public float serverYaw;
     public final SampleListD serverPosXList = new SampleListD(5);
     public final SampleListD serverPosYList = new SampleListD(5);
     public final SampleListD serverPosZList = new SampleListD(5);
-    public final SampleListF serverRotationPitchList = new SampleListF(5); // Pitch of the head
-    public final SampleListF serverRotationYawList = new SampleListF(5);// Yaw of the body
-    public final SampleListF serverRotationYawHeadList = new SampleListF(5); // Yaw of the head, directly equals to player.rotationYawHead
+    public final SampleListF serverPitchList = new SampleListF(5); // Pitch of the head
+    public final SampleListF serverYawHeadList = new SampleListF(5); // Yaw of the head, directly equals to player.rotationYawHead
+    public final SampleListF serverYawList = new SampleListF(5); // Yaw of the body
     /* ----- Server samples end ----- */
 
     /** Last time the player broke a block */
@@ -73,10 +65,7 @@ public class PlayerDataSamples {
     public void onTickStart() {
         this.hasSwung = false;
         this.hasAttackedMultiTarget = false;
-        this.hasAttacked = false;
         this.targetedPlayer = null;
-        this.updatedServerData = 0;
-        this.updatedYawHead = 0;
     }
 
     public void onTick(EntityPlayer player) {
@@ -85,35 +74,36 @@ public class PlayerDataSamples {
         this.lastHurtTime = player.hurtTime == 10 ? 0 : this.lastHurtTime + 1;
         this.lastSwingTime++;
         this.swingList.add(this.hasSwung);
-        this.attackList.add(this.hasAttacked);
+        this.attackList.add(this.hasAttacked());
         this.posXList.add(player.posX);
         this.posYList.add(player.posY);
         this.posZList.add(player.posZ);
         this.speedXList.add((player.posX - player.lastTickPosX) * 20D);
         this.speedYList.add((player.posY - player.lastTickPosY) * 20D);
         this.speedZList.add((player.posZ - player.lastTickPosZ) * 20D);
-        this.updatedServerDataList.add(this.updatedServerData);
-        this.updatedYawHeadList.add(this.updatedYawHead);
         this.serverPosXList.add(this.serverPosX);
         this.serverPosYList.add(this.serverPosY);
         this.serverPosZList.add(this.serverPosZ);
-        this.serverRotationPitchList.add(this.serverRotationPitch);
-        this.serverRotationYawList.add(this.serverRotationYaw);
-        this.serverRotationYawHeadList.add(this.serverRotationYawHead);
+        this.serverPitchList.add(this.serverPitch);
+        this.serverYawHeadList.add(this.serverYawHead);
+        this.serverYawList.add(this.serverYaw);
     }
 
     public void setPositionAndRotation(double x, double y, double z, float yaw, float pitch) {
-        this.updatedServerData++;
         this.serverPosX = x;
         this.serverPosY = y;
         this.serverPosZ = z;
-        this.serverRotationYaw = yaw;
-        this.serverRotationPitch = pitch;
+        this.serverYaw = yaw;
+        this.serverPitch = pitch;
     }
 
     public void setRotationYawHead(float yawHead) {
-        this.updatedYawHead++;
-        this.serverRotationYawHead = yawHead;
+        this.serverYawHead = yawHead;
+    }
+
+    /** True if the player has attacked another player during this tick */
+    public boolean hasAttacked() {
+        return this.targetedPlayer != null;
     }
 
     /** True if the player's position in the XZ plane is identical to the last tick */
@@ -138,7 +128,7 @@ public class PlayerDataSamples {
     }
 
     public Vec3 getLookServer() {
-        return getVectorForRotation(this.serverRotationPitch, this.serverRotationYawHead);
+        return getVectorForRotation(this.serverPitch, this.serverYawHead);
     }
 
     /**

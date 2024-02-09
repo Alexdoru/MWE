@@ -49,7 +49,7 @@ public class KillAuraCheck extends AbstractCheck {
         // TODO est ce qu'il faut utiliser le pos/yaw du tick d'avant,
         //  quand est ce qu'on recoit le paquet de position par rapport au swing paquet
 
-        if (!data.hasAttacked) return false;
+        if (!data.hasAttacked()) return false;
         if (player.isRiding()) return false;
         if (data.targetedPlayer == mc.thePlayer) return false;
 
