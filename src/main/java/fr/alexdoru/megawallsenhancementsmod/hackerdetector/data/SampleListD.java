@@ -71,7 +71,7 @@ public class SampleListD {
         final StringBuilder b = new StringBuilder();
         b.append('[');
         for (int i = 0; ; i++) {
-            b.append(this.get(i));
+            b.append(String.format("%.2f", this.get(i)));
             if (i == this.size - 1) {
                 return b.append(']').toString();
             }
