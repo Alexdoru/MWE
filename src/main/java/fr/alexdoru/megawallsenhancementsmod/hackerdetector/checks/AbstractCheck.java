@@ -214,7 +214,7 @@ public abstract class AbstractCheck implements ICheck {
         if (player == mc.thePlayer) {
             lookVect = Vector3D.getPlayersLookVec(player);
         } else {
-            lookVect = Vector3D.getVectorFromRotation(data.serverRotationPitch, data.serverRotationYawHead);
+            lookVect = Vector3D.getVectorFromRotation(data.serverPitch, data.serverYawHead);
         }
         final double angleWithVector = lookVect.getAngleWithVector(eyesToBlockCenter);
         final double maxAngle = Math.toDegrees(Math.atan(0.5D * Math.sqrt(3D / distSq))) * 1.33D;

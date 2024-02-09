@@ -158,11 +158,9 @@ public class AttackDetector {
         }
         if (dataAttacker.targetedPlayer != null && dataAttacker.targetedPlayer != target) {
             dataAttacker.hasAttackedMultiTarget = true;
-            dataAttacker.hasAttacked = false;
             dataAttacker.targetedPlayer = null;
             return;
         }
-        dataAttacker.hasAttacked = true;
         dataAttacker.targetedPlayer = target;
         if (ConfigHandler.debugLogging) {
             HackerDetector.log(attacker.getName() + " attacked " + target.getName() + " [" + attackType.name() + "]");
