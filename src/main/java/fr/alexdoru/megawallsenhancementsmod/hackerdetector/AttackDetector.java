@@ -33,7 +33,7 @@ public class AttackDetector {
                 final long timeDiff = System.currentTimeMillis() - lastSwingTime;
                 if (timeDiff < 2) {
                     if (lastPacketWasSwing) {
-                        checkPlayerAttack(attackerID, ((S19PacketEntityStatusAccessor) packet).getEntityId(), AttackType.ATTACK);
+                        checkPlayerAttack(attackerID, ((S19PacketEntityStatusAccessor) packet).getEntityId(), AttackType.DIRECT_HURT);
                     } else {
                         checkPlayerAttack(attackerID, ((S19PacketEntityStatusAccessor) packet).getEntityId(), AttackType.HURT);
                     }
@@ -52,7 +52,7 @@ public class AttackDetector {
                 final long timeDiff = System.currentTimeMillis() - lastSwingTime;
                 if (timeDiff < 2) {
                     if (lastPacketWasSwing) {
-                        checkPlayerAttack(attackerID, packetAnimation.getEntityID(), AttackType.ATTACK);
+                        checkPlayerAttack(attackerID, packetAnimation.getEntityID(), AttackType.DIRECT_HURT);
                     } else {
                         checkPlayerAttack(attackerID, packetAnimation.getEntityID(), AttackType.HURT);
                     }
@@ -61,7 +61,7 @@ public class AttackDetector {
                 final long timeDiff = System.currentTimeMillis() - lastSwingTime;
                 if (timeDiff < 2) {
                     if (lastPacketWasSwing) {
-                        checkPlayerAttack(attackerID, packetAnimation.getEntityID(), AttackType.ATTACK);
+                        checkPlayerAttack(attackerID, packetAnimation.getEntityID(), animationType == 4 ? AttackType.DIRECT_CRITICAL : AttackType.DIRECT_SHARPNESS);
                     } else {
                         checkPlayerAttack(attackerID, packetAnimation.getEntityID(), animationType == 4 ? AttackType.CRITICAL : AttackType.SHARPNESS);
                     }
@@ -72,7 +72,11 @@ public class AttackDetector {
             if (timeDiff < 2) {
                 final S12PacketEntityVelocity packetVelo = (S12PacketEntityVelocity) packet;
                 if (packetVelo.getMotionX() != 0 || packetVelo.getMotionY() != 0 || packetVelo.getMotionZ() != 0) {
-                    checkPlayerAttack(attackerID, packetVelo.getEntityID(), AttackType.VELOCITY);
+                    if (lastPacketWasSwing) {
+                        checkPlayerAttack(attackerID, packetVelo.getEntityID(), AttackType.DIRECT_VELOCITY);
+                    } else {
+                        checkPlayerAttack(attackerID, packetVelo.getEntityID(), AttackType.VELOCITY);
+                    }
                 }
             }
         }
@@ -115,12 +119,15 @@ public class AttackDetector {
                 return;
             }
             switch (attackType) {
+                case DIRECT_VELOCITY:
                 case VELOCITY:  // velocity packet
                     if (mc.thePlayer == target) {
                         onPlayerAttack((EntityPlayer) attacker, mc.thePlayer, attackType);
                     }
                     break;
-                case ATTACK:  // swing and hurt packet received consecutively
+                case DIRECT_CRITICAL:
+                case DIRECT_HURT: // swing and hurt packet received consecutively
+                case DIRECT_SHARPNESS:
                 case HURT:  // target hurt
                     // when an ability does damage to multiple players, this can fire multiple times
                     // on different players for the same attacker
@@ -164,10 +171,13 @@ public class AttackDetector {
 
     public enum AttackType {
 
-        ATTACK,
         CRITICAL,
-        SHARPNESS,
+        DIRECT_CRITICAL,
+        DIRECT_HURT,
+        DIRECT_SHARPNESS,
+        DIRECT_VELOCITY,
         HURT,
+        SHARPNESS,
         VELOCITY
 
     }
