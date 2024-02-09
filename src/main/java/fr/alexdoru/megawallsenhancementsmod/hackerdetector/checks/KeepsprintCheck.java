@@ -58,8 +58,8 @@ public class KeepsprintCheck extends AbstractCheck {
         super.log(player, data, data.keepsprintVL,
                 " | sprintTime " + data.sprintTime
                         + " | useItemTime " + data.useItemTime
-                        + " | speedXZ " + data.getSpeedXZ()
-                        + (item != null ? " item held " + item.getRegistryName() : "")
+                        + " | speedXZ " + String.format("%.2f", data.getSpeedXZ())
+                        + (item != null ? " | item held " + item.getRegistryName() : "")
         );
     }
 

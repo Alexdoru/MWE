@@ -56,8 +56,8 @@ public class NoSlowdownCheck extends AbstractCheck {
         super.log(player, data, data.noSlowdownVL,
                 " | sprintTime " + data.sprintTime
                         + " | useItemTime " + data.useItemTime
-                        + " | speedXZ " + data.getSpeedXZ()
-                        + (item != null ? " item held " + item.getRegistryName() : "")
+                        + " | speedXZ " + String.format("%.2f", data.getSpeedXZ())
+                        + (item != null ? " | item held " + item.getRegistryName() : "")
         );
     }
 
