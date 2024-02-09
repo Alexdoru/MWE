@@ -71,7 +71,7 @@ public class SampleListZ {
         final StringBuilder b = new StringBuilder();
         b.append('[');
         for (int i = 0; ; i++) {
-            b.append(this.get(i));
+            b.append(this.get(i) ? "1" : "0");
             if (i == this.size - 1) {
                 return b.append(']').toString();
             }
