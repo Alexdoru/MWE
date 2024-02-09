@@ -131,7 +131,7 @@ public abstract class AbstractCheck implements ICheck {
 
     protected void log(EntityPlayer player, PlayerDataSamples data, ViolationLevelTracker vl, String extramsg) {
         HackerDetector.log(player.getName() + " failed " + this.getCheatName()
-                + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")") + " check "
+                + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")") + " check"
                 + " | vl " + vl.getViolationLevel()
                 + (extramsg == null ? "" : extramsg)
         );
