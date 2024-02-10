@@ -1,19 +1,22 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
+import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
-import fr.alexdoru.megawallsenhancementsmod.asm.loader.ASMLoadingPlugin;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetworkManagerHook_PacketListener;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
-import fr.alexdoru.megawallsenhancementsmod.gui.guiscreens.NoCheatersConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.*;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
-import fr.alexdoru.megawallsenhancementsmod.utils.*;
+import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.MapUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
@@ -21,7 +24,10 @@ import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
@@ -40,9 +46,9 @@ public class CommandNocheaters extends MyAbstractCommand {
             return;
         }
 
-        if (args.length == 1 && args[0].equalsIgnoreCase("config")) {
+        if (args.length == 1 && args[0].equalsIgnoreCase("logpackets")) {
 
-            new DelayedTask(() -> mc.displayGuiScreen(new NoCheatersConfigGuiScreen(null)));
+            logPackets();
 
         } else if (args[0].equalsIgnoreCase("reportlist") || args[0].equalsIgnoreCase("debugreportlist")) {
 
@@ -177,8 +183,20 @@ public class CommandNocheaters extends MyAbstractCommand {
         });
     }
 
+    private static void logPackets() {
+        if (!MegaWallsEnhancementsMod.isDev()) {
+            return;
+        }
+        NetworkManagerHook_PacketListener.logPackets = !NetworkManagerHook_PacketListener.logPackets;
+        if (NetworkManagerHook_PacketListener.logPackets) {
+            ChatUtil.debug(EnumChatFormatting.GREEN + "Logging packets");
+        } else {
+            ChatUtil.debug(EnumChatFormatting.RED + "Stopped logging packets");
+        }
+    }
+
     private void logPlayer(String[] args) {
-        if (ASMLoadingPlugin.isObf() && !mc.thePlayer.getUniqueID().equals(UUID.fromString("57715d32-a685-4e2e-ae68-54c19808b58d"))) {
+        if (!MegaWallsEnhancementsMod.isDev()) {
             return;
         }
         for (int i = 1, argsLength = args.length; i < argsLength; i++) {

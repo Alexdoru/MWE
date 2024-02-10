@@ -18,7 +18,7 @@ public class ServerPacketLogger {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss.SSS");
-    private static final FileLogger logger = new FileLogger("ServerPacketLogger.log", null);
+    public static final FileLogger logger = new FileLogger("ServerPacketLogger.log", null);
 
     public static void logPacket(Packet<?> packet) {
         final String time = formatTime();

@@ -2,8 +2,10 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.S19PacketEntityStatusAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetworkManagerHook_PacketListener;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.debug.ServerPacketLogger;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -95,6 +97,16 @@ public class AttackDetector {
     }
 
     private static void checkPlayerAttack(int attackerID, int targetId, AttackType attackType) {
+        if (NetworkManagerHook_PacketListener.logPackets) {
+            Minecraft.getMinecraft().addScheduledTask(() -> {
+                final Entity attacker = mc.theWorld.getEntityByID(attackerID);
+                final Entity target = mc.theWorld.getEntityByID(targetId);
+                if (!(attacker instanceof EntityPlayer) || !(target instanceof EntityPlayer) || attacker == target) {
+                    return;
+                }
+                ServerPacketLogger.logger.log(attacker.getName() + " potential attacked " + target.getName() + " [" + attackType.name() + "]");
+            });
+        }
         HackerDetector.addScheduledTask(() -> {
             final Entity attacker = mc.theWorld.getEntityByID(attackerID);
             final Entity target = mc.theWorld.getEntityByID(targetId);
