@@ -56,19 +56,25 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
                 () -> ConfigHandler.hideHungerTitleInMW,
                 EnumChatFormatting.GRAY + "Hide the hunger message that appears in the middle of the screen in deathmatch"));
         final List<String> iconsTooltip = new ArrayList<>();
-        iconsTooltip.add(EnumChatFormatting.GREEN + "Icons on names");
+        iconsTooltip.add(EnumChatFormatting.GREEN + "Squad Icon on names");
         iconsTooltip.add("");
-        iconsTooltip.add(EnumChatFormatting.GRAY + "Toggles all icons in front of names, on nametags and in the tablist");
+        iconsTooltip.add(EnumChatFormatting.DARK_GRAY + "\u25AA " + EnumChatFormatting.GREEN + "Enabled" + EnumChatFormatting.GRAY + " : displays a squad icon in front of names on nametags and in the tablist");
         iconsTooltip.add("");
-        iconsTooltip.add(NameUtil.squadprefix + EnumChatFormatting.GRAY + " : players in your squad");
-        iconsTooltip.add(NameUtil.prefix_bhop + EnumChatFormatting.GRAY + " : players reported for blatant cheats");
-        iconsTooltip.add(NameUtil.prefix + EnumChatFormatting.GRAY + " : players reported for other cheats");
-        iconsTooltip.add(NameUtil.prefix_scan + EnumChatFormatting.GRAY + " : players flagged by the /scangame command");
+        iconsTooltip.add(EnumChatFormatting.DARK_GRAY + "\u25AA " + EnumChatFormatting.GREEN + "Tab Only" + EnumChatFormatting.GRAY + " : displays a squad icon in front of names in the tablist only");
+        iconsTooltip.add("");
+        iconsTooltip.add(NameUtil.SQUAD_ICON + EnumChatFormatting.GRAY + " : players in your squad");
         this.buttonList.add(new FancyGuiButton(
                 xPosLeft, getButtonYPos(3),
-                () -> "Icons on names : " + getSuffix(ConfigHandler.iconsOnNames),
+                () -> "Squad Icon on names : " + (ConfigHandler.squadIconTabOnly ? EnumChatFormatting.GREEN + "Tab Only" : getSuffix(ConfigHandler.squadIconOnNames)),
                 () -> {
-                    ConfigHandler.iconsOnNames = !ConfigHandler.iconsOnNames;
+                    if (ConfigHandler.squadIconOnNames && !ConfigHandler.squadIconTabOnly) {
+                        ConfigHandler.squadIconOnNames = false;
+                        ConfigHandler.squadIconTabOnly = true;
+                    } else if (ConfigHandler.squadIconTabOnly) {
+                        ConfigHandler.squadIconTabOnly = false;
+                    } else {
+                        ConfigHandler.squadIconOnNames = true;
+                    }
                     NameUtil.refreshAllNamesInWorld();
                 },
                 iconsTooltip));
