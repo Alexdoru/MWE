@@ -3,8 +3,9 @@ package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.*;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
+
+import static net.minecraft.util.EnumChatFormatting.*;
 
 public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
@@ -20,9 +21,9 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
         super.initGui();
         final int xLeftCol = getxCenter() - buttonsWidth - 10;
         final int xRightCol = getxCenter() + 10;
-        this.elementList.add(new TextElement(EnumChatFormatting.BLUE + "Hitboxes", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
-        this.elementList.add(new TextElement(EnumChatFormatting.GRAY + "You obviously need to press f3+b to enable hitboxes", getxCenter(), getButtonYPos(-1) + 2 * fontRendererObj.FONT_HEIGHT).makeCentered());
-        this.elementList.add(new TextElement(EnumChatFormatting.WHITE + "Draw Hitbox for :", getxCenter() - buttonsWidth / 2 - 10, getButtonYPos(1) - buttonsHeight / 2).makeCentered());
+        this.elementList.add(new TextElement(BLUE + "Hitboxes", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
+        this.elementList.add(new TextElement(GRAY + "You obviously need to press f3+b to enable hitboxes", getxCenter(), getButtonYPos(-1) + 2 * fontRendererObj.FONT_HEIGHT).makeCentered());
+        this.elementList.add(new TextElement(WHITE + "Draw Hitbox for :", getxCenter() - buttonsWidth / 2 - 10, getButtonYPos(1) - buttonsHeight / 2).makeCentered());
         this.elementList.add(new ColoredSquareElement(xRightCol + buttonsWidth - 25 + 4, getButtonYPos(3), 20, () -> ConfigHandler.hitboxColor));
         this.buttonList.add(new OptionGuiButton(
                 xLeftCol, getButtonYPos(1),
@@ -84,63 +85,63 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
                 "Team color for players",
                 (b) -> ConfigHandler.teamColoredHitbox = b,
                 () -> ConfigHandler.teamColoredHitbox,
-                EnumChatFormatting.GRAY + "For players, the hitbox will take the color of the player's team"));
+                GRAY + "For players, the hitbox will take the color of the player's team"));
         this.buttonList.add(new OptionGuiButton(
                 xRightCol, getButtonYPos(2),
                 buttonsWidth, 20,
                 "Team color for arrows",
                 (b) -> ConfigHandler.teamColoredArrowHitbox = b,
                 () -> ConfigHandler.teamColoredArrowHitbox,
-                EnumChatFormatting.GRAY + "For arrows, the hitbox will take the color of the shooter's team"));
+                GRAY + "For arrows, the hitbox will take the color of the shooter's team"));
         this.buttonList.add(new FancyGuiButton(
                 xRightCol, getButtonYPos(3),
                 buttonsWidth - 25, buttonsHeight,
                 () -> "Select custom hitbox color",
                 () -> mc.displayGuiScreen(new ColorSelectionGuiScreen(this, ConfigHandler.hitboxColor, 0xFFFFFF, color -> ConfigHandler.hitboxColor = color)),
-                EnumChatFormatting.GREEN + "Custom hitbox color",
-                EnumChatFormatting.GRAY + "Change the color of the entity hitboxes"));
+                GREEN + "Custom hitbox color",
+                GRAY + "Change the color of the entity hitboxes"));
         this.buttonList.add(new OptionGuiButton(
                 xRightCol, getButtonYPos(4),
                 buttonsWidth, 20,
                 "Real size hitbox",
                 (b) -> ConfigHandler.realSizeHitbox = b,
                 () -> ConfigHandler.realSizeHitbox,
-                EnumChatFormatting.GRAY + "The hitbox will be larger and represent the area where you can attack entities"));
+                GRAY + "The hitbox will be larger and represent the area where you can attack entities"));
         this.buttonList.add(new OptionGuiButton(
                 xRightCol, getButtonYPos(5),
                 buttonsWidth, 20,
                 "Red eyeline",
                 (b) -> ConfigHandler.drawRedBox = b,
                 () -> ConfigHandler.drawRedBox,
-                EnumChatFormatting.GRAY + "Draw a red square at the eye level of entities"));
+                GRAY + "Draw a red square at the eye level of entities"));
         this.buttonList.add(new OptionGuiButton(
                 xRightCol, getButtonYPos(6),
                 buttonsWidth, 20,
                 "Draw blue vector",
                 (b) -> ConfigHandler.drawBlueVect = b,
                 () -> ConfigHandler.drawBlueVect,
-                EnumChatFormatting.GRAY + "Draw a blue line comming out of the eyes of entities that represent where they look at"));
+                GRAY + "Draw a blue line comming out of the eyes of entities that represent where they look at"));
         this.buttonList.add(new OptionGuiButton(
                 xRightCol, getButtonYPos(7),
                 buttonsWidth, 20,
                 "For players only",
                 (b) -> ConfigHandler.drawBlueVectForPlayersOnly = b,
                 () -> ConfigHandler.drawBlueVectForPlayersOnly,
-                EnumChatFormatting.GRAY + "Draw blue vector for players only"));
+                GRAY + "Draw blue vector for players only"));
         this.buttonList.add(new OptionGuiButton(
                 xRightCol, getButtonYPos(8),
                 buttonsWidth, 20,
                 "Make vector 3 meters",
                 (b) -> ConfigHandler.makeBlueVect3Meters = b,
                 () -> ConfigHandler.makeBlueVect3Meters,
-                EnumChatFormatting.GRAY + "Make the blue vector 3 meters long, just like the player's attack reach"));
+                GRAY + "Make the blue vector 3 meters long, just like the player's attack reach"));
         this.buttonList.add(new OptionGuiButton(
                 xRightCol, getButtonYPos(9),
                 buttonsWidth, 20,
                 "Hide close hitbox",
                 (b) -> ConfigHandler.hideCloseHitbox = b,
                 () -> ConfigHandler.hideCloseHitbox,
-                EnumChatFormatting.GRAY + "Stops rendering the hitboxes that are closer than the range set below"));
+                GRAY + "Stops rendering the hitboxes that are closer than the range set below"));
         this.buttonList.add(new GuiSlider(16, xRightCol, getButtonYPos(10), buttonsWidth, buttonsHeight, "Range : ", " m", 0d, 64d, ConfigHandler.hitboxDrawRange, false, true, this)); //hitbox draw range slider
         this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(12), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
