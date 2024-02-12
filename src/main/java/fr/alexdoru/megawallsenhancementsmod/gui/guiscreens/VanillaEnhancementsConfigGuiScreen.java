@@ -5,13 +5,14 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.*;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.config.GuiSlider;
 import net.minecraftforge.fml.common.Loader;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static net.minecraft.util.EnumChatFormatting.*;
 
 public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
@@ -32,28 +33,28 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
         super.initGui();
         final int xPosLeft = getxCenter() - buttonWidth - 10;
         final int xPosRight = getxCenter() + 10;
-        this.elementList.add(new TextElement(EnumChatFormatting.GOLD + "Vanilla Enhancements", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
+        this.elementList.add(new TextElement(GOLD + "Vanilla Enhancements", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
         this.buttonList.add(new FancyGuiButton(
                 xPosLeft, getButtonYPos(1),
                 buttonWidth, buttonsHeight,
                 () -> "Cancel night vision effect : " + getSuffix(!ConfigHandler.cancelNightVisionEffect),
                 () -> ConfigHandler.cancelNightVisionEffect = !ConfigHandler.cancelNightVisionEffect,
-                EnumChatFormatting.GREEN + "Cancel night vision effect",
-                EnumChatFormatting.GRAY + "Removes the visual effect of night vision"));
+                GREEN + "Cancel night vision effect",
+                GRAY + "Removes the visual effect of night vision"));
         this.buttonList.add(new OptionGuiButton(
                 xPosLeft, getButtonYPos(2),
                 buttonWidth, buttonsHeight,
                 "Clear view",
                 (b) -> ConfigHandler.clearVision = b,
                 () -> ConfigHandler.clearVision,
-                EnumChatFormatting.GRAY + "Stops rendering particles that are too close (75cm) to the camera for a better visibility"));
+                GRAY + "Stops rendering particles that are too close (75cm) to the camera for a better visibility"));
         this.buttonList.add(new OptionGuiButton(
                 xPosLeft, getButtonYPos(3),
                 buttonWidth, buttonsHeight,
                 "Fix actionbar text overlap",
                 (b) -> ConfigHandler.fixActionbarTextOverlap = b,
                 () -> ConfigHandler.fixActionbarTextOverlap,
-                EnumChatFormatting.GRAY + "Prevents the actionbar text from overlapping with the armor bar if the player has more than 2 rows of health"));
+                GRAY + "Prevents the actionbar text from overlapping with the armor bar if the player has more than 2 rows of health"));
         this.buttonList.add(new FancyGuiButton(
                 xPosLeft, getButtonYPos(4),
                 buttonWidth, buttonsHeight,
@@ -63,9 +64,9 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                     if (ConfigHandler.playSoundLowHP) {
                         SoundUtil.playLowHPSound();
                     }
-                }, EnumChatFormatting.GREEN + "Sound warning when low HP",
-                EnumChatFormatting.GRAY + "Plays a sound when your health drops below the threshold defined below",
-                EnumChatFormatting.GRAY + "The sound used is \"note.pling\" check your sound settings to see if it's enabled !"));
+                }, GREEN + "Sound warning when low HP",
+                GRAY + "Plays a sound when your health drops below the threshold defined below",
+                GRAY + "The sound used is \"note.pling\" check your sound settings to see if it's enabled !"));
         this.buttonList.add(new GuiSlider(20, xPosLeft, getButtonYPos(5), buttonWidth, buttonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
         this.buttonList.add(new OptionGuiButton(
                 xPosLeft, getButtonYPos(6),
@@ -73,8 +74,8 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                 "Limit dropped item rendered",
                 (b) -> ConfigHandler.limitDroppedEntityRendered = b,
                 () -> ConfigHandler.limitDroppedEntityRendered,
-                EnumChatFormatting.GRAY + "Dynamically modifies the render distance of dropped items entities to preserve performance. It starts reducing the render distance when exceeding the threshold set below.",
-                EnumChatFormatting.GRAY + "There is a keybind (ESC -> options -> controls -> MegaWallsEnhancements) to toggle it on the fly"));
+                GRAY + "Dynamically modifies the render distance of dropped items entities to preserve performance. It starts reducing the render distance when exceeding the threshold set below.",
+                GRAY + "There is a keybind (ESC -> options -> controls -> MegaWallsEnhancements) to toggle it on the fly"));
         this.buttonList.add(new GuiSlider(23, xPosLeft, getButtonYPos(7), buttonWidth, buttonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
         this.buttonList.add(new OptionGuiButton(
                 xPosLeft, getButtonYPos(8),
@@ -82,7 +83,7 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                 "Safe inventory",
                 (b) -> ConfigHandler.safeInventory = b,
                 () -> ConfigHandler.safeInventory,
-                EnumChatFormatting.GRAY + "Prevents dropping the sword you are holding in your hotbar. Prevents hotkeying important kit items out of your inventory (in Mega Walls)."));
+                GRAY + "Prevents dropping the sword you are holding in your hotbar. Prevents hotkeying important kit items out of your inventory (in Mega Walls)."));
         if (isOrangeSimpleModLoaded) {
             this.buttonList.add(new OptionGuiButton(
                     xPosLeft, getButtonYPos(9),
@@ -90,7 +91,7 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                     "Hide Toggle Sprint HUD",
                     (b) -> ConfigHandler.hideToggleSprintText = b,
                     () -> ConfigHandler.hideToggleSprintText,
-                    EnumChatFormatting.GRAY + "Hides the Toggle Sprint HUD from Orange's Marshall Simple Mod"));
+                    GRAY + "Hides the Toggle Sprint HUD from Orange's Marshall Simple Mod"));
         }
         if (hasOptifine) {
             this.buttonList.add(new OptionGuiButton(
@@ -99,43 +100,43 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                     "Hide Optifine hats",
                     (b) -> ConfigHandler.hideOptifineHats = b,
                     () -> ConfigHandler.hideOptifineHats,
-                    EnumChatFormatting.GRAY + "Hides the hats added by Optifine during Halloween and Christmas",
-                    EnumChatFormatting.DARK_RED + "Requires game restart to be fully effective"));
+                    GRAY + "Hides the hats added by Optifine during Halloween and Christmas",
+                    DARK_RED + "Requires game restart to be fully effective"));
         }
         this.buttonList.add(new FancyGuiButton(
                 xPosRight, getButtonYPos(1),
                 buttonWidth - 25, buttonsHeight,
                 () -> "Select custom hurt color",
                 () -> mc.displayGuiScreen(new ColorSelectionGuiScreen(this, ConfigHandler.hitColor, 0x4CFF0000, color -> ConfigHandler.hitColor = color)),
-                EnumChatFormatting.GREEN + "Custom hurt color",
-                EnumChatFormatting.GRAY + "Change the color entities take when they get hurt"));
+                GREEN + "Custom hurt color",
+                GRAY + "Change the color entities take when they get hurt"));
         this.elementList.add(new ColoredSquareElement(xPosRight + buttonWidth - 25 + 4, getButtonYPos(1), 20, () -> ConfigHandler.hitColor));
         this.buttonList.add(new FancyGuiButton(
                 xPosRight, getButtonYPos(2),
                 buttonWidth / 2 - 2, buttonsHeight,
-                () -> "Color armor : " + (ConfigHandler.colorArmorWhenHurt ? EnumChatFormatting.GREEN + "On" : EnumChatFormatting.RED + "Off"),
+                () -> "Color armor : " + (ConfigHandler.colorArmorWhenHurt ? GREEN + "On" : RED + "Off"),
                 () -> ConfigHandler.colorArmorWhenHurt = !ConfigHandler.colorArmorWhenHurt,
-                EnumChatFormatting.GREEN + "Color armor",
-                EnumChatFormatting.GRAY + "The armor will be colored as well when a player is hurt, like it does in 1.7.",
-                EnumChatFormatting.GRAY + "If you have a 1.7 Old animation mod (such as " + EnumChatFormatting.YELLOW + "Sk1er's 1.7 Old Animation mod" + EnumChatFormatting.GRAY + "), you might need to turn off their \"Red Armor\" setting for this one to take effect."));
+                GREEN + "Color armor",
+                GRAY + "The armor will be colored as well when a player is hurt, like it does in 1.7.",
+                GRAY + "If you have a 1.7 Old animation mod (such as " + YELLOW + "Sk1er's 1.7 Old Animation mod" + GRAY + "), you might need to turn off their \"Red Armor\" setting for this one to take effect."));
         this.buttonList.add(new FancyGuiButton(
                 xPosRight + buttonWidth / 2 + 2, getButtonYPos(2),
                 buttonWidth / 2 - 2, buttonsHeight,
-                () -> "Use team color : " + (ConfigHandler.useTeamColorWhenHurt ? EnumChatFormatting.GREEN + "On" : EnumChatFormatting.RED + "Off"),
+                () -> "Use team color : " + (ConfigHandler.useTeamColorWhenHurt ? GREEN + "On" : RED + "Off"),
                 () -> ConfigHandler.useTeamColorWhenHurt = !ConfigHandler.useTeamColorWhenHurt,
-                EnumChatFormatting.GREEN + "Use team color",
-                EnumChatFormatting.GRAY + "When hurt the players will take the color of their team, other entities will take the custom color defined above.",
-                EnumChatFormatting.YELLOW + "When this is enabled, it still uses the alpha level defined in the custom color."));
+                GREEN + "Use team color",
+                GRAY + "When hurt the players will take the color of their team, other entities will take the custom color defined above.",
+                YELLOW + "When this is enabled, it still uses the alpha level defined in the custom color."));
         final List<String> shortCoinsList = new ArrayList<>();
-        shortCoinsList.add(EnumChatFormatting.GREEN + "Short coin messages");
+        shortCoinsList.add(GREEN + "Short coin messages");
         shortCoinsList.add("");
-        shortCoinsList.add(EnumChatFormatting.GRAY + "Makes the coin messages shorter by removing the network booster info. It also compacts the guild bonus message and coin message into one.");
+        shortCoinsList.add(GRAY + "Makes the coin messages shorter by removing the network booster info. It also compacts the guild bonus message and coin message into one.");
         shortCoinsList.add("");
-        shortCoinsList.add(EnumChatFormatting.GRAY + "It makes the assists messages in mega walls fit on one line instead of two.");
+        shortCoinsList.add(GRAY + "It makes the assists messages in mega walls fit on one line instead of two.");
         shortCoinsList.add("");
-        shortCoinsList.add(EnumChatFormatting.GOLD + "+100 coins! (hypixel's Network booster)" + EnumChatFormatting.AQUA + " FINAL KILL");
-        shortCoinsList.add(EnumChatFormatting.WHITE + "Will become : ");
-        shortCoinsList.add(EnumChatFormatting.GOLD + "+100 coins!" + EnumChatFormatting.AQUA + " FINAL KILL");
+        shortCoinsList.add(GOLD + "+100 coins! (hypixel's Network booster)" + AQUA + " FINAL KILL");
+        shortCoinsList.add(WHITE + "Will become : ");
+        shortCoinsList.add(GOLD + "+100 coins!" + AQUA + " FINAL KILL");
         this.buttonList.add(new OptionGuiButton(
                 xPosRight, getButtonYPos(3),
                 buttonWidth, buttonsHeight,
@@ -144,15 +145,15 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                 () -> ConfigHandler.shortCoinMessage,
                 shortCoinsList));
         final List<String> coloredScoresHead = new ArrayList<>();
-        coloredScoresHead.add(EnumChatFormatting.GREEN + "Colored scores above head");
+        coloredScoresHead.add(GREEN + "Colored scores above head");
         coloredScoresHead.add("");
-        coloredScoresHead.add(EnumChatFormatting.GRAY + "Renders the scores/health in color, according to the score value and the player's maximum health points");
+        coloredScoresHead.add(GRAY + "Renders the scores/health in color, according to the score value and the player's maximum health points");
         coloredScoresHead.add("");
-        coloredScoresHead.add(EnumChatFormatting.DARK_GREEN + "44" + EnumChatFormatting.RED + " \u2764");
-        coloredScoresHead.add(EnumChatFormatting.GREEN + "35" + EnumChatFormatting.RED + " \u2764");
-        coloredScoresHead.add(EnumChatFormatting.YELLOW + "25" + EnumChatFormatting.RED + " \u2764");
-        coloredScoresHead.add(EnumChatFormatting.RED + "15" + EnumChatFormatting.RED + " \u2764");
-        coloredScoresHead.add(EnumChatFormatting.DARK_RED + "5" + EnumChatFormatting.RED + " \u2764");
+        coloredScoresHead.add(DARK_GREEN + "44" + RED + " \u2764");
+        coloredScoresHead.add(GREEN + "35" + RED + " \u2764");
+        coloredScoresHead.add(YELLOW + "25" + RED + " \u2764");
+        coloredScoresHead.add(RED + "15" + RED + " \u2764");
+        coloredScoresHead.add(DARK_RED + "5" + RED + " \u2764");
         this.buttonList.add(new OptionGuiButton(
                 xPosRight, getButtonYPos(4),
                 buttonWidth, buttonsHeight,
@@ -161,17 +162,17 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                 () -> ConfigHandler.coloredScoreAboveHead,
                 coloredScoresHead));
         final List<String> coloredScoresTabList = new ArrayList<>();
-        coloredScoresTabList.add(EnumChatFormatting.GREEN + "Colored scores in tab");
+        coloredScoresTabList.add(GREEN + "Colored scores in tab");
         coloredScoresTabList.add("");
-        coloredScoresTabList.add(EnumChatFormatting.GRAY + "Renders the scores/health in color, according to the score value and the player's maximum health points");
+        coloredScoresTabList.add(GRAY + "Renders the scores/health in color, according to the score value and the player's maximum health points");
         coloredScoresTabList.add("");
-        coloredScoresTabList.add(EnumChatFormatting.RED + "OrangeMarshall " + EnumChatFormatting.GRAY + "[ZOM] " + EnumChatFormatting.DARK_GREEN + "44");
-        coloredScoresTabList.add(EnumChatFormatting.RED + "OrangeMarshall " + EnumChatFormatting.GRAY + "[ZOM] " + EnumChatFormatting.GREEN + "35");
-        coloredScoresTabList.add(EnumChatFormatting.RED + "OrangeMarshall " + EnumChatFormatting.GRAY + "[ZOM] " + EnumChatFormatting.YELLOW + "25");
-        coloredScoresTabList.add(EnumChatFormatting.RED + "OrangeMarshall " + EnumChatFormatting.GRAY + "[ZOM] " + EnumChatFormatting.RED + "15");
-        coloredScoresTabList.add(EnumChatFormatting.RED + "OrangeMarshall " + EnumChatFormatting.GRAY + "[ZOM]  " + EnumChatFormatting.DARK_RED + "5");
+        coloredScoresTabList.add(RED + "OrangeMarshall " + GRAY + "[ZOM] " + DARK_GREEN + "44");
+        coloredScoresTabList.add(RED + "OrangeMarshall " + GRAY + "[ZOM] " + GREEN + "35");
+        coloredScoresTabList.add(RED + "OrangeMarshall " + GRAY + "[ZOM] " + YELLOW + "25");
+        coloredScoresTabList.add(RED + "OrangeMarshall " + GRAY + "[ZOM] " + RED + "15");
+        coloredScoresTabList.add(RED + "OrangeMarshall " + GRAY + "[ZOM]  " + DARK_RED + "5");
         coloredScoresTabList.add("");
-        coloredScoresTabList.add(EnumChatFormatting.RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements");
+        coloredScoresTabList.add(RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements");
         this.buttonList.add(new OptionGuiButton(
                 xPosRight, getButtonYPos(5),
                 buttonWidth, buttonsHeight,
@@ -184,11 +185,11 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                 buttonWidth, buttonsHeight,
                 () -> {
                     if (ConfigHandler.hideTablistHeaderFooter && !ConfigHandler.showHeaderFooterOutsideMW) {
-                        return "Hide header/footer in tab : " + EnumChatFormatting.GREEN + "Enabled";
+                        return "Hide header/footer in tab : " + GREEN + "Enabled";
                     } else if (ConfigHandler.hideTablistHeaderFooter /*&& ConfigHandler.showHeaderFooterOutsideMW*/) {
-                        return "Hide header/footer in tab : " + EnumChatFormatting.GREEN + "Only in MW";
+                        return "Hide header/footer in tab : " + GREEN + "Only in MW";
                     } else {
-                        return "Hide header/footer in tab : " + EnumChatFormatting.RED + "Disabled";
+                        return "Hide header/footer in tab : " + RED + "Disabled";
                     }
                 },
                 () -> {
@@ -202,27 +203,27 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                         ConfigHandler.showHeaderFooterOutsideMW = false;
                     }
                 },
-                EnumChatFormatting.GREEN + "Hide header/footer in tab",
-                EnumChatFormatting.DARK_GRAY + "\u25AA " + EnumChatFormatting.GREEN + "Enabled" + EnumChatFormatting.GRAY + " : will hide the text at top and bottom of the tablist",
-                EnumChatFormatting.DARK_GRAY + "\u25AA " + EnumChatFormatting.GREEN + "Only in MW" + EnumChatFormatting.GRAY + " : will hide the text at top and bottom of the tablist only in Mega Walls since that text can contain usefull information in other games such as Bedwars or Skyblock",
-                EnumChatFormatting.DARK_GRAY + "\u25AA " + EnumChatFormatting.RED + "Disabled" + EnumChatFormatting.GRAY + " : will always render the text at top and bottom of the tablist",
-                EnumChatFormatting.RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements"));
+                GREEN + "Hide header/footer in tab",
+                DARK_GRAY + "\u25AA " + GREEN + "Enabled" + GRAY + " : will hide the text at top and bottom of the tablist",
+                DARK_GRAY + "\u25AA " + GREEN + "Only in MW" + GRAY + " : will hide the text at top and bottom of the tablist only in Mega Walls since that text can contain usefull information in other games such as Bedwars or Skyblock",
+                DARK_GRAY + "\u25AA " + RED + "Disabled" + GRAY + " : will always render the text at top and bottom of the tablist",
+                RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements"));
         this.buttonList.add(new OptionGuiButton(
                 xPosRight, getButtonYPos(7),
                 buttonWidth, buttonsHeight,
                 "Show playercount in tab",
                 (b) -> ConfigHandler.showPlayercountTablist = b,
                 () -> ConfigHandler.showPlayercountTablist,
-                EnumChatFormatting.GRAY + "Displays the amount of players in the lobby at the top of the tablist",
-                EnumChatFormatting.RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements"));
+                GRAY + "Displays the amount of players in the lobby at the top of the tablist",
+                RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements"));
         this.buttonList.add(new OptionGuiButton(
                 xPosRight, getButtonYPos(8),
                 buttonWidth, buttonsHeight,
                 "Hide ping in tab",
                 (b) -> ConfigHandler.hidePingTablist = b,
                 () -> ConfigHandler.hidePingTablist,
-                EnumChatFormatting.GRAY + "Stops rendering the ping in the tablist when all values are equal to 1",
-                EnumChatFormatting.RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements"));
+                GRAY + "Stops rendering the ping in the tablist when all values are equal to 1",
+                RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements"));
         if (isPatcherNotLoaded) {
             buttonList.add(new GuiSlider(30, xPosRight, getButtonYPos(9), buttonWidth, buttonsHeight, "Tablist size : ", " players", 50d, 125d, ConfigHandler.tablistSize, false, true, this));
         }

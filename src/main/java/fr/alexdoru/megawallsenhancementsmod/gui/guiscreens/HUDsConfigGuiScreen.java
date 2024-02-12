@@ -7,8 +7,9 @@ import fr.alexdoru.megawallsenhancementsmod.gui.elements.TextElement;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.*;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
+
+import static net.minecraft.util.EnumChatFormatting.*;
 
 public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
@@ -21,7 +22,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         this.maxWidth = 90 * 2 + BUTTON_WIDTH + 4 * 2;
         this.maxHeight = (buttonsHeight + 4) * 13 + buttonsHeight;
         super.initGui();
-        this.elementList.add(new TextElement(EnumChatFormatting.DARK_PURPLE + "HUDs", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
+        this.elementList.add(new TextElement(DARK_PURPLE + "HUDs", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(1),
                 "Arrow Hit HUD",
@@ -29,7 +30,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 () -> ConfigHandler.showArrowHitHUD,
                 ArrowHitHUD.instance,
                 this,
-                EnumChatFormatting.GRAY + "Displays the health of your opponent on arrow hits")
+                GRAY + "Displays the health of your opponent on arrow hits")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(2),
@@ -38,7 +39,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 () -> ConfigHandler.showPrimedTNTHUD,
                 CreeperPrimedTntHUD.instance,
                 this,
-                EnumChatFormatting.GRAY + "Displays the cooldown of the primed TNT when playing Creeper" + EnumChatFormatting.YELLOW + " in Mega Walls")
+                GRAY + "Displays the cooldown of the primed TNT when playing Creeper" + YELLOW + " in Mega Walls")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(3),
@@ -47,8 +48,8 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 () -> ConfigHandler.showEnergyDisplayHUD,
                 EnergyDisplayHUD.instance,
                 this,
-                EnumChatFormatting.GRAY + "Displays a HUD with the amount of energy you have" + EnumChatFormatting.YELLOW + " in Mega Walls" + EnumChatFormatting.GRAY + ". Turns "
-                        + EnumChatFormatting.AQUA + "aqua" + EnumChatFormatting.GRAY + " when your energy level exceeds the amount set below.")
+                GRAY + "Displays a HUD with the amount of energy you have" + YELLOW + " in Mega Walls" + GRAY + ". Turns "
+                        + AQUA + "aqua" + GRAY + " when your energy level exceeds the amount set below.")
                 .accept(this.buttonList);
         this.buttonList.add(new GuiSlider(21, getxCenter() - BUTTON_WIDTH / 2, getButtonYPos(4), BUTTON_WIDTH, buttonsHeight, "Energy threshold : ", "", 1d, 160d, ConfigHandler.aquaEnergyDisplayThreshold, false, true, this));
         new HUDSettingGuiButtons(
@@ -58,7 +59,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 () -> ConfigHandler.showKillCooldownHUD,
                 KillCooldownHUD.instance,
                 this,
-                EnumChatFormatting.GRAY + "Displays the cooldown of the /kill command in " + EnumChatFormatting.YELLOW + "Mega Walls")
+                GRAY + "Displays the cooldown of the /kill command in " + YELLOW + "Mega Walls")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(6),
@@ -67,7 +68,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 () -> ConfigHandler.showPhxBondHUD,
                 PhoenixBondHUD.instance,
                 this,
-                EnumChatFormatting.GRAY + "Displays the hearts healed from a Phoenix bond" + EnumChatFormatting.YELLOW + " in Mega Walls")
+                GRAY + "Displays the hearts healed from a Phoenix bond" + YELLOW + " in Mega Walls")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(7),
@@ -76,7 +77,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 () -> ConfigHandler.showSquadHUD,
                 SquadHealthHUD.instance,
                 this,
-                EnumChatFormatting.GRAY + "Displays a mini tablist with just your squadmates")
+                GRAY + "Displays a mini tablist with just your squadmates")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(8),
@@ -85,7 +86,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 () -> ConfigHandler.showSpeedHUD,
                 SpeedHUD.instance,
                 this,
-                EnumChatFormatting.GRAY + "Displays your own speed in the XZ plane")
+                GRAY + "Displays your own speed in the XZ plane")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(9),
@@ -98,12 +99,12 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 },
                 HunterStrengthHUD.instance,
                 this,
-                EnumChatFormatting.GREEN + "Strength HUD",
-                EnumChatFormatting.GRAY + "Displays the duration of the strength " + EnumChatFormatting.YELLOW + "in Mega Walls" + EnumChatFormatting.GRAY + " when it is obtained or about to be obtained, with Dreadlord, Herobrine, Hunter and Zombie.")
+                GREEN + "Strength HUD",
+                GRAY + "Displays the duration of the strength " + YELLOW + "in Mega Walls" + GRAY + " when it is obtained or about to be obtained, with Dreadlord, Herobrine, Hunter and Zombie.")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(10),
-                () -> "Wither death time HUD : " + (ConfigHandler.witherHUDinSidebar ? EnumChatFormatting.YELLOW + "in Sidebar" : getSuffix(ConfigHandler.showLastWitherHUD)),
+                () -> "Wither death time HUD : " + (ConfigHandler.witherHUDinSidebar ? YELLOW + "in Sidebar" : getSuffix(ConfigHandler.showLastWitherHUD)),
                 () -> {
                     if (ConfigHandler.showLastWitherHUD && !ConfigHandler.witherHUDinSidebar) {
                         ConfigHandler.witherHUDinSidebar = true;
@@ -118,8 +119,8 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 },
                 LastWitherHPHUD.instance,
                 this,
-                EnumChatFormatting.GREEN + "Wither death time HUD",
-                EnumChatFormatting.GRAY + "Displays the time it takes for the last wither to die " + EnumChatFormatting.YELLOW + "in Mega Walls" + EnumChatFormatting.GRAY + ". The HUD can be configured to appear in the " + EnumChatFormatting.YELLOW + "sidebar" + EnumChatFormatting.GRAY + ".")
+                GREEN + "Wither death time HUD",
+                GRAY + "Displays the time it takes for the last wither to die " + YELLOW + "in Mega Walls" + GRAY + ". The HUD can be configured to appear in the " + YELLOW + "sidebar" + GRAY + ".")
                 .accept(this.buttonList);
         this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(12), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
