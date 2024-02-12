@@ -275,6 +275,18 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Stops rendering the hats added by Optifine")
     public static boolean hideOptifineHats;
 
+    @ConfigProperty(
+            category = MWENHANCEMENTS,
+            name = "Show Squad Icons",
+            comment = "Display squad icon on names of squad members")
+    public static boolean squadIconOnNames = true;
+
+    @ConfigProperty(
+            category = MWENHANCEMENTS,
+            name = "Squad Icons In Tab Only",
+            comment = "Display squad icon only in the tablist")
+    public static boolean squadIconTabOnly;
+
     /**
      * HUD config
      */
@@ -403,9 +415,15 @@ public class ConfigHandler extends AbstractConfig {
      */
     @ConfigProperty(
             category = NOCHEATERS,
-            name = "Toggle Icons",
-            comment = "Display warning symbol on nametags of reported players")
-    public static boolean iconsOnNames = true;
+            name = "Show Warning Icons",
+            comment = "Display warning icon on names of reported players")
+    public static boolean warningIconsOnNames = true;
+
+    @ConfigProperty(
+            category = NOCHEATERS,
+            name = "Warning Icons In Tab Only",
+            comment = "Display warning icon only in the tablist")
+    public static boolean warningIconsTabOnly;
 
     @ConfigProperty(
             category = NOCHEATERS,

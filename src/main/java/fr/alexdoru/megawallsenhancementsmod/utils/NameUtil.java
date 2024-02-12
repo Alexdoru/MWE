@@ -60,15 +60,15 @@ import java.util.regex.Pattern;
 public class NameUtil {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
-    public static final String prefix = EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.BOLD + "\u26a0 " + EnumChatFormatting.RESET;
-    public static final String prefix_bhop = EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.BOLD + "\u26a0 " + EnumChatFormatting.RESET;
-    public static final String prefix_scan = EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD + "\u26a0 " + EnumChatFormatting.RESET;
-    public static final String squadprefix = EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] " + EnumChatFormatting.RESET;
-    private static final IChatComponent iprefix = new ChatComponentText(prefix);
-    private static final IChatComponent iprefix_bhop = new ChatComponentText(prefix_bhop);
-    private static final IChatComponent iprefix_scan = new ChatComponentText(prefix_scan);
-    private static final IChatComponent isquadprefix = new ChatComponentText(squadprefix);
-    private static final List<IChatComponent> allPrefix = Arrays.asList(iprefix, iprefix_bhop, iprefix_scan, isquadprefix);
+    public static final String WARNING_ICON = EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.BOLD + "\u26a0 " + EnumChatFormatting.RESET;
+    public static final String RED_WARNING_ICON = EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.BOLD + "\u26a0 " + EnumChatFormatting.RESET;
+    public static final String PINK_WARNING_ICON = EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD + "\u26a0 " + EnumChatFormatting.RESET;
+    public static final String SQUAD_ICON = EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] " + EnumChatFormatting.RESET;
+    private static final IChatComponent IWARNING_ICON = new ChatComponentText(WARNING_ICON);
+    private static final IChatComponent IRED_WARNING_ICON = new ChatComponentText(RED_WARNING_ICON);
+    private static final IChatComponent IPINK_WARNING_ICON = new ChatComponentText(PINK_WARNING_ICON);
+    private static final IChatComponent ISQUAD_ICON = new ChatComponentText(SQUAD_ICON);
+    private static final List<IChatComponent> ALL_ICONS_LIST = Arrays.asList(IWARNING_ICON, IRED_WARNING_ICON, IPINK_WARNING_ICON, ISQUAD_ICON);
     private static final Pattern PATTERN_CLASS_TAG = Pattern.compile("\\[([A-Z]{3})\\]");
     private static final Set<UUID> warningMsgPrinted = new HashSet<>();
 
@@ -178,11 +178,19 @@ public class NameUtil {
         }
 
         if (!onPlayerJoin) {
-            player.getPrefixes().removeAll(allPrefix);
+            player.getPrefixes().removeAll(ALL_ICONS_LIST);
         }
 
         if (mwPlayerData.extraPrefix != null) {
-            player.addPrefix(mwPlayerData.extraPrefix);
+            if (mwPlayerData.extraPrefix == ISQUAD_ICON) {
+                if (!ConfigHandler.squadIconTabOnly) {
+                    player.addPrefix(mwPlayerData.extraPrefix);
+                }
+            } else {
+                if (!ConfigHandler.warningIconsTabOnly) {
+                    player.addPrefix(mwPlayerData.extraPrefix);
+                }
+            }
         }
 
         if (onPlayerJoin && mwPlayerData.wdr != null) {
@@ -231,23 +239,25 @@ public class NameUtil {
         final String squadname = SquadHandler.getSquad().get(username);
         final boolean isSquadMate = squadname != null;
 
-        if (ConfigHandler.iconsOnNames) {
-            if (isSquadMate) {
-                extraPrefix = squadprefix;
-                iExtraPrefix = isquadprefix;
-            } else {
+        if (isSquadMate) {
+            if (ConfigHandler.squadIconOnNames || ConfigHandler.squadIconTabOnly) {
+                extraPrefix = SQUAD_ICON;
+                iExtraPrefix = ISQUAD_ICON;
+            }
+        } else {
+            if (ConfigHandler.warningIconsOnNames || ConfigHandler.warningIconsTabOnly) {
                 if (wdr != null) {
                     if (wdr.shouldPutRedIcon()) {
-                        extraPrefix = prefix_bhop;
-                        iExtraPrefix = iprefix_bhop;
+                        extraPrefix = RED_WARNING_ICON;
+                        iExtraPrefix = IRED_WARNING_ICON;
                     } else {
-                        extraPrefix = prefix;
-                        iExtraPrefix = iprefix;
+                        extraPrefix = WARNING_ICON;
+                        iExtraPrefix = IWARNING_ICON;
                     }
                 } else {
                     if (ScangameData.doesPlayerFlag(id)) {
-                        extraPrefix = prefix_scan;
-                        iExtraPrefix = iprefix_scan;
+                        extraPrefix = PINK_WARNING_ICON;
+                        iExtraPrefix = IPINK_WARNING_ICON;
                     }
                 }
             }

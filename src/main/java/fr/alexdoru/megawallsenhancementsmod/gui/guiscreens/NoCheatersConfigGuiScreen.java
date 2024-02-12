@@ -84,19 +84,27 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 EnumChatFormatting.GREEN + "Censor cheaters in chat",
                 EnumChatFormatting.GRAY + "Deletes or censors chat messages sent by reported players"));
         final List<String> iconsTooltip = new ArrayList<>();
-        iconsTooltip.add(EnumChatFormatting.GREEN + "Icons on names");
+        iconsTooltip.add(EnumChatFormatting.GREEN + "Warning Icon on names");
         iconsTooltip.add("");
-        iconsTooltip.add(EnumChatFormatting.GRAY + "Toggles all icons in front of names, on nametags and in the tablist");
+        iconsTooltip.add(EnumChatFormatting.DARK_GRAY + "\u25AA " + EnumChatFormatting.GREEN + "Enabled" + EnumChatFormatting.GRAY + " : displays a warning icon in front of names on nametags and in the tablist");
         iconsTooltip.add("");
-        iconsTooltip.add(NameUtil.squadprefix + EnumChatFormatting.GRAY + " : players in your squad");
-        iconsTooltip.add(NameUtil.prefix_bhop + EnumChatFormatting.GRAY + " : players reported for blatant cheats");
-        iconsTooltip.add(NameUtil.prefix + EnumChatFormatting.GRAY + " : players reported for other cheats");
-        iconsTooltip.add(NameUtil.prefix_scan + EnumChatFormatting.GRAY + " : players flagged by the /scangame command");
+        iconsTooltip.add(EnumChatFormatting.DARK_GRAY + "\u25AA " + EnumChatFormatting.GREEN + "Tab Only" + EnumChatFormatting.GRAY + " : displays a warning icon in front of names in the tablist only");
+        iconsTooltip.add("");
+        iconsTooltip.add(NameUtil.RED_WARNING_ICON + EnumChatFormatting.GRAY + " : players reported for blatant cheats");
+        iconsTooltip.add(NameUtil.WARNING_ICON + EnumChatFormatting.GRAY + " : players reported for cheating");
+        iconsTooltip.add(NameUtil.PINK_WARNING_ICON + EnumChatFormatting.GRAY + " : players flagged by the /scangame command");
         this.buttonList.add(new FancyGuiButton(
                 xPos, getButtonYPos(7),
-                () -> "Icons on names : " + getSuffix(ConfigHandler.iconsOnNames),
+                () -> "Warning Icon on names : " + (ConfigHandler.warningIconsTabOnly ? EnumChatFormatting.GREEN + "Tab Only" : getSuffix(ConfigHandler.warningIconsOnNames)),
                 () -> {
-                    ConfigHandler.iconsOnNames = !ConfigHandler.iconsOnNames;
+                    if (ConfigHandler.warningIconsOnNames && !ConfigHandler.warningIconsTabOnly) {
+                        ConfigHandler.warningIconsOnNames = false;
+                        ConfigHandler.warningIconsTabOnly = true;
+                    } else if (ConfigHandler.warningIconsTabOnly) {
+                        ConfigHandler.warningIconsTabOnly = false;
+                    } else {
+                        ConfigHandler.warningIconsOnNames = true;
+                    }
                     NameUtil.refreshAllNamesInWorld();
                 },
                 iconsTooltip));
