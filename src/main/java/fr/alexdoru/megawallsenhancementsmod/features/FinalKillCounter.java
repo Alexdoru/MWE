@@ -135,33 +135,36 @@ public class FinalKillCounter {
     private static HashMap<String, Integer>[] teamKillsArray;
     private static Random rand;
 
+    @SuppressWarnings("unchecked")
     public FinalKillCounter() {
-        rand = new Random();
         KILL_PATTERNS = new Pattern[KILL_MESSAGES.length];
+        prefixes = Arrays.copyOf(DEFAULT_PREFIXES, DEFAULT_PREFIXES.length);
+        teamKillsArray = new HashMap[TEAMS];
+        for (int i = 0; i < TEAMS; i++) {
+            teamKillsArray[i] = new HashMap<>();
+        }
         for (int i = 0; i < KILL_MESSAGES.length; i++) {
             KILL_PATTERNS[i] = Pattern.compile(KILL_MESSAGES[i]);
         }
+        rand = new Random();
         FKCounterHUD.instance.updateDisplayText();
     }
 
     /**
      * Resets the Killcounter and assigns it to a new game ID
      */
-    @SuppressWarnings("unchecked")
     private static void resetKillCounterTo(String gameIdIn) {
         playersPresentInGame.clear();
         gameId = gameIdIn;
-        prefixes = new String[TEAMS];
-        teamKillsArray = new HashMap[TEAMS];
         allPlayerKills.clear();
         deadPlayers.clear();
         for (int i = 0; i < TEAMS; i++) {
             prefixes[i] = DEFAULT_PREFIXES[i];
-            teamKillsArray[i] = new HashMap<>();
+            teamKillsArray[i].clear();
         }
-        Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap().forEach(p -> {
-            if (p != null) {
-                ((NetworkPlayerInfoAccessor) p).setPlayerFinalkills(0);
+        Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap().forEach(netInfo -> {
+            if (netInfo != null) {
+                ((NetworkPlayerInfoAccessor) netInfo).setPlayerFinalkills(0);
             }
         });
         FKCounterHUD.instance.updateDisplayText();
@@ -187,7 +190,7 @@ public class FinalKillCounter {
                     final String killedTeamColor = StringUtil.getLastColorCodeBefore(formattedText, killedPlayer);
                     final String killerTeamColor = StringUtil.getLastColorCodeBefore(formattedText.replaceFirst(killedPlayer, ""), killer);
                     int killsOfKilledPlayer = 0;
-                    if (!killedTeamColor.equals("") && !killerTeamColor.equals("")) {
+                    if (!killedTeamColor.isEmpty() && !killerTeamColor.isEmpty()) {
                         killsOfKilledPlayer = removeKilledPlayer(killedPlayer, killedTeamColor);
                         if (killsOfKilledPlayer != -1) {
                             addKill(killer, killerTeamColor);
@@ -211,7 +214,7 @@ public class FinalKillCounter {
                     RenderPlayerHook_RenegadeArrowCount.removeArrowsFrom(killedPlayer, -1);
                     final String killedTeamColor = StringUtil.getLastColorCodeBefore(formattedText, killedPlayer);
                     int killsOfKilledPlayer = 0;
-                    if (!killedTeamColor.equals("")) {
+                    if (!killedTeamColor.isEmpty()) {
                         killsOfKilledPlayer = removeKilledPlayer(killedPlayer, killedTeamColor);
                         if (killsOfKilledPlayer != -1) {
                             playersPresentInGame.add(killedPlayer);

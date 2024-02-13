@@ -24,6 +24,7 @@ public class ScoreboardParser {
     private static final Pattern PREGAME_LOBBY_PATTERN = Pattern.compile("Players:\\s*[0-9]+/[0-9]+");
     private static final Pattern WITHER_ALIVE_PATTERN = Pattern.compile("\\[[BGRY]\\] Wither HP: ?(\\d+)");
     private static final Pattern WITHER_ALIVE_HEART_PATTERN = Pattern.compile("\\[[BGRY]\\] Wither [\u2764\u2665]: ?(\\d+)");
+    private static final Pattern REPLAY_MAP_PATTERN = Pattern.compile("Map: ([a-zA-Z0-9_ ]+)");
 
     private static boolean triggeredWallsFallAlert = false;
     private static boolean triggeredGameEndAlert = false;
@@ -34,6 +35,7 @@ public class ScoreboardParser {
     private boolean isMWEnvironement = false;
     private boolean isReplayMode = false;
     private boolean isMWReplay = false;
+    private String replayMap = null;
     private boolean isInSkyblock = false;
     private boolean isPreGameLobby = false;
     private boolean isPrepPhase = false;
@@ -160,9 +162,11 @@ public class ScoreboardParser {
             return;
         }
         for (final String line : unformattedLines) {
-            if (line.contains("Game: Mega Walls")) {
+            final Matcher mapMatcher = REPLAY_MAP_PATTERN.matcher(line);
+            if (mapMatcher.find()) {
+                replayMap = mapMatcher.group(1);
+            } else if (line.contains("Game: Mega Walls")) {
                 isMWReplay = true;
-                return;
             }
         }
     }
@@ -217,6 +221,10 @@ public class ScoreboardParser {
 
     public boolean isMWReplay() {
         return isMWReplay;
+    }
+
+    public String getReplayMap() {
+        return replayMap;
     }
 
     public boolean isInSkyblock() {

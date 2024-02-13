@@ -34,6 +34,15 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(2),
+                "Base Location HUD",
+                (b) -> ConfigHandler.showBaseLocationHUD = b,
+                () -> ConfigHandler.showBaseLocationHUD,
+                BaseLocationHUD.instance,
+                this,
+                GRAY + "Displays in which base you are currently in Mega Walls")
+                .accept(this.buttonList);
+        new HUDSettingGuiButtons(
+                getxCenter(), getButtonYPos(3),
                 "Creeper primed TNT HUD",
                 (b) -> ConfigHandler.showPrimedTNTHUD = b,
                 () -> ConfigHandler.showPrimedTNTHUD,
@@ -42,7 +51,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 GRAY + "Displays the cooldown of the primed TNT when playing Creeper" + YELLOW + " in Mega Walls")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
-                getxCenter(), getButtonYPos(3),
+                getxCenter(), getButtonYPos(4),
                 "Energy display HUD",
                 (b) -> ConfigHandler.showEnergyDisplayHUD = b,
                 () -> ConfigHandler.showEnergyDisplayHUD,
@@ -51,9 +60,9 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 GRAY + "Displays a HUD with the amount of energy you have" + YELLOW + " in Mega Walls" + GRAY + ". Turns "
                         + AQUA + "aqua" + GRAY + " when your energy level exceeds the amount set below.")
                 .accept(this.buttonList);
-        this.buttonList.add(new GuiSlider(21, getxCenter() - BUTTON_WIDTH / 2, getButtonYPos(4), BUTTON_WIDTH, buttonsHeight, "Energy threshold : ", "", 1d, 160d, ConfigHandler.aquaEnergyDisplayThreshold, false, true, this));
+        this.buttonList.add(new GuiSlider(21, getxCenter() - BUTTON_WIDTH / 2, getButtonYPos(5), BUTTON_WIDTH, buttonsHeight, "Energy threshold : ", "", 1d, 160d, ConfigHandler.aquaEnergyDisplayThreshold, false, true, this));
         new HUDSettingGuiButtons(
-                getxCenter(), getButtonYPos(5),
+                getxCenter(), getButtonYPos(6),
                 "Kill cooldown HUD",
                 (b) -> ConfigHandler.showKillCooldownHUD = b,
                 () -> ConfigHandler.showKillCooldownHUD,
@@ -62,7 +71,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 GRAY + "Displays the cooldown of the /kill command in " + YELLOW + "Mega Walls")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
-                getxCenter(), getButtonYPos(6),
+                getxCenter(), getButtonYPos(7),
                 "Phoenix bond HUD",
                 (b) -> ConfigHandler.showPhxBondHUD = b,
                 () -> ConfigHandler.showPhxBondHUD,
@@ -71,7 +80,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 GRAY + "Displays the hearts healed from a Phoenix bond" + YELLOW + " in Mega Walls")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
-                getxCenter(), getButtonYPos(7),
+                getxCenter(), getButtonYPos(8),
                 "Squad HUD",
                 (b) -> ConfigHandler.showSquadHUD = b,
                 () -> ConfigHandler.showSquadHUD,
@@ -80,7 +89,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 GRAY + "Displays a mini tablist with just your squadmates")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
-                getxCenter(), getButtonYPos(8),
+                getxCenter(), getButtonYPos(9),
                 "Speed HUD",
                 (b) -> ConfigHandler.showSpeedHUD = b,
                 () -> ConfigHandler.showSpeedHUD,
@@ -89,7 +98,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 GRAY + "Displays your own speed in the XZ plane")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
-                getxCenter(), getButtonYPos(9),
+                getxCenter(), getButtonYPos(10),
                 () -> "Strength HUD : " + getSuffix(ConfigHandler.showStrengthHUD),
                 () -> {
                     ConfigHandler.showStrengthHUD = !ConfigHandler.showStrengthHUD;
@@ -103,7 +112,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 GRAY + "Displays the duration of the strength " + YELLOW + "in Mega Walls" + GRAY + " when it is obtained or about to be obtained, with Dreadlord, Herobrine, Hunter and Zombie.")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
-                getxCenter(), getButtonYPos(10),
+                getxCenter(), getButtonYPos(11),
                 () -> "Wither death time HUD : " + (ConfigHandler.witherHUDinSidebar ? YELLOW + "in Sidebar" : getSuffix(ConfigHandler.showLastWitherHUD)),
                 () -> {
                     if (ConfigHandler.showLastWitherHUD && !ConfigHandler.witherHUDinSidebar) {
@@ -122,7 +131,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 GREEN + "Wither death time HUD",
                 GRAY + "Displays the time it takes for the last wither to die " + YELLOW + "in Mega Walls" + GRAY + ". The HUD can be configured to appear in the " + YELLOW + "sidebar" + GRAY + ".")
                 .accept(this.buttonList);
-        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(12), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
+        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(13), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
 
     @Override
