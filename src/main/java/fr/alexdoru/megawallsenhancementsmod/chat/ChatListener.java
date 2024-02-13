@@ -19,6 +19,7 @@ import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TimerUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
@@ -45,15 +46,13 @@ public class ChatListener {
     private static final Pattern HEROBRINE_STRENGTH_PATTERN = Pattern.compile("\u00a7e\u00a7lPOWER \u00a7c\u00a7l85% ([0-9])s");
     private static final Pattern HUNTER_PRE_STRENGTH_PATTERN = Pattern.compile("\u00a7a\u00a7lF\\.O\\.N\\. \u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l([0-9]+)");
     private static final Pattern CREEPER_FISSION_HEART_PATTERN = Pattern.compile("^\u00a7a\u00a7lFISSION HEART \u00a7c\u00a7l([0-9])s");
-    private static final Pattern LOCRAW_PATTERN = Pattern.compile("^\\{\"server\":\"(\\w+)\",\"gametype\":\"\\w+\"(?:|,\"lobbyname\":\"\\w+\")(?:|,\"mode\":\"\\w+\")(?:|,\"map\":\"[a-zA-Z0-9_ ]+\")\\}$");
+    private static final Pattern LOCRAW_PATTERN = Pattern.compile("^\\{\"server\":\"(\\w+)\",\"gametype\":\"\\w+\"(?:|,\"lobbyname\":\"\\w+\")(?:|,\"mode\":\"\\w+\")(?:|,\"map\":\"([a-zA-Z0-9_ ]+)\")\\}$");
     private static final Pattern PLAYER_JOIN_PATTERN = Pattern.compile("^(\\w{1,16}) has joined \\([0-9]{1,3}/[0-9]{1,3}\\)!");
     private static final Pattern ZOMBIE_STRENGTH_PATTERN = Pattern.compile("\u00a72\u00a7lBERSERK \u00a7c\u00a7l75% ([0-9])s");
     private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:|\\[SHOUT\\] |\\[SPECTATOR\\] )(?:|\\[[A-Z]{3,6}\\] )(?:|\\[((?:MV|VI)P\\+?\\+?)\\] )(\\w{2,16}):.*");
     private static final HashSet<String> MW_REPETITVE_MSG = new HashSet<>();
     private static final TimerUtil timerStrength = new TimerUtil(11000L);
     private static boolean addGuildCoinsBonus;
-    private static boolean interceptLocraw;
-    private static long timeInterceptLocraw;
 
     static {
         MW_REPETITVE_MSG.add("You broke your protected chest");
@@ -218,7 +217,11 @@ public class ChatListener {
                     final Matcher locrawMatcher = LOCRAW_PATTERN.matcher(msg);
                     if (locrawMatcher.matches()) {
                         final String gameId = locrawMatcher.group(1).replace("mega", "M");
-                        CommandScanGame.handleScangameCommand(gameId);
+                        final String map = locrawMatcher.group(2);
+                        if (locrawAction == LocrawAction.RUNSCANGAME) {
+                            CommandScanGame.handleScangameCommand(gameId);
+                        }
+                        BaseLocationHUD.instance.setCurrentMap(map); // can't hurt to set the map everytime
                         interceptLocraw = false;
                         event.setCanceled(true);
                     }
@@ -269,9 +272,29 @@ public class ChatListener {
 
     }
 
-    public static void interceptLocrawAndRunScangame() {
-        interceptLocraw = true;
-        timeInterceptLocraw = System.currentTimeMillis();
+    private static boolean interceptLocraw;
+    private static long timeInterceptLocraw;
+    private static LocrawAction locrawAction;
+
+    public static void runScangame() {
+        sendLocraw(LocrawAction.RUNSCANGAME);
+    }
+
+    public static void setMegaWallsMap() {
+        sendLocraw(LocrawAction.SETMEGAWALLSMAP);
+    }
+
+    private static void sendLocraw(LocrawAction action) {
+        if (Minecraft.getMinecraft().thePlayer != null) {
+            Minecraft.getMinecraft().thePlayer.sendChatMessage("/locraw");
+            interceptLocraw = true;
+            timeInterceptLocraw = System.currentTimeMillis();
+            locrawAction = action;
+        }
+    }
+
+    private enum LocrawAction {
+        RUNSCANGAME, SETMEGAWALLSMAP
     }
 
 }

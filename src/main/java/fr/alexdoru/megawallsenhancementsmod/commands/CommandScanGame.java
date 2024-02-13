@@ -44,8 +44,7 @@ public class CommandScanGame extends MyAbstractCommand {
         }
         final String currentGameId = ScoreboardUtils.getGameIdFromScoreboard();
         if (currentGameId == null) {
-            sendChatMessage("/locraw");
-            ChatListener.interceptLocrawAndRunScangame();
+            ChatListener.runScangame();
         } else {
             handleScangameCommand(currentGameId);
         }

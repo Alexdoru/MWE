@@ -410,6 +410,18 @@ public class ConfigHandler extends AbstractConfig {
             comment = "position of the phoenix bond HUD")
     public static final GuiPosition phxBondHUDPosition = new GuiPosition(0.5d, 0.75d);
 
+    @ConfigProperty(
+            category = GUI,
+            name = "Base Location HUD",
+            comment = "Displays in which base you are located in Mega Walls")
+    public static boolean showBaseLocationHUD = true;
+
+    @ConfigProperty(
+            category = GUI,
+            name = "Base Location HUD position",
+            comment = "position of the base location HUD")
+    public static final GuiPosition baseLocationHUDPosition = new GuiPosition(0.5d, 0.15d);
+
     /**
      * NoCheaters Config
      */

@@ -8,11 +8,10 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public final class GuiManager {
 
-    private final List<IRenderer> registeredRenderers = new ArrayList<>();
+    private final ArrayList<IRenderer> registeredRenderers = new ArrayList<>();
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static final PlayerRenderHUD playerRenderHUD = new PlayerRenderHUD();
 
@@ -22,6 +21,7 @@ public final class GuiManager {
     public GuiManager() {
         this.registeredRenderers.add(new FKCounterHUD());
         this.registeredRenderers.add(new ArrowHitHUD());
+        this.registeredRenderers.add(new BaseLocationHUD());
         this.registeredRenderers.add(new KillCooldownHUD());
         this.registeredRenderers.add(new HunterStrengthHUD());
         this.registeredRenderers.add(new CreeperPrimedTntHUD());
@@ -30,6 +30,7 @@ public final class GuiManager {
         this.registeredRenderers.add(new SquadHealthHUD());
         this.registeredRenderers.add(new SpeedHUD());
         this.registeredRenderers.add(new PhoenixBondHUD());
+        this.registeredRenderers.trimToSize();
     }
 
     /**
