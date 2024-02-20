@@ -61,7 +61,7 @@ public class WdrData {
         wdrMap.remove(uuid);
     }
 
-    private static void saveReportedPlayers() {
+    public static void saveReportedPlayers() {
         try (final BufferedWriter writer = new BufferedWriter(new FileWriter(wdrsFile))) {
             for (final Entry<String, WDR> entry : wdrMap.entrySet()) {
                 final String uuid = entry.getKey();

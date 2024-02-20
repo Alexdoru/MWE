@@ -60,6 +60,7 @@ public class CommandUnWDR extends MyAbstractCommand {
             return;
         }
         WdrData.remove(uuid);
+        WdrData.saveReportedPlayers();
         ChatHandler.deleteWarningMessagesFor(playername);
         NameUtil.updateMWPlayerDataAndEntityData(playername, false);
         ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + ".");
