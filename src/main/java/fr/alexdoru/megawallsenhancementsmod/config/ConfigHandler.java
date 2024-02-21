@@ -422,6 +422,24 @@ public class ConfigHandler extends AbstractConfig {
             comment = "position of the base location HUD")
     public static final GuiPosition baseLocationHUDPosition = new GuiPosition(0.5d, 0.15d);
 
+    @ConfigProperty(
+            category = GUI,
+            name = "Mini Potion HUD",
+            comment = "Displays a minimalist potion HUD")
+    public static boolean showMiniPotionHUD;
+
+    @ConfigProperty(
+            category = GUI,
+            name = "Mini Potion HUD only in MW",
+            comment = "Displays a minimalist potion HUD only in MW")
+    public static boolean showMiniPotionHUDOnlyMW;
+
+    @ConfigProperty(
+            category = GUI,
+            name = "Mini Potion HUD position",
+            comment = "position of the mini potion HUD")
+    public static final GuiPosition miniPotionHUDPosition = new GuiPosition(0.5d, 7.5d / 20d);
+
     /**
      * NoCheaters Config
      */
