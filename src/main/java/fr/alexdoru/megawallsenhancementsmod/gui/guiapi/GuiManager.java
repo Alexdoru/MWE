@@ -19,17 +19,18 @@ public final class GuiManager {
      * Register your Guis here
      */
     public GuiManager() {
-        this.registeredRenderers.add(new FKCounterHUD());
         this.registeredRenderers.add(new ArrowHitHUD());
         this.registeredRenderers.add(new BaseLocationHUD());
-        this.registeredRenderers.add(new KillCooldownHUD());
-        this.registeredRenderers.add(new HunterStrengthHUD());
         this.registeredRenderers.add(new CreeperPrimedTntHUD());
-        this.registeredRenderers.add(new LastWitherHPHUD());
         this.registeredRenderers.add(new EnergyDisplayHUD());
-        this.registeredRenderers.add(new SquadHealthHUD());
-        this.registeredRenderers.add(new SpeedHUD());
+        this.registeredRenderers.add(new FKCounterHUD());
+        this.registeredRenderers.add(new HunterStrengthHUD());
+        this.registeredRenderers.add(new KillCooldownHUD());
+        this.registeredRenderers.add(new LastWitherHPHUD());
+        this.registeredRenderers.add(new MiniPotionHUD());
         this.registeredRenderers.add(new PhoenixBondHUD());
+        this.registeredRenderers.add(new SpeedHUD());
+        this.registeredRenderers.add(new SquadHealthHUD());
         this.registeredRenderers.trimToSize();
     }
 

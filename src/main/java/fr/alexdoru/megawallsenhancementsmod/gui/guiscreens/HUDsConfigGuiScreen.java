@@ -20,7 +20,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
     @Override
     public void initGui() {
         this.maxWidth = 90 * 2 + BUTTON_WIDTH + 4 * 2;
-        this.maxHeight = (buttonsHeight + 4) * 13 + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * 14 + buttonsHeight;
         super.initGui();
         this.elementList.add(new TextElement(DARK_PURPLE + "HUDs", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
         new HUDSettingGuiButtons(
@@ -72,6 +72,40 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(7),
+                () -> {
+                    if (ConfigHandler.showMiniPotionHUD) {
+                        return "Mini potion HUD : " + GREEN + "Enabled";
+                    } else if (ConfigHandler.showMiniPotionHUDOnlyMW) {
+                        return "Mini potion HUD : " + GREEN + "Only in MW";
+                    } else {
+                        return "Mini potion HUD : " + RED + "Disabled";
+                    }
+                },
+                () -> {
+                    if (ConfigHandler.showMiniPotionHUD) {
+                        ConfigHandler.showMiniPotionHUD = false;
+                        ConfigHandler.showMiniPotionHUDOnlyMW = true;
+                    } else if (ConfigHandler.showMiniPotionHUDOnlyMW) {
+                        ConfigHandler.showMiniPotionHUDOnlyMW = false;
+                    } else {
+                        ConfigHandler.showMiniPotionHUD = true;
+                    }
+                },
+                MiniPotionHUD.instance,
+                this,
+                GREEN + "Mini potion HUD",
+                GRAY + "Displays remaining duration of the following potion buffs : "
+                        + LIGHT_PURPLE + "regeneration" + GRAY + ", "
+                        + DARK_GRAY + "resistance" + GRAY + ", "
+                        + AQUA + "speed" + GRAY + ", "
+                        + RED + "strength" + GRAY + ", "
+                        + WHITE + "invisibility" + GRAY + ", "
+                        + " has different modes :",
+                DARK_GRAY + "\u25AA " + GREEN + "Always Enabled",
+                DARK_GRAY + "\u25AA " + GREEN + "Only in Mega Walls")
+                .accept(this.buttonList);
+        new HUDSettingGuiButtons(
+                getxCenter(), getButtonYPos(8),
                 "Phoenix bond HUD",
                 (b) -> ConfigHandler.showPhxBondHUD = b,
                 () -> ConfigHandler.showPhxBondHUD,
@@ -80,7 +114,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 GRAY + "Displays the hearts healed from a Phoenix bond" + YELLOW + " in Mega Walls")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
-                getxCenter(), getButtonYPos(8),
+                getxCenter(), getButtonYPos(9),
                 "Squad HUD",
                 (b) -> ConfigHandler.showSquadHUD = b,
                 () -> ConfigHandler.showSquadHUD,
@@ -89,7 +123,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 GRAY + "Displays a mini tablist with just your squadmates")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
-                getxCenter(), getButtonYPos(9),
+                getxCenter(), getButtonYPos(10),
                 "Speed HUD",
                 (b) -> ConfigHandler.showSpeedHUD = b,
                 () -> ConfigHandler.showSpeedHUD,
@@ -98,7 +132,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 GRAY + "Displays your own speed in the XZ plane")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
-                getxCenter(), getButtonYPos(10),
+                getxCenter(), getButtonYPos(11),
                 () -> "Strength HUD : " + getSuffix(ConfigHandler.showStrengthHUD),
                 () -> {
                     ConfigHandler.showStrengthHUD = !ConfigHandler.showStrengthHUD;
@@ -112,7 +146,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 GRAY + "Displays the duration of the strength " + YELLOW + "in Mega Walls" + GRAY + " when it is obtained or about to be obtained, with Dreadlord, Herobrine, Hunter and Zombie.")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
-                getxCenter(), getButtonYPos(11),
+                getxCenter(), getButtonYPos(12),
                 () -> "Wither death time HUD : " + (ConfigHandler.witherHUDinSidebar ? YELLOW + "in Sidebar" : getSuffix(ConfigHandler.showLastWitherHUD)),
                 () -> {
                     if (ConfigHandler.showLastWitherHUD && !ConfigHandler.witherHUDinSidebar) {
@@ -131,7 +165,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 GREEN + "Wither death time HUD",
                 GRAY + "Displays the time it takes for the last wither to die " + YELLOW + "in Mega Walls" + GRAY + ". The HUD can be configured to appear in the " + YELLOW + "sidebar" + GRAY + ".")
                 .accept(this.buttonList);
-        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(13), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
+        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(14), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
 
     @Override
