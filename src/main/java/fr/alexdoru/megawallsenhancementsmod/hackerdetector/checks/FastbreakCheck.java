@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.BrokenBlock;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
@@ -14,7 +15,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 
@@ -216,27 +216,19 @@ public class FastbreakCheck extends AbstractCheck {
     }
 
     private static int getMaxHasteAmplifierMW(EntityPlayer player) {
-        final ScorePlayerTeam team = mc.theWorld.getScoreboard().getTeam(player.getName());
-        if (team == null) {
+        final MWClass mwClass = ((EntityPlayerAccessor) player).getMWClass();
+        if (mwClass == null) {
             return 3;
         }
-        final String classTag;
-        if (ScoreboardTracker.isInMwGame) {
-            classTag = team.getColorSuffix();
-        } else if (ScoreboardTracker.isMWReplay) {
-            classTag = team.getColorPrefix();
-        } else {
-            return 3;
-        }
-        if (classTag.contains("ZOM")) {
+        if (mwClass == MWClass.ZOMBIE) {
             if (ScoreboardTracker.isPrepPhase || ScoreboardTracker.isMWReplay) {
                 return 3;
             } else {
                 return 2;
             }
-        } else if (classTag.contains("HUN")) {
+        } else if (mwClass == MWClass.HUNTER) {
             return 3;
-        } else if (classTag.contains("MOL")) {
+        } else if (mwClass == MWClass.MOLEMAN) {
             return 2;
         }
         if (ScoreboardTracker.isPrepPhase || ScoreboardTracker.isMWReplay) {

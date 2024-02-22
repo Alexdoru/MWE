@@ -62,10 +62,6 @@ public enum MWClass {
         return null;
     }
 
-    public static MWClass fromTag(String TAG) {
-        return tagMap.get(TAG);
-    }
-
     public static MWClass ofPlayer(String playername) {
         final WorldClient world = Minecraft.getMinecraft().theWorld;
         if (world == null) {
@@ -75,8 +71,15 @@ public enum MWClass {
         if (team == null) {
             return null;
         }
-        final String classTag = EnumChatFormatting.getTextWithoutFormattingCodes(team.getColorSuffix().replaceAll("[\\[\\]\\s]", ""));
-        return MWClass.fromTag(classTag);
+        return MWClass.fromTeamTag(team.getColorSuffix());
+    }
+
+    public static MWClass fromTeamTag(String teamTag) {
+        return MWClass.fromTag(EnumChatFormatting.getTextWithoutFormattingCodes(teamTag).replaceAll("[\\[\\]\\s]", ""));
+    }
+
+    public static MWClass fromTag(String TAG) {
+        return tagMap.get(TAG);
     }
 
 }
