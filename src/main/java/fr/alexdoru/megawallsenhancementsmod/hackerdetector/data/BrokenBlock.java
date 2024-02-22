@@ -12,19 +12,21 @@ public class BrokenBlock {
     public final Block block;
     public final BlockPos blockPos;
     public final long breakTime;
-    public List<EntityPlayer> playersList = null;
+    public final String tool;
+    public List<EntityPlayer> playerList = null;
 
-    public BrokenBlock(Block block, BlockPos blockPos, long breakTime) {
+    public BrokenBlock(Block block, BlockPos blockPos, long breakTime, String tool) {
         this.block = block;
         this.blockPos = blockPos;
         this.breakTime = breakTime;
+        this.tool = tool;
     }
 
     public void addPlayer(EntityPlayer player) {
-        if (this.playersList == null) {
-            this.playersList = new ArrayList<>();
+        if (this.playerList == null) {
+            this.playerList = new ArrayList<>();
         }
-        this.playersList.add(player);
+        this.playerList.add(player);
     }
 
 }

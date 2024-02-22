@@ -49,8 +49,12 @@ public class RenderGlobalHook {
     }
 
     public static void listenDestroyedBlocks(IBlockState state, BlockPos blockPos) {
-        if (ConfigHandler.hackerDetector && FastbreakCheck.isCheckActive() && "pickaxe".equals(state.getBlock().getHarvestTool(state))) {
-            HackerDetector.INSTANCE.brokenBlocksList.add(new BrokenBlock(state.getBlock(), blockPos, System.currentTimeMillis()));
+        if (ConfigHandler.hackerDetector && FastbreakCheck.isCheckActive()) {
+            final String tool = state.getBlock().getHarvestTool(state);
+            // for trapped chests the tool is null
+            if ("pickaxe".equals(tool) || "axe".equals(tool) || tool == null) {
+                HackerDetector.INSTANCE.brokenBlocksList.add(new BrokenBlock(state.getBlock(), blockPos, System.currentTimeMillis(), tool));
+            }
         }
     }
 
