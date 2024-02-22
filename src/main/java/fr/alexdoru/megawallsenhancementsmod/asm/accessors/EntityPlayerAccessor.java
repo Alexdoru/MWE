@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.accessors;
 
+import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 
 public interface EntityPlayerAccessor {
@@ -14,4 +15,6 @@ public interface EntityPlayerAccessor {
     void setPlayerTeamColorInt(int color);
     boolean getmwe$RenderNametag();
     void setmwe$RenderNametag(boolean b);
+    MWClass getMWClass();
+    void setMWClass(MWClass mwclass);
 }

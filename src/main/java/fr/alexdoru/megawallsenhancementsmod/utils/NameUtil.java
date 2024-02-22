@@ -10,6 +10,7 @@ import fr.alexdoru.megawallsenhancementsmod.data.AliasData;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.data.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
+import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.WarningMessagesHandler;
@@ -141,15 +142,18 @@ public class NameUtil {
             if (networkPlayerInfo != null) {
                 final MWPlayerData.PlayerData mwPlayerData = getMWPlayerData(networkPlayerInfo.getGameProfile(), true);
                 ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(mwPlayerData.displayName);
-                final EntityPlayer player;
-                if (playername.equals(ConfigHandler.hypixelNick)) {
-                    player = mc.thePlayer;
-                } else {
-                    player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
-                }
-                if (player != null) {
-                    ((EntityPlayerAccessor) player).setPlayerTeamColor(mwPlayerData.teamColor);
-                    ((EntityPlayerAccessor) player).setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
+                if (mc.theWorld != null) {
+                    final EntityPlayer player;
+                    if (playername.equals(ConfigHandler.hypixelNick)) {
+                        player = mc.thePlayer;
+                    } else {
+                        player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
+                    }
+                    if (player != null) {
+                        ((EntityPlayerAccessor) player).setPlayerTeamColor(mwPlayerData.teamColor);
+                        ((EntityPlayerAccessor) player).setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
+                        ((EntityPlayerAccessor) player).setMWClass(mwPlayerData.mwClass);
+                    }
                 }
             }
         }
@@ -171,11 +175,14 @@ public class NameUtil {
         playerAccessor.setPrestige4Tag(mwPlayerData.originalP4Tag);
         playerAccessor.setPrestige5Tag(mwPlayerData.P5Tag);
         playerAccessor.setPlayerTeamColor(mwPlayerData.teamColor);
+
         if (ConfigHandler.pinkSquadmates && mwPlayerData.squadname != null) {
             playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt('d'));
         } else {
             playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
         }
+
+        playerAccessor.setMWClass(mwPlayerData.mwClass);
 
         if (!onPlayerJoin) {
             player.getPrefixes().removeAll(ALL_ICONS_LIST);
@@ -267,12 +274,14 @@ public class NameUtil {
         String formattedPrestigeVstring = null;
         String colorSuffix = null;
         char teamColor = '\0';
+        MWClass mwClass = null;
         if (mc.theWorld != null) {
             final ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
             if (team != null) {
                 final String teamprefix = team.getColorPrefix();
                 colorSuffix = team.getColorSuffix();
                 teamColor = StringUtil.getLastColorCharOf(teamprefix);
+                mwClass = MWClass.fromTeamTag(ScoreboardTracker.isMWReplay ? teamprefix : colorSuffix);
                 if (ConfigHandler.prestigeV && colorSuffix.contains(EnumChatFormatting.GOLD.toString())) {
                     final Matcher matcher = PATTERN_CLASS_TAG.matcher(colorSuffix);
                     if (matcher.find()) {
@@ -305,9 +314,9 @@ public class NameUtil {
         }
 
         if (mwPlayerData == null) {
-            mwPlayerData = new MWPlayerData.PlayerData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring, teamColor);
+            mwPlayerData = new MWPlayerData.PlayerData(id, wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring, teamColor, mwClass);
         } else {
-            mwPlayerData.setData(wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring, teamColor);
+            mwPlayerData.setData(wdr, iExtraPrefix, squadname, displayName, colorSuffix, formattedPrestigeVstring, teamColor, mwClass);
         }
 
         return mwPlayerData;
