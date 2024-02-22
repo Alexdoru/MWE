@@ -11,8 +11,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
+import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 
@@ -63,21 +65,30 @@ public class FastbreakCheck extends AbstractCheck {
         checkPlayerBreakingBlocks(player, null);
     }
 
-    private void checkPlayerBreakingBlocks(EntityPlayer player, PlayerDataSamples data) {
+    private static void checkPlayerBreakingBlocks(EntityPlayer player, PlayerDataSamples data) {
         if (isCheckActive() && player.isSwingInProgress && !HackerDetector.INSTANCE.brokenBlocksList.isEmpty()) {
-            final ItemStack itemStack = player.getHeldItem();
-            if (itemStack != null && itemStack.isItemEnchanted() && itemStack.getItem() == Items.diamond_pickaxe) {
-                for (final BrokenBlock brokenBlock : HackerDetector.INSTANCE.brokenBlocksList) {
-                    if (isPlayerLookingAtBlock(player, data, brokenBlock.blockPos)) {
-                        brokenBlock.addPlayer(player);
-                        // return after one block, otherwise it can false flag when a golem
-                        // uses their ability, it does 6 or more breaking block animations
-                        // in the same area
-                        return;
-                    }
+            final ItemStack stack = player.getHeldItem();
+            if (stack == null) return;
+            for (final BrokenBlock brokenBlock : HackerDetector.INSTANCE.brokenBlocksList) {
+                if (isAppropriateTool(stack, brokenBlock) && isPlayerLookingAtBlock(player, data, brokenBlock.blockPos)) {
+                    brokenBlock.addPlayer(player);
+                    // return after one block, otherwise it can false flag when a golem
+                    // uses their ability, it does 6 or more breaking block animations
+                    // in the same area
+                    return;
                 }
             }
         }
+    }
+
+    private static boolean isAppropriateTool(ItemStack stack, BrokenBlock brokenBlock) {
+        if ("pickaxe".equals(brokenBlock.tool)) {
+            return stack.isItemEnchanted() && stack.getItem() == Items.diamond_pickaxe;
+        } else if (brokenBlock.tool == null || "axe".equals(brokenBlock.tool)) {
+            // for trapped chests the tool is null
+            return stack.getItem() instanceof ItemAxe;
+        }
+        return false;
     }
 
     /**
@@ -87,44 +98,38 @@ public class FastbreakCheck extends AbstractCheck {
     public void onTickEnd() {
         if (isCheckActive() && mc.theWorld != null && mc.thePlayer != null && mc.theWorld.isRemote) {
             for (final BrokenBlock brokenBlock : HackerDetector.INSTANCE.brokenBlocksList) {
-                if (brokenBlock.playersList != null) {
-                    long oldestTime = System.currentTimeMillis();
-                    EntityPlayer playerBreaking = null;
-                    for (final EntityPlayer player : brokenBlock.playersList) {
-                        if (player instanceof EntityPlayerAccessor) {
-                            final PlayerDataSamples data = ((EntityPlayerAccessor) player).getPlayerDataSamples();
-                            if (data.lastBreakBlockTime - oldestTime < 0) {
-                                oldestTime = data.lastBreakBlockTime;
-                                playerBreaking = player;
-                            }
+                if (brokenBlock.playerList == null) continue;
+                long oldestTime = System.currentTimeMillis();
+                EntityPlayer playerBreaking = null;
+                for (final EntityPlayer player : brokenBlock.playerList) {
+                    if (player instanceof EntityPlayerAccessor) {
+                        final PlayerDataSamples data = ((EntityPlayerAccessor) player).getPlayerDataSamples();
+                        if (data.lastBreakBlockTime - oldestTime < 0) {
+                            oldestTime = data.lastBreakBlockTime;
+                            playerBreaking = player;
                         }
                     }
-                    if (playerBreaking != null) {
-                        final PlayerDataSamples data = ((EntityPlayerAccessor) playerBreaking).getPlayerDataSamples();
-                        final long recordedBreakTime = brokenBlock.breakTime - data.lastBreakBlockTime;
-                        data.lastBreakBlockTime = brokenBlock.breakTime;
-                        if (playerBreaking != mc.thePlayer) {
-                            final float expectedTimeToBreak = 50F * getTimeToHarvestBlock(getBlockStrengthMW(playerBreaking, brokenBlock.blockPos, brokenBlock.block));
-                            data.breakTimeRatio.add(Math.min(recordedBreakTime / expectedTimeToBreak, 1.1F));
-                            if (data.breakTimeRatio.hasCollected()) {
-                                final float avg = data.breakTimeRatio.average();
-                                if (avg < 0.9F) {
-                                    data.fastbreakVL.add(MathHelper.clamp_int(MathHelper.floor_float((0.9F - avg) * 10F), 1, 6));
-                                    if (ConfigHandler.debugLogging) {
-                                        this.log(playerBreaking, data, data.fastbreakVL,
-                                                " | avg " + String.format("%.4f", avg) +
-                                                        " | recordedBreakTime " + recordedBreakTime +
-                                                        " | expectedTimeToBreak (haste II)" + expectedTimeToBreak +
-                                                        " | block " + brokenBlock.block.getRegistryName());
-                                    }
-                                    super.checkViolationLevel(playerBreaking, true, data.fastbreakVL);
-                                } else {
-                                    data.fastbreakVL.substract(1);
-                                    super.checkViolationLevel(playerBreaking, false, data.fastbreakVL);
-                                }
-                            }
-                        }
+                }
+                if (playerBreaking == null) continue;
+                final PlayerDataSamples data = ((EntityPlayerAccessor) playerBreaking).getPlayerDataSamples();
+                final long recordedBreakTime = brokenBlock.breakTime - data.lastBreakBlockTime;
+                data.lastBreakBlockTime = brokenBlock.breakTime;
+                if (playerBreaking == mc.thePlayer || !"pickaxe".equals(brokenBlock.tool)) continue;
+                final float expectedBreakTime = 50F * getTimeToHarvestBlock(getBlockStrengthMW(playerBreaking, brokenBlock.blockPos, brokenBlock.block));
+                final float breakTimeRatio = recordedBreakTime / expectedBreakTime;
+                if (breakTimeRatio < 0.95F) {
+                    data.fastbreakVL.add(MathHelper.clamp_int(MathHelper.floor_float((1F - breakTimeRatio) * 20F), 1, 4));
+                    if (ConfigHandler.debugLogging && data.fastbreakVL.getViolationLevel() > 6) {
+                        this.log(playerBreaking, data, data.fastbreakVL,
+                                " | breakTimeRatio " + String.format("%.2f", breakTimeRatio) +
+                                        " | breakTime " + recordedBreakTime + "/" + (int) expectedBreakTime +
+                                        " | block " + brokenBlock.block.getRegistryName());
+                        //this.fail(playerBreaking, " " + recordedBreakTime + "/" + expectedBreakTime + " vl" + data.fastbreakVL.getViolationLevel());
                     }
+                    super.checkViolationLevel(playerBreaking, true, data.fastbreakVL);
+                } else {
+                    data.fastbreakVL.substract(2);
+                    super.checkViolationLevel(playerBreaking, false, data.fastbreakVL);
                 }
             }
         }
@@ -135,6 +140,8 @@ public class FastbreakCheck extends AbstractCheck {
     protected void log(EntityPlayer player, PlayerDataSamples data, ViolationLevelTracker vl, String extramsg) {
         if (player.isPotionActive(Potion.digSpeed)) {
             extramsg += " | haste level " + (player.getActivePotionEffect(Potion.digSpeed).getAmplifier() + 1);
+        } else {
+            extramsg += " | hasteAmplifierMW " + getMaxHasteAmplifierMW(player);
         }
         if (player.isPotionActive(Potion.digSlowdown)) {
             extramsg += " | mining fatigue level " + (player.getActivePotionEffect(Potion.digSlowdown).getAmplifier() + 1);
@@ -143,7 +150,7 @@ public class FastbreakCheck extends AbstractCheck {
     }
 
     public static ViolationLevelTracker newViolationTracker() {
-        return new ViolationLevelTracker(20);
+        return new ViolationLevelTracker(40);
     }
 
     public static boolean isCheckActive() {
@@ -185,8 +192,7 @@ public class FastbreakCheck extends AbstractCheck {
         if (player.isPotionActive(Potion.digSpeed)) {
             f *= 1.0F + (float) (player.getActivePotionEffect(Potion.digSpeed).getAmplifier() + 1) * 0.2F;
         } else {
-            /* Hardcode it to haste 2 to prevent false flags if the client doesn't receive the potion effect of another player*/
-            f *= 1.4F;
+            f *= 1.0F + getMaxHasteAmplifierMW(player) * 0.2F;
         }
         if (player.isPotionActive(Potion.digSlowdown)) {
             final float f1;
@@ -207,6 +213,37 @@ public class FastbreakCheck extends AbstractCheck {
             f *= f1;
         }
         return f < 0 ? 0 : f;
+    }
+
+    private static int getMaxHasteAmplifierMW(EntityPlayer player) {
+        final ScorePlayerTeam team = mc.theWorld.getScoreboard().getTeam(player.getName());
+        if (team == null) {
+            return 3;
+        }
+        final String classTag;
+        if (ScoreboardTracker.isInMwGame) {
+            classTag = team.getColorSuffix();
+        } else if (ScoreboardTracker.isMWReplay) {
+            classTag = team.getColorPrefix();
+        } else {
+            return 3;
+        }
+        if (classTag.contains("ZOM")) {
+            if (ScoreboardTracker.isPrepPhase || ScoreboardTracker.isMWReplay) {
+                return 3;
+            } else {
+                return 2;
+            }
+        } else if (classTag.contains("HUN")) {
+            return 3;
+        } else if (classTag.contains("MOL")) {
+            return 2;
+        }
+        if (ScoreboardTracker.isPrepPhase || ScoreboardTracker.isMWReplay) {
+            return 2;
+        } else {
+            return 0;
+        }
     }
 
 }
