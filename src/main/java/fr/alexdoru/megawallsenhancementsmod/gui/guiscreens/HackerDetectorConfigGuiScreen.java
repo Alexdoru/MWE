@@ -73,13 +73,6 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
                 DARK_GRAY + "\u25AA " + YELLOW + "Only in chat" + GRAY + " : only show when typing the report")
                 .accept(this.buttonList);
         this.buttonList.add(new OptionGuiButton(
-                xPos + BUTTON_WIDTH + 4, getButtonYPos(4),
-                sideButtonWidth, 20,
-                "Debug",
-                (b) -> ConfigHandler.debugLogging = b,
-                () -> ConfigHandler.debugLogging,
-                GRAY + "Logs every hacker detector related action in .minecraft/logs/HackerDetector.log"));
-        this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(6),
                 "Show flag messages",
                 (b) -> ConfigHandler.showFlagMessages = b,

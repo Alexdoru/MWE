@@ -518,11 +518,7 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Detects cheaters in your game")
     public static boolean hackerDetector = true;
 
-    @ConfigProperty(
-            category = HACKERDETECTOR,
-            name = "Enable debug log",
-            comment = "Logs player failing checks in for debugging")
-    public static boolean debugLogging;
+    public static boolean debugLogging = false;
 
     @ConfigProperty(
             category = HACKERDETECTOR,
