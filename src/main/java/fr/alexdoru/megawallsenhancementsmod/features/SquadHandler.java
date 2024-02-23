@@ -91,7 +91,7 @@ public class SquadHandler {
 
             if (found_teammates) {
 
-                if (line.contains("www.hypixel.net") || line.contains("HAPPY HOUR!") || line.equals("")) {
+                if (line.contains("www.hypixel.net") || line.contains("HAPPY HOUR!") || line.isEmpty()) {
                     break;
                 }
 
@@ -116,7 +116,7 @@ public class SquadHandler {
 
         final String myName = Minecraft.getMinecraft().thePlayer.getName();
         final String myCustomName = squadmap.get(myName);
-        final String myCustomNick = ConfigHandler.hypixelNick.equals("") ? null : squadmap.get(ConfigHandler.hypixelNick);
+        final String myCustomNick = ConfigHandler.hypixelNick.isEmpty() ? null : squadmap.get(ConfigHandler.hypixelNick);
 
         squadmap.clear();
         squadmap.putAll(newsquad);
@@ -133,7 +133,7 @@ public class SquadHandler {
             if (myCustomName == null) {
                 addPlayer(myName);
             }
-            if (myCustomNick == null && !ConfigHandler.hypixelNick.equals("")) {
+            if (myCustomNick == null && !ConfigHandler.hypixelNick.isEmpty()) {
                 addPlayer(ConfigHandler.hypixelNick, ConfigHandler.nickHider ? EnumChatFormatting.ITALIC + myName + EnumChatFormatting.RESET : ConfigHandler.hypixelNick);
             }
         }

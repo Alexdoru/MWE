@@ -26,7 +26,7 @@ public abstract class MyGuiScreen extends GuiScreen {
     private int usersGuiScale = -1;
     protected int maxWidth;
     protected int maxHeight;
-    protected List<UIElement> elementList = new ArrayList<>();
+    protected final List<UIElement> elementList = new ArrayList<>();
 
     @Override
     public void initGui() {

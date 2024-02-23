@@ -29,7 +29,7 @@ public class PartyDetection {
             partysMap.clear();
         }
 
-        if (jointime - timeLastJoin < 101L && !lastPlayerJoining.equals("")) {
+        if (jointime - timeLastJoin < 101L && !lastPlayerJoining.isEmpty()) {
             final List<String> partyLastPlayer = partysMap.get(lastPlayerJoining);
             final List<String> partyPlayer = partysMap.get(playername);
             if (partyLastPlayer != null && partyPlayer != null) {
@@ -78,7 +78,7 @@ public class PartyDetection {
                     final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(player);
                     if (networkPlayerInfo != null) {
                         final String teamColorPlayer = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), player), player);
-                        if (!teamColorPlayername.equals("") && teamColorPlayername.equals(teamColorPlayer)) {
+                        if (!teamColorPlayername.isEmpty() && teamColorPlayername.equals(teamColorPlayer)) {
                             containsPlayers = true;
                             imsg.appendSibling(new ChatComponentText(NameUtil.getFormattedName(networkPlayerInfo) + " ")
                                     .setChatStyle(new ChatStyle()
