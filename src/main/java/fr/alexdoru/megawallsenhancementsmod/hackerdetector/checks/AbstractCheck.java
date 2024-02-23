@@ -50,7 +50,7 @@ public abstract class AbstractCheck implements ICheck {
 
     private void printFlagMessage(EntityPlayer player) {
         if (ConfigHandler.debugLogging) {
-            HackerDetector.log(player.getName() + " flags " + this.getCheatName() + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")"));
+            HackerDetector.log(player.getName() + " flags " + this.getCheatName());
         }
         if (!ConfigHandler.showFlagMessages) {
             return;
