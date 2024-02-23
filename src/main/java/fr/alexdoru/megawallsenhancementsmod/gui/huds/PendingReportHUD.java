@@ -11,7 +11,7 @@ import net.minecraft.util.EnumChatFormatting;
 public class PendingReportHUD implements IRenderer {
 
     private final Minecraft mc = Minecraft.getMinecraft();
-    public static PendingReportHUD instance = new PendingReportHUD();
+    public static final PendingReportHUD instance = new PendingReportHUD();
 
     @Override
     public void render(ScaledResolution resolution) {

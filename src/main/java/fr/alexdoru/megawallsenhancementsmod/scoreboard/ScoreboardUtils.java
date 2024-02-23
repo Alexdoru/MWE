@@ -160,11 +160,11 @@ public class ScoreboardUtils {
             final ScorePlayerTeam scoreplayerteam = scoreboard.getPlayersTeam(score.getPlayerName());
             final String s1;
             if (scoreplayerteam == null) {
-                s1 = score.getPlayerName() + EnumChatFormatting.RED + "" + score.getScorePoints();
+                s1 = score.getPlayerName() + EnumChatFormatting.RED + score.getScorePoints();
                 printChat.add(s1);
                 printConsole.add("playername : '" + StringUtil.getStringAsUnicode(score.getPlayerName()) + "' points : '" + score.getScorePoints());
             } else {
-                s1 = scoreplayerteam.getColorPrefix() + score.getPlayerName() + scoreplayerteam.getColorSuffix() + EnumChatFormatting.RED + "" + score.getScorePoints();
+                s1 = scoreplayerteam.getColorPrefix() + score.getPlayerName() + scoreplayerteam.getColorSuffix() + EnumChatFormatting.RED + score.getScorePoints();
                 printChat.add(s1);
                 printConsole.add("prefix : '" + scoreplayerteam.getColorPrefix() + "' playername : '" + StringUtil.getStringAsUnicode(score.getPlayerName()) + "' suffix : " + scoreplayerteam.getColorSuffix() + "' points : '" + score.getScorePoints());
             }
