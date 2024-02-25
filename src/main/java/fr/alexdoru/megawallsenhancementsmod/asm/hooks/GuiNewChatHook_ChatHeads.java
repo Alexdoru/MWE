@@ -55,9 +55,7 @@ public class GuiNewChatHook_ChatHeads {
             }
             msg = CHAT_TIMESTAMP_PATTERN.matcher(msg).replaceAll("").trim();
             final Matcher matcher = NAME_PATTERN.matcher(msg);
-            int i = 0;
-            while (matcher.find() && i < 3) {
-                i++;
+            while (matcher.find()) {
                 final String potentialName = matcher.group();
                 final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(potentialName);
                 if (networkPlayerInfo instanceof NetworkPlayerInfoAccessor_ChatHeads) {
@@ -69,6 +67,7 @@ public class GuiNewChatHook_ChatHeads {
                     final ResourceLocation resourceLocation = NetHandlerPlayClientHook.getPlayerSkin(potentialName);
                     if (resourceLocation != null) {
                         ((ChatComponentTextAccessor) message).setSkinChatHead(new SkinChatHead(resourceLocation));
+                        return;
                     }
                 }
             }
