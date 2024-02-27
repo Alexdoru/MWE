@@ -40,7 +40,7 @@ public class HackerDetector {
     private final FastbreakCheck fastbreakCheck;
 
     private HackerDetector() {
-        this.checkList.add(new AutoblockCheckA());
+        this.checkList.add(new AutoblockCheck());
         this.checkList.add(this.fastbreakCheck = new FastbreakCheck());
         this.checkList.add(new KeepsprintCheck());
         this.checkList.add(new KillAuraCheck());

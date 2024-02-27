@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 
-public class AutoblockCheckA extends AbstractCheck {
+public class AutoblockCheck extends AbstractCheck {
 
     @Override
     public String getCheatName() {
@@ -31,16 +31,16 @@ public class AutoblockCheckA extends AbstractCheck {
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        if (player.isSwingInProgress) {
+        if (data.hasSwung) {
             final ItemStack itemStack = player.getHeldItem();
             if (itemStack != null && itemStack.getItem() instanceof ItemSword) {
-                if (data.useItemTime > 6) {
+                if (data.useItemTime > 3) {
                     data.autoblockAVL.add(5);
                     if (ConfigHandler.debugLogging) {
                         this.log(player, data, data.autoblockAVL, " | useItemTime " + data.useItemTime);
                     }
                     return true;
-                } else {
+                } else if (data.useItemTime == 0) {
                     data.autoblockAVL.substract(2);
                 }
             }
@@ -49,7 +49,7 @@ public class AutoblockCheckA extends AbstractCheck {
     }
 
     public static ViolationLevelTracker newViolationTracker() {
-        return new ViolationLevelTracker(120);
+        return new ViolationLevelTracker(30);
     }
 
 }
