@@ -1,23 +1,17 @@
 package fr.alexdoru.megawallsenhancementsmod.commands;
 
-import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
-import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetworkManagerHook_PacketListener;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.*;
-import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.MapUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
-import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
 import net.minecraft.event.ClickEvent;
@@ -46,11 +40,7 @@ public class CommandNocheaters extends MyAbstractCommand {
             return;
         }
 
-        if (args.length == 1 && args[0].equalsIgnoreCase("logpackets")) {
-
-            logPackets();
-
-        } else if (args[0].equalsIgnoreCase("reportlist") || args[0].equalsIgnoreCase("debugreportlist")) {
+        if (args[0].equalsIgnoreCase("reportlist") || args[0].equalsIgnoreCase("debugreportlist")) {
 
             printReportList(args);
 
@@ -81,10 +71,6 @@ public class CommandNocheaters extends MyAbstractCommand {
                 }
             }
             ChatUtil.addChatMessage(stringBuilder.toString());
-
-        } else if (args[0].equalsIgnoreCase("log")) {
-
-            this.logPlayer(args);
 
         } else {
 
@@ -181,50 +167,6 @@ public class CommandNocheaters extends MyAbstractCommand {
             );
             return null;
         });
-    }
-
-    private static void logPackets() {
-        if (!MegaWallsEnhancementsMod.isDev()) {
-            return;
-        }
-        NetworkManagerHook_PacketListener.logPackets = !NetworkManagerHook_PacketListener.logPackets;
-        if (NetworkManagerHook_PacketListener.logPackets) {
-            ChatUtil.debug(EnumChatFormatting.GREEN + "Logging packets");
-        } else {
-            ChatUtil.debug(EnumChatFormatting.RED + "Stopped logging packets");
-        }
-    }
-
-    private void logPlayer(String[] args) {
-        if (!MegaWallsEnhancementsMod.isDev()) {
-            return;
-        }
-        for (int i = 1, argsLength = args.length; i < argsLength; i++) {
-            String name = args[i];
-            if (ScoreboardTracker.isReplayMode) {
-                for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
-                    if (netInfo.getGameProfile().getName().contains(name)) {
-                        // in replay mode for some reason the names
-                        // of players contains color codes :
-                        // ex : Playername§r
-                        name = netInfo.getGameProfile().getName();
-                    }
-                }
-            }
-            if (HackerDetector.INSTANCE.playersToLog.remove(name)) {
-                ChatUtil.debug("Removed " + name + " players to log");
-            } else {
-                HackerDetector.INSTANCE.playersToLog.add(name);
-                ChatUtil.debug("Added " + name + " to players to log");
-            }
-        }
-        if (HackerDetector.INSTANCE.playersToLog.isEmpty()) {
-            ChatUtil.debug("Stopped logging");
-        } else {
-            ConfigHandler.debugLogging = true;
-            ChatUtil.debug("Now logging for " + HackerDetector.INSTANCE.playersToLog);
-        }
-        ConfigHandler.saveConfig();
     }
 
 }
