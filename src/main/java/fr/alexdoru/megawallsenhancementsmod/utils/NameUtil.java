@@ -84,7 +84,7 @@ public class NameUtil {
         if (isValidMinecraftName(playername)) {
             final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
             if (networkPlayerInfo != null) {
-                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(getMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
+                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(fetchMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
             }
             final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
@@ -99,7 +99,7 @@ public class NameUtil {
     public static void updateMWPlayerDataAndEntityData(EntityPlayer player, boolean refreshDisplayName) {
         final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(player.getName());
         if (networkPlayerInfo != null) {
-            ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(getMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
+            ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(fetchMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
         }
         updateEntityPlayerFields(player, false);
         if (refreshDisplayName) {
@@ -111,7 +111,7 @@ public class NameUtil {
      * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
      */
     public static void updateMWPlayerDataAndEntityData(NetworkPlayerInfo networkPlayerInfo, boolean refreshDisplayName) {
-        ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(getMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
+        ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(fetchMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
         final EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
         if (player != null) {
             updateEntityPlayerFields(player, false);
@@ -140,7 +140,7 @@ public class NameUtil {
         if (isValidMinecraftName(playername)) {
             final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
             if (networkPlayerInfo != null) {
-                final MWPlayerData.PlayerData mwPlayerData = getMWPlayerData(networkPlayerInfo.getGameProfile(), true);
+                final MWPlayerData.PlayerData mwPlayerData = fetchMWPlayerData(networkPlayerInfo.getGameProfile(), true);
                 ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(mwPlayerData.displayName);
                 if (mc.theWorld != null) {
                     final EntityPlayer player;
@@ -229,7 +229,7 @@ public class NameUtil {
      * a rerun all the code in the method to generate the MWPlayerData instance
      */
     @Nonnull
-    public static MWPlayerData.PlayerData getMWPlayerData(GameProfile gameProfileIn, boolean forceRefresh) {
+    public static MWPlayerData.PlayerData fetchMWPlayerData(GameProfile gameProfileIn, boolean forceRefresh) {
 
         final UUID id = gameProfileIn.getId();
         MWPlayerData.PlayerData mwPlayerData = MWPlayerData.get(id);
@@ -240,7 +240,8 @@ public class NameUtil {
 
         final String username = gameProfileIn.getName();
         final String uuid = id.toString().replace("-", "");
-        final WDR wdr = WdrData.getWdr(id.version() == 1 ? username : uuid);
+        final boolean isNicked = id.version() == 1;
+        final WDR wdr = WdrData.getWdr(isNicked ? username : uuid);
         String extraPrefix = "";
         IChatComponent iExtraPrefix = null;
         final String squadname = SquadHandler.getSquad().get(username);
@@ -293,7 +294,7 @@ public class NameUtil {
                     }
                 }
                 final boolean isobf = teamprefix.contains("\u00a7k");
-                final String alias = AliasData.getAlias(id.version() == 1 ? username : uuid);
+                final String alias = AliasData.getAlias(isNicked ? username : uuid);
                 if (iExtraPrefix != null || isSquadMate || formattedPrestigeVstring != null || alias != null) {
                     displayName = new ChatComponentText(
                             (isobf ? "" : extraPrefix)
