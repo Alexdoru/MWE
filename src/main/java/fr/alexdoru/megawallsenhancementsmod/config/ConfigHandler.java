@@ -310,6 +310,12 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = GUI,
+            name = "Show head on Arrow Hit HUD",
+            comment = "Show head of player hit on Arrow Hit HUD")
+    public static boolean showHeadOnArrowHitHUD;
+
+    @ConfigProperty(
+            category = GUI,
             name = "Arrow Hit HUD",
             comment = "position of the ArrowHitHUD")
     public static final GuiPosition arrowHitHUDPosition = new GuiPosition(0.5d, 9d / 20d);

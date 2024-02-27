@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.GuiNewChatAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
@@ -8,10 +9,15 @@ import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.ColorUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.gui.ChatLine;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -31,6 +37,7 @@ public class ArrowHitHUD extends AbstractRenderer {
 
     private String displayText = "";
     private long hitTime;
+    private ResourceLocation skin;
 
     public ArrowHitHUD() {
         super(ConfigHandler.arrowHitHUDPosition);
@@ -47,8 +54,10 @@ public class ArrowHitHUD extends AbstractRenderer {
             final String hitValue = matcherArrowHit.group(2);
             if (isDeadFromShot(playername, hitValue)) {
                 displayText = EnumChatFormatting.GOLD + "Kill";
+                skin = null;
             } else {
                 displayText = getColor(hitValue) + hitValue;
+                setPlayerHead(playername);
             }
             final String s = ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg;
             event.message = new ChatComponentText(s);
@@ -66,6 +75,7 @@ public class ArrowHitHUD extends AbstractRenderer {
             RenderPlayerHook_RenegadeArrowCount.addArrowOnPlayer(playername, hitTime, Integer.parseInt(arrowsPinned));
             final boolean bool = Float.parseFloat(hitValue) > (Float.parseFloat(arrowsPinned)) * 2.0f;
             displayText = getColor(hitValue) + hitValue + EnumChatFormatting.GRAY + " (" + (bool ? EnumChatFormatting.GREEN : EnumChatFormatting.GOLD) + arrowsPinned + EnumChatFormatting.GRAY + ")";
+            setPlayerHead(playername);
             final String s = ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg;
             event.message = new ChatComponentText(s);
             ChatUtil.addSkinToComponent(event.message, playername);
@@ -77,6 +87,7 @@ public class ArrowHitHUD extends AbstractRenderer {
         if (matcherLeapHit.matches()) {
             hitTime = System.currentTimeMillis() + 1000L;
             displayText = EnumChatFormatting.GREEN + "-" + 2f * Float.parseFloat(matcherLeapHit.group(1));
+            skin = null;
             return true;
         }
 
@@ -86,6 +97,7 @@ public class ArrowHitHUD extends AbstractRenderer {
             hitTime = System.currentTimeMillis() + 1000L;
             final String playername = matcherLeapDirectHit.group(1);
             displayText = EnumChatFormatting.GREEN + "-" + 2f * Float.parseFloat(matcherLeapDirectHit.group(2));
+            skin = null;
             final String s = ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg;
             event.message = new ChatComponentText(s);
             ChatUtil.addSkinToComponent(event.message, playername);
@@ -106,11 +118,17 @@ public class ArrowHitHUD extends AbstractRenderer {
                 fmsg = ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg;
             }
             displayText = EnumChatFormatting.GREEN + "-" + totalDamage;
+            skin = null;
             return true;
         }
 
         return false;
 
+    }
+
+    private void setPlayerHead(String playername) {
+        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
+        if (netInfo != null && netInfo.hasLocationSkin()) skin = netInfo.getLocationSkin();
     }
 
     private boolean isDeadFromShot(String playername, String hpValue) {
@@ -136,7 +154,20 @@ public class ArrowHitHUD extends AbstractRenderer {
     @Override
     public void render(ScaledResolution resolution) {
         this.guiPosition.updateAbsolutePosition(resolution);
-        drawCenteredString(mc.fontRendererObj, displayText, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+        int x = this.guiPosition.getAbsoluteRenderX();
+        int y = this.guiPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT;
+        drawCenteredString(mc.fontRendererObj, displayText, x, y, 0xFFFFFF);
+        if (ConfigHandler.showHeadOnArrowHitHUD && skin != null) {
+            x -= 4;
+            y += mc.fontRendererObj.FONT_HEIGHT + 1;
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.enableAlpha();
+            GlStateManager.enableBlend();
+            GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+            mc.getTextureManager().bindTexture(skin);
+            Gui.drawScaledCustomSizeModalRect(x, y, 8, 8, 8, 8, 8, 8, 64.0F, 64.0F);
+            Gui.drawScaledCustomSizeModalRect(x, y, 40, 8, 8, 8, 8, 8, 64.0F, 64.0F);
+        }
     }
 
     @Override

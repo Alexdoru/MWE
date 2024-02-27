@@ -1,17 +1,14 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.ChatComponentTextAccessor;
-import fr.alexdoru.megawallsenhancementsmod.asm.accessors.NetworkPlayerInfoAccessor_ChatHeads;
-import fr.alexdoru.megawallsenhancementsmod.chat.SkinChatHead;
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.util.regex.Matcher;
@@ -56,19 +53,8 @@ public class GuiNewChatHook_ChatHeads {
             msg = CHAT_TIMESTAMP_PATTERN.matcher(msg).replaceAll("").trim();
             final Matcher matcher = NAME_PATTERN.matcher(msg);
             while (matcher.find()) {
-                final String potentialName = matcher.group();
-                final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(potentialName);
-                if (networkPlayerInfo instanceof NetworkPlayerInfoAccessor_ChatHeads) {
-                    final SkinChatHead skinChatHead = new SkinChatHead(networkPlayerInfo.getLocationSkin());
-                    ((ChatComponentTextAccessor) message).setSkinChatHead(skinChatHead);
-                    ((NetworkPlayerInfoAccessor_ChatHeads) networkPlayerInfo).setSkinChatHead(skinChatHead);
+                if (ChatUtil.tryAddSkinToComponent(message, matcher.group())) {
                     return;
-                } else {
-                    final ResourceLocation resourceLocation = NetHandlerPlayClientHook.getPlayerSkin(potentialName);
-                    if (resourceLocation != null) {
-                        ((ChatComponentTextAccessor) message).setSkinChatHead(new SkinChatHead(resourceLocation));
-                        return;
-                    }
                 }
             }
         }
