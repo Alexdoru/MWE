@@ -58,22 +58,26 @@ public class ChatUtil {
     }
 
     public static void addSkinToComponent(IChatComponent msg, String playername) {
-        if (msg instanceof ChatComponentTextAccessor) {
-            if (((ChatComponentTextAccessor) msg).getSkinChatHead() != null) {
-                return;
-            }
-            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
-            if (networkPlayerInfo instanceof NetworkPlayerInfoAccessor_ChatHeads) {
-                final SkinChatHead skinChatHead = new SkinChatHead(networkPlayerInfo.getLocationSkin());
-                ((ChatComponentTextAccessor) msg).setSkinChatHead(skinChatHead);
-                ((NetworkPlayerInfoAccessor_ChatHeads) networkPlayerInfo).setSkinChatHead(skinChatHead);
-            } else {
-                final ResourceLocation resourceLocation = NetHandlerPlayClientHook.getPlayerSkin(playername);
-                if (resourceLocation != null) {
-                    ((ChatComponentTextAccessor) msg).setSkinChatHead(new SkinChatHead(resourceLocation));
-                }
+        if (msg instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) msg).getSkinChatHead() == null) {
+            tryAddSkinToComponent(msg, playername);
+        }
+    }
+
+    public static boolean tryAddSkinToComponent(IChatComponent msg, String playername) {
+        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
+        if (netInfo instanceof NetworkPlayerInfoAccessor_ChatHeads) {
+            final SkinChatHead skin = new SkinChatHead(netInfo.getLocationSkin());
+            ((ChatComponentTextAccessor) msg).setSkinChatHead(skin);
+            ((NetworkPlayerInfoAccessor_ChatHeads) netInfo).setSkinChatHead(skin);
+            return true;
+        } else {
+            final ResourceLocation resourceLocation = NetHandlerPlayClientHook.getPlayerSkin(playername);
+            if (resourceLocation != null) {
+                ((ChatComponentTextAccessor) msg).setSkinChatHead(new SkinChatHead(resourceLocation));
+                return true;
             }
         }
+        return false;
     }
 
     public static void printIChatList(String listtitle, IChatComponent imessagebody, int displaypage, int nbpage, String command, EnumChatFormatting barColor, IChatComponent titleHoverText, String titleURL) {
