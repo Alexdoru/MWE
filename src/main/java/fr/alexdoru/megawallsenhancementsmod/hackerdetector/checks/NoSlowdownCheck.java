@@ -31,19 +31,21 @@ public class NoSlowdownCheck extends AbstractCheck {
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        /* If the player is moving slower than the base running speed, we consider it is keepsprint */
-        if (!player.isRiding() && player.hurtTime == 0) {
-            /* It takes 32 ticks to eat/drink one food/potion item */
-            if (data.useItemTime > 5 && data.getSpeedXZ() >= 4D) {
-                if (data.sprintTime > 70) {
-                    data.noSlowdownVL.add(2);
-                    if (ConfigHandler.debugLogging) {
-                        this.log(player, data, data.noSlowdownVL, null);
-                    }
-                    return true;
-                } else if (data.sprintTime == 0) {
-                    data.noSlowdownVL.substract(3);
+        // If the player is moving slower than the base running speed, we consider it is keepsprint */
+        // It takes 32 ticks to consume food/potion */
+        if (player.isRiding()) return false;
+        if (data.useItemTime > 5 && player.hurtTime == 0 && data.getSpeedXZ() >= 4D) {
+            final int maxDuration = player.getHeldItem().getMaxItemUseDuration();
+            if (maxDuration == 0) return false; // wtf ??
+            // it is possible to double eat -> start sprinting while eating a second item
+            if (data.sprintTime > (maxDuration == 32 ? 70 : 5)) {
+                data.noSlowdownVL.add(2);
+                if (ConfigHandler.debugLogging) {
+                    this.log(player, data, data.noSlowdownVL, null);
                 }
+                return true;
+            } else if (data.sprintTime == 0) {
+                data.noSlowdownVL.substract(3);
             }
         }
         return false;

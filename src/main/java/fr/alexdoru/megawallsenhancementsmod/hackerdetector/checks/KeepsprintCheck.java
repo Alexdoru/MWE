@@ -31,22 +31,22 @@ public class KeepsprintCheck extends AbstractCheck {
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        if (data.isNotMovingXZ() || player.isRiding()) {
-            return false;
-        }
-        /* It takes 32 ticks to eat/drink one food/potion item */
-        if (data.sprintTime > 70 && data.useItemTime > 4) {
-            /* If the player is moving slower than the base running speed, we consider it is keepsprint */
-            if (player.hurtTime == 0 && data.getSpeedXZ() < 4D) {
+        // If the player is moving slower than the base running speed, we consider it is keepsprint */
+        // It takes 32 ticks to consume food/potion */
+        if (data.isNotMovingXZ() || player.isRiding()) return false;
+        if (data.useItemTime > 5 && player.hurtTime == 0 && data.getSpeedXZ() < 4D) {
+            final int maxDuration = player.getHeldItem().getMaxItemUseDuration();
+            if (maxDuration == 0) return false; // wtf ??
+            // it is possible to double eat -> start sprinting while eating a second item
+            if (data.sprintTime > (maxDuration == 32 ? 70 : 5)) {
                 data.keepsprintVL.add(2);
                 if (ConfigHandler.debugLogging) {
                     this.log(player, data, data.keepsprintVL, null);
                 }
+                return true;
+            } else if (data.sprintTime == 0) {
+                data.keepsprintVL.substract(3);
             }
-            return true;
-        } else if (data.sprintTime == 0 && data.useItemTime > 4) {
-            data.keepsprintVL.substract(3);
-            return false;
         }
         return false;
     }

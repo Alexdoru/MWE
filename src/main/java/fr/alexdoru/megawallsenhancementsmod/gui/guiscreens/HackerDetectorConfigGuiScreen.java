@@ -32,7 +32,7 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
                 "Hacker Detector",
                 (b) -> ConfigHandler.hackerDetector = b,
                 () -> ConfigHandler.hackerDetector,
-                GRAY + "Analyses movements and actions of players in your game and tells you if they are cheating. Currently has checks for : Autoblock, Fastbreak, Keepsprint, Noslowdown"));
+                GRAY + "Analyses movements and actions of players around you and gives a warning message if they are cheating."));
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(3),
                 "Save in NoCheaters",
