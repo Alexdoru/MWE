@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.enums;
 
 import fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumChatFormatting;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +36,7 @@ public enum MegaWallsMap {
 
     private final TeamColor northBase, eastBase, southBase, westBase;
     private final double northLimit, eastLimit, southLimit, westLimit;
+    private final double innerNorthLimit, innerEastLimit, innerSouthLimit, innerWestLimit;
     private final double surfaceLevel;
     private static final Map<String, MegaWallsMap> fromNameMap = new HashMap<>();
 
@@ -54,28 +56,57 @@ public enum MegaWallsMap {
         this.southLimit = southLimit;
         this.westLimit = westLimit;
         this.surfaceLevel = surfaceLevel;
+        final int FRONT_BASE_WIDTH = 12;
+        this.innerNorthLimit = this.northLimit + FRONT_BASE_WIDTH;
+        this.innerEastLimit = this.eastLimit - FRONT_BASE_WIDTH;
+        this.innerSouthLimit = this.southLimit - FRONT_BASE_WIDTH;
+        this.innerWestLimit = this.westLimit + FRONT_BASE_WIDTH;
     }
 
     public String getPlayerBaseLocation(EntityPlayer player) {
         //             NORTH -Z
         //   WEST -X             EAST +X
         //             SOUTH +Z
-        if (player.posZ < northLimit && player.posX > westLimit) {
-            return northBase.formattedName();
-        } else if (player.posX > eastLimit && player.posZ > northLimit) {
-            return eastBase.formattedName();
-        } else if (player.posZ > southLimit && player.posX < eastLimit) {
-            return southBase.formattedName();
-        } else if (player.posX < westLimit && player.posZ < southLimit) {
-            return westBase.formattedName();
-        } else if (isPlayerAtMiddle(player)) {
-            return "MIDDLE";
+        if (isPlayerAtMiddle(player)) {
+            if (isPlayerAtMidMid(player)) {
+                return "MIDDLE";
+            } else if (ab(player) && player.posX > innerEastLimit && cd(player)) {
+                return "MIDDLE(" + eastBase.formattedName() + EnumChatFormatting.RESET + ")";
+            } else if (!cd(player) && player.posZ > innerSouthLimit && ab(player)) {
+                return "MIDDLE(" + southBase.formattedName() + EnumChatFormatting.RESET + ")";
+            } else if (!ab(player) && player.posX < innerWestLimit && !cd(player)) {
+                return "MIDDLE(" + westBase.formattedName() + EnumChatFormatting.RESET + ")";
+            } else if (cd(player) && player.posZ < innerNorthLimit && !ab(player)) {
+                return "MIDDLE(" + northBase.formattedName() + EnumChatFormatting.RESET + ")";
+            }
+        } else {
+            if (player.posZ < northLimit && player.posX > westLimit) {
+                return northBase.formattedName();
+            } else if (player.posX > eastLimit && player.posZ > northLimit) {
+                return eastBase.formattedName();
+            } else if (player.posZ > southLimit && player.posX < eastLimit) {
+                return southBase.formattedName();
+            } else if (player.posX < westLimit && player.posZ < southLimit) {
+                return westBase.formattedName();
+            }
         }
         return "";
     }
 
     private boolean isPlayerAtMiddle(EntityPlayer player) {
         return player.posX < eastLimit && player.posX > westLimit && player.posZ < southLimit && player.posZ > northLimit;
+    }
+
+    private boolean isPlayerAtMidMid(EntityPlayer player) {
+        return player.posX < innerEastLimit && player.posX > innerWestLimit && player.posZ < innerSouthLimit && player.posZ > innerNorthLimit;
+    }
+
+    private boolean ab(EntityPlayer player) {
+        return player.posX > -player.posZ + eastLimit + northLimit;
+    }
+
+    private boolean cd(EntityPlayer player) {
+        return player.posX > player.posZ + westLimit - northLimit;
     }
 
     public static MegaWallsMap fromName(String name) {
