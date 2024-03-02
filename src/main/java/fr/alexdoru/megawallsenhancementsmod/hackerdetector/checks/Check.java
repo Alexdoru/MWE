@@ -107,6 +107,7 @@ public abstract class AbstractCheck implements ICheck {
                 wdr.time = new Date().getTime();
                 wdr.hacks.trimToSize();
             }
+            WdrData.markDirty();
             NameUtil.updateMWPlayerDataAndEntityData(player, false);
         }
     }

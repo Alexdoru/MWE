@@ -50,6 +50,7 @@ public class MegaWallsEnhancementsMod {
     @EventHandler
     public void init(FMLInitializationEvent event) {
 
+        MinecraftForge.EVENT_BUS.register(new WdrData());
         MinecraftForge.EVENT_BUS.register(new GuiManager());
         MinecraftForge.EVENT_BUS.register(new ModUpdater());
         MinecraftForge.EVENT_BUS.register(new ChatListener());
@@ -76,8 +77,6 @@ public class MegaWallsEnhancementsMod {
         ClientCommandHandler.instance.registerCommand(new CommandNocheaters());
         ClientCommandHandler.instance.registerCommand(new CommandHypixelShout());
         ClientCommandHandler.instance.registerCommand(new CommandMWEnhancements());
-
-        WdrData.init();
 
     }
 

@@ -165,18 +165,17 @@ public class CommandWDR extends MyAbstractCommand {
         final WDR wdr = WdrData.getWdr(uuid);
 
         if (wdr == null) {
+            if (isaNick) {
+                cheats.add(WDR.NICK);
+            }
             WdrData.put(uuid, new WDR(time, cheats));
-            WdrData.saveReportedPlayers();
         } else {
             wdr.time = time;
             cheats.removeAll(wdr.hacks);
             wdr.hacks.addAll(cheats);
             wdr.hacks.trimToSize();
         }
-        if (isaNick && !cheats.contains(WDR.NICK)) {
-            cheats.add(WDR.NICK);
-            cheats.trimToSize();
-        }
+        WdrData.saveReportedPlayers();
 
         NameUtil.updateMWPlayerDataAndEntityData(playername, false);
         if (showReportMessage || wdr == null) {

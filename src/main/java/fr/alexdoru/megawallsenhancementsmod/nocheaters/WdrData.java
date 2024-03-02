@@ -1,8 +1,10 @@
 package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.utils.ListUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,11 +24,25 @@ public class WdrData {
     private static File wdrsFile;
     // used for backwards compat
     private static final String IGNORED = "ignored";
+    private static boolean dirty;
 
-    public static void init() {
+    public WdrData() {
         wdrsFile = new File(Minecraft.getMinecraft().mcDataDir, "config/wdred.txt");
         loadReportedPlayers();
         Runtime.getRuntime().addShutdownHook(new Thread(WdrData::saveReportedPlayers));
+    }
+
+    @SubscribeEvent
+    public void onMWGameEvent(MegaWallsGameEvent event) {
+        if (event.getType() == MegaWallsGameEvent.EventType.GAME_START || event.getType() == MegaWallsGameEvent.EventType.GAME_END) {
+            if (dirty) {
+                WdrData.saveReportedPlayers();
+            }
+        }
+    }
+
+    public static void markDirty() {
+        dirty = true;
     }
 
     public static Map<String, WDR> getWdredMap() {
@@ -71,6 +87,7 @@ public class WdrData {
         } catch (IOException e) {
             logger.error("Failed to write data to the wdr file");
         }
+        dirty = false;
     }
 
     private static void loadReportedPlayers() {
