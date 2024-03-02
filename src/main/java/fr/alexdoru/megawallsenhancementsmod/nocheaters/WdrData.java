@@ -1,12 +1,12 @@
 package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
-import fr.alexdoru.megawallsenhancementsmod.utils.ListUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.*;
@@ -14,21 +14,17 @@ import java.util.Map.Entry;
 
 public class WdrData {
 
-    private static final Logger logger = LogManager.getLogger("NoCheaters");
     private static final long TIME_TRANSFORM_NICKED_REPORT = 86400000L; // 24hours
-    private static final Map<String, WDR> wdrMap = new HashMap<>();
-    /**
-     * In the wdred file the data is saved with the following pattern
-     * uuid timestamp timeLastManualReport hack1 hack2 hack3 hack4 hack5
-     */
-    private static File wdrsFile;
+    private static final File legacywdrFile = new File(Minecraft.getMinecraft().mcDataDir, "config/wdred.txt");
+    private static final File wdrJsonFile = new File(Minecraft.getMinecraft().mcDataDir, "config/WDRList.json");
     // used for backwards compat
     private static final String IGNORED = "ignored";
+
+    private static final Map<String, WDR> wdrMap = new HashMap<>();
     private static boolean dirty;
 
     public WdrData() {
-        wdrsFile = new File(Minecraft.getMinecraft().mcDataDir, "config/wdred.txt");
-        loadReportedPlayers();
+        WdrData.loadReportedPlayers();
         Runtime.getRuntime().addShutdownHook(new Thread(WdrData::saveReportedPlayers));
     }
 
@@ -78,93 +74,90 @@ public class WdrData {
     }
 
     public static void saveReportedPlayers() {
-        try (final BufferedWriter writer = new BufferedWriter(new FileWriter(wdrsFile))) {
-            for (final Entry<String, WDR> entry : wdrMap.entrySet()) {
-                final String uuid = entry.getKey();
-                final WDR wdr = entry.getValue();
-                writer.write(uuid + " " + wdr.time + wdr.hacksToString() + "\n");
-            }
+        final ArrayList<String> reportLines = new ArrayList<>(wdrMap.size());
+        for (final Entry<String, WDR> entry : wdrMap.entrySet()) {
+            final String uuid = entry.getKey();
+            final WDR wdr = entry.getValue();
+            reportLines.add(uuid + " " + wdr.time + wdr.hacksToString());
+        }
+        try (final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(wdrJsonFile))) {
+            final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+            final String jsonString = gson.toJson(reportLines);
+            bufferedWriter.write(jsonString);
         } catch (IOException e) {
-            logger.error("Failed to write data to the wdr file");
+            e.printStackTrace();
         }
         dirty = false;
     }
 
     private static void loadReportedPlayers() {
-        if (!wdrsFile.exists()) {
-            logger.info("Couldn't find existing wdr file");
-            return;
+        final List<String> jsonReportLines = loadReportsFromJSONFile();
+        final List<String> legacyReportLines = loadReportsFromLegacyFile();
+        final boolean deleteLegacyFile = !legacyReportLines.isEmpty();
+        jsonReportLines.forEach(WdrData::loadReportLine);
+        legacyReportLines.forEach(WdrData::loadReportLine);
+        if (deleteLegacyFile) {
+            WdrData.saveReportedPlayers();
+            legacywdrFile.deleteOnExit();
         }
-        try (final BufferedReader reader = new BufferedReader(new FileReader(wdrsFile))) {
-
-            final long datenow = (new Date()).getTime();
-
-            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-                final String[] split = line.split(" ");
-                if (split.length >= 3) {
-
-                    boolean oldDataFormat = false;
-                    final String uuid = split[0];
-                    long timestamp = 0L;
-
-                    try {
-                        timestamp = Long.parseLong(split[1]);
-                        try {
-                            Long.parseLong(split[2]);
-                        } catch (Exception e) {
-                            oldDataFormat = true;
-                        }
-                    } catch (Exception e) {
-                        logger.error("Failed to parse timestamp for : " + uuid);
-                    }
-
-                    if (ConfigHandler.deleteOldReports && datenow > timestamp + ConfigHandler.timeDeleteReport * 24f * 3600f * 1000f) {
-                        continue;
-                    }
-
-                    final ArrayList<String> hacks = filterTimestampedReports(
-                            Arrays.copyOfRange(split, oldDataFormat ? 2 : 3, split.length)
-                    );
-
-                    if (hacks.contains(WDR.NICK) && (datenow > timestamp + TIME_TRANSFORM_NICKED_REPORT)) {
-                        continue;
-                    }
-
-                    // remove reports for players that are only ignored
-                    if (hacks.remove(IGNORED) && hacks.isEmpty()) {
-                        continue;
-                    }
-
-                    wdrMap.put(uuid, new WDR(timestamp, hacks));
-
-                }
-            }
-
-        } catch (Exception e) {
-            logger.error("Failed to read the wdr file");
-        }
-
     }
 
-    /**
-     * Transforms the timestamped reports older into normal reports
-     */
-    private static ArrayList<String> filterTimestampedReports(String[] split) {
-        final ArrayList<String> hacks = new ArrayList<>();
-        if (split[0].charAt(0) == '-') {
-            int j = 0; // indice of timestamp
-            for (int i = 0; i < split.length; i++) {
-                if (split[i].charAt(0) == '-') { // serverID
-                    j = i;
-                } else if (i > j + 3) { // cheats
-                    hacks.add(split[i]);
-                }
-            }
-            return (ArrayList<String>) ListUtil.removeDuplicates(hacks);
-        } else {
-            hacks.addAll(Arrays.asList(split));
-            return hacks;
+    private static List<String> loadReportsFromJSONFile() {
+        final List<String> reportLines = new ArrayList<>();
+        if (!wdrJsonFile.exists()) {
+            return reportLines;
         }
+        try {
+            final Gson gson = new Gson();
+            return gson.fromJson(new FileReader(wdrJsonFile), new TypeToken<ArrayList<String>>() {}.getType());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return reportLines;
+        }
+    }
+
+    private static List<String> loadReportsFromLegacyFile() {
+        final List<String> reportLines = new ArrayList<>();
+        if (!legacywdrFile.exists()) {
+            return reportLines;
+        }
+        try (final BufferedReader reader = new BufferedReader(new FileReader(legacywdrFile))) {
+            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+                reportLines.add(line);
+            }
+        } catch (Exception ignored) {}
+        return reportLines;
+    }
+
+    private static void loadReportLine(String reportLine) {
+        //In the wdr file the data is saved with the following pattern :
+        //uuid timestamp hack1 hack2 hack3 hack4 hack5
+        final String[] split = reportLine.split(" ");
+        if (split.length < 3) return;
+        boolean oldDataFormat = false;
+        final String uuid = split[0];
+        long timestamp = 0L;
+        try {
+            timestamp = Long.parseLong(split[1]);
+            try {
+                Long.parseLong(split[2]);
+            } catch (Exception e) {
+                oldDataFormat = true;
+            }
+        } catch (Exception ignored) {}
+        final long datenow = new Date().getTime();
+        if (ConfigHandler.deleteOldReports && datenow > timestamp + ConfigHandler.timeDeleteReport * 24f * 3600f * 1000f) {
+            return;
+        }
+        final ArrayList<String> hacks = new ArrayList<>(Arrays.asList(split).subList(oldDataFormat ? 2 : 3, split.length));
+        if (hacks.contains(WDR.NICK) && (datenow > timestamp + TIME_TRANSFORM_NICKED_REPORT)) {
+            return;
+        }
+        // remove reports for players that are only ignored
+        if (hacks.remove(IGNORED) && hacks.isEmpty()) {
+            return;
+        }
+        wdrMap.put(uuid, new WDR(timestamp, hacks));
     }
 
 }
