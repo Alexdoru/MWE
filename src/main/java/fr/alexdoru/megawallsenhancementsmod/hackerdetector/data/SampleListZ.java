@@ -63,6 +63,15 @@ public class SampleListZ {
         return this.sum() / (float) this.size;
     }
 
+    public boolean isSameValues() {
+        if (this.size < 2) return false;
+        final boolean v = this.get(0);
+        for (int i = 1; i < this.size; i++) {
+            if (v != this.get(i)) return false;
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
         if (this.size == 0) {

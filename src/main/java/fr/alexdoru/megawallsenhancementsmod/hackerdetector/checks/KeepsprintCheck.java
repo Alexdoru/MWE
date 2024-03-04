@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class KeepsprintCheck extends AbstractCheck {
+public class KeepsprintCheck extends Check {
 
     @Override
     public String getCheatName() {

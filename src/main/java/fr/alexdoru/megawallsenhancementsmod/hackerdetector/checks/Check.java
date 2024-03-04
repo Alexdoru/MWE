@@ -32,7 +32,7 @@ import java.util.function.Predicate;
 /**
  * Abstract class to hold util methods for the checks
  */
-public abstract class AbstractCheck implements ICheck {
+public abstract class Check implements ICheck {
 
     protected static final Minecraft mc = Minecraft.getMinecraft();
     private static final HashSet<String> flagMessages = new HashSet<>();
@@ -189,9 +189,9 @@ public abstract class AbstractCheck implements ICheck {
                     pos.getZ() + 0.5D - player.posZ);
         } else {
             eyesToBlockCenter = new Vector3D(
-                    pos.getX() + 0.5D - data.serverPosX,
-                    pos.getY() + 0.5D - (data.serverPosY + player.getEyeHeight()),
-                    pos.getZ() + 0.5D - data.serverPosZ);
+                    pos.getX() + 0.5D - data.serverPosXList.get(0),
+                    pos.getY() + 0.5D - (data.serverPosYList.get(0) + player.getEyeHeight()),
+                    pos.getZ() + 0.5D - data.serverPosZList.get(0));
         }
         /* (0.5*sqrt(3) + 4.5)^2 | Squared distance from center of the block to the corner + player's break reach */
         final double distSq = eyesToBlockCenter.normSquared();
@@ -207,7 +207,7 @@ public abstract class AbstractCheck implements ICheck {
         if (player == mc.thePlayer) {
             lookVect = Vector3D.getPlayersLookVec(player);
         } else {
-            lookVect = Vector3D.getVectorFromRotation(data.serverPitch, data.serverYawHead);
+            lookVect = Vector3D.getVectorFromRotation(data.serverPitchList.get(0), data.serverYawHeadList.get(0));
         }
         final double angleWithVector = lookVect.getAngleWithVector(eyesToBlockCenter);
         final double maxAngle = Math.toDegrees(Math.atan(0.5D * Math.sqrt(3D / distSq))) * 1.33D;

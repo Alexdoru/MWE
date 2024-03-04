@@ -18,7 +18,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 
-public class FastbreakCheck extends AbstractCheck {
+public class FastbreakCheck extends Check {
 
     @Override
     public String getCheatName() {

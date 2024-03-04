@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class NoSlowdownCheck extends AbstractCheck {
+public class NoSlowdownCheck extends Check {
 
     @Override
     public String getCheatName() {

@@ -36,21 +36,17 @@ public class PlayerDataSamples {
     /* ----- Client samples end ----- */
 
     /* ----- Samples of rotations/positions received from the server ----- */
-    public double serverPosX;
-    public double serverPosY;
-    public double serverPosZ;
-    /** Pitch of the player's head [-90, 90] */
-    public float serverPitch;
-    /** Yaw of the player's head [-180, 180] */
-    public float serverYawHead;
+    private int serverUpdates;
+    public final SampleListI serverUpdatesList = new SampleListI(10);
+    public final SampleListD serverPosXList = new SampleListD(10);
+    public final SampleListD serverPosYList = new SampleListD(10);
+    public final SampleListD serverPosZList = new SampleListD(10);
     /** Yaw of the player's body [-180, 180] */
-    public float serverYaw;
-    public final SampleListD serverPosXList = new SampleListD(5);
-    public final SampleListD serverPosYList = new SampleListD(5);
-    public final SampleListD serverPosZList = new SampleListD(5);
-    public final SampleListF serverPitchList = new SampleListF(5); // Pitch of the head
-    public final SampleListF serverYawHeadList = new SampleListF(5); // Yaw of the head, directly equals to player.rotationYawHead
-    public final SampleListF serverYawList = new SampleListF(5); // Yaw of the body
+    public final SampleListF serverYawList = new SampleListF(10);
+    /** Pitch of the player's head [-90, 90] */
+    public final SampleListF serverPitchList = new SampleListF(10);
+    /** Yaw of the player's head [-180, 180], directly equals to player.rotationYawHead */
+    public final SampleListF serverYawHeadList = new SampleListF(10);
     /* ----- Server samples end ----- */
 
     /** Last time the player broke a block */
@@ -65,6 +61,7 @@ public class PlayerDataSamples {
         this.hasSwung = false;
         this.hasAttackedMultiTarget = false;
         this.targetedPlayer = null;
+        this.serverUpdates = 0;
     }
 
     public void onTick(EntityPlayer player) {
@@ -80,24 +77,20 @@ public class PlayerDataSamples {
         this.speedXList.add((player.posX - player.lastTickPosX) * 20D);
         this.speedYList.add((player.posY - player.lastTickPosY) * 20D);
         this.speedZList.add((player.posZ - player.lastTickPosZ) * 20D);
-        this.serverPosXList.add(this.serverPosX);
-        this.serverPosYList.add(this.serverPosY);
-        this.serverPosZList.add(this.serverPosZ);
-        this.serverPitchList.add(this.serverPitch);
-        this.serverYawHeadList.add(this.serverYawHead);
-        this.serverYawList.add(this.serverYaw);
+        this.serverUpdatesList.add(this.serverUpdates);
     }
 
     public void setPositionAndRotation(double x, double y, double z, float yaw, float pitch) {
-        this.serverPosX = x;
-        this.serverPosY = y;
-        this.serverPosZ = z;
-        this.serverYaw = yaw;
-        this.serverPitch = pitch;
+        this.serverUpdates++;
+        this.serverPosXList.add(x);
+        this.serverPosYList.add(y);
+        this.serverPosZList.add(z);
+        this.serverYawList.add(yaw);
+        this.serverPitchList.add(pitch);
     }
 
     public void setRotationYawHead(float yawHead) {
-        this.serverYawHead = yawHead;
+        this.serverYawHeadList.add(yawHead);
     }
 
     /** True if the player has attacked another player during this tick */
@@ -116,18 +109,12 @@ public class PlayerDataSamples {
         return Math.sqrt(vx * vx + vz * vz);
     }
 
-    public double getSpeedXZ(int index) {
-        final double vx = this.speedXList.get(index);
-        final double vz = this.speedZList.get(index);
-        return Math.sqrt(vx * vx + vz * vz);
-    }
-
     public Vec3 getPositionEyesServer(EntityPlayer player) {
-        return new Vec3(this.serverPosX, this.serverPosY + (double) player.getEyeHeight(), this.serverPosZ);
+        return new Vec3(this.serverPosXList.get(0), this.serverPosYList.get(0) + (double) player.getEyeHeight(), this.serverPosZList.get(0));
     }
 
     public Vec3 getLookServer() {
-        return getVectorForRotation(this.serverPitch, this.serverYawHead);
+        return getVectorForRotation(this.serverPitchList.get(0), this.serverYawHeadList.get(0));
     }
 
     /**
