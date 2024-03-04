@@ -14,6 +14,8 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
+import java.util.UUID;
+
 public class WarningMessagesHandler {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
@@ -24,28 +26,24 @@ public class WarningMessagesHandler {
     public static void printReportMessagesForWorld(boolean callFromCommand) {
         ChatHandler.deleteAllWarningMessages();
         boolean foundReport = false;
-        for (final NetworkPlayerInfo networkPlayerInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            final String uuid = networkPlayerInfo.getGameProfile().getId().toString().replace("-", "");
-            final String playerName = networkPlayerInfo.getGameProfile().getName();
+        for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
+            final UUID uuid = netInfo.getGameProfile().getId();
+            final String playerName = netInfo.getGameProfile().getName();
             final WDR wdr = WdrData.getWdr(uuid, playerName);
             if (wdr == null) {
                 continue;
             }
             foundReport = true;
-            printWarningMessage(
-                    uuid,
-                    (!ScoreboardTracker.isInMwGame || ScoreboardTracker.isPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), playerName),
-                    playerName,
-                    wdr
-            );
+            final String formattedName = (!ScoreboardTracker.isInMwGame || ScoreboardTracker.isPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), playerName);
+            printWarningMessage(uuid, formattedName, playerName, wdr);
         }
         if (callFromCommand && !foundReport) {
             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "No reported player here !");
         }
     }
 
-    public static void printWarningMessage(String uuid, String formattedName, String playername, WDR wdr) {
-        final String wdrmapKey = wdr.isNicked() ? playername : uuid;
+    public static void printWarningMessage(UUID uuid, String formattedName, String playername, WDR wdr) {
+        final String wdrmapKey = uuid.version() == 4 ? uuid.toString() : playername;
         final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ").appendSibling(createPlayerNameWithHoverText(formattedName, playername, wdrmapKey, wdr, EnumChatFormatting.LIGHT_PURPLE));
         final IChatComponent allCheats = wdr.getFormattedHacks();
         imsg.appendText(EnumChatFormatting.GRAY + " joined,");
@@ -72,7 +70,6 @@ public class WarningMessagesHandler {
                                 + EnumChatFormatting.GREEN + "Last reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.time) + " ago, on " + DateUtil.localformatTimestamp(wdr.time) + "\n"
                                 + EnumChatFormatting.GREEN + "Reported for :" + EnumChatFormatting.GOLD + wdr.hacksToString() + "\n\n"
                                 + EnumChatFormatting.YELLOW + "Click here to remove this player from your report list"))));
-
     }
 
 }

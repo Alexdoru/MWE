@@ -18,10 +18,7 @@ import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
@@ -125,14 +122,14 @@ public class CommandNocheaters extends MyAbstractCommand {
             displaypage = 1;
         }
 
-        final Map<String, WDR> sortedMap = MapUtil.sortByDecreasingValue(WdrData.getWdredMap());
-        final long timeNow = (new Date()).getTime();
+        final Map<Object, WDR> sortedMap = MapUtil.sortByDecreasingValue(WdrData.getAllWDRs());
+        final long timeNow = new Date().getTime();
         final List<Future<IChatComponent>> futureList = new ArrayList<>();
         int nbreport = 1; // pour compter le nb de report et en afficher que 8 par page
         int nbpage = 1;
         boolean warning = true;
 
-        for (final Map.Entry<String, WDR> entry : sortedMap.entrySet()) {
+        for (final Map.Entry<Object, WDR> entry : sortedMap.entrySet()) {
             if (nbreport == 11) {
                 nbreport = 1;
                 nbpage++;
@@ -173,13 +170,20 @@ public class CommandNocheaters extends MyAbstractCommand {
 
 class CreateReportLineTask implements Callable<IChatComponent> {
 
-    private final String uuid;
+    private final UUID uuid;
+    private final String nickname;
     private final WDR wdr;
     private final boolean doStalk;
     private final long timeNow;
 
-    public CreateReportLineTask(String uuid, WDR wdr, boolean doStalk, long timeNow) {
-        this.uuid = uuid;
+    public CreateReportLineTask(Object mapKey, WDR wdr, boolean doStalk, long timeNow) {
+        if (mapKey instanceof UUID) {
+            this.uuid = (UUID) mapKey;
+            this.nickname = null;
+        } else if (mapKey instanceof String) {
+            this.uuid = null;
+            this.nickname = (String) mapKey;
+        } else throw new IllegalArgumentException();
         this.wdr = wdr;
         this.doStalk = doStalk;
         this.timeNow = timeNow;
@@ -194,15 +198,16 @@ class CreateReportLineTask implements Callable<IChatComponent> {
 
             if (doStalk) {
 
-                if (wdr.isNicked()) {
+                if (this.nickname != null) {
 
-                    imsg = WarningMessagesHandler.createPlayerNameWithHoverText(EnumChatFormatting.DARK_PURPLE + "[Nick] " + EnumChatFormatting.GOLD + uuid, uuid, uuid, wdr, EnumChatFormatting.WHITE);
+                    imsg = WarningMessagesHandler.createPlayerNameWithHoverText(EnumChatFormatting.DARK_PURPLE + "[Nick] " + EnumChatFormatting.GOLD + nickname, nickname, nickname, wdr, EnumChatFormatting.WHITE);
 
                 } else {
 
+                    assert uuid != null;
                     final HypixelPlayerData playerdata = new HypixelPlayerData(uuid);
                     final LoginData logindata = new LoginData(playerdata.getPlayerData());
-                    imsg = WarningMessagesHandler.createPlayerNameWithHoverText(logindata.getFormattedName(), logindata.getdisplayname(), uuid, wdr, EnumChatFormatting.WHITE);
+                    imsg = WarningMessagesHandler.createPlayerNameWithHoverText(logindata.getFormattedName(), logindata.getdisplayname(), uuid.toString(), wdr, EnumChatFormatting.WHITE);
 
                     final IChatComponent ismgStatus = new ChatComponentText("");
 
@@ -235,7 +240,12 @@ class CreateReportLineTask implements Callable<IChatComponent> {
 
             } else {
 
-                imsg = new ChatComponentText(EnumChatFormatting.RED + uuid + EnumChatFormatting.GRAY + " reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.time));
+                if (nickname != null) {
+                    imsg = new ChatComponentText(EnumChatFormatting.RED + nickname + EnumChatFormatting.GRAY + " reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.time));
+                } else {
+                    assert uuid != null;
+                    imsg = new ChatComponentText(EnumChatFormatting.RED + uuid.toString() + EnumChatFormatting.GRAY + " reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.time));
+                }
 
             }
 

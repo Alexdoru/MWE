@@ -86,21 +86,13 @@ public abstract class AbstractCheck implements ICheck {
         if (!ScoreboardTracker.isReplayMode && ConfigHandler.addToReportList && SquadHandler.getSquad().get(player.getName()) == null) {
             final String cheat = this.getCheatName().toLowerCase() + "[H]";
             final UUID uuid = player.getUniqueID();
-            final boolean isNicked = uuid.version() != 4;
-            final String uuidStr = isNicked ? player.getName() : uuid.toString().replace("-", "");
-            final WDR wdr = WdrData.getWdr(uuidStr);
+            final WDR wdr = WdrData.getWdr(uuid, player.getName());
             if (wdr == null) {
-                final long time = (new Date()).getTime();
+                final long time = new Date().getTime();
                 final ArrayList<String> hacks = new ArrayList<>();
                 hacks.add(cheat);
-                if (isNicked) {
-                    hacks.add(WDR.NICK);
-                }
-                WdrData.put(uuidStr, new WDR(time, hacks));
+                WdrData.put(uuid, player.getName(), new WDR(time, hacks));
             } else {
-                if (isNicked && !wdr.hacks.contains(WDR.NICK)) {
-                    wdr.hacks.add(WDR.NICK);
-                }
                 if (!wdr.hacks.contains(cheat)) {
                     wdr.hacks.add(cheat);
                 }

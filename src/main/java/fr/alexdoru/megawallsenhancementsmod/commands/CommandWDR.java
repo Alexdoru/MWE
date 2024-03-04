@@ -21,10 +21,7 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class CommandWDR extends MyAbstractCommand {
 
@@ -68,19 +65,9 @@ public class CommandWDR extends MyAbstractCommand {
         final String playername = args[0];
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
-                if (netInfo.getGameProfile().getId().version() == 4) {
+                if (netInfo.getGameProfile().getId().version() == 1 || netInfo.getGameProfile().getId().version() == 4) {
                     handleWDRCommand(
-                            netInfo.getGameProfile().getId().toString(),
-                            netInfo.getGameProfile().getName(),
-                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()),
-                            args,
-                            sendReport,
-                            showReportMessage
-                    );
-                    return;
-                } else if (netInfo.getGameProfile().getId().version() == 1) {
-                    handleWDRCommand(
-                            null,
+                            netInfo.getGameProfile().getId(),
                             netInfo.getGameProfile().getName(),
                             ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()),
                             args,
@@ -101,7 +88,7 @@ public class CommandWDR extends MyAbstractCommand {
                             // real player
                             mc.addScheduledTask(() ->
                                     handleWDRCommand(
-                                            mojangReq.getUuid(),
+                                            mojangReq.getUUID(),
                                             mojangReq.getName(),
                                             loginData.getFormattedName(),
                                             args,
@@ -120,13 +107,7 @@ public class CommandWDR extends MyAbstractCommand {
         });
     }
 
-    private static void handleWDRCommand(String uuid, String playername, String formattedPlayername, String[] args, boolean sendReport, boolean showReportMessage) {
-        final boolean isaNick = uuid == null;
-        if (isaNick) {
-            uuid = playername;
-        } else {
-            uuid = uuid.replace("-", "");
-        }
+    private static void handleWDRCommand(UUID uuid, String playername, String formattedPlayername, String[] args, boolean sendReport, boolean showReportMessage) {
         final ArrayList<String> cheats = new ArrayList<>();
         final StringBuilder message = new StringBuilder("/wdr " + playername);
         final long time = new Date().getTime();
@@ -162,13 +143,11 @@ public class CommandWDR extends MyAbstractCommand {
             ChatUtil.printReportingAdvice();
         }
 
-        final WDR wdr = WdrData.getWdr(uuid);
+        final WDR wdr = WdrData.getWdr(uuid, playername);
 
+        final boolean isNicked = uuid.version() != 4;
         if (wdr == null) {
-            if (isaNick) {
-                cheats.add(WDR.NICK);
-            }
-            WdrData.put(uuid, new WDR(time, cheats));
+            WdrData.put(uuid, playername, new WDR(time, cheats));
         } else {
             wdr.time = time;
             cheats.removeAll(wdr.hacks);
@@ -180,9 +159,9 @@ public class CommandWDR extends MyAbstractCommand {
         NameUtil.updateMWPlayerDataAndEntityData(playername, false);
         if (showReportMessage || wdr == null) {
             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() +
-                    EnumChatFormatting.GREEN + "You reported " + (isaNick ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
+                    EnumChatFormatting.GREEN + "You reported " + (isNicked ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
                     + EnumChatFormatting.RED + (formattedPlayername == null ? playername : EnumChatFormatting.RESET + formattedPlayername) + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
-                    + EnumChatFormatting.GREEN + (isaNick ? " for the next 24 hours." : "."));
+                    + EnumChatFormatting.GREEN + (isNicked ? " for the next 24 hours." : "."));
         }
     }
 

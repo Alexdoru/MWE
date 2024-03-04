@@ -9,11 +9,13 @@ import fr.alexdoru.megawallsenhancementsmod.nocheaters.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
+import fr.alexdoru.megawallsenhancementsmod.utils.UUIDUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.List;
+import java.util.UUID;
 
 public class CommandUnWDR extends MyAbstractCommand {
 
@@ -29,7 +31,7 @@ public class CommandUnWDR extends MyAbstractCommand {
             return;
         }
         if (args.length == 1) { // if you use /unwdr <playername>
-            this.unwdrPlayer(args);
+            this.unwdrPlayer(args[0]);
         } else if (args.length == 2) { // when you click the message it does /unwdr <UUID> <playername>
             this.unwdr(args[0], args[1]);
         }
@@ -40,26 +42,25 @@ public class CommandUnWDR extends MyAbstractCommand {
         return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
     }
 
-    private void unwdrPlayer(String[] args) {
+    private void unwdrPlayer(String playername) {
         MultithreadingUtil.addTaskToQueue(() -> {
-            final String playername = args[0];
             try {
                 final MojangPlayernameToUUID apireq = new MojangPlayernameToUUID(playername);
                 mc.addScheduledTask(() -> this.unwdr(apireq.getUuid(), apireq.getName()));
             } catch (ApiException e) {
-                mc.addScheduledTask(() -> this.unwdr(playername, playername));
+                mc.addScheduledTask(() -> this.unwdr(null, playername));
             }
             return null;
         });
     }
 
-    private void unwdr(String uuid, String playername) {
-        final WDR wdr = WdrData.getWdr(uuid);
+    private void unwdr(String uuidstr, String playername) {
+        final UUID uuid = UUIDUtil.fromString(uuidstr);
+        final WDR wdr = WdrData.remove(uuid, playername);
         if (wdr == null) {
             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list.");
             return;
         }
-        WdrData.remove(uuid);
         WdrData.saveReportedPlayers();
         ChatHandler.deleteWarningMessagesFor(playername);
         NameUtil.updateMWPlayerDataAndEntityData(playername, false);
