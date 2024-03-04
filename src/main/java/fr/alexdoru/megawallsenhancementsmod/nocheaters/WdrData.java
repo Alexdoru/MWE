@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
+import fr.alexdoru.megawallsenhancementsmod.utils.UUIDUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -14,13 +15,10 @@ import java.util.Map.Entry;
 
 public class WdrData {
 
-    private static final long TIME_TRANSFORM_NICKED_REPORT = 86400000L; // 24hours
     private static final File legacywdrFile = new File(Minecraft.getMinecraft().mcDataDir, "config/wdred.txt");
     private static final File wdrJsonFile = new File(Minecraft.getMinecraft().mcDataDir, "config/WDRList.json");
-    // used for backwards compat
-    private static final String IGNORED = "ignored";
-
-    private static final Map<String, WDR> wdrMap = new HashMap<>();
+    private static final Map<UUID, WDR> uuidMap = new HashMap<>();
+    private static final Map<String, WDR> nickMap = new HashMap<>();
     private static boolean dirty;
 
     public WdrData() {
@@ -41,44 +39,48 @@ public class WdrData {
         dirty = true;
     }
 
-    public static Map<String, WDR> getWdredMap() {
-        return wdrMap;
-    }
-
-    public static WDR getWdr(String uuid) {
-        return wdrMap.get(uuid);
-    }
-
-    public static WDR getWdr(String uuid, String playername) {
-        WDR wdr = wdrMap.get(uuid);
-        if (wdr != null) {
-            return wdr;
-        }
-        wdr = wdrMap.get(playername);
-        return wdr;
+    public static Map<Object, WDR> getAllWDRs() {
+        final Map<Object, WDR> mergedMap = new HashMap<>(uuidMap.size() + nickMap.size());
+        mergedMap.putAll(uuidMap);
+        mergedMap.putAll(nickMap);
+        return mergedMap;
     }
 
     public static WDR getWdr(UUID uuid, String playername) {
         if (uuid.version() == 4) {
-            return wdrMap.get(uuid.toString().replace("-", ""));
+            return uuidMap.get(uuid);
         }
-        return wdrMap.get(playername);
+        return nickMap.get(playername);
     }
 
-    public static void put(String uuid, WDR wdr) {
-        wdrMap.put(uuid, wdr);
+    public static void put(UUID uuid, String playername, WDR wdr) {
+        if (uuid.version() == 4) {
+            uuidMap.put(uuid, wdr);
+            return;
+        }
+        nickMap.put(playername, wdr);
     }
 
-    public static void remove(String uuid) {
-        wdrMap.remove(uuid);
+    public static WDR remove(UUID uuid, String playername) {
+        if (uuid != null) {
+            return uuidMap.remove(uuid);
+        } else if (playername != null) {
+            return nickMap.remove(playername);
+        }
+        return null;
     }
 
     public static void saveReportedPlayers() {
-        final ArrayList<String> reportLines = new ArrayList<>(wdrMap.size());
-        for (final Entry<String, WDR> entry : wdrMap.entrySet()) {
-            final String uuid = entry.getKey();
+        final ArrayList<String> reportLines = new ArrayList<>(uuidMap.size() + nickMap.size());
+        for (final Entry<UUID, WDR> entry : uuidMap.entrySet()) {
+            final String uuid = entry.getKey().toString();
             final WDR wdr = entry.getValue();
             reportLines.add(uuid + " " + wdr.time + wdr.hacksToString());
+        }
+        for (final Entry<String, WDR> entry : nickMap.entrySet()) {
+            final String playername = entry.getKey();
+            final WDR wdr = entry.getValue();
+            reportLines.add(playername + " " + wdr.time + wdr.hacksToString());
         }
         try (final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(wdrJsonFile))) {
             final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
@@ -135,7 +137,6 @@ public class WdrData {
         final String[] split = reportLine.split(" ");
         if (split.length < 3) return;
         boolean oldDataFormat = false;
-        final String uuid = split[0];
         long timestamp = 0L;
         try {
             timestamp = Long.parseLong(split[1]);
@@ -150,14 +151,26 @@ public class WdrData {
             return;
         }
         final ArrayList<String> hacks = new ArrayList<>(Arrays.asList(split).subList(oldDataFormat ? 2 : 3, split.length));
-        if (hacks.contains(WDR.NICK) && (datenow > timestamp + TIME_TRANSFORM_NICKED_REPORT)) {
-            return;
-        }
         // remove reports for players that are only ignored
+        // used for backwards compat
+        final String IGNORED = "ignored";
         if (hacks.remove(IGNORED) && hacks.isEmpty()) {
             return;
         }
-        wdrMap.put(uuid, new WDR(timestamp, hacks));
+        final String mapKey = split[0];
+        // mapkey could be a playername for nicked players
+        // a uuid without ----
+        // a uuid with ----
+        final UUID uuid = UUIDUtil.fromString(mapKey);
+        if (uuid == null && mapKey.length() < 17) {
+            final long TIME_TRANSFORM_NICKED_REPORT = 86400000L; // 24hours
+            if (datenow > timestamp + TIME_TRANSFORM_NICKED_REPORT) {
+                return;
+            }
+            nickMap.put(mapKey, new WDR(timestamp, hacks));
+        } else {
+            uuidMap.put(uuid, new WDR(timestamp, hacks));
+        }
     }
 
 }

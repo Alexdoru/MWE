@@ -120,8 +120,6 @@ public class ReportSuggestionHandler {
         boolean isSenderCheating = false;
         /*Only accepts VIP+, MVP, MVP+, MVP++*/
 
-        final String senderUUID;
-
         if (isSenderMyself) {
 
             isSenderInTablist = true;
@@ -131,10 +129,9 @@ public class ReportSuggestionHandler {
             final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(messageSender);
             if (networkPlayerInfo != null) {
                 isSenderInTablist = true;
-                final UUID id = networkPlayerInfo.getGameProfile().getId();
-                senderUUID = id.toString().replace("-", "");
-                isSenderFlaging = ScangameData.doesPlayerFlag(id);
-                final WDR wdr = WdrData.getWdr(senderUUID, messageSender);
+                final UUID uuid = networkPlayerInfo.getGameProfile().getId();
+                isSenderFlaging = ScangameData.doesPlayerFlag(uuid);
+                final WDR wdr = WdrData.getWdr(uuid, messageSender);
                 if (wdr != null) {
                     isSenderCheating = wdr.hasValidCheats();
                 }

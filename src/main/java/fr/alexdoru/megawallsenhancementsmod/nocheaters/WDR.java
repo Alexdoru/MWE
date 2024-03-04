@@ -10,8 +10,6 @@ import java.util.ArrayList;
 
 public class WDR implements Comparable<WDR> {
 
-    public static final String NICK = "nick";
-
     public long time;
     public final ArrayList<String> hacks;
 
@@ -41,10 +39,6 @@ public class WDR implements Comparable<WDR> {
         return false;
     }
 
-    public boolean isNicked() {
-        return hacks.contains(NICK);
-    }
-
     public boolean hasValidCheats() {
         for (final String cheat : hacks) {
             if (CommandReport.cheatsList.contains(cheat)) {
@@ -70,8 +64,6 @@ public class WDR implements Comparable<WDR> {
                     || hack.startsWith("fastbreak")
                     || hack.startsWith("noslowdown")) {
                 allCheats.appendText(" " + EnumChatFormatting.DARK_RED + hack);
-            } else if (hack.equalsIgnoreCase(WDR.NICK)) {
-                allCheats.appendText(" " + EnumChatFormatting.DARK_PURPLE + hack);
             } else {
                 allCheats.appendText(" " + EnumChatFormatting.GOLD + hack);
             }

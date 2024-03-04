@@ -5,10 +5,16 @@ import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.utils.JsonUtil;
 
+import java.util.UUID;
+
 public class HypixelPlayerData {
 
     private final JsonObject playerData;
     private final String uuid;
+
+    public HypixelPlayerData(UUID uuid) throws ApiException {
+        this(uuid.toString());
+    }
 
     public HypixelPlayerData(String uuid) throws ApiException {
         final HttpClient httpClient = new HttpClient("https://api.hypixel.net/player?uuid=" + uuid);

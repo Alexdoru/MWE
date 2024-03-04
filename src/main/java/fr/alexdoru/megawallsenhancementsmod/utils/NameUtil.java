@@ -205,10 +205,9 @@ public class NameUtil {
             if (ConfigHandler.warningMessages) {
                 if (!warningMsgPrinted.contains(player.getUniqueID())) {
                     warningMsgPrinted.add(player.getUniqueID());
-                    final String uuid = player.getUniqueID().toString().replace("-", "");
                     ChatHandler.deleteWarningMessagesFor(playerName);
                     WarningMessagesHandler.printWarningMessage(
-                            uuid,
+                            player.getUniqueID(),
                             (!ScoreboardTracker.isInMwGame || ScoreboardTracker.isPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(player.getTeam(), playerName),
                             playerName,
                             mwPlayerData.wdr
@@ -240,8 +239,7 @@ public class NameUtil {
 
         final String username = gameProfileIn.getName();
         final String uuid = id.toString().replace("-", "");
-        final boolean isNicked = id.version() == 1;
-        final WDR wdr = WdrData.getWdr(isNicked ? username : uuid);
+        final WDR wdr = WdrData.getWdr(id, username);
         String extraPrefix = "";
         IChatComponent iExtraPrefix = null;
         final String squadname = SquadHandler.getSquad().get(username);
@@ -294,6 +292,7 @@ public class NameUtil {
                     }
                 }
                 final boolean isobf = teamprefix.contains("\u00a7k");
+                final boolean isNicked = id.version() == 1;
                 final String alias = AliasData.getAlias(isNicked ? username : uuid);
                 if (iExtraPrefix != null || isSquadMate || formattedPrestigeVstring != null || alias != null) {
                     displayName = new ChatComponentText(
