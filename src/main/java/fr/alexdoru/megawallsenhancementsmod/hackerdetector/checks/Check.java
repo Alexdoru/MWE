@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.chat.FlagChatComponent;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector3D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
@@ -49,24 +50,25 @@ public abstract class Check implements ICheck {
     }
 
     private void printFlagMessage(EntityPlayer player) {
+        final String cheatType = this.getCheatName() + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")");
         if (ConfigHandler.debugLogging) {
-            HackerDetector.log(player.getName() + " flags " + this.getCheatName());
+            HackerDetector.log(player.getName() + " flags " + cheatType);
         }
         if (!ConfigHandler.showFlagMessages) {
             return;
         }
+        final String flagKey = player.getName() + cheatType;
         final String msg = ChatUtil.getTagNoCheaters() + EnumChatFormatting.RESET
                 + NameUtil.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.YELLOW + " flags "
-                + EnumChatFormatting.RED + this.getCheatName()
-                + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")");
+                + EnumChatFormatting.RED + cheatType;
         if (ConfigHandler.oneFlagMessagePerGame) {
-            if (flagMessages.contains(msg)) {
+            if (flagMessages.contains(flagKey)) {
                 return;
             }
-            flagMessages.add(msg);
+            flagMessages.add(flagKey);
         }
-        final IChatComponent imsg = new ChatComponentText(msg)
+        final IChatComponent imsg = new FlagChatComponent(flagKey, msg)
                 .setChatStyle(new ChatStyle()
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.COPY_TO_CLIPBOARD_COMMAND + EnumChatFormatting.getTextWithoutFormattingCodes(msg)))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.RED + this.getCheatDescription()))));
@@ -77,7 +79,7 @@ public abstract class Check implements ICheck {
             imsg.appendSibling(ChatUtil.getWDRButton(player.getName(), this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
         }
         if (ConfigHandler.compactFlagMessages) {
-            ChatHandler.deleteMessageFromChat(imsg);
+            ChatHandler.deleteFlagFromChat(flagKey);
         }
         ChatUtil.addChatMessage(imsg);
     }

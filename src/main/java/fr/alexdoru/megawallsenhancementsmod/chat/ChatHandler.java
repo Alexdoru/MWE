@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.chat;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.GuiNewChatAccessor;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.chat.FlagChatComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
@@ -120,6 +121,22 @@ public class ChatHandler {
             final IChatComponent chatComponent = iterator.next().getChatComponent();
             final String text = chatComponent.getUnformattedText();
             if (textToMatch.equals(text)) {
+                iterator.remove();
+                deleteFromDrawnChatLines(chatComponent, chatSearchLength * 3);
+                break;
+            }
+            i++;
+        }
+    }
+
+    public static void deleteFlagFromChat(String flagKey) {
+        final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
+        final int chatSearchLength = 100;
+        final Iterator<ChatLine> iterator = chatLines.iterator();
+        int i = 0;
+        while (iterator.hasNext() && i < chatSearchLength) {
+            final IChatComponent chatComponent = iterator.next().getChatComponent();
+            if (chatComponent instanceof FlagChatComponent && flagKey.equals(((FlagChatComponent) chatComponent).getFlagKey())) {
                 iterator.remove();
                 deleteFromDrawnChatLines(chatComponent, chatSearchLength * 3);
                 break;
