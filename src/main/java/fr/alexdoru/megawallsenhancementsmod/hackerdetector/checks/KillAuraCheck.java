@@ -13,7 +13,7 @@ import net.minecraft.util.Vec3;
 
 import java.util.List;
 
-public class KillAuraCheck extends AbstractCheck {
+public class KillAuraCheck extends Check {
 
     @Override
     public String getCheatName() {
@@ -37,17 +37,6 @@ public class KillAuraCheck extends AbstractCheck {
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-
-        // TODO débugger le systeme de détéction d'attaques en affichant la distance
-        //  entre les deux players, le type d'attaque, l'angle entre la camera et le joueur
-        // TODO mettre un score pour les hits,
-        //  si les paquets sont pas direct a la suite augmenter le vl moins fort
-        //  faire une enum entry pour chaque type d'attaque, DIRECT ou pas
-        // TODO listen to list of blocks changed in the last MAX_TICK_DELAY ?
-        //  to check if the block just got placed and the player wasn't actually hitting through blocks
-        //   WorldClient.invalidateRegionAndSetBlock
-        // TODO est ce qu'il faut utiliser le pos/yaw du tick d'avant,
-        //  quand est ce qu'on recoit le paquet de position par rapport au swing paquet
 
         if (!data.hasAttacked()) return false;
         if (player.isRiding()) return false;

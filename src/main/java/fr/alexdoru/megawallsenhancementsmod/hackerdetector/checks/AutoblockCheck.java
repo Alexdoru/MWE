@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 
-public class AutoblockCheck extends AbstractCheck {
+public class AutoblockCheck extends Check {
 
     @Override
     public String getCheatName() {
