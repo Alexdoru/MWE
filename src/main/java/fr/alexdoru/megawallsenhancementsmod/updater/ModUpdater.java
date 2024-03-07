@@ -22,10 +22,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.minecraftforge.fml.common.versioning.ComparableVersion;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
@@ -34,7 +36,6 @@ import java.nio.file.StandardCopyOption;
 public class ModUpdater {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
-    private static final Logger updateLogger = LogManager.getLogger("Updater MegaWallsEnhancements");
     private static boolean hasTriggered = false;
     public static boolean isUpTodate = false;
 
@@ -46,8 +47,8 @@ public class ModUpdater {
             MultithreadingUtil.addTaskToQueue(() -> {
                 try {
                     checkForUpdate();
-                } catch (ApiException e) {
-                    e.printStackTrace();
+                } catch (Throwable t) {
+                    t.printStackTrace();
                 }
                 return null;
             });
@@ -66,36 +67,32 @@ public class ModUpdater {
         }
     }
 
-    /**
-     * https://github.com/DeDiamondPro/Auto-Updater
-     */
+    // https://github.com/DeDiamondPro/Auto-Updater
     private static void checkForUpdate() throws ApiException, IOException {
 
-        updateLogger.info("Checking for updates");
+        MegaWallsEnhancementsMod.logger.info("Checking for updates");
 
         final String GITHUB_API_URL = "https://api.github.com/repos/Alexdoru/MegaWallsEnhancements/releases";
         final HttpClient httpClient = new HttpClient(GITHUB_API_URL);
         final JsonArray jsonArray = httpClient.getJsonArray();
 
-        int latestVersion = 0;
-        String version = "";
-        String browser_download_url = null;
+        String downloadUrl = null;
+        ComparableVersion latestVersion = null;
 
         for (final JsonElement jsonElement : jsonArray) {
             final JsonObject release = jsonElement.getAsJsonObject();
-            final String tag_name = JsonUtil.getString(release, "tag_name");
-            if (tag_name != null && release.has("assets")) {
-                final int releaseVersion = Integer.parseInt(tag_name.replace(".", ""));
-                if (releaseVersion > latestVersion) {
-                    latestVersion = releaseVersion;
-                    version = tag_name;
+            final String tag = JsonUtil.getString(release, "tag_name");
+            if (tag != null && release.has("assets")) {
+                final ComparableVersion releaseVersion = new ComparableVersion(tag);
+                if (latestVersion == null || releaseVersion.compareTo(latestVersion) > 0) {
                     final JsonElement assets = release.get("assets");
                     if (assets != null && assets.isJsonArray()) {
                         final JsonArray assetsJsonArray = assets.getAsJsonArray();
                         for (final JsonElement assetsElement : assetsJsonArray) {
                             if (assetsElement != null && assetsElement.isJsonObject()) {
                                 final JsonObject assetsJsonObject = assetsElement.getAsJsonObject();
-                                browser_download_url = JsonUtil.getString(assetsJsonObject, "browser_download_url");
+                                downloadUrl = JsonUtil.getString(assetsJsonObject, "browser_download_url");
+                                latestVersion = releaseVersion;
                             }
                         }
                     }
@@ -103,69 +100,71 @@ public class ModUpdater {
             }
         }
 
-        if (Integer.parseInt(MegaWallsEnhancementsMod.version.replace(".", "")) < latestVersion) {
-
-            final String GITHUB_URL = "https://github.com/Alexdoru/MegaWallsEnhancements/releases";
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements "
-                    + EnumChatFormatting.GOLD + "version v" + version + EnumChatFormatting.GREEN + " is available, click this message to see the changelog and download page.")
-                    .setChatStyle(new ChatStyle()
-                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, GITHUB_URL))
-                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + GITHUB_URL)))));
-
-            if (ConfigHandler.automaticUpdate && browser_download_url != null && browser_download_url.endsWith(".jar")) {
-
-                if (Loader.isModLoaded("feather")) {
-                    ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "The automatic updater is disabled on Feather.");
-                    return;
-                }
-
-                final File cacheDir = new File("config/updatecache");
-                if (!cacheDir.exists() && !cacheDir.mkdir()) {
-                    throw new IllegalStateException("Could not create cache folder");
-                }
-
-                final String newModFileName = getFileName(browser_download_url);
-                final File modCacheFile = new File(cacheDir, newModFileName);
-                downloadFileTo(browser_download_url, modCacheFile);
-                updateLogger.info("Downloaded MWEnhancement Update");
-
-                final String GITHUB_DELETER_URL = "https://github.com/W-OVERFLOW/Deleter/releases/download/v1.8/Deleter-1.8.jar";
-                final String deleterFileName = getFileName(GITHUB_DELETER_URL);
-                final File deleterFile = new File(cacheDir, deleterFileName);
-                downloadFileTo(GITHUB_DELETER_URL, deleterFile);
-                updateLogger.info("Downloaded Mod Deleter");
-
-                if (modCacheFile.exists() && deleterFile.exists()) {
-
-                    ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements " + EnumChatFormatting.GOLD + "version v" + version + EnumChatFormatting.GREEN + " has been downloaded and will be installed automatically when closing your game.");
-
-                    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                        try {
-                            final File oldJarFile = MegaWallsEnhancementsMod.jarFile;
-                            final File newJarFile = new File(oldJarFile.getParent(), newModFileName);
-                            if (newJarFile.createNewFile() && modCacheFile.exists() && oldJarFile.exists()) {
-                                try (final InputStream source = new FileInputStream(modCacheFile); final OutputStream dest = new FileOutputStream(newJarFile)) {
-                                    final byte[] buffer = new byte[1024];
-                                    int length;
-                                    while ((length = source.read(buffer)) > 0) {
-                                        dest.write(buffer, 0, length);
-                                    }
-                                }
-                                modCacheFile.delete();
-                                deleteOldJar(oldJarFile.getAbsolutePath(), deleterFile);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }));
-
-                }
-
-            }
-
-        } else {
-
+        final ComparableVersion currentVersion = new ComparableVersion(MegaWallsEnhancementsMod.version);
+        if (latestVersion == null) {
+            return;
+        }
+        if (currentVersion.compareTo(latestVersion) >= 0) {
+            MegaWallsEnhancementsMod.logger.info("The mod is up to date!");
             isUpTodate = true;
+            return;
+        }
+
+        final String GITHUB_URL = "https://github.com/Alexdoru/MegaWallsEnhancements/releases";
+        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements "
+                + EnumChatFormatting.GOLD + "version v" + latestVersion + EnumChatFormatting.GREEN + " is available, click this message to see the changelog and download page.")
+                .setChatStyle(new ChatStyle()
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, GITHUB_URL))
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + GITHUB_URL)))));
+
+        if (!ConfigHandler.automaticUpdate || downloadUrl == null || !downloadUrl.endsWith(".jar")) return;
+
+        if (Loader.isModLoaded("feather")) {
+            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "The automatic updater is disabled on Feather.");
+            return;
+        }
+
+        final File cacheDir = new File("config/updatecache");
+        if (!cacheDir.exists() && !cacheDir.mkdir()) {
+            throw new IllegalStateException("Could not create cache folder");
+        }
+
+        final String newModFileName = getFileName(downloadUrl);
+        final File modCacheFile = new File(cacheDir, newModFileName);
+        downloadFileTo(downloadUrl, modCacheFile);
+        MegaWallsEnhancementsMod.logger.info("Downloaded MWE Update");
+
+        final String GITHUB_DELETER_URL = "https://github.com/W-OVERFLOW/Deleter/releases/download/v1.8/Deleter-1.8.jar";
+        final String deleterFileName = getFileName(GITHUB_DELETER_URL);
+        final File deleterFile = new File(cacheDir, deleterFileName);
+        downloadFileTo(GITHUB_DELETER_URL, deleterFile);
+        MegaWallsEnhancementsMod.logger.info("Downloaded Mod Deleter");
+
+        if (modCacheFile.exists() && deleterFile.exists()) {
+
+            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements "
+                    + EnumChatFormatting.GOLD + "version v" + latestVersion
+                    + EnumChatFormatting.GREEN + " has been downloaded and will be installed to your mods folder automatically when closing your game.");
+
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    final File oldJarFile = MegaWallsEnhancementsMod.jarFile;
+                    final File newJarFile = new File(oldJarFile.getParent(), newModFileName);
+                    if (newJarFile.createNewFile() && modCacheFile.exists() && oldJarFile.exists()) {
+                        try (final InputStream source = Files.newInputStream(modCacheFile.toPath()); final OutputStream dest = Files.newOutputStream(newJarFile.toPath())) {
+                            final byte[] buffer = new byte[1024];
+                            int length;
+                            while ((length = source.read(buffer)) > 0) {
+                                dest.write(buffer, 0, length);
+                            }
+                        }
+                        modCacheFile.delete();
+                        deleteOldJar(oldJarFile.getAbsolutePath(), deleterFile);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }));
 
         }
 
