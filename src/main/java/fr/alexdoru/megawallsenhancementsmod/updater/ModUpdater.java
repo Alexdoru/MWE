@@ -134,7 +134,7 @@ public class ModUpdater {
         downloadFileTo(downloadUrl, modCacheFile);
         MegaWallsEnhancementsMod.logger.info("Downloaded MWE Update");
 
-        final String GITHUB_DELETER_URL = "https://github.com/W-OVERFLOW/Deleter/releases/download/v1.8/Deleter-1.8.jar";
+        final String GITHUB_DELETER_URL = "https://github.com/Alexdoru/Deleter/releases/download/1.0/Deleter.jar";
         final String deleterFileName = getFileName(GITHUB_DELETER_URL);
         final File deleterFile = new File(cacheDir, deleterFileName);
         downloadFileTo(GITHUB_DELETER_URL, deleterFile);
