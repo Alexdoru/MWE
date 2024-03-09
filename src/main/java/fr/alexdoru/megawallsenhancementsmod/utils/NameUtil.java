@@ -184,9 +184,7 @@ public class NameUtil {
 
         playerAccessor.setMWClass(mwPlayerData.mwClass);
 
-        if (!onPlayerJoin) {
-            player.getPrefixes().removeAll(ALL_ICONS_LIST);
-        }
+        player.getPrefixes().removeAll(ALL_ICONS_LIST);
 
         if (mwPlayerData.extraPrefix != null) {
             if (mwPlayerData.extraPrefix == ISQUAD_ICON) {
