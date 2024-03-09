@@ -62,7 +62,7 @@ public class CommandUnWDR extends MyAbstractCommand {
             return;
         }
         WdrData.saveReportedPlayers();
-        ChatHandler.deleteWarningMessagesFor(playername);
+        ChatHandler.deleteWarningFromChat(playername);
         NameUtil.updateMWPlayerDataAndEntityData(playername, false);
         ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + ".");
     }

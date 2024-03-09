@@ -203,10 +203,10 @@ public class NameUtil {
             if (ConfigHandler.warningMessages) {
                 if (!warningMsgPrinted.contains(player.getUniqueID())) {
                     warningMsgPrinted.add(player.getUniqueID());
-                    ChatHandler.deleteWarningMessagesFor(playerName);
+                    ChatHandler.deleteWarningFromChat(playerName);
                     WarningMessagesHandler.printWarningMessage(
                             player.getUniqueID(),
-                            (!ScoreboardTracker.isInMwGame || ScoreboardTracker.isPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(player.getTeam(), playerName),
+                            ScorePlayerTeam.formatPlayerName(player.getTeam(), playerName),
                             playerName,
                             mwPlayerData.wdr
                     );
