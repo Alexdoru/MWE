@@ -83,7 +83,7 @@ public class ReportQueue {
 
     private int getNextCounterDelay() {
         if (doesQueueHaveSpecialReport() || queueList.isEmpty()) {
-            return 5 + random.nextInt(5);
+            return 10 + random.nextInt(8);
         } else {
             final int i = TIME_BETWEEN_REPORTS_MAX - 12 * 20 * (queueList.size() - 1);
             return (int) ((10d * random.nextGaussian() / 6d) + Math.max(i, TIME_BETWEEN_REPORTS_MIN));
@@ -241,7 +241,11 @@ public class ReportQueue {
         return playersReportedThisGame.contains(playername);
     }
 
+    private int prevItemHeld;
+
     private boolean isPlayerStandingStill(EntityPlayerSP thePlayer) {
+        final boolean sameItem = mc.thePlayer.inventory.currentItem == prevItemHeld;
+        prevItemHeld = mc.thePlayer.inventory.currentItem;
         return (mc.inGameHasFocus || mc.currentScreen instanceof GuiChat || mc.currentScreen instanceof GuiIngameMenu)
                 && thePlayer.movementInput.moveForward == 0.0F
                 && thePlayer.movementInput.moveStrafe == 0.0F
@@ -249,7 +253,8 @@ public class ReportQueue {
                 && !thePlayer.movementInput.sneak
                 && !mc.gameSettings.keyBindAttack.isKeyDown()
                 && !mc.gameSettings.keyBindUseItem.isKeyDown()
-                && mc.thePlayer.prevRotationYawHead == mc.thePlayer.rotationYawHead;
+                && mc.thePlayer.prevRotationYawHead == mc.thePlayer.rotationYawHead
+                && sameItem;
     }
 
     public static class ReportInQueue {
