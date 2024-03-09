@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.chat.WarningChatComponent;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import net.minecraft.client.Minecraft;
@@ -34,8 +35,7 @@ public class WarningMessagesHandler {
                 continue;
             }
             foundReport = true;
-            final String formattedName = (!ScoreboardTracker.isInMwGame || ScoreboardTracker.isPrepPhase) ? null : ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), playerName);
-            printWarningMessage(uuid, formattedName, playerName, wdr);
+            printWarningMessage(uuid, ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), playerName), playerName, wdr);
         }
         if (callFromCommand && !foundReport) {
             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "No reported player here !");
@@ -44,16 +44,16 @@ public class WarningMessagesHandler {
 
     public static void printWarningMessage(UUID uuid, String formattedName, String playername, WDR wdr) {
         final String wdrmapKey = uuid.version() == 4 ? uuid.toString() : playername;
-        final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.RED + "Warning : ").appendSibling(createPlayerNameWithHoverText(formattedName, playername, wdrmapKey, wdr, EnumChatFormatting.LIGHT_PURPLE));
+        final IChatComponent imsg = new WarningChatComponent(playername, EnumChatFormatting.RED + "Warning : ")
+                .appendSibling(createPlayerNameWithHoverText(formattedName, playername, wdrmapKey, wdr, EnumChatFormatting.LIGHT_PURPLE))
+                .appendText(EnumChatFormatting.GRAY + " joined, Cheats :");
         final IChatComponent allCheats = wdr.getFormattedHacks();
-        imsg.appendText(EnumChatFormatting.GRAY + " joined,");
         if (!ScoreboardTracker.isPreGameLobby) {
             allCheats.setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
                             + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " cheating" + ChatUtil.getReportingAdvice())))
                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + playername + " cheating")));
         }
-        imsg.appendText(EnumChatFormatting.GRAY + " Cheats :");
         imsg.appendSibling(allCheats);
         ChatUtil.addChatMessage(imsg);
     }
@@ -61,8 +61,8 @@ public class WarningMessagesHandler {
     /**
      * Returns a message with the player name and a hover event on top with the report info
      */
-    public static IChatComponent createPlayerNameWithHoverText(String formattedNameIn, String playername, String wdrmapKey, WDR wdr, EnumChatFormatting namecolor) {
-        final String formattedName = formattedNameIn == null ? namecolor.toString() + playername : formattedNameIn;
+    public static IChatComponent createPlayerNameWithHoverText(String formattedName, String playername, String wdrmapKey, WDR wdr, EnumChatFormatting namecolor) {
+        formattedName = formattedName == null || formattedName.contains(EnumChatFormatting.OBFUSCATED.toString()) ? namecolor.toString() + playername : formattedName;
         return new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + wdrmapKey + " " + playername))
                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(

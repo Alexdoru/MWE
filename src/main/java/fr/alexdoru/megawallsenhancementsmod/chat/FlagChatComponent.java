@@ -1,4 +1,4 @@
-package fr.alexdoru.megawallsenhancementsmod.hackerdetector.chat;
+package fr.alexdoru.megawallsenhancementsmod.chat;
 
 import net.minecraft.util.ChatComponentText;
 
