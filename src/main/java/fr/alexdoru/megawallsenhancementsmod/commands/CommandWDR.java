@@ -36,7 +36,33 @@ public class CommandWDR extends MyAbstractCommand {
             sendChatMessage("/wdr");
             return;
         }
-        handleWDRCommand(args, true, false);
+        final String playername = args[0];
+        final ArrayList<String> cheats = new ArrayList<>();
+        final StringBuilder message = new StringBuilder("/wdr " + playername);
+
+        if (args.length == 1) {
+            cheats.add("cheating");
+        } else {
+            for (int i = 1; i < args.length; i++) {
+                if (args[i].equalsIgnoreCase("autoblock") || args[i].equalsIgnoreCase("multiaura")) {
+                    message.append(" killaura");
+                } else {
+                    if (!args[i].equalsIgnoreCase("noslowdown") && !args[i].equalsIgnoreCase("keepsprint") && !args[i].equalsIgnoreCase("fastbreak")) {
+                        message.append(" ").append(args[i]);
+                    }
+                }
+                cheats.add(args[i]);
+            }
+        }
+
+        sendChatMessage(message.toString());
+        ReportQueue.INSTANCE.addPlayerReportedThisGame(playername);
+        PartyDetection.printBoostingReportAdvice(playername);
+
+        if (ScoreboardTracker.isPreGameLobby) {
+            ChatUtil.printReportingAdvice();
+        }
+        addPlayerToReportList(playername, cheats);
     }
 
     @Override
@@ -61,19 +87,16 @@ public class CommandWDR extends MyAbstractCommand {
         return args.length > 1 ? getListOfStringsMatchingLastWord(args, CommandReport.cheatsArray) : null;
     }
 
-    public static void handleWDRCommand(String[] args, boolean sendReport, boolean showReportMessage) {
-        final String playername = args[0];
+    private static void addPlayerToReportList(String playername, ArrayList<String> cheats) {
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
-                if (netInfo.getGameProfile().getId().version() == 1 || netInfo.getGameProfile().getId().version() == 4) {
-                    handleWDRCommand(
-                            netInfo.getGameProfile().getId(),
+                final UUID uuid = netInfo.getGameProfile().getId();
+                if (uuid.version() == 1 || uuid.version() == 4) {
+                    addPlayerToReportList(
+                            uuid,
                             netInfo.getGameProfile().getName(),
                             ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()),
-                            args,
-                            sendReport,
-                            showReportMessage
-                    );
+                            cheats);
                     return;
                 }
             }
@@ -81,69 +104,24 @@ public class CommandWDR extends MyAbstractCommand {
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
                 final MojangPlayernameToUUID mojangReq = new MojangPlayernameToUUID(playername);
-                if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                    try {
-                        final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(mojangReq.getUuid()));
-                        if (!loginData.hasNeverJoinedHypixel() && mojangReq.getName().equals(loginData.getdisplayname())) {
-                            // real player
-                            mc.addScheduledTask(() ->
-                                    handleWDRCommand(
-                                            mojangReq.getUUID(),
-                                            mojangReq.getName(),
-                                            loginData.getFormattedName(),
-                                            args,
-                                            sendReport,
-                                            showReportMessage
-                                    )
-                            );
-                            return null;
-                        }
-                    } catch (ApiException ignored) {}
+                if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
+                    mc.addScheduledTask(() -> addPlayerToReportList(mojangReq.getUUID(), mojangReq.getName(), null, cheats));
+                    return null;
+                }
+                final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(mojangReq.getUuid()));
+                if (!loginData.hasNeverJoinedHypixel() && mojangReq.getName().equals(loginData.getdisplayname())) {
+                    // real player
+                    mc.addScheduledTask(() -> addPlayerToReportList(mojangReq.getUUID(), mojangReq.getName(), loginData.getFormattedName(), cheats));
+                    return null;
                 }
             } catch (ApiException ignored) {}
-            // nicked player
-            mc.addScheduledTask(() -> sendChatMessage("/wdr ", args));
             return null;
         });
     }
 
-    private static void handleWDRCommand(UUID uuid, String playername, String formattedPlayername, String[] args, boolean sendReport, boolean showReportMessage) {
-        final ArrayList<String> cheats = new ArrayList<>();
-        final StringBuilder message = new StringBuilder("/wdr " + playername);
-        final long time = new Date().getTime();
-
-        if (args.length == 1) {
-            cheats.add("cheating");
-        } else {
-            for (int i = 1; i < args.length; i++) {
-                if (args[i].equalsIgnoreCase("fastbreak")) {
-                    cheats.add(args[i]);
-                    message.append(" speed");
-                } else if (args[i].equalsIgnoreCase("autoblock") || args[i].equalsIgnoreCase("multiaura")) {
-                    cheats.add(args[i]);
-                    message.append(" killaura");
-                } else if (args[i].equalsIgnoreCase("noslowdown") || args[i].equalsIgnoreCase("keepsprint")) {
-                    cheats.add(args[i]);
-                    message.append(" velocity");
-                } else {
-                    cheats.add(args[i]);
-                    message.append(" ").append(args[i]);
-                }
-            }
-        }
-
-        if (sendReport) {
-            sendChatMessage(message.toString());
-            ReportQueue.INSTANCE.addPlayerReportedThisGame(playername);
-        }
-
-        PartyDetection.printBoostingReportAdvice(playername);
-
-        if (ScoreboardTracker.isPreGameLobby) {
-            ChatUtil.printReportingAdvice();
-        }
-
+    private static void addPlayerToReportList(UUID uuid, String playername, String formattedName, ArrayList<String> cheats) {
         final WDR wdr = WdrData.getWdr(uuid, playername);
+        final long time = new Date().getTime();
 
         final boolean isNicked = uuid.version() != 4;
         if (wdr == null) {
@@ -157,10 +135,10 @@ public class CommandWDR extends MyAbstractCommand {
         WdrData.saveReportedPlayers();
 
         NameUtil.updateMWPlayerDataAndEntityData(playername, false);
-        if (showReportMessage || wdr == null) {
+        if (wdr == null) {
             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() +
                     EnumChatFormatting.GREEN + "You reported " + (isNicked ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
-                    + EnumChatFormatting.RED + (formattedPlayername == null ? playername : EnumChatFormatting.RESET + formattedPlayername) + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
+                    + EnumChatFormatting.RED + (formattedName == null ? playername : EnumChatFormatting.RESET + formattedName) + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
                     + EnumChatFormatting.GREEN + (isNicked ? " for the next 24 hours." : "."));
         }
     }

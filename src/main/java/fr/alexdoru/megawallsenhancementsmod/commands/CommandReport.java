@@ -83,21 +83,15 @@ public class CommandReport extends MyAbstractCommand {
         }
 
         final StringBuilder msg = new StringBuilder("/report " + args[0]);
-
         for (int i = 1; i < args.length; i++) {
-
-            if (args[i].equalsIgnoreCase("fastbreak")) {
-                msg.append(" speed");
-            } else if (args[i].equalsIgnoreCase("autoblock") || args[i].equalsIgnoreCase("multiaura")) {
+            if (args[i].equalsIgnoreCase("autoblock") || args[i].equalsIgnoreCase("multiaura")) {
                 msg.append(" killaura");
-            } else if (args[i].equalsIgnoreCase("noslowdown") || args[i].equalsIgnoreCase("keepsprint")) {
-                msg.append(" velocity");
+            } else if (args[i].equalsIgnoreCase("noslowdown") || args[i].equalsIgnoreCase("keepsprint") || args[i].equalsIgnoreCase("fastbreak")) {
+                msg.append(" cheating");
             } else {
-                msg.append(" ").append(args[i]); //reconstructs the message to send it to the server
+                msg.append(" ").append(args[i]);
             }
-
         }
-
         sendChatMessage(msg.toString());
 
     }
