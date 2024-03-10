@@ -42,7 +42,7 @@ public class KillAuraCheck extends Check {
         if (player.isRiding()) return false;
         if (data.targetedPlayer == mc.thePlayer) return false;
 
-        final double maxReach = 4D;
+        final double maxReach = 3.5D;
         final Vec3 attackerEyePos = data.getPositionEyesServer(player);
         final Vec3 lookVect = data.getLookServer();
         final Vec3 lookEndPos = attackerEyePos.addVector(lookVect.xCoord * maxReach, lookVect.yCoord * maxReach, lookVect.zCoord * maxReach);
@@ -110,42 +110,43 @@ public class KillAuraCheck extends Check {
                 player.getEntityBoundingBox().addCoord(lookVect.xCoord * maxDistance, lookVect.yCoord * maxDistance, lookVect.zCoord * maxDistance).expand(f, f, f),
                 p -> p != data.targetedPlayer && p != mc.thePlayer && !p.isSpectator() && p.canBeCollidedWith());
 
-        int globalInside = Integer.MAX_VALUE;
-        int b = 0;
-        int p = 0;
+        int b = 1000;
+        int p = 1000;
+        double reach = 0D;
 
         for (int i = 1; i < MAX_TICK_DELAY; i++) {
             if (!hits[i - 1]) continue;
             final int iterMax = (int) (hitDistances[i - 1] / STEP_SIZE);
-            byte timesInsidePlayer = 0;
-            for (int j = 0; j < iterMax + 1; j++) {
-                final double dx = attackerEyePos.xCoord + j * STEP_SIZE * lookVect.xCoord;
-                final double dy = attackerEyePos.yCoord + j * STEP_SIZE * lookVect.yCoord;
-                final double dz = attackerEyePos.zCoord + j * STEP_SIZE * lookVect.zCoord;
-                for (final EntityPlayer entity : nearbyPlayers) {
-                    final PlayerDataSamples eData = ((EntityPlayerAccessor) entity).getPlayerDataSamples();
-                    if (eData.posXList.size() < MAX_TICK_DELAY) continue;
-                    if (isInsideHitbox(eData.posXList.get(i), eData.posYList.get(i), eData.posZList.get(i), dx, dy, dz)) {
-                        timesInsidePlayer++;
-                        break;
+            int timesInsidePlayer = 0;
+            if (!nearbyPlayers.isEmpty()) {
+                for (int j = 0; j < iterMax + 1; j++) {
+                    final double dx = attackerEyePos.xCoord + j * STEP_SIZE * lookVect.xCoord;
+                    final double dy = attackerEyePos.yCoord + j * STEP_SIZE * lookVect.yCoord;
+                    final double dz = attackerEyePos.zCoord + j * STEP_SIZE * lookVect.zCoord;
+                    for (final EntityPlayer entity : nearbyPlayers) {
+                        final PlayerDataSamples eData = ((EntityPlayerAccessor) entity).getPlayerDataSamples();
+                        if (eData.posXList.size() < MAX_TICK_DELAY) continue;
+                        if (isInsideHitbox(eData.posXList.get(i), eData.posYList.get(i), eData.posZList.get(i), dx, dy, dz)) {
+                            timesInsidePlayer++;
+                            break;
+                        }
                     }
                 }
             }
-            final int insideTick = timesInsidePlayer + insideBlockArray[iterMax];
-            if (globalInside > insideTick) {
-                globalInside = insideTick;
+            if (b + p > timesInsidePlayer + insideBlockArray[iterMax]) {
                 b = insideBlockArray[iterMax];
                 p = timesInsidePlayer;
+                reach = hitDistances[i - 1];
             }
-            if (globalInside == 0) {
+            if (b + p == 0) {
                 return false;
             }
         }
 
-        if (globalInside > 0) {
-            data.killAuraVL.add(Math.min(globalInside, 15) * 20);
+        if (b + p > 0) {
+            data.killAuraVL.add(Math.min(10, Math.min(10, b) + Math.min(8, p)) * 25);
             if (ConfigHandler.debugLogging) {
-                final String msg = " | target : " + data.targetedPlayer.getName() + " | b " + b + " p " + p;
+                final String msg = " | target : " + data.targetedPlayer.getName() + " | b " + b + " | p " + p + " | reach " + String.format("%.2f", reach);
                 this.log(player, data, data.killAuraVL, msg);
                 //this.fail(player, " b" + b + " p" + p + " vl" + data.killAuraVL.getViolationLevel());
             }
