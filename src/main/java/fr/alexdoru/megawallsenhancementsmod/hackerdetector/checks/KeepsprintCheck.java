@@ -31,14 +31,13 @@ public class KeepsprintCheck extends Check {
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        // If the player is moving slower than the base running speed, we consider it is keepsprint */
-        // It takes 32 ticks to consume food/potion */
+        // If the player is moving slower than the base running speed, we consider it is keepsprint
         if (data.isNotMovingXZ() || player.isRiding()) return false;
         if (data.useItemTime > 5 && player.hurtTime == 0 && data.getSpeedXZ() < 4D) {
             final int maxDuration = player.getHeldItem().getMaxItemUseDuration();
             if (maxDuration == 0) return false; // wtf ??
             // it is possible to double eat -> start sprinting while eating a second item
-            if (data.sprintTime > (maxDuration == 32 ? 70 : 5)) {
+            if (data.sprintTime > (maxDuration == 32 ? 70 : 5) || data.sprintTime > data.useItemTime + 5) {
                 data.keepsprintVL.add(2);
                 if (ConfigHandler.debugLogging) {
                     this.log(player, data, data.keepsprintVL, null);
@@ -64,7 +63,7 @@ public class KeepsprintCheck extends Check {
     }
 
     public static ViolationLevelTracker newViolationTracker() {
-        return new ViolationLevelTracker(34);
+        return new ViolationLevelTracker(32);
     }
 
 }
