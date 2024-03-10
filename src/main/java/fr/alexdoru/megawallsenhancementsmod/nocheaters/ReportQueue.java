@@ -51,6 +51,7 @@ public class ReportQueue {
                     final String playername = reportInQueue.reportedPlayer;
                     if (reportInQueue.isReportSuggestion || reportInQueue.isReportFromHackerDetector || ScoreboardTracker.isInMwGame) {
                         final String msg = "/wdr " + playername;
+                        mc.ingameGUI.getChatGUI().addToSentMessages(msg);
                         mc.thePlayer.sendChatMessage(msg);
                     }
                     counter = getNextCounterDelay();
