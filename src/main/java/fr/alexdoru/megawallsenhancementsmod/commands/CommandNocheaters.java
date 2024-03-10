@@ -5,8 +5,9 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.*;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.WDR;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.WarningMessagesHandler;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.DateUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.MapUtil;
@@ -41,33 +42,9 @@ public class CommandNocheaters extends MyAbstractCommand {
 
             printReportList(args);
 
-        } else if (args[0].equalsIgnoreCase("clearreportqueue")) {
-
-            ReportQueue.INSTANCE.clearSuggestionsInReportQueue();
-
-        } else if (args[0].equalsIgnoreCase("cancelreport")) {
-
-            if (args.length == 2) {
-                ReportQueue.INSTANCE.clearReportsFor(args[1]);
-            }
-
         } else if (args[0].equalsIgnoreCase("getscoreboard")) {
 
             ScoreboardUtils.debugGetScoreboard();
-
-        } else if (args[0].equalsIgnoreCase("autoreporthistory")) {
-
-            final StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(ChatUtil.getTagNoCheaters());
-            stringBuilder.append(EnumChatFormatting.GREEN);
-            stringBuilder.append("Players reported this game : ");
-            stringBuilder.append(EnumChatFormatting.GOLD);
-            for (final StringLong stringLong : ReportSuggestionHandler.getReportSuggestionHistory()) {
-                if (stringLong.message != null) {
-                    stringBuilder.append(stringLong.message).append(" ");
-                }
-            }
-            ChatUtil.addChatMessage(stringBuilder.toString());
 
         } else {
 

@@ -6,8 +6,6 @@ import fr.alexdoru.megawallsenhancementsmod.commands.CommandHypixelShout;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandReport;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
-import fr.alexdoru.megawallsenhancementsmod.data.StringLong;
-import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
@@ -21,11 +19,8 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,15 +31,6 @@ public class ReportSuggestionHandler {
     private static final String uuidPattern = "[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}";
     private static final Pattern REPORT_PATTERN1 = Pattern.compile("((?:\\w{2,16}|" + uuidPattern + ")) (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE);
     private static final Pattern REPORT_PATTERN2 = Pattern.compile("\\/?(?:wdr|report) (\\w{2,16}) ((?:\\w{2,16}|" + uuidPattern + "))", Pattern.CASE_INSENSITIVE);
-    private static final List<StringLong> reportSuggestionHistory = new ArrayList<>();
-
-    @SubscribeEvent
-    public void onMegaWallsGameEvent(MegaWallsGameEvent event) {
-        if (event.getType() == MegaWallsGameEvent.EventType.GAME_START || event.getType() == MegaWallsGameEvent.EventType.GAME_END) {
-            clearReportSuggestionHistory();
-            ReportQueue.INSTANCE.clearPlayersReportedThisGame();
-        }
-    }
 
     public static boolean parseReportMessage(
             ClientChatReceivedEvent event,
@@ -214,10 +200,6 @@ public class ReportSuggestionHandler {
         return StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED);
     }
 
-    public static List<StringLong> getReportSuggestionHistory() {
-        return reportSuggestionHistory;
-    }
-
     private static void addButtons(IChatComponent imsg, String reportedPlayer, String cheat, boolean isTargetMyself) {
         if (isTargetMyself) {
             return;
@@ -240,10 +222,6 @@ public class ReportSuggestionHandler {
 
     private static boolean isPlayerMyself(@Nullable String name) {
         return (mc.thePlayer != null && mc.thePlayer.getName().equalsIgnoreCase(name)) || (!ConfigHandler.hypixelNick.isEmpty() && ConfigHandler.hypixelNick.equals(name));
-    }
-
-    private static void clearReportSuggestionHistory() {
-        reportSuggestionHistory.clear();
     }
 
     /**

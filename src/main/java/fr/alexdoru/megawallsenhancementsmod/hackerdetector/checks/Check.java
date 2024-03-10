@@ -108,7 +108,7 @@ public abstract class Check implements ICheck {
 
     private void sendReport(EntityPlayer player) {
         if (this.canSendReport() && ScoreboardTracker.isInMwGame && ConfigHandler.autoreportFlaggedPlayers && SquadHandler.getSquad().get(player.getName()) == null) {
-            ReportQueue.INSTANCE.addReportFromHackerDetector(player.getName(), this.getCheatName().toLowerCase());
+            ReportQueue.INSTANCE.addReportToQueue(player.getName());
         }
     }
 
