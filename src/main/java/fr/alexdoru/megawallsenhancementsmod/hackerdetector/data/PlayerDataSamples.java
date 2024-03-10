@@ -8,6 +8,10 @@ import net.minecraft.util.Vec3;
 
 public class PlayerDataSamples {
 
+    /** Amount of ticks the player has spent on ground */
+    public int onGroundTime;
+    /** Amount of ticks the player has spent in air */
+    public int airTime;
     /** Amount of ticks since the player started sprinting */
     public int sprintTime = 0;
     /** Amount of ticks since the player has been using an item */
@@ -53,7 +57,8 @@ public class PlayerDataSamples {
     public long lastBreakBlockTime = System.currentTimeMillis();
     public final ViolationLevelTracker autoblockAVL = AutoblockCheck.newViolationTracker();
     public final ViolationLevelTracker fastbreakVL = FastbreakCheck.newViolationTracker();
-    public final ViolationLevelTracker keepsprintVL = KeepsprintCheck.newViolationTracker();
+    public final ViolationLevelTracker keepsprintAVL = KeepSprintACheck.newViolationTracker();
+    public final ViolationLevelTracker keepSprintBVL = KeepSprintBCheck.newViolationTracker();
     public final ViolationLevelTracker killAuraVL = KillAuraCheck.newViolationTracker();
     public final ViolationLevelTracker noSlowdownVL = NoSlowdownCheck.newViolationTracker();
 
@@ -65,6 +70,8 @@ public class PlayerDataSamples {
     }
 
     public void onTick(EntityPlayer player) {
+        this.onGroundTime = player.onGround ? this.onGroundTime + 1 : 0;
+        this.airTime = player.onGround ? 0 : this.airTime + 1;
         this.sprintTime = player.isSprinting() ? this.sprintTime + 1 : 0;
         this.useItemTime = player.isEating() && player.getHeldItem() != null ? this.useItemTime + 1 : 0;
         this.lastHurtTime = player.hurtTime == 10 ? 0 : this.lastHurtTime + 1;

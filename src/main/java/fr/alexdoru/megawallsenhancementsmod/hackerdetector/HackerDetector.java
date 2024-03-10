@@ -42,7 +42,8 @@ public class HackerDetector {
     private HackerDetector() {
         this.checkList.add(new AutoblockCheck());
         this.checkList.add(this.fastbreakCheck = new FastbreakCheck());
-        this.checkList.add(new KeepsprintCheck());
+        this.checkList.add(new KeepSprintACheck());
+        //this.checkList.add(new KeepSprintBCheck());
         this.checkList.add(new KillAuraCheck());
         this.checkList.add(new NoSlowdownCheck());
     }
