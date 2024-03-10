@@ -11,7 +11,7 @@ import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.PlayerJoinListener;
-import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportSuggestionHandler;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.updater.ModUpdater;
@@ -53,6 +53,7 @@ public class MegaWallsEnhancementsMod {
         MinecraftForge.EVENT_BUS.register(new WdrData());
         MinecraftForge.EVENT_BUS.register(new GuiManager());
         MinecraftForge.EVENT_BUS.register(new ModUpdater());
+        MinecraftForge.EVENT_BUS.register(new ReportQueue());
         MinecraftForge.EVENT_BUS.register(new ChatListener());
         MinecraftForge.EVENT_BUS.register(new SquadHandler());
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
@@ -61,7 +62,6 @@ public class MegaWallsEnhancementsMod {
         MinecraftForge.EVENT_BUS.register(new PlayerJoinListener());
         MinecraftForge.EVENT_BUS.register(new KeybindingListener());
         MinecraftForge.EVENT_BUS.register(new MegaWallsEndGameStats());
-        MinecraftForge.EVENT_BUS.register(new ReportSuggestionHandler());
         MinecraftForge.EVENT_BUS.register(new RenderPlayerHook_RenegadeArrowCount());
 
         ClientCommandHandler.instance.registerCommand(new CommandWDR());

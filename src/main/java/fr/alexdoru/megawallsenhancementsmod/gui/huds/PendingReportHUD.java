@@ -1,17 +1,18 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
-import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.IRenderer;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
-public class PendingReportHUD implements IRenderer {
+public class PendingReportHUD extends AbstractRenderer {
 
-    private final Minecraft mc = Minecraft.getMinecraft();
-    public static final PendingReportHUD instance = new PendingReportHUD();
+    public static PendingReportHUD INSTANCE;
+
+    public PendingReportHUD() {
+        super(ConfigHandler.reportHUDPosition);
+        INSTANCE = this;
+    }
 
     @Override
     public void render(ScaledResolution resolution) {
@@ -30,10 +31,9 @@ public class PendingReportHUD implements IRenderer {
             text = str.toString();
         } else {
             final float progress = ReportQueue.INSTANCE.standingStillCounter / (float) ReportQueue.INSTANCE.standingStillLimit;
-            final int index = ReportQueue.INSTANCE.getIndexOfNextReportToSend();
-            final ReportQueue.ReportInQueue reportInQueue = ReportQueue.INSTANCE.queueList.get(index == -1 ? 0 : index);
+            final String playername = ReportQueue.INSTANCE.queueList.get(0);
             final StringBuilder str = new StringBuilder();
-            str.append("/wdr ").append(reportInQueue.reportedPlayer);
+            str.append("/wdr ").append(playername);
             final int msgLength = str.length();
             int offset = (int) (progress * (msgLength)) + 1;
             offset = Math.max(0, offset);
@@ -55,11 +55,6 @@ public class PendingReportHUD implements IRenderer {
     @Override
     public boolean isEnabled(long currentTimeMillis) {
         return ConfigHandler.showReportHUD && !ReportQueue.INSTANCE.queueList.isEmpty();
-    }
-
-    @Override
-    public GuiPosition getGuiPosition() {
-        return ConfigHandler.reportHUDPosition;
     }
 
 }

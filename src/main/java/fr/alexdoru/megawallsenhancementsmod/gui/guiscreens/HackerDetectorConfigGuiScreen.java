@@ -66,7 +66,7 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
                     ConfigHandler.showReportHUD = false;
                     ConfigHandler.showReportHUDonlyInChat = false;
                 },
-                PendingReportHUD.instance,
+                PendingReportHUD.INSTANCE,
                 this,
                 GREEN + "Pending reports HUD",
                 DARK_GRAY + "\u25AA " + GREEN + "Enabled" + GRAY + " : displays a small text when the mods has reports to send to the server, and when it's typing the reports",
