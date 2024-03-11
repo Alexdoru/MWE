@@ -5,8 +5,6 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class ColorUtil {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
-
     public static EnumChatFormatting getPrestigeVColor(int classpoints) {
         if (classpoints >= 80_000) {
             return EnumChatFormatting.BLACK;
@@ -62,7 +60,7 @@ public class ColorUtil {
         if (colorChar == '\0') {
             return 0xFFFFFF;
         }
-        return mc.fontRendererObj.getColorCode(colorChar);
+        return Minecraft.getMinecraft().fontRendererObj.getColorCode(colorChar);
     }
 
 }
