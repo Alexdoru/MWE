@@ -121,6 +121,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                         + AQUA + "speed" + GRAY + ", "
                         + RED + "strength" + GRAY + ", "
                         + WHITE + "invisibility" + GRAY + ", "
+                        + GREEN + "jump boost" + GRAY + ", "
                         + "has different modes :",
                 DARK_GRAY + "\u25AA " + GREEN + "Always Enabled",
                 DARK_GRAY + "\u25AA " + GREEN + "Only in Mega Walls",

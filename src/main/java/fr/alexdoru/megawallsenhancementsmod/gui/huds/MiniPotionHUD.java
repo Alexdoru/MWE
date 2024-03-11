@@ -41,6 +41,12 @@ public class MiniPotionHUD extends AbstractRenderer {
                     len += mc.fontRendererObj.getStringWidth(strings[index]) + 2;
                     index++;
                     break;
+                case 8: // jump boost
+                    strings[index] = formatDuration(effect);
+                    colors[index] = 0xFF4DFF2F;
+                    len += mc.fontRendererObj.getStringWidth(strings[index]) + 2;
+                    index++;
+                    break;
                 case 10: // regeneration
                     strings[index] = formatDuration(effect);
                     colors[index] = 0xFFFF66D5;
