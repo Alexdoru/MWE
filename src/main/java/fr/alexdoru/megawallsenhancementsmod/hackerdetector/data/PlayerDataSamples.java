@@ -16,6 +16,10 @@ public class PlayerDataSamples {
     public int sprintTime = 0;
     /** Amount of ticks since the player has been using an item */
     public int useItemTime = 0;
+    /** Amount of ticks since the player finished eating something */
+    public int lastEatTime = 50;
+    /** True if the item in use is food or potion or milk bucket */
+    public boolean usedItemIsConsumable = false;
     /** Amount of ticks since the player took a hit */
     public int lastHurtTime = 0;
     /** Amount of ticks since the last sword swing started */
@@ -73,7 +77,17 @@ public class PlayerDataSamples {
         this.onGroundTime = player.onGround ? this.onGroundTime + 1 : 0;
         this.airTime = player.onGround ? 0 : this.airTime + 1;
         this.sprintTime = player.isSprinting() ? this.sprintTime + 1 : 0;
-        this.useItemTime = player.isEating() && player.getHeldItem() != null ? this.useItemTime + 1 : 0;
+        final boolean isEating = player.isEating();
+        if (!isEating && this.usedItemIsConsumable && this.useItemTime > 25) {
+            this.lastEatTime = 0;
+        }
+        this.lastEatTime++;
+        if (isEating && player.getHeldItem() != null) {
+            this.usedItemIsConsumable = player.getHeldItem().getMaxItemUseDuration() == 32;
+            this.useItemTime = this.useItemTime + 1;
+        } else {
+            this.useItemTime = 0;
+        }
         this.lastHurtTime = player.hurtTime == 10 ? 0 : this.lastHurtTime + 1;
         this.lastSwingTime++;
         this.swingList.add(this.hasSwung);

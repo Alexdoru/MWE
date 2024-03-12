@@ -38,11 +38,14 @@ public class KeepSprintACheck extends Check {
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
         // If the player is moving slower than the base running speed, we consider it is keepsprint
         if (data.isNotMovingXZ() || player.isRiding()) return false;
-        if (data.useItemTime > 5 && player.hurtTime == 0 && data.getSpeedXZ() < 4D) {
-            final int maxDuration = player.getHeldItem().getMaxItemUseDuration();
-            if (maxDuration == 0) return false; // wtf ??
-            // it is possible to double eat -> start sprinting while eating a second item
-            if (data.sprintTime > (maxDuration == 32 ? 70 : 5) || data.sprintTime > data.useItemTime + 5) {
+        if (data.useItemTime > 0 && player.hurtTime == 0 && data.getSpeedXZ() < 2.5D) {
+            final boolean invalidSprint;
+            if (data.usedItemIsConsumable) {
+                invalidSprint = data.sprintTime > 32 || data.sprintTime > data.useItemTime + 3 || data.lastEatTime > 32 && data.sprintTime > 5;
+            } else {
+                invalidSprint = data.sprintTime > 5;
+            }
+            if (invalidSprint) {
                 data.keepsprintAVL.add(2);
                 if (ConfigHandler.debugLogging) {
                     this.log(player, data, data.keepsprintAVL, null);
@@ -62,6 +65,7 @@ public class KeepSprintACheck extends Check {
         super.log(player, data, data.keepsprintAVL,
                 " | sprintTime " + data.sprintTime
                         + " | useItemTime " + data.useItemTime
+                        + " | lastEatTime " + data.lastEatTime
                         + " | speedXZ " + String.format("%.2f", data.getSpeedXZ())
                         + (item != null ? " | item held " + item.getRegistryName() : "")
         );

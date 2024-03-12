@@ -32,17 +32,20 @@ public class NoSlowdownCheck extends Check {
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
         // If the player is moving slower than the base running speed, we consider it is keepsprint
-        if (player.isRiding()) return false;
-        if (data.useItemTime > 5) {
-            final int maxDuration = player.getHeldItem().getMaxItemUseDuration();
-            if (maxDuration == 0) return false; // wtf ??
-            // it is possible to double eat -> start sprinting while eating a second item
-            if (data.sprintTime > (maxDuration == 32 ? 70 : 5) || data.sprintTime > data.useItemTime + 5) {
+        if (data.isNotMovingXZ() || player.isRiding()) return false;
+        if (data.useItemTime > 0) {
+            final boolean invalidSprint;
+            if (data.usedItemIsConsumable) {
+                invalidSprint = data.sprintTime > 32 || data.sprintTime > data.useItemTime + 3 || data.lastEatTime > 32 && data.sprintTime > 5;
+            } else {
+                invalidSprint = data.sprintTime > 5;
+            }
+            if (invalidSprint) {
                 data.noSlowdownVL.add(2);
                 if (ConfigHandler.debugLogging) {
                     this.log(player, data, data.noSlowdownVL, null);
                 }
-                return player.hurtTime == 0 && data.getSpeedXZ() >= 4D;
+                return player.hurtTime == 0 && data.getSpeedXZ() >= 2.5D;
             } else if (data.sprintTime == 0) {
                 data.noSlowdownVL.substract(3);
             }
@@ -54,9 +57,10 @@ public class NoSlowdownCheck extends Check {
     protected void log(EntityPlayer player, PlayerDataSamples data, ViolationLevelTracker vl, String extramsg) {
         final ItemStack itemStack = player.getHeldItem();
         final Item item = itemStack == null ? null : itemStack.getItem();
-        super.log(player, data, data.noSlowdownVL,
+        super.log(player, data, vl,
                 " | sprintTime " + data.sprintTime
                         + " | useItemTime " + data.useItemTime
+                        + " | lastEatTime " + data.lastEatTime
                         + " | speedXZ " + String.format("%.2f", data.getSpeedXZ())
                         + (item != null ? " | item held " + item.getRegistryName() : "")
         );
