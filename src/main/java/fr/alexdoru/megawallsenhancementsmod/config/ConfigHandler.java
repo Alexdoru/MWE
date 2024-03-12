@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.config;
 
+import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
 
 public class ConfigHandler extends AbstractConfig {
@@ -10,6 +11,24 @@ public class ConfigHandler extends AbstractConfig {
     private static final String NOCHEATERS = "NoCheaters";
     private static final String HACKERDETECTOR = "HackerDetector";
     private static final String HITBOX = "Hitbox";
+
+    protected static void onModUpdate() {
+        if (!modVersion.equals(MegaWallsEnhancementsMod.version)) {
+            ConfigHandler.hackerDetector = true;
+            ConfigHandler.autoreportFlaggedPlayers = true;
+            ConfigHandler.showReportHUD = true;
+            ConfigHandler.showReportHUDonlyInChat = false;
+            ConfigHandler.reportHUDPosition.resetToDefault();
+            ConfigHandler.modVersion = MegaWallsEnhancementsMod.version;
+            ConfigHandler.saveConfig();
+        }
+    }
+
+    @ConfigProperty(
+            category = "General",
+            name = "Mod Version",
+            comment = "The version of the mod the config was saved with")
+    protected static String modVersion = "";
 
     /**
      * FKCounter config
