@@ -63,7 +63,8 @@ public class PlayerDataSamples {
     public final ViolationLevelTracker fastbreakVL = FastbreakCheck.newViolationTracker();
     public final ViolationLevelTracker keepsprintAVL = KeepSprintACheck.newViolationTracker();
     public final ViolationLevelTracker keepSprintBVL = KeepSprintBCheck.newViolationTracker();
-    public final ViolationLevelTracker killAuraVL = KillAuraCheck.newViolationTracker();
+    public final ViolationLevelTracker killAuraAVL = KillAuraACheck.newViolationTracker();
+    public final ViolationLevelTracker killAuraBVL = KillAuraBCheck.newViolationTracker();
     public final ViolationLevelTracker noSlowdownVL = NoSlowdownCheck.newViolationTracker();
 
     public void onTickStart() {
