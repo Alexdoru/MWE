@@ -540,6 +540,12 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = HACKERDETECTOR,
+            name = "Show flag message type",
+            comment = "Additionally prints the type of flag on the alert message")
+    public static boolean showFlagMessageType = true;
+
+    @ConfigProperty(
+            category = HACKERDETECTOR,
             name = "Compact alerts",
             comment = "Compact flag messages with previous ones")
     public static boolean compactFlagMessages = true;

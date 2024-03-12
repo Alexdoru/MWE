@@ -20,7 +20,7 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
     public void initGui() {
         final int sideButtonWidth = 90;
         this.maxWidth = BUTTON_WIDTH + (10 + sideButtonWidth) * 2;
-        this.maxHeight = (buttonsHeight + 4) * 11 + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * 12 + buttonsHeight;
         super.initGui();
         final int xPos = getxCenter() - BUTTON_WIDTH / 2;
         this.elementList.add(new TextElement(DARK_RED + "Hacker Detector", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
@@ -80,17 +80,23 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
                 GRAY + "Prints a message in chat when it detects a player using cheats"));
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(7),
+                "Show flag type",
+                (b) -> ConfigHandler.showFlagMessageType = b,
+                () -> ConfigHandler.showFlagMessageType,
+                GRAY + "Shows on the flag message the flag type. For example it will show \"KillAura(B)\" instead of just \"KillAura\""));
+        this.buttonList.add(new OptionGuiButton(
+                xPos, getButtonYPos(8),
                 "Compact flag messages",
                 (b) -> ConfigHandler.compactFlagMessages = b,
                 () -> ConfigHandler.compactFlagMessages,
                 GRAY + "Compacts identical flag messages together"));
         this.buttonList.add(new OptionGuiButton(
-                xPos, getButtonYPos(8),
+                xPos, getButtonYPos(9),
                 "Show single flag message",
                 (b) -> ConfigHandler.oneFlagMessagePerGame = b,
                 () -> ConfigHandler.oneFlagMessagePerGame,
                 GRAY + "Print flag messages only once per game per player"));
-        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(10), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
+        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
 
 }
