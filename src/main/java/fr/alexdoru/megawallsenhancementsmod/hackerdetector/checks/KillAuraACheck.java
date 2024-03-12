@@ -13,7 +13,7 @@ import net.minecraft.util.Vec3;
 
 import java.util.List;
 
-public class KillAuraCheck extends Check {
+public class KillAuraACheck extends Check {
 
     @Override
     public String getCheatName() {
@@ -26,13 +26,18 @@ public class KillAuraCheck extends Check {
     }
 
     @Override
+    public String getFlagType() {
+        return "A";
+    }
+
+    @Override
     public boolean canSendReport() {
         return true;
     }
 
     @Override
     public void performCheck(EntityPlayer player, PlayerDataSamples data) {
-        super.checkViolationLevel(player, this.check(player, data), data.killAuraVL);
+        super.checkViolationLevel(player, this.check(player, data), data.killAuraAVL);
     }
 
     @Override
@@ -144,11 +149,11 @@ public class KillAuraCheck extends Check {
         }
 
         if (b + p > 0) {
-            data.killAuraVL.add(Math.min(10, Math.min(10, b) + Math.min(8, p)) * 25);
+            data.killAuraAVL.add(Math.min(10, Math.min(10, b) + Math.min(8, p)) * 25);
             if (ConfigHandler.debugLogging) {
                 final String msg = " | target : " + data.targetedPlayer.getName() + " | b " + b + " | p " + p + " | reach " + String.format("%.2f", reach);
-                this.log(player, data, data.killAuraVL, msg);
-                //this.fail(player, " b" + b + " p" + p + " vl" + data.killAuraVL.getViolationLevel());
+                this.log(player, data, data.killAuraAVL, msg);
+                //this.fail(player, " b" + b + " p" + p + " vl" + data.killAuraAVL.getViolationLevel());
             }
             return true;
         }
