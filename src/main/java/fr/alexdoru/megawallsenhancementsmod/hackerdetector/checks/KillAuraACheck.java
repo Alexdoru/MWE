@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.block.Block;
@@ -113,7 +114,7 @@ public class KillAuraACheck extends Check {
         maxDistance = maxDistance + 2D;
         final List<EntityPlayer> nearbyPlayers = getPlayersInAABBexcluding(player,
                 player.getEntityBoundingBox().addCoord(lookVect.xCoord * maxDistance, lookVect.yCoord * maxDistance, lookVect.zCoord * maxDistance).expand(f, f, f),
-                p -> p != data.targetedPlayer && p != mc.thePlayer && !p.isSpectator() && p.canBeCollidedWith());
+                p -> p != data.targetedPlayer && p != mc.thePlayer && p.canBeCollidedWith() && HackerDetector.isValidPlayer(p.getUniqueID()) && !p.isInvisible());
 
         int b = 1000;
         int p = 1000;

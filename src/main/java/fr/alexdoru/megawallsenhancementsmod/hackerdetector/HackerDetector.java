@@ -8,7 +8,6 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.BrokenBlock;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.FileLogger;
-import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -94,12 +93,8 @@ public class HackerDetector {
         final List<EntityPlayer> playerList = new ArrayList<>(mc.theWorld.playerEntities.size());
 
         for (final EntityPlayer player : mc.theWorld.playerEntities) {
-            if (player.ticksExisted >= 20 &&
-                    !player.isDead &&
-                    !player.capabilities.isFlying &&
-                    !player.capabilities.isCreativeMode &&
-                    !player.isInvisible() &&
-                    (ScoreboardTracker.isReplayMode || !NameUtil.filterNPC(player.getUniqueID()))) {
+            if (player.ticksExisted >= 20 && !player.isDead && isValidPlayer(player.getUniqueID())) {
+                // this includes the watchdog bot above the player
                 playerList.add(player);
                 ((EntityPlayerAccessor) player).getPlayerDataSamples().onTickStart();
             }
@@ -115,6 +110,14 @@ public class HackerDetector {
             this.performChecksOnPlayer(player);
         }
 
+    }
+
+    public static boolean isValidPlayer(UUID uuid) {
+        final int v = uuid.version();
+        if (ScoreboardTracker.isReplayMode) {
+            return v == 2;
+        }
+        return v == 1 || v == 4;
     }
 
     private void onTickEnd() {
