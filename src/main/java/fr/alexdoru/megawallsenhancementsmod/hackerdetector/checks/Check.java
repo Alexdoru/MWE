@@ -57,11 +57,11 @@ public abstract class Check implements ICheck {
         if (!ConfigHandler.showFlagMessages) {
             return;
         }
-        final String flagKey = player.getName() + cheatType;
+        final String flagKey = player.getName() + (ConfigHandler.showFlagMessageType ? cheatType : this.getCheatName());
         final String msg = ChatUtil.getTagNoCheaters() + EnumChatFormatting.RESET
                 + NameUtil.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.YELLOW + " flags "
-                + EnumChatFormatting.RED + cheatType;
+                + EnumChatFormatting.RED + (ConfigHandler.showFlagMessageType ? cheatType : this.getCheatName());
         if (ConfigHandler.oneFlagMessagePerGame) {
             if (flagMessages.contains(flagKey)) {
                 return;
