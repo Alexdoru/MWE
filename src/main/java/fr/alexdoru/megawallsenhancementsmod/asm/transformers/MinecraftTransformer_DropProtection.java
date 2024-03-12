@@ -32,19 +32,6 @@ public class MinecraftTransformer_DropProtection implements MWETransformer {
                         status.addInjection();
                     }
 
-                    if (insnNode instanceof MethodInsnNode && ((MethodInsnNode) insnNode).name.equals("onPostClientTick")) {
-                        final InsnList insnList = new InsnList();
-                        final LabelNode label = new LabelNode();
-                        insnList.add(new FieldInsnNode(GETSTATIC, "net/minecraft/client/Minecraft", "field_110184_bpa", "Z"));
-                        insnList.add(new JumpInsnNode(IFEQ, label));
-                        insnList.add(new InsnNode(ACONST_NULL));
-                        insnList.add(getNewMethodInsnNode(MethodMapping.STRINGBUILDER$TOSTRING));
-                        insnList.add(new InsnNode(POP));
-                        insnList.add(label);
-                        methodNode.instructions.insert(insnNode, insnList);
-                        classNode.visitField(ACC_PUBLIC + ACC_STATIC + ACC_SYNTHETIC, "field_110184_bpa", "Z", null, false);
-                    }
-
                     if (checkMethodInsnNode(insnNode, MethodMapping.ENTITYPLAYERSP$DROPONEITEM)) {
                         /*
                          * Replaces line 2101 :
