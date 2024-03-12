@@ -22,6 +22,7 @@ public abstract class AbstractConfig {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+        ConfigHandler.onModUpdate();
     }
 
     /**
