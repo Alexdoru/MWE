@@ -46,13 +46,13 @@ public class KillAuraACheck extends Check {
 
         if (!data.hasAttacked()) return false;
         if (player.isRiding()) return false;
-        if (data.targetedPlayer == mc.thePlayer) return false;
+        if (data.attackInfo.target == mc.thePlayer) return false;
 
         final double maxReach = 3.5D;
         final Vec3 attackerEyePos = data.getPositionEyesServer(player);
         final Vec3 lookVect = data.getLookServer();
         final Vec3 lookEndPos = attackerEyePos.addVector(lookVect.xCoord * maxReach, lookVect.yCoord * maxReach, lookVect.zCoord * maxReach);
-        final PlayerDataSamples targetData = ((EntityPlayerAccessor) data.targetedPlayer).getPlayerDataSamples();
+        final PlayerDataSamples targetData = ((EntityPlayerAccessor) data.attackInfo.target).getPlayerDataSamples();
 
         final int MAX_TICK_DELAY = 10;
         if (targetData.posXList.size() < MAX_TICK_DELAY) {
@@ -114,7 +114,7 @@ public class KillAuraACheck extends Check {
         maxDistance = maxDistance + 2D;
         final List<EntityPlayer> nearbyPlayers = getPlayersInAABBexcluding(player,
                 player.getEntityBoundingBox().addCoord(lookVect.xCoord * maxDistance, lookVect.yCoord * maxDistance, lookVect.zCoord * maxDistance).expand(f, f, f),
-                p -> p != data.targetedPlayer && p != mc.thePlayer && p.canBeCollidedWith() && HackerDetector.isValidPlayer(p.getUniqueID()) && !p.isInvisible());
+                p -> p != data.attackInfo.target && p != mc.thePlayer && p.canBeCollidedWith() && HackerDetector.isValidPlayer(p.getUniqueID()) && !p.isInvisible());
 
         int b = 1000;
         int p = 1000;
@@ -152,7 +152,7 @@ public class KillAuraACheck extends Check {
         if (b + p > 0) {
             data.killAuraAVL.add(Math.min(10, Math.min(10, b) + Math.min(8, p)) * 25);
             if (ConfigHandler.debugLogging) {
-                final String msg = " | target : " + data.targetedPlayer.getName() + " | b " + b + " | p " + p + " | reach " + String.format("%.2f", reach);
+                final String msg = " | " + data.attackInfo.attackType.name() + " | target : " + data.attackInfo.targetName + " | b " + b + " | p " + p + " | reach " + String.format("%.2f", reach);
                 this.log(player, data, data.killAuraAVL, msg);
                 //this.fail(player, " b" + b + " p" + p + " vl" + data.killAuraAVL.getViolationLevel());
             }

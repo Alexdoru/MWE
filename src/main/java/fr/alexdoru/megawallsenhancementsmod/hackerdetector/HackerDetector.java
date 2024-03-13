@@ -136,6 +136,7 @@ public class HackerDetector {
         for (final ICheck check : this.checkList) {
             check.performCheck(player, data);
         }
+        data.onPostChecks();
         this.playersCheckedTemp++;
     }
 

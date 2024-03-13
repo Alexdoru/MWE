@@ -27,11 +27,8 @@ public class PlayerDataSamples {
     /** True when we receive a swing packet from this entity during the last tick */
     public boolean hasSwung = false;
     public final SampleListZ swingList = new SampleListZ(20);
-    /** Used to filter hurt events from an ability damaging multiple players at
-     * the same time and mistaken for a player attacking multiple entities */
-    public boolean hasAttackedMultiTarget = false;
-    /** Player attacked during this tick if any */
-    public EntityPlayer targetedPlayer;
+    /** Info about attack that happend this tick if any */
+    public AttackInfo attackInfo;
     public final SampleListZ attackList = new SampleListZ(20);
 
     /* ----- Samples of rotations/positions interpolated by the client ----- */
@@ -69,8 +66,7 @@ public class PlayerDataSamples {
 
     public void onTickStart() {
         this.hasSwung = false;
-        this.hasAttackedMultiTarget = false;
-        this.targetedPlayer = null;
+        this.attackInfo = null;
         this.serverUpdates = 0;
     }
 
@@ -102,6 +98,10 @@ public class PlayerDataSamples {
         this.serverUpdatesList.add(this.serverUpdates);
     }
 
+    public void onPostChecks() {
+        if (this.attackInfo != null) this.attackInfo.target = null;
+    }
+
     public void setPositionAndRotation(double x, double y, double z, float yaw, float pitch) {
         this.serverUpdates++;
         this.serverPosXList.add(x);
@@ -117,7 +117,7 @@ public class PlayerDataSamples {
 
     /** True if the player has attacked another player during this tick */
     public boolean hasAttacked() {
-        return this.targetedPlayer != null;
+        return this.attackInfo != null && !this.attackInfo.multiTarget;
     }
 
     /** True if the player's position in the XZ plane is identical to the last tick */
