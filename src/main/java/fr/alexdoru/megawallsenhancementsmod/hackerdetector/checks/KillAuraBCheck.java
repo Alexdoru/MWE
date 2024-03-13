@@ -36,15 +36,12 @@ public class KillAuraBCheck extends Check {
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        if (data.hasSwung) {
-            if (data.useItemTime > 3 && data.usedItemIsConsumable && data.lastEatTime > 32) {
-                data.killAuraBVL.add(5);
-                if (ConfigHandler.debugLogging) {
+        if (player.isSwingInProgress) {
+            if (data.useItemTime > 6 && data.usedItemIsConsumable && data.lastEatTime > 32) {
+                if (ConfigHandler.debugLogging && data.killAuraBVL.getViolationLevel() > 3) {
                     this.log(player, data, data.killAuraBVL, null);
                 }
                 return true;
-            } else if (data.useItemTime == 0) {
-                data.killAuraBVL.substract(2);
             }
         }
         return false;
@@ -62,7 +59,7 @@ public class KillAuraBCheck extends Check {
     }
 
     public static ViolationLevelTracker newViolationTracker() {
-        return new ViolationLevelTracker(25);
+        return new ViolationLevelTracker(1, 3, 20);
     }
 
 }
