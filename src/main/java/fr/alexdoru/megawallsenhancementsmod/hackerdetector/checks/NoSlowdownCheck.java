@@ -33,19 +33,20 @@ public class NoSlowdownCheck extends Check {
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
         // If the player is moving slower than the base running speed, we consider it is keepsprint
         if (data.isNotMovingXZ() || player.isRiding()) return false;
-        if (data.useItemTime > 0) {
+        if (data.useItemTime > 5) {
             final boolean invalidSprint;
             if (data.usedItemIsConsumable) {
+                if (data.useItemTime > 32) return false;
                 invalidSprint = data.sprintTime > 32 || data.sprintTime > data.useItemTime + 3 || data.lastEatTime > 32 && data.sprintTime > 5;
             } else {
                 invalidSprint = data.sprintTime > 5;
             }
-            if (invalidSprint) {
+            if (invalidSprint && data.getSpeedXZ() >= 2.5D) {
                 data.noSlowdownVL.add(2);
                 if (ConfigHandler.debugLogging) {
                     this.log(player, data, data.noSlowdownVL, null);
                 }
-                return player.hurtTime == 0 && data.getSpeedXZ() >= 2.5D;
+                return true;
             } else if (data.sprintTime == 0) {
                 data.noSlowdownVL.substract(3);
             }

@@ -26,7 +26,7 @@ public class KeepSprintACheck extends Check {
 
     @Override
     public boolean canSendReport() {
-        return false;
+        return true;
     }
 
     @Override
@@ -38,14 +38,15 @@ public class KeepSprintACheck extends Check {
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
         // If the player is moving slower than the base running speed, we consider it is keepsprint
         if (data.isNotMovingXZ() || player.isRiding()) return false;
-        if (data.useItemTime > 0 && player.hurtTime == 0 && data.getSpeedXZ() < 2.5D) {
+        if (data.useItemTime > 5) {
             final boolean invalidSprint;
             if (data.usedItemIsConsumable) {
+                if (data.useItemTime > 32) return false;
                 invalidSprint = data.sprintTime > 32 || data.sprintTime > data.useItemTime + 3 || data.lastEatTime > 32 && data.sprintTime > 5;
             } else {
                 invalidSprint = data.sprintTime > 5;
             }
-            if (invalidSprint) {
+            if (invalidSprint && data.getSpeedXZ() < 2.5D) {
                 data.keepsprintAVL.add(2);
                 if (ConfigHandler.debugLogging) {
                     this.log(player, data, data.keepsprintAVL, null);
