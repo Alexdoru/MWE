@@ -2,7 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.S19PacketEntityStatusAccessor;
-import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.AttackInfo;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
@@ -152,18 +152,11 @@ public class AttackDetector {
     }
 
     private static void onPlayerAttack(EntityPlayer attacker, EntityPlayer target, AttackType attackType) {
-        final PlayerDataSamples dataAttacker = ((EntityPlayerAccessor) attacker).getPlayerDataSamples();
-        if (dataAttacker.hasAttackedMultiTarget) {
-            return;
-        }
-        if (dataAttacker.targetedPlayer != null && dataAttacker.targetedPlayer != target) {
-            dataAttacker.hasAttackedMultiTarget = true;
-            dataAttacker.targetedPlayer = null;
-            return;
-        }
-        dataAttacker.targetedPlayer = target;
-        if (ConfigHandler.debugLogging) {
-            HackerDetector.log(attacker.getName() + " attacked " + target.getName() + " [" + attackType.name() + "]");
+        final PlayerDataSamples data = ((EntityPlayerAccessor) attacker).getPlayerDataSamples();
+        if (data.attackInfo == null) {
+            data.attackInfo = new AttackInfo(target, attackType);
+        } else if (data.attackInfo.target != target) {
+            data.attackInfo.multiTarget = true;
         }
     }
 
