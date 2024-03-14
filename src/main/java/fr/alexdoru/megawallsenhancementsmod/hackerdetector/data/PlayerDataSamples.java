@@ -8,6 +8,8 @@ import net.minecraft.util.Vec3;
 
 public class PlayerDataSamples {
 
+    /** Used to ensure we chech each player only once per tick, since the World#playerEntities list might contain duplicates */
+    public boolean checkedThisTick;
     /** Amount of ticks the player has spent on ground */
     public int onGroundTime;
     /** Amount of ticks the player has spent in air */
@@ -65,12 +67,14 @@ public class PlayerDataSamples {
     public final ViolationLevelTracker noSlowdownVL = NoSlowdownCheck.newViolationTracker();
 
     public void onTickStart() {
+        this.checkedThisTick = false;
         this.hasSwung = false;
         this.attackInfo = null;
         this.serverUpdates = 0;
     }
 
     public void onTick(EntityPlayer player) {
+        this.checkedThisTick = true;
         this.onGroundTime = player.onGround ? this.onGroundTime + 1 : 0;
         this.airTime = player.onGround ? 0 : this.airTime + 1;
         this.sprintTime = player.isSprinting() ? this.sprintTime + 1 : 0;
