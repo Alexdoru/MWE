@@ -132,6 +132,7 @@ public class HackerDetector {
             return;
         }
         final PlayerDataSamples data = ((EntityPlayerAccessor) player).getPlayerDataSamples();
+        if (data.checkedThisTick) return;
         data.onTick(player);
         for (final ICheck check : this.checkList) {
             check.performCheck(player, data);
