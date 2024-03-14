@@ -22,10 +22,6 @@ public class PlayerDataSamples {
     public int lastEatTime = 50;
     /** True if the item in use is food or potion or milk bucket */
     public boolean usedItemIsConsumable = false;
-    /** Amount of ticks since the player took a hit */
-    public int lastHurtTime = 0;
-    /** Amount of ticks since the last sword swing started */
-    public int lastSwingTime = -1;
     /** True when we receive a swing packet from this entity during the last tick */
     public boolean hasSwung = false;
     public final SampleListZ swingList = new SampleListZ(20);
@@ -89,8 +85,6 @@ public class PlayerDataSamples {
         } else {
             this.useItemTime = 0;
         }
-        this.lastHurtTime = player.hurtTime == 10 ? 0 : this.lastHurtTime + 1;
-        this.lastSwingTime++;
         this.swingList.add(this.hasSwung);
         this.attackList.add(this.hasAttacked());
         this.posXList.add(player.posX);
