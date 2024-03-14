@@ -17,6 +17,12 @@ import net.minecraft.network.play.server.S0BPacketAnimation;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.network.play.server.S19PacketEntityStatus;
 
+/**
+ * Tries to estimate if a player attacked another player by looking at the packets received,
+ * the server sends them from here :
+ * {@link net.minecraft.entity.player.EntityPlayer#attackTargetEntityWithCurrentItem)}
+ * {@link net.minecraft.entity.EntityLivingBase#attackEntityFrom}
+ */
 public class AttackDetector {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
@@ -29,7 +35,7 @@ public class AttackDetector {
     public static void lookForAttacks(Packet<?> packet) {
         if (packet instanceof S19PacketEntityStatusAccessor) {
             final byte opCode = ((S19PacketEntityStatus) packet).getOpCode();
-            if (opCode == 2 || opCode == 3) { // Entity gets hurt (2) or dies (3)
+            if (opCode == 2) { // Entity gets hurt (2)
                 final long timeDiff = System.currentTimeMillis() - lastSwingTime;
                 if (timeDiff < 2) {
                     if (lastPacketWasSwing) {
@@ -48,15 +54,6 @@ public class AttackDetector {
                 attackerID = packetAnimation.getEntityID();
                 onEntitySwing(attackerID);
                 return;
-            } else if (animationType == 1) { // hurt animation
-                final long timeDiff = System.currentTimeMillis() - lastSwingTime;
-                if (timeDiff < 2) {
-                    if (lastPacketWasSwing) {
-                        checkPlayerAttack(attackerID, packetAnimation.getEntityID(), AttackType.DIRECT_HURT);
-                    } else {
-                        checkPlayerAttack(attackerID, packetAnimation.getEntityID(), AttackType.HURT);
-                    }
-                }
             } else if (animationType == 4 || animationType == 5) { // critical (4) / enchant particle (5)
                 final long timeDiff = System.currentTimeMillis() - lastSwingTime;
                 if (timeDiff < 2) {
@@ -83,9 +80,9 @@ public class AttackDetector {
         lastPacketWasSwing = false;
     }
 
-    private static void onEntitySwing(int attackerID) {
+    private static void onEntitySwing(int entityID) {
         HackerDetector.addScheduledTask(() -> {
-            final Entity attacker = mc.theWorld.getEntityByID(attackerID);
+            final Entity attacker = mc.theWorld.getEntityByID(entityID);
             if (attacker instanceof EntityPlayerAccessor) {
                 final PlayerDataSamples data = ((EntityPlayerAccessor) attacker).getPlayerDataSamples();
                 data.hasSwung = true;
