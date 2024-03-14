@@ -84,9 +84,7 @@ public class AttackDetector {
         HackerDetector.addScheduledTask(() -> {
             final Entity attacker = mc.theWorld.getEntityByID(entityID);
             if (attacker instanceof EntityPlayerAccessor) {
-                final PlayerDataSamples data = ((EntityPlayerAccessor) attacker).getPlayerDataSamples();
-                data.hasSwung = true;
-                data.lastSwingTime = -1;
+                ((EntityPlayerAccessor) attacker).getPlayerDataSamples().hasSwung = true;
             }
         });
     }
