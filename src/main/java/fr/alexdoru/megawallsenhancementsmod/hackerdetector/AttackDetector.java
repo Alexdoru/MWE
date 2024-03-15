@@ -16,6 +16,8 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S0BPacketAnimation;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.network.play.server.S19PacketEntityStatus;
+import net.minecraft.network.play.server.S29PacketSoundEffect;
+import net.minecraft.util.Vec3;
 
 /**
  * Tries to estimate if a player attacked another player by looking at the packets received,
@@ -30,54 +32,81 @@ public class AttackDetector {
     private static boolean lastPacketWasSwing;
     private static long lastSwingTime;
     private static int attackerID;
+    private static boolean lastPacketWasHurt;
+    private static long lastHurtTime;
+    private static int lastHurtID;
+    private static boolean consecutiveSwingHurt;
 
     // Careful, this code isn't called from the main thread
     public static void lookForAttacks(Packet<?> packet) {
-        if (packet instanceof S19PacketEntityStatusAccessor) {
-            final byte opCode = ((S19PacketEntityStatus) packet).getOpCode();
-            if (opCode == 2) { // Entity gets hurt (2)
-                final long timeDiff = System.currentTimeMillis() - lastSwingTime;
-                if (timeDiff < 2) {
-                    if (lastPacketWasSwing) {
-                        checkPlayerAttack(attackerID, ((S19PacketEntityStatusAccessor) packet).getEntityId(), AttackType.DIRECT_HURT);
-                    } else {
-                        checkPlayerAttack(attackerID, ((S19PacketEntityStatusAccessor) packet).getEntityId(), AttackType.HURT);
-                    }
-                }
-            }
-        } else if (packet instanceof S0BPacketAnimation) {
+        if (packet instanceof S0BPacketAnimation) {
             final S0BPacketAnimation packetAnimation = (S0BPacketAnimation) packet;
             final int animationType = packetAnimation.getAnimationType();
             if (animationType == 0) { // Swing packet
+                lastPacketWasHurt = false;
+                consecutiveSwingHurt = false;
                 lastPacketWasSwing = true;
                 lastSwingTime = System.currentTimeMillis();
                 attackerID = packetAnimation.getEntityID();
                 onEntitySwing(attackerID);
                 return;
             } else if (animationType == 4 || animationType == 5) { // critical (4) / enchant particle (5)
-                final long timeDiff = System.currentTimeMillis() - lastSwingTime;
-                if (timeDiff < 2) {
+                if (System.currentTimeMillis() - lastSwingTime < 2) {
                     if (lastPacketWasSwing) {
-                        checkPlayerAttack(attackerID, packetAnimation.getEntityID(), animationType == 4 ? AttackType.DIRECT_CRITICAL : AttackType.DIRECT_SHARPNESS);
+                        checkPlayerAttack(attackerID, packetAnimation.getEntityID(), animationType == 4 ? AttackType.DIRECT_CRITICAL : AttackType.DIRECT_SHARPNESS, null);
                     } else {
-                        checkPlayerAttack(attackerID, packetAnimation.getEntityID(), animationType == 4 ? AttackType.CRITICAL : AttackType.SHARPNESS);
+                        checkPlayerAttack(attackerID, packetAnimation.getEntityID(), animationType == 4 ? AttackType.CRITICAL : AttackType.SHARPNESS, null);
                     }
                 }
             }
         } else if (packet instanceof S12PacketEntityVelocity) {
-            final long timeDiff = System.currentTimeMillis() - lastSwingTime;
-            if (timeDiff < 2) {
+            if (System.currentTimeMillis() - lastSwingTime < 2) {
                 final S12PacketEntityVelocity packetVelo = (S12PacketEntityVelocity) packet;
                 if (packetVelo.getMotionX() != 0 || packetVelo.getMotionY() != 0 || packetVelo.getMotionZ() != 0) {
                     if (lastPacketWasSwing) {
-                        checkPlayerAttack(attackerID, packetVelo.getEntityID(), AttackType.DIRECT_VELOCITY);
+                        checkPlayerAttack(attackerID, packetVelo.getEntityID(), AttackType.DIRECT_VELOCITY, null);
                     } else {
-                        checkPlayerAttack(attackerID, packetVelo.getEntityID(), AttackType.VELOCITY);
+                        checkPlayerAttack(attackerID, packetVelo.getEntityID(), AttackType.VELOCITY, null);
                     }
                 }
             }
+        } else if (packet instanceof S19PacketEntityStatusAccessor) {
+            if (((S19PacketEntityStatus) packet).getOpCode() == 2) { // Entity gets hurt (2)
+                if (lastPacketWasSwing) consecutiveSwingHurt = true;
+                lastPacketWasSwing = false;
+                lastPacketWasHurt = true;
+                lastHurtTime = System.currentTimeMillis();
+                lastHurtID = ((S19PacketEntityStatusAccessor) packet).getEntityId();
+                return;
+            }
+        } else if (packet instanceof S29PacketSoundEffect) {
+            if (lastPacketWasSwing && System.currentTimeMillis() - lastSwingTime < 2) {
+                if ("mob.guardian.elder.hit".equals(((S29PacketSoundEffect) packet).getSoundName())) {
+                    // TODO dreadlord hit
+                } else if ("note.harp".equals(((S29PacketSoundEffect) packet).getSoundName())) {
+                    // TODO shaman hit
+                }
+            } else if (lastPacketWasHurt && System.currentTimeMillis() - lastSwingTime < 2 && System.currentTimeMillis() - lastHurtTime < 2) {
+                if ("game.player.hurt".equals(((S29PacketSoundEffect) packet).getSoundName())) {
+                    final S29PacketSoundEffect soundPacket = (S29PacketSoundEffect) packet;
+                    checkPlayerAttack(
+                            attackerID,
+                            lastHurtID,
+                            consecutiveSwingHurt ? AttackType.DIRECTHURTSOUND : AttackType.HURTSOUND,
+                            new Vec3(soundPacket.getX(), soundPacket.getY(), soundPacket.getZ()));
+                } else if ("game.player.die".equals(((S29PacketSoundEffect) packet).getSoundName())) {
+                    final S29PacketSoundEffect soundPacket = (S29PacketSoundEffect) packet;
+                    checkPlayerAttack(
+                            attackerID,
+                            lastHurtID,
+                            consecutiveSwingHurt ? AttackType.DIRECTDEATHSOUND : AttackType.DEATHSOUND,
+                            new Vec3(soundPacket.getX(), soundPacket.getY(), soundPacket.getZ()));
+                }
+            }
         }
+        lastPacketWasHurt = false;
         lastPacketWasSwing = false;
+        consecutiveSwingHurt = false;
     }
 
     private static void onEntitySwing(int entityID) {
@@ -89,13 +118,13 @@ public class AttackDetector {
         });
     }
 
-    private static void checkPlayerAttack(int attackerID, int targetId, AttackType attackType) {
+    private static void checkPlayerAttack(int attackerEntityId, int targetEntityId, AttackType attackType, Vec3 soundPos) {
         HackerDetector.addScheduledTask(() -> {
-            final Entity attacker = mc.theWorld.getEntityByID(attackerID);
-            final Entity target = mc.theWorld.getEntityByID(targetId);
+            final Entity attacker = mc.theWorld.getEntityByID(attackerEntityId);
+            final Entity target = mc.theWorld.getEntityByID(targetEntityId);
             if (!(attacker instanceof EntityPlayer) || !(target instanceof EntityPlayer) || attacker == target) {
                 return;
-            }// TODO sur le death packet du coup le players n'est ptet plus la
+            }
             final double xDiff = Math.abs(mc.thePlayer.posX - target.posX);
             final double zDiff = Math.abs(mc.thePlayer.posZ - target.posZ);
             if (xDiff > 56D || zDiff > 56D) {
@@ -114,26 +143,28 @@ public class AttackDetector {
                 return;
             }
             switch (attackType) {
+                case HURTSOUND:
+                case DEATHSOUND:
+                case DIRECTHURTSOUND:
+                case DIRECTDEATHSOUND:
+                    if (Math.abs(soundPos.xCoord - target.posX) < 1d && Math.abs(soundPos.yCoord - target.posY) < 1d && Math.abs(soundPos.zCoord - target.posZ) < 1d) {
+                        onPlayerAttack((EntityPlayer) attacker, (EntityPlayer) target, attackType);
+                    }
+                    break;
                 case DIRECT_VELOCITY:
-                case VELOCITY:  // velocity packet
+                case VELOCITY:
                     if (mc.thePlayer == target) {
                         onPlayerAttack((EntityPlayer) attacker, mc.thePlayer, attackType);
                     }
                     break;
+                case CRITICAL:
                 case DIRECT_CRITICAL:
-                case DIRECT_HURT: // swing and hurt packet received consecutively
-                case DIRECT_SHARPNESS:
-                case HURT:  // target hurt
-                    // when an ability does damage to multiple players, this can fire multiple times
-                    // on different players for the same attacker
-                    onPlayerAttack((EntityPlayer) attacker, (EntityPlayer) target, attackType);
-                    break;
-                case CRITICAL:  // target has crit particles
                     if (attacker.ridingEntity == null) {
                         onPlayerAttack((EntityPlayer) attacker, (EntityPlayer) target, attackType);
                     }
                     break;
-                case SHARPNESS:  // target has sharp particles
+                case DIRECT_SHARPNESS:
+                case SHARPNESS:
                     final ItemStack heldItem = ((EntityPlayer) attacker).getHeldItem();
                     if (heldItem != null) {
                         final Item item = heldItem.getItem();
@@ -158,11 +189,15 @@ public class AttackDetector {
     public enum AttackType {
 
         CRITICAL,
+        DEATHSOUND,
+        DIRECTDEATHSOUND,
+        DIRECTHURTSOUND,
         DIRECT_CRITICAL,
-        DIRECT_HURT,
         DIRECT_SHARPNESS,
         DIRECT_VELOCITY,
-        HURT,
+        //DREADLORDHIT,
+        HURTSOUND,
+        //SHAMANHIT,
         SHARPNESS,
         VELOCITY
 
