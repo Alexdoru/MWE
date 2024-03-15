@@ -48,7 +48,7 @@ public class KillAuraACheck extends Check {
         if (player.isRiding()) return false;
         if (data.attackInfo.target == mc.thePlayer) return false;
 
-        final double maxReach = 3.5D;
+        final double maxReach = 3.15D;
         final Vec3 attackerEyePos = data.getPositionEyesServer(player);
         final Vec3 lookVect = data.getLookServer();
         final Vec3 lookEndPos = attackerEyePos.addVector(lookVect.xCoord * maxReach, lookVect.yCoord * maxReach, lookVect.zCoord * maxReach);
