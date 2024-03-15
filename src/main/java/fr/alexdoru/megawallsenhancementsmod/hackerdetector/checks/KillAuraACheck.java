@@ -44,7 +44,7 @@ public class KillAuraACheck extends Check {
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
 
-        if (!data.hasAttacked()) return false;
+        if (!data.hasAttackedTarget()) return false;
         if (player.isRiding()) return false;
         if (data.attackInfo.target == mc.thePlayer) return false;
 

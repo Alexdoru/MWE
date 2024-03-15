@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 public class AttackInfo {
 
     public EntityPlayer target;
-    public final String targetName;
+    public String targetName;
     public final AttackDetector.AttackType attackType;
     /**
      * Used to filter hurt events from an ability damaging multiple players at
@@ -15,9 +15,13 @@ public class AttackInfo {
     public boolean multiTarget = false;
 
     public AttackInfo(EntityPlayer target, AttackDetector.AttackType attackType) {
-        this.target = target;
-        this.targetName = target.getName();
+        this.setTarget(target);
         this.attackType = attackType;
+    }
+
+    public void setTarget(EntityPlayer target) {
+        this.target = target;
+        this.targetName = target == null ? null : target.getName();
     }
 
 }
