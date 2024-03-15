@@ -118,6 +118,11 @@ public class PlayerDataSamples {
         return this.attackInfo != null && !this.attackInfo.multiTarget;
     }
 
+    /** True if the player has attacked another player during this tick, and we found the target */
+    public boolean hasAttackedTarget() {
+        return this.attackInfo != null && !this.attackInfo.multiTarget && this.attackInfo.target != null;
+    }
+
     /** True if the player's position in the XZ plane is identical to the last tick */
     public boolean isNotMovingXZ() {
         return this.speedXList.get(0) == 0D && this.speedZList.get(0) == 0D;

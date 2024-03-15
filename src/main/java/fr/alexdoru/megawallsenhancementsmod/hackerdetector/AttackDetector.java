@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.S19PacketEntityStatusAccessor;
+import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.AttackInfo;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
@@ -80,22 +81,21 @@ public class AttackDetector {
                 return;
             }
         } else if (packet instanceof S29PacketSoundEffect) {
+            final S29PacketSoundEffect soundPacket = (S29PacketSoundEffect) packet;
             if (lastPacketWasSwing && System.currentTimeMillis() - lastSwingTime < 2) {
-                if ("mob.guardian.elder.hit".equals(((S29PacketSoundEffect) packet).getSoundName())) {
-                    // TODO dreadlord hit
-                } else if ("note.harp".equals(((S29PacketSoundEffect) packet).getSoundName())) {
-                    // TODO shaman hit
+                if ("mob.guardian.elder.hit".equals(soundPacket.getSoundName()) && soundPacket.getPitch() > 1f) {
+                    checkPlayerHit(attackerID, AttackType.DREADLORDHIT, new Vec3(soundPacket.getX(), soundPacket.getY(), soundPacket.getZ()));
+                } else if ("note.harp".equals(soundPacket.getSoundName())) {
+                    checkPlayerHit(attackerID, AttackType.SHAMANHIT, new Vec3(soundPacket.getX(), soundPacket.getY(), soundPacket.getZ()));
                 }
             } else if (lastPacketWasHurt && System.currentTimeMillis() - lastSwingTime < 2 && System.currentTimeMillis() - lastHurtTime < 2) {
-                if ("game.player.hurt".equals(((S29PacketSoundEffect) packet).getSoundName())) {
-                    final S29PacketSoundEffect soundPacket = (S29PacketSoundEffect) packet;
+                if ("game.player.hurt".equals(soundPacket.getSoundName())) {
                     checkPlayerAttack(
                             attackerID,
                             lastHurtID,
                             consecutiveSwingHurt ? AttackType.DIRECTHURTSOUND : AttackType.HURTSOUND,
                             new Vec3(soundPacket.getX(), soundPacket.getY(), soundPacket.getZ()));
-                } else if ("game.player.die".equals(((S29PacketSoundEffect) packet).getSoundName())) {
-                    final S29PacketSoundEffect soundPacket = (S29PacketSoundEffect) packet;
+                } else if ("game.player.die".equals(soundPacket.getSoundName())) {
                     checkPlayerAttack(
                             attackerID,
                             lastHurtID,
@@ -114,6 +114,34 @@ public class AttackDetector {
             final Entity attacker = mc.theWorld.getEntityByID(entityID);
             if (attacker instanceof EntityPlayerAccessor) {
                 ((EntityPlayerAccessor) attacker).getPlayerDataSamples().hasSwung = true;
+            }
+        });
+    }
+
+    private static void checkPlayerHit(int playerId, AttackType attackType, Vec3 soundPos) {
+        HackerDetector.addScheduledTask(() -> {
+            if (!ScoreboardTracker.isInMwGame && !ScoreboardTracker.isMWReplay) {
+                return;
+            }
+            final Entity player = mc.theWorld.getEntityByID(playerId);
+            if (!(player instanceof EntityPlayer)) {
+                return;
+            }
+            if (Math.abs(soundPos.xCoord - player.posX) > 1d || Math.abs(soundPos.yCoord - player.posY) > 1d || Math.abs(soundPos.zCoord - player.posZ) > 1d) {
+                return;
+            }
+            final MWClass mwClass = ((EntityPlayerAccessor) player).getMWClass();
+            switch (attackType) {
+                case DREADLORDHIT:
+                    if (mwClass == MWClass.DREADLORD) {
+                        onPlayerAttack((EntityPlayer) player, null, AttackType.DREADLORDHIT);
+                    }
+                    break;
+                case SHAMANHIT:
+                    if (mwClass == MWClass.SHAMAN) {
+                        onPlayerAttack((EntityPlayer) player, null, AttackType.SHAMANHIT);
+                    }
+                    break;
             }
         });
     }
@@ -181,6 +209,8 @@ public class AttackDetector {
         final PlayerDataSamples data = ((EntityPlayerAccessor) attacker).getPlayerDataSamples();
         if (data.attackInfo == null) {
             data.attackInfo = new AttackInfo(target, attackType);
+        } else if (data.attackInfo.target == null) {
+            data.attackInfo.setTarget(target);
         } else if (data.attackInfo.target != target) {
             data.attackInfo.multiTarget = true;
         }
@@ -195,9 +225,9 @@ public class AttackDetector {
         DIRECT_CRITICAL,
         DIRECT_SHARPNESS,
         DIRECT_VELOCITY,
-        //DREADLORDHIT,
+        DREADLORDHIT,
         HURTSOUND,
-        //SHAMANHIT,
+        SHAMANHIT,
         SHARPNESS,
         VELOCITY
 
