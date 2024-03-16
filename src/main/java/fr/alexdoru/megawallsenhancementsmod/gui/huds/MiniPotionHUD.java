@@ -27,7 +27,6 @@ public class MiniPotionHUD extends AbstractRenderer {
         int index = 0;
         int len = 0;
         for (final PotionEffect effect : potionEffects) {
-            if (effect.getDuration() > 999 * 20) continue;
             switch (effect.getPotionID()) {
                 case 1: // speed
                     strings[index] = formatDuration(effect);
@@ -87,6 +86,7 @@ public class MiniPotionHUD extends AbstractRenderer {
     }
 
     private String formatDuration(PotionEffect effect) {
+        if (effect.getDuration() > 999 * 20) return "\u221e";
         if (effect.getDuration() >= 60) {
             return String.valueOf(effect.getDuration() / 20);
         } else if (effect.getDuration() >= 0) {
