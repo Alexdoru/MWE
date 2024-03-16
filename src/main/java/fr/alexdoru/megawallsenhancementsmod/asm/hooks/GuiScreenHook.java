@@ -2,6 +2,8 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
 import fr.alexdoru.megawallsenhancementsmod.utils.ClipboardUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiChat;
 
 @SuppressWarnings("unused")
 public class GuiScreenHook {
@@ -20,6 +22,12 @@ public class GuiScreenHook {
         if (MW_GAME_END_STATS.equals(command)) {
             MegaWallsEndGameStats.printGameStatsMessage();
             return true;
+        }
+        if (command != null && Minecraft.getMinecraft().currentScreen instanceof GuiChat) {
+            final String lowerCase = command.toLowerCase();
+            if (lowerCase.startsWith("/report ") || lowerCase.startsWith("/wdr ")) {
+                Minecraft.getMinecraft().ingameGUI.getChatGUI().addToSentMessages(command);
+            }
         }
         return false;
     }
