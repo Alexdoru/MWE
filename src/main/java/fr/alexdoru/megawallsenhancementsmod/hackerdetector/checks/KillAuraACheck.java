@@ -124,7 +124,7 @@ public class KillAuraACheck extends Check {
             if (!hits[i - 1]) continue;
             final int iterMax = (int) (hitDistances[i - 1] / STEP_SIZE);
             int timesInsidePlayer = 0;
-            if (!nearbyPlayers.isEmpty()) {
+            if (!nearbyPlayers.isEmpty() && nearbyPlayers.size() < 15) {
                 for (int j = 0; j < iterMax + 1; j++) {
                     final double dx = attackerEyePos.xCoord + j * STEP_SIZE * lookVect.xCoord;
                     final double dy = attackerEyePos.yCoord + j * STEP_SIZE * lookVect.yCoord;
@@ -150,9 +150,11 @@ public class KillAuraACheck extends Check {
         }
 
         if (b + p > 0) {
-            data.killAuraAVL.add(Math.min(10, Math.min(10, b) + Math.min(8, p)) * 25);
+            final int vlb = Math.min(10, b);
+            final int vlp = Math.min(8, p);
+            data.killAuraAVL.add(Math.min(10, vlb + (nearbyPlayers.size() > 8 ? vlp / 2 : vlp)) * 25);
             if (ConfigHandler.debugLogging) {
-                final String msg = " | " + data.attackInfo.attackType.name() + " | target : " + data.attackInfo.targetName + " | b " + b + " | p " + p + " | reach " + String.format("%.2f", reach);
+                final String msg = " | " + data.attackInfo.attackType.name() + " | target : " + data.attackInfo.targetName + " | b " + b + " | p " + p + " | reach " + String.format("%.2f", reach) + " | players " + nearbyPlayers.size();
                 this.log(player, data, data.killAuraAVL, msg);
                 //this.fail(player, " b" + b + " p" + p + " vl" + data.killAuraAVL.getViolationLevel());
             }
