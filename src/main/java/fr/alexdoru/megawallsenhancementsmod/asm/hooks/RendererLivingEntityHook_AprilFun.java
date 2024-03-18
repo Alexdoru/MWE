@@ -8,7 +8,10 @@ import net.minecraft.entity.monster.EntityZombie;
 @SuppressWarnings("unused")
 public class RendererLivingEntityHook_AprilFun {
 
+    public static boolean active = true;
+
     public static void doFunny(EntityLivingBase entity) {
+        if (!active) return;
         GlStateManager.translate(0.0F, getVisibleHeight(entity) + 0.1F, 0.0F);
         GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
     }
