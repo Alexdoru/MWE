@@ -18,7 +18,7 @@ public class ReportQueue {
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     public int standingStillCounter;
-    public int standingStillLimit = 45;
+    public int standingStillLimit = 55;
     private int movingCounter;
     public final List<String> queueList = new ArrayList<>();
     private final Set<String> playersReportedThisGame = new HashSet<>();
