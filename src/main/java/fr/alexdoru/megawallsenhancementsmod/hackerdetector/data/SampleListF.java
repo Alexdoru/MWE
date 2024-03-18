@@ -47,6 +47,10 @@ public class SampleListF {
         return this.size;
     }
 
+    public int capacity() {
+        return this.capacity;
+    }
+
     public boolean hasCollected() {
         return size == capacity;
     }

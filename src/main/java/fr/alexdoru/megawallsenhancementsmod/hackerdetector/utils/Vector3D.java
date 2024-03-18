@@ -11,12 +11,6 @@ public class Vector3D {
     public final double y;
     public final double z;
 
-    public Vector3D() {
-        this.x = 0D;
-        this.y = 0D;
-        this.z = 0D;
-    }
-
     public Vector3D(double x, double y, double z) {
         this.x = x;
         this.y = y;
@@ -55,10 +49,6 @@ public class Vector3D {
 
     public Vector3D addVector(double x1, double y1, double z1) {
         return new Vector3D(this.x + x1, this.y + y1, this.z + z1);
-    }
-
-    public boolean isZero() {
-        return this.x == 0D && this.y == 0D && this.z == 0D;
     }
 
     /**

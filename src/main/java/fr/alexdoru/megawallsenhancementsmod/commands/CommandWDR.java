@@ -47,7 +47,10 @@ public class CommandWDR extends MyAbstractCommand {
                 if (args[i].equalsIgnoreCase("autoblock") || args[i].equalsIgnoreCase("multiaura")) {
                     message.append(" killaura");
                 } else {
-                    if (!args[i].equalsIgnoreCase("noslowdown") && !args[i].equalsIgnoreCase("keepsprint") && !args[i].equalsIgnoreCase("fastbreak")) {
+                    if (!args[i].equalsIgnoreCase("noslowdown")
+                            && !args[i].equalsIgnoreCase("keepsprint")
+                            && !args[i].equalsIgnoreCase("fastbreak")
+                            && !args[i].equalsIgnoreCase("scaffold")) {
                         message.append(" ").append(args[i]);
                     }
                 }

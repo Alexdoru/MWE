@@ -1,8 +1,8 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.data;
 
-public class SampleListD {
+public class SampleListL {
 
-    private final double[] data;
+    private final long[] data;
     /** The maximum size */
     private final int capacity;
     /** The current size of the list */
@@ -10,19 +10,19 @@ public class SampleListD {
     /** The array index of the last element inserted */
     private int latestIndex;
 
-    public SampleListD(int capacity) {
+    public SampleListL(int capacity) {
         if (capacity < 2) {
             throw new IllegalArgumentException("Size must be at least 2");
         }
-        this.data = new double[capacity];
+        this.data = new long[capacity];
         this.capacity = capacity;
         this.size = 0;
         this.latestIndex = -1;
     }
 
-    public void add(double d) {
+    public void add(long e) {
         this.latestIndex = (this.latestIndex + 1) % this.capacity;
-        this.data[this.latestIndex] = d;
+        this.data[this.latestIndex] = e;
         if (this.size < this.capacity) this.size++;
     }
 
@@ -30,7 +30,7 @@ public class SampleListD {
      * get(0) will return the latest element insert,
      * get(capacity - 1) will return the oldest element
      */
-    public double get(int index) {
+    public long get(int index) {
         if (index < 0 || index > this.size) {
             throw new ArrayIndexOutOfBoundsException();
         }
@@ -55,21 +55,21 @@ public class SampleListD {
         return size == capacity;
     }
 
-    public double sum() {
-        double s = 0D;
+    public long sum() {
+        long s = 0;
         for (int i = 0; i < this.size; i++) {
             s += this.data[i];
         }
         return s;
     }
 
-    public double average() {
-        return this.sum() / this.size;
+    public float average() {
+        return this.sum() / (float) this.size;
     }
 
     public boolean isSameValues() {
         if (this.size < 2) return false;
-        final double v = this.get(0);
+        final long v = this.get(0);
         for (int i = 1; i < this.size; i++) {
             if (v != this.get(i)) return false;
         }
@@ -84,7 +84,7 @@ public class SampleListD {
         final StringBuilder b = new StringBuilder();
         b.append('[');
         for (int i = 0; ; i++) {
-            b.append(String.format("%.2f", this.get(i)));
+            b.append(this.get(i));
             if (i == this.size - 1) {
                 return b.append(']').toString();
             }
@@ -96,7 +96,7 @@ public class SampleListD {
     public boolean equals(Object other) {
         if (this == other) return true;
         if (other == null || getClass() != other.getClass()) return false;
-        final SampleListD list = (SampleListD) other;
+        final SampleListL list = (SampleListL) other;
         if (size != list.size) return false;
         if (size == 0) return true;
         for (int i = 0; ; i++) {
