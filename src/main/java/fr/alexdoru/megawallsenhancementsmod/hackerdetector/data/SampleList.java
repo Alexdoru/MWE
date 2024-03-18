@@ -53,6 +53,10 @@ public class SampleList<T> {
         return this.size;
     }
 
+    public int capacity() {
+        return this.capacity;
+    }
+
     public boolean hasCollected() {
         return size == capacity;
     }

@@ -40,16 +40,16 @@ public class PlayerDataSamples {
 
     /* ----- Samples of rotations/positions received from the server ----- */
     private int serverUpdates;
-    public final SampleListI serverUpdatesList = new SampleListI(10);
-    public final SampleListD serverPosXList = new SampleListD(10);
-    public final SampleListD serverPosYList = new SampleListD(10);
-    public final SampleListD serverPosZList = new SampleListD(10);
+    public final SampleListI serverUpdatesList = new SampleListI(5);
+    public final SampleListD serverPosXList = new SampleListD(5);
+    public final SampleListD serverPosYList = new SampleListD(5);
+    public final SampleListD serverPosZList = new SampleListD(5);
     /** Yaw of the player's body [-180, 180] */
-    public final SampleListF serverYawList = new SampleListF(10);
+    public final SampleListF serverYawList = new SampleListF(5);
     /** Pitch of the player's head [-90, 90] */
-    public final SampleListF serverPitchList = new SampleListF(10);
+    public final SampleListF serverPitchList = new SampleListF(5);
     /** Yaw of the player's head [-180, 180], directly equals to player.rotationYawHead */
-    public final SampleListF serverYawHeadList = new SampleListF(10);
+    public final SampleListF serverYawHeadList = new SampleListF(5);
     /* ----- Server samples end ----- */
 
     /** Last time the player broke a block */
@@ -61,6 +61,7 @@ public class PlayerDataSamples {
     public final ViolationLevelTracker killAuraAVL = KillAuraACheck.newViolationTracker();
     public final ViolationLevelTracker killAuraBVL = KillAuraBCheck.newViolationTracker();
     public final ViolationLevelTracker noSlowdownVL = NoSlowdownCheck.newViolationTracker();
+    public final ViolationLevelTracker scaffoldVL = ScaffoldCheck.newViolationTracker();
 
     public void onTickStart() {
         this.checkedThisTick = false;
@@ -132,6 +133,12 @@ public class PlayerDataSamples {
         final double vx = this.speedXList.get(0);
         final double vz = this.speedZList.get(0);
         return Math.sqrt(vx * vx + vz * vz);
+    }
+
+    public double getSpeedXZSq() {
+        final double vx = this.speedXList.get(0);
+        final double vz = this.speedZList.get(0);
+        return vx * vx + vz * vz;
     }
 
     public Vec3 getPositionEyesServer(EntityPlayer player) {

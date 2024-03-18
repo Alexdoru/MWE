@@ -41,7 +41,7 @@ public class NoSlowdownCheck extends Check {
             } else {
                 invalidSprint = data.sprintTime > 5;
             }
-            if (invalidSprint && data.getSpeedXZ() >= 2.5D) {
+            if (invalidSprint && data.getSpeedXZSq() >= 6.25D) {
                 data.noSlowdownVL.add(2);
                 if (ConfigHandler.debugLogging) {
                     this.log(player, data, data.noSlowdownVL, null);

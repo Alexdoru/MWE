@@ -29,10 +29,7 @@ public class WDR implements Comparable<WDR> {
 
     public boolean shouldPutRedIcon() {
         for (final String s : this.hacks) {
-            if (s.startsWith("bhop")
-                    || s.startsWith("autoblock")
-                    || s.startsWith("fastbreak")
-                    || s.startsWith("noslowdown")) {
+            if (isRedHack(s)) {
                 return true;
             }
         }
@@ -59,16 +56,21 @@ public class WDR implements Comparable<WDR> {
     public IChatComponent getFormattedHacks() {
         final IChatComponent allCheats = new ChatComponentText("");
         for (final String hack : this.hacks) {
-            if (hack.startsWith("bhop")
-                    || hack.startsWith("autoblock")
-                    || hack.startsWith("fastbreak")
-                    || hack.startsWith("noslowdown")) {
+            if (isRedHack(hack)) {
                 allCheats.appendText(" " + EnumChatFormatting.DARK_RED + hack);
             } else {
                 allCheats.appendText(" " + EnumChatFormatting.GOLD + hack);
             }
         }
         return allCheats;
+    }
+
+    private static boolean isRedHack(String s) {
+        return s.startsWith("bhop") ||
+                s.startsWith("autoblock") ||
+                s.startsWith("fastbreak") ||
+                s.startsWith("noslowdown") ||
+                s.startsWith("scaffold");
     }
 
 }

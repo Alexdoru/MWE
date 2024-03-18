@@ -55,7 +55,8 @@ public class CommandReport extends MyAbstractCommand {
             "noslowdown",
             "fastbreak",
             "speedmine",
-            "cheating"
+            "cheating",
+            "scaffold"
     };
     public static final List<String> cheatsList = Arrays.asList(cheatsArray);
 
@@ -86,7 +87,10 @@ public class CommandReport extends MyAbstractCommand {
         for (int i = 1; i < args.length; i++) {
             if (args[i].equalsIgnoreCase("autoblock") || args[i].equalsIgnoreCase("multiaura")) {
                 msg.append(" killaura");
-            } else if (args[i].equalsIgnoreCase("noslowdown") || args[i].equalsIgnoreCase("keepsprint") || args[i].equalsIgnoreCase("fastbreak")) {
+            } else if (args[i].equalsIgnoreCase("noslowdown")
+                    || args[i].equalsIgnoreCase("keepsprint")
+                    || args[i].equalsIgnoreCase("fastbreak")
+                    || args[i].equalsIgnoreCase("scaffold")) {
                 msg.append(" cheating");
             } else {
                 msg.append(" ").append(args[i]);

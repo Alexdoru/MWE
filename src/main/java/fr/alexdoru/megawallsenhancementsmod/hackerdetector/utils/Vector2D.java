@@ -7,24 +7,9 @@ public class Vector2D {
     public final double u;
     public final double v;
 
-    public Vector2D() {
-        this.u = 0D;
-        this.v = 0D;
-    }
-
     public Vector2D(double u, double v) {
-        if (u == -0.0D) {
-            u = 0.0D;
-        }
-        if (v == -0.0D) {
-            v = 0.0D;
-        }
         this.u = u;
         this.v = v;
-    }
-
-    public boolean isZero() {
-        return this.u == 0D && this.v == 0D;
     }
 
     /**
@@ -35,20 +20,41 @@ public class Vector2D {
     }
 
     /**
-     * In degres
+     * Returns the absolute angle between this vector and the axis OU
      */
-    public double getAngleWithOrigin() {
-        final double lengthVector = this.norm();
-        if (lengthVector < 1.0000000116860974E-7D) {
+    public double getAngle() {
+        final double norm = this.norm();
+        if (norm < 1.0000000116860974E-7D) {
             return 0D;
         }
-        final double cos = this.u / lengthVector;
+        final double cos = this.u / norm;
         if (cos > 1) {
             return 0D;
         } else if (cos < -1) {
             return 180D;
         }
         return Math.toDegrees(Math.acos(cos));
+    }
+
+    /**
+     * Returns the oriented angle between this vector and the axis OU
+     */
+    public double getOrientedAngle() {
+        final double norm = this.norm();
+        if (norm < 1.0000000116860974E-7D) {
+            return 0D;
+        }
+        final double cos = this.u / norm;
+        if (cos > 1) {
+            return 0D;
+        } else if (cos < -1) {
+            return 180D;
+        }
+        if (this.v >= 0d) {
+            return Math.toDegrees(Math.acos(cos));
+        } else {
+            return -Math.toDegrees(Math.acos(cos));
+        }
     }
 
     /**
