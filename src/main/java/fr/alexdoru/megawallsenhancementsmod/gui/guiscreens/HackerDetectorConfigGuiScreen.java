@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.gui.elements.OptionGuiButton;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.SimpleGuiButton;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.TextElement;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.PendingReportHUD;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import net.minecraft.client.gui.GuiScreen;
 
 import static net.minecraft.util.EnumChatFormatting.*;
@@ -42,7 +43,12 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(4),
                 "Report Flagged players",
-                (b) -> ConfigHandler.autoreportFlaggedPlayers = b,
+                (b) -> {
+                    ConfigHandler.autoreportFlaggedPlayers = b;
+                    if (!ConfigHandler.autoreportFlaggedPlayers) {
+                        ReportQueue.INSTANCE.queueList.clear();
+                    }
+                },
                 () -> ConfigHandler.autoreportFlaggedPlayers,
                 GRAY + "Sends a report automatically to Hypixel when it flags a cheater",
                 YELLOW + "Only works in Mega Walls, sends one report per game per player"));
