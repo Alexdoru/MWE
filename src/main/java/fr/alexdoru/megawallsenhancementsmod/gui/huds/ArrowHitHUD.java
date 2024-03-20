@@ -140,7 +140,7 @@ public class ArrowHitHUD extends AbstractRenderer {
             return false;
         }
         final ChatLine chatLine = chatLines.get(0);
-        final String chatMessage = EnumChatFormatting.getTextWithoutFormattingCodes(chatLine.getChatComponent().getUnformattedText());
+        final String chatMessage = EnumChatFormatting.getTextWithoutFormattingCodes(chatLine.getChatComponent().getUnformattedText()).replace("^\\[[RBGY]\\] ", "");
         final int updatedCounter = chatLine.getUpdatedCounter();
         final int currentUpdateCounter = mc.ingameGUI.getUpdateCounter();
         final int counterDiff = Math.abs(currentUpdateCounter - updatedCounter);
