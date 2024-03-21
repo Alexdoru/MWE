@@ -4,6 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.TickingBlockMap;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -15,6 +16,12 @@ import net.minecraft.util.Vec3;
 import java.util.List;
 
 public class KillAuraACheck extends Check {
+
+    private final TickingBlockMap recentPlacedBlocks;
+
+    public KillAuraACheck(TickingBlockMap map) {
+        this.recentPlacedBlocks = map;
+    }
 
     @Override
     public String getCheatName() {
@@ -97,9 +104,10 @@ public class KillAuraACheck extends Check {
             final int ypos = MathHelper.floor_double(dy);
             final int zpos = MathHelper.floor_double(dz);
             if (xpos != blockXpos || ypos != blockYpos || zpos != blockZpos) {
-                final IBlockState iblockstate = mc.theWorld.getBlockState(new BlockPos(xpos, ypos, zpos));
+                final BlockPos pos = new BlockPos(xpos, ypos, zpos);
+                final IBlockState iblockstate = mc.theWorld.getBlockState(pos);
                 final Block block = iblockstate.getBlock();
-                canHitThroughBlock = !(block.canCollideCheck(iblockstate, false) && block.isFullBlock());
+                canHitThroughBlock = !block.isFullBlock() || !block.canCollideCheck(iblockstate, false) || recentPlacedBlocks.contains(pos);
                 blockXpos = xpos;
                 blockYpos = ypos;
                 blockZpos = zpos;
@@ -150,9 +158,9 @@ public class KillAuraACheck extends Check {
         }
 
         if (b + p > 0) {
-            final int vlb = Math.min(10, b);
+            final int vlb = Math.min(15, b);
             final int vlp = Math.min(8, p);
-            data.killAuraAVL.add(Math.min(10, vlb + (nearbyPlayers.size() > 8 ? vlp / 2 : vlp)) * 25);
+            data.killAuraAVL.add(Math.min(15, vlb + (nearbyPlayers.size() > 8 ? vlp / 2 : vlp)) * 25);
             if (ConfigHandler.debugLogging) {
                 final String msg = " | " + data.attackInfo.attackType.name() + " | target : " + data.attackInfo.targetName + " | b " + b + " | p " + p + " | reach " + String.format("%.2f", reach) + " | players " + nearbyPlayers.size();
                 this.log(player, data, data.killAuraAVL, msg);

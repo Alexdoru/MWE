@@ -3,7 +3,6 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.FastbreakCheck;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.BrokenBlock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -53,7 +52,7 @@ public class RenderGlobalHook {
             final String tool = state.getBlock().getHarvestTool(state);
             // for trapped chests the tool is null
             if ("pickaxe".equals(tool) || "axe".equals(tool) || tool == null) {
-                HackerDetector.INSTANCE.brokenBlocksList.add(new BrokenBlock(state.getBlock(), blockPos, System.currentTimeMillis(), tool));
+                HackerDetector.addBrokenBlock(state.getBlock(), blockPos, tool);
             }
         }
     }
