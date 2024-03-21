@@ -37,7 +37,7 @@ public class KillAuraBCheck extends Check {
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
         if (player.isSwingInProgress) {
-            if (data.useItemTime > 6 && data.usedItemIsConsumable && data.lastEatTime > 32) {
+            if (data.useItemTime > 6 && data.timeEating < 33 && data.usedItemIsConsumable && data.lastEatTime > 32) {
                 if (ConfigHandler.debugLogging && data.killAuraBVL.getViolationLevel() > 3) {
                     this.log(player, data, data.killAuraBVL, null);
                 }
