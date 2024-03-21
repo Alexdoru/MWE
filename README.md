@@ -47,6 +47,7 @@ Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, th
 - **Arrow hit HUD** - HUD that displays the health of players when shooting them with a bow
 - **Squad HUD** - A mini tablist that will display only members of your squad
 - **Speed HUD** - HUD displaying your speed
+- **Mini Potion HUD** - just a colored number with remaining duration of potion buffs
 - **Chat heads** - Display heads of players in front of chat messages (disabled with Feather client)
 - **Cancel night vision** - Remove the blueish tint from night vision
 - **Clear view** - Stop rendering particles that are too close (75cm) to the screen for a better visibility
@@ -89,6 +90,7 @@ Allows you to customize the look of the f3+b hitboxes.
 
 ### Mega Walls features
 
+- **Base Location HUD** - shows in which base you are located
 - **Creeper primed TNT HUD** - Displays the cooldown of the primed tnt when playing Creeper
 - **Energy display HUD** - Displays the amount of energy you have
 - **Kill cooldown HUD** - Displays the cooldown on the `/kill` command
@@ -121,7 +123,9 @@ Detects players using certain cheats and warns you about those players. It can a
 - **Autoblock check**
 - **Fastbreak check**
 - **Keepsprint check**
+- **Killaura check** - checks attacking through blocks and players, check attacking while eating/drinking
 - **Noslowdown check**
+- **Scaffold check**
 
 ### NoCheaters:
 
