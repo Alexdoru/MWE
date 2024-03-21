@@ -15,10 +15,10 @@ public class BrokenBlock {
     public final String tool;
     public List<EntityPlayer> playerList = null;
 
-    public BrokenBlock(Block block, BlockPos blockPos, long breakTime, String tool) {
+    public BrokenBlock(Block block, BlockPos blockPos, String tool) {
         this.block = block;
         this.blockPos = blockPos;
-        this.breakTime = breakTime;
+        this.breakTime = System.currentTimeMillis();
         this.tool = tool;
     }
 

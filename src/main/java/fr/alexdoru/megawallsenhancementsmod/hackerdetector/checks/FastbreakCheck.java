@@ -3,7 +3,6 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.BrokenBlock;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
@@ -18,7 +17,15 @@ import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 
+import java.util.List;
+
 public class FastbreakCheck extends Check {
+
+    private final List<BrokenBlock> brokenBlocksList;
+
+    public FastbreakCheck(List<BrokenBlock> list) {
+        this.brokenBlocksList = list;
+    }
 
     @Override
     public String getCheatName() {
@@ -65,11 +72,11 @@ public class FastbreakCheck extends Check {
         checkPlayerBreakingBlocks(player, null);
     }
 
-    private static void checkPlayerBreakingBlocks(EntityPlayer player, PlayerDataSamples data) {
-        if (isCheckActive() && player.isSwingInProgress && !HackerDetector.INSTANCE.brokenBlocksList.isEmpty()) {
+    private void checkPlayerBreakingBlocks(EntityPlayer player, PlayerDataSamples data) {
+        if (isCheckActive() && player.isSwingInProgress && !this.brokenBlocksList.isEmpty()) {
             final ItemStack stack = player.getHeldItem();
             if (stack == null) return;
-            for (final BrokenBlock brokenBlock : HackerDetector.INSTANCE.brokenBlocksList) {
+            for (final BrokenBlock brokenBlock : this.brokenBlocksList) {
                 if (isAppropriateTool(stack, brokenBlock) && isPlayerLookingAtBlock(player, data, brokenBlock.blockPos)) {
                     brokenBlock.addPlayer(player);
                     // return after one block, otherwise it can false flag when a golem
@@ -97,7 +104,7 @@ public class FastbreakCheck extends Check {
      */
     public void onTickEnd() {
         if (isCheckActive() && mc.theWorld != null && mc.thePlayer != null && mc.theWorld.isRemote) {
-            for (final BrokenBlock brokenBlock : HackerDetector.INSTANCE.brokenBlocksList) {
+            for (final BrokenBlock brokenBlock : this.brokenBlocksList) {
                 if (brokenBlock.playerList == null) continue;
                 long oldestTime = System.currentTimeMillis();
                 EntityPlayer playerBreaking = null;
@@ -133,7 +140,6 @@ public class FastbreakCheck extends Check {
                 }
             }
         }
-        HackerDetector.INSTANCE.brokenBlocksList.clear();
     }
 
     @Override

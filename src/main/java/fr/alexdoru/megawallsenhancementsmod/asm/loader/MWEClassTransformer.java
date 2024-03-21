@@ -35,6 +35,7 @@ public class MWEClassTransformer implements IClassTransformer {
      * Register the MWETransformer(s) here
      */
     public MWEClassTransformer() {
+        registerTransformer(new C08PacketPlayerBlockPlacementTransformer());
         registerTransformer(new ChatComponentStyleTransformer_ChatHeads());
         registerTransformer(new ChatComponentTextTransformer_ChatHeads());
         registerTransformer(new CommandHandlerTransformer_CaseCommand());
@@ -74,6 +75,7 @@ public class MWEClassTransformer implements IClassTransformer {
         registerTransformer(new MinecraftTransformer_DropProtection());
         registerTransformer(new MinecraftTransformer_WarpProtection());
         //registerTransformer(new NetHandlerPlayClientTransformer_BlockBreakAnimListener());
+        registerTransformer(new NetHandlerPlayClientTransformer_BlockChangeListener());
         //registerTransformer(new NetHandlerPlayClientTransformer_EquipmentListener());
         registerTransformer(new NetHandlerPlayClientTransformer_PlayerMapTracker());
         registerTransformer(new NetHandlerPlayClientTransformer_TeamsListener());
