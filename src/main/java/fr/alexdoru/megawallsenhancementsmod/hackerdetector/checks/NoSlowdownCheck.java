@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelT
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 
 public class NoSlowdownCheck extends Check {
 
@@ -41,7 +42,7 @@ public class NoSlowdownCheck extends Check {
             } else {
                 invalidSprint = data.sprintTime > 5;
             }
-            if (invalidSprint && data.getSpeedXZSq() >= 6.25D) {
+            if (invalidSprint && (data.getSpeedXZSq() >= 6.25D || player.getHeldItem().getItem() instanceof ItemSword)) {
                 data.noSlowdownVL.add(2);
                 if (ConfigHandler.debugLogging) {
                     this.log(player, data, data.noSlowdownVL, null);

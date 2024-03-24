@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelT
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 
 public class KeepSprintACheck extends Check {
 
@@ -44,6 +45,7 @@ public class KeepSprintACheck extends Check {
                 if (data.useItemTime > 32) return false;
                 invalidSprint = data.sprintTime > 32 || data.sprintTime > data.useItemTime + 3 || data.lastEatTime > 32 && data.sprintTime > 5;
             } else {
+                if (player.getHeldItem().getItem() instanceof ItemSword) return false;
                 invalidSprint = data.sprintTime > 5;
             }
             if (invalidSprint && data.getSpeedXZSq() < 6.25D) {
