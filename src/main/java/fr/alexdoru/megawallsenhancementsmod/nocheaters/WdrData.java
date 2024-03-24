@@ -146,6 +146,7 @@ public class WdrData {
                 oldDataFormat = true;
             }
         } catch (Exception ignored) {}
+        if (timestamp == 0L) return;
         final long datenow = new Date().getTime();
         if (ConfigHandler.deleteOldReports && datenow > timestamp + ConfigHandler.timeDeleteReport * 24f * 3600f * 1000f) {
             return;
@@ -154,21 +155,24 @@ public class WdrData {
         // remove reports for players that are only ignored
         // used for backwards compat
         final String IGNORED = "ignored";
-        if (hacks.remove(IGNORED) && hacks.isEmpty()) {
+        hacks.remove(IGNORED);
+        if (hacks.isEmpty()) {
             return;
         }
         final String mapKey = split[0];
-        // mapkey could be a playername for nicked players
-        // a uuid without ----
-        // a uuid with ----
+        if (mapKey.isEmpty()) return;
+        // mapkey could be :
+        // - a playername for nicked players
+        // - a uuid without ----
+        // - a uuid with ----
         final UUID uuid = UUIDUtil.fromString(mapKey);
         if (uuid == null && mapKey.length() < 17) {
-            final long TIME_TRANSFORM_NICKED_REPORT = 86400000L; // 24hours
+            final long TIME_TRANSFORM_NICKED_REPORT = 86400000L; // 24 hours
             if (datenow > timestamp + TIME_TRANSFORM_NICKED_REPORT) {
                 return;
             }
             nickMap.put(mapKey, new WDR(timestamp, hacks));
-        } else {
+        } else if (uuid != null) {
             uuidMap.put(uuid, new WDR(timestamp, hacks));
         }
     }
