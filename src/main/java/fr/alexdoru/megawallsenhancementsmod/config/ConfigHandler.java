@@ -18,7 +18,6 @@ public class ConfigHandler extends AbstractConfig {
             ConfigHandler.autoreportFlaggedPlayers = true;
             ConfigHandler.showReportHUD = true;
             ConfigHandler.showReportHUDonlyInChat = false;
-            ConfigHandler.reportHUDPosition.resetToDefault();
             ConfigHandler.modVersion = MegaWallsEnhancementsMod.version;
             ConfigHandler.saveConfig();
         }
