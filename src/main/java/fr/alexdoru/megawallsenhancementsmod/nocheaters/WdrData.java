@@ -106,16 +106,16 @@ public class WdrData {
 
     private static List<String> loadReportsFromJSONFile() {
         final List<String> reportLines = new ArrayList<>();
-        if (!wdrJsonFile.exists()) {
-            return reportLines;
+        if (wdrJsonFile.exists()) {
+            try {
+                final Gson gson = new Gson();
+                final List<String> list = gson.fromJson(new FileReader(wdrJsonFile), new TypeToken<List<String>>() {}.getType());
+                if (list != null) reportLines.addAll(list);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        try {
-            final Gson gson = new Gson();
-            return gson.fromJson(new FileReader(wdrJsonFile), new TypeToken<ArrayList<String>>() {}.getType());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return reportLines;
-        }
+        return reportLines;
     }
 
     private static List<String> loadReportsFromLegacyFile() {
