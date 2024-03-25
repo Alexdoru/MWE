@@ -118,6 +118,11 @@ public class CommandNocheaters extends MyAbstractCommand {
             nbreport++;
         }
 
+        if (sortedMap.isEmpty()) {
+            ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "You have no one reported!");
+            return;
+        }
+
         if (warning) {
             ChatUtil.addChatMessage(EnumChatFormatting.RED + "No reports to display, " + nbpage + " page" + (nbpage == 1 ? "" : "s") + " available.");
             return;
