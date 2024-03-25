@@ -43,6 +43,7 @@ public class ScaffoldCheck extends Check {
                 if (angleDiff > 165d && speedXZSq < 100d) {
                     final double speedY = data.speedYList.get(0);
                     final double avgAccelY = avgAccel(data.serverPosYList);
+                    if (isAlmostZero(avgAccelY)) return false; // fix false flag in stairs
                     if (speedY < 15d && speedY > 4d && avgAccelY > -25d) {
                         if (ConfigHandler.debugLogging) {
                             final String msg = " | pitch " + String.format("%.2f", data.serverPitchList.get(0)) + " | speedXZ " + String.format("%.2f", data.getSpeedXZ()) + " | angleDiff " + String.format("%.2f", angleDiff) + " | speedY " + String.format("%.2f", speedY) + " | avgAccelY " + String.format("%.2f", avgAccelY);
@@ -72,6 +73,10 @@ public class ScaffoldCheck extends Check {
 
     private static double avgAccel(SampleListD list) {
         return 50d * (list.get(3) - list.get(2) - list.get(1) + list.get(0));
+    }
+
+    private static boolean isAlmostZero(double d) {
+        return Math.abs(d) < 0.001d;
     }
 
 }
