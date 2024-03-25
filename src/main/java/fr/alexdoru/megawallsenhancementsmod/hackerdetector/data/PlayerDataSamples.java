@@ -56,14 +56,14 @@ public class PlayerDataSamples {
 
     /** Last time the player broke a block */
     public long lastBreakBlockTime = System.currentTimeMillis();
-    public final ViolationLevelTracker autoblockAVL = AutoblockCheck.newViolationTracker();
-    public final ViolationLevelTracker fastbreakVL = FastbreakCheck.newViolationTracker();
-    public final ViolationLevelTracker keepsprintAVL = KeepSprintACheck.newViolationTracker();
-    public final ViolationLevelTracker keepSprintBVL = KeepSprintBCheck.newViolationTracker();
-    public final ViolationLevelTracker killAuraAVL = KillAuraACheck.newViolationTracker();
-    public final ViolationLevelTracker killAuraBVL = KillAuraBCheck.newViolationTracker();
-    public final ViolationLevelTracker noSlowdownVL = NoSlowdownCheck.newViolationTracker();
-    public final ViolationLevelTracker scaffoldVL = ScaffoldCheck.newViolationTracker();
+    public final ViolationLevelTracker autoblockAVL = AutoblockCheck.newVL();
+    public final ViolationLevelTracker fastbreakVL = FastbreakCheck.newVL();
+    public final ViolationLevelTracker keepsprintAVL = KeepSprintACheck.newVL();
+    public final ViolationLevelTracker keepSprintBVL = KeepSprintBCheck.newVL();
+    public final ViolationLevelTracker killAuraAVL = KillAuraACheck.newVL();
+    public final ViolationLevelTracker killAuraBVL = KillAuraBCheck.newVL();
+    public final ViolationLevelTracker noSlowdownVL = NoSlowdownCheck.newVL();
+    public final ViolationLevelTracker scaffoldVL = ScaffoldCheck.newVL();
 
     public void onTickStart() {
         this.checkedThisTick = false;

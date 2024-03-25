@@ -155,7 +155,7 @@ public class FastbreakCheck extends Check {
         super.log(player, data, vl, extramsg);
     }
 
-    public static ViolationLevelTracker newViolationTracker() {
+    public static ViolationLevelTracker newVL() {
         return new ViolationLevelTracker(40);
     }
 

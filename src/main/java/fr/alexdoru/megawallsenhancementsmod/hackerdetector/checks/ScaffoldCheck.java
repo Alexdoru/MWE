@@ -63,7 +63,7 @@ public class ScaffoldCheck extends Check {
         return false;
     }
 
-    public static ViolationLevelTracker newViolationTracker() {
+    public static ViolationLevelTracker newVL() {
         return new ViolationLevelTracker(2, 1, 24);
     }
 

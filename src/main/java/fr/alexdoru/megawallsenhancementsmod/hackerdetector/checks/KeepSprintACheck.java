@@ -74,7 +74,7 @@ public class KeepSprintACheck extends Check {
         );
     }
 
-    public static ViolationLevelTracker newViolationTracker() {
+    public static ViolationLevelTracker newVL() {
         return new ViolationLevelTracker(32);
     }
 
