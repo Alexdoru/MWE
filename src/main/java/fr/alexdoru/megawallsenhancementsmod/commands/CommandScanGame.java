@@ -59,6 +59,7 @@ public class CommandScanGame extends MyAbstractCommand {
         int i = 0;
         final boolean isMythicHour = ScoreboardUtils.isMegaWallsMythicGame();
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
+            if (mc.thePlayer != null && netInfo.getGameProfile().getId().equals(mc.thePlayer.getUniqueID())) continue;
             if (scanPlayer(netInfo, isMythicHour)) i++;
         }
         ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " players...");
