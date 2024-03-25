@@ -49,7 +49,7 @@ public class KeepSprintBCheck extends Check {
         return false;
     }
 
-    public static ViolationLevelTracker newViolationTracker() {
+    public static ViolationLevelTracker newVL() {
         return new ViolationLevelTracker(50);
     }
 

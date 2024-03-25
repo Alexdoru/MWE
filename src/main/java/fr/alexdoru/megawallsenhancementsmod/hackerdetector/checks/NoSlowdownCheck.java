@@ -68,7 +68,7 @@ public class NoSlowdownCheck extends Check {
         );
     }
 
-    public static ViolationLevelTracker newViolationTracker() {
+    public static ViolationLevelTracker newVL() {
         return new ViolationLevelTracker(32);
     }
 
