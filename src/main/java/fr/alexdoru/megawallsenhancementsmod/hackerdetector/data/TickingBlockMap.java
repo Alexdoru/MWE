@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class TickingBlockMap {
 
-    private static final int MAX_TICK = 12;
+    private static final int MAX_TICK = 20;
     private int tickTime;
     private final Deque<BlockPlaced> deque = new ArrayDeque<>(100);
     private final Map<BlockPos, Integer> map = new HashMap<>(100);
