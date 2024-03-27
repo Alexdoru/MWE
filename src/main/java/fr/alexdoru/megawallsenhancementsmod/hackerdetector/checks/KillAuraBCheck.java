@@ -36,10 +36,16 @@ public class KillAuraBCheck extends Check {
 
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
-        if (player.isSwingInProgress) {
+        if (data.hasAttacked()) {
             if (data.useItemTime > 6 && data.timeEating < 33 && data.usedItemIsConsumable && data.lastEatTime > 32) {
-                if (ConfigHandler.debugLogging && data.killAuraBVL.getViolationLevel() > 3) {
-                    this.log(player, data, data.killAuraBVL, null);
+                if (ConfigHandler.debugLogging) {
+                    final ItemStack itemStack = player.getHeldItem();
+                    final Item item = itemStack == null ? null : itemStack.getItem();
+                    super.log(player, data, data.killAuraBVL,
+                            " | " + data.attackInfo.attackType.name() +
+                                    " | useItemTime " + data.useItemTime
+                                    + " | lastEatTime " + data.lastEatTime
+                                    + (item != null ? " | item held " + item.getRegistryName() : ""));
                 }
                 return true;
             }
@@ -47,19 +53,8 @@ public class KillAuraBCheck extends Check {
         return false;
     }
 
-    @Override
-    protected void log(EntityPlayer player, PlayerDataSamples data, ViolationLevelTracker vl, String extramsg) {
-        final ItemStack itemStack = player.getHeldItem();
-        final Item item = itemStack == null ? null : itemStack.getItem();
-        super.log(player, data, vl,
-                " | useItemTime " + data.useItemTime
-                        + " | lastEatTime " + data.lastEatTime
-                        + (item != null ? " | item held " + item.getRegistryName() : "")
-        );
-    }
-
     public static ViolationLevelTracker newVL() {
-        return new ViolationLevelTracker(1, 3, 20);
+        return new ViolationLevelTracker(100, 1, 110);
     }
 
 }
