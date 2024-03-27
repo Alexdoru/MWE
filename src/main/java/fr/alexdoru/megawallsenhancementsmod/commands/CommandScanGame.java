@@ -55,6 +55,7 @@ public class CommandScanGame extends MyAbstractCommand {
             ScangameData.clearScanGameData();
             if (ScoreboardTracker.isPreGameLobby) ScangameData.clearRandomKits();
             ScangameData.setScanGameId(currentGameId);
+            NameUtil.refreshAllNamesInWorld();
         }
         int i = 0;
         final boolean isMythicHour = ScoreboardUtils.isMegaWallsMythicGame();
