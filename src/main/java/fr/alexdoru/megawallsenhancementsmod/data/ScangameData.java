@@ -26,7 +26,10 @@ public class ScangameData {
     @SubscribeEvent
     public void onMwGame(MegaWallsGameEvent event) {
         if (event.getType() == MegaWallsGameEvent.EventType.GAME_START) {
-            onGameStart();
+            final String currentGameId = ScoreboardUtils.getGameIdFromScoreboard();
+            if (currentGameId != null && !currentGameId.equals(scanGameId)) {
+                clearScanGameData();
+            }
         }
         if (event.getType() == MegaWallsGameEvent.EventType.GAME_END) {
             clearScanGameData();
@@ -40,13 +43,6 @@ public class ScangameData {
 
     public static void clearRandomKits() {
         randomKitSet.clear();
-    }
-
-    private static void onGameStart() {
-        final String currentGameId = ScoreboardUtils.getGameIdFromScoreboard();
-        if (currentGameId != null && !currentGameId.equals(scanGameId)) {
-            clearScanGameData();
-        }
     }
 
     public static void fectchRandomClasses() {

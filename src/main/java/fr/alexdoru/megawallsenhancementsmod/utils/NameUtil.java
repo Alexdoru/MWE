@@ -122,11 +122,9 @@ public class NameUtil {
     }
 
     public static void refreshAllNamesInWorld() {
-        mc.getNetHandler().getPlayerInfoMap().forEach(p -> {
-            if (p != null) {
-                updateMWPlayerDataAndEntityData(p, true);
-            }
-        });
+        for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
+            if (netInfo != null) updateMWPlayerDataAndEntityData(netInfo, true);
+        }
     }
 
     private static final Pattern MINECRAFT_NAME_PATTERN = Pattern.compile("\\w{1,16}");
