@@ -11,11 +11,12 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 import java.util.List;
 import java.util.Map.Entry;
+
+import static net.minecraft.util.EnumChatFormatting.*;
 
 public class CommandSquad extends MyAbstractCommand {
 
@@ -45,6 +46,10 @@ public class CommandSquad extends MyAbstractCommand {
 
             this.addTeamToSquad();
 
+        } else if (args[0].equalsIgnoreCase("formsquad")) {
+
+            SquadHandler.formSquad();
+
         } else if (args[0].equalsIgnoreCase("disband")) {
 
             this.disbandSquad();
@@ -67,7 +72,7 @@ public class CommandSquad extends MyAbstractCommand {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        final String[] args1 = {"add", "addteam", "disband", "list", "remove"};
+        final String[] args1 = {"add", "addteam", "disband", "formsquad", "list", "remove"};
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, args1);
         }
@@ -84,28 +89,29 @@ public class CommandSquad extends MyAbstractCommand {
     @Override
     protected void printCommandHelp() {
         ChatUtil.addChatMessage(
-                EnumChatFormatting.GREEN + ChatUtil.bar() + "\n"
-                        + ChatUtil.centerLine(EnumChatFormatting.GOLD + "Squad Help\n\n")
-                        + EnumChatFormatting.YELLOW + "/squad add <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "add a player to the squad\n"
-                        + EnumChatFormatting.YELLOW + "/squad add <player> as Nickname" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "add a player to the squad and change their name\n"
-                        + EnumChatFormatting.YELLOW + "/squad addteam" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "add all your teamates to the squad\n"
-                        + EnumChatFormatting.YELLOW + "/squad remove <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "remove a player from the squad\n"
-                        + EnumChatFormatting.YELLOW + "/squad list" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "list players in the squad\n"
-                        + EnumChatFormatting.YELLOW + "/squad disband" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "disband the squad\n"
-                        + EnumChatFormatting.GREEN + ChatUtil.bar()
+                GREEN + ChatUtil.bar() + "\n"
+                        + ChatUtil.centerLine(GOLD + "Squad Help\n\n")
+                        + YELLOW + "/squad add <player>" + GRAY + " - " + AQUA + "add a player to the squad\n"
+                        + YELLOW + "/squad add <player> as Nickname" + GRAY + " - " + AQUA + "add a player to the squad and change their name\n"
+                        + YELLOW + "/squad addteam" + GRAY + " - " + AQUA + "add all your teamates to the squad\n"
+                        + YELLOW + "/squad formsquad" + GRAY + " - " + AQUA + "add your teamates to the squad when in a MW pre game\n"
+                        + YELLOW + "/squad remove <player>" + GRAY + " - " + AQUA + "remove a player from the squad\n"
+                        + YELLOW + "/squad list" + GRAY + " - " + AQUA + "list players in the squad\n"
+                        + YELLOW + "/squad disband" + GRAY + " - " + AQUA + "disband the squad\n"
+                        + GREEN + ChatUtil.bar()
         );
     }
 
     private void addSquadMembers(String[] args) {
         if (args.length < 2) {
-            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : /squad <add> <playername>");
+            ChatUtil.addChatMessage(RED + "Usage : /squad <add> <playername>");
             return;
         }
 
         if (SquadHandler.getSquad().isEmpty()) {
             SquadHandler.addPlayer(Minecraft.getMinecraft().thePlayer.getName());
             if (!ConfigHandler.hypixelNick.isEmpty()) {
-                SquadHandler.addPlayer(ConfigHandler.hypixelNick, ConfigHandler.nickHider ? EnumChatFormatting.ITALIC + Minecraft.getMinecraft().thePlayer.getName() + EnumChatFormatting.RESET : ConfigHandler.hypixelNick);
+                SquadHandler.addPlayer(ConfigHandler.hypixelNick, ConfigHandler.nickHider ? ITALIC + Minecraft.getMinecraft().thePlayer.getName() + RESET : ConfigHandler.hypixelNick);
             }
         }
 
@@ -129,15 +135,15 @@ public class CommandSquad extends MyAbstractCommand {
             }
             SquadHandler.addPlayer(args[1], alias);
             ChatUtil.addChatMessage(ChatUtil.getTagMW() +
-                    EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[1] + EnumChatFormatting.GREEN + " as " +
-                    EnumChatFormatting.GOLD + alias + EnumChatFormatting.GREEN + " to the squad.");
+                    GREEN + "Added " + GOLD + args[1] + GREEN + " as " +
+                    GOLD + alias + GREEN + " to the squad.");
             return;
         }
 
         for (int i = 1; i < args.length; i++) {
             SquadHandler.addPlayer(args[i]);
             ChatUtil.addChatMessage(ChatUtil.getTagMW() +
-                    EnumChatFormatting.GREEN + "Added " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " to the squad.");
+                    GREEN + "Added " + GOLD + args[i] + GREEN + " to the squad.");
         }
     }
 
@@ -147,7 +153,7 @@ public class CommandSquad extends MyAbstractCommand {
         }
         final NetworkPlayerInfo playerInfo = mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID());
         if (playerInfo == null) {
-            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "Couldn't find your team!");
+            ChatUtil.addChatMessage(ChatUtil.getTagMW() + RED + "Couldn't find your team!");
             return;
         }
         final char myColor = this.getTeamColor(playerInfo);
@@ -159,13 +165,13 @@ public class CommandSquad extends MyAbstractCommand {
                 if (SquadHandler.getSquad().isEmpty()) {
                     SquadHandler.addPlayer(Minecraft.getMinecraft().thePlayer.getName());
                     if (!ConfigHandler.hypixelNick.isEmpty()) {
-                        SquadHandler.addPlayer(ConfigHandler.hypixelNick, ConfigHandler.nickHider ? EnumChatFormatting.ITALIC + Minecraft.getMinecraft().thePlayer.getName() + EnumChatFormatting.RESET : ConfigHandler.hypixelNick);
+                        SquadHandler.addPlayer(ConfigHandler.hypixelNick, ConfigHandler.nickHider ? ITALIC + Minecraft.getMinecraft().thePlayer.getName() + RESET : ConfigHandler.hypixelNick);
                     }
                 }
                 SquadHandler.addPlayer(netInfo.getGameProfile().getName());
             }
         }
-        ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Added all your team to the squad!");
+        ChatUtil.addChatMessage(ChatUtil.getTagMW() + GREEN + "Added all your team to the squad!");
     }
 
     private char getTeamColor(NetworkPlayerInfo networkPlayerInfo) {
@@ -177,36 +183,36 @@ public class CommandSquad extends MyAbstractCommand {
 
     private void removeSquadMembers(String[] args) {
         if (args.length < 2) {
-            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : /squad <remove> <playername>");
+            ChatUtil.addChatMessage(RED + "Usage : /squad <remove> <playername>");
             return;
         }
         for (int i = 1; i < args.length; i++) {
             if (SquadHandler.removePlayer(args[i])) {
-                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Removed " + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.GREEN + " from the squad.");
+                ChatUtil.addChatMessage(ChatUtil.getTagMW() + GREEN + "Removed " + GOLD + args[i] + GREEN + " from the squad.");
             } else {
-                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GOLD + args[i] + EnumChatFormatting.RED + " isn't in the squad.");
+                ChatUtil.addChatMessage(ChatUtil.getTagMW() + GOLD + args[i] + RED + " isn't in the squad.");
             }
         }
     }
 
     private void listSquadMembers() {
         if (SquadHandler.getSquad().isEmpty()) {
-            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "No one in the squad right now.");
+            ChatUtil.addChatMessage(ChatUtil.getTagMW() + RED + "No one in the squad right now.");
             return;
         }
-        final IChatComponent imsg = new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Players in your squad : \n");
+        final IChatComponent imsg = new ChatComponentText(ChatUtil.getTagMW() + GREEN + "Players in your squad : \n");
         for (final Entry<String, String> entry : SquadHandler.getSquad().entrySet()) {
             final String displayname = entry.getKey();
             final String squadname = entry.getValue();
-            imsg.appendText(EnumChatFormatting.DARK_GRAY + "- " + EnumChatFormatting.GOLD + displayname
-                    + (displayname.equals(squadname) ? "" : EnumChatFormatting.GREEN + " renamed as : " + EnumChatFormatting.GOLD + entry.getValue()) + "\n");
+            imsg.appendText(DARK_GRAY + "- " + GOLD + displayname
+                    + (displayname.equals(squadname) ? "" : GREEN + " renamed as : " + GOLD + entry.getValue()) + "\n");
         }
         ChatUtil.addChatMessage(imsg);
     }
 
     private void disbandSquad() {
         SquadHandler.clearSquad();
-        ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Removed all players from the squad.");
+        ChatUtil.addChatMessage(ChatUtil.getTagMW() + GREEN + "Removed all players from the squad.");
     }
 
 }
