@@ -79,7 +79,11 @@ public class ReportQueue {
 
     public void addPlayerReportedThisGame(String playername) {
         playersReportedThisGame.add(playername);
-        queueList.removeIf(playerInQueue -> (playerInQueue.equalsIgnoreCase(playername)));
+        removePlayerFromReportQueue(playername);
+    }
+
+    public void removePlayerFromReportQueue(String playername) {
+        queueList.removeIf(p -> (p.equalsIgnoreCase(playername)));
     }
 
     /**
