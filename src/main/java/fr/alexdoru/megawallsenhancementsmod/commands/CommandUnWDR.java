@@ -4,6 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.MojangPlayernameToUUID;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.WdrData;
 import fr.alexdoru.megawallsenhancementsmod.utils.MultithreadingUtil;
@@ -55,6 +56,7 @@ public class CommandUnWDR extends MyAbstractCommand {
     }
 
     private void unwdr(String uuidstr, String playername) {
+        ReportQueue.INSTANCE.removePlayerFromReportQueue(playername);
         final UUID uuid = UUIDUtil.fromString(uuidstr);
         final WDR wdr = WdrData.remove(uuid, playername);
         if (wdr == null) {
