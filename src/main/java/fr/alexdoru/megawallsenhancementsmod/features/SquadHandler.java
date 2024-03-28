@@ -83,35 +83,26 @@ public class SquadHandler {
         if (scoresRaw.isEmpty()) {
             return;
         }
-        boolean found_teammates = false;
 
         final HashMap<String, String> newsquad = new HashMap<>();
-
+        boolean foundTeammates = false;
         for (final String line : scoresRaw) {
-
-            if (found_teammates) {
-
+            if (foundTeammates) {
                 if (line.contains("www.hypixel.net") || line.contains("HAPPY HOUR!") || line.isEmpty()) {
                     break;
                 }
-
                 final String nameonscoreboard = line.replace(" ", "");
                 final String squadmate = squadmap.get(nameonscoreboard);
-                /*
-                 * the player was already in the squad before, reuse the same name transformation
-                 */
+                 // the player was already in the squad before, reuse the same name transformation
                 if (squadmate == null) {
                     newsquad.put(nameonscoreboard, nameonscoreboard);
                 } else {
                     newsquad.put(nameonscoreboard, squadmate);
                 }
-
             }
-
             if (line.contains("Teammates:")) {
-                found_teammates = true;
+                foundTeammates = true;
             }
-
         }
 
         final String myName = Minecraft.getMinecraft().thePlayer.getName();
