@@ -94,7 +94,7 @@ public class HttpClient {
             }
 
             // I think this will never run because a code != 200 will be received
-            if (!url.contains("api.mojang.com")) {
+            if (!url.contains("api.mojang.com") && !url.contains("laby.net/api")) {
                 if (!JsonUtil.getBoolean(obj, "success")) {
                     final String msg = JsonUtil.getString(obj, "cause");
                     if (msg == null) {
