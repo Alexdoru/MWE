@@ -3,12 +3,10 @@ package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.SampleListD;
-import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector2D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 
 public class ScaffoldCheck extends Check {
 
@@ -38,7 +36,7 @@ public class ScaffoldCheck extends Check {
         if (player.isSwingInProgress && player.hurtTime == 0 && data.serverPitchList.get(0) > 50f && data.getSpeedXZSq() > 9d) {
             final ItemStack itemStack = player.getHeldItem();
             if (itemStack != null && itemStack.getItem() instanceof ItemBlock) {
-                final double angleDiff = Math.abs(getAngleDiff(data.speedXList.get(0), data.speedZList.get(0), data.serverYawHeadList.get(0)));
+                final double angleDiff = Math.abs(data.getMoveLookAngleDiff());
                 final double speedXZSq = data.getSpeedXZSq();
                 if (angleDiff > 165d && speedXZSq < 100d) {
                     final double speedY = data.speedYList.get(0);
@@ -65,10 +63,6 @@ public class ScaffoldCheck extends Check {
 
     public static ViolationLevelTracker newVL() {
         return new ViolationLevelTracker(2, 1, 24);
-    }
-
-    private static double getAngleDiff(double dx, double dz, double yaw) {
-        return MathHelper.wrapAngleTo180_double(new Vector2D(dz, -dx).getOrientedAngle() - yaw);
     }
 
     private static double avgAccel(SampleListD list) {

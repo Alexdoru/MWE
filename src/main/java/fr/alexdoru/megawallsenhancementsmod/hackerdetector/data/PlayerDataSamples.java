@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.data;
 
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.*;
+import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector2D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
@@ -77,12 +78,12 @@ public class PlayerDataSamples {
         this.onGroundTime = player.onGround ? this.onGroundTime + 1 : 0;
         this.airTime = player.onGround ? 0 : this.airTime + 1;
         this.sprintTime = player.isSprinting() ? this.sprintTime + 1 : 0;
-        final boolean isEating = player.isEating();
-        if (!isEating && this.usedItemIsConsumable && this.useItemTime > 25) {
+        final boolean isUsingItem = player.isEating() && player.getHeldItem() != null;
+        if (!isUsingItem && this.usedItemIsConsumable && this.useItemTime > 25) {
             this.lastEatTime = 0;
         }
         this.lastEatTime++;
-        if (isEating && player.getHeldItem() != null) {
+        if (isUsingItem) {
             this.usedItemIsConsumable = player.getHeldItem().getMaxItemUseDuration() == 32;
             this.useItemTime = this.useItemTime + 1;
             this.timeEating = this.usedItemIsConsumable ? this.timeEating + 1 : 0;
@@ -151,6 +152,10 @@ public class PlayerDataSamples {
 
     public Vec3 getLookServer() {
         return getVectorForRotation(this.serverPitchList.get(0), this.serverYawHeadList.get(0));
+    }
+
+    public double getMoveLookAngleDiff() {
+        return MathHelper.wrapAngleTo180_double(new Vector2D(this.speedZList.get(0), -this.speedXList.get(0)).getOrientedAngle() - this.serverYawHeadList.get(0));
     }
 
     /**
