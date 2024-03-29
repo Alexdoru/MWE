@@ -43,7 +43,13 @@ public class KeepSprintACheck extends Check {
             final boolean invalidSprint;
             if (data.usedItemIsConsumable) {
                 if (data.useItemTime > 32) return false;
-                invalidSprint = data.sprintTime > 32 || data.sprintTime > data.useItemTime + 3 || data.lastEatTime > 32 && data.sprintTime > 5;
+                if (data.sprintTime > 32) {
+                    invalidSprint = true;
+                } else {
+                    if (data.sprintTime == data.useItemTime && data.useItemTime < 12) return false;
+                    if (Math.abs(data.getMoveLookAngleDiff()) > 135d) return false; // rubber band
+                    invalidSprint = data.sprintTime > data.useItemTime + 3 || data.lastEatTime > 32 && data.sprintTime > 5;
+                }
             } else {
                 if (player.getHeldItem().getItem() instanceof ItemSword) return false;
                 invalidSprint = data.sprintTime > 5;
@@ -65,17 +71,17 @@ public class KeepSprintACheck extends Check {
     protected void log(EntityPlayer player, PlayerDataSamples data, ViolationLevelTracker vl, String extramsg) {
         final ItemStack itemStack = player.getHeldItem();
         final Item item = itemStack == null ? null : itemStack.getItem();
-        super.log(player, data, data.keepsprintAVL,
+        super.log(player, data, vl,
                 " | sprintTime " + data.sprintTime
                         + " | useItemTime " + data.useItemTime
                         + " | lastEatTime " + data.lastEatTime
                         + " | speedXZ " + String.format("%.2f", data.getSpeedXZ())
                         + (item != null ? " | item held " + item.getRegistryName() : "")
-        );
+                        + " | moveDiff " + String.format("%.2f", Math.abs(data.getMoveLookAngleDiff())));
     }
 
     public static ViolationLevelTracker newVL() {
-        return new ViolationLevelTracker(32);
+        return new ViolationLevelTracker(34);
     }
 
 }
