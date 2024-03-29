@@ -17,7 +17,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -25,9 +24,9 @@ import java.util.*;
 
 public class HackerDetector {
 
-    public static final HackerDetector INSTANCE = new HackerDetector();
-    private static final FileLogger logger = new FileLogger("HackerDetector.log", "HH:mm:ss.SSS");
     private static final Minecraft mc = Minecraft.getMinecraft();
+    public static HackerDetector INSTANCE;
+    private static FileLogger logger;
     private final List<ICheck> checkList = new ArrayList<>();
     private long timeElapsedTemp = 0L;
     private long timeElapsed = 0L;
@@ -39,13 +38,14 @@ public class HackerDetector {
     private final Queue<Runnable> scheduledTasks = new ArrayDeque<>();
     public final Set<String> playersToLog = new HashSet<>();
 
-    static {
-        MinecraftForge.EVENT_BUS.register(INSTANCE);
-    }
-
     private final FastbreakCheck fastbreakCheck;
 
-    private HackerDetector() {
+    static {
+        if (ConfigHandler.debugLogging) initLogger();
+    }
+
+    public HackerDetector() {
+        INSTANCE = this;
         this.checkList.add(new AutoblockCheck());
         this.checkList.add(this.fastbreakCheck = new FastbreakCheck(brokenBlocksList));
         this.checkList.add(new KeepSprintACheck());
@@ -160,7 +160,12 @@ public class HackerDetector {
     }
 
     public static void log(String message) {
+        if (logger == null) initLogger();
         logger.log(message);
+    }
+
+    private static void initLogger() {
+        logger = new FileLogger("HackerDetector.log", "HH:mm:ss.SSS");
     }
 
     public static void addBrokenBlock(Block block, BlockPos blockPos, String tool) {
