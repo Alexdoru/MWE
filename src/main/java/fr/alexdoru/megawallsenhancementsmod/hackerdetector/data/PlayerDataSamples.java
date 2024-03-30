@@ -78,7 +78,7 @@ public class PlayerDataSamples {
         this.onGroundTime = player.onGround ? this.onGroundTime + 1 : 0;
         this.airTime = player.onGround ? 0 : this.airTime + 1;
         this.sprintTime = player.isSprinting() ? this.sprintTime + 1 : 0;
-        final boolean isUsingItem = player.isEating() && player.getHeldItem() != null;
+        final boolean isUsingItem = player.isEating() && player.getHeldItem() != null && player.getHeldItem().getMaxItemUseDuration() > 0;
         if (!isUsingItem && this.usedItemIsConsumable && this.useItemTime > 25) {
             this.lastEatTime = 0;
         }

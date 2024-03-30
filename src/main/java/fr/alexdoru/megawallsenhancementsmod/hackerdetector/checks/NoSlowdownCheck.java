@@ -34,7 +34,11 @@ public class NoSlowdownCheck extends Check {
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
         // If the player is moving slower than the base running speed, we consider it is keepsprint
         if (data.isNotMovingXZ() || player.isRiding()) return false;
-        if (data.useItemTime > 5) {
+        if (data.useItemTime > 5 && data.sprintTime > 0) {
+            if (Math.abs(data.getMoveLookAngleDiff()) > 135d) {
+                data.noSlowdownVL.substract(3);
+                return false; // rubber band
+            }
             final boolean invalidSprint;
             if (data.usedItemIsConsumable) {
                 if (data.useItemTime > 32) return false;
@@ -42,7 +46,6 @@ public class NoSlowdownCheck extends Check {
                     invalidSprint = true;
                 } else {
                     if (data.sprintTime == data.useItemTime && data.useItemTime < 12) return false;
-                    if (Math.abs(data.getMoveLookAngleDiff()) > 135d) return false; // rubber band
                     invalidSprint = data.sprintTime > data.useItemTime + 3 || data.lastEatTime > 32 && data.sprintTime > 5;
                 }
             } else {
@@ -54,9 +57,9 @@ public class NoSlowdownCheck extends Check {
                     this.log(player, data, data.noSlowdownVL, null);
                 }
                 return true;
-            } else if (data.sprintTime == 0) {
-                data.noSlowdownVL.substract(3);
             }
+        } else if (data.useItemTime > 5 && data.sprintTime == 0) {
+            data.noSlowdownVL.substract(3);
         }
         return false;
     }
@@ -75,7 +78,7 @@ public class NoSlowdownCheck extends Check {
     }
 
     public static ViolationLevelTracker newVL() {
-        return new ViolationLevelTracker(34);
+        return new ViolationLevelTracker(48);
     }
 
 }
