@@ -51,13 +51,14 @@ public abstract class Check implements ICheck {
 
     private void printFlagMessage(EntityPlayer player) {
         final String cheatType = this.getCheatName() + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")");
+        final String playername = ScoreboardTracker.isReplayMode ? EnumChatFormatting.getTextWithoutFormattingCodes(player.getName()) : player.getName();
         if (ConfigHandler.debugLogging) {
             HackerDetector.log(player.getName() + " flags " + cheatType);
         }
         if (!ConfigHandler.showFlagMessages) {
             return;
         }
-        final String flagKey = player.getName() + (ConfigHandler.showFlagMessageType ? cheatType : this.getCheatName());
+        final String flagKey = playername + (ConfigHandler.showFlagMessageType ? cheatType : this.getCheatName());
         final String msg = ChatUtil.getTagNoCheaters() + EnumChatFormatting.RESET
                 + NameUtil.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.YELLOW + " flags "
@@ -73,10 +74,10 @@ public abstract class Check implements ICheck {
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.COPY_TO_CLIPBOARD_COMMAND + EnumChatFormatting.getTextWithoutFormattingCodes(msg)))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.RED + this.getCheatDescription()))));
         if (!(ScoreboardTracker.isInMwGame && ConfigHandler.autoreportFlaggedPlayers)) {
-            imsg.appendSibling(ChatUtil.getReportButton(player.getName(), "cheating " + this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
+            imsg.appendSibling(ChatUtil.getReportButton(playername, "cheating " + this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
         }
         if (ScoreboardTracker.isReplayMode || !ConfigHandler.addToReportList) {
-            imsg.appendSibling(ChatUtil.getWDRButton(player.getName(), this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
+            imsg.appendSibling(ChatUtil.getWDRButton(playername, this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
         }
         if (ConfigHandler.compactFlagMessages) {
             ChatHandler.deleteFlagFromChat(flagKey);
