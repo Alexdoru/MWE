@@ -17,7 +17,7 @@ public class PendingReportHUD extends AbstractRenderer {
     @Override
     public void render(ScaledResolution resolution) {
         final String text;
-        if (ReportQueue.INSTANCE.standingStillCounter == 0) {
+        if (ReportQueue.INSTANCE.getStandStillCounter() == 0) {
             if (ConfigHandler.showReportHUDonlyInChat) return;
             final int nbReports = ReportQueue.INSTANCE.queueList.size();
             final long l = System.currentTimeMillis() % 3000L + 1000L;
@@ -30,7 +30,7 @@ public class PendingReportHUD extends AbstractRenderer {
             }
             text = str.toString();
         } else {
-            final float progress = ReportQueue.INSTANCE.standingStillCounter / (float) ReportQueue.INSTANCE.standingStillLimit;
+            final float progress = ReportQueue.INSTANCE.getStandStillCounter() / (float) ReportQueue.INSTANCE.getStandStillLimit();
             final String playername = ReportQueue.INSTANCE.queueList.get(0);
             final StringBuilder str = new StringBuilder();
             str.append("/wdr ").append(playername);
