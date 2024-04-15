@@ -50,6 +50,7 @@ public class MWEClassTransformer implements IClassTransformer {
         //registerTransformer(new EntityPlayerSPTransformer_HealthListener());
         registerTransformer(new EntityRendererTransformer_CancelNightVision());
         registerTransformer(new EntityRendererTransformer_RenderOverlayHook());
+        registerTransformer(new GuiChatTransformer_Accessor());
         registerTransformer(new GuiChatTransformer_TabCompletePlayers());
         registerTransformer(new GuiContainerTransformer_SafeInventory());
         registerTransformer(new GuiIngameForgeTransformer_FixActionBar());

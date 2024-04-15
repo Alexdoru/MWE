@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import net.minecraft.client.Minecraft;
@@ -42,8 +43,7 @@ public class ReportQueue {
                 movingCounter = 0;
                 final String playername = queueList.remove(0);
                 final String msg = "/wdr " + playername;
-                mc.ingameGUI.getChatGUI().addToSentMessages(msg);
-                mc.thePlayer.sendChatMessage(msg);
+                ChatUtil.sendChatMessage(msg, true);
                 standStillLimit = 22 + random.nextInt(12);
                 standStillCounter = 0;
                 betweenReportCounter = 50;
