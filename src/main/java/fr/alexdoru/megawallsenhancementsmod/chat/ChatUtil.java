@@ -10,20 +10,22 @@ import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.*;
 
+import static net.minecraft.util.EnumChatFormatting.*;
+
 public class ChatUtil {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     public static String getTagMW() {
-        return EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "MWE" + EnumChatFormatting.GOLD + "] ";
+        return GOLD + "[" + DARK_GRAY + "MWE" + GOLD + "] ";
     }
 
     public static String getTagNoCheaters() {
-        return EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "NoCheaters" + EnumChatFormatting.GOLD + "] ";
+        return GOLD + "[" + DARK_GRAY + "NoCheaters" + GOLD + "] ";
     }
 
     public static String getTagHitboxes() {
-        return EnumChatFormatting.BLUE + "[Hitbox] ";
+        return BLUE + "[Hitbox] ";
     }
 
     public static void addChatMessage(String msg) {
@@ -93,14 +95,14 @@ public class ChatUtil {
     public static IChatComponent getListTitleLine(String listtitle, int displaypage, int nbpage, String command, IChatComponent titleHoverText, String titleURL) {
         final IChatComponent titleLine = new ChatComponentText("             ");
         if (displaypage > 1) {
-            titleLine.appendSibling(new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + " <<")
+            titleLine.appendSibling(new ChatComponentText(YELLOW + "" + BOLD + " <<")
                     .setChatStyle(new ChatStyle()
-                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to view page " + (displaypage - 1))))
+                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(YELLOW + "Click to view page " + (displaypage - 1))))
                             .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command + " " + (displaypage - 1)))));
         } else {
             titleLine.appendText("   ");
         }
-        final IChatComponent titleComponent = new ChatComponentText(EnumChatFormatting.GOLD + " " + listtitle + " (Page " + displaypage + " of " + nbpage + ")");
+        final IChatComponent titleComponent = new ChatComponentText(GOLD + " " + listtitle + " (Page " + displaypage + " of " + nbpage + ")");
         if (titleHoverText != null && titleURL != null) {
             titleComponent.setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, titleHoverText))
@@ -108,26 +110,26 @@ public class ChatUtil {
         }
         titleLine.appendSibling(titleComponent);
         if (displaypage < nbpage) {
-            titleLine.appendSibling(new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.BOLD + " >>")
+            titleLine.appendSibling(new ChatComponentText(YELLOW + "" + BOLD + " >>")
                     .setChatStyle(new ChatStyle()
-                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to view page " + (displaypage + 1))))
+                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(YELLOW + "Click to view page " + (displaypage + 1))))
                             .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command + " " + (displaypage + 1)))));
         }
         return titleLine;
     }
 
     public static void printApikeySetupInfo() {
-        addChatMessage(getTagMW() + EnumChatFormatting.RED + "You didn't set up your Api key. If you have an Api Key, use "
-                + EnumChatFormatting.YELLOW + "\"/mwe setapikey <key>\""
-                + EnumChatFormatting.RED + " to use it with the mod.");
+        addChatMessage(getTagMW() + RED + "You didn't set up your Api key. If you have an Api Key, use "
+                + YELLOW + "\"/mwe setapikey <key>\""
+                + RED + " to use it with the mod.");
     }
 
     public static String inexistantMinecraftNameMsg(String playername) {
-        return EnumChatFormatting.RED + "The name " + EnumChatFormatting.YELLOW + playername + EnumChatFormatting.RED + " doesn't exist, it might be a nick.";
+        return RED + "The name " + YELLOW + playername + RED + " doesn't exist, it might be a nick.";
     }
 
     public static String invalidMinecraftNameMsg(String playername) {
-        return EnumChatFormatting.RED + "The name " + EnumChatFormatting.YELLOW + playername + EnumChatFormatting.RED + " isn't a valid Minecraft username.";
+        return RED + "The name " + YELLOW + playername + RED + " isn't a valid Minecraft username.";
     }
 
     /**
@@ -137,7 +139,7 @@ public class ChatUtil {
         final char separator = '-';
         final int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
         final int separatorWidth = mc.fontRendererObj.getCharWidth(separator);
-        return EnumChatFormatting.STRIKETHROUGH + new String(new char[chatWidth / separatorWidth]).replace("\0", "-");
+        return STRIKETHROUGH + new String(new char[chatWidth / separatorWidth]).replace("\0", "-");
     }
 
     /**
@@ -263,16 +265,16 @@ public class ChatUtil {
     }
 
     public static IChatComponent PlanckeHeaderText(String formattedname, String playername, String titletext) {
-        return new ChatComponentText(getSeparatorToCenter(formattedname + EnumChatFormatting.GOLD + titletext))
+        return new ChatComponentText(getSeparatorToCenter(formattedname + GOLD + titletext))
                 .appendSibling(new ChatComponentText(formattedname)
                         .setChatStyle(new ChatStyle()
                                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/names " + playername))
-                                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for name history")))))
+                                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(YELLOW + "Click for name history")))))
 
-                .appendSibling(new ChatComponentText(EnumChatFormatting.GOLD + titletext)
+                .appendSibling(new ChatComponentText(GOLD + titletext)
                         .setChatStyle(new ChatStyle()
                                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://plancke.io/hypixel/player/stats/" + playername))
-                                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to open Plancke in browser")))));
+                                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(YELLOW + "Click to open Plancke in browser")))));
     }
 
     public static IChatComponent getReportButtons(String playername, String cheatReport, String cheatWDR, ClickEvent.Action actionreport, ClickEvent.Action actionwdr) {
@@ -280,86 +282,51 @@ public class ChatUtil {
     }
 
     public static IChatComponent getReportButton(String playername, String cheatReport, ClickEvent.Action actionreport) {
-        return new ChatComponentText(EnumChatFormatting.DARK_GREEN + " [Report]")
+        return new ChatComponentText(DARK_GREEN + " [Report]")
                 .setChatStyle(new ChatStyle()
                         .setChatClickEvent(new ClickEvent(actionreport, "/report " + playername + " " + cheatReport))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
-                                        + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " " + cheatReport + "\n"
-                                        + EnumChatFormatting.GRAY + "Using the report option won't save the cheater's name in the mod NoCheaters"
+                                new ChatComponentText(GREEN + "Click this message to report this player" + "\n"
+                                        + YELLOW + "Command : " + RED + "/report " + playername + " " + cheatReport + "\n"
+                                        + GRAY + "Using the report option won't save the cheater's name in the mod NoCheaters"
                                         + getReportingAdvice()))));
     }
 
     public static IChatComponent getWDRButton(String playername, String cheatWDR, ClickEvent.Action actionwdr) {
-        return new ChatComponentText(EnumChatFormatting.DARK_PURPLE + " [WDR]")
+        return new ChatComponentText(DARK_PURPLE + " [WDR]")
                 .setChatStyle(new ChatStyle()
                         .setChatClickEvent(new ClickEvent(actionwdr, "/wdr " + playername + " " + cheatWDR))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
-                                        + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/wdr " + playername + " " + cheatWDR + "\n"
-                                        + EnumChatFormatting.GRAY + "Using the wdr option will give you warnings about this player ingame\n"
-                                        + EnumChatFormatting.GRAY + "You can use " + EnumChatFormatting.YELLOW + "/unwdr " + playername + EnumChatFormatting.GRAY + " to remove them from your report list"
+                                new ChatComponentText(GREEN + "Click this message to report this player" + "\n"
+                                        + YELLOW + "Command : " + RED + "/wdr " + playername + " " + cheatWDR + "\n"
+                                        + GRAY + "Using the wdr option will give you warnings about this player ingame\n"
+                                        + GRAY + "You can use " + YELLOW + "/unwdr " + playername + GRAY + " to remove them from your report list"
                                         + getReportingAdvice()))));
     }
 
-    public static IChatComponent getUnIgnoreButton(String uuid, String playername) {
-        return new ChatComponentText(EnumChatFormatting.YELLOW + " [Un-Ignore]")
-                .setChatStyle(new ChatStyle()
-                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nocheaters ignoreremove " + uuid + " " + playername))
-                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to remove that player from your ignore list,\n"
-                                        + EnumChatFormatting.GREEN + "you will receive all future report suggestions comming from them"))));
-    }
-
-    public static IChatComponent getIgnoreButton(String playername) {
-        return new ChatComponentText(EnumChatFormatting.YELLOW + " [Ignore]")
-                .setChatStyle(new ChatStyle()
-                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nocheaters ignore " + playername))
-                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to cancel the report from this player\n"
-                                        + EnumChatFormatting.GREEN + "and ignore all future report suggestions comming from them\n"
-                                        + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/nocheaters ignore " + playername + "\n"
-                                        + EnumChatFormatting.GRAY + "You can un-ignore them by opening the ignore list with\n"
-                                        + EnumChatFormatting.YELLOW + "/nocheaters ignorelist"))));
-    }
-
-    public static IChatComponent getCancelButton(String playername) {
-        return new ChatComponentText(EnumChatFormatting.RED + " [Cancel]")
-                .setChatStyle(new ChatStyle()
-                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nocheaters cancelreport " + playername))
-                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to cancel the report for this player"))));
-    }
-
-    public static IChatComponent getCancelAllReportsButton() {
-        return new ChatComponentText(EnumChatFormatting.RED + " [Cancel All Reports]")
-                .setChatStyle(new ChatStyle()
-                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/nocheaters clearreportqueue"))
-                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to cancel all report suggestions about to be sent"))));
-    }
-
     public static String getReportingAdvice() {
-        final String s = "\n\n" + EnumChatFormatting.RED + "To make reporting efficient, be sure to report" + EnumChatFormatting.DARK_RED + " when you are ingame with\n"
-                + EnumChatFormatting.DARK_RED + "the cheater" + EnumChatFormatting.RED + " and not before the game starts or in the lobby.";
+        final String s = "\n\n" + RED + "To make reporting efficient, be sure to report" + DARK_RED + " when you are ingame with\n"
+                + DARK_RED + "the cheater" + RED + " and not before the game starts or in the lobby.";
         return ScoreboardTracker.isPreGameLobby ? s : "";
     }
 
     public static void printReportingAdvice() {
-        addChatMessage(getTagNoCheaters() + EnumChatFormatting.RED + "To make reporting efficient, be sure to report" + EnumChatFormatting.DARK_RED + " when you are ingame with the cheater " + EnumChatFormatting.RED + "and not before the game starts or in the lobby. This way a replay can be attached to the report and it will have a higher chance to be reviewed.");
+        addChatMessage(getTagNoCheaters() + RED + "To make reporting efficient, be sure to report"
+                + DARK_RED + " when you are ingame with the cheater "
+                + RED + "and not before the game starts or in the lobby. This way a replay can be attached to the report and it will have a higher chance to be reviewed.");
     }
 
     public static IChatComponent formattedNameWithReportButton(String playername, String formattedName) {
         return new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + playername + " cheating"))
                 .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                        new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
-                                + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " cheating" + "\n"
-                                + EnumChatFormatting.GRAY + "Using the report option won't save the cheater's name in the mod NoCheaters"))));
+                        new ChatComponentText(GREEN + "Click this message to report this player" + "\n"
+                                + YELLOW + "Command : " + RED + "/report " + playername + " cheating" + "\n"
+                                + GRAY + "Using the report option won't save the cheater's name in the mod NoCheaters"))));
     }
 
     public static void debug(String msg) {
-        addChatMessage(EnumChatFormatting.AQUA + "[Debug]: " + EnumChatFormatting.RESET + msg);
+        addChatMessage(AQUA + "[Debug]: " + RESET + msg);
     }
 
 }
