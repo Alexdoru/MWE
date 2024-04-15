@@ -8,8 +8,10 @@ import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginDat
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsClassStats;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.MegaWallsStats;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatListener;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.chat.ScanFlagChatComponent;
 import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
@@ -247,10 +249,10 @@ public class CommandScanGame extends MyAbstractCommand {
     }
 
     private static void addScanMessageToChat(NetworkPlayerInfo netInfo, IChatComponent imsg) {
-        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW())
+        ChatHandler.deleteScanFlagFromChat(netInfo.getGameProfile().getName());
+        ChatUtil.addChatMessage(new ScanFlagChatComponent(netInfo.getGameProfile().getName(), ChatUtil.getTagMW())
                 .appendSibling(NameUtil.getFormattedNameWithPlanckeClickEvent(netInfo))
-                .appendSibling(imsg)
-        );
+                .appendSibling(imsg));
     }
 
 }

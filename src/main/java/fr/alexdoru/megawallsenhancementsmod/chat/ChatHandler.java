@@ -77,6 +77,22 @@ public class ChatHandler {
         }
     }
 
+    public static void deleteScanFlagFromChat(String key) {
+        final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
+        final int chatSearchLength = 250;
+        final Iterator<ChatLine> iterator = chatLines.iterator();
+        int i = 0;
+        while (iterator.hasNext() && i < chatSearchLength) {
+            final IChatComponent chatComponent = iterator.next().getChatComponent();
+            if (chatComponent instanceof ScanFlagChatComponent && key.equals(((ScanFlagChatComponent) chatComponent).getKey())) {
+                iterator.remove();
+                deleteFromDrawnChatLines(chatComponent, chatSearchLength * 3);
+                break;
+            }
+            i++;
+        }
+    }
+
     public static void deleteWarningFromChat(String playername) {
         final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
         final int chatSearchLength = 100;
