@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
+import fr.alexdoru.megawallsenhancementsmod.asm.accessors.GuiChatAccessor;
 import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
 import fr.alexdoru.megawallsenhancementsmod.utils.ClipboardUtil;
 import net.minecraft.client.Minecraft;
@@ -14,7 +15,7 @@ public class GuiScreenHook {
     /**
      * Returns true if it handles a custom click event
      */
-    public static boolean handleMWEnCustomChatCommand(String command) {
+    public static boolean executeMWEClickEvent(String command) {
         if (command != null && command.startsWith(COPY_TO_CLIPBOARD_COMMAND)) {
             ClipboardUtil.copyString(command.replaceFirst(COPY_TO_CLIPBOARD_COMMAND, ""));
             return true;
@@ -23,10 +24,18 @@ public class GuiScreenHook {
             MegaWallsEndGameStats.printGameStatsMessage();
             return true;
         }
-        if (command != null && Minecraft.getMinecraft().currentScreen instanceof GuiChat) {
+        final Minecraft mc = Minecraft.getMinecraft();
+        if (command != null && mc.currentScreen instanceof GuiChat) {
             final String lowerCase = command.toLowerCase();
             if (lowerCase.startsWith("/report ") || lowerCase.startsWith("/wdr ")) {
-                Minecraft.getMinecraft().ingameGUI.getChatGUI().addToSentMessages(command);
+                boolean flag = false;
+                if (mc.currentScreen instanceof GuiChatAccessor) {
+                    flag = ((GuiChatAccessor) mc.currentScreen).getSentHistoryCursor() == mc.ingameGUI.getChatGUI().getSentMessages().size();
+                }
+                mc.ingameGUI.getChatGUI().addToSentMessages(command);
+                if (flag) {
+                    ((GuiChatAccessor) mc.currentScreen).setSentHistoryCursor(mc.ingameGUI.getChatGUI().getSentMessages().size());
+                }
             }
         }
         return false;

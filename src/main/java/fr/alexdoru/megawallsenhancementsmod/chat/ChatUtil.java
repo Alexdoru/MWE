@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.chat;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.ChatComponentTextAccessor;
+import fr.alexdoru.megawallsenhancementsmod.asm.accessors.GuiChatAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.NetworkPlayerInfoAccessor_ChatHeads;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
@@ -56,6 +57,20 @@ public class ChatUtil {
                     mc.thePlayer.addChatMessage(msg);
                 }
             });
+        }
+    }
+
+    public static void sendChatMessage(String msg, boolean addToHistory) {
+        if (mc.thePlayer == null) return;
+        mc.thePlayer.sendChatMessage(msg);
+        if (!addToHistory) return;
+        boolean flag = false;
+        if (mc.currentScreen instanceof GuiChatAccessor) {
+            flag = ((GuiChatAccessor) mc.currentScreen).getSentHistoryCursor() == mc.ingameGUI.getChatGUI().getSentMessages().size();
+        }
+        mc.ingameGUI.getChatGUI().addToSentMessages(msg);
+        if (flag) {
+            ((GuiChatAccessor) mc.currentScreen).setSentHistoryCursor(mc.ingameGUI.getChatGUI().getSentMessages().size());
         }
     }
 

@@ -27,12 +27,6 @@ public class GuiScreenTransformer_ExecuteChatCommands implements MWETransformer 
                                 if (checkInsnNode(fourthNode, ICONST_0)) {
                                     final AbstractInsnNode fifthNode = fourthNode.getNext();
                                     if (checkMethodInsnNode(fifthNode, MethodMapping.GUISCREEN$SENDCHATMESSAGE)) {
-                                        /*
-                                         * Inject before line 450 :
-                                         * if (GuiScreenHook.handleMWEnCustomChatCommand(clickevent.getValue())) {
-                                         *     return true;
-                                         * }
-                                         */
                                         methodNode.instructions.insert(insnNode, getInsnList());
                                         status.addInjection();
                                     }
@@ -50,7 +44,7 @@ public class GuiScreenTransformer_ExecuteChatCommands implements MWETransformer 
         final LabelNode notCancelled = new LabelNode();
         list.add(new VarInsnNode(ALOAD, 2));
         list.add(getNewMethodInsnNode(MethodMapping.CLICKEVENT$GETVALUE));
-        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiScreenHook"), "handleMWEnCustomChatCommand", "(Ljava/lang/String;)Z", false));
+        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiScreenHook"), "executeMWEClickEvent", "(Ljava/lang/String;)Z", false));
         list.add(new JumpInsnNode(IFEQ, notCancelled));
         list.add(new InsnNode(ICONST_1));
         list.add(new InsnNode(IRETURN));
