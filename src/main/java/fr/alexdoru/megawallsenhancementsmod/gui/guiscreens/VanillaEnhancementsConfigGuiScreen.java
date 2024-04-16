@@ -130,9 +130,7 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
         final List<String> shortCoinsList = new ArrayList<>();
         shortCoinsList.add(GREEN + "Short coin messages");
         shortCoinsList.add("");
-        shortCoinsList.add(GRAY + "Makes the coin messages shorter by removing the network booster info. It also compacts the guild bonus message and coin message into one.");
-        shortCoinsList.add("");
-        shortCoinsList.add(GRAY + "It makes the assists messages in mega walls fit on one line instead of two.");
+        shortCoinsList.add(GRAY + "Makes the coins & tokens messages shorter by removing the network booster info. It also compacts the guild bonus message and coin message into one.");
         shortCoinsList.add("");
         shortCoinsList.add(GOLD + "+100 coins! (hypixel's Network booster)" + AQUA + " FINAL KILL");
         shortCoinsList.add(WHITE + "Will become : ");

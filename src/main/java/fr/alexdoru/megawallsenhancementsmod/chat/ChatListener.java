@@ -34,14 +34,14 @@ import java.util.regex.Pattern;
 public class ChatListener {
 
     private static final String BAN_MESSAGE = "A player has been removed from your game.";
-    private static final String COINS_DOUBLED_GUILD_REWARD = "Coins just earned DOUBLED as a Guild Level Reward!";
     private static final String HUNTER_STRENGTH_MESSAGE = "Your Force of Nature gave you a 5 second Strength I buff.";
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
     private static final String PREP_PHASE = "Prepare your defenses!";
     private static final Pattern BLOCKED_MESSAGE = Pattern.compile("^We blocked your comment \"(.+)\" as it is breaking our rules because[a-zA-Z\\s]+\\. https:\\/\\/www.hypixel.net\\/rules\\/.*");
-    private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ coins!.*");
-    private static final Pattern COINS_BOOSTER_PATTERN = Pattern.compile("^\\+\\d+ coins!( \\([^\\(\\)]*(?:Coins \\+ EXP|Booster)[^\\(\\)]*\\)).*");
+    private static final Pattern COINS_DOUBLED_GUILD_PATTERN = Pattern.compile("^(?:Tokens|Coins) just earned DOUBLED as a Guild Level Reward!$");
+    private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ (tokens|coins)!.*");
+    private static final Pattern COINS_BOOSTER_PATTERN = Pattern.compile("^\\+\\d+ (tokens|coins)!( \\([^\\(\\)]*(?:Coins \\+ EXP|Booster)[^\\(\\)]*\\)).*");
     private static final Pattern DREADLORD_STRENGTH_PATTERN = Pattern.compile("\u00a74\u00a7lSOUL SIPHON \u00a7c\u00a7l85% ([0-9])s");
     private static final Pattern HEROBRINE_STRENGTH_PATTERN = Pattern.compile("\u00a7e\u00a7lPOWER \u00a7c\u00a7l85% ([0-9])s");
     private static final Pattern HUNTER_PRE_STRENGTH_PATTERN = Pattern.compile("\u00a7a\u00a7lF\\.O\\.N\\. \u00a77\\(\u00a7l\u00a7c\u00a7lStrength\u00a77\\) \u00a7e\u00a7l([0-9]+)");
@@ -93,28 +93,32 @@ public class ChatListener {
                 return;
             }
 
-            /* Shortens the coins messages by removing the booster info */
             if (ConfigHandler.shortCoinMessage) {
-                if (msg.equals(COINS_DOUBLED_GUILD_REWARD)) {
+                if (COINS_DOUBLED_GUILD_PATTERN.matcher(msg).matches()) {
                     event.setCanceled(true);
                     addGuildCoinsBonus = true;
                     return;
                 }
-                final Matcher matchercoins = COINS_BOOSTER_PATTERN.matcher(msg);
-                if (matchercoins.matches()) {
+                final Matcher matcherBooster = COINS_BOOSTER_PATTERN.matcher(msg);
+                if (matcherBooster.matches()) {
                     if (addGuildCoinsBonus) {
+                        final String currency = matcherBooster.group(1);
+                        final boolean isCoins = "coins".equals(currency);
                         event.message = new ChatComponentText(fmsg
-                                .replaceFirst("coins!", "coins! (" + EnumChatFormatting.DARK_GREEN + "Guild " + EnumChatFormatting.GOLD + "bonus)")
-                                .replace(matchercoins.group(1), "")
-                        );
+                                .replaceFirst(currency + "!", currency + "! (" + (isCoins ? EnumChatFormatting.DARK_GREEN : "") + "Guild " + (isCoins ? EnumChatFormatting.GOLD : "") + "bonus)")
+                                .replace(matcherBooster.group(2), ""));
                         addGuildCoinsBonus = false;
                     } else {
-                        event.message = new ChatComponentText(fmsg.replace(matchercoins.group(1), ""));
+                        event.message = new ChatComponentText(fmsg.replace(matcherBooster.group(2), ""));
                     }
                     return;
-                } else if (COINS_PATTERN.matcher(msg).matches()) {
+                }
+                final Matcher matcherCoins = COINS_PATTERN.matcher(msg);
+                if (matcherCoins.matches()) {
                     if (addGuildCoinsBonus) {
-                        event.message = new ChatComponentText(fmsg.replaceFirst("coins!", "coins! (" + EnumChatFormatting.DARK_GREEN + "Guild " + EnumChatFormatting.GOLD + "bonus)"));
+                        final String currency = matcherCoins.group(1);
+                        final boolean isCoins = "coins".equals(currency);
+                        event.message = new ChatComponentText(fmsg.replaceFirst(currency + "!", currency + "! (" + (isCoins ? EnumChatFormatting.DARK_GREEN : "") + "Guild " + (isCoins ? EnumChatFormatting.GOLD : "") + "bonus)"));
                         addGuildCoinsBonus = false;
                         return;
                     }
