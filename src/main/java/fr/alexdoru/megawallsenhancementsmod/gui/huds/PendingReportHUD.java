@@ -31,7 +31,7 @@ public class PendingReportHUD extends AbstractRenderer {
             text = str.toString();
         } else {
             final float progress = ReportQueue.INSTANCE.getStandStillCounter() / (float) ReportQueue.INSTANCE.getStandStillLimit();
-            final String playername = ReportQueue.INSTANCE.queueList.get(0);
+            final String playername = ReportQueue.INSTANCE.queueList.get(0).name;
             final StringBuilder str = new StringBuilder();
             str.append("/wdr ").append(playername);
             final int msgLength = str.length();

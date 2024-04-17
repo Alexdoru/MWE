@@ -320,15 +320,19 @@ public class ChatUtil {
     }
 
     public static String getReportingAdvice() {
-        final String s = "\n\n" + RED + "To make reporting efficient, be sure to report" + DARK_RED + " when you are ingame with\n"
-                + DARK_RED + "the cheater" + RED + " and not before the game starts or in the lobby.";
-        return ScoreboardTracker.isPreGameLobby ? s : "";
+        if (ScoreboardTracker.isPreGameLobby) {
+            return "\n\n" + RED + "To make reporting efficient, be sure to use /report"
+                    + DARK_RED + " when you are ingame with\n" + DARK_RED + "the cheater and they are currently cheating\n"
+                    + RED + ", not 2 minutes after, not after the game ended or before the game starts.";
+        }
+        return "";
     }
 
     public static void printReportingAdvice() {
-        addChatMessage(getTagNoCheaters() + RED + "To make reporting efficient, be sure to report"
-                + DARK_RED + " when you are ingame with the cheater "
-                + RED + "and not before the game starts or in the lobby. This way a replay can be attached to the report and it will have a higher chance to be reviewed.");
+        addChatMessage(getTagNoCheaters() + RED + "To make reporting efficient, be sure to use /report"
+                + DARK_RED + " when you are ingame with the cheater and they are currently cheating "
+                + RED + ", not 2 minutes after, not after the game ended or before the game starts." +
+                " This way a replay with a timestamp can be attached to the report for review.");
     }
 
     public static IChatComponent formattedNameWithReportButton(String playername, String formattedName) {
