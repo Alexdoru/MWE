@@ -119,6 +119,7 @@ public class FastbreakCheck extends Check {
                 }
                 if (playerBreaking == null) continue;
                 final PlayerDataSamples data = ((EntityPlayerAccessor) playerBreaking).getPlayerDataSamples();
+                if (data.serverUpdatesList.sum() * 20 / data.serverUpdatesList.capacity() > 14) return;
                 final long recordedBreakTime = brokenBlock.breakTime - data.lastBreakBlockTime;
                 data.lastBreakBlockTime = brokenBlock.breakTime;
                 if (playerBreaking == mc.thePlayer || !"pickaxe".equals(brokenBlock.tool)) continue;
