@@ -51,7 +51,7 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
                 },
                 () -> ConfigHandler.autoreportFlaggedPlayers,
                 GRAY + "Sends a report automatically to Hypixel when it flags a cheater",
-                YELLOW + "Only works in Mega Walls, sends one report per game per player"));
+                YELLOW + "Only works in Mega Walls, sends one report per game per player. It will abort the report if you wait too long to send it."));
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(5),
                 () -> {
