@@ -31,6 +31,9 @@ public class PlayerDataSamples {
     /** Info about attack that happend this tick if any */
     public AttackInfo attackInfo;
     public final SampleListZ attackList = new SampleListZ(20);
+    /** Last time the player broke a block */
+    public long lastBreakBlockTime = System.currentTimeMillis();
+    public SampleListF breakTimeRatio = new SampleListF(8);
 
     /* ----- Samples of rotations/positions interpolated by the client ----- */
     public final SampleListD posXList = new SampleListD(10);
@@ -55,8 +58,6 @@ public class PlayerDataSamples {
     public final SampleListF serverYawHeadList = new SampleListF(5);
     /* ----- Server samples end ----- */
 
-    /** Last time the player broke a block */
-    public long lastBreakBlockTime = System.currentTimeMillis();
     public final ViolationLevelTracker autoblockAVL = AutoblockCheck.newVL();
     public final ViolationLevelTracker fastbreakVL = FastbreakCheck.newVL();
     public final ViolationLevelTracker keepsprintAVL = KeepSprintACheck.newVL();
