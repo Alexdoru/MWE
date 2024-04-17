@@ -21,6 +21,8 @@ import java.util.List;
 
 public class FastbreakCheck extends Check {
 
+    private boolean sendReport;
+
     private final List<BrokenBlock> brokenBlocksList;
 
     public FastbreakCheck(List<BrokenBlock> list) {
@@ -39,7 +41,7 @@ public class FastbreakCheck extends Check {
 
     @Override
     public boolean canSendReport() {
-        return true;
+        return sendReport;
     }
 
     @Override
@@ -125,15 +127,18 @@ public class FastbreakCheck extends Check {
                 if (playerBreaking == mc.thePlayer || !"pickaxe".equals(brokenBlock.tool)) continue;
                 final float expectedBreakTime = 50F * getTimeToHarvestBlock(getBlockStrengthMW(playerBreaking, brokenBlock.blockPos, brokenBlock.block));
                 final float breakTimeRatio = recordedBreakTime / expectedBreakTime;
+                data.breakTimeRatio.add(Math.min(breakTimeRatio, 1.1F));
                 if (breakTimeRatio < 0.95F) {
                     data.fastbreakVL.add(MathHelper.clamp_int(MathHelper.floor_float((1F - breakTimeRatio) * 20F), 1, 4));
                     if (ConfigHandler.debugLogging && data.fastbreakVL.getViolationLevel() > 6) {
                         this.log(playerBreaking, data, data.fastbreakVL,
-                                " | breakTimeRatio " + String.format("%.2f", breakTimeRatio) +
+                                " | avgBreaktimeRatio " + String.format("%.2f", data.breakTimeRatio.average()) +
+                                        " | breakTimeRatio " + String.format("%.2f", breakTimeRatio) +
                                         " | breakTime " + recordedBreakTime + "/" + (int) expectedBreakTime +
                                         " | block " + brokenBlock.block.getRegistryName());
                         //this.fail(playerBreaking, " " + recordedBreakTime + "/" + expectedBreakTime + " vl" + data.fastbreakVL.getViolationLevel());
                     }
+                    this.sendReport = data.breakTimeRatio.average() < 0.8F;
                     super.checkViolationLevel(playerBreaking, true, data.fastbreakVL);
                 } else {
                     data.fastbreakVL.substract(2);

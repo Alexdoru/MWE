@@ -27,7 +27,7 @@ public class KeepSprintACheck extends Check {
 
     @Override
     public boolean canSendReport() {
-        return true;
+        return false;
     }
 
     @Override
