@@ -43,7 +43,7 @@ public class PlayerDataSamples {
 
     /* ----- Samples of rotations/positions received from the server ----- */
     private int serverUpdates;
-    public final SampleListI serverUpdatesList = new SampleListI(5);
+    public final SampleListI serverUpdatesList = new SampleListI(20);
     public final SampleListD serverPosXList = new SampleListD(5);
     public final SampleListD serverPosYList = new SampleListD(5);
     public final SampleListD serverPosZList = new SampleListD(5);
