@@ -38,7 +38,7 @@ public class MegaWallsEnhancementsMod {
 
     public static final String modid = "mwenhancements";
     public static final String modName = "MegaWallsEnhancements";
-    public static final String version = "3.6.3";
+    public static final String version = "3.6.4";
     public static final Logger logger = LogManager.getLogger(modName);
     public static File jarFile;
 
