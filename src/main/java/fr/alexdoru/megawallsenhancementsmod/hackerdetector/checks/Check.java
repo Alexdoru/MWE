@@ -73,6 +73,7 @@ public abstract class Check implements ICheck {
                 .setChatStyle(new ChatStyle()
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.COPY_TO_CLIPBOARD_COMMAND + EnumChatFormatting.getTextWithoutFormattingCodes(msg)))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.RED + this.getCheatDescription()))));
+        ChatUtil.addSkinToComponent(imsg, player.getName());
         if (!(ScoreboardTracker.isInMwGame && ConfigHandler.autoreportFlaggedPlayers)) {
             imsg.appendSibling(ChatUtil.getReportButton(playername, "cheating " + this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
         }

@@ -33,15 +33,6 @@ public class ChatUtil {
         addChatMessage(new ChatComponentText(msg));
     }
 
-    public static void addChatMessage(String msg, String playername) {
-        addChatMessage(new ChatComponentText(msg), playername);
-    }
-
-    public static void addChatMessage(IChatComponent component, String playername) {
-        addSkinToComponent(component, playername);
-        addChatMessage(component);
-    }
-
     public static void addChatMessage(IChatComponent msg) {
         addChatMessage(msg, mc.isCallingFromMinecraftThread());
     }
