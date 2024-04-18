@@ -47,6 +47,7 @@ public class WarningMessagesHandler {
         final IChatComponent imsg = new WarningChatComponent(playername, EnumChatFormatting.RED + "Warning : ")
                 .appendSibling(createPlayerNameWithHoverText(formattedName, playername, wdrmapKey, wdr, EnumChatFormatting.LIGHT_PURPLE))
                 .appendText(EnumChatFormatting.GRAY + " joined, Cheats :");
+        ChatUtil.addSkinToComponent(imsg, playername);
         final IChatComponent allCheats = wdr.getFormattedHacks();
         if (!ScoreboardTracker.isPreGameLobby) {
             allCheats.setChatStyle(new ChatStyle()

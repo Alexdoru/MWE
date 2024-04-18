@@ -250,9 +250,11 @@ public class CommandScanGame extends MyAbstractCommand {
 
     private static void addScanMessageToChat(NetworkPlayerInfo netInfo, IChatComponent imsg) {
         ChatHandler.deleteScanFlagFromChat(netInfo.getGameProfile().getName());
-        ChatUtil.addChatMessage(new ScanFlagChatComponent(netInfo.getGameProfile().getName(), ChatUtil.getTagMW())
+        final IChatComponent msg = new ScanFlagChatComponent(netInfo.getGameProfile().getName(), ChatUtil.getTagMW())
                 .appendSibling(NameUtil.getFormattedNameWithPlanckeClickEvent(netInfo))
-                .appendSibling(imsg));
+                .appendSibling(imsg);
+        ChatUtil.addSkinToComponent(msg, netInfo.getGameProfile().getName());
+        ChatUtil.addChatMessage(msg);
     }
 
 }
