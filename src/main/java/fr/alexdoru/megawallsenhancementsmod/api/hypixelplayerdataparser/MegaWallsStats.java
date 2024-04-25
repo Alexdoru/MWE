@@ -156,7 +156,7 @@ public class MegaWallsStats {
         return fkpergame;
     }
 
-    public int getGames_played() {
+    public int getGamesPlayed() {
         return games_played;
     }
 

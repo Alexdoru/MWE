@@ -317,6 +317,16 @@ public class MegaWallsClassStats {
         return unlocked || classname.equals("hunter") || classname.equals("shark") || classname.equals("cow");
     }
 
+    public boolean isMythic() {
+        return classname.equals("assassin") ||
+                classname.equals("werewolf") ||
+                classname.equals("phoenix") ||
+                classname.equals("automaton") ||
+                classname.equals("moleman") ||
+                classname.equals("renegade") ||
+                classname.equals("snowman");
+    }
+
     /**
      * Returns an array with :
      * - kit level
@@ -341,6 +351,10 @@ public class MegaWallsClassStats {
                 + (skill_level_b == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_b) + " "
                 + (skill_level_c == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_c) + " "
                 + (skill_level_g == 3 ? EnumChatFormatting.GOLD : EnumChatFormatting.DARK_GRAY) + ChatUtil.intToRoman(skill_level_g);
+    }
+
+    public String getClassname() {
+        return classnameuppercase;
     }
 
     public int getClasspoints() {
