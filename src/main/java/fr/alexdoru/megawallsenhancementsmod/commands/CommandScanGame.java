@@ -22,10 +22,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 import java.util.UUID;
+
+import static net.minecraft.util.EnumChatFormatting.*;
 
 public class CommandScanGame extends MyAbstractCommand {
 
@@ -41,7 +42,7 @@ public class CommandScanGame extends MyAbstractCommand {
             return;
         }
         if (!ScoreboardTracker.isInMwGame && !ScoreboardTracker.isPreGameLobby) {
-            ChatUtil.addChatMessage(EnumChatFormatting.RED + "This is only available in Mega Walls!");
+            ChatUtil.addChatMessage(RED + "This is only available in Mega Walls!");
             return;
         }
         final String currentGameId = ScoreboardUtils.getGameIdFromScoreboard();
@@ -65,7 +66,7 @@ public class CommandScanGame extends MyAbstractCommand {
             if (mc.thePlayer != null && netInfo.getGameProfile().getId().equals(mc.thePlayer.getUniqueID())) continue;
             if (scanPlayer(netInfo, isMythicHour)) i++;
         }
-        ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Scanning " + i + " players...");
+        ChatUtil.addChatMessage(ChatUtil.getTagMW() + GREEN + "Scanning " + i + " players...");
     }
 
     private static boolean scanPlayer(NetworkPlayerInfo netInfo, boolean isMythicHourInPreGameLobby) {
@@ -115,7 +116,7 @@ public class CommandScanGame extends MyAbstractCommand {
         final String playername = networkPlayerInfo.getGameProfile().getName();
         final MegaWallsStats megaWallsStats = new MegaWallsStats(playerdata.getPlayerData());
 
-        if (megaWallsStats.getGames_played() > 500) {
+        if (megaWallsStats.getGamesPlayed() > 500) {
             ScangameData.addToSkipSet(uuid);
             return;
         }
@@ -137,112 +138,95 @@ public class CommandScanGame extends MyAbstractCommand {
     }
 
     private static IChatComponent checkPlayerFkd(MegaWallsStats megaWallsStats) {
-        if ((megaWallsStats.getGames_played() <= 25 && megaWallsStats.getFkdr() > 3.5f) ||
-                (megaWallsStats.getGames_played() <= 250 && megaWallsStats.getFkdr() > 5f) ||
-                (megaWallsStats.getGames_played() <= 500 && megaWallsStats.getFkdr() > 8f) ||
+        if ((megaWallsStats.getGamesPlayed() <= 25 && megaWallsStats.getFkdr() > 3.5f) ||
+                (megaWallsStats.getGamesPlayed() <= 250 && megaWallsStats.getFkdr() > 5f) ||
+                (megaWallsStats.getGamesPlayed() <= 500 && megaWallsStats.getFkdr() > 8f) ||
                 megaWallsStats.getWlr() * megaWallsStats.getFkdr() > 0.33F * 1F * 6F) { // 6 times the average win/loss times the average fkdr
-            return new ChatComponentText(EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megaWallsStats.getGames_played()
-                    + EnumChatFormatting.GRAY + " games, fkd : " + EnumChatFormatting.GOLD + String.format("%.1f", megaWallsStats.getFkdr())
-                    + EnumChatFormatting.GRAY + " FK/game : " + EnumChatFormatting.GOLD + String.format("%.1f", megaWallsStats.getFkpergame())
-                    + EnumChatFormatting.GRAY + " W/L : " + EnumChatFormatting.GOLD + String.format("%.1f", megaWallsStats.getWlr()));
+            return new ChatComponentText(GRAY + " played : " + GOLD + megaWallsStats.getGamesPlayed()
+                    + GRAY + " games, fkd : " + GOLD + String.format("%.1f", megaWallsStats.getFkdr())
+                    + GRAY + " FK/game : " + GOLD + String.format("%.1f", megaWallsStats.getFkpergame())
+                    + GRAY + " W/L : " + GOLD + String.format("%.1f", megaWallsStats.getWlr()));
 
         }
         return null;
     }
 
-    private static IChatComponent checkMaxKits(String playername, JsonObject playerData, MegaWallsStats megaWallsStats, GeneralInfo generalInfo) {
-        if (megaWallsStats.getGames_played() >= 15 || generalInfo.getNetworkLevel() > 100F) {
+    private static IChatComponent checkMaxKits(String playername, JsonObject playerData, MegaWallsStats mwStats, GeneralInfo generalInfo) {
+        if (mwStats.getGamesPlayed() >= 15) {
             return null;
         }
-        final boolean firstGame = megaWallsStats.getGames_played() == 0;
-        final boolean secondFlag = generalInfo.getCompletedQuests() < 30 && generalInfo.getNetworkLevel() > 25f || megaWallsStats.getGames_played() < 3;
-        final JsonObject classesdata = megaWallsStats.getClassesdata();
-        IChatComponent imsg = null;
+        final JsonObject classesdata = mwStats.getClassesdata();
         if (classesdata == null) {
             return null;
         }
+        IChatComponent imsg = null;
         if (ScoreboardTracker.isInMwGame) {
             final MWClass mwClass = MWClass.ofPlayer(playername);
             if (mwClass != null) {
                 final MegaWallsClassStats classStats = new MegaWallsClassStats(playerData, mwClass.className);
-                if (firstGame) {
-                    imsg = getMaxKitMsgFirstGame(mwClass.className, classStats);
-                } else if (secondFlag) {
-                    imsg = getMaxKitMsg(mwClass.className, classStats, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megaWallsStats.getGames_played());
-                }
+                imsg = getMaxKitMsg(mwStats, classStats, generalInfo);
             }
             return imsg;
         }
         for (final MWClass mwClass : MWClass.values()) {
             final MegaWallsClassStats classStats = new MegaWallsClassStats(playerData, mwClass.className);
             if (imsg == null) {
-                if (firstGame) {
-                    imsg = getMaxKitMsgFirstGame(mwClass.className, classStats);
-                } else if (secondFlag) {
-                    imsg = getMaxKitMsg(mwClass.className, classStats, generalInfo.getCompletedQuests(), (int) generalInfo.getNetworkLevel(), megaWallsStats.getGames_played());
-                }
+                imsg = getMaxKitMsg(mwStats, classStats, generalInfo);
             } else {
-                final IChatComponent classMsg = getFormattedClassMsg(mwClass.className, classStats, firstGame);
-                if (classMsg != null) {
-                    imsg.appendSibling(classMsg);
+                final int[] upgrades = classStats.getKitUpgrades();
+                if (mwStats.getGamesPlayed() == 0 ? upgrades[0] >= 4 || upgrades[1] >= 4 : upgrades[0] == 5 && upgrades[1] == 5 && upgrades[2] == 3 && upgrades[3] == 3) {
+                    imsg.appendSibling(new ChatComponentText(" " + GOLD + classStats.getClassname() + " " + classStats.getFormattedKitUpgrades()));
                 }
             }
         }
         return imsg;
     }
 
-    private static IChatComponent getMaxKitMsgFirstGame(String className, MegaWallsClassStats classStats) {
+    private static IChatComponent getMaxKitMsg(MegaWallsStats mwStats, MegaWallsClassStats classStats, GeneralInfo generalInfo) {
+        final boolean firstGame = mwStats.getGamesPlayed() == 0;
+        final boolean secondFlag = generalInfo.getCompletedQuests() < 30 && generalInfo.getNetworkLevel() > 25f || mwStats.getGamesPlayed() < 5;
+        final boolean mythicFlag = classStats.isMythic() && mwStats.getGamesPlayed() < 10;
         final int[] upgrades = classStats.getKitUpgrades();
-        if (upgrades[0] >= 4 || upgrades[1] >= 4) {
-            return new ChatComponentText(EnumChatFormatting.GRAY + " never played and has :").appendSibling(getFormattedClassMsg(className, classStats, true));
+        if (firstGame) {
+            if (upgrades[0] >= 4 || upgrades[1] >= 4) {
+                return new ChatComponentText(GRAY + " never played and has : " + GOLD + classStats.getClassname() + " " + classStats.getFormattedKitUpgrades());
+            }
+            return null;
         }
-        return null;
-    }
-
-    private static IChatComponent getMaxKitMsg(String className, MegaWallsClassStats classStats, int quests, int networklevel, int gameplayed) {
-        final int[] upgrades = classStats.getKitUpgrades();
-        if (upgrades[0] == 5 && upgrades[1] == 5 && upgrades[2] == 3 && upgrades[3] == 3) {
-            return new ChatComponentText(EnumChatFormatting.GRAY + " played " + EnumChatFormatting.GOLD + gameplayed + EnumChatFormatting.GRAY + " games"
-                    + EnumChatFormatting.GRAY + ", network lvl " + EnumChatFormatting.GOLD + networklevel
-                    + EnumChatFormatting.GRAY + ", with " + EnumChatFormatting.GOLD + quests + EnumChatFormatting.GRAY + " quests"
-                    + EnumChatFormatting.GRAY + " and has :").appendSibling(getFormattedClassMsg(className, classStats, false));
-        }
-        return null;
-    }
-
-    private static IChatComponent getFormattedClassMsg(String className, MegaWallsClassStats classStats, boolean firstgame) {
-        final int[] upgrades = classStats.getKitUpgrades();
-        if (firstgame ? upgrades[0] >= 4 || upgrades[1] >= 4 : upgrades[0] == 5 && upgrades[1] == 5 && upgrades[2] == 3 && upgrades[3] == 3) {
-            return new ChatComponentText(" " + EnumChatFormatting.GOLD + className + " " + classStats.getFormattedKitUpgrades());
+        if ((secondFlag && upgrades[0] == 5 && upgrades[1] == 5 && upgrades[2] == 3 && upgrades[3] == 3) || (mythicFlag && upgrades[0] == 5 && upgrades[1] == 5)) {
+            return new ChatComponentText(GRAY + " played " + GOLD + mwStats.getGamesPlayed() + GRAY + " games"
+                    + GRAY + ", network lvl " + GOLD + ((int) generalInfo.getNetworkLevel())
+                    + GRAY + ", with " + GOLD + generalInfo.getCompletedQuests() + GRAY + " quests"
+                    + GRAY + " and has : " + GOLD + classStats.getClassname() + " " + classStats.getFormattedKitUpgrades());
         }
         return null;
     }
 
     private static IChatComponent checkLegendarySkins(MegaWallsStats megaWallsStats) {
-        final float ratio = megaWallsStats.getLegSkins() * 12f / (megaWallsStats.getGames_played() == 0 ? 1 : megaWallsStats.getGames_played());
+        final float ratio = megaWallsStats.getLegSkins() * 12f / (megaWallsStats.getGamesPlayed() == 0 ? 1 : megaWallsStats.getGamesPlayed());
         if (ratio >= 1) {
-            return new ChatComponentText(EnumChatFormatting.GRAY + " played : " + EnumChatFormatting.GOLD + megaWallsStats.getGames_played()
-                    + EnumChatFormatting.GRAY + " games, and has : " + EnumChatFormatting.GOLD + megaWallsStats.getLegSkins()
-                    + EnumChatFormatting.GRAY + " legendary skin" + (megaWallsStats.getLegSkins() > 1 ? "s" : ""));
+            return new ChatComponentText(GRAY + " played : " + GOLD + megaWallsStats.getGamesPlayed()
+                    + GRAY + " games, and has : " + GOLD + megaWallsStats.getLegSkins()
+                    + GRAY + " legendary skin" + (megaWallsStats.getLegSkins() > 1 ? "s" : ""));
         }
         return null;
     }
 
     private static IChatComponent getMythicRandomMsg(int networkLevel, int completedQuests) {
-        return new ChatComponentText(EnumChatFormatting.GRAY + " picked "
-                + EnumChatFormatting.GOLD + "random"
-                + EnumChatFormatting.GRAY + ", network lvl " + EnumChatFormatting.GOLD + networkLevel
-                + EnumChatFormatting.GRAY + " and " + EnumChatFormatting.GOLD + completedQuests + EnumChatFormatting.GRAY + " quests");
+        return new ChatComponentText(GRAY + " picked "
+                + GOLD + "random"
+                + GRAY + ", network lvl " + GOLD + networkLevel
+                + GRAY + " and " + GOLD + completedQuests + GRAY + " quests");
     }
 
     private static IChatComponent checkRandomKit(GeneralInfo generalInfo, HypixelPlayerData playerdata) {
         if (((int) generalInfo.getNetworkLevel() + generalInfo.getCompletedQuests()) < 11) {
             final LoginData loginData = new LoginData(playerdata.getPlayerData());
             if (loginData.isNonRanked()) {
-                return new ChatComponentText(EnumChatFormatting.GRAY + " picked "
-                        + EnumChatFormatting.GOLD + "random"
-                        + EnumChatFormatting.GRAY + ", network lvl " + EnumChatFormatting.GOLD + ((int) generalInfo.getNetworkLevel())
-                        + EnumChatFormatting.GRAY + " and " + EnumChatFormatting.GOLD + generalInfo.getCompletedQuests() + EnumChatFormatting.GRAY + " quests");
+                return new ChatComponentText(GRAY + " picked "
+                        + GOLD + "random"
+                        + GRAY + ", network lvl " + GOLD + ((int) generalInfo.getNetworkLevel())
+                        + GRAY + " and " + GOLD + generalInfo.getCompletedQuests() + GRAY + " quests");
             }
         }
         return null;
