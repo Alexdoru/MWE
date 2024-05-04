@@ -6,6 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.TickingBlockMap;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -164,7 +165,9 @@ public class KillAuraACheck extends Check {
             if (ConfigHandler.debugLogging) {
                 final String msg = " | " + data.attackInfo.attackType.name() + " | target : " + data.attackInfo.targetName + " | b " + b + " | p " + p + " | reach " + String.format("%.2f", reach) + " | players " + nearbyPlayers.size();
                 this.log(player, data, data.killAuraAVL, msg);
-                //this.fail(player, " b" + b + " p" + p + " vl" + data.killAuraAVL.getViolationLevel());
+                if (ScoreboardTracker.isReplayMode) {
+                    this.fail(player, " b" + b + " p" + p + " vl" + data.killAuraAVL.getViolationLevel());
+                }
             }
             return true;
         }
