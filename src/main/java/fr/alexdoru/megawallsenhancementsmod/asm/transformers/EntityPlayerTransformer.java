@@ -21,19 +21,16 @@ public class EntityPlayerTransformer implements MWETransformer {
         final String PRESTIGE_5_TAG_FIELD_NAME = "mwe$Prestige5Tag";
         final String TEAM_COLOR_FIELD_NAME = "mwe$PlayerTeamColor";
         final String TEAM_COLOR_INT_FIELD_NAME = "mwe$PlayerTeamColorI";
-        final String RENDER_NAMETAG_FIELD_NAME = "mwe$renderNametag";
         classNode.visitField(ACC_PRIVATE, PRESTIGE_4_TAG_FIELD_NAME, "Ljava/lang/String;", null, null);
         classNode.visitField(ACC_PRIVATE, PRESTIGE_5_TAG_FIELD_NAME, "Ljava/lang/String;", null, null);
         classNode.visitField(ACC_PRIVATE, FieldMapping.ENTITYPLAYER$PLAYERDATASAMPLES.name, FieldMapping.ENTITYPLAYER$PLAYERDATASAMPLES.desc, null, null);
         classNode.visitField(ACC_PRIVATE, TEAM_COLOR_FIELD_NAME, "C", null, '\0');
         classNode.visitField(ACC_PRIVATE, TEAM_COLOR_INT_FIELD_NAME, "I", null, 0xFFFFFF); // HEX int to do white color
-        classNode.visitField(ACC_PRIVATE, RENDER_NAMETAG_FIELD_NAME, "Z", null, false);
         classNode.visitField(ACC_PRIVATE, FieldMapping.ENTITYPLAYER$MWCLASS.name, FieldMapping.ENTITYPLAYER$MWCLASS.desc, null, null);
         addGetterAndSetterMethod(classNode, "Prestige4Tag", ClassMapping.ENTITYPLAYER, PRESTIGE_4_TAG_FIELD_NAME, "Ljava/lang/String;", null);
         addGetterAndSetterMethod(classNode, "Prestige5Tag", ClassMapping.ENTITYPLAYER, PRESTIGE_5_TAG_FIELD_NAME, "Ljava/lang/String;", null);
         addGetterAndSetterMethod(classNode, "PlayerTeamColor", ClassMapping.ENTITYPLAYER, TEAM_COLOR_FIELD_NAME, "C", null);
         addGetterAndSetterMethod(classNode, "PlayerTeamColorInt", ClassMapping.ENTITYPLAYER, TEAM_COLOR_INT_FIELD_NAME, "I", null);
-        addGetterAndSetterMethod(classNode, "mwe$RenderNametag", ClassMapping.ENTITYPLAYER, RENDER_NAMETAG_FIELD_NAME, "Z", null);
         addGetterAndSetterMethod(classNode, "MWClass", FieldMapping.ENTITYPLAYER$MWCLASS, null);
         addGetterMethod(classNode, "getPlayerDataSamples", FieldMapping.ENTITYPLAYER$PLAYERDATASAMPLES, null);
         status.setInjectionPoints(2);

@@ -2,7 +2,6 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.EntityLivingBase;
 
 @SuppressWarnings("unused")
@@ -11,7 +10,7 @@ public class RendererLivingEntityHook_HitColor {
     private static int hitColor;
 
     public static float getRed(float r, EntityLivingBase entity) {
-        if (ConfigHandler.useTeamColorWhenHurt && entity instanceof EntityPlayerAccessor && (((EntityPlayerAccessor) entity).getmwe$RenderNametag() || entity instanceof EntityPlayerSP)) {
+        if (ConfigHandler.useTeamColorWhenHurt && entity instanceof EntityPlayerAccessor) {
             hitColor = ((EntityPlayerAccessor) entity).getPlayerTeamColorInt();
         } else {
             hitColor = ConfigHandler.hitColor;
