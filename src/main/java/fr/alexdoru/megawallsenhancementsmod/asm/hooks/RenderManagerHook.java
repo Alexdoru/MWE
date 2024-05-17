@@ -4,7 +4,6 @@ import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.IHitboxRender;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.util.AxisAlignedBB;
@@ -27,7 +26,7 @@ public class RenderManagerHook {
     private static int hitboxColor = 0xFFFFFF;
 
     public static int getRedHitboxColor(int r, Entity entity) {
-        if (ConfigHandler.teamColoredHitbox && entity instanceof EntityPlayerAccessor && (((EntityPlayerAccessor) entity).getmwe$RenderNametag() || entity instanceof EntityPlayerSP)) {
+        if (ConfigHandler.teamColoredHitbox && entity instanceof EntityPlayerAccessor) {
             hitboxColor = ((EntityPlayerAccessor) entity).getPlayerTeamColorInt();
         } else if (ConfigHandler.teamColoredArrowHitbox && entity instanceof EntityArrow && ((EntityArrow) entity).shootingEntity instanceof EntityPlayerAccessor) {
             hitboxColor = ((EntityPlayerAccessor) ((EntityArrow) entity).shootingEntity).getPlayerTeamColorInt();

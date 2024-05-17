@@ -13,8 +13,6 @@ public interface EntityPlayerAccessor {
     void setPlayerTeamColor(char color);
     int getPlayerTeamColorInt();
     void setPlayerTeamColorInt(int color);
-    boolean getmwe$RenderNametag();
-    void setmwe$RenderNametag(boolean b);
     MWClass getMWClass();
     void setMWClass(MWClass mwclass);
 }
