@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.features.LeatherArmorManager;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -29,6 +30,10 @@ public class EntityOtherPlayerMPHook {
             }
         }
         return false;
+    }
+
+    public static ItemStack getLeatherArmor(EntityOtherPlayerMP player, int slotIn, ItemStack stack) {
+        return LeatherArmorManager.replaceIronArmor(player, slotIn, stack);
     }
 
     private static boolean areItemStacksSemiEquals(ItemStack stackA, ItemStack stackB) {

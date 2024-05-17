@@ -11,6 +11,7 @@ import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.data.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
 import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
+import fr.alexdoru.megawallsenhancementsmod.features.LeatherArmorManager;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.WarningMessagesHandler;
@@ -28,7 +29,11 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -148,9 +153,12 @@ public class NameUtil {
                         player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
                     }
                     if (player != null) {
-                        ((EntityPlayerAccessor) player).setPlayerTeamColor(mwPlayerData.teamColor);
-                        ((EntityPlayerAccessor) player).setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
-                        ((EntityPlayerAccessor) player).setMWClass(mwPlayerData.mwClass);
+                        final EntityPlayerAccessor playerAccessor = (EntityPlayerAccessor) player;
+                        final int oldColor = playerAccessor.getPlayerTeamColorInt();
+                        playerAccessor.setPlayerTeamColor(mwPlayerData.teamColor);
+                        playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
+                        playerAccessor.setMWClass(mwPlayerData.mwClass);
+                        LeatherArmorManager.onColorChange(player, oldColor, playerAccessor.getPlayerTeamColorInt());
                     }
                 }
             }
@@ -172,13 +180,15 @@ public class NameUtil {
         final EntityPlayerAccessor playerAccessor = (EntityPlayerAccessor) player;
         playerAccessor.setPrestige4Tag(mwPlayerData.originalP4Tag);
         playerAccessor.setPrestige5Tag(mwPlayerData.P5Tag);
-        playerAccessor.setPlayerTeamColor(mwPlayerData.teamColor);
 
+        final int oldColor = playerAccessor.getPlayerTeamColorInt();
+        playerAccessor.setPlayerTeamColor(mwPlayerData.teamColor);
         if (ConfigHandler.pinkSquadmates && mwPlayerData.squadname != null) {
             playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt('d'));
         } else {
             playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
         }
+        LeatherArmorManager.onColorChange(player, oldColor, playerAccessor.getPlayerTeamColorInt());
 
         playerAccessor.setMWClass(mwPlayerData.mwClass);
 
