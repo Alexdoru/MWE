@@ -4,6 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.ASMLoadingPlugin;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.features.LeatherArmorManager;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.FancyGuiButton;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.OptionGuiButton;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.SimpleGuiButton;
@@ -27,7 +28,7 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
     @Override
     public void initGui() {
         this.maxWidth = BUTTON_WIDTH;
-        this.maxHeight = (buttonsHeight + 4) * 8 + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * 9 + buttonsHeight;
         super.initGui();
         final int xPosLeft = getxCenter() - BUTTON_WIDTH - 10;
         final int xPosRight = getxCenter() + 10;
@@ -125,6 +126,15 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
                 (b) -> ConfigHandler.strengthParticules = b,
                 () -> ConfigHandler.strengthParticules,
                 GRAY + "Spawns angry villager particles when an herobrine or dreadlord gets strength from a final kill"));
+        this.buttonList.add(new FancyGuiButton(
+                xPosLeft, getButtonYPos(6),
+                () -> "Colored Leather Armor : " + getSuffix(ConfigHandler.coloredLeatherArmor),
+                () -> {
+                    ConfigHandler.coloredLeatherArmor = !ConfigHandler.coloredLeatherArmor;
+                    LeatherArmorManager.onSettingChange();
+                },
+                GREEN + "Colored Leather Armor",
+                GRAY + "Changes iron armor worn by other players to colored leather armor matching their team color in Mega Walls"));
         this.buttonList.add(new OptionGuiButton(
                 xPosRight, getButtonYPos(1),
                 "Renegade arrow count",
@@ -169,7 +179,7 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
                     },
                     chatHeadTooltip));
         }
-        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(7), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
+        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(8), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
 
 }

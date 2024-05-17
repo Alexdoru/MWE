@@ -29,9 +29,6 @@ public class ConfigHandler extends AbstractConfig {
             comment = "The version of the mod the config was saved with")
     protected static String modVersion = "";
 
-    /**
-     * FKCounter config
-     */
     @ConfigProperty(
             category = FKCOUNTER,
             name = "FKCounter HUD",
@@ -92,9 +89,6 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Kill diff in Chat")
     public static boolean showKillDiffInChat = true;
 
-    /**
-     * MWEnhancements config
-     */
     @ConfigProperty(
             category = MWENHANCEMENTS,
             name = "APIKey",
@@ -305,9 +299,12 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Display squad icon only in the tablist")
     public static boolean squadIconTabOnly;
 
-    /**
-     * HUD config
-     */
+    @ConfigProperty(
+            category = MWENHANCEMENTS,
+            name = "Colored Leather Armor",
+            comment = "Changes iron armor to team colored leather armor")
+    public static boolean coloredLeatherArmor;
+
     @ConfigProperty(
             category = GUI,
             name = "Show kill cooldown HUD",
@@ -464,9 +461,6 @@ public class ConfigHandler extends AbstractConfig {
             comment = "position of the mini potion HUD")
     public static final GuiPosition miniPotionHUDPosition = new GuiPosition(0.5d, 7.5d / 20d);
 
-    /**
-     * NoCheaters Config
-     */
     @ConfigProperty(
             category = NOCHEATERS,
             name = "Show Warning Icons",
@@ -533,9 +527,6 @@ public class ConfigHandler extends AbstractConfig {
             comment = "position of the report HUD")
     public static final GuiPosition reportHUDPosition = new GuiPosition(0d, 1d);
 
-    /**
-     * Hacker Detector Config
-     */
     @ConfigProperty(
             category = HACKERDETECTOR,
             name = "Hacker Detector",
@@ -580,9 +571,6 @@ public class ConfigHandler extends AbstractConfig {
             comment = "Sends a report for flagged players")
     public static boolean autoreportFlaggedPlayers = true;
 
-    /**
-     * Hitbox Config
-     */
     @ConfigProperty(
             category = HITBOX,
             name = "Toggle hitbox",
