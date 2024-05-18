@@ -90,7 +90,8 @@ Allows you to customize the look of the f3+b hitboxes.
 
 ### Mega Walls features
 
-- **Base Location HUD** - shows in which base you are located
+- **Colored Leather Armor** - Changes iron armor pieces to team colored leather armor
+- **Base Location HUD** - Shows in which base you are located
 - **Creeper primed TNT HUD** - Displays the cooldown of the primed tnt when playing Creeper
 - **Energy display HUD** - Displays the amount of energy you have
 - **Kill cooldown HUD** - Displays the cooldown on the `/kill` command
