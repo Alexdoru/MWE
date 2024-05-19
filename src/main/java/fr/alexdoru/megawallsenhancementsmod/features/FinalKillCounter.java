@@ -240,7 +240,7 @@ public class FinalKillCounter {
         if (!ConfigHandler.showKillDiffInChat || killsOfKilledPlayer < 1) {
             return "";
         }
-        return EnumChatFormatting.WHITE + " (" + '\u00a7' + killedTeamColor + "-" + killsOfKilledPlayer + EnumChatFormatting.WHITE + ")";
+        return EnumChatFormatting.WHITE + " (" + '§' + killedTeamColor + "-" + killsOfKilledPlayer + EnumChatFormatting.WHITE + ")";
     }
 
     public static String getGameId() {
@@ -307,7 +307,7 @@ public class FinalKillCounter {
     }
 
     public static void removeKilledPlayer(String player, int team) {
-        removeKilledPlayer(player, getColorPrefixFromTeam(team).replace("\u00a7", ""));
+        removeKilledPlayer(player, getColorPrefixFromTeam(team).replace("§", ""));
     }
 
     /**
@@ -366,7 +366,7 @@ public class FinalKillCounter {
     }
 
     public static String getColorPrefixFromTeam(int team) {
-        return "\u00a7" + prefixes[team];
+        return "§" + prefixes[team];
     }
 
     public static String getTeamNameFromTeam(int team) {

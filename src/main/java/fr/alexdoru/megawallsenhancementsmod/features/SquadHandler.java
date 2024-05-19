@@ -93,7 +93,7 @@ public class SquadHandler {
                 }
                 final String nameonscoreboard = line.replace(" ", "");
                 final String squadmate = squadmap.get(nameonscoreboard);
-                 // the player was already in the squad before, reuse the same name transformation
+                // the player was already in the squad before, reuse the same name transformation
                 if (squadmate == null) {
                     newsquad.put(nameonscoreboard, nameonscoreboard);
                 } else {

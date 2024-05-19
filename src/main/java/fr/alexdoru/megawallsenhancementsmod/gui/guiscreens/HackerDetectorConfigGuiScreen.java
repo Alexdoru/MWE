@@ -75,8 +75,8 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
                 PendingReportHUD.INSTANCE,
                 this,
                 GREEN + "Pending reports HUD",
-                DARK_GRAY + "\u25AA " + GREEN + "Enabled" + GRAY + " : displays a small text when the mods has reports to send to the server, and when it's typing the reports",
-                DARK_GRAY + "\u25AA " + YELLOW + "Only in chat" + GRAY + " : only show when typing the report")
+                DARK_GRAY + "▪ " + GREEN + "Enabled" + GRAY + " : displays a small text when the mods has reports to send to the server, and when it's typing the reports",
+                DARK_GRAY + "▪ " + YELLOW + "Only in chat" + GRAY + " : only show when typing the report")
                 .accept(this.buttonList);
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(6),

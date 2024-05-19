@@ -128,7 +128,7 @@ public class CommandSquad extends MyAbstractCommand {
                 if (ConfigHandler.keepFirstLetterSquadnames) {
                     if (!args[1].isEmpty() && !alias.isEmpty()) {
                         if (args[1].charAt(0) != alias.charAt(0)) {
-                            alias = args[1].charAt(0) + " \u2758 " + alias;
+                            alias = args[1].charAt(0) + " ❘ " + alias;
                         }
                     }
                 }

@@ -29,11 +29,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,9 +62,9 @@ import java.util.regex.Pattern;
 public class NameUtil {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
-    public static final String WARNING_ICON = EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.BOLD + "\u26a0 " + EnumChatFormatting.RESET;
-    public static final String RED_WARNING_ICON = EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.BOLD + "\u26a0 " + EnumChatFormatting.RESET;
-    public static final String PINK_WARNING_ICON = EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD + "\u26a0 " + EnumChatFormatting.RESET;
+    public static final String WARNING_ICON = EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET;
+    public static final String RED_WARNING_ICON = EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET;
+    public static final String PINK_WARNING_ICON = EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET;
     public static final String SQUAD_ICON = EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] " + EnumChatFormatting.RESET;
     private static final IChatComponent IWARNING_ICON = new ChatComponentText(WARNING_ICON);
     private static final IChatComponent IRED_WARNING_ICON = new ChatComponentText(RED_WARNING_ICON);
@@ -297,7 +293,7 @@ public class NameUtil {
                         }
                     }
                 }
-                final boolean isobf = teamprefix.contains("\u00a7k");
+                final boolean isobf = teamprefix.contains(EnumChatFormatting.OBFUSCATED.toString());
                 final boolean isNicked = id.version() == 1;
                 final String alias = AliasData.getAlias(isNicked ? username : uuid);
                 if (iExtraPrefix != null || isSquadMate || formattedPrestigeVstring != null || alias != null) {
@@ -329,7 +325,7 @@ public class NameUtil {
 
     }
 
-    private static final Pattern obfPattern = Pattern.compile("\u00a7k[OX]*");
+    private static final Pattern obfPattern = Pattern.compile("§k[OX]*");
 
     private static String deobfString(String obfText) {
         return obfPattern.matcher(obfText).replaceAll("");

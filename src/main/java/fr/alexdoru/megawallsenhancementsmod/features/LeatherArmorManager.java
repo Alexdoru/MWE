@@ -30,7 +30,7 @@ public class LeatherArmorManager {
                 player instanceof EntityPlayerAccessor &&
                 ((EntityPlayerAccessor) player).getPlayerTeamColor() != '\0') {
             for (int i = 0; i < player.inventory.armorInventory.length; i++) {
-                ItemStack stack = player.inventory.armorInventory[i];
+                final ItemStack stack = player.inventory.armorInventory[i];
                 if (isColoredLeatherArmor(stack, oldColor)) {
                     player.inventory.armorInventory[i] = createColoredLeatherArmor(stack, newColor);
                 }
@@ -41,10 +41,10 @@ public class LeatherArmorManager {
     public static void onSettingChange() {
         final Minecraft mc = Minecraft.getMinecraft();
         if (mc.theWorld == null || (!ScoreboardTracker.isInMwGame && !ScoreboardTracker.isMWReplay)) return;
-        for (EntityPlayer player : mc.theWorld.playerEntities) {
+        for (final EntityPlayer player : mc.theWorld.playerEntities) {
             if (player instanceof EntityOtherPlayerMP && player instanceof EntityPlayerAccessor && ((EntityPlayerAccessor) player).getPlayerTeamColor() != '\0') {
                 for (int i = 0; i < player.inventory.armorInventory.length; i++) {
-                    ItemStack stack = player.inventory.armorInventory[i];
+                    final ItemStack stack = player.inventory.armorInventory[i];
                     if (ConfigHandler.coloredLeatherArmor) {
                         if (isCleanIronArmor(stack)) {
                             player.inventory.armorInventory[i] = createColoredLeatherArmor(stack, ((EntityPlayerAccessor) player).getPlayerTeamColorInt());

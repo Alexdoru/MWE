@@ -141,7 +141,7 @@ public class UHCStats {
         };
 
         ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
-                .appendSibling(ChatUtil.PlanckeHeaderText(EnumChatFormatting.GOLD + "[" + getStarLevel(score) + '\u272B' + "] " + formattedName, playername, " - UHC stats"))
+                .appendSibling(ChatUtil.PlanckeHeaderText(EnumChatFormatting.GOLD + "[" + getStarLevel(score) + '✫' + "] " + formattedName, playername, " - UHC stats"))
                 .appendText("\n" + "\n" + ChatUtil.alignText(matrix) + "\n")
                 .appendText(ChatUtil.centerLine(EnumChatFormatting.GREEN + "Score : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(score) + EnumChatFormatting.GREEN + " Coins : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(coins) + "\n"))
                 .appendText(EnumChatFormatting.AQUA + ChatUtil.bar()));

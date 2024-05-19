@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
-import java.awt.*;
+import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 
 public class ClipboardUtil {

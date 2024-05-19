@@ -25,7 +25,7 @@ public class RenderPlayerHook_RenegadeArrowCount {
             if (list == null || list.isEmpty()) {
                 return str;
             }
-            return str.append(EnumChatFormatting.RESET).append("  ").append(list.size()).append(EnumChatFormatting.GREEN).append(" \u27B9");
+            return str.append(EnumChatFormatting.RESET).append("  ").append(list.size()).append(EnumChatFormatting.GREEN).append(" ➹");
         }
         return str;
     }

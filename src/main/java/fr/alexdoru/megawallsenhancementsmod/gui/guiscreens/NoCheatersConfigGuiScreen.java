@@ -87,9 +87,9 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         final List<String> iconsTooltip = new ArrayList<>();
         iconsTooltip.add(GREEN + "Warning Icon on names");
         iconsTooltip.add("");
-        iconsTooltip.add(DARK_GRAY + "\u25AA " + GREEN + "Enabled" + GRAY + " : displays a warning icon in front of names on nametags and in the tablist");
+        iconsTooltip.add(DARK_GRAY + "▪ " + GREEN + "Enabled" + GRAY + " : displays a warning icon in front of names on nametags and in the tablist");
         iconsTooltip.add("");
-        iconsTooltip.add(DARK_GRAY + "\u25AA " + GREEN + "Tab Only" + GRAY + " : displays a warning icon in front of names in the tablist only");
+        iconsTooltip.add(DARK_GRAY + "▪ " + GREEN + "Tab Only" + GRAY + " : displays a warning icon in front of names in the tablist only");
         iconsTooltip.add("");
         iconsTooltip.add(NameUtil.RED_WARNING_ICON + GRAY + ": players reported for blatant cheats");
         iconsTooltip.add(NameUtil.WARNING_ICON + GRAY + ": players reported for cheating");

@@ -30,10 +30,10 @@ public class PhoenixBondHUD extends AbstractRenderer {
     private final List<PhxHealLine> dummyTextToRender = new ArrayList<>();
     private long timeStartRender;
 
-    private static final Pattern INCOMING_BOND_PATTERN = Pattern.compile("^You were healed by (\\w{1,16})'s Spirit Bond for ([0-9]*[.]?[0-9]+)[\u2764\u2665]");
+    private static final Pattern INCOMING_BOND_PATTERN = Pattern.compile("^You were healed by (\\w{1,16})'s Spirit Bond for ([0-9]*[.]?[0-9]+)[❤♥]");
     private static final Pattern BOND_USED_PATTERN = Pattern.compile("^Your Spirit Bond healed");
-    private static final Pattern PLAYERS_HEALED_PATTERN = Pattern.compile("(\\w{1,16})\\sfor\\s([0-9]*[.]?[0-9]+)[\u2764\u2665]");
-    private static final Pattern SELF_HEALED_PATTERN = Pattern.compile("You are healed for\\s([0-9]*[.]?[0-9]+)[\u2764\u2665]");
+    private static final Pattern PLAYERS_HEALED_PATTERN = Pattern.compile("(\\w{1,16})\\sfor\\s([0-9]*[.]?[0-9]+)[❤♥]");
+    private static final Pattern SELF_HEALED_PATTERN = Pattern.compile("You are healed for\\s([0-9]*[.]?[0-9]+)[❤♥]");
 
     public PhoenixBondHUD() {
         super(ConfigHandler.phxBondHUDPosition);
@@ -101,7 +101,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
             formattedName = getColoredName(playername, networkPlayerInfo);
         }
         return new PhxHealLine(
-                getHealColor(Float.parseFloat(amountHealed)) + amountHealed + EnumChatFormatting.RED + "\u2764",
+                getHealColor(Float.parseFloat(amountHealed)) + amountHealed + EnumChatFormatting.RED + "❤",
                 SkinUtil.getSkin(networkPlayerInfo),
                 formattedName);
     }

@@ -31,7 +31,7 @@ public class LastWitherHPHUD extends AbstractRenderer {
         }
         witherHp = witherHPIn;
         if (ScoreboardTracker.getParser().isOnlyOneWitherAlive()) {
-            color = "\u00a7" + ScoreboardTracker.getParser().getAliveWithers().get(0);
+            color = "§" + ScoreboardTracker.getParser().getAliveWithers().get(0);
         }
         final long time = System.currentTimeMillis();
         final int timeToDie = (witherHp / 8) * 5 + (thirdWitherDeathTime + 55000L - time > 0 ? (int) ((thirdWitherDeathTime + 55000L - time) / 1000L) - 4 : (int) ((lastWitherHPUpdate - time) / 1000L) + 3);
@@ -42,7 +42,7 @@ public class LastWitherHPHUD extends AbstractRenderer {
     public void onMWEvent(MegaWallsGameEvent event) {
         if (event.getType() == MegaWallsGameEvent.EventType.THIRD_WITHER_DEATH) {
             thirdWitherDeathTime = System.currentTimeMillis();
-            color = "\u00a7" + ScoreboardTracker.getParser().getAliveWithers().get(0);
+            color = "§" + ScoreboardTracker.getParser().getAliveWithers().get(0);
         }
     }
 
