@@ -3,13 +3,15 @@ package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import net.minecraft.client.gui.ScaledResolution;
 
+import static net.minecraft.util.EnumChatFormatting.*;
+
 public class HunterStrengthHUD extends AbstractRenderer {
 
     public static HunterStrengthHUD instance;
 
-    private static final String DUMMY_TEXT = "\u00a77(\u00a7l\u00a7c\u00a7lStrength\u00a77)\u00a7e\u00a7l in 10";
-    private static final String PRE_STRENGTH_TEXT = "\u00a77(\u00a7l\u00a7c\u00a7lStrength\u00a77)\u00a7e\u00a7l in ";
-    private static final String STRENGTH_TEXT = "\u00a7l\u00a7c\u00a7lStrength \u00a7e\u00a7l";
+    private static final String DUMMY_TEXT = GRAY + "(" + RED + BOLD + "Strength" + GRAY + ")" + YELLOW + BOLD + " in 10";
+    private static final String PRE_STRENGTH_TEXT = GRAY + "(" + RED + BOLD + "Strength" + GRAY + ")" + YELLOW + BOLD + " in ";
+    private static final String STRENGTH_TEXT = RED.toString() + BOLD + "Strength " + YELLOW + BOLD;
     private long timeStartRender;
     private long renderDuration;
     private boolean isStrengthRender;

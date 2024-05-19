@@ -86,7 +86,7 @@ public class MiniPotionHUD extends AbstractRenderer {
     }
 
     private String formatDuration(PotionEffect effect) {
-        if (effect.getDuration() > 999 * 20) return "\u221e";
+        if (effect.getDuration() > 999 * 20) return "∞";
         if (effect.getDuration() >= 60) {
             return String.valueOf(effect.getDuration() / 20);
         } else if (effect.getDuration() >= 0) {

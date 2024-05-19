@@ -60,9 +60,9 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
         final List<String> iconsTooltip = new ArrayList<>();
         iconsTooltip.add(GREEN + "Squad Icon on names");
         iconsTooltip.add("");
-        iconsTooltip.add(DARK_GRAY + "\u25AA " + GREEN + "Enabled" + GRAY + " : displays a squad icon in front of names on nametags and in the tablist");
+        iconsTooltip.add(DARK_GRAY + "▪ " + GREEN + "Enabled" + GRAY + " : displays a squad icon in front of names on nametags and in the tablist");
         iconsTooltip.add("");
-        iconsTooltip.add(DARK_GRAY + "\u25AA " + GREEN + "Tab Only" + GRAY + " : displays a squad icon in front of names in the tablist only");
+        iconsTooltip.add(DARK_GRAY + "▪ " + GREEN + "Tab Only" + GRAY + " : displays a squad icon in front of names in the tablist only");
         iconsTooltip.add("");
         iconsTooltip.add(NameUtil.SQUAD_ICON + GRAY + ": players in your squad");
         this.buttonList.add(new FancyGuiButton(

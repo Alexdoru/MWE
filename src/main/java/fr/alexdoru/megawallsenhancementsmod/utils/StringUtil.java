@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 
 public class StringUtil {
 
-    private static final Pattern FORMATTING_CODE_PATTERN = Pattern.compile("(?i)" + '\u00a7' + "[0-9A-FK-OR]");
-    private static final Pattern COLOR_CODE_PATTERN = Pattern.compile("(?i)" + '\u00a7' + "[0-9A-F]");
+    private static final Pattern FORMATTING_CODE_PATTERN = Pattern.compile("(?i)" + '§' + "[0-9A-FK-OR]");
+    private static final Pattern COLOR_CODE_PATTERN = Pattern.compile("(?i)" + '§' + "[0-9A-F]");
 
     /**
      * On hypixel the chat messages sent by players follow the pattern:
@@ -167,7 +167,7 @@ public class StringUtil {
         return string.substring(0, 1).toUpperCase() + string.substring(1);
     }
 
-    //private static final Pattern FORMATTING_CODE_END_OF_STRING_PATTERN = Pattern.compile('\u00a7' + "[0-9A-FK-OR]$");
+    //private static final Pattern FORMATTING_CODE_END_OF_STRING_PATTERN = Pattern.compile('§' + "[0-9A-FK-OR]$");
     ///* NEEDS TO BE TESTED
     // * Removes all formatting codes located directly before the target string
     // * Only does it for the first occurence of that string

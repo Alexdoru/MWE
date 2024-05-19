@@ -80,10 +80,10 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
 
                 },
                 YELLOW + "Change the look of the HUD :",
-                DARK_GRAY + "\u25AA " + GREEN + "Classic mode" + GRAY + " : draws the names of each teams with the amount of finals",
-                DARK_GRAY + "\u25AA " + GREEN + "Player mode" + GRAY + " : draws the names of each teams, along with the names and amounts of finals of each player that has finals, you can change the amount of playernames it draws per team with the slider below",
-                DARK_GRAY + "\u25AA " + GREEN + "Compact mode" + GRAY + " : only draws 4 colored numbers that represent the finals of each teams",
-                DARK_GRAY + "\u25AA " + GREEN + "Compact mode in sidebar" + GRAY + " : subtly places the compact HUD in the sidebar"
+                DARK_GRAY + "▪ " + GREEN + "Classic mode" + GRAY + " : draws the names of each teams with the amount of finals",
+                DARK_GRAY + "▪ " + GREEN + "Player mode" + GRAY + " : draws the names of each teams, along with the names and amounts of finals of each player that has finals, you can change the amount of playernames it draws per team with the slider below",
+                DARK_GRAY + "▪ " + GREEN + "Compact mode" + GRAY + " : only draws 4 colored numbers that represent the finals of each teams",
+                DARK_GRAY + "▪ " + GREEN + "Compact mode in sidebar" + GRAY + " : subtly places the compact HUD in the sidebar"
         ));
         this.buttonList.add(new GuiSlider(6, xPos, getButtonYPos(3), 200, buttonsHeight, "Player amount : ", "", 1d, 10d, ConfigHandler.fkcounterHUDPlayerAmount, false, true, this));
         this.buttonList.add(new GuiSlider(5, xPos, getButtonYPos(4), 200, buttonsHeight, "HUD Size : ", "%", 1d, 400d, ConfigHandler.fkcounterHUDSize * 100d, false, true, this));

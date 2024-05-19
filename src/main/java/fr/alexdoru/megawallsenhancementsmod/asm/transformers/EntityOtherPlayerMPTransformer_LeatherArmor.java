@@ -4,11 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.loader.InjectionStatus;
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.MWETransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.VarInsnNode;
+import org.objectweb.asm.tree.*;
 
 public class EntityOtherPlayerMPTransformer_LeatherArmor implements MWETransformer {
 

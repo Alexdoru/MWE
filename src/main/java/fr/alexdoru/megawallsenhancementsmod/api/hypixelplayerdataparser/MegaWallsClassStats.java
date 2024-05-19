@@ -189,7 +189,7 @@ public class MegaWallsClassStats {
 
                 {
                         EnumChatFormatting.GREEN + "Ability activations : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_a_activations) + " ",
-                        EnumChatFormatting.GREEN + "Ability Damage : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_a_damage_dealt / 2) + EnumChatFormatting.RED + "\u2764",
+                        EnumChatFormatting.GREEN + "Ability Damage : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_a_damage_dealt / 2) + EnumChatFormatting.RED + "❤",
                 },
 
                 {
@@ -198,8 +198,8 @@ public class MegaWallsClassStats {
                 },
 
                 {
-                        EnumChatFormatting.GREEN + "Self healed : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_self_healed / 2) + EnumChatFormatting.RED + "\u2764" + " ",
-                        EnumChatFormatting.GREEN + "Allies healed : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_allies_healed / 2) + EnumChatFormatting.RED + "\u2764",
+                        EnumChatFormatting.GREEN + "Self healed : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_self_healed / 2) + EnumChatFormatting.RED + "❤" + " ",
+                        EnumChatFormatting.GREEN + "Allies healed : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(classname_allies_healed / 2) + EnumChatFormatting.RED + "❤",
                 },
 
                 {
@@ -335,7 +335,7 @@ public class MegaWallsClassStats {
      * - passive 2 level
      * - gathering level
      */
-    public int[] getKitUpgrades () {
+    public int[] getKitUpgrades() {
         return new int[]{
                 skill_level_d,
                 skill_level_a,

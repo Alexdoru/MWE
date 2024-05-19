@@ -2,7 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui.elements;
 
 import net.minecraft.client.gui.Gui;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.function.Supplier;
 
 public class ColoredSquareElement implements UIElement {

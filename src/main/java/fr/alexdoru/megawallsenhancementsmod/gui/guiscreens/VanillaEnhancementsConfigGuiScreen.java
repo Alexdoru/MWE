@@ -147,11 +147,11 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
         coloredScoresHead.add("");
         coloredScoresHead.add(GRAY + "Renders the scores/health in color, according to the score value and the player's maximum health points");
         coloredScoresHead.add("");
-        coloredScoresHead.add(DARK_GREEN + "44" + RED + " \u2764");
-        coloredScoresHead.add(GREEN + "35" + RED + " \u2764");
-        coloredScoresHead.add(YELLOW + "25" + RED + " \u2764");
-        coloredScoresHead.add(RED + "15" + RED + " \u2764");
-        coloredScoresHead.add(DARK_RED + "5" + RED + " \u2764");
+        coloredScoresHead.add(DARK_GREEN + "44" + RED + " ❤");
+        coloredScoresHead.add(GREEN + "35" + RED + " ❤");
+        coloredScoresHead.add(YELLOW + "25" + RED + " ❤");
+        coloredScoresHead.add(RED + "15" + RED + " ❤");
+        coloredScoresHead.add(DARK_RED + "5" + RED + " ❤");
         this.buttonList.add(new OptionGuiButton(
                 xPosRight, getButtonYPos(4),
                 buttonWidth, buttonsHeight,
@@ -202,9 +202,9 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                     }
                 },
                 GREEN + "Hide header/footer in tab",
-                DARK_GRAY + "\u25AA " + GREEN + "Enabled" + GRAY + " : will hide the text at top and bottom of the tablist",
-                DARK_GRAY + "\u25AA " + GREEN + "Only in MW" + GRAY + " : will hide the text at top and bottom of the tablist only in Mega Walls since that text can contain usefull information in other games such as Bedwars or Skyblock",
-                DARK_GRAY + "\u25AA " + RED + "Disabled" + GRAY + " : will always render the text at top and bottom of the tablist",
+                DARK_GRAY + "▪ " + GREEN + "Enabled" + GRAY + " : will hide the text at top and bottom of the tablist",
+                DARK_GRAY + "▪ " + GREEN + "Only in MW" + GRAY + " : will hide the text at top and bottom of the tablist only in Mega Walls since that text can contain usefull information in other games such as Bedwars or Skyblock",
+                DARK_GRAY + "▪ " + RED + "Disabled" + GRAY + " : will always render the text at top and bottom of the tablist",
                 RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements"));
         this.buttonList.add(new OptionGuiButton(
                 xPosRight, getButtonYPos(7),

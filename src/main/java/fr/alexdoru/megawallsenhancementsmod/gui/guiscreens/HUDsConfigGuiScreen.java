@@ -49,9 +49,9 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 this,
                 GREEN + "Arrow Hit HUD",
                 GRAY + "Displays the health of your opponent on arrow hits",
-                DARK_GRAY + "\u25AA " + GREEN + "Enabled",
-                DARK_GRAY + "\u25AA " + GREEN + "Show Head" + GRAY + " : Shows player head on hit",
-                DARK_GRAY + "\u25AA " + RED + "Disabled")
+                DARK_GRAY + "▪ " + GREEN + "Enabled",
+                DARK_GRAY + "▪ " + GREEN + "Show Head" + GRAY + " : Shows player head on hit",
+                DARK_GRAY + "▪ " + RED + "Disabled")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(2),
@@ -123,9 +123,9 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                         + WHITE + "invisibility" + GRAY + ", "
                         + GREEN + "jump boost" + GRAY + ", "
                         + "has different modes :",
-                DARK_GRAY + "\u25AA " + GREEN + "Always Enabled",
-                DARK_GRAY + "\u25AA " + GREEN + "Only in Mega Walls",
-                DARK_GRAY + "\u25AA " + RED + "Disabled")
+                DARK_GRAY + "▪ " + GREEN + "Always Enabled",
+                DARK_GRAY + "▪ " + GREEN + "Only in Mega Walls",
+                DARK_GRAY + "▪ " + RED + "Disabled")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(8),
@@ -187,9 +187,9 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 this,
                 GREEN + "Wither death time HUD",
                 GRAY + "Displays the time it takes for the last wither to die " + YELLOW + "in Mega Walls",
-                DARK_GRAY + "\u25AA " + GREEN + "Enabled" + GRAY + " : place the HUD anywhere",
-                DARK_GRAY + "\u25AA " + YELLOW + "In Sidebar" + GRAY + " : The HUD is placed in the sidebar",
-                DARK_GRAY + "\u25AA " + RED + "Disabled")
+                DARK_GRAY + "▪ " + GREEN + "Enabled" + GRAY + " : place the HUD anywhere",
+                DARK_GRAY + "▪ " + YELLOW + "In Sidebar" + GRAY + " : The HUD is placed in the sidebar",
+                DARK_GRAY + "▪ " + RED + "Disabled")
                 .accept(this.buttonList);
         this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(14), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }

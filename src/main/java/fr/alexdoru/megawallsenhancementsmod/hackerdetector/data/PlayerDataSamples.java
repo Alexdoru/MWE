@@ -33,7 +33,7 @@ public class PlayerDataSamples {
     public final SampleListZ attackList = new SampleListZ(20);
     /** Last time the player broke a block */
     public long lastBreakBlockTime = System.currentTimeMillis();
-    public SampleListF breakTimeRatio = new SampleListF(8);
+    public final SampleListF breakTimeRatio = new SampleListF(8);
 
     /* ----- Samples of rotations/positions interpolated by the client ----- */
     public final SampleListD posXList = new SampleListD(10);
