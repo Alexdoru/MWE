@@ -110,13 +110,15 @@ public class ArrowHitHUD extends AbstractRenderer {
             hitTime = System.currentTimeMillis() + 1000L;
             final Matcher matcherRend2 = PATTERN_REND_DAMAGE.matcher(msg);
             float totalDamage = 0f;
+            String s = fmsg;
             while (matcherRend2.find()) {
                 final float damage = Float.parseFloat(matcherRend2.group(1));
                 final String playername = matcherRend2.group(2);
                 totalDamage += damage;
                 RenderPlayerHook_RenegadeArrowCount.removeArrowsFrom(playername, (int) (damage / 2));
-                fmsg = ScoreboardTracker.isInMwGame ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg;
+                s = ScoreboardTracker.isInMwGame ? s.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : s;
             }
+            if (!s.equals(fmsg)) event.message = new ChatComponentText(s);
             displayText = EnumChatFormatting.GREEN + "-" + totalDamage;
             skin = null;
             return true;
