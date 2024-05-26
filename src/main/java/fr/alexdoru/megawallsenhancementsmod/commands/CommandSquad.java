@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.TabCompletionUtil;
@@ -44,7 +45,11 @@ public class CommandSquad extends MyAbstractCommand {
 
         } else if (args[0].equalsIgnoreCase("addteam")) {
 
-            this.addTeamToSquad();
+            if (ScoreboardTracker.isPreGameLobby) {
+                SquadHandler.formSquad();
+            } else {
+                this.addTeamToSquad();
+            }
 
         } else if (args[0].equalsIgnoreCase("formsquad")) {
 
