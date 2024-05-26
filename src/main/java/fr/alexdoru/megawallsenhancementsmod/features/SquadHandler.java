@@ -109,8 +109,8 @@ public class SquadHandler {
         final String myCustomName = squadmap.get(myName);
         final String myCustomNick = ConfigHandler.hypixelNick.isEmpty() ? null : squadmap.get(ConfigHandler.hypixelNick);
 
-        squadmap.clear();
-        squadmap.putAll(newsquad);
+        clearSquad();
+        newsquad.forEach(SquadHandler::addPlayer);
 
         if (myCustomName != null) {
             addPlayer(myName, myCustomName);
