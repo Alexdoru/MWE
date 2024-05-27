@@ -42,9 +42,7 @@ public class BaseLocationHUD extends AbstractRenderer {
     public void onMWEvent(MegaWallsGameEvent event) {
         if (!ConfigHandler.showBaseLocationHUD) return;
         if (event.getType() == MegaWallsGameEvent.EventType.CONNECT || event.getType() == MegaWallsGameEvent.EventType.GAME_START) {
-            if (mc.thePlayer != null) {
-                ChatListener.setMegaWallsMap();
-            }
+            ChatListener.setMegaWallsMap();
         }
     }
 
