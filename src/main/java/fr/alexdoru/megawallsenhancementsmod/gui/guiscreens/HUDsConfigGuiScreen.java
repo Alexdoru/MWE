@@ -1,10 +1,12 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 
+import fr.alexdoru.megawallsenhancementsmod.chat.ChatListener;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.HUDSettingGuiButtons;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.SimpleGuiButton;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.TextElement;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.*;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.client.config.GuiSlider;
@@ -55,11 +57,16 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(2),
-                "Base Location HUD",
-                (b) -> ConfigHandler.showBaseLocationHUD = b,
-                () -> ConfigHandler.showBaseLocationHUD,
+                () -> "Base Location HUD : " + getSuffix(ConfigHandler.showBaseLocationHUD),
+                () -> {
+                    ConfigHandler.showBaseLocationHUD = !ConfigHandler.showBaseLocationHUD;
+                    if (ConfigHandler.showBaseLocationHUD && ScoreboardTracker.isInMwGame) {
+                        ChatListener.setMegaWallsMap();
+                    }
+                },
                 BaseLocationHUD.instance,
                 this,
+                GREEN + "Base Location HUD",
                 GRAY + "Displays in which base you are currently in Mega Walls")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
