@@ -37,6 +37,7 @@ public enum ClassMapping {
     GUIPLAYERTABOVERLAY("awh", "net/minecraft/client/gui/GuiPlayerTabOverlay"),
     GUISCREEN("axu", "net/minecraft/client/gui/GuiScreen"),
     GUISCREENBOOK("ayo", "net/minecraft/client/gui/GuiScreenBook"),
+    GUITEXTFIELD("avw", "net/minecraft/client/gui/GuiTextField"),
     IBLOCKSTATE("alz", "net/minecraft/block/state/IBlockState"),
     ICAMERA("bia", "net/minecraft/client/renderer/culling/ICamera"),
     ICHATCOMPONENT("eu", "net/minecraft/util/IChatComponent"),

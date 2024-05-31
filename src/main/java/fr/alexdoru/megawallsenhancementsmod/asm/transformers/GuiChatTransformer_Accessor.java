@@ -17,6 +17,7 @@ public class GuiChatTransformer_Accessor implements MWETransformer {
         status.setInjectionPoints(0);
         addInterface(classNode, "GuiChatAccessor");
         addGetterAndSetterMethod(classNode, "SentHistoryCursor", FieldMapping.GUICHAT$SENTHISTORYCURSOR, null);
+        addGetterMethod(classNode, "getInputField", FieldMapping.GUICHAT$INPUTFIELD, null);
     }
 
 }

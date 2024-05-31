@@ -1,12 +1,11 @@
 package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
+import fr.alexdoru.megawallsenhancementsmod.asm.accessors.GuiChatAccessor;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -18,7 +17,7 @@ public class ReportQueue {
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     private int standStillCounter;
-    private int standStillLimit = 25;
+    private int standStillLimit = 22;
     private int movingCounter;
     private int betweenReportCounter;
     public final List<ReportInQueue> queueList = new ArrayList<>();
@@ -52,7 +51,7 @@ public class ReportQueue {
                 final String msg = "/wdr " + playername;
                 playersReportedThisGame.add(playername);
                 ChatUtil.sendChatMessage(msg, true);
-                standStillLimit = 22 + random.nextInt(12);
+                standStillLimit = 20 + random.nextInt(11);
                 standStillCounter = 0;
                 betweenReportCounter = 50;
                 ChatHandler.deleteStopMovingInstruction();
@@ -111,7 +110,7 @@ public class ReportQueue {
     private boolean isPlayerStandingStill() {
         final boolean sameItem = mc.thePlayer.inventory.currentItem == prevItemHeld;
         prevItemHeld = mc.thePlayer.inventory.currentItem;
-        return (mc.inGameHasFocus || mc.currentScreen instanceof GuiChat || mc.currentScreen instanceof GuiIngameMenu)
+        return (mc.inGameHasFocus || mc.currentScreen instanceof GuiChatAccessor && ((GuiChatAccessor) mc.currentScreen).getInputField().getText().isEmpty())
                 && mc.thePlayer.movementInput.moveForward == 0.0F
                 && mc.thePlayer.movementInput.moveStrafe == 0.0F
                 && !mc.thePlayer.movementInput.jump
