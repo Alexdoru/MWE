@@ -42,7 +42,7 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
                 GRAY + "Saves flagged players in NoCheaters"));
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(4),
-                "Report Flagged players",
+                "Auto-report cheaters",
                 (b) -> {
                     ConfigHandler.autoreportFlaggedPlayers = b;
                     if (!ConfigHandler.autoreportFlaggedPlayers) {
@@ -50,8 +50,8 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
                     }
                 },
                 () -> ConfigHandler.autoreportFlaggedPlayers,
-                GRAY + "Sends a report automatically to Hypixel when it flags a cheater",
-                YELLOW + "Only works in Mega Walls, sends one report per game per player. It will abort the report if you wait too long to send it."));
+                GRAY + "Sends a /report automatically to Hypixel when it flags a cheater",
+                YELLOW + "Only works in Mega Walls, sends one report per game per player. It will abort the report after 30 seconds if you wait too long to send it."));
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(5),
                 () -> {
