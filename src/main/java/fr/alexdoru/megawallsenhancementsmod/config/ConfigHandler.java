@@ -14,10 +14,6 @@ public class ConfigHandler extends AbstractConfig {
 
     protected static void onModUpdate() {
         if (!modVersion.equals(MegaWallsEnhancementsMod.version)) {
-            ConfigHandler.hackerDetector = true;
-            ConfigHandler.autoreportFlaggedPlayers = true;
-            ConfigHandler.showReportHUD = true;
-            ConfigHandler.showReportHUDonlyInChat = false;
             ConfigHandler.modVersion = MegaWallsEnhancementsMod.version;
             ConfigHandler.saveConfig();
         }
