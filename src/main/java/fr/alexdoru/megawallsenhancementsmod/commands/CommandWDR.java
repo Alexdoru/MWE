@@ -27,41 +27,25 @@ public class CommandWDR extends MyAbstractCommand {
 
     @Override
     public String getCommandName() {
-        return "watchdogreport";
+        return "wdr";
     }
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length == 0) {
-            sendChatMessage("/wdr");
+            this.sendCommand();
             return;
         }
+        this.sendCommand(args);
         final String playername = args[0];
         final ArrayList<String> cheats = new ArrayList<>();
-        final StringBuilder message = new StringBuilder("/wdr " + playername);
-
         if (args.length == 1) {
             cheats.add("cheating");
         } else {
-            for (int i = 1; i < args.length; i++) {
-                if (args[i].equalsIgnoreCase("autoblock") || args[i].equalsIgnoreCase("multiaura")) {
-                    message.append(" killaura");
-                } else {
-                    if (!args[i].equalsIgnoreCase("noslowdown")
-                            && !args[i].equalsIgnoreCase("keepsprint")
-                            && !args[i].equalsIgnoreCase("fastbreak")
-                            && !args[i].equalsIgnoreCase("scaffold")) {
-                        message.append(" ").append(args[i]);
-                    }
-                }
-                cheats.add(args[i]);
-            }
+            cheats.addAll(Arrays.asList(args).subList(1, args.length));
         }
-
-        sendChatMessage(message.toString());
         ReportQueue.INSTANCE.addPlayerReportedThisGame(playername);
         PartyDetection.printBoostingReportAdvice(playername);
-
         if (ScoreboardTracker.isPreGameLobby) {
             ChatUtil.printReportingAdvice();
         }
@@ -70,7 +54,7 @@ public class CommandWDR extends MyAbstractCommand {
 
     @Override
     public List<String> getCommandAliases() {
-        return Collections.singletonList("wdr");
+        return Collections.singletonList("watchdogreport");
     }
 
     @Override
