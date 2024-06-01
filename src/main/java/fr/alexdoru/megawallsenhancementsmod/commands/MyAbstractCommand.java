@@ -20,14 +20,18 @@ public abstract class MyAbstractCommand extends CommandBase {
 
     protected void printCommandHelp() {}
 
+    protected void sendCommand() {
+        sendChatMessage('/' + this.getCommandName());
+    }
+
+    protected void sendCommand(String[] args) {
+        sendChatMessage('/' + this.getCommandName() + " " + buildString(args, 0));
+    }
+
     protected static void sendChatMessage(String msg) {
         if (mc.thePlayer != null) {
             mc.thePlayer.sendChatMessage(msg);
         }
-    }
-
-    protected static void sendChatMessage(String command, String[] args) {
-        sendChatMessage(command + buildString(args, 0));
     }
 
 }

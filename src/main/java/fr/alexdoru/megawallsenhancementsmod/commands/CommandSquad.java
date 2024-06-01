@@ -30,7 +30,7 @@ public class CommandSquad extends MyAbstractCommand {
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (ScoreboardUtils.isPlayingHypixelPit()) {
-            sendChatMessage("/squad ", args);
+            this.sendCommand(args);
             return;
         }
 
