@@ -11,7 +11,7 @@ import net.minecraft.client.gui.FontRenderer;
 public class GuiIngameHook {
 
     public static String cancelHungerTitle(String subtitle) {
-        if (ConfigHandler.hideHungerTitleInMW && subtitle.contains("Get to the middle to stop the hunger!")) {
+        if (ConfigHandler.hideHungerTitleInMW && subtitle.contains("Get to the center to stop the hunger")) {
             return "";
         }
         return subtitle;
