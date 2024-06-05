@@ -16,6 +16,8 @@ public class KeybindingListener {
     private static final Minecraft mc = Minecraft.getMinecraft();
     private static final KeyBinding killKey = new KeyBinding("/Kill", 0, "MegaWallsEnhancements");
     private static final KeyBinding surfaceKey = new KeyBinding("/Surface", 0, "MegaWallsEnhancements");
+    private static final KeyBinding echestKey = new KeyBinding("/enderchest", 0, "MegaWallsEnhancements");
+    private static final KeyBinding teamchestKey = new KeyBinding("/teamchest", 0, "MegaWallsEnhancements");
     private static final KeyBinding newNickKey = new KeyBinding("New Random Nick", 0, "MegaWallsEnhancements");
     private static final KeyBinding playerHitboxes = new KeyBinding("Toggle player hitboxes", 0, "Hitboxes");
     private static final KeyBinding toggleDroppedItemLimit = new KeyBinding("Toggle dropped item limit", 0, "MegaWallsEnhancements");
@@ -23,6 +25,8 @@ public class KeybindingListener {
     public KeybindingListener() {
         ClientRegistry.registerKeyBinding(killKey);
         ClientRegistry.registerKeyBinding(surfaceKey);
+        ClientRegistry.registerKeyBinding(echestKey);
+        ClientRegistry.registerKeyBinding(teamchestKey);
         ClientRegistry.registerKeyBinding(newNickKey);
         ClientRegistry.registerKeyBinding(playerHitboxes);
         ClientRegistry.registerKeyBinding(toggleDroppedItemLimit);
@@ -39,6 +43,10 @@ public class KeybindingListener {
             mc.thePlayer.sendChatMessage("/kill");
         } else if (ScoreboardTracker.isPrepPhase && surfaceKey.isPressed()) {
             mc.thePlayer.sendChatMessage("/surface");
+        } else if (ScoreboardTracker.isInMwGame && echestKey.isPressed()) {
+            mc.thePlayer.sendChatMessage("/enderchest");
+        } else if (ScoreboardTracker.isInMwGame && teamchestKey.isPressed()) {
+            mc.thePlayer.sendChatMessage("/teamchest");
         } else if (toggleDroppedItemLimit.isPressed()) {
             ConfigHandler.limitDroppedEntityRendered = !ConfigHandler.limitDroppedEntityRendered;
             ConfigHandler.saveConfig();
