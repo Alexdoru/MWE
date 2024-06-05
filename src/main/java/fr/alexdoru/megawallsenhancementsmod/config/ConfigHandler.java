@@ -14,6 +14,7 @@ public class ConfigHandler extends AbstractConfig {
 
     protected static void onModUpdate() {
         if (!modVersion.equals(MegaWallsEnhancementsMod.version)) {
+            ConfigHandler.showfkcounterHUD = false;
             ConfigHandler.modVersion = MegaWallsEnhancementsMod.version;
             ConfigHandler.saveConfig();
         }
@@ -35,13 +36,13 @@ public class ConfigHandler extends AbstractConfig {
             category = FKCOUNTER,
             name = "Show FKCounter HUD",
             comment = "Displays the HUD of the final kill counter")
-    public static boolean showfkcounterHUD = true;
+    public static boolean showfkcounterHUD;
 
     @ConfigProperty(
             category = FKCOUNTER,
             name = "Compact FKCounter HUD",
             comment = "Use a compact HUD for the final kill counter")
-    public static boolean fkcounterHUDCompact;
+    public static boolean fkcounterHUDCompact = true;
 
     @ConfigProperty(
             category = FKCOUNTER,
@@ -53,7 +54,7 @@ public class ConfigHandler extends AbstractConfig {
             category = FKCOUNTER,
             name = "HUD in sidebar",
             comment = "Places the fkcounter in the sidebar")
-    public static boolean fkcounterHUDinSidebar;
+    public static boolean fkcounterHUDinSidebar = true;
 
     @ConfigProperty(
             category = FKCOUNTER,
@@ -83,7 +84,7 @@ public class ConfigHandler extends AbstractConfig {
             category = FKCOUNTER,
             name = "Kill diff in Chat",
             comment = "Kill diff in Chat")
-    public static boolean showKillDiffInChat = true;
+    public static boolean showKillDiffInChat;
 
     @ConfigProperty(
             category = MWENHANCEMENTS,
