@@ -38,7 +38,7 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
         repetitiveMsgTooltip.add("");
         repetitiveMsgTooltip.add(GRAY + "Hides the following messages in mega walls :");
         repetitiveMsgTooltip.add("");
-        repetitiveMsgTooltip.add(RED + "Get to the middle to stop the hunger!");
+        repetitiveMsgTooltip.add(RED + "Get to the center to stop the hunger");
         repetitiveMsgTooltip.add(GREEN + "You broke your protected chest");
         repetitiveMsgTooltip.add(GREEN + "You broke your protected trapped chest");
         repetitiveMsgTooltip.add(YELLOW + "Your Salvaging skill returned your arrow to you!");

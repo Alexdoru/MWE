@@ -57,7 +57,7 @@ public class ChatListener {
     static {
         MW_REPETITVE_MSG.add("You broke your protected chest");
         MW_REPETITVE_MSG.add("You broke your protected trapped chest");
-        MW_REPETITVE_MSG.add("Get to the middle to stop the hunger!");
+        MW_REPETITVE_MSG.add("Get to the center to stop the hunger");
         MW_REPETITVE_MSG.add("Your Salvaging skill returned your arrow to you!");
         MW_REPETITVE_MSG.add("Your Efficiency skill got you an extra drop!");
         MW_REPETITVE_MSG.add("Your Soothing Moo Skill is ready!");
