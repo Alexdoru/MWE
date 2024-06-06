@@ -49,6 +49,14 @@ public class FinalKillCounter {
             "(\\w{1,16}) was killed with a potion by (\\w{1,16}).*",
             "(\\w{1,16}) was killed with an explosion by (\\w{1,16}).*",
             "(\\w{1,16}) was killed with magic by (\\w{1,16}).*",
+            /*Digital messages*/
+            "(\\w{1,16}) was blocked by (\\w{1,16}).*",
+            "(\\w{1,16}) was put into cold storage by (\\w{1,16}).*",
+            "(\\w{1,16}) was deleted by (\\w{1,16}).*",
+            "(\\w{1,16}) was purged by an antivirus owned by (\\w{1,16}).*",
+            "(\\w{1,16}) accidentally closed the game while fighting (\\w{1,16}).*",
+            "(\\w{1,16}) had their computer switched off by (\\w{1,16}).*",
+            "(\\w{1,16}) had their computer fried by (\\w{1,16}).*",
             /*Western messages*/
             "(\\w{1,16}) was filled full of lead by (\\w{1,16}).*",
             "(\\w{1,16}) was iced by (\\w{1,16}).*",
