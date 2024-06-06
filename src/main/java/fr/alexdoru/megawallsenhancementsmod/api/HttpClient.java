@@ -45,7 +45,6 @@ public class HttpClient {
                         throw new ApiException("Missing one or more fields");
                     } else if (status == 403) {
                         Minecraft.getMinecraft().addScheduledTask(() -> {
-                            ConfigHandler.prestigeV = false;
                             ConfigHandler.APIKey = "";
                             ConfigHandler.saveConfig();
                             return null;

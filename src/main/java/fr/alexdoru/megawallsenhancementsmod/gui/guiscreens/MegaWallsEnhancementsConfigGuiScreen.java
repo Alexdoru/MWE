@@ -1,8 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 
-import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.ASMLoadingPlugin;
-import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.LeatherArmorManager;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.FancyGuiButton;
@@ -28,7 +26,7 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
     @Override
     public void initGui() {
         this.maxWidth = BUTTON_WIDTH;
-        this.maxHeight = (buttonsHeight + 4) * 9 + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * 8 + buttonsHeight;
         super.initGui();
         final int xPosLeft = getxCenter() - BUTTON_WIDTH - 10;
         final int xPosRight = getxCenter() + 10;
@@ -80,54 +78,14 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
                     NameUtil.refreshAllNamesInWorld();
                 },
                 iconsTooltip));
-        final List<String> prestige5Tooltip = new ArrayList<>();
-        prestige5Tooltip.add(GREEN + "Prestige 5 tags");
-        prestige5Tooltip.add("");
-        prestige5Tooltip.add(GRAY + "Adds the prestige V colored tags in mega walls.");
-        prestige5Tooltip.add("");
-        prestige5Tooltip.add(GRAY + "You need at least," + GOLD + " 6000 classpoints" + GRAY + ", and a "
-                + RED + "working API Key" + GRAY + ". This will send api requests and store the data in a cache until you close your game.");
-        prestige5Tooltip.add(GRAY + "Type " + YELLOW + "/mwenhancements clearcache" + GRAY + " to force update the data.");
-        prestige5Tooltip.add("");
-        prestige5Tooltip.add(GOLD + "Prestige Colors :");
-        prestige5Tooltip.add(GOLD + " 6000 classpoints : " + AQUA + "[TAG]");
-        prestige5Tooltip.add(GOLD + " 8000 classpoints : " + LIGHT_PURPLE + "[TAG]");
-        prestige5Tooltip.add(GOLD + " 10000 classpoints : " + RED + "[TAG]");
-        prestige5Tooltip.add(GOLD + " 12500 classpoints : " + WHITE + "[TAG]");
-        prestige5Tooltip.add(GOLD + " 15000 classpoints : " + BLUE + "[TAG]");
-        prestige5Tooltip.add(GOLD + " 20000 classpoints : " + YELLOW + "[TAG]");
-        prestige5Tooltip.add(GOLD + " 25000 classpoints : " + DARK_GREEN + "[TAG]");
-        prestige5Tooltip.add(GOLD + " 30000 classpoints : " + DARK_AQUA + "[TAG]");
-        prestige5Tooltip.add(GOLD + " 35000 classpoints : " + DARK_PURPLE + "[TAG]");
-        prestige5Tooltip.add(GOLD + " 40000 classpoints : " + DARK_RED + "[TAG]");
-        prestige5Tooltip.add(GOLD + " 50000 classpoints : " + DARK_GRAY + "[TAG]");
-        prestige5Tooltip.add(GOLD + " 65000 classpoints : " + DARK_BLUE + "[TAG]");
-        prestige5Tooltip.add(GOLD + " 80000 classpoints : " + BLACK + "[TAG]");
-        this.buttonList.add(new FancyGuiButton(
-                xPosLeft, getButtonYPos(4),
-                () -> "Prestige 5 tags : " + getSuffix(ConfigHandler.prestigeV),
-                () -> {
-                    if (ConfigHandler.prestigeV) {
-                        ConfigHandler.prestigeV = false;
-                        NameUtil.refreshAllNamesInWorld();
-                    } else {
-                        if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                            ChatUtil.printApikeySetupInfo();
-                        } else {
-                            ConfigHandler.prestigeV = true;
-                            NameUtil.refreshAllNamesInWorld();
-                        }
-                    }
-                },
-                prestige5Tooltip));
         this.buttonList.add(new OptionGuiButton(
-                xPosLeft, getButtonYPos(5),
+                xPosLeft, getButtonYPos(4),
                 "More strength particules",
                 (b) -> ConfigHandler.strengthParticules = b,
                 () -> ConfigHandler.strengthParticules,
                 GRAY + "Spawns angry villager particles when an herobrine or dreadlord gets strength from a final kill"));
         this.buttonList.add(new FancyGuiButton(
-                xPosLeft, getButtonYPos(6),
+                xPosLeft, getButtonYPos(5),
                 () -> "Colored Leather Armor : " + getSuffix(ConfigHandler.coloredLeatherArmor),
                 () -> {
                     ConfigHandler.coloredLeatherArmor = !ConfigHandler.coloredLeatherArmor;
@@ -178,7 +136,7 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
                     },
                     chatHeadTooltip));
         }
-        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(8), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
+        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(7), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
 
 }

@@ -154,12 +154,6 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = MWENHANCEMENTS,
-            name = "Prestige V colored Tag",
-            comment = "Prestige V colored Tag")
-    public static boolean prestigeV;
-
-    @ConfigProperty(
-            category = MWENHANCEMENTS,
             name = "Delete repetitive chat messages in mw",
             comment = "Delete repetitive chat messages in mw")
     public static boolean hideRepetitiveMWChatMsg = true;

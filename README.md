@@ -98,7 +98,6 @@ Allows you to customize the look of the f3+b hitboxes.
 - **Phoenix bond HUD** - Displays the amount of hearts healed from a Phoenix bond
 - **Strength HUD** - Displays the duration of the strength in Mega Walls when playing Dreadlord, Herobrine, Hunter, Zombie. Plays a sound and shows the countdown before getting strength with Hunter.
 - **Wither death time HUD** - Displays the time left before the last wither standing automatically dies, HUD can be placed in the sidebar
-- **Prestige 5 tags** - Change the color of golden class tags to a new color according to the amount of classpoints on the class
 - **Hide hunger title** - Stop rendering the hunger message in the middle of the screen during deathmatch
 - **Hide repetitive msg** - Hide certain messages that spam the chat in Mega Walls
 - **More strength particles** - Spawn particles around the player when a dreadlord or herobrine gets strength on kill
