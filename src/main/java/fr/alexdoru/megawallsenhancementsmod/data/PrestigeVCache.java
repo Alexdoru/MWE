@@ -83,7 +83,7 @@ public class PrestigeVCache {
         private final HashMap<MWClass, EnumChatFormatting> playersPrestigeColors = new HashMap<>();
 
         private void addClass(MWClass mwClass, int classpoints) {
-            this.playersPrestigeColors.put(mwClass, ColorUtil.getPrestigeVColor(classpoints));
+            this.playersPrestigeColors.put(mwClass, ColorUtil.getPrestige4Color(classpoints));
         }
 
     }
