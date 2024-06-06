@@ -3,11 +3,9 @@ package fr.alexdoru.megawallsenhancementsmod.commands;
 import fr.alexdoru.megawallsenhancementsmod.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.data.PrestigeVCache;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiscreens.GeneralConfigGuiScreen;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
-import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
@@ -35,11 +33,6 @@ public class CommandMWEnhancements extends MyAbstractCommand {
                 HypixelApiKeyUtil.setApiKey(args[1]);
             }
             return;
-        } else if (args.length >= 1 && args[0].equalsIgnoreCase("clearcache")) {
-            PrestigeVCache.clearCache();
-            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Cleared " + EnumChatFormatting.GOLD + "Prestige V" + EnumChatFormatting.GREEN + " data Cache");
-            NameUtil.refreshAllNamesInWorld();
-            return;
         } else if (args.length >= 1 && args[0].equalsIgnoreCase("howplaygame")) {
             final String title = ScoreboardUtils.getUnformattedSidebarTitle();
             if (title != null && title.contains("MEGA WALLS")) {
@@ -63,7 +56,7 @@ public class CommandMWEnhancements extends MyAbstractCommand {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        final String[] possibilities = {"clearcache", "howplaygame", "refreshconfig", "setapikey"};
+        final String[] possibilities = {"howplaygame", "refreshconfig", "setapikey"};
         return getListOfStringsMatchingLastWord(args, possibilities);
     }
 

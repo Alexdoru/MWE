@@ -9,7 +9,7 @@ import net.minecraft.util.IChatComponent;
 public class NetworkPlayerInfoHook {
 
     public static IChatComponent getDisplayName(GameProfile gameProfileIn) {
-        return NameUtil.fetchMWPlayerData(gameProfileIn, false).displayName;
+        return NameUtil.getMWPlayerData(gameProfileIn, false).displayName;
     }
 
     public static int getPlayersFinals(String playername) {
