@@ -49,7 +49,7 @@ public class ChatListener {
     private static final Pattern LOCRAW_PATTERN = Pattern.compile("^\\{\"server\":\"(\\w+)\",\"gametype\":\"\\w+\"(?:|,\"lobbyname\":\"\\w+\")(?:|,\"mode\":\"\\w+\")(?:|,\"map\":\"([a-zA-Z0-9_ ]+)\")\\}$");
     private static final Pattern PLAYER_JOIN_PATTERN = Pattern.compile("^(\\w{1,16}) has joined \\([0-9]{1,3}/[0-9]{1,3}\\)!");
     private static final Pattern ZOMBIE_STRENGTH_PATTERN = Pattern.compile("§2§lBERSERK §c§l75% ([0-9])s");
-    private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:|\\[SHOUT\\] |\\[SPECTATOR\\] )(?:|\\[[A-Z]{3,6}\\] )(?:|\\[((?:MV|VI)P\\+?\\+?)\\] )(\\w{2,16}):.*");
+    private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:\\[[^\\[\\]]+\\] )*(\\w{2,16}):.*");
     private static final HashSet<String> MW_REPETITVE_MSG = new HashSet<>();
     private static final TimerUtil timerStrength = new TimerUtil(11000L);
     private static boolean addGuildCoinsBonus;
@@ -146,12 +146,10 @@ public class ChatListener {
             }
 
             final Matcher matcher = MESSAGE_PATTERN.matcher(msg);
-            //String senderRank = null;
             String messageSender = null;
             String squadname = null;
             if (matcher.matches()) {
-                //senderRank = matcher.group(1);
-                messageSender = matcher.group(2);
+                messageSender = matcher.group(1);
                 squadname = SquadHandler.getSquad().get(messageSender);
             }
 
