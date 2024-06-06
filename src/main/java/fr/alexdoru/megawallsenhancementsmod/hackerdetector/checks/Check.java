@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 
+import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiScreenHook;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
@@ -192,10 +193,7 @@ public abstract class Check implements ICheck {
                     pos.getY() + 0.5D - (player.posY + player.getEyeHeight()),
                     pos.getZ() + 0.5D - player.posZ);
         } else {
-            eyesToBlockCenter = new Vector3D(
-                    pos.getX() + 0.5D - data.serverPosXList.get(0),
-                    pos.getY() + 0.5D - (data.serverPosYList.get(0) + player.getEyeHeight()),
-                    pos.getZ() + 0.5D - data.serverPosZList.get(0));
+            eyesToBlockCenter = getEyesToBlockVect(player, data, pos);
         }
         /* (0.5*sqrt(3) + 4.5)^2 | Squared distance from center of the block to the corner + player's break reach */
         final double distSq = eyesToBlockCenter.normSquared();
@@ -216,6 +214,87 @@ public abstract class Check implements ICheck {
         final double angleWithVector = lookVect.getAngleWithVector(eyesToBlockCenter);
         final double maxAngle = Math.toDegrees(Math.atan(0.5D * Math.sqrt(3D / distSq))) * 1.33D;
         return angleWithVector < maxAngle;
+    }
+
+    protected static Vector3D getEyesToBlockVect(EntityPlayer player, PlayerDataSamples data, BlockPos pos) {
+        return new Vector3D(
+                pos.getX() + 0.5D - data.serverPosXList.get(0),
+                pos.getY() + 0.5D - (data.serverPosYList.get(0) + player.getEyeHeight()),
+                pos.getZ() + 0.5D - data.serverPosZList.get(0));
+    }
+
+    /**
+     * Given a block position, two points in space, A and B, this method returns the coordinates
+     * of the point where the ray going from A to B hits the block. Returns null if it doesn't hit the box.
+     */
+    protected static Vec3 getHitVectOnBlock(BlockPos pos, Vec3 vecA, Vec3 vecB) {
+
+        final double boxMinX = pos.getX();
+        final double boxMaxX = pos.getX() + 1d;
+        final double boxMinY = pos.getY();
+        final double boxMaxY = pos.getY() + 1d;
+        final double boxMinZ = pos.getZ();
+        final double boxMaxZ = pos.getZ() + 1d;
+
+        Vec3 interMinX = vecA.getIntermediateWithXValue(vecB, boxMinX);
+        Vec3 interMaxX = vecA.getIntermediateWithXValue(vecB, boxMaxX);
+        Vec3 interMinY = vecA.getIntermediateWithYValue(vecB, boxMinY);
+        Vec3 interMaxY = vecA.getIntermediateWithYValue(vecB, boxMaxY);
+        Vec3 interMinZ = vecA.getIntermediateWithZValue(vecB, boxMinZ);
+        Vec3 interMaxZ = vecA.getIntermediateWithZValue(vecB, boxMaxZ);
+
+        if (interMinX == null || interMinX.yCoord < boxMinY || interMinX.yCoord > boxMaxY || interMinX.zCoord < boxMinZ || interMinX.zCoord > boxMaxZ) {
+            interMinX = null;
+        }
+
+        if (interMaxX == null || interMaxX.yCoord < boxMinY || interMaxX.yCoord > boxMaxY || interMaxX.zCoord < boxMinZ || interMaxX.zCoord > boxMaxZ) {
+            interMaxX = null;
+        }
+
+        if (interMinY == null || interMinY.xCoord < boxMinX || interMinY.xCoord > boxMaxX || interMinY.zCoord < boxMinZ || interMinY.zCoord > boxMaxZ) {
+            interMinY = null;
+        }
+
+        if (interMaxY == null || interMaxY.xCoord < boxMinX || interMaxY.xCoord > boxMaxX || interMaxY.zCoord < boxMinZ || interMaxY.zCoord > boxMaxZ) {
+            interMaxY = null;
+        }
+
+        if (interMinZ == null || interMinZ.xCoord < boxMinX || interMinZ.xCoord > boxMaxX || interMinZ.yCoord < boxMinY || interMinZ.yCoord > boxMaxY) {
+            interMinZ = null;
+        }
+
+        if (interMaxZ == null || interMaxZ.xCoord < boxMinX || interMaxZ.xCoord > boxMaxX || interMaxZ.yCoord < boxMinY || interMaxZ.yCoord > boxMaxY) {
+            interMaxZ = null;
+        }
+
+        Vec3 closestHitVect = null;
+
+        if (interMinX != null) {
+            closestHitVect = interMinX;
+        }
+
+        if (interMaxX != null && (closestHitVect == null || vecA.squareDistanceTo(interMaxX) < vecA.squareDistanceTo(closestHitVect))) {
+            closestHitVect = interMaxX;
+        }
+
+        if (interMinY != null && (closestHitVect == null || vecA.squareDistanceTo(interMinY) < vecA.squareDistanceTo(closestHitVect))) {
+            closestHitVect = interMinY;
+        }
+
+        if (interMaxY != null && (closestHitVect == null || vecA.squareDistanceTo(interMaxY) < vecA.squareDistanceTo(closestHitVect))) {
+            closestHitVect = interMaxY;
+        }
+
+        if (interMinZ != null && (closestHitVect == null || vecA.squareDistanceTo(interMinZ) < vecA.squareDistanceTo(closestHitVect))) {
+            closestHitVect = interMinZ;
+        }
+
+        if (interMaxZ != null && (closestHitVect == null || vecA.squareDistanceTo(interMaxZ) < vecA.squareDistanceTo(closestHitVect))) {
+            closestHitVect = interMaxZ;
+        }
+
+        return closestHitVect;
+
     }
 
     /**
@@ -460,6 +539,16 @@ public abstract class Check implements ICheck {
         for (final EntityPlayer player : mc.theWorld.playerEntities) {
             if (player != entity && player.getEntityBoundingBox().intersectsWith(aabb) && predicate.test(player)) {
                 list.add(player);
+            }
+        }
+        return list;
+    }
+
+    protected static List<PlayerDataSamples> getPlayersDataInAABBexcluding(Entity entity, AxisAlignedBB aabb, Predicate<? super EntityPlayer> predicate) {
+        final List<PlayerDataSamples> list = new ArrayList<>();
+        for (final EntityPlayer player : mc.theWorld.playerEntities) {
+            if (player != entity && player.getEntityBoundingBox().intersectsWith(aabb) && predicate.test(player)) {
+                list.add(((EntityPlayerAccessor) player).getPlayerDataSamples());
             }
         }
         return list;

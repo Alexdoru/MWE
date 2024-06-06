@@ -3,6 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.asm.transformers;
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.InjectionStatus;
 import fr.alexdoru.megawallsenhancementsmod.asm.loader.MWETransformer;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.ClassMapping;
+import fr.alexdoru.megawallsenhancementsmod.asm.mappings.FieldMapping;
 import fr.alexdoru.megawallsenhancementsmod.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
@@ -19,11 +20,20 @@ public class NetHandlerPlayClientTransformer_BlockBreakAnimListener implements M
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.NETHANDLERPLAYCLIENT$HANDLEBLOCKBREAKANIM)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if (checkInsnNode(insnNode, RETURN)) {
+                    if (checkMethodInsnNode(insnNode, MethodMapping.WORLDCLIENT$SENDBLOCKBREAKPROGRESS)) {
                         final InsnList list = new InsnList();
+                        list.add(new VarInsnNode(ALOAD, 0));
+                        list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.NETHANDLERPLAYCLIENT$GAMECONTROLLER));
+                        list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.MINECRAFT$THEWORLD));
                         list.add(new VarInsnNode(ALOAD, 1));
-                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("NetHandlerPlayClientHook"), "handleBlockBreakAnim", "(L" + ClassMapping.S25PACKETBLOCKBREAKANIM + ";)V", false));
-                        methodNode.instructions.insertBefore(insnNode, list);
+                        list.add(new MethodInsnNode(
+                                INVOKESTATIC,
+                                getHookClass("NetHandlerPlayClientHook_BlockBreakAnim"),
+                                "handleBlockBreakAnim",
+                                "(L" + ClassMapping.WORLDCLIENT + ";L" + ClassMapping.S25PACKETBLOCKBREAKANIM + ";)V",
+                                false
+                        ));
+                        methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
                     }
                 }

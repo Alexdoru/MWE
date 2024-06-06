@@ -86,6 +86,7 @@ public enum ClassMapping {
     TEXTUREMANAGER("bmj", "net/minecraft/client/renderer/texture/TextureManager"),
     THREADQUICKEXITEXCEPTION("ki", "net/minecraft/network/ThreadQuickExitException"),
     WORLD("adm", "net/minecraft/world/World"),
+    WORLDCLIENT("bdb", "net/minecraft/client/multiplayer/WorldClient"),
     WORLDRENDERER("bfd", "net/minecraft/client/renderer/WorldRenderer"),
     WORLDSETTINGS$GAMETYPE("adp$a", "net/minecraft/world/WorldSettings$GameType");
 

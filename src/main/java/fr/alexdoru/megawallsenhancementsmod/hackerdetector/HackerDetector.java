@@ -48,6 +48,7 @@ public class HackerDetector {
         INSTANCE = this;
         this.checkList.add(new AutoblockCheck());
         this.checkList.add(this.fastbreakCheck = new FastbreakCheck(brokenBlocksList));
+        this.checkList.add(new GhosthandCheck());
         this.checkList.add(new KeepSprintACheck());
         //this.checkList.add(new KeepSprintBCheck());
         this.checkList.add(new KillAuraACheck(recentPlacedBlocks));

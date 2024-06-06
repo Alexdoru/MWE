@@ -103,28 +103,6 @@ public class NetHandlerPlayClientHook {
         ChatUtil.addChatMessage(msg);
     }
 
-    ///**
-    // * The client seems to receive a packet for blocks in a 32 blocks radius maximum
-    // */
-    //@SuppressWarnings("unused")
-    //public static void handleBlockBreakAnim(S25PacketBlockBreakAnim packetIn) {
-    //    final Minecraft mc = Minecraft.getMinecraft();
-    //    if (mc.theWorld != null) {
-    //        final Entity breakerEntity = mc.theWorld.getEntityByID(packetIn.getBreakerId());
-    //        if (breakerEntity instanceof EntityOtherPlayerMP) {
-    //            final PlayerDataSamples data = ((EntityPlayerAccessor) breakerEntity).getPlayerDataSamples();
-    //            final BlockPos brokeBlockPos = packetIn.getPosition();
-    //        }
-    //    }
-    //}
-
-    //public static void onEntityTeleport(Entity entity) {
-    //    if (entity instanceof EntityPlayer) {
-    //        ChatUtil.debug("Detected Teleport of " + entity.getName());
-    //        AbstractCheck.logger.info("Detected Teleport of " + entity.getName() + " to x=" + entity.posX + " y=" + entity.posY + " z=" + entity.posZ);
-    //    }
-    //}
-
     private static class DisconnectedPlayer {
 
         public final long disconnectTime;

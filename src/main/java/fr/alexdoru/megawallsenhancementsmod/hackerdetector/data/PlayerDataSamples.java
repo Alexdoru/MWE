@@ -4,6 +4,7 @@ import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.*;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.Vector2D;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 
@@ -34,6 +35,8 @@ public class PlayerDataSamples {
     /** Last time the player broke a block */
     public long lastBreakBlockTime = System.currentTimeMillis();
     public final SampleListF breakTimeRatio = new SampleListF(8);
+    /** Last block touched by this player */
+    public BlockPos blockTouched;
 
     /* ----- Samples of rotations/positions interpolated by the client ----- */
     public final SampleListD posXList = new SampleListD(10);
@@ -60,6 +63,7 @@ public class PlayerDataSamples {
 
     public final ViolationLevelTracker autoblockAVL = AutoblockCheck.newVL();
     public final ViolationLevelTracker fastbreakVL = FastbreakCheck.newVL();
+    public final ViolationLevelTracker ghosthandVL = GhosthandCheck.newVl();
     public final ViolationLevelTracker keepsprintAVL = KeepSprintACheck.newVL();
     public final ViolationLevelTracker keepSprintBVL = KeepSprintBCheck.newVL();
     public final ViolationLevelTracker killAuraAVL = KillAuraACheck.newVL();
@@ -105,6 +109,7 @@ public class PlayerDataSamples {
 
     public void onPostChecks() {
         if (this.attackInfo != null) this.attackInfo.target = null;
+        this.blockTouched = null;
     }
 
     public void setPositionAndRotation(double x, double y, double z, float yaw, float pitch) {

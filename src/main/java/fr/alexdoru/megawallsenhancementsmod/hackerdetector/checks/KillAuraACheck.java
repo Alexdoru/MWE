@@ -121,9 +121,9 @@ public class KillAuraACheck extends Check {
 
         final float f = 1.0F;
         maxDistance = maxDistance + 2D;
-        final List<EntityPlayer> nearbyPlayers = getPlayersInAABBexcluding(player,
+        final List<PlayerDataSamples> nearbyPlayers = getPlayersDataInAABBexcluding(player,
                 player.getEntityBoundingBox().addCoord(lookVect.xCoord * maxDistance, lookVect.yCoord * maxDistance, lookVect.zCoord * maxDistance).expand(f, f, f),
-                p -> p != data.attackInfo.target && p != mc.thePlayer && p.canBeCollidedWith() && HackerDetector.isValidPlayer(p.getUniqueID()) && !p.isInvisible());
+                p -> p != data.attackInfo.target && p != mc.thePlayer && p.canBeCollidedWith() && HackerDetector.isValidPlayer(p.getUniqueID()) && !p.isInvisible() && ((EntityPlayerAccessor) p).getPlayerDataSamples().posXList.size() >= MAX_TICK_DELAY);
 
         int b = 1000;
         int p = 1000;
@@ -138,9 +138,7 @@ public class KillAuraACheck extends Check {
                     final double dx = attackerEyePos.xCoord + j * STEP_SIZE * lookVect.xCoord;
                     final double dy = attackerEyePos.yCoord + j * STEP_SIZE * lookVect.yCoord;
                     final double dz = attackerEyePos.zCoord + j * STEP_SIZE * lookVect.zCoord;
-                    for (final EntityPlayer entity : nearbyPlayers) {
-                        final PlayerDataSamples eData = ((EntityPlayerAccessor) entity).getPlayerDataSamples();
-                        if (eData.posXList.size() < MAX_TICK_DELAY) continue;
+                    for (final PlayerDataSamples eData : nearbyPlayers) {
                         if (isInsideHitbox(eData.posXList.get(i), eData.posYList.get(i), eData.posZList.get(i), dx, dy, dz)) {
                             timesInsidePlayer++;
                             break;

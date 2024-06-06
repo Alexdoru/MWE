@@ -76,7 +76,7 @@ public class MWEClassTransformer implements IClassTransformer {
         registerTransformer(new MinecraftTransformer_DebugMessages());
         registerTransformer(new MinecraftTransformer_DropProtection());
         registerTransformer(new MinecraftTransformer_WarpProtection());
-        //registerTransformer(new NetHandlerPlayClientTransformer_BlockBreakAnimListener());
+        registerTransformer(new NetHandlerPlayClientTransformer_BlockBreakAnimListener());
         registerTransformer(new NetHandlerPlayClientTransformer_BlockChangeListener());
         //registerTransformer(new NetHandlerPlayClientTransformer_EquipmentListener());
         registerTransformer(new NetHandlerPlayClientTransformer_PlayerMapTracker());

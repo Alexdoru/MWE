@@ -109,7 +109,8 @@ public enum MethodMapping {
     STRINGBUILDER$TOSTRING(INVOKEVIRTUAL, STRINGBUILDER, "toString", "()Ljava/lang/String;"),
     TESSELLATOR$DRAW(INVOKEVIRTUAL, TESSELLATOR, "b", "draw", "()V"),
     TESSELLATOR$GETINSTANCE(INVOKESTATIC, TESSELLATOR, "a", "getInstance", "()L" + TESSELLATOR + ";"),
-    WORLD$UPDATEENTITYWITHOPTIONALFORCE("a", "updateEntityWithOptionalForce", "(L" + ENTITY + ";Z)V");
+    WORLD$UPDATEENTITYWITHOPTIONALFORCE("a", "updateEntityWithOptionalForce", "(L" + ENTITY + ";Z)V"),
+    WORLDCLIENT$SENDBLOCKBREAKPROGRESS(INVOKEVIRTUAL, WORLDCLIENT, "c", "sendBlockBreakProgress", "(IL" + BLOCKPOS + ";I)V");
 
     public final int opcode;
     public final String owner;
