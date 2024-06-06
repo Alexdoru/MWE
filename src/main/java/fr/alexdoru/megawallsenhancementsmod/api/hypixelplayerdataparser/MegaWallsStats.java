@@ -184,7 +184,7 @@ public class MegaWallsStats {
                 imsg.appendText(EnumChatFormatting.GOLD + " P" + ChatUtil.intToRoman(entry.getValue()[0]));
             }
             final Integer classpoints = entry.getValue()[1];
-            imsg.appendText(" : " + ColorUtil.getPrestigeVColor(classpoints) + classpoints + "\n");
+            imsg.appendText(" : " + ColorUtil.getPrestige4Color(classpoints) + classpoints + "\n");
         }
         imsg.appendText(EnumChatFormatting.GREEN + "Total : " + EnumChatFormatting.GOLD + total_classpoints + "\n");
         int cpMissing = MWClass.values().length * 2_000;
