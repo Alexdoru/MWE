@@ -135,6 +135,12 @@ public class PlayerDataSamples {
         return this.attackInfo != null && !this.attackInfo.multiTarget && this.attackInfo.target != null;
     }
 
+    public boolean isOnFlatGround() {
+        return Math.abs(serverPosYList.get(0) - serverPosYList.get(1)) < 0.001d &&
+                Math.abs(serverPosYList.get(1) - serverPosYList.get(2)) < 0.001d &&
+                Math.abs(serverPosYList.get(2) - serverPosYList.get(3)) < 0.001d;
+    }
+
     /** True if the player's position in the XZ plane is identical to the last tick */
     public boolean isNotMovingXZ() {
         return this.speedXList.get(0) == 0D && this.speedZList.get(0) == 0D;

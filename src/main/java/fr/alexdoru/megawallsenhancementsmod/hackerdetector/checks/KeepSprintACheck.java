@@ -20,10 +20,10 @@ public class KeepSprintACheck extends Check {
         return "The player's sprint doesn't turn off when using items (blocking sword, eating, drinking, using bow...)";
     }
 
-    //@Override
-    //public String getFlagType() {
-    //    return "A";
-    //}
+    @Override
+    public String getFlagType() {
+        return "A";
+    }
 
     @Override
     public boolean canSendReport() {
