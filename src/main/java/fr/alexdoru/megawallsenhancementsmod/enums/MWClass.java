@@ -1,5 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.enums;
 
+import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.scoreboard.ScorePlayerTeam;
@@ -10,30 +11,33 @@ import java.util.Map;
 
 public enum MWClass {
 
-    ARCANIST("ARC", "Arcanist"),
-    ASSASSIN("ASN", "Assassin"),
-    AUTOMATON("ATN", "Automaton"),
-    BLAZE("BLA", "Blaze"),
-    COW("COW", "Cow"),
-    CREEPER("CRE", "Creeper"),
-    DREADLORD("DRE", "Dreadlord"),
-    ENDERMAN("END", "Enderman"),
-    GOLEM("GOL", "Golem"),
-    HEROBRINE("HBR", "Herobrine"),
-    HUNTER("HUN", "Hunter"),
-    MOLEMAN("MOL", "Moleman"),
-    PHOENIX("PHX", "Phoenix"),
-    PIGMAN("PIG", "Pigman"),
-    PIRATE("PIR", "Pirate"),
-    RENEGADE("REN", "Renegade"),
-    SHAMAN("SHA", "Shaman"),
-    SHARK("SRK", "Shark"),
-    SKELETON("SKE", "Skeleton"),
-    SNOWMAN("SNO", "Snowman"),
-    SPIDER("SPI", "Spider"),
-    SQUID("SQU", "Squid"),
-    WEREWOLF("WER", "Werewolf"),
-    ZOMBIE("ZOM", "Zombie");
+    ANGEL("ANG"),
+    ARCANIST("ARC"),
+    ASSASSIN("ASN"),
+    AUTOMATON("ATN"),
+    BLAZE("BLA"),
+    COW("COW"),
+    CREEPER("CRE"),
+    DRAGON("DRG"),
+    DREADLORD("DRE"),
+    ENDERMAN("END"),
+    GOLEM("GOL"),
+    HEROBRINE("HBR"),
+    HUNTER("HUN"),
+    MOLEMAN("MOL"),
+    PHOENIX("PHX"),
+    PIGMAN("PIG"),
+    PIRATE("PIR"),
+    RENEGADE("REN"),
+    SHAMAN("SHA"),
+    SHARK("SRK"),
+    SHEEP("SHP"),
+    SKELETON("SKE"),
+    SNOWMAN("SNO"),
+    SPIDER("SPI"),
+    SQUID("SQU"),
+    WEREWOLF("WER"),
+    ZOMBIE("ZOM");
 
     public final String TAG;
     public final String className;
@@ -46,9 +50,9 @@ public enum MWClass {
         }
     }
 
-    MWClass(String TAG, String className) {
+    MWClass(String TAG) {
         this.TAG = TAG;
-        this.className = className;
+        this.className = StringUtil.uppercaseFirstLetter(this.name().toLowerCase());
     }
 
     public static MWClass fromTagOrName(String nameIn) {
