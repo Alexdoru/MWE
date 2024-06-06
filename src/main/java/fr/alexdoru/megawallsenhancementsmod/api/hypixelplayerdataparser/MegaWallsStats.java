@@ -114,10 +114,8 @@ public class MegaWallsStats {
                     continue;
                 }
                 final int prestige = JsonUtil.getInt(classeobj, "prestige");
-                nbprestiges = nbprestiges + prestige;
-                final int classpoints = JsonUtil.getInt(megaWallsStatsObj, classname + "_final_kills_standard")
-                        + JsonUtil.getInt(megaWallsStatsObj, classname + "_final_assists_standard")
-                        + JsonUtil.getInt(megaWallsStatsObj, classname + "_wins_standard") * 10;
+                nbprestiges += prestige;
+                final int classpoints = JsonUtil.getInt(megaWallsStatsObj, classname + "_class_points");
                 total_classpoints += classpoints;
                 classpointsMap.put(classname, new Integer[]{prestige, classpoints});
             }
@@ -187,8 +185,8 @@ public class MegaWallsStats {
             imsg.appendText(" : " + ColorUtil.getPrestige4Color(classpoints) + classpoints + "\n");
         }
         imsg.appendText(EnumChatFormatting.GREEN + "Total : " + EnumChatFormatting.GOLD + total_classpoints + "\n");
-        int cpMissing = MWClass.values().length * 2_000;
-        int coinsMissing = MWClass.values().length * 2_000_000 - this.coins;
+        int cpMissing = MWClass.values().length * 5_000;
+        int coinsMissing = MWClass.values().length * 3_000_000 - this.coins;
         for (final Map.Entry<String, Integer[]> entry : classpointsMap.entrySet()) {
             cpMissing -= Math.min(entry.getValue()[1], 2000);
             final int prestige = entry.getValue()[0];
@@ -256,7 +254,7 @@ public class MegaWallsStats {
 
                 {
                         EnumChatFormatting.AQUA + "Wither kills : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(wither_kills) + "     ",
-                        EnumChatFormatting.AQUA + "Leg skins : " + (getLegSkins() == 24 ? EnumChatFormatting.GOLD : EnumChatFormatting.GREEN) + getLegSkins() + EnumChatFormatting.GOLD + "/24"
+                        EnumChatFormatting.AQUA + "Leg skins : " + (getLegSkins() == 27 ? EnumChatFormatting.GOLD : EnumChatFormatting.GREEN) + getLegSkins() + EnumChatFormatting.GOLD + "/27"
                 },
 
                 {

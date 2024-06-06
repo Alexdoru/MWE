@@ -15,6 +15,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommandPlancke extends MyAbstractCommand {
@@ -137,8 +138,13 @@ public class CommandPlancke extends MyAbstractCommand {
             return getListOfStringsMatchingLastWord(args, games);
         }
         if (args.length == 3 && (args[1].equalsIgnoreCase("mw") || args[1].equalsIgnoreCase("megawalls"))) {
-            final String[] mwargs = {"arcanist", "assassin", "automaton", "blaze", "classpoint", "cow", "creeper", "dreadlord", "enderman", "golem", "herobrine", "hunter", "legendary", "moleman", "phoenix", "pirate", "renegade", "shaman", "shark", "skeleton", "snowman", "spider", "squid", "pigman", "werewolf", "zombie"};
-            return getListOfStringsMatchingLastWord(args, mwargs);
+            final List<String> list = new ArrayList<>();
+            for (final MWClass mwClass : MWClass.values()) {
+                list.add(mwClass.className.toLowerCase());
+            }
+            list.add("classpoint");
+            list.add("legendary");
+            return getListOfStringsMatchingLastWord(args, list);
         }
         return null;
     }
