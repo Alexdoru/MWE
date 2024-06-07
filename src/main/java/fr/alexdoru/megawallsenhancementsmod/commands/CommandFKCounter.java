@@ -11,7 +11,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter.*;
 
@@ -56,7 +55,9 @@ public class CommandFKCounter extends MyAbstractCommand {
             ChatUtil.addChatMessage(strBuilder.toString());
 
         } else if (args.length == 2 && args[0].equalsIgnoreCase("remove")) {
+
             removePlayer(args[1]);
+
         } else if (args.length > 0 && args[0].equalsIgnoreCase("say")) {
 
             if (getGameId() == null) {
@@ -64,37 +65,14 @@ public class CommandFKCounter extends MyAbstractCommand {
                 return;
             }
 
-            final StringBuilder strBuilder = new StringBuilder();
-
-            if (args.length == 1) {
-
-                final Map<Integer, Integer> sortedmap = getSortedTeamKillsMap();
-                int i = 0;
-                for (final Map.Entry<Integer, Integer> entry : sortedmap.entrySet()) {
-                    if (i != 0) {
-                        strBuilder.append(", ");
-                    }
-                    strBuilder.append(getTeamNameFromTeam(entry.getKey())).append(": ").append(entry.getValue());
-                    i++;
-                }
-
-            } else if (args.length == 2 && args[1].equalsIgnoreCase("red")) {
-                strBuilder.append(getTeamNameFromTeam(RED_TEAM)).append(": ").append(MapUtil.sortByDecreasingValue(getPlayers(RED_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
-            } else if (args.length == 2 && args[1].equalsIgnoreCase("green")) {
-                strBuilder.append(getTeamNameFromTeam(GREEN_TEAM)).append(": ").append(MapUtil.sortByDecreasingValue(getPlayers(GREEN_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
-            } else if (args.length == 2 && args[1].equalsIgnoreCase("yellow")) {
-                strBuilder.append(getTeamNameFromTeam(YELLOW_TEAM)).append(": ").append(MapUtil.sortByDecreasingValue(getPlayers(YELLOW_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
-            } else if (args.length == 2 && args[1].equalsIgnoreCase("blue")) {
-                strBuilder.append(getTeamNameFromTeam(BLUE_TEAM)).append(": ").append(MapUtil.sortByDecreasingValue(getPlayers(BLUE_TEAM)).entrySet().stream().map(entry -> entry.getKey() + " (" + entry.getValue() + ")").collect(Collectors.joining(", ")));
-            }
-
-            sendChatMessage(strBuilder.toString());
+            sendChatMessage("You shouldn't ask for finals and instead try to final kill everyone to win the game!");
 
         } else if (args.length > 0 && args[0].equalsIgnoreCase("help")) {
 
             this.printCommandHelp();
 
         } else {
+
             if (getGameId() == null) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + "This is not available right now");
                 return;
@@ -116,16 +94,13 @@ public class CommandFKCounter extends MyAbstractCommand {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        final String[] fksarguments = {"players", "remove", "say", "settings", "help"};
-        final String[] colors = {"red", "green", "yellow", "blue"};
+        final String[] fksarguments = {"players", "remove", "settings", "help"};
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, fksarguments);
         }
         if (args.length == 2) {
             if (args[0].equals("remove")) {
                 return getListOfStringsMatchingLastWord(args, getPlayerListInKillCounter());
-            } else {
-                return getListOfStringsMatchingLastWord(args, colors);
             }
         }
         return null;
@@ -138,7 +113,6 @@ public class CommandFKCounter extends MyAbstractCommand {
                         + ChatUtil.centerLine(EnumChatFormatting.GOLD + "Fks Help") + "\n\n"
                         + EnumChatFormatting.YELLOW + "/fks" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the amount of finals per team in the chat\n"
                         + EnumChatFormatting.YELLOW + "/fks players" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the amount of finals per player in the chat\n"
-                        + EnumChatFormatting.YELLOW + "/fks say" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "sends a message in the chat with the amount of finals per team\n"
                         + EnumChatFormatting.YELLOW + "/fks settings" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "opens the settings GUI\n"
                         + EnumChatFormatting.AQUA + ChatUtil.bar()
         );
