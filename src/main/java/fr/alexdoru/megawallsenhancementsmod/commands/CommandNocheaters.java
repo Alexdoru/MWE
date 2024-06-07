@@ -5,6 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.megawallsenhancementsmod.api.requests.HypixelPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
+import fr.alexdoru.megawallsenhancementsmod.gui.huds.DebugScoreboardHUD;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.WDR;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.WarningMessagesHandler;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.WdrData;
@@ -18,12 +19,15 @@ import net.minecraft.command.NumberInvalidException;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.*;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 public class CommandNocheaters extends MyAbstractCommand {
+
+    private DebugScoreboardHUD debugHUD;
 
     @Override
     public String getCommandName() {
@@ -45,6 +49,10 @@ public class CommandNocheaters extends MyAbstractCommand {
         } else if (args[0].equalsIgnoreCase("getscoreboard")) {
 
             ScoreboardUtils.debugGetScoreboard();
+
+        } else if (args[0].equalsIgnoreCase("debugscoreboard")) {
+
+            debugScoreboard();
 
         } else {
 
@@ -146,6 +154,15 @@ public class CommandNocheaters extends MyAbstractCommand {
             );
             return null;
         });
+    }
+
+    private void debugScoreboard() {
+        if (this.debugHUD == null) {
+            this.debugHUD = new DebugScoreboardHUD();
+            MinecraftForge.EVENT_BUS.register(this.debugHUD);
+        } else {
+            MinecraftForge.EVENT_BUS.unregister(this.debugHUD);
+        }
     }
 
 }
