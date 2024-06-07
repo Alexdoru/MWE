@@ -267,14 +267,13 @@ public class NameUtil {
         }
 
         IChatComponent displayName = null;
-        final String colorSuffix;
         char teamColor = '\0';
         MWClass mwClass = null;
         if (mc.theWorld != null) {
             final ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
             if (team != null) {
                 final String teamprefix = team.getColorPrefix();
-                colorSuffix = team.getColorSuffix();
+                final String colorSuffix = team.getColorSuffix();
                 teamColor = StringUtil.getLastColorCharOf(teamprefix);
                 mwClass = MWClass.fromTeamTag(ScoreboardTracker.isMWReplay ? teamprefix : colorSuffix);
                 final boolean isobf = teamprefix.contains(EnumChatFormatting.OBFUSCATED.toString());
