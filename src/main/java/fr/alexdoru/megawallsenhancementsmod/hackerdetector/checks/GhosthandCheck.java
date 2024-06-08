@@ -1,6 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.HackerDetector;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.utils.ViolationLevelTracker;
@@ -76,12 +77,15 @@ public class GhosthandCheck extends Check {
         }
 
         data.ghosthandVL.add(1);
+        if (ConfigHandler.debugLogging && data.ghosthandVL.getViolationLevel() > 2) {
+            this.log(player, data, data.ghosthandVL, null);
+        }
         return true;
 
     }
 
     public static ViolationLevelTracker newVl() {
-        return new ViolationLevelTracker(15);
+        return new ViolationLevelTracker(8);
     }
 
 }
