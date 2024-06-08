@@ -301,32 +301,32 @@ public abstract class Check implements ICheck {
      * Returns true if the coordinates provided (Vec3) are inside the hitbox of the player of position playerX, playerY, playerZ
      */
     protected static boolean isInsideHitbox(double playerX, double playerY, double playerZ, Vec3 vec) {
-        return vec.xCoord > playerX - 0.4 && vec.xCoord < playerX + 0.4
+        return vec.xCoord > playerX - 0.3 && vec.xCoord < playerX + 0.3
                 && vec.yCoord > playerY - 0.1 && vec.yCoord < playerY + 1.9
-                && vec.zCoord > playerZ - 0.4 && vec.zCoord < playerZ + 0.4;
+                && vec.zCoord > playerZ - 0.3 && vec.zCoord < playerZ + 0.3;
     }
 
     /**
      * Returns true if the coordinates provided are inside the hitbox of the player
      */
     protected static boolean isInsideHitbox(EntityPlayer player, Vec3 vec) {
-        return vec.xCoord > player.posX - 0.4 && vec.xCoord < player.posX + 0.4
+        return vec.xCoord > player.posX - 0.3 && vec.xCoord < player.posX + 0.3
                 && vec.yCoord > player.posY - 0.1 && vec.yCoord < player.posY + 1.9
-                && vec.zCoord > player.posZ - 0.4 && vec.zCoord < player.posZ + 0.4;
+                && vec.zCoord > player.posZ - 0.3 && vec.zCoord < player.posZ + 0.3;
     }
 
     /**
      * Returns true if the coordinates provided are inside the hitbox of the player
      */
     protected static boolean isInsideHitbox(EntityPlayer player, double x, double y, double z) {
-        return x > player.posX - 0.4 && x < player.posX + 0.4 && y > player.posY - 0.1 && y < player.posY + 1.9 && z > player.posZ - 0.4 && z < player.posZ + 0.4;
+        return x > player.posX - 0.3 && x < player.posX + 0.3 && y > player.posY - 0.1 && y < player.posY + 1.9 && z > player.posZ - 0.3 && z < player.posZ + 0.3;
     }
 
     /**
      * Returns true if the coordinates (x,y,z) provided are inside the hitbox of the player of coordinates (playerX,playerY,playerZ)
      */
     protected static boolean isInsideHitbox(double playerX, double playerY, double playerZ, double x, double y, double z) {
-        return x > playerX - 0.4 && x < playerX + 0.4 && y > playerY - 0.1 && y < playerY + 1.9 && z > playerZ - 0.4 && z < playerZ + 0.4;
+        return x > playerX - 0.3 && x < playerX + 0.3 && y > playerY - 0.1 && y < playerY + 1.9 && z > playerZ - 0.3 && z < playerZ + 0.3;
     }
 
     /**
@@ -343,12 +343,12 @@ public abstract class Check implements ICheck {
      */
     protected static Vec3 getHitVectOnPlayer(double playerX, double playerY, double playerZ, Vec3 vecA, Vec3 vecB) {
 
-        final double boxMinX = playerX - 0.4;
-        final double boxMaxX = playerX + 0.4;
+        final double boxMinX = playerX - 0.3;
+        final double boxMaxX = playerX + 0.3;
         final double boxMinY = playerY - 0.1;
         final double boxMaxY = playerY + 1.9;
-        final double boxMinZ = playerZ - 0.4;
-        final double boxMaxZ = playerZ + 0.4;
+        final double boxMinZ = playerZ - 0.3;
+        final double boxMaxZ = playerZ + 0.3;
 
         Vec3 interMinX = vecA.getIntermediateWithXValue(vecB, boxMinX);
         Vec3 interMaxX = vecA.getIntermediateWithXValue(vecB, boxMaxX);
@@ -425,12 +425,12 @@ public abstract class Check implements ICheck {
      */
     protected static double getDistanceInHitbox(double playerX, double playerY, double playerZ, Vec3 vecA, Vec3 vecB) {
 
-        final double boxMinX = playerX - 0.4;
-        final double boxMaxX = playerX + 0.4;
+        final double boxMinX = playerX - 0.3;
+        final double boxMaxX = playerX + 0.3;
         final double boxMinY = playerY - 0.1;
         final double boxMaxY = playerY + 1.9;
-        final double boxMinZ = playerZ - 0.4;
-        final double boxMaxZ = playerZ + 0.4;
+        final double boxMinZ = playerZ - 0.3;
+        final double boxMaxZ = playerZ + 0.3;
 
         Vec3 interMinX = vecA.getIntermediateWithXValue(vecB, boxMinX);
         Vec3 interMaxX = vecA.getIntermediateWithXValue(vecB, boxMaxX);
