@@ -14,6 +14,12 @@ public class ConfigHandler extends AbstractConfig {
 
     protected static void onModUpdate() {
         if (!modVersion.equals(MegaWallsEnhancementsMod.version)) {
+            if (ConfigHandler.lastWitherHUDPosition.getRelativeX() == 0.75d && ConfigHandler.lastWitherHUDPosition.getRelativeY() == 0.05d) {
+                ConfigHandler.lastWitherHUDPosition.resetToDefault();
+            }
+            if (ConfigHandler.baseLocationHUDPosition.getRelativeX() == 0.5d && ConfigHandler.baseLocationHUDPosition.getRelativeY() == 0.15d) {
+                ConfigHandler.baseLocationHUDPosition.resetToDefault();
+            }
             ConfigHandler.modVersion = MegaWallsEnhancementsMod.version;
             ConfigHandler.saveConfig();
         }
@@ -341,7 +347,7 @@ public class ConfigHandler extends AbstractConfig {
             category = GUI,
             name = "last wither HUD",
             comment = "position of the LastWitherHUD")
-    public static final GuiPosition lastWitherHUDPosition = new GuiPosition(0.75d, 0.05d);
+    public static final GuiPosition lastWitherHUDPosition = new GuiPosition(0.75d, 0d);
 
     @ConfigProperty(
             category = GUI,
@@ -431,7 +437,7 @@ public class ConfigHandler extends AbstractConfig {
             category = GUI,
             name = "Base Location HUD position",
             comment = "position of the base location HUD")
-    public static final GuiPosition baseLocationHUDPosition = new GuiPosition(0.5d, 0.15d);
+    public static final GuiPosition baseLocationHUDPosition = new GuiPosition(0.90d, 0d);
 
     @ConfigProperty(
             category = GUI,
