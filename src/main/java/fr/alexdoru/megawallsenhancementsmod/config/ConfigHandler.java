@@ -14,7 +14,6 @@ public class ConfigHandler extends AbstractConfig {
 
     protected static void onModUpdate() {
         if (!modVersion.equals(MegaWallsEnhancementsMod.version)) {
-            ConfigHandler.showfkcounterHUD = false;
             ConfigHandler.modVersion = MegaWallsEnhancementsMod.version;
             ConfigHandler.saveConfig();
         }
