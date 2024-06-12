@@ -100,14 +100,12 @@ public class MegaWallsClassStats {
         wlr = (float) classname_wins / (classname_losses == 0 ? 1 : (float) classname_losses);
         fkadr = (float) (classname_final_kills + classname_final_assists) / (classname_final_deaths == 0 ? 1 : (float) classname_final_deaths);
 
-        classpoints = JsonUtil.getInt(megaWallsStatsObj, classname + "_class_points");
+        classpoints = computeClasspoints(megaWallsStatsObj, classname);
 
         games_played = classname_wins + classname_losses; // doesn't count the draws
         fkpergame = (float) classname_final_kills / (games_played == 0 ? 1 : (float) games_played);
 
-        /*
-         * fields below are for the game stats
-         */
+        // fields below are for the game stats
         classname_assists = JsonUtil.getInt(megaWallsStatsObj, classname + "_assists");
         classname_wither_damage = JsonUtil.getInt(megaWallsStatsObj, classname + "_wither_damage");
         classname_wither_kills = JsonUtil.getInt(megaWallsStatsObj, classname + "_wither_kills");
@@ -144,6 +142,10 @@ public class MegaWallsClassStats {
         prestige = JsonUtil.getInt(classeobj, "prestige");
         enderchest_rows = Math.max(JsonUtil.getInt(classeobj, "enderchest_rows"), 3);
 
+    }
+
+    protected static int computeClasspoints(JsonObject megaWallsStatsObj, String name) {
+        return JsonUtil.getInt(megaWallsStatsObj, name + "_class_points");
     }
 
     /*

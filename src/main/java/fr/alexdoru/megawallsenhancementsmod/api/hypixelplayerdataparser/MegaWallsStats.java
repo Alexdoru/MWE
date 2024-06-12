@@ -115,7 +115,7 @@ public class MegaWallsStats {
                 }
                 final int prestige = JsonUtil.getInt(classeobj, "prestige");
                 nbprestiges += prestige;
-                final int classpoints = JsonUtil.getInt(megaWallsStatsObj, classname + "_class_points");
+                final int classpoints = MegaWallsClassStats.computeClasspoints(megaWallsStatsObj, classname);
                 total_classpoints += classpoints;
                 classpointsMap.put(classname, new Integer[]{prestige, classpoints});
             }
