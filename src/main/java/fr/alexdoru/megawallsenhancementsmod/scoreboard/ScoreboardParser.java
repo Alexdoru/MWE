@@ -112,7 +112,7 @@ public class ScoreboardParser {
             SoundUtil.playNotePling();
             ChatUtil.addChatMessage(EnumChatFormatting.YELLOW + "Game ends in 5 minutes!");
             triggeredGameEndAlert = true;
-        } else if (unformattedSidebarLines.get(1).contains("None!:")) {
+        } else if (unformattedSidebarLines.get(1).contains("Game End: 00:00")) {
             hasGameEnded = true;
         }
 
