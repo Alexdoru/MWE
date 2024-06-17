@@ -23,7 +23,6 @@ public class ScoreboardParser {
     private static final Pattern MW_INGAME_PATTERN = Pattern.compile("[0-9]+\\sF\\.\\sKills?\\s[0-9]+\\sF\\.\\sAssists?");
     private static final Pattern PREGAME_LOBBY_PATTERN = Pattern.compile("Players:\\s*[0-9]+/[0-9]+");
     private static final Pattern WITHER_ALIVE_PATTERN = Pattern.compile("\\[[BGRY]\\] Wither HP: ?(\\d+)");
-    private static final Pattern WITHER_ALIVE_HEART_PATTERN = Pattern.compile("\\[[BGRY]\\] Wither [❤♥]: ?(\\d+)");
     private static final Pattern REPLAY_MAP_PATTERN = Pattern.compile("Map: ([a-zA-Z0-9_ ]+)");
 
     private static boolean triggeredWallsFallAlert = false;
@@ -130,14 +129,6 @@ public class ScoreboardParser {
                 colorCode = StringUtil.getLastColorCodeBefore(formattedLine, "\\[");
                 aliveWithers.add(colorCode);
                 witherHP = Integer.parseInt(matcher1.group(1));
-            } else {
-                final Matcher matcher2 = WITHER_ALIVE_HEART_PATTERN.matcher(line);
-                if (matcher2.find()) {
-                    final String formattedLine = formattedSidebarLines.get(i);
-                    colorCode = StringUtil.getLastColorCodeBefore(formattedLine, "\\[");
-                    aliveWithers.add(colorCode);
-                    witherHP = 2 * Integer.parseInt(matcher2.group(1));
-                }
             }
 
             if (line.contains("eliminated!")) {
