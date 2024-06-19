@@ -135,7 +135,7 @@ public class ScoreboardUtils {
     /**
      * Prints scoreboard in chat
      */
-    public static void debugGetScoreboard() {
+    public static void printScoreboard() {
         if (mc.theWorld == null) {
             return;
         }

@@ -20,6 +20,8 @@ public class DebugScoreboardHUD {
             y += mc.fontRendererObj.FONT_HEIGHT;
             mc.fontRendererObj.drawStringWithShadow("isInMwGame " + formatBool(ScoreboardTracker.isInMwGame), x, y, 0xFFFFFF);
             y += mc.fontRendererObj.FONT_HEIGHT;
+            mc.fontRendererObj.drawStringWithShadow("Game ID " + ScoreboardTracker.getParser().getGameId(), x, y, 0xFFFFFF);
+            y += mc.fontRendererObj.FONT_HEIGHT;
             mc.fontRendererObj.drawStringWithShadow("isPrepPhase " + formatBool(ScoreboardTracker.isPrepPhase), x, y, 0xFFFFFF);
             y += mc.fontRendererObj.FONT_HEIGHT;
             mc.fontRendererObj.drawStringWithShadow("withersAlive " + ScoreboardTracker.getParser().getAliveWithers().size(), x, y, 0xFFFFFF);

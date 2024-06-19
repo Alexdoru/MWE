@@ -48,7 +48,7 @@ public class CommandNocheaters extends MyAbstractCommand {
 
         } else if (args[0].equalsIgnoreCase("getscoreboard")) {
 
-            ScoreboardUtils.debugGetScoreboard();
+            ScoreboardUtils.printScoreboard();
 
         } else if (args[0].equalsIgnoreCase("debugscoreboard")) {
 
@@ -162,6 +162,7 @@ public class CommandNocheaters extends MyAbstractCommand {
             MinecraftForge.EVENT_BUS.register(this.debugHUD);
         } else {
             MinecraftForge.EVENT_BUS.unregister(this.debugHUD);
+            this.debugHUD = null;
         }
     }
 
