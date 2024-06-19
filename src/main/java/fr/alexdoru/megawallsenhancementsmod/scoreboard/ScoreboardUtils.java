@@ -62,24 +62,27 @@ public class ScoreboardUtils {
 
     /**
      * Returns a list of formatted strings containing each line of the scoreboard/sidebar
-     * Item at index 0 is the first line etc
+     * Item at index 0 is the first line
+     * See Vanilla code at {@link net.minecraft.client.gui.GuiIngame#renderScoreboard}
      */
     public static List<String> getFormattedSidebarText(Scoreboard scoreboard) {
-        final List<String> lines = new ArrayList<>();
         final ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(1);
         if (objective == null) {
-            return lines;
+            return new ArrayList<>();
         }
-        Collection<Score> scores = scoreboard.getSortedScores(objective);
-        final List<Score> list = scores.stream().filter(input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#")).collect(Collectors.toList());
+        final Collection<Score> scores = scoreboard.getSortedScores(objective);
+        List<Score> list = new ArrayList<>();
+        for (final Score input : scores) {
+            if (input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#")) {
+                list.add(input);
+            }
+        }
         if (list.size() > 15) {
-            scores = Lists.newArrayList(Iterables.skip(list, scores.size() - 15));
-        } else {
-            scores = list;
+            list = Lists.newArrayList(Iterables.skip(list, scores.size() - 15));
         }
-        for (final Score score : scores) {
-            final ScorePlayerTeam team = scoreboard.getPlayersTeam(score.getPlayerName());
-            lines.add(ScorePlayerTeam.formatPlayerName(team, ""));
+        final List<String> lines = new ArrayList<>();
+        for (final Score score : list) {
+            lines.add(ScorePlayerTeam.formatPlayerName(scoreboard.getPlayersTeam(score.getPlayerName()), ""));
         }
         Collections.reverse(lines);
         return lines;

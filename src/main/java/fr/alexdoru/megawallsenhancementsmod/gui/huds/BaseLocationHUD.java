@@ -41,7 +41,7 @@ public class BaseLocationHUD extends AbstractRenderer {
     @SubscribeEvent
     public void onMWEvent(MegaWallsGameEvent event) {
         if (!ConfigHandler.showBaseLocationHUD) return;
-        if (event.getType() == MegaWallsGameEvent.EventType.CONNECT || event.getType() == MegaWallsGameEvent.EventType.GAME_START) {
+        if (event.getType() == MegaWallsGameEvent.EventType.CONNECT) {
             ChatListener.setMegaWallsMap();
         }
     }
