@@ -31,7 +31,7 @@ public class LeatherArmorManager {
                 ((EntityPlayerAccessor) player).getPlayerTeamColor() != '\0') {
             for (int i = 0; i < player.inventory.armorInventory.length; i++) {
                 final ItemStack stack = player.inventory.armorInventory[i];
-                if (isColoredLeatherArmor(stack, oldColor)) {
+                if (isColoredLeatherArmor(stack)) {
                     player.inventory.armorInventory[i] = createColoredLeatherArmor(stack, newColor);
                 }
             }
@@ -49,7 +49,7 @@ public class LeatherArmorManager {
                         if (isCleanIronArmor(stack)) {
                             player.inventory.armorInventory[i] = createColoredLeatherArmor(stack, ((EntityPlayerAccessor) player).getPlayerTeamColorInt());
                         }
-                    } else if (isColoredLeatherArmor(stack, ((EntityPlayerAccessor) player).getPlayerTeamColorInt())) {
+                    } else if (isColoredLeatherArmor(stack)) {
                         final ItemArmor itemArmor = (ItemArmor) stack.getItem();
                         player.inventory.armorInventory[i] = new ItemStack(new ItemArmor(ItemArmor.ArmorMaterial.IRON, itemArmor.renderIndex, itemArmor.armorType));
                     }
@@ -62,10 +62,10 @@ public class LeatherArmorManager {
         return stack != null && stack.getItem() instanceof ItemArmor && !stack.isItemEnchanted() && ((ItemArmor) stack.getItem()).getArmorMaterial() == ItemArmor.ArmorMaterial.IRON;
     }
 
-    private static boolean isColoredLeatherArmor(ItemStack stack, int color) {
+    private static boolean isColoredLeatherArmor(ItemStack stack) {
         if (stack != null && stack.getItem() instanceof ItemArmor && !stack.isItemEnchanted()) {
             final ItemArmor itemArmor = (ItemArmor) stack.getItem();
-            return itemArmor.getArmorMaterial() == ItemArmor.ArmorMaterial.LEATHER && itemArmor.hasColor(stack) && itemArmor.getColor(stack) == color;
+            return itemArmor.getArmorMaterial() == ItemArmor.ArmorMaterial.LEATHER && itemArmor.hasColor(stack);
         }
         return false;
     }
