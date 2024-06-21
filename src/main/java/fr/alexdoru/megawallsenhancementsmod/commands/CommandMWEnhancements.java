@@ -36,7 +36,7 @@ public class CommandMWEnhancements extends MyAbstractCommand {
         } else if (args.length >= 1 && args[0].equalsIgnoreCase("howplaygame")) {
             final String title = ScoreboardUtils.getUnformattedSidebarTitle();
             if (title != null && title.contains("MEGA WALLS")) {
-                final String msg1 = "During the first 7 minutes you have to mine iron, make armor and store everything in your enderchest";
+                final String msg1 = "During the first 6 minutes you have to mine iron, make armor and store everything in your enderchest";
                 final String msg2 = "Once the walls fall down you can go to mid and fight other players, each class has unique abilities";
                 final String msg3 = "Every team has a wither, you have to protect yours and kill the withers from the other teams";
                 final String msg4 = "Once a wither is dead the players from that team can't respawn, be the last team standing to win";
