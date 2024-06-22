@@ -78,14 +78,8 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
                     NameUtil.refreshAllNamesInWorld();
                 },
                 iconsTooltip));
-        this.buttonList.add(new OptionGuiButton(
-                xPosLeft, getButtonYPos(4),
-                "More strength particules",
-                (b) -> ConfigHandler.strengthParticules = b,
-                () -> ConfigHandler.strengthParticules,
-                GRAY + "Spawns angry villager particles when an herobrine or dreadlord gets strength from a final kill"));
         this.buttonList.add(new FancyGuiButton(
-                xPosLeft, getButtonYPos(5),
+                xPosLeft, getButtonYPos(4),
                 () -> "Colored Leather Armor : " + getSuffix(ConfigHandler.coloredLeatherArmor),
                 () -> {
                     ConfigHandler.coloredLeatherArmor = !ConfigHandler.coloredLeatherArmor;

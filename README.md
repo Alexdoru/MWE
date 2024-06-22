@@ -100,7 +100,6 @@ Allows you to customize the look of the f3+b hitboxes.
 - **Wither death time HUD** - Displays the time left before the last wither standing automatically dies, HUD can be placed in the sidebar
 - **Hide hunger title** - Stop rendering the hunger message in the middle of the screen during deathmatch
 - **Hide repetitive msg** - Hide certain messages that spam the chat in Mega Walls
-- **More strength particles** - Spawn particles around the player when a dreadlord or herobrine gets strength on kill
 - **Renegade arrow count** - Display the amount of arrows you have pinned in them above player heads when playing Renegade
 - **Nick hider** - Display to yourself your own name when you are nicked in Mega Walls
 - **Pink Squadmates** - Squadmates' nametags will appear pink as well as their hitboxes

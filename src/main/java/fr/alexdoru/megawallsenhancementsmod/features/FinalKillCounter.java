@@ -5,20 +5,16 @@ import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.enums.MWClass;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
-import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.MapUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -207,7 +203,6 @@ public class FinalKillCounter {
                         }
                         FKCounterHUD.instance.updateDisplayText();
                     }
-                    spawnParticles(killer);
                     final String s = formattedText.replace(killer, SquadHandler.getSquadname(killer))
                             .replace(killedPlayer, SquadHandler.getSquadname(killedPlayer))
                             + getKillDiffString(killsOfKilledPlayer, killedTeamColor);
@@ -409,54 +404,6 @@ public class FinalKillCounter {
 
     private static boolean isNotValidTeam(int team) {
         return (team < 0 || team >= TEAMS);
-    }
-
-    private static void spawnParticles(String killer) {
-
-        if (!ConfigHandler.strengthParticules) {
-            return;
-        }
-
-        final MWClass mwClass = MWClass.ofPlayer(killer);
-        if (mwClass == null) {
-            return;
-        }
-
-        final int duration;
-        if (mwClass == MWClass.DREADLORD) {
-            duration = 5 * 20;
-        } else if (mwClass == MWClass.HEROBRINE) {
-            duration = 6 * 20;
-        } else {
-            return;
-        }
-
-        final EntityPlayer player = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(killer); // O(N)
-        if (player == null) {
-            return;
-        }
-
-        for (int i = 0; i < duration / 10; i++) {
-            new DelayedTask(() -> {
-                for (int j = 0; j < 5; ++j) {
-                    final double d0 = rand.nextGaussian() * 0.02D;
-                    final double d1 = rand.nextGaussian() * 0.02D;
-                    final double d2 = rand.nextGaussian() * 0.02D;
-                    if (Minecraft.getMinecraft().theWorld != null) {
-                        Minecraft.getMinecraft().theWorld.spawnParticle(
-                                EnumParticleTypes.VILLAGER_ANGRY,
-                                player.posX + (double) (rand.nextFloat() * player.width * 2.0F) - (double) player.width,
-                                player.posY + 1.0D + (double) (rand.nextFloat() * player.height),
-                                player.posZ + (double) (rand.nextFloat() * player.width * 2.0F) - (double) player.width,
-                                d0,
-                                d1,
-                                d2
-                        );
-                    }
-                }
-            }, i * 10);
-        }
-
     }
 
     @SubscribeEvent

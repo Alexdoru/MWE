@@ -105,12 +105,6 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = MWENHANCEMENTS,
-            name = "Strength particules",
-            comment = "Spawns strength particules when an herobrine or dreadlord get a final")
-    public static boolean strengthParticules = true;
-
-    @ConfigProperty(
-            category = MWENHANCEMENTS,
             name = "Shorten coin message",
             comment = "Shorten the coins messages by removing the network booster info")
     public static boolean shortCoinMessage;
