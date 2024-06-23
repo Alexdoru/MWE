@@ -31,6 +31,7 @@ public final class GuiManager {
         this.registeredRenderers.add(new PhoenixBondHUD());
         this.registeredRenderers.add(new SpeedHUD());
         this.registeredRenderers.add(new SquadHealthHUD());
+        this.registeredRenderers.add(new WarcryHUD());
         this.registeredRenderers.trimToSize();
     }
 
@@ -42,7 +43,11 @@ public final class GuiManager {
         if (event.type == ElementType.TEXT && !(mc.currentScreen instanceof PositionEditGuiScreen)) {
             final long time = System.currentTimeMillis();
             mc.mcProfiler.startSection("MWE HUD");
-            registeredRenderers.forEach(renderer -> callRenderer(renderer, event.resolution, time));
+            for (final IRenderer renderer : this.registeredRenderers) {
+                if (renderer.isEnabled(time)) {
+                    renderer.render(event.resolution);
+                }
+            }
             mc.mcProfiler.endSection();
         }
     }
@@ -53,11 +58,5 @@ public final class GuiManager {
      * after this.mc.ingameGUI.renderGameOverlay(partialTicks) call
      */
     public static void onPostRenderGameOverlay(float partialTicks) {}
-
-    private static void callRenderer(IRenderer renderer, ScaledResolution resolution, long currentTimeMillis) {
-        if (renderer.isEnabled(currentTimeMillis)) {
-            renderer.render(resolution);
-        }
-    }
 
 }

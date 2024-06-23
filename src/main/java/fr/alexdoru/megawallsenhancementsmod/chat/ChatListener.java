@@ -140,6 +140,10 @@ public class ChatListener {
                 return;
             }
 
+            if (WarcryHUD.instance.processMessage(msg)) {
+                return;
+            }
+
             final Matcher matcher = MESSAGE_PATTERN.matcher(msg);
             String messageSender = null;
             String squadname = null;

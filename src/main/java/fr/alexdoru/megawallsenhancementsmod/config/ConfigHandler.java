@@ -451,6 +451,19 @@ public class ConfigHandler extends AbstractConfig {
             comment = "position of the mini potion HUD")
     public static final GuiPosition miniPotionHUDPosition = new GuiPosition(0.5d, 7.5d / 20d);
 
+
+    @ConfigProperty(
+            category = GUI,
+            name = "Show warcry HUD",
+            comment = "Displays a HUD with the cooldown of the warcry in Mega Walls")
+    public static boolean showWarcryHUD = true;
+
+    @ConfigProperty(
+            category = GUI,
+            name = "Warcry HUD position",
+            comment = "position of the warcry HUD")
+    public static final GuiPosition warcryHUDPosition = new GuiPosition(0.65d, 1d);
+
     @ConfigProperty(
             category = NOCHEATERS,
             name = "Show Warning Icons",

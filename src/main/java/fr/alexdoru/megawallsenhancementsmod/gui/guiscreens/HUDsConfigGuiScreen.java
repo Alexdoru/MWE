@@ -22,7 +22,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
     @Override
     public void initGui() {
         this.maxWidth = 90 * 2 + BUTTON_WIDTH + 4 * 2;
-        this.maxHeight = (buttonsHeight + 4) * 14 + buttonsHeight;
+        this.maxHeight = (buttonsHeight + 4) * 15 + buttonsHeight;
         super.initGui();
         this.elementList.add(new TextElement(DARK_PURPLE + "HUDs", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
         new HUDSettingGuiButtons(
@@ -177,6 +177,15 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(12),
+                "Warcry HUD",
+                (b) -> ConfigHandler.showWarcryHUD = b,
+                () -> ConfigHandler.showWarcryHUD,
+                WarcryHUD.instance,
+                this,
+                GRAY + "Displays the cooldown of the warcry in Mega Walls")
+                .accept(this.buttonList);
+        new HUDSettingGuiButtons(
+                getxCenter(), getButtonYPos(13),
                 () -> "Wither death time HUD : " + (ConfigHandler.witherHUDinSidebar ? YELLOW + "in Sidebar" : getSuffix(ConfigHandler.showLastWitherHUD)),
                 () -> {
                     if (ConfigHandler.showLastWitherHUD && !ConfigHandler.witherHUDinSidebar) {
@@ -198,7 +207,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 DARK_GRAY + "▪ " + YELLOW + "In Sidebar" + GRAY + " : The HUD is placed in the sidebar",
                 DARK_GRAY + "▪ " + RED + "Disabled")
                 .accept(this.buttonList);
-        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(14), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
+        this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(15), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
 
     @Override
