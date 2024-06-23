@@ -41,8 +41,6 @@ public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
         repetitiveMsgTooltip.add(GREEN + "You broke your protected trapped chest");
         repetitiveMsgTooltip.add(YELLOW + "Your Salvaging skill returned your arrow to you!");
         repetitiveMsgTooltip.add(YELLOW + "Your Efficiency skill got you an extra drop!");
-        repetitiveMsgTooltip.add(GREEN + "Your " + AQUA + "Ability name " + GREEN + "skill is ready!");
-        repetitiveMsgTooltip.add(GREEN + "Click your sword or bow to activate your skill!");
         this.buttonList.add(new OptionGuiButton(
                 xPosLeft, getButtonYPos(1),
                 "Hide repetitive MW msg",
