@@ -55,7 +55,7 @@ public class MinecraftHook {
     }
 
     public static boolean shouldCancelRightClick(ItemStack itemStack) {
-        if (ScoreboardTracker.isInMwGame && itemStack != null && itemStack.getItem() == Items.paper) {
+        if (ScoreboardTracker.isInMwGame() && itemStack != null && itemStack.getItem() == Items.paper) {
             final NBTTagCompound tagCompound = itemStack.getTagCompound();
             if (tagCompound != null && tagCompound.hasKey("display", 10)) {
                 final NBTTagCompound displayTag = tagCompound.getCompoundTag("display");

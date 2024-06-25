@@ -116,7 +116,7 @@ public class CommandStalk extends MyAbstractCommand {
             imsg.appendText(RED + " Latest activity : " + YELLOW + DateUtil.timeSince(latestActivityTime) + GRAY + " ago " + latestActivity + RED + ".");
         }
 
-        if (ScoreboardTracker.isMWEnvironement) {
+        if (ScoreboardTracker.isMWEnvironement()) {
             this.appendSelectedClass(imsg, playerData);
         }
 

@@ -75,7 +75,7 @@ public class SquadHandler {
      */
     public static void formSquad() {
 
-        if (!ScoreboardTracker.isMWEnvironement) {
+        if (!ScoreboardTracker.isMWEnvironement()) {
             return;
         }
 

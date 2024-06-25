@@ -33,7 +33,7 @@ public class BaseLocationHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return ConfigHandler.showBaseLocationHUD && (ScoreboardTracker.isInMwGame || ScoreboardTracker.isMWReplay) && this.currentMap != null;
+        return ConfigHandler.showBaseLocationHUD && (ScoreboardTracker.isInMwGame() || ScoreboardTracker.isMWReplay()) && this.currentMap != null;
     }
 
     @SubscribeEvent

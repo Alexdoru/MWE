@@ -120,7 +120,7 @@ public class AttackDetector {
 
     private static void checkPlayerHit(int playerId, AttackType attackType, Vec3 soundPos) {
         HackerDetector.addScheduledTask(() -> {
-            if (!ScoreboardTracker.isInMwGame && !ScoreboardTracker.isMWReplay) {
+            if (!ScoreboardTracker.isInMwGame() && !ScoreboardTracker.isMWReplay()) {
                 return;
             }
             final Entity player = mc.theWorld.getEntityByID(playerId);
@@ -164,7 +164,7 @@ public class AttackDetector {
             if (attacker.getDistanceSqToEntity(target) > 64d) {
                 return;
             }
-            if ((ScoreboardTracker.isInMwGame || ScoreboardTracker.isMWReplay)
+            if ((ScoreboardTracker.isInMwGame() || ScoreboardTracker.isMWReplay())
                     && ((EntityPlayerAccessor) attacker).getPlayerTeamColor() != '\0'
                     && ((EntityPlayerAccessor) attacker).getPlayerTeamColor() == ((EntityPlayerAccessor) target).getPlayerTeamColor()) {
                 // discard attack if both players are on the same team

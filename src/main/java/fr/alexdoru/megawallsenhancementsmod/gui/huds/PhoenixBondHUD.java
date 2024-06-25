@@ -44,7 +44,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
 
     public boolean processMessage(IChatComponent component, String msg) {
 
-        if (!ScoreboardTracker.isInMwGame) {
+        if (!ScoreboardTracker.isInMwGame()) {
             return false;
         }
 

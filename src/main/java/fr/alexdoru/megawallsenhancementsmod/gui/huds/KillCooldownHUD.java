@@ -43,7 +43,7 @@ public class KillCooldownHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return currentTimeMillis - lastkilltime < 60000L && ScoreboardTracker.isInMwGame;
+        return currentTimeMillis - lastkilltime < 60000L && ScoreboardTracker.isInMwGame();
     }
 
 }

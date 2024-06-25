@@ -129,7 +129,7 @@ public class NameUtil {
 
     public static boolean isValidMinecraftName(String playername) {
         return !StringUtil.isNullOrEmpty(playername) &&
-                (MINECRAFT_NAME_PATTERN.matcher(playername).matches() || ScoreboardTracker.isReplayMode);
+                (MINECRAFT_NAME_PATTERN.matcher(playername).matches() || ScoreboardTracker.isReplayMode());
     }
 
     public static void onScoreboardPacket(String playername) {
@@ -275,7 +275,7 @@ public class NameUtil {
                 final String teamprefix = team.getColorPrefix();
                 final String colorSuffix = team.getColorSuffix();
                 teamColor = StringUtil.getLastColorCharOf(teamprefix);
-                mwClass = MWClass.fromTeamTag(ScoreboardTracker.isMWReplay ? teamprefix : colorSuffix);
+                mwClass = MWClass.fromTeamTag(ScoreboardTracker.isMWReplay() ? teamprefix : colorSuffix);
                 final boolean isobf = teamprefix.contains(EnumChatFormatting.OBFUSCATED.toString());
                 final boolean isNicked = id.version() == 1;
                 final String alias = AliasData.getAlias(isNicked ? username : uuid);

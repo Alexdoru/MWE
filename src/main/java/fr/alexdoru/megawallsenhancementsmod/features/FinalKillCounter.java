@@ -174,7 +174,7 @@ public class FinalKillCounter {
 
     public static boolean processMessage(ClientChatReceivedEvent event, String formattedText, String unformattedText) {
 
-        if (!ScoreboardTracker.isInMwGame) {
+        if (!ScoreboardTracker.isInMwGame()) {
             return false;
         }
 

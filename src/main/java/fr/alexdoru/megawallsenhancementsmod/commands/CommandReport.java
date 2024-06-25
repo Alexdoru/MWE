@@ -54,8 +54,8 @@ public class CommandReport extends MyAbstractCommand {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
-            if (ScoreboardTracker.isInMwGame) {
-                if (ScoreboardTracker.isPrepPhase) {
+            if (ScoreboardTracker.isInMwGame()) {
+                if (ScoreboardTracker.isPrepPhase()) {
                     return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
                 } else {
                     final List<String> playersInThisGame = FinalKillCounter.getPlayersInThisGame();

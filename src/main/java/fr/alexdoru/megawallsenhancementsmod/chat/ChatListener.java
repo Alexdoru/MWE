@@ -71,12 +71,12 @@ public class ChatListener {
             final String msg = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
             final String fmsg = event.message.getFormattedText();
 
-            if (ScoreboardTracker.isInMwGame && ConfigHandler.hideRepetitiveMWChatMsg && MW_REPETITVE_MSG.contains(msg)) {
+            if (ScoreboardTracker.isInMwGame() && ConfigHandler.hideRepetitiveMWChatMsg && MW_REPETITVE_MSG.contains(msg)) {
                 event.setCanceled(true);
                 return;
             }
 
-            if (!ScoreboardTracker.isInMwGame && msg.equals(GENERAL_START_MESSAGE)) {
+            if (!ScoreboardTracker.isInMwGame() && msg.equals(GENERAL_START_MESSAGE)) {
                 SquadHandler.formSquad();
                 Check.clearFlagMessages();
                 ScangameData.fectchRandomClasses();
@@ -198,7 +198,7 @@ public class ChatListener {
                 return;
             }
 
-            if (ScoreboardTracker.isPreGameLobby) {
+            if (ScoreboardTracker.isPreGameLobby()) {
                 final Matcher playerJoinMatcher = PLAYER_JOIN_PATTERN.matcher(msg);
                 if (playerJoinMatcher.matches()) {
                     final String playername = playerJoinMatcher.group(1);

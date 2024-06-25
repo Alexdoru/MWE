@@ -166,7 +166,7 @@ public class FastbreakCheck extends Check {
     }
 
     public static boolean isCheckActive() {
-        return ScoreboardTracker.isInMwGame || ScoreboardTracker.isMWReplay;
+        return ScoreboardTracker.isInMwGame() || ScoreboardTracker.isMWReplay();
     }
 
     /**
@@ -233,7 +233,7 @@ public class FastbreakCheck extends Check {
             return 3;
         }
         if (mwClass == MWClass.ZOMBIE) {
-            if (ScoreboardTracker.isPrepPhase || ScoreboardTracker.isMWReplay) {
+            if (ScoreboardTracker.isPrepPhase() || ScoreboardTracker.isMWReplay()) {
                 return 3;
             } else {
                 return 2;
@@ -243,7 +243,7 @@ public class FastbreakCheck extends Check {
         } else if (mwClass == MWClass.MOLEMAN) {
             return 2;
         }
-        if (ScoreboardTracker.isPrepPhase || ScoreboardTracker.isMWReplay) {
+        if (ScoreboardTracker.isPrepPhase() || ScoreboardTracker.isMWReplay()) {
             return 2;
         } else {
             return 0;

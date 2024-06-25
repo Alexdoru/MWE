@@ -9,10 +9,10 @@ import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 public class ScorePlayerTeamHook {
 
     public static String spoofSidebarLine(String playername) {
-        if (ConfigHandler.witherHUDinSidebar && ConfigHandler.showLastWitherHUD && ScoreboardTracker.isInMwGame && "\ud83d\udca3".equals(playername) && ScoreboardTracker.getParser().isOnlyOneWitherAlive()) {
+        if (ConfigHandler.witherHUDinSidebar && ConfigHandler.showLastWitherHUD && ScoreboardTracker.isInMwGame() && "\ud83d\udca3".equals(playername) && ScoreboardTracker.getParser().isOnlyOneWitherAlive()) {
             return GuiManager.lastWitherHPHUD.displayText;
         }
-        if (ConfigHandler.fkcounterHUDinSidebar && ConfigHandler.showfkcounterHUD && ScoreboardTracker.isInMwGame && "\ud83d\udc7d".equals(playername) && FinalKillCounter.getGameId() != null) {
+        if (ConfigHandler.fkcounterHUDinSidebar && ConfigHandler.showfkcounterHUD && ScoreboardTracker.isInMwGame() && "\ud83d\udc7d".equals(playername) && FinalKillCounter.getGameId() != null) {
             return GuiManager.fkCounterHUD.displayText;
         }
         return null;

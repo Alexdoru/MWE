@@ -12,29 +12,25 @@ public class ScoreboardTracker {
      * Turns true from the moment the player gets tp to the cage to the end of the game
      * False in the pre game lobby
      */
-    public static boolean isInMwGame = false;
+    private static boolean isInMwGame = false;
     /** True in the pre game lobby in mega walls */
-    public static boolean isPreGameLobby = false;
+    private static boolean isPreGameLobby = false;
     /** True during the preparation phase of a mega walls game */
-    public static boolean isPrepPhase = false;
+    private static boolean isPrepPhase = false;
     /** True in mega walls lobbys, games etc */
-    public static boolean isMWEnvironement = false;
+    private static boolean isMWEnvironement = false;
     /** True when in the Replay Mode */
-    public static boolean isReplayMode = false;
+    private static boolean isReplayMode = false;
     /** True when in a mega walls replay **/
-    public static boolean isMWReplay = false;
+    private static boolean isMWReplay = false;
     /** True when is Skyblock */
-    public static boolean isInSkyblock = false;
+    private static boolean isInSkyblock = false;
 
     private static ScoreboardParser parser = new ScoreboardParser();
 
     private String prevGameId = null;
     private boolean prevHasGameEnded = false;
     private int prevAmountWitherAlive = 4;
-
-    public static ScoreboardParser getParser() {
-        return parser;
-    }
 
     @SubscribeEvent
     public void onGameStart(MegaWallsGameEvent event) {
@@ -51,16 +47,15 @@ public class ScoreboardTracker {
         }
 
         parser = new ScoreboardParser();
+        isInMwGame = parser.isInMwGame();
+        isMWEnvironement = parser.isMWEnvironement();
+        isPreGameLobby = parser.isPreGameLobby();
+        isPrepPhase = parser.isPrepPhase();
+        isReplayMode = parser.isReplayMode();
+        isMWReplay = parser.isMWReplay();
+        isInSkyblock = parser.isInSkyblock();
 
-        ScoreboardTracker.isInMwGame = parser.isInMwGame();
-        ScoreboardTracker.isMWEnvironement = parser.isMWEnvironement();
-        ScoreboardTracker.isPreGameLobby = parser.isPreGameLobby();
-        ScoreboardTracker.isPrepPhase = parser.isPrepPhase();
-        ScoreboardTracker.isReplayMode = parser.isReplayMode();
-        ScoreboardTracker.isMWReplay = parser.isMWReplay();
-        ScoreboardTracker.isInSkyblock = parser.isInSkyblock();
-
-        if (ScoreboardTracker.isMWReplay) {
+        if (isMWReplay) {
             GuiManager.baseLocationHUD.setCurrentMap(parser.getReplayMap());
         }
 
@@ -100,6 +95,38 @@ public class ScoreboardTracker {
         this.prevGameId = gameId;
         this.prevHasGameEnded = hasgameended;
         this.prevAmountWitherAlive = amountWitherAlive;
+    }
+
+    public static ScoreboardParser getParser() {
+        return parser;
+    }
+
+    public static boolean isInMwGame() {
+        return isInMwGame;
+    }
+
+    public static boolean isPreGameLobby() {
+        return isPreGameLobby;
+    }
+
+    public static boolean isPrepPhase() {
+        return isPrepPhase;
+    }
+
+    public static boolean isMWEnvironement() {
+        return isMWEnvironement;
+    }
+
+    public static boolean isReplayMode() {
+        return isReplayMode;
+    }
+
+    public static boolean isMWReplay() {
+        return isMWReplay;
+    }
+
+    public static boolean isInSkyblock() {
+        return isInSkyblock;
     }
 
 }

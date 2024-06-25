@@ -41,7 +41,7 @@ public class CommandScanGame extends MyAbstractCommand {
             ChatUtil.printApikeySetupInfo();
             return;
         }
-        if (!ScoreboardTracker.isInMwGame && !ScoreboardTracker.isPreGameLobby) {
+        if (!ScoreboardTracker.isInMwGame() && !ScoreboardTracker.isPreGameLobby()) {
             ChatUtil.addChatMessage(RED + "This is only available in Mega Walls!");
             return;
         }
@@ -56,7 +56,7 @@ public class CommandScanGame extends MyAbstractCommand {
     public static void handleScangameCommand(String currentGameId) {
         if (!currentGameId.equals(ScangameData.getScanGameId())) {
             ScangameData.clearScanGameData();
-            if (ScoreboardTracker.isPreGameLobby) ScangameData.clearRandomKits();
+            if (ScoreboardTracker.isPreGameLobby()) ScangameData.clearRandomKits();
             ScangameData.setScanGameId(currentGameId);
             NameUtil.refreshAllNamesInWorld();
         }
@@ -160,7 +160,7 @@ public class CommandScanGame extends MyAbstractCommand {
             return null;
         }
         IChatComponent imsg = null;
-        if (ScoreboardTracker.isInMwGame) {
+        if (ScoreboardTracker.isInMwGame()) {
             final MWClass mwClass = MWClass.ofPlayer(playername);
             if (mwClass != null) {
                 final MegaWallsClassStats classStats = new MegaWallsClassStats(playerData, mwClass.className);

@@ -311,7 +311,7 @@ public class ChatUtil {
     }
 
     public static String getReportingAdvice() {
-        if (ScoreboardTracker.isPreGameLobby) {
+        if (ScoreboardTracker.isPreGameLobby()) {
             return "\n\n" + RED + "To make reporting efficient, be sure to use /report"
                     + DARK_RED + " when you are ingame with\n" + DARK_RED + "the cheater and they are currently cheating\n"
                     + RED + ", not 2 minutes after, not after the game ended or before the game starts.";

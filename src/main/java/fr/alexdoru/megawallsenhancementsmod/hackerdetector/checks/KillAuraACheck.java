@@ -163,7 +163,7 @@ public class KillAuraACheck extends Check {
             if (ConfigHandler.debugLogging) {
                 final String msg = " | " + data.attackInfo.attackType.name() + " | target : " + data.attackInfo.targetName + " | b " + b + " | p " + p + " | reach " + String.format("%.2f", reach) + " | players " + nearbyPlayers.size();
                 this.log(player, data, data.killAuraAVL, msg);
-                if (ScoreboardTracker.isReplayMode) {
+                if (ScoreboardTracker.isReplayMode()) {
                     this.fail(player, " b" + b + " p" + p + " vl" + data.killAuraAVL.getViolationLevel());
                 }
             }

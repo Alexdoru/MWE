@@ -45,7 +45,7 @@ public class CommandSquad extends MyAbstractCommand {
 
         } else if (args[0].equalsIgnoreCase("addteam")) {
 
-            if (ScoreboardTracker.isPreGameLobby) {
+            if (ScoreboardTracker.isPreGameLobby()) {
                 SquadHandler.formSquad();
             } else {
                 this.addTeamToSquad();

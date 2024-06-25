@@ -49,7 +49,7 @@ public class WarningMessagesHandler {
                 .appendText(EnumChatFormatting.GRAY + " joined, Cheats :");
         ChatUtil.addSkinToComponent(imsg, playername);
         final IChatComponent allCheats = wdr.getFormattedHacks();
-        if (!ScoreboardTracker.isPreGameLobby) {
+        if (!ScoreboardTracker.isPreGameLobby()) {
             allCheats.setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
                             + EnumChatFormatting.YELLOW + "Command : " + EnumChatFormatting.RED + "/report " + playername + " cheating" + ChatUtil.getReportingAdvice())))

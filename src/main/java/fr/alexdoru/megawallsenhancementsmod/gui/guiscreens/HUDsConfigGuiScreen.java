@@ -60,7 +60,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 () -> "Base Location HUD : " + getSuffix(ConfigHandler.showBaseLocationHUD),
                 () -> {
                     ConfigHandler.showBaseLocationHUD = !ConfigHandler.showBaseLocationHUD;
-                    if (ConfigHandler.showBaseLocationHUD && ScoreboardTracker.isInMwGame) {
+                    if (ConfigHandler.showBaseLocationHUD && ScoreboardTracker.isInMwGame()) {
                         ChatListener.setMegaWallsMap();
                     }
                 },

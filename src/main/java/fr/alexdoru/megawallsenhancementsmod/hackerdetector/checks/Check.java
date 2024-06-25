@@ -52,7 +52,7 @@ public abstract class Check implements ICheck {
 
     private void printFlagMessage(EntityPlayer player) {
         final String cheatType = this.getCheatName() + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")");
-        final String playername = ScoreboardTracker.isReplayMode ? EnumChatFormatting.getTextWithoutFormattingCodes(player.getName()) : player.getName();
+        final String playername = ScoreboardTracker.isReplayMode() ? EnumChatFormatting.getTextWithoutFormattingCodes(player.getName()) : player.getName();
         if (ConfigHandler.debugLogging) {
             HackerDetector.log(player.getName() + " flags " + cheatType);
         }
@@ -75,10 +75,10 @@ public abstract class Check implements ICheck {
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.COPY_TO_CLIPBOARD_COMMAND + EnumChatFormatting.getTextWithoutFormattingCodes(msg)))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.RED + this.getCheatDescription()))));
         ChatUtil.addSkinToComponent(imsg, player.getName());
-        if (!(ScoreboardTracker.isInMwGame && ConfigHandler.autoreportFlaggedPlayers)) {
+        if (!(ScoreboardTracker.isInMwGame() && ConfigHandler.autoreportFlaggedPlayers)) {
             imsg.appendSibling(ChatUtil.getReportButton(playername, "cheating " + this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
         }
-        if (ScoreboardTracker.isReplayMode || !ConfigHandler.addToReportList) {
+        if (ScoreboardTracker.isReplayMode() || !ConfigHandler.addToReportList) {
             imsg.appendSibling(ChatUtil.getWDRButton(playername, this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
         }
         if (ConfigHandler.compactFlagMessages) {
@@ -88,7 +88,7 @@ public abstract class Check implements ICheck {
     }
 
     private void addToReportList(EntityPlayer player) {
-        if (!ScoreboardTracker.isReplayMode && ConfigHandler.addToReportList && SquadHandler.getSquad().get(player.getName()) == null) {
+        if (!ScoreboardTracker.isReplayMode() && ConfigHandler.addToReportList && SquadHandler.getSquad().get(player.getName()) == null) {
             final String cheat = this.getCheatName().toLowerCase() + "[H]";
             final UUID uuid = player.getUniqueID();
             final WDR wdr = WdrData.getWdr(uuid, player.getName());
@@ -110,7 +110,7 @@ public abstract class Check implements ICheck {
     }
 
     private void sendReport(EntityPlayer player) {
-        if (this.canSendReport() && ScoreboardTracker.isInMwGame && ConfigHandler.autoreportFlaggedPlayers && SquadHandler.getSquad().get(player.getName()) == null) {
+        if (this.canSendReport() && ScoreboardTracker.isInMwGame() && ConfigHandler.autoreportFlaggedPlayers && SquadHandler.getSquad().get(player.getName()) == null) {
             ReportQueue.INSTANCE.addReportToQueue(player.getName());
         }
     }

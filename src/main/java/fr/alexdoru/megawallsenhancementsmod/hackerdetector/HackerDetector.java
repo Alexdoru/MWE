@@ -93,7 +93,7 @@ public class HackerDetector {
 
     private void onTickStart() {
 
-        if (!ConfigHandler.hackerDetector || ScoreboardTracker.isInSkyblock || mc.theWorld == null || mc.thePlayer == null || !mc.theWorld.isRemote) {
+        if (!ConfigHandler.hackerDetector || ScoreboardTracker.isInSkyblock() || mc.theWorld == null || mc.thePlayer == null || !mc.theWorld.isRemote) {
             synchronized (this.scheduledTasks) {
                 this.scheduledTasks.clear();
             }
@@ -124,7 +124,7 @@ public class HackerDetector {
 
     public static boolean isValidPlayer(UUID uuid) {
         final int v = uuid.version();
-        if (ScoreboardTracker.isReplayMode) {
+        if (ScoreboardTracker.isReplayMode()) {
             return v == 2;
         }
         return v == 1 || v == 4;

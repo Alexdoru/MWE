@@ -63,7 +63,7 @@ public class GuiContainerHook {
      * kit bow except if you have enchanted bows on you (pirate bows)
      */
     private static boolean isItemImportant(Slot theSlot, int i) {
-        if (ScoreboardTracker.isInMwGame && ConfigHandler.safeInventory) {
+        if (ScoreboardTracker.isInMwGame() && ConfigHandler.safeInventory) {
             /*Targeted inventory for the hotkeying*/
             if (theSlot.inventory instanceof InventoryPlayer) {
                 return false;

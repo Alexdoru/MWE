@@ -37,7 +37,7 @@ public class WarcryHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        if (ConfigHandler.showWarcryHUD && ScoreboardTracker.isInMwGame) {
+        if (ConfigHandler.showWarcryHUD && ScoreboardTracker.isInMwGame()) {
             return updateDisplayText(currentTimeMillis);
         }
         return false;
@@ -63,7 +63,7 @@ public class WarcryHUD extends AbstractRenderer {
     }
 
     public boolean processMessage(String msg) {
-        if (!ScoreboardTracker.isInMwGame) {
+        if (!ScoreboardTracker.isInMwGame()) {
             return false;
         }
         if (WARCRY_AVAILABLE_MESSAGE.equals(msg)) {

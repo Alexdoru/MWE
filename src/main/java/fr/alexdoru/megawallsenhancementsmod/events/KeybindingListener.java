@@ -43,13 +43,13 @@ public class KeybindingListener {
 
         if (killKey.isPressed() && !(mc.currentScreen instanceof GuiGameOver)) {
             mc.thePlayer.sendChatMessage("/kill");
-        } else if (ScoreboardTracker.isPrepPhase && surfaceKey.isPressed()) {
+        } else if (ScoreboardTracker.isPrepPhase() && surfaceKey.isPressed()) {
             mc.thePlayer.sendChatMessage("/surface");
-        } else if (ScoreboardTracker.isInMwGame && echestKey.isPressed()) {
+        } else if (ScoreboardTracker.isInMwGame() && echestKey.isPressed()) {
             mc.thePlayer.sendChatMessage("/enderchest");
-        } else if (ScoreboardTracker.isInMwGame && teamchestKey.isPressed()) {
+        } else if (ScoreboardTracker.isInMwGame() && teamchestKey.isPressed()) {
             mc.thePlayer.sendChatMessage("/teamchest");
-        } else if (ScoreboardTracker.isInMwGame && warcryKey.isPressed()) {
+        } else if (ScoreboardTracker.isInMwGame() && warcryKey.isPressed()) {
             mc.thePlayer.sendChatMessage("/warcry");
         } else if (toggleDroppedItemLimit.isPressed()) {
             ConfigHandler.limitDroppedEntityRendered = !ConfigHandler.limitDroppedEntityRendered;

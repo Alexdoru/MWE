@@ -29,7 +29,7 @@ public class ScoreboardUtils {
     }
 
     public static boolean isMegaWallsMythicGame() {
-        if (!ScoreboardTracker.isMWEnvironement) {
+        if (!ScoreboardTracker.isMWEnvironement()) {
             return false;
         }
         final List<String> scoresRaw = getUnformattedSidebarText();
