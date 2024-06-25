@@ -10,9 +10,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class LastWitherHPHUD extends AbstractRenderer {
 
-    public static LastWitherHPHUD instance;
-
-    private static final String DUMMY_TEXT = EnumChatFormatting.GREEN + "Wither dies in 148s";
     public String displayText = "";
     private String color = "";
     private long lastWitherHPUpdate = 0;
@@ -21,7 +18,6 @@ public class LastWitherHPHUD extends AbstractRenderer {
 
     public LastWitherHPHUD() {
         super(ConfigHandler.lastWitherHUDPosition);
-        instance = this;
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -54,7 +50,7 @@ public class LastWitherHPHUD extends AbstractRenderer {
 
     @Override
     public void renderDummy() {
-        mc.fontRendererObj.drawStringWithShadow(DUMMY_TEXT, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.GREEN + "Wither dies in 148s", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override

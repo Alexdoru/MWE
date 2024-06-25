@@ -10,11 +10,8 @@ import java.util.Collection;
 
 public class MiniPotionHUD extends AbstractRenderer {
 
-    public static MiniPotionHUD instance;
-
     public MiniPotionHUD() {
         super(ConfigHandler.miniPotionHUDPosition);
-        instance = this;
     }
 
     @Override

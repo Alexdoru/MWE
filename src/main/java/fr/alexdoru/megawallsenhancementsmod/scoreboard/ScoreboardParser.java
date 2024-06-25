@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.scoreboard;
 
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.LastWitherHPHUD;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import net.minecraft.client.Minecraft;
@@ -136,7 +136,7 @@ public class ScoreboardParser {
         }
 
         if (isOnlyOneWitherAlive()) {
-            LastWitherHPHUD.instance.updateWitherHP(witherHP);
+            GuiManager.lastWitherHPHUD.updateWitherHP(witherHP);
         }
     }
 

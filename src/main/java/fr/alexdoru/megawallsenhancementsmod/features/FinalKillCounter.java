@@ -6,7 +6,7 @@ import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook_RenegadeA
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardUtils;
 import fr.alexdoru.megawallsenhancementsmod.utils.MapUtil;
@@ -137,7 +137,6 @@ public class FinalKillCounter {
     private static String gameId;
     private static String[] prefixes; // color codes prefix that you are using in your hypixel mega walls settings
     private static HashMap<String, Integer>[] teamKillsArray;
-    private static Random rand;
 
     @SuppressWarnings("unchecked")
     public FinalKillCounter() {
@@ -150,8 +149,7 @@ public class FinalKillCounter {
         for (int i = 0; i < KILL_MESSAGES.length; i++) {
             KILL_PATTERNS[i] = Pattern.compile(KILL_MESSAGES[i]);
         }
-        rand = new Random();
-        FKCounterHUD.instance.updateDisplayText();
+        GuiManager.fkCounterHUD.updateDisplayText();
     }
 
     /**
@@ -171,7 +169,7 @@ public class FinalKillCounter {
                 ((NetworkPlayerInfoAccessor) netInfo).setPlayerFinalkills(0);
             }
         });
-        FKCounterHUD.instance.updateDisplayText();
+        GuiManager.fkCounterHUD.updateDisplayText();
     }
 
     public static boolean processMessage(ClientChatReceivedEvent event, String formattedText, String unformattedText) {
@@ -201,7 +199,7 @@ public class FinalKillCounter {
                             playersPresentInGame.add(killedPlayer);
                             playersPresentInGame.add(killer);
                         }
-                        FKCounterHUD.instance.updateDisplayText();
+                        GuiManager.fkCounterHUD.updateDisplayText();
                     }
                     final String s = formattedText.replace(killer, SquadHandler.getSquadname(killer))
                             .replace(killedPlayer, SquadHandler.getSquadname(killedPlayer))
@@ -222,7 +220,7 @@ public class FinalKillCounter {
                         if (killsOfKilledPlayer != -1) {
                             playersPresentInGame.add(killedPlayer);
                         }
-                        FKCounterHUD.instance.updateDisplayText();
+                        GuiManager.fkCounterHUD.updateDisplayText();
                     }
                     final String s = formattedText.replace(killedPlayer, SquadHandler.getSquadname(killedPlayer))
                             + getKillDiffString(killsOfKilledPlayer, killedTeamColor);
@@ -306,7 +304,7 @@ public class FinalKillCounter {
                 }
             }
         }
-        FKCounterHUD.instance.updateDisplayText();
+        GuiManager.fkCounterHUD.updateDisplayText();
     }
 
     public static void removeKilledPlayer(String player, int team) {

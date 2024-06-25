@@ -25,7 +25,6 @@ import java.util.regex.Pattern;
 
 public class PhoenixBondHUD extends AbstractRenderer {
 
-    public static PhoenixBondHUD instance;
     private final List<PhxHealLine> textToRender = new ArrayList<>();
     private final List<PhxHealLine> dummyTextToRender = new ArrayList<>();
     private long timeStartRender;
@@ -37,7 +36,6 @@ public class PhoenixBondHUD extends AbstractRenderer {
 
     public PhoenixBondHUD() {
         super(ConfigHandler.phxBondHUDPosition);
-        instance = this;
         this.dummyTextToRender.add(getLine(EnumChatFormatting.GREEN + "Player1", "10.5"));
         this.dummyTextToRender.add(getLine(EnumChatFormatting.GREEN + "Player2", "6.0"));
         this.dummyTextToRender.add(getLine(EnumChatFormatting.GREEN + "Player3", "3.5"));

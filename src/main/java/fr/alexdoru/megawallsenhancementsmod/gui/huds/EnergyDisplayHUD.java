@@ -12,9 +12,6 @@ import java.util.HashSet;
 
 public class EnergyDisplayHUD extends AbstractRenderer {
 
-    public static EnergyDisplayHUD instance;
-
-    private static final String DUMMY_TEXT = EnumChatFormatting.GREEN + "50";
     private static final HashSet<Item> itemsForRender = new HashSet<>();
     private long timeStartRender;
     private int prevEnergyValue;
@@ -28,7 +25,6 @@ public class EnergyDisplayHUD extends AbstractRenderer {
 
     public EnergyDisplayHUD() {
         super(ConfigHandler.energyDisplayHUDPosition);
-        instance = this;
     }
 
     @Override
@@ -66,12 +62,12 @@ public class EnergyDisplayHUD extends AbstractRenderer {
 
     @Override
     public void renderDummy() {
-        drawCenteredString(mc.fontRendererObj, DUMMY_TEXT, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        drawCenteredString(mc.fontRendererObj, EnumChatFormatting.GREEN + "50", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return ConfigHandler.showEnergyDisplayHUD && ScoreboardTracker.isInMwGame && mc.thePlayer != null;
+        return ConfigHandler.showEnergyDisplayHUD && ScoreboardTracker.isInMwGame;
     }
 
 }

@@ -345,15 +345,15 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = GUI,
-            name = "Hunter Strength HUD",
+            name = "Show Strength HUD",
             comment = "Displays HUD and plays a sound 10 seconds before getting strength with hunter")
     public static boolean showStrengthHUD = true;
 
     @ConfigProperty(
             category = GUI,
-            name = "hunter Strength HUD",
-            comment = "position of the Hunter Strength HUD")
-    public static final GuiPosition hunterStrengthHUDPosition = new GuiPosition(0.5d, 8d / 20d);
+            name = "Strength HUD",
+            comment = "position of the Strength HUD")
+    public static final GuiPosition strengthHUDPosition = new GuiPosition(0.5d, 8d / 20d);
 
     @ConfigProperty(
             category = GUI,

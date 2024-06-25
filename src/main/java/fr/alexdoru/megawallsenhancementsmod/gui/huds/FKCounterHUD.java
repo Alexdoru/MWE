@@ -18,8 +18,6 @@ import java.util.Map.Entry;
 
 public class FKCounterHUD extends AbstractRenderer {
 
-    public static FKCounterHUD instance;
-
     private static final List<String> DUMMY_TEXT = Arrays.asList(
             EnumChatFormatting.RED + "Red" + EnumChatFormatting.WHITE + ": 1",
             EnumChatFormatting.GREEN + "Green" + EnumChatFormatting.WHITE + ": 2",
@@ -42,7 +40,6 @@ public class FKCounterHUD extends AbstractRenderer {
 
     public FKCounterHUD() {
         super(ConfigHandler.fkcounterHUDPosition);
-        instance = this;
     }
 
     private int getHeight() {

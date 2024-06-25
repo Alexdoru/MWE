@@ -6,12 +6,8 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class SpeedHUD extends AbstractRenderer {
 
-    public static SpeedHUD instance;
-    private static final String DUMMY_TEXT = EnumChatFormatting.DARK_GREEN + "Speed: " + EnumChatFormatting.WHITE + "5.65m/s";
-
     public SpeedHUD() {
         super(ConfigHandler.speedHUDPosition);
-        instance = this;
     }
 
     @Override
@@ -26,7 +22,7 @@ public class SpeedHUD extends AbstractRenderer {
 
     @Override
     public void renderDummy() {
-        mc.fontRendererObj.drawStringWithShadow(DUMMY_TEXT, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.DARK_GREEN + "Speed: " + EnumChatFormatting.WHITE + "5.65m/s", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override

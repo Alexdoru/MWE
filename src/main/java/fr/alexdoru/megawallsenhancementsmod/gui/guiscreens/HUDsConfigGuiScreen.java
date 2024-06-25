@@ -5,7 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.HUDSettingGuiButtons;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.SimpleGuiButton;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.TextElement;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.*;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.SoundUtil;
 import net.minecraft.client.gui.GuiScreen;
@@ -47,7 +47,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                         ConfigHandler.showHeadOnArrowHitHUD = false;
                     }
                 },
-                ArrowHitHUD.instance,
+                GuiManager.arrowHitHUD,
                 this,
                 GREEN + "Arrow Hit HUD",
                 GRAY + "Displays the health of your opponent on arrow hits",
@@ -64,7 +64,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                         ChatListener.setMegaWallsMap();
                     }
                 },
-                BaseLocationHUD.instance,
+                GuiManager.baseLocationHUD,
                 this,
                 GREEN + "Base Location HUD",
                 GRAY + "Displays in which base you are currently in Mega Walls")
@@ -74,7 +74,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 "Creeper primed TNT HUD",
                 (b) -> ConfigHandler.showPrimedTNTHUD = b,
                 () -> ConfigHandler.showPrimedTNTHUD,
-                CreeperPrimedTntHUD.instance,
+                GuiManager.creeperPrimedTntHUD,
                 this,
                 GRAY + "Displays the cooldown of the primed TNT when playing Creeper" + YELLOW + " in Mega Walls")
                 .accept(this.buttonList);
@@ -83,7 +83,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 "Energy display HUD",
                 (b) -> ConfigHandler.showEnergyDisplayHUD = b,
                 () -> ConfigHandler.showEnergyDisplayHUD,
-                EnergyDisplayHUD.instance,
+                GuiManager.energyDisplayHUD,
                 this,
                 GRAY + "Displays a HUD with the amount of energy you have" + YELLOW + " in Mega Walls" + GRAY + ". Turns "
                         + AQUA + "aqua" + GRAY + " when your energy level exceeds the amount set below.")
@@ -94,7 +94,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 "Kill cooldown HUD",
                 (b) -> ConfigHandler.showKillCooldownHUD = b,
                 () -> ConfigHandler.showKillCooldownHUD,
-                KillCooldownHUD.instance,
+                GuiManager.killCooldownHUD,
                 this,
                 GRAY + "Displays the cooldown of the /kill command in " + YELLOW + "Mega Walls")
                 .accept(this.buttonList);
@@ -119,7 +119,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                         ConfigHandler.showMiniPotionHUD = true;
                     }
                 },
-                MiniPotionHUD.instance,
+                GuiManager.miniPotionHUD,
                 this,
                 GREEN + "Mini potion HUD",
                 GRAY + "Displays remaining duration of the following potion buffs : "
@@ -139,7 +139,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 "Phoenix bond HUD",
                 (b) -> ConfigHandler.showPhxBondHUD = b,
                 () -> ConfigHandler.showPhxBondHUD,
-                PhoenixBondHUD.instance,
+                GuiManager.phoenixBondHUD,
                 this,
                 GRAY + "Displays the hearts healed from a Phoenix bond" + YELLOW + " in Mega Walls")
                 .accept(this.buttonList);
@@ -148,7 +148,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 "Squad HUD",
                 (b) -> ConfigHandler.showSquadHUD = b,
                 () -> ConfigHandler.showSquadHUD,
-                SquadHealthHUD.instance,
+                GuiManager.squadHealthHUD,
                 this,
                 GRAY + "Displays a mini tablist with just your squadmates")
                 .accept(this.buttonList);
@@ -157,7 +157,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 "Speed HUD",
                 (b) -> ConfigHandler.showSpeedHUD = b,
                 () -> ConfigHandler.showSpeedHUD,
-                SpeedHUD.instance,
+                GuiManager.speedHUD,
                 this,
                 GRAY + "Displays your own speed in the XZ plane")
                 .accept(this.buttonList);
@@ -170,7 +170,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                         SoundUtil.playStrengthSound();
                     }
                 },
-                HunterStrengthHUD.instance,
+                GuiManager.strengthHUD,
                 this,
                 GREEN + "Strength HUD",
                 GRAY + "Displays the duration of the strength " + YELLOW + "in Mega Walls" + GRAY + " when it is obtained or about to be obtained, with Dreadlord, Herobrine, Hunter and Zombie.")
@@ -180,7 +180,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 "Warcry HUD",
                 (b) -> ConfigHandler.showWarcryHUD = b,
                 () -> ConfigHandler.showWarcryHUD,
-                WarcryHUD.instance,
+                GuiManager.warcryHUD,
                 this,
                 GRAY + "Displays the cooldown of the warcry in Mega Walls")
                 .accept(this.buttonList);
@@ -199,7 +199,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                     ConfigHandler.witherHUDinSidebar = false;
                     ConfigHandler.showLastWitherHUD = false;
                 },
-                LastWitherHPHUD.instance,
+                GuiManager.lastWitherHPHUD,
                 this,
                 GREEN + "Wither death time HUD",
                 GRAY + "Displays the time it takes for the last wither to die " + YELLOW + "in Mega Walls",

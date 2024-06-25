@@ -6,9 +6,6 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class CreeperPrimedTntHUD extends AbstractRenderer {
 
-    public static CreeperPrimedTntHUD instance;
-
-    private static final String DUMMY_TEXT = EnumChatFormatting.GREEN + "Tnt " + EnumChatFormatting.RED + "3.0s";
     private long timeStartRender;
     private long renderDuration;
     private String lastCountdownNum = "";
@@ -16,7 +13,6 @@ public class CreeperPrimedTntHUD extends AbstractRenderer {
 
     public CreeperPrimedTntHUD() {
         super(ConfigHandler.creeperTNTHUDPosition);
-        instance = this;
     }
 
     @Override
@@ -30,7 +26,7 @@ public class CreeperPrimedTntHUD extends AbstractRenderer {
 
     @Override
     public void renderDummy() {
-        drawCenteredString(mc.fontRendererObj, DUMMY_TEXT, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        drawCenteredString(mc.fontRendererObj, EnumChatFormatting.GREEN + "Tnt " + EnumChatFormatting.RED + "3.0s", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override

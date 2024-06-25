@@ -5,7 +5,7 @@ import fr.alexdoru.megawallsenhancementsmod.gui.elements.HUDSettingGuiButtons;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.OptionGuiButton;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.SimpleGuiButton;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.TextElement;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.PendingReportHUD;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportQueue;
 import net.minecraft.client.gui.GuiScreen;
 
@@ -72,7 +72,7 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
                     ConfigHandler.showReportHUD = false;
                     ConfigHandler.showReportHUDonlyInChat = false;
                 },
-                PendingReportHUD.INSTANCE,
+                GuiManager.pendingReportHUD,
                 this,
                 GREEN + "Pending reports HUD",
                 DARK_GRAY + "▪ " + GREEN + "Enabled" + GRAY + " : displays a small text when the mods has reports to send to the server, and when it's typing the reports",

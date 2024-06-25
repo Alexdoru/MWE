@@ -8,15 +8,11 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class KillCooldownHUD extends AbstractRenderer {
 
-    public static KillCooldownHUD instance;
-
-    private static final String DUMMY_TEXT = EnumChatFormatting.DARK_RED + "/kill cooldown : 60s";
     private long lastkilltime = 0;
     private final TimerUtil timerKillCooldown = new TimerUtil(60000L);
 
     public KillCooldownHUD() {
         super(ConfigHandler.killCooldownHUDPosition);
-        instance = this;
     }
 
     /**
@@ -42,7 +38,7 @@ public class KillCooldownHUD extends AbstractRenderer {
 
     @Override
     public void renderDummy() {
-        mc.fontRendererObj.drawStringWithShadow(DUMMY_TEXT, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.DARK_RED + "/kill cooldown : 60s", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override

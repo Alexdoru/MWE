@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.KillCooldownHUD;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 
@@ -15,7 +15,7 @@ public class EntityPlayerSPHook_CommandListener {
         if (ConfigHandler.showKillCooldownHUD && ScoreboardTracker.isInMwGame) {
             message = message.toLowerCase();
             if (message.equals("/kill") || message.startsWith("/kill ")) {
-                KillCooldownHUD.instance.drawCooldownHUD();
+                GuiManager.killCooldownHUD.drawCooldownHUD();
             }
         }
     }

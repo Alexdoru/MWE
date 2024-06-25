@@ -9,7 +9,7 @@ import fr.alexdoru.megawallsenhancementsmod.features.FinalKillCounter;
 import fr.alexdoru.megawallsenhancementsmod.features.MegaWallsEndGameStats;
 import fr.alexdoru.megawallsenhancementsmod.features.PartyDetection;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.*;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
 import fr.alexdoru.megawallsenhancementsmod.hackerdetector.checks.Check;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.ReportSuggestionHandler;
 import fr.alexdoru.megawallsenhancementsmod.nocheaters.WDR;
@@ -84,7 +84,7 @@ public class ChatListener {
             }
 
             if (msg.equals(OWN_WITHER_DEATH_MESSAGE)) {
-                KillCooldownHUD.instance.hideHUD();
+                GuiManager.killCooldownHUD.hideHUD();
                 return;
             }
 
@@ -132,15 +132,15 @@ public class ChatListener {
                 return;
             }
 
-            if (ArrowHitHUD.instance.processMessage(event, msg, fmsg)) {
+            if (GuiManager.arrowHitHUD.processMessage(event, msg, fmsg)) {
                 return;
             }
 
-            if (PhoenixBondHUD.instance.processMessage(event.message, msg)) {
+            if (GuiManager.phoenixBondHUD.processMessage(event.message, msg)) {
                 return;
             }
 
-            if (WarcryHUD.instance.processMessage(msg)) {
+            if (GuiManager.warcryHUD.processMessage(msg)) {
                 return;
             }
 
@@ -194,7 +194,7 @@ public class ChatListener {
             }
 
             if (ConfigHandler.showStrengthHUD && msg.equals(HUNTER_STRENGTH_MESSAGE)) {
-                HunterStrengthHUD.instance.setStrengthRenderStart(5000L);
+                GuiManager.strengthHUD.setStrengthRenderStart(5000L);
                 return;
             }
 
@@ -222,7 +222,7 @@ public class ChatListener {
                         if (locrawAction == LocrawAction.RUNSCANGAME) {
                             CommandScanGame.handleScangameCommand(gameId);
                         }
-                        BaseLocationHUD.instance.setCurrentMap(map); // can't hurt to set the map everytime
+                        GuiManager.baseLocationHUD.setCurrentMap(map); // can't hurt to set the map everytime
                         interceptLocraw = false;
                         event.setCanceled(true);
                     }
@@ -239,7 +239,7 @@ public class ChatListener {
             if (ConfigHandler.showStrengthHUD) {
                 final Matcher dreadStrenghtMatcher = DREADLORD_STRENGTH_PATTERN.matcher(fmsg);
                 if (dreadStrenghtMatcher.find()) {
-                    HunterStrengthHUD.instance.setStrengthRenderStart(Long.parseLong(dreadStrenghtMatcher.group(1)) * 1000L);
+                    GuiManager.strengthHUD.setStrengthRenderStart(Long.parseLong(dreadStrenghtMatcher.group(1)) * 1000L);
                     return;
                 }
                 final Matcher preStrengthMatcher = HUNTER_PRE_STRENGTH_PATTERN.matcher(fmsg);
@@ -248,24 +248,24 @@ public class ChatListener {
                         SoundUtil.playStrengthSound();
                     }
                     final String preStrengthTimer = preStrengthMatcher.group(1);
-                    HunterStrengthHUD.instance.setPreStrengthTime(preStrengthTimer);
+                    GuiManager.strengthHUD.setPreStrengthTime(preStrengthTimer);
                     return;
                 }
                 final Matcher herobrineStrenghtMatcher = HEROBRINE_STRENGTH_PATTERN.matcher(fmsg);
                 if (herobrineStrenghtMatcher.find()) {
-                    HunterStrengthHUD.instance.setStrengthRenderStart(Long.parseLong(herobrineStrenghtMatcher.group(1)) * 1000L);
+                    GuiManager.strengthHUD.setStrengthRenderStart(Long.parseLong(herobrineStrenghtMatcher.group(1)) * 1000L);
                     return;
                 }
                 final Matcher zombieStrenghtMatcher = ZOMBIE_STRENGTH_PATTERN.matcher(fmsg);
                 if (zombieStrenghtMatcher.find()) {
-                    HunterStrengthHUD.instance.setStrengthRenderStart(Long.parseLong(zombieStrenghtMatcher.group(1)) * 1000L);
+                    GuiManager.strengthHUD.setStrengthRenderStart(Long.parseLong(zombieStrenghtMatcher.group(1)) * 1000L);
                 }
             }
 
             if (ConfigHandler.showPrimedTNTHUD) {
                 final Matcher creeperMatcher = CREEPER_FISSION_HEART_PATTERN.matcher(fmsg);
                 if (creeperMatcher.find()) {
-                    CreeperPrimedTntHUD.instance.setCooldownRenderStart(creeperMatcher.group(1));
+                    GuiManager.creeperPrimedTntHUD.setCooldownRenderStart(creeperMatcher.group(1));
                 }
             }
 

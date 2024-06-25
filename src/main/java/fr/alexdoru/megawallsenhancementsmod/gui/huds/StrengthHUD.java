@@ -5,9 +5,7 @@ import net.minecraft.client.gui.ScaledResolution;
 
 import static net.minecraft.util.EnumChatFormatting.*;
 
-public class HunterStrengthHUD extends AbstractRenderer {
-
-    public static HunterStrengthHUD instance;
+public class StrengthHUD extends AbstractRenderer {
 
     private static final String DUMMY_TEXT = GRAY + "(" + RED + BOLD + "Strength" + GRAY + ")" + YELLOW + BOLD + " in 10";
     private static final String PRE_STRENGTH_TEXT = GRAY + "(" + RED + BOLD + "Strength" + GRAY + ")" + YELLOW + BOLD + " in ";
@@ -16,9 +14,8 @@ public class HunterStrengthHUD extends AbstractRenderer {
     private long renderDuration;
     private boolean isStrengthRender;
 
-    public HunterStrengthHUD() {
-        super(ConfigHandler.hunterStrengthHUDPosition);
-        instance = this;
+    public StrengthHUD() {
+        super(ConfigHandler.strengthHUDPosition);
     }
 
     @Override

@@ -12,13 +12,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class BaseLocationHUD extends AbstractRenderer {
 
-    public static BaseLocationHUD instance;
     private MegaWallsMap currentMap;
 
     public BaseLocationHUD() {
         super(ConfigHandler.baseLocationHUDPosition);
-        instance = this;
-        MinecraftForge.EVENT_BUS.register(instance);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override

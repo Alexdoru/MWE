@@ -2,7 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.gui.guiscreens;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.gui.elements.*;
-import fr.alexdoru.megawallsenhancementsmod.gui.huds.FKCounterHUD;
+import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
@@ -29,7 +29,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                 "Show Final Kill Counter",
                 (b) -> ConfigHandler.showfkcounterHUD = b,
                 () -> ConfigHandler.showfkcounterHUD,
-                FKCounterHUD.instance,
+                GuiManager.fkCounterHUD,
                 this,
                 GRAY + "Displays the amount of final kills per team in Mega Walls",
                 RED + "This will only work if you have your Hypixel language set to English")
@@ -76,7 +76,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                         ConfigHandler.fkcounterHUDCompact = false;
                         ConfigHandler.fkcounterHUDinSidebar = false;
                     }
-                    FKCounterHUD.instance.updateDisplayText();
+                    GuiManager.fkCounterHUD.updateDisplayText();
 
                 },
                 YELLOW + "Change the look of the HUD :",
@@ -117,7 +117,7 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                 break;
             case 6:
                 ConfigHandler.fkcounterHUDPlayerAmount = slider.getValueInt();
-                FKCounterHUD.instance.updateDisplayText();
+                GuiManager.fkCounterHUD.updateDisplayText();
                 break;
         }
     }

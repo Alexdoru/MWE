@@ -13,18 +13,14 @@ import java.util.regex.Pattern;
 
 public class WarcryHUD extends AbstractRenderer {
 
-    public static WarcryHUD instance;
-
     private static final String WARCRY_AVAILABLE_MESSAGE = "Your warcry is now available!";
     private static final Pattern WARCRY_COOLDOWN_PATTERN = Pattern.compile("^You can use your warcry again in (\\d+)m (\\d+)s!$");
     private static final Pattern WARCRY_ACTIVATION_PATTERN = Pattern.compile("^You performed the (?:\\w+ )+warcry!$");
-
     private long activationTime;
     private String displayText = "";
 
     public WarcryHUD() {
         super(ConfigHandler.warcryHUDPosition);
-        instance = this;
         MinecraftForge.EVENT_BUS.register(this);
     }
 

@@ -7,11 +7,8 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class PendingReportHUD extends AbstractRenderer {
 
-    public static PendingReportHUD INSTANCE;
-
     public PendingReportHUD() {
         super(ConfigHandler.reportHUDPosition);
-        INSTANCE = this;
     }
 
     @Override

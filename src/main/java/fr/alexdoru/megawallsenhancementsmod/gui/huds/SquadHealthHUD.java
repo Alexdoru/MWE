@@ -32,12 +32,10 @@ import java.util.regex.Pattern;
 
 public class SquadHealthHUD extends AbstractRenderer {
 
-    public static SquadHealthHUD instance;
     private static final Ordering<NetworkPlayerInfo> ordering = Ordering.from(new SquadHealthHUD.PlayerComparator());
 
     public SquadHealthHUD() {
         super(ConfigHandler.squadHUDPosition);
-        instance = this;
     }
 
     @Override
@@ -126,6 +124,7 @@ public class SquadHealthHUD extends AbstractRenderer {
     }
 
     private static final Pattern squadSuffixPattern = Pattern.compile("^" + EnumChatFormatting.GOLD + "\\[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "\\] ");
+
     private String getPlayerName(NetworkPlayerInfo networkPlayerInfoIn) {
         final String formattedName = NameUtil.getFormattedName(networkPlayerInfoIn);
         return squadSuffixPattern.matcher(formattedName).replaceFirst("");
@@ -178,6 +177,7 @@ public class SquadHealthHUD extends AbstractRenderer {
 
     private static class PlayerComparator implements Comparator<NetworkPlayerInfo> {
         private PlayerComparator() {}
+
         @Override
         public int compare(NetworkPlayerInfo p_compare_1_, NetworkPlayerInfo p_compare_2_) {
             final ScorePlayerTeam scoreplayerteam = p_compare_1_.getPlayerTeam();

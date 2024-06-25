@@ -25,9 +25,6 @@ import java.util.regex.Pattern;
 
 public class ArrowHitHUD extends AbstractRenderer {
 
-    public static ArrowHitHUD instance;
-
-    private static final String DUMMY_TEXT = EnumChatFormatting.GREEN + "20.0";
     private static final Pattern PATTERN_ARROW_HIT = Pattern.compile("^(\\w+) is on ([0-9]*[.]?[0-9]+) HP!");
     private static final Pattern PATTERN_RENEGADE_HIT = Pattern.compile("^(\\w+) is on ([0-9]*[.]?[0-9]+) HP, pinned by (\\d+) arrows.*");
     private static final Pattern PATTERN_LEAP_HIT = Pattern.compile("^You took ([0-9]*[.]?[0-9]+) recoil damage after traveling \\d+.\\d+ blocks!");
@@ -41,7 +38,6 @@ public class ArrowHitHUD extends AbstractRenderer {
 
     public ArrowHitHUD() {
         super(ConfigHandler.arrowHitHUDPosition);
-        instance = this;
     }
 
     public boolean processMessage(ClientChatReceivedEvent event, String msg, String fmsg) {
@@ -174,7 +170,7 @@ public class ArrowHitHUD extends AbstractRenderer {
 
     @Override
     public void renderDummy() {
-        drawCenteredString(mc.fontRendererObj, DUMMY_TEXT, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+        drawCenteredString(mc.fontRendererObj, EnumChatFormatting.GREEN + "20.0", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
     }
 
     @Override
