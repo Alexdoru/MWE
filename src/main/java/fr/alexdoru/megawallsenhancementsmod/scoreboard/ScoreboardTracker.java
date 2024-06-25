@@ -2,6 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.scoreboard;
 
 import fr.alexdoru.megawallsenhancementsmod.events.MegaWallsGameEvent;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiManager;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -46,6 +47,7 @@ public class ScoreboardTracker {
             return;
         }
 
+        Minecraft.getMinecraft().mcProfiler.startSection("MWE Scoreboard");
         parser = new ScoreboardParser();
         isInMwGame = parser.isInMwGame();
         isMWEnvironement = parser.isMWEnvironement();
@@ -54,13 +56,11 @@ public class ScoreboardTracker {
         isReplayMode = parser.isReplayMode();
         isMWReplay = parser.isMWReplay();
         isInSkyblock = parser.isInSkyblock();
-
         if (isMWReplay) {
             GuiManager.baseLocationHUD.setCurrentMap(parser.getReplayMap());
         }
-
         this.fireScoreboardRelatedEvents();
-
+        Minecraft.getMinecraft().mcProfiler.endSection();
     }
 
     private void fireScoreboardRelatedEvents() {

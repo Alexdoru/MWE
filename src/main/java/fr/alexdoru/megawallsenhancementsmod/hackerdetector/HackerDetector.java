@@ -72,14 +72,13 @@ public class HackerDetector {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
+        mc.mcProfiler.startSection("Hacker Detector");
         if (event.phase == TickEvent.Phase.START) {
             this.playersCheckedTemp = 0;
             final long timeStart = System.nanoTime();
             this.onTickStart();
             this.timeElapsedTemp += System.nanoTime() - timeStart;
-            return;
-        }
-        if (event.phase == TickEvent.Phase.END) {
+        } else  if (event.phase == TickEvent.Phase.END) {
             final long timeStart = System.nanoTime();
             this.onTickEnd();
             this.timeElapsedTemp += System.nanoTime() - timeStart;
@@ -89,6 +88,7 @@ public class HackerDetector {
             }
             this.playersChecked = this.playersCheckedTemp;
         }
+        mc.mcProfiler.endSection();
     }
 
     private void onTickStart() {
