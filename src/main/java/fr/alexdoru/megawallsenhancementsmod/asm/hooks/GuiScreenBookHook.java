@@ -21,7 +21,7 @@ public class GuiScreenBookHook {
     private static boolean isOnNickGenerationPage = false;
     private static final TimerUtil timer = new TimerUtil(500L);
 
-    private static final Pattern nickSuccessPagePattern = Pattern.compile("You have finished setting up your nickname!\\s*When you go into a game, you will be nicked as\\s*(?:|\\[(?:MV|VI)P\\+?\\+?\\] )(\\w{2,16})");
+    private static final Pattern nickSuccessPagePattern = Pattern.compile("You have finished setting up your nickname!\\s*When you go into a game, you will be nicked as\\s*(?:|\\[(?:MV|VI)P\\+?\\+?] )(\\w{2,16})");
     private static final Pattern nickGenerationPagePattern = Pattern.compile("We've generated a random username for you:\\s*\\w{2,16}");
 
     public static void onBookInit(ItemStack book) {

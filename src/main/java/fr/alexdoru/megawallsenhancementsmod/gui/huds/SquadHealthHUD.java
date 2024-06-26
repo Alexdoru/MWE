@@ -123,7 +123,7 @@ public class SquadHealthHUD extends AbstractRenderer {
         GlStateManager.popMatrix();
     }
 
-    private static final Pattern squadSuffixPattern = Pattern.compile("^" + EnumChatFormatting.GOLD + "\\[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "\\] ");
+    private static final Pattern squadSuffixPattern = Pattern.compile("^" + EnumChatFormatting.GOLD + "\\[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] ");
 
     private String getPlayerName(NetworkPlayerInfo networkPlayerInfoIn) {
         final String formattedName = NameUtil.getFormattedName(networkPlayerInfoIn);

@@ -28,9 +28,14 @@ import java.util.regex.Pattern;
 public class ReportSuggestionHandler {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
-    private static final String uuidPattern = "[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}";
-    private static final Pattern REPORT_PATTERN1 = Pattern.compile("((?:\\w{2,16}|" + uuidPattern + ")) (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE);
-    private static final Pattern REPORT_PATTERN2 = Pattern.compile("\\/?(?:wdr|report) (\\w{2,16}) ((?:\\w{2,16}|" + uuidPattern + "))", Pattern.CASE_INSENSITIVE);
+    private static final Pattern REPORT_PATTERN1;
+    private static final Pattern REPORT_PATTERN2;
+
+    static {
+        final String uuidPattern = "[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}";
+        REPORT_PATTERN1 = Pattern.compile("(\\w{2,16}|" + uuidPattern + ") (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE);
+        REPORT_PATTERN2 = Pattern.compile("/?(?:wdr|report) (\\w{2,16}) (\\w{2,16}|" + uuidPattern + ")", Pattern.CASE_INSENSITIVE);
+    }
 
     public static boolean parseReportMessage(
             ClientChatReceivedEvent event,
@@ -259,7 +264,7 @@ public class ReportSuggestionHandler {
         }
         CommandHypixelShout.resetLastShout();
         final Matcher matcher1 = Pattern.compile("(\\w{2,16}) (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE).matcher(msg);
-        final Matcher matcher2 = Pattern.compile("\\/?(?:wdr|report) (\\w{2,16}) (\\w+)", Pattern.CASE_INSENSITIVE).matcher(msg);
+        final Matcher matcher2 = Pattern.compile("/?(?:wdr|report) (\\w{2,16}) (\\w+)", Pattern.CASE_INSENSITIVE).matcher(msg);
         if (matcher1.find()) {
             final String reportText = matcher1.group();
             final String reportedPlayer = matcher1.group(1);
