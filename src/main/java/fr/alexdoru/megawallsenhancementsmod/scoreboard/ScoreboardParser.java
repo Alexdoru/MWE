@@ -26,6 +26,7 @@ public class ScoreboardParser {
 
     private static boolean triggeredWallsFallAlert = false;
     private static boolean triggeredGameEndAlert = false;
+    private static boolean triggeredKillCooldownReset = false;
 
     private final List<String> aliveWithers = new ArrayList<>(4);
     private String gameId = null;
@@ -42,6 +43,7 @@ public class ScoreboardParser {
     public static void onGameStart() {
         triggeredWallsFallAlert = false;
         triggeredGameEndAlert = false;
+        triggeredKillCooldownReset = false;
     }
 
     /* This runs on every tick to parse the scoreboard data */
@@ -56,20 +58,22 @@ public class ScoreboardParser {
             return;
         }
 
-        final String title = ScoreboardUtils.getUnformattedSidebarTitle(scoreboard);
-        if (title.contains("MEGA WALLS")) {
+        final String title = ScoreboardUtils.getSidebarTitle(scoreboard);
+        final String cleanTitle = EnumChatFormatting.getTextWithoutFormattingCodes(title);
+        if (cleanTitle.contains("MEGA WALLS")) {
             isMWEnvironement = true;
-            this.parseMegaWallsScoreboard(scoreboard);
-        } else if (title.contains("REPLAY")) {
+            final String teamColor = StringUtil.getLastColorCodeBefore(title, "MEGA WALLS");
+            this.parseMegaWallsScoreboard(scoreboard, teamColor);
+        } else if (cleanTitle.contains("REPLAY")) {
             isReplayMode = true;
             this.parseReplayScoreboard(scoreboard);
-        } else if (title.contains("SKYBLOCK")) {
+        } else if (cleanTitle.contains("SKYBLOCK")) {
             isInSkyblock = true;
         }
 
     }
 
-    private void parseMegaWallsScoreboard(Scoreboard scoreboard) {
+    private void parseMegaWallsScoreboard(Scoreboard scoreboard, String teamColor) {
         final List<String> formattedLines = ScoreboardUtils.getFormattedSidebarText(scoreboard);
         final List<String> cleanLines = ScoreboardUtils.stripControlCodes(formattedLines);
 
@@ -118,11 +122,16 @@ public class ScoreboardParser {
             final String line = cleanLines.get(i);
             /*Wither alive detection*/
             final Matcher witherAliveMatcher = WITHER_ALIVE_PATTERN.matcher(line);
-            final String colorCode;
+            String colorCode = "";
             if (witherAliveMatcher.find()) {
                 colorCode = StringUtil.getLastColorCodeBefore(formattedLines.get(i), "\\[");
                 aliveWithers.add(colorCode);
                 witherHP = Integer.parseInt(witherAliveMatcher.group(1).replace(",", ""));
+            }
+
+            if (!triggeredKillCooldownReset && witherHP < 100 && !colorCode.isEmpty() && colorCode.equals(teamColor)) {
+                GuiManager.killCooldownHUD.hideHUD();
+                triggeredKillCooldownReset = true;
             }
 
             if (line.contains("eliminated!")) {
