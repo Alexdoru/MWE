@@ -18,6 +18,7 @@ public class KeybindingListener {
     private static final KeyBinding surfaceKey = new KeyBinding("/Surface", 0, "MegaWallsEnhancements");
     private static final KeyBinding echestKey = new KeyBinding("/enderchest", 0, "MegaWallsEnhancements");
     private static final KeyBinding teamchestKey = new KeyBinding("/teamchest", 0, "MegaWallsEnhancements");
+    private static final KeyBinding warcryKey = new KeyBinding("/warcry", 0, "MegaWallsEnhancements");
     private static final KeyBinding newNickKey = new KeyBinding("New Random Nick", 0, "MegaWallsEnhancements");
     private static final KeyBinding playerHitboxes = new KeyBinding("Toggle player hitboxes", 0, "Hitboxes");
     private static final KeyBinding toggleDroppedItemLimit = new KeyBinding("Toggle dropped item limit", 0, "MegaWallsEnhancements");
@@ -27,6 +28,7 @@ public class KeybindingListener {
         ClientRegistry.registerKeyBinding(surfaceKey);
         ClientRegistry.registerKeyBinding(echestKey);
         ClientRegistry.registerKeyBinding(teamchestKey);
+        ClientRegistry.registerKeyBinding(warcryKey);
         ClientRegistry.registerKeyBinding(newNickKey);
         ClientRegistry.registerKeyBinding(playerHitboxes);
         ClientRegistry.registerKeyBinding(toggleDroppedItemLimit);
@@ -47,6 +49,8 @@ public class KeybindingListener {
             mc.thePlayer.sendChatMessage("/enderchest");
         } else if (ScoreboardTracker.isInMwGame && teamchestKey.isPressed()) {
             mc.thePlayer.sendChatMessage("/teamchest");
+        } else if (ScoreboardTracker.isInMwGame && warcryKey.isPressed()) {
+            mc.thePlayer.sendChatMessage("/warcry");
         } else if (toggleDroppedItemLimit.isPressed()) {
             ConfigHandler.limitDroppedEntityRendered = !ConfigHandler.limitDroppedEntityRendered;
             ConfigHandler.saveConfig();

@@ -104,7 +104,7 @@ Allows you to customize the look of the f3+b hitboxes.
 - **Renegade arrow count** - Display above player heads the amount of arrows you have pinned in them when playing Renegade
 - **Nick hider** - Display to yourself your own name when you are nicked in Mega Walls
 - **Pink Squadmates** - Squadmates' nametags will apear pink as well as their hitboxes
-- **Command Keybinds** - Keybinds to run the following commands : `/kill`, `/surface`, `/teamchest`, `/enderchest`
+- **Command Keybinds** - Keybinds to run the following commands : `/kill`, `/surface`, `/teamchest`, `/enderchest`, `/warcry`
 - Notification at 5 mins before a game ends, and 10 seconds before the walls fall if you are not on the game
 - Shows your stats for the game when a game ends
 - Shows class and kit in the chat message when you hit an arrow
