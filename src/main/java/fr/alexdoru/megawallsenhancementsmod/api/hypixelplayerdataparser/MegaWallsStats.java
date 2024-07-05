@@ -184,26 +184,46 @@ public class MegaWallsStats {
             final Integer classpoints = entry.getValue()[1];
             imsg.appendText(" : " + ColorUtil.getPrestige4Color(classpoints) + classpoints + "\n");
         }
-        imsg.appendText(EnumChatFormatting.GREEN + "Total : " + EnumChatFormatting.GOLD + total_classpoints + "\n");
-        int cpMissing = MWClass.values().length * 5_000;
-        int coinsMissing = MWClass.values().length * 3_000_000 - this.coins;
+        imsg.appendText(EnumChatFormatting.GREEN + "Total class points : " + EnumChatFormatting.GOLD + total_classpoints + "\n");
+        final int AMOUNT_OF_KITS = MWClass.values().length;
+        int cpMissingForP5 = AMOUNT_OF_KITS * 5000;
+        int coinsMissingForP5 = AMOUNT_OF_KITS * 3_000_000 - this.coins;
+        int cpMissingForP4 = AMOUNT_OF_KITS * 2000;
+        int coinsMissingForP4 = AMOUNT_OF_KITS * 2_000_000 - this.coins;
+        int baseCoinsBonus = 0;
         for (final Map.Entry<String, Integer[]> entry : classpointsMap.entrySet()) {
-            cpMissing -= Math.min(entry.getValue()[1], 2000);
             final int prestige = entry.getValue()[0];
-            if (prestige == 4) {
-                coinsMissing -= 2_000_000;
+            final int cp = entry.getValue()[1];
+            cpMissingForP5 -= Math.min(cp, 5000);
+            cpMissingForP4 -= Math.min(cp, 2000);
+            if (prestige == 5) {
+                coinsMissingForP5 -= 3_000_000;
+                coinsMissingForP4 -= 2_000_000;
+                baseCoinsBonus += 3;
+            } else if (prestige == 4) {
+                coinsMissingForP5 -= 2_000_000;
+                coinsMissingForP4 -= 2_000_000;
+                baseCoinsBonus += 1;
             } else if (prestige == 3) {
-                coinsMissing -= 1_250_000;
+                coinsMissingForP5 -= 1_250_000;
+                coinsMissingForP4 -= 1_250_000;
             } else if (prestige == 2) {
-                coinsMissing -= 750_000;
+                coinsMissingForP5 -= 750_000;
+                coinsMissingForP4 -= 750_000;
             } else if (prestige == 1) {
-                coinsMissing -= 250_000;
+                coinsMissingForP5 -= 250_000;
+                coinsMissingForP4 -= 250_000;
             }
         }
-        coinsMissing = Math.max(0, coinsMissing);
-        imsg.appendText(EnumChatFormatting.GREEN + "Missing : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(cpMissing) + " cp"
+        coinsMissingForP5 = Math.max(0, coinsMissingForP5);
+        coinsMissingForP4 = Math.max(0, coinsMissingForP4);
+        imsg.appendText(EnumChatFormatting.GREEN + "Base coins bonus : " + EnumChatFormatting.GOLD + "+" + baseCoinsBonus + "\n");
+        imsg.appendText(EnumChatFormatting.GREEN + "Missing " + EnumChatFormatting.GOLD + ChatUtil.formatInt(cpMissingForP4) + " cp"
                 + EnumChatFormatting.GREEN + ", "
-                + EnumChatFormatting.GOLD + ChatUtil.formatInt(coinsMissing) + " coins\n");
+                + EnumChatFormatting.GOLD + ChatUtil.formatInt(coinsMissingForP4) + " coins" + EnumChatFormatting.GREEN + " for all PIV\n");
+        imsg.appendText(EnumChatFormatting.GREEN + "Missing " + EnumChatFormatting.GOLD + ChatUtil.formatInt(cpMissingForP5) + " cp"
+                + EnumChatFormatting.GREEN + ", "
+                + EnumChatFormatting.GOLD + ChatUtil.formatInt(coinsMissingForP5) + " coins" + EnumChatFormatting.GREEN + " for all PV\n");
         imsg.appendText(EnumChatFormatting.AQUA + ChatUtil.bar());
         ChatUtil.addChatMessage(imsg);
     }
