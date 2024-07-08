@@ -19,6 +19,7 @@ public class ScoreboardParser {
     public static final Pattern GAME_ID_PATTERN = Pattern.compile("\\d+/\\d+/\\d+\\s+(\\w+)");
     private static final Pattern GATES_OPEN_PATTERN = Pattern.compile("Gates Open: \\d+:\\d+");
     private static final Pattern WALLS_FALL_PATTERN = Pattern.compile("Walls Fall: (\\d+):(\\d+)");
+    private static final Pattern GAME_END_PATTERN = Pattern.compile("Game End: (\\d+):(\\d+)");
     private static final Pattern MW_INGAME_PATTERN = Pattern.compile("[0-9]+\\sF\\.\\sKills?\\s[0-9]+\\sF\\.\\sAssists?");
     private static final Pattern PREGAME_LOBBY_PATTERN = Pattern.compile("Players:\\s*[0-9]+/[0-9]+");
     private static final Pattern WITHER_ALIVE_PATTERN = Pattern.compile("\\[[BGRY]] Wither HP: ([,\\d]+)");
@@ -27,6 +28,8 @@ public class ScoreboardParser {
     private static boolean triggeredWallsFallAlert = false;
     private static boolean triggeredGameEndAlert = false;
     private static boolean triggeredKillCooldownReset = false;
+
+    private static int prevGameEndTime;
 
     private final List<String> aliveWithers = new ArrayList<>(4);
     private String gameId = null;
@@ -96,7 +99,33 @@ public class ScoreboardParser {
             }
         }
 
-        final String gameTimeLine = cleanLines.get(1);
+        this.parseMWTimeLine(cleanLines.get(1));
+        this.parseWitherAndTeamsLines(teamColor, cleanLines, formattedLines);
+    }
+
+    private void parseMWTimeLine(String gameTimeLine) {
+        final Matcher gameEndMatcher = GAME_END_PATTERN.matcher(gameTimeLine);
+        if (gameEndMatcher.find()) {
+            final int secLeft = Integer.parseInt(gameEndMatcher.group(1)) * 60 + Integer.parseInt(gameEndMatcher.group(2));
+            final boolean skip = Math.abs(prevGameEndTime - secLeft) > 10;
+            prevGameEndTime = secLeft;
+            if (skip) {
+                // this is here to fix the bug that fires events
+                // at 06:00 and 01:00 instead of 05:00 and 00:00
+                // It is caused by the client processing a new tick
+                // and parsing the scoreboard in between scoreboard
+                // packets
+                return;
+            }
+            if (!triggeredGameEndAlert && secLeft == 5 * 60) {
+                SoundUtil.playNotePling();
+                ChatUtil.addChatMessage(EnumChatFormatting.YELLOW + "Game ends in 5 minutes!");
+                triggeredGameEndAlert = true;
+            } else if (secLeft == 0) {
+                hasGameEnded = true;
+            }
+            return;
+        }
         final Matcher wallsFallMatcher = WALLS_FALL_PATTERN.matcher(gameTimeLine);
         if (wallsFallMatcher.find()) {
             isPrepPhase = true;
@@ -104,16 +133,14 @@ public class ScoreboardParser {
                 SoundUtil.playGameStartSound();
                 triggeredWallsFallAlert = true;
             }
-        } else if (GATES_OPEN_PATTERN.matcher(gameTimeLine).find()) {
-            isPrepPhase = true;
-        } else if (!triggeredGameEndAlert && "Game End: 05:00".equals(gameTimeLine)) {
-            SoundUtil.playNotePling();
-            ChatUtil.addChatMessage(EnumChatFormatting.YELLOW + "Game ends in 5 minutes!");
-            triggeredGameEndAlert = true;
-        } else if (gameTimeLine.contains("Game End: 00:00")) {
-            hasGameEnded = true;
+            return;
         }
+        if (GATES_OPEN_PATTERN.matcher(gameTimeLine).find()) {
+            isPrepPhase = true;
+        }
+    }
 
+    private void parseWitherAndTeamsLines(String teamColor, List<String> cleanLines, List<String> formattedLines) {
         int eliminatedTeams = 0;
         int witherHP = 1000;
 
