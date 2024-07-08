@@ -6,6 +6,8 @@ import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.chat.SkinChatHead;
 import fr.alexdoru.megawallsenhancementsmod.data.MWPlayerData;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -13,36 +15,30 @@ import net.minecraft.network.play.server.S3EPacketTeams;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
-@SuppressWarnings("UnstableApiUsage")
+
 public class NetHandlerPlayClientHook {
 
-    private static final HashMap<String, NetworkPlayerInfo> playerInfoMap = new HashMap<>();
-    private static final HashMap<String, ResourceLocation> skinMap = new HashMap<>();
-    private static final EvictingQueue<DisconnectedPlayer> latestDisconnected = EvictingQueue.create(20);
+    @SuppressWarnings("UnstableApiUsage")
+    private static final Queue<DisconnectedPlayer> latestDisconnected = EvictingQueue.create(20);
+    private static final Map<String, NetworkPlayerInfo> playerInfoMap = new HashMap<>();
+    private static final Map<String, ResourceLocation> skinMap = new HashMap<>();
 
     @SuppressWarnings("unused")
-    public static void putPlayerInMap(NetworkPlayerInfo networkplayerinfo) {
-        playerInfoMap.put(networkplayerinfo.getGameProfile().getName(), networkplayerinfo);
+    public static void putPlayerInMap(NetworkPlayerInfo netInfo) {
+        playerInfoMap.put(netInfo.getGameProfile().getName(), netInfo);
     }
 
     @SuppressWarnings("unused")
     public static void removePlayerFromMap(Object o) {
         if (o instanceof NetworkPlayerInfo) {
-            final NetworkPlayerInfo networkPlayerInfo = (NetworkPlayerInfo) o;
-            final String playerName = networkPlayerInfo.getGameProfile().getName();
-            playerInfoMap.remove(playerName);
-            latestDisconnected.add(new DisconnectedPlayer(
-                    System.currentTimeMillis(),
-                    playerName,
-                    NameUtil.getFormattedName(networkPlayerInfo)
-            ));
-            MWPlayerData.remove(networkPlayerInfo.getGameProfile().getId());
-            if (networkPlayerInfo.hasLocationSkin()) {
-                skinMap.put(playerName, networkPlayerInfo.getLocationSkin());
+            final NetworkPlayerInfo netInfo = (NetworkPlayerInfo) o;
+            playerInfoMap.remove(netInfo.getGameProfile().getName());
+            latestDisconnected.add(new DisconnectedPlayer(netInfo));
+            MWPlayerData.remove(netInfo.getGameProfile().getId());
+            if (netInfo.hasLocationSkin()) {
+                skinMap.put(netInfo.getGameProfile().getName(), netInfo.getLocationSkin());
             }
         }
     }
@@ -78,11 +74,18 @@ public class NetHandlerPlayClientHook {
         ResourceLocation skin = null;
         for (final DisconnectedPlayer disconnectedPlayer : latestDisconnected) {
             if (disconnectedPlayer.playername != null && timenow - disconnectedPlayer.disconnectTime <= 1000L && !disconnectList.contains(disconnectedPlayer.playername)) {
-                disconnectList.add(disconnectedPlayer.playername);
-                commandBuilder.append(" ").append(disconnectedPlayer.playername);
-                messageBuilder.append(" ").append(disconnectedPlayer.formattedName);
-                if (skin == null) {
-                    skin = skinMap.get(disconnectedPlayer.playername);
+                final NetHandlerPlayClient netHandler = Minecraft.getMinecraft().getNetHandler();
+                NetworkPlayerInfo netInfo = null;
+                if (netHandler != null) {
+                    netInfo = netHandler.getPlayerInfo(disconnectedPlayer.uuid);
+                }
+                if (netInfo == null) {
+                    disconnectList.add(disconnectedPlayer.playername);
+                    commandBuilder.append(" ").append(disconnectedPlayer.playername);
+                    messageBuilder.append(" ").append(disconnectedPlayer.formattedName);
+                    if (skin == null) {
+                        skin = skinMap.get(disconnectedPlayer.playername);
+                    }
                 }
             }
         }
@@ -104,17 +107,17 @@ public class NetHandlerPlayClientHook {
     }
 
     private static class DisconnectedPlayer {
-
         public final long disconnectTime;
+        public final UUID uuid;
         public final String playername;
         public final String formattedName;
 
-        public DisconnectedPlayer(long disconnectTime, String playername, String formattedName) {
-            this.disconnectTime = disconnectTime;
-            this.playername = playername;
-            this.formattedName = formattedName;
+        public DisconnectedPlayer(NetworkPlayerInfo netInfo) {
+            this.disconnectTime = System.currentTimeMillis();
+            this.uuid = netInfo.getGameProfile().getId();
+            this.playername = netInfo.getGameProfile().getName();
+            this.formattedName = NameUtil.getFormattedName(netInfo);
         }
-
     }
 
 }
