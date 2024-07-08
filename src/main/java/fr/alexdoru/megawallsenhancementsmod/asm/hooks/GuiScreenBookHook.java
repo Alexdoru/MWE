@@ -81,7 +81,7 @@ public class GuiScreenBookHook {
             final int keyCode = KeybindingListener.getNewNickKey().getKeyCode();
             final String text;
             if (keyCode == 0) {
-                text = EnumChatFormatting.GREEN + "Go to " + EnumChatFormatting.GOLD + "Option -> Controls -> MegaWallsEnhancements" + EnumChatFormatting.GREEN + ", to set the keybind to get a random nick";
+                text = EnumChatFormatting.GREEN + "Go to " + EnumChatFormatting.GOLD + "Option -> Controls -> MWE" + EnumChatFormatting.GREEN + ", to set the keybind to get a random nick";
             } else {
                 text = EnumChatFormatting.GREEN + "Press " + EnumChatFormatting.GOLD + Keyboard.getKeyName(keyCode) + EnumChatFormatting.GREEN + " to get a new random nick";
             }

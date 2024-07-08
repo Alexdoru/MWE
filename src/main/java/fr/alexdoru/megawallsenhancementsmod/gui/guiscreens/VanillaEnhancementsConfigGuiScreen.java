@@ -75,7 +75,7 @@ public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements G
                 (b) -> ConfigHandler.limitDroppedEntityRendered = b,
                 () -> ConfigHandler.limitDroppedEntityRendered,
                 GRAY + "Dynamically modifies the render distance of dropped items entities to preserve performance. It starts reducing the render distance when exceeding the threshold set below.",
-                GRAY + "There is a keybind (ESC -> options -> controls -> MegaWallsEnhancements) to toggle it on the fly"));
+                GRAY + "There is a keybind (ESC -> options -> controls -> MWE) to toggle it on the fly"));
         this.buttonList.add(new GuiSlider(23, xPosLeft, getButtonYPos(7), buttonWidth, buttonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
         this.buttonList.add(new OptionGuiButton(
                 xPosLeft, getButtonYPos(8),

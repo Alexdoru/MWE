@@ -14,14 +14,14 @@ import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 public class KeybindingListener {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
-    private static final KeyBinding killKey = new KeyBinding("/Kill", 0, "MegaWallsEnhancements");
-    private static final KeyBinding surfaceKey = new KeyBinding("/Surface", 0, "MegaWallsEnhancements");
-    private static final KeyBinding echestKey = new KeyBinding("/enderchest", 0, "MegaWallsEnhancements");
-    private static final KeyBinding teamchestKey = new KeyBinding("/teamchest", 0, "MegaWallsEnhancements");
-    private static final KeyBinding warcryKey = new KeyBinding("/warcry", 0, "MegaWallsEnhancements");
-    private static final KeyBinding newNickKey = new KeyBinding("New Random Nick", 0, "MegaWallsEnhancements");
+    private static final KeyBinding killKey = new KeyBinding("/Kill", 0, "MWE");
+    private static final KeyBinding surfaceKey = new KeyBinding("/Surface", 0, "MWE");
+    private static final KeyBinding echestKey = new KeyBinding("/enderchest", 0, "MWE");
+    private static final KeyBinding teamchestKey = new KeyBinding("/teamchest", 0, "MWE");
+    private static final KeyBinding warcryKey = new KeyBinding("/warcry", 0, "MWE");
+    private static final KeyBinding newNickKey = new KeyBinding("New Random Nick", 0, "MWE");
     private static final KeyBinding playerHitboxes = new KeyBinding("Toggle player hitboxes", 0, "Hitboxes");
-    private static final KeyBinding toggleDroppedItemLimit = new KeyBinding("Toggle dropped item limit", 0, "MegaWallsEnhancements");
+    private static final KeyBinding toggleDroppedItemLimit = new KeyBinding("Toggle dropped item limit", 0, "MWE");
 
     public KeybindingListener() {
         ClientRegistry.registerKeyBinding(killKey);
@@ -41,7 +41,7 @@ public class KeybindingListener {
             return;
         }
 
-        if (killKey.isPressed() && !(mc.currentScreen instanceof GuiGameOver)) {
+        if (ScoreboardTracker.isInMwGame() && !ScoreboardTracker.isPrepPhase() && killKey.isPressed() && !(mc.currentScreen instanceof GuiGameOver)) {
             mc.thePlayer.sendChatMessage("/kill");
         } else if (ScoreboardTracker.isPrepPhase() && surfaceKey.isPressed()) {
             mc.thePlayer.sendChatMessage("/surface");
@@ -49,7 +49,7 @@ public class KeybindingListener {
             mc.thePlayer.sendChatMessage("/enderchest");
         } else if (ScoreboardTracker.isInMwGame() && teamchestKey.isPressed()) {
             mc.thePlayer.sendChatMessage("/teamchest");
-        } else if (ScoreboardTracker.isInMwGame() && warcryKey.isPressed()) {
+        } else if (ScoreboardTracker.isInMwGame() && !ScoreboardTracker.isPrepPhase() && warcryKey.isPressed()) {
             mc.thePlayer.sendChatMessage("/warcry");
         } else if (toggleDroppedItemLimit.isPressed()) {
             ConfigHandler.limitDroppedEntityRendered = !ConfigHandler.limitDroppedEntityRendered;
