@@ -66,11 +66,15 @@ public class WarningMessagesHandler {
         formattedName = formattedName == null || formattedName.contains(EnumChatFormatting.OBFUSCATED.toString()) ? namecolor.toString() + playername : formattedName;
         return new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + wdrmapKey + " " + playername))
-                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
-                        formattedName + "\n"
-                                + EnumChatFormatting.GREEN + "Last reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.time) + " ago, on " + DateUtil.localformatTimestamp(wdr.time) + "\n"
-                                + EnumChatFormatting.GREEN + "Reported for :" + EnumChatFormatting.GOLD + wdr.hacksToString() + "\n\n"
-                                + EnumChatFormatting.YELLOW + "Click here to remove this player from your report list"))));
+                .setChatHoverEvent(getWDRHoverEvent(formattedName, wdr)));
+    }
+
+    public static HoverEvent getWDRHoverEvent(String formattedName, WDR wdr) {
+        return new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
+                formattedName + "\n"
+                        + EnumChatFormatting.GREEN + "Last reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.time) + " ago, on " + DateUtil.localformatTimestamp(wdr.time) + "\n"
+                        + EnumChatFormatting.GREEN + "Reported for :" + EnumChatFormatting.GOLD + wdr.hacksToString() + "\n\n"
+                        + EnumChatFormatting.YELLOW + "Click here to remove this player from your report list"));
     }
 
 }
