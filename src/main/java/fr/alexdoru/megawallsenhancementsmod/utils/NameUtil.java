@@ -3,7 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.utils;
 import com.mojang.authlib.GameProfile;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.NetworkPlayerInfoAccessor;
-import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatHandler;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.AliasData;
@@ -80,9 +80,9 @@ public class NameUtil {
      */
     public static void updateMWPlayerDataAndEntityData(String playername, boolean refreshDisplayName) {
         if (isValidMinecraftName(playername)) {
-            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
-            if (networkPlayerInfo != null) {
-                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(getMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
+            final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+            if (netInfo != null) {
+                ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(getMWPlayerData(netInfo.getGameProfile(), true).displayName);
             }
             final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
             if (player != null) {
@@ -95,9 +95,9 @@ public class NameUtil {
     }
 
     public static void updateMWPlayerDataAndEntityData(EntityPlayer player, boolean refreshDisplayName) {
-        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(player.getName());
-        if (networkPlayerInfo != null) {
-            ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(getMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
+        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(player.getName());
+        if (netInfo != null) {
+            ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(getMWPlayerData(netInfo.getGameProfile(), true).displayName);
         }
         updateEntityPlayerFields(player, false);
         if (refreshDisplayName) {
@@ -108,9 +108,9 @@ public class NameUtil {
     /**
      * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
      */
-    public static void updateMWPlayerDataAndEntityData(NetworkPlayerInfo networkPlayerInfo, boolean refreshDisplayName) {
-        ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(getMWPlayerData(networkPlayerInfo.getGameProfile(), true).displayName);
-        final EntityPlayer player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
+    public static void updateMWPlayerDataAndEntityData(NetworkPlayerInfo netInfo, boolean refreshDisplayName) {
+        ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(getMWPlayerData(netInfo.getGameProfile(), true).displayName);
+        final EntityPlayer player = mc.theWorld.getPlayerEntityByName(netInfo.getGameProfile().getName());
         if (player != null) {
             updateEntityPlayerFields(player, false);
             if (refreshDisplayName) {
@@ -121,7 +121,9 @@ public class NameUtil {
 
     public static void refreshAllNamesInWorld() {
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            if (netInfo != null) updateMWPlayerDataAndEntityData(netInfo, true);
+            if (netInfo != null) {
+                updateMWPlayerDataAndEntityData(netInfo, true);
+            }
         }
     }
 
@@ -134,16 +136,16 @@ public class NameUtil {
 
     public static void onScoreboardPacket(String playername) {
         if (isValidMinecraftName(playername)) {
-            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
-            if (networkPlayerInfo != null) {
-                final MWPlayerData.PlayerData mwPlayerData = getMWPlayerData(networkPlayerInfo.getGameProfile(), true);
-                ((NetworkPlayerInfoAccessor) networkPlayerInfo).setCustomDisplayname(mwPlayerData.displayName);
+            final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+            if (netInfo != null) {
+                final MWPlayerData.PlayerData mwPlayerData = getMWPlayerData(netInfo.getGameProfile(), true);
+                ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(mwPlayerData.displayName);
                 if (mc.theWorld != null) {
                     final EntityPlayer player;
                     if (playername.equals(ConfigHandler.hypixelNick)) {
                         player = mc.thePlayer;
                     } else {
-                        player = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getGameProfile().getName());
+                        player = mc.theWorld.getPlayerEntityByName(netInfo.getGameProfile().getName());
                     }
                     if (player != null) {
                         final EntityPlayerAccessor playerAccessor = (EntityPlayerAccessor) player;
@@ -318,22 +320,22 @@ public class NameUtil {
      * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay#getPlayerName}
      */
     public static String getFormattedName(String playername) {
-        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
-        if (networkPlayerInfo == null) {
+        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+        if (netInfo == null) {
             return playername;
         }
-        return getFormattedName(networkPlayerInfo);
+        return getFormattedName(netInfo);
     }
 
     /**
      * Returns the formatted name of the player, additionnal icons, squadname, alias and prestive V tag included
      * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay#getPlayerName}
      */
-    public static String getFormattedName(NetworkPlayerInfo networkPlayerInfo) {
-        if (networkPlayerInfo.getDisplayName() == null) {
-            return ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), networkPlayerInfo.getGameProfile().getName());
+    public static String getFormattedName(NetworkPlayerInfo netInfo) {
+        if (netInfo.getDisplayName() == null) {
+            return ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName());
         }
-        return networkPlayerInfo.getDisplayName().getFormattedText();
+        return netInfo.getDisplayName().getFormattedText();
     }
 
     /**
@@ -341,19 +343,19 @@ public class NameUtil {
      * This doesn't return the icons in front that the player may have.
      */
     public static String getFormattedNameWithoutIcons(String playername) {
-        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
-        if (networkPlayerInfo == null) {
+        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+        if (netInfo == null) {
             return SquadHandler.getSquadname(playername);
         }
-        return getFormattedNameWithoutIcons(networkPlayerInfo);
+        return getFormattedNameWithoutIcons(netInfo);
     }
 
     /**
      * Returns the formatted team name with additionnaly a custom prestige V tag and a squadname
      * This doesn't return the icons in front that the player may have.
      */
-    public static String getFormattedNameWithoutIcons(NetworkPlayerInfo networkPlayerInfo) {
-        return formatPlayerNameUnscrambled(networkPlayerInfo.getPlayerTeam(), networkPlayerInfo.getGameProfile().getName());
+    public static String getFormattedNameWithoutIcons(NetworkPlayerInfo netInfo) {
+        return formatPlayerNameUnscrambled(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName());
     }
 
     /**
@@ -370,18 +372,18 @@ public class NameUtil {
     /**
      * Used for /scangame
      */
-    public static IChatComponent getFormattedNameWithPlanckeClickEvent(NetworkPlayerInfo networkPlayerInfoIn) {
+    public static IChatComponent getFormattedNameWithPlanckeClickEvent(NetworkPlayerInfo netInfo) {
         final String formattedName;
-        if (networkPlayerInfoIn.getPlayerTeam() == null) {
-            formattedName = networkPlayerInfoIn.getGameProfile().getName();
+        if (netInfo.getPlayerTeam() == null) {
+            formattedName = netInfo.getGameProfile().getName();
         } else {
-            final ScorePlayerTeam team = networkPlayerInfoIn.getPlayerTeam();
-            formattedName = deobfString(team.getColorPrefix()) + networkPlayerInfoIn.getGameProfile().getName() + team.getColorSuffix();
+            final ScorePlayerTeam team = netInfo.getPlayerTeam();
+            formattedName = deobfString(team.getColorPrefix()) + netInfo.getGameProfile().getName() + team.getColorSuffix();
         }
         return new ChatComponentText(formattedName)
                 .setChatStyle(new ChatStyle()
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to see the mega walls stats of that player")))
-                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + networkPlayerInfoIn.getGameProfile().getName() + " mw")));
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + netInfo.getGameProfile().getName() + " mw")));
     }
 
     /**
@@ -402,12 +404,12 @@ public class NameUtil {
     /**
      * Returns true if the player is using a random class
      */
-    public static boolean isPlayerUsingRandom(NetworkPlayerInfo networkPlayerInfo) {
-        final String randomSkinLocation = "512a44f6c022dfaa6f61274c85aa1594cb304f0136fd5d1d3a27c1379e875692";
-        if (!networkPlayerInfo.hasLocationSkin()) {
+    public static boolean isPlayerUsingRandom(NetworkPlayerInfo netInfo) {
+        final String skinHash = "512a44f6c022dfaa6f61274c85aa1594cb304f0136fd5d1d3a27c1379e875692";
+        if (!netInfo.hasLocationSkin()) {
             return false;
         }
-        return randomSkinLocation.equals(networkPlayerInfo.getLocationSkin().toString().substring(16));
+        return skinHash.equals(netInfo.getLocationSkin().toString().substring(16));
     }
 
 }

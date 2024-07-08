@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.GuiNewChatAccessor;
-import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
@@ -125,7 +125,7 @@ public class ArrowHitHUD extends AbstractRenderer {
     }
 
     private void setPlayerHead(String playername) {
-        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
+        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
         if (netInfo != null && netInfo.hasLocationSkin()) skin = netInfo.getLocationSkin();
     }
 

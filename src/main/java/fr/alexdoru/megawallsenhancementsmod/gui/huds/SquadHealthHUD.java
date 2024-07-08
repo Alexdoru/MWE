@@ -5,7 +5,7 @@ import com.google.common.collect.Ordering;
 import com.mojang.authlib.GameProfile;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.NetworkPlayerInfoAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiPlayerTabOverlayHook;
-import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
@@ -47,9 +47,9 @@ public class SquadHealthHUD extends AbstractRenderer {
         }
         final List<NetworkPlayerInfo> list = new ArrayList<>();
         for (final String squadmateName : SquadHandler.getSquad().keySet()) {
-            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(squadmateName);
-            if (networkPlayerInfo != null) {
-                list.add(networkPlayerInfo);
+            final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(squadmateName);
+            if (netInfo != null) {
+                list.add(netInfo);
             }
         }
         if (list.size() <= 1) {

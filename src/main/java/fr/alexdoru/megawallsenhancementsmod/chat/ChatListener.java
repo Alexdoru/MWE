@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.chat;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandScanGame;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.data.ScangameData;
@@ -166,9 +166,9 @@ public class ChatListener {
 
             // Chat Censoring
             if (ConfigHandler.censorCheaterChatMsg && messageSender != null) {
-                final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(messageSender);
-                if (networkPlayerInfo != null) {
-                    final WDR wdr = WdrData.getWdr(networkPlayerInfo.getGameProfile().getId(), messageSender);
+                final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(messageSender);
+                if (netInfo != null) {
+                    final WDR wdr = WdrData.getWdr(netInfo.getGameProfile().getId(), messageSender);
                     if (wdr != null && wdr.hasValidCheats()) {
                         if (ConfigHandler.deleteCheaterChatMsg) {
                             event.setCanceled(true);
@@ -209,7 +209,7 @@ public class ChatListener {
             }
 
             if (msg.equals(BAN_MESSAGE)) {
-                new DelayedTask(NetHandlerPlayClientHook::printDisconnectedPlayers, 10);
+                new DelayedTask(NetHandlerPlayClientHook_PlayerMapTracker::printDisconnectedPlayers, 10);
                 return;
             }
 

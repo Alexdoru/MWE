@@ -22,7 +22,13 @@ public class NetHandlerPlayClientTransformer_PlayerMapTracker implements MWETran
             if (checkMethodNode(methodNode, MethodMapping.NETHANDLERPLAYCLIENT$INIT)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkFieldInsnNode(insnNode, PUTFIELD, FieldMapping.NETHANDLERPLAYCLIENT$PLAYERINFOMAP)) {
-                        methodNode.instructions.insert(insnNode, new MethodInsnNode(INVOKESTATIC, getHookClass("NetHandlerPlayClientHook"), "clearPlayerMap", "()V", false));
+                        methodNode.instructions.insert(insnNode, new MethodInsnNode(
+                                INVOKESTATIC,
+                                getHookClass("NetHandlerPlayClientHook_PlayerMapTracker"),
+                                "clearPlayerMap",
+                                "()V",
+                                false
+                        ));
                         status.addInjection();
                     }
                 }
@@ -30,41 +36,50 @@ public class NetHandlerPlayClientTransformer_PlayerMapTracker implements MWETran
 
             if (checkMethodNode(methodNode, MethodMapping.NETHANDLERPLAYCLIENT$HANDLEPLAYERLISTITEM)) {
 
-                AbstractInsnNode targetNodeRemoveInjection = null;
-                AbstractInsnNode targetNodePutInjection = null;
+                AbstractInsnNode targetRemoveNode = null;
+                AbstractInsnNode targetPutNode = null;
 
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-
                     if (checkMethodInsnNode(insnNode, MethodMapping.MAP$REMOVE)) {
                         final AbstractInsnNode nextNode = insnNode.getNext();
                         if (checkInsnNode(nextNode, POP)) {
-                            targetNodeRemoveInjection = nextNode;
+                            targetRemoveNode = nextNode;
                         }
                     }
-
                     if (checkMethodInsnNode(insnNode, MethodMapping.MAP$PUT)) {
                         final AbstractInsnNode nextNode = insnNode.getNext();
                         if (checkInsnNode(nextNode, POP)) {
-                            targetNodePutInjection = nextNode.getNext();
+                            targetPutNode = nextNode.getNext();
                         }
                     }
-
                 }
 
-                if (targetNodeRemoveInjection != null && targetNodePutInjection != null) {
+                if (targetRemoveNode != null && targetPutNode != null) {
                     // Replace line 1628 :
                     // this.playerInfoMap.remove(s38packetplayerlistitem$addplayerdata.getProfile().getId());
                     // With :
-                    // NetHandlerPlayClientHook.removePlayerFromMap(this.playerInfoMap.remove(s38packetplayerlistitem$addplayerdata.getProfile().getId()));
-                    methodNode.instructions.insertBefore(targetNodeRemoveInjection, new MethodInsnNode(INVOKESTATIC, getHookClass("NetHandlerPlayClientHook"), "removePlayerFromMap", "(Ljava/lang/Object;)V", false));
-                    methodNode.instructions.remove(targetNodeRemoveInjection);
+                    // NetHandlerPlayClientHook_PlayerMapTracker.removePlayerFromMap(this.playerInfoMap.remove(s38packetplayerlistitem$addplayerdata.getProfile().getId()));
+                    methodNode.instructions.insertBefore(targetRemoveNode, new MethodInsnNode(
+                            INVOKESTATIC,
+                            getHookClass("NetHandlerPlayClientHook_PlayerMapTracker"),
+                            "removePlayerFromMap",
+                            "(Ljava/lang/Object;)V",
+                            false
+                    ));
+                    methodNode.instructions.remove(targetRemoveNode);
                     status.addInjection();
                     // Injects after line 1637 :
-                    // NetHandlerPlayClientHook.putPlayerInMap(networkplayerinfo.getGameProfile().getName(), networkplayerinfo);
+                    // NetHandlerPlayClientHook_PlayerMapTracker.putPlayerInMap(networkplayerinfo.getGameProfile().getName(), networkplayerinfo);
                     final InsnList listPut = new InsnList();
                     listPut.add(new VarInsnNode(ALOAD, 4));
-                    listPut.add(new MethodInsnNode(INVOKESTATIC, getHookClass("NetHandlerPlayClientHook"), "putPlayerInMap", "(L" + ClassMapping.NETWORKPLAYERINFO + ";)V", false));
-                    methodNode.instructions.insertBefore(targetNodePutInjection, listPut);
+                    listPut.add(new MethodInsnNode(
+                            INVOKESTATIC,
+                            getHookClass("NetHandlerPlayClientHook_PlayerMapTracker"),
+                            "putPlayerInMap",
+                            "(L" + ClassMapping.NETWORKPLAYERINFO + ";)V",
+                            false
+                    ));
+                    methodNode.instructions.insertBefore(targetPutNode, listPut);
                     status.addInjection();
                 }
             }

@@ -11,14 +11,12 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
-import net.minecraft.network.play.server.S3EPacketTeams;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.*;
 
 import java.util.*;
 
 
-public class NetHandlerPlayClientHook {
+public class NetHandlerPlayClientHook_PlayerMapTracker {
 
     @SuppressWarnings("UnstableApiUsage")
     private static final Queue<DisconnectedPlayer> latestDisconnected = EvictingQueue.create(20);
@@ -57,13 +55,6 @@ public class NetHandlerPlayClientHook {
 
     public static ResourceLocation getPlayerSkin(String playername) {
         return skinMap.get(playername);
-    }
-
-    @SuppressWarnings("unused")
-    public static void handleTeamPacket(S3EPacketTeams packetIn, ScorePlayerTeam scoreplayerteam) {
-        if (packetIn.getAction() == 2) {
-            scoreplayerteam.getMembershipCollection().forEach(NameUtil::onScoreboardPacket);
-        }
     }
 
     public static void printDisconnectedPlayers() {

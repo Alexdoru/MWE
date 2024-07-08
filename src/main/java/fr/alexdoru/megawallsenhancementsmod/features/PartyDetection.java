@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.features;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.DelayedTask;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
@@ -66,21 +66,21 @@ public class PartyDetection {
     public static void printBoostingReportAdvice(String playername) {
         final List<String> partyList = partysMap.get(playername);
         if (partyList != null) {
-            final NetworkPlayerInfo infoPlayername = NetHandlerPlayClientHook.getPlayerInfo(playername);
-            if (infoPlayername == null) {
+            final NetworkPlayerInfo cheaterNetInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+            if (cheaterNetInfo == null) {
                 return;
             }
-            final String teamColorPlayername = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(infoPlayername.getPlayerTeam(), playername), playername);
+            final String cheaterTeamColor = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(cheaterNetInfo.getPlayerTeam(), playername), playername);
             final ChatComponentText imsg = new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "This player joined in a party with : ");
             boolean containsPlayers = false;
             for (final String player : partyList) {
                 if (!player.equals(playername)) {
-                    final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(player);
-                    if (networkPlayerInfo != null) {
-                        final String teamColorPlayer = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(networkPlayerInfo.getPlayerTeam(), player), player);
-                        if (!teamColorPlayername.isEmpty() && teamColorPlayername.equals(teamColorPlayer)) {
+                    final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(player);
+                    if (netInfo != null) {
+                        final String teamColorPlayer = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), player), player);
+                        if (!cheaterTeamColor.isEmpty() && cheaterTeamColor.equals(teamColorPlayer)) {
                             containsPlayers = true;
-                            imsg.appendSibling(new ChatComponentText(NameUtil.getFormattedName(networkPlayerInfo) + " ")
+                            imsg.appendSibling(new ChatComponentText(NameUtil.getFormattedName(netInfo) + " ")
                                     .setChatStyle(new ChatStyle()
                                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report " + player + " for boosting")))
                                             .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + player + " boo"))));

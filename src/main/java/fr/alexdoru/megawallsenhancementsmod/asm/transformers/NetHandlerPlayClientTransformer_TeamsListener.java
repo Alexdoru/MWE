@@ -23,7 +23,13 @@ public class NetHandlerPlayClientTransformer_TeamsListener implements MWETransfo
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 1));
                         list.add(new VarInsnNode(ALOAD, 3));
-                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("NetHandlerPlayClientHook"), "handleTeamPacket", "(L" + ClassMapping.S3EPACKETTEAMS + ";L" + ClassMapping.SCOREPLAYERTEAM + ";)V", false));
+                        list.add(new MethodInsnNode(
+                                INVOKESTATIC,
+                                getHookClass("NetHandlerPlayClientHook_TeamsListener"),
+                                "handleTeamPacket",
+                                "(L" + ClassMapping.S3EPACKETTEAMS + ";L" + ClassMapping.SCOREPLAYERTEAM + ";)V",
+                                false
+                        ));
                         methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
                     }

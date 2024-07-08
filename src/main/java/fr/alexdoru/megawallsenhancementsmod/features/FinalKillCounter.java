@@ -1,7 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.features;
 
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.NetworkPlayerInfoAccessor;
-import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
@@ -351,9 +351,9 @@ public class FinalKillCounter {
     }
 
     private static void updateNetworkPlayerinfo(String playername, int finals) {
-        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
-        if (networkPlayerInfo instanceof NetworkPlayerInfoAccessor) {
-            ((NetworkPlayerInfoAccessor) networkPlayerInfo).setPlayerFinalkills(finals);
+        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+        if (netInfo instanceof NetworkPlayerInfoAccessor) {
+            ((NetworkPlayerInfoAccessor) netInfo).setPlayerFinalkills(finals);
         }
     }
 

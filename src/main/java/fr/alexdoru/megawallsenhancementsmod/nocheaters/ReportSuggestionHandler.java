@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.nocheaters;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandHypixelShout;
 import fr.alexdoru.megawallsenhancementsmod.commands.CommandReport;
@@ -117,10 +117,10 @@ public class ReportSuggestionHandler {
 
         } else if (messageSender != null) {
 
-            final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(messageSender);
-            if (networkPlayerInfo != null) {
+            final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(messageSender);
+            if (netInfo != null) {
                 isSenderInTablist = true;
-                final UUID uuid = networkPlayerInfo.getGameProfile().getId();
+                final UUID uuid = netInfo.getGameProfile().getId();
                 isSenderFlaging = ScangameData.doesPlayerFlag(uuid);
                 final WDR wdr = WdrData.getWdr(uuid, messageSender);
                 if (wdr != null) {
@@ -222,7 +222,7 @@ public class ReportSuggestionHandler {
     }
 
     private static boolean isNameValid(String playername) {
-        return NetHandlerPlayClientHook.getPlayerInfo(playername) != null || isPlayerMyself(playername) || FinalKillCounter.wasPlayerInThisGame(playername);
+        return NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername) != null || isPlayerMyself(playername) || FinalKillCounter.wasPlayerInThisGame(playername);
     }
 
     private static boolean isPlayerMyself(@Nullable String name) {
@@ -282,9 +282,9 @@ public class ReportSuggestionHandler {
     }
 
     private static void sendShoutWithUUID(String blockedMessgae, String reportText, String reportedPlayer) {
-        final NetworkPlayerInfo networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(reportedPlayer);
-        if (networkPlayerInfo == null) return;
-        final String uuid = networkPlayerInfo.getGameProfile().getId().toString();
+        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(reportedPlayer);
+        if (netInfo == null) return;
+        final String uuid = netInfo.getGameProfile().getId().toString();
         if (mc.thePlayer != null) {
             new DelayedTask(() -> ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Shout was blocked, trying to send report suggestion with UUID instead"));
             new DelayedTask(() -> mc.thePlayer.sendChatMessage("/shout " + blockedMessgae.replaceFirst(reportText, reportText.replaceFirst(reportedPlayer, uuid))), 20);

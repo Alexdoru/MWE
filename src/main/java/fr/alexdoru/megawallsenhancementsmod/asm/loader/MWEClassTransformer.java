@@ -48,7 +48,6 @@ public class MWEClassTransformer implements IClassTransformer {
         registerTransformer(new EntityPlayerTransformer());
         registerTransformer(new EntityPlayerTransformer_FixAutoblockBypass());
         registerTransformer(new EntityPlayerSPTransformer_CommandListener());
-        //registerTransformer(new EntityPlayerSPTransformer_HealthListener());
         registerTransformer(new EntityRendererTransformer_CancelNightVision());
         registerTransformer(new EntityRendererTransformer_RenderOverlayHook());
         registerTransformer(new GuiChatTransformer_Accessor());
@@ -78,11 +77,8 @@ public class MWEClassTransformer implements IClassTransformer {
         registerTransformer(new MinecraftTransformer_WarpProtection());
         registerTransformer(new NetHandlerPlayClientTransformer_BlockBreakAnimListener());
         registerTransformer(new NetHandlerPlayClientTransformer_BlockChangeListener());
-        //registerTransformer(new NetHandlerPlayClientTransformer_EquipmentListener());
         registerTransformer(new NetHandlerPlayClientTransformer_PlayerMapTracker());
         registerTransformer(new NetHandlerPlayClientTransformer_TeamsListener());
-        //registerTransformer(new NetHandlerPlayClientTransformer_TeleportListener());
-        //registerTransformer(new NetworkManagerTransformer_ClientPacketListener());
         registerTransformer(new NetworkManagerTransformer_ServerPacketListener());
         registerTransformer(new NetworkPlayerInfo$1Transformer_ChatHeads());
         registerTransformer(new NetworkPlayerInfoTransformer_ChatHeads());
@@ -100,7 +96,6 @@ public class MWEClassTransformer implements IClassTransformer {
         registerTransformer(new OrangeSprintRendererTransformer_HideHUD());
         registerTransformer(new SidebarmodReloadedTransformer_CustomSidebarLines());
         registerTransformer(new SidebarmodRevampTransformer_CustomSidebarLines());
-        //registerTransformer(new WorldTransformer());
         if ("01/04".equals(new SimpleDateFormat("dd/MM").format(new Date().getTime())))
             registerTransformer(new RendererLivingEntityTransformer_AprilFun());
     }

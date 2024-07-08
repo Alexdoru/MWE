@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.gui.huds;
 
-import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
@@ -89,18 +89,18 @@ public class PhoenixBondHUD extends AbstractRenderer {
     }
 
     private PhxHealLine getLine(String playername, String amountHealed) {
-        final NetworkPlayerInfo networkPlayerInfo;
+        final NetworkPlayerInfo netInfo;
         final String formattedName;
         if (playername == null) { // myself
-            networkPlayerInfo = mc.thePlayer == null ? null : mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID());
+            netInfo = mc.thePlayer == null ? null : mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID());
             formattedName = EnumChatFormatting.AQUA.toString() + EnumChatFormatting.BOLD + "You";
         } else {
-            networkPlayerInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
-            formattedName = getColoredName(playername, networkPlayerInfo);
+            netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+            formattedName = getColoredName(playername, netInfo);
         }
         return new PhxHealLine(
                 getHealColor(Float.parseFloat(amountHealed)) + amountHealed + EnumChatFormatting.RED + "❤",
-                SkinUtil.getSkin(networkPlayerInfo),
+                SkinUtil.getSkin(netInfo),
                 formattedName);
     }
 

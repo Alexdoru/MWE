@@ -3,7 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.chat;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.ChatComponentTextAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.GuiChatAccessor;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.NetworkPlayerInfoAccessor_ChatHeads;
-import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook;
+import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -72,14 +72,14 @@ public class ChatUtil {
     }
 
     public static boolean tryAddSkinToComponent(IChatComponent msg, String playername) {
-        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook.getPlayerInfo(playername);
+        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
         if (netInfo instanceof NetworkPlayerInfoAccessor_ChatHeads) {
             final SkinChatHead skin = new SkinChatHead(netInfo.getLocationSkin());
             ((ChatComponentTextAccessor) msg).setSkinChatHead(skin);
             ((NetworkPlayerInfoAccessor_ChatHeads) netInfo).setSkinChatHead(skin);
             return true;
         } else {
-            final ResourceLocation resourceLocation = NetHandlerPlayClientHook.getPlayerSkin(playername);
+            final ResourceLocation resourceLocation = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerSkin(playername);
             if (resourceLocation != null) {
                 ((ChatComponentTextAccessor) msg).setSkinChatHead(new SkinChatHead(resourceLocation));
                 return true;
