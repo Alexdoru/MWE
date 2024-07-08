@@ -124,7 +124,7 @@ public class ScoreboardParser {
             final Matcher witherAliveMatcher = WITHER_ALIVE_PATTERN.matcher(line);
             String colorCode = "";
             if (witherAliveMatcher.find()) {
-                colorCode = StringUtil.getLastColorCodeBefore(formattedLines.get(i), "\\[");
+                colorCode = StringUtil.getLastColorCodeBefore(formattedLines.get(i), "[");
                 aliveWithers.add(colorCode);
                 witherHP = Integer.parseInt(witherAliveMatcher.group(1).replace(",", ""));
             }

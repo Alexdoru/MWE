@@ -7,13 +7,116 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 import javax.annotation.Nonnull;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class StringUtil {
 
-    private static final Pattern FORMATTING_CODE_PATTERN = Pattern.compile("(?i)" + '§' + "[0-9A-FK-OR]");
-    private static final Pattern COLOR_CODE_PATTERN = Pattern.compile("(?i)" + '§' + "[0-9A-F]");
+    /**
+     * Returns the last formatting code of a String
+     * <p>
+     * Returns '\0' if it can't find any formatting code
+     * <p>
+     * Returns a single character
+     */
+    public static char getLastFormattingCharOf(String text) {
+        for (int i = text.length() - 1; i >= 0; --i) {
+            if (text.charAt(i) == '§' && i + 1 < text.length()) {
+                final char format = text.charAt(i + 1);
+                final int index = "0123456789abcdefklmnorABCDEFKLMNOR".indexOf(format);
+                if (index != -1) {
+                    return index < 22 ? format : "0123456789abcdefklmnorABCDEFKLMNOR".charAt(index - 12);
+                }
+            }
+        }
+        return '\0';
+    }
+
+    /**
+     * Returns the last formatting code of a String
+     * <p>
+     * Returns "" if it can't find any formatting code
+     * <p>
+     * Returns a single character as a String
+     */
+    public static String getLastFormattingCodeOf(String text) {
+        final char c = getLastFormattingCharOf(text);
+        return c == '\0' ? "" : String.valueOf(c);
+    }
+
+    /**
+     * Returns the last formatting code before the first occurence of a certain target in a String
+     * <p>
+     * Returns "" if it can't find any formatting code
+     * <p>
+     * Returns a single character as a String
+     */
+    public static String getLastFormattingCodeBefore(String message, String target) {
+        final int index = message.indexOf(target);
+        return index == -1 ? "" : getLastFormattingCodeOf(message.substring(0, index));
+    }
+
+    /**
+     * Returns the last color code character
+     * <p>
+     * Returns '\0' if it can't find any color code
+     * <p>
+     * Returns a single character
+     */
+    public static char getLastColorCharOf(String text) {
+        for (int i = text.length() - 1; i >= 0; --i) {
+            if (text.charAt(i) == '§' && i + 1 < text.length()) {
+                final char format = text.charAt(i + 1);
+                final int index = "0123456789abcdefABCDEF".indexOf(format);
+                if (index != -1) {
+                    return index < 16 ? format : "0123456789abcdefABCDEF".charAt(index - 6);
+                }
+            }
+        }
+        return '\0';
+    }
+
+    /**
+     * Returns the last color code of a String
+     * <p>
+     * Returns "" if it can't find any formatting code
+     * <p>
+     * Returns a single character as a String
+     */
+    public static String getLastColorCodeOf(String text) {
+        final char c = getLastColorCharOf(text);
+        return c == '\0' ? "" : String.valueOf(c);
+    }
+
+    /**
+     * Returns the last color code before the first occurence of a certain target in a String
+     * <p>
+     * Returns "" if it can't find any formatting code
+     * <p>
+     * Returns a single character as a String
+     */
+    public static String getLastColorCodeBefore(String message, String target) {
+        final int index = message.indexOf(target);
+        return index == -1 ? "" : getLastColorCodeOf(message.substring(0, index));
+    }
+
+    public static boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
+    }
+
+    public static String getStringAsUnicode(String s) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            final char c = s.charAt(i);
+            stringBuilder.append("\\u").append(Integer.toHexString(c | 0x10000).substring(1));
+        }
+        return stringBuilder.toString();
+    }
+
+    public static String uppercaseFirstLetter(String string) {
+        if (string == null) {
+            return null;
+        }
+        return string.substring(0, 1).toUpperCase() + string.substring(1);
+    }
 
     /**
      * On hypixel the chat messages sent by players follow the pattern:
@@ -50,87 +153,18 @@ public class StringUtil {
         if (split.length != 2) {
             return message;
         }
-        return split[0] + color + target + getLastFormattingCodeOf(split[0]) + split[1];
+        return split[0] + color + target + '§' + getLastFormattingCodeOf(split[0]) + split[1];
     }
 
     /**
-     * Replaces the target inside the String while preserving the color
-     * after the replacement
+     * Replaces the target inside the String while preserving the color after the replacement
      */
     public static String replaceTargetWith(String message, String target, String replacement) {
         final String[] split = message.split(target, 2);
         if (split.length != 2) {
             return message;
         }
-        return split[0] + replacement + getLastFormattingCodeOf(split[0]) + split[1];
-    }
-
-    /**
-     * Returns the last formatting code of a String
-     * Returns "" if it can't find any formatting code
-     * Else returns "§ + code"
-     */
-    public static String getLastFormattingCodeOf(String text) {
-        final Matcher matcher = FORMATTING_CODE_PATTERN.matcher(text);
-        String s = "";
-        while (matcher.find()) {
-            s = matcher.group();
-        }
-        return s;
-    }
-
-    /**
-     * Returns the last formatting code before a certain word in a String
-     * Returns "" if it can't find any formatting code
-     * Else returns "§ + code"
-     */
-    public static String getLastFormattingCodeBefore(String message, String target) {
-        final String[] split = message.split(target, 2);
-        if (split.length != 2) {
-            return "";
-        }
-        return getLastFormattingCodeOf(split[0]);
-    }
-
-    /**
-     * Returns the last color code character, only color codes, not formatting codes
-     * This only returns one character and not "§ + code"
-     * Returns "" if it can't find the last color code
-     */
-    public static String getLastColorCodeOf(String text) {
-        final Matcher matcher = COLOR_CODE_PATTERN.matcher(text);
-        String s = null;
-        while (matcher.find()) {
-            s = matcher.group();
-        }
-        return s == null ? "" : String.valueOf(s.charAt(1));
-    }
-
-    /**
-     * Returns the last color code character, only color codes, not formatting codes
-     * This only returns one character and not "§ + code"
-     * Returns '\0' if it can't find the last color code
-     */
-    public static char getLastColorCharOf(String text) {
-        final Matcher matcher = COLOR_CODE_PATTERN.matcher(text);
-        String s = null;
-        while (matcher.find()) {
-            s = matcher.group();
-        }
-        return s == null ? '\0' : s.charAt(1);
-    }
-
-    /**
-     * Returns the last color code before a certain word in a String, only color codes, not formatting codes
-     * This only returns one character and not "§ + code"
-     * Returns "" if it can't find the last color code
-     */
-    public static String getLastColorCodeBefore(String message, String target) {
-        final String[] split = message.split(target, 2);
-        if (split.length != 2) {
-            return "";
-        }
-        return getLastColorCodeOf(split[0]);
+        return split[0] + replacement + '§' + getLastFormattingCodeOf(split[0]) + split[1];
     }
 
     public static IChatComponent censorChatMessage(String message, String messageSender) {
@@ -146,43 +180,5 @@ public class StringUtil {
                 .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + "Censored")
                         .setChatStyle(new ChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(secondSplit[1])))));
     }
-
-    public static boolean isNullOrEmpty(String s) {
-        return s == null || s.isEmpty();
-    }
-
-    public static String getStringAsUnicode(String s) {
-        final StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < s.length(); i++) {
-            final char c = s.charAt(i);
-            stringBuilder.append("\\u").append(Integer.toHexString(c | 0x10000).substring(1));
-        }
-        return stringBuilder.toString();
-    }
-
-    public static String uppercaseFirstLetter(String string) {
-        if (string == null) {
-            return null;
-        }
-        return string.substring(0, 1).toUpperCase() + string.substring(1);
-    }
-
-    //private static final Pattern FORMATTING_CODE_END_OF_STRING_PATTERN = Pattern.compile('§' + "[0-9A-FK-OR]$");
-    ///* NEEDS TO BE TESTED
-    // * Removes all formatting codes located directly before the target string
-    // * Only does it for the first occurence of that string
-    // */
-    //public static String removeFormattingCodesBefore(String message, String target) {
-    //    String[] split = message.split(target, 2);
-    //    if (split.length != 2) {
-    //        return message;
-    //    }
-    //    Matcher matcher = FORMATTING_CODE_END_OF_STRING_PATTERN.matcher(split[0]);
-    //    while (matcher.matches()) {
-    //        split[0] = split[0].substring(0, split[0].length() - 2);
-    //        matcher = FORMATTING_CODE_END_OF_STRING_PATTERN.matcher(split[0]);
-    //    }
-    //    return split[0] + target + split[1];
-    //}
 
 }
