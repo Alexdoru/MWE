@@ -6,7 +6,7 @@ import fr.alexdoru.mwe.utils.NameUtil;
 import net.minecraft.util.IChatComponent;
 
 @SuppressWarnings("unused")
-public class NetworkPlayerInfoHook {
+public class NetworkPlayerInfoHook_CustomTab {
 
     public static IChatComponent getDisplayName(GameProfile gameProfileIn) {
         return NameUtil.getMWPlayerData(gameProfileIn, false).displayName;
@@ -14,6 +14,10 @@ public class NetworkPlayerInfoHook {
 
     public static int getPlayersFinals(String playername) {
         return FinalKillCounter.getPlayersFinals(playername);
+    }
+
+    public static IChatComponent changeDisplayName(IChatComponent original, IChatComponent customName) {
+        return original != null ? original : customName;
     }
 
 }

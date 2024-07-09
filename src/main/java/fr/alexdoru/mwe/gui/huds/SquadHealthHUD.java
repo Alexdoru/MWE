@@ -65,7 +65,7 @@ public class SquadHealthHUD extends AbstractRenderer {
                 maxScoreWidth = Math.max(maxScoreWidth, mc.fontRendererObj.getStringWidth(" " + scoreboard.getValueFromObjective(networkplayerinfo.getGameProfile().getName(), scoreobjective).getScorePoints()));
             }
             if (ScoreboardTracker.isInMwGame()) {
-                final int playerFinalkills = ((NetworkPlayerInfoAccessor) networkplayerinfo).getPlayerFinalkills();
+                final int playerFinalkills = ((NetworkPlayerInfoAccessor) networkplayerinfo).getFinalKills();
                 if (playerFinalkills != 0) {
                     maxFinalWidth = Math.max(maxFinalWidth, mc.fontRendererObj.getStringWidth(" " + playerFinalkills));
                 }
@@ -90,28 +90,28 @@ public class SquadHealthHUD extends AbstractRenderer {
                 GlStateManager.enableAlpha();
                 GlStateManager.enableBlend();
                 GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-                final NetworkPlayerInfo networkplayerinfo = playerlistToRender.get(i);
-                final GameProfile gameprofile = networkplayerinfo.getGameProfile();
+                final NetworkPlayerInfo netInfo = playerlistToRender.get(i);
+                final GameProfile gameprofile = netInfo.getGameProfile();
                 if (flag) {
                     final EntityPlayer entityplayer = mc.theWorld.getPlayerEntityByUUID(gameprofile.getId());
-                    mc.getTextureManager().bindTexture(networkplayerinfo.getLocationSkin());
+                    mc.getTextureManager().bindTexture(netInfo.getLocationSkin());
                     Gui.drawScaledCustomSizeModalRect(xDrawingPos, yDrawingPos, 8, 8, 8, 8, 8, 8, 64.0F, 64.0F);
                     if (entityplayer == null || entityplayer.isWearing(EnumPlayerModelParts.HAT)) {
                         Gui.drawScaledCustomSizeModalRect(xDrawingPos, yDrawingPos, 40, 8, 8, 8, 8, 8, 64.0F, 64.0F);
                     }
                     xDrawingPos += 9;
                 }
-                mc.fontRendererObj.drawStringWithShadow(this.getPlayerName(networkplayerinfo), (float) xDrawingPos, (float) yDrawingPos, 0xFFFFFF);
+                mc.fontRendererObj.drawStringWithShadow(this.getPlayerName(netInfo), (float) xDrawingPos, (float) yDrawingPos, 0xFFFFFF);
                 final int xStartFinalDrawingPos = xDrawingPos + maxNameWidth + 1;
                 final int xStartScoreDrawingPos = xStartFinalDrawingPos + maxFinalWidth;
                 if (maxScoreWidth + maxFinalWidth > 5) {
-                    if (scoreobjective != null && networkplayerinfo.getGameType() != WorldSettings.GameType.SPECTATOR && scoreobjective.getRenderType() != IScoreObjectiveCriteria.EnumRenderType.HEARTS) {
+                    if (scoreobjective != null && netInfo.getGameType() != WorldSettings.GameType.SPECTATOR && scoreobjective.getRenderType() != IScoreObjectiveCriteria.EnumRenderType.HEARTS) {
                         final int scorePoints = scoreobjective.getScoreboard().getValueFromObjective(gameprofile.getName(), scoreobjective).getScorePoints();
                         final String scoreString = ColorUtil.getColoredHP(EnumChatFormatting.YELLOW, scorePoints) + " " + scorePoints;
                         mc.fontRendererObj.drawStringWithShadow(scoreString, xStartScoreDrawingPos, yDrawingPos, 0xFFFFFF);
                     }
                     if (ScoreboardTracker.isInMwGame()) {
-                        final int playersFinals = ((NetworkPlayerInfoAccessor) networkplayerinfo).getPlayerFinalkills();
+                        final int playersFinals = ((NetworkPlayerInfoAccessor) netInfo).getFinalKills();
                         if (playersFinals != 0) {
                             final String finalsString = EnumChatFormatting.GOLD + " " + playersFinals;
                             mc.fontRendererObj.drawStringWithShadow(finalsString, xStartFinalDrawingPos, yDrawingPos, 0xFFFFFF);

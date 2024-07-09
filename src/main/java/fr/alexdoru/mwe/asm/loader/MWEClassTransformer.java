@@ -82,7 +82,7 @@ public class MWEClassTransformer implements IClassTransformer {
         registerTransformer(new NetworkManagerTransformer_ServerPacketListener());
         registerTransformer(new NetworkPlayerInfo$1Transformer_ChatHeads());
         registerTransformer(new NetworkPlayerInfoTransformer_ChatHeads());
-        registerTransformer(new NetworkPlayerInfoTransformer_CustomNamesInTab());
+        registerTransformer(new NetworkPlayerInfoTransformer_CustomTab());
         registerTransformer(new RendererLivingEntity_HitColor());
         registerTransformer(new RenderGlobalTransformer_LimitDroppedItems());
         registerTransformer(new RenderGlobalTransformer_ListenDestroyedBlocks());

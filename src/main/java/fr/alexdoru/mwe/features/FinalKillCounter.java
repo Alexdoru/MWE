@@ -166,7 +166,7 @@ public class FinalKillCounter {
         }
         Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap().forEach(netInfo -> {
             if (netInfo != null) {
-                ((NetworkPlayerInfoAccessor) netInfo).setPlayerFinalkills(0);
+                ((NetworkPlayerInfoAccessor) netInfo).setFinalKills(0);
             }
         });
         GuiManager.fkCounterHUD.updateDisplayText();
@@ -353,7 +353,7 @@ public class FinalKillCounter {
     private static void updateNetworkPlayerinfo(String playername, int finals) {
         final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
         if (netInfo instanceof NetworkPlayerInfoAccessor) {
-            ((NetworkPlayerInfoAccessor) netInfo).setPlayerFinalkills(finals);
+            ((NetworkPlayerInfoAccessor) netInfo).setFinalKills(finals);
         }
     }
 

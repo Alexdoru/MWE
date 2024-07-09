@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.asm.transformers;
 
 import fr.alexdoru.mwe.asm.loader.InjectionStatus;
 import fr.alexdoru.mwe.asm.loader.MWETransformer;
-import fr.alexdoru.mwe.asm.mappings.ClassMapping;
+import fr.alexdoru.mwe.asm.mappings.FieldMapping;
 import fr.alexdoru.mwe.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
@@ -34,7 +34,7 @@ public class GuiPlayerTabOverlayTransformer_FinalKills implements MWETransformer
                         if (checkVarInsnNode(nextNode, ISTORE, 6)) {
                             final InsnList list = new InsnList();
                             list.add(new VarInsnNode(ALOAD, 9));
-                            list.add(new FieldInsnNode(GETFIELD, ClassMapping.NETWORKPLAYERINFO.toString(), "mwenhancements$playerFinalkills", "I"));
+                            list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.NETWORKPLAYERINFO$MWE$FINALKILLS));
                             list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook_FinalKills"), "computeFKScoreWidth", "(I)V", false));
                             methodNode.instructions.insert(nextNode, list);
                             status.addInjection();
@@ -82,7 +82,7 @@ public class GuiPlayerTabOverlayTransformer_FinalKills implements MWETransformer
                     } else if (latestAload0 != null && index_j2 != -1 && index_i != -1 && index_k2 != -1 && index_networkplayerinfo != -1 && checkMethodInsnNode(insnNode, MethodMapping.GUIPLAYERTABOVERLAY$DRAWPING)) {
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, index_networkplayerinfo));
-                        list.add(new FieldInsnNode(GETFIELD, ClassMapping.NETWORKPLAYERINFO.toString(), "mwenhancements$playerFinalkills", "I"));
+                        list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.NETWORKPLAYERINFO$MWE$FINALKILLS));
                         list.add(new VarInsnNode(ILOAD, index_j2));
                         list.add(new VarInsnNode(ILOAD, index_i));
                         list.add(new VarInsnNode(ILOAD, index_k2));

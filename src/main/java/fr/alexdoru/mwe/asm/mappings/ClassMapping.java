@@ -72,7 +72,6 @@ public enum ClassMapping {
     S23PACKETBLOCKCHANGE("fv", "net/minecraft/network/play/server/S23PacketBlockChange"),
     S25PACKETBLOCKBREAKANIM("fs", "net/minecraft/network/play/server/S25PacketBlockBreakAnim"),
     S38PACKETPLAYERLISTITEM("gz", "net/minecraft/network/play/server/S38PacketPlayerListItem"),
-    S38PACKETPLAYERLISTITEM$ADDPLAYERDATA("gz$b", "net/minecraft/network/play/server/S38PacketPlayerListItem$AddPlayerData"),
     S3EPACKETTEAMS("hr", "net/minecraft/network/play/server/S3EPacketTeams"),
     SCALEDRESOLUTION("avr", "net/minecraft/client/gui/ScaledResolution"),
     SCORE("aum", "net/minecraft/scoreboard/Score"),
