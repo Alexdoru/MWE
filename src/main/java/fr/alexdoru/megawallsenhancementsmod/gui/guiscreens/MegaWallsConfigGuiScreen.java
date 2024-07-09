@@ -15,11 +15,11 @@ import java.util.List;
 
 import static net.minecraft.util.EnumChatFormatting.*;
 
-public class MegaWallsEnhancementsConfigGuiScreen extends MyGuiScreen {
+public class MegaWallsConfigGuiScreen extends MyGuiScreen {
 
     private final GuiScreen parent;
 
-    public MegaWallsEnhancementsConfigGuiScreen(GuiScreen parent) {
+    public MegaWallsConfigGuiScreen(GuiScreen parent) {
         this.parent = parent;
     }
 

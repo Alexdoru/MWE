@@ -14,11 +14,11 @@ import java.util.List;
 
 import static net.minecraft.util.EnumChatFormatting.*;
 
-public class VanillaEnhancementsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
+public class VanillaConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider {
 
     private final GuiScreen parent;
 
-    public VanillaEnhancementsConfigGuiScreen(GuiScreen parent) {
+    public VanillaConfigGuiScreen(GuiScreen parent) {
         this.parent = parent;
     }
 

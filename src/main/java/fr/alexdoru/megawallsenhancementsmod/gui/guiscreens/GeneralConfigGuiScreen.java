@@ -22,8 +22,8 @@ public class GeneralConfigGuiScreen extends MyGuiScreen {
         final int xPos = this.getxCenter() - buttonsWidth / 2;
         this.elementList.add(new TextElement(GREEN + "Config", getxCenter(), getButtonYPos(-1)).setSize(2).makeCentered());
         this.buttonList.add(new SimpleGuiButton(xPos, getButtonYPos(1), buttonsWidth, buttonsHeight, AQUA + "Final Kill Counter", () -> mc.displayGuiScreen(new FKConfigGuiScreen(this))));
-        this.buttonList.add(new SimpleGuiButton(xPos, getButtonYPos(2), buttonsWidth, buttonsHeight, GREEN + "Mega Walls Enhancements", () -> mc.displayGuiScreen(new MegaWallsEnhancementsConfigGuiScreen(this))));
-        this.buttonList.add(new SimpleGuiButton(xPos, getButtonYPos(3), buttonsWidth, buttonsHeight, GOLD + "Vanilla Enhancements", () -> mc.displayGuiScreen(new VanillaEnhancementsConfigGuiScreen(this))));
+        this.buttonList.add(new SimpleGuiButton(xPos, getButtonYPos(2), buttonsWidth, buttonsHeight, GREEN + "Mega Walls Enhancements", () -> mc.displayGuiScreen(new MegaWallsConfigGuiScreen(this))));
+        this.buttonList.add(new SimpleGuiButton(xPos, getButtonYPos(3), buttonsWidth, buttonsHeight, GOLD + "Vanilla Enhancements", () -> mc.displayGuiScreen(new VanillaConfigGuiScreen(this))));
         this.buttonList.add(new OptionGuiButton(
                 getxCenter() + buttonsWidth / 2 + 10, getButtonYPos(2),
                 buttonsWidth, buttonsHeight,
@@ -45,7 +45,8 @@ public class GeneralConfigGuiScreen extends MyGuiScreen {
                     130, buttonsHeight,
                     "April fun ",
                     (b) -> RendererLivingEntityHook_AprilFun.active = b,
-                    () -> RendererLivingEntityHook_AprilFun.active, GRAY + "haha got u"));
+                    () -> RendererLivingEntityHook_AprilFun.active,
+                    GRAY + "haha got u"));
         }
     }
 
