@@ -17,48 +17,65 @@ public class MinecraftTransformer_DropProtection implements MWETransformer {
     @Override
     public void transform(ClassNode classNode, InjectionStatus status) {
         status.setInjectionPoints(3);
-
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.MINECRAFT$RUNTICK)) {
-                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-
-                    if (checkMethodInsnNode(insnNode, MethodMapping.INVENTORYPLAYER$CHANGECURRENTITEM) ||
-                            checkFieldInsnNode(insnNode, PUTFIELD, FieldMapping.INVENTORYPLAYER$CURRENTITEM)) {
-                        /*
-                         * Injects after line 1869 & 2077
-                         * MinecraftHook.updateCurrentSlot(this);
-                         */
-                        methodNode.instructions.insert(insnNode, updateCurrentSlotInsnList());
-                        status.addInjection();
-                    }
-
-                    if (checkMethodInsnNode(insnNode, MethodMapping.ENTITYPLAYERSP$DROPONEITEM)) {
-                        /*
-                         * Replaces line 2101 :
-                         * this.thePlayer.dropOneItem(GuiScreen.isCtrlKeyDown());
-                         * With :
-                         * MinecraftHook.dropOneItem(this.thePlayer);
-                         */
-                        methodNode.instructions.remove(insnNode.getPrevious());
-                        methodNode.instructions.remove(insnNode.getNext());
-                        final InsnList list = new InsnList();
-                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("MinecraftHook"), "dropOneItem", "(L" + ClassMapping.ENTITYPLAYERSP + ";)V", false));
-                        methodNode.instructions.insertBefore(insnNode, list);
-                        methodNode.instructions.remove(insnNode);
-                        status.addInjection();
-                    }
-
-                }
+                this.injectUpdateCurrentSlot(methodNode, status);
+                this.injectDropItemCheck(methodNode, status);
             }
         }
-
     }
 
-    private InsnList updateCurrentSlotInsnList() {
-        final InsnList list = new InsnList();
-        list.add(new VarInsnNode(ALOAD, 0));
-        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("MinecraftHook"), "updateCurrentSlot", "(L" + ClassMapping.MINECRAFT + ";)V", false));
-        return list;
+    private void injectUpdateCurrentSlot(MethodNode methodNode, InjectionStatus status) {
+        for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+            if (checkMethodInsnNode(insnNode, MethodMapping.INVENTORYPLAYER$CHANGECURRENTITEM) ||
+                    checkFieldInsnNode(insnNode, PUTFIELD, FieldMapping.INVENTORYPLAYER$CURRENTITEM)) {
+                final InsnList list = new InsnList();
+                list.add(new VarInsnNode(ALOAD, 0));
+                list.add(new MethodInsnNode(
+                        INVOKESTATIC,
+                        getHookClass("MinecraftHook_DropProtection"),
+                        "updateCurrentSlot",
+                        "(L" + ClassMapping.MINECRAFT + ";)V",
+                        false
+                ));
+                methodNode.instructions.insert(insnNode, list);
+                status.addInjection();
+            }
+        }
+    }
+
+    private void injectDropItemCheck(MethodNode methodNode, InjectionStatus status) {
+        boolean slice = false;
+        AbstractInsnNode targetNode = null;
+        LabelNode label = null;
+        for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+            if (!slice && checkFieldInsnNode(insnNode, GETFIELD, FieldMapping.GAMESETTINGS$KEYBINDDROP)) {
+                slice = true;
+            }
+            if (slice && label == null && checkMethodInsnNode(insnNode, MethodMapping.ENTITYPLAYERSP$ISSPECTATOR)) {
+                final AbstractInsnNode nextNode = insnNode.getNext();
+                if (checkJumpInsnNode(nextNode, IFNE)) {
+                    targetNode = nextNode;
+                    label = ((JumpInsnNode) nextNode).label;
+                }
+            }
+            if (slice && label != null && checkMethodInsnNode(insnNode, MethodMapping.ENTITYPLAYERSP$DROPONEITEM)) {
+                final InsnList list = new InsnList();
+                list.add(new VarInsnNode(ALOAD, 0));
+                list.add(new MethodInsnNode(
+                        INVOKESTATIC,
+                        getHookClass("MinecraftHook_DropProtection"),
+                        "shouldDropItem",
+                        "(L" + ClassMapping.MINECRAFT + ";)Z",
+                        false
+                ));
+                list.add(new JumpInsnNode(IFEQ, label));
+                methodNode.instructions.insert(targetNode, list);
+                status.addInjection();
+                return;
+            }
+
+        }
     }
 
 }

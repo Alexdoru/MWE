@@ -46,6 +46,7 @@ public enum ClassMapping {
     INVENTORYPLAYER("wm", "net/minecraft/entity/player/InventoryPlayer"),
     ITEMSTACK("zx", "net/minecraft/item/ItemStack"),
     ITHREADLISTENER("od", "net/minecraft/util/IThreadListener"),
+    KEYBINDING("avb", "net/minecraft/client/settings/KeyBinding"),
     MAP("java/util/Map"),
     MATH("java/lang/Math"),
     MINECRAFT("ave", "net/minecraft/client/Minecraft"),

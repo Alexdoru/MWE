@@ -22,6 +22,7 @@ public enum MethodMapping {
     ENTITYPLAYER$GETDISPLAYNAME("f_", "getDisplayName", "()L" + ICHATCOMPONENT + ";"),
     ENTITYPLAYER$ONUPDATE("t_", "onUpdate", "()V"),
     ENTITYPLAYERSP$DROPONEITEM(INVOKEVIRTUAL, ENTITYPLAYERSP, "a", "dropOneItem", "(Z)L" + ENTITYITEM + ";"),
+    ENTITYPLAYERSP$ISSPECTATOR(INVOKEVIRTUAL, ENTITYPLAYERSP, "v", "isSpectator", "()Z"),
     ENTITYPLAYERSP$SENDCHATMESSAGE("e", "sendChatMessage", "(Ljava/lang/String;)V"),
     ENTITYPLAYERSP$SETPLAYERSPHEALTH("n", "setPlayerSPHealth", "(F)V"),
     ENTITYRENDERER$UPDATECAMERAANDRENDER("a", "updateCameraAndRender", "(FJ)V"),
