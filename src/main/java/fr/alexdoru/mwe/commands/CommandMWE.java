@@ -13,11 +13,11 @@ import net.minecraft.util.EnumChatFormatting;
 import java.util.Arrays;
 import java.util.List;
 
-public class CommandMWEnhancements extends MyAbstractCommand {
+public class CommandMWE extends MyAbstractCommand {
 
     @Override
     public String getCommandName() {
-        return "mwenhancements";
+        return "mwe";
     }
 
     @Override
@@ -62,7 +62,7 @@ public class CommandMWEnhancements extends MyAbstractCommand {
 
     @Override
     public List<String> getCommandAliases() {
-        return Arrays.asList("mwe", "megawallsenhancements");
+        return Arrays.asList("mwenhancements", "megawallsenhancements");
     }
 
 }

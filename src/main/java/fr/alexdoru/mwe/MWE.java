@@ -65,6 +65,7 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(new MegaWallsEndGameStats());
         MinecraftForge.EVENT_BUS.register(new RenderPlayerHook_RenegadeArrowCount());
 
+        ClientCommandHandler.instance.registerCommand(new CommandMWE());
         ClientCommandHandler.instance.registerCommand(new CommandWDR());
         ClientCommandHandler.instance.registerCommand(new CommandName());
         ClientCommandHandler.instance.registerCommand(new CommandUnWDR());
@@ -77,7 +78,6 @@ public class MWE {
         ClientCommandHandler.instance.registerCommand(new CommandFKCounter());
         ClientCommandHandler.instance.registerCommand(new CommandNocheaters());
         ClientCommandHandler.instance.registerCommand(new CommandHypixelShout());
-        ClientCommandHandler.instance.registerCommand(new CommandMWEnhancements());
 
     }
 
