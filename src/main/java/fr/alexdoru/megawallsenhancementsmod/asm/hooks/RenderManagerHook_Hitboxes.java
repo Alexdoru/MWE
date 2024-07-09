@@ -9,7 +9,11 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.util.AxisAlignedBB;
 
 @SuppressWarnings("unused")
-public class RenderManagerHook {
+public class RenderManagerHook_Hitboxes {
+
+    public static boolean shouldToggleOnStart(boolean original) {
+        return ConfigHandler.isDebugHitboxOn;
+    }
 
     public static boolean shouldRenderHitbox(Entity entityIn, Entity viewingEntity) {
         if (ConfigHandler.hideCloseHitbox) {
@@ -56,8 +60,8 @@ public class RenderManagerHook {
         }
     }
 
-    public static double getBlueVectLength() {
-        return ConfigHandler.makeBlueVect3Meters ? 3.0d : 2.0d;
+    public static double getBlueVectLength(double original) {
+        return ConfigHandler.makeBlueVect3Meters ? 3.0d : original;
     }
 
     public static AxisAlignedBB getAxisAlignedBB(AxisAlignedBB axisAlignedBBIn, Entity entityIn) {
