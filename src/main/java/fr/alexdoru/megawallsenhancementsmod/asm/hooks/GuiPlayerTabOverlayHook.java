@@ -3,7 +3,6 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.EnumChatFormatting;
 
 import javax.annotation.Nonnull;
@@ -12,33 +11,6 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public class GuiPlayerTabOverlayHook {
-
-    private static final Minecraft mc = Minecraft.getMinecraft();
-    private static int finalsScoreWidth = 0;
-
-    public static void resetFinalsScoreWidth() {
-        finalsScoreWidth = 0;
-    }
-
-    public static void computeFKScoreWidth(int playerFinalkills) {
-        if (ScoreboardTracker.isInMwGame() && ConfigHandler.fkcounterHUDTablist) {
-            if (playerFinalkills != 0) {
-                finalsScoreWidth = Math.max(finalsScoreWidth, mc.fontRendererObj.getStringWidth(" " + playerFinalkills));
-            }
-        }
-    }
-
-    public static int getRenderScoreWidth() {
-        return finalsScoreWidth;
-    }
-
-    public static void renderFinals(int playerFinalkills, int j2, int i, int k2) {
-        if (!ConfigHandler.fkcounterHUDTablist || playerFinalkills == 0 || !ScoreboardTracker.isInMwGame()) {
-            return;
-        }
-        final String s1 = EnumChatFormatting.GOLD + " " + playerFinalkills;
-        mc.fontRendererObj.drawStringWithShadow(s1, j2 + i + 1, k2, 0xFFFFFF);
-    }
 
     public static boolean shouldRenderHeader() {
         return ConfigHandler.showPlayercountTablist || !shouldHideFooter();
@@ -56,7 +28,7 @@ public class GuiPlayerTabOverlayHook {
         if (!ConfigHandler.showPlayercountTablist) {
             return listIn;
         }
-        final int i = mc.thePlayer.sendQueue.getPlayerInfoMap().size();
+        final int i = Minecraft.getMinecraft().thePlayer.sendQueue.getPlayerInfoMap().size();
         if (i < 2) {
             return shouldHideFooter() ? new ArrayList<>() : listIn;
         }
