@@ -26,9 +26,14 @@ public class GuiPlayerTabOverlayTransformer_HidePing implements MWETransformer {
                             if (checkInsnNode(thirdNode, IADD)) {
                                 final InsnList list = new InsnList();
                                 list.add(new VarInsnNode(ALOAD, 5));
-                                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "getPingWidth", "(Ljava/util/List;)I", false));
-                                methodNode.instructions.insert(insnNode, list);
-                                methodNode.instructions.remove(secondNode);
+                                list.add(new MethodInsnNode(
+                                        INVOKESTATIC,
+                                        getHookClass("GuiPlayerTabOverlayHook_HidePing"),
+                                        "getPingWidth",
+                                        "(ILjava/util/List;)I",
+                                        false
+                                ));
+                                methodNode.instructions.insert(secondNode, list);
                                 status.addInjection();
                             }
                         }
@@ -37,7 +42,13 @@ public class GuiPlayerTabOverlayTransformer_HidePing implements MWETransformer {
                     } else if (latestAload0 != null && checkMethodInsnNode(insnNode, MethodMapping.GUIPLAYERTABOVERLAY$DRAWPING)) {
                         final LabelNode label = new LabelNode();
                         final InsnList list = new InsnList();
-                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "shouldDrawPing", "()Z", false));
+                        list.add(new MethodInsnNode(
+                                INVOKESTATIC,
+                                getHookClass("GuiPlayerTabOverlayHook_HidePing"),
+                                "shouldDrawPing",
+                                "()Z",
+                                false
+                        ));
                         list.add(new JumpInsnNode(IFEQ, label));
                         methodNode.instructions.insertBefore(latestAload0, list);
                         methodNode.instructions.insert(insnNode, label);

@@ -78,25 +78,6 @@ public class GuiPlayerTabOverlayHook {
         return list;
     }
 
-    private static boolean drawPing = true;
-
-    public static int getPingWidth(List<NetworkPlayerInfo> list) { // called once per frame
-        if (ConfigHandler.hidePingTablist) {
-            if (ScoreboardTracker.isInMwGame()) {
-                drawPing = false;
-                return 0;
-            }
-            drawPing = !list.stream().allMatch(it -> it.getResponseTime() <= 1);
-            return drawPing ? 13 : 0;
-        }
-        drawPing = true;
-        return 13;
-    }
-
-    public static boolean shouldDrawPing() { //called n times per frame
-        return drawPing;
-    }
-
     public static int fixMissplacedDrawRect(int l1) {
         return l1 % 2;
     }
