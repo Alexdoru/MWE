@@ -21,17 +21,16 @@ public class GuiPlayerTabOverlayTransformer_ColoredScores implements MWETransfor
             if (checkMethodNode(methodNode, MethodMapping.GUIPLAYERTABOVERLAY$DRAWSCOREBOARDVALUES)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkFieldInsnNode(insnNode, GETSTATIC, FieldMapping.ENUMCHATFORMATTING$YELLOW)) {
-                        /*
-                        Original line :
-                        String s1 = EnumChatFormatting.YELLOW + "" + i;
-                        After transformation :
-                        String s1 = GuiPlayerTabOverlayHook.getColoredHP(i) + "" + i;
-                         */
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ILOAD, 7));
-                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "getColoredHP", "(I)L" + ClassMapping.ENUMCHATFORMATTING + ";", false));
-                        methodNode.instructions.insertBefore(insnNode, list);
-                        methodNode.instructions.remove(insnNode);
+                        list.add(new MethodInsnNode(
+                                INVOKESTATIC,
+                                getHookClass("GuiPlayerTabOverlayHook_ColoredScores"),
+                                "getColoredHP",
+                                "(L" + ClassMapping.ENUMCHATFORMATTING + ";I)L" + ClassMapping.ENUMCHATFORMATTING + ";",
+                                false
+                        ));
+                        methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
                     }
                 }

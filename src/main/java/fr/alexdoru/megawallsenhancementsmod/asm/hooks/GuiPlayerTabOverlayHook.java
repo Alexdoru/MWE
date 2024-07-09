@@ -2,7 +2,6 @@ package fr.alexdoru.megawallsenhancementsmod.asm.hooks;
 
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
-import fr.alexdoru.megawallsenhancementsmod.utils.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.EnumChatFormatting;
@@ -100,20 +99,6 @@ public class GuiPlayerTabOverlayHook {
 
     public static int fixMissplacedDrawRect(int l1) {
         return l1 % 2;
-    }
-
-    public static EnumChatFormatting getColoredHP(int healthPoints) {
-        if (ConfigHandler.useColoredScores) {
-            final float maxHealthPoints;
-            if (ScoreboardTracker.isInMwGame()) {
-                maxHealthPoints = 44f;
-            } else {
-                maxHealthPoints = mc.thePlayer.getMaxHealth();
-            }
-            return ColorUtil.getHPColor(maxHealthPoints, healthPoints);
-        } else {
-            return EnumChatFormatting.YELLOW;
-        }
     }
 
 }

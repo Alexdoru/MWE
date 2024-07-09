@@ -4,11 +4,11 @@ import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Ordering;
 import com.mojang.authlib.GameProfile;
 import fr.alexdoru.megawallsenhancementsmod.asm.accessors.NetworkPlayerInfoAccessor;
-import fr.alexdoru.megawallsenhancementsmod.asm.hooks.GuiPlayerTabOverlayHook;
 import fr.alexdoru.megawallsenhancementsmod.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
 import fr.alexdoru.megawallsenhancementsmod.features.SquadHandler;
 import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
+import fr.alexdoru.megawallsenhancementsmod.utils.ColorUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.NameUtil;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -107,7 +107,7 @@ public class SquadHealthHUD extends AbstractRenderer {
                 if (maxScoreWidth + maxFinalWidth > 5) {
                     if (scoreobjective != null && networkplayerinfo.getGameType() != WorldSettings.GameType.SPECTATOR && scoreobjective.getRenderType() != IScoreObjectiveCriteria.EnumRenderType.HEARTS) {
                         final int scorePoints = scoreobjective.getScoreboard().getValueFromObjective(gameprofile.getName(), scoreobjective).getScorePoints();
-                        final String scoreString = GuiPlayerTabOverlayHook.getColoredHP(scorePoints) + " " + scorePoints;
+                        final String scoreString = ColorUtil.getColoredHP(EnumChatFormatting.YELLOW, scorePoints) + " " + scorePoints;
                         mc.fontRendererObj.drawStringWithShadow(scoreString, xStartScoreDrawingPos, yDrawingPos, 0xFFFFFF);
                     }
                     if (ScoreboardTracker.isInMwGame()) {
@@ -160,7 +160,7 @@ public class SquadHealthHUD extends AbstractRenderer {
                 final int xStartScoreDrawingPos = xStartFinalDrawingPos + maxFinalWidth;
                 if (maxScoreWidth + maxFinalWidth > 5) {
                     final int scorePoints = 12 + (i * 18 + 22) % 8;
-                    final String scoreString = GuiPlayerTabOverlayHook.getColoredHP(scorePoints) + " " + scorePoints;
+                    final String scoreString = ColorUtil.getColoredHP(EnumChatFormatting.YELLOW, scorePoints) + " " + scorePoints;
                     mc.fontRendererObj.drawStringWithShadow(scoreString, xStartScoreDrawingPos, yDrawingPos, 0xFFFFFF);
                     final String finalsString = EnumChatFormatting.GOLD + " " + (3 + (i * 28 + 15) % 5);
                     mc.fontRendererObj.drawStringWithShadow(finalsString, xStartFinalDrawingPos, yDrawingPos, 0xFFFFFF);

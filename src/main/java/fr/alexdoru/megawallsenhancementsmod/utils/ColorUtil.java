@@ -1,5 +1,7 @@
 package fr.alexdoru.megawallsenhancementsmod.utils;
 
+import fr.alexdoru.megawallsenhancementsmod.config.ConfigHandler;
+import fr.alexdoru.megawallsenhancementsmod.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -37,17 +39,30 @@ public class ColorUtil {
         }
     }
 
+    public static EnumChatFormatting getColoredHP(EnumChatFormatting original, int hp) {
+        if (ConfigHandler.useColoredScores) {
+            final float maxHP;
+            if (ScoreboardTracker.isInMwGame()) {
+                maxHP = 44f;
+            } else {
+                maxHP = Minecraft.getMinecraft().thePlayer.getMaxHealth();
+            }
+            return ColorUtil.getHPColor(maxHP, hp);
+        }
+        return original;
+    }
+
     /**
      * Gets the HP color depending on the HP input
      */
-    public static EnumChatFormatting getHPColor(float maxHealthPoints, float healthPoints) {
-        if (healthPoints > maxHealthPoints) {
+    public static EnumChatFormatting getHPColor(float maxHP, float hp) {
+        if (hp > maxHP) {
             return EnumChatFormatting.DARK_GREEN;
-        } else if (healthPoints > maxHealthPoints * 3f / 4f) {
+        } else if (hp > maxHP * 3f / 4f) {
             return EnumChatFormatting.GREEN;
-        } else if (healthPoints > maxHealthPoints / 2f) {
+        } else if (hp > maxHP / 2f) {
             return EnumChatFormatting.YELLOW;
-        } else if (healthPoints > maxHealthPoints / 4f) {
+        } else if (hp > maxHP / 4f) {
             return EnumChatFormatting.RED;
         } else {
             return EnumChatFormatting.DARK_RED;
