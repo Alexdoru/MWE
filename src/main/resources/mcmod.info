@@ -1,8 +1,8 @@
 [
   {
     "modid": "mwenhancements",
-    "name": "MegaWallsEnhancements",
-    "description": "Enhancements for Hypixel and Hypixel's Mega Walls",
+    "name": "MWE",
+    "description": "Enhancements for PVP, Hypixel and Hypixel's Mega Walls",
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "https://github.com/Alexdoru/MegaWallsEnhancements",

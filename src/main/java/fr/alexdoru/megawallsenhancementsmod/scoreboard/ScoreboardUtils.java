@@ -2,7 +2,7 @@ package fr.alexdoru.megawallsenhancementsmod.scoreboard;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
+import fr.alexdoru.megawallsenhancementsmod.MWE;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
 import fr.alexdoru.megawallsenhancementsmod.utils.StringUtil;
 import net.minecraft.client.Minecraft;
@@ -173,7 +173,7 @@ public class ScoreboardUtils {
             }
         }
         printChat.forEach(ChatUtil::addChatMessage);
-        printConsole.forEach(MegaWallsEnhancementsMod.logger::info);
+        printConsole.forEach(MWE.logger::info);
     }
 
     /**

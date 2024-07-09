@@ -3,7 +3,7 @@ package fr.alexdoru.megawallsenhancementsmod.updater;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
+import fr.alexdoru.megawallsenhancementsmod.MWE;
 import fr.alexdoru.megawallsenhancementsmod.api.HttpClient;
 import fr.alexdoru.megawallsenhancementsmod.api.exceptions.ApiException;
 import fr.alexdoru.megawallsenhancementsmod.chat.ChatUtil;
@@ -70,7 +70,7 @@ public class ModUpdater {
     // https://github.com/DeDiamondPro/Auto-Updater
     private static void checkForUpdate() throws ApiException, IOException {
 
-        MegaWallsEnhancementsMod.logger.info("Checking for updates");
+        MWE.logger.info("Checking for updates");
 
         final String GITHUB_API_URL = "https://api.github.com/repos/Alexdoru/MegaWallsEnhancements/releases";
         final HttpClient httpClient = new HttpClient(GITHUB_API_URL);
@@ -100,12 +100,12 @@ public class ModUpdater {
             }
         }
 
-        final ComparableVersion currentVersion = new ComparableVersion(MegaWallsEnhancementsMod.version);
+        final ComparableVersion currentVersion = new ComparableVersion(MWE.version);
         if (latestVersion == null) {
             return;
         }
         if (currentVersion.compareTo(latestVersion) >= 0) {
-            MegaWallsEnhancementsMod.logger.info("The mod is up to date!");
+            MWE.logger.info("The mod is up to date!");
             isUpTodate = true;
             return;
         }
@@ -132,13 +132,13 @@ public class ModUpdater {
         final String newModFileName = getFileName(downloadUrl);
         final File modCacheFile = new File(cacheDir, newModFileName);
         downloadFileTo(downloadUrl, modCacheFile);
-        MegaWallsEnhancementsMod.logger.info("Downloaded MWE Update");
+        MWE.logger.info("Downloaded MWE Update");
 
         final String GITHUB_DELETER_URL = "https://github.com/Alexdoru/Deleter/releases/download/1.0/Deleter.jar";
         final String deleterFileName = getFileName(GITHUB_DELETER_URL);
         final File deleterFile = new File(cacheDir, deleterFileName);
         downloadFileTo(GITHUB_DELETER_URL, deleterFile);
-        MegaWallsEnhancementsMod.logger.info("Downloaded Mod Deleter");
+        MWE.logger.info("Downloaded Mod Deleter");
 
         if (modCacheFile.exists() && deleterFile.exists()) {
 
@@ -148,7 +148,7 @@ public class ModUpdater {
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 try {
-                    final File oldJarFile = MegaWallsEnhancementsMod.jarFile;
+                    final File oldJarFile = MWE.jarFile;
                     final File newJarFile = new File(oldJarFile.getParent(), newModFileName);
                     if (newJarFile.createNewFile() && modCacheFile.exists() && oldJarFile.exists()) {
                         try (final InputStream source = Files.newInputStream(modCacheFile.toPath()); final OutputStream dest = Files.newOutputStream(newJarFile.toPath())) {

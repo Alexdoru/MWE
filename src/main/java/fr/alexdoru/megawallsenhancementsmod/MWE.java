@@ -28,16 +28,15 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 
 @Mod(
-        modid = MegaWallsEnhancementsMod.modid,
-        name = MegaWallsEnhancementsMod.modName,
-        version = MegaWallsEnhancementsMod.version,
+        modid = MWE.modid,
+        name = MWE.modName,
+        version = MWE.version,
         acceptedMinecraftVersions = "[1.8.9]",
-        clientSideOnly = true
-)
-public class MegaWallsEnhancementsMod {
+        clientSideOnly = true)
+public class MWE {
 
     public static final String modid = "mwenhancements";
-    public static final String modName = "MegaWallsEnhancements";
+    public static final String modName = "MWE";
     public static final String version = "3.8";
     public static final Logger logger = LogManager.getLogger(modName);
     public static File jarFile;

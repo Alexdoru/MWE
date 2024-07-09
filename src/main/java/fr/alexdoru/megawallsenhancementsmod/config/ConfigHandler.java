@@ -1,6 +1,6 @@
 package fr.alexdoru.megawallsenhancementsmod.config;
 
-import fr.alexdoru.megawallsenhancementsmod.MegaWallsEnhancementsMod;
+import fr.alexdoru.megawallsenhancementsmod.MWE;
 import fr.alexdoru.megawallsenhancementsmod.gui.guiapi.GuiPosition;
 
 public class ConfigHandler extends AbstractConfig {
@@ -13,14 +13,14 @@ public class ConfigHandler extends AbstractConfig {
     private static final String HITBOX = "Hitbox";
 
     protected static void onModUpdate() {
-        if (!modVersion.equals(MegaWallsEnhancementsMod.version)) {
+        if (!modVersion.equals(MWE.version)) {
             if (ConfigHandler.lastWitherHUDPosition.getRelativeX() == 0.75d && ConfigHandler.lastWitherHUDPosition.getRelativeY() == 0.05d) {
                 ConfigHandler.lastWitherHUDPosition.resetToDefault();
             }
             if (ConfigHandler.baseLocationHUDPosition.getRelativeX() == 0.5d && ConfigHandler.baseLocationHUDPosition.getRelativeY() == 0.15d) {
                 ConfigHandler.baseLocationHUDPosition.resetToDefault();
             }
-            ConfigHandler.modVersion = MegaWallsEnhancementsMod.version;
+            ConfigHandler.modVersion = MWE.version;
             ConfigHandler.saveConfig();
         }
     }
