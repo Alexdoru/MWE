@@ -26,7 +26,7 @@ public class GuiPlayerTabOverlayTransformer_HideHeaderFooter implements MWETrans
                             if (checkJumpInsnNode(thirdNode, IFNULL)) {
                                 final LabelNode label = ((JumpInsnNode) thirdNode).label;
                                 final InsnList list = new InsnList();
-                                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "shouldRenderHeader", "()Z", false));
+                                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook_HideHeaderFooter"), "shouldRenderHeader", "()Z", false));
                                 list.add(new JumpInsnNode(IFEQ, label));
                                 methodNode.instructions.insert(thirdNode, list);
                                 status.addInjection();
@@ -36,7 +36,7 @@ public class GuiPlayerTabOverlayTransformer_HideHeaderFooter implements MWETrans
                             if (checkJumpInsnNode(thirdNode, IFNULL)) {
                                 final LabelNode label = ((JumpInsnNode) thirdNode).label;
                                 final InsnList list = new InsnList();
-                                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "shouldHideFooter", "()Z", false));
+                                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook_HideHeaderFooter"), "shouldHideFooter", "()Z", false));
                                 list.add(new JumpInsnNode(IFNE, label));
                                 methodNode.instructions.insert(thirdNode, list);
                                 status.addInjection();
