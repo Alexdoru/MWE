@@ -24,13 +24,23 @@ public class GuiPlayerTabOverlayTransformer_LongerTab implements MWETransformer 
             if (checkMethodNode(methodNode, MethodMapping.GUIPLAYERTABOVERLAY$RENDERPLAYERLIST)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkIntInsnNode(insnNode, BIPUSH, 20)) {
-                        methodNode.instructions.insertBefore(insnNode, new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "getTablistHeight", "()I", false));
-                        methodNode.instructions.remove(insnNode);
+                        methodNode.instructions.insert(insnNode, new MethodInsnNode(
+                                INVOKESTATIC,
+                                getHookClass("GuiPlayerTabOverlayHook_LongerTab"),
+                                "getTablistHeight",
+                                "(I)I",
+                                false
+                        ));
                         status.addInjection();
                     }
                     if (!isPatcherLoaded && checkIntInsnNode(insnNode, BIPUSH, 80)) {
-                        methodNode.instructions.insertBefore(insnNode, new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "getTotalPlayerAmount", "()I", false));
-                        methodNode.instructions.remove(insnNode);
+                        methodNode.instructions.insert(insnNode, new MethodInsnNode(
+                                INVOKESTATIC,
+                                getHookClass("GuiPlayerTabOverlayHook_LongerTab"),
+                                "getTotalPlayerAmount",
+                                "(I)I",
+                                false
+                        ));
                         status.addInjection();
                     }
                 }

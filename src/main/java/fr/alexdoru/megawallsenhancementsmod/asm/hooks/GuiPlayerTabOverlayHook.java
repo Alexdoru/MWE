@@ -51,14 +51,6 @@ public class GuiPlayerTabOverlayHook {
         return ConfigHandler.hideTablistHeaderFooter;
     }
 
-    public static int getTablistHeight() {
-        return 25;
-    }
-
-    public static int getTotalPlayerAmount() {
-        return ConfigHandler.tablistSize;
-    }
-
     @Nonnull
     public static List<String> addPlayerCountInHeader(@Nonnull List<String> listIn) {
         if (!ConfigHandler.showPlayercountTablist) {
