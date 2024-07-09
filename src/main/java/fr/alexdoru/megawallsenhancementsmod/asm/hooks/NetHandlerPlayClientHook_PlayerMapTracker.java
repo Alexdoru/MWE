@@ -29,7 +29,7 @@ public class NetHandlerPlayClientHook_PlayerMapTracker {
     }
 
     @SuppressWarnings("unused")
-    public static void removePlayerFromMap(Object o) {
+    public static Object removePlayerFromMap(Object o) {
         if (o instanceof NetworkPlayerInfo) {
             final NetworkPlayerInfo netInfo = (NetworkPlayerInfo) o;
             playerInfoMap.remove(netInfo.getGameProfile().getName());
@@ -39,6 +39,7 @@ public class NetHandlerPlayClientHook_PlayerMapTracker {
                 skinMap.put(netInfo.getGameProfile().getName(), netInfo.getLocationSkin());
             }
         }
+        return o;
     }
 
     @SuppressWarnings("unused")

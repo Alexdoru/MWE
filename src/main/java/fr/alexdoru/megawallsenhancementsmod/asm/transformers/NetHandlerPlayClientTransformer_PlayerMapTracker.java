@@ -55,21 +55,16 @@ public class NetHandlerPlayClientTransformer_PlayerMapTracker implements MWETran
                 }
 
                 if (targetRemoveNode != null && targetPutNode != null) {
-                    // Replace line 1628 :
-                    // this.playerInfoMap.remove(s38packetplayerlistitem$addplayerdata.getProfile().getId());
-                    // With :
-                    // NetHandlerPlayClientHook_PlayerMapTracker.removePlayerFromMap(this.playerInfoMap.remove(s38packetplayerlistitem$addplayerdata.getProfile().getId()));
+
                     methodNode.instructions.insertBefore(targetRemoveNode, new MethodInsnNode(
                             INVOKESTATIC,
                             getHookClass("NetHandlerPlayClientHook_PlayerMapTracker"),
                             "removePlayerFromMap",
-                            "(Ljava/lang/Object;)V",
+                            "(Ljava/lang/Object;)Ljava/lang/Object;",
                             false
                     ));
-                    methodNode.instructions.remove(targetRemoveNode);
                     status.addInjection();
-                    // Injects after line 1637 :
-                    // NetHandlerPlayClientHook_PlayerMapTracker.putPlayerInMap(networkplayerinfo.getGameProfile().getName(), networkplayerinfo);
+
                     final InsnList listPut = new InsnList();
                     listPut.add(new VarInsnNode(ALOAD, 4));
                     listPut.add(new MethodInsnNode(
@@ -81,6 +76,7 @@ public class NetHandlerPlayClientTransformer_PlayerMapTracker implements MWETran
                     ));
                     methodNode.instructions.insertBefore(targetPutNode, listPut);
                     status.addInjection();
+
                 }
             }
 
