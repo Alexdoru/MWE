@@ -7,37 +7,66 @@ import net.minecraft.util.IChatComponent;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class WDR implements Comparable<WDR> {
 
-    public long time;
-    public final ArrayList<String> hacks;
+    private final ArrayList<String> cheats;
+    private boolean redIcon;
+    private long timestamp;
 
-    public WDR(long time, ArrayList<String> hacks) {
-        this.time = time;
-        this.hacks = hacks;
-        this.hacks.trimToSize();
+    public WDR(ArrayList<String> cheats) {
+        this(cheats, new Date().getTime());
     }
 
-    /**
-     * Compares the timestamp
-     */
-    @Override
-    public int compareTo(@Nonnull WDR wdr) {
-        return Long.compare(this.time, wdr.time);
+    public WDR(ArrayList<String> cheats, long timestamp) {
+        this.cheats = cheats;
+        this.cheats.trimToSize();
+        this.updateRedIcon();
+        this.timestamp = timestamp;
     }
 
-    public boolean shouldPutRedIcon() {
-        for (final String s : this.hacks) {
-            if (isRedHack(s)) {
-                return true;
-            }
+    public boolean addCheat(String cheat) {
+        if (!this.cheats.contains(cheat)) {
+            this.cheats.add(cheat);
+            this.cheats.trimToSize();
+            this.updateRedIcon();
+            return true;
         }
+        this.timestamp = new Date().getTime();
         return false;
     }
 
+    public void addCheats(List<String> list) {
+        list.removeAll(this.cheats);
+        this.cheats.addAll(list);
+        this.cheats.trimToSize();
+        this.updateRedIcon();
+        this.timestamp = new Date().getTime();
+    }
+
+    private void updateRedIcon() {
+        if (this.redIcon) return;
+        for (final String cheat : this.cheats) {
+            if (isRedCheat(cheat)) {
+                this.redIcon = true;
+                return;
+            }
+        }
+        this.redIcon = false;
+    }
+
+    public boolean hasRedIcon() {
+        return this.redIcon;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
     public boolean hasValidCheats() {
-        for (final String cheat : hacks) {
+        for (final String cheat : this.cheats) {
             if (CommandReport.cheatsList.contains(cheat)) {
                 return true;
             }
@@ -45,32 +74,38 @@ public class WDR implements Comparable<WDR> {
         return false;
     }
 
-    public String hacksToString() {
-        final StringBuilder cheats = new StringBuilder();
-        for (final String hack : hacks) {
-            cheats.append(" ").append(hack);
+    public String cheatsToString() {
+        final StringBuilder sb = new StringBuilder();
+        for (final String cheat : this.cheats) {
+            sb.append(" ").append(cheat);
         }
-        return cheats.toString();
+        return sb.toString();
     }
 
-    public IChatComponent getFormattedHacks() {
-        final IChatComponent allCheats = new ChatComponentText("");
-        for (final String hack : this.hacks) {
-            if (isRedHack(hack)) {
-                allCheats.appendText(" " + EnumChatFormatting.DARK_RED + hack);
+    public IChatComponent getFormattedCheats() {
+        final IChatComponent imsg = new ChatComponentText("");
+        for (final String cheat : this.cheats) {
+            if (isRedCheat(cheat)) {
+                imsg.appendText(" " + EnumChatFormatting.DARK_RED + cheat);
             } else {
-                allCheats.appendText(" " + EnumChatFormatting.GOLD + hack);
+                imsg.appendText(" " + EnumChatFormatting.GOLD + cheat);
             }
         }
-        return allCheats;
+        return imsg;
     }
 
-    private static boolean isRedHack(String s) {
-        return s.startsWith("bhop") ||
-                s.startsWith("autoblock") ||
-                s.startsWith("fastbreak") ||
-                s.startsWith("noslowdown") ||
-                s.startsWith("scaffold");
+    @Override
+    public int compareTo(@Nonnull WDR wdr) {
+        return Long.compare(this.timestamp, wdr.timestamp);
+    }
+
+    private static boolean isRedCheat(String cheat) {
+        cheat = cheat.toLowerCase();
+        return cheat.startsWith("bhop") ||
+                cheat.startsWith("autoblock") ||
+                cheat.startsWith("fastbreak") ||
+                cheat.startsWith("noslowdown") ||
+                cheat.startsWith("scaffold");
     }
 
 }

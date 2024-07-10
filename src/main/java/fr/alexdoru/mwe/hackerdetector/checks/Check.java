@@ -28,7 +28,10 @@ import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 /**
@@ -92,20 +95,17 @@ public abstract class Check implements ICheck {
             final String cheat = this.getCheatName().toLowerCase() + "[H]";
             final UUID uuid = player.getUniqueID();
             final WDR wdr = WdrData.getWdr(uuid, player.getName());
+            final boolean refreshName;
             if (wdr == null) {
-                final long time = new Date().getTime();
-                final ArrayList<String> hacks = new ArrayList<>();
-                hacks.add(cheat);
-                WdrData.put(uuid, player.getName(), new WDR(time, hacks));
+                final ArrayList<String> cheats = new ArrayList<>(1);
+                cheats.add(cheat);
+                WdrData.put(uuid, player.getName(), new WDR(cheats));
+                refreshName = true;
             } else {
-                if (!wdr.hacks.contains(cheat)) {
-                    wdr.hacks.add(cheat);
-                }
-                wdr.time = new Date().getTime();
-                wdr.hacks.trimToSize();
+                refreshName = wdr.addCheat(cheat);
             }
             WdrData.markDirty();
-            NameUtil.updateMWPlayerDataAndEntityData(player, false);
+            if (refreshName) NameUtil.updateMWPlayerDataAndEntityData(player, false);
         }
     }
 

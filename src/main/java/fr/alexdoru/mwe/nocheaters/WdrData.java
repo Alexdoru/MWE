@@ -75,12 +75,12 @@ public class WdrData {
         for (final Entry<UUID, WDR> entry : uuidMap.entrySet()) {
             final String uuid = entry.getKey().toString();
             final WDR wdr = entry.getValue();
-            reportLines.add(uuid + " " + wdr.time + wdr.hacksToString());
+            reportLines.add(uuid + " " + wdr.getTimestamp() + wdr.cheatsToString());
         }
         for (final Entry<String, WDR> entry : nickMap.entrySet()) {
             final String playername = entry.getKey();
             final WDR wdr = entry.getValue();
-            reportLines.add(playername + " " + wdr.time + wdr.hacksToString());
+            reportLines.add(playername + " " + wdr.getTimestamp() + wdr.cheatsToString());
         }
         try (final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(wdrJsonFile))) {
             final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
@@ -171,9 +171,9 @@ public class WdrData {
             if (datenow > timestamp + TIME_TRANSFORM_NICKED_REPORT) {
                 return;
             }
-            nickMap.put(mapKey, new WDR(timestamp, hacks));
+            nickMap.put(mapKey, new WDR(hacks, timestamp));
         } else if (uuid != null) {
-            uuidMap.put(uuid, new WDR(timestamp, hacks));
+            uuidMap.put(uuid, new WDR(hacks, timestamp));
         }
     }
 

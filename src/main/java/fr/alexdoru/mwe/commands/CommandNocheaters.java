@@ -241,10 +241,10 @@ class CreateReportLineTask implements Callable<IChatComponent> {
             } else {
 
                 if (nickname != null) {
-                    imsg = new ChatComponentText(EnumChatFormatting.RED + nickname + EnumChatFormatting.GRAY + " reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.time));
+                    imsg = new ChatComponentText(EnumChatFormatting.RED + nickname + EnumChatFormatting.GRAY + " reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.getTimestamp()));
                 } else {
                     assert uuid != null;
-                    imsg = new ChatComponentText(EnumChatFormatting.RED + uuid.toString() + EnumChatFormatting.GRAY + " reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.time));
+                    imsg = new ChatComponentText(EnumChatFormatting.RED + uuid.toString() + EnumChatFormatting.GRAY + " reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.getTimestamp()));
                 }
 
             }
@@ -258,7 +258,7 @@ class CreateReportLineTask implements Callable<IChatComponent> {
     }
 
     private boolean isProbBanned(long latestActivityTime) {
-        return (Math.abs(latestActivityTime - wdr.time) < 24L * 60L * 60L * 1000L && Math.abs(timeNow - wdr.time) > 3L * 24L * 60L * 60L * 1000L) || Math.abs(timeNow - latestActivityTime) > 14L * 24L * 60L * 60L * 1000L;
+        return (Math.abs(latestActivityTime - wdr.getTimestamp()) < 24L * 60L * 60L * 1000L && Math.abs(timeNow - wdr.getTimestamp()) > 3L * 24L * 60L * 60L * 1000L) || Math.abs(timeNow - latestActivityTime) > 14L * 24L * 60L * 60L * 1000L;
     }
 
 }

@@ -48,7 +48,7 @@ public class WarningMessagesHandler {
                 .appendSibling(createPlayerNameWithHoverText(formattedName, playername, wdrmapKey, wdr, EnumChatFormatting.LIGHT_PURPLE))
                 .appendText(EnumChatFormatting.GRAY + " joined, Cheats :");
         ChatUtil.addSkinToComponent(imsg, playername);
-        final IChatComponent allCheats = wdr.getFormattedHacks();
+        final IChatComponent allCheats = wdr.getFormattedCheats();
         if (!ScoreboardTracker.isPreGameLobby()) {
             allCheats.setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GREEN + "Click this message to report this player" + "\n"
@@ -72,8 +72,8 @@ public class WarningMessagesHandler {
     public static HoverEvent getWDRHoverEvent(String formattedName, WDR wdr) {
         return new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
                 formattedName + "\n"
-                        + EnumChatFormatting.GREEN + "Last reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.time) + " ago, on " + DateUtil.localformatTimestamp(wdr.time) + "\n"
-                        + EnumChatFormatting.GREEN + "Reported for :" + EnumChatFormatting.GOLD + wdr.hacksToString() + "\n\n"
+                        + EnumChatFormatting.GREEN + "Last reported : " + EnumChatFormatting.YELLOW + DateUtil.timeSince(wdr.getTimestamp()) + " ago, on " + DateUtil.localformatTimestamp(wdr.getTimestamp()) + "\n"
+                        + EnumChatFormatting.GREEN + "Reported for :" + EnumChatFormatting.GOLD + wdr.cheatsToString() + "\n\n"
                         + EnumChatFormatting.YELLOW + "Click here to remove this player from your report list"));
     }
 

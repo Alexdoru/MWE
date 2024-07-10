@@ -252,18 +252,16 @@ public class NameUtil {
         } else {
             if (ConfigHandler.warningIconsOnNames || ConfigHandler.warningIconsTabOnly) {
                 if (wdr != null) {
-                    if (wdr.shouldPutRedIcon()) {
+                    if (wdr.hasRedIcon()) {
                         extraPrefix = RED_WARNING_ICON;
                         iExtraPrefix = IRED_WARNING_ICON;
                     } else {
                         extraPrefix = WARNING_ICON;
                         iExtraPrefix = IWARNING_ICON;
                     }
-                } else {
-                    if (ScangameData.doesPlayerFlag(id)) {
-                        extraPrefix = PINK_WARNING_ICON;
-                        iExtraPrefix = IPINK_WARNING_ICON;
-                    }
+                } else if (ScangameData.doesPlayerFlag(id)) {
+                    extraPrefix = PINK_WARNING_ICON;
+                    iExtraPrefix = IPINK_WARNING_ICON;
                 }
             }
         }

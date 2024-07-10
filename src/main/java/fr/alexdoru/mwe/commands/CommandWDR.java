@@ -108,19 +108,13 @@ public class CommandWDR extends MyAbstractCommand {
 
     private static void addPlayerToReportList(UUID uuid, String playername, String formattedName, ArrayList<String> cheats) {
         final WDR wdr = WdrData.getWdr(uuid, playername);
-        final long time = new Date().getTime();
-
         final boolean isNicked = uuid.version() != 4;
         if (wdr == null) {
-            WdrData.put(uuid, playername, new WDR(time, cheats));
+            WdrData.put(uuid, playername, new WDR(cheats));
         } else {
-            wdr.time = time;
-            cheats.removeAll(wdr.hacks);
-            wdr.hacks.addAll(cheats);
-            wdr.hacks.trimToSize();
+            wdr.addCheats(cheats);
         }
         WdrData.saveReportedPlayers();
-
         NameUtil.updateMWPlayerDataAndEntityData(playername, false);
         if (wdr == null) {
             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() +
