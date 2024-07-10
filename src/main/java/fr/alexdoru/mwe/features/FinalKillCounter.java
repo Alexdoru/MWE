@@ -407,9 +407,7 @@ public class FinalKillCounter {
     @SubscribeEvent
     public void onMwGame(MegaWallsGameEvent event) {
 
-        /*
-         * to fix the bug where the FKCounter doesn't work properly if you play two games in a row on a server with the same serverID
-         */
+        // to fix the bug where the FKCounter doesn't work properly if you play two games in a row on a server with the same serverID
         if (event.getType() == MegaWallsGameEvent.EventType.GAME_START) {
             final String currentGameId = ScoreboardTracker.getParser().getGameId();
             if (currentGameId != null) {
@@ -420,14 +418,12 @@ public class FinalKillCounter {
         }
 
         if (event.getType() == MegaWallsGameEvent.EventType.CONNECT) {
-            final String currentGameId = ScoreboardTracker.getParser().getGameId(); // this is not null due to how the event is defined/posted
+            final String currentGameId = ScoreboardTracker.getParser().getGameId();
             if (gameId == null || !gameId.equals(currentGameId)) {
                 resetKillCounterTo(currentGameId);
             }
-            /*
-             * this is here to fix the bug where the killcounter doesn't work if you re-start your minecraft during a game of MW
-             * or if you changed your colors for the teams in your MW settings and rejoined the game
-             */
+            // this is here to fix the bug where the killcounter doesn't work if you re-start your minecraft during a game of MW
+            // or if you changed your colors for the teams in your MW settings and rejoined the game
             setTeamPrefixes();
         }
 

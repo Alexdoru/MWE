@@ -20,10 +20,8 @@ public class GuiScreenBookTransformer_NewNickKey implements MWETransformer {
         for (final MethodNode methodNode : classNode.methods) {
 
             if (checkMethodNode(methodNode, MethodMapping.GUISCREENBOOK$INIT)) {
-                /*
-                 * Injects at head of constructor :
-                 * GuiScreenBookHook.onBookInit(book);
-                 */
+                // Injects at head of constructor :
+                // GuiScreenBookHook.onBookInit(book);
                 final InsnList list = new InsnList();
                 list.add(new VarInsnNode(ALOAD, 2));
                 list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiScreenBookHook"), "onBookInit", "(L" + ClassMapping.ITEMSTACK + ";)V", false));
@@ -32,10 +30,8 @@ public class GuiScreenBookTransformer_NewNickKey implements MWETransformer {
             }
 
             if (checkMethodNode(methodNode, MethodMapping.GUISCREENBOOK$KEYTYPED)) {
-                /*
-                 * Injects at head :
-                 * GuiScreenBookHook.onKeyTyped(keyCode);
-                 */
+                // Injects at head :
+                // GuiScreenBookHook.onKeyTyped(keyCode);
                 final InsnList list = new InsnList();
                 list.add(new VarInsnNode(ILOAD, 2));
                 list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiScreenBookHook"), "onKeyTyped", "(I)V", false));
@@ -46,10 +42,8 @@ public class GuiScreenBookTransformer_NewNickKey implements MWETransformer {
             if (checkMethodNode(methodNode, MethodMapping.GUISCREENBOOK$DRAWSCREEN)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkMethodInsnNode(insnNode, MethodMapping.GUISCREENBOOK$DRAWTEXTUREDMODALRECT)) {
-                        /*
-                         * Injects at line 411 :
-                         * GuiScreenBookHook.renderInstructions(this.width, this.bookImageHeight);
-                         */
+                        // Injects at line 411 :
+                        // GuiScreenBookHook.renderInstructions(this.width, this.bookImageHeight);
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.GUISCREENBOOK$WIDTH));

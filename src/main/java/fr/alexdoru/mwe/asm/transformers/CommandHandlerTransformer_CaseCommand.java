@@ -24,12 +24,10 @@ public class CommandHandlerTransformer_CaseCommand implements MWETransformer {
                     if (checkInsnNode(insnNode, ICONST_0)) {
                         final AbstractInsnNode nextNode = insnNode.getNext();
                         if (checkInsnNode(nextNode, AALOAD)) {
-                            /*
-                             * Replaces line 169 :
-                             * String s = astring[0];
-                             * With :
-                             * String s = CommandHandlerHook.putToLowerCase(astring[0]);
-                             */
+                            // Replaces line 169 :
+                            // String s = astring[0];
+                            // With :
+                            // String s = CommandHandlerHook.putToLowerCase(astring[0]);
                             methodNode.instructions.insert(nextNode, new MethodInsnNode(INVOKESTATIC, getHookClass("CommandHandlerHook"), "putToLowerCase", "(Ljava/lang/String;)Ljava/lang/String;", false));
                             status.addInjection();
                         }

@@ -32,9 +32,7 @@ public class LoginData {
             return;
         }
 
-        /*
-         * the 8 first characters on the _id entry of the API happen to be the amount of seconds since 1st jan 1970 in hexadecimal
-         */
+        // the 8 first characters on the _id entry of the API happen to be the amount of seconds since 1st jan 1970 in hexadecimal
         final String _id = JsonUtil.getString(playerData, "_id");
 
         if (_id != null) {

@@ -18,29 +18,23 @@ public class EntityFXTransformer_ClearView implements MWETransformer {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.ENTITYFX$RENDERPARTICLE)) {
-                /*
-                 * Injects at HEAD:
-                 * if(EntityFXHook.shouldHideParticle(this, entityIn)) {
-                 *    return;
-                 * }
-                 */
-                methodNode.instructions.insert(hideParticleInsnList());
+                // Injects at HEAD:
+                // if(EntityFXHook.shouldHideParticle(this, entityIn)) {
+                //    return;
+                // }
+                final InsnList list = new InsnList();
+                final LabelNode notCanceled = new LabelNode();
+                list.add(new VarInsnNode(ALOAD, 0));
+                list.add(new VarInsnNode(ALOAD, 2));
+                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("EntityFXHook"), "shouldHideParticle", "(L" + ClassMapping.ENTITYFX + ";L" + ClassMapping.ENTITY + ";)Z", false));
+                list.add(new JumpInsnNode(IFEQ, notCanceled));
+                list.add(new InsnNode(RETURN));
+                list.add(notCanceled);
+                methodNode.instructions.insert(list);
                 status.addInjection();
                 break;
             }
         }
-    }
-
-    private InsnList hideParticleInsnList() {
-        final InsnList list = new InsnList();
-        final LabelNode notCanceled = new LabelNode();
-        list.add(new VarInsnNode(ALOAD, 0));
-        list.add(new VarInsnNode(ALOAD, 2));
-        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("EntityFXHook"), "shouldHideParticle", "(L" + ClassMapping.ENTITYFX + ";L" + ClassMapping.ENTITY + ";)Z", false));
-        list.add(new JumpInsnNode(IFEQ, notCanceled));
-        list.add(new InsnNode(RETURN));
-        list.add(notCanceled);
-        return list;
     }
 
 }

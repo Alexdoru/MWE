@@ -20,10 +20,8 @@ public class LayerArrowTransformer implements MWETransformer {
             if (checkMethodNode(methodNode, MethodMapping.LAYERARROW$DORENDERLAYER)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkVarInsnNode(insnNode, ASTORE, 10)) {
-                        /*
-                         * Injects after line 32 :
-                         * entity.pinnedToPlayer = true;
-                         */
+                        // Injects after line 32 :
+                        // entity.pinnedToPlayer = true;
                         final InsnList list = new InsnList();
                         list.add(new InsnNode(DUP));
                         list.add(new InsnNode(ICONST_1));

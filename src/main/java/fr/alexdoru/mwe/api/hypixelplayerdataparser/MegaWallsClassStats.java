@@ -47,9 +47,7 @@ public class MegaWallsClassStats {
     private int prestige;
     private int enderchest_rows = 3;
 
-    /*
-     * fields below are for the game stats
-     */
+    // fields below are for the game stats
 
     //private int classname_games_played;
     private int classname_assists;
@@ -148,23 +146,20 @@ public class MegaWallsClassStats {
         return JsonUtil.getInt(megaWallsStatsObj, name + "_class_points");
     }
 
-    /*
-     * Returns this minus the input
+    /**
+     * Returns this minus the other instance
      */
-    public void minus(MegaWallsClassStats mwclassStats) throws IllegalArgumentException, IllegalAccessException {
+    public void minus(MegaWallsClassStats other) throws IllegalArgumentException, IllegalAccessException {
         for (final Field field : this.getClass().getDeclaredFields()) {
             if (field.getType() == int.class) {
                 if (!field.isAccessible()) {
                     field.setAccessible(true);
                 }
-                field.setInt(this, Math.max(0, field.getInt(this) - field.getInt(mwclassStats)));
+                field.setInt(this, Math.max(0, field.getInt(this) - field.getInt(other)));
             }
         }
     }
 
-    /*
-     * message used for the stats message at the end of a game
-     */
     public IChatComponent getGameStatMessage(String formattedname, String gameDuration) {
 
         final float arrowaccuracy = 100f * (float) classname_arrows_hit / (float) (classname_arrows_fired == 0 ? 1 : classname_arrows_fired);

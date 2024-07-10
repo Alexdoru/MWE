@@ -24,21 +24,18 @@ public class RenderGlobalTransformer_LimitDroppedItems implements MWETransformer
                     if (checkInsnNode(insnNode, ICONST_0)) {
                         final AbstractInsnNode nextNode = insnNode.getNext();
                         if (checkFieldInsnNode(nextNode, PUTFIELD, FieldMapping.RENDERGLOBAL$COUNTENTITIESRENDERED)) {
-                            /*
-                             * Injects after line 565 :
-                             * RenderGlobalHook.resetEntityItemCount();
-                             */
+                            // Injects after line 565 :
+                            // RenderGlobalHook.resetEntityItemCount();
                             methodNode.instructions.insert(nextNode, new MethodInsnNode(INVOKESTATIC, getHookClass("RenderGlobalHook"), "resetEntityItemCount", "()V", false));
                             status.addInjection();
                         }
                     } else if (checkMethodInsnNode(insnNode, MethodMapping.RENDERMANAGER$RENDERENTITYSIMPLE)) {
                         ordinal++;
-                        /* Replace line 672 :
-                         * this.renderManager.renderEntitySimple(entity2, partialTicks);
-                         * With :
-                         * RenderGlobalHook.renderEntitySimple(this.renderManager, entity2, partialTicks);
-                         */
                         if (ordinal == 3) {
+                            // Replace line 672 :
+                            // this.renderManager.renderEntitySimple(entity2, partialTicks);
+                            // With :
+                            // RenderGlobalHook.renderEntitySimple(this.renderManager, entity2, partialTicks);
                             final InsnList list = new InsnList();
                             list.add(new VarInsnNode(DLOAD, 5));
                             list.add(new VarInsnNode(DLOAD, 7));

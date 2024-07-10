@@ -23,10 +23,8 @@ public class MinecraftTransformer_DebugMessages implements MWETransformer {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
 
                     if (checkMethodInsnNode(insnNode, MethodMapping.RENDERGLOBAL$LOADRENDERER)) {
-                        /*
-                         * Injects after line 1989 :
-                         * MinecraftHook.onSettingChange(this.gameSettings.advancedItemTooltips, "Advanced Item Tooltips");
-                         */
+                        // Injects after line 1989 :
+                        // MinecraftHook.onSettingChange(this.gameSettings.advancedItemTooltips, "Advanced Item Tooltips");
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("MinecraftHook"), "onReloadChunks", "(L" + ClassMapping.MINECRAFT + ";)V", false));
@@ -35,10 +33,8 @@ public class MinecraftTransformer_DebugMessages implements MWETransformer {
                     }
 
                     if (checkFieldInsnNode(insnNode, PUTFIELD, FieldMapping.GAMESETTINGS$ADVANCEDITEMTOOLTIPS)) {
-                        /*
-                         * Injects after line 1994 :
-                         * MinecraftHook.onSettingChange(this.gameSettings.advancedItemTooltips, "Advanced Item Tooltips");
-                         */
+                        // Injects after line 1994 :
+                        // MinecraftHook.onSettingChange(this.gameSettings.advancedItemTooltips, "Advanced Item Tooltips");
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new VarInsnNode(ALOAD, 0));
@@ -51,10 +47,8 @@ public class MinecraftTransformer_DebugMessages implements MWETransformer {
                     }
 
                     if (checkMethodInsnNode(insnNode, MethodMapping.RENDERMANAGER$SETDEBUGBOUNDINGBOX)) {
-                        /*
-                         * Injects after line 2000 :
-                         * MinecraftHook.onSettingChange(this.renderManager.isDebugBoundingBox(), "Hitboxes");
-                         */
+                        // Injects after line 2000 :
+                        // MinecraftHook.onSettingChange(this.renderManager.isDebugBoundingBox(), "Hitboxes");
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new VarInsnNode(ALOAD, 0));
@@ -67,10 +61,8 @@ public class MinecraftTransformer_DebugMessages implements MWETransformer {
                     }
 
                     if (checkFieldInsnNode(insnNode, PUTFIELD, FieldMapping.GAMESETTINGS$PAUSEONLOSTFOCUS)) {
-                        /*
-                         * Injects after line 2005 :
-                         * MinecraftHook.onSettingChange(this.gameSettings.pauseOnLostFocus, "Pause on lost focus");
-                         */
+                        // Injects after line 2005 :
+                        // MinecraftHook.onSettingChange(this.gameSettings.pauseOnLostFocus, "Pause on lost focus");
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new VarInsnNode(ALOAD, 0));

@@ -25,10 +25,8 @@ public class ScoreboardTransformer implements MWETransformer {
                         if (checkMethodInsnNode(secondNode, MethodMapping.MAP$REMOVE)) {
                             final AbstractInsnNode thirdNode = secondNode.getNext();
                             if (checkInsnNode(thirdNode, POP)) {
-                                /*
-                                 * Injects after line 299 :
-                                 * ScoreboardHook.removeTeamHook(player);
-                                 */
+                                // Injects after line 299 :
+                                // ScoreboardHook.removeTeamHook(player);
                                 final InsnList list = new InsnList();
                                 list.add(new VarInsnNode(ALOAD, index));
                                 list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("ScoreboardHook"), "removeTeamHook", "(Ljava/lang/String;)V", false));
@@ -43,10 +41,8 @@ public class ScoreboardTransformer implements MWETransformer {
             if (checkMethodNode(methodNode, MethodMapping.SCOREBOARD$ADDPLAYERTOTEAM)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkInsnNode(insnNode, ICONST_1) && checkInsnNode(insnNode.getNext(), IRETURN)) {
-                        /*
-                         * Injects before line 329 :
-                         * ScoreboardHook.addPlayerToTeamHook(player);
-                         */
+                        // Injects before line 329 :
+                        // ScoreboardHook.addPlayerToTeamHook(player);
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 1));
                         list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("ScoreboardHook"), "addPlayerToTeamHook", "(Ljava/lang/String;)V", false));
@@ -61,10 +57,8 @@ public class ScoreboardTransformer implements MWETransformer {
                     if (checkMethodInsnNode(insnNode, MethodMapping.COLLECTION$REMOVE)) {
                         final AbstractInsnNode nextNode = insnNode.getNext();
                         if (checkInsnNode(nextNode, POP)) {
-                            /*
-                             * Injects after line 360 :
-                             * ScoreboardHook.removePlayerFromTeamHook(player);
-                             */
+                            // Injects after line 360 :
+                            // ScoreboardHook.removePlayerFromTeamHook(player);
                             final InsnList list = new InsnList();
                             list.add(new VarInsnNode(ALOAD, 1));
                             list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("ScoreboardHook"), "removePlayerFromTeamHook", "(Ljava/lang/String;)V", false));

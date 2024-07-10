@@ -23,12 +23,10 @@ public class GuiIngameForgeTransformer_FixActionBar implements MWETransformer {
                         if (checkVarInsnNode(secondNode, ILOAD)) {
                             final AbstractInsnNode thirdNode = secondNode.getNext();
                             if (checkVarInsnNode(thirdNode, FLOAD) && checkMethodInsnNode(thirdNode.getNext(), MethodMapping.GUIINGAMEFORGE$RENDERRECORDOVERLAY)) {
-                                /*
-                                 * Replaces line 150 :
-                                 * renderRecordOverlay(width, height, partialTicks);
-                                 * With :
-                                 * renderRecordOverlay(width, GuiIngameForgeHook.adjustActionBarHeight(height, left_height), partialTicks);
-                                 */
+                                // Replaces line 150 :
+                                // renderRecordOverlay(width, height, partialTicks);
+                                // With :
+                                // renderRecordOverlay(width, GuiIngameForgeHook.adjustActionBarHeight(height, left_height), partialTicks);
                                 final InsnList list = new InsnList();
                                 list.add(new FieldInsnNode(GETSTATIC, "net/minecraftforge/client/GuiIngameForge", "left_height", "I"));
                                 list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiIngameForgeHook"), "adjustActionBarHeight", "(II)I", false));
