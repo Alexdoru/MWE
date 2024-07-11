@@ -3,6 +3,10 @@ package fr.alexdoru.mwe.config;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.gui.guiapi.GuiPosition;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class ConfigHandler extends AbstractConfig {
 
     private static final String FKCOUNTER = "Final Kill Counter";
@@ -529,6 +533,12 @@ public class ConfigHandler extends AbstractConfig {
             name = "Report HUD position",
             comment = "position of the report HUD")
     public static final GuiPosition reportHUDPosition = new GuiPosition(0d, 1d);
+
+    @ConfigProperty(
+            category = NOCHEATERS,
+            name = "List of cheats considered blatant",
+            comment = "Players reported with theses cheats will appear with a red icon on their name")
+    public static final List<String> redIconCheats = new ArrayList<>(Arrays.asList("autoblock", "bhop", "fastbreak", "noslowdown", "scaffold"));
 
     @ConfigProperty(
             category = HACKERDETECTOR,

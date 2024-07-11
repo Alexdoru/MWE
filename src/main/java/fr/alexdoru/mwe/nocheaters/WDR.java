@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.nocheaters;
 
 import fr.alexdoru.mwe.commands.CommandReport;
+import fr.alexdoru.mwe.config.ConfigHandler;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
@@ -101,11 +102,12 @@ public class WDR implements Comparable<WDR> {
 
     private static boolean isRedCheat(String cheat) {
         cheat = cheat.toLowerCase();
-        return cheat.startsWith("bhop") ||
-                cheat.startsWith("autoblock") ||
-                cheat.startsWith("fastbreak") ||
-                cheat.startsWith("noslowdown") ||
-                cheat.startsWith("scaffold");
+        for (final String s : ConfigHandler.redIconCheats) {
+            if (cheat.startsWith(s)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
