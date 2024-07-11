@@ -37,15 +37,15 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = FKCOUNTER,
-            name = "FKCounter HUD",
-            comment = "position of the final kill counter HUD")
-    public static final GuiPosition fkcounterHUDPosition = new GuiPosition(0d, 0.1d);
-
-    @ConfigProperty(
-            category = FKCOUNTER,
             name = "Show FKCounter HUD",
             comment = "Displays the HUD of the final kill counter")
     public static boolean showfkcounterHUD;
+
+    @ConfigProperty(
+            category = FKCOUNTER,
+            name = "FKCounter HUD",
+            comment = "position of the final kill counter HUD")
+    public static final GuiPosition fkcounterHUDPosition = new GuiPosition(0d, 0.1d);
 
     @ConfigProperty(
             category = FKCOUNTER,
@@ -319,15 +319,15 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = GUI,
-            name = "Show head on Arrow Hit HUD",
-            comment = "Show head of player hit on Arrow Hit HUD")
-    public static boolean showHeadOnArrowHitHUD;
-
-    @ConfigProperty(
-            category = GUI,
             name = "Arrow Hit HUD",
             comment = "position of the ArrowHitHUD")
     public static final GuiPosition arrowHitHUDPosition = new GuiPosition(0.5d, 9d / 20d);
+
+    @ConfigProperty(
+            category = GUI,
+            name = "Show head on Arrow Hit HUD",
+            comment = "Show head of player hit on Arrow Hit HUD")
+    public static boolean showHeadOnArrowHitHUD;
 
     @ConfigProperty(
             category = GUI,
@@ -337,15 +337,15 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = GUI,
-            name = "Wiher HUD in sidebar",
-            comment = "Displays the time it takes for the last wither to die in the sidebar")
-    public static boolean witherHUDinSidebar = true;
-
-    @ConfigProperty(
-            category = GUI,
             name = "last wither HUD",
             comment = "position of the LastWitherHUD")
     public static final GuiPosition lastWitherHUDPosition = new GuiPosition(0.75d, 0d);
+
+    @ConfigProperty(
+            category = GUI,
+            name = "Wiher HUD in sidebar",
+            comment = "Displays the time it takes for the last wither to die in the sidebar")
+    public static boolean witherHUDinSidebar = true;
 
     @ConfigProperty(
             category = GUI,
@@ -445,16 +445,15 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = GUI,
-            name = "Mini Potion HUD only in MW",
-            comment = "Displays a minimalist potion HUD only in MW")
-    public static boolean showMiniPotionHUDOnlyMW;
-
-    @ConfigProperty(
-            category = GUI,
             name = "Mini Potion HUD position",
             comment = "position of the mini potion HUD")
     public static final GuiPosition miniPotionHUDPosition = new GuiPosition(0.5d, 7.5d / 20d);
 
+    @ConfigProperty(
+            category = GUI,
+            name = "Mini Potion HUD only in MW",
+            comment = "Displays a minimalist potion HUD only in MW")
+    public static boolean showMiniPotionHUDOnlyMW;
 
     @ConfigProperty(
             category = GUI,
@@ -479,6 +478,12 @@ public class ConfigHandler extends AbstractConfig {
             name = "Warning Icons In Tab Only",
             comment = "Display warning icon only in the tablist")
     public static boolean warningIconsTabOnly;
+
+    @ConfigProperty(
+            category = NOCHEATERS,
+            name = "List of cheats considered blatant",
+            comment = "Players reported with theses cheats will appear with a red icon on their name")
+    public static final List<String> redIconCheats = new ArrayList<>(Arrays.asList("autoblock", "bhop", "fastbreak", "noslowdown", "scaffold"));
 
     @ConfigProperty(
             category = NOCHEATERS,
@@ -533,12 +538,6 @@ public class ConfigHandler extends AbstractConfig {
             name = "Report HUD position",
             comment = "position of the report HUD")
     public static final GuiPosition reportHUDPosition = new GuiPosition(0d, 1d);
-
-    @ConfigProperty(
-            category = NOCHEATERS,
-            name = "List of cheats considered blatant",
-            comment = "Players reported with theses cheats will appear with a red icon on their name")
-    public static final List<String> redIconCheats = new ArrayList<>(Arrays.asList("autoblock", "bhop", "fastbreak", "noslowdown", "scaffold"));
 
     @ConfigProperty(
             category = HACKERDETECTOR,
