@@ -43,7 +43,7 @@ public class MWE {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        ConfigHandler.preInit(event.getSuggestedConfigurationFile());
+        ConfigHandler.loadConfig(event.getSuggestedConfigurationFile());
         jarFile = event.getSourceFile();
     }
 

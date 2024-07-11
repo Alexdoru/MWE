@@ -2,9 +2,8 @@ package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.gui.guiscreens.GeneralConfigGuiScreen;
-import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
+import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
@@ -22,20 +21,14 @@ public class CommandMWE extends MyAbstractCommand {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        if (args.length == 1 && args[0].equalsIgnoreCase("refreshconfig")) {
-            ConfigHandler.loadConfigFromFile();
-            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Reloaded values from the config file.");
-            return;
-        } else if (args.length >= 1 && args[0].equalsIgnoreCase("setapikey")) {
+        if (args.length >= 1 && args[0].equalsIgnoreCase("setapikey")) {
             if (args.length != 2) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + " setapikey <key>");
             } else {
                 HypixelApiKeyUtil.setApiKey(args[1]);
             }
-            return;
         } else if (args.length >= 1 && args[0].equalsIgnoreCase("howplaygame")) {
-            final String title = ScoreboardUtils.getUnformattedSidebarTitle();
-            if (title != null && title.contains("MEGA WALLS")) {
+            if (ScoreboardTracker.isMWEnvironement()) {
                 final String msg1 = "During the first 6 minutes you have to mine iron, make armor and store everything in your enderchest";
                 final String msg2 = "Once the walls fall down you can go to mid and fight other players, each class has unique abilities";
                 final String msg3 = "Every team has a wither, you have to protect yours and kill the withers from the other teams";
@@ -49,14 +42,14 @@ public class CommandMWE extends MyAbstractCommand {
             } else {
                 ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "Command only works in Mega Walls");
             }
-            return;
+        } else {
+            new DelayedTask(() -> mc.displayGuiScreen(new GeneralConfigGuiScreen()));
         }
-        new DelayedTask(() -> mc.displayGuiScreen(new GeneralConfigGuiScreen()));
     }
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        final String[] possibilities = {"howplaygame", "refreshconfig", "setapikey"};
+        final String[] possibilities = {"howplaygame", "setapikey"};
         return getListOfStringsMatchingLastWord(args, possibilities);
     }
 
