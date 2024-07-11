@@ -3,13 +3,35 @@ package fr.alexdoru.mwe.config;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.gui.guiapi.GuiPosition;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class ConfigHandler extends AbstractConfig {
 
-    protected static void onModUpdate() {
+    private static ConfigHandler INSTANCE;
+
+    private ConfigHandler(File file) {
+        super(ConfigHandler.class, file);
+    }
+
+    public static void loadConfig(File file) {
+        if (INSTANCE != null) {
+            throw new IllegalStateException("Config already created!");
+        }
+        INSTANCE = new ConfigHandler(file);
+        ConfigHandler.onModUpdate();
+    }
+
+    public static void saveConfig() {
+        if (INSTANCE == null) {
+            throw new NullPointerException("Config didn't load when the game started, this shouldn't happen !");
+        }
+        INSTANCE.save();
+    }
+
+    private static void onModUpdate() {
         if (!modVersion.equals(MWE.version)) {
             if (ConfigHandler.lastWitherHUDPosition.getRelativeX() == 0.75d && ConfigHandler.lastWitherHUDPosition.getRelativeY() == 0.05d) {
                 ConfigHandler.lastWitherHUDPosition.resetToDefault();
