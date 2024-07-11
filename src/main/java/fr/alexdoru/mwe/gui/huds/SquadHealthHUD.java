@@ -1,7 +1,5 @@
 package fr.alexdoru.mwe.gui.huds;
 
-import com.google.common.collect.ComparisonChain;
-import com.google.common.collect.Ordering;
 import com.mojang.authlib.GameProfile;
 import fr.alexdoru.mwe.asm.accessors.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
@@ -19,20 +17,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraft.scoreboard.IScoreObjectiveCriteria;
 import net.minecraft.scoreboard.ScoreObjective;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.WorldSettings;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class SquadHealthHUD extends AbstractRenderer {
-
-    private static final Ordering<NetworkPlayerInfo> ordering = Ordering.from(new SquadHealthHUD.PlayerComparator());
 
     public SquadHealthHUD() {
         super(ConfigHandler.squadHUDPosition);
@@ -55,7 +49,7 @@ public class SquadHealthHUD extends AbstractRenderer {
         if (list.size() <= 1) {
             return;
         }
-        final List<NetworkPlayerInfo> playerlistToRender = ordering.sortedCopy(list);
+        final List<NetworkPlayerInfo> playerlistToRender = NameUtil.sortedCopyOf(list);
         int maxNameWidth = 0;
         int maxScoreWidth = 0;
         int maxFinalWidth = 0;
@@ -173,21 +167,6 @@ public class SquadHealthHUD extends AbstractRenderer {
     @Override
     public boolean isEnabled(long currentTimeMillis) {
         return ConfigHandler.showSquadHUD && SquadHandler.getSquad().size() > 1;
-    }
-
-    private static class PlayerComparator implements Comparator<NetworkPlayerInfo> {
-        private PlayerComparator() {}
-
-        @Override
-        public int compare(NetworkPlayerInfo p_compare_1_, NetworkPlayerInfo p_compare_2_) {
-            final ScorePlayerTeam scoreplayerteam = p_compare_1_.getPlayerTeam();
-            final ScorePlayerTeam scoreplayerteam1 = p_compare_2_.getPlayerTeam();
-            return ComparisonChain.start()
-                    .compareTrueFirst(p_compare_1_.getGameType() != WorldSettings.GameType.SPECTATOR, p_compare_2_.getGameType() != WorldSettings.GameType.SPECTATOR)
-                    .compare(scoreplayerteam != null ? scoreplayerteam.getRegisteredName() : "", scoreplayerteam1 != null ? scoreplayerteam1.getRegisteredName() : "")
-                    .compare(p_compare_1_.getGameProfile().getName(), p_compare_2_.getGameProfile().getName())
-                    .result();
-        }
     }
 
 }

@@ -6,7 +6,7 @@ import fr.alexdoru.mwe.gui.elements.FancyGuiButton;
 import fr.alexdoru.mwe.gui.elements.OptionGuiButton;
 import fr.alexdoru.mwe.gui.elements.SimpleGuiButton;
 import fr.alexdoru.mwe.gui.elements.TextElement;
-import fr.alexdoru.mwe.nocheaters.WarningMessagesHandler;
+import fr.alexdoru.mwe.nocheaters.WarningMessages;
 import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import net.minecraft.client.gui.GuiScreen;
@@ -41,7 +41,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 () -> {
                     ConfigHandler.warningMessages = !ConfigHandler.warningMessages;
                     if (ConfigHandler.warningMessages) {
-                        WarningMessagesHandler.printReportMessagesForWorld(false);
+                        WarningMessages.printReportMessagesForWorld(false);
                     } else {
                         ChatHandler.deleteAllWarningMessages();
                     }

@@ -1,5 +1,7 @@
 package fr.alexdoru.mwe.utils;
 
+import com.google.common.collect.ComparisonChain;
+import com.google.common.collect.Ordering;
 import com.mojang.authlib.GameProfile;
 import fr.alexdoru.mwe.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.mwe.asm.accessors.NetworkPlayerInfoAccessor;
@@ -13,7 +15,7 @@ import fr.alexdoru.mwe.enums.MWClass;
 import fr.alexdoru.mwe.features.LeatherArmorManager;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.nocheaters.WDR;
-import fr.alexdoru.mwe.nocheaters.WarningMessagesHandler;
+import fr.alexdoru.mwe.nocheaters.WarningMessages;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
@@ -22,10 +24,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.world.WorldSettings;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -200,17 +204,11 @@ public class NameUtil {
         }
 
         if (onPlayerJoin && mwPlayerData.wdr != null) {
-            final String playerName = player.getName();
             if (ConfigHandler.warningMessages) {
                 if (!warningMsgPrinted.contains(player.getUniqueID())) {
                     warningMsgPrinted.add(player.getUniqueID());
-                    ChatHandler.deleteWarningFromChat(playerName);
-                    WarningMessagesHandler.printWarningMessage(
-                            player.getUniqueID(),
-                            ScorePlayerTeam.formatPlayerName(player.getTeam(), playerName),
-                            playerName,
-                            mwPlayerData.wdr
-                    );
+                    ChatHandler.deleteWarningFromChat(player.getName());
+                    WarningMessages.printWarningMessage(player.getUniqueID(), player.getTeam(), player.getName(), mwPlayerData.wdr);
                 }
             }
         }
@@ -360,11 +358,13 @@ public class NameUtil {
      * Equivalent of {@link net.minecraft.scoreboard.ScorePlayerTeam#formatPlayerName}
      * but with eventually a squadname
      */
-    private static String formatPlayerNameUnscrambled(ScorePlayerTeam team, String playername) {
+    public static String formatPlayerNameUnscrambled(Team team, String playername) {
         if (team == null) {
             return SquadHandler.getSquadname(playername);
+        } else if (team instanceof ScorePlayerTeam) {
+            return deobfString(((ScorePlayerTeam) team).getColorPrefix()) + SquadHandler.getSquadname(playername) + ((ScorePlayerTeam) team).getColorSuffix();
         }
-        return deobfString(team.getColorPrefix()) + SquadHandler.getSquadname(playername) + team.getColorSuffix();
+        return deobfString(team.formatString(playername));
     }
 
     /**
@@ -408,6 +408,25 @@ public class NameUtil {
             return false;
         }
         return skinHash.equals(netInfo.getLocationSkin().toString().substring(16));
+    }
+
+    private static final Ordering<NetworkPlayerInfo> netInfoOrdering = Ordering.from(new NameUtil.PlayerComparator());
+
+    public static List<NetworkPlayerInfo> sortedCopyOf(Collection<NetworkPlayerInfo> list) {
+        return netInfoOrdering.sortedCopy(list);
+    }
+
+    private static class PlayerComparator implements Comparator<NetworkPlayerInfo> {
+        @Override
+        public int compare(NetworkPlayerInfo netInfo1, NetworkPlayerInfo netInfo2) {
+            final ScorePlayerTeam team1 = netInfo1.getPlayerTeam();
+            final ScorePlayerTeam team2 = netInfo2.getPlayerTeam();
+            return ComparisonChain.start()
+                    .compareTrueFirst(netInfo1.getGameType() != WorldSettings.GameType.SPECTATOR, netInfo2.getGameType() != WorldSettings.GameType.SPECTATOR)
+                    .compare(team1 != null ? team1.getRegisteredName() : "", team2 != null ? team2.getRegisteredName() : "")
+                    .compare(netInfo1.getGameProfile().getName(), netInfo2.getGameProfile().getName())
+                    .result();
+        }
     }
 
 }

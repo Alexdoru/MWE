@@ -7,7 +7,7 @@ import fr.alexdoru.mwe.api.requests.HypixelPlayerData;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.gui.huds.DebugScoreboardHUD;
 import fr.alexdoru.mwe.nocheaters.WDR;
-import fr.alexdoru.mwe.nocheaters.WarningMessagesHandler;
+import fr.alexdoru.mwe.nocheaters.WarningMessages;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import fr.alexdoru.mwe.utils.DateUtil;
@@ -38,7 +38,7 @@ public class CommandNocheaters extends MyAbstractCommand {
     public void processCommand(ICommandSender sender, String[] args) {
 
         if (args.length == 0) {
-            WarningMessagesHandler.printReportMessagesForWorld(true);
+            WarningMessages.printReportMessagesForWorld(true);
             return;
         }
 
@@ -200,14 +200,14 @@ class CreateReportLineTask implements Callable<IChatComponent> {
 
                 if (this.nickname != null) {
 
-                    imsg = WarningMessagesHandler.createPlayerNameWithHoverText(EnumChatFormatting.DARK_PURPLE + "[Nick] " + EnumChatFormatting.GOLD + nickname, nickname, nickname, wdr, EnumChatFormatting.WHITE);
+                    imsg = WarningMessages.getPlayernameWithHoverText(EnumChatFormatting.DARK_PURPLE + "[Nick] " + EnumChatFormatting.GOLD + nickname, null, nickname, nickname, wdr);
 
                 } else {
 
                     assert uuid != null;
                     final HypixelPlayerData playerdata = new HypixelPlayerData(uuid);
                     final LoginData logindata = new LoginData(playerdata.getPlayerData());
-                    imsg = WarningMessagesHandler.createPlayerNameWithHoverText(logindata.getFormattedName(), logindata.getdisplayname(), uuid.toString(), wdr, EnumChatFormatting.WHITE);
+                    imsg = WarningMessages.getPlayernameWithHoverText(logindata.getFormattedName(), null, logindata.getdisplayname(), uuid.toString(), wdr);
 
                     final IChatComponent ismgStatus = new ChatComponentText("");
 
