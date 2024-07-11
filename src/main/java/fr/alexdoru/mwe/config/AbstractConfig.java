@@ -13,7 +13,7 @@ import java.util.*;
 public abstract class AbstractConfig {
 
     private static Configuration config;
-    private static final HashMap<String, Property> propertyMap = new HashMap<>();
+    private static final Map<String, Property> propertyMap = new HashMap<>();
 
     public static void preInit(File file) {
         config = new Configuration(file);
@@ -26,7 +26,7 @@ public abstract class AbstractConfig {
     }
 
     /**
-     * Saves the values of the config fields to the config file
+     * Writes the values of the config fields to the config file
      */
     public static void saveConfig() {
         try {
@@ -53,13 +53,13 @@ public abstract class AbstractConfig {
 
         if (config == null) {
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.DARK_RED + "Config didn't load when the game started, this shouldn't happen !");
-            return;
+            throw new IllegalStateException("Config didn't load when the game started, this shouldn't happen !");
         }
 
         if (loadFromConfigFile) {
             config.load();
             propertyMap.clear();
-            final HashMap<String, List<String>> categoryOrderMap = new HashMap<>();
+            final Map<String, List<String>> categoryOrderMap = new HashMap<>();
             for (final Field field : ConfigHandler.class.getDeclaredFields()) {
                 if (field.isAnnotationPresent(ConfigProperty.class)) {
                     final ConfigProperty configProperty = field.getAnnotation(ConfigProperty.class);
@@ -105,6 +105,12 @@ public abstract class AbstractConfig {
             field.setDouble(null, propertyMap.get(configProperty.name()).getDouble());
         } else if (field.getType() == int.class) {
             field.setInt(null, propertyMap.get(configProperty.name()).getInt());
+        } else if (field.getGenericType().toString().equals("java.util.List<java.lang.String>")) {
+            final String[] strings = propertyMap.get(configProperty.name()).getStringList();
+            //noinspection unchecked
+            final List<String> list = (List<String>) field.get(null);
+            list.clear();
+            list.addAll(Arrays.asList(strings));
         } else {
             throw new IllegalArgumentException("Type of field not handled by config");
         }
@@ -123,12 +129,15 @@ public abstract class AbstractConfig {
             propertyMap.get(configProperty.name()).set((double) field.get(null));
         } else if (field.getType() == int.class) {
             propertyMap.get(configProperty.name()).set((int) field.get(null));
+        } else if (field.getGenericType().toString().equals("java.util.List<java.lang.String>")) {
+            //noinspection unchecked
+            propertyMap.get(configProperty.name()).set(((List<String>) field.get(null)).toArray(new String[0]));
         } else {
             throw new IllegalArgumentException("Type of field not handled by config");
         }
     }
 
-    private static void generatePropertyFromField(HashMap<String, List<String>> categoryOrderMap, Field field, ConfigProperty configProperty) throws IllegalAccessException {
+    private static void generatePropertyFromField(Map<String, List<String>> categoryOrderMap, Field field, ConfigProperty configProperty) throws IllegalAccessException {
         List<String> propsInCategory = categoryOrderMap.get(configProperty.category());
         if (propsInCategory == null) {
             propsInCategory = new ArrayList<>();
@@ -158,6 +167,10 @@ public abstract class AbstractConfig {
             propertyMap.put(configProperty.name(), config.get(configProperty.category(), configProperty.name(), (double) field.get(null), configProperty.comment()));
         } else if (field.getType() == int.class) {
             propertyMap.put(configProperty.name(), config.get(configProperty.category(), configProperty.name(), (int) field.get(null), configProperty.comment()));
+        } else if (field.getGenericType().toString().equals("java.util.List<java.lang.String>")) {
+            //noinspection unchecked
+            final String[] defaultStrings = ((List<String>) field.get(null)).toArray(new String[0]);
+            propertyMap.put(configProperty.name(), config.get(configProperty.category(), configProperty.name(), defaultStrings, configProperty.comment()));
         } else {
             throw new IllegalArgumentException("Type of field not handled by config");
         }
