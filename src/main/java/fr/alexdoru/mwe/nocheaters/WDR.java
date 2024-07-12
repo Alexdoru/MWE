@@ -40,10 +40,12 @@ public class WDR implements Comparable<WDR> {
     }
 
     public void addCheats(List<String> list) {
-        list.removeAll(this.cheats);
-        this.cheats.addAll(list);
-        this.cheats.trimToSize();
-        this.updateRedIcon();
+        if (this.cheats.isEmpty() || list.size() != 1 || !list.get(0).equals("cheating")) {
+            list.removeAll(this.cheats);
+            this.cheats.addAll(list);
+            this.cheats.trimToSize();
+            this.updateRedIcon();
+        }
         this.timestamp = new Date().getTime();
     }
 
