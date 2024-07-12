@@ -59,7 +59,6 @@ public enum ClassMapping {
     PACKETTHREADUTIL("fh", "net/minecraft/network/PacketThreadUtil"),
     PLAYERDATASAMPLES("fr/alexdoru/mwe/hackerdetector/data/PlayerDataSamples"),
     POTION("pe", "net/minecraft/potion/Potion"),
-    PROFILER("nt", "net/minecraft/profiler/Profiler"),
     RENDERERLIVINGENTITY("bjl", "net/minecraft/client/renderer/entity/RendererLivingEntity"),
     RENDERGLOBAL("bfr", "net/minecraft/client/renderer/RenderGlobal"),
     RENDERITEM("bjh", "net/minecraft/client/renderer/entity/RenderItem"),
