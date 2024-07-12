@@ -5,7 +5,7 @@ import fr.alexdoru.mwe.asm.loader.MWETransformer;
 import fr.alexdoru.mwe.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
-public class GuiPlayerTabOverlayTransformer_FixMissplacedDrawRect implements MWETransformer {
+public class GuiPlayerTabOverlayTransformer_FixDrawRect implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {
@@ -34,7 +34,13 @@ public class GuiPlayerTabOverlayTransformer_FixMissplacedDrawRect implements MWE
                                     if (checkInsnNode(fifthNode, ICONST_1)) {
                                         final InsnList list = new InsnList();
                                         list.add(new VarInsnNode(ILOAD, ((VarInsnNode) insnNode).var));
-                                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook"), "fixMissplacedDrawRect", "(I)I", false));
+                                        list.add(new MethodInsnNode(
+                                                INVOKESTATIC,
+                                                getHookClass("GuiPlayerTabOverlayHook_FixDrawRect"),
+                                                "fixDrawRect",
+                                                "(I)I",
+                                                false
+                                        ));
                                         list.add(new InsnNode(IADD));
                                         methodNode.instructions.insert(fifthNode.getNext(), list);
                                         status.addInjection();

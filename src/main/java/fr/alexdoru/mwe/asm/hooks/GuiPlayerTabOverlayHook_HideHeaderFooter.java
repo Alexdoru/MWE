@@ -7,14 +7,14 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 public class GuiPlayerTabOverlayHook_HideHeaderFooter {
 
     public static boolean shouldRenderHeader() {
-        return ConfigHandler.showPlayercountTablist || !shouldHideFooter();
+        return ConfigHandler.showPlayercountTablist || shouldRenderHeaderFooter();
     }
 
-    public static boolean shouldHideFooter() {
+    public static boolean shouldRenderHeaderFooter() {
         if (ConfigHandler.showHeaderFooterOutsideMW && !ScoreboardTracker.isMWEnvironement()) {
-            return false;
+            return true;
         }
-        return ConfigHandler.hideTablistHeaderFooter;
+        return !ConfigHandler.hideTablistHeaderFooter;
     }
 
 }
