@@ -97,9 +97,7 @@ public abstract class Check implements ICheck {
             final WDR wdr = WdrData.getWdr(uuid, player.getName());
             final boolean refreshName;
             if (wdr == null) {
-                final ArrayList<String> cheats = new ArrayList<>(1);
-                cheats.add(cheat);
-                WdrData.put(uuid, player.getName(), new WDR(cheats));
+                WdrData.put(uuid, player.getName(), new WDR(cheat));
                 refreshName = true;
             } else {
                 refreshName = wdr.addCheat(cheat);

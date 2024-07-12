@@ -17,12 +17,19 @@ public class WDR implements Comparable<WDR> {
     private boolean redIcon;
     private long timestamp;
 
-    public WDR(ArrayList<String> cheats) {
+    public WDR(String cheat) {
+        this.cheats = new ArrayList<>(1);
+        this.cheats.add(cheat);
+        this.updateRedIcon();
+        this.timestamp = new Date().getTime();
+    }
+
+    public WDR(List<String> cheats) {
         this(cheats, new Date().getTime());
     }
 
-    public WDR(ArrayList<String> cheats, long timestamp) {
-        this.cheats = cheats;
+    public WDR(List<String> cheats, long timestamp) {
+        this.cheats = new ArrayList<>(cheats);
         this.cheats.trimToSize();
         this.updateRedIcon();
         this.timestamp = timestamp;

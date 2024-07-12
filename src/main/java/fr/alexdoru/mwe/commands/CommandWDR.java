@@ -38,7 +38,7 @@ public class CommandWDR extends MyAbstractCommand {
         }
         this.sendCommand(args);
         final String playername = args[0];
-        final ArrayList<String> cheats = new ArrayList<>();
+        final List<String> cheats = new ArrayList<>();
         if (args.length == 1) {
             cheats.add("cheating");
         } else {
@@ -74,7 +74,7 @@ public class CommandWDR extends MyAbstractCommand {
         return args.length > 1 ? getListOfStringsMatchingLastWord(args, CommandReport.cheatsArray) : null;
     }
 
-    private static void addPlayerToReportList(String playername, ArrayList<String> cheats) {
+    private static void addPlayerToReportList(String playername, List<String> cheats) {
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
                 final UUID uuid = netInfo.getGameProfile().getId();
@@ -106,7 +106,7 @@ public class CommandWDR extends MyAbstractCommand {
         });
     }
 
-    private static void addPlayerToReportList(UUID uuid, String playername, String formattedName, ArrayList<String> cheats) {
+    private static void addPlayerToReportList(UUID uuid, String playername, String formattedName, List<String> cheats) {
         final WDR wdr = WdrData.getWdr(uuid, playername);
         final boolean isNicked = uuid.version() != 4;
         if (wdr == null) {
