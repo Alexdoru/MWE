@@ -23,7 +23,6 @@ public enum MethodMapping {
     ENTITYPLAYERSP$DROPONEITEM(INVOKEVIRTUAL, ENTITYPLAYERSP, "a", "dropOneItem", "(Z)L" + ENTITYITEM + ";"),
     ENTITYPLAYERSP$ISSPECTATOR(INVOKEVIRTUAL, ENTITYPLAYERSP, "v", "isSpectator", "()Z"),
     ENTITYPLAYERSP$SENDCHATMESSAGE("e", "sendChatMessage", "(Ljava/lang/String;)V"),
-    ENTITYPLAYERSP$SETPLAYERSPHEALTH("n", "setPlayerSPHealth", "(F)V"),
     ENTITYRENDERER$UPDATECAMERAANDRENDER("a", "updateCameraAndRender", "(FJ)V"),
     ENTITYRENDERER$UPDATEFOGCOLOR("i", "updateFogColor", "(F)V"),
     ENTITYRENDERER$UPDATELIGHTMAP("g", "updateLightmap", "(F)V"),
