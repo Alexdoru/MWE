@@ -7,7 +7,6 @@ import static fr.alexdoru.mwe.asm.mappings.ClassMapping.*;
 public enum FieldMapping {
 
     CLIENTCOMMANDHANDLER$INSTANCE(CLIENTCOMMANDHANDLER, "instance", CLIENTCOMMANDHANDLER),
-    ENTITY$ONGROUND(ENTITY, "C", "onGround", "Z"),
     ENTITYARROW$ISINGROUND(ENTITYARROW, "i", "inGround", "Z"),
     ENTITYARROW$PINNEDTOPLAYER(ENTITYARROW, "pinnedToPlayer", "Z"),
     ENTITYPLAYER$ITEMINUSE(ENTITYPLAYER, "g", "itemInUse", ITEMSTACK),
