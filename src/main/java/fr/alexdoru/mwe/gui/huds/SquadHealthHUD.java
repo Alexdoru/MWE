@@ -24,7 +24,6 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class SquadHealthHUD extends AbstractRenderer {
 
@@ -117,11 +116,9 @@ public class SquadHealthHUD extends AbstractRenderer {
         GlStateManager.popMatrix();
     }
 
-    private static final Pattern squadSuffixPattern = Pattern.compile("^" + EnumChatFormatting.GOLD + "\\[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] ");
-
-    private String getPlayerName(NetworkPlayerInfo networkPlayerInfoIn) {
-        final String formattedName = NameUtil.getFormattedName(networkPlayerInfoIn);
-        return squadSuffixPattern.matcher(formattedName).replaceFirst("");
+    private String getPlayerName(NetworkPlayerInfo netInfo) {
+        final String name = NameUtil.getFormattedName(netInfo);
+        return name.startsWith(NameUtil.SQUAD_ICON) ? name.substring(NameUtil.SQUAD_ICON.length()) : name;
     }
 
     @Override
