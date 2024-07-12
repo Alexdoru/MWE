@@ -16,9 +16,7 @@ import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
-import fr.alexdoru.mwe.utils.SoundUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
-import fr.alexdoru.mwe.utils.TimerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ChatComponentText;
@@ -42,16 +40,10 @@ public class ChatListener {
     private static final Pattern COINS_DOUBLED_GUILD_PATTERN = Pattern.compile("^(?:Tokens|Coins) just earned DOUBLED as a Guild Level Reward!$");
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ (tokens|coins)!.*");
     private static final Pattern COINS_BOOSTER_PATTERN = Pattern.compile("^\\+\\d+ (tokens|coins)!( \\([^()]*(?:Coins \\+ EXP|Booster)[^()]*\\)).*");
-    private static final Pattern DREADLORD_STRENGTH_PATTERN = Pattern.compile("§4§lSOUL SIPHON §c§l85% ([0-9])s");
-    private static final Pattern HEROBRINE_STRENGTH_PATTERN = Pattern.compile("§e§lPOWER §c§l85% ([0-9])s");
-    private static final Pattern HUNTER_PRE_STRENGTH_PATTERN = Pattern.compile("§a§lF\\.O\\.N\\. §7\\(§l§c§lStrength§7\\) §e§l([0-9]+)");
-    private static final Pattern CREEPER_FISSION_HEART_PATTERN = Pattern.compile("^§a§lFISSION HEART §c§l([0-9])s");
     private static final Pattern LOCRAW_PATTERN = Pattern.compile("^\\{\"server\":\"(\\w+)\",\"gametype\":\"\\w+\"(?:|,\"lobbyname\":\"\\w+\")(?:|,\"mode\":\"\\w+\")(?:|,\"map\":\"([a-zA-Z0-9_ ]+)\")\\}$");
     private static final Pattern PLAYER_JOIN_PATTERN = Pattern.compile("^(\\w{1,16}) has joined \\([0-9]{1,3}/[0-9]{1,3}\\)!");
-    private static final Pattern ZOMBIE_STRENGTH_PATTERN = Pattern.compile("§2§lBERSERK §c§l75% ([0-9])s");
     private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:\\[[^\\[\\]]+] )*(\\w{2,16}):.*");
     private static final HashSet<String> MW_REPETITVE_MSG = new HashSet<>();
-    private static final TimerUtil timerStrength = new TimerUtil(11000L);
     private static boolean addGuildCoinsBonus;
 
     static {
@@ -235,39 +227,10 @@ public class ChatListener {
         } else if (event.type == 2) {
 
             final String fmsg = event.message.getFormattedText();
-
-            if (ConfigHandler.showStrengthHUD) {
-                final Matcher dreadStrenghtMatcher = DREADLORD_STRENGTH_PATTERN.matcher(fmsg);
-                if (dreadStrenghtMatcher.find()) {
-                    GuiManager.strengthHUD.setStrengthRenderStart(Long.parseLong(dreadStrenghtMatcher.group(1)) * 1000L);
-                    return;
-                }
-                final Matcher preStrengthMatcher = HUNTER_PRE_STRENGTH_PATTERN.matcher(fmsg);
-                if (preStrengthMatcher.find()) {
-                    if (timerStrength.update()) {
-                        SoundUtil.playStrengthSound();
-                    }
-                    final String preStrengthTimer = preStrengthMatcher.group(1);
-                    GuiManager.strengthHUD.setPreStrengthTime(preStrengthTimer);
-                    return;
-                }
-                final Matcher herobrineStrenghtMatcher = HEROBRINE_STRENGTH_PATTERN.matcher(fmsg);
-                if (herobrineStrenghtMatcher.find()) {
-                    GuiManager.strengthHUD.setStrengthRenderStart(Long.parseLong(herobrineStrenghtMatcher.group(1)) * 1000L);
-                    return;
-                }
-                final Matcher zombieStrenghtMatcher = ZOMBIE_STRENGTH_PATTERN.matcher(fmsg);
-                if (zombieStrenghtMatcher.find()) {
-                    GuiManager.strengthHUD.setStrengthRenderStart(Long.parseLong(zombieStrenghtMatcher.group(1)) * 1000L);
-                }
+            if (GuiManager.strengthHUD.processMessage(fmsg)) {
+                return;
             }
-
-            if (ConfigHandler.showPrimedTNTHUD) {
-                final Matcher creeperMatcher = CREEPER_FISSION_HEART_PATTERN.matcher(fmsg);
-                if (creeperMatcher.find()) {
-                    GuiManager.creeperPrimedTntHUD.setCooldownRenderStart(creeperMatcher.group(1));
-                }
-            }
+            GuiManager.creeperPrimedTntHUD.processMessage(fmsg);
 
         }
 

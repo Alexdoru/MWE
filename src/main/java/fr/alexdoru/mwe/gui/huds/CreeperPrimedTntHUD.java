@@ -4,8 +4,12 @@ import fr.alexdoru.mwe.config.ConfigHandler;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class CreeperPrimedTntHUD extends AbstractRenderer {
 
+    private static final Pattern CREEPER_FISSION_HEART_PATTERN = Pattern.compile("^§a§lFISSION HEART §c§l([0-9])s");
     private long timeStartRender;
     private long renderDuration;
     private String lastCountdownNum = "";
@@ -34,26 +38,32 @@ public class CreeperPrimedTntHUD extends AbstractRenderer {
         return timeStartRender + renderDuration - currentTimeMillis > 0;
     }
 
-    public void setCooldownRenderStart(String cooldownTimer) {
-        if (!lastCountdownNum.equals(cooldownTimer)) {
-            timeStartRender = System.currentTimeMillis();
-            renderDuration = 1000L * Integer.parseInt(cooldownTimer) + 1000L;
+    public void processMessage(String fmsg) {
+        if (ConfigHandler.showPrimedTNTHUD) {
+            final Matcher creeperMatcher = CREEPER_FISSION_HEART_PATTERN.matcher(fmsg);
+            if (creeperMatcher.find()) {
+                final String cooldown = creeperMatcher.group(1);
+                if (!lastCountdownNum.equals(cooldown)) {
+                    timeStartRender = System.currentTimeMillis();
+                    renderDuration = 1000L * Integer.parseInt(cooldown) + 1000L;
+                }
+                switch (cooldown) {
+                    case "3":
+                        colorPrefix = EnumChatFormatting.GREEN;
+                        break;
+                    case "2":
+                        colorPrefix = EnumChatFormatting.YELLOW;
+                        break;
+                    case "1":
+                        colorPrefix = EnumChatFormatting.GOLD;
+                        break;
+                    case "0":
+                        colorPrefix = EnumChatFormatting.RED;
+                        break;
+                }
+                lastCountdownNum = cooldown;
+            }
         }
-        switch (cooldownTimer) {
-            case "3":
-                colorPrefix = EnumChatFormatting.GREEN;
-                break;
-            case "2":
-                colorPrefix = EnumChatFormatting.YELLOW;
-                break;
-            case "1":
-                colorPrefix = EnumChatFormatting.GOLD;
-                break;
-            case "0":
-                colorPrefix = EnumChatFormatting.RED;
-                break;
-        }
-        lastCountdownNum = cooldownTimer;
     }
 
 }
