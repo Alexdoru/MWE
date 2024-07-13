@@ -25,8 +25,14 @@ public class RenderGlobalTransformer_LimitDroppedItems implements MWETransformer
                         final AbstractInsnNode nextNode = insnNode.getNext();
                         if (checkFieldInsnNode(nextNode, PUTFIELD, FieldMapping.RENDERGLOBAL$COUNTENTITIESRENDERED)) {
                             // Injects after line 565 :
-                            // RenderGlobalHook.resetEntityItemCount();
-                            methodNode.instructions.insert(nextNode, new MethodInsnNode(INVOKESTATIC, getHookClass("RenderGlobalHook"), "resetEntityItemCount", "()V", false));
+                            // RenderGlobalHook_LimitDroppedItems.resetEntityItemCount();
+                            methodNode.instructions.insert(nextNode, new MethodInsnNode(
+                                    INVOKESTATIC,
+                                    getHookClass("RenderGlobalHook_LimitDroppedItems"),
+                                    "resetEntityItemCount",
+                                    "()V",
+                                    false
+                            ));
                             status.addInjection();
                         }
                     } else if (checkMethodInsnNode(insnNode, MethodMapping.RENDERMANAGER$RENDERENTITYSIMPLE)) {
@@ -35,12 +41,17 @@ public class RenderGlobalTransformer_LimitDroppedItems implements MWETransformer
                             // Replace line 672 :
                             // this.renderManager.renderEntitySimple(entity2, partialTicks);
                             // With :
-                            // RenderGlobalHook.renderEntitySimple(this.renderManager, entity2, partialTicks);
+                            // RenderGlobalHook_LimitDroppedItems.renderEntitySimple(this.renderManager, entity2, partialTicks);
                             final InsnList list = new InsnList();
                             list.add(new VarInsnNode(DLOAD, 5));
                             list.add(new VarInsnNode(DLOAD, 7));
                             list.add(new VarInsnNode(DLOAD, 9));
-                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderGlobalHook"), "renderEntitySimple", "(L" + ClassMapping.RENDERMANAGER + ";L" + ClassMapping.ENTITY + ";FDDD)V", false));
+                            list.add(new MethodInsnNode(INVOKESTATIC,
+                                    getHookClass("RenderGlobalHook_LimitDroppedItems"),
+                                    "renderEntitySimple",
+                                    "(L" + ClassMapping.RENDERMANAGER + ";L" + ClassMapping.ENTITY + ";FDDD)V",
+                                    false
+                            ));
                             methodNode.instructions.insertBefore(insnNode, list);
                             methodNode.instructions.remove(insnNode.getNext()); // remove POP
                             methodNode.instructions.remove(insnNode); // remove INVOKEVIRTUAL RenderManager.renderEntitySimple (Lnet/minecraft/entity/Entity;F)Z

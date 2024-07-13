@@ -23,7 +23,13 @@ public class RenderGlobalTransformer_ListenDestroyedBlocks implements MWETransfo
                         final InsnList list = new InsnList();
                         list.add(new InsnNode(DUP));
                         list.add(new VarInsnNode(ALOAD, 3));
-                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderGlobalHook"), "listenDestroyedBlocks", "(L" + ClassMapping.IBLOCKSTATE + ";L" + ClassMapping.BLOCKPOS + ";)V", false));
+                        list.add(new MethodInsnNode(
+                                INVOKESTATIC,
+                                getHookClass("RenderGlobalHook_ListenDestroyedBlocks"),
+                                "listenDestroyedBlocks",
+                                "(L" + ClassMapping.IBLOCKSTATE + ";L" + ClassMapping.BLOCKPOS + ";)V",
+                                false
+                        ));
                         methodNode.instructions.insertBefore(insnNode, list);
                         status.addInjection();
                     }
