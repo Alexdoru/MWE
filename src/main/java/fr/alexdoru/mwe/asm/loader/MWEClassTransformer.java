@@ -57,7 +57,7 @@ public class MWEClassTransformer implements IClassTransformer {
         registerTransformer(new GuiIngameTransformer_CancelHunger());
         registerTransformer(new GuiIngameTransformer_CustomSidebarLines());
         registerTransformer(new GuiNewChatTransformer_ChatHeads());
-        registerTransformer(new GuiNewChatTransformer_RemoveFormattingCodesInLog());
+        registerTransformer(new GuiNewChatTransformer_CleanChatLogs());
         registerTransformer(new GuiNewChatTransformer());
         registerTransformer(new GuiPlayerTabOverlayTransformer_ColoredScores());
         registerTransformer(new GuiPlayerTabOverlayTransformer_FinalKills());

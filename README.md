@@ -72,6 +72,7 @@ Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, th
 - **Fix case commands tabcomplete** - Fix not being able to tabcomplete commands if the command contains uppercased letters
 - **Hide Optifine hats** - Hide cosmetic hats added by Optifine during certain seasons
 - **Command keybinds** - Keybinds to run the commands `/kill` & `/surface`
+- **Clean chat logs ** - Remove formatting codes from the chat logs
 
 ### Hitbox mod, better f3+b:
 

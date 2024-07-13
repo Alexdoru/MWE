@@ -321,6 +321,12 @@ public class ConfigHandler extends AbstractConfig {
     public static boolean afkSoundWarning = true;
 
     @ConfigProperty(
+            category = "VanillaEnhancements",
+            name = "Clean chat logs",
+            comment = "Removes formatting codes in the chat logs")
+    public static boolean cleanChatLogs = true;
+
+    @ConfigProperty(
             category = "GUI",
             name = "Show kill cooldown HUD",
             comment = "Displays the cooldown for the /kill command when in MegaWalls")
