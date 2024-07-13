@@ -1,37 +1,18 @@
 package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.TimerUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 @SuppressWarnings("unused")
-public class MinecraftHook {
+public class MinecraftHook_WarpProtection {
 
     private static final TimerUtil warpTimer = new TimerUtil(5000L);
-
-    public static void onSettingChange(Minecraft mc, boolean settingIn, String settingName) {
-        if (mc.theWorld != null && mc.thePlayer != null) {
-            mc.thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "[Debug]: " + EnumChatFormatting.WHITE + settingName + ":" + (settingIn ? EnumChatFormatting.GREEN + " On" : EnumChatFormatting.RED + " Off")));
-        }
-        if ("Hitboxes".equals(settingName)) {
-            ConfigHandler.isDebugHitboxOn = settingIn;
-            ConfigHandler.saveConfig();
-        }
-    }
-
-    public static void onReloadChunks(Minecraft mc) {
-        if (mc.theWorld != null && mc.thePlayer != null) {
-            mc.thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "[Debug]: " + EnumChatFormatting.WHITE + "Reloading all chunks"));
-        }
-    }
 
     public static boolean shouldCancelRightClick(ItemStack itemStack) {
         if (ScoreboardTracker.isInMwGame() && itemStack != null && itemStack.getItem() == Items.paper) {

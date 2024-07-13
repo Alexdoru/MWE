@@ -25,7 +25,13 @@ public class MinecraftTransformer_WarpProtection implements MWETransformer {
                         if (ordinal == 0 && checkVarInsnNode(nextNode, ASTORE)) {
                             final InsnList list = new InsnList();
                             list.add(new VarInsnNode(ALOAD, ((VarInsnNode) nextNode).var));
-                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("MinecraftHook"), "shouldCancelRightClick", "(L" + ClassMapping.ITEMSTACK + ";)Z", false));
+                            list.add(new MethodInsnNode(
+                                    INVOKESTATIC,
+                                    getHookClass("MinecraftHook_WarpProtection"),
+                                    "shouldCancelRightClick",
+                                    "(L" + ClassMapping.ITEMSTACK + ";)Z",
+                                    false
+                            ));
                             final LabelNode notCancelled = new LabelNode();
                             list.add(new JumpInsnNode(IFEQ, notCancelled)); // if (true) { return;} else {jump to notCancelled label}
                             list.add(new InsnNode(RETURN)); // return;
