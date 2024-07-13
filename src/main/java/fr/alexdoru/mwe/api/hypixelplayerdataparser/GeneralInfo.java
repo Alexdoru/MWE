@@ -89,7 +89,7 @@ public class GeneralInfo extends LoginData {
                         + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Achievement : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.achievementPoints) + " "
                         + EnumChatFormatting.GREEN + "Quests : " + EnumChatFormatting.GOLD + ChatUtil.formatInt(this.completedQuests)) + "\n"
 
-                        + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Firstlogin : " + EnumChatFormatting.GOLD + DateUtil.localformatTimestampday(this.getFirstLogin()) + " "
+                        + ChatUtil.centerLine(EnumChatFormatting.GREEN + "Firstlogin : " + EnumChatFormatting.GOLD + DateUtil.localFormatTimeInDay(this.getFirstLogin()) + " "
 
                         + (this.isStaffonHypixel() || this.isHidingFromAPI() ? "" : EnumChatFormatting.GREEN + "Status : " + (this.isOnline() ? EnumChatFormatting.DARK_GREEN + "Online" :
                         EnumChatFormatting.RED + "Offline " + EnumChatFormatting.DARK_GRAY + "for " + EnumChatFormatting.YELLOW + DateUtil.timeSince(this.getLastLogout())))) + "\n"

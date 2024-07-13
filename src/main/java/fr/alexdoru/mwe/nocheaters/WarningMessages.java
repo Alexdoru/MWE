@@ -68,7 +68,7 @@ public class WarningMessages {
     public static HoverEvent getWDRHoverEvent(String formattedName, WDR wdr) {
         return new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
                 formattedName + "\n"
-                        + GREEN + "Last reported : " + YELLOW + DateUtil.timeSince(wdr.getTimestamp()) + " ago, on " + DateUtil.localformatTimestamp(wdr.getTimestamp()) + "\n"
+                        + GREEN + "Last reported : " + YELLOW + DateUtil.timeSince(wdr.getTimestamp()) + " ago, on " + DateUtil.localFormatTime(wdr.getTimestamp()) + "\n"
                         + GREEN + "Reported for :" + GOLD + wdr.cheatsToString() + "\n\n"
                         + YELLOW + "Click here to remove this player from your report list"));
     }

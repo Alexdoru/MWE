@@ -6,25 +6,27 @@ import java.util.TimeZone;
 
 public class DateUtil {
 
-    public static String localformatTimestamp(long epoch) {
-        final SimpleDateFormat Df = new SimpleDateFormat("dd/MM/yyyy 'at' HH:mm:ss");
-        //SimpleDateFormat Df = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
-        //Calendar currentTime = Calendar.getInstance();
-        return Df.format(epoch);
+    private static final SimpleDateFormat LOCAL_DATE_FORMAT;
+    private static final SimpleDateFormat LOCAL_DATE_FORMAT_DAY;
+    private static final SimpleDateFormat EST_DATE_FORMAT;
+
+    static {
+        LOCAL_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy 'at' HH:mm:ss");
+        LOCAL_DATE_FORMAT_DAY = new SimpleDateFormat("dd/MM/yyyy");
+        EST_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy 'at' HH:mm:ss 'EST'");
+        EST_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("America/New_York"));
     }
 
-    public static String ESTformatTimestamp(long epoch) {
-        final SimpleDateFormat ESTDf = new SimpleDateFormat("dd/MM/yyyy 'at' HH:mm:ss 'EST'");
-        //SimpleDateFormat ESTDf = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
-        final TimeZone etTimeZone = TimeZone.getTimeZone("America/New_York");
-        ESTDf.setTimeZone(etTimeZone);
-        //Calendar currentTime = Calendar.getInstance();
-        return ESTDf.format(epoch);
+    public static String localFormatTime(long epoch) {
+        return LOCAL_DATE_FORMAT.format(epoch);
     }
 
-    public static String localformatTimestampday(long epoch) {
-        final SimpleDateFormat Df = new SimpleDateFormat("dd/MM/yyyy");
-        return Df.format(epoch);
+    public static String localFormatTimeInDay(long epoch) {
+        return LOCAL_DATE_FORMAT_DAY.format(epoch);
+    }
+
+    public static String ESTFormatTime(long epoch) {
+        return EST_DATE_FORMAT.format(epoch);
     }
 
     /**
@@ -54,7 +56,6 @@ public class DateUtil {
             hours = min / 60;
             days = hours / 24;
             return days + (days == 1 ? "day" : "days") + hours % 24 + "h";
-            //return String.valueOf(days) + (days==1?"day":"days") + String.valueOf(hours%24) + "h" + String.valueOf(min%60) + "min";
         }
     }
 
