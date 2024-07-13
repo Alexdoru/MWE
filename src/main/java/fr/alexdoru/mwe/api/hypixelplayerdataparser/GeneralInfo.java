@@ -3,7 +3,7 @@ package fr.alexdoru.mwe.api.hypixelplayerdataparser;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import fr.alexdoru.mwe.asm.hooks.GuiScreenHook;
+import fr.alexdoru.mwe.asm.hooks.GuiScreenHook_CustomChatClickEvent;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.utils.DateUtil;
 import fr.alexdoru.mwe.utils.HypixelLevelingUtil;
@@ -107,7 +107,7 @@ public class GeneralInfo extends LoginData {
             msg.appendSibling(new ChatComponentText(EnumChatFormatting.BLUE + "Discord ")
                     .setChatStyle(new ChatStyle()
                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to copy " + EnumChatFormatting.BLUE + this.DISCORD)))
-                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.COPY_TO_CLIPBOARD_COMMAND + this.DISCORD))
+                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook_CustomChatClickEvent.COPY_TO_CLIPBOARD_COMMAND + this.DISCORD))
                     ));
 
         }

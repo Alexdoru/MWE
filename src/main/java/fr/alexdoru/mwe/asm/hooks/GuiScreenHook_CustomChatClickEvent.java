@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 
 @SuppressWarnings("unused")
-public class GuiScreenHook {
+public class GuiScreenHook_CustomChatClickEvent {
 
     public static final String COPY_TO_CLIPBOARD_COMMAND = "/copyToClipBoard ";
     public static final String MW_GAME_END_STATS = "/gamestatsmw";

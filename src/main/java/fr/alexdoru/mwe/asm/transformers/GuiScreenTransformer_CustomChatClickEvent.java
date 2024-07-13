@@ -5,7 +5,7 @@ import fr.alexdoru.mwe.asm.loader.MWETransformer;
 import fr.alexdoru.mwe.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
-public class GuiScreenTransformer_ExecuteChatCommands implements MWETransformer {
+public class GuiScreenTransformer_CustomChatClickEvent implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {
@@ -44,7 +44,13 @@ public class GuiScreenTransformer_ExecuteChatCommands implements MWETransformer 
         final LabelNode notCancelled = new LabelNode();
         list.add(new VarInsnNode(ALOAD, 2));
         list.add(getNewMethodInsnNode(MethodMapping.CLICKEVENT$GETVALUE));
-        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiScreenHook"), "executeMWEClickEvent", "(Ljava/lang/String;)Z", false));
+        list.add(new MethodInsnNode(
+                INVOKESTATIC,
+                getHookClass("GuiScreenHook_CustomChatClickEvent"),
+                "executeMWEClickEvent",
+                "(Ljava/lang/String;)Z",
+                false
+        ));
         list.add(new JumpInsnNode(IFEQ, notCancelled));
         list.add(new InsnNode(ICONST_1));
         list.add(new InsnNode(IRETURN));

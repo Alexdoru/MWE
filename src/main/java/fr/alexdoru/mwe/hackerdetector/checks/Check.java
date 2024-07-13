@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.hackerdetector.checks;
 
 import fr.alexdoru.mwe.asm.accessors.EntityPlayerAccessor;
-import fr.alexdoru.mwe.asm.hooks.GuiScreenHook;
+import fr.alexdoru.mwe.asm.hooks.GuiScreenHook_CustomChatClickEvent;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.FlagChatComponent;
@@ -75,7 +75,7 @@ public abstract class Check implements ICheck {
         }
         final IChatComponent imsg = new FlagChatComponent(flagKey, msg)
                 .setChatStyle(new ChatStyle()
-                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.COPY_TO_CLIPBOARD_COMMAND + EnumChatFormatting.getTextWithoutFormattingCodes(msg)))
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook_CustomChatClickEvent.COPY_TO_CLIPBOARD_COMMAND + EnumChatFormatting.getTextWithoutFormattingCodes(msg)))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.RED + this.getCheatDescription()))));
         ChatUtil.addSkinToComponent(imsg, player.getName());
         if (!(ScoreboardTracker.isInMwGame() && ConfigHandler.autoreportFlaggedPlayers)) {

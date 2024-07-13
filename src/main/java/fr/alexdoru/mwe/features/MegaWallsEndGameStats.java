@@ -6,7 +6,7 @@ import fr.alexdoru.mwe.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.mwe.api.hypixelplayerdataparser.MegaWallsClassSkinData;
 import fr.alexdoru.mwe.api.hypixelplayerdataparser.MegaWallsClassStats;
 import fr.alexdoru.mwe.api.requests.HypixelPlayerData;
-import fr.alexdoru.mwe.asm.hooks.GuiScreenHook;
+import fr.alexdoru.mwe.asm.hooks.GuiScreenHook_CustomChatClickEvent;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.enums.MWClass;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
@@ -90,7 +90,7 @@ public class MegaWallsEndGameStats {
                 endGameStatsMessage = endGameStats.getGameStatMessage(formattedName, gameDuration);
                 mwClassStartGameStats = null;
                 ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Click to view the stats of your " + EnumChatFormatting.AQUA + "Mega Walls " + EnumChatFormatting.YELLOW + "game!")
-                        .setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook.MW_GAME_END_STATS))));
+                        .setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook_CustomChatClickEvent.MW_GAME_END_STATS))));
             } catch (Exception ignored) {}
             return null;
         });
