@@ -7,14 +7,7 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.gui.FontRenderer;
 
 @SuppressWarnings("unused")
-public class GuiIngameHook {
-
-    public static String cancelHungerTitle(String subtitle) {
-        if (ConfigHandler.hideHungerTitleInMW && subtitle.contains("Get to the center to stop the hunger")) {
-            return "";
-        }
-        return subtitle;
-    }
+public class GuiIngameHook_CustomSidebarLines {
 
     public static String getSidebarTextLine(String textIn, int lineNumber) {
         if (ConfigHandler.witherHUDinSidebar && lineNumber == 13 && ConfigHandler.showLastWitherHUD && ScoreboardTracker.isInMwGame() && ScoreboardTracker.getParser().isOnlyOneWitherAlive()) {

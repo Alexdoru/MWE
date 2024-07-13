@@ -31,7 +31,13 @@ public class SidebarmodRevampTransformer_CustomSidebarLines implements MWETransf
                             list.add(new VarInsnNode(ALOAD, 3));
                             list.add(new VarInsnNode(ALOAD, 0));
                             list.add(new FieldInsnNode(GETFIELD, "revamp/sidebarmod/gui/GuiSidebar", "redNumbers", "Z"));
-                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiIngameHook"), "getSidebarTextLineWidth", "(ILnet/minecraft/client/gui/FontRenderer;Z)I", false));
+                            list.add(new MethodInsnNode(
+                                    INVOKESTATIC,
+                                    getHookClass("GuiIngameHook_CustomSidebarLines"),
+                                    "getSidebarTextLineWidth",
+                                    "(ILnet/minecraft/client/gui/FontRenderer;Z)I",
+                                    false
+                            ));
                             methodNode.instructions.insert(nextNode, list);
                             status.addInjection();
                         }
@@ -44,10 +50,16 @@ public class SidebarmodRevampTransformer_CustomSidebarLines implements MWETransf
                         final AbstractInsnNode nextNode = insnNode.getNext();
                         if (checkVarInsnNode(nextNode, ASTORE, 13)) {
                             // Original line : String s1 = ScorePlayerTeam.formatPlayerName(scoreplayerteam1, score1.getPlayerName());
-                            // After transformation : String s1 = GuiIngameHook.getSidebarTextLine(ScorePlayerTeam.formatPlayerName(scoreplayerteam1, score1.getPlayerName()), j);
+                            // After transformation : String s1 = GuiIngameHook_CustomSidebarLines.getSidebarTextLine(ScorePlayerTeam.formatPlayerName(scoreplayerteam1, score1.getPlayerName()), j);
                             final InsnList list = new InsnList();
                             list.add(new VarInsnNode(ILOAD, 9));
-                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiIngameHook"), "getSidebarTextLine", "(Ljava/lang/String;I)Ljava/lang/String;", false));
+                            list.add(new MethodInsnNode(
+                                    INVOKESTATIC,
+                                    getHookClass("GuiIngameHook_CustomSidebarLines"),
+                                    "getSidebarTextLine",
+                                    "(Ljava/lang/String;I)Ljava/lang/String;",
+                                    false
+                            ));
                             methodNode.instructions.insertBefore(nextNode, list);
                             status.addInjection();
                         }
