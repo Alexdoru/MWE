@@ -19,13 +19,6 @@ public class SoundUtil {
         mc.getSoundHandler().playSound(PositionedSoundRecord.create(RANDOM_ORB, 1.0F));
     }
 
-    public static void playGameStartSound() {
-        mc.getSoundHandler().playSound(PositionedSoundRecord.create(RANDOM_ORB, 1.0F));
-        mc.getSoundHandler().playDelayedSound(PositionedSoundRecord.create(RANDOM_ORB, 1.0F), 2);
-        mc.getSoundHandler().playDelayedSound(PositionedSoundRecord.create(RANDOM_ORB, 1.0F), 4);
-        mc.getSoundHandler().playDelayedSound(PositionedSoundRecord.create(RANDOM_ORB, 1.0F), 6);
-    }
-
     public static void playLowHPSound() {
         mc.getSoundHandler().playSound(PositionedSoundRecord.create(NOTE_PLING, 1.0F));
         mc.getSoundHandler().playDelayedSound(PositionedSoundRecord.create(NOTE_PLING, 1.0F), 2);

@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.scoreboard;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.features.AFKSoundWarning;
 import fr.alexdoru.mwe.gui.guiapi.GuiManager;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
@@ -130,7 +131,7 @@ public class ScoreboardParser {
         if (wallsFallMatcher.find()) {
             isPrepPhase = true;
             if (!triggeredWallsFallAlert && wallsFallMatcher.group(1).equals("00") && wallsFallMatcher.group(2).equals("10") && !Display.isActive()) {
-                SoundUtil.playGameStartSound();
+                AFKSoundWarning.playWallsFallSound();
                 triggeredWallsFallAlert = true;
             }
             return;

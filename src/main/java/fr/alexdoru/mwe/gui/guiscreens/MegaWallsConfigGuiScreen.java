@@ -86,6 +86,12 @@ public class MegaWallsConfigGuiScreen extends MyGuiScreen {
                 GREEN + "Colored Leather Armor",
                 GRAY + "Changes iron armor worn by other players to colored leather armor matching their team color in Mega Walls"));
         this.buttonList.add(new OptionGuiButton(
+                xPosLeft, getButtonYPos(5),
+                "AFK sound warning",
+                (b) -> ConfigHandler.afkSoundWarning = b,
+                () -> ConfigHandler.afkSoundWarning,
+                GRAY + "Plays sound when you are about to get kicked for AFK in Mega Walls as well as when the walls are about to fall and your game is tabbed out"));
+        this.buttonList.add(new OptionGuiButton(
                 xPosRight, getButtonYPos(1),
                 "Renegade arrow count",
                 (b) -> ConfigHandler.renegadeArrowCount = b,

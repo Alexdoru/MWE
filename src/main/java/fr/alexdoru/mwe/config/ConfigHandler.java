@@ -315,6 +315,12 @@ public class ConfigHandler extends AbstractConfig {
     public static boolean coloredLeatherArmor;
 
     @ConfigProperty(
+            category = "MegaWallsEnhancements",
+            name = "AFK sound warning",
+            comment = "Plays sound when you are about to get kicked for AFK in Mega Walls")
+    public static boolean afkSoundWarning = true;
+
+    @ConfigProperty(
             category = "GUI",
             name = "Show kill cooldown HUD",
             comment = "Displays the cooldown for the /kill command when in MegaWalls")

@@ -4,10 +4,7 @@ import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.data.ScangameData;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
-import fr.alexdoru.mwe.features.FinalKillCounter;
-import fr.alexdoru.mwe.features.MegaWallsEndGameStats;
-import fr.alexdoru.mwe.features.PartyDetection;
-import fr.alexdoru.mwe.features.SquadHandler;
+import fr.alexdoru.mwe.features.*;
 import fr.alexdoru.mwe.gui.guiapi.GuiManager;
 import fr.alexdoru.mwe.hackerdetector.checks.Check;
 import fr.alexdoru.mwe.nocheaters.ReportSuggestionHandler;
@@ -29,6 +26,7 @@ import java.util.regex.Pattern;
 
 public class ChatListener {
 
+    private static final String AFK_MESSAGE = "Are you AFK? You could be kicked for AFKing!";
     private static final String BAN_MESSAGE = "A player has been removed from your game.";
     private static final String HUNTER_STRENGTH_MESSAGE = "Your Force of Nature gave you a 5 second Strength I buff.";
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
@@ -74,6 +72,11 @@ public class ChatListener {
 
             if (msg.equals(OWN_WITHER_DEATH_MESSAGE)) {
                 GuiManager.killCooldownHUD.hideHUD();
+                return;
+            }
+
+            if (msg.equals(AFK_MESSAGE)) {
+                AFKSoundWarning.playAFKKickSound();
                 return;
             }
 
