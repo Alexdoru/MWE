@@ -24,7 +24,7 @@ public class EntityOtherPlayerMPTransformer_LeatherArmor implements MWETransform
                 list.add(new VarInsnNode(ALOAD, 2));
                 list.add(new MethodInsnNode(
                         INVOKESTATIC,
-                        getHookClass("EntityOtherPlayerMPHook"),
+                        getHookClass("EntityOtherPlayerMPHook_LeatherArmor"),
                         "getLeatherArmor",
                         "(L" + ClassMapping.ENTITYOTHERPLAYERMP + ";IL" + ClassMapping.ITEMSTACK + ";)L" + ClassMapping.ITEMSTACK + ";",
                         false

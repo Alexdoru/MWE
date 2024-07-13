@@ -24,7 +24,7 @@ public class EntityOtherPlayerMPTransformer_FixAutoblockBypass implements MWETra
                 list.add(new VarInsnNode(ALOAD, 2));
                 list.add(new MethodInsnNode(
                         INVOKESTATIC,
-                        getHookClass("EntityOtherPlayerMPHook"),
+                        getHookClass("EntityOtherPlayerMPHook_FixAutoblockBypass"),
                         "shouldCancelEquipmentUpdate",
                         "(L" + ClassMapping.ENTITYOTHERPLAYERMP + ";IL" + ClassMapping.ITEMSTACK + ";)Z",
                         false
