@@ -19,14 +19,20 @@ public class EntityFXTransformer_ClearView implements MWETransformer {
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.ENTITYFX$RENDERPARTICLE)) {
                 // Injects at HEAD:
-                // if(EntityFXHook.shouldHideParticle(this, entityIn)) {
+                // if(EntityFXHook_CleanView.shouldHideParticle(this, entityIn)) {
                 //    return;
                 // }
                 final InsnList list = new InsnList();
                 final LabelNode notCanceled = new LabelNode();
                 list.add(new VarInsnNode(ALOAD, 0));
                 list.add(new VarInsnNode(ALOAD, 2));
-                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("EntityFXHook"), "shouldHideParticle", "(L" + ClassMapping.ENTITYFX + ";L" + ClassMapping.ENTITY + ";)Z", false));
+                list.add(new MethodInsnNode(
+                        INVOKESTATIC,
+                        getHookClass("EntityFXHook_CleanView"),
+                        "shouldHideParticle",
+                        "(L" + ClassMapping.ENTITYFX + ";L" + ClassMapping.ENTITY + ";)Z",
+                        false
+                ));
                 list.add(new JumpInsnNode(IFEQ, notCanceled));
                 list.add(new InsnNode(RETURN));
                 list.add(notCanceled);
