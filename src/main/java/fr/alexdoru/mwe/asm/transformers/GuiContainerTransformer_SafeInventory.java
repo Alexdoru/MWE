@@ -22,7 +22,7 @@ public class GuiContainerTransformer_SafeInventory implements MWETransformer {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkMethodInsnNode(insnNode, MethodMapping.GUICONTAINER$HANDLEMOUSECLICK)) {
                         // Insert before line 720 :
-                        // if (GuiContainerHook.shouldCancelHotkey(this.theSlot, i)) {
+                        // if (GuiContainerHook_SafeInventory.shouldCancelHotkey(this.theSlot, i)) {
                         //    return true;
                         // }
                         final InsnList list = new InsnList();
@@ -30,7 +30,13 @@ public class GuiContainerTransformer_SafeInventory implements MWETransformer {
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.GUICONTAINER$THESLOT));
                         list.add(new VarInsnNode(ILOAD, 2));
-                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiContainerHook"), "shouldCancelHotkey", "(L" + ClassMapping.SLOT + ";I)Z", false));
+                        list.add(new MethodInsnNode(
+                                INVOKESTATIC,
+                                getHookClass("GuiContainerHook_SafeInventory"),
+                                "shouldCancelHotkey",
+                                "(L" + ClassMapping.SLOT + ";I)Z",
+                                false
+                        ));
                         list.add(new JumpInsnNode(IFEQ, notCancelled));
                         list.add(new InsnNode(ICONST_1));
                         list.add(new InsnNode(IRETURN));
