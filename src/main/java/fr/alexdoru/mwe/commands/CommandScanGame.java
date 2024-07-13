@@ -9,8 +9,8 @@ import fr.alexdoru.mwe.api.hypixelplayerdataparser.MegaWallsClassStats;
 import fr.alexdoru.mwe.api.hypixelplayerdataparser.MegaWallsStats;
 import fr.alexdoru.mwe.api.requests.HypixelPlayerData;
 import fr.alexdoru.mwe.chat.ChatHandler;
-import fr.alexdoru.mwe.chat.ChatListener;
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.chat.LocrawListener;
 import fr.alexdoru.mwe.chat.ScanFlagChatComponent;
 import fr.alexdoru.mwe.data.ScangameData;
 import fr.alexdoru.mwe.enums.MWClass;
@@ -47,7 +47,7 @@ public class CommandScanGame extends MyAbstractCommand {
         }
         final String currentGameId = ScoreboardUtils.getGameIdFromScoreboard();
         if (currentGameId == null) {
-            ChatListener.runScangame();
+            LocrawListener.runScangame();
         } else {
             handleScangameCommand(currentGameId);
         }

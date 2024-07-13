@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.gui.guiscreens;
 
-import fr.alexdoru.mwe.chat.ChatListener;
+import fr.alexdoru.mwe.chat.LocrawListener;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.gui.elements.HUDSettingGuiButtons;
 import fr.alexdoru.mwe.gui.elements.SimpleGuiButton;
@@ -61,7 +61,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 () -> {
                     ConfigHandler.showBaseLocationHUD = !ConfigHandler.showBaseLocationHUD;
                     if (ConfigHandler.showBaseLocationHUD && ScoreboardTracker.isInMwGame()) {
-                        ChatListener.setMegaWallsMap();
+                        LocrawListener.setMegaWallsMap();
                     }
                 },
                 GuiManager.baseLocationHUD,

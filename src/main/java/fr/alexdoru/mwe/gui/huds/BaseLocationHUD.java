@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.gui.huds;
 
-import fr.alexdoru.mwe.chat.ChatListener;
+import fr.alexdoru.mwe.chat.LocrawListener;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.enums.MegaWallsMap;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
@@ -40,7 +40,7 @@ public class BaseLocationHUD extends AbstractRenderer {
     public void onMWEvent(MegaWallsGameEvent event) {
         if (!ConfigHandler.showBaseLocationHUD) return;
         if (event.getType() == MegaWallsGameEvent.EventType.CONNECT) {
-            ChatListener.setMegaWallsMap();
+            LocrawListener.setMegaWallsMap();
         }
     }
 

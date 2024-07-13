@@ -1,7 +1,6 @@
 package fr.alexdoru.mwe.chat;
 
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
-import fr.alexdoru.mwe.commands.CommandScanGame;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.data.ScangameData;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
@@ -17,7 +16,6 @@ import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.StringUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
@@ -40,7 +38,6 @@ public class ChatListener {
     private static final Pattern COINS_DOUBLED_GUILD_PATTERN = Pattern.compile("^(?:Tokens|Coins) just earned DOUBLED as a Guild Level Reward!$");
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ (tokens|coins)!.*");
     private static final Pattern COINS_BOOSTER_PATTERN = Pattern.compile("^\\+\\d+ (tokens|coins)!( \\([^()]*(?:Coins \\+ EXP|Booster)[^()]*\\)).*");
-    private static final Pattern LOCRAW_PATTERN = Pattern.compile("^\\{\"server\":\"(\\w+)\",\"gametype\":\"\\w+\"(?:|,\"lobbyname\":\"\\w+\")(?:|,\"mode\":\"\\w+\")(?:|,\"map\":\"([a-zA-Z0-9_ ]+)\")\\}$");
     private static final Pattern PLAYER_JOIN_PATTERN = Pattern.compile("^(\\w{1,16}) has joined \\([0-9]{1,3}/[0-9]{1,3}\\)!");
     private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:\\[[^\\[\\]]+] )*(\\w{2,16}):.*");
     private static final HashSet<String> MW_REPETITVE_MSG = new HashSet<>();
@@ -202,25 +199,6 @@ public class ChatListener {
 
             if (msg.equals(BAN_MESSAGE)) {
                 new DelayedTask(NetHandlerPlayClientHook_PlayerMapTracker::printDisconnectedPlayers, 10);
-                return;
-            }
-
-            if (interceptLocraw) {
-                if (System.currentTimeMillis() - timeInterceptLocraw < 1001L) {
-                    final Matcher locrawMatcher = LOCRAW_PATTERN.matcher(msg);
-                    if (locrawMatcher.matches()) {
-                        final String gameId = locrawMatcher.group(1).replace("mega", "M");
-                        final String map = locrawMatcher.group(2);
-                        if (locrawAction == LocrawAction.RUNSCANGAME) {
-                            CommandScanGame.handleScangameCommand(gameId);
-                        }
-                        GuiManager.baseLocationHUD.setCurrentMap(map); // can't hurt to set the map everytime
-                        interceptLocraw = false;
-                        event.setCanceled(true);
-                    }
-                } else {
-                    interceptLocraw = false;
-                }
             }
 
             /*Status messages*/
@@ -234,31 +212,6 @@ public class ChatListener {
 
         }
 
-    }
-
-    private static boolean interceptLocraw;
-    private static long timeInterceptLocraw;
-    private static LocrawAction locrawAction;
-
-    public static void runScangame() {
-        sendLocraw(LocrawAction.RUNSCANGAME);
-    }
-
-    public static void setMegaWallsMap() {
-        sendLocraw(LocrawAction.SETMEGAWALLSMAP);
-    }
-
-    private static void sendLocraw(LocrawAction action) {
-        if (Minecraft.getMinecraft().thePlayer != null) {
-            Minecraft.getMinecraft().thePlayer.sendChatMessage("/locraw");
-            interceptLocraw = true;
-            timeInterceptLocraw = System.currentTimeMillis();
-            locrawAction = action;
-        }
-    }
-
-    private enum LocrawAction {
-        RUNSCANGAME, SETMEGAWALLSMAP
     }
 
 }
