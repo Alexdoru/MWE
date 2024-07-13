@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class GuiChatHook {
+public class GuiChatHook_TabCompletePlayers {
 
     private static List<String> tabCompleteOptions;
 

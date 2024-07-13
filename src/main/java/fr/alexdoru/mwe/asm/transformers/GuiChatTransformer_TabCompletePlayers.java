@@ -24,7 +24,13 @@ public class GuiChatTransformer_TabCompletePlayers implements MWETransformer {
                 list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.GUICHAT$WAITINGONAUTOCOMPLETE));
                 list.add(new VarInsnNode(ALOAD, 1));
                 list.add(new VarInsnNode(ALOAD, 2));
-                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiChatHook"), "autoComplete", "(ZLjava/lang/String;Ljava/lang/String;)Z", false));
+                list.add(new MethodInsnNode(
+                        INVOKESTATIC,
+                        getHookClass("GuiChatHook_TabCompletePlayers"),
+                        "autoComplete",
+                        "(ZLjava/lang/String;Ljava/lang/String;)Z",
+                        false
+                ));
                 list.add(getNewFieldInsnNode(PUTFIELD, FieldMapping.GUICHAT$WAITINGONAUTOCOMPLETE));
                 methodNode.instructions.insert(list);
                 status.addInjection();
@@ -34,7 +40,13 @@ public class GuiChatTransformer_TabCompletePlayers implements MWETransformer {
                     if (checkFieldInsnNode(insnNode, GETSTATIC, FieldMapping.CLIENTCOMMANDHANDLER$INSTANCE)) {
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 1));
-                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiChatHook"), "getLatestAutoComplete", "([Ljava/lang/String;)[Ljava/lang/String;", false));
+                        list.add(new MethodInsnNode(
+                                INVOKESTATIC,
+                                getHookClass("GuiChatHook_TabCompletePlayers"),
+                                "getLatestAutoComplete",
+                                "([Ljava/lang/String;)[Ljava/lang/String;",
+                                false
+                        ));
                         list.add(new VarInsnNode(ASTORE, 1));
                         methodNode.instructions.insertBefore(insnNode, list);
                         status.addInjection();
