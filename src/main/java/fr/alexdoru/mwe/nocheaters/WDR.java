@@ -37,6 +37,9 @@ public class WDR implements Comparable<WDR> {
 
     public boolean addCheat(String cheat) {
         if (!this.cheats.contains(cheat)) {
+            if (cheat.endsWith("[H]")) {
+                this.cheats.remove("cheating");
+            }
             this.cheats.add(cheat);
             this.cheats.trimToSize();
             this.updateRedIcon();
