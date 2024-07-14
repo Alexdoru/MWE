@@ -200,7 +200,7 @@ public class ChatListener {
                 }
             }
 
-            if (msg.equals(BAN_MESSAGE)) {
+            if (ConfigHandler.showBannedPlayers && msg.equals(BAN_MESSAGE)) {
                 new DelayedTask(NetHandlerPlayClientHook_PlayerMapTracker::printDisconnectedPlayers, 10);
             }
 

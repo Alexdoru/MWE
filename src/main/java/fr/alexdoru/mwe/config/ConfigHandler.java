@@ -496,6 +496,12 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = "NoCheaters",
+            name = "Show banned players",
+            comment = "Reveals the name of the player getting banned when playing on hypixel")
+    public static boolean showBannedPlayers = true;
+
+    @ConfigProperty(
+            category = "NoCheaters",
             name = "Show Warning Icons",
             comment = "Display warning icon on names of reported players")
     public static boolean warningIconsOnNames = true;

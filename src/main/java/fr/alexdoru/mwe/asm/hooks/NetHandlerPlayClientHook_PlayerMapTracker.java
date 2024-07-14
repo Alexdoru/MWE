@@ -1,10 +1,10 @@
 package fr.alexdoru.mwe.asm.hooks;
 
-import com.google.common.collect.EvictingQueue;
 import fr.alexdoru.mwe.asm.accessors.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
 import fr.alexdoru.mwe.data.MWPlayerData;
+import fr.alexdoru.mwe.hackerdetector.data.SampleList;
 import fr.alexdoru.mwe.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
@@ -18,8 +18,7 @@ import java.util.*;
 
 public class NetHandlerPlayClientHook_PlayerMapTracker {
 
-    @SuppressWarnings("UnstableApiUsage")
-    private static final Queue<DisconnectedPlayer> latestDisconnected = EvictingQueue.create(20);
+    private static final SampleList<DisconnectedPlayer> latestDisconnected = new SampleList<>(20);
     private static final Map<String, NetworkPlayerInfo> playerInfoMap = new HashMap<>();
     private static final Map<String, ResourceLocation> skinMap = new HashMap<>();
 
@@ -64,7 +63,8 @@ public class NetHandlerPlayClientHook_PlayerMapTracker {
         final StringBuilder messageBuilder = new StringBuilder();
         final long timenow = System.currentTimeMillis();
         ResourceLocation skin = null;
-        for (final DisconnectedPlayer disconnectedPlayer : latestDisconnected) {
+        for (int i = 0; i < latestDisconnected.size(); i++) {
+            final DisconnectedPlayer disconnectedPlayer = latestDisconnected.get(i);
             if (disconnectedPlayer.playername != null && timenow - disconnectedPlayer.disconnectTime <= 1000L && !disconnectList.contains(disconnectedPlayer.playername)) {
                 final NetHandlerPlayClient netHandler = Minecraft.getMinecraft().getNetHandler();
                 NetworkPlayerInfo netInfo = null;
