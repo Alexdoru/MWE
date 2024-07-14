@@ -1,9 +1,9 @@
 package fr.alexdoru.mwe.nocheaters;
 
+import fr.alexdoru.mwe.asm.hooks.GuiScreenHook_CustomChatClickEvent;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.WarningChatComponent;
-import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DateUtil;
 import fr.alexdoru.mwe.utils.NameUtil;
 import net.minecraft.client.Minecraft;
@@ -13,6 +13,7 @@ import net.minecraft.event.HoverEvent;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 import java.util.UUID;
@@ -41,19 +42,19 @@ public class WarningMessages {
 
     public static void printWarningMessage(UUID uuid, Team team, String playername, WDR wdr) {
         final String wdrmapKey = uuid.version() == 4 ? uuid.toString() : playername;
-        final IChatComponent imsg = new WarningChatComponent(playername, RED + "Warning : ")
-                .appendSibling(getPlayernameWithHoverText(null, team, playername, wdrmapKey, wdr))
-                .appendText(GRAY + " joined, Cheats :");
-        ChatUtil.addSkinToComponent(imsg, playername);
-        final IChatComponent allCheats = wdr.getFormattedCheats();
-        if (!ScoreboardTracker.isPreGameLobby()) {
-            allCheats.setChatStyle(new ChatStyle()
-                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(GREEN + "Click this message to report this player" + "\n"
-                            + YELLOW + "Command : " + RED + "/report " + playername + " cheating" + ChatUtil.getReportingAdvice())))
-                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + playername + " cheating")));
-        }
-        imsg.appendSibling(allCheats);
-        ChatUtil.addChatMessage(imsg);
+        final IChatComponent firstPartImsg = new WarningChatComponent(playername, RED + "Warning : ")
+                .appendSibling(getPlayernameWithHoverText(null, team, playername, wdrmapKey, wdr));
+        ChatUtil.addSkinToComponent(firstPartImsg, playername);
+        final ChatStyle copyChatStyle = new ChatStyle();
+        final IChatComponent secondPartImsg = new ChatComponentText(GRAY + " joined, Cheats :")
+                .appendSibling(wdr.getFormattedCheats())
+                .setChatStyle(copyChatStyle);
+        firstPartImsg.appendSibling(secondPartImsg);
+        final String msg = EnumChatFormatting.getTextWithoutFormattingCodes(firstPartImsg.getUnformattedText());
+        copyChatStyle.setChatClickEvent(new ClickEvent(
+                ClickEvent.Action.RUN_COMMAND,
+                GuiScreenHook_CustomChatClickEvent.COPY_TO_CLIPBOARD_COMMAND + msg));
+        ChatUtil.addChatMessage(firstPartImsg);
     }
 
     public static IChatComponent getPlayernameWithHoverText(String formattedName, Team team, String playername, String wdrmapKey, WDR wdr) {
