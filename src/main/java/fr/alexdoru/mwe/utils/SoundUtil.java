@@ -15,7 +15,7 @@ public class SoundUtil {
         mc.getSoundHandler().playSound(PositionedSoundRecord.create(FIRECHARGE_USE, 0.0F));
     }
 
-    public static void playReportSuggestionSound() {
+    public static void playChatNotifSound() {
         mc.getSoundHandler().playSound(PositionedSoundRecord.create(RANDOM_ORB, 1.0F));
     }
 

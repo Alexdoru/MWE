@@ -16,6 +16,7 @@ import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.NameUtil;
+import fr.alexdoru.mwe.utils.SoundUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -41,14 +42,25 @@ public abstract class Check implements ICheck {
 
     protected static final Minecraft mc = Minecraft.getMinecraft();
     private static final HashSet<String> flagMessages = new HashSet<>();
+    private static long lastSoundTime;
 
     @Override
     public final void checkViolationLevel(EntityPlayer player, boolean failedCheck, ViolationLevelTracker... trackers) {
         for (final ViolationLevelTracker tracker : trackers) {
             if (tracker.isFlagging(failedCheck)) {
+                this.playFlagSound();
                 this.printFlagMessage(player);
                 this.addToReportList(player);
                 this.sendReport(player);
+            }
+        }
+    }
+
+    private void playFlagSound() {
+        if (ConfigHandler.soundWhenFlagging) {
+            if (System.currentTimeMillis() - lastSoundTime > 250) {
+                SoundUtil.playChatNotifSound();
+                lastSoundTime = System.currentTimeMillis();
             }
         }
     }
@@ -63,7 +75,7 @@ public abstract class Check implements ICheck {
             return;
         }
         final String flagKey = playername + (ConfigHandler.showFlagMessageType ? cheatType : this.getCheatName());
-        final String msg = ChatUtil.getTagNoCheaters() + EnumChatFormatting.RESET
+        final String msg = ConfigHandler.flagMessagePrefix + EnumChatFormatting.RESET
                 + NameUtil.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.YELLOW + " flags "
                 + EnumChatFormatting.RED + (ConfigHandler.showFlagMessageType ? cheatType : this.getCheatName());
@@ -78,11 +90,13 @@ public abstract class Check implements ICheck {
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook_CustomChatClickEvent.COPY_TO_CLIPBOARD_COMMAND + EnumChatFormatting.getTextWithoutFormattingCodes(msg)))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.RED + this.getCheatDescription()))));
         ChatUtil.addSkinToComponent(imsg, player.getName());
-        if (!(ScoreboardTracker.isInMwGame() && ConfigHandler.autoreportFlaggedPlayers)) {
-            imsg.appendSibling(ChatUtil.getReportButton(playername, "cheating " + this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
-        }
-        if (ScoreboardTracker.isReplayMode() || !ConfigHandler.addToReportList) {
-            imsg.appendSibling(ChatUtil.getWDRButton(playername, this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
+        if (ConfigHandler.showReportButtonOnFlags) {
+            if (!(ScoreboardTracker.isInMwGame() && ConfigHandler.autoreportFlaggedPlayers)) {
+                imsg.appendSibling(ChatUtil.getReportButton(playername, "cheating " + this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
+            }
+            if (ScoreboardTracker.isReplayMode() || !ConfigHandler.addToReportList) {
+                imsg.appendSibling(ChatUtil.getWDRButton(playername, this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
+            }
         }
         if (ConfigHandler.compactFlagMessages) {
             ChatHandler.deleteFlagFromChat(flagKey);

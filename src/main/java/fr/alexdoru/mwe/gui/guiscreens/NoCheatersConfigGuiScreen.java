@@ -53,7 +53,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 () -> {
                     ConfigHandler.reportSuggestions = !ConfigHandler.reportSuggestions;
                     if (ConfigHandler.reportSuggestions) {
-                        SoundUtil.playReportSuggestionSound();
+                        SoundUtil.playChatNotifSound();
                     }
                 }, GREEN + "Report suggestions in chat",
                 GRAY + "When there is a message that respects the following patterns, it will print a report suggestion in chat",

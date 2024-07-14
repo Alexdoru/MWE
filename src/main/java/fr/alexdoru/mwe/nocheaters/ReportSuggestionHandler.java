@@ -165,7 +165,7 @@ public class ReportSuggestionHandler {
         }
 
         if (!isSenderCheating && !isSenderFlaging) {
-            SoundUtil.playReportSuggestionSound();
+            SoundUtil.playChatNotifSound();
         }
 
         if (!isSenderInTablist || messageSender == null) {

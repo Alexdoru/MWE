@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.config;
 
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.gui.guiapi.GuiPosition;
+import net.minecraft.util.EnumChatFormatting;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class ConfigHandler extends AbstractConfig {
 
-    private static ConfigHandler INSTANCE;
+    private static AbstractConfig INSTANCE;
 
     private ConfigHandler(File file) {
         super(ConfigHandler.class, file);
@@ -615,6 +616,24 @@ public class ConfigHandler extends AbstractConfig {
             name = "Report flagged players",
             comment = "Sends a report for flagged players")
     public static boolean autoreportFlaggedPlayers = true;
+
+    @ConfigProperty(
+            category = "HackerDetector",
+            name = "Sound when flagging",
+            comment = "Plays a sound when it flags a player")
+    public static boolean soundWhenFlagging;
+
+    @ConfigProperty(
+            category = "HackerDetector",
+            name = "Show report button on flags",
+            comment = "Shows the report button on flag messages")
+    public static boolean showReportButtonOnFlags = true;
+
+    @ConfigProperty(
+            category = "HackerDetector",
+            name = "Flag message prefix",
+            comment = "Lets you chose the prefix of flags messages")
+    public static String flagMessagePrefix = EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "NoCheaters" + EnumChatFormatting.GOLD + "] ";
 
     @ConfigProperty(
             category = "Hitbox",
