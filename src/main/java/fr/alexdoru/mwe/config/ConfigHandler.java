@@ -240,6 +240,12 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = "MegaWallsEnhancements",
+            name = "Tablist column separator",
+            comment = "Spacing between columns in the tablist, in pixels. (Vanilla 5)")
+    public static int tablistColumnSpacing = 1;
+
+    @ConfigProperty(
+            category = "MegaWallsEnhancements",
             name = "Color when an entity gets hurt",
             comment = "Color when an entity gets hurt")
     public static int hitColor = 0x4CFF0000;
