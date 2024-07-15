@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.asm.accessors.EntityPlayerAccessor;
+import fr.alexdoru.mwe.asm.accessors.IWitherColor;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import net.minecraft.entity.EntityLivingBase;
 
@@ -10,8 +11,11 @@ public class RendererLivingEntityHook_HitColor {
     private static int hitColor;
 
     public static float getRed(float r, EntityLivingBase entity) {
-        if (ConfigHandler.useTeamColorWhenHurt && entity instanceof EntityPlayerAccessor) {
+        if (ConfigHandler.teamColoredPlayerHurt && entity instanceof EntityPlayerAccessor) {
             hitColor = ((EntityPlayerAccessor) entity).getPlayerTeamColorInt();
+        } else if (ConfigHandler.teamColoredWitherHurt && entity instanceof IWitherColor) {
+            final int i = ((IWitherColor) entity).getmwe$Color();
+            hitColor = i == 0 ? ConfigHandler.hitColor : i;
         } else {
             hitColor = ConfigHandler.hitColor;
         }

@@ -70,11 +70,17 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
         this.buttonList.add(new OptionGuiButton(
                 xLeftCol, getButtonYPos(8),
                 buttonsWidth, 20,
+                "Withers",
+                (b) -> ConfigHandler.drawHitboxForWithers = b,
+                () -> ConfigHandler.drawHitboxForWithers));
+        this.buttonList.add(new OptionGuiButton(
+                xLeftCol, getButtonYPos(9),
+                buttonsWidth, 20,
                 "Item frame",
                 (b) -> ConfigHandler.drawHitboxItemFrame = b,
                 () -> ConfigHandler.drawHitboxItemFrame));
         this.buttonList.add(new OptionGuiButton(
-                xLeftCol, getButtonYPos(9),
+                xLeftCol, getButtonYPos(10),
                 buttonsWidth, 20,
                 "Other entities",
                 (b) -> ConfigHandler.drawHitboxForOtherEntity = b,
@@ -82,14 +88,14 @@ public class HitboxConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISli
         this.buttonList.add(new OptionGuiButton(
                 xRightCol, getButtonYPos(1),
                 buttonsWidth, 20,
-                "Team color for players",
-                (b) -> ConfigHandler.teamColoredHitbox = b,
-                () -> ConfigHandler.teamColoredHitbox,
-                GRAY + "For players, the hitbox will take the color of the player's team"));
+                "Team colored",
+                (b) -> ConfigHandler.teamColoredPlayerHitbox = b,
+                () -> ConfigHandler.teamColoredPlayerHitbox,
+                GRAY + "For players, the hitbox will take the color of the team associated team"));
         this.buttonList.add(new OptionGuiButton(
                 xRightCol, getButtonYPos(2),
                 buttonsWidth, 20,
-                "Team color for arrows",
+                "Team colored arrows",
                 (b) -> ConfigHandler.teamColoredArrowHitbox = b,
                 () -> ConfigHandler.teamColoredArrowHitbox,
                 GRAY + "For arrows, the hitbox will take the color of the shooter's team"));

@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.asm.accessors.EntityPlayerAccessor;
 import fr.alexdoru.mwe.asm.accessors.IHitboxRender;
+import fr.alexdoru.mwe.asm.accessors.IWitherColor;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.Entity;
@@ -30,8 +31,11 @@ public class RenderManagerHook_Hitboxes {
     private static int hitboxColor = 0xFFFFFF;
 
     public static int getRedHitboxColor(int r, Entity entity) {
-        if (ConfigHandler.teamColoredHitbox && entity instanceof EntityPlayerAccessor) {
+        if (ConfigHandler.teamColoredPlayerHitbox && entity instanceof EntityPlayerAccessor) {
             hitboxColor = ((EntityPlayerAccessor) entity).getPlayerTeamColorInt();
+        } else if (ConfigHandler.teamColoredWitherHitbox && entity instanceof IWitherColor) {
+            final int i = ((IWitherColor) entity).getmwe$Color();
+            hitboxColor = i == 0 ? ConfigHandler.hitboxColor : i;
         } else if (ConfigHandler.teamColoredArrowHitbox && entity instanceof EntityArrow && ((EntityArrow) entity).shootingEntity instanceof EntityPlayerAccessor) {
             hitboxColor = ((EntityPlayerAccessor) ((EntityArrow) entity).shootingEntity).getPlayerTeamColorInt();
         } else {

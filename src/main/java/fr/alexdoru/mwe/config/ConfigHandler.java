@@ -33,7 +33,8 @@ public class ConfigHandler extends AbstractConfig {
     }
 
     private static void onModUpdate() {
-        if (!modVersion.equals(MWE.version)) {
+        if (!ConfigHandler.modVersion.equals(MWE.version)) {
+            ConfigHandler.drawHitboxForWithers = false;
             if (ConfigHandler.lastWitherHUDPosition.getRelativeX() == 0.75d && ConfigHandler.lastWitherHUDPosition.getRelativeY() == 0.05d) {
                 ConfigHandler.lastWitherHUDPosition.resetToDefault();
             }
@@ -251,9 +252,15 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = "MegaWallsEnhancements",
-            name = "Use team color when hurt",
-            comment = "Use team color when hurt")
-    public static boolean useTeamColorWhenHurt;
+            name = "Team colored hurt color for players",
+            comment = "Hurt effect takes color of the player's team")
+    public static boolean teamColoredPlayerHurt = true;
+
+    @ConfigProperty(
+            category = "MegaWallsEnhancements",
+            name = "Team colored hurt color for withers",
+            comment = "Hurt effect takes color of the wither's team")
+    public static boolean teamColoredWitherHurt = true;
 
     @ConfigProperty(
             category = "MegaWallsEnhancements",
@@ -685,6 +692,12 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = "Hitbox",
+            name = "Hitbox for withers",
+            comment = "Hitbox for withers")
+    public static boolean drawHitboxForWithers = true;
+
+    @ConfigProperty(
+            category = "Hitbox",
             name = "Hitbox for item frame",
             comment = "Hitbox for item frame")
     public static boolean drawHitboxItemFrame = true;
@@ -739,9 +752,15 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = "Hitbox",
-            name = "Team colored hitbox",
-            comment = "Makes the player hitboxes take the color of the player's team")
-    public static boolean teamColoredHitbox = true;
+            name = "Team colored player hitbox",
+            comment = "Player hitboxes take the color of their team")
+    public static boolean teamColoredPlayerHitbox = true;
+
+    @ConfigProperty(
+            category = "Hitbox",
+            name = "Team colored wither hitbox",
+            comment = "Wither hitboxes take the color of their team")
+    public static boolean teamColoredWitherHitbox = true;
 
     @ConfigProperty(
             category = "Hitbox",

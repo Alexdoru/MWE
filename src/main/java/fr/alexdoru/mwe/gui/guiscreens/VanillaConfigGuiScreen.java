@@ -122,8 +122,8 @@ public class VanillaConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISl
         this.buttonList.add(new FancyGuiButton(
                 xPosRight + buttonWidth / 2 + 2, getButtonYPos(2),
                 buttonWidth / 2 - 2, buttonsHeight,
-                () -> "Use team color : " + (ConfigHandler.useTeamColorWhenHurt ? GREEN + "On" : RED + "Off"),
-                () -> ConfigHandler.useTeamColorWhenHurt = !ConfigHandler.useTeamColorWhenHurt,
+                () -> "Use team color : " + (ConfigHandler.teamColoredPlayerHurt ? GREEN + "On" : RED + "Off"),
+                () -> ConfigHandler.teamColoredPlayerHurt = !ConfigHandler.teamColoredPlayerHurt,
                 GREEN + "Use team color",
                 GRAY + "When hurt the players will take the color of their team, other entities will take the custom color defined above.",
                 YELLOW + "When this is enabled, it still uses the alpha level defined in the custom color."));

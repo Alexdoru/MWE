@@ -16,10 +16,11 @@ public class HitboxRenderTransformer implements MWETransformer {
     public String[] getTargetClassName() {
         return new String[]{
                 "net.minecraft.client.entity.AbstractClientPlayer",
-                "net.minecraft.entity.projectile.EntityArrow",
+                "net.minecraft.entity.boss.EntityWither",
                 "net.minecraft.entity.item.EntityItem",
+                "net.minecraft.entity.item.EntityItemFrame",
                 "net.minecraft.entity.passive.EntityAnimal",
-                "net.minecraft.entity.item.EntityItemFrame"
+                "net.minecraft.entity.projectile.EntityArrow"
         };
     }
 
@@ -29,9 +30,10 @@ public class HitboxRenderTransformer implements MWETransformer {
         addInterface(classNode, "IHitboxRender");
         final Map<String, String> map = new HashMap<>();
         map.put(ABSTRACTCLIENTPLAYER.name, "drawHitboxForPlayers");
+        map.put(ENTITYWITHER.name, "drawHitboxForWithers");
         map.put(ENTITYITEM.name, "drawHitboxForDroppedItems");
-        map.put(ENTITYANIMAL.name, "drawHitboxForPassiveMobs");
         map.put(ENTITYITEMFRAME.name, "drawHitboxItemFrame");
+        map.put(ENTITYANIMAL.name, "drawHitboxForPassiveMobs");
         if (map.containsKey(classNode.name)) {
             final MethodNode methodNode = new MethodNode(ACC_PUBLIC, "mwe$shouldRenderHitbox", "()Z", null, null);
             classNode.methods.add(methodNode);
