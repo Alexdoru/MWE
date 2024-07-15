@@ -7,7 +7,7 @@ import fr.alexdoru.mwe.asm.mappings.FieldMapping;
 import fr.alexdoru.mwe.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
-public class RendererLivingEntity_HitColor implements MWETransformer {
+public class RendererLivingEntityTransformer_HitColor implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {

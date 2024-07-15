@@ -15,7 +15,11 @@ import java.util.Map;
 public class ASMLoadingPlugin implements IFMLLoadingPlugin {
 
     public static final Logger logger = LogManager.getLogger("ASM MWE");
-    private static final boolean DUMP_CLASSES = Boolean.parseBoolean(System.getProperty("mwe.dumpclass", "false"));
+    // JVM flags
+    // -Dmwe.moreclassdump=true
+    // -Dmwe.classdump=true
+    private static final boolean MORE_CLASS_DUMP = Boolean.parseBoolean(System.getProperty("mwe.moreclassdump", "false"));
+    private static final boolean CLASS_DUMP = MORE_CLASS_DUMP || Boolean.parseBoolean(System.getProperty("mwe.classdump", "false"));
     private static boolean isObf;
 
     @Override
@@ -74,8 +78,12 @@ public class ASMLoadingPlugin implements IFMLLoadingPlugin {
         return isObf;
     }
 
-    public static boolean dumpClasses() {
-        return !isObf || DUMP_CLASSES;
+    public static boolean classDump() {
+        return !isObf() || CLASS_DUMP;
+    }
+
+    public static boolean moreClassDump() {
+        return MORE_CLASS_DUMP;
     }
 
 }

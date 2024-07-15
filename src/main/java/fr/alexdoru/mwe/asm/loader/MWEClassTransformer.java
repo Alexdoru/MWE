@@ -31,95 +31,92 @@ public class MWEClassTransformer implements IClassTransformer {
     private File outputDir = null;
     private final HashMap<String, List<MWETransformer>> transformers = new HashMap<>();
 
-    /**
-     * Register the MWETransformer(s) here
-     */
     public MWEClassTransformer() {
-        registerTransformer(new C08PacketPlayerBlockPlacementTransformer());
-        registerTransformer(new ChatComponentStyleTransformer_ChatHeads());
-        registerTransformer(new ChatComponentTextTransformer_ChatHeads());
-        registerTransformer(new CommandHandlerTransformer_CaseCommand());
-        registerTransformer(new EntityArrowTransformer());
-        registerTransformer(new EntityFXTransformer_ClearView());
-        registerTransformer(new EntityLivingBaseTransformer_RotationTracker());
-        registerTransformer(new EntityOtherPlayerMPTransformer_FixAutoblockBypass());
-        registerTransformer(new EntityOtherPlayerMPTransformer_LeatherArmor());
-        registerTransformer(new EntityOtherPlayerMPTransformer_PositionTracker());
-        registerTransformer(new EntityPlayerTransformer());
-        registerTransformer(new EntityPlayerTransformer_FixAutoblockBypass());
-        registerTransformer(new EntityPlayerSPTransformer_CommandListener());
-        registerTransformer(new EntityRendererTransformer_CancelNightVision());
-        registerTransformer(new EntityRendererTransformer_RenderOverlayHook());
-        registerTransformer(new EntityWitherTransformer_Color());
-        registerTransformer(new GuiChatTransformer_Accessor());
-        registerTransformer(new GuiChatTransformer_TabCompletePlayers());
-        registerTransformer(new GuiContainerTransformer_SafeInventory());
-        registerTransformer(new GuiIngameForgeTransformer_FixActionBar());
-        registerTransformer(new GuiIngameTransformer_CancelHunger());
-        registerTransformer(new GuiIngameTransformer_CustomSidebarLines());
-        registerTransformer(new GuiNewChatTransformer_ChatHeads());
-        registerTransformer(new GuiNewChatTransformer_CleanChatLogs());
-        registerTransformer(new GuiNewChatTransformer());
-        registerTransformer(new GuiPlayerTabOverlayTransformer_ColoredScores());
-        registerTransformer(new GuiPlayerTabOverlayTransformer_FinalKills());
-        registerTransformer(new GuiPlayerTabOverlayTransformer_FixDrawRect());
-        registerTransformer(new GuiPlayerTabOverlayTransformer_HideHeaderFooter());
-        registerTransformer(new GuiPlayerTabOverlayTransformer_HidePing());
-        registerTransformer(new GuiPlayerTabOverlayTransformer_LongerTab());
-        registerTransformer(new GuiPlayerTabOverlayTransformer_PlayerCount());
-        registerTransformer(new GuiScreenBookTransformer_NewNickKey());
-        registerTransformer(new GuiScreenTransformer_CustomChatClickEvent());
-        registerTransformer(new GuiUtilRenderComponentsTransformer_ChatHeads());
-        registerTransformer(new HitboxRenderTransformer());
-        registerTransformer(new LayerArmorBaseTransformer_HitColor());
-        registerTransformer(new LayerArrowTransformer());
-        registerTransformer(new MinecraftTransformer_DebugMessages());
-        registerTransformer(new MinecraftTransformer_DropProtection());
-        registerTransformer(new MinecraftTransformer_WarpProtection());
-        registerTransformer(new NetHandlerPlayClientTransformer_BlockBreakAnimListener());
-        registerTransformer(new NetHandlerPlayClientTransformer_BlockChangeListener());
-        registerTransformer(new NetHandlerPlayClientTransformer_EntityMetadata());
-        registerTransformer(new NetHandlerPlayClientTransformer_PlayerMapTracker());
-        registerTransformer(new NetHandlerPlayClientTransformer_TeamsListener());
-        registerTransformer(new NetworkManagerTransformer_ServerPacketListener());
-        registerTransformer(new NetworkPlayerInfo$1Transformer_ChatHeads());
-        registerTransformer(new NetworkPlayerInfoTransformer_ChatHeads());
-        registerTransformer(new NetworkPlayerInfoTransformer_CustomTab());
-        registerTransformer(new RendererLivingEntity_HitColor());
-        registerTransformer(new RenderGlobalTransformer_LimitDroppedItems());
-        registerTransformer(new RenderGlobalTransformer_ListenDestroyedBlocks());
-        registerTransformer(new RenderManagerTransformer_Hitboxes());
-        registerTransformer(new RenderPlayerTransformer_ColoredHealth());
-        registerTransformer(new RenderPlayerTransformer_RenegadeArrowCount());
-        registerTransformer(new S19PacketEntityStatusTransformer());
-        registerTransformer(new ScoreboardTransformer());
-        registerTransformer(new ScorePlayerTeamTransformer());
-        registerTransformer(new OptifinePlayerItemsLayerTransformer_RemoveHats());
-        registerTransformer(new OrangeSprintRendererTransformer_HideHUD());
-        registerTransformer(new SidebarmodReloadedTransformer_CustomSidebarLines());
-        registerTransformer(new SidebarmodRevampTransformer_CustomSidebarLines());
+        register(new C08PacketPlayerBlockPlacementTransformer());
+        register(new ChatComponentStyleTransformer_ChatHeads());
+        register(new ChatComponentTextTransformer_ChatHeads());
+        register(new CommandHandlerTransformer_CaseCommand());
+        register(new EntityArrowTransformer());
+        register(new EntityFXTransformer_ClearView());
+        register(new EntityLivingBaseTransformer_RotationTracker());
+        register(new EntityOtherPlayerMPTransformer_FixAutoblockBypass());
+        register(new EntityOtherPlayerMPTransformer_LeatherArmor());
+        register(new EntityOtherPlayerMPTransformer_PositionTracker());
+        register(new EntityPlayerTransformer());
+        register(new EntityPlayerTransformer_FixAutoblockBypass());
+        register(new EntityPlayerSPTransformer_CommandListener());
+        register(new EntityRendererTransformer_CancelNightVision());
+        register(new EntityRendererTransformer_RenderOverlayHook());
+        register(new EntityWitherTransformer_Color());
+        register(new GuiChatTransformer_Accessor());
+        register(new GuiChatTransformer_TabCompletePlayers());
+        register(new GuiContainerTransformer_SafeInventory());
+        register(new GuiIngameForgeTransformer_FixActionBar());
+        register(new GuiIngameTransformer_CancelHunger());
+        register(new GuiIngameTransformer_CustomSidebarLines());
+        register(new GuiNewChatTransformer_ChatHeads());
+        register(new GuiNewChatTransformer_CleanChatLogs());
+        register(new GuiNewChatTransformer());
+        register(new GuiPlayerTabOverlayTransformer_ColoredScores());
+        register(new GuiPlayerTabOverlayTransformer_FinalKills());
+        register(new GuiPlayerTabOverlayTransformer_FixDrawRect());
+        register(new GuiPlayerTabOverlayTransformer_HideHeaderFooter());
+        register(new GuiPlayerTabOverlayTransformer_HidePing());
+        register(new GuiPlayerTabOverlayTransformer_LongerTab());
+        register(new GuiPlayerTabOverlayTransformer_PlayerCount());
+        register(new GuiScreenBookTransformer_NewNickKey());
+        register(new GuiScreenTransformer_CustomChatClickEvent());
+        register(new GuiUtilRenderComponentsTransformer_ChatHeads());
+        register(new HitboxRenderTransformer());
+        register(new LayerArmorBaseTransformer_HitColor());
+        register(new LayerArrowTransformer());
+        register(new MinecraftTransformer_DebugMessages());
+        register(new MinecraftTransformer_DropProtection());
+        register(new MinecraftTransformer_WarpProtection());
+        register(new NetHandlerPlayClientTransformer_BlockBreakAnimListener());
+        register(new NetHandlerPlayClientTransformer_BlockChangeListener());
+        register(new NetHandlerPlayClientTransformer_EntityMetadata());
+        register(new NetHandlerPlayClientTransformer_PlayerMapTracker());
+        register(new NetHandlerPlayClientTransformer_TeamsListener());
+        register(new NetworkManagerTransformer_ServerPacketListener());
+        register(new NetworkPlayerInfo$1Transformer_ChatHeads());
+        register(new NetworkPlayerInfoTransformer_ChatHeads());
+        register(new NetworkPlayerInfoTransformer_CustomTab());
+        register(new RendererLivingEntityTransformer_HitColor());
+        register(new RenderGlobalTransformer_LimitDroppedItems());
+        register(new RenderGlobalTransformer_ListenDestroyedBlocks());
+        register(new RenderManagerTransformer_Hitboxes());
+        register(new RenderPlayerTransformer_ColoredHealth());
+        register(new RenderPlayerTransformer_RenegadeArrowCount());
+        register(new S19PacketEntityStatusTransformer());
+        register(new ScoreboardTransformer());
+        register(new ScorePlayerTeamTransformer());
+        register(new OptifinePlayerItemsLayerTransformer_RemoveHats());
+        register(new OrangeSprintRendererTransformer_HideHUD());
+        register(new SidebarmodReloadedTransformer_CustomSidebarLines());
+        register(new SidebarmodRevampTransformer_CustomSidebarLines());
         if ("01/04".equals(new SimpleDateFormat("dd/MM").format(new Date().getTime())))
-            registerTransformer(new RendererLivingEntityTransformer_AprilFun());
+            register(new RendererLivingEntityTransformer_AprilFun());
     }
 
-    private void registerTransformer(MWETransformer classTransformer) {
-        for (final String clazz : classTransformer.getTargetClassName()) {
-            transformers.computeIfAbsent(clazz, k -> new ArrayList<>()).add(classTransformer);
+    private void register(MWETransformer transformer) {
+        for (final String className : transformer.getTargetClassName()) {
+            transformers.computeIfAbsent(className, k -> new ArrayList<>()).add(transformer);
         }
     }
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
-        if (basicClass == null) return null;
-        final List<MWETransformer> transformerList = transformers.get(transformedName);
-        if (transformerList == null) return basicClass;
-        final long l = System.currentTimeMillis();
+        if (basicClass == null || !transformers.containsKey(transformedName)) {
+            return basicClass;
+        }
+        final long l = System.nanoTime();
         try {
             final ClassReader classReader = new ClassReader(basicClass);
             final ClassNode classNode = new ClassNode();
             classReader.accept(classNode, 0);
             boolean skip = true;
-            for (final MWETransformer transformer : transformerList) {
+            for (final MWETransformer transformer : transformers.get(transformedName)) {
                 final InjectionStatus status = new InjectionStatus();
                 transformer.transform(classNode, status);
                 if (status.isSkippingTransformation()) {
@@ -143,7 +140,7 @@ public class MWEClassTransformer implements IClassTransformer {
         } catch (Throwable t) {
             ASMLoadingPlugin.logger.error("Failed to transform " + transformedName, t);
         }
-        final long l2 = System.currentTimeMillis() - l;
+        final long l2 = (System.nanoTime() - l) / 1_000_000L;
         debugLog("Transformed " + transformedName + " in " + l2 + "ms");
         saveTransformedClass(basicClass, transformedName);
         return basicClass;
@@ -155,10 +152,10 @@ public class MWEClassTransformer implements IClassTransformer {
     }
 
     private static void debugLog(String msg) {
-        if (ASMLoadingPlugin.isObf()) {
-            ASMLoadingPlugin.logger.debug(msg);
-        } else {
+        if (ASMLoadingPlugin.classDump()) {
             ASMLoadingPlugin.logger.info(msg);
+        } else {
+            ASMLoadingPlugin.logger.debug(msg);
         }
     }
 
@@ -174,16 +171,22 @@ public class MWEClassTransformer implements IClassTransformer {
     }
 
     private void saveTransformedClass(final byte[] data, final String transformedName) {
-        if (!ASMLoadingPlugin.dumpClasses()) {
+        if (!ASMLoadingPlugin.classDump() && !ASMLoadingPlugin.moreClassDump()) {
             return;
         }
         if (outputDir == null) {
             emptyClassOutputFolder();
         }
         final String fileName = transformedName.replace('.', File.separatorChar);
+        writeClassFile(data, transformedName, fileName);
+        if (ASMLoadingPlugin.moreClassDump()) {
+            writeBytecodeFile(data, transformedName, fileName);
+            writeASMFile(data, transformedName, fileName);
+        }
+    }
+
+    private void writeClassFile(byte[] data, String transformedName, String fileName) {
         final File classFile = new File(outputDir, fileName + ".class");
-        final File bytecodeFile = new File(outputDir, fileName + "_BYTE.txt");
-        final File asmifiedFile = new File(outputDir, fileName + "_ASM.txt");
         final File outDir = classFile.getParentFile();
         if (!outDir.exists()) {
             //noinspection ResultOfMethodCallIgnored
@@ -199,6 +202,15 @@ public class MWEClassTransformer implements IClassTransformer {
         } catch (IOException e) {
             ASMLoadingPlugin.logger.error("Could not save transformed class (byte[]) " + transformedName, e);
         }
+    }
+
+    private void writeBytecodeFile(byte[] data, String transformedName, String fileName) {
+        final File bytecodeFile = new File(outputDir, fileName + "_BYTE.txt");
+        final File outDir = bytecodeFile.getParentFile();
+        if (!outDir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            outDir.mkdirs();
+        }
         if (bytecodeFile.exists()) {
             //noinspection ResultOfMethodCallIgnored
             bytecodeFile.delete();
@@ -209,6 +221,15 @@ public class MWEClassTransformer implements IClassTransformer {
             ASMLoadingPlugin.logger.info("Saved transformed class (bytecode) to " + bytecodeFile.toPath());
         } catch (IOException e) {
             ASMLoadingPlugin.logger.error("Could not save transformed class (bytecode) " + transformedName, e);
+        }
+    }
+
+    private void writeASMFile(byte[] data, String transformedName, String fileName) {
+        final File asmifiedFile = new File(outputDir, fileName + "_ASM.txt");
+        final File outDir = asmifiedFile.getParentFile();
+        if (!outDir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            outDir.mkdirs();
         }
         if (asmifiedFile.exists()) {
             //noinspection ResultOfMethodCallIgnored
