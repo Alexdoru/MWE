@@ -1,8 +1,8 @@
 package fr.alexdoru.mwe.chat;
 
-import fr.alexdoru.mwe.asm.accessors.ChatComponentTextAccessor;
-import fr.alexdoru.mwe.asm.accessors.GuiChatAccessor;
-import fr.alexdoru.mwe.asm.accessors.NetworkPlayerInfoAccessor_ChatHeads;
+import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
+import fr.alexdoru.mwe.asm.interfaces.GuiChatAccessor;
+import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor_ChatHeads;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;

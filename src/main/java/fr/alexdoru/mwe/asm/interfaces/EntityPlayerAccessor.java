@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.asm.accessors;
+package fr.alexdoru.mwe.asm.interfaces;
 
 import fr.alexdoru.mwe.enums.MWClass;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;

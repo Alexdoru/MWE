@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.asm.accessors;
+package fr.alexdoru.mwe.asm.interfaces;
 
 import net.minecraft.util.IChatComponent;
 

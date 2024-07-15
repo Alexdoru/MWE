@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.hackerdetector;
 
-import fr.alexdoru.mwe.asm.accessors.EntityPlayerAccessor;
-import fr.alexdoru.mwe.asm.accessors.S19PacketEntityStatusAccessor;
+import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
+import fr.alexdoru.mwe.asm.interfaces.S19PacketEntityStatusAccessor;
 import fr.alexdoru.mwe.enums.MWClass;
 import fr.alexdoru.mwe.hackerdetector.data.AttackInfo;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;

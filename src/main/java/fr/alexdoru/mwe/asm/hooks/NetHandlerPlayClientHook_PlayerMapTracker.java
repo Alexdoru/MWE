@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.hooks;
 
-import fr.alexdoru.mwe.asm.accessors.ChatComponentTextAccessor;
+import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
 import fr.alexdoru.mwe.data.MWPlayerData;

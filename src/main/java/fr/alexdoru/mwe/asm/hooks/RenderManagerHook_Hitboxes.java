@@ -1,8 +1,8 @@
 package fr.alexdoru.mwe.asm.hooks;
 
-import fr.alexdoru.mwe.asm.accessors.EntityPlayerAccessor;
-import fr.alexdoru.mwe.asm.accessors.IHitboxRender;
-import fr.alexdoru.mwe.asm.accessors.IWitherColor;
+import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
+import fr.alexdoru.mwe.asm.interfaces.IHitboxRender;
+import fr.alexdoru.mwe.asm.interfaces.IWitherColor;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.Entity;

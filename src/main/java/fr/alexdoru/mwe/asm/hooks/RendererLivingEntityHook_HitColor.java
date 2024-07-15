@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks;
 
-import fr.alexdoru.mwe.asm.accessors.EntityPlayerAccessor;
-import fr.alexdoru.mwe.asm.accessors.IWitherColor;
+import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
+import fr.alexdoru.mwe.asm.interfaces.IWitherColor;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import net.minecraft.entity.EntityLivingBase;
 

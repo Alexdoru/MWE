@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.nocheaters;
 
-import fr.alexdoru.mwe.asm.accessors.GuiChatAccessor;
+import fr.alexdoru.mwe.asm.interfaces.GuiChatAccessor;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;

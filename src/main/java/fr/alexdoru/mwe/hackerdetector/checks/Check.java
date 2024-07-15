@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.hackerdetector.checks;
 
-import fr.alexdoru.mwe.asm.accessors.EntityPlayerAccessor;
+import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.asm.hooks.GuiScreenHook_CustomChatClickEvent;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;

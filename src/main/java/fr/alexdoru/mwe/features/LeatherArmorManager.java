@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.features;
 
-import fr.alexdoru.mwe.asm.accessors.EntityPlayerAccessor;
+import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;

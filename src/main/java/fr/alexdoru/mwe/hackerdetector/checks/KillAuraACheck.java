@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.hackerdetector.checks;
 
-import fr.alexdoru.mwe.asm.accessors.EntityPlayerAccessor;
+import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;

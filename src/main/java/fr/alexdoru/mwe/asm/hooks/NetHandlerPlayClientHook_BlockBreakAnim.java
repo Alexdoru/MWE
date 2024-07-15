@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.hooks;
 
-import fr.alexdoru.mwe.asm.accessors.EntityPlayerAccessor;
+import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.multiplayer.WorldClient;

@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.gui.huds;
 
-import fr.alexdoru.mwe.asm.accessors.GuiNewChatAccessor;
+import fr.alexdoru.mwe.asm.interfaces.GuiNewChatAccessor;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.mwe.chat.ChatUtil;

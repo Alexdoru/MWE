@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.hackerdetector;
 
-import fr.alexdoru.mwe.asm.accessors.EntityPlayerAccessor;
+import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.hackerdetector.checks.*;

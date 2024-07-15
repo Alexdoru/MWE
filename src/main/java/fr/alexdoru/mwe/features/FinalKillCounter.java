@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.features;
 
-import fr.alexdoru.mwe.asm.accessors.NetworkPlayerInfoAccessor;
+import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.mwe.chat.ChatUtil;

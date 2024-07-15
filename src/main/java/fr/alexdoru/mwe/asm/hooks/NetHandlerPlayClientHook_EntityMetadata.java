@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.hooks;
 
-import fr.alexdoru.mwe.asm.accessors.IWitherColor;
+import fr.alexdoru.mwe.asm.interfaces.IWitherColor;
 import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.entity.Entity;

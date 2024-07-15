@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.chat;
 
-import fr.alexdoru.mwe.asm.accessors.GuiNewChatAccessor;
+import fr.alexdoru.mwe.asm.interfaces.GuiNewChatAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.GuiUtilRenderComponents;

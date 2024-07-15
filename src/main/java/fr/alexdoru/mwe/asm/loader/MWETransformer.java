@@ -23,7 +23,7 @@ public interface MWETransformer extends Opcodes {
     void transform(ClassNode classNode, InjectionStatus status);
 
     default void addInterface(ClassNode classNode, String interfaceName) {
-        classNode.interfaces.add("fr/alexdoru/mwe/asm/accessors/" + interfaceName);
+        classNode.interfaces.add("fr/alexdoru/mwe/asm/interfaces/" + interfaceName);
     }
 
     default String getHookClass(String className) {

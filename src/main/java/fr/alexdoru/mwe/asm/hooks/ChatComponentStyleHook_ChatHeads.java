@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.hooks;
 
-import fr.alexdoru.mwe.asm.accessors.ChatComponentTextAccessor;
+import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import net.minecraft.util.IChatComponent;
 
 @SuppressWarnings("unused")

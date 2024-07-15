@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.hooks;
 
-import fr.alexdoru.mwe.asm.accessors.GuiChatAccessor;
+import fr.alexdoru.mwe.asm.interfaces.GuiChatAccessor;
 import fr.alexdoru.mwe.features.MegaWallsEndGameStats;
 import fr.alexdoru.mwe.utils.ClipboardUtil;
 import net.minecraft.client.Minecraft;

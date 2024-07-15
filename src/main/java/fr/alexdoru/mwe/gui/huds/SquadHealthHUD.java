@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.gui.huds;
 
 import com.mojang.authlib.GameProfile;
-import fr.alexdoru.mwe.asm.accessors.NetworkPlayerInfoAccessor;
+import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.features.SquadHandler;
