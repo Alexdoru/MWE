@@ -43,6 +43,16 @@ public class StringUtil {
     }
 
     /**
+     * Returns the last formatting char before the first occurence of a certain target in a String
+     * <p>
+     * Returns '\0' if it can't find any formatting code
+     */
+    public static char getLastFormattingCharBefore(String message, String target) {
+        final int index = message.indexOf(target);
+        return index == -1 ? '\0' : getLastFormattingCharOf(message.substring(0, index));
+    }
+
+    /**
      * Returns the last formatting code before the first occurence of a certain target in a String
      * <p>
      * Returns "" if it can't find any formatting code
@@ -87,9 +97,19 @@ public class StringUtil {
     }
 
     /**
+     * Returns the last color char before the first occurence of a certain target in a String
+     * <p>
+     * Returns '\0' if it can't find any color code
+     */
+    public static char getLastColorCharBefore(String message, String target) {
+        final int index = message.indexOf(target);
+        return index == -1 ? '\0' : getLastColorCharOf(message.substring(0, index));
+    }
+
+    /**
      * Returns the last color code before the first occurence of a certain target in a String
      * <p>
-     * Returns "" if it can't find any formatting code
+     * Returns "" if it can't find any color code
      * <p>
      * Returns a single character as a String
      */

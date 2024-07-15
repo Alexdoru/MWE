@@ -50,6 +50,7 @@ public class MWEClassTransformer implements IClassTransformer {
         registerTransformer(new EntityPlayerSPTransformer_CommandListener());
         registerTransformer(new EntityRendererTransformer_CancelNightVision());
         registerTransformer(new EntityRendererTransformer_RenderOverlayHook());
+        registerTransformer(new EntityWitherTransformer_Color());
         registerTransformer(new GuiChatTransformer_Accessor());
         registerTransformer(new GuiChatTransformer_TabCompletePlayers());
         registerTransformer(new GuiContainerTransformer_SafeInventory());
@@ -77,6 +78,7 @@ public class MWEClassTransformer implements IClassTransformer {
         registerTransformer(new MinecraftTransformer_WarpProtection());
         registerTransformer(new NetHandlerPlayClientTransformer_BlockBreakAnimListener());
         registerTransformer(new NetHandlerPlayClientTransformer_BlockChangeListener());
+        registerTransformer(new NetHandlerPlayClientTransformer_EntityMetadata());
         registerTransformer(new NetHandlerPlayClientTransformer_PlayerMapTracker());
         registerTransformer(new NetHandlerPlayClientTransformer_TeamsListener());
         registerTransformer(new NetworkManagerTransformer_ServerPacketListener());
