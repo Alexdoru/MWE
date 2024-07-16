@@ -209,16 +209,20 @@ public class ScoreboardParser {
         return aliveWithers;
     }
 
+    public boolean isOnlyOneWitherAlive() {
+        return aliveWithers.size() == 1;
+    }
+
+    public boolean isDeathmatch() {
+        return aliveWithers.isEmpty();
+    }
+
     public boolean hasGameEnded() {
         return hasGameEnded;
     }
 
     public boolean isPrepPhase() {
         return isPrepPhase;
-    }
-
-    public boolean isOnlyOneWitherAlive() {
-        return aliveWithers.size() == 1;
     }
 
     public boolean isMWEnvironement() {

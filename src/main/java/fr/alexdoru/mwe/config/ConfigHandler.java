@@ -335,6 +335,12 @@ public class ConfigHandler extends AbstractConfig {
     public static boolean afkSoundWarning = true;
 
     @ConfigProperty(
+            category = "MegaWallsEnhancements",
+            name = "Render wither outline",
+            comment = "Renders the outline of withers in Mega Walls")
+    public static boolean renderWitherOutline = true;
+
+    @ConfigProperty(
             category = "VanillaEnhancements",
             name = "Clean chat logs",
             comment = "Removes formatting codes in the chat logs")
