@@ -19,26 +19,24 @@ public class RenderManagerTransformer_Hitboxes implements MWETransformer {
         status.setInjectionPoints(11);
         for (final MethodNode methodNode : classNode.methods) {
 
-            if (checkMethodNode(methodNode, MethodMapping.RENDERMANAGER$INIT)) {
+            if (isConstructorMethod(methodNode)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if (checkInsnNode(insnNode, ICONST_0)) {
-                        if (checkFieldInsnNode(insnNode.getNext(), PUTFIELD, FieldMapping.RENDERMANAGER$DEBUGBOUNDINGBOX)) {
-                            methodNode.instructions.insert(insnNode, new MethodInsnNode(
-                                    INVOKESTATIC,
-                                    getHookClass("RenderManagerHook_Hitboxes"),
-                                    "shouldToggleOnStart",
-                                    "(Z)Z",
-                                    false
-                            ));
-                            status.addInjection();
-                        }
+                    if (checkFieldInsnNode(insnNode, PUTFIELD, FieldMapping.RENDERMANAGER$DEBUGBOUNDINGBOX)) {
+                        methodNode.instructions.insertBefore(insnNode, new MethodInsnNode(
+                                INVOKESTATIC,
+                                getHookClass("RenderManagerHook_Hitboxes"),
+                                "shouldToggleOnStart",
+                                "(Z)Z",
+                                false
+                        ));
+                        status.addInjection();
                     }
                 }
             }
 
             if (checkMethodNode(methodNode, MethodMapping.RENDERMANAGER$RENDERDEBUGBOUNDINGBOX)) {
                 // Injects at head :
-                // if (!RenderManagerHook_Hitboxes.shouldRenderHitbox(entityIn)) {
+                // if (!RenderManagerHook_Hitboxes.shouldRenderHitbox(entityIn, this.livingPlayer, this.renderOutlines)) {
                 //     return;
                 // }
                 methodNode.instructions.insert(getShouldRenderInsnList());
@@ -175,11 +173,13 @@ public class RenderManagerTransformer_Hitboxes implements MWETransformer {
         final LabelNode label = new LabelNode();
         list.add(new VarInsnNode(ALOAD, 1));
         list.add(new VarInsnNode(ALOAD, 0));
-        list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.RENDERMANAGER$LIVINGENTITY));
+        list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.RENDERMANAGER$LIVINGPLAYER));
+        list.add(new VarInsnNode(ALOAD, 0));
+        list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.RENDERMANAGER$RENDEROUTLINES));
         list.add(new MethodInsnNode(INVOKESTATIC,
                 getHookClass("RenderManagerHook_Hitboxes"),
                 "shouldRenderHitbox",
-                "(L" + ClassMapping.ENTITY + ";L" + ClassMapping.ENTITY + ";)Z",
+                "(L" + ClassMapping.ENTITY + ";L" + ClassMapping.ENTITY + ";Z)Z",
                 false
         ));
         list.add(new JumpInsnNode(IFNE, label));

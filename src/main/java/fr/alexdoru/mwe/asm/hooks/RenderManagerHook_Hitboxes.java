@@ -16,7 +16,10 @@ public class RenderManagerHook_Hitboxes {
         return ConfigHandler.isDebugHitboxOn;
     }
 
-    public static boolean shouldRenderHitbox(Entity entityIn, Entity viewingEntity) {
+    public static boolean shouldRenderHitbox(Entity entityIn, Entity viewingEntity, boolean renderOutlines) {
+        if (renderOutlines) {
+            return false;
+        }
         if (ConfigHandler.hideCloseHitbox) {
             if (entityIn.getDistanceSqToEntity(viewingEntity) <= ConfigHandler.hitboxDrawRange * ConfigHandler.hitboxDrawRange) {
                 return false;
