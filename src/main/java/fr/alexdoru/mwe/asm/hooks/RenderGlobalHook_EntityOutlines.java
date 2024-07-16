@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.asm.interfaces.IWitherColor;
+import fr.alexdoru.mwe.asm.interfaces.RenderManagerAccessor;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
@@ -18,8 +19,8 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class RenderGlobalHook_EntityOutlines {
 
-    private static boolean hasRendered = false;
     private static final Minecraft mc = Minecraft.getMinecraft();
+    private static boolean hasRendered = false;
 
     public static boolean renderWitherOutline(
             boolean original,
@@ -104,6 +105,10 @@ public class RenderGlobalHook_EntityOutlines {
         GlStateManager.enableDepth();
         GlStateManager.enableAlpha();
         hasRendered = true;
+    }
+
+    public static boolean isRenderOutlines() {
+        return ((RenderManagerAccessor) mc.getRenderManager()).isRenderOutlines();
     }
 
 }

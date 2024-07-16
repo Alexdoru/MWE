@@ -1,10 +1,7 @@
 package fr.alexdoru.mwe.asm.loader;
 
 import fr.alexdoru.mwe.asm.transformers.*;
-import fr.alexdoru.mwe.asm.transformers.externalmods.OptifinePlayerItemsLayerTransformer_RemoveHats;
-import fr.alexdoru.mwe.asm.transformers.externalmods.OrangeSprintRendererTransformer_HideHUD;
-import fr.alexdoru.mwe.asm.transformers.externalmods.SidebarmodReloadedTransformer_CustomSidebarLines;
-import fr.alexdoru.mwe.asm.transformers.externalmods.SidebarmodRevampTransformer_CustomSidebarLines;
+import fr.alexdoru.mwe.asm.transformers.externalmods.*;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
 import org.apache.commons.io.FileUtils;
@@ -88,12 +85,14 @@ public class MWEClassTransformer implements IClassTransformer {
         register(new RenderGlobalTransformer_EntityOutlines());
         register(new RenderGlobalTransformer_LimitDroppedItems());
         register(new RenderGlobalTransformer_ListenDestroyedBlocks());
+        register(new RenderManagerTransformer_Accessor());
         register(new RenderManagerTransformer_Hitboxes());
         register(new RenderPlayerTransformer_ColoredHealth());
         register(new RenderPlayerTransformer_RenegadeArrowCount());
         register(new S19PacketEntityStatusTransformer());
         register(new ScoreboardTransformer());
         register(new ScorePlayerTeamTransformer());
+        register(new EntityCullingTransformer_FixOutlineCulling());
         register(new OptifinePlayerItemsLayerTransformer_RemoveHats());
         register(new OrangeSprintRendererTransformer_HideHUD());
         register(new SidebarmodReloadedTransformer_CustomSidebarLines());
