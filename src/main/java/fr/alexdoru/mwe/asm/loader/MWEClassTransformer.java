@@ -32,6 +32,7 @@ public class MWEClassTransformer implements IClassTransformer {
         register(new C08PacketPlayerBlockPlacementTransformer());
         register(new ChatComponentStyleTransformer_ChatHeads());
         register(new ChatComponentTextTransformer_ChatHeads());
+        register(new ChatLineTransformer_Accessor());
         register(new CommandHandlerTransformer_CaseCommand());
         register(new EntityArrowTransformer());
         register(new EntityFXTransformer_ClearView());
@@ -46,6 +47,7 @@ public class MWEClassTransformer implements IClassTransformer {
         register(new EntityRendererTransformer_RenderOverlayHook());
         register(new EntityWitherTransformer_Color());
         register(new GuiChatTransformer_Accessor());
+        register(new GuiChatTransformer_CopyMessages());
         register(new GuiChatTransformer_TabCompletePlayers());
         register(new GuiContainerTransformer_SafeInventory());
         register(new GuiIngameForgeTransformer_FixActionBar());
@@ -53,6 +55,7 @@ public class MWEClassTransformer implements IClassTransformer {
         register(new GuiIngameTransformer_CustomSidebarLines());
         register(new GuiNewChatTransformer_ChatHeads());
         register(new GuiNewChatTransformer_CleanChatLogs());
+        register(new GuiNewChatTransformer_CopyMessages());
         register(new GuiNewChatTransformer());
         register(new GuiPlayerTabOverlayTransformer_ColoredScores());
         register(new GuiPlayerTabOverlayTransformer_ColumnSpacing());

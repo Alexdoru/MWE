@@ -347,6 +347,24 @@ public class ConfigHandler extends AbstractConfig {
     public static boolean cleanChatLogs = true;
 
     @ConfigProperty(
+            category = "VanillaEnhancements",
+            name = "Right click to copy chat messages",
+            comment = "Right click to copy chat messages")
+    public static boolean rightClickChatCopy = true;
+
+    @ConfigProperty(
+            category = "VanillaEnhancements",
+            name = "Left click to copy chat messages",
+            comment = "Left click to copy chat messages, it will not work if the message already has a click event")
+    public static boolean leftClickChatCopy = true;
+
+    @ConfigProperty(
+            category = "VanillaEnhancements",
+            name = "Shift click to copy one chat line",
+            comment = "Hold shift while clicking a chat line to only copy one line of chat and not the whole message")
+    public static boolean shiftClickChatLineCopy = true;
+
+    @ConfigProperty(
             category = "GUI",
             name = "Show kill cooldown HUD",
             comment = "Displays the cooldown for the /kill command when in MegaWalls")

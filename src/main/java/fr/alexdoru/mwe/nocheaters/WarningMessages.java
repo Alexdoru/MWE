@@ -1,6 +1,5 @@
 package fr.alexdoru.mwe.nocheaters;
 
-import fr.alexdoru.mwe.asm.hooks.GuiScreenHook_CustomChatClickEvent;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.WarningChatComponent;
@@ -13,7 +12,6 @@ import net.minecraft.event.HoverEvent;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 import java.util.UUID;
@@ -42,19 +40,12 @@ public class WarningMessages {
 
     public static void printWarningMessage(UUID uuid, Team team, String playername, WDR wdr) {
         final String wdrmapKey = uuid.version() == 4 ? uuid.toString() : playername;
-        final IChatComponent firstPartImsg = new WarningChatComponent(playername, RED + "Warning : ")
-                .appendSibling(getPlayernameWithHoverText(null, team, playername, wdrmapKey, wdr));
-        ChatUtil.addSkinToComponent(firstPartImsg, playername);
-        final ChatStyle copyChatStyle = new ChatStyle();
-        final IChatComponent secondPartImsg = new ChatComponentText(GRAY + " joined, Cheats :")
-                .appendSibling(wdr.getFormattedCheats())
-                .setChatStyle(copyChatStyle);
-        firstPartImsg.appendSibling(secondPartImsg);
-        final String msg = EnumChatFormatting.getTextWithoutFormattingCodes(firstPartImsg.getUnformattedText());
-        copyChatStyle.setChatClickEvent(new ClickEvent(
-                ClickEvent.Action.RUN_COMMAND,
-                GuiScreenHook_CustomChatClickEvent.COPY_TO_CLIPBOARD_COMMAND + msg));
-        ChatUtil.addChatMessage(firstPartImsg);
+        final IChatComponent imsg = new WarningChatComponent(playername, RED + "Warning : ")
+                .appendSibling(getPlayernameWithHoverText(null, team, playername, wdrmapKey, wdr))
+                .appendText(GRAY + " joined, Cheats :")
+                .appendSibling(wdr.getFormattedCheats());
+        ChatUtil.addSkinToComponent(imsg, playername);
+        ChatUtil.addChatMessage(imsg);
     }
 
     public static IChatComponent getPlayernameWithHoverText(String formattedName, Team team, String playername, String wdrmapKey, WDR wdr) {

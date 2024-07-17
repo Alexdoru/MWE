@@ -2,9 +2,9 @@ package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.asm.interfaces.GuiChatAccessor;
 import fr.alexdoru.mwe.features.MegaWallsEndGameStats;
-import fr.alexdoru.mwe.utils.ClipboardUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiScreen;
 
 @SuppressWarnings("unused")
 public class GuiScreenHook_CustomChatClickEvent {
@@ -17,7 +17,7 @@ public class GuiScreenHook_CustomChatClickEvent {
      */
     public static boolean executeMWEClickEvent(String command) {
         if (command != null && command.startsWith(COPY_TO_CLIPBOARD_COMMAND)) {
-            ClipboardUtil.copyString(command.replaceFirst(COPY_TO_CLIPBOARD_COMMAND, ""));
+            GuiScreen.setClipboardString(command.replaceFirst(COPY_TO_CLIPBOARD_COMMAND, ""));
             return true;
         }
         if (MW_GAME_END_STATS.equals(command)) {
