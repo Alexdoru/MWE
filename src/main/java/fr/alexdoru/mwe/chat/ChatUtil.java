@@ -4,6 +4,7 @@ import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.asm.interfaces.GuiChatAccessor;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor_ChatHeads;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
+import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -18,15 +19,19 @@ public class ChatUtil {
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     public static String getTagMW() {
-        return GOLD + "[" + DARK_GRAY + "MWE" + GOLD + "] ";
+        return GOLD + "[" + DARK_GRAY + "MWE" + GOLD + "] " + RESET;
     }
 
     public static String getTagNoCheaters() {
-        return GOLD + "[" + DARK_GRAY + "NoCheaters" + GOLD + "] ";
+        return GOLD + "[" + DARK_GRAY + "NoCheaters" + GOLD + "] " + RESET;
+    }
+
+    public static String getTagHackerDetector() {
+        return ConfigHandler.flagMessagePrefix + RESET;
     }
 
     public static String getTagHitboxes() {
-        return BLUE + "[Hitbox] ";
+        return BLUE + "[Hitbox] " + RESET;
     }
 
     public static void addChatMessage(String msg) {

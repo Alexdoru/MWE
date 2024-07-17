@@ -20,7 +20,7 @@ public class ChatHandler {
     //as a result drawnChatLines.size() >= chatLines.size()
 
     private static final Minecraft mc = Minecraft.getMinecraft();
-    private static final IChatComponent stopMovingMsg = new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Stop moving for a second to send a report!");
+    private static final IChatComponent stopMovingMsg = new ChatComponentText(ChatUtil.getTagHackerDetector() + EnumChatFormatting.RED + "Stop moving for a second to send a report!");
 
     public static void deleteMessageFromChat(IChatComponent messageToDelete) {
         final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
