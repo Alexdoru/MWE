@@ -124,27 +124,30 @@ public class ChatHandler {
         }
     }
 
-    private static void deleteFromDrawnChatLines(IChatComponent targetedChatComponent, int drawnChatSearchLength) {
+    private static void deleteFromDrawnChatLines(IChatComponent componentToDelete, int searchLength) {
         final List<ChatLine> drawnChatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getDrawnChatLines();
-        final int j = MathHelper.floor_float((float) mc.ingameGUI.getChatGUI().getChatWidth() / mc.ingameGUI.getChatGUI().getChatScale());
-        final List<IChatComponent> todeleteList = GuiUtilRenderComponents.splitText(targetedChatComponent, j, Minecraft.getMinecraft().fontRendererObj, false, false);
-        String textToDelete = todeleteList.get(0).getUnformattedText();
-        // This for loop finds the first line of the message to delete
-        // and then backtracks to delete the rest of the message if it fits on more than one line
-        for (int index = 0; index < drawnChatLines.size() && index < drawnChatSearchLength; index++) {
-            String text = drawnChatLines.get(index).getChatComponent().getUnformattedText();
-            if (textToDelete.equals(text)) {
-                drawnChatLines.remove(index);
-                index--;
-                for (int index2 = 1; index2 < todeleteList.size() && index >= 0; index2++) {
-                    textToDelete = todeleteList.get(index2).getUnformattedText();
-                    text = drawnChatLines.get(index).getChatComponent().getUnformattedText();
-                    if (textToDelete.equals(text)) {
-                        drawnChatLines.remove(index);
+        final int width = MathHelper.floor_float((float) mc.ingameGUI.getChatGUI().getChatWidth() / mc.ingameGUI.getChatGUI().getChatScale());
+        final List<IChatComponent> toDeleteList = GuiUtilRenderComponents.splitText(componentToDelete, width, Minecraft.getMinecraft().fontRendererObj, false, false);
+        // This for loop finds the first sequence of the list of strings to delete
+        // and then loops from there to delete the rest of the message if it fits on more than one line
+        final String firstLineToMatch = toDeleteList.get(0).getUnformattedText(); // cache the first line for speed
+        int deletionIndex = -1;
+        loop:
+        for (int i = toDeleteList.size() - 1; i < drawnChatLines.size() && i < searchLength; i++) {
+            if (firstLineToMatch.equals(drawnChatLines.get(i).getChatComponent().getUnformattedText())) {
+                for (int j = 1; j < toDeleteList.size(); j++) {
+                    if (!toDeleteList.get(j).getUnformattedText().equals(drawnChatLines.get(i - j).getChatComponent().getUnformattedText())) {
+                        continue loop;
                     }
-                    index--;
                 }
+                deletionIndex = i;
                 break;
+            }
+        }
+        if (deletionIndex != -1) {
+            for (int j = 0; j < toDeleteList.size(); j++) {
+                drawnChatLines.remove(deletionIndex);
+                deletionIndex--;
             }
         }
     }
