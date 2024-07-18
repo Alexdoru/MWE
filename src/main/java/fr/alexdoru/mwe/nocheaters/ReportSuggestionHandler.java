@@ -2,13 +2,11 @@ package fr.alexdoru.mwe.nocheaters;
 
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.commands.CommandHypixelShout;
 import fr.alexdoru.mwe.commands.CommandReport;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.data.ScangameData;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
@@ -28,16 +26,10 @@ import java.util.regex.Pattern;
 public class ReportSuggestionHandler {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
-    private static final Pattern REPORT_PATTERN1;
-    private static final Pattern REPORT_PATTERN2;
+    private static final Pattern REPORT_PATTERN1 = Pattern.compile("(\\w{2,16}) (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE);
+    private static final Pattern REPORT_PATTERN2 = Pattern.compile("/?(?:wdr|report) (\\w{2,16}) (\\w{2,16})", Pattern.CASE_INSENSITIVE);
 
-    static {
-        final String uuidPattern = "[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}";
-        REPORT_PATTERN1 = Pattern.compile("(\\w{2,16}|" + uuidPattern + ") (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE);
-        REPORT_PATTERN2 = Pattern.compile("/?(?:wdr|report) (\\w{2,16}) (\\w{2,16}|" + uuidPattern + ")", Pattern.CASE_INSENSITIVE);
-    }
-
-    public static boolean parseReportMessage(
+    public static boolean processMessage(
             ClientChatReceivedEvent event,
             @Nullable String messageSender,
             @Nullable String squadname,
@@ -48,53 +40,24 @@ public class ReportSuggestionHandler {
             final Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);
             if (matcher1.find()) {
                 final String reportText = matcher1.group();
-                final String reportedPlayerOrUUID = matcher1.group(1);
-                final String reportedPlayer = reportedPlayerOrUUID.length() == 36 ? getNameFromUUID(reportedPlayerOrUUID) : reportedPlayerOrUUID;
-                if (reportedPlayer != null && isNameValid(reportedPlayer)) {
-                    handleReportSuggestion(
-                            event,
-                            reportedPlayer,
-                            messageSender,
-                            squadname,
-                            reportedPlayerOrUUID.equals(reportedPlayer) ? reportText : reportText.replace(reportedPlayerOrUUID, reportedPlayer),
-                            "bhop",
-                            reportedPlayerOrUUID.equals(reportedPlayer) ? fmsgIn : fmsgIn.replace(reportedPlayerOrUUID, reportedPlayer));
-                } else {
-                    event.message = getIChatComponentWithSquadnameAsSender(fmsgIn, messageSender, squadname);
+                final String reportedPlayer = matcher1.group(1);
+                if (isNameValid(reportedPlayer)) {
+                    handleReportSuggestion(event, reportedPlayer, messageSender, squadname, reportText, "bhop", fmsgIn);
+                    return true;
                 }
-                return true;
             } else if (matcher2.find()) {
                 final String reportText = matcher2.group();
-                final String reportedPlayerOrUUID = matcher2.group(1);
-                final String reportedPlayer = reportedPlayerOrUUID.length() == 36 ? getNameFromUUID(reportedPlayerOrUUID) : reportedPlayerOrUUID;
+                final String reportedPlayer = matcher2.group(1);
                 final String cheat = matcher2.group(2).toLowerCase();
-                if (reportedPlayer != null && isCheatValid(cheat) && isNameValid(reportedPlayer)) {
-                    handleReportSuggestion(
-                            event,
-                            reportedPlayer,
-                            messageSender,
-                            squadname,
-                            reportedPlayerOrUUID.equals(reportedPlayer) ? reportText : reportText.replace(reportedPlayerOrUUID, reportedPlayer),
-                            cheat,
-                            reportedPlayerOrUUID.equals(reportedPlayer) ? fmsgIn : fmsgIn.replace(reportedPlayerOrUUID, reportedPlayer));
-                } else {
-                    event.message = getIChatComponentWithSquadnameAsSender(fmsgIn, messageSender, squadname);
+                if (isNameValid(reportedPlayer) && isCheatValid(cheat)) {
+                    handleReportSuggestion(event, reportedPlayer, messageSender, squadname, reportText, cheat, fmsgIn);
+                    return true;
                 }
-                return true;
             }
         }
         return false;
     }
 
-    private static String getNameFromUUID(String s) {
-        final UUID uuid = UUID.fromString(s);
-        final NetworkPlayerInfo networkPlayerInfo = Minecraft.getMinecraft().getNetHandler().getPlayerInfo(uuid);
-        return networkPlayerInfo == null ? null : networkPlayerInfo.getGameProfile().getName();
-    }
-
-    /**
-     * reportedPlayer is necessarily in the tablist
-     */
     private static void handleReportSuggestion(
             ClientChatReceivedEvent event,
             String reportedPlayer,
@@ -159,11 +122,6 @@ public class ReportSuggestionHandler {
             boolean isSenderCheating,
             boolean isSenderFlaging) {
 
-        if (!ConfigHandler.reportSuggestions) {
-            event.message = getIChatComponentWithSquadnameAsSender(fmsg, messageSender, squadname);
-            return;
-        }
-
         if (!isSenderCheating && !isSenderFlaging) {
             SoundUtil.playChatNotifSound();
         }
@@ -227,68 +185,6 @@ public class ReportSuggestionHandler {
 
     private static boolean isPlayerMyself(@Nullable String name) {
         return (mc.thePlayer != null && mc.thePlayer.getName().equalsIgnoreCase(name)) || (!ConfigHandler.hypixelNick.isEmpty() && ConfigHandler.hypixelNick.equals(name));
-    }
-
-    /**
-     * Mirrors the {@link ReportSuggestionHandler#parseReportMessage}
-     * method and returns true if this method would parse the shout as a report suggestion
-     * but the player can't be found in the tablist.
-     * Although it only checks one regex pattern because the other one would conflict
-     * too much with messages that people want to send outside of report suggestions.
-     * This is mainly to prevent wasting shouts if the targeted player
-     * isn't found at the moment you send the shout.
-     */
-    public static boolean shouldCancelShout(String msg) {
-        final Matcher matcher2 = REPORT_PATTERN2.matcher(msg);
-        if (matcher2.find()) {
-            final String reportedPlayerOrUUID = matcher2.group(1);
-            final String reportedPlayer = reportedPlayerOrUUID.length() == 36 ? getNameFromUUID(reportedPlayerOrUUID) : reportedPlayerOrUUID;
-            final String cheat = matcher2.group(2).toLowerCase();
-            if (isCheatValid(cheat) && reportedPlayer != null) {
-                return !isNameValid(reportedPlayer);
-            } else {
-                return false;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Parses the blocked message to look for a report suggestion, if it contains one,
-     * and it was sent from a shout, it sends it again but with the uuid instead of the playername
-     */
-    public static void processBlockedMessage(String msg) {
-        final String latestShoutSent = CommandHypixelShout.getLatestShoutSent();
-        if (latestShoutSent == null || !latestShoutSent.equals(msg)) {
-            return;
-        }
-        CommandHypixelShout.resetLastShout();
-        final Matcher matcher1 = Pattern.compile("(\\w{2,16}) (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE).matcher(msg);
-        final Matcher matcher2 = Pattern.compile("/?(?:wdr|report) (\\w{2,16}) (\\w+)", Pattern.CASE_INSENSITIVE).matcher(msg);
-        if (matcher1.find()) {
-            final String reportText = matcher1.group();
-            final String reportedPlayer = matcher1.group(1);
-            if (isNameValid(reportedPlayer)) {
-                sendShoutWithUUID(msg, reportText, reportedPlayer);
-            }
-        } else if (matcher2.find()) {
-            final String reportText = matcher2.group();
-            final String reportedPlayer = matcher2.group(1);
-            final String cheat = matcher2.group(2).toLowerCase();
-            if (isCheatValid(cheat) && isNameValid(reportedPlayer)) {
-                sendShoutWithUUID(msg, reportText, reportedPlayer);
-            }
-        }
-    }
-
-    private static void sendShoutWithUUID(String blockedMessgae, String reportText, String reportedPlayer) {
-        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(reportedPlayer);
-        if (netInfo == null) return;
-        final String uuid = netInfo.getGameProfile().getId().toString();
-        if (mc.thePlayer != null) {
-            new DelayedTask(() -> ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "Shout was blocked, trying to send report suggestion with UUID instead"));
-            new DelayedTask(() -> mc.thePlayer.sendChatMessage("/shout " + blockedMessgae.replaceFirst(reportText, reportText.replaceFirst(reportedPlayer, uuid))), 20);
-        }
     }
 
 }

@@ -32,7 +32,6 @@ public class ChatListener {
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
     private static final String PREP_PHASE = "Prepare your defenses!";
-    private static final Pattern BLOCKED_MESSAGE = Pattern.compile("^We blocked your comment \"(.+)\" as it is breaking our rules because[a-zA-Z\\s]+\\. https://www.hypixel.net/rules/.*");
     private static final Pattern COINS_DOUBLED_GUILD_PATTERN = Pattern.compile("^(?:Tokens|Coins) just earned DOUBLED as a Guild Level Reward!$");
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ (tokens|coins)!.*");
     private static final Pattern COINS_BOOSTER_PATTERN = Pattern.compile("^\\+\\d+ (tokens|coins)!( \\([^()]*(?:Coins \\+ EXP|Booster)[^()]*\\)).*");
@@ -144,14 +143,7 @@ public class ChatListener {
                 squadname = SquadHandler.getSquad().get(messageSender);
             }
 
-            final Matcher matcherBlockedMessage = BLOCKED_MESSAGE.matcher(msg);
-            if (matcherBlockedMessage.matches()) {
-                final String blockedMessage = matcherBlockedMessage.group(1);
-                ReportSuggestionHandler.processBlockedMessage(blockedMessage);
-                return;
-            }
-
-            if (ReportSuggestionHandler.parseReportMessage(event, messageSender, squadname, msg, fmsg)) {
+            if (ReportSuggestionHandler.processMessage(event, messageSender, squadname, msg, fmsg)) {
                 ChatUtil.addSkinToComponent(event.message, messageSender);
                 return;
             }
