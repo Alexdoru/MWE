@@ -148,6 +148,9 @@ public class ChatHandler {
             for (int j = 0; j < toDeleteList.size(); j++) {
                 drawnChatLines.remove(deletionIndex);
                 deletionIndex--;
+                if (mc.ingameGUI.getChatGUI().getChatOpen()) {
+                    mc.ingameGUI.getChatGUI().scroll(-1);
+                }
             }
         }
     }
