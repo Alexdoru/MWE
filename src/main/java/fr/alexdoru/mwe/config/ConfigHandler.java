@@ -365,6 +365,36 @@ public class ConfigHandler extends AbstractConfig {
     public static boolean shiftClickChatLineCopy = true;
 
     @ConfigProperty(
+            category = "VanillaEnhancements",
+            name = "Search box in chat",
+            comment = "Adds a search box to search the chat")
+    public static boolean searchBoxChat = true;
+
+    @ConfigProperty(
+            category = "VanillaEnhancements",
+            name = "Search box shortcuts",
+            comment = "Enables using ctrl + F shortcut to enter chat search")
+    public static boolean searchBoxChatShortcuts = true;
+
+    @ConfigProperty(
+            category = "VanillaEnhancements",
+            name = "Keep previous chat search",
+            comment = "Keep the previous chat search when you re-open the chat")
+    public static boolean keepPreviousChatSearch;
+
+    @ConfigProperty(
+            category = "VanillaEnhancements",
+            name = "Search box X offset",
+            comment = "Allows to move the search box right and left. Positive values move to the right")
+    public static int searchBoxXOffset = 0;
+
+    @ConfigProperty(
+            category = "VanillaEnhancements",
+            name = "Search box Y offset",
+            comment = "Allows to move the search box up and down. Positive values move up")
+    public static int searchBoxYOffset = 0;
+
+    @ConfigProperty(
             category = "GUI",
             name = "Show kill cooldown HUD",
             comment = "Displays the cooldown for the /kill command when in MegaWalls")

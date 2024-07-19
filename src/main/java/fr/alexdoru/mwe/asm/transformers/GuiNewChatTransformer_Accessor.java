@@ -6,7 +6,7 @@ import fr.alexdoru.mwe.asm.mappings.ClassMapping;
 import fr.alexdoru.mwe.asm.mappings.FieldMapping;
 import org.objectweb.asm.tree.ClassNode;
 
-public class GuiNewChatTransformer implements MWETransformer {
+public class GuiNewChatTransformer_Accessor implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {

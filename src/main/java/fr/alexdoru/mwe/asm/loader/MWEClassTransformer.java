@@ -48,15 +48,17 @@ public class MWEClassTransformer implements IClassTransformer {
         register(new EntityWitherTransformer_Color());
         register(new GuiChatTransformer_Accessor());
         register(new GuiChatTransformer_CopyMessages());
+        register(new GuiChatTransformer_SearchBox());
         register(new GuiChatTransformer_TabCompletePlayers());
         register(new GuiContainerTransformer_SafeInventory());
         register(new GuiIngameForgeTransformer_FixActionBar());
         register(new GuiIngameTransformer_CancelHunger());
         register(new GuiIngameTransformer_CustomSidebarLines());
+        register(new GuiNewChatTransformer_Accessor());
         register(new GuiNewChatTransformer_ChatHeads());
         register(new GuiNewChatTransformer_CleanChatLogs());
         register(new GuiNewChatTransformer_CopyMessages());
-        register(new GuiNewChatTransformer());
+        register(new GuiNewChatTransformer_SearchBox());
         register(new GuiPlayerTabOverlayTransformer_ColoredScores());
         register(new GuiPlayerTabOverlayTransformer_ColumnSpacing());
         register(new GuiPlayerTabOverlayTransformer_FinalKills());
@@ -67,6 +69,7 @@ public class MWEClassTransformer implements IClassTransformer {
         register(new GuiPlayerTabOverlayTransformer_PlayerCount());
         register(new GuiScreenBookTransformer_NewNickKey());
         register(new GuiScreenTransformer_CustomChatClickEvent());
+        register(new GuiScreenTransformer_Invoker());
         register(new GuiUtilRenderComponentsTransformer_ChatHeads());
         register(new HitboxRenderTransformer());
         register(new LayerArmorBaseTransformer_HitColor());
