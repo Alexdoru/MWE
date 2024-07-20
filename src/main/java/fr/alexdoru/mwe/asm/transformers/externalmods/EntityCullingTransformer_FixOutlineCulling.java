@@ -58,6 +58,7 @@ public class EntityCullingTransformer_FixOutlineCulling implements MWETransforme
         list.add(new InsnNode(ICONST_0));
         list.add(new InsnNode(IRETURN));
         list.add(label);
+        list.add(new FrameNode(F_SAME, 0, null, 0, null));
         methodNode.instructions.insert(list);
         status.addInjection();
     }
