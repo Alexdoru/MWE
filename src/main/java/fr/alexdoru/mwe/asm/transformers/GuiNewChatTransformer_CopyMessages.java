@@ -45,14 +45,24 @@ public class GuiNewChatTransformer_CopyMessages implements MWETransformer {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
                     if (checkMethodInsnNode(insnNode, MethodMapping.CHATLINE$INIT)) {
                         final InsnList list = new InsnList();
-                        list.add(new VarInsnNode(ALOAD, 1));
-                        list.add(new MethodInsnNode(
-                                INVOKESTATIC,
-                                getHookClass("GuiNewChatHook_CopyMessages"),
-                                injects == 0 ? "setText" : "setText1",
-                                "(L" + ClassMapping.CHATLINE + ";L" + ClassMapping.ICHATCOMPONENT + ";)L" + ClassMapping.CHATLINE + ";",
-                                false
-                        ));
+                        if (injects == 0) {
+                            list.add(new VarInsnNode(ALOAD, 1));
+                            list.add(new MethodInsnNode(
+                                    INVOKESTATIC,
+                                    getHookClass("GuiNewChatHook_CopyMessages"),
+                                    "setText",
+                                    "(L" + ClassMapping.CHATLINE + ";L" + ClassMapping.ICHATCOMPONENT + ";)L" + ClassMapping.CHATLINE + ";",
+                                    false
+                            ));
+                        } else {
+                            list.add(new MethodInsnNode(
+                                    INVOKESTATIC,
+                                    getHookClass("GuiNewChatHook_CopyMessages"),
+                                    "setText1",
+                                    "(L" + ClassMapping.CHATLINE + ";)L" + ClassMapping.CHATLINE + ";",
+                                    false
+                            ));
+                        }
                         methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
                         injects++;

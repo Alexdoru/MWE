@@ -18,7 +18,7 @@ public class GuiNewChatHook_CopyMessages {
         return chatLine;
     }
 
-    public static ChatLine setText1(ChatLine chatLine, IChatComponent chatComponent) {
+    public static ChatLine setText1(ChatLine chatLine) {
         ((ChatLineAccessor) chatLine).setmwe$Text(text);
         return chatLine;
     }
