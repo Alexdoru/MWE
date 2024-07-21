@@ -72,7 +72,7 @@ public class ModUpdater {
 
         MWE.logger.info("Checking for updates");
 
-        final String GITHUB_API_URL = "https://api.github.com/repos/Alexdoru/MegaWallsEnhancements/releases";
+        final String GITHUB_API_URL = "https://api.github.com/repos/Alexdoru/MWE/releases";
         final HttpClient httpClient = new HttpClient(GITHUB_API_URL);
         final JsonArray jsonArray = httpClient.getJsonArray();
 
@@ -110,7 +110,7 @@ public class ModUpdater {
             return;
         }
 
-        final String GITHUB_URL = "https://github.com/Alexdoru/MegaWallsEnhancements/releases";
+        final String GITHUB_URL = "https://github.com/Alexdoru/MWE/releases";
         ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements "
                 + EnumChatFormatting.GOLD + "version v" + latestVersion + EnumChatFormatting.GREEN + " is available, click this message to see the changelog and download page.")
                 .setChatStyle(new ChatStyle()

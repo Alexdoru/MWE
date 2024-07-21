@@ -2,10 +2,10 @@
   {
     "modid": "mwenhancements",
     "name": "MWE",
-    "description": "Enhancements for PVP, Hypixel and Hypixel's Mega Walls",
+    "description": "A mod designed for PVP players with extra features for Mega Walls",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "https://github.com/Alexdoru/MegaWallsEnhancements",
+    "url": "https://github.com/Alexdoru/MWE",
     "updateUrl": "",
     "authorList": [
       "Alexdoru"

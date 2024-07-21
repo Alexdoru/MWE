@@ -9,7 +9,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class CommandMWE extends MyAbstractCommand {
@@ -51,11 +50,6 @@ public class CommandMWE extends MyAbstractCommand {
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         final String[] possibilities = {"howplaygame", "setapikey"};
         return getListOfStringsMatchingLastWord(args, possibilities);
-    }
-
-    @Override
-    public List<String> getCommandAliases() {
-        return Arrays.asList("mwenhancements", "megawallsenhancements");
     }
 
 }

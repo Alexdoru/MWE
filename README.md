@@ -1,28 +1,28 @@
-<p align="center">
-<a href="https://github.com/Alexdoru/MegaWallsEnhancements/releases" target="_blank">
-<img alt="release" src="https://img.shields.io/github/v/release/Alexdoru/MegaWallsEnhancements?color=0843B2&style=for-the-badge" />
+<div style="text-align: center;">
+<a href="https://github.com/Alexdoru/MWE/releases" target="_blank">
+<img alt="release" src="https://img.shields.io/github/v/release/Alexdoru/MWE?color=0843B2&style=for-the-badge" />
 </a>
-<a href="https://github.com/Alexdoru/MegaWallsEnhancements/releases" target="_blank">
-<img alt="downloads" src="https://img.shields.io/github/downloads/Alexdoru/MegaWallsEnhancements/total?color=0843B2&style=for-the-badge" />
+<a href="https://github.com/Alexdoru/MWE/releases" target="_blank">
+<img alt="downloads" src="https://img.shields.io/github/downloads/Alexdoru/MWE/total?color=0843B2&style=for-the-badge" />
 </a>
-</p>
+</div>
 
 **This is a mod for Minecraft Forge 1.8.9 that contains numerous features and improvements for pvp players and for Hypixel's Mega Walls. Use `/mwe` to open the config menu.**
 
 ## Summary
-- [Download](https://github.com/Alexdoru/MegaWallsEnhancements#download)
-- [Installation](https://github.com/Alexdoru/MegaWallsEnhancements#installation)
-- [Feature list](https://github.com/Alexdoru/MegaWallsEnhancements#feature-list)
-  - [Enhancements](https://github.com/Alexdoru/MegaWallsEnhancements#enhancements)
-  - [Hitbox Mod, Better f3+b](https://github.com/Alexdoru/MegaWallsEnhancements#hitbox-mod-better-f3b)
-  - [Mega Walls features](https://github.com/Alexdoru/MegaWallsEnhancements#mega-walls-features)
-  - [Hacker Detector](https://github.com/Alexdoru/MegaWallsEnhancements#hacker-detector)
-  - [NoCheaters](https://github.com/Alexdoru/MegaWallsEnhancements#nocheaters)
-  - [Commands](https://github.com/Alexdoru/MegaWallsEnhancements#commands)
+- [Download](https://github.com/Alexdoru/MWE#download)
+- [Installation](https://github.com/Alexdoru/MWE#installation)
+- [Feature list](https://github.com/Alexdoru/MWE#feature-list)
+  - [Enhancements](https://github.com/Alexdoru/MWE#enhancements)
+  - [Hitbox Mod, Better f3+b](https://github.com/Alexdoru/MWE#hitbox-mod-better-f3b)
+  - [Mega Walls features](https://github.com/Alexdoru/MWE#mega-walls-features)
+  - [Hacker Detector](https://github.com/Alexdoru/MWE#hacker-detector)
+  - [NoCheaters](https://github.com/Alexdoru/MWE#nocheaters)
+  - [Commands](https://github.com/Alexdoru/MWE#commands)
 
 ## Download
 
-Download the latest release from the **[releases page](https://github.com/Alexdoru/MegaWallsEnhancements/releases)**
+Download the latest release from the **[releases page](https://github.com/Alexdoru/MWE/releases)**
 
 ## Installation
 
