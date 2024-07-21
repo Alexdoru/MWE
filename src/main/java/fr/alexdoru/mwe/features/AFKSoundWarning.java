@@ -1,7 +1,6 @@
 package fr.alexdoru.mwe.features;
 
 import fr.alexdoru.mwe.config.ConfigHandler;
-import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
@@ -45,7 +44,7 @@ public class AFKSoundWarning {
     }
 
     public static void playAFKKickSound() {
-        if (ConfigHandler.afkSoundWarning && ScoreboardTracker.isInMwGame()) {
+        if (ConfigHandler.afkSoundWarning) {
             MinecraftForge.EVENT_BUS.register(new AFKSoundWarning(new ResourceLocation("note.pling"), 20 * 15));
         }
     }

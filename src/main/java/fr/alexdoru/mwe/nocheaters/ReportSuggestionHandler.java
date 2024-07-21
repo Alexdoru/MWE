@@ -33,8 +33,7 @@ public class ReportSuggestionHandler {
             ClientChatReceivedEvent event,
             @Nullable String messageSender,
             @Nullable String squadname,
-            String msgIn,
-            String fmsgIn) {
+            String fmsgIn, String msgIn) {
         if (ConfigHandler.reportSuggestions) {
             final Matcher matcher1 = REPORT_PATTERN1.matcher(msgIn);
             final Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);

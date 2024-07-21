@@ -63,9 +63,6 @@ public class WarcryHUD extends AbstractRenderer {
     }
 
     public boolean processMessage(String msg) {
-        if (!ScoreboardTracker.isInMwGame()) {
-            return false;
-        }
         if (WARCRY_AVAILABLE_MESSAGE.equals(msg)) {
             this.activationTime = 0;
             return true;

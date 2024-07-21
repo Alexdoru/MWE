@@ -341,6 +341,18 @@ public class ConfigHandler extends AbstractConfig {
     public static boolean renderWitherOutline = true;
 
     @ConfigProperty(
+            category = "MegaWallsEnhancements",
+            name = "Squad add halo player",
+            comment = "Automatically adds to the squad the player you give your halo to")
+    public static boolean squadHaloPlayer = true;
+
+    @ConfigProperty(
+            category = "MegaWallsEnhancements",
+            name = "Print deathmatch damage in chat",
+            comment = "Prints the deathmatch damage as a separate message in chat instead of having to hover over the message")
+    public static boolean printDeathmatchDamageMessage = true;
+
+    @ConfigProperty(
             category = "VanillaEnhancements",
             name = "Clean chat logs",
             comment = "Removes formatting codes in the chat logs")

@@ -40,7 +40,7 @@ public class ArrowHitHUD extends AbstractRenderer {
         super(ConfigHandler.arrowHitHUDPosition);
     }
 
-    public boolean processMessage(ClientChatReceivedEvent event, String msg, String fmsg) {
+    public boolean processMessage(ClientChatReceivedEvent event, String fmsg, String msg) {
 
         final Matcher matcherArrowHit = PATTERN_ARROW_HIT.matcher(msg);
 

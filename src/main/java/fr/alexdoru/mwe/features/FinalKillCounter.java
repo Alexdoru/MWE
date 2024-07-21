@@ -1,8 +1,8 @@
 package fr.alexdoru.mwe.features;
 
-import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
+import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
@@ -173,10 +173,6 @@ public class FinalKillCounter {
     }
 
     public static boolean processMessage(ClientChatReceivedEvent event, String formattedText, String unformattedText) {
-
-        if (!ScoreboardTracker.isInMwGame()) {
-            return false;
-        }
 
         for (final Pattern pattern : KILL_PATTERNS) {
 

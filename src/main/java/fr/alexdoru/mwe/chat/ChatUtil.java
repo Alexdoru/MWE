@@ -1,9 +1,9 @@
 package fr.alexdoru.mwe.chat;
 
+import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.asm.interfaces.GuiChatAccessor;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor_ChatHeads;
-import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
@@ -11,6 +11,8 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.*;
+
+import java.util.Arrays;
 
 import static net.minecraft.util.EnumChatFormatting.*;
 
@@ -164,14 +166,20 @@ public class ChatUtil {
      * Returns the amounts of spaces needed to make a message centered
      */
     public static String getSeparatorToCenter(String message) {
-        final char space = ' ';
         final int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
-        final int separatorWidth = mc.fontRendererObj.getCharWidth(space);
         final int messageWidth = mc.fontRendererObj.getStringWidth(message);
-        if (messageWidth >= chatWidth) {
-            return "";
-        }
-        return new String(new char[(chatWidth - messageWidth) / (2 * separatorWidth)]).replace("\0", " ");
+        if (messageWidth >= chatWidth) return "";
+        return getSeparatorOfLength((chatWidth - messageWidth) / 2);
+    }
+
+    public static String getSeparatorOfLength(int length) {
+        final char space = ' ';
+        final int separatorWidth = mc.fontRendererObj.getCharWidth(space);
+        final int amountChars = length / separatorWidth;
+        if (amountChars < 1) return "";
+        final char[] chars = new char[amountChars];
+        Arrays.fill(chars, space);
+        return new String(chars);
     }
 
     /**

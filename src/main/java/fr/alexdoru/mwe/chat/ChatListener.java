@@ -12,15 +12,22 @@ import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
+import fr.alexdoru.mwe.utils.MapUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,6 +44,8 @@ public class ChatListener {
     private static final Pattern COINS_BOOSTER_PATTERN = Pattern.compile("^\\+\\d+ (tokens|coins)!( \\([^()]*(?:Coins \\+ EXP|Booster)[^()]*\\)).*");
     private static final Pattern PLAYER_JOIN_PATTERN = Pattern.compile("^(\\w{1,16}) has joined \\([0-9]{1,3}/[0-9]{1,3}\\)!");
     private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:\\[[^\\[\\]]+] )*(\\w{2,16}):.*");
+    private static final Pattern HALO_GIVE_PATTERN = Pattern.compile("^You gave your halo to (\\w+)!");
+    private static final Pattern HALO_HOTBAR_PATTERN = Pattern.compile("^HALO (\\w+) .+");
     private static final HashSet<String> MW_REPETITVE_MSG = new HashSet<>();
     private static boolean addGuildCoinsBonus;
 
@@ -51,67 +60,73 @@ public class ChatListener {
     @SubscribeEvent
     public void onChatMessage(ClientChatReceivedEvent event) {
 
+        final String fmsg = event.message.getFormattedText();
+        final String msg = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
+
         /*normal chat messages*/
         if (event.type == 0) {
 
-            final String msg = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
-            final String fmsg = event.message.getFormattedText();
+            if (ScoreboardTracker.isInMwGame()) {
 
-            if (ScoreboardTracker.isInMwGame() && ConfigHandler.hideRepetitiveMWChatMsg && MW_REPETITVE_MSG.contains(msg)) {
-                event.setCanceled(true);
-                return;
-            }
-
-            if (!ScoreboardTracker.isInMwGame() && msg.equals(GENERAL_START_MESSAGE)) {
-                SquadHandler.formSquad();
-                Check.clearFlagMessages();
-                ScangameData.fectchRandomClasses();
-                return;
-            }
-
-            if (msg.equals(OWN_WITHER_DEATH_MESSAGE)) {
-                GuiManager.killCooldownHUD.hideHUD();
-                return;
-            }
-
-            if (msg.equals(AFK_MESSAGE)) {
-                AFKSoundWarning.playAFKKickSound();
-                return;
-            }
-
-            if (ConfigHandler.shortCoinMessage) {
-                if (COINS_DOUBLED_GUILD_PATTERN.matcher(msg).matches()) {
+                if (ConfigHandler.hideRepetitiveMWChatMsg && MW_REPETITVE_MSG.contains(msg)) {
                     event.setCanceled(true);
-                    addGuildCoinsBonus = true;
                     return;
                 }
-                final Matcher matcherBooster = COINS_BOOSTER_PATTERN.matcher(msg);
-                if (matcherBooster.matches()) {
-                    if (addGuildCoinsBonus) {
-                        final String currency = matcherBooster.group(1);
-                        final boolean isCoins = "coins".equals(currency);
-                        event.message = new ChatComponentText(fmsg
-                                .replaceFirst(currency + "!", currency + "! (" + (isCoins ? EnumChatFormatting.DARK_GREEN : "") + "Guild " + (isCoins ? EnumChatFormatting.GOLD : "") + "bonus)")
-                                .replace(matcherBooster.group(2), ""));
-                        addGuildCoinsBonus = false;
-                    } else {
-                        event.message = new ChatComponentText(fmsg.replace(matcherBooster.group(2), ""));
+
+                if (msg.equals(OWN_WITHER_DEATH_MESSAGE)) {
+                    GuiManager.killCooldownHUD.hideHUD();
+                    return;
+                }
+
+                if (msg.equals(AFK_MESSAGE)) {
+                    AFKSoundWarning.playAFKKickSound();
+                    return;
+                }
+
+                if (ConfigHandler.squadHaloPlayer) {
+                    final Matcher haloGiveMatcher = HALO_GIVE_PATTERN.matcher(msg);
+                    if (haloGiveMatcher.find()) {
+                        SquadHandler.addSelf();
+                        SquadHandler.addPlayer(haloGiveMatcher.group(1));
                     }
-                    return;
                 }
-                final Matcher matcherCoins = COINS_PATTERN.matcher(msg);
-                if (matcherCoins.matches()) {
-                    if (addGuildCoinsBonus) {
-                        final String currency = matcherCoins.group(1);
-                        final boolean isCoins = "coins".equals(currency);
-                        event.message = new ChatComponentText(fmsg.replaceFirst(currency + "!", currency + "! (" + (isCoins ? EnumChatFormatting.DARK_GREEN : "") + "Guild " + (isCoins ? EnumChatFormatting.GOLD : "") + "bonus)"));
-                        addGuildCoinsBonus = false;
+
+                if (ConfigHandler.printDeathmatchDamageMessage) {
+                    if (printDeathmatchDamage(event.message, msg)) {
                         return;
                     }
                 }
-                if (addGuildCoinsBonus) {
-                    addGuildCoinsBonus = false;
+
+                if (FinalKillCounter.processMessage(event, fmsg, msg)) {
+                    return;
                 }
+
+                if (GuiManager.phoenixBondHUD.processMessage(event.message, msg)) {
+                    return;
+                }
+
+                if (GuiManager.warcryHUD.processMessage(msg)) {
+                    return;
+                }
+
+                if (ConfigHandler.showStrengthHUD && msg.equals(HUNTER_STRENGTH_MESSAGE)) {
+                    GuiManager.strengthHUD.setStrengthRenderStart(5000L);
+                    return;
+                }
+
+            } else {
+
+                if (msg.equals(GENERAL_START_MESSAGE)) {
+                    SquadHandler.formSquad();
+                    Check.clearFlagMessages();
+                    ScangameData.fectchRandomClasses();
+                    return;
+                }
+
+            }
+
+            if (processCoinsMessages(event, fmsg, msg)) {
+                return;
             }
 
             if (msg.equals(PREP_PHASE)) {
@@ -119,19 +134,7 @@ public class ChatListener {
                 return;
             }
 
-            if (FinalKillCounter.processMessage(event, fmsg, msg)) {
-                return;
-            }
-
-            if (GuiManager.arrowHitHUD.processMessage(event, msg, fmsg)) {
-                return;
-            }
-
-            if (GuiManager.phoenixBondHUD.processMessage(event.message, msg)) {
-                return;
-            }
-
-            if (GuiManager.warcryHUD.processMessage(msg)) {
+            if (GuiManager.arrowHitHUD.processMessage(event, fmsg, msg)) {
                 return;
             }
 
@@ -143,7 +146,7 @@ public class ChatListener {
                 squadname = SquadHandler.getSquad().get(messageSender);
             }
 
-            if (ReportSuggestionHandler.processMessage(event, messageSender, squadname, msg, fmsg)) {
+            if (ReportSuggestionHandler.processMessage(event, messageSender, squadname, fmsg, msg)) {
                 ChatUtil.addSkinToComponent(event.message, messageSender);
                 return;
             }
@@ -177,11 +180,6 @@ public class ChatListener {
                 return;
             }
 
-            if (ConfigHandler.showStrengthHUD && msg.equals(HUNTER_STRENGTH_MESSAGE)) {
-                GuiManager.strengthHUD.setStrengthRenderStart(5000L);
-                return;
-            }
-
             if (ScoreboardTracker.isPreGameLobby()) {
                 final Matcher playerJoinMatcher = PLAYER_JOIN_PATTERN.matcher(msg);
                 if (playerJoinMatcher.matches()) {
@@ -197,16 +195,112 @@ public class ChatListener {
             }
 
             /*Status messages*/
-        } else if (event.type == 2) {
+        } else if (event.type == 2 && ScoreboardTracker.isInMwGame()) {
 
-            final String fmsg = event.message.getFormattedText();
             if (GuiManager.strengthHUD.processMessage(fmsg)) {
                 return;
             }
-            GuiManager.creeperPrimedTntHUD.processMessage(fmsg);
+
+            if (GuiManager.creeperPrimedTntHUD.processMessage(fmsg)) {
+                return;
+            }
+
+            final Matcher haloMatcher = HALO_HOTBAR_PATTERN.matcher(msg);
+            if (haloMatcher.find()) {
+                final String name = haloMatcher.group(1);
+                final String squadname = SquadHandler.getSquadname(name);
+                if (!squadname.equals(name)) {
+                    if (ConfigHandler.pinkSquadmates) {
+                        event.message = new ChatComponentText(fmsg.replaceFirst(name, EnumChatFormatting.LIGHT_PURPLE + squadname));
+                    } else {
+                        event.message = new ChatComponentText(fmsg.replaceFirst(name, squadname));
+                    }
+                }
+            }
 
         }
 
+    }
+
+    private boolean printDeathmatchDamage(IChatComponent imsg, String msg) {
+        if (!msg.equals("                  Draw settled by: Deathmatch damage")) return false;
+        for (final IChatComponent iChatComponent : imsg) {
+            if (iChatComponent.getChatStyle() == null) continue;
+            final HoverEvent hoverEvent = iChatComponent.getChatStyle().getChatHoverEvent();
+            if (hoverEvent != null && hoverEvent.getAction() == HoverEvent.Action.SHOW_TEXT && hoverEvent.getValue() != null) {
+                final String hoverMsg = EnumChatFormatting.getTextWithoutFormattingCodes(hoverEvent.getValue().getUnformattedText());
+                final Matcher matcher = Pattern.compile("([A-Z]+): ([\\d,]+) damage").matcher(hoverMsg);
+                final Map<String, Integer> map = new HashMap<>();
+                while (matcher.find()) {
+                    final String teamname = matcher.group(1);
+                    final int damage = Integer.parseInt(matcher.group(2).replace(",", ""));
+                    if (damage != 0) {
+                        map.put(teamname, damage);
+                    }
+                }
+                if (map.size() > 1) {
+                    final Map<String, Integer> sortedMap = MapUtil.sortByDecreasingValue(map);
+                    final String hoverFmsg = hoverEvent.getValue().getFormattedText();
+                    final StringBuilder sb = new StringBuilder();
+                    for (final Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
+                        final char color = StringUtil.getLastColorCharBefore(hoverFmsg, entry.getKey());
+                        if (color != '\0') sb.append('§').append(color);
+                        sb.append(entry.getKey()).append(EnumChatFormatting.WHITE).append(": ").append(entry.getValue()).append(" ");
+                    }
+                    final String damageMessage = sb.toString();
+                    if (ChatUtil.getSeparatorToCenter(damageMessage).isEmpty()) {
+                        imsg.appendText("\n").appendText(damageMessage);
+                    } else {
+                        final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+                        final int widthToCenter = fr.getStringWidth("                  ") +
+                                fr.getStringWidth("Draw settled by: Deathmatch damage") / 2
+                                - fr.getStringWidth(damageMessage) / 2 + 1;
+                        imsg.appendText("\n")
+                                .appendText(ChatUtil.getSeparatorOfLength(widthToCenter))
+                                .appendText(damageMessage);
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean processCoinsMessages(ClientChatReceivedEvent event, String fmsg, String msg) {
+        if (!ConfigHandler.shortCoinMessage) return false;
+        if (COINS_DOUBLED_GUILD_PATTERN.matcher(msg).matches()) {
+            event.setCanceled(true);
+            addGuildCoinsBonus = true;
+            return true;
+        }
+        final Matcher matcherBooster = COINS_BOOSTER_PATTERN.matcher(msg);
+        if (matcherBooster.matches()) {
+            if (addGuildCoinsBonus) {
+                final String currency = matcherBooster.group(1);
+                final boolean isCoins = "coins".equals(currency);
+                event.message = new ChatComponentText(fmsg
+                        .replaceFirst(currency + "!", currency + "! (" + (isCoins ? EnumChatFormatting.DARK_GREEN : "") + "Guild " + (isCoins ? EnumChatFormatting.GOLD : "") + "bonus)")
+                        .replace(matcherBooster.group(2), ""));
+                addGuildCoinsBonus = false;
+            } else {
+                event.message = new ChatComponentText(fmsg.replace(matcherBooster.group(2), ""));
+            }
+            return true;
+        }
+        final Matcher matcherCoins = COINS_PATTERN.matcher(msg);
+        if (matcherCoins.matches()) {
+            if (addGuildCoinsBonus) {
+                final String currency = matcherCoins.group(1);
+                final boolean isCoins = "coins".equals(currency);
+                event.message = new ChatComponentText(fmsg.replaceFirst(currency + "!", currency + "! (" + (isCoins ? EnumChatFormatting.DARK_GREEN : "") + "Guild " + (isCoins ? EnumChatFormatting.GOLD : "") + "bonus)"));
+                addGuildCoinsBonus = false;
+                return true;
+            }
+        }
+        if (addGuildCoinsBonus) {
+            addGuildCoinsBonus = false;
+        }
+        return false;
     }
 
 }

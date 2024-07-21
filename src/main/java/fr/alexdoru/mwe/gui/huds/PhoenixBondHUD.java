@@ -4,7 +4,6 @@ import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.features.SquadHandler;
-import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.MapUtil;
 import fr.alexdoru.mwe.utils.SkinUtil;
 import net.minecraft.client.gui.Gui;
@@ -43,10 +42,6 @@ public class PhoenixBondHUD extends AbstractRenderer {
     }
 
     public boolean processMessage(IChatComponent component, String msg) {
-
-        if (!ScoreboardTracker.isInMwGame()) {
-            return false;
-        }
 
         final Matcher incomingBondMatcher = INCOMING_BOND_PATTERN.matcher(msg);
 

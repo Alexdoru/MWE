@@ -113,12 +113,7 @@ public class CommandSquad extends MyAbstractCommand {
             return;
         }
 
-        if (SquadHandler.getSquad().isEmpty()) {
-            SquadHandler.addPlayer(Minecraft.getMinecraft().thePlayer.getName());
-            if (!ConfigHandler.hypixelNick.isEmpty()) {
-                SquadHandler.addPlayer(ConfigHandler.hypixelNick, ConfigHandler.nickHider ? ITALIC + Minecraft.getMinecraft().thePlayer.getName() + RESET : ConfigHandler.hypixelNick);
-            }
-        }
+        SquadHandler.addSelf();
 
         if (args.length >= 4 && args[2].equalsIgnoreCase("as")) {
             final StringBuilder stringBuilder = new StringBuilder();
@@ -167,12 +162,7 @@ public class CommandSquad extends MyAbstractCommand {
                 continue;
             }
             if (myColor == this.getTeamColor(netInfo)) {
-                if (SquadHandler.getSquad().isEmpty()) {
-                    SquadHandler.addPlayer(Minecraft.getMinecraft().thePlayer.getName());
-                    if (!ConfigHandler.hypixelNick.isEmpty()) {
-                        SquadHandler.addPlayer(ConfigHandler.hypixelNick, ConfigHandler.nickHider ? ITALIC + Minecraft.getMinecraft().thePlayer.getName() + RESET : ConfigHandler.hypixelNick);
-                    }
-                }
+                SquadHandler.addSelf();
                 SquadHandler.addPlayer(netInfo.getGameProfile().getName());
             }
         }

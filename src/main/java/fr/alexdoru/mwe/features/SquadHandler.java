@@ -26,6 +26,15 @@ public class SquadHandler {
         }
     }
 
+    public static void addSelf() {
+        if (squadmap.isEmpty()) {
+            addPlayer(Minecraft.getMinecraft().thePlayer.getName());
+            if (!ConfigHandler.hypixelNick.isEmpty()) {
+                addPlayer(ConfigHandler.hypixelNick, ConfigHandler.nickHider ? EnumChatFormatting.ITALIC + Minecraft.getMinecraft().thePlayer.getName() + EnumChatFormatting.RESET : ConfigHandler.hypixelNick);
+            }
+        }
+    }
+
     public static void addPlayer(String playername) {
         addPlayer(playername, playername);
     }

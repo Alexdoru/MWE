@@ -38,7 +38,7 @@ public class CreeperPrimedTntHUD extends AbstractRenderer {
         return timeStartRender + renderDuration - currentTimeMillis > 0;
     }
 
-    public void processMessage(String fmsg) {
+    public boolean processMessage(String fmsg) {
         if (ConfigHandler.showPrimedTNTHUD) {
             final Matcher creeperMatcher = CREEPER_FISSION_HEART_PATTERN.matcher(fmsg);
             if (creeperMatcher.find()) {
@@ -62,8 +62,10 @@ public class CreeperPrimedTntHUD extends AbstractRenderer {
                         break;
                 }
                 lastCountdownNum = cooldown;
+                return true;
             }
         }
+        return false;
     }
 
 }
