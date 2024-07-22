@@ -59,6 +59,7 @@ public class MWEClassTransformer implements IClassTransformer {
         register(new GuiNewChatTransformer_CleanChatLogs());
         register(new GuiNewChatTransformer_CopyMessages());
         register(new GuiNewChatTransformer_SearchBox());
+        register(new GuiNewChatTransformer_LongerChat());
         register(new GuiPlayerTabOverlayTransformer_ColoredScores());
         register(new GuiPlayerTabOverlayTransformer_ColumnSpacing());
         register(new GuiPlayerTabOverlayTransformer_FinalKills());

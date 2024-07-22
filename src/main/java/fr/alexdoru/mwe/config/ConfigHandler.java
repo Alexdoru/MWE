@@ -407,6 +407,12 @@ public class ConfigHandler extends AbstractConfig {
     public static int searchBoxYOffset = 0;
 
     @ConfigProperty(
+            category = "VanillaEnhancements",
+            name = "Longer chat",
+            comment = "Extends the maximum amount of chat lines to 32 000 (Vanilla 100)")
+    public static boolean longerChat = true;
+
+    @ConfigProperty(
             category = "GUI",
             name = "Show kill cooldown HUD",
             comment = "Displays the cooldown for the /kill command when in MegaWalls")
