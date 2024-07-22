@@ -384,6 +384,12 @@ public class ConfigHandler extends AbstractConfig {
 
     @ConfigProperty(
             category = "VanillaEnhancements",
+            name = "Show search box unfocused",
+            comment = "Shows the search box icon in the chat when it's not focused")
+    public static boolean showSearchBoxUnfocused = true;
+
+    @ConfigProperty(
+            category = "VanillaEnhancements",
             name = "Search box shortcuts",
             comment = "Enables using ctrl + F shortcut to enter chat search")
     public static boolean searchBoxChatShortcuts = true;

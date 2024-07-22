@@ -78,6 +78,7 @@ public class GuiChatHook_SearchBox {
 
     public void onDrawScreen(int mouseX, int mouseY) {
         if (searchBox == null) return;
+        if (!isSearchBoxFocused && !ConfigHandler.showSearchBoxUnfocused) return;
         searchBox.drawTextBox(this.guiChat, mouseX, mouseY);
     }
 
@@ -115,6 +116,7 @@ public class GuiChatHook_SearchBox {
 
     public boolean onMouseClicked(int mouseX, int mouseY, int mouseButton) {
         if (searchBox == null) return false;
+        if (!isSearchBoxFocused && !ConfigHandler.showSearchBoxUnfocused) return false;
         if (mouseButton == 0) {
             if (isSearchBoxFocused) {
                 if (searchBox.isMouseOnSearchIcon(mouseX, mouseY)) {
