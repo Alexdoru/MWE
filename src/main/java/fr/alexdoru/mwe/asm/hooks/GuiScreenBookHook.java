@@ -28,39 +28,41 @@ public class GuiScreenBookHook {
         try {
             isOnNickGenerationPage = false;
             if (book.hasTagCompound()) {
-                final NBTTagCompound nbttagcompound = book.getTagCompound();
-                NBTTagList bookPages = nbttagcompound.getTagList("pages", 8);
-                if (bookPages != null) {
-                    bookPages = (NBTTagList) bookPages.copy();
-                    int bookTotalPages = bookPages.tagCount();
-                    if (bookTotalPages < 1) {
-                        bookTotalPages = 1;
-                    }
-                    for (int i = 0; i < bookTotalPages; i++) {
-                        final String pagetext = EnumChatFormatting.getTextWithoutFormattingCodes(IChatComponent.Serializer.jsonToComponent(bookPages.getStringTagAt(i)).getUnformattedText().replace("\n", ""));
-                        Matcher matcher = nickSuccessPagePattern.matcher(pagetext);
-                        if (matcher.find()) {
-                            final String newNick = matcher.group(1);
-                            if (newNick != null && !newNick.isEmpty()) {
-                                if (!ConfigHandler.hypixelNick.isEmpty()) {
-                                    final String oldAliasForNick = SquadHandler.getSquad().remove(ConfigHandler.hypixelNick);
-                                    if (oldAliasForNick != null) {
-                                        if (oldAliasForNick.equals(ConfigHandler.hypixelNick)) {
-                                            SquadHandler.addPlayer(newNick);
-                                        } else {
-                                            SquadHandler.addPlayer(newNick, oldAliasForNick);
+                final NBTTagCompound nbt = book.getTagCompound();
+                if (nbt.hasKey("pages", 8)) {
+                    NBTTagList bookPages = nbt.getTagList("pages", 8);
+                    if (bookPages != null) {
+                        bookPages = (NBTTagList) bookPages.copy();
+                        int bookTotalPages = bookPages.tagCount();
+                        if (bookTotalPages < 1) {
+                            bookTotalPages = 1;
+                        }
+                        for (int i = 0; i < bookTotalPages; i++) {
+                            final String pagetext = EnumChatFormatting.getTextWithoutFormattingCodes(IChatComponent.Serializer.jsonToComponent(bookPages.getStringTagAt(i)).getUnformattedText().replace("\n", ""));
+                            Matcher matcher = nickSuccessPagePattern.matcher(pagetext);
+                            if (matcher.find()) {
+                                final String newNick = matcher.group(1);
+                                if (newNick != null && !newNick.isEmpty()) {
+                                    if (!ConfigHandler.hypixelNick.isEmpty()) {
+                                        final String oldAliasForNick = SquadHandler.getSquad().remove(ConfigHandler.hypixelNick);
+                                        if (oldAliasForNick != null) {
+                                            if (oldAliasForNick.equals(ConfigHandler.hypixelNick)) {
+                                                SquadHandler.addPlayer(newNick);
+                                            } else {
+                                                SquadHandler.addPlayer(newNick, oldAliasForNick);
+                                            }
                                         }
                                     }
+                                    ConfigHandler.hypixelNick = newNick;
+                                    ConfigHandler.saveConfig();
+                                    return;
                                 }
-                                ConfigHandler.hypixelNick = newNick;
-                                ConfigHandler.saveConfig();
+                            }
+                            matcher = nickGenerationPagePattern.matcher(pagetext);
+                            if (matcher.find()) {
+                                isOnNickGenerationPage = true;
                                 return;
                             }
-                        }
-                        matcher = nickGenerationPagePattern.matcher(pagetext);
-                        if (matcher.find()) {
-                            isOnNickGenerationPage = true;
-                            return;
                         }
                     }
                 }
