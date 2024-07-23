@@ -2,14 +2,9 @@ package fr.alexdoru.mwe.chat;
 
 import fr.alexdoru.mwe.asm.interfaces.GuiScreenInvoker;
 import fr.alexdoru.mwe.config.ConfigHandler;
-import fr.alexdoru.mwe.utils.ColorUtil;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +13,6 @@ import static net.minecraft.util.EnumChatFormatting.*;
 
 public class GuiChatSearchBox extends GuiTextField {
 
-    // thanks to Sfyri for making the search texture
-    private static final ResourceLocation searchIcon = new ResourceLocation("mwe", "shearch_icon.png");
     private final int searchIconX;
     private final int defaultWidth;
     private boolean isRegexSearch;
@@ -74,14 +67,14 @@ public class GuiChatSearchBox extends GuiTextField {
                 this.width = Math.max(textWidth + 9, defaultWidth);
             }
             if (isRegexSearch) {
-                drawSearchIcon(guiscreen, this.searchIconX + 1, this.yPosition, AQUA);
+                guiscreen.mc.fontRendererObj.drawStringWithShadow(AQUA + "?", this.searchIconX + 1, this.yPosition, 0xFFFFFF);
             } else {
-                drawSearchIcon(guiscreen, this.searchIconX + 1, this.yPosition, GREEN);
+                guiscreen.mc.fontRendererObj.drawStringWithShadow(GREEN + "?", this.searchIconX + 1, this.yPosition, 0xFFFFFF);
             }
             drawRect(this.xPosition - 1, this.yPosition - 1 - 1, this.xPosition + this.width, this.yPosition + this.height, Integer.MIN_VALUE);
             drawRect(this.xPosition - 1, this.yPosition - 1, this.xPosition + this.width - 1, this.yPosition + this.height - 1, 0x20FFFFFF);
         } else {
-            drawSearchIcon(guiscreen, this.searchIconX + 1, this.yPosition, WHITE);
+            guiscreen.mc.fontRendererObj.drawStringWithShadow("?", this.searchIconX + 1, this.yPosition, 0xFFFFFF);
         }
         super.drawTextBox();
         if (this.isFocused() && this.isRegexSearch && this.errorMessage != null) {
@@ -109,24 +102,6 @@ public class GuiChatSearchBox extends GuiTextField {
             }
             ((GuiScreenInvoker) guiscreen).mwe$drawHoveringText(tooltip, mouseX, mouseY - guiscreen.mc.fontRendererObj.FONT_HEIGHT * tooltip.size() - 3);
         }
-    }
-
-    private void drawSearchIcon(GuiScreen guiScreen, int drawX, int drawY, EnumChatFormatting color) {
-        drawX -= 2;
-        drawY -= 1;
-        GlStateManager.pushMatrix();
-        GlStateManager.enableAlpha();
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        guiScreen.mc.getTextureManager().bindTexture(searchIcon);
-        final int colorI = ColorUtil.getColorInt(color.toString().charAt(1));
-        final int r = colorI >> 16 & 255;
-        final int g = colorI >> 8 & 255;
-        final int b = colorI & 255;
-        GlStateManager.color(r / 255f, g / 255f, b / 255f);
-        drawModalRectWithCustomSizedTexture(drawX, drawY, 0f, 0f, 10, 10, 10f, 10f);
-        GlStateManager.popMatrix();
     }
 
     public boolean isTextFieldShowing() {

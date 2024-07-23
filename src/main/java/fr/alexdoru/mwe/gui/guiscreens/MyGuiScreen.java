@@ -19,7 +19,7 @@ import java.util.List;
 
 public abstract class MyGuiScreen extends GuiScreen {
 
-    private static final ResourceLocation SHADER = new ResourceLocation("mwe", "blur.json");
+    private static final ResourceLocation SHADER = new ResourceLocation("fkcounter", "shaders/blur.json");
     protected final int buttonsHeight = 20;
     protected final int BUTTON_WIDTH = 200;
     protected GuiScreen parent = null;
