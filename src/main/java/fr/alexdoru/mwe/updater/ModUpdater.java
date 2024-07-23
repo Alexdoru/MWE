@@ -72,9 +72,7 @@ public class ModUpdater {
 
         MWE.logger.info("Checking for updates");
 
-        final String GITHUB_API_URL = "https://api.github.com/repos/Alexdoru/MWE/releases";
-        final HttpClient httpClient = new HttpClient(GITHUB_API_URL);
-        final JsonArray jsonArray = httpClient.getJsonArray();
+        final JsonArray jsonArray = HttpClient.getAsJsonArray("https://api.github.com/repos/Alexdoru/MWE/releases");
 
         String downloadUrl = null;
         ComparableVersion latestVersion = null;

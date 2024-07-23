@@ -17,8 +17,7 @@ public class HypixelPlayerData {
     }
 
     public HypixelPlayerData(String uuid) throws ApiException {
-        final HttpClient httpClient = new HttpClient("https://api.hypixel.net/player?uuid=" + uuid);
-        final JsonObject obj = httpClient.getJsonResponse();
+        final JsonObject obj = HttpClient.getAsJsonObject("https://api.hypixel.net/player?uuid=" + uuid);
         final JsonObject playerdata = JsonUtil.getJsonObject(obj, "player");
         if (playerdata == null) {
             throw new ApiException("This player never joined Hypixel, it might be a nick.");

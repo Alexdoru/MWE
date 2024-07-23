@@ -28,10 +28,9 @@ public class MojangNameToUUID {
             this.uuid = cachedData.uuid;
             return;
         }
-        final HttpClient httpClient = new HttpClient("https://api.mojang.com/users/profiles/minecraft/" + playername);
-        final JsonObject obj = httpClient.getJsonResponse();
-        this.name = JsonUtil.getString(obj, "name");
-        final String id = JsonUtil.getString(obj, "id");
+        final JsonObject jsonObject = HttpClient.getAsJsonObject("https://api.mojang.com/users/profiles/minecraft/" + playername);
+        this.name = JsonUtil.getString(jsonObject, "name");
+        final String id = JsonUtil.getString(jsonObject, "id");
         if (this.name == null || id == null) {
             throw new ApiException(ChatUtil.inexistantMinecraftNameMsg(playername));
         }

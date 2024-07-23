@@ -20,10 +20,23 @@ import java.nio.charset.StandardCharsets;
 
 public class HttpClient {
 
-    private final JsonObject jsonResponse;
-    private final JsonArray jsonArray;
+    public static JsonArray getAsJsonArray(String url) throws ApiException {
+        final JsonElement jsonElement = new JsonParser().parse(HttpClient.get(url));
+        if (jsonElement == null || !jsonElement.isJsonArray()) {
+            throw new ApiException("Cannot parse Api response to Json Object");
+        }
+        return jsonElement.getAsJsonArray();
+    }
 
-    public HttpClient(String url) throws ApiException {
+    public static JsonObject getAsJsonObject(String url) throws ApiException {
+        final JsonElement jsonElement = new JsonParser().parse(HttpClient.get(url));
+        if (jsonElement == null || !jsonElement.isJsonObject()) {
+            throw new ApiException("Cannot parse Api response to Json Object");
+        }
+        return jsonElement.getAsJsonObject();
+    }
+
+    public static String get(String url) throws ApiException {
 
         try {
 
@@ -68,31 +81,19 @@ public class HttpClient {
                 throw new ApiException("Http error code : " + status);
             }
 
-            final StringBuilder responseContent = new StringBuilder();
+            final StringBuilder sb = new StringBuilder();
             try (final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    responseContent.append(line);
+                    sb.append(line);
                 }
             }
 
-            if (url.contains("api.github.com")) {
-                final JsonElement element = new JsonParser().parse(responseContent.toString());
-                if (element != null && element.isJsonArray()) {
-                    this.jsonResponse = null;
-                    this.jsonArray = element.getAsJsonArray();
-                    return;
-                }
+            final String s = sb.toString();
+            if (s.isEmpty()) {
+                throw new ApiException("Response is Empty!");
             }
-
-            final JsonObject obj = new JsonParser().parse(responseContent.toString()).getAsJsonObject();
-
-            if (obj == null) {
-                throw new ApiException("Cannot parse Api response to Json");
-            }
-
-            this.jsonResponse = obj;
-            this.jsonArray = null;
+            return s;
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -101,15 +102,7 @@ public class HttpClient {
 
     }
 
-    public JsonObject getJsonResponse() {
-        return jsonResponse;
-    }
-
-    public JsonArray getJsonArray() {
-        return jsonArray;
-    }
-
-    private String stripLastElementOfUrl(String url) {
+    private static String stripLastElementOfUrl(String url) {
         final String[] split = url.split("/");
         return split[split.length - 1];
     }

@@ -12,9 +12,8 @@ public class HypixelGuild {
     private String formattedGuildTag;
 
     public HypixelGuild(String uuid) throws ApiException {
-        final HttpClient httpClient = new HttpClient("https://api.hypixel.net/guild?player=" + uuid);
-        final JsonObject obj = httpClient.getJsonResponse();
-        final JsonObject guildData = JsonUtil.getJsonObject(obj, "guild");
+        final JsonObject jsonObject = HttpClient.getAsJsonObject("https://api.hypixel.net/guild?player=" + uuid);
+        final JsonObject guildData = JsonUtil.getJsonObject(jsonObject, "guild");
         if (guildData == null) {
             return;
         }

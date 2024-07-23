@@ -23,8 +23,7 @@ public class LabyModNameHistory {
             return nameLines;
         }
 
-        final HttpClient httpClient = new HttpClient("https://laby.net/api/user/" + uuidIn.toString() + "/get-snippet");
-        final JsonObject jsonResponse = httpClient.getJsonResponse();
+        final JsonObject jsonResponse = HttpClient.getAsJsonObject("https://laby.net/api/user/" + uuidIn.toString() + "/get-snippet");
         final JsonArray nameHistory = JsonUtil.getJsonArray(jsonResponse, "name_history");
         if (nameHistory == null || nameHistory.size() == 0) {
             throw new ApiException("Name history data is empty");

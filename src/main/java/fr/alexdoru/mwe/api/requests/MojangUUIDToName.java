@@ -17,8 +17,8 @@ public class MojangUUIDToName {
             // if the player changes their username while we are playing, their new name will not show
             return nameCache.get(uuid);
         }
-        final JsonObject obj = new HttpClient("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString()).getJsonResponse();
-        final String name = JsonUtil.getString(obj, "name");
+        final JsonObject jsonObject = HttpClient.getAsJsonObject("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString());
+        final String name = JsonUtil.getString(jsonObject, "name");
         if (name == null) {
             throw new ApiException("Invalid UUID");
         }
