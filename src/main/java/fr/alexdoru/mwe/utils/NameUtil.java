@@ -3,9 +3,9 @@ package fr.alexdoru.mwe.utils;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Ordering;
 import com.mojang.authlib.GameProfile;
+import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
-import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.data.AliasData;
@@ -88,7 +88,7 @@ public class NameUtil {
             if (netInfo != null) {
                 ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(getMWPlayerData(netInfo.getGameProfile(), true).displayName);
             }
-            final EntityPlayer player = mc.theWorld.getPlayerEntityByName(playername);
+            final EntityPlayer player = getPlayerEntityByName(playername);
             if (player != null) {
                 updateEntityPlayerFields(player, false);
                 if (refreshDisplayName) {
@@ -114,7 +114,7 @@ public class NameUtil {
      */
     public static void updateMWPlayerDataAndEntityData(NetworkPlayerInfo netInfo, boolean refreshDisplayName) {
         ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(getMWPlayerData(netInfo.getGameProfile(), true).displayName);
-        final EntityPlayer player = mc.theWorld.getPlayerEntityByName(netInfo.getGameProfile().getName());
+        final EntityPlayer player = getPlayerEntityByName(netInfo.getGameProfile().getName());
         if (player != null) {
             updateEntityPlayerFields(player, false);
             if (refreshDisplayName) {
@@ -149,7 +149,7 @@ public class NameUtil {
                     if (playername.equals(ConfigHandler.hypixelNick)) {
                         player = mc.thePlayer;
                     } else {
-                        player = mc.theWorld.getPlayerEntityByName(netInfo.getGameProfile().getName());
+                        player = getPlayerEntityByName(netInfo.getGameProfile().getName());
                     }
                     if (player != null) {
                         final EntityPlayerAccessor playerAccessor = (EntityPlayerAccessor) player;
@@ -274,7 +274,7 @@ public class NameUtil {
                 final String colorSuffix = team.getColorSuffix();
                 teamColor = StringUtil.getLastColorCharOf(teamprefix);
                 mwClass = MWClass.fromTeamTag(ScoreboardTracker.isMWReplay() ? teamprefix : colorSuffix);
-                final boolean isobf = teamprefix.contains(EnumChatFormatting.OBFUSCATED.toString());
+                final boolean isobf = teamprefix.contains("§k");
                 final boolean isNicked = id.version() == 1;
                 final String alias = AliasData.getAlias(isNicked ? username : uuid);
                 if (iExtraPrefix != null || isSquadMate || alias != null) {
@@ -309,6 +309,18 @@ public class NameUtil {
 
     private static String deobfString(String obfText) {
         return obfPattern.matcher(obfText).replaceAll("");
+    }
+
+    public static EntityPlayer getPlayerEntityByName(String playername) {
+        // we loop backwards because the player list contains duplicate entities
+        // and the "active" ones are the latest inserted
+        final List<EntityPlayer> playerList = mc.theWorld.playerEntities;
+        for (int i = playerList.size() - 1; i >= 0; --i) {
+            if (playername.equals(playerList.get(i).getName())) {
+                return playerList.get(i);
+            }
+        }
+        return null;
     }
 
     /**
