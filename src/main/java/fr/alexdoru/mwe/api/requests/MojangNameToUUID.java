@@ -11,13 +11,13 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
-public class MojangPlayernameToUUID {
+public class MojangNameToUUID {
 
     private static final ConcurrentHashMap<String, NameUuidData> nameUuidCache = new ConcurrentHashMap<>();
     private final String name;
     private final String uuid;
 
-    public MojangPlayernameToUUID(String playername) throws ApiException {
+    public MojangNameToUUID(String playername) throws ApiException {
         final String lowerCaseName = playername.toLowerCase();
         if (!Pattern.compile("\\w{1,16}").matcher(lowerCaseName).matches()) {
             throw new ApiException(ChatUtil.invalidMinecraftNameMsg(playername));

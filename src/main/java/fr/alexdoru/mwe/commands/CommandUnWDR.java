@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.api.exceptions.ApiException;
-import fr.alexdoru.mwe.api.requests.MojangPlayernameToUUID;
+import fr.alexdoru.mwe.api.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
@@ -46,7 +46,7 @@ public class CommandUnWDR extends MyAbstractCommand {
     private void unwdrPlayer(String playername) {
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
-                final MojangPlayernameToUUID apireq = new MojangPlayernameToUUID(playername);
+                final MojangNameToUUID apireq = new MojangNameToUUID(playername);
                 mc.addScheduledTask(() -> this.unwdr(apireq.getUuid(), apireq.getName()));
             } catch (ApiException e) {
                 mc.addScheduledTask(() -> this.unwdr(null, playername));

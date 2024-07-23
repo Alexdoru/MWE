@@ -5,7 +5,7 @@ import fr.alexdoru.mwe.api.cache.CachedHypixelPlayerData;
 import fr.alexdoru.mwe.api.exceptions.ApiException;
 import fr.alexdoru.mwe.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.mwe.api.requests.HypixelPlayerData;
-import fr.alexdoru.mwe.api.requests.MojangPlayernameToUUID;
+import fr.alexdoru.mwe.api.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.data.AliasData;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
@@ -214,7 +214,7 @@ public class CommandAddAlias extends MyAbstractCommand {
         }
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
-                final MojangPlayernameToUUID mojangReq = new MojangPlayernameToUUID(playername);
+                final MojangNameToUUID mojangReq = new MojangNameToUUID(playername);
                 if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
                     try {
                         final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(mojangReq.getUuid()));
@@ -269,7 +269,7 @@ public class CommandAddAlias extends MyAbstractCommand {
         }
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
-                final MojangPlayernameToUUID mojangReq = new MojangPlayernameToUUID(playername);
+                final MojangNameToUUID mojangReq = new MojangNameToUUID(playername);
                 if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
                     try {
                         final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(mojangReq.getUuid()));

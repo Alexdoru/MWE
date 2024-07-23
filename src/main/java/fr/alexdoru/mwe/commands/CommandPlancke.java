@@ -6,7 +6,7 @@ import fr.alexdoru.mwe.api.cache.CachedHypixelPlayerData;
 import fr.alexdoru.mwe.api.exceptions.ApiException;
 import fr.alexdoru.mwe.api.hypixelplayerdataparser.*;
 import fr.alexdoru.mwe.api.requests.HypixelGuild;
-import fr.alexdoru.mwe.api.requests.MojangPlayernameToUUID;
+import fr.alexdoru.mwe.api.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.enums.MWClass;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
@@ -37,7 +37,7 @@ public class CommandPlancke extends MyAbstractCommand {
         }
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
-                final MojangPlayernameToUUID apiname = new MojangPlayernameToUUID(args[0]);
+                final MojangNameToUUID apiname = new MojangNameToUUID(args[0]);
                 final JsonObject playerdata = CachedHypixelPlayerData.getPlayerData(apiname.getUuid());
                 final HypixelGuild hypixelGuild = args.length == 1 ? new HypixelGuild(apiname.getUuid()) : null;
                 mc.addScheduledTask(() -> this.plancke(args, apiname, playerdata, hypixelGuild));
@@ -49,7 +49,7 @@ public class CommandPlancke extends MyAbstractCommand {
         });
     }
 
-    private void plancke(String[] args, MojangPlayernameToUUID apiname, JsonObject playerdata, HypixelGuild hypixelGuild) {
+    private void plancke(String[] args, MojangNameToUUID apiname, JsonObject playerdata, HypixelGuild hypixelGuild) {
 
         final LoginData loginData = new LoginData(playerdata);
 

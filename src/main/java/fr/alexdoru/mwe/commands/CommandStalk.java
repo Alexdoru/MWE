@@ -6,7 +6,7 @@ import fr.alexdoru.mwe.api.hypixelplayerdataparser.LoginData;
 import fr.alexdoru.mwe.api.hypixelplayerdataparser.MegaWallsClassSkinData;
 import fr.alexdoru.mwe.api.requests.HypixelPlayerData;
 import fr.alexdoru.mwe.api.requests.HypixelPlayerStatus;
-import fr.alexdoru.mwe.api.requests.MojangPlayernameToUUID;
+import fr.alexdoru.mwe.api.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DateUtil;
@@ -52,7 +52,7 @@ public class CommandStalk extends MyAbstractCommand {
     private void stalkPlayer(String name) {
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
-                final MojangPlayernameToUUID apiname = new MojangPlayernameToUUID(name);
+                final MojangNameToUUID apiname = new MojangNameToUUID(name);
                 final HypixelPlayerData playerData = new HypixelPlayerData(apiname.getUuid());
                 final LoginData loginData = new LoginData(playerData.getPlayerData());
                 if (!apiname.getName().equals(loginData.getdisplayname()) || loginData.hasNeverJoinedHypixel()) {

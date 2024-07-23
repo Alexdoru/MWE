@@ -4,7 +4,7 @@ import fr.alexdoru.mwe.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.api.cache.CachedHypixelPlayerData;
 import fr.alexdoru.mwe.api.exceptions.ApiException;
 import fr.alexdoru.mwe.api.hypixelplayerdataparser.LoginData;
-import fr.alexdoru.mwe.api.requests.MojangPlayernameToUUID;
+import fr.alexdoru.mwe.api.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.PartyDetection;
@@ -90,7 +90,7 @@ public class CommandWDR extends MyAbstractCommand {
         }
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
-                final MojangPlayernameToUUID mojangReq = new MojangPlayernameToUUID(playername);
+                final MojangNameToUUID mojangReq = new MojangNameToUUID(playername);
                 if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
                     mc.addScheduledTask(() -> addPlayerToReportList(mojangReq.getUUID(), mojangReq.getName(), null, cheats));
                     return null;

@@ -9,7 +9,6 @@ import fr.alexdoru.mwe.api.exceptions.ApiException;
 import fr.alexdoru.mwe.api.exceptions.RateLimitException;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.ConfigHandler;
-import fr.alexdoru.mwe.utils.JsonUtil;
 import net.minecraft.client.Minecraft;
 
 import java.io.BufferedReader;
@@ -90,18 +89,6 @@ public class HttpClient {
 
             if (obj == null) {
                 throw new ApiException("Cannot parse Api response to Json");
-            }
-
-            // I think this will never run because a code != 200 will be received
-            if (!url.contains("api.mojang.com") && !url.contains("laby.net/api")) {
-                if (!JsonUtil.getBoolean(obj, "success")) {
-                    final String msg = JsonUtil.getString(obj, "cause");
-                    if (msg == null) {
-                        throw new ApiException("Request to api unsuccessful");
-                    } else {
-                        throw new ApiException(msg);
-                    }
-                }
             }
 
             this.jsonResponse = obj;

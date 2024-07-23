@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.api.exceptions.ApiException;
 import fr.alexdoru.mwe.api.requests.LabyModNameHistory;
-import fr.alexdoru.mwe.api.requests.MojangPlayernameToUUID;
+import fr.alexdoru.mwe.api.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import fr.alexdoru.mwe.utils.TabCompletionUtil;
@@ -36,7 +36,7 @@ public class CommandName extends MyAbstractCommand {
 
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
-                final MojangPlayernameToUUID nameApi = new MojangPlayernameToUUID(args[0]);
+                final MojangNameToUUID nameApi = new MojangNameToUUID(args[0]);
                 final List<String> history = LabyModNameHistory.getNameHistory(nameApi.getUUID());
                 mc.addScheduledTask(() -> printNameList(history, args));
             } catch (ApiException e1) {
