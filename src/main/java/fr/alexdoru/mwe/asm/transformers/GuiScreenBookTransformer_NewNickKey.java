@@ -19,14 +19,22 @@ public class GuiScreenBookTransformer_NewNickKey implements MWETransformer {
         status.setInjectionPoints(3);
         for (final MethodNode methodNode : classNode.methods) {
 
-            if (checkMethodNode(methodNode, MethodMapping.GUISCREENBOOK$INIT)) {
-                // Injects at head of constructor :
-                // GuiScreenBookHook.onBookInit(book);
-                final InsnList list = new InsnList();
-                list.add(new VarInsnNode(ALOAD, 2));
-                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiScreenBookHook"), "onBookInit", "(L" + ClassMapping.ITEMSTACK + ";)V", false));
-                methodNode.instructions.insert(list);
-                status.addInjection();
+            if (isConstructorMethod(methodNode)) {
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                    if (checkInsnNode(insnNode, RETURN)) {
+                        final InsnList list = new InsnList();
+                        list.add(new VarInsnNode(ALOAD, 2));
+                        list.add(new MethodInsnNode(
+                                INVOKESTATIC,
+                                getHookClass("GuiScreenBookHook"),
+                                "onBookInit",
+                                "(L" + ClassMapping.ITEMSTACK + ";)V",
+                                false
+                        ));
+                        methodNode.instructions.insertBefore(insnNode, list);
+                        status.addInjection();
+                    }
+                }
             }
 
             if (checkMethodNode(methodNode, MethodMapping.GUISCREENBOOK$KEYTYPED)) {

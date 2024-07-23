@@ -3,7 +3,6 @@ package fr.alexdoru.mwe.asm.transformers;
 import fr.alexdoru.mwe.asm.loader.InjectionStatus;
 import fr.alexdoru.mwe.asm.loader.MWETransformer;
 import fr.alexdoru.mwe.asm.mappings.ClassMapping;
-import fr.alexdoru.mwe.asm.mappings.FieldMapping;
 import fr.alexdoru.mwe.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
 
@@ -19,10 +18,10 @@ public class NetHandlerPlayClientTransformer_PlayerMapTracker implements MWETran
         status.setInjectionPoints(3);
         for (final MethodNode methodNode : classNode.methods) {
 
-            if (checkMethodNode(methodNode, MethodMapping.NETHANDLERPLAYCLIENT$INIT)) {
+            if (isConstructorMethod(methodNode)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if (checkFieldInsnNode(insnNode, PUTFIELD, FieldMapping.NETHANDLERPLAYCLIENT$PLAYERINFOMAP)) {
-                        methodNode.instructions.insert(insnNode, new MethodInsnNode(
+                    if (checkInsnNode(insnNode, RETURN)) {
+                        methodNode.instructions.insertBefore(insnNode, new MethodInsnNode(
                                 INVOKESTATIC,
                                 getHookClass("NetHandlerPlayClientHook_PlayerMapTracker"),
                                 "clearPlayerMap",
