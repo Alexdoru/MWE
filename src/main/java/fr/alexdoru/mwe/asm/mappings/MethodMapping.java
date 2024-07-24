@@ -12,6 +12,7 @@ public enum MethodMapping {
     CHATCOMPONENTTEXT$INIT(INVOKESPECIAL, CHATCOMPONENTTEXT, "<init>", "(Ljava/lang/String;)V"),
     CHATLINE$INIT(INVOKESPECIAL, CHATLINE, "<init>", "(IL" + ICHATCOMPONENT + ";I)V"),
     CLICKEVENT$GETVALUE(INVOKEVIRTUAL, CLICKEVENT, "b", "getValue", "()Ljava/lang/String;"),
+    COMMANDHANDLER$EXECUTECOMMAND("a", "executeCommand", "(L" + ICOMMANDSENDER + ";Ljava/lang/String;)I"),
     COMMANDHANDLER$GETTABCOMPLETIONOPTION("a", "getTabCompletionOptions", "(L" + ICOMMANDSENDER + ";Ljava/lang/String;L" + BLOCKPOS + ";)Ljava/util/List;"),
     EFFECTRENDERER$ADDBLOCKDESTROYEFFECTS(INVOKEVIRTUAL, EFFECTRENDERER, "a", "addBlockDestroyEffects", "(L" + BLOCKPOS + ";L" + IBLOCKSTATE + ";)V"),
     ENTITY$SETCURRENTITEMORARMOR(INVOKEVIRTUAL, ENTITY, "c", "setCurrentItemOrArmor", "(IL" + ITEMSTACK + ";)V"),

@@ -33,6 +33,7 @@ public class MWEClassTransformer implements IClassTransformer {
         register(new ChatComponentStyleTransformer_ChatHeads());
         register(new ChatComponentTextTransformer_ChatHeads());
         register(new ChatLineTransformer_Accessor());
+        register(new ClientCommandHandlerTransformer_FixSlash());
         register(new CommandHandlerTransformer_CaseCommand());
         register(new EntityArrowTransformer());
         register(new EntityFXTransformer_ClearView());
