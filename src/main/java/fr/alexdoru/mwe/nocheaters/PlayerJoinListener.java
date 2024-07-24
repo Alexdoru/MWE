@@ -24,7 +24,7 @@ public class PlayerJoinListener {
     }
 
     @SubscribeEvent
-    public void onGuiScreen(GuiScreenEvent.InitGuiEvent event) {
+    public void onGuiScreen(GuiScreenEvent.InitGuiEvent.Pre event) {
         if (event.gui instanceof GuiGameOver) {
             lastDeathTime = System.currentTimeMillis();
         }
@@ -35,10 +35,9 @@ public class PlayerJoinListener {
         if (event.entity instanceof EntityPlayer) {
             try {
                 if (event.entity instanceof EntityPlayerSP) {
-                    /* Delaying the transformation for self because :
-                        - certain fields such as mc.theWorld.getScoreboard().getPlayersTeam(username) are null when you just joined the world
-                        - for self the player spawn before receiving a networkplayerinfo packet
-                     */
+                    // Delaying the transformation for self because :
+                    // - certain fields such as mc.theWorld.getScoreboard().getPlayersTeam(username) are null when you just joined the world
+                    // - for self the player spawn before receiving a networkplayerinfo packet
                     new DelayedTask(() -> {
                         NameUtil.getMWPlayerData(((EntityPlayerSP) event.entity).getGameProfile(), true);
                         NameUtil.updateEntityPlayerFields((EntityPlayer) event.entity, true);

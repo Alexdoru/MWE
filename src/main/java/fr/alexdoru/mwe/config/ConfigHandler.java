@@ -419,6 +419,18 @@ public class ConfigHandler extends AbstractConfig {
     public static boolean longerChat = true;
 
     @ConfigProperty(
+            category = "VanillaEnhancements",
+            name = "De-obfuscate names in tab",
+            comment = "Removes obfuscation in the names in the tablist")
+    public static boolean deobfNamesInTab;
+
+    @ConfigProperty(
+            category = "VanillaEnhancements",
+            name = "Show fake players in tab",
+            comment = "Puts a red star next to fake player names")
+    public static boolean showFakePlayersInTab;
+
+    @ConfigProperty(
             category = "GUI",
             name = "Show kill cooldown HUD",
             comment = "Displays the cooldown for the /kill command when in MegaWalls")

@@ -226,9 +226,8 @@ public class NameUtil {
         String extraPrefix = "";
         IChatComponent iExtraPrefix = null;
         final String squadname = SquadHandler.getSquad().get(username);
-        final boolean isSquadMate = squadname != null;
 
-        if (isSquadMate) {
+        if (squadname != null) {
             if (ConfigHandler.squadIconOnNames || ConfigHandler.squadIconTabOnly) {
                 extraPrefix = SQUAD_ICON;
                 iExtraPrefix = ISQUAD_ICON;
@@ -254,7 +253,10 @@ public class NameUtil {
         char teamColor = '\0';
         MWClass mwClass = null;
         if (mc.theWorld != null) {
-            final ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
+            ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
+            if (team == null && mc.thePlayer != null && mc.thePlayer.getName().equals(username) && !ConfigHandler.hypixelNick.isEmpty()) {
+                team = mc.theWorld.getScoreboard().getPlayersTeam(ConfigHandler.hypixelNick);
+            }
             if (team != null) {
                 final String teamprefix = team.getColorPrefix();
                 final String colorSuffix = team.getColorSuffix();
@@ -263,20 +265,21 @@ public class NameUtil {
                 final boolean isobf = teamprefix.contains("§k");
                 final boolean isNicked = id.version() == 1;
                 final String alias = AliasData.getAlias(isNicked ? username : uuid);
-                if (iExtraPrefix != null || isSquadMate || alias != null) {
-                    displayName = new ChatComponentText(
-                            (isobf ? "" : extraPrefix)
-                                    + teamprefix
-                                    + (isSquadMate ? squadname : username)
-                                    + colorSuffix
-                                    + (isobf || alias == null ? "" : EnumChatFormatting.RESET + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.RESET + ")"));
-                }
-            } else if (mc.thePlayer != null && mc.thePlayer.getName().equals(username)) {
-                if (!ConfigHandler.hypixelNick.isEmpty()) {
-                    final ScorePlayerTeam teamNick = mc.theWorld.getScoreboard().getPlayersTeam(ConfigHandler.hypixelNick);
-                    if (teamNick != null) {
-                        teamColor = StringUtil.getLastColorCharOf(teamNick.getColorPrefix());
+                if (iExtraPrefix != null || isobf || isNicked || squadname != null || alias != null) {
+                    final StringBuilder sb = new StringBuilder();
+                    if (iExtraPrefix != null) sb.append(extraPrefix);
+                    if (isobf && ConfigHandler.deobfNamesInTab) sb.append(deobfString(teamprefix));
+                    else sb.append(teamprefix);
+                    if (squadname != null) sb.append(squadname);
+                    else sb.append(username);
+                    sb.append(colorSuffix);
+                    if (isNicked && ConfigHandler.showFakePlayersInTab) {
+                        sb.append(EnumChatFormatting.DARK_RED).append(EnumChatFormatting.BOLD).append(" *");
                     }
+                    if (alias != null) {
+                        sb.append(EnumChatFormatting.RESET).append(" (").append(EnumChatFormatting.GOLD).append(alias).append(EnumChatFormatting.RESET).append(")");
+                    }
+                    displayName = new ChatComponentText(sb.toString());
                 }
             }
         }
