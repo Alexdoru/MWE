@@ -21,7 +21,11 @@ import fr.alexdoru.mwe.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.event.ClickEvent;
+import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 import java.util.UUID;
@@ -235,10 +239,18 @@ public class CommandScanGame extends MyAbstractCommand {
     private static void addScanMessageToChat(NetworkPlayerInfo netInfo, IChatComponent imsg) {
         ChatHandler.deleteScanFlagFromChat(netInfo.getGameProfile().getName());
         final IChatComponent msg = new ScanFlagChatComponent(netInfo.getGameProfile().getName(), ChatUtil.getTagMW())
-                .appendSibling(NameUtil.getFormattedNameWithPlanckeClickEvent(netInfo))
+                .appendSibling(getFormattedNameWithPlanckeClickEvent(netInfo))
                 .appendSibling(imsg);
         ChatUtil.addSkinToComponent(msg, netInfo.getGameProfile().getName());
         ChatUtil.addChatMessage(msg);
+    }
+
+    private static IChatComponent getFormattedNameWithPlanckeClickEvent(NetworkPlayerInfo netInfo) {
+        final String formattedName = NameUtil.getFormattedNameWithoutIcons(netInfo);
+        return new ChatComponentText(formattedName)
+                .setChatStyle(new ChatStyle()
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to see the mega walls stats of that player")))
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + netInfo.getGameProfile().getName() + " mw")));
     }
 
 }

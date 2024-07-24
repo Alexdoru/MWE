@@ -21,12 +21,9 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.event.HoverEvent;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldSettings;
@@ -41,10 +38,11 @@ import java.util.regex.Pattern;
  * - updates/creates MWPlayerData stored in the cache
  * - assigns custom displayName or null
  * - assigns the finals of the player
- * on Scoreboard Team packets :
+ * on Team packets :
  * - transforms the name in the tablist
+ * - update the fields in entity player
  * on playerJoin :
- * - look the MWPlayerData and assigns the custom fields in EntityPlayer (prestige 5)
+ * - look the MWPlayerData and assigns the custom fields in EntityPlayer
  * - print warning message
  * <p>
  * When the world loads, for EntityPlayerSP it does :
@@ -109,9 +107,6 @@ public class NameUtil {
         }
     }
 
-    /**
-     * This updates the infos storred in GameProfile.MWPlayerData and refreshes the name in the tablist and the nametag
-     */
     public static void updateMWPlayerDataAndEntityData(NetworkPlayerInfo netInfo, boolean refreshDisplayName) {
         ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(getMWPlayerData(netInfo.getGameProfile(), true).displayName);
         final EntityPlayer player = getPlayerEntityByName(netInfo.getGameProfile().getName());
@@ -125,20 +120,17 @@ public class NameUtil {
 
     public static void refreshAllNamesInWorld() {
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            if (netInfo != null) {
-                updateMWPlayerDataAndEntityData(netInfo, true);
-            }
+            updateMWPlayerDataAndEntityData(netInfo, true);
         }
     }
 
     private static final Pattern MINECRAFT_NAME_PATTERN = Pattern.compile("\\w{1,16}");
 
-    public static boolean isValidMinecraftName(String playername) {
-        return !StringUtil.isNullOrEmpty(playername) &&
-                (MINECRAFT_NAME_PATTERN.matcher(playername).matches() || ScoreboardTracker.isReplayMode());
+    public static boolean isValidMinecraftName(String name) {
+        return !StringUtil.isNullOrEmpty(name) && (MINECRAFT_NAME_PATTERN.matcher(name).matches() || ScoreboardTracker.isReplayMode());
     }
 
-    public static void onScoreboardPacket(String playername) {
+    public static void onTeamPacket(String playername) {
         if (!isValidMinecraftName(playername)) return;
         final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
         if (netInfo == null) return;
@@ -152,32 +144,12 @@ public class NameUtil {
                 player = getPlayerEntityByName(netInfo.getGameProfile().getName());
             }
             if (player != null) {
-                final EntityPlayerAccessor playerAccessor = (EntityPlayerAccessor) player;
-                final int oldColor = playerAccessor.getPlayerTeamColorInt();
-                playerAccessor.setPlayerTeamColor(mwPlayerData.teamColor);
-                if (ConfigHandler.pinkSquadmates && mwPlayerData.squadname != null) {
-                    playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt('d'));
-                } else {
-                    playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
-                }
-                playerAccessor.setMWClass(mwPlayerData.mwClass);
-                LeatherArmorManager.onColorChange(player, oldColor, playerAccessor.getPlayerTeamColorInt());
+                updateEntityPlayerFields(player, mwPlayerData);
             }
         }
     }
 
-    /**
-     * Updates the custom fields in the entity player, such as the prestige V tag,
-     * so current prestige 4 tag, the icon on nametags and also checks to print
-     * the warning message if player was reported and is currently joining the world
-     */
-    public static void updateEntityPlayerFields(EntityPlayer player, boolean onPlayerJoin) {
-
-        final MWPlayerData.PlayerData mwPlayerData = MWPlayerData.get(player.getUniqueID());
-        if (mwPlayerData == null) {
-            return;
-        }
-
+    private static void updateEntityPlayerFields(EntityPlayer player, MWPlayerData.PlayerData mwPlayerData) {
         final EntityPlayerAccessor playerAccessor = (EntityPlayerAccessor) player;
         final int oldColor = playerAccessor.getPlayerTeamColorInt();
         playerAccessor.setPlayerTeamColor(mwPlayerData.teamColor);
@@ -188,27 +160,41 @@ public class NameUtil {
         }
         playerAccessor.setMWClass(mwPlayerData.mwClass);
         LeatherArmorManager.onColorChange(player, oldColor, playerAccessor.getPlayerTeamColorInt());
+    }
+
+    /**
+     * Updates the custom fields in the entity player, the icon on nametags and also checks to print
+     * the warning message if player was reported and is currently joining the world
+     */
+    public static void updateEntityPlayerFields(EntityPlayer player, boolean onPlayerJoin) {
+
+        final MWPlayerData.PlayerData playerData = MWPlayerData.get(player.getUniqueID());
+        if (playerData == null) {
+            return;
+        }
+
+        updateEntityPlayerFields(player, playerData);
 
         player.getPrefixes().removeAll(ALL_ICONS_LIST);
 
-        if (mwPlayerData.extraPrefix != null) {
-            if (mwPlayerData.extraPrefix == ISQUAD_ICON) {
+        if (playerData.extraPrefix != null) {
+            if (playerData.extraPrefix == ISQUAD_ICON) {
                 if (!ConfigHandler.squadIconTabOnly) {
-                    player.addPrefix(mwPlayerData.extraPrefix);
+                    player.addPrefix(playerData.extraPrefix);
                 }
             } else {
                 if (!ConfigHandler.warningIconsTabOnly) {
-                    player.addPrefix(mwPlayerData.extraPrefix);
+                    player.addPrefix(playerData.extraPrefix);
                 }
             }
         }
 
-        if (onPlayerJoin && mwPlayerData.wdr != null) {
+        if (onPlayerJoin && playerData.wdr != null) {
             if (ConfigHandler.warningMessages) {
                 if (!warningMsgPrinted.contains(player.getUniqueID())) {
                     warningMsgPrinted.add(player.getUniqueID());
                     ChatHandler.deleteWarningFromChat(player.getName());
-                    WarningMessages.printWarningMessage(player.getUniqueID(), player.getTeam(), player.getName(), mwPlayerData.wdr);
+                    WarningMessages.printWarningMessage(player.getUniqueID(), player.getTeam(), player.getName(), playerData.wdr);
                 }
             }
         }
@@ -225,16 +211,16 @@ public class NameUtil {
      * a rerun all the code in the method to generate the MWPlayerData instance
      */
     @Nonnull
-    public static MWPlayerData.PlayerData getMWPlayerData(GameProfile gameProfileIn, boolean forceRefresh) {
+    public static MWPlayerData.PlayerData getMWPlayerData(GameProfile gameProfile, boolean forceRefresh) {
 
-        final UUID id = gameProfileIn.getId();
-        MWPlayerData.PlayerData mwPlayerData = MWPlayerData.get(id);
+        final UUID id = gameProfile.getId();
+        MWPlayerData.PlayerData playerData = MWPlayerData.get(id);
 
-        if (!forceRefresh && mwPlayerData != null) {
-            return mwPlayerData;
+        if (!forceRefresh && playerData != null) {
+            return playerData;
         }
 
-        final String username = gameProfileIn.getName();
+        final String username = gameProfile.getName();
         final String uuid = id.toString().replace("-", "");
         final WDR wdr = WdrData.getWdr(id, username);
         String extraPrefix = "";
@@ -295,13 +281,13 @@ public class NameUtil {
             }
         }
 
-        if (mwPlayerData == null) {
-            mwPlayerData = new MWPlayerData.PlayerData(id, wdr, iExtraPrefix, squadname, displayName, teamColor, mwClass);
+        if (playerData == null) {
+            playerData = new MWPlayerData.PlayerData(id, wdr, iExtraPrefix, squadname, displayName, teamColor, mwClass);
         } else {
-            mwPlayerData.setData(wdr, iExtraPrefix, squadname, displayName, teamColor, mwClass);
+            playerData.setData(wdr, iExtraPrefix, squadname, displayName, teamColor, mwClass);
         }
 
-        return mwPlayerData;
+        return playerData;
 
     }
 
@@ -336,7 +322,7 @@ public class NameUtil {
     }
 
     /**
-     * Returns the formatted name of the player, additionnal icons, squadname, alias and prestive V tag included
+     * Returns the formatted name of the player, additionnal icons, squadname, alias not included
      * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay#getPlayerName}
      */
     public static String getFormattedName(NetworkPlayerInfo netInfo) {
@@ -347,7 +333,7 @@ public class NameUtil {
     }
 
     /**
-     * Returns the formatted team name with additionnaly a custom prestige V tag and a squadname
+     * Returns the formatted team name with additionnaly a squadname
      * This doesn't return the icons in front that the player may have.
      */
     public static String getFormattedNameWithoutIcons(String playername) {
@@ -359,18 +345,18 @@ public class NameUtil {
     }
 
     /**
-     * Returns the formatted team name with additionnaly a custom prestige V tag and a squadname
+     * Returns the formatted team name with additionnaly a squadname
      * This doesn't return the icons in front that the player may have.
      */
     public static String getFormattedNameWithoutIcons(NetworkPlayerInfo netInfo) {
-        return formatPlayerNameUnscrambled(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName());
+        return getFormattedNameWithoutIcons(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName());
     }
 
     /**
      * Equivalent of {@link net.minecraft.scoreboard.ScorePlayerTeam#formatPlayerName}
      * but with eventually a squadname
      */
-    public static String formatPlayerNameUnscrambled(Team team, String playername) {
+    public static String getFormattedNameWithoutIcons(Team team, String playername) {
         if (team == null) {
             return SquadHandler.getSquadname(playername);
         } else if (team instanceof ScorePlayerTeam) {
@@ -380,30 +366,16 @@ public class NameUtil {
     }
 
     /**
-     * Used for /scangame
-     */
-    public static IChatComponent getFormattedNameWithPlanckeClickEvent(NetworkPlayerInfo netInfo) {
-        final String formattedName;
-        if (netInfo.getPlayerTeam() == null) {
-            formattedName = netInfo.getGameProfile().getName();
-        } else {
-            final ScorePlayerTeam team = netInfo.getPlayerTeam();
-            formattedName = deobfString(team.getColorPrefix()) + netInfo.getGameProfile().getName() + team.getColorSuffix();
-        }
-        return new ChatComponentText(formattedName)
-                .setChatStyle(new ChatStyle()
-                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to see the mega walls stats of that player")))
-                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + netInfo.getGameProfile().getName() + " mw")));
-    }
-
-    /**
      * Returns true if it's the uuid of an NPC
      * from experimentation, on Hypixel :
+     * <p>
      * - nicked players are v1
+     * <p>
      * - NPCs are v2
+     * <p>
      * - real players are v4
      */
-    public static boolean filterNPC(UUID uuid) {
+    public static boolean isNPC(UUID uuid) {
         return uuid.version() == 2;
     }
 

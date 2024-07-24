@@ -50,7 +50,7 @@ public class WarningMessages {
 
     public static IChatComponent getPlayernameWithHoverText(String formattedName, Team team, String playername, String wdrmapKey, WDR wdr) {
         if (formattedName == null) {
-            formattedName = NameUtil.formatPlayerNameUnscrambled(team, playername);
+            formattedName = NameUtil.getFormattedNameWithoutIcons(team, playername);
         }
         return new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + wdrmapKey + " " + playername))

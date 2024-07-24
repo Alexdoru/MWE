@@ -19,7 +19,7 @@ public class NetHandlerPlayClientTransformer_TeamsListener implements MWETransfo
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.NETHANDLERPLAYCLIENT$HANDLETEAMS)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
-                    if (checkMethodInsnNode(insnNode, MethodMapping.SCOREPLAYERTEAM$SETNAMESUFFIX)) {
+                    if (checkInsnNode(insnNode, RETURN)) {
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 1));
                         list.add(new VarInsnNode(ALOAD, 3));
@@ -30,7 +30,7 @@ public class NetHandlerPlayClientTransformer_TeamsListener implements MWETransfo
                                 "(L" + ClassMapping.S3EPACKETTEAMS + ";L" + ClassMapping.SCOREPLAYERTEAM + ";)V",
                                 false
                         ));
-                        methodNode.instructions.insert(insnNode, list);
+                        methodNode.instructions.insertBefore(insnNode, list);
                         status.addInjection();
                     }
                 }

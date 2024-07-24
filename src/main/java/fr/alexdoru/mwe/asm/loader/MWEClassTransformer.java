@@ -97,7 +97,6 @@ public class MWEClassTransformer implements IClassTransformer {
         register(new RenderPlayerTransformer_ColoredHealth());
         register(new RenderPlayerTransformer_RenegadeArrowCount());
         register(new S19PacketEntityStatusTransformer());
-        register(new ScoreboardTransformer());
         register(new ScorePlayerTeamTransformer());
         register(new EntityCullingTransformer_FixOutlineCulling());
         register(new OptifinePlayerItemsLayerTransformer_RemoveHats());
