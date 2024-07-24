@@ -139,27 +139,29 @@ public class NameUtil {
     }
 
     public static void onScoreboardPacket(String playername) {
-        if (isValidMinecraftName(playername)) {
-            final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
-            if (netInfo != null) {
-                final MWPlayerData.PlayerData mwPlayerData = getMWPlayerData(netInfo.getGameProfile(), true);
-                ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(mwPlayerData.displayName);
-                if (mc.theWorld != null) {
-                    final EntityPlayer player;
-                    if (playername.equals(ConfigHandler.hypixelNick)) {
-                        player = mc.thePlayer;
-                    } else {
-                        player = getPlayerEntityByName(netInfo.getGameProfile().getName());
-                    }
-                    if (player != null) {
-                        final EntityPlayerAccessor playerAccessor = (EntityPlayerAccessor) player;
-                        final int oldColor = playerAccessor.getPlayerTeamColorInt();
-                        playerAccessor.setPlayerTeamColor(mwPlayerData.teamColor);
-                        playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
-                        playerAccessor.setMWClass(mwPlayerData.mwClass);
-                        LeatherArmorManager.onColorChange(player, oldColor, playerAccessor.getPlayerTeamColorInt());
-                    }
+        if (!isValidMinecraftName(playername)) return;
+        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+        if (netInfo == null) return;
+        final MWPlayerData.PlayerData mwPlayerData = getMWPlayerData(netInfo.getGameProfile(), true);
+        ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(mwPlayerData.displayName);
+        if (mc.theWorld != null) {
+            final EntityPlayer player;
+            if (playername.equals(ConfigHandler.hypixelNick)) {
+                player = mc.thePlayer;
+            } else {
+                player = getPlayerEntityByName(netInfo.getGameProfile().getName());
+            }
+            if (player != null) {
+                final EntityPlayerAccessor playerAccessor = (EntityPlayerAccessor) player;
+                final int oldColor = playerAccessor.getPlayerTeamColorInt();
+                playerAccessor.setPlayerTeamColor(mwPlayerData.teamColor);
+                if (ConfigHandler.pinkSquadmates && mwPlayerData.squadname != null) {
+                    playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt('d'));
+                } else {
+                    playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
                 }
+                playerAccessor.setMWClass(mwPlayerData.mwClass);
+                LeatherArmorManager.onColorChange(player, oldColor, playerAccessor.getPlayerTeamColorInt());
             }
         }
     }
@@ -177,7 +179,6 @@ public class NameUtil {
         }
 
         final EntityPlayerAccessor playerAccessor = (EntityPlayerAccessor) player;
-
         final int oldColor = playerAccessor.getPlayerTeamColorInt();
         playerAccessor.setPlayerTeamColor(mwPlayerData.teamColor);
         if (ConfigHandler.pinkSquadmates && mwPlayerData.squadname != null) {
@@ -185,9 +186,8 @@ public class NameUtil {
         } else {
             playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
         }
-        LeatherArmorManager.onColorChange(player, oldColor, playerAccessor.getPlayerTeamColorInt());
-
         playerAccessor.setMWClass(mwPlayerData.mwClass);
+        LeatherArmorManager.onColorChange(player, oldColor, playerAccessor.getPlayerTeamColorInt());
 
         player.getPrefixes().removeAll(ALL_ICONS_LIST);
 
