@@ -8,7 +8,6 @@ import fr.alexdoru.mwe.api.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.PartyDetection;
-import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
@@ -44,7 +43,6 @@ public class CommandWDR extends MyAbstractCommand {
         } else {
             cheats.addAll(Arrays.asList(args).subList(1, args.length));
         }
-        ReportQueue.INSTANCE.addPlayerReportedThisGame(playername);
         PartyDetection.printBoostingReportAdvice(playername);
         if (ScoreboardTracker.isPreGameLobby()) {
             ChatUtil.printReportingAdvice();

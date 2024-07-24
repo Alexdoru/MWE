@@ -49,7 +49,6 @@ public class ReportQueue {
                 movingCounter = 0;
                 final String playername = queueList.remove(0).name;
                 final String msg = "/wdr " + playername;
-                playersReportedThisGame.add(playername);
                 ChatUtil.sendChatMessage(msg, true);
                 standStillLimit = 20 + random.nextInt(11);
                 standStillCounter = 0;
@@ -103,6 +102,7 @@ public class ReportQueue {
 
     public void removePlayerFromReportQueue(String playername) {
         queueList.removeIf(report -> (report.name.equalsIgnoreCase(playername)));
+        if (queueList.isEmpty()) ChatHandler.deleteStopMovingInstruction();
     }
 
     private int prevItemHeld;

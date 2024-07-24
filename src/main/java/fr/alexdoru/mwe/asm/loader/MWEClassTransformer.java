@@ -51,6 +51,7 @@ public class MWEClassTransformer implements IClassTransformer {
         register(new GuiChatTransformer_CopyMessages());
         register(new GuiChatTransformer_SearchBox());
         register(new GuiChatTransformer_TabCompletePlayers());
+        register(new GuiContainerTransformer_ListenClicks());
         register(new GuiContainerTransformer_SafeInventory());
         register(new GuiIngameForgeTransformer_FixActionBar());
         register(new GuiIngameTransformer_CancelHunger());
