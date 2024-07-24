@@ -45,6 +45,7 @@ public enum ClassMapping {
     IBLOCKSTATE("alz", "net/minecraft/block/state/IBlockState"),
     ICAMERA("bia", "net/minecraft/client/renderer/culling/ICamera"),
     ICHATCOMPONENT("eu", "net/minecraft/util/IChatComponent"),
+    ICOMMAND("k", "net/minecraft/command/ICommand"),
     ICOMMANDSENDER("m", "net/minecraft/command/ICommandSender"),
     INETHANDLER("ep", "net/minecraft/network/INetHandler"),
     INVENTORYPLAYER("wm", "net/minecraft/entity/player/InventoryPlayer"),

@@ -14,6 +14,7 @@ public enum MethodMapping {
     CLICKEVENT$GETVALUE(INVOKEVIRTUAL, CLICKEVENT, "b", "getValue", "()Ljava/lang/String;"),
     COMMANDHANDLER$EXECUTECOMMAND("a", "executeCommand", "(L" + ICOMMANDSENDER + ";Ljava/lang/String;)I"),
     COMMANDHANDLER$GETTABCOMPLETIONOPTION("a", "getTabCompletionOptions", "(L" + ICOMMANDSENDER + ";Ljava/lang/String;L" + BLOCKPOS + ";)Ljava/util/List;"),
+    COMMANDHANDLER$REGISTERCOMMAND("a", "registerCommand", "(L" + ICOMMAND + ";)L" + ICOMMAND + ";"),
     EFFECTRENDERER$ADDBLOCKDESTROYEFFECTS(INVOKEVIRTUAL, EFFECTRENDERER, "a", "addBlockDestroyEffects", "(L" + BLOCKPOS + ";L" + IBLOCKSTATE + ";)V"),
     ENTITY$SETCURRENTITEMORARMOR(INVOKEVIRTUAL, ENTITY, "c", "setCurrentItemOrArmor", "(IL" + ITEMSTACK + ";)V"),
     ENTITY$SETPOSITIONANDROTATION2("a", "setPositionAndRotation2", "(DDDFFIZ)V"),
