@@ -35,6 +35,7 @@ public class ChatListener {
 
     private static final String AFK_MESSAGE = "Are you AFK? You could be kicked for AFKing!";
     private static final String BAN_MESSAGE = "A player has been removed from your game.";
+    private static final String DEATHMATCH_DAMAGE_MESSAGE = "                  Draw settled by: Deathmatch damage";
     private static final String HUNTER_STRENGTH_MESSAGE = "Your Force of Nature gave you a 5 second Strength I buff.";
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
@@ -223,7 +224,7 @@ public class ChatListener {
     }
 
     private boolean printDeathmatchDamage(IChatComponent imsg, String msg) {
-        if (!msg.equals("                  Draw settled by: Deathmatch damage")) return false;
+        if (!msg.equals(DEATHMATCH_DAMAGE_MESSAGE)) return false;
         for (final IChatComponent iChatComponent : imsg) {
             if (iChatComponent.getChatStyle() == null) continue;
             final HoverEvent hoverEvent = iChatComponent.getChatStyle().getChatHoverEvent();

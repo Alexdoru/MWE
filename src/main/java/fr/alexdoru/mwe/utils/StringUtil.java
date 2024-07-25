@@ -7,6 +7,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 
 public class StringUtil {
 
@@ -136,6 +137,12 @@ public class StringUtil {
             return null;
         }
         return string.substring(0, 1).toUpperCase() + string.substring(1);
+    }
+
+    public static String getRepetitionOf(char c, int length) {
+        final char[] chars = new char[length];
+        Arrays.fill(chars, c);
+        return new String(chars);
     }
 
     /**

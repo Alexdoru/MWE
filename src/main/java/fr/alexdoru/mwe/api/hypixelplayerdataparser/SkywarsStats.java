@@ -3,6 +3,7 @@ package fr.alexdoru.mwe.api.hypixelplayerdataparser;
 import com.google.gson.JsonObject;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.utils.JsonUtil;
+import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -183,8 +184,8 @@ public class SkywarsStats {
 
         final int i = (int) ((1f - level_progress) * 10) + 1;
 
-        final String str1 = new String(new char[i]).replace("\0", "■");
-        final String str2 = new String(new char[10 - i]).replace("\0", "■");
+        final String str1 = StringUtil.getRepetitionOf('■', i);
+        final String str2 = StringUtil.getRepetitionOf('■', 10 - i);
 
         return EnumChatFormatting.GRAY + "Progress: " + EnumChatFormatting.AQUA + (current_level_xp_max - xp_remaning) + EnumChatFormatting.GRAY + "/" + EnumChatFormatting.GREEN + current_level_xp_max + EnumChatFormatting.GRAY + " XP"
                 + EnumChatFormatting.DARK_GRAY + " [" + EnumChatFormatting.AQUA + str1 + EnumChatFormatting.GRAY + str2 + EnumChatFormatting.DARK_GRAY + "]";

@@ -6,13 +6,12 @@ import fr.alexdoru.mwe.asm.interfaces.GuiChatAccessor;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor_ChatHeads;
 import fr.alexdoru.mwe.config.ConfigHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
+import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.*;
-
-import java.util.Arrays;
 
 import static net.minecraft.util.EnumChatFormatting.*;
 
@@ -149,10 +148,13 @@ public class ChatUtil {
      * Draws a bar that takes the width of the chat window
      */
     public static String bar() {
-        final char separator = '-';
+        return STRIKETHROUGH + repeatToChatWidth('-');
+    }
+
+    public static String repeatToChatWidth(char c) {
         final int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
-        final int separatorWidth = mc.fontRendererObj.getCharWidth(separator);
-        return STRIKETHROUGH + new String(new char[chatWidth / separatorWidth]).replace("\0", "-");
+        final int charWidth = mc.fontRendererObj.getCharWidth(c);
+        return StringUtil.getRepetitionOf(c, chatWidth / charWidth);
     }
 
     /**
@@ -177,9 +179,7 @@ public class ChatUtil {
         final int separatorWidth = mc.fontRendererObj.getCharWidth(space);
         final int amountChars = length / separatorWidth;
         if (amountChars < 1) return "";
-        final char[] chars = new char[amountChars];
-        Arrays.fill(chars, space);
-        return new String(chars);
+        return StringUtil.getRepetitionOf(space, amountChars);
     }
 
     /**
@@ -206,7 +206,7 @@ public class ChatUtil {
         String leftSeparatorText = "";
 
         if (chatWidth > maxLineWidth) {
-            leftSeparatorText = new String(new char[(chatWidth - maxLineWidth) / (2 * separatorWidth)]).replace("\0", String.valueOf(separator));
+            leftSeparatorText = StringUtil.getRepetitionOf(separator, (chatWidth - maxLineWidth) / (2 * separatorWidth));
         }
 
         final StringBuilder message = new StringBuilder();
@@ -217,7 +217,7 @@ public class ChatUtil {
                 if (j == 0) { // first element on the left
 
                     final int messageWidth = mc.fontRendererObj.getStringWidth(strings[j]);
-                    message.append(leftSeparatorText).append(strings[j]).append(new String(new char[(columnWidth - messageWidth) / (separatorWidth)]).replace("\0", String.valueOf(separator)));
+                    message.append(leftSeparatorText).append(strings[j]).append(StringUtil.getRepetitionOf(separator, (columnWidth - messageWidth) / (separatorWidth)));
 
                 } else if (j == strings.length - 1) { // last element on the right
 
@@ -226,7 +226,7 @@ public class ChatUtil {
                 } else { // element in the middle
 
                     final int messageWidth = mc.fontRendererObj.getStringWidth(strings[j]);
-                    message.append(strings[j]).append(new String(new char[(columnWidth - messageWidth) / (separatorWidth)]).replace("\0", String.valueOf(separator)));
+                    message.append(strings[j]).append(StringUtil.getRepetitionOf(separator, (columnWidth - messageWidth) / (separatorWidth)));
 
                 }
 
