@@ -736,7 +736,7 @@ public class ConfigHandler extends AbstractConfig {
             category = "HackerDetector",
             name = "Flag message prefix",
             comment = "Lets you chose the prefix of flags messages")
-    public static String flagMessagePrefix = EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "NoCheaters" + EnumChatFormatting.GOLD + "] ";
+    public static String flagMessagePrefix = EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "NoCheaters" + EnumChatFormatting.GOLD + "]";
 
     @ConfigProperty(
             category = "Hitbox",

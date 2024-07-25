@@ -29,7 +29,7 @@ public class ChatUtil {
     }
 
     public static String getTagHackerDetector() {
-        return ConfigHandler.flagMessagePrefix + RESET;
+        return ConfigHandler.flagMessagePrefix + " " + RESET;
     }
 
     public static String getTagHitboxes() {
