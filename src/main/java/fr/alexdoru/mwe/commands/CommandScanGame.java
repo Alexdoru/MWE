@@ -66,7 +66,7 @@ public class CommandScanGame extends MyAbstractCommand {
         }
         int i = 0;
         final boolean isMythicHour = ScoreboardUtils.isMegaWallsMythicGame();
-        for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
+        for (final NetworkPlayerInfo netInfo : NameUtil.sortedCopyOf(mc.getNetHandler().getPlayerInfoMap())) {
             if (mc.thePlayer != null && netInfo.getGameProfile().getId().equals(mc.thePlayer.getUniqueID())) continue;
             if (scanPlayer(netInfo, isMythicHour)) i++;
         }
@@ -148,8 +148,8 @@ public class CommandScanGame extends MyAbstractCommand {
                 megaWallsStats.getWlr() * megaWallsStats.getFkdr() > 0.33F * 1F * 6F) { // 6 times the average win/loss times the average fkdr
             return new ChatComponentText(GRAY + " played : " + GOLD + megaWallsStats.getGamesPlayed()
                     + GRAY + " games, fkd : " + GOLD + String.format("%.1f", megaWallsStats.getFkdr())
-                    + GRAY + " FK/game : " + GOLD + String.format("%.1f", megaWallsStats.getFkpergame())
-                    + GRAY + " W/L : " + GOLD + String.format("%.1f", megaWallsStats.getWlr()));
+                    + GRAY + " FK per game : " + GOLD + String.format("%.1f", megaWallsStats.getFkpergame())
+                    + GRAY + " WLR : " + GOLD + String.format("%.1f", megaWallsStats.getWlr()));
 
         }
         return null;
