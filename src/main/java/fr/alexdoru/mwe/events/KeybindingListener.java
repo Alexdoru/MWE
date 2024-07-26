@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.events;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGameOver;
@@ -52,17 +52,17 @@ public class KeybindingListener {
         } else if (ScoreboardTracker.isInMwGame() && !ScoreboardTracker.isPrepPhase() && warcryKey.isPressed()) {
             mc.thePlayer.sendChatMessage("/warcry");
         } else if (toggleDroppedItemLimit.isPressed()) {
-            ConfigHandler.limitDroppedEntityRendered = !ConfigHandler.limitDroppedEntityRendered;
-            ConfigHandler.saveConfig();
-            if (ConfigHandler.limitDroppedEntityRendered) {
+            MWEConfig.limitDroppedEntityRendered = !MWEConfig.limitDroppedEntityRendered;
+            MWEConfig.saveConfig();
+            if (MWEConfig.limitDroppedEntityRendered) {
                 ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Limit dropped items rendered: " + EnumChatFormatting.GREEN + "On");
             } else {
                 ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Limit dropped items rendered: " + EnumChatFormatting.RED + "Off");
             }
         } else if (playerHitboxes.isPressed()) {
-            ConfigHandler.drawHitboxForPlayers = !ConfigHandler.drawHitboxForPlayers;
-            ConfigHandler.saveConfig();
-            if (ConfigHandler.drawHitboxForPlayers) {
+            MWEConfig.drawHitboxForPlayers = !MWEConfig.drawHitboxForPlayers;
+            MWEConfig.saveConfig();
+            if (MWEConfig.drawHitboxForPlayers) {
                 ChatUtil.addChatMessage(ChatUtil.getTagHitboxes() + EnumChatFormatting.WHITE + "Draw hitboxes for players: " + EnumChatFormatting.GREEN + "On");
             } else {
                 ChatUtil.addChatMessage(ChatUtil.getTagHitboxes() + EnumChatFormatting.WHITE + "Draw hitboxes for players: " + EnumChatFormatting.RED + "Off");

@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.asm.interfaces.IWitherColor;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.entity.EntityLivingBase;
 
 @SuppressWarnings("unused")
@@ -11,13 +11,13 @@ public class RendererLivingEntityHook_HitColor {
     private static int hitColor;
 
     public static float getRed(float r, EntityLivingBase entity) {
-        if (ConfigHandler.teamColoredPlayerHurt && entity instanceof EntityPlayerAccessor) {
+        if (MWEConfig.teamColoredPlayerHurt && entity instanceof EntityPlayerAccessor) {
             hitColor = ((EntityPlayerAccessor) entity).getPlayerTeamColorInt();
-        } else if (ConfigHandler.teamColoredWitherHurt && entity instanceof IWitherColor) {
+        } else if (MWEConfig.teamColoredWitherHurt && entity instanceof IWitherColor) {
             final int i = ((IWitherColor) entity).getmwe$Color();
-            hitColor = i == 0 ? ConfigHandler.hitColor : i;
+            hitColor = i == 0 ? MWEConfig.hitColor : i;
         } else {
-            hitColor = ConfigHandler.hitColor;
+            hitColor = MWEConfig.hitColor;
         }
         return (float) (hitColor >> 16 & 0xFF) / 255.0F;
     }
@@ -31,7 +31,7 @@ public class RendererLivingEntityHook_HitColor {
     }
 
     public static float getAlpha(float a) {
-        return (float) (ConfigHandler.hitColor >> 24 & 0xFF) / 255.0F;
+        return (float) (MWEConfig.hitColor >> 24 & 0xFF) / 255.0F;
     }
 
 }

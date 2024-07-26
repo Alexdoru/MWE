@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.hooks;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.network.NetworkPlayerInfo;
 
@@ -13,7 +13,7 @@ public class GuiPlayerTabOverlayHook_HidePing {
 
     // called once per frame
     public static int getPingWidth(int original, List<NetworkPlayerInfo> list) {
-        if (ConfigHandler.hidePingTablist) {
+        if (MWEConfig.hidePingTablist) {
             if (ScoreboardTracker.isInMwGame()) {
                 drawPing = false;
                 return 0;

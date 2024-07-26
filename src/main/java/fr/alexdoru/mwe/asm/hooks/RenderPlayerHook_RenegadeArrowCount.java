@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.hooks;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.utils.TimerUtil;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.util.EnumChatFormatting;
@@ -20,7 +20,7 @@ public class RenderPlayerHook_RenegadeArrowCount {
 
     @SuppressWarnings("unused")
     public static StringBuilder getArrowCount(StringBuilder str, AbstractClientPlayer entityIn) {
-        if (ConfigHandler.renegadeArrowCount) {
+        if (MWEConfig.renegadeArrowCount) {
             final List<Long> list = arrowHitMap.get(entityIn.getName());
             if (list == null || list.isEmpty()) {
                 return str;

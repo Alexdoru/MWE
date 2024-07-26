@@ -114,7 +114,7 @@ public class RenderManagerTransformer_Hitboxes implements MWETransformer {
                             // Transforms line 453 :
                             // if (entityIn instanceof EntityLivingBase)
                             // Becomes :
-                            // if (entityIn instanceof EntityLivingBase && ConfigHandler.drawRedBox)
+                            // if (entityIn instanceof EntityLivingBase && MWEConfig.drawRedBox)
                             final InsnList list = new InsnList();
                             list.add(new JumpInsnNode(IFEQ, labelNode));
                             list.add(getNewConfigFieldInsnNode("drawRedBox"));

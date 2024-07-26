@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.gui.huds;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
@@ -39,22 +39,22 @@ public class FKCounterHUD extends AbstractRenderer {
     private final List<String> textToRender = new ArrayList<>();
 
     public FKCounterHUD() {
-        super(ConfigHandler.fkcounterHUDPosition);
+        super(MWEConfig.fkcounterHUDPosition);
     }
 
     private int getHeight() {
-        if (ConfigHandler.fkcounterHUDCompact) {
-            return (int) (mc.fontRendererObj.FONT_HEIGHT * ConfigHandler.fkcounterHUDSize);
+        if (MWEConfig.fkcounterHUDCompact) {
+            return (int) (mc.fontRendererObj.FONT_HEIGHT * MWEConfig.fkcounterHUDSize);
         } else {
-            return (int) (mc.fontRendererObj.FONT_HEIGHT * 4 * ConfigHandler.fkcounterHUDSize);
+            return (int) (mc.fontRendererObj.FONT_HEIGHT * 4 * MWEConfig.fkcounterHUDSize);
         }
     }
 
     private int getWidth() {
-        if (ConfigHandler.fkcounterHUDCompact) {
-            return (int) (mc.fontRendererObj.getStringWidth(this.displayText) * ConfigHandler.fkcounterHUDSize);
+        if (MWEConfig.fkcounterHUDCompact) {
+            return (int) (mc.fontRendererObj.getStringWidth(this.displayText) * MWEConfig.fkcounterHUDSize);
         } else {
-            return (int) (getMultilineWidth(this.textToRender) * ConfigHandler.fkcounterHUDSize);
+            return (int) (getMultilineWidth(this.textToRender) * MWEConfig.fkcounterHUDSize);
         }
     }
 
@@ -65,12 +65,12 @@ public class FKCounterHUD extends AbstractRenderer {
         final int y = this.guiPosition.getAbsoluteRenderY();
         GlStateManager.pushMatrix();
         {
-            if (ConfigHandler.fkcounterHUDDrawBackground) {
+            if (MWEConfig.fkcounterHUDDrawBackground) {
                 drawRect(x - 2, y - 2, x + getWidth() + 1, y + getHeight(), BACKGROUND_COLOR);
             }
             GlStateManager.translate(x, y, 0);
-            GlStateManager.scale(ConfigHandler.fkcounterHUDSize, ConfigHandler.fkcounterHUDSize, 1d);
-            if (ConfigHandler.fkcounterHUDCompact) {
+            GlStateManager.scale(MWEConfig.fkcounterHUDSize, MWEConfig.fkcounterHUDSize, 1d);
+            if (MWEConfig.fkcounterHUDCompact) {
                 mc.fontRendererObj.drawStringWithShadow(this.displayText, 0, 0, 0xFFFFFF);
             } else {
                 drawStringList(this.textToRender);
@@ -86,12 +86,12 @@ public class FKCounterHUD extends AbstractRenderer {
         final int y = this.guiPosition.getAbsoluteRenderY();
 
         final int width;
-        if (ConfigHandler.fkcounterHUDCompact) {
-            width = (int) (mc.fontRendererObj.getStringWidth(DUMMY_TEXT_COMPACT) * ConfigHandler.fkcounterHUDSize);
-        } else if (ConfigHandler.fkcounterHUDShowPlayers) {
-            width = (int) (getMultilineWidth(DUMMY_TEXT_PLAYERS) * ConfigHandler.fkcounterHUDSize);
+        if (MWEConfig.fkcounterHUDCompact) {
+            width = (int) (mc.fontRendererObj.getStringWidth(DUMMY_TEXT_COMPACT) * MWEConfig.fkcounterHUDSize);
+        } else if (MWEConfig.fkcounterHUDShowPlayers) {
+            width = (int) (getMultilineWidth(DUMMY_TEXT_PLAYERS) * MWEConfig.fkcounterHUDSize);
         } else {
-            width = (int) (getMultilineWidth(DUMMY_TEXT) * ConfigHandler.fkcounterHUDSize);
+            width = (int) (getMultilineWidth(DUMMY_TEXT) * MWEConfig.fkcounterHUDSize);
         }
 
         final int left = x - 2;
@@ -107,10 +107,10 @@ public class FKCounterHUD extends AbstractRenderer {
             drawVerticalLine(left, top, bottom, Color.RED.getRGB());
             drawVerticalLine(right, top, bottom, Color.RED.getRGB());
             GlStateManager.translate(x, y, 0);
-            GlStateManager.scale(ConfigHandler.fkcounterHUDSize, ConfigHandler.fkcounterHUDSize, 1d);
-            if (ConfigHandler.fkcounterHUDCompact) {
+            GlStateManager.scale(MWEConfig.fkcounterHUDSize, MWEConfig.fkcounterHUDSize, 1d);
+            if (MWEConfig.fkcounterHUDCompact) {
                 mc.fontRendererObj.drawStringWithShadow(DUMMY_TEXT_COMPACT, 0, 0, 0xFFFFFF);
-            } else if (ConfigHandler.fkcounterHUDShowPlayers) {
+            } else if (MWEConfig.fkcounterHUDShowPlayers) {
                 drawStringList(DUMMY_TEXT_PLAYERS);
             } else {
                 drawStringList(DUMMY_TEXT);
@@ -122,7 +122,7 @@ public class FKCounterHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return !ConfigHandler.fkcounterHUDinSidebar && ConfigHandler.showfkcounterHUD && ScoreboardTracker.isInMwGame() && FinalKillCounter.getGameId() != null;
+        return !MWEConfig.fkcounterHUDinSidebar && MWEConfig.showfkcounterHUD && ScoreboardTracker.isInMwGame() && FinalKillCounter.getGameId() != null;
     }
 
     public void updateDisplayText() {
@@ -134,7 +134,7 @@ public class FKCounterHUD extends AbstractRenderer {
         this.textToRender.clear();
         final Map<Integer, Integer> sortedmap = FinalKillCounter.getSortedTeamKillsMap();
 
-        if (ConfigHandler.fkcounterHUDCompact) {
+        if (MWEConfig.fkcounterHUDCompact) {
 
             boolean first = true;
             final StringBuilder strBuilder = new StringBuilder();
@@ -148,7 +148,7 @@ public class FKCounterHUD extends AbstractRenderer {
             }
             this.displayText = strBuilder.toString();
 
-        } else if (ConfigHandler.fkcounterHUDShowPlayers) {
+        } else if (MWEConfig.fkcounterHUDShowPlayers) {
 
             for (final Entry<Integer, Integer> teamEntry : sortedmap.entrySet()) {
                 final StringBuilder strBuilder = new StringBuilder();
@@ -166,7 +166,7 @@ public class FKCounterHUD extends AbstractRenderer {
                         }
                         strBuilder.append(SquadHandler.getSquadname(playerEntry.getKey())).append(" (").append(playerEntry.getValue()).append(")");
                         playerAmount++;
-                        if (playerAmount == ConfigHandler.fkcounterHUDPlayerAmount) {
+                        if (playerAmount == MWEConfig.fkcounterHUDPlayerAmount) {
                             break;
                         }
                         first = false;

@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.gui.huds;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.gui.ScaledResolution;
@@ -17,7 +17,7 @@ public class LastWitherHPHUD extends AbstractRenderer {
     private int witherHp = 0;
 
     public LastWitherHPHUD() {
-        super(ConfigHandler.lastWitherHUDPosition);
+        super(MWEConfig.lastWitherHUDPosition);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -55,7 +55,7 @@ public class LastWitherHPHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return !ConfigHandler.witherHUDinSidebar && ConfigHandler.showLastWitherHUD && ScoreboardTracker.isInMwGame() && ScoreboardTracker.getParser().isOnlyOneWitherAlive();
+        return !MWEConfig.witherHUDinSidebar && MWEConfig.showLastWitherHUD && ScoreboardTracker.isInMwGame() && ScoreboardTracker.getParser().isOnlyOneWitherAlive();
     }
 
 }

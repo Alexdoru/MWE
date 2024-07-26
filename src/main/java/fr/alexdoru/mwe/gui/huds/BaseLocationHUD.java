@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.chat.LocrawListener;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.enums.MegaWallsMap;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
@@ -15,7 +15,7 @@ public class BaseLocationHUD extends AbstractRenderer {
     private MegaWallsMap currentMap;
 
     public BaseLocationHUD() {
-        super(ConfigHandler.baseLocationHUDPosition);
+        super(MWEConfig.baseLocationHUDPosition);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -33,12 +33,12 @@ public class BaseLocationHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return ConfigHandler.showBaseLocationHUD && (ScoreboardTracker.isInMwGame() || ScoreboardTracker.isMWReplay()) && this.currentMap != null;
+        return MWEConfig.showBaseLocationHUD && (ScoreboardTracker.isInMwGame() || ScoreboardTracker.isMWReplay()) && this.currentMap != null;
     }
 
     @SubscribeEvent
     public void onMWEvent(MegaWallsGameEvent event) {
-        if (!ConfigHandler.showBaseLocationHUD) return;
+        if (!MWEConfig.showBaseLocationHUD) return;
         if (event.getType() == MegaWallsGameEvent.EventType.CONNECT) {
             LocrawListener.setMegaWallsMap();
         }

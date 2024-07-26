@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.utils.MapUtil;
 import fr.alexdoru.mwe.utils.SkinUtil;
@@ -34,7 +34,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
     private static final Pattern SELF_HEALED_PATTERN = Pattern.compile("You are healed for\\s([0-9]*[.]?[0-9]+)[❤♥]");
 
     public PhoenixBondHUD() {
-        super(ConfigHandler.phxBondHUDPosition);
+        super(MWEConfig.phxBondHUDPosition);
         this.dummyTextToRender.add(getLine(EnumChatFormatting.GREEN + "Player1", "10.5"));
         this.dummyTextToRender.add(getLine(EnumChatFormatting.GREEN + "Player2", "6.0"));
         this.dummyTextToRender.add(getLine(EnumChatFormatting.GREEN + "Player3", "3.5"));
@@ -151,7 +151,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return ConfigHandler.showPhxBondHUD && timeStartRender + 5000L > currentTimeMillis;
+        return MWEConfig.showPhxBondHUD && timeStartRender + 5000L > currentTimeMillis;
     }
 
     private EnumChatFormatting getHealColor(float heal) {

@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.utils;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
@@ -40,7 +40,7 @@ public class ColorUtil {
     }
 
     public static EnumChatFormatting getColoredHP(EnumChatFormatting original, int hp) {
-        if (ConfigHandler.useColoredScores) {
+        if (MWEConfig.useColoredScores) {
             final float maxHP;
             if (ScoreboardTracker.isInMwGame()) {
                 maxHP = 44f;

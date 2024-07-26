@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.hooks;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.IChatComponent;
 import org.lwjgl.input.Mouse;
@@ -11,7 +11,7 @@ public class GuiChatHook_CopyMessages {
 
     @SuppressWarnings("unused")
     public static void onChatRightClick(int mouseButton) {
-        if (ConfigHandler.rightClickChatCopy && mouseButton == 1) {
+        if (MWEConfig.rightClickChatCopy && mouseButton == 1) {
             copyChatLine = true;
             Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatComponent(Mouse.getX(), Mouse.getY());
             copyChatLine = false;
@@ -23,7 +23,7 @@ public class GuiChatHook_CopyMessages {
         if (ranClickEvent) {
             return true;
         } else {
-            if (ConfigHandler.leftClickChatCopy && component != null) {
+            if (MWEConfig.leftClickChatCopy && component != null) {
                 copyChatLine = true;
                 Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatComponent(Mouse.getX(), Mouse.getY());
                 copyChatLine = false;

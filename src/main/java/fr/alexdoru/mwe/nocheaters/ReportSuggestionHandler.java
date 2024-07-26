@@ -3,7 +3,7 @@ package fr.alexdoru.mwe.nocheaters;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.commands.CommandReport;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.ScangameData;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
@@ -34,7 +34,7 @@ public class ReportSuggestionHandler {
             @Nullable String messageSender,
             @Nullable String squadname,
             String fmsgIn, String msgIn) {
-        if (ConfigHandler.reportSuggestions) {
+        if (MWEConfig.reportSuggestions) {
             final Matcher matcher1 = REPORT_PATTERN1.matcher(msgIn);
             final Matcher matcher2 = REPORT_PATTERN2.matcher(msgIn);
             if (matcher1.find()) {
@@ -183,7 +183,7 @@ public class ReportSuggestionHandler {
     }
 
     private static boolean isPlayerMyself(@Nullable String name) {
-        return (mc.thePlayer != null && mc.thePlayer.getName().equalsIgnoreCase(name)) || (!ConfigHandler.hypixelNick.isEmpty() && ConfigHandler.hypixelNick.equals(name));
+        return (mc.thePlayer != null && mc.thePlayer.getName().equalsIgnoreCase(name)) || (!MWEConfig.hypixelNick.isEmpty() && MWEConfig.hypixelNick.equals(name));
     }
 
 }

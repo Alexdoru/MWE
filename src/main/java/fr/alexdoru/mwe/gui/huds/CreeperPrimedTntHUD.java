@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.gui.huds;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -16,7 +16,7 @@ public class CreeperPrimedTntHUD extends AbstractRenderer {
     private EnumChatFormatting colorPrefix = EnumChatFormatting.GREEN;
 
     public CreeperPrimedTntHUD() {
-        super(ConfigHandler.creeperTNTHUDPosition);
+        super(MWEConfig.creeperTNTHUDPosition);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class CreeperPrimedTntHUD extends AbstractRenderer {
     }
 
     public boolean processMessage(String fmsg) {
-        if (ConfigHandler.showPrimedTNTHUD) {
+        if (MWEConfig.showPrimedTNTHUD) {
             final Matcher creeperMatcher = CREEPER_FISSION_HEART_PATTERN.matcher(fmsg);
             if (creeperMatcher.find()) {
                 final String cooldown = creeperMatcher.group(1);

@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.gui.huds;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.gui.ScaledResolution;
@@ -20,7 +20,7 @@ public class WarcryHUD extends AbstractRenderer {
     private String displayText = "";
 
     public WarcryHUD() {
-        super(ConfigHandler.warcryHUDPosition);
+        super(MWEConfig.warcryHUDPosition);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -37,7 +37,7 @@ public class WarcryHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        if (ConfigHandler.showWarcryHUD && ScoreboardTracker.isInMwGame()) {
+        if (MWEConfig.showWarcryHUD && ScoreboardTracker.isInMwGame()) {
             return updateDisplayText(currentTimeMillis);
         }
         return false;

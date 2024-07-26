@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.hooks;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.utils.TimerUtil;
@@ -43,18 +43,18 @@ public class GuiScreenBookHook {
                             if (matcher.find()) {
                                 final String newNick = matcher.group(1);
                                 if (newNick != null && !newNick.isEmpty()) {
-                                    if (!ConfigHandler.hypixelNick.isEmpty()) {
-                                        final String oldAliasForNick = SquadHandler.getSquad().remove(ConfigHandler.hypixelNick);
+                                    if (!MWEConfig.hypixelNick.isEmpty()) {
+                                        final String oldAliasForNick = SquadHandler.getSquad().remove(MWEConfig.hypixelNick);
                                         if (oldAliasForNick != null) {
-                                            if (oldAliasForNick.equals(ConfigHandler.hypixelNick)) {
+                                            if (oldAliasForNick.equals(MWEConfig.hypixelNick)) {
                                                 SquadHandler.addPlayer(newNick);
                                             } else {
                                                 SquadHandler.addPlayer(newNick, oldAliasForNick);
                                             }
                                         }
                                     }
-                                    ConfigHandler.hypixelNick = newNick;
-                                    ConfigHandler.saveConfig();
+                                    MWEConfig.hypixelNick = newNick;
+                                    MWEConfig.saveConfig();
                                     return;
                                 }
                             }

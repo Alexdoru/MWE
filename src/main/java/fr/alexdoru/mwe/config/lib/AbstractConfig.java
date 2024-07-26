@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.config;
+package fr.alexdoru.mwe.config.lib;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.gui.guiapi.GuiPosition;
@@ -47,7 +47,7 @@ public abstract class AbstractConfig {
         }
     }
 
-    protected void save() {
+    public void save() {
         try {
             for (final Field field : configClass.getDeclaredFields()) {
                 if (field.isAnnotationPresent(ConfigProperty.class)) {

@@ -3,7 +3,7 @@ package fr.alexdoru.mwe.gui.huds;
 import com.mojang.authlib.GameProfile;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.ColorUtil;
@@ -28,7 +28,7 @@ import java.util.List;
 public class SquadHealthHUD extends AbstractRenderer {
 
     public SquadHealthHUD() {
-        super(ConfigHandler.squadHUDPosition);
+        super(MWEConfig.squadHUDPosition);
     }
 
     @Override
@@ -163,7 +163,7 @@ public class SquadHealthHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return ConfigHandler.showSquadHUD && SquadHandler.getSquad().size() > 1;
+        return MWEConfig.showSquadHUD && SquadHandler.getSquad().size() > 1;
     }
 
 }

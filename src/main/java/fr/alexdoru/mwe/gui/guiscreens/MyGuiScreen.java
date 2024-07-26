@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.gui.guiscreens;
 
 import fr.alexdoru.mwe.asm.loader.ASMLoadingPlugin;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.gui.elements.FancyGuiButton;
 import fr.alexdoru.mwe.gui.elements.SimpleGuiButton;
 import fr.alexdoru.mwe.gui.elements.UIElement;
@@ -86,7 +86,7 @@ public abstract class MyGuiScreen extends GuiScreen {
     @Override
     public void onGuiClosed() {
         mc.gameSettings.guiScale = usersGuiScale;
-        ConfigHandler.saveConfig();
+        MWEConfig.saveConfig();
         try {
             mc.entityRenderer.stopUseShader();
         } catch (Exception ignored) {}

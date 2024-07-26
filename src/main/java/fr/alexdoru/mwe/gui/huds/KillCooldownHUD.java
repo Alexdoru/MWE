@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.gui.huds;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.TimerUtil;
 import net.minecraft.client.gui.ScaledResolution;
@@ -12,7 +12,7 @@ public class KillCooldownHUD extends AbstractRenderer {
     private final TimerUtil timerKillCooldown = new TimerUtil(60000L);
 
     public KillCooldownHUD() {
-        super(ConfigHandler.killCooldownHUDPosition);
+        super(MWEConfig.killCooldownHUDPosition);
     }
 
     /**

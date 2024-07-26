@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.hooks;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 
 @SuppressWarnings("unused")
 public class GuiPlayerTabOverlayHook_LongerTab {
@@ -10,7 +10,7 @@ public class GuiPlayerTabOverlayHook_LongerTab {
     }
 
     public static int getTotalPlayerAmount(int original) {
-        return ConfigHandler.tablistSize;
+        return MWEConfig.tablistSize;
     }
 
 }

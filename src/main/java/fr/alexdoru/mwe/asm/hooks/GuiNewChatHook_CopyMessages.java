@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.asm.interfaces.ChatLineAccessor;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
@@ -25,7 +25,7 @@ public class GuiNewChatHook_CopyMessages {
 
     public static void copyChatLine(ChatLine chatLine) {
         if (GuiChatHook_CopyMessages.copyChatLine()) {
-            if (ConfigHandler.shiftClickChatLineCopy && GuiScreen.isShiftKeyDown()) {
+            if (MWEConfig.shiftClickChatLineCopy && GuiScreen.isShiftKeyDown()) {
                 GuiScreen.setClipboardString(EnumChatFormatting.getTextWithoutFormattingCodes(chatLine.getChatComponent().getUnformattedText()).trim());
             } else if (((ChatLineAccessor) chatLine).getmwe$Text() != null) {
                 GuiScreen.setClipboardString(((ChatLineAccessor) chatLine).getmwe$Text().trim());

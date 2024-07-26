@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.gui.guiscreens;
 
 import fr.alexdoru.mwe.chat.LocrawListener;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.gui.elements.HUDSettingGuiButtons;
 import fr.alexdoru.mwe.gui.elements.SimpleGuiButton;
 import fr.alexdoru.mwe.gui.elements.TextElement;
@@ -28,23 +28,23 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(1),
                 () -> {
-                    if (ConfigHandler.showArrowHitHUD && !ConfigHandler.showHeadOnArrowHitHUD) {
+                    if (MWEConfig.showArrowHitHUD && !MWEConfig.showHeadOnArrowHitHUD) {
                         return "Arrow Hit HUD : " + GREEN + "Enabled";
-                    } else if (ConfigHandler.showArrowHitHUD) {
+                    } else if (MWEConfig.showArrowHitHUD) {
                         return "Arrow Hit HUD : " + GREEN + "Show Head";
                     } else {
                         return "Arrow Hit HUD : " + RED + "Disabled";
                     }
                 },
                 () -> {
-                    if (ConfigHandler.showArrowHitHUD && !ConfigHandler.showHeadOnArrowHitHUD) {
-                        ConfigHandler.showHeadOnArrowHitHUD = true;
-                    } else if (ConfigHandler.showArrowHitHUD) {
-                        ConfigHandler.showArrowHitHUD = false;
-                        ConfigHandler.showHeadOnArrowHitHUD = false;
+                    if (MWEConfig.showArrowHitHUD && !MWEConfig.showHeadOnArrowHitHUD) {
+                        MWEConfig.showHeadOnArrowHitHUD = true;
+                    } else if (MWEConfig.showArrowHitHUD) {
+                        MWEConfig.showArrowHitHUD = false;
+                        MWEConfig.showHeadOnArrowHitHUD = false;
                     } else {
-                        ConfigHandler.showArrowHitHUD = true;
-                        ConfigHandler.showHeadOnArrowHitHUD = false;
+                        MWEConfig.showArrowHitHUD = true;
+                        MWEConfig.showHeadOnArrowHitHUD = false;
                     }
                 },
                 GuiManager.arrowHitHUD,
@@ -57,10 +57,10 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(2),
-                () -> "Base Location HUD : " + getSuffix(ConfigHandler.showBaseLocationHUD),
+                () -> "Base Location HUD : " + getSuffix(MWEConfig.showBaseLocationHUD),
                 () -> {
-                    ConfigHandler.showBaseLocationHUD = !ConfigHandler.showBaseLocationHUD;
-                    if (ConfigHandler.showBaseLocationHUD && ScoreboardTracker.isInMwGame()) {
+                    MWEConfig.showBaseLocationHUD = !MWEConfig.showBaseLocationHUD;
+                    if (MWEConfig.showBaseLocationHUD && ScoreboardTracker.isInMwGame()) {
                         LocrawListener.setMegaWallsMap();
                     }
                 },
@@ -72,8 +72,8 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(3),
                 "Creeper primed TNT HUD",
-                (b) -> ConfigHandler.showPrimedTNTHUD = b,
-                () -> ConfigHandler.showPrimedTNTHUD,
+                (b) -> MWEConfig.showPrimedTNTHUD = b,
+                () -> MWEConfig.showPrimedTNTHUD,
                 GuiManager.creeperPrimedTntHUD,
                 this,
                 GRAY + "Displays the cooldown of the primed TNT when playing Creeper" + YELLOW + " in Mega Walls")
@@ -81,19 +81,19 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(4),
                 "Energy display HUD",
-                (b) -> ConfigHandler.showEnergyDisplayHUD = b,
-                () -> ConfigHandler.showEnergyDisplayHUD,
+                (b) -> MWEConfig.showEnergyDisplayHUD = b,
+                () -> MWEConfig.showEnergyDisplayHUD,
                 GuiManager.energyDisplayHUD,
                 this,
                 GRAY + "Displays a HUD with the amount of energy you have" + YELLOW + " in Mega Walls" + GRAY + ". Turns "
                         + AQUA + "aqua" + GRAY + " when your energy level exceeds the amount set below.")
                 .accept(this.buttonList);
-        this.buttonList.add(new GuiSlider(21, getxCenter() - BUTTON_WIDTH / 2, getButtonYPos(5), BUTTON_WIDTH, buttonsHeight, "Energy threshold : ", "", 1d, 160d, ConfigHandler.aquaEnergyDisplayThreshold, false, true, this));
+        this.buttonList.add(new GuiSlider(21, getxCenter() - BUTTON_WIDTH / 2, getButtonYPos(5), BUTTON_WIDTH, buttonsHeight, "Energy threshold : ", "", 1d, 160d, MWEConfig.aquaEnergyDisplayThreshold, false, true, this));
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(6),
                 "Kill cooldown HUD",
-                (b) -> ConfigHandler.showKillCooldownHUD = b,
-                () -> ConfigHandler.showKillCooldownHUD,
+                (b) -> MWEConfig.showKillCooldownHUD = b,
+                () -> MWEConfig.showKillCooldownHUD,
                 GuiManager.killCooldownHUD,
                 this,
                 GRAY + "Displays the cooldown of the /kill command in " + YELLOW + "Mega Walls")
@@ -101,22 +101,22 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(7),
                 () -> {
-                    if (ConfigHandler.showMiniPotionHUD) {
+                    if (MWEConfig.showMiniPotionHUD) {
                         return "Mini potion HUD : " + GREEN + "Enabled";
-                    } else if (ConfigHandler.showMiniPotionHUDOnlyMW) {
+                    } else if (MWEConfig.showMiniPotionHUDOnlyMW) {
                         return "Mini potion HUD : " + GREEN + "Only in MW";
                     } else {
                         return "Mini potion HUD : " + RED + "Disabled";
                     }
                 },
                 () -> {
-                    if (ConfigHandler.showMiniPotionHUD) {
-                        ConfigHandler.showMiniPotionHUD = false;
-                        ConfigHandler.showMiniPotionHUDOnlyMW = true;
-                    } else if (ConfigHandler.showMiniPotionHUDOnlyMW) {
-                        ConfigHandler.showMiniPotionHUDOnlyMW = false;
+                    if (MWEConfig.showMiniPotionHUD) {
+                        MWEConfig.showMiniPotionHUD = false;
+                        MWEConfig.showMiniPotionHUDOnlyMW = true;
+                    } else if (MWEConfig.showMiniPotionHUDOnlyMW) {
+                        MWEConfig.showMiniPotionHUDOnlyMW = false;
                     } else {
-                        ConfigHandler.showMiniPotionHUD = true;
+                        MWEConfig.showMiniPotionHUD = true;
                     }
                 },
                 GuiManager.miniPotionHUD,
@@ -137,8 +137,8 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(8),
                 "Phoenix bond HUD",
-                (b) -> ConfigHandler.showPhxBondHUD = b,
-                () -> ConfigHandler.showPhxBondHUD,
+                (b) -> MWEConfig.showPhxBondHUD = b,
+                () -> MWEConfig.showPhxBondHUD,
                 GuiManager.phoenixBondHUD,
                 this,
                 GRAY + "Displays the hearts healed from a Phoenix bond" + YELLOW + " in Mega Walls")
@@ -146,8 +146,8 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(9),
                 "Squad HUD",
-                (b) -> ConfigHandler.showSquadHUD = b,
-                () -> ConfigHandler.showSquadHUD,
+                (b) -> MWEConfig.showSquadHUD = b,
+                () -> MWEConfig.showSquadHUD,
                 GuiManager.squadHealthHUD,
                 this,
                 GRAY + "Displays a mini tablist with just your squadmates")
@@ -155,18 +155,18 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(10),
                 "Speed HUD",
-                (b) -> ConfigHandler.showSpeedHUD = b,
-                () -> ConfigHandler.showSpeedHUD,
+                (b) -> MWEConfig.showSpeedHUD = b,
+                () -> MWEConfig.showSpeedHUD,
                 GuiManager.speedHUD,
                 this,
                 GRAY + "Displays your own speed in the XZ plane")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(11),
-                () -> "Strength HUD : " + getSuffix(ConfigHandler.showStrengthHUD),
+                () -> "Strength HUD : " + getSuffix(MWEConfig.showStrengthHUD),
                 () -> {
-                    ConfigHandler.showStrengthHUD = !ConfigHandler.showStrengthHUD;
-                    if (ConfigHandler.showStrengthHUD) {
+                    MWEConfig.showStrengthHUD = !MWEConfig.showStrengthHUD;
+                    if (MWEConfig.showStrengthHUD) {
                         SoundUtil.playStrengthSound();
                     }
                 },
@@ -178,26 +178,26 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(12),
                 "Warcry HUD",
-                (b) -> ConfigHandler.showWarcryHUD = b,
-                () -> ConfigHandler.showWarcryHUD,
+                (b) -> MWEConfig.showWarcryHUD = b,
+                () -> MWEConfig.showWarcryHUD,
                 GuiManager.warcryHUD,
                 this,
                 GRAY + "Displays the cooldown of the warcry in Mega Walls")
                 .accept(this.buttonList);
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(13),
-                () -> "Wither death time HUD : " + (ConfigHandler.witherHUDinSidebar ? YELLOW + "in Sidebar" : getSuffix(ConfigHandler.showLastWitherHUD)),
+                () -> "Wither death time HUD : " + (MWEConfig.witherHUDinSidebar ? YELLOW + "in Sidebar" : getSuffix(MWEConfig.showLastWitherHUD)),
                 () -> {
-                    if (ConfigHandler.showLastWitherHUD && !ConfigHandler.witherHUDinSidebar) {
-                        ConfigHandler.witherHUDinSidebar = true;
+                    if (MWEConfig.showLastWitherHUD && !MWEConfig.witherHUDinSidebar) {
+                        MWEConfig.witherHUDinSidebar = true;
                         return;
                     }
-                    if (!ConfigHandler.showLastWitherHUD && !ConfigHandler.witherHUDinSidebar) {
-                        ConfigHandler.showLastWitherHUD = true;
+                    if (!MWEConfig.showLastWitherHUD && !MWEConfig.witherHUDinSidebar) {
+                        MWEConfig.showLastWitherHUD = true;
                         return;
                     }
-                    ConfigHandler.witherHUDinSidebar = false;
-                    ConfigHandler.showLastWitherHUD = false;
+                    MWEConfig.witherHUDinSidebar = false;
+                    MWEConfig.showLastWitherHUD = false;
                 },
                 GuiManager.lastWitherHPHUD,
                 this,
@@ -213,7 +213,7 @@ public class HUDsConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlide
     @Override
     public void onChangeSliderValue(GuiSlider slider) {
         if (slider.id == 21) {
-            ConfigHandler.aquaEnergyDisplayThreshold = slider.getValueInt();
+            MWEConfig.aquaEnergyDisplayThreshold = slider.getValueInt();
         }
     }
 

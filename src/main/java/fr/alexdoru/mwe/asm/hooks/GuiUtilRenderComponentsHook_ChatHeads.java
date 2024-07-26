@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 
@@ -12,7 +12,7 @@ public class GuiUtilRenderComponentsHook_ChatHeads {
 
     public static ChatComponentText getStarterChatComponent(ChatComponentText newMsg, IChatComponent fullMessage) {
         if (fullMessage instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) fullMessage).getSkinChatHead() != null) {
-            offsetLine = ConfigHandler.chatHeads;
+            offsetLine = MWEConfig.chatHeads;
             ((ChatComponentTextAccessor) newMsg).setSkinChatHead(((ChatComponentTextAccessor) fullMessage).getSkinChatHead());
             return newMsg;
         }

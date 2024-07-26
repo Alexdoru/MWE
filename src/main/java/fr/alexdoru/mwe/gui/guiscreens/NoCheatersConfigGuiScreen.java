@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.gui.guiscreens;
 
 import fr.alexdoru.mwe.chat.ChatHandler;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.gui.elements.FancyGuiButton;
 import fr.alexdoru.mwe.gui.elements.OptionGuiButton;
 import fr.alexdoru.mwe.gui.elements.SimpleGuiButton;
@@ -37,10 +37,10 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         this.elementList.add(new TextElement(YELLOW + "/unwdr playername" + WHITE + " or click the name on the warning message", getxCenter(), getButtonYPos(0) + 3 * fontRendererObj.FONT_HEIGHT).makeCentered());
         this.buttonList.add(new FancyGuiButton(
                 xPos, getButtonYPos(2),
-                () -> "Warning messages in chat : " + getSuffix(ConfigHandler.warningMessages),
+                () -> "Warning messages in chat : " + getSuffix(MWEConfig.warningMessages),
                 () -> {
-                    ConfigHandler.warningMessages = !ConfigHandler.warningMessages;
-                    if (ConfigHandler.warningMessages) {
+                    MWEConfig.warningMessages = !MWEConfig.warningMessages;
+                    if (MWEConfig.warningMessages) {
                         WarningMessages.printReportMessagesForWorld(false);
                     } else {
                         ChatHandler.deleteAllWarningMessages();
@@ -49,10 +49,10 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
                 GRAY + "Prints a warning message in chat when a reported player joins your world, those messages have built in compact chat."));
         this.buttonList.add(new FancyGuiButton(
                 xPos, getButtonYPos(3),
-                () -> "Report suggestions in chat : " + getSuffix(ConfigHandler.reportSuggestions),
+                () -> "Report suggestions in chat : " + getSuffix(MWEConfig.reportSuggestions),
                 () -> {
-                    ConfigHandler.reportSuggestions = !ConfigHandler.reportSuggestions;
-                    if (ConfigHandler.reportSuggestions) {
+                    MWEConfig.reportSuggestions = !MWEConfig.reportSuggestions;
+                    if (MWEConfig.reportSuggestions) {
                         SoundUtil.playChatNotifSound();
                     }
                 }, GREEN + "Report suggestions in chat",
@@ -63,24 +63,24 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(4),
                 "Delete old reports",
-                (b) -> ConfigHandler.deleteOldReports = b,
-                () -> ConfigHandler.deleteOldReports,
+                (b) -> MWEConfig.deleteOldReports = b,
+                () -> MWEConfig.deleteOldReports,
                 GRAY + "Deletes reports older than the specified value, the deletion occurs when you start Minecraft."));
-        this.buttonList.add(new GuiSlider(7, xPos, getButtonYPos(5), BUTTON_WIDTH, 20, "Delete reports older than : ", " days", 1d, 365d, ConfigHandler.timeDeleteReport, false, true, this));
+        this.buttonList.add(new GuiSlider(7, xPos, getButtonYPos(5), BUTTON_WIDTH, 20, "Delete reports older than : ", " days", 1d, 365d, MWEConfig.timeDeleteReport, false, true, this));
         this.buttonList.add(new FancyGuiButton(
                 xPos, getButtonYPos(6),
-                () -> "Censor cheaters in chat : " + (ConfigHandler.deleteCheaterChatMsg ? GREEN + "Delete" : (ConfigHandler.censorCheaterChatMsg ? YELLOW + "Censor" : RED + "Disabled")),
+                () -> "Censor cheaters in chat : " + (MWEConfig.deleteCheaterChatMsg ? GREEN + "Delete" : (MWEConfig.censorCheaterChatMsg ? YELLOW + "Censor" : RED + "Disabled")),
                 () -> {
-                    if (ConfigHandler.censorCheaterChatMsg && !ConfigHandler.deleteCheaterChatMsg) {
-                        ConfigHandler.deleteCheaterChatMsg = true;
+                    if (MWEConfig.censorCheaterChatMsg && !MWEConfig.deleteCheaterChatMsg) {
+                        MWEConfig.deleteCheaterChatMsg = true;
                         return;
                     }
-                    if (!ConfigHandler.censorCheaterChatMsg && !ConfigHandler.deleteCheaterChatMsg) {
-                        ConfigHandler.censorCheaterChatMsg = true;
+                    if (!MWEConfig.censorCheaterChatMsg && !MWEConfig.deleteCheaterChatMsg) {
+                        MWEConfig.censorCheaterChatMsg = true;
                         return;
                     }
-                    ConfigHandler.deleteCheaterChatMsg = false;
-                    ConfigHandler.censorCheaterChatMsg = false;
+                    MWEConfig.deleteCheaterChatMsg = false;
+                    MWEConfig.censorCheaterChatMsg = false;
                 },
                 GREEN + "Censor cheaters in chat",
                 GRAY + "Deletes or censors chat messages sent by reported players"));
@@ -96,15 +96,15 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
         iconsTooltip.add(NameUtil.PINK_WARNING_ICON + GRAY + ": players flagged by the /scangame command");
         this.buttonList.add(new FancyGuiButton(
                 xPos, getButtonYPos(7),
-                () -> "Warning Icon on names : " + (ConfigHandler.warningIconsTabOnly ? GREEN + "Tab Only" : getSuffix(ConfigHandler.warningIconsOnNames)),
+                () -> "Warning Icon on names : " + (MWEConfig.warningIconsTabOnly ? GREEN + "Tab Only" : getSuffix(MWEConfig.warningIconsOnNames)),
                 () -> {
-                    if (ConfigHandler.warningIconsOnNames && !ConfigHandler.warningIconsTabOnly) {
-                        ConfigHandler.warningIconsOnNames = false;
-                        ConfigHandler.warningIconsTabOnly = true;
-                    } else if (ConfigHandler.warningIconsTabOnly) {
-                        ConfigHandler.warningIconsTabOnly = false;
+                    if (MWEConfig.warningIconsOnNames && !MWEConfig.warningIconsTabOnly) {
+                        MWEConfig.warningIconsOnNames = false;
+                        MWEConfig.warningIconsTabOnly = true;
+                    } else if (MWEConfig.warningIconsTabOnly) {
+                        MWEConfig.warningIconsTabOnly = false;
                     } else {
-                        ConfigHandler.warningIconsOnNames = true;
+                        MWEConfig.warningIconsOnNames = true;
                     }
                     NameUtil.refreshAllNamesInWorld();
                 },
@@ -115,7 +115,7 @@ public class NoCheatersConfigGuiScreen extends MyGuiScreen implements GuiSlider.
     @Override
     public void onChangeSliderValue(GuiSlider slider) {
         if (slider.id == 7) {
-            ConfigHandler.timeDeleteReport = slider.getValueInt();
+            MWEConfig.timeDeleteReport = slider.getValueInt();
         }
     }
 

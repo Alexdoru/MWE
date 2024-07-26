@@ -7,7 +7,7 @@ import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.chat.ChatHandler;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.AliasData;
 import fr.alexdoru.mwe.data.MWPlayerData;
 import fr.alexdoru.mwe.data.ScangameData;
@@ -138,7 +138,7 @@ public class NameUtil {
         ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(mwPlayerData.displayName);
         if (mc.theWorld != null) {
             final EntityPlayer player;
-            if (playername.equals(ConfigHandler.hypixelNick)) {
+            if (playername.equals(MWEConfig.hypixelNick)) {
                 player = mc.thePlayer;
             } else {
                 player = getPlayerEntityByName(netInfo.getGameProfile().getName());
@@ -153,7 +153,7 @@ public class NameUtil {
         final EntityPlayerAccessor playerAccessor = (EntityPlayerAccessor) player;
         final int oldColor = playerAccessor.getPlayerTeamColorInt();
         playerAccessor.setPlayerTeamColor(mwPlayerData.teamColor);
-        if (ConfigHandler.pinkSquadmates && mwPlayerData.squadname != null) {
+        if (MWEConfig.pinkSquadmates && mwPlayerData.squadname != null) {
             playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt('d'));
         } else {
             playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
@@ -179,18 +179,18 @@ public class NameUtil {
 
         if (playerData.extraPrefix != null) {
             if (playerData.extraPrefix == ISQUAD_ICON) {
-                if (!ConfigHandler.squadIconTabOnly) {
+                if (!MWEConfig.squadIconTabOnly) {
                     player.addPrefix(playerData.extraPrefix);
                 }
             } else {
-                if (!ConfigHandler.warningIconsTabOnly) {
+                if (!MWEConfig.warningIconsTabOnly) {
                     player.addPrefix(playerData.extraPrefix);
                 }
             }
         }
 
         if (onPlayerJoin && playerData.wdr != null) {
-            if (ConfigHandler.warningMessages) {
+            if (MWEConfig.warningMessages) {
                 if (!warningMsgPrinted.contains(player.getUniqueID())) {
                     warningMsgPrinted.add(player.getUniqueID());
                     ChatHandler.deleteWarningFromChat(player.getName());
@@ -228,12 +228,12 @@ public class NameUtil {
         final String squadname = SquadHandler.getSquad().get(username);
 
         if (squadname != null) {
-            if (ConfigHandler.squadIconOnNames || ConfigHandler.squadIconTabOnly) {
+            if (MWEConfig.squadIconOnNames || MWEConfig.squadIconTabOnly) {
                 extraPrefix = SQUAD_ICON;
                 iExtraPrefix = ISQUAD_ICON;
             }
         } else {
-            if (ConfigHandler.warningIconsOnNames || ConfigHandler.warningIconsTabOnly) {
+            if (MWEConfig.warningIconsOnNames || MWEConfig.warningIconsTabOnly) {
                 if (wdr != null) {
                     if (wdr.hasRedIcon()) {
                         extraPrefix = RED_WARNING_ICON;
@@ -254,8 +254,8 @@ public class NameUtil {
         MWClass mwClass = null;
         if (mc.theWorld != null) {
             ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
-            if (team == null && mc.thePlayer != null && mc.thePlayer.getName().equals(username) && !ConfigHandler.hypixelNick.isEmpty()) {
-                team = mc.theWorld.getScoreboard().getPlayersTeam(ConfigHandler.hypixelNick);
+            if (team == null && mc.thePlayer != null && mc.thePlayer.getName().equals(username) && !MWEConfig.hypixelNick.isEmpty()) {
+                team = mc.theWorld.getScoreboard().getPlayersTeam(MWEConfig.hypixelNick);
             }
             if (team != null) {
                 final String teamprefix = team.getColorPrefix();
@@ -268,12 +268,12 @@ public class NameUtil {
                 if (iExtraPrefix != null || isobf || isNicked || squadname != null || alias != null) {
                     final StringBuilder sb = new StringBuilder();
                     if (iExtraPrefix != null) sb.append(extraPrefix);
-                    if (isobf && ConfigHandler.deobfNamesInTab) sb.append(deobfString(teamprefix));
+                    if (isobf && MWEConfig.deobfNamesInTab) sb.append(deobfString(teamprefix));
                     else sb.append(teamprefix);
                     if (squadname != null) sb.append(squadname);
                     else sb.append(username);
                     sb.append(colorSuffix);
-                    if (isNicked && ConfigHandler.showFakePlayersInTab) {
+                    if (isNicked && MWEConfig.showFakePlayersInTab) {
                         sb.append(EnumChatFormatting.DARK_RED).append(EnumChatFormatting.BOLD).append(" *");
                     }
                     if (alias != null) {

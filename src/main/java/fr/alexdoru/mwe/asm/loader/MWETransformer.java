@@ -111,7 +111,7 @@ public interface MWETransformer extends Opcodes {
     }
 
     default FieldInsnNode getNewConfigFieldInsnNode(String name) {
-        return new FieldInsnNode(GETSTATIC, "fr/alexdoru/mwe/config/ConfigHandler", name, "Z");
+        return new FieldInsnNode(GETSTATIC, "fr/alexdoru/mwe/config/MWEConfig", name, "Z");
     }
 
     default void addGetterAndSetterMethod(ClassNode classNode, String methodName, FieldMapping field, String methodSignature) {

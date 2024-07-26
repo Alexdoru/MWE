@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.hackerdetector.checks;
 
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
@@ -77,7 +77,7 @@ public class GhosthandCheck extends Check {
         }
 
         data.ghosthandVL.add(1);
-        if (ConfigHandler.debugLogging && data.ghosthandVL.getViolationLevel() > 2) {
+        if (MWEConfig.debugLogging && data.ghosthandVL.getViolationLevel() > 2) {
             this.log(player, data, data.ghosthandVL, null);
         }
         return true;

@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.hackerdetector.checks;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
@@ -53,7 +53,7 @@ public class NoSlowdownCheck extends Check {
             }
             if (invalidSprint && (data.getSpeedXZSq() >= 6.25D || player.getHeldItem().getItem() instanceof ItemSword)) {
                 data.noSlowdownVL.add(2);
-                if (ConfigHandler.debugLogging) {
+                if (MWEConfig.debugLogging) {
                     this.log(player, data, data.noSlowdownVL, null);
                 }
                 return true;

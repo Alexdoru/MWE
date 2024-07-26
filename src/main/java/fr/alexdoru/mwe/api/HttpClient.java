@@ -8,7 +8,7 @@ import fr.alexdoru.mwe.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.api.exceptions.ApiException;
 import fr.alexdoru.mwe.api.exceptions.RateLimitException;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.client.Minecraft;
 
 import java.io.BufferedReader;
@@ -57,8 +57,8 @@ public class HttpClient {
                         throw new ApiException("Missing one or more fields");
                     } else if (status == 403) {
                         Minecraft.getMinecraft().addScheduledTask(() -> {
-                            ConfigHandler.APIKey = "";
-                            ConfigHandler.saveConfig();
+                            MWEConfig.APIKey = "";
+                            MWEConfig.saveConfig();
                             return null;
                         });
                         throw new ApiException("Invalid API key");

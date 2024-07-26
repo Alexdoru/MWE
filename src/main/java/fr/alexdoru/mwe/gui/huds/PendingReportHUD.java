@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.gui.huds;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
@@ -8,14 +8,14 @@ import net.minecraft.util.EnumChatFormatting;
 public class PendingReportHUD extends AbstractRenderer {
 
     public PendingReportHUD() {
-        super(ConfigHandler.reportHUDPosition);
+        super(MWEConfig.reportHUDPosition);
     }
 
     @Override
     public void render(ScaledResolution resolution) {
         final String text;
         if (ReportQueue.INSTANCE.getStandStillCounter() == 0) {
-            if (ConfigHandler.showReportHUDonlyInChat) return;
+            if (MWEConfig.showReportHUDonlyInChat) return;
             final int nbReports = ReportQueue.INSTANCE.queueList.size();
             final long l = System.currentTimeMillis() % 3000L + 1000L;
             final StringBuilder str = new StringBuilder();
@@ -51,7 +51,7 @@ public class PendingReportHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return ConfigHandler.showReportHUD && !ReportQueue.INSTANCE.queueList.isEmpty();
+        return MWEConfig.showReportHUD && !ReportQueue.INSTANCE.queueList.isEmpty();
     }
 
 }

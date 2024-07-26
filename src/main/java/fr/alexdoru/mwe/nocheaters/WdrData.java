@@ -3,7 +3,7 @@ package fr.alexdoru.mwe.nocheaters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.utils.UUIDUtil;
 import net.minecraft.client.Minecraft;
@@ -148,7 +148,7 @@ public class WdrData {
         } catch (Exception ignored) {}
         if (timestamp == 0L) return;
         final long datenow = new Date().getTime();
-        if (ConfigHandler.deleteOldReports && datenow > timestamp + ConfigHandler.timeDeleteReport * 24f * 3600f * 1000f) {
+        if (MWEConfig.deleteOldReports && datenow > timestamp + MWEConfig.timeDeleteReport * 24f * 3600f * 1000f) {
             return;
         }
         final ArrayList<String> hacks = new ArrayList<>(Arrays.asList(split).subList(oldDataFormat ? 2 : 3, split.length));

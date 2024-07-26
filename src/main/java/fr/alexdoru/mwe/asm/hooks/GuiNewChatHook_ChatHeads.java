@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.Gui;
@@ -20,7 +20,7 @@ public class GuiNewChatHook_ChatHeads {
     private static boolean isHeadLine = false;
 
     public static void preRenderStringCall(ChatLine chatLine, int alpha, int x, int y) {
-        if (ConfigHandler.chatHeads && chatLine.getChatComponent() instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) chatLine.getChatComponent()).getSkinChatHead() != null) {
+        if (MWEConfig.chatHeads && chatLine.getChatComponent() instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) chatLine.getChatComponent()).getSkinChatHead() != null) {
             isHeadLine = true;
             GlStateManager.color(1.0F, 1.0F, 1.0F, ((float) alpha / 255.0F));
             GlStateManager.enableAlpha();
@@ -61,7 +61,7 @@ public class GuiNewChatHook_ChatHeads {
     }
 
     public static int fixComponentHover(ChatLine chatLine) {
-        if (ConfigHandler.chatHeads && chatLine.getChatComponent() instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) chatLine.getChatComponent()).getSkinChatHead() != null) {
+        if (MWEConfig.chatHeads && chatLine.getChatComponent() instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) chatLine.getChatComponent()).getSkinChatHead() != null) {
             return -9;
         }
         return 0;

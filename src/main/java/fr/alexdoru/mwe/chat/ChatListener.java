@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.chat;
 
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.ScangameData;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.features.*;
@@ -69,7 +69,7 @@ public class ChatListener {
 
             if (ScoreboardTracker.isInMwGame()) {
 
-                if (ConfigHandler.hideRepetitiveMWChatMsg && MW_REPETITVE_MSG.contains(msg)) {
+                if (MWEConfig.hideRepetitiveMWChatMsg && MW_REPETITVE_MSG.contains(msg)) {
                     event.setCanceled(true);
                     return;
                 }
@@ -84,7 +84,7 @@ public class ChatListener {
                     return;
                 }
 
-                if (ConfigHandler.squadHaloPlayer) {
+                if (MWEConfig.squadHaloPlayer) {
                     final Matcher haloGiveMatcher = HALO_GIVE_PATTERN.matcher(msg);
                     if (haloGiveMatcher.find()) {
                         SquadHandler.addSelf();
@@ -92,7 +92,7 @@ public class ChatListener {
                     }
                 }
 
-                if (ConfigHandler.printDeathmatchDamageMessage) {
+                if (MWEConfig.printDeathmatchDamageMessage) {
                     if (printDeathmatchDamage(event.message, msg)) {
                         return;
                     }
@@ -110,7 +110,7 @@ public class ChatListener {
                     return;
                 }
 
-                if (ConfigHandler.showStrengthHUD && msg.equals(HUNTER_STRENGTH_MESSAGE)) {
+                if (MWEConfig.showStrengthHUD && msg.equals(HUNTER_STRENGTH_MESSAGE)) {
                     GuiManager.strengthHUD.setStrengthRenderStart(5000L);
                     return;
                 }
@@ -153,12 +153,12 @@ public class ChatListener {
             }
 
             // Chat Censoring
-            if (ConfigHandler.censorCheaterChatMsg && messageSender != null) {
+            if (MWEConfig.censorCheaterChatMsg && messageSender != null) {
                 final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(messageSender);
                 if (netInfo != null) {
                     final WDR wdr = WdrData.getWdr(netInfo.getGameProfile().getId(), messageSender);
                     if (wdr != null && wdr.hasValidCheats()) {
-                        if (ConfigHandler.deleteCheaterChatMsg) {
+                        if (MWEConfig.deleteCheaterChatMsg) {
                             event.setCanceled(true);
                         } else {
                             event.message = StringUtil.censorChatMessage(fmsg, messageSender);
@@ -191,7 +191,7 @@ public class ChatListener {
                 }
             }
 
-            if (ConfigHandler.showBannedPlayers && msg.equals(BAN_MESSAGE)) {
+            if (MWEConfig.showBannedPlayers && msg.equals(BAN_MESSAGE)) {
                 new DelayedTask(NetHandlerPlayClientHook_PlayerMapTracker::printDisconnectedPlayers, 10);
             }
 
@@ -211,7 +211,7 @@ public class ChatListener {
                 final String name = haloMatcher.group(1);
                 final String squadname = SquadHandler.getSquadname(name);
                 if (!squadname.equals(name)) {
-                    if (ConfigHandler.pinkSquadmates) {
+                    if (MWEConfig.pinkSquadmates) {
                         event.message = new ChatComponentText(fmsg.replaceFirst(name, EnumChatFormatting.LIGHT_PURPLE + squadname));
                     } else {
                         event.message = new ChatComponentText(fmsg.replaceFirst(name, squadname));
@@ -268,7 +268,7 @@ public class ChatListener {
     }
 
     private static boolean processCoinsMessages(ClientChatReceivedEvent event, String fmsg, String msg) {
-        if (!ConfigHandler.shortCoinMessage) return false;
+        if (!MWEConfig.shortCoinMessage) return false;
         if (COINS_DOUBLED_GUILD_PATTERN.matcher(msg).matches()) {
             event.setCanceled(true);
             addGuildCoinsBonus = true;

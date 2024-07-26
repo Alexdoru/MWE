@@ -7,7 +7,7 @@ import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.HttpClient;
 import fr.alexdoru.mwe.api.exceptions.ApiException;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.utils.JsonUtil;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import net.minecraft.client.Minecraft;
@@ -115,7 +115,7 @@ public class ModUpdater {
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, GITHUB_URL))
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + GITHUB_URL)))));
 
-        if (!ConfigHandler.automaticUpdate || downloadUrl == null || !downloadUrl.endsWith(".jar")) return;
+        if (!MWEConfig.automaticUpdate || downloadUrl == null || !downloadUrl.endsWith(".jar")) return;
 
         if (Loader.isModLoaded("feather")) {
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "The automatic updater is disabled on Feather.");

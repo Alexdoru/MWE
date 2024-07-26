@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.hackerdetector;
 
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.hackerdetector.checks.*;
 import fr.alexdoru.mwe.hackerdetector.data.BrokenBlock;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
@@ -41,7 +41,7 @@ public class HackerDetector {
     private final FastbreakCheck fastbreakCheck;
 
     static {
-        if (ConfigHandler.debugLogging) initLogger();
+        if (MWEConfig.debugLogging) initLogger();
     }
 
     public HackerDetector() {
@@ -59,7 +59,7 @@ public class HackerDetector {
 
     @SubscribeEvent
     public void onDrawDebugText(RenderGameOverlayEvent.Text event) {
-        if (mc.gameSettings.showDebugInfo && ConfigHandler.hackerDetector) {
+        if (mc.gameSettings.showDebugInfo && MWEConfig.hackerDetector) {
             event.left.add("");
             event.left.add("Hacker Detector:");
             event.left.add("Block Cache: " + brokenBlocksList.size() + "/" + recentPlacedBlocks.size());
@@ -93,7 +93,7 @@ public class HackerDetector {
 
     private void onTickStart() {
 
-        if (!ConfigHandler.hackerDetector || ScoreboardTracker.isInSkyblock() || mc.theWorld == null || mc.thePlayer == null || !mc.theWorld.isRemote) {
+        if (!MWEConfig.hackerDetector || ScoreboardTracker.isInSkyblock() || mc.theWorld == null || mc.thePlayer == null || !mc.theWorld.isRemote) {
             synchronized (this.scheduledTasks) {
                 this.scheduledTasks.clear();
             }
@@ -131,7 +131,7 @@ public class HackerDetector {
     }
 
     private void onTickEnd() {
-        if (ConfigHandler.hackerDetector) {
+        if (MWEConfig.hackerDetector) {
             this.fastbreakCheck.onTickEnd();
             this.brokenBlocksList.clear();
             this.recentPlacedBlocks.onTick();

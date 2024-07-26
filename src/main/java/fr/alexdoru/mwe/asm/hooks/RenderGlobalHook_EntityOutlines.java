@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.asm.interfaces.IWitherColor;
 import fr.alexdoru.mwe.asm.interfaces.RenderManagerAccessor;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -34,7 +34,7 @@ public class RenderGlobalHook_EntityOutlines {
             return true;
         }
         final boolean b = MinecraftForgeClient.getRenderPass() == 1 &&
-                ConfigHandler.renderWitherOutline &&
+                MWEConfig.renderWitherOutline &&
                 entityOutlineFramebuffer != null &&
                 entityOutlineShader != null &&
                 mc.thePlayer != null &&

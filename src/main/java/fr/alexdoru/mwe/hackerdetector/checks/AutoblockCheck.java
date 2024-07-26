@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.hackerdetector.checks;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,7 +36,7 @@ public class AutoblockCheck extends Check {
             if (itemStack != null && itemStack.getItem() instanceof ItemSword) {
                 if (data.useItemTime > 5) {
                     data.autoblockAVL.add(5);
-                    if (ConfigHandler.debugLogging) {
+                    if (MWEConfig.debugLogging) {
                         this.log(player, data, data.autoblockAVL, " | useItemTime " + data.useItemTime);
                     }
                     return true;

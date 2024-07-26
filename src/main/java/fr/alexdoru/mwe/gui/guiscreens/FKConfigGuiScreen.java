@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.gui.guiscreens;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.gui.elements.*;
 import fr.alexdoru.mwe.gui.guiapi.GuiManager;
 import net.minecraft.client.gui.GuiScreen;
@@ -27,8 +27,8 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(1),
                 "Show Final Kill Counter",
-                (b) -> ConfigHandler.showfkcounterHUD = b,
-                () -> ConfigHandler.showfkcounterHUD,
+                (b) -> MWEConfig.showfkcounterHUD = b,
+                () -> MWEConfig.showfkcounterHUD,
                 GuiManager.fkCounterHUD,
                 this,
                 GRAY + "Displays the amount of final kills per team in Mega Walls",
@@ -38,16 +38,16 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                 getxCenter() - 100, getButtonYPos(2),
                 () -> {
                     // Normal mode
-                    if (!ConfigHandler.fkcounterHUDShowPlayers && !ConfigHandler.fkcounterHUDCompact && !ConfigHandler.fkcounterHUDinSidebar) {
+                    if (!MWEConfig.fkcounterHUDShowPlayers && !MWEConfig.fkcounterHUDCompact && !MWEConfig.fkcounterHUDinSidebar) {
                         return "Display mode : " + GREEN + "Classic";
                         // Player mode
-                    } else if (ConfigHandler.fkcounterHUDShowPlayers && !ConfigHandler.fkcounterHUDCompact && !ConfigHandler.fkcounterHUDinSidebar) {
+                    } else if (MWEConfig.fkcounterHUDShowPlayers && !MWEConfig.fkcounterHUDCompact && !MWEConfig.fkcounterHUDinSidebar) {
                         return "Display mode : " + GREEN + "Player";
                         // Compact mode
-                    } else if (!ConfigHandler.fkcounterHUDShowPlayers && ConfigHandler.fkcounterHUDCompact && !ConfigHandler.fkcounterHUDinSidebar) {
+                    } else if (!MWEConfig.fkcounterHUDShowPlayers && MWEConfig.fkcounterHUDCompact && !MWEConfig.fkcounterHUDinSidebar) {
                         return "Display mode : " + GREEN + "Compact";
                         // Compact mode in sidebar
-                    } else if (!ConfigHandler.fkcounterHUDShowPlayers && ConfigHandler.fkcounterHUDCompact /*&& ConfigHandler.fkcounterHUDinSidebar*/) {
+                    } else if (!MWEConfig.fkcounterHUDShowPlayers && MWEConfig.fkcounterHUDCompact /*&& MWEConfig.fkcounterHUDinSidebar*/) {
                         return "Display mode : " + GREEN + "Compact in sidebar";
                     } else {
                         // force normal mode if you have weird boolean states
@@ -57,24 +57,24 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                 () -> {
 
                     // Normal mode
-                    if (!ConfigHandler.fkcounterHUDShowPlayers && !ConfigHandler.fkcounterHUDCompact && !ConfigHandler.fkcounterHUDinSidebar) {
-                        ConfigHandler.fkcounterHUDShowPlayers = true;
+                    if (!MWEConfig.fkcounterHUDShowPlayers && !MWEConfig.fkcounterHUDCompact && !MWEConfig.fkcounterHUDinSidebar) {
+                        MWEConfig.fkcounterHUDShowPlayers = true;
                         // Player mode
-                    } else if (ConfigHandler.fkcounterHUDShowPlayers && !ConfigHandler.fkcounterHUDCompact && !ConfigHandler.fkcounterHUDinSidebar) {
-                        ConfigHandler.fkcounterHUDShowPlayers = false;
-                        ConfigHandler.fkcounterHUDCompact = true;
+                    } else if (MWEConfig.fkcounterHUDShowPlayers && !MWEConfig.fkcounterHUDCompact && !MWEConfig.fkcounterHUDinSidebar) {
+                        MWEConfig.fkcounterHUDShowPlayers = false;
+                        MWEConfig.fkcounterHUDCompact = true;
                         // Compact mode
-                    } else if (!ConfigHandler.fkcounterHUDShowPlayers && ConfigHandler.fkcounterHUDCompact && !ConfigHandler.fkcounterHUDinSidebar) {
-                        ConfigHandler.fkcounterHUDinSidebar = true;
+                    } else if (!MWEConfig.fkcounterHUDShowPlayers && MWEConfig.fkcounterHUDCompact && !MWEConfig.fkcounterHUDinSidebar) {
+                        MWEConfig.fkcounterHUDinSidebar = true;
                         // Compact mode in sidebar
-                    } else if (!ConfigHandler.fkcounterHUDShowPlayers && ConfigHandler.fkcounterHUDCompact /*&& ConfigHandler.fkcounterHUDinSidebar*/) {
-                        ConfigHandler.fkcounterHUDCompact = false;
-                        ConfigHandler.fkcounterHUDinSidebar = false;
+                    } else if (!MWEConfig.fkcounterHUDShowPlayers && MWEConfig.fkcounterHUDCompact /*&& MWEConfig.fkcounterHUDinSidebar*/) {
+                        MWEConfig.fkcounterHUDCompact = false;
+                        MWEConfig.fkcounterHUDinSidebar = false;
                     } else {
                         // force normal mode if you have weird boolean states
-                        ConfigHandler.fkcounterHUDShowPlayers = false;
-                        ConfigHandler.fkcounterHUDCompact = false;
-                        ConfigHandler.fkcounterHUDinSidebar = false;
+                        MWEConfig.fkcounterHUDShowPlayers = false;
+                        MWEConfig.fkcounterHUDCompact = false;
+                        MWEConfig.fkcounterHUDinSidebar = false;
                     }
                     GuiManager.fkCounterHUD.updateDisplayText();
 
@@ -85,26 +85,26 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
                 DARK_GRAY + "▪ " + GREEN + "Compact mode" + GRAY + " : only draws 4 colored numbers that represent the finals of each teams",
                 DARK_GRAY + "▪ " + GREEN + "Compact mode in sidebar" + GRAY + " : subtly places the compact HUD in the sidebar"
         ));
-        this.buttonList.add(new GuiSlider(6, xPos, getButtonYPos(3), 200, buttonsHeight, "Player amount : ", "", 1d, 10d, ConfigHandler.fkcounterHUDPlayerAmount, false, true, this));
-        this.buttonList.add(new GuiSlider(5, xPos, getButtonYPos(4), 200, buttonsHeight, "HUD Size : ", "%", 1d, 400d, ConfigHandler.fkcounterHUDSize * 100d, false, true, this));
+        this.buttonList.add(new GuiSlider(6, xPos, getButtonYPos(3), 200, buttonsHeight, "Player amount : ", "", 1d, 10d, MWEConfig.fkcounterHUDPlayerAmount, false, true, this));
+        this.buttonList.add(new GuiSlider(5, xPos, getButtonYPos(4), 200, buttonsHeight, "HUD Size : ", "%", 1d, 400d, MWEConfig.fkcounterHUDSize * 100d, false, true, this));
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(5),
                 "Draw background",
-                (b) -> ConfigHandler.fkcounterHUDDrawBackground = b,
-                () -> ConfigHandler.fkcounterHUDDrawBackground,
+                (b) -> MWEConfig.fkcounterHUDDrawBackground = b,
+                () -> MWEConfig.fkcounterHUDDrawBackground,
                 GRAY + "Renders a background behind the final kill counter HUD"));
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(6),
                 "Finals in tablist",
-                (b) -> ConfigHandler.fkcounterHUDTablist = b,
-                () -> ConfigHandler.fkcounterHUDTablist,
+                (b) -> MWEConfig.fkcounterHUDTablist = b,
+                () -> MWEConfig.fkcounterHUDTablist,
                 GRAY + "Renders in the tablist next to their names the amount of final kills that each player has",
                 RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements"));
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(7),
                 "Show kill diff in chat",
-                (b) -> ConfigHandler.showKillDiffInChat = b,
-                () -> ConfigHandler.showKillDiffInChat,
+                (b) -> MWEConfig.showKillDiffInChat = b,
+                () -> MWEConfig.showKillDiffInChat,
                 GRAY + "Adds at the end of kill messages the final kill difference for every kill"));
         this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(9), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
@@ -113,10 +113,10 @@ public class FKConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISlider 
     public void onChangeSliderValue(GuiSlider slider) {
         switch (slider.id) {
             case 5:
-                ConfigHandler.fkcounterHUDSize = slider.getValueInt() / 100d;
+                MWEConfig.fkcounterHUDSize = slider.getValueInt() / 100d;
                 break;
             case 6:
-                ConfigHandler.fkcounterHUDPlayerAmount = slider.getValueInt();
+                MWEConfig.fkcounterHUDPlayerAmount = slider.getValueInt();
                 GuiManager.fkCounterHUD.updateDisplayText();
                 break;
         }

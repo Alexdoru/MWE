@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.chat;
 
 import fr.alexdoru.mwe.asm.interfaces.GuiScreenInvoker;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -85,7 +85,7 @@ public class GuiChatSearchBox extends GuiTextField {
             if (!this.isFocused()) {
                 tooltip.add(GREEN + "Click to search the chat!");
                 tooltip.add(GRAY + "Shift click to use " + AQUA + "regex" + GRAY + " search");
-                if (ConfigHandler.searchBoxChatShortcuts) {
+                if (MWEConfig.searchBoxChatShortcuts) {
                     tooltip.add("");
                     tooltip.add(GRAY + "Shortcuts :");
                     tooltip.add(GREEN + "Ctrl + F" + GRAY + " for normal search");

@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.gui.huds;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import fr.alexdoru.mwe.utils.TimerUtil;
 import net.minecraft.client.gui.ScaledResolution;
@@ -25,7 +25,7 @@ public class StrengthHUD extends AbstractRenderer {
     private final TimerUtil timerStrength = new TimerUtil(11000L);
 
     public StrengthHUD() {
-        super(ConfigHandler.strengthHUDPosition);
+        super(MWEConfig.strengthHUDPosition);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class StrengthHUD extends AbstractRenderer {
     }
 
     public boolean processMessage(String fmsg) {
-        if (!ConfigHandler.showStrengthHUD) return false;
+        if (!MWEConfig.showStrengthHUD) return false;
         final Matcher dreadStrenghtMatcher = DREADLORD_STRENGTH_PATTERN.matcher(fmsg);
         if (dreadStrenghtMatcher.find()) {
             this.setStrengthRenderStart(Long.parseLong(dreadStrenghtMatcher.group(1)) * 1000L);

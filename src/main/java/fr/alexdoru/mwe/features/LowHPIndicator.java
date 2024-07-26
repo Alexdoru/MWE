@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.features;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -13,15 +13,15 @@ public class LowHPIndicator {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        if (!ConfigHandler.playSoundLowHP || event.phase == TickEvent.Phase.START || mc.theWorld == null || mc.thePlayer == null) {
+        if (!MWEConfig.playSoundLowHP || event.phase == TickEvent.Phase.START || mc.theWorld == null || mc.thePlayer == null) {
             return;
         }
-        if (!playedSound && mc.thePlayer.getHealth() < mc.thePlayer.getMaxHealth() * ConfigHandler.healthThreshold) {
+        if (!playedSound && mc.thePlayer.getHealth() < mc.thePlayer.getMaxHealth() * MWEConfig.healthThreshold) {
             SoundUtil.playLowHPSound();
             playedSound = true;
             return;
         }
-        if (playedSound && mc.thePlayer.getHealth() >= mc.thePlayer.getMaxHealth() * ConfigHandler.healthThreshold) {
+        if (playedSound && mc.thePlayer.getHealth() >= mc.thePlayer.getMaxHealth() * MWEConfig.healthThreshold) {
             playedSound = false;
         }
     }

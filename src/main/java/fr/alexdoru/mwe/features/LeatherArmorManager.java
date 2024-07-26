@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.features;
 
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 public class LeatherArmorManager {
 
     public static ItemStack replaceIronArmor(EntityOtherPlayerMP player, int slotIn, ItemStack stack) {
-        if (slotIn != 0 && ConfigHandler.coloredLeatherArmor &&
+        if (slotIn != 0 && MWEConfig.coloredLeatherArmor &&
                 (ScoreboardTracker.isInMwGame() || ScoreboardTracker.isMWReplay()) &&
                 player instanceof EntityPlayerAccessor &&
                 ((EntityPlayerAccessor) player).getPlayerTeamColor() != '\0' &&
@@ -23,7 +23,7 @@ public class LeatherArmorManager {
     }
 
     public static void onColorChange(EntityPlayer player, int oldColor, int newColor) {
-        if (ConfigHandler.coloredLeatherArmor &&
+        if (MWEConfig.coloredLeatherArmor &&
                 (ScoreboardTracker.isInMwGame() || ScoreboardTracker.isMWReplay()) &&
                 player instanceof EntityOtherPlayerMP &&
                 oldColor != newColor &&
@@ -45,7 +45,7 @@ public class LeatherArmorManager {
             if (player instanceof EntityOtherPlayerMP && player instanceof EntityPlayerAccessor && ((EntityPlayerAccessor) player).getPlayerTeamColor() != '\0') {
                 for (int i = 0; i < player.inventory.armorInventory.length; i++) {
                     final ItemStack stack = player.inventory.armorInventory[i];
-                    if (ConfigHandler.coloredLeatherArmor) {
+                    if (MWEConfig.coloredLeatherArmor) {
                         if (isCleanIronArmor(stack)) {
                             player.inventory.armorInventory[i] = createColoredLeatherArmor(stack, ((EntityPlayerAccessor) player).getPlayerTeamColorInt());
                         }

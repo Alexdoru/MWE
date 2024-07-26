@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.hackerdetector.checks;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.mwe.hackerdetector.data.SampleListD;
 import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
@@ -43,13 +43,13 @@ public class ScaffoldCheck extends Check {
                     final double avgAccelY = avgAccel(data.serverPosYList);
                     if (isAlmostZero(avgAccelY)) return false; // fix false flag in stairs
                     if (speedY < 15d && speedY > 4d && avgAccelY > -25d) {
-                        if (ConfigHandler.debugLogging) {
+                        if (MWEConfig.debugLogging) {
                             final String msg = " | pitch " + String.format("%.2f", data.serverPitchList.get(0)) + " | speedXZ " + String.format("%.2f", data.getSpeedXZ()) + " | angleDiff " + String.format("%.2f", angleDiff) + " | speedY " + String.format("%.2f", speedY) + " | avgAccelY " + String.format("%.2f", avgAccelY);
                             this.log(player, data, data.scaffoldVL, msg);
                         }
                         return true;
                     } else if (speedY < 4d && speedY > -1d && Math.abs(speedY) > 0.005d && speedXZSq > 25d) {
-                        if (ConfigHandler.debugLogging) {
+                        if (MWEConfig.debugLogging) {
                             final String msg = " | pitch " + String.format("%.2f", data.serverPitchList.get(0)) + " | speedXZ " + String.format("%.2f", data.getSpeedXZ()) + " | angleDiff " + String.format("%.2f", angleDiff) + " | speedY " + String.format("%.2f", speedY) + " | avgAccelY " + String.format("%.2f", avgAccelY);
                             this.log(player, data, data.scaffoldVL, msg);
                         }

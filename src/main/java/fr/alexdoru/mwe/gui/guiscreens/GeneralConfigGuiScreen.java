@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.gui.guiscreens;
 
 import fr.alexdoru.mwe.asm.hooks.RendererLivingEntityHook_AprilFun;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.gui.elements.OptionGuiButton;
 import fr.alexdoru.mwe.gui.elements.SimpleGuiButton;
 import fr.alexdoru.mwe.gui.elements.TextElement;
@@ -28,8 +28,8 @@ public class GeneralConfigGuiScreen extends MyGuiScreen {
                 getxCenter() + buttonsWidth / 2 + 10, getButtonYPos(2),
                 buttonsWidth, buttonsHeight,
                 "Automatic Updates",
-                (b) -> ConfigHandler.automaticUpdate = b,
-                () -> ConfigHandler.automaticUpdate,
+                (b) -> MWEConfig.automaticUpdate = b,
+                () -> MWEConfig.automaticUpdate,
                 GRAY + "When your game starts, it will check and notify you if an update is available. If this setting is turned " +
                         GREEN + "ON" + GRAY + " it will also download the updated mod and install it in your mods folder when closing your game.",
                 YELLOW + "The automatic installation doesn't work with " + RED + "Feather client" + YELLOW + ", you have to manually download the updated mod and place it in your mods folder."));

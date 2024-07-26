@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.hooks;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.EnumChatFormatting;
@@ -15,7 +15,7 @@ public class GuiPlayerTabOverlayHook_PlayerCount {
 
     @Nonnull
     public static List<String> addPlayerCountInHeader(@Nonnull List<String> listIn) {
-        if (!ConfigHandler.showPlayercountTablist) {
+        if (!MWEConfig.showPlayercountTablist) {
             return listIn;
         }
         final Collection<NetworkPlayerInfo> playerInfoMap = Minecraft.getMinecraft().thePlayer.sendQueue.getPlayerInfoMap();

@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.gui.guiscreens;
 
 import fr.alexdoru.mwe.asm.loader.ASMLoadingPlugin;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.features.LeatherArmorManager;
 import fr.alexdoru.mwe.gui.elements.FancyGuiButton;
 import fr.alexdoru.mwe.gui.elements.OptionGuiButton;
@@ -44,14 +44,14 @@ public class MegaWallsConfigGuiScreen extends MyGuiScreen {
         this.buttonList.add(new OptionGuiButton(
                 xPosLeft, getButtonYPos(1),
                 "Hide repetitive MW msg",
-                (b) -> ConfigHandler.hideRepetitiveMWChatMsg = b,
-                () -> ConfigHandler.hideRepetitiveMWChatMsg,
+                (b) -> MWEConfig.hideRepetitiveMWChatMsg = b,
+                () -> MWEConfig.hideRepetitiveMWChatMsg,
                 repetitiveMsgTooltip));
         this.buttonList.add(new OptionGuiButton(
                 xPosLeft, getButtonYPos(2),
                 "Hide hunger title",
-                (b) -> ConfigHandler.hideHungerTitleInMW = b,
-                () -> ConfigHandler.hideHungerTitleInMW,
+                (b) -> MWEConfig.hideHungerTitleInMW = b,
+                () -> MWEConfig.hideHungerTitleInMW,
                 GRAY + "Hide the hunger message that appears in the middle of the screen in deathmatch"));
         final List<String> iconsTooltip = new ArrayList<>();
         iconsTooltip.add(GREEN + "Squad Icon on names");
@@ -63,24 +63,24 @@ public class MegaWallsConfigGuiScreen extends MyGuiScreen {
         iconsTooltip.add(NameUtil.SQUAD_ICON + GRAY + ": players in your squad");
         this.buttonList.add(new FancyGuiButton(
                 xPosLeft, getButtonYPos(3),
-                () -> "Squad Icon on names : " + (ConfigHandler.squadIconTabOnly ? GREEN + "Tab Only" : getSuffix(ConfigHandler.squadIconOnNames)),
+                () -> "Squad Icon on names : " + (MWEConfig.squadIconTabOnly ? GREEN + "Tab Only" : getSuffix(MWEConfig.squadIconOnNames)),
                 () -> {
-                    if (ConfigHandler.squadIconOnNames && !ConfigHandler.squadIconTabOnly) {
-                        ConfigHandler.squadIconOnNames = false;
-                        ConfigHandler.squadIconTabOnly = true;
-                    } else if (ConfigHandler.squadIconTabOnly) {
-                        ConfigHandler.squadIconTabOnly = false;
+                    if (MWEConfig.squadIconOnNames && !MWEConfig.squadIconTabOnly) {
+                        MWEConfig.squadIconOnNames = false;
+                        MWEConfig.squadIconTabOnly = true;
+                    } else if (MWEConfig.squadIconTabOnly) {
+                        MWEConfig.squadIconTabOnly = false;
                     } else {
-                        ConfigHandler.squadIconOnNames = true;
+                        MWEConfig.squadIconOnNames = true;
                     }
                     NameUtil.refreshAllNamesInWorld();
                 },
                 iconsTooltip));
         this.buttonList.add(new FancyGuiButton(
                 xPosLeft, getButtonYPos(4),
-                () -> "Colored Leather Armor : " + getSuffix(ConfigHandler.coloredLeatherArmor),
+                () -> "Colored Leather Armor : " + getSuffix(MWEConfig.coloredLeatherArmor),
                 () -> {
-                    ConfigHandler.coloredLeatherArmor = !ConfigHandler.coloredLeatherArmor;
+                    MWEConfig.coloredLeatherArmor = !MWEConfig.coloredLeatherArmor;
                     LeatherArmorManager.onSettingChange();
                 },
                 GREEN + "Colored Leather Armor",
@@ -88,26 +88,26 @@ public class MegaWallsConfigGuiScreen extends MyGuiScreen {
         this.buttonList.add(new OptionGuiButton(
                 xPosLeft, getButtonYPos(5),
                 "AFK sound warning",
-                (b) -> ConfigHandler.afkSoundWarning = b,
-                () -> ConfigHandler.afkSoundWarning,
+                (b) -> MWEConfig.afkSoundWarning = b,
+                () -> MWEConfig.afkSoundWarning,
                 GRAY + "Plays sound when you are about to get kicked for AFK in Mega Walls as well as when the walls are about to fall and your game is tabbed out"));
         this.buttonList.add(new OptionGuiButton(
                 xPosRight, getButtonYPos(1),
                 "Renegade arrow count",
-                (b) -> ConfigHandler.renegadeArrowCount = b,
-                () -> ConfigHandler.renegadeArrowCount,
+                (b) -> MWEConfig.renegadeArrowCount = b,
+                () -> MWEConfig.renegadeArrowCount,
                 GRAY + "Renders above player heads the amount of arrows pinned in each player when playing renegade"));
         this.buttonList.add(new OptionGuiButton(
                 xPosRight, getButtonYPos(2),
                 "Nick hider",
-                (b) -> ConfigHandler.nickHider = b,
-                () -> ConfigHandler.nickHider,
+                (b) -> MWEConfig.nickHider = b,
+                () -> MWEConfig.nickHider,
                 GRAY + "Shows your real name instead of your nick when forming the squad in Mega Walls"));
         this.buttonList.add(new FancyGuiButton(
                 xPosRight, getButtonYPos(3),
-                () -> "Pink squadmates : " + getSuffix(ConfigHandler.pinkSquadmates),
+                () -> "Pink squadmates : " + getSuffix(MWEConfig.pinkSquadmates),
                 () -> {
-                    ConfigHandler.pinkSquadmates = !ConfigHandler.pinkSquadmates;
+                    MWEConfig.pinkSquadmates = !MWEConfig.pinkSquadmates;
                     NameUtil.refreshAllNamesInWorld();
                 },
                 GREEN + "Pink squadmates",
@@ -115,8 +115,8 @@ public class MegaWallsConfigGuiScreen extends MyGuiScreen {
         this.buttonList.add(new OptionGuiButton(
                 xPosRight, getButtonYPos(4),
                 "Keep first letter squadname",
-                (b) -> ConfigHandler.keepFirstLetterSquadnames = b,
-                () -> ConfigHandler.keepFirstLetterSquadnames,
+                (b) -> MWEConfig.keepFirstLetterSquadnames = b,
+                () -> MWEConfig.keepFirstLetterSquadnames,
                 GRAY + "When adding a player to the squad with a custom name of your choice, using"
                         + YELLOW + " /squad add <name> as <custom name>"
                         + GRAY + ", it will keep the first letter of their real name so that you can track them on the compass"));
@@ -127,9 +127,9 @@ public class MegaWallsConfigGuiScreen extends MyGuiScreen {
             chatHeadTooltip.add(GRAY + "Renders heads of players in front of chat messages");
             this.buttonList.add(new FancyGuiButton(
                     xPosRight, getButtonYPos(5),
-                    () -> "Chat Heads : " + getSuffix(ConfigHandler.chatHeads),
+                    () -> "Chat Heads : " + getSuffix(MWEConfig.chatHeads),
                     () -> {
-                        ConfigHandler.chatHeads = !ConfigHandler.chatHeads;
+                        MWEConfig.chatHeads = !MWEConfig.chatHeads;
                         mc.ingameGUI.getChatGUI().refreshChat();
                     },
                     chatHeadTooltip));

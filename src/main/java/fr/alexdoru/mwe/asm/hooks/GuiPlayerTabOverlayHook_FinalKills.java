@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.hooks;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
@@ -15,7 +15,7 @@ public class GuiPlayerTabOverlayHook_FinalKills {
     }
 
     public static void computeFKScoreWidth(int playerFinalkills) {
-        if (ScoreboardTracker.isInMwGame() && ConfigHandler.fkcounterHUDTablist) {
+        if (ScoreboardTracker.isInMwGame() && MWEConfig.fkcounterHUDTablist) {
             if (playerFinalkills != 0) {
                 finalsScoreWidth = Math.max(finalsScoreWidth, Minecraft.getMinecraft().fontRendererObj.getStringWidth(" " + playerFinalkills));
             }
@@ -27,7 +27,7 @@ public class GuiPlayerTabOverlayHook_FinalKills {
     }
 
     public static void renderFinals(int playerFinalkills, int j2, int i, int k2) {
-        if (!ConfigHandler.fkcounterHUDTablist || playerFinalkills == 0 || !ScoreboardTracker.isInMwGame()) {
+        if (!MWEConfig.fkcounterHUDTablist || playerFinalkills == 0 || !ScoreboardTracker.isInMwGame()) {
             return;
         }
         final String s1 = EnumChatFormatting.GOLD + " " + playerFinalkills;

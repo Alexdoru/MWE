@@ -4,7 +4,7 @@ import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.gui.guiapi.GuiManager;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
@@ -234,7 +234,7 @@ public class FinalKillCounter {
     }
 
     private static String getKillDiffString(int killsOfKilledPlayer, String killedTeamColor) {
-        if (!ConfigHandler.showKillDiffInChat || killsOfKilledPlayer < 1) {
+        if (!MWEConfig.showKillDiffInChat || killsOfKilledPlayer < 1) {
             return "";
         }
         return EnumChatFormatting.WHITE + " (" + '§' + killedTeamColor + "-" + killsOfKilledPlayer + EnumChatFormatting.WHITE + ")";

@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.hackerdetector.checks;
 
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.enums.MWClass;
 import fr.alexdoru.mwe.hackerdetector.data.BrokenBlock;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
@@ -130,7 +130,7 @@ public class FastbreakCheck extends Check {
                 data.breakTimeRatio.add(Math.min(breakTimeRatio, 1.1F));
                 if (breakTimeRatio < 0.95F) {
                     data.fastbreakVL.add(MathHelper.clamp_int(MathHelper.floor_float((1F - breakTimeRatio) * 20F), 1, 4));
-                    if (ConfigHandler.debugLogging && data.fastbreakVL.getViolationLevel() > 6) {
+                    if (MWEConfig.debugLogging && data.fastbreakVL.getViolationLevel() > 6) {
                         this.log(playerBreaking, data, data.fastbreakVL,
                                 " | avgBreaktimeRatio " + String.format("%.2f", data.breakTimeRatio.average()) +
                                         " | breakTimeRatio " + String.format("%.2f", breakTimeRatio) +

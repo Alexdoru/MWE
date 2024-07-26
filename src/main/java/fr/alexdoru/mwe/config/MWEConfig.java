@@ -1,6 +1,8 @@
 package fr.alexdoru.mwe.config;
 
 import fr.alexdoru.mwe.MWE;
+import fr.alexdoru.mwe.config.lib.AbstractConfig;
+import fr.alexdoru.mwe.config.lib.ConfigProperty;
 import fr.alexdoru.mwe.gui.guiapi.GuiPosition;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -9,20 +11,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ConfigHandler extends AbstractConfig {
+public class MWEConfig extends AbstractConfig {
 
     private static AbstractConfig INSTANCE;
 
-    private ConfigHandler(File file) {
-        super(ConfigHandler.class, file);
+    private MWEConfig(File file) {
+        super(MWEConfig.class, file);
     }
 
     public static void loadConfig(File file) {
         if (INSTANCE != null) {
             throw new IllegalStateException("Config already created!");
         }
-        INSTANCE = new ConfigHandler(file);
-        ConfigHandler.onModUpdate();
+        INSTANCE = new MWEConfig(file);
+        MWEConfig.onModUpdate();
     }
 
     public static void saveConfig() {
@@ -33,16 +35,16 @@ public class ConfigHandler extends AbstractConfig {
     }
 
     private static void onModUpdate() {
-        if (!ConfigHandler.modVersion.equals(MWE.version)) {
-            ConfigHandler.drawHitboxForWithers = false;
-            if (ConfigHandler.lastWitherHUDPosition.getRelativeX() == 0.75d && ConfigHandler.lastWitherHUDPosition.getRelativeY() == 0.05d) {
-                ConfigHandler.lastWitherHUDPosition.resetToDefault();
+        if (!MWEConfig.modVersion.equals(MWE.version)) {
+            MWEConfig.drawHitboxForWithers = false;
+            if (MWEConfig.lastWitherHUDPosition.getRelativeX() == 0.75d && MWEConfig.lastWitherHUDPosition.getRelativeY() == 0.05d) {
+                MWEConfig.lastWitherHUDPosition.resetToDefault();
             }
-            if (ConfigHandler.baseLocationHUDPosition.getRelativeX() == 0.5d && ConfigHandler.baseLocationHUDPosition.getRelativeY() == 0.15d) {
-                ConfigHandler.baseLocationHUDPosition.resetToDefault();
+            if (MWEConfig.baseLocationHUDPosition.getRelativeX() == 0.5d && MWEConfig.baseLocationHUDPosition.getRelativeY() == 0.15d) {
+                MWEConfig.baseLocationHUDPosition.resetToDefault();
             }
-            ConfigHandler.modVersion = MWE.version;
-            ConfigHandler.saveConfig();
+            MWEConfig.modVersion = MWE.version;
+            MWEConfig.saveConfig();
         }
     }
 
@@ -50,7 +52,7 @@ public class ConfigHandler extends AbstractConfig {
             category = "General",
             name = "Mod Version",
             comment = "The version of the mod the config was saved with")
-    protected static String modVersion = "";
+    public static String modVersion = "";
 
     @ConfigProperty(
             category = "Final Kill Counter",

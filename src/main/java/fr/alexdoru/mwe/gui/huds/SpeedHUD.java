@@ -1,13 +1,13 @@
 package fr.alexdoru.mwe.gui.huds;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
 public class SpeedHUD extends AbstractRenderer {
 
     public SpeedHUD() {
-        super(ConfigHandler.speedHUDPosition);
+        super(MWEConfig.speedHUDPosition);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class SpeedHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return ConfigHandler.showSpeedHUD;
+        return MWEConfig.showSpeedHUD;
     }
 
 }

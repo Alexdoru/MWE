@@ -4,7 +4,7 @@ import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.asm.interfaces.GuiChatAccessor;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor_ChatHeads;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
@@ -28,7 +28,7 @@ public class ChatUtil {
     }
 
     public static String getTagHackerDetector() {
-        return ConfigHandler.flagMessagePrefix + " " + RESET;
+        return MWEConfig.flagMessagePrefix + " " + RESET;
     }
 
     public static String getTagHitboxes() {

@@ -4,7 +4,7 @@ import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.FlagChatComponent;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
@@ -56,7 +56,7 @@ public abstract class Check implements ICheck {
     }
 
     private void playFlagSound() {
-        if (ConfigHandler.soundWhenFlagging) {
+        if (MWEConfig.soundWhenFlagging) {
             if (System.currentTimeMillis() - lastSoundTime > 250) {
                 SoundUtil.playChatNotifSound();
                 lastSoundTime = System.currentTimeMillis();
@@ -67,18 +67,18 @@ public abstract class Check implements ICheck {
     private void printFlagMessage(EntityPlayer player) {
         final String cheatType = this.getCheatName() + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")");
         final String playername = ScoreboardTracker.isReplayMode() ? EnumChatFormatting.getTextWithoutFormattingCodes(player.getName()) : player.getName();
-        if (ConfigHandler.debugLogging) {
+        if (MWEConfig.debugLogging) {
             HackerDetector.log(player.getName() + " flags " + cheatType);
         }
-        if (!ConfigHandler.showFlagMessages) {
+        if (!MWEConfig.showFlagMessages) {
             return;
         }
-        final String flagKey = playername + (ConfigHandler.showFlagMessageType ? cheatType : this.getCheatName());
+        final String flagKey = playername + (MWEConfig.showFlagMessageType ? cheatType : this.getCheatName());
         final String msg = ChatUtil.getTagHackerDetector()
                 + NameUtil.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.YELLOW + " flags "
-                + EnumChatFormatting.RED + (ConfigHandler.showFlagMessageType ? cheatType : this.getCheatName());
-        if (ConfigHandler.oneFlagMessagePerGame) {
+                + EnumChatFormatting.RED + (MWEConfig.showFlagMessageType ? cheatType : this.getCheatName());
+        if (MWEConfig.oneFlagMessagePerGame) {
             if (flagMessages.contains(flagKey)) {
                 return;
             }
@@ -88,22 +88,22 @@ public abstract class Check implements ICheck {
                 .setChatStyle(new ChatStyle()
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.RED + this.getCheatDescription()))));
         ChatUtil.addSkinToComponent(imsg, player.getName());
-        if (ConfigHandler.showReportButtonOnFlags) {
-            if (!(ScoreboardTracker.isInMwGame() && ConfigHandler.autoreportFlaggedPlayers)) {
+        if (MWEConfig.showReportButtonOnFlags) {
+            if (!(ScoreboardTracker.isInMwGame() && MWEConfig.autoreportFlaggedPlayers)) {
                 imsg.appendSibling(ChatUtil.getReportButton(playername, "cheating " + this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
             }
-            if (ScoreboardTracker.isReplayMode() || !ConfigHandler.addToReportList) {
+            if (ScoreboardTracker.isReplayMode() || !MWEConfig.addToReportList) {
                 imsg.appendSibling(ChatUtil.getWDRButton(playername, this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
             }
         }
-        if (ConfigHandler.compactFlagMessages) {
+        if (MWEConfig.compactFlagMessages) {
             ChatHandler.deleteFlagFromChat(flagKey);
         }
         ChatUtil.addChatMessage(imsg);
     }
 
     private void addToReportList(EntityPlayer player) {
-        if (!ScoreboardTracker.isReplayMode() && ConfigHandler.addToReportList && SquadHandler.getSquad().get(player.getName()) == null) {
+        if (!ScoreboardTracker.isReplayMode() && MWEConfig.addToReportList && SquadHandler.getSquad().get(player.getName()) == null) {
             final String cheat = this.getCheatName().toLowerCase() + "[H]";
             final UUID uuid = player.getUniqueID();
             final WDR wdr = WdrData.getWdr(uuid, player.getName());
@@ -120,7 +120,7 @@ public abstract class Check implements ICheck {
     }
 
     private void sendReport(EntityPlayer player) {
-        if (this.canSendReport() && ScoreboardTracker.isInMwGame() && ConfigHandler.autoreportFlaggedPlayers && SquadHandler.getSquad().get(player.getName()) == null) {
+        if (this.canSendReport() && ScoreboardTracker.isInMwGame() && MWEConfig.autoreportFlaggedPlayers && SquadHandler.getSquad().get(player.getName()) == null) {
             ReportQueue.INSTANCE.addReportToQueue(player.getName());
         }
     }

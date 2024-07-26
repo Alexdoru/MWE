@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.hackerdetector.checks;
 
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.mwe.hackerdetector.data.TickingBlockMap;
@@ -160,7 +160,7 @@ public class KillAuraACheck extends Check {
             final int vlb = Math.min(15, b);
             final int vlp = Math.min(8, p);
             data.killAuraAVL.add(Math.min(15, vlb + (nearbyPlayers.size() > 8 ? vlp / 2 : vlp)) * 25);
-            if (ConfigHandler.debugLogging) {
+            if (MWEConfig.debugLogging) {
                 final String msg = " | " + data.attackInfo.attackType.name() + " | target : " + data.attackInfo.targetName + " | b " + b + " | p " + p + " | reach " + String.format("%.2f", reach) + " | players " + nearbyPlayers.size();
                 this.log(player, data, data.killAuraAVL, msg);
                 if (ScoreboardTracker.isReplayMode()) {

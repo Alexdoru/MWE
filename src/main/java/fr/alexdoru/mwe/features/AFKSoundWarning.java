@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.features;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
@@ -44,13 +44,13 @@ public class AFKSoundWarning {
     }
 
     public static void playAFKKickSound() {
-        if (ConfigHandler.afkSoundWarning) {
+        if (MWEConfig.afkSoundWarning) {
             MinecraftForge.EVENT_BUS.register(new AFKSoundWarning(new ResourceLocation("note.pling"), 20 * 15));
         }
     }
 
     public static void playWallsFallSound() {
-        if (ConfigHandler.afkSoundWarning) {
+        if (MWEConfig.afkSoundWarning) {
             MinecraftForge.EVENT_BUS.register(new AFKSoundWarning(new ResourceLocation("random.orb"), 10));
         }
     }

@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.hackerdetector.checks;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.mwe.hackerdetector.data.SampleListD;
 import fr.alexdoru.mwe.hackerdetector.utils.Vector2D;
@@ -46,7 +46,7 @@ public class KeepSprintBCheck extends Check {
             if (prevSpeedXZ > 4d) {
                 if (speedXZ > 0.9d * prevSpeedXZ) {
                     data.keepSprintBVL.add(10);
-                    if (ConfigHandler.debugLogging) {
+                    if (MWEConfig.debugLogging) {
                         this.log(player, data, data.keepSprintBVL,
                                 " | attacked " + data.hasAttacked() +
                                         " | prevSpeedXZ " + String.format("%.4f", prevSpeedXZ) +

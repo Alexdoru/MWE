@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.gui.huds;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.potion.PotionEffect;
@@ -11,7 +11,7 @@ import java.util.Collection;
 public class MiniPotionHUD extends AbstractRenderer {
 
     public MiniPotionHUD() {
-        super(ConfigHandler.miniPotionHUDPosition);
+        super(MWEConfig.miniPotionHUDPosition);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class MiniPotionHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return ConfigHandler.showMiniPotionHUD || (ConfigHandler.showMiniPotionHUDOnlyMW && ScoreboardTracker.isInMwGame());
+        return MWEConfig.showMiniPotionHUD || (MWEConfig.showMiniPotionHUDOnlyMW && ScoreboardTracker.isInMwGame());
     }
 
     private String formatDuration(PotionEffect effect) {

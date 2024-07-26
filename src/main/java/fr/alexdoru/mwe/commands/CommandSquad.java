@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
@@ -124,8 +124,8 @@ public class CommandSquad extends MyAbstractCommand {
                 }
             }
             String alias = stringBuilder.toString();
-            if (!args[1].equals(Minecraft.getMinecraft().thePlayer.getName()) && !args[1].equals(ConfigHandler.hypixelNick)) {
-                if (ConfigHandler.keepFirstLetterSquadnames) {
+            if (!args[1].equals(Minecraft.getMinecraft().thePlayer.getName()) && !args[1].equals(MWEConfig.hypixelNick)) {
+                if (MWEConfig.keepFirstLetterSquadnames) {
                     if (!args[1].isEmpty() && !alias.isEmpty()) {
                         if (args[1].charAt(0) != alias.charAt(0)) {
                             alias = args[1].charAt(0) + " ❘ " + alias;

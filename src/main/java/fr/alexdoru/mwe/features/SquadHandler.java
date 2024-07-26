@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.features;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import fr.alexdoru.mwe.utils.NameUtil;
@@ -22,15 +22,15 @@ public class SquadHandler {
     public void onNameFormat(NameFormat event) {
         final String squadname = squadmap.get(event.username);
         if (squadname != null) {
-            event.displayname = ConfigHandler.pinkSquadmates ? EnumChatFormatting.LIGHT_PURPLE + squadname : squadname;
+            event.displayname = MWEConfig.pinkSquadmates ? EnumChatFormatting.LIGHT_PURPLE + squadname : squadname;
         }
     }
 
     public static void addSelf() {
         if (squadmap.isEmpty()) {
             addPlayer(Minecraft.getMinecraft().thePlayer.getName());
-            if (!ConfigHandler.hypixelNick.isEmpty()) {
-                addPlayer(ConfigHandler.hypixelNick, ConfigHandler.nickHider ? EnumChatFormatting.ITALIC + Minecraft.getMinecraft().thePlayer.getName() + EnumChatFormatting.RESET : ConfigHandler.hypixelNick);
+            if (!MWEConfig.hypixelNick.isEmpty()) {
+                addPlayer(MWEConfig.hypixelNick, MWEConfig.nickHider ? EnumChatFormatting.ITALIC + Minecraft.getMinecraft().thePlayer.getName() + EnumChatFormatting.RESET : MWEConfig.hypixelNick);
             }
         }
     }
@@ -116,7 +116,7 @@ public class SquadHandler {
 
         final String myName = Minecraft.getMinecraft().thePlayer.getName();
         final String myCustomName = squadmap.get(myName);
-        final String myCustomNick = ConfigHandler.hypixelNick.isEmpty() ? null : squadmap.get(ConfigHandler.hypixelNick);
+        final String myCustomNick = MWEConfig.hypixelNick.isEmpty() ? null : squadmap.get(MWEConfig.hypixelNick);
 
         clearSquad();
         newsquad.forEach(SquadHandler::addPlayer);
@@ -126,15 +126,15 @@ public class SquadHandler {
         }
 
         if (myCustomNick != null) {
-            addPlayer(ConfigHandler.hypixelNick, myCustomNick);
+            addPlayer(MWEConfig.hypixelNick, myCustomNick);
         }
 
         if (!squadmap.isEmpty()) {
             if (myCustomName == null) {
                 addPlayer(myName);
             }
-            if (myCustomNick == null && !ConfigHandler.hypixelNick.isEmpty()) {
-                addPlayer(ConfigHandler.hypixelNick, ConfigHandler.nickHider ? EnumChatFormatting.ITALIC + myName + EnumChatFormatting.RESET : ConfigHandler.hypixelNick);
+            if (myCustomNick == null && !MWEConfig.hypixelNick.isEmpty()) {
+                addPlayer(MWEConfig.hypixelNick, MWEConfig.nickHider ? EnumChatFormatting.ITALIC + myName + EnumChatFormatting.RESET : MWEConfig.hypixelNick);
             }
         }
 

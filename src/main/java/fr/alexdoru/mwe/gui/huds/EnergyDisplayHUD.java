@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.gui.huds;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.init.Items;
@@ -24,7 +24,7 @@ public class EnergyDisplayHUD extends AbstractRenderer {
     }
 
     public EnergyDisplayHUD() {
-        super(ConfigHandler.energyDisplayHUDPosition);
+        super(MWEConfig.energyDisplayHUDPosition);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class EnergyDisplayHUD extends AbstractRenderer {
         }
         if (this.timeStartRender + 2500L - currentTime > 0L) {
             final String displayText;
-            if (energy >= ConfigHandler.aquaEnergyDisplayThreshold) {
+            if (energy >= MWEConfig.aquaEnergyDisplayThreshold) {
                 displayText = EnumChatFormatting.AQUA.toString() + EnumChatFormatting.BOLD + energy;
             } else {
                 displayText = EnumChatFormatting.GREEN.toString() + energy;
@@ -67,7 +67,7 @@ public class EnergyDisplayHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return ConfigHandler.showEnergyDisplayHUD && ScoreboardTracker.isInMwGame();
+        return MWEConfig.showEnergyDisplayHUD && ScoreboardTracker.isInMwGame();
     }
 
 }

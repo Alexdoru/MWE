@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.gui.guiscreens;
 
 import fr.alexdoru.mwe.asm.loader.ASMLoadingPlugin;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.gui.elements.*;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import net.minecraft.client.gui.GuiScreen;
@@ -37,60 +37,60 @@ public class VanillaConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISl
         this.buttonList.add(new FancyGuiButton(
                 xPosLeft, getButtonYPos(1),
                 buttonWidth, buttonsHeight,
-                () -> "Cancel night vision effect : " + getSuffix(!ConfigHandler.cancelNightVisionEffect),
-                () -> ConfigHandler.cancelNightVisionEffect = !ConfigHandler.cancelNightVisionEffect,
+                () -> "Cancel night vision effect : " + getSuffix(!MWEConfig.cancelNightVisionEffect),
+                () -> MWEConfig.cancelNightVisionEffect = !MWEConfig.cancelNightVisionEffect,
                 GREEN + "Cancel night vision effect",
                 GRAY + "Removes the visual effect of night vision"));
         this.buttonList.add(new OptionGuiButton(
                 xPosLeft, getButtonYPos(2),
                 buttonWidth, buttonsHeight,
                 "Clear view",
-                (b) -> ConfigHandler.clearVision = b,
-                () -> ConfigHandler.clearVision,
+                (b) -> MWEConfig.clearVision = b,
+                () -> MWEConfig.clearVision,
                 GRAY + "Stops rendering particles that are too close (75cm) to the camera for a better visibility"));
         this.buttonList.add(new OptionGuiButton(
                 xPosLeft, getButtonYPos(3),
                 buttonWidth, buttonsHeight,
                 "Fix actionbar text overlap",
-                (b) -> ConfigHandler.fixActionbarTextOverlap = b,
-                () -> ConfigHandler.fixActionbarTextOverlap,
+                (b) -> MWEConfig.fixActionbarTextOverlap = b,
+                () -> MWEConfig.fixActionbarTextOverlap,
                 GRAY + "Prevents the actionbar text from overlapping with the armor bar if the player has more than 2 rows of health"));
         this.buttonList.add(new FancyGuiButton(
                 xPosLeft, getButtonYPos(4),
                 buttonWidth, buttonsHeight,
-                () -> "Sound warning when low HP : " + getSuffix(ConfigHandler.playSoundLowHP),
+                () -> "Sound warning when low HP : " + getSuffix(MWEConfig.playSoundLowHP),
                 () -> {
-                    ConfigHandler.playSoundLowHP = !ConfigHandler.playSoundLowHP;
-                    if (ConfigHandler.playSoundLowHP) {
+                    MWEConfig.playSoundLowHP = !MWEConfig.playSoundLowHP;
+                    if (MWEConfig.playSoundLowHP) {
                         SoundUtil.playLowHPSound();
                     }
                 }, GREEN + "Sound warning when low HP",
                 GRAY + "Plays a sound when your health drops below the threshold defined below",
                 GRAY + "The sound used is \"note.pling\" check your sound settings to see if it's enabled !"));
-        this.buttonList.add(new GuiSlider(20, xPosLeft, getButtonYPos(5), buttonWidth, buttonsHeight, "Health threshold : ", " %", 0d, 100d, ConfigHandler.healthThreshold * 100d, false, true, this));
+        this.buttonList.add(new GuiSlider(20, xPosLeft, getButtonYPos(5), buttonWidth, buttonsHeight, "Health threshold : ", " %", 0d, 100d, MWEConfig.healthThreshold * 100d, false, true, this));
         this.buttonList.add(new OptionGuiButton(
                 xPosLeft, getButtonYPos(6),
                 buttonWidth, buttonsHeight,
                 "Limit dropped item rendered",
-                (b) -> ConfigHandler.limitDroppedEntityRendered = b,
-                () -> ConfigHandler.limitDroppedEntityRendered,
+                (b) -> MWEConfig.limitDroppedEntityRendered = b,
+                () -> MWEConfig.limitDroppedEntityRendered,
                 GRAY + "Dynamically modifies the render distance of dropped items entities to preserve performance. It starts reducing the render distance when exceeding the threshold set below.",
                 GRAY + "There is a keybind (ESC -> options -> controls -> MWE) to toggle it on the fly"));
-        this.buttonList.add(new GuiSlider(23, xPosLeft, getButtonYPos(7), buttonWidth, buttonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, ConfigHandler.maxDroppedEntityRendered, false, true, this));
+        this.buttonList.add(new GuiSlider(23, xPosLeft, getButtonYPos(7), buttonWidth, buttonsHeight, "Maximum dropped item entities : ", "", 40d, 400d, MWEConfig.maxDroppedEntityRendered, false, true, this));
         this.buttonList.add(new OptionGuiButton(
                 xPosLeft, getButtonYPos(8),
                 buttonWidth, buttonsHeight,
                 "Safe inventory",
-                (b) -> ConfigHandler.safeInventory = b,
-                () -> ConfigHandler.safeInventory,
+                (b) -> MWEConfig.safeInventory = b,
+                () -> MWEConfig.safeInventory,
                 GRAY + "Prevents dropping the sword you are holding in your hotbar. Prevents hotkeying important kit items out of your inventory (in Mega Walls)."));
         if (isOrangeSimpleModLoaded) {
             this.buttonList.add(new OptionGuiButton(
                     xPosLeft, getButtonYPos(9),
                     buttonWidth, buttonsHeight,
                     "Hide Toggle Sprint HUD",
-                    (b) -> ConfigHandler.hideToggleSprintText = b,
-                    () -> ConfigHandler.hideToggleSprintText,
+                    (b) -> MWEConfig.hideToggleSprintText = b,
+                    () -> MWEConfig.hideToggleSprintText,
                     GRAY + "Hides the Toggle Sprint HUD from Orange's Marshall Simple Mod"));
         }
         if (hasOptifine) {
@@ -98,8 +98,8 @@ public class VanillaConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISl
                     xPosLeft, getButtonYPos(isOrangeSimpleModLoaded ? 10 : 9),
                     buttonWidth, buttonsHeight,
                     "Hide Optifine hats",
-                    (b) -> ConfigHandler.hideOptifineHats = b,
-                    () -> ConfigHandler.hideOptifineHats,
+                    (b) -> MWEConfig.hideOptifineHats = b,
+                    () -> MWEConfig.hideOptifineHats,
                     GRAY + "Hides the hats added by Optifine during Halloween and Christmas",
                     DARK_RED + "Requires game restart to be fully effective"));
         }
@@ -107,23 +107,23 @@ public class VanillaConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISl
                 xPosRight, getButtonYPos(1),
                 buttonWidth - 25, buttonsHeight,
                 () -> "Select custom hurt color",
-                () -> mc.displayGuiScreen(new ColorSelectionGuiScreen(this, ConfigHandler.hitColor, 0x4CFF0000, color -> ConfigHandler.hitColor = color)),
+                () -> mc.displayGuiScreen(new ColorSelectionGuiScreen(this, MWEConfig.hitColor, 0x4CFF0000, color -> MWEConfig.hitColor = color)),
                 GREEN + "Custom hurt color",
                 GRAY + "Change the color entities take when they get hurt"));
-        this.elementList.add(new ColoredSquareElement(xPosRight + buttonWidth - 25 + 4, getButtonYPos(1), 20, () -> ConfigHandler.hitColor));
+        this.elementList.add(new ColoredSquareElement(xPosRight + buttonWidth - 25 + 4, getButtonYPos(1), 20, () -> MWEConfig.hitColor));
         this.buttonList.add(new FancyGuiButton(
                 xPosRight, getButtonYPos(2),
                 buttonWidth / 2 - 2, buttonsHeight,
-                () -> "Color armor : " + (ConfigHandler.colorArmorWhenHurt ? GREEN + "On" : RED + "Off"),
-                () -> ConfigHandler.colorArmorWhenHurt = !ConfigHandler.colorArmorWhenHurt,
+                () -> "Color armor : " + (MWEConfig.colorArmorWhenHurt ? GREEN + "On" : RED + "Off"),
+                () -> MWEConfig.colorArmorWhenHurt = !MWEConfig.colorArmorWhenHurt,
                 GREEN + "Color armor",
                 GRAY + "The armor will be colored as well when a player is hurt, like it does in 1.7.",
                 GRAY + "If you have a 1.7 Old animation mod (such as " + YELLOW + "Sk1er's 1.7 Old Animation mod" + GRAY + "), you might need to turn off their \"Red Armor\" setting for this one to take effect."));
         this.buttonList.add(new FancyGuiButton(
                 xPosRight + buttonWidth / 2 + 2, getButtonYPos(2),
                 buttonWidth / 2 - 2, buttonsHeight,
-                () -> "Use team color : " + (ConfigHandler.teamColoredPlayerHurt ? GREEN + "On" : RED + "Off"),
-                () -> ConfigHandler.teamColoredPlayerHurt = !ConfigHandler.teamColoredPlayerHurt,
+                () -> "Use team color : " + (MWEConfig.teamColoredPlayerHurt ? GREEN + "On" : RED + "Off"),
+                () -> MWEConfig.teamColoredPlayerHurt = !MWEConfig.teamColoredPlayerHurt,
                 GREEN + "Use team color",
                 GRAY + "When hurt the players will take the color of their team, other entities will take the custom color defined above.",
                 YELLOW + "When this is enabled, it still uses the alpha level defined in the custom color."));
@@ -139,8 +139,8 @@ public class VanillaConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISl
                 xPosRight, getButtonYPos(3),
                 buttonWidth, buttonsHeight,
                 "Short coin messages",
-                (b) -> ConfigHandler.shortCoinMessage = b,
-                () -> ConfigHandler.shortCoinMessage,
+                (b) -> MWEConfig.shortCoinMessage = b,
+                () -> MWEConfig.shortCoinMessage,
                 shortCoinsList));
         final List<String> coloredScoresHead = new ArrayList<>();
         coloredScoresHead.add(GREEN + "Colored scores above head");
@@ -156,8 +156,8 @@ public class VanillaConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISl
                 xPosRight, getButtonYPos(4),
                 buttonWidth, buttonsHeight,
                 "Colored scores above head",
-                (b) -> ConfigHandler.coloredScoreAboveHead = b,
-                () -> ConfigHandler.coloredScoreAboveHead,
+                (b) -> MWEConfig.coloredScoreAboveHead = b,
+                () -> MWEConfig.coloredScoreAboveHead,
                 coloredScoresHead));
         final List<String> coloredScoresTabList = new ArrayList<>();
         coloredScoresTabList.add(GREEN + "Colored scores in tab");
@@ -175,30 +175,30 @@ public class VanillaConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISl
                 xPosRight, getButtonYPos(5),
                 buttonWidth, buttonsHeight,
                 "Colored scores in tab",
-                (b) -> ConfigHandler.useColoredScores = b,
-                () -> ConfigHandler.useColoredScores,
+                (b) -> MWEConfig.useColoredScores = b,
+                () -> MWEConfig.useColoredScores,
                 coloredScoresTabList));
         this.buttonList.add(new FancyGuiButton(
                 xPosRight, getButtonYPos(6),
                 buttonWidth, buttonsHeight,
                 () -> {
-                    if (ConfigHandler.hideTablistHeaderFooter && !ConfigHandler.showHeaderFooterOutsideMW) {
+                    if (MWEConfig.hideTablistHeaderFooter && !MWEConfig.showHeaderFooterOutsideMW) {
                         return "Hide header/footer in tab : " + GREEN + "Enabled";
-                    } else if (ConfigHandler.hideTablistHeaderFooter /*&& ConfigHandler.showHeaderFooterOutsideMW*/) {
+                    } else if (MWEConfig.hideTablistHeaderFooter /*&& MWEConfig.showHeaderFooterOutsideMW*/) {
                         return "Hide header/footer in tab : " + GREEN + "Only in MW";
                     } else {
                         return "Hide header/footer in tab : " + RED + "Disabled";
                     }
                 },
                 () -> {
-                    if (ConfigHandler.hideTablistHeaderFooter && !ConfigHandler.showHeaderFooterOutsideMW) {
-                        ConfigHandler.showHeaderFooterOutsideMW = true;
-                    } else if (ConfigHandler.hideTablistHeaderFooter /*&& ConfigHandler.showHeaderFooterOutsideMW*/) {
-                        ConfigHandler.hideTablistHeaderFooter = false;
-                        ConfigHandler.showHeaderFooterOutsideMW = false;
+                    if (MWEConfig.hideTablistHeaderFooter && !MWEConfig.showHeaderFooterOutsideMW) {
+                        MWEConfig.showHeaderFooterOutsideMW = true;
+                    } else if (MWEConfig.hideTablistHeaderFooter /*&& MWEConfig.showHeaderFooterOutsideMW*/) {
+                        MWEConfig.hideTablistHeaderFooter = false;
+                        MWEConfig.showHeaderFooterOutsideMW = false;
                     } else {
-                        ConfigHandler.hideTablistHeaderFooter = true;
-                        ConfigHandler.showHeaderFooterOutsideMW = false;
+                        MWEConfig.hideTablistHeaderFooter = true;
+                        MWEConfig.showHeaderFooterOutsideMW = false;
                     }
                 },
                 GREEN + "Hide header/footer in tab",
@@ -210,20 +210,20 @@ public class VanillaConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISl
                 xPosRight, getButtonYPos(7),
                 buttonWidth, buttonsHeight,
                 "Show playercount in tab",
-                (b) -> ConfigHandler.showPlayercountTablist = b,
-                () -> ConfigHandler.showPlayercountTablist,
+                (b) -> MWEConfig.showPlayercountTablist = b,
+                () -> MWEConfig.showPlayercountTablist,
                 GRAY + "Displays the amount of players in the lobby at the top of the tablist",
                 RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements"));
         this.buttonList.add(new OptionGuiButton(
                 xPosRight, getButtonYPos(8),
                 buttonWidth, buttonsHeight,
                 "Hide ping in tab",
-                (b) -> ConfigHandler.hidePingTablist = b,
-                () -> ConfigHandler.hidePingTablist,
+                (b) -> MWEConfig.hidePingTablist = b,
+                () -> MWEConfig.hidePingTablist,
                 GRAY + "Stops rendering the ping in the tablist when all values are equal to 1",
                 RED + "This will not work with certain mods such as Orange Marshall's Vanilla Enhancements"));
         if (isPatcherNotLoaded) {
-            buttonList.add(new GuiSlider(30, xPosRight, getButtonYPos(9), buttonWidth, buttonsHeight, "Tablist size : ", " players", 50d, 125d, ConfigHandler.tablistSize, false, true, this));
+            buttonList.add(new GuiSlider(30, xPosRight, getButtonYPos(9), buttonWidth, buttonsHeight, "Tablist size : ", " players", 50d, 125d, MWEConfig.tablistSize, false, true, this));
         }
         this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(11), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }
@@ -232,13 +232,13 @@ public class VanillaConfigGuiScreen extends MyGuiScreen implements GuiSlider.ISl
     public void onChangeSliderValue(GuiSlider slider) {
         switch (slider.id) {
             case 20:
-                ConfigHandler.healthThreshold = slider.getValueInt() / 100d;
+                MWEConfig.healthThreshold = slider.getValueInt() / 100d;
                 break;
             case 23:
-                ConfigHandler.maxDroppedEntityRendered = slider.getValueInt();
+                MWEConfig.maxDroppedEntityRendered = slider.getValueInt();
                 break;
             case 30:
-                ConfigHandler.tablistSize = slider.getValueInt();
+                MWEConfig.tablistSize = slider.getValueInt();
                 break;
         }
     }

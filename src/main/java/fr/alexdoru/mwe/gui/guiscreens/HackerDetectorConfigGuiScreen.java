@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.gui.guiscreens;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.gui.elements.HUDSettingGuiButtons;
 import fr.alexdoru.mwe.gui.elements.OptionGuiButton;
 import fr.alexdoru.mwe.gui.elements.SimpleGuiButton;
@@ -31,25 +31,25 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(2),
                 "Hacker Detector",
-                (b) -> ConfigHandler.hackerDetector = b,
-                () -> ConfigHandler.hackerDetector,
+                (b) -> MWEConfig.hackerDetector = b,
+                () -> MWEConfig.hackerDetector,
                 GRAY + "Analyses movements and actions of players around you and gives a warning message if they are cheating"));
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(3),
                 "Save in NoCheaters",
-                (b) -> ConfigHandler.addToReportList = b,
-                () -> ConfigHandler.addToReportList,
+                (b) -> MWEConfig.addToReportList = b,
+                () -> MWEConfig.addToReportList,
                 GRAY + "Saves flagged players in NoCheaters to get warnings about them"));
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(4),
                 "Auto-report cheaters",
                 (b) -> {
-                    ConfigHandler.autoreportFlaggedPlayers = b;
-                    if (!ConfigHandler.autoreportFlaggedPlayers) {
+                    MWEConfig.autoreportFlaggedPlayers = b;
+                    if (!MWEConfig.autoreportFlaggedPlayers) {
                         ReportQueue.INSTANCE.queueList.clear();
                     }
                 },
-                () -> ConfigHandler.autoreportFlaggedPlayers,
+                () -> MWEConfig.autoreportFlaggedPlayers,
                 GRAY + "Sends a /report automatically to Hypixel when it flags a cheater",
                 YELLOW + "Only works in Mega Walls, sends one report per game per player, you need to stand still for the mod to type the report." +
                         " It will not send the report if you wait more than 30 seconds to send it."));
@@ -57,28 +57,28 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
                 xPos + BUTTON_WIDTH + 4, getButtonYPos(4),
                 sideButtonWidth, 20,
                 "Debug",
-                (b) -> ConfigHandler.debugLogging = b,
-                () -> ConfigHandler.debugLogging,
+                (b) -> MWEConfig.debugLogging = b,
+                () -> MWEConfig.debugLogging,
                 GRAY + "Logs every hacker detector related action in .minecraft/logs/HackerDetector.log"));
         new HUDSettingGuiButtons(
                 getxCenter(), getButtonYPos(5),
                 () -> {
-                    if (ConfigHandler.showReportHUDonlyInChat) {
+                    if (MWEConfig.showReportHUDonlyInChat) {
                         return "Reports HUD : " + YELLOW + "Only in chat";
                     }
-                    return "Reports HUD : " + getSuffix(ConfigHandler.showReportHUD);
+                    return "Reports HUD : " + getSuffix(MWEConfig.showReportHUD);
                 },
                 () -> {
-                    if (ConfigHandler.showReportHUD && !ConfigHandler.showReportHUDonlyInChat) {
-                        ConfigHandler.showReportHUDonlyInChat = true;
+                    if (MWEConfig.showReportHUD && !MWEConfig.showReportHUDonlyInChat) {
+                        MWEConfig.showReportHUDonlyInChat = true;
                         return;
                     }
-                    if (!ConfigHandler.showReportHUD && !ConfigHandler.showReportHUDonlyInChat) {
-                        ConfigHandler.showReportHUD = true;
+                    if (!MWEConfig.showReportHUD && !MWEConfig.showReportHUDonlyInChat) {
+                        MWEConfig.showReportHUD = true;
                         return;
                     }
-                    ConfigHandler.showReportHUD = false;
-                    ConfigHandler.showReportHUDonlyInChat = false;
+                    MWEConfig.showReportHUD = false;
+                    MWEConfig.showReportHUDonlyInChat = false;
                 },
                 GuiManager.pendingReportHUD,
                 this,
@@ -89,32 +89,32 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(6),
                 "Sound when flagging",
-                (b) -> ConfigHandler.soundWhenFlagging = b,
-                () -> ConfigHandler.soundWhenFlagging,
+                (b) -> MWEConfig.soundWhenFlagging = b,
+                () -> MWEConfig.soundWhenFlagging,
                 GRAY + "Plays a sound when it flags a player"));
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(7),
                 "Show flag messages",
-                (b) -> ConfigHandler.showFlagMessages = b,
-                () -> ConfigHandler.showFlagMessages,
+                (b) -> MWEConfig.showFlagMessages = b,
+                () -> MWEConfig.showFlagMessages,
                 GRAY + "Prints a message in chat when it detects a player using cheats"));
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(8),
                 "Compact flags in chat",
-                (b) -> ConfigHandler.compactFlagMessages = b,
-                () -> ConfigHandler.compactFlagMessages,
+                (b) -> MWEConfig.compactFlagMessages = b,
+                () -> MWEConfig.compactFlagMessages,
                 GRAY + "Deletes previous flag message when printing a new identical flag message"));
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(9),
                 "Show single flag message",
-                (b) -> ConfigHandler.oneFlagMessagePerGame = b,
-                () -> ConfigHandler.oneFlagMessagePerGame,
+                (b) -> MWEConfig.oneFlagMessagePerGame = b,
+                () -> MWEConfig.oneFlagMessagePerGame,
                 GRAY + "Prints flag messages only once per game per player"));
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(10),
                 "Show flag type",
-                (b) -> ConfigHandler.showFlagMessageType = b,
-                () -> ConfigHandler.showFlagMessageType,
+                (b) -> MWEConfig.showFlagMessageType = b,
+                () -> MWEConfig.showFlagMessageType,
                 GRAY + "Shows the flag type on the flag message. For example it will show : ",
                 RED + "Player" + YELLOW + " flags " + RED + "\"KillAura(A)\"",
                 RED + "Player" + YELLOW + " flags " + RED + "\"KillAura(B)\"",
@@ -123,8 +123,8 @@ public class HackerDetectorConfigGuiScreen extends MyGuiScreen {
         this.buttonList.add(new OptionGuiButton(
                 xPos, getButtonYPos(11),
                 "Show report button on flags",
-                (b) -> ConfigHandler.showReportButtonOnFlags = b,
-                () -> ConfigHandler.showReportButtonOnFlags,
+                (b) -> MWEConfig.showReportButtonOnFlags = b,
+                () -> MWEConfig.showReportButtonOnFlags,
                 GRAY + "Shows the report button on flag messages"));
         this.buttonList.add(new SimpleGuiButton(getxCenter() - 150 / 2, getButtonYPos(13), 150, buttonsHeight, "Done", () -> mc.displayGuiScreen(this.parent)));
     }

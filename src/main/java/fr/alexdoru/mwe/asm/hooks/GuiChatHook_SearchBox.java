@@ -3,7 +3,7 @@ package fr.alexdoru.mwe.asm.hooks;
 import fr.alexdoru.mwe.asm.interfaces.GuiChatAccessor;
 import fr.alexdoru.mwe.asm.interfaces.GuiNewChatExt;
 import fr.alexdoru.mwe.chat.GuiChatSearchBox;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.MathHelper;
@@ -27,18 +27,18 @@ public class GuiChatHook_SearchBox {
     }
 
     public void onInitGui() {
-        if (!ConfigHandler.searchBoxChat) return;
+        if (!MWEConfig.searchBoxChat) return;
         final boolean isFirstOpening = searchBox == null;
         final String prevSearch = isFirstOpening ? null : searchBox.getText();
         final String prevErrorMessage = isFirstOpening ? null : searchBox.getErrorMessage();
         final int searchBoxWidth = 64;
         final int searchBoxHeight = this.guiChat.mc.fontRendererObj.FONT_HEIGHT + 1;
         final int x = MathHelper.clamp_int(
-                4 + ConfigHandler.searchBoxXOffset,
+                4 + MWEConfig.searchBoxXOffset,
                 0,
                 this.guiChat.width - searchBoxWidth);
         final int y = MathHelper.clamp_int(
-                this.guiChat.height - 12 - 2 - (searchBoxHeight) - 1 - ConfigHandler.searchBoxYOffset + (Loader.isModLoaded("chatting") ? -12 : 0),
+                this.guiChat.height - 12 - 2 - (searchBoxHeight) - 1 - MWEConfig.searchBoxYOffset + (Loader.isModLoaded("chatting") ? -12 : 0),
                 0,
                 this.guiChat.height);
         searchBox = new GuiChatSearchBox(
@@ -59,7 +59,7 @@ public class GuiChatHook_SearchBox {
     }
 
     private void restoreLastSearch() {
-        if (ConfigHandler.keepPreviousChatSearch) {
+        if (MWEConfig.keepPreviousChatSearch) {
             if (lastSearch instanceof Pattern) {
                 isRegexSearch = true;
                 searchBox.setRegexSearch(true);
@@ -78,7 +78,7 @@ public class GuiChatHook_SearchBox {
 
     public void onDrawScreen(int mouseX, int mouseY) {
         if (searchBox == null) return;
-        if (!isSearchBoxFocused && !ConfigHandler.showSearchBoxUnfocused) return;
+        if (!isSearchBoxFocused && !MWEConfig.showSearchBoxUnfocused) return;
         searchBox.drawTextBox(this.guiChat, mouseX, mouseY);
     }
 
@@ -116,7 +116,7 @@ public class GuiChatHook_SearchBox {
 
     public boolean onMouseClicked(int mouseX, int mouseY, int mouseButton) {
         if (searchBox == null) return false;
-        if (!isSearchBoxFocused && !ConfigHandler.showSearchBoxUnfocused) return false;
+        if (!isSearchBoxFocused && !MWEConfig.showSearchBoxUnfocused) return false;
         if (mouseButton == 0) {
             if (isSearchBoxFocused) {
                 if (searchBox.isMouseOnSearchIcon(mouseX, mouseY)) {
@@ -185,7 +185,7 @@ public class GuiChatHook_SearchBox {
     }
 
     private static boolean isCtrlFShorcutPressed(int keyCode) {
-        return ConfigHandler.searchBoxChatShortcuts && keyCode == Keyboard.KEY_F && GuiScreen.isCtrlKeyDown();
+        return MWEConfig.searchBoxChatShortcuts && keyCode == Keyboard.KEY_F && GuiScreen.isCtrlKeyDown();
     }
 
 }

@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.hackerdetector.checks;
 
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,7 +38,7 @@ public class KillAuraBCheck extends Check {
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
         if (data.hasAttacked()) {
             if (data.useItemTime > 6 && data.timeEating < 33 && data.usedItemIsConsumable && data.lastEatTime > 32) {
-                if (ConfigHandler.debugLogging) {
+                if (MWEConfig.debugLogging) {
                     final ItemStack itemStack = player.getHeldItem();
                     final Item item = itemStack == null ? null : itemStack.getItem();
                     super.log(player, data, data.killAuraBVL,

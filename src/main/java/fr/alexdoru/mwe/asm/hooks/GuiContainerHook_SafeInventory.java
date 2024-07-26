@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -63,7 +63,7 @@ public class GuiContainerHook_SafeInventory {
      * kit bow except if you have enchanted bows on you (pirate bows)
      */
     private static boolean isItemImportant(Slot theSlot, int i) {
-        if (ScoreboardTracker.isInMwGame() && ConfigHandler.safeInventory) {
+        if (ScoreboardTracker.isInMwGame() && MWEConfig.safeInventory) {
             /*Targeted inventory for the hotkeying*/
             if (theSlot.inventory instanceof InventoryPlayer) {
                 return false;

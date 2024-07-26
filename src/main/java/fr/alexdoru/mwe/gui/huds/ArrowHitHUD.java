@@ -4,7 +4,7 @@ import fr.alexdoru.mwe.asm.interfaces.GuiNewChatAccessor;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.NameUtil;
@@ -37,7 +37,7 @@ public class ArrowHitHUD extends AbstractRenderer {
     private ResourceLocation skin;
 
     public ArrowHitHUD() {
-        super(ConfigHandler.arrowHitHUDPosition);
+        super(MWEConfig.arrowHitHUDPosition);
     }
 
     public boolean processMessage(ClientChatReceivedEvent event, String fmsg, String msg) {
@@ -155,7 +155,7 @@ public class ArrowHitHUD extends AbstractRenderer {
         int x = this.guiPosition.getAbsoluteRenderX();
         int y = this.guiPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT;
         drawCenteredString(mc.fontRendererObj, displayText, x, y, 0xFFFFFF);
-        if (ConfigHandler.showHeadOnArrowHitHUD && skin != null) {
+        if (MWEConfig.showHeadOnArrowHitHUD && skin != null) {
             x -= 4;
             y += mc.fontRendererObj.FONT_HEIGHT + 1;
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -175,7 +175,7 @@ public class ArrowHitHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return ConfigHandler.showArrowHitHUD && currentTimeMillis - hitTime < 1000L;
+        return MWEConfig.showArrowHitHUD && currentTimeMillis - hitTime < 1000L;
     }
 
 }

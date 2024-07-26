@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.nocheaters;
 
 import fr.alexdoru.mwe.commands.CommandReport;
-import fr.alexdoru.mwe.config.ConfigHandler;
+import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
@@ -114,7 +114,7 @@ public class WDR implements Comparable<WDR> {
 
     private static boolean isRedCheat(String cheat) {
         cheat = cheat.toLowerCase();
-        for (final String s : ConfigHandler.redIconCheats) {
+        for (final String s : MWEConfig.redIconCheats) {
             if (cheat.startsWith(s)) {
                 return true;
             }
