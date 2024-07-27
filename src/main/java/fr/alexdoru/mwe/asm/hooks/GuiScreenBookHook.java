@@ -3,6 +3,7 @@ package fr.alexdoru.mwe.asm.hooks;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.SquadHandler;
+import fr.alexdoru.mwe.utils.StringUtil;
 import fr.alexdoru.mwe.utils.TimerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -38,7 +39,7 @@ public class GuiScreenBookHook {
                             bookTotalPages = 1;
                         }
                         for (int i = 0; i < bookTotalPages; i++) {
-                            final String pagetext = EnumChatFormatting.getTextWithoutFormattingCodes(IChatComponent.Serializer.jsonToComponent(bookPages.getStringTagAt(i)).getUnformattedText().replace("\n", ""));
+                            final String pagetext = StringUtil.removeFormattingCodes(IChatComponent.Serializer.jsonToComponent(bookPages.getStringTagAt(i)).getUnformattedText().replace("\n", ""));
                             Matcher matcher = nickSuccessPagePattern.matcher(pagetext);
                             if (matcher.find()) {
                                 final String newNick = matcher.group(1);

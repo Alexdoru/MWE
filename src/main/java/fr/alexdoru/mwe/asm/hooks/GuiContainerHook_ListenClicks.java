@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
+import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.init.Blocks;
@@ -9,7 +10,6 @@ import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,7 +48,7 @@ public class GuiContainerHook_ListenClicks {
                 final ItemStack stack = slot.getStack();
                 if (stack != null && stack.getItem() == Items.skull) {
                     if (stack.hasDisplayName()) {
-                        final String text = EnumChatFormatting.getTextWithoutFormattingCodes(stack.getDisplayName());
+                        final String text = StringUtil.removeFormattingCodes(stack.getDisplayName());
                         final Matcher matcher = Pattern.compile("/report (\\w+)").matcher(text);
                         if (matcher.find()) {
                             ReportQueue.INSTANCE.addPlayerReportedThisGame(matcher.group(1));

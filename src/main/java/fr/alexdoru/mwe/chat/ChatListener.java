@@ -62,7 +62,7 @@ public class ChatListener {
     public void onChatMessage(ClientChatReceivedEvent event) {
 
         final String fmsg = event.message.getFormattedText();
-        final String msg = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
+        final String msg = StringUtil.removeFormattingCodes(event.message.getUnformattedText());
 
         /*normal chat messages*/
         if (event.type == 0) {
@@ -229,7 +229,7 @@ public class ChatListener {
             if (iChatComponent.getChatStyle() == null) continue;
             final HoverEvent hoverEvent = iChatComponent.getChatStyle().getChatHoverEvent();
             if (hoverEvent != null && hoverEvent.getAction() == HoverEvent.Action.SHOW_TEXT && hoverEvent.getValue() != null) {
-                final String hoverMsg = EnumChatFormatting.getTextWithoutFormattingCodes(hoverEvent.getValue().getUnformattedText());
+                final String hoverMsg = StringUtil.removeFormattingCodes(hoverEvent.getValue().getUnformattedText());
                 final Matcher matcher = Pattern.compile("([A-Z]+): ([\\d,]+) damage").matcher(hoverMsg);
                 final Map<String, Integer> map = new HashMap<>();
                 while (matcher.find()) {

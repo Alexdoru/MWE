@@ -2,8 +2,8 @@ package fr.alexdoru.mwe.chat;
 
 import fr.alexdoru.mwe.commands.CommandScanGame;
 import fr.alexdoru.mwe.gui.guiapi.GuiManager;
+import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -35,7 +35,7 @@ public class LocrawListener {
     @SubscribeEvent
     public void onChatMessage(ClientChatReceivedEvent event) {
         if (event.type == 0) {
-            final String msg = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
+            final String msg = StringUtil.removeFormattingCodes(event.message.getUnformattedText());
             final Matcher locrawMatcher = LOCRAW_PATTERN.matcher(msg);
             if (locrawMatcher.matches()) {
                 final String gameId = locrawMatcher.group(1).replace("mega", "M");

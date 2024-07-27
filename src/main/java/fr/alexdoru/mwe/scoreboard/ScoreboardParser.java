@@ -63,7 +63,7 @@ public class ScoreboardParser {
         }
 
         final String title = ScoreboardUtils.getSidebarTitle(scoreboard);
-        final String cleanTitle = EnumChatFormatting.getTextWithoutFormattingCodes(title);
+        final String cleanTitle = StringUtil.removeFormattingCodes(title);
         if (cleanTitle.contains("MEGA WALLS")) {
             isMWEnvironement = true;
             final String teamColor = StringUtil.getLastColorCodeBefore(title, "MEGA WALLS");

@@ -4,7 +4,6 @@ import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.util.EnumChatFormatting;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -77,7 +76,7 @@ public enum MWClass {
     }
 
     public static MWClass fromTeamTag(String teamTag) {
-        return MWClass.fromTag(EnumChatFormatting.getTextWithoutFormattingCodes(teamTag).replaceAll("[\\[\\]\\s]", ""));
+        return MWClass.fromTag(StringUtil.removeFormattingCodes(teamTag).replaceAll("[\\[\\]\\s]", ""));
     }
 
     public static MWClass fromTag(String TAG) {

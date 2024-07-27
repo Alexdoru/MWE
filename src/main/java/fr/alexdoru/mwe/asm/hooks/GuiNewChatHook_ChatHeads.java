@@ -3,11 +3,11 @@ package fr.alexdoru.mwe.asm.hooks;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import org.lwjgl.opengl.GL11;
 
@@ -46,7 +46,7 @@ public class GuiNewChatHook_ChatHeads {
     public static void addHeadToMessage(IChatComponent message) {
         if (message instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) message).getSkinChatHead() == null) {
             String msg = message.getFormattedText().split("\n")[0];
-            msg = EnumChatFormatting.getTextWithoutFormattingCodes(msg);
+            msg = StringUtil.removeFormattingCodes(msg);
             if (msg.startsWith("   ")) {
                 return;
             }

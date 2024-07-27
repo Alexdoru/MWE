@@ -16,6 +16,7 @@ import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.SoundUtil;
+import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -66,7 +67,7 @@ public abstract class Check implements ICheck {
 
     private void printFlagMessage(EntityPlayer player) {
         final String cheatType = this.getCheatName() + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")");
-        final String playername = ScoreboardTracker.isReplayMode() ? EnumChatFormatting.getTextWithoutFormattingCodes(player.getName()) : player.getName();
+        final String playername = ScoreboardTracker.isReplayMode() ? StringUtil.removeFormattingCodes(player.getName()) : player.getName();
         if (MWEConfig.debugLogging) {
             HackerDetector.log(player.getName() + " flags " + cheatType);
         }

@@ -118,7 +118,7 @@ public class ScoreboardUtils {
      * Returns unformatted top of the scoreboard/sidebar
      */
     public static String getUnformattedSidebarTitle(Scoreboard scoreboard) {
-        return EnumChatFormatting.getTextWithoutFormattingCodes(getSidebarTitle(scoreboard));
+        return StringUtil.removeFormattingCodes(getSidebarTitle(scoreboard));
     }
 
     /**
@@ -184,7 +184,7 @@ public class ScoreboardUtils {
     public static List<String> stripControlCodes(List<String> listIn) {
         final List<String> list = new ArrayList<>(listIn.size());
         for (final String line : listIn) {
-            list.add(EnumChatFormatting.getTextWithoutFormattingCodes(line));
+            list.add(StringUtil.removeFormattingCodes(line));
         }
         return list;
     }

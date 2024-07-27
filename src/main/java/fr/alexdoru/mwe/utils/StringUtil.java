@@ -12,6 +12,27 @@ import java.util.Arrays;
 public class StringUtil {
 
     /**
+     * A faster version of {@link net.minecraft.util.EnumChatFormatting#getTextWithoutFormattingCodes(String)}
+     */
+    public static String removeFormattingCodes(String text) {
+        if (text == null || text.length() < 2) return text;
+        final int len = text.length();
+        final char[] chars = text.toCharArray();
+        final char[] newChars = new char[len];
+        int count = 0;
+        for (int i = 0; i < len; i++) {
+            final char c = chars[i];
+            if (c == '§' && i + 1 < len && "0123456789abcdefklmnorABCDEFKLMNOR".indexOf(chars[i + 1]) != -1) {
+                i++;
+                continue;
+            }
+            newChars[count] = c;
+            count++;
+        }
+        return new String(newChars, 0, count);
+    }
+
+    /**
      * Returns the last formatting code of a String
      * <p>
      * Returns '\0' if it can't find any formatting code
@@ -167,9 +188,9 @@ public class StringUtil {
         }
         final String[] secondSplit = split[1].split(": ", 2);
         if (secondSplit.length != 2) {
-            return split[0] + messageSender + injectedText + (cleanEnd ? EnumChatFormatting.getTextWithoutFormattingCodes(split[1]) : split[1]);
+            return split[0] + messageSender + injectedText + (cleanEnd ? removeFormattingCodes(split[1]) : split[1]);
         }
-        return split[0] + messageSender + injectedText + secondSplit[0] + ": " + injectAtMsgStart + (cleanEnd ? EnumChatFormatting.getTextWithoutFormattingCodes(secondSplit[1]) : secondSplit[1]);
+        return split[0] + messageSender + injectedText + secondSplit[0] + ": " + injectAtMsgStart + (cleanEnd ? removeFormattingCodes(secondSplit[1]) : secondSplit[1]);
     }
 
     /**
