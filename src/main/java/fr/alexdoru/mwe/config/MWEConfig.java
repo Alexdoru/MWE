@@ -35,7 +35,7 @@ public class MWEConfig extends AbstractConfig {
     }
 
     private static void onModUpdate() {
-        if (!MWEConfig.modVersion.equals(MWE.version)) {
+        if (!MWEConfig.modVersion.isEmpty() && !MWEConfig.modVersion.equals(MWE.version)) {
             MWEConfig.drawHitboxForWithers = false;
             if (MWEConfig.lastWitherHUDPosition.getRelativeX() == 0.75d && MWEConfig.lastWitherHUDPosition.getRelativeY() == 0.05d) {
                 MWEConfig.lastWitherHUDPosition.resetToDefault();

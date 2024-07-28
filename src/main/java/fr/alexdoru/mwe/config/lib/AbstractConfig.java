@@ -21,17 +21,17 @@ public abstract class AbstractConfig {
 
     private final Class<?> configClass;
     private final Configuration config;
-    private final Map<String, Property> propertyMap = new HashMap<>();
+    private final List<ConfigField> configFields = new ArrayList<>();
 
     protected AbstractConfig(Class<?> clazz, File file) {
         configClass = clazz;
         config = new Configuration(file);
         config.load();
         try {
+            final Map<String, Property> propertyMap = new HashMap<>();
             for (final Field field : configClass.getDeclaredFields()) {
                 if (field.isAnnotationPresent(ConfigProperty.class)) {
-                    createPropertyFromField(field);
-                    assignPropertyValueToField(field);
+                    configFields.add(new ConfigField(field, propertyMap, config));
                 }
             }
         } catch (IllegalAccessException e) {
@@ -49,10 +49,8 @@ public abstract class AbstractConfig {
 
     public void save() {
         try {
-            for (final Field field : configClass.getDeclaredFields()) {
-                if (field.isAnnotationPresent(ConfigProperty.class)) {
-                    assignFieldValueToProperty(field);
-                }
+            for (final ConfigField configField : configFields) {
+                configField.saveFieldValueToConfig();
             }
         } catch (IllegalAccessException e) {
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.DARK_RED + "Failed to save the config!");
@@ -108,87 +106,6 @@ public abstract class AbstractConfig {
         }
         for (final Map.Entry<String, List<String>> entry : categoryOrderMap.entrySet()) {
             config.setCategoryPropertyOrder(entry.getKey(), entry.getValue());
-        }
-    }
-
-    private void createPropertyFromField(Field field) throws IllegalAccessException {
-        final ConfigProperty annotation = field.getAnnotation(ConfigProperty.class);
-        if (field.getType() == GuiPosition.class) {
-            final String xKey = "Xpos " + annotation.name();
-            final String yKey = "Ypos " + annotation.name();
-            if (propertyMap.containsKey(xKey) || propertyMap.containsKey(yKey)) {
-                throw new IllegalStateException("Duplicate key names in config properties");
-            }
-            final GuiPosition guiPosition = (GuiPosition) field.get(null);
-            propertyMap.put(xKey, config.get(annotation.category(), xKey, guiPosition.getRelativeX(), "The x " + annotation.comment() + ", value ranges from 0 to 1"));
-            propertyMap.put(yKey, config.get(annotation.category(), yKey, guiPosition.getRelativeY(), "The y " + annotation.comment() + ", value ranges from 0 to 1"));
-            return;
-        }
-        if (propertyMap.containsKey(annotation.name())) {
-            throw new IllegalStateException("Duplicate key names in config properties");
-        }
-        if (field.getType() == String.class) {
-            propertyMap.put(annotation.name(), config.get(annotation.category(), annotation.name(), (String) field.get(null), annotation.comment()));
-        } else if (field.getType() == boolean.class) {
-            propertyMap.put(annotation.name(), config.get(annotation.category(), annotation.name(), (boolean) field.get(null), annotation.comment()));
-        } else if (field.getType() == double.class) {
-            propertyMap.put(annotation.name(), config.get(annotation.category(), annotation.name(), (double) field.get(null), annotation.comment()));
-        } else if (field.getType() == int.class) {
-            propertyMap.put(annotation.name(), config.get(annotation.category(), annotation.name(), (int) field.get(null), annotation.comment()));
-        } else if (field.getGenericType().toString().equals("java.util.List<java.lang.String>")) {
-            //noinspection unchecked
-            final String[] defaultStrings = ((List<String>) field.get(null)).toArray(new String[0]);
-            propertyMap.put(annotation.name(), config.get(annotation.category(), annotation.name(), defaultStrings, annotation.comment()));
-        } else {
-            throw new IllegalArgumentException("Type of field not handled by config");
-        }
-    }
-
-    private void assignPropertyValueToField(Field field) throws IllegalAccessException {
-        final ConfigProperty annotation = field.getAnnotation(ConfigProperty.class);
-        if (field.getType() == GuiPosition.class) {
-            final GuiPosition position = ((GuiPosition) field.get(null));
-            position.setRelativePosition(
-                    propertyMap.get("Xpos " + annotation.name()).getDouble(),
-                    propertyMap.get("Ypos " + annotation.name()).getDouble());
-        } else if (field.getType() == String.class) {
-            field.set(null, propertyMap.get(annotation.name()).getString());
-        } else if (field.getType() == boolean.class) {
-            field.setBoolean(null, propertyMap.get(annotation.name()).getBoolean());
-        } else if (field.getType() == double.class) {
-            field.setDouble(null, propertyMap.get(annotation.name()).getDouble());
-        } else if (field.getType() == int.class) {
-            field.setInt(null, propertyMap.get(annotation.name()).getInt());
-        } else if (field.getGenericType().toString().equals("java.util.List<java.lang.String>")) {
-            final String[] strings = propertyMap.get(annotation.name()).getStringList();
-            //noinspection unchecked
-            final List<String> list = (List<String>) field.get(null);
-            list.clear();
-            list.addAll(Arrays.asList(strings));
-        } else {
-            throw new IllegalArgumentException("Type of field not handled by config");
-        }
-    }
-
-    private void assignFieldValueToProperty(Field field) throws IllegalAccessException {
-        final ConfigProperty annotation = field.getAnnotation(ConfigProperty.class);
-        if (field.getType() == GuiPosition.class) {
-            final GuiPosition guiPosition = (GuiPosition) field.get(null);
-            propertyMap.get("Xpos " + annotation.name()).set(guiPosition.getRelativeX());
-            propertyMap.get("Ypos " + annotation.name()).set(guiPosition.getRelativeY());
-        } else if (field.getType() == String.class) {
-            propertyMap.get(annotation.name()).set((String) field.get(null));
-        } else if (field.getType() == boolean.class) {
-            propertyMap.get(annotation.name()).set((boolean) field.get(null));
-        } else if (field.getType() == double.class) {
-            propertyMap.get(annotation.name()).set((double) field.get(null));
-        } else if (field.getType() == int.class) {
-            propertyMap.get(annotation.name()).set((int) field.get(null));
-        } else if (field.getGenericType().toString().equals("java.util.List<java.lang.String>")) {
-            //noinspection unchecked
-            propertyMap.get(annotation.name()).set(((List<String>) field.get(null)).toArray(new String[0]));
-        } else {
-            throw new IllegalArgumentException("Type of field not handled by config");
         }
     }
 
