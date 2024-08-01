@@ -9,9 +9,7 @@ import net.minecraft.util.EnumChatFormatting;
 public class MinecraftHook_DebugMessages {
 
     public static void onSettingChange(Minecraft mc, boolean settingIn, String settingName) {
-        if (mc.theWorld != null && mc.thePlayer != null) {
-            mc.thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "[Debug]: " + EnumChatFormatting.WHITE + settingName + ":" + (settingIn ? EnumChatFormatting.GREEN + " On" : EnumChatFormatting.RED + " Off")));
-        }
+        mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "[Debug]: " + EnumChatFormatting.WHITE + settingName + ":" + (settingIn ? EnumChatFormatting.GREEN + " On" : EnumChatFormatting.RED + " Off")));
         if ("Hitboxes".equals(settingName)) {
             MWEConfig.isDebugHitboxOn = settingIn;
             MWEConfig.saveConfig();
@@ -19,9 +17,7 @@ public class MinecraftHook_DebugMessages {
     }
 
     public static void onReloadChunks(Minecraft mc) {
-        if (mc.theWorld != null && mc.thePlayer != null) {
-            mc.thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "[Debug]: " + EnumChatFormatting.WHITE + "Reloading all chunks"));
-        }
+        mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "[Debug]: " + EnumChatFormatting.WHITE + "Reloading all chunks"));
     }
 
 }

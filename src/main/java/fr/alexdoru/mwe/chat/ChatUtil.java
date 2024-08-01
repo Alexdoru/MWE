@@ -45,15 +45,9 @@ public class ChatUtil {
 
     private static void addChatMessage(IChatComponent msg, boolean isCallingFromMinecraftThread) {
         if (isCallingFromMinecraftThread) {
-            if (mc.theWorld != null && mc.thePlayer != null) {
-                mc.thePlayer.addChatMessage(msg);
-            }
+            mc.ingameGUI.getChatGUI().printChatMessage(msg);
         } else {
-            mc.addScheduledTask(() -> {
-                if (mc.theWorld != null && mc.thePlayer != null) {
-                    mc.thePlayer.addChatMessage(msg);
-                }
-            });
+            mc.addScheduledTask(() -> mc.ingameGUI.getChatGUI().printChatMessage(msg));
         }
     }
 
