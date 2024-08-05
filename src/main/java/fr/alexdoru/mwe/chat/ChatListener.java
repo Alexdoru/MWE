@@ -209,13 +209,15 @@ public class ChatListener {
             final Matcher haloMatcher = HALO_HOTBAR_PATTERN.matcher(msg);
             if (haloMatcher.find()) {
                 final String name = haloMatcher.group(1);
-                final String squadname = SquadHandler.getSquadname(name);
-                if (!squadname.equals(name)) {
+                final String squadname = SquadHandler.getSquad().get(name);
+                if (squadname == null) return;
+                if (squadname.equals(name)) {
                     if (MWEConfig.pinkSquadmates) {
-                        event.message = new ChatComponentText(fmsg.replaceFirst(name, EnumChatFormatting.LIGHT_PURPLE + squadname));
-                    } else {
-                        event.message = new ChatComponentText(fmsg.replaceFirst(name, squadname));
+                        event.message = new ChatComponentText(StringUtil.changeColorOf(fmsg, name, EnumChatFormatting.LIGHT_PURPLE));
                     }
+                } else {
+                    final String replacement = MWEConfig.pinkSquadmates ? EnumChatFormatting.LIGHT_PURPLE + squadname : squadname;
+                    event.message = new ChatComponentText(fmsg.replaceFirst(name, replacement));
                 }
             }
 
