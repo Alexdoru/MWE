@@ -22,6 +22,7 @@ public class ReportQueue {
     private int betweenReportCounter;
     public final List<ReportInQueue> queueList = new ArrayList<>();
     private final Set<String> playersReportedThisGame = new HashSet<>();
+    private final Set<String> boostingAdvicePrinted = new HashSet<>();
     private final Random random = new Random();
 
     private static final long TIME_ABORPT_REPORT = 30_000L;
@@ -77,6 +78,7 @@ public class ReportQueue {
     public void onMegaWallsGameEvent(MegaWallsGameEvent event) {
         if (event.getType() == MegaWallsGameEvent.EventType.GAME_START || event.getType() == MegaWallsGameEvent.EventType.GAME_END) {
             playersReportedThisGame.clear();
+            boostingAdvicePrinted.clear();
         }
     }
 
@@ -90,7 +92,9 @@ public class ReportQueue {
                     return;
                 }
             }
-            PartyDetection.printBoostingReportAdvice(playername);
+            if (boostingAdvicePrinted.add(playername)) {
+                PartyDetection.printBoostingReportAdvice(playername);
+            }
             queueList.add(new ReportInQueue(playername));
         }
     }
