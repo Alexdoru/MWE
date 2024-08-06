@@ -42,6 +42,8 @@ public class GuiNewChatHook_SearchBox {
             if (lineText != null) {
                 if (isRegexSearch ? searchPattern.matcher(lineText).find() : lineText.toLowerCase().contains(textToSearch)) {
                     matchingLines.add(0, chatLine);
+                } else {
+                    guiNewChat.scroll(-1);
                 }
             }
         }
