@@ -621,8 +621,14 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = "NoCheaters",
             name = "List of cheats considered blatant",
-            comment = "Players reported with theses cheats will appear with a red icon on their name")
+            comment = "Players reported with one of theses cheats will appear with a red icon on their name")
     public static final List<String> redIconCheats = new ArrayList<>(Arrays.asList("autoblock", "bhop", "fastbreak", "noslowdown", "scaffold"));
+
+    @ConfigProperty(
+            category = "NoCheaters",
+            name = "List of cheats that don't give an icon",
+            comment = "Players reported with only theses cheats will have no icon on their name")
+    public static final List<String> noIconCheats = new ArrayList<>();
 
     @ConfigProperty(
             category = "NoCheaters",

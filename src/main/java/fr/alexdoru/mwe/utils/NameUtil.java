@@ -238,7 +238,7 @@ public class NameUtil {
                     if (wdr.hasRedIcon()) {
                         extraPrefix = RED_WARNING_ICON;
                         iExtraPrefix = IRED_WARNING_ICON;
-                    } else {
+                    } else if (wdr.hasYellowIcon()) {
                         extraPrefix = WARNING_ICON;
                         iExtraPrefix = IWARNING_ICON;
                     }

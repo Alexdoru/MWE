@@ -15,12 +15,13 @@ public class WDR implements Comparable<WDR> {
 
     private final ArrayList<String> cheats;
     private boolean redIcon;
+    private boolean yellowIcon;
     private long timestamp;
 
     public WDR(String cheat) {
         this.cheats = new ArrayList<>(1);
         this.cheats.add(cheat);
-        this.updateRedIcon();
+        this.updateIcon();
         this.timestamp = new Date().getTime();
     }
 
@@ -31,7 +32,7 @@ public class WDR implements Comparable<WDR> {
     public WDR(List<String> cheats, long timestamp) {
         this.cheats = new ArrayList<>(cheats);
         this.cheats.trimToSize();
-        this.updateRedIcon();
+        this.updateIcon();
         this.timestamp = timestamp;
     }
 
@@ -42,7 +43,7 @@ public class WDR implements Comparable<WDR> {
             }
             this.cheats.add(cheat);
             this.cheats.trimToSize();
-            this.updateRedIcon();
+            this.updateIcon();
             return true;
         }
         this.timestamp = new Date().getTime();
@@ -54,24 +55,37 @@ public class WDR implements Comparable<WDR> {
             list.removeAll(this.cheats);
             this.cheats.addAll(list);
             this.cheats.trimToSize();
-            this.updateRedIcon();
+            this.updateIcon();
         }
         this.timestamp = new Date().getTime();
     }
 
-    private void updateRedIcon() {
+    private void updateIcon() {
         if (this.redIcon) return;
         for (final String cheat : this.cheats) {
             if (isRedCheat(cheat)) {
                 this.redIcon = true;
+                this.yellowIcon = false;
+                return;
+            }
+        }
+        for (final String cheat : this.cheats) {
+            if (!isNoIconCheat(cheat)) {
+                this.redIcon = false;
+                this.yellowIcon = true;
                 return;
             }
         }
         this.redIcon = false;
+        this.yellowIcon = false;
     }
 
     public boolean hasRedIcon() {
         return this.redIcon;
+    }
+
+    public boolean hasYellowIcon() {
+        return this.yellowIcon;
     }
 
     public long getTimestamp() {
@@ -115,6 +129,16 @@ public class WDR implements Comparable<WDR> {
     private static boolean isRedCheat(String cheat) {
         cheat = cheat.toLowerCase();
         for (final String s : MWEConfig.redIconCheats) {
+            if (cheat.startsWith(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isNoIconCheat(String cheat) {
+        cheat = cheat.toLowerCase();
+        for (final String s : MWEConfig.noIconCheats) {
             if (cheat.startsWith(s)) {
                 return true;
             }
