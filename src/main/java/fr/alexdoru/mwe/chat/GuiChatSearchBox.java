@@ -91,6 +91,21 @@ public class GuiChatSearchBox extends GuiTextField {
                     tooltip.add(GREEN + "Ctrl + F" + GRAY + " for normal search");
                     tooltip.add(AQUA + "Ctrl + Shift + F" + GRAY + " for regex search");
                 }
+                if (MWEConfig.leftClickChatCopy || MWEConfig.rightClickChatCopy) {
+                    tooltip.add("");
+                }
+                if (MWEConfig.leftClickChatCopy && MWEConfig.rightClickChatCopy) {
+                    tooltip.add(GRAY + "Left/Right click a chat message to copy!");
+                } else if (MWEConfig.leftClickChatCopy) {
+                    tooltip.add(GRAY + "Left click a chat message to copy!");
+                } else if (MWEConfig.rightClickChatCopy) {
+                    tooltip.add(GRAY + "Right click a chat message to copy!");
+                }
+                if (MWEConfig.shiftClickChatLineCopy && (MWEConfig.leftClickChatCopy || MWEConfig.rightClickChatCopy)) {
+                    tooltip.add(GRAY + "Hold shift to only copy one line!");
+                }
+                tooltip.add("");
+                tooltip.add(GRAY + ITALIC.toString() + "You can hide this box in the settings");
             } else {
                 tooltip.add(GRAY + "Current search mode : " + (isRegexSearch ? AQUA + "REGEX" : GREEN + "NORMAL"));
                 if (isRegexSearch) {
