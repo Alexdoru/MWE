@@ -110,7 +110,7 @@ public class ChatListener {
                     return;
                 }
 
-                if (MWEConfig.showStrengthHUD && msg.equals(HUNTER_STRENGTH_MESSAGE)) {
+                if (MWEConfig.strengthHUDPosition.isEnabled() && msg.equals(HUNTER_STRENGTH_MESSAGE)) {
                     GuiManager.strengthHUD.setStrengthRenderStart(5000L);
                     return;
                 }
@@ -153,7 +153,7 @@ public class ChatListener {
             }
 
             // Chat Censoring
-            if (MWEConfig.censorCheaterChatMsg && messageSender != null) {
+            if ((MWEConfig.censorCheaterChatMsg || MWEConfig.deleteCheaterChatMsg) && messageSender != null) {
                 final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(messageSender);
                 if (netInfo != null) {
                     final WDR wdr = WdrData.getWdr(netInfo.getGameProfile().getId(), messageSender);

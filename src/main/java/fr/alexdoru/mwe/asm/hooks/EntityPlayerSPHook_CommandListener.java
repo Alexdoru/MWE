@@ -12,7 +12,7 @@ public class EntityPlayerSPHook_CommandListener {
         if (StringUtil.isNullOrEmpty(message)) {
             return;
         }
-        if (MWEConfig.showKillCooldownHUD && ScoreboardTracker.isInMwGame()) {
+        if (MWEConfig.killCooldownHUDPosition.isEnabled() && ScoreboardTracker.isInMwGame()) {
             message = message.toLowerCase();
             if (message.equals("/kill") || message.startsWith("/kill ")) {
                 GuiManager.killCooldownHUD.drawCooldownHUD();

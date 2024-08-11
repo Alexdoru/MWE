@@ -228,12 +228,12 @@ public class NameUtil {
         final String squadname = SquadHandler.getSquad().get(username);
 
         if (squadname != null) {
-            if (MWEConfig.squadIconOnNames || MWEConfig.squadIconTabOnly) {
+            if (MWEConfig.squadIconOnNames) {
                 extraPrefix = SQUAD_ICON;
                 iExtraPrefix = ISQUAD_ICON;
             }
         } else {
-            if (MWEConfig.warningIconsOnNames || MWEConfig.warningIconsTabOnly) {
+            if (MWEConfig.warningIconsOnNames) {
                 if (wdr != null) {
                     if (wdr.hasRedIcon()) {
                         extraPrefix = RED_WARNING_ICON;

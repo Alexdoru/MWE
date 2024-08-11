@@ -79,7 +79,10 @@ public class MiniPotionHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return MWEConfig.showMiniPotionHUD || (MWEConfig.showMiniPotionHUDOnlyMW && ScoreboardTracker.isInMwGame());
+        if (MWEConfig.showMiniPotionHUDOnlyMW) {
+            return this.guiPosition.isEnabled() && ScoreboardTracker.isInMwGame();
+        }
+        return this.guiPosition.isEnabled();
     }
 
     private String formatDuration(PotionEffect effect) {

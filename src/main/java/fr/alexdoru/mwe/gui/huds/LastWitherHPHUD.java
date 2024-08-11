@@ -55,7 +55,7 @@ public class LastWitherHPHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return !MWEConfig.witherHUDinSidebar && MWEConfig.showLastWitherHUD && ScoreboardTracker.isInMwGame() && ScoreboardTracker.getParser().isOnlyOneWitherAlive();
+        return this.guiPosition.isEnabled() && !MWEConfig.witherHUDinSidebar && ScoreboardTracker.isInMwGame() && ScoreboardTracker.getParser().isOnlyOneWitherAlive();
     }
 
 }

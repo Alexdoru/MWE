@@ -3,8 +3,6 @@ package fr.alexdoru.mwe.commands;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.gui.guiapi.GuiManager;
-import fr.alexdoru.mwe.gui.guiscreens.FKConfigGuiScreen;
-import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.MapUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
@@ -24,11 +22,7 @@ public class CommandFKCounter extends MyAbstractCommand {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
 
-        if (args.length > 0 && args[0].equalsIgnoreCase("settings")) {
-
-            new DelayedTask(() -> mc.displayGuiScreen(new FKConfigGuiScreen(null)));
-
-        } else if (args.length > 0 && (args[0].equalsIgnoreCase("players") || args[0].equalsIgnoreCase("player") || args[0].equalsIgnoreCase("p"))) {
+        if (args.length > 0 && (args[0].equalsIgnoreCase("players") || args[0].equalsIgnoreCase("player") || args[0].equalsIgnoreCase("p"))) {
 
             if (getGameId() == null) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + "This is not available right now");

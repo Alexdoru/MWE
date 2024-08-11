@@ -51,7 +51,7 @@ public class PendingReportHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return MWEConfig.showReportHUD && !ReportQueue.INSTANCE.queueList.isEmpty();
+        return this.guiPosition.isEnabled() && !ReportQueue.INSTANCE.queueList.isEmpty();
     }
 
 }

@@ -1,14 +1,29 @@
 package fr.alexdoru.mwe.config;
 
 import fr.alexdoru.mwe.MWE;
-import fr.alexdoru.mwe.config.lib.AbstractConfig;
-import fr.alexdoru.mwe.config.lib.ConfigProperty;
+import fr.alexdoru.mwe.asm.loader.ASMLoadingPlugin;
+import fr.alexdoru.mwe.chat.ChatHandler;
+import fr.alexdoru.mwe.chat.LocrawListener;
+import fr.alexdoru.mwe.config.lib.*;
+import fr.alexdoru.mwe.features.LeatherArmorManager;
+import fr.alexdoru.mwe.gui.guiapi.GuiManager;
 import fr.alexdoru.mwe.gui.guiapi.GuiPosition;
+import fr.alexdoru.mwe.nocheaters.ReportQueue;
+import fr.alexdoru.mwe.nocheaters.WarningMessages;
+import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
+import fr.alexdoru.mwe.utils.DelayedTask;
+import fr.alexdoru.mwe.utils.NameUtil;
+import fr.alexdoru.mwe.utils.SoundUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.Loader;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class MWEConfig extends AbstractConfig {
@@ -24,7 +39,13 @@ public class MWEConfig extends AbstractConfig {
             throw new IllegalStateException("Config already created!");
         }
         INSTANCE = new MWEConfig(file);
-        MWEConfig.onModUpdate();
+        if (!MWEConfig.modVersion.equals(MWE.version)) {
+            if (!MWEConfig.modVersion.isEmpty()) {
+                MWEConfig.onModUpdate();
+            }
+            MWEConfig.modVersion = MWE.version;
+            MWEConfig.saveConfig();
+        }
     }
 
     public static void saveConfig() {
@@ -34,856 +55,969 @@ public class MWEConfig extends AbstractConfig {
         INSTANCE.save();
     }
 
-    private static void onModUpdate() {
-        if (!MWEConfig.modVersion.equals(MWE.version)) {
-            if (!MWEConfig.modVersion.isEmpty()) {
-                MWEConfig.drawHitboxForWithers = false;
-                if (MWEConfig.lastWitherHUDPosition.getRelativeX() == 0.75d && MWEConfig.lastWitherHUDPosition.getRelativeY() == 0.05d) {
-                    MWEConfig.lastWitherHUDPosition.resetToDefault();
-                }
-                if (MWEConfig.baseLocationHUDPosition.getRelativeX() == 0.5d && MWEConfig.baseLocationHUDPosition.getRelativeY() == 0.15d) {
-                    MWEConfig.baseLocationHUDPosition.resetToDefault();
-                }
-            }
-            MWEConfig.modVersion = MWE.version;
-            MWEConfig.saveConfig();
+    public static void displayConfigGuiScreen() {
+        if (INSTANCE == null) {
+            throw new NullPointerException("Config didn't load when the game started, this shouldn't happen !");
         }
+        new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(INSTANCE.getConfigGuiScreen()));
     }
+
+    private static void onModUpdate() {
+        // code to run on mod version update
+    }
+
+    @ConfigCategory(displayname = "§6Vanilla")
+    public static final String VANILLA = "Vanilla";
+
+    @ConfigCategory(displayname = "§8Hypixel")
+    public static final String HYPIXEL = "Hypixel";
+
+    @ConfigCategory(displayname = "§aMega Walls")
+    public static final String MEGA_WALLS = "Mega Walls";
+
+    @ConfigCategory(displayname = "§5PVP Stuff")
+    public static final String PVP_STUFF = "PVP Stuff";
+
+    @ConfigCategory(
+            displayname = "§bFinal Kill Counter",
+            comment = "For Mega Walls")
+    public static final String FINAL_KILL_COUNTER = "Final Kill Counter";
+
+    @ConfigCategory(
+            displayname = "§2Squad",
+            comment = "§fAdd players to your squad using the §e/squad§f command!")
+    public static final String SQUAD = "Squad";
+
+    @ConfigCategory(
+            displayname = "§cNoCheaters",
+            comment = "§fNoCheaters saves players reported via §e/wdr name§f (not /report) and warns you about them ingame."
+                    + "§fTo remove a player from your report list use : §e/unwdr name§f or click the name on the warning message."
+                    + "§fYou can see all the players you have reported using §e/nocheaters reportlist§f.")
+    public static final String NOCHEATERS = "NoCheaters";
+
+    @ConfigCategory(
+            displayname = "§4Hacker Detector",
+            comment = "§eDisclaimer : §fthis is not 100% accurate and can sometimes flag legit players, "
+                    + "it won't flag every cheater either, however players that are regularly flagging are definitely cheating")
+    public static final String HACKER_DETECTOR = "Hacker Detector";
+
+    @ConfigCategory(
+            displayname = "§9Hitboxes, better F3+b",
+            comment = "§7You obviously need to press F3+b to enable hitboxes")
+    public static final String HITBOXES = "Hitbox";
+
+    @ConfigCategory(displayname = "§dExternal")
+    public static final String EXTERNAL = "External";
 
     @ConfigProperty(
             category = "General",
             name = "Mod Version",
-            comment = "The version of the mod the config was saved with")
+            comment = "The version of the mod the config was saved with",
+            hidden = true)
     public static String modVersion = "";
 
     @ConfigProperty(
-            category = "Final Kill Counter",
-            name = "Show FKCounter HUD",
-            comment = "Displays the HUD of the final kill counter")
-    public static boolean showfkcounterHUD;
+            category = "April Fools",
+            name = "April Fun",
+            comment = "Haha got u")
+    public static boolean aprilFools = true;
+
+    @ConfigPropertyHideOverride(name = "April Fun")
+    public static boolean hideAprilFoolsSetting() {
+        return !"01/04".equals(new SimpleDateFormat("dd/MM").format(new Date().getTime()));
+    }
 
     @ConfigProperty(
-            category = "Final Kill Counter",
-            name = "FKCounter HUD",
-            comment = "position of the final kill counter HUD")
-    public static final GuiPosition fkcounterHUDPosition = new GuiPosition(0d, 0.1d);
-
-    @ConfigProperty(
-            category = "Final Kill Counter",
-            name = "Compact FKCounter HUD",
-            comment = "Use a compact HUD for the final kill counter")
-    public static boolean fkcounterHUDCompact = true;
-
-    @ConfigProperty(
-            category = "Final Kill Counter",
-            name = "Show players",
-            comment = "Displays players with most finals in each team")
-    public static boolean fkcounterHUDShowPlayers;
-
-    @ConfigProperty(
-            category = "Final Kill Counter",
-            name = "HUD in sidebar",
-            comment = "Places the fkcounter in the sidebar")
-    public static boolean fkcounterHUDinSidebar = true;
-
-    @ConfigProperty(
-            category = "Final Kill Counter",
-            name = "Draw background",
-            comment = "Draws a box around the HUD of the final kill counter")
-    public static boolean fkcounterHUDDrawBackground;
-
-    @ConfigProperty(
-            category = "Final Kill Counter",
-            name = "HUD Size",
-            comment = "Size of the final kill counter HUD")
-    public static double fkcounterHUDSize = 1.0d;
-
-    @ConfigProperty(
-            category = "Final Kill Counter",
-            name = "Player amount",
-            comment = "Amount of players displayed on screen when you use the \"Show players\" setting")
-    public static int fkcounterHUDPlayerAmount = 3;
-
-    @ConfigProperty(
-            category = "Final Kill Counter",
-            name = "Fks in tablist",
-            comment = "Draws the finals in the tablist")
-    public static boolean fkcounterHUDTablist = true;
-
-    @ConfigProperty(
-            category = "Final Kill Counter",
-            name = "Kill diff in Chat",
-            comment = "Kill diff in Chat")
-    public static boolean showKillDiffInChat;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "APIKey",
-            comment = "Your Hypixel API Key")
-    public static String APIKey = "";
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Hypixel Nick",
-            comment = "Your nick on Hypixel")
-    public static String hypixelNick = "";
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Shorten coin message",
-            comment = "Shorten the coins messages by removing the network booster info")
-    public static boolean shortCoinMessage;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Sound low HP",
-            comment = "Plays a sound when your health falls below a certain threshold")
-    public static boolean playSoundLowHP;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Health Threshold",
-            comment = "The health threshold at witch it will play a sound, value ranges from 0 to 1")
-    public static double healthThreshold = 0.5d;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Cancel Night Vision Effect",
-            comment = "Removes the visual effets of night vision")
-    public static boolean cancelNightVisionEffect;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Colored Tablist Scores",
-            comment = "Makes the scores in the tablist use a greend to red color gradient depending of the value")
-    public static boolean useColoredScores = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Safe Inventory",
-            comment = "Prevents sword dropping and hotkeying kit items")
-    public static boolean safeInventory = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Limit dropped item rendered",
-            comment = "Limit dropped item rendered")
-    public static boolean limitDroppedEntityRendered = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Max amount of item rendered",
-            comment = "Max amount of item rendered")
-    public static int maxDroppedEntityRendered = 80;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Delete repetitive chat messages in mw",
-            comment = "Delete repetitive chat messages in mw")
-    public static boolean hideRepetitiveMWChatMsg = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Hide hunger title in MW",
-            comment = "Hide hunger title in MW")
-    public static boolean hideHungerTitleInMW = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Strength particules",
-            comment = "Spawns strength particules when an herobrine or dreadlord get a final")
-    public static boolean strengthParticules = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Clear Vision",
-            comment = "Hides particles too close to the camera")
-    public static boolean clearVision = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Automatic Update",
-            comment = "Updates the mod automatically")
-    public static boolean automaticUpdate = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Nick Hider",
-            comment = "Shows your real name instead of your nick when in squad")
-    public static boolean nickHider = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Hide Header Footer Tablist",
-            comment = "Hides the header and footer text in the Tablist")
-    public static boolean hideTablistHeaderFooter;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Show Header Footer outside MW",
-            comment = "Show Header Footer outside of mega walls")
-    public static boolean showHeaderFooterOutsideMW;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Show playercount Tablist",
-            comment = "Shows the amount of players in the lobby at the top of the Tablist")
-    public static boolean showPlayercountTablist = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Tablist size",
-            comment = "Amount of players displayed in the tablist (Vanilla 80)")
-    public static int tablistSize = 100;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Fix actionbar text overlap",
-            comment = "Prevents the actionbar text from overlapping with the armor bar")
-    public static boolean fixActionbarTextOverlap = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Hide ping tablist",
-            comment = "Don't render the ping in the tablist if all values are equal to 1")
-    public static boolean hidePingTablist = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Tablist column separator",
-            comment = "Spacing between columns in the tablist, in pixels. (Vanilla 5)")
-    public static int tablistColumnSpacing = 1;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Color when an entity gets hurt",
-            comment = "Color when an entity gets hurt")
-    public static int hitColor = 0x4CFF0000;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Color armor when hurt",
-            comment = "Color armor when hurt")
-    public static boolean colorArmorWhenHurt = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Team colored hurt color for players",
-            comment = "Hurt effect takes color of the player's team")
-    public static boolean teamColoredPlayerHurt = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Team colored hurt color for withers",
-            comment = "Hurt effect takes color of the wither's team")
-    public static boolean teamColoredWitherHurt = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Show pined arrows as renegade",
-            comment = "Show pined arrows as renegade above player heads")
-    public static boolean renegadeArrowCount;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Hide Orange's Toggle Sprint text",
-            comment = "Hide Orange's Toggle Sprint text")
-    public static boolean hideToggleSprintText;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Colored scores above head",
-            comment = "Colored scores above head")
-    public static boolean coloredScoreAboveHead;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Pink squadmates",
-            comment = "Colors your squadmates' nametag, hitbox and hit color pink")
-    public static boolean pinkSquadmates = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Keep first letter squadnames",
-            comment = "Keeps the first letter of squadnames to be able to track them with compass")
-    public static boolean keepFirstLetterSquadnames = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
+            category = VANILLA, subCategory = "Chat",
             name = "Chat Heads",
             comment = "Renders heads of players in front of chat messages")
     public static boolean chatHeads = true;
 
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Hide Optifine Hats",
-            comment = "Stops rendering the hats added by Optifine")
-    public static boolean hideOptifineHats;
+    @ConfigPropertyHideOverride(name = "Chat Heads")
+    public static boolean hideChatHeadSetting() {
+        return ASMLoadingPlugin.isFeatherLoaded();
+    }
+
+    @ConfigPropertyEvent(name = "Chat Heads")
+    public static void onChatHeadsSetting() {
+        Minecraft.getMinecraft().ingameGUI.getChatGUI().refreshChat();
+    }
 
     @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Show Squad Icons",
-            comment = "Display squad icon on names of squad members")
-    public static boolean squadIconOnNames = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Squad Icons In Tab Only",
-            comment = "Display squad icon only in the tablist")
-    public static boolean squadIconTabOnly;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Colored Leather Armor",
-            comment = "Changes iron armor to team colored leather armor")
-    public static boolean coloredLeatherArmor;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "AFK sound warning",
-            comment = "Plays sound when you are about to get kicked for AFK in Mega Walls")
-    public static boolean afkSoundWarning = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Render wither outline",
-            comment = "Renders the outline of withers in Mega Walls")
-    public static boolean renderWitherOutline = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Squad add halo player",
-            comment = "Automatically adds to the squad the player you give your halo to")
-    public static boolean squadHaloPlayer = true;
-
-    @ConfigProperty(
-            category = "MegaWallsEnhancements",
-            name = "Print deathmatch damage in chat",
-            comment = "Prints the deathmatch damage as a separate message in chat instead of having to hover over the message")
-    public static boolean printDeathmatchDamageMessage = true;
-
-    @ConfigProperty(
-            category = "VanillaEnhancements",
-            name = "Clean chat logs",
-            comment = "Removes formatting codes in the chat logs")
-    public static boolean cleanChatLogs = true;
-
-    @ConfigProperty(
-            category = "VanillaEnhancements",
-            name = "Right click to copy chat messages",
-            comment = "Right click to copy chat messages")
-    public static boolean rightClickChatCopy = true;
-
-    @ConfigProperty(
-            category = "VanillaEnhancements",
-            name = "Left click to copy chat messages",
-            comment = "Left click to copy chat messages, it will not work if the message already has a click event")
-    public static boolean leftClickChatCopy = true;
-
-    @ConfigProperty(
-            category = "VanillaEnhancements",
-            name = "Shift click to copy one chat line",
-            comment = "Hold shift while clicking a chat line to only copy one line of chat and not the whole message")
-    public static boolean shiftClickChatLineCopy = true;
-
-    @ConfigProperty(
-            category = "VanillaEnhancements",
-            name = "Search box in chat",
-            comment = "Adds a search box to search the chat")
-    public static boolean searchBoxChat = true;
-
-    @ConfigProperty(
-            category = "VanillaEnhancements",
-            name = "Show search box unfocused",
-            comment = "Shows the search box icon in the chat when it's not focused")
-    public static boolean showSearchBoxUnfocused = true;
-
-    @ConfigProperty(
-            category = "VanillaEnhancements",
-            name = "Search box shortcuts",
-            comment = "Enables using ctrl + F shortcut to enter chat search")
-    public static boolean searchBoxChatShortcuts = true;
-
-    @ConfigProperty(
-            category = "VanillaEnhancements",
-            name = "Keep previous chat search",
-            comment = "Keep the previous chat search when you re-open the chat")
-    public static boolean keepPreviousChatSearch;
-
-    @ConfigProperty(
-            category = "VanillaEnhancements",
-            name = "Search box X offset",
-            comment = "Allows to move the search box right and left. Positive values move to the right")
-    public static int searchBoxXOffset = 0;
-
-    @ConfigProperty(
-            category = "VanillaEnhancements",
-            name = "Search box Y offset",
-            comment = "Allows to move the search box up and down. Positive values move up")
-    public static int searchBoxYOffset = 0;
-
-    @ConfigProperty(
-            category = "VanillaEnhancements",
+            category = VANILLA, subCategory = "Chat",
             name = "Longer chat",
             comment = "Extends the maximum amount of chat lines to 32 000 (Vanilla 100)")
     public static boolean longerChat = true;
 
     @ConfigProperty(
-            category = "VanillaEnhancements",
+            category = VANILLA, subCategory = "Chat Copy",
+            name = "Left click to copy chat messages",
+            comment = "Left click to copy chat messages, it will do nothing if the message already has a click event")
+    public static boolean leftClickChatCopy = true;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Chat Copy",
+            name = "Right click to copy chat messages",
+            comment = "Right click to copy chat messages")
+    public static boolean rightClickChatCopy = true;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Chat Copy",
+            name = "Shift click to copy one chat line",
+            comment = "Hold shift while clicking a chat line to only copy one line of chat and not the whole message")
+    public static boolean shiftClickChatLineCopy = true;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Chat Search",
+            name = "Search box in chat",
+            comment = "Adds a search box to search the chat")
+    public static boolean searchBoxChat = true;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Chat Search",
+            name = "Always render search box",
+            comment = "Always renders the search box icon in the chat."
+                    + " If the box is not rendered you can still use the chat search by pressing ctrl + F")
+    public static boolean showSearchBoxUnfocused = true;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Chat Search",
+            name = "Search box shortcuts",
+            comment = "Enables using ctrl + F shortcut to enter chat search")
+    public static boolean searchBoxChatShortcuts = true;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Chat Search",
+            name = "Keep previous chat search",
+            comment = "Keeps the previous chat search when you re-open the chat")
+    public static boolean keepPreviousChatSearch;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Chat Search",
+            name = "Search box X offset",
+            comment = "Allows to move the search box right and left. Positive values move to the right",
+            sliderMin = -20, sliderMax = 400)
+    public static int searchBoxXOffset = 0;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Chat Search",
+            name = "Search box Y offset",
+            comment = "Allows to move the search box up and down. Positive values move up",
+            sliderMin = -20, sliderMax = 400)
+    public static int searchBoxYOffset = 0;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Hurt Color",
+            name = "Custom Hurt Color",
+            comment = "Change the color entities take when they get hurt",
+            isColor = true)
+    public static int hitColor = 0x4CFF0000;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Hurt Color",
+            name = "Color armor when hurt",
+            comment = "The armor will be colored as well when a player is hurt, like it does in 1.7\n"
+                    + "§eIf you have a 1.7 Old animation mod, you might need to turn off their \"Red Armor\" setting for this to work.")
+    public static boolean colorArmorWhenHurt = true;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Hurt Color",
+            name = "Team colored hurt color for players",
+            comment = "When hurt the players will take the color of their team, other entities will take the custom color defined above.\n"
+                    + "§eWhen this is enabled, it still uses the alpha level defined in the custom color.")
+    public static boolean teamColoredPlayerHurt;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Hurt Color",
+            name = "Team colored hurt color for withers",
+            comment = "When hurt the withers will take the color of their name")
+    public static boolean teamColoredWitherHurt = true;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Performance",
+            name = "Limit dropped item rendered",
+            comment = "Dynamically modifies the render distance of dropped items entities to preserve performance. It starts reducing the render distance when exceeding the threshold set below.\n"
+                    + "There is a keybind (ESC -> options -> controls -> MWE) to toggle it on the fly")
+    public static boolean limitDroppedEntityRendered = true;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Performance",
+            name = "Max amount of dropped item",
+            comment = "Max amount of item rendered",
+            sliderMin = 40, sliderMax = 200)
+    public static int maxDroppedEntityRendered = 80;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Render",
+            name = "Cancel Night Vision Effect",
+            comment = "Removes the visual effets of night vision")
+    public static boolean cancelNightVisionEffect;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Render",
+            name = "Clear View",
+            comment = "Stops rendering particles that are too close (75cm) to the camera for a better visibility")
+    public static boolean clearVision = true;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Render",
+            name = "Colored health/scores above head",
+            comment = "Renders the health/scores above head in color according to the score's value compared to the player's maximum health points\n"
+                    + "\n"
+                    + "    §222§c ❤\n"
+                    + "    §a17§c ❤\n"
+                    + "    §e12§c ❤\n"
+                    + "    §c 7§c ❤\n"
+                    + "    §4 2§c ❤\n")
+    public static boolean coloredScoreAboveHead = true;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Tablist",
+            name = "Colored health/scores in Tablist",
+            comment = "Renders the health/scores in the tablist in color according to the score's value compared to the player's maximum health points\n"
+                    + "\n"
+                    + "§cOrangeMarshall " + "§222§c ❤\n"
+                    + "§cOrangeMarshall " + "§a17§c ❤\n"
+                    + "§cOrangeMarshall " + "§e12§c ❤\n"
+                    + "§cOrangeMarshall " + "§c 7§c ❤\n"
+                    + "§cOrangeMarshall " + "§4 2§c ❤\n")
+    public static boolean coloredScoresInTablist = true;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Tablist",
+            name = "Hide Header Footer Tablist",
+            comment = "Hides the header and footer text at the top and bottom of the Tablist")
+    public static boolean hideTablistHeaderFooter;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Tablist",
+            name = "Hide Header Footer only in MW",
+            comment = "Hides the header and footer text only when playing Mega Walls")
+    public static boolean hideTablistHeaderFooterOnlyInMW;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Tablist",
+            name = "Show playercount Tablist",
+            comment = "Displays the amount of players in the lobby at the top of the tablist")
+    public static boolean showPlayercountTablist = true;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Tablist",
+            name = "Tablist size",
+            comment = "Amount of players displayed in the tablist (Vanilla 80)",
+            sliderMin = 60, sliderMax = 120)
+    public static int tablistSize = 100;
+
+    @ConfigPropertyHideOverride(name = "Tablist size")
+    public static boolean hideTabSizeSetting() {
+        return ASMLoadingPlugin.isPatcherLoaded();
+    }
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Tablist",
+            name = "Hide ping tablist",
+            comment = "Stops rendering the ping in the tablist when all values are equal to 1")
+    public static boolean hidePingTablist = true;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Tablist",
+            name = "Tablist column separator",
+            comment = "Spacing between columns in the tablist, in pixels. (Vanilla 5)",
+            sliderMin = 1, sliderMax = 20)
+    public static int tablistColumnSpacing = 1;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Tablist",
             name = "De-obfuscate names in tab",
             comment = "Removes obfuscation in the names in the tablist")
     public static boolean deobfNamesInTab;
 
     @ConfigProperty(
-            category = "VanillaEnhancements",
+            category = VANILLA, subCategory = "Tablist",
             name = "Show fake players in tab",
             comment = "Puts a red star next to fake player names")
     public static boolean showFakePlayersInTab;
 
     @ConfigProperty(
-            category = "GUI",
-            name = "Show kill cooldown HUD",
-            comment = "Displays the cooldown for the /kill command when in MegaWalls")
-    public static boolean showKillCooldownHUD = true;
+            category = VANILLA, subCategory = "Bugfix",
+            name = "Fix actionbar text overlap",
+            comment = "Prevents the actionbar text from overlapping with the armor bar if you have more than 2 rows of health")
+    public static boolean fixActionbarTextOverlap = true;
 
     @ConfigProperty(
-            category = "GUI",
-            name = "kill cooldown HUD",
-            comment = "position of the killcooldown HUD")
-    public static final GuiPosition killCooldownHUDPosition = new GuiPosition(0d, 0d);
+            category = VANILLA, subCategory = "Logs",
+            name = "Clean chat logs",
+            comment = "Removes formatting codes from the chat logs")
+    public static boolean cleanChatLogs = true;
 
     @ConfigProperty(
-            category = "GUI",
-            name = "Show Arrow Hit HUD",
-            comment = "Displays the HP of opponents on arrow hits")
-    public static boolean showArrowHitHUD = true;
-
-    @ConfigProperty(
-            category = "GUI",
+            category = PVP_STUFF, subCategory = "HUD",
             name = "Arrow Hit HUD",
-            comment = "position of the ArrowHitHUD")
-    public static final GuiPosition arrowHitHUDPosition = new GuiPosition(0.5d, 9d / 20d);
+            comment = "Displays the HP of opponents on arrow hits")
+    public static final GuiPosition arrowHitHUDPosition = new GuiPosition(true, 0.5d, 9d / 20d);
 
     @ConfigProperty(
-            category = "GUI",
+            category = PVP_STUFF, subCategory = "HUD",
             name = "Show head on Arrow Hit HUD",
-            comment = "Show head of player hit on Arrow Hit HUD")
+            comment = "Show head of player shot on the Arrow Hit HUD")
     public static boolean showHeadOnArrowHitHUD;
 
     @ConfigProperty(
-            category = "GUI",
-            name = "Show last wither HUD",
-            comment = "Displays the time it takes for the last wither to die")
-    public static boolean showLastWitherHUD = true;
-
-    @ConfigProperty(
-            category = "GUI",
-            name = "last wither HUD",
-            comment = "position of the LastWitherHUD")
-    public static final GuiPosition lastWitherHUDPosition = new GuiPosition(0.75d, 0d);
-
-    @ConfigProperty(
-            category = "GUI",
-            name = "Wiher HUD in sidebar",
-            comment = "Displays the time it takes for the last wither to die in the sidebar")
-    public static boolean witherHUDinSidebar = true;
-
-    @ConfigProperty(
-            category = "GUI",
-            name = "Show Strength HUD",
-            comment = "Displays HUD and plays a sound 10 seconds before getting strength with hunter")
-    public static boolean showStrengthHUD = true;
-
-    @ConfigProperty(
-            category = "GUI",
-            name = "Strength HUD",
-            comment = "position of the Strength HUD")
-    public static final GuiPosition strengthHUDPosition = new GuiPosition(0.5d, 8d / 20d);
-
-    @ConfigProperty(
-            category = "GUI",
-            name = "Squad HUD",
-            comment = "Displays a mini-tablist with only your squadmates")
-    public static boolean showSquadHUD = true;
-
-    @ConfigProperty(
-            category = "GUI",
-            name = "squad HUD",
-            comment = "position of the squad HUD")
-    public static final GuiPosition squadHUDPosition = new GuiPosition(0.25d, 0d);
-
-    @ConfigProperty(
-            category = "GUI",
-            name = "Creeper Primed TNT HUD",
-            comment = "Displays HUD showing the cooldown on your primed tnt with creeper")
-    public static boolean showPrimedTNTHUD = true;
-
-    @ConfigProperty(
-            category = "GUI",
-            name = "creeper primed TNT HUD",
-            comment = "position of the Creeper Primed TNT HUD")
-    public static final GuiPosition creeperTNTHUDPosition = new GuiPosition(0.5d, 8d / 20d);
-
-    @ConfigProperty(
-            category = "GUI",
-            name = "Energy Display HUD",
-            comment = "Displays HUD showing your current energy when you hit someone")
-    public static boolean showEnergyDisplayHUD = true;
-
-    @ConfigProperty(
-            category = "GUI",
-            name = "energy display HUD",
-            comment = "position of the Energy Display HUD")
-    public static final GuiPosition energyDisplayHUDPosition = new GuiPosition(0.5d, 10.5 / 20d);
-
-    @ConfigProperty(
-            category = "GUI",
-            name = "Threshold to make energy display aqua",
-            comment = "The threshold number that when hit will cause the energy display to turn aqua")
-    public static int aquaEnergyDisplayThreshold = 100;
-
-    @ConfigProperty(
-            category = "GUI",
+            category = PVP_STUFF, subCategory = "HUD",
             name = "Speed HUD",
-            comment = "Displays your own speed")
-    public static boolean showSpeedHUD;
+            comment = "Displays your own speed in the XZ plane")
+    public static final GuiPosition speedHUDPosition = new GuiPosition(false, 1d, 1d);
 
     @ConfigProperty(
-            category = "GUI",
-            name = "Speed HUD position",
-            comment = "position of the speed HUD")
-    public static final GuiPosition speedHUDPosition = new GuiPosition(1d, 1d);
+            category = PVP_STUFF, subCategory = "Health",
+            name = "Sound warning low HP",
+            comment = "Plays a sound when your health drops below the threshold defined below"
+                    + "The sound used is \"note.pling\" check your sound settings to see if it's enabled !")
+    public static boolean playSoundLowHP;
+
+    @ConfigPropertyEvent(name = "Sound warning low HP")
+    public static void onLowHPSoundSetting() {
+        if (MWEConfig.playSoundLowHP) {
+            SoundUtil.playLowHPSound();
+        }
+    }
 
     @ConfigProperty(
-            category = "GUI",
-            name = "Phoenix Bond HUD",
-            comment = "Displays the hearts healed from phoenix bond")
-    public static boolean showPhxBondHUD = true;
+            category = PVP_STUFF, subCategory = "Health",
+            name = "Health Threshold low HP",
+            comment = "The health threshold under which it will play a sound",
+            sliderMax = 1)
+    public static double healthThreshold = 0.5d;
 
     @ConfigProperty(
-            category = "GUI",
-            name = "Phoenix Bond HUD position",
-            comment = "position of the phoenix bond HUD")
-    public static final GuiPosition phxBondHUDPosition = new GuiPosition(0.5d, 0.75d);
+            category = PVP_STUFF, subCategory = "Inventory",
+            name = "Prevent sword dropping",
+            comment = "Prevents dropping the sword you are holding in your hand")
+    public static boolean preventSwordDropping = true;
 
     @ConfigProperty(
-            category = "GUI",
-            name = "Base Location HUD",
-            comment = "Displays in which base you are located in Mega Walls")
-    public static boolean showBaseLocationHUD = true;
-
-    @ConfigProperty(
-            category = "GUI",
-            name = "Base Location HUD position",
-            comment = "position of the base location HUD")
-    public static final GuiPosition baseLocationHUDPosition = new GuiPosition(0.90d, 0d);
-
-    @ConfigProperty(
-            category = "GUI",
+            category = PVP_STUFF, subCategory = "Potion effect",
             name = "Mini Potion HUD",
-            comment = "Displays a minimalist potion HUD")
-    public static boolean showMiniPotionHUD;
+            comment = "Displays a minimalist potion HUD with the remaining duration of the following potion buffs :"
+                    + " §dregeneration§7, §8resistance§7, §bspeed§7, §cstrength§7, §finvisibility§7, §ajump boost§7")
+    public static final GuiPosition miniPotionHUDPosition = new GuiPosition(false, 0.5d, 7.5d / 20d);
 
     @ConfigProperty(
-            category = "GUI",
-            name = "Mini Potion HUD position",
-            comment = "position of the mini potion HUD")
-    public static final GuiPosition miniPotionHUDPosition = new GuiPosition(0.5d, 7.5d / 20d);
-
-    @ConfigProperty(
-            category = "GUI",
+            category = PVP_STUFF, subCategory = "Potion effect",
             name = "Mini Potion HUD only in MW",
-            comment = "Displays a minimalist potion HUD only in MW")
+            comment = "Displays the mini potion HUD only in Mega Walls")
     public static boolean showMiniPotionHUDOnlyMW;
 
     @ConfigProperty(
-            category = "GUI",
-            name = "Show warcry HUD",
-            comment = "Displays a HUD with the cooldown of the warcry in Mega Walls")
-    public static boolean showWarcryHUD = true;
-
-    @ConfigProperty(
-            category = "GUI",
-            name = "Warcry HUD position",
-            comment = "position of the warcry HUD")
-    public static final GuiPosition warcryHUDPosition = new GuiPosition(0.65d, 1d);
-
-    @ConfigProperty(
-            category = "NoCheaters",
-            name = "Show banned players",
-            comment = "Reveals the name of the player getting banned when playing on hypixel")
-    public static boolean showBannedPlayers = true;
-
-    @ConfigProperty(
-            category = "NoCheaters",
-            name = "Show Warning Icons",
-            comment = "Display warning icon on names of reported players")
-    public static boolean warningIconsOnNames = true;
-
-    @ConfigProperty(
-            category = "NoCheaters",
-            name = "Warning Icons In Tab Only",
-            comment = "Display warning icon only in the tablist")
-    public static boolean warningIconsTabOnly;
-
-    @ConfigProperty(
-            category = "NoCheaters",
-            name = "List of cheats considered blatant",
-            comment = "Players reported with one of theses cheats will appear with a red icon on their name")
-    public static final List<String> redIconCheats = new ArrayList<>(Arrays.asList("autoblock", "bhop", "fastbreak", "noslowdown", "scaffold"));
-
-    @ConfigProperty(
-            category = "NoCheaters",
-            name = "List of cheats that don't give an icon",
-            comment = "Players reported with only theses cheats will have no icon on their name")
-    public static final List<String> noIconCheats = new ArrayList<>();
-
-    @ConfigProperty(
-            category = "NoCheaters",
-            name = "Toggle Warnings",
-            comment = "Gives warning messages in chat for reported players")
-    public static boolean warningMessages;
-
-    @ConfigProperty(
-            category = "NoCheaters",
-            name = "Report suggestion",
-            comment = "Give report suggestions in the chat based on messages in shouts")
-    public static boolean reportSuggestions = true;
-
-    @ConfigProperty(
-            category = "NoCheaters",
-            name = "Delete Old Report",
-            comment = "Deletes reports older than the specified value")
-    public static boolean deleteOldReports;
-
-    @ConfigProperty(
-            category = "NoCheaters",
-            name = "Time delete reports",
-            comment = "Reports older than this will be deleted on game start (days)")
-    public static int timeDeleteReport = 365;
-
-    @ConfigProperty(
-            category = "NoCheaters",
-            name = "Censor Cheater Chat",
-            comment = "Censors chat messages sent by reported cheaters")
-    public static boolean censorCheaterChatMsg;
-
-    @ConfigProperty(
-            category = "NoCheaters",
-            name = "Delete Cheater Chat",
-            comment = "Deletes chat messages sent by reported cheaters")
-    public static boolean deleteCheaterChatMsg;
-
-    @ConfigProperty(
-            category = "NoCheaters",
-            name = "Report HUD",
-            comment = "Displays when the mod has reports to send")
-    public static boolean showReportHUD = true;
-
-    @ConfigProperty(
-            category = "NoCheaters",
-            name = "Report HUD in chat only",
-            comment = "Displays report hud only in chat")
-    public static boolean showReportHUDonlyInChat;
-
-    @ConfigProperty(
-            category = "NoCheaters",
-            name = "Report HUD position",
-            comment = "position of the report HUD")
-    public static final GuiPosition reportHUDPosition = new GuiPosition(0d, 1d);
-
-    @ConfigProperty(
-            category = "HackerDetector",
-            name = "Hacker Detector",
-            comment = "Detects cheaters in your game")
-    public static boolean hackerDetector = true;
-
-    public static boolean debugLogging;
-
-    @ConfigProperty(
-            category = "HackerDetector",
-            name = "Add to report list",
-            comment = "Adds flagged players to your report list")
-    public static boolean addToReportList = true;
-
-    @ConfigProperty(
-            category = "HackerDetector",
-            name = "Show flag messages",
-            comment = "Prints a message in chat when a player flags")
-    public static boolean showFlagMessages = true;
-
-    @ConfigProperty(
-            category = "HackerDetector",
-            name = "Show flag message type",
-            comment = "Additionally prints the type of flag on the alert message")
-    public static boolean showFlagMessageType = true;
-
-    @ConfigProperty(
-            category = "HackerDetector",
-            name = "Compact alerts",
-            comment = "Compact flag messages with previous ones")
-    public static boolean compactFlagMessages = true;
-
-    @ConfigProperty(
-            category = "HackerDetector",
-            name = "One message per game",
-            comment = "Prints flag message for each player once per game")
-    public static boolean oneFlagMessagePerGame;
-
-    @ConfigProperty(
-            category = "HackerDetector",
-            name = "Report flagged players",
-            comment = "Sends a report for flagged players")
-    public static boolean autoreportFlaggedPlayers = true;
-
-    @ConfigProperty(
-            category = "HackerDetector",
-            name = "Sound when flagging",
-            comment = "Plays a sound when it flags a player")
-    public static boolean soundWhenFlagging;
-
-    @ConfigProperty(
-            category = "HackerDetector",
-            name = "Show report button on flags",
-            comment = "Shows the report button on flag messages")
-    public static boolean showReportButtonOnFlags = true;
-
-    @ConfigProperty(
-            category = "HackerDetector",
-            name = "Flag message prefix",
-            comment = "Lets you chose the prefix of flags messages")
-    public static String flagMessagePrefix = EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "NoCheaters" + EnumChatFormatting.GOLD + "]";
-
-    @ConfigProperty(
-            category = "Hitbox",
-            name = "Toggle hitbox",
-            comment = "Toggle hitbox when starting game")
+            category = HITBOXES,
+            name = "Hitbox enabled on start",
+            hidden = true)
     public static boolean isDebugHitboxOn;
 
     @ConfigProperty(
-            category = "Hitbox",
-            name = "Hitbox for players",
-            comment = "Hitbox for players")
+            category = HITBOXES, subCategory = "Render hitbox for : ",
+            name = "Hitbox for players")
     public static boolean drawHitboxForPlayers = true;
 
     @ConfigProperty(
-            category = "Hitbox",
-            name = "Hitbox for grounded arrows",
-            comment = "Hitbox for grounded arrows")
+            category = HITBOXES, subCategory = "Render hitbox for : ",
+            name = "Hitbox for grounded arrows")
     public static boolean drawHitboxForGroundedArrows = true;
 
     @ConfigProperty(
-            category = "Hitbox",
-            name = "Hitbox for pinned arrows",
-            comment = "Hitbox for pinned arrows")
+            category = HITBOXES, subCategory = "Render hitbox for : ",
+            name = "Hitbox for pinned arrows")
     public static boolean drawHitboxForPinnedArrows = true;
 
     @ConfigProperty(
-            category = "Hitbox",
-            name = "Hitbox for flying arrows",
-            comment = "Hitbox for flying arrows")
+            category = HITBOXES, subCategory = "Render hitbox for : ",
+            name = "Hitbox for flying arrows")
     public static boolean drawHitboxForFlyingArrows = true;
 
     @ConfigProperty(
-            category = "Hitbox",
-            name = "Hitbox for dropped items",
-            comment = "Hitbox for dropped items")
+            category = HITBOXES, subCategory = "Render hitbox for : ",
+            name = "Hitbox for dropped items")
     public static boolean drawHitboxForDroppedItems = true;
 
     @ConfigProperty(
-            category = "Hitbox",
-            name = "Hitbox for passive mobs",
-            comment = "Hitbox for passive mobs")
+            category = HITBOXES, subCategory = "Render hitbox for : ",
+            name = "Hitbox for passive mobs")
     public static boolean drawHitboxForPassiveMobs = true;
 
     @ConfigProperty(
-            category = "Hitbox",
-            name = "Hitbox for aggressive mobs",
-            comment = "Hitbox for aggressive mobs")
+            category = HITBOXES, subCategory = "Render hitbox for : ",
+            name = "Hitbox for aggressive mobs")
     public static boolean drawHitboxForAggressiveMobs = true;
 
     @ConfigProperty(
-            category = "Hitbox",
-            name = "Hitbox for withers",
-            comment = "Hitbox for withers")
+            category = HITBOXES, subCategory = "Render hitbox for : ",
+            name = "Hitbox for withers")
     public static boolean drawHitboxForWithers = true;
 
     @ConfigProperty(
-            category = "Hitbox",
-            name = "Hitbox for item frame",
-            comment = "Hitbox for item frame")
+            category = HITBOXES, subCategory = "Render hitbox for : ",
+            name = "Hitbox for item frame")
     public static boolean drawHitboxItemFrame = true;
 
     @ConfigProperty(
-            category = "Hitbox",
-            name = "Hitbox for other entity",
-            comment = "Hitbox for other entity")
+            category = HITBOXES, subCategory = "Render hitbox for : ",
+            name = "Hitbox for other entity")
     public static boolean drawHitboxForOtherEntity = true;
 
     @ConfigProperty(
-            category = "Hitbox",
-            name = "Draw red box",
-            comment = "Draw red box")
+            category = HITBOXES, subCategory = "Red box",
+            name = "Red eye square",
+            comment = "Renders a red square at the eye level of entities")
     public static boolean drawRedBox = true;
 
     @ConfigProperty(
-            category = "Hitbox",
-            name = "Draw blue vector",
-            comment = "Draw blue vector")
+            category = HITBOXES, subCategory = "Blue Vector",
+            name = "Render blue vector",
+            comment = "Renders a blue line comming out of the eyes of entities that represent where they look at")
     public static boolean drawBlueVect = true;
 
     @ConfigProperty(
-            category = "Hitbox",
+            category = HITBOXES, subCategory = "Blue Vector",
             name = "Blue vect for players only",
-            comment = "Blue vect for players only")
+            comment = "Renders the blue line for players only")
     public static boolean drawBlueVectForPlayersOnly;
 
     @ConfigProperty(
-            category = "Hitbox",
+            category = HITBOXES, subCategory = "Blue Vector",
             name = "Make blue vector 3m long",
-            comment = "Make blue vector 3m long")
-    public static boolean makeBlueVect3Meters;
+            comment = "Make the blue vector 3 meters long, just like the player's attack reach")
+    public static boolean makeBlueVect3Meters = true;
 
     @ConfigProperty(
-            category = "Hitbox",
-            name = "Real size hitbox",
-            comment = "Make hitbox their real size")
-    public static boolean realSizeHitbox;
+            category = HITBOXES, subCategory = "Color",
+            name = "Hitbox Color",
+            comment = "A custom color for the hitboxes",
+            isColor = true)
+    public static int hitboxColor = 0xFFFFFF;
 
     @ConfigProperty(
-            category = "Hitbox",
-            name = "Don't render close hitbox",
-            comment = "Doesn't render the hitbox of entities close to you")
-    public static boolean hideCloseHitbox;
+            category = HITBOXES, subCategory = "Color",
+            name = "Team colored arrow hitbox",
+            comment = "For arrows, the hitbox will take the color of the shooter's team")
+    public static boolean teamColoredArrowHitbox = true;
 
     @ConfigProperty(
-            category = "Hitbox",
-            name = "Hitbox render range",
-            comment = "Doesn't render the hitbox of entities closer than this")
-    public static double hitboxDrawRange = 6f;
-
-    @ConfigProperty(
-            category = "Hitbox",
+            category = HITBOXES, subCategory = "Color",
             name = "Team colored player hitbox",
-            comment = "Player hitboxes take the color of their team")
+            comment = "The hitbox of players will take the color of their team, other entities will have the custom color defined above.")
     public static boolean teamColoredPlayerHitbox = true;
 
     @ConfigProperty(
-            category = "Hitbox",
+            category = HITBOXES, subCategory = "Color",
             name = "Team colored wither hitbox",
             comment = "Wither hitboxes take the color of their team")
     public static boolean teamColoredWitherHitbox = true;
 
     @ConfigProperty(
-            category = "Hitbox",
-            name = "Team colored arrow hitbox",
-            comment = "Makes the hitbox of arrows take the color of the shooter's team")
-    public static boolean teamColoredArrowHitbox = true;
+            category = HITBOXES, subCategory = "Other",
+            name = "Real size hitbox",
+            comment = "The hitboxes will be larger and accurately represent the hitbox where you can attack the entities")
+    public static boolean realSizeHitbox;
 
     @ConfigProperty(
-            category = "Hitbox",
-            name = "Hitbox Color",
-            comment = "A custom color for the hitboxes")
-    public static int hitboxColor = 0xFFFFFF;
+            category = HITBOXES, subCategory = "Other",
+            name = "Hide close hitbox",
+            comment = "Stops rendering the hitboxes that are closer than the range defined below")
+    public static boolean hideCloseHitbox;
+
+    @ConfigProperty(
+            category = HITBOXES, subCategory = "Other",
+            name = "Hitbox render range",
+            comment = "Doesn't render the hitbox of entities closer than this",
+            sliderMax = 64)
+    public static double hitboxDrawRange = 8f;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "General",
+            name = "Colored leather armor",
+            comment = "Changes iron armor worn by other players to colored leather armor matching their team color")
+    public static boolean coloredLeatherArmor;
+
+    @ConfigPropertyEvent(name = "Colored leather armor")
+    public static void onColoredLeatherArmorSetting() {
+        LeatherArmorManager.onSettingChange();
+    }
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "General",
+            name = "AFK sound warning",
+            comment = "Plays a sound when you are about to get kicked for AFK as well as when the walls are about to fall and your game is tabbed out")
+    public static boolean afkSoundWarning = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "General",
+            name = "Strength particules",
+            comment = "Spawns strength particules when a herobrine or dreadlord gets a kill")
+    public static boolean strengthParticules = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "General",
+            name = "Show pinned arrows as renegade",
+            comment = "Renders above player heads the amount of arrows pinned in each player when playing renegade")
+    public static boolean renegadeArrowCount = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "General",
+            name = "Squad add halo player",
+            comment = "Automatically adds to the squad the player you give your halo to")
+    public static boolean squadHaloPlayer = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Chat",
+            name = "Print deathmatch damage in chat",
+            comment = "Prints the deathmatch damage as a separate message in chat instead of having to hover over the message")
+    public static boolean printDeathmatchDamageMessage = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Chat",
+            name = "Hide repetitive chat messages",
+            comment = "Hides the following messages :\n"
+                    + "\n"
+                    + "§cGet to the center to stop the hunger\n"
+                    + "§aYou broke your protected chest\n"
+                    + "§eYour Salvaging skill returned your arrow to you!\n"
+                    + "§eYour Efficiency skill got you an extra drop!")
+    public static boolean hideRepetitiveMWChatMsg = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Inventory",
+            name = "Safe Inventory",
+            comment = "Prevents hotkeying important kit items out of your inventory")
+    public static boolean safeInventory = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Render",
+            name = "Render wither outline",
+            comment = "Renders a colored outline around withers")
+    public static boolean renderWitherOutline = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Screen",
+            name = "Hide hunger title",
+            comment = "Hide the hunger message that appears in the middle of the screen during deathmatch")
+    public static boolean hideHungerTitleInMW = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Kill cooldown HUD",
+            comment = "Displays the cooldown of the /kill command")
+    public static final GuiPosition killCooldownHUDPosition = new GuiPosition(true, 0d, 0d);
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Last wither HUD",
+            comment = "Displays the time it takes for the last wither to die")
+    public static final GuiPosition lastWitherHUDPosition = new GuiPosition(true, 0.75d, 0d);
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Last wither HUD in sidebar",
+            comment = "Renders the Last wither HUD in the sidebar")
+    public static boolean witherHUDinSidebar = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Strength HUD",
+            comment = "Displays the duration of the strength effect when you have it or when you are about to have it with Hunter."
+                    + " Works with Dreadlord, Herobrine, Hunter and Zombie.")
+    public static final GuiPosition strengthHUDPosition = new GuiPosition(true, 0.5d, 8d / 20d);
+
+    @ConfigPropertyEvent(name = "Strength HUD")
+    public static void onStrengthHUDSetting() {
+        if (MWEConfig.strengthHUDPosition.isEnabled()) {
+            SoundUtil.playStrengthSound();
+        }
+    }
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Creeper primed TNT HUD",
+            comment = "Displays the cooldown of the primed TNT when playing Creeper")
+    public static final GuiPosition creeperTNTHUDPosition = new GuiPosition(true, 0.5d, 8d / 20d);
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Energy display HUD",
+            comment = "Displays a HUD with the amount of energy you have. Turns §baqua§7 when your energy level exceeds the amount set below.")
+    public static final GuiPosition energyDisplayHUDPosition = new GuiPosition(true, 0.5d, 10.5 / 20d);
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Threshold to make energy HUD aqua",
+            sliderMax = 160)
+    public static int aquaEnergyDisplayThreshold = 100;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Phoenix Bond HUD",
+            comment = "Displays the hearts healed from a Phoenix bond")
+    public static final GuiPosition phxBondHUDPosition = new GuiPosition(true, 0.5d, 0.75d);
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Base Location HUD",
+            comment = "Displays in which base you are currently located")
+    public static final GuiPosition baseLocationHUDPosition = new GuiPosition(true, 0.90d, 0d);
+
+    @ConfigPropertyEvent(name = "Base Location HUD")
+    public static void onBaseLocationSetting() {
+        if (MWEConfig.baseLocationHUDPosition.isEnabled() && ScoreboardTracker.isInMwGame()) {
+            LocrawListener.setMegaWallsMap();
+        }
+    }
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Warcry HUD",
+            comment = "Displays the warcry cooldown")
+    public static final GuiPosition warcryHUDPosition = new GuiPosition(true, 0.65d, 1d);
+
+    @ConfigProperty(
+            category = FINAL_KILL_COUNTER, subCategory = "HUD",
+            name = "Final Kill Counter HUD",
+            comment = "Displays the HUD of the final kill counter\n"
+                    + "§cThis will only work if you have your Hypixel language set to English")
+    public static final GuiPosition fkcounterHUDPosition = new GuiPosition(false, 0d, 0.1d);
+
+    @ConfigProperty(
+            category = FINAL_KILL_COUNTER, subCategory = "HUD",
+            name = "Compact mode",
+            comment = "Use a compact HUD for the final kill counter")
+    public static boolean fkcounterHUDCompact = true;
+
+    @ConfigProperty(
+            category = FINAL_KILL_COUNTER, subCategory = "HUD",
+            name = "Compact HUD in Sidebar",
+            comment = "Renders the final kill counter HUD in the sidebar")
+    public static boolean fkcounterHUDinSidebar = true;
+
+    @ConfigProperty(
+            category = FINAL_KILL_COUNTER, subCategory = "HUD",
+            name = "Players mode",
+            comment = "Displays players with most finals in each team")
+    public static boolean fkcounterHUDShowPlayers;
+
+    @ConfigProperty(
+            category = FINAL_KILL_COUNTER, subCategory = "HUD",
+            name = "Player amount",
+            comment = "Amount of players displayed on screen when you use the Players mode",
+            sliderMin = 1, sliderMax = 10)
+    public static int fkcounterHUDPlayerAmount = 3;
+
+    @ConfigPropertyEvent(name = {
+            "Final Kill Counter HUD",
+            "Compact mode",
+            "Compact HUD in Sidebar",
+            "Players mode",
+            "Player amount"})
+    public static void onFKSHUDSetting() {
+        GuiManager.fkCounterHUD.updateDisplayText();
+    }
+
+    @ConfigProperty(
+            category = FINAL_KILL_COUNTER, subCategory = "HUD",
+            name = "Render HUD background",
+            comment = "Renders a background behind the final kill counter HUD")
+    public static boolean fkcounterHUDDrawBackground;
+
+    @ConfigProperty(
+            category = FINAL_KILL_COUNTER, subCategory = "Tablist",
+            name = "Finals in tablist",
+            comment = "Renders in the tablist next to their names the amount of final kills that each player has")
+    public static boolean fkcounterHUDTablist = true;
+
+    @ConfigProperty(
+            category = FINAL_KILL_COUNTER, subCategory = "Chat",
+            name = "Show kill diff in chat",
+            comment = "Appends at the end of kill messages the amount of final kills the killed player had")
+    public static boolean showKillDiffInChat = true;
+
+    @ConfigProperty(
+            category = HYPIXEL,
+            name = "APIKey",
+            comment = "Your Hypixel API Key",
+            hidden = true)
+    public static String APIKey = "";
+
+    @ConfigProperty(
+            category = HYPIXEL,
+            name = "Hypixel Nick",
+            comment = "Your nick on Hypixel",
+            hidden = true)
+    public static String hypixelNick = "";
+
+    @ConfigProperty(
+            category = HYPIXEL,
+            name = "Short coin messages",
+            comment = "Makes the §6coins §7and §2tokens§7 messages shorter by removing the network booster info. It also compacts the guild bonus message and coin message into one.\n"
+                    + "\n"
+                    + "§6+100 coins! (hypixel's Network booster) §bFINAL KILL\n"
+                    + "§fWill become : \n"
+                    + "§6+100 coins!§b FINAL KILL")
+    public static boolean shortCoinMessage;
+
+    @ConfigProperty(
+            category = NOCHEATERS, subCategory = "General",
+            name = "Warning messages in chat",
+            comment = "Prints a warning message in chat when a reported player joins your world, these messages have built in compact chat")
+    public static boolean warningMessages;
+
+    @ConfigPropertyEvent(name = "Warning messages in chat")
+    public static void onWarningMessageSetting() {
+        if (MWEConfig.warningMessages) {
+            WarningMessages.printReportMessagesForWorld(false);
+        } else {
+            ChatHandler.deleteAllWarningMessages();
+        }
+    }
+
+    @ConfigProperty(
+            category = NOCHEATERS, subCategory = "General",
+            name = "Show banned players",
+            comment = "Reveals the name of the player getting disconnected after a ban when playing on hypixel")
+    public static boolean showBannedPlayers = true;
+
+    @ConfigProperty(
+            category = NOCHEATERS, subCategory = "General",
+            name = "Delete Old Report",
+            comment = "Deletes reports older than the specified value, the deletion occurs when you start game")
+    public static boolean deleteOldReports;
+
+    @ConfigProperty(
+            category = NOCHEATERS, subCategory = "General",
+            name = "Time delete reports",
+            comment = "Reports older than this will be deleted on game start (days)",
+            sliderMin = 1, sliderMax = 365 * 2)
+    public static int timeDeleteReport = 365;
+
+    @ConfigProperty(
+            category = NOCHEATERS, subCategory = "Icons",
+            name = "Show Warning Icons",
+            comment = "Displays a warning icon in front of names of reported players on their nametags and in the tablist\n"
+                    + "\n"
+                    + "§4§l⚠ §r§7: players reported for blatant cheats\n"
+                    + "§e§l⚠ §r§7: players reported for other cheats\n"
+                    + "\n"
+                    + "You can define in the config file the lists of cheats that give a red icon and cheats that don't give any icon")
+    public static boolean warningIconsOnNames = true;
+
+    @ConfigProperty(
+            category = NOCHEATERS, subCategory = "Icons",
+            name = "Warning Icons In Tab Only",
+            comment = "Displays the warning icons in the tablist only, not on nametags")
+    public static boolean warningIconsTabOnly;
+
+    @ConfigPropertyEvent(name = {
+            "Show fake players in tab",
+            "De-obfuscate names in tab",
+            "Show Squad Icons",
+            "Squad Icons In Tab Only",
+            "Show Warning Icons",
+            "Warning Icons In Tab Only",
+            "Pink squadmates"})
+    public static void refreshAllNames() {
+        NameUtil.refreshAllNamesInWorld();
+    }
+
+    @ConfigProperty(
+            category = NOCHEATERS, subCategory = "Chat",
+            name = "Report suggestions",
+            comment = "Highlights chat messages that calls out a player for cheating. It will match the messages that respect the following patterns :\n"
+                    + "\n"
+                    + "§aPlayer: §fplayername is bhoping\n"
+                    + "§aPlayer: §fwdr playername cheat\n"
+                    + "§aPlayer: §freport playername cheat")
+    public static boolean reportSuggestions = true;
+
+    @ConfigPropertyEvent(name = "Report suggestions")
+    public static void onReportSuggestionSetting() {
+        if (MWEConfig.reportSuggestions) {
+            SoundUtil.playChatNotifSound();
+        }
+    }
+
+    @ConfigProperty(
+            category = NOCHEATERS, subCategory = "Chat",
+            name = "Censor cheaters messages in chat",
+            comment = "Censors chat messages sent by reported players")
+    public static boolean censorCheaterChatMsg;
+
+    @ConfigProperty(
+            category = NOCHEATERS, subCategory = "Chat",
+            name = "Delete cheaters messages in chat",
+            comment = "Deletes chat messages sent by reported players")
+    public static boolean deleteCheaterChatMsg;
+
+    @ConfigProperty(
+            category = NOCHEATERS,
+            name = "List of cheats that give a red icon",
+            comment = "Players reported with one of theses cheats will appear with a red icon on their name",
+            hidden = true)
+    public static final List<String> redIconCheats = new ArrayList<>(Arrays.asList("autoblock", "bhop", "fastbreak", "noslowdown", "scaffold"));
+
+    @ConfigProperty(
+            category = NOCHEATERS,
+            name = "List of cheats that don't give an icon",
+            comment = "Players reported with only theses cheats will have no icon on their name",
+            hidden = true)
+    public static final List<String> noIconCheats = new ArrayList<>();
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "General",
+            name = "Hacker Detector",
+            comment = "Analyses movements and actions of players around you")
+    public static boolean hackerDetector = true;
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "General",
+            name = "Add to report list",
+            comment = "Saves flagged players in NoCheaters to get warnings about them")
+    public static boolean addToReportList = true;
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Flags",
+            name = "Show flag messages",
+            comment = "Prints a message in chat when it detects a player using cheats")
+    public static boolean showFlagMessages = true;
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Flags",
+            name = "Show flag type",
+            comment = "Shows the flag type on the flag message. For example : Killaura(A), Killaura(B)...")
+    public static boolean showFlagMessageType = true;
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Flags",
+            name = "Compact flags in chat",
+            comment = "Deletes previous flag message when printing a new identical flag message")
+    public static boolean compactFlagMessages = true;
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Flags",
+            name = "Show single flag message",
+            comment = "Prints flag messages only once per game per player")
+    public static boolean oneFlagMessagePerGame;
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Flags",
+            name = "Sound when flagging",
+            comment = "Plays a sound when it flags a player")
+    public static boolean soundWhenFlagging;
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Flags",
+            name = "Show report button on flags",
+            comment = "Shows the report buttons on flag messages")
+    public static boolean showReportButtonOnFlags = true;
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Flags",
+            name = "Flag message prefix",
+            comment = "Lets you chose the prefix of flags messages",
+            hidden = true)
+    public static String flagMessagePrefix = EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "NoCheaters" + EnumChatFormatting.GOLD + "]";
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Report",
+            name = "Auto-report cheaters",
+            comment = "Sends a /report automatically to Hypixel when it flags a cheater\n"
+                    + "§eOnly works in Mega Walls, sends one report per game per player, you need to stand still for the mod to type the report." +
+                    " It will not send the report if you wait more than 30 seconds to send it.")
+    public static boolean autoreportFlaggedPlayers = true;
+
+    @ConfigPropertyEvent(name = "Auto-report cheaters")
+    public static void onAutoreportSetting() {
+        if (!MWEConfig.autoreportFlaggedPlayers) {
+            ReportQueue.INSTANCE.queueList.clear();
+        }
+    }
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Report",
+            name = "Report HUD",
+            comment = "Displays a small text when the mod has reports to send to the server and when it is typing the report")
+    public static final GuiPosition reportHUDPosition = new GuiPosition(true, 0d, 1d);
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Report",
+            name = "Report HUD in chat only",
+            comment = "Displays the report HUD only when the chat is open")
+    public static boolean showReportHUDonlyInChat;
+
+    public static boolean debugLogging;
+
+    @ConfigProperty(
+            category = EXTERNAL,
+            name = "Hide Optifine Hats",
+            comment = "Hides the hats added by Optifine during Halloween and Christmas\n"
+                    + "§eRequires game restart to be fully effective")
+    public static boolean hideOptifineHats;
+
+    @ConfigPropertyHideOverride(name = "Hide Optifine Hats")
+    public static boolean hideOptifineHatsSetting() {
+        return !FMLClientHandler.instance().hasOptifine();
+    }
+
+    @ConfigProperty(
+            category = EXTERNAL,
+            name = "Hide Orange's Toggle Sprint HUD",
+            comment = "Hides the Toggle Sprint HUD from Orange's Marshall Simple Mod")
+    public static boolean hideToggleSprintText;
+
+    @ConfigPropertyHideOverride(name = "Hide Orange's Toggle Sprint HUD")
+    public static boolean hideOrangeToggleSprintSetting() {
+        return !Loader.isModLoaded("orangesimplemod");
+    }
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "General",
+            name = "Pink squadmates",
+            comment = "Your squadmates will have a pink nametag, hitbox color and hurt color")
+    public static boolean pinkSquadmates = true;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "General",
+            name = "Nick Hider",
+            comment = "Shows your real name instead of your nick in the chat and tablist")
+    public static boolean nickHider = true;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "General",
+            name = "Keep first letter squadname",
+            comment = "§7When adding a player to the squad with a custom name of your choice,"
+                    + " using§e /squad add <name> as <custom name>§7,"
+                    + " it will keep the first letter of their real name so that you can track them on the compass")
+    public static boolean keepFirstLetterSquadnames = true;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "Icons",
+            name = "Show Squad Icons",
+            comment = "Displays a squad icon for squad members on their nametag and in the tablist\n"
+                    + "\n"
+                    + "§6[§2S§6] §r§7: players in your squad")
+    public static boolean squadIconOnNames = true;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "Icons",
+            name = "Squad Icons In Tab Only",
+            comment = "Displays the squad icons in the tablist only, not on nametags")
+    public static boolean squadIconTabOnly;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "HUD",
+            name = "Squad HUD",
+            comment = "Displays a mini-tablist with your squadmates")
+    public static final GuiPosition squadHUDPosition = new GuiPosition(true, 0.25d, 0d);
+
+    @ConfigProperty(
+            category = "Updates",
+            name = "Automatic Update",
+            comment = "Updates the mod automatically")
+    public static boolean automaticUpdate = true;
 
 }

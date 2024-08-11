@@ -39,7 +39,7 @@ public class CreeperPrimedTntHUD extends AbstractRenderer {
     }
 
     public boolean processMessage(String fmsg) {
-        if (MWEConfig.showPrimedTNTHUD) {
+        if (this.guiPosition.isEnabled()) {
             final Matcher creeperMatcher = CREEPER_FISSION_HEART_PATTERN.matcher(fmsg);
             if (creeperMatcher.find()) {
                 final String cooldown = creeperMatcher.group(1);

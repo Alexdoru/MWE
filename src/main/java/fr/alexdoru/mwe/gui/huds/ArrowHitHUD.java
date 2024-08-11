@@ -175,7 +175,7 @@ public class ArrowHitHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return MWEConfig.showArrowHitHUD && currentTimeMillis - hitTime < 1000L;
+        return this.guiPosition.isEnabled() && currentTimeMillis - hitTime < 1000L;
     }
 
 }

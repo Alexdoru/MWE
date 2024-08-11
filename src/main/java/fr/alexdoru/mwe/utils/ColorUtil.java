@@ -40,7 +40,7 @@ public class ColorUtil {
     }
 
     public static EnumChatFormatting getColoredHP(EnumChatFormatting original, int hp) {
-        if (MWEConfig.useColoredScores) {
+        if (MWEConfig.coloredScoresInTablist) {
             final float maxHP;
             if (ScoreboardTracker.isInMwGame()) {
                 maxHP = 44f;

@@ -9,10 +9,10 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 public class ScorePlayerTeamHook {
 
     public static String spoofSidebarLine(String playername) {
-        if (MWEConfig.witherHUDinSidebar && MWEConfig.showLastWitherHUD && ScoreboardTracker.isInMwGame() && "\ud83d\udca3".equals(playername) && ScoreboardTracker.getParser().isOnlyOneWitherAlive()) {
+        if (MWEConfig.witherHUDinSidebar && MWEConfig.lastWitherHUDPosition.isEnabled() && ScoreboardTracker.isInMwGame() && "\ud83d\udca3".equals(playername) && ScoreboardTracker.getParser().isOnlyOneWitherAlive()) {
             return GuiManager.lastWitherHPHUD.displayText;
         }
-        if (MWEConfig.fkcounterHUDinSidebar && MWEConfig.showfkcounterHUD && ScoreboardTracker.isInMwGame() && "\ud83d\udc7d".equals(playername) && FinalKillCounter.getGameId() != null) {
+        if (MWEConfig.fkcounterHUDinSidebar && MWEConfig.fkcounterHUDPosition.isEnabled() && ScoreboardTracker.isInMwGame() && "\ud83d\udc7d".equals(playername) && FinalKillCounter.getGameId() != null) {
             return GuiManager.fkCounterHUD.displayText;
         }
         return null;

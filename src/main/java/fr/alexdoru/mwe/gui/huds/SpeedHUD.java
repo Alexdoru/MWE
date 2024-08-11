@@ -27,7 +27,7 @@ public class SpeedHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return MWEConfig.showSpeedHUD;
+        return this.guiPosition.isEnabled();
     }
 
 }

@@ -6,20 +6,17 @@ import net.minecraft.util.ResourceLocation;
 
 public class SoundUtil {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
-    private static final ResourceLocation FIRECHARGE_USE = new ResourceLocation("item.fireCharge.use");
-    private static final ResourceLocation NOTE_PLING = new ResourceLocation("note.pling");
-    private static final ResourceLocation RANDOM_ORB = new ResourceLocation("random.orb");
-
     public static void playStrengthSound() {
-        mc.getSoundHandler().playSound(PositionedSoundRecord.create(FIRECHARGE_USE, 0.0F));
+        Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("item.fireCharge.use"), 0.0F));
     }
 
     public static void playChatNotifSound() {
-        mc.getSoundHandler().playSound(PositionedSoundRecord.create(RANDOM_ORB, 1.0F));
+        Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("random.orb"), 1.0F));
     }
 
     public static void playLowHPSound() {
+        final Minecraft mc = Minecraft.getMinecraft();
+        final ResourceLocation NOTE_PLING = new ResourceLocation("note.pling");
         mc.getSoundHandler().playSound(PositionedSoundRecord.create(NOTE_PLING, 1.0F));
         mc.getSoundHandler().playDelayedSound(PositionedSoundRecord.create(NOTE_PLING, 1.0F), 2);
         mc.getSoundHandler().playDelayedSound(PositionedSoundRecord.create(NOTE_PLING, 1.0F), 4);
@@ -27,7 +24,11 @@ public class SoundUtil {
     }
 
     public static void playNotePling() {
-        mc.getSoundHandler().playSound(PositionedSoundRecord.create(NOTE_PLING, 1.0F));
+        Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("note.pling"), 1.0F));
+    }
+
+    public static void playButtonPress() {
+        Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
     }
 
 }

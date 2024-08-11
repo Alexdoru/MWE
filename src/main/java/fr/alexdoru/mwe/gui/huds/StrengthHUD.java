@@ -47,7 +47,7 @@ public class StrengthHUD extends AbstractRenderer {
     }
 
     public boolean processMessage(String fmsg) {
-        if (!MWEConfig.showStrengthHUD) return false;
+        if (!MWEConfig.strengthHUDPosition.isEnabled()) return false;
         final Matcher dreadStrenghtMatcher = DREADLORD_STRENGTH_PATTERN.matcher(fmsg);
         if (dreadStrenghtMatcher.find()) {
             this.setStrengthRenderStart(Long.parseLong(dreadStrenghtMatcher.group(1)) * 1000L);

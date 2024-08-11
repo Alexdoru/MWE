@@ -37,7 +37,7 @@ public class WarcryHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        if (MWEConfig.showWarcryHUD && ScoreboardTracker.isInMwGame()) {
+        if (this.guiPosition.isEnabled() && ScoreboardTracker.isInMwGame()) {
             return updateDisplayText(currentTimeMillis);
         }
         return false;

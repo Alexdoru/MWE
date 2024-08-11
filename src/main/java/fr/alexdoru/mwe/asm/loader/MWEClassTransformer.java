@@ -72,7 +72,6 @@ public class MWEClassTransformer implements IClassTransformer {
         register(new GuiPlayerTabOverlayTransformer_PlayerCount());
         register(new GuiScreenBookTransformer_NewNickKey());
         register(new GuiScreenTransformer_CustomChatClickEvent());
-        register(new GuiScreenTransformer_Invoker());
         register(new GuiUtilRenderComponentsTransformer_ChatHeads());
         register(new HitboxRenderTransformer());
         register(new LayerArmorBaseTransformer_HitColor());

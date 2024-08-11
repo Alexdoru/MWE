@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.gui.guiscreens.GeneralConfigGuiScreen;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import net.minecraft.command.ICommandSender;
@@ -42,7 +42,7 @@ public class CommandMWE extends MyAbstractCommand {
                 ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "Command only works in Mega Walls");
             }
         } else {
-            new DelayedTask(() -> mc.displayGuiScreen(new GeneralConfigGuiScreen()));
+            MWEConfig.displayConfigGuiScreen();
         }
     }
 

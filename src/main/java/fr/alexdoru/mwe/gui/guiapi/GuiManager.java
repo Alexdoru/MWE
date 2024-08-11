@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public final class GuiManager {
 
-    private final ArrayList<IRenderer> registeredRenderers = new ArrayList<>();
+    private static final ArrayList<IRenderer> registeredRenderers = new ArrayList<>();
     private static final Minecraft mc = Minecraft.getMinecraft();
     public static final ArrowHitHUD arrowHitHUD = new ArrowHitHUD();
     public static final BaseLocationHUD baseLocationHUD = new BaseLocationHUD();
@@ -27,25 +27,22 @@ public final class GuiManager {
     public static final SquadHealthHUD squadHealthHUD = new SquadHealthHUD();
     public static final WarcryHUD warcryHUD = new WarcryHUD();
 
-    /**
-     * Register your Guis here
-     */
-    public GuiManager() {
-        this.registeredRenderers.add(arrowHitHUD);
-        this.registeredRenderers.add(baseLocationHUD);
-        this.registeredRenderers.add(creeperPrimedTntHUD);
-        this.registeredRenderers.add(energyDisplayHUD);
-        this.registeredRenderers.add(fkCounterHUD);
-        this.registeredRenderers.add(strengthHUD);
-        this.registeredRenderers.add(killCooldownHUD);
-        this.registeredRenderers.add(lastWitherHPHUD);
-        this.registeredRenderers.add(miniPotionHUD);
-        this.registeredRenderers.add(pendingReportHUD);
-        this.registeredRenderers.add(phoenixBondHUD);
-        this.registeredRenderers.add(speedHUD);
-        this.registeredRenderers.add(squadHealthHUD);
-        this.registeredRenderers.add(warcryHUD);
-        this.registeredRenderers.trimToSize();
+    static {
+        registeredRenderers.add(arrowHitHUD);
+        registeredRenderers.add(baseLocationHUD);
+        registeredRenderers.add(creeperPrimedTntHUD);
+        registeredRenderers.add(energyDisplayHUD);
+        registeredRenderers.add(fkCounterHUD);
+        registeredRenderers.add(strengthHUD);
+        registeredRenderers.add(killCooldownHUD);
+        registeredRenderers.add(lastWitherHPHUD);
+        registeredRenderers.add(miniPotionHUD);
+        registeredRenderers.add(pendingReportHUD);
+        registeredRenderers.add(phoenixBondHUD);
+        registeredRenderers.add(speedHUD);
+        registeredRenderers.add(squadHealthHUD);
+        registeredRenderers.add(warcryHUD);
+        registeredRenderers.trimToSize();
     }
 
     /**
@@ -56,7 +53,7 @@ public final class GuiManager {
         if (event.type == ElementType.TEXT && !(mc.currentScreen instanceof PositionEditGuiScreen)) {
             final long time = System.currentTimeMillis();
             mc.mcProfiler.startSection("MWE HUD");
-            for (final IRenderer renderer : this.registeredRenderers) {
+            for (final IRenderer renderer : registeredRenderers) {
                 if (renderer.isEnabled(time)) {
                     renderer.render(event.resolution);
                 }
@@ -71,5 +68,14 @@ public final class GuiManager {
      * after this.mc.ingameGUI.renderGameOverlay(partialTicks) call
      */
     public static void onPostRenderGameOverlay(float partialTicks) {}
+
+    public static IRenderer getRendererFromPosition(GuiPosition guiPosition) {
+        if (guiPosition == null) return null;
+        for (final IRenderer renderer : registeredRenderers) {
+            if (guiPosition == renderer.getGuiPosition())
+                return renderer;
+        }
+        return null;
+    }
 
 }

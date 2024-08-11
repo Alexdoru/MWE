@@ -33,12 +33,12 @@ public class BaseLocationHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return MWEConfig.showBaseLocationHUD && (ScoreboardTracker.isInMwGame() || ScoreboardTracker.isMWReplay()) && this.currentMap != null;
+        return this.guiPosition.isEnabled() && (ScoreboardTracker.isInMwGame() || ScoreboardTracker.isMWReplay()) && this.currentMap != null;
     }
 
     @SubscribeEvent
     public void onMWEvent(MegaWallsGameEvent event) {
-        if (!MWEConfig.showBaseLocationHUD) return;
+        if (!this.guiPosition.isEnabled()) return;
         if (event.getType() == MegaWallsGameEvent.EventType.CONNECT) {
             LocrawListener.setMegaWallsMap();
         }

@@ -67,7 +67,7 @@ public class EnergyDisplayHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return MWEConfig.showEnergyDisplayHUD && ScoreboardTracker.isInMwGame();
+        return this.guiPosition.isEnabled() && ScoreboardTracker.isInMwGame();
     }
 
 }

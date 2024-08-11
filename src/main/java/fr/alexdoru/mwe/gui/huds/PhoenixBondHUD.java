@@ -151,7 +151,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return MWEConfig.showPhxBondHUD && timeStartRender + 5000L > currentTimeMillis;
+        return guiPosition.isEnabled() && timeStartRender + 5000L > currentTimeMillis;
     }
 
     private EnumChatFormatting getHealColor(float heal) {

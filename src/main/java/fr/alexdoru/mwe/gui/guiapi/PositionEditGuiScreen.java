@@ -1,6 +1,5 @@
 package fr.alexdoru.mwe.gui.guiapi;
 
-import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -11,7 +10,7 @@ import java.io.IOException;
 
 public class PositionEditGuiScreen extends GuiScreen {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
+    private final Minecraft mc = Minecraft.getMinecraft();
     private final IRenderer renderer;
     private final GuiPosition guiPosition;
     private final GuiScreen parent;
@@ -60,7 +59,6 @@ public class PositionEditGuiScreen extends GuiScreen {
     @Override
     public void onGuiClosed() {
         this.guiPosition.saveAbsoluteToRelative();
-        MWEConfig.saveConfig();
         new DelayedTask(() -> mc.displayGuiScreen(parent));
     }
 

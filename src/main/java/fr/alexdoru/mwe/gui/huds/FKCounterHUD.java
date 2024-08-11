@@ -6,7 +6,6 @@ import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.MapUtil;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.awt.Color;
@@ -43,19 +42,17 @@ public class FKCounterHUD extends AbstractRenderer {
     }
 
     private int getHeight() {
-        if (MWEConfig.fkcounterHUDCompact) {
-            return (int) (mc.fontRendererObj.FONT_HEIGHT * MWEConfig.fkcounterHUDSize);
-        } else {
-            return (int) (mc.fontRendererObj.FONT_HEIGHT * 4 * MWEConfig.fkcounterHUDSize);
+        if (MWEConfig.fkcounterHUDCompact || MWEConfig.fkcounterHUDinSidebar) {
+            return mc.fontRendererObj.FONT_HEIGHT;
         }
+        return mc.fontRendererObj.FONT_HEIGHT * 4;
     }
 
     private int getWidth() {
-        if (MWEConfig.fkcounterHUDCompact) {
-            return (int) (mc.fontRendererObj.getStringWidth(this.displayText) * MWEConfig.fkcounterHUDSize);
-        } else {
-            return (int) (getMultilineWidth(this.textToRender) * MWEConfig.fkcounterHUDSize);
+        if (MWEConfig.fkcounterHUDCompact || MWEConfig.fkcounterHUDinSidebar) {
+            return mc.fontRendererObj.getStringWidth(this.displayText);
         }
+        return getMultilineWidth(this.textToRender);
     }
 
     @Override
@@ -63,20 +60,14 @@ public class FKCounterHUD extends AbstractRenderer {
         this.guiPosition.updateAdjustedAbsolutePosition(resolution, getWidth(), getHeight());
         final int x = this.guiPosition.getAbsoluteRenderX();
         final int y = this.guiPosition.getAbsoluteRenderY();
-        GlStateManager.pushMatrix();
-        {
-            if (MWEConfig.fkcounterHUDDrawBackground) {
-                drawRect(x - 2, y - 2, x + getWidth() + 1, y + getHeight(), BACKGROUND_COLOR);
-            }
-            GlStateManager.translate(x, y, 0);
-            GlStateManager.scale(MWEConfig.fkcounterHUDSize, MWEConfig.fkcounterHUDSize, 1d);
-            if (MWEConfig.fkcounterHUDCompact) {
-                mc.fontRendererObj.drawStringWithShadow(this.displayText, 0, 0, 0xFFFFFF);
-            } else {
-                drawStringList(this.textToRender);
-            }
+        if (MWEConfig.fkcounterHUDDrawBackground) {
+            drawRect(x - 2, y - 2, x + getWidth() + 1, y + getHeight(), BACKGROUND_COLOR);
         }
-        GlStateManager.popMatrix();
+        if (MWEConfig.fkcounterHUDCompact) {
+            mc.fontRendererObj.drawStringWithShadow(this.displayText, x, y, 0xFFFFFF);
+        } else {
+            drawStringList(this.textToRender, x, y);
+        }
     }
 
     @Override
@@ -86,12 +77,12 @@ public class FKCounterHUD extends AbstractRenderer {
         final int y = this.guiPosition.getAbsoluteRenderY();
 
         final int width;
-        if (MWEConfig.fkcounterHUDCompact) {
-            width = (int) (mc.fontRendererObj.getStringWidth(DUMMY_TEXT_COMPACT) * MWEConfig.fkcounterHUDSize);
+        if (MWEConfig.fkcounterHUDCompact || MWEConfig.fkcounterHUDinSidebar) {
+            width = mc.fontRendererObj.getStringWidth(DUMMY_TEXT_COMPACT);
         } else if (MWEConfig.fkcounterHUDShowPlayers) {
-            width = (int) (getMultilineWidth(DUMMY_TEXT_PLAYERS) * MWEConfig.fkcounterHUDSize);
+            width = getMultilineWidth(DUMMY_TEXT_PLAYERS);
         } else {
-            width = (int) (getMultilineWidth(DUMMY_TEXT) * MWEConfig.fkcounterHUDSize);
+            width = getMultilineWidth(DUMMY_TEXT);
         }
 
         final int left = x - 2;
@@ -99,30 +90,24 @@ public class FKCounterHUD extends AbstractRenderer {
         final int right = x + width + 1;
         final int bottom = y + getHeight();
 
-        GlStateManager.pushMatrix();
-        {
-            drawRect(left, top, right, bottom, DUMMY_BACKGROUND_COLOR);
-            drawHorizontalLine(left, right, top, Color.RED.getRGB());
-            drawHorizontalLine(left, right, bottom, Color.RED.getRGB());
-            drawVerticalLine(left, top, bottom, Color.RED.getRGB());
-            drawVerticalLine(right, top, bottom, Color.RED.getRGB());
-            GlStateManager.translate(x, y, 0);
-            GlStateManager.scale(MWEConfig.fkcounterHUDSize, MWEConfig.fkcounterHUDSize, 1d);
-            if (MWEConfig.fkcounterHUDCompact) {
-                mc.fontRendererObj.drawStringWithShadow(DUMMY_TEXT_COMPACT, 0, 0, 0xFFFFFF);
-            } else if (MWEConfig.fkcounterHUDShowPlayers) {
-                drawStringList(DUMMY_TEXT_PLAYERS);
-            } else {
-                drawStringList(DUMMY_TEXT);
-            }
+        drawRect(left, top, right, bottom, DUMMY_BACKGROUND_COLOR);
+        drawHorizontalLine(left, right, top, Color.RED.getRGB());
+        drawHorizontalLine(left, right, bottom, Color.RED.getRGB());
+        drawVerticalLine(left, top, bottom, Color.RED.getRGB());
+        drawVerticalLine(right, top, bottom, Color.RED.getRGB());
+        if (MWEConfig.fkcounterHUDCompact || MWEConfig.fkcounterHUDinSidebar) {
+            mc.fontRendererObj.drawStringWithShadow(DUMMY_TEXT_COMPACT, x, y, 0xFFFFFF);
+        } else if (MWEConfig.fkcounterHUDShowPlayers) {
+            drawStringList(DUMMY_TEXT_PLAYERS, x, y);
+        } else {
+            drawStringList(DUMMY_TEXT, x, y);
         }
-        GlStateManager.popMatrix();
 
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return !MWEConfig.fkcounterHUDinSidebar && MWEConfig.showfkcounterHUD && ScoreboardTracker.isInMwGame() && FinalKillCounter.getGameId() != null;
+        return !MWEConfig.fkcounterHUDinSidebar && this.guiPosition.isEnabled() && ScoreboardTracker.isInMwGame() && FinalKillCounter.getGameId() != null;
     }
 
     public void updateDisplayText() {
@@ -134,7 +119,7 @@ public class FKCounterHUD extends AbstractRenderer {
         this.textToRender.clear();
         final Map<Integer, Integer> sortedmap = FinalKillCounter.getSortedTeamKillsMap();
 
-        if (MWEConfig.fkcounterHUDCompact) {
+        if (MWEConfig.fkcounterHUDCompact || MWEConfig.fkcounterHUDinSidebar) {
 
             boolean first = true;
             final StringBuilder strBuilder = new StringBuilder();
@@ -191,10 +176,9 @@ public class FKCounterHUD extends AbstractRenderer {
 
     }
 
-    private void drawStringList(List<String> list) {
-        int y = 0;
+    private void drawStringList(List<String> list, int x, int y) {
         for (final String line : list) {
-            mc.fontRendererObj.drawStringWithShadow(line, (float) 0, (float) y, 0xFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow(line, x, y, 0xFFFFFF);
             y += mc.fontRendererObj.FONT_HEIGHT;
         }
     }

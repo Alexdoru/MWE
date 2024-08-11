@@ -11,11 +11,11 @@ public class MinecraftHook_DropProtection {
     private static long lastSlotChangeFromSwordSlot;
 
     public static boolean shouldDropItem(Minecraft mc) {
-        return !MWEConfig.safeInventory || (System.currentTimeMillis() >= lastSlotChangeFromSwordSlot + 100 && !isHoldingSword(mc.thePlayer));
+        return !MWEConfig.preventSwordDropping || (System.currentTimeMillis() >= lastSlotChangeFromSwordSlot + 100 && !isHoldingSword(mc.thePlayer));
     }
 
     public static void updateCurrentSlot(Minecraft mc) {
-        if (MWEConfig.safeInventory && isHoldingSword(mc.thePlayer)) {
+        if (MWEConfig.preventSwordDropping && isHoldingSword(mc.thePlayer)) {
             lastSlotChangeFromSwordSlot = System.currentTimeMillis();
         }
     }

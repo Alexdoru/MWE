@@ -12,10 +12,13 @@ public class GuiPlayerTabOverlayHook_HideHeaderFooter {
     }
 
     public static boolean shouldRenderHeaderFooter() {
-        if (MWEConfig.showHeaderFooterOutsideMW && !ScoreboardTracker.isMWEnvironement()) {
-            return true;
+        if (MWEConfig.hideTablistHeaderFooter) {
+            if (MWEConfig.hideTablistHeaderFooterOnlyInMW) {
+                return !ScoreboardTracker.isMWEnvironement();
+            }
+            return false;
         }
-        return !MWEConfig.hideTablistHeaderFooter;
+        return true;
     }
 
 }

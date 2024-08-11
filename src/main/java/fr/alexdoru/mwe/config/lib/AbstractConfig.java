@@ -1,7 +1,10 @@
 package fr.alexdoru.mwe.config.lib;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.config.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.mwe.gui.guiapi.GuiPosition;
+import fr.alexdoru.mwe.utils.MapUtil;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -15,33 +18,83 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 public abstract class AbstractConfig {
 
     private final Class<?> configClass;
     private final Configuration config;
-    private final List<ConfigField> configFields = new ArrayList<>();
+    private final LinkedHashMap<String, LinkedHashMap<String, List<String>>> configStructure = new LinkedHashMap<>();
+    private final List<ConfigCategoryContainer> categories = new ArrayList<>();
+    private final List<ConfigFieldContainer> configFields = new ArrayList<>();
 
     protected AbstractConfig(Class<?> clazz, File file) {
         configClass = clazz;
         config = new Configuration(file);
         config.load();
         try {
+            final Map<String, Method> configEvents = new HashMap<>();
+            final Set<String> eventUsages = new HashSet<>();
+            final Map<String, Method> configHideOverrides = new HashMap<>();
+            final Set<String> hideUsages = new HashSet<>();
+            for (final Method method : configClass.getDeclaredMethods()) {
+                if (method.isAnnotationPresent(ConfigPropertyEvent.class)) {
+                    if (!Modifier.isStatic(method.getModifiers())) {
+                        throw new IllegalStateException("Config event method " + method.getName() + " must be static");
+                    }
+                    final String desc = Type.getMethodDescriptor(method);
+                    if (!"()V".equals(desc)) {
+                        throw new IllegalStateException("Config event method " + method.getName() + " must be ()V");
+                    }
+                    final String[] configName = method.getAnnotation(ConfigPropertyEvent.class).name();
+                    for (final String name : configName) {
+                        configEvents.put(name, method);
+                        eventUsages.add(name);
+                    }
+                } else if (method.isAnnotationPresent(ConfigPropertyHideOverride.class)) {
+                    if (!Modifier.isStatic(method.getModifiers())) {
+                        throw new IllegalStateException("Config hide condition method " + method.getName() + " must be static");
+                    }
+                    final String desc = Type.getMethodDescriptor(method);
+                    if (!"()Z".equals(desc)) {
+                        throw new IllegalStateException("Config hide condition method " + method.getName() + " must be ()Z");
+                    }
+                    final String[] configName = method.getAnnotation(ConfigPropertyHideOverride.class).name();
+                    for (final String name : configName) {
+                        configHideOverrides.put(name, method);
+                        hideUsages.add(name);
+                    }
+                }
+            }
             final Map<String, Property> propertyMap = new HashMap<>();
             for (final Field field : configClass.getDeclaredFields()) {
                 if (field.isAnnotationPresent(ConfigProperty.class)) {
-                    configFields.add(new ConfigField(field, propertyMap, config));
+                    final ConfigFieldContainer fieldContainer = new ConfigFieldContainer(field, configEvents, configHideOverrides, propertyMap, config);
+                    eventUsages.remove(fieldContainer.getAnnotation().name());
+                    hideUsages.remove(fieldContainer.getAnnotation().name());
+                    configFields.add(fieldContainer);
+                } else if (field.isAnnotationPresent(ConfigCategory.class)) {
+                    categories.add(new ConfigCategoryContainer(field));
                 }
             }
+            if (!eventUsages.isEmpty()) {
+                throw new IllegalStateException("Some config events are not used anywhere : " + Arrays.toString(eventUsages.toArray()));
+            }
+            if (!hideUsages.isEmpty()) {
+                throw new IllegalStateException("Some config hide conditions are not used anywhere : " + Arrays.toString(hideUsages.toArray()));
+            }
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to create the config!");
         }
         try {
-            setConfigPropertyOrder();
+            readConfigInDefinitionOrder();
         } catch (IOException e) {
+            readConfigInAlphabeticalOrder();
             e.printStackTrace();
         }
+        setConfigPropertyOrder();
         if (config.hasChanged()) {
             config.save();
         }
@@ -49,7 +102,7 @@ public abstract class AbstractConfig {
 
     public void save() {
         try {
-            for (final ConfigField configField : configFields) {
+            for (final ConfigFieldContainer configField : configFields) {
                 configField.saveFieldValueToConfig();
             }
         } catch (IllegalAccessException e) {
@@ -61,7 +114,15 @@ public abstract class AbstractConfig {
         }
     }
 
-    private void setConfigPropertyOrder() throws IOException {
+    public GuiScreen getConfigGuiScreen() {
+        try {
+            return new ConfigGuiScreen(this, categories, configFields, configStructure);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Failed to generate the config menu!");
+        }
+    }
+
+    private void readConfigInDefinitionOrder() throws IOException {
         // We need to parse the class bytes with ASM because
         // the reflection method class.getDeclaredFields()
         // returns the fields in no specific order.
@@ -71,7 +132,6 @@ public abstract class AbstractConfig {
         final ClassNode cn = new ClassNode();
         cr.accept(cn, ClassReader.SKIP_CODE);
         final Set<String> configNames = new HashSet<>();
-        final Map<String, List<String>> categoryOrderMap = new LinkedHashMap<>();
         final String annotationDesc = Type.getDescriptor(ConfigProperty.class);
         final String guiPositionDesc = Type.getDescriptor(GuiPosition.class);
         for (final FieldNode field : cn.fields) {
@@ -79,12 +139,15 @@ public abstract class AbstractConfig {
             for (final AnnotationNode annotation : field.visibleAnnotations) {
                 if (!annotation.desc.equals(annotationDesc)) continue;
                 String configCategory = null;
+                String configSubCategory = "";
                 String configName = null;
                 for (int i = 0; i < annotation.values.size(); i += 2) {
                     final Object name = annotation.values.get(i);
                     final Object value = annotation.values.get(i + 1);
                     if ("category".equals(name) && value instanceof String) {
                         configCategory = ((String) value);
+                    } else if ("subCategory".equals(name) && value instanceof String) {
+                        configSubCategory = ((String) value);
                     } else if ("name".equals(name) && value instanceof String) {
                         configName = (String) value;
                     }
@@ -93,19 +156,47 @@ public abstract class AbstractConfig {
                     if (!configNames.add(configName)) {
                         throw new IllegalStateException("Duplicate key names in config properties");
                     }
-                    final List<String> list = categoryOrderMap.computeIfAbsent(configCategory, k -> new ArrayList<>());
+                    final LinkedHashMap<String, List<String>> subCategory = configStructure.computeIfAbsent(configCategory, m -> new LinkedHashMap<>());
+                    final List<String> subCatConfigs = subCategory.computeIfAbsent(configSubCategory, l -> new ArrayList<>());
                     final boolean isGuiPosition = field.desc.equals(guiPositionDesc);
                     if (isGuiPosition) {
-                        list.add("Xpos " + configName);
-                        list.add("Ypos " + configName);
-                    } else {
-                        list.add(configName);
+                        subCatConfigs.add("Show " + configName);
+                        subCatConfigs.add("Xpos " + configName);
+                        subCatConfigs.add("Ypos " + configName);
                     }
+                    subCatConfigs.add(configName);
                 }
             }
         }
-        for (final Map.Entry<String, List<String>> entry : categoryOrderMap.entrySet()) {
-            config.setCategoryPropertyOrder(entry.getKey(), entry.getValue());
+    }
+
+    private void readConfigInAlphabeticalOrder() {
+        final LinkedHashMap<String, LinkedHashMap<String, List<String>>> unsortedStructure = new LinkedHashMap<>();
+        for (final ConfigFieldContainer configField : configFields) {
+            final ConfigProperty annotation = configField.getAnnotation();
+            final LinkedHashMap<String, List<String>> subCategory = unsortedStructure.computeIfAbsent(annotation.category(), m -> new LinkedHashMap<>());
+            final List<String> subCatConfigs = subCategory.computeIfAbsent(annotation.subCategory(), l -> new ArrayList<>());
+            final boolean isGuiPosition = configField.getType() == GuiPosition.class;
+            if (isGuiPosition) {
+                subCatConfigs.add("Show " + annotation.name());
+                subCatConfigs.add("Xpos " + annotation.name());
+                subCatConfigs.add("Ypos " + annotation.name());
+            }
+            subCatConfigs.add(annotation.name());
+        }
+        for (final Map.Entry<String, LinkedHashMap<String, List<String>>> entry : MapUtil.sortByKey(unsortedStructure).entrySet()) {
+            configStructure.put(entry.getKey(), MapUtil.sortByKey(entry.getValue()));
+        }
+    }
+
+    private void setConfigPropertyOrder() {
+        for (final Map.Entry<String, LinkedHashMap<String, List<String>>> entry : configStructure.entrySet()) {
+            final LinkedHashMap<String, List<String>> subCategory = entry.getValue();
+            final List<String> categoryConfigs = new ArrayList<>();
+            for (final List<String> configs : subCategory.values()) {
+                categoryConfigs.addAll(configs);
+            }
+            config.setCategoryPropertyOrder(entry.getKey(), categoryConfigs);
         }
     }
 
