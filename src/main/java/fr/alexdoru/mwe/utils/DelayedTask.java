@@ -11,14 +11,12 @@ public class DelayedTask {
     private int counter;
 
     public DelayedTask(Runnable task) {
-        this.counter = 0;
-        this.runnable = task;
-        MinecraftForge.EVENT_BUS.register(this);
+        this(task, 0);
     }
 
     public DelayedTask(Runnable task, int ticks) {
-        this.counter = ticks;
         this.runnable = task;
+        this.counter = ticks;
         MinecraftForge.EVENT_BUS.register(this);
     }
 
