@@ -237,7 +237,7 @@ public class MWEConfig extends AbstractConfig {
             category = VANILLA, subCategory = "Performance",
             name = "Limit dropped item rendered",
             comment = "Dynamically modifies the render distance of dropped items entities to preserve performance. It starts reducing the render distance when exceeding the threshold set below.\n"
-                    + "There is a keybind (ESC -> options -> controls -> MWE) to toggle it on the fly")
+                    + "There is a keybind (ESC -> options -> controls -> MWE) to toggle it")
     public static boolean limitDroppedEntityRendered = true;
 
     @ConfigProperty(
@@ -394,6 +394,13 @@ public class MWEConfig extends AbstractConfig {
             name = "Prevent sword dropping",
             comment = "Prevents dropping the sword you are holding in your hand")
     public static boolean preventSwordDropping = true;
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Toggle Sprint",
+            name = "Toggle Sprint",
+            comment = "Always sprint when you hold the forward key\n"
+                    + "There is a keybind (ESC -> options -> controls -> MWE) to toggle it")
+    public static boolean toggleSprint;
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Potion effect",

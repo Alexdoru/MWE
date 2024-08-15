@@ -18,6 +18,7 @@ public class KeybindingListener {
     private static final KeyBinding surfaceKey = new KeyBinding("/Surface", 0, "MWE");
     private static final KeyBinding echestKey = new KeyBinding("/enderchest", 0, "MWE");
     private static final KeyBinding teamchestKey = new KeyBinding("/teamchest", 0, "MWE");
+    private static final KeyBinding toggleSprintKey = new KeyBinding("Toggle Sprint", 0, "MWE");
     private static final KeyBinding warcryKey = new KeyBinding("/warcry", 0, "MWE");
     private static final KeyBinding newNickKey = new KeyBinding("New Random Nick", 0, "MWE");
     private static final KeyBinding playerHitboxes = new KeyBinding("Toggle player hitboxes", 0, "Hitboxes");
@@ -28,6 +29,7 @@ public class KeybindingListener {
         ClientRegistry.registerKeyBinding(surfaceKey);
         ClientRegistry.registerKeyBinding(echestKey);
         ClientRegistry.registerKeyBinding(teamchestKey);
+        ClientRegistry.registerKeyBinding(toggleSprintKey);
         ClientRegistry.registerKeyBinding(warcryKey);
         ClientRegistry.registerKeyBinding(newNickKey);
         ClientRegistry.registerKeyBinding(playerHitboxes);
@@ -49,6 +51,11 @@ public class KeybindingListener {
             mc.thePlayer.sendChatMessage("/enderchest");
         } else if (ScoreboardTracker.isInMwGame() && teamchestKey.isPressed()) {
             mc.thePlayer.sendChatMessage("/teamchest");
+        } else if (toggleSprintKey.isPressed()) {
+            MWEConfig.toggleSprint = !MWEConfig.toggleSprint;
+            if (MWEConfig.toggleSprint) ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Toggle Sprint On");
+            else ChatUtil.addChatMessage(EnumChatFormatting.RED + "Toggle Sprint Off");
+            MWEConfig.saveConfig();
         } else if (ScoreboardTracker.isInMwGame() && !ScoreboardTracker.isPrepPhase() && warcryKey.isPressed()) {
             mc.thePlayer.sendChatMessage("/warcry");
         } else if (toggleDroppedItemLimit.isPressed()) {
