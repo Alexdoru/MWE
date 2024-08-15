@@ -949,6 +949,12 @@ public class MWEConfig extends AbstractConfig {
             comment = "Displays the report HUD only when the chat is open")
     public static boolean showReportHUDonlyInChat;
 
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Bypass",
+            name = "Fix autoblock animation bypass",
+            comment = "Patches a bypass that allows cheaters to not appear to be blocking their sword when they are in fact blocking and attacking at the same time")
+    public static boolean fixAutoblockAnimationBypass = true;
+
     public static boolean debugLogging;
 
     @ConfigProperty(

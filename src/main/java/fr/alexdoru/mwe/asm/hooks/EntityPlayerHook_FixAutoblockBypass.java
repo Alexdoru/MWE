@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.asm.hooks;
 
+import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -11,7 +12,7 @@ import java.util.Objects;
 public class EntityPlayerHook_FixAutoblockBypass {
 
     public static boolean areItemStackSemiEquals(ItemStack currentStack, ItemStack itemInUse, EntityPlayer player) {
-        if (player.getClass() != EntityOtherPlayerMP.class) {
+        if (!MWEConfig.fixAutoblockAnimationBypass || player.getClass() != EntityOtherPlayerMP.class) {
             return currentStack == itemInUse;
         }
         if (currentStack == itemInUse) {
