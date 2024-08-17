@@ -23,6 +23,7 @@ public final class GuiManager {
     public static final MiniPotionHUD miniPotionHUD = new MiniPotionHUD();
     public static final PendingReportHUD pendingReportHUD = new PendingReportHUD();
     public static final PhoenixBondHUD phoenixBondHUD = new PhoenixBondHUD();
+    public static final PotionHUD potionHUD = new PotionHUD();
     public static final SpeedHUD speedHUD = new SpeedHUD();
     public static final SquadHealthHUD squadHealthHUD = new SquadHealthHUD();
     public static final WarcryHUD warcryHUD = new WarcryHUD();
@@ -39,6 +40,7 @@ public final class GuiManager {
         registeredRenderers.add(miniPotionHUD);
         registeredRenderers.add(pendingReportHUD);
         registeredRenderers.add(phoenixBondHUD);
+        registeredRenderers.add(potionHUD);
         registeredRenderers.add(speedHUD);
         registeredRenderers.add(squadHealthHUD);
         registeredRenderers.add(warcryHUD);

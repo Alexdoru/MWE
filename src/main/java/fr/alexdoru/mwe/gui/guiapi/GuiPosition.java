@@ -5,8 +5,6 @@ import net.minecraft.client.gui.ScaledResolution;
 
 public final class GuiPosition {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
-
     private boolean enabled;
     /** The default relative x and y coordinates for this HUD. Ranging from 0 to 1 */
     private final double defaultRelativeX, defaultRelativeY;
@@ -38,7 +36,7 @@ public final class GuiPosition {
     }
 
     public void saveAbsoluteToRelative() {
-        final ScaledResolution res = new ScaledResolution(mc);
+        final ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
         this.relativeX = ((double) this.absoluteRenderX) / ((double) res.getScaledWidth());
         this.relativeY = ((double) this.absoluteRenderY) / ((double) res.getScaledHeight());
     }
@@ -53,7 +51,7 @@ public final class GuiPosition {
      * Needs to be called before getAbsoluteRenderX() and getAbsoluteRenderY()
      */
     public void updateAbsolutePosition() {
-        updateAbsolutePosition(new ScaledResolution(mc));
+        updateAbsolutePosition(new ScaledResolution(Minecraft.getMinecraft()));
     }
 
     /**
@@ -70,13 +68,36 @@ public final class GuiPosition {
      * Needs to be called before getAbsoluteRenderX() and getAbsoluteRenderY()
      * So that the whole HUD fits inside the screen
      */
-    public void updateAdjustedAbsolutePosition(ScaledResolution res, int hudWidth, int hudHigth) {
+    public void updateAdjustedAbsolutePosition(ScaledResolution res, int hudWidth, int hudHeight) {
         updateAbsolutePosition(res);
         if (this.absoluteRenderX + hudWidth > res.getScaledWidth()) {
             this.absoluteRenderX = res.getScaledWidth() - hudWidth;
         }
-        if (this.absoluteRenderY + hudHigth > res.getScaledHeight()) {
-            this.absoluteRenderY = res.getScaledHeight() - hudHigth;
+        if (this.absoluteRenderY + hudHeight > res.getScaledHeight()) {
+            this.absoluteRenderY = res.getScaledHeight() - hudHeight;
+        }
+    }
+
+    /**
+     * Updates the position of the render : absoluteRenderX and absoluteRenderY
+     * Needs to be called before getAbsoluteRenderX() and getAbsoluteRenderY()
+     * So that the whole HUD fits inside the screen
+     */
+    public void updateAdjustedAbsolutePosition(ScaledResolution res, int hudWidth, int hudHeight, int renderOffsetX, int renderOffsetY) {
+        updateAbsolutePosition(res);
+        this.absoluteRenderX = this.absoluteRenderX + renderOffsetX;
+        this.absoluteRenderY = this.absoluteRenderY + renderOffsetY;
+        if (this.absoluteRenderX < 0) {
+            this.absoluteRenderX = 0;
+        }
+        if (this.absoluteRenderY < 0) {
+            this.absoluteRenderY = 0;
+        }
+        if (this.absoluteRenderX + hudWidth > res.getScaledWidth()) {
+            this.absoluteRenderX = res.getScaledWidth() - hudWidth;
+        }
+        if (this.absoluteRenderY + hudHeight > res.getScaledHeight()) {
+            this.absoluteRenderY = res.getScaledHeight() - hudHeight;
         }
     }
 

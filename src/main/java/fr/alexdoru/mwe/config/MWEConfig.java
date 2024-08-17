@@ -351,22 +351,43 @@ public class MWEConfig extends AbstractConfig {
     public static boolean cleanChatLogs = true;
 
     @ConfigProperty(
-            category = PVP_STUFF, subCategory = "HUD",
-            name = "Arrow Hit HUD",
-            comment = "Displays the HP of opponents on arrow hits")
-    public static final GuiPosition arrowHitHUDPosition = new GuiPosition(true, 0.5d, 9d / 20d);
+            category = PVP_STUFF, subCategory = "Potion HUD",
+            name = "Mini Potion HUD",
+            comment = "Displays a minimalist potion HUD with the remaining duration of the following potion buffs :"
+                    + " §dregeneration§7, §8resistance§7, §bspeed§7, §cstrength§7, §finvisibility§7, §ajump boost§7")
+    public static final GuiPosition miniPotionHUDPosition = new GuiPosition(false, 0.5d, 7.5d / 20d);
 
     @ConfigProperty(
-            category = PVP_STUFF, subCategory = "HUD",
-            name = "Show head on Arrow Hit HUD",
-            comment = "Show head of player shot on the Arrow Hit HUD")
-    public static boolean showHeadOnArrowHitHUD;
+            category = PVP_STUFF, subCategory = "Potion HUD",
+            name = "Mini Potion HUD only in MW",
+            comment = "Displays the mini potion HUD only in Mega Walls")
+    public static boolean showMiniPotionHUDOnlyMW;
 
     @ConfigProperty(
-            category = PVP_STUFF, subCategory = "HUD",
-            name = "Speed HUD",
-            comment = "Displays your own speed in the XZ plane")
-    public static final GuiPosition speedHUDPosition = new GuiPosition(false, 1d, 1d);
+            category = PVP_STUFF, subCategory = "Potion HUD",
+            name = "Potion HUD",
+            comment = "Displays your potions effects")
+    public static final GuiPosition potionHUDPosition = new GuiPosition(false, 0d, 0.5d);
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Potion HUD",
+            name = "Horizontal Potion HUD",
+            comment = "Displays the Potion HUD horizontally")
+    public static boolean horizontalPotionHUD;
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Potion HUD",
+            name = "Potion HUD Text Color",
+            comment = "Color of the text for the Potion HUD",
+            isColor = true)
+    public static int potionHUDTextColor = 0xFFFFFF;
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Toggle Sprint",
+            name = "Toggle Sprint",
+            comment = "Always sprint when you hold the forward key\n"
+                    + "There is a keybind (ESC -> options -> controls -> MWE) to toggle it")
+    public static boolean toggleSprint;
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Health",
@@ -396,24 +417,22 @@ public class MWEConfig extends AbstractConfig {
     public static boolean preventSwordDropping = true;
 
     @ConfigProperty(
-            category = PVP_STUFF, subCategory = "Toggle Sprint",
-            name = "Toggle Sprint",
-            comment = "Always sprint when you hold the forward key\n"
-                    + "There is a keybind (ESC -> options -> controls -> MWE) to toggle it")
-    public static boolean toggleSprint;
+            category = PVP_STUFF, subCategory = "Other HUD",
+            name = "Arrow Hit HUD",
+            comment = "Displays the HP of opponents on arrow hits")
+    public static final GuiPosition arrowHitHUDPosition = new GuiPosition(true, 0.5d, 9d / 20d);
 
     @ConfigProperty(
-            category = PVP_STUFF, subCategory = "Potion effect",
-            name = "Mini Potion HUD",
-            comment = "Displays a minimalist potion HUD with the remaining duration of the following potion buffs :"
-                    + " §dregeneration§7, §8resistance§7, §bspeed§7, §cstrength§7, §finvisibility§7, §ajump boost§7")
-    public static final GuiPosition miniPotionHUDPosition = new GuiPosition(false, 0.5d, 7.5d / 20d);
+            category = PVP_STUFF, subCategory = "Other HUD",
+            name = "Show head on Arrow Hit HUD",
+            comment = "Show head of player shot on the Arrow Hit HUD")
+    public static boolean showHeadOnArrowHitHUD;
 
     @ConfigProperty(
-            category = PVP_STUFF, subCategory = "Potion effect",
-            name = "Mini Potion HUD only in MW",
-            comment = "Displays the mini potion HUD only in Mega Walls")
-    public static boolean showMiniPotionHUDOnlyMW;
+            category = PVP_STUFF, subCategory = "Other HUD",
+            name = "Speed HUD",
+            comment = "Displays your own speed in the XZ plane")
+    public static final GuiPosition speedHUDPosition = new GuiPosition(false, 1d, 1d);
 
     @ConfigProperty(
             category = HITBOXES,
