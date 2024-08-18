@@ -38,15 +38,15 @@ public class PendingReportHUD extends AbstractRenderer {
             str.insert(offset, EnumChatFormatting.WHITE);
             text = str.toString();
         }
-        this.getGuiPosition().updateAdjustedAbsolutePosition(resolution, mc.fontRendererObj.getStringWidth(text), mc.fontRendererObj.FONT_HEIGHT);
-        final int x = this.getGuiPosition().getAbsoluteRenderX();
-        final int y = this.getGuiPosition().getAbsoluteRenderY();
+        this.guiPosition.updateAdjustedAbsolutePosition(resolution, mc.fontRendererObj.getStringWidth(text), mc.fontRendererObj.FONT_HEIGHT);
+        final int x = this.guiPosition.getAbsoluteRenderX();
+        final int y = this.guiPosition.getAbsoluteRenderY();
         mc.fontRendererObj.drawStringWithShadow(text, x + 1, y, 0xFFFF55);
     }
 
     @Override
     public void renderDummy() {
-        mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.RED + "1 report to send..", this.getGuiPosition().getAbsoluteRenderX() + 1, this.getGuiPosition().getAbsoluteRenderY(), 0xFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.RED + "1 report to send..", this.guiPosition.getAbsoluteRenderX() + 1, this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
