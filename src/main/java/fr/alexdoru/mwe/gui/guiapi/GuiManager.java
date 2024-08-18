@@ -12,6 +12,7 @@ public final class GuiManager {
 
     private static final ArrayList<IRenderer> registeredRenderers = new ArrayList<>();
     private static final Minecraft mc = Minecraft.getMinecraft();
+    public static final ArmorHUD armorHUD = new ArmorHUD();
     public static final ArrowHitHUD arrowHitHUD = new ArrowHitHUD();
     public static final BaseLocationHUD baseLocationHUD = new BaseLocationHUD();
     public static final CreeperPrimedTntHUD creeperPrimedTntHUD = new CreeperPrimedTntHUD();
@@ -29,6 +30,7 @@ public final class GuiManager {
     public static final WarcryHUD warcryHUD = new WarcryHUD();
 
     static {
+        registeredRenderers.add(armorHUD);
         registeredRenderers.add(arrowHitHUD);
         registeredRenderers.add(baseLocationHUD);
         registeredRenderers.add(creeperPrimedTntHUD);

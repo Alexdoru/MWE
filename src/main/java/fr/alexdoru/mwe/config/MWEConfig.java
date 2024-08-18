@@ -351,6 +351,42 @@ public class MWEConfig extends AbstractConfig {
     public static boolean cleanChatLogs = true;
 
     @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Armor HUD",
+            name = "Armor HUD",
+            comment = "Displays your currently equipped armor")
+    public static final GuiPosition armorHUDPositon = new GuiPosition(false, 0.25d, 1d);
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Armor HUD",
+            name = "Horizontal Armor HUD",
+            comment = "Displays the Armor HUD horizontally")
+    public static boolean horizontalArmorHUD = true;
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Armor HUD",
+            name = "Low Durability Armor HUD",
+            comment = "Only renders the Armor HUD when the durability of one of your armor pieces falls below the threshold defined below")
+    public static boolean lowDuraArmorHUD;
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Armor HUD",
+            name = "Low Durability threshold",
+            sliderMax = 528)
+    public static int lowDuraArmorHUDValue = 50;
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Armor HUD",
+            name = "Show Armor Durability",
+            comment = "Renders the durability of each armor piece")
+    public static boolean showArmorDurability = true;
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Armor HUD",
+            name = "Show Armor Durability as number",
+            comment = "Renders the durability of each armor piece as colored numbers instead of a bar")
+    public static boolean showArmorDurabilityAsNumber;
+
+    @ConfigProperty(
             category = PVP_STUFF, subCategory = "Potion HUD",
             name = "Mini Potion HUD",
             comment = "Displays a minimalist potion HUD with the remaining duration of the following potion buffs :"
@@ -413,13 +449,13 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Inventory",
             name = "Prevent sword dropping",
-            comment = "Prevents dropping the sword you are holding in your hand")
+            comment = "Prevents dropping the sword in your hand when pressing the drop key")
     public static boolean preventSwordDropping = true;
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Other HUD",
             name = "Arrow Hit HUD",
-            comment = "Displays the HP of opponents on arrow hits")
+            comment = "Displays the HP of opponents on arrow hits, also works with Spider Leap damage in Mega Walls and Renegade Rend")
     public static final GuiPosition arrowHitHUDPosition = new GuiPosition(true, 0.5d, 9d / 20d);
 
     @ConfigProperty(
