@@ -4,7 +4,6 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.TimerUtil;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.EnumChatFormatting;
 
 public class KillCooldownHUD extends AbstractRenderer {
 
@@ -31,14 +30,14 @@ public class KillCooldownHUD extends AbstractRenderer {
     @Override
     public void render(ScaledResolution resolution) {
         final int timeleft = 60 - ((int) (System.currentTimeMillis() - lastkilltime)) / 1000;
-        final String displayText = EnumChatFormatting.DARK_RED + "/kill cooldown : " + timeleft + "s";
+        final String displayText = "/kill cooldown : " + timeleft + "s";
         this.guiPosition.updateAdjustedAbsolutePosition(resolution, mc.fontRendererObj.getStringWidth(displayText), mc.fontRendererObj.FONT_HEIGHT);
-        mc.fontRendererObj.drawStringWithShadow(displayText, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow(displayText, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.killCooldownHUDColor);
     }
 
     @Override
     public void renderDummy() {
-        mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.DARK_RED + "/kill cooldown : 60s", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow("/kill cooldown : 60s", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.killCooldownHUDColor);
     }
 
     @Override

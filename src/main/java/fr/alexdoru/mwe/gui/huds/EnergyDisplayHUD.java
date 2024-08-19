@@ -9,10 +9,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.HashSet;
+import java.util.Set;
 
 public class EnergyDisplayHUD extends AbstractRenderer {
 
-    private static final HashSet<Item> itemsForRender = new HashSet<>();
+    private static final Set<Item> itemsForRender = new HashSet<>();
     private long timeStartRender;
     private int prevEnergyValue;
 
@@ -24,7 +25,7 @@ public class EnergyDisplayHUD extends AbstractRenderer {
     }
 
     public EnergyDisplayHUD() {
-        super(MWEConfig.energyDisplayHUDPosition);
+        super(MWEConfig.energyHUDPosition);
     }
 
     @Override
@@ -49,20 +50,23 @@ public class EnergyDisplayHUD extends AbstractRenderer {
             return;
         }
         if (this.timeStartRender + 2500L - currentTime > 0L) {
-            final String displayText;
-            if (energy >= MWEConfig.aquaEnergyDisplayThreshold) {
-                displayText = EnumChatFormatting.AQUA.toString() + EnumChatFormatting.BOLD + energy;
-            } else {
-                displayText = EnumChatFormatting.GREEN.toString() + energy;
-            }
             this.guiPosition.updateAbsolutePosition(resolution);
-            drawCenteredString(mc.fontRendererObj, displayText, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+            if (energy >= MWEConfig.highEnergyThreshold) {
+                drawCenteredString(mc.fontRendererObj, EnumChatFormatting.BOLD.toString() + energy, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.highEnergyHUDColor);
+            } else {
+                drawCenteredString(mc.fontRendererObj, String.valueOf(energy), this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.lowEnergyHUDColor);
+            }
         }
     }
 
     @Override
     public void renderDummy() {
-        drawCenteredString(mc.fontRendererObj, EnumChatFormatting.GREEN + "50", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        final int energy = 50;
+        if (energy >= MWEConfig.highEnergyThreshold) {
+            drawCenteredString(mc.fontRendererObj, EnumChatFormatting.BOLD.toString() + energy, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.highEnergyHUDColor);
+        } else {
+            drawCenteredString(mc.fontRendererObj, String.valueOf(energy), this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.lowEnergyHUDColor);
+        }
     }
 
     @Override

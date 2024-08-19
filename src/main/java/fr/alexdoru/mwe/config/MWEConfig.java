@@ -414,7 +414,6 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Potion HUD",
             name = "Potion HUD Text Color",
-            comment = "Color of the text for the Potion HUD",
             isColor = true)
     public static int potionHUDTextColor = 0xFFFFFF;
 
@@ -469,6 +468,12 @@ public class MWEConfig extends AbstractConfig {
             name = "Speed HUD",
             comment = "Displays your own speed in the XZ plane")
     public static final GuiPosition speedHUDPosition = new GuiPosition(false, 1d, 1d);
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Other HUD",
+            name = "Speed HUD Color",
+            isColor = true)
+    public static int speedHUDColor = 0x00AA00;
 
     @ConfigProperty(
             category = HITBOXES,
@@ -672,6 +677,12 @@ public class MWEConfig extends AbstractConfig {
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
+            name = "Kill cooldown HUD Color",
+            isColor = true)
+    public static int killCooldownHUDColor = 0xAA0000;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
             name = "Last wither HUD",
             comment = "Displays the time it takes for the last wither to die")
     public static final GuiPosition lastWitherHUDPosition = new GuiPosition(true, 0.75d, 0d);
@@ -705,14 +716,26 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Energy display HUD",
-            comment = "Displays a HUD with the amount of energy you have. Turns §baqua§7 when your energy level exceeds the amount set below.")
-    public static final GuiPosition energyDisplayHUDPosition = new GuiPosition(true, 0.5d, 10.5 / 20d);
+            comment = "Displays a HUD with the amount of energy you have. Turns a different color when your energy level exceeds the amount set below.")
+    public static final GuiPosition energyHUDPosition = new GuiPosition(true, 0.5d, 10.5 / 20d);
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
-            name = "Threshold to make energy HUD aqua",
+            name = "High energy threshold",
             sliderMax = 160)
-    public static int aquaEnergyDisplayThreshold = 100;
+    public static int highEnergyThreshold = 100;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Low energy color",
+            isColor = true)
+    public static int lowEnergyHUDColor = 0x55FF55;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "High energy color",
+            isColor = true)
+    public static int highEnergyHUDColor = 0x55FFFF;
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
