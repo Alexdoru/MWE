@@ -1,16 +1,19 @@
 package fr.alexdoru.mwe.hackerdetector.checks;
 
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
+import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.mwe.hackerdetector.data.TickingBlockMap;
 import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
+import fr.alexdoru.mwe.utils.NameUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 
@@ -163,9 +166,21 @@ public class KillAuraACheck extends Check {
             if (MWEConfig.debugLogging) {
                 final String msg = " | " + data.attackInfo.attackType.name() + " | target : " + data.attackInfo.targetName + " | b " + b + " | p " + p + " | reach " + String.format("%.2f", reach) + " | players " + nearbyPlayers.size();
                 this.log(player, data, data.killAuraAVL, msg);
-                if (ScoreboardTracker.isReplayMode()) {
-                    this.fail(player, " b" + b + " p" + p + " vl" + data.killAuraAVL.getViolationLevel());
+            }
+            if (MWEConfig.debugKillauraFlags && ScoreboardTracker.isReplayMode()) {
+                final StringBuilder sb = new StringBuilder();
+                sb.append(NameUtil.getFormattedNameWithoutIcons(player.getName()));
+                sb.append(EnumChatFormatting.RESET).append(" attacked ");
+                sb.append(NameUtil.getFormattedNameWithoutIcons(data.attackInfo.targetName));
+                sb.append(EnumChatFormatting.RESET).append(" through ");
+                if (b > 2) {
+                    sb.append(b / 10d).append("m of blocks");
                 }
+                if (p > 2) {
+                    sb.append(" ");
+                    sb.append(p / 10d).append("m of players");
+                }
+                ChatUtil.debug(sb.toString());
             }
             return true;
         }

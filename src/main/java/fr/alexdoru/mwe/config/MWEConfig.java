@@ -1043,6 +1043,12 @@ public class MWEConfig extends AbstractConfig {
     public static boolean debugLogging;
 
     @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Debug",
+            name = "Replay Killaura Flags",
+            comment = "Prints a chat message whenever someone attacks another player through blocks, only works in replay, the attack detection system isn't accurate outside of replay")
+    public static boolean debugKillauraFlags;
+
+    @ConfigProperty(
             category = EXTERNAL,
             name = "Hide Optifine Hats",
             comment = "Hides the hats added by Optifine during Halloween and Christmas\n"
