@@ -32,6 +32,10 @@ public class PositionEditGuiScreen extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.renderCrosshair();
+        final boolean prevEnabled = this.guiPosition.isEnabled();
+        this.guiPosition.setEnabled(false);
+        GuiManager.renderAllDummy();
+        this.guiPosition.setEnabled(prevEnabled);
         super.drawDefaultBackground();
         renderer.renderDummy();
         if (this.dragging) {

@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.gui.guiapi;
 
 import fr.alexdoru.mwe.gui.huds.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -80,6 +81,16 @@ public final class GuiManager {
                 return renderer;
         }
         return null;
+    }
+
+    public static void renderAllDummy() {
+        final ScaledResolution resolution = new ScaledResolution(mc);
+        for (final IRenderer renderer : registeredRenderers) {
+            if (renderer.getGuiPosition().isEnabled()) {
+                renderer.getGuiPosition().updateAbsolutePosition(resolution);
+                renderer.renderDummy();
+            }
+        }
     }
 
 }
