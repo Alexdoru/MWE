@@ -2,16 +2,19 @@ package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.asm.interfaces.IWitherColor;
 import fr.alexdoru.mwe.asm.interfaces.RenderManagerAccessor;
+import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.client.shader.ShaderGroup;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import java.util.List;
@@ -42,6 +45,12 @@ public class RenderGlobalHook_EntityOutlines {
                 !ScoreboardTracker.getParser().isDeathmatch();
         if (!b) {
             hasRendered = false;
+            return false;
+        }
+        if (!OpenGlHelper.isFramebufferEnabled()) {
+            MWEConfig.renderWitherOutline = false;
+            MWEConfig.saveConfig();
+            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "Wither outline rendering has been disabled, frame buffers aren't supported!");
             return false;
         }
         final List<Entity> list = mc.theWorld.getLoadedEntityList();

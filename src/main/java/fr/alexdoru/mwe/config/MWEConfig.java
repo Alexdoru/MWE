@@ -660,7 +660,8 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "Render",
             name = "Render wither outline",
-            comment = "Renders a colored outline around withers")
+            comment = "Renders a colored outline around withers\n"
+                    + "§cThis doesn't work with Optifine's Fast Render")
     public static boolean renderWitherOutline = true;
 
     @ConfigProperty(
