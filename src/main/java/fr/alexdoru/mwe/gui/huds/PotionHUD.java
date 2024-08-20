@@ -86,9 +86,11 @@ public class PotionHUD extends AbstractRenderer {
                 GlStateManager.scale(2d / 3d, 2d / 3d, 2d / 3d);
                 GlStateManager.translate(-xDrawPots, -yDrawPots, 0d);
                 final String potDuration = potioneffect.getDuration() > 60 * 60 * 20 ? "**:**" : Potion.getDurationString(potioneffect);
-                final String potionLevel = ChatUtil.intToRoman(potioneffect.getAmplifier() + 1);
                 fr.drawStringWithShadow(potDuration, xDrawPots + 27 - fr.getStringWidth(potDuration) - 1, yDrawPots + 27 - fr.FONT_HEIGHT + 5, MWEConfig.potionHUDTextColor);
-                fr.drawStringWithShadow(potionLevel, xDrawPots + 27 - fr.getStringWidth(potionLevel) - 1, yDrawPots, MWEConfig.potionHUDTextColor);
+                if (potioneffect.getAmplifier() != 0) {
+                    final String potionLevel = ChatUtil.intToRoman(potioneffect.getAmplifier() + 1);
+                    fr.drawStringWithShadow(potionLevel, xDrawPots + 27 - fr.getStringWidth(potionLevel) - 1, yDrawPots, MWEConfig.potionHUDTextColor);
+                }
                 if (MWEConfig.horizontalPotionHUD) {
                     xDrawPots += 27 + 2;
                 } else {
