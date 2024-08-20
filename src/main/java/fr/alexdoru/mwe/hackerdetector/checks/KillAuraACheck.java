@@ -167,7 +167,7 @@ public class KillAuraACheck extends Check {
                 final String msg = " | " + data.attackInfo.attackType.name() + " | target : " + data.attackInfo.targetName + " | b " + b + " | p " + p + " | reach " + String.format("%.2f", reach) + " | players " + nearbyPlayers.size();
                 this.log(player, data, data.killAuraAVL, msg);
             }
-            if (MWEConfig.debugKillauraFlags && ScoreboardTracker.isReplayMode()) {
+            if (MWEConfig.debugKillauraFlags && ScoreboardTracker.isReplayMode() && (b > 2 || p > 2)) {
                 final StringBuilder sb = new StringBuilder();
                 sb.append(NameUtil.getFormattedNameWithoutIcons(player.getName()));
                 sb.append(EnumChatFormatting.RESET).append(" attacked ");
