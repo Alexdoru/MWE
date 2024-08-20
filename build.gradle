@@ -12,7 +12,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "3.8"
+version = "4.0"
 group = "fr.alexdoru"
 archivesBaseName = "[1.8.9] MWE"
 

@@ -35,12 +35,17 @@ Download the latest release from the **[releases page](https://github.com/Alexdo
 - **[Optifine](https://optifine.net/downloads)** - Enhances performance
 - **[Sk1er's Patcher](https://sk1er.club/mods/patcher)** - `/patcher` Minecraft QOLs, performance improvements and vanilla bug fixes
 - **[Sk1er's Old Animation](https://discord.gg/sk1er)** - `/oldanimations` Brings back 1.7 animations, available in beta on their discord server
-- **[Orange's Simple Mods-1.2 ](https://legacy.curseforge.com/minecraft/mc-mods/oranges-simplemods-collection/files)** - `/simpleconfig /simplehud` Armor Status HUD, Status effect HUD and Toggle Sprint
 - **[My Sidebar Mod](https://github.com/Alexdoru/SidebarMod/releases/)** - `/sidebarmod` Enhances the sidebar
 
 Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, the chat, tablist and hitbox related features from this mod will not work.
 
 ## Feature list
+
+### Basic PVP Mods
+
+- **Armor HUD** - Renders your armor on the screen, render vertically or horizontally, choose to render durability, choose to only render when the durability is low
+- **Potion HUD** - Renders your potion effects on the screen, render vertically or horizontally, choose the text color
+- **Toggle Sprint** - Holds your sprint when you hold the forward key, there is a keybind to toggle it
 
 ### Enhancements
 
@@ -49,6 +54,11 @@ Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, th
 - **Speed HUD** - HUD displaying your speed
 - **Mini Potion HUD** - Just a colored number with remaining duration of potion buffs
 - **Chat heads** - Display heads of players in front of chat messages (disabled with Feather client)
+- **Chat Copy** - Left/Right click to copy a chat message, hold shift to copy one line
+- **Chat Search** - add search bar in the chat to search chat messages, press Ctrl + F to enter chat search, Ctrl + Shift + F to use Regex search, the search icon can be hidden when it's not used, and it can be moved for compatibility
+- **Longer chat** - setting to extend the chat size to 32 000 lines
+- **Forge command fix** - fix forge trying to run commands even if you don't put a `/` in front of your message
+- **Case command fix** - fix command handler only supporting commands written in all lower case
 - **Cancel night vision** - Remove the blueish tint from night vision
 - **Clear view** - Stop rendering particles that are too close (75cm) to the screen for a better visibility
 - **Sound warning low HP** - Play a sound when your health drops below a certain threshold
@@ -65,6 +75,7 @@ Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, th
 - **Hide tablist ping** - Hide the ping values in the tablist if all the values are equal to 1
 - **Display playercount in tablist** - Display the amount of players in your current lobby at the top of the tablist
 - **Change tablist size** - Change the amount of players displayed in the tablist (disabled with Patcher)
+- **Choose tablist column spacing** - Choose the spacing between columns in the tablist
 - **Tabcomplete player names** - Ability to tab complete player names in the chat all the time
 - **Hide toggle sprint HUD** - Hide the toggle sprint HUD from OrangeMarshall's SimpleMod
 - **Fix tablist rect background** - Fix the background of the tablist not being symmetric and sometimes missing pixels on one side
@@ -72,13 +83,15 @@ Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, th
 - **Fix case commands tabcomplete** - Fix not being able to tabcomplete commands if the command contains uppercased letters
 - **Hide Optifine hats** - Hide cosmetic hats added by Optifine during certain seasons
 - **Command keybinds** - Keybinds to run the commands `/kill` & `/surface`
-- **Clean chat logs ** - Remove formatting codes from the chat logs
+- **Clean chat logs** - Remove formatting codes from the chat logs
+- **Wither Hurt Color** - Gives a team colored hurt color to withers if they have a team
 
 ### Hitbox mod, better f3+b:
 
 Allows you to customize the look of the f3+b hitboxes.
-- **Enable hitboxes for certain entity types** - players, grounded arrows, pinned arrows, flying arrows, dropped items, passive mobs, aggressive mobs, item frames, other entities
+- **Enable hitboxes for certain entity types** - players, grounded arrows, pinned arrows, flying arrows, dropped items, passive mobs, aggressive mobs, item frames, withers, other entities
 - **Team colored player hitbox** - The player hitbox will take the color of the player's team
+- **Team colored wither hitbox** - The wither hitbox will take the color of the wither's team
 - **Team colored arrow hitbox** - The arrow hitbox will take the color of the shooter's team
 - **Custom hitbox color** - Select a custom color for all the hitboxes
 - **Real size hitbox** - Render the actual hitbox of the player which is a bit larger than what default f3+b shows
@@ -98,6 +111,7 @@ Allows you to customize the look of the f3+b hitboxes.
 - **Kill cooldown HUD** - Displays the cooldown on the `/kill` command
 - **Phoenix bond HUD** - Displays the amount of hearts healed from a Phoenix bond
 - **Strength HUD** - Displays the duration of the strength in Mega Walls when playing Dreadlord, Herobrine, Hunter, Zombie. Plays a sound and shows the countdown before getting strength with Hunter.
+- **Warcry HUD** - Displays the warcry cooldown
 - **Wither death time HUD** - Displays the time left before the last wither standing automatically dies, HUD can be placed in the sidebar
 - **Hide hunger title** - Stop rendering the hunger message in the middle of the screen during deathmatch
 - **Hide repetitive msg** - Hide certain messages that spam the chat in Mega Walls
@@ -105,7 +119,10 @@ Allows you to customize the look of the f3+b hitboxes.
 - **Renegade arrow count** - Display the amount of arrows you have pinned in them above player heads when playing Renegade
 - **Nick hider** - Display to yourself your own name when you are nicked in Mega Walls
 - **Pink Squadmates** - Squadmates' nametags will appear pink as well as their hitboxes
-- **Command Keybinds** - Keybinds to run the following commands : `/kill`, `/surface`, `/teamchest`, `/enderchest`
+- **Command Keybinds** - Keybinds to run the following commands : `/enderchest`, `/kill`, `/surface`, `/teamchest`, `/warcry`
+- **AFK kick sound** - plays a sound when you are about to get kicked for AFK
+- **Wither Outlines** - renders a team colored outlines around withers
+- **Draw damage** - in case of a draw prints the deathmatch damage directly in the chat when the game ends
 - Notification at 5 mins before a game ends, and 10 seconds before the walls fall if you are not on the game
 - Shows your stats for the game when a game ends
 - Shows class and kit in the chat message when you hit an arrow
@@ -124,6 +141,7 @@ Tracks final kills in Hypixel's Mega Walls.
 Detects players using certain cheats and warns you about those players. It can also automatically report them and save those players in NoCheaters.
 - **Autoblock check**
 - **Fastbreak check**
+- **Ghosthand check**
 - **Keepsprint check**
 - **Killaura check** - checks attacking through blocks and players, check attacking while eating/drinking
 - **Noslowdown check**
@@ -132,6 +150,7 @@ Detects players using certain cheats and warns you about those players. It can a
 ### NoCheaters:
 
 Saves all the players you report with `/wdr` (not /report), and gives you warnings about those players when you come across them ingame. Use `/unwdr <name>` to remove a player.
+Players reported for blatant cheats will have a red icon, others will have a yellow icon. You can define in the config which cheats give a red icon or no icon at all.
 - **Icons on names** - Add an icon in front of nametags and in the tablist for players you have reported
 - **Warning message** - Print a warning message in chat when a reported player joins your lobby
 - **Report suggestion** - Highlight certain chat messages sent by players that warn about other players cheating
