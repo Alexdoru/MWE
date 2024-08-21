@@ -1,8 +1,8 @@
 package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.features.SquadHandler;
-import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.TimerUtil;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -15,7 +15,7 @@ public class MinecraftHook_WarpProtection {
     private static final TimerUtil warpTimer = new TimerUtil(5000L);
 
     public static boolean shouldCancelRightClick(ItemStack itemStack) {
-        if (ScoreboardTracker.isInMwGame() && itemStack != null && itemStack.getItem() == Items.paper) {
+        if (MWEConfig.warpProtection && itemStack != null && itemStack.getItem() == Items.paper) {
             final NBTTagCompound tagCompound = itemStack.getTagCompound();
             if (tagCompound != null && tagCompound.hasKey("display", 10)) {
                 final NBTTagCompound displayTag = tagCompound.getCompoundTag("display");

@@ -848,6 +848,12 @@ public class MWEConfig extends AbstractConfig {
     public static boolean shortCoinMessage;
 
     @ConfigProperty(
+            category = HYPIXEL,
+            name = "Warp Protection",
+            comment = "Adds confirmation when clicking the \"Play Again\" paper if you have players in your squad")
+    public static boolean warpProtection = true;
+
+    @ConfigProperty(
             category = NOCHEATERS, subCategory = "General",
             name = "Warning messages in chat",
             comment = "Prints a warning message in chat when a reported player joins your world, these messages have built in compact chat")

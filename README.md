@@ -123,10 +123,10 @@ Allows you to customize the look of the f3+b hitboxes.
 - **AFK kick sound** - plays a sound when you are about to get kicked for AFK
 - **Wither Outlines** - renders a team colored outlines around withers
 - **Draw damage** - in case of a draw prints the deathmatch damage directly in the chat when the game ends
+- **Squad Halo Player** - adds to the squad the player you give your halo to when playing the Angel class
+- **Warp Protection** - adds confirmation when clicking the "Play Again" paper if you have players in your squad
 - Notification at 5 mins before a game ends, and 10 seconds before the walls fall if you are not on the game
-- Shows your stats for the game when a game ends
 - Shows class and kit in the chat message when you hit an arrow
-- Prevent clicking the "Play Again" button if you are in a party
 
 #### Final Kill Counter:
 
