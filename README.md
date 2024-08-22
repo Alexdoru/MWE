@@ -12,12 +12,16 @@
 ## Summary
 - [Download](https://github.com/Alexdoru/MWE#download)
 - [Installation](https://github.com/Alexdoru/MWE#installation)
-- [Feature list](https://github.com/Alexdoru/MWE#feature-list)
-  - [Enhancements](https://github.com/Alexdoru/MWE#enhancements)
+- [Features](https://github.com/Alexdoru/MWE#features)
+  - [Vanilla Enhancements](https://github.com/Alexdoru/MWE#vanilla-enhancements)
+  - [PVP Stuff](https://github.com/Alexdoru/MWE#pvp-stuff)
+  - [Hypixel](https://github.com/Alexdoru/MWE#hypixel)
+  - [Squad System](https://github.com/Alexdoru/MWE#squad-system)
   - [Hitbox Mod, Better f3+b](https://github.com/Alexdoru/MWE#hitbox-mod-better-f3b)
   - [Mega Walls features](https://github.com/Alexdoru/MWE#mega-walls-features)
-  - [Hacker Detector](https://github.com/Alexdoru/MWE#hacker-detector)
   - [NoCheaters](https://github.com/Alexdoru/MWE#nocheaters)
+  - [Hacker Detector](https://github.com/Alexdoru/MWE#hacker-detector)
+  - [External](https://github.com/Alexdoru/MWE#external)
   - [Commands](https://github.com/Alexdoru/MWE#commands)
 
 ## Download
@@ -39,52 +43,77 @@ Download the latest release from the **[releases page](https://github.com/Alexdo
 
 Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, the chat, tablist and hitbox related features from this mod will not work.
 
-## Feature list
+## Features
 
-### Basic PVP Mods
+### Vanilla Enhancements
+
+#### Chat
+
+- **Chat heads** - Displays heads of players in front of chat messages
+- **Chat Copy** - Left/Right click to copy a chat message, hold shift to copy one line
+- **Chat Search** - Adds a search bar in the chat to search chat messages, press Ctrl + F to enter chat search, Ctrl + Shift + F to use Regex search, the search icon can be hidden when it's not used, and it can be moved for compatibility
+- **Longer chat** - Extends the chat size to 32 000 lines
+- **Case command fix** - Fix command handler only supporting commands written in all lower case
+- **Forge command fix** - Fix forge trying to run commands even if you don't put a `/` in front of your message
+- **Tabcomplete player names** - Ability to tab complete player names in the chat all the time
+- **Clean chat logs** - Removes formatting codes from the chat logs
+
+#### Hurt Color
+
+- **Custom color** - Change the color entities take when they get hurt
+- **Team colored color** - For players, the hurt color will be the color of their team
+- **Color armor** - For players, their armor will be colored as well when they get hurt, as it does in 1.7
+- **Wither Hurt Color** - Gives a team colored hurt color to withers if they have a team
+
+#### Tablist
+
+- **Colored scores** - Render the scores/health in color, according to the score value/health and the player's maximum health points
+- **Change size** - Change the amount of players displayed in the tablist (disabled with Patcher)
+- **Display playercount** - Display the amount of players in your current lobby at the top of the tablist
+- **Hide header/footer** - Hide the header and footer text of the tablist
+- **Hide ping** - Hide the ping values in the tablist if all the values are equal to 1
+- **Choose column spacing** - Choose the spacing between columns in the tablist
+- **Fix background** - Fix the background of the tablist not being symmetric and sometimes missing pixels on one side
+
+#### Performance
+
+- **Limit dropped items** - Dynamically modifies the render distance for dropped items entities to preserve performance
+
+#### Render
+
+- **Cancel night vision** - Removes the blueish tint from night vision
+- **Clear view** - Stops rendering particles that are too close (75cm) to the screen for a better visibility
+- **Colored scores above head** - Renders the scores/health above player heads in color, according to the score value/health and the player's maximum health points
+
+#### Bug Fix
+
+- **Fix actionbar text overlap** - Prevents the actionbar text from overlapping with the armor bar if the player has more than 2 rows of health
+
+### PVP Stuff
 
 - **Armor HUD** - Renders your armor on the screen, render vertically or horizontally, choose to render durability, choose to only render when the durability is low
 - **Potion HUD** - Renders your potion effects on the screen, render vertically or horizontally, choose the text color
 - **Toggle Sprint** - Holds your sprint when you hold the forward key, there is a keybind to toggle it
-
-### Enhancements
-
 - **Arrow hit HUD** - HUD that displays the health of players when shooting them with a bow
-- **Squad HUD** - A mini tablist that will display only members of your squad
 - **Speed HUD** - HUD displaying your speed
 - **Mini Potion HUD** - Just a colored number with remaining duration of potion buffs
-- **Chat heads** - Display heads of players in front of chat messages (disabled with Feather client)
-- **Chat Copy** - Left/Right click to copy a chat message, hold shift to copy one line
-- **Chat Search** - add search bar in the chat to search chat messages, press Ctrl + F to enter chat search, Ctrl + Shift + F to use Regex search, the search icon can be hidden when it's not used, and it can be moved for compatibility
-- **Longer chat** - setting to extend the chat size to 32 000 lines
-- **Forge command fix** - fix forge trying to run commands even if you don't put a `/` in front of your message
-- **Case command fix** - fix command handler only supporting commands written in all lower case
-- **Cancel night vision** - Remove the blueish tint from night vision
-- **Clear view** - Stop rendering particles that are too close (75cm) to the screen for a better visibility
-- **Sound warning low HP** - Play a sound when your health drops below a certain threshold
-- **Limit dropped items** - Dynamically modify the render distance for dropped items entities to preserve performance
-- **Safe Inventory** - Prevent you from dropping your sword or from hotkeying important kit items in outside inventories in Mega Walls
-- **Custom hurt color** - Change the color entities take when they get hurt
-- **Color armor** - For players, their armor will be colored as well when they get hurt, as it does in 1.7
-- **Team colored hit color** - For players, the hurt color will be the color of their team
-- **Short coins messages** - On Hypixel, remove the booster info in the coin messages to make the message smaller
-- **Ban reveal** - Reveals the name of the player getting banned when playing on hypixel
-- **Colored scores above head** - Render the scores/health in colour, according to the score value/health and the player's maximum health points
-- **Colored scores in tablist** - Render the scores/health in colour, according to the score value/health and the player's maximum health points
-- **Hide tablist header/footer** - Hide the header and footer text of the tablist
-- **Hide tablist ping** - Hide the ping values in the tablist if all the values are equal to 1
-- **Display playercount in tablist** - Display the amount of players in your current lobby at the top of the tablist
-- **Change tablist size** - Change the amount of players displayed in the tablist (disabled with Patcher)
-- **Choose tablist column spacing** - Choose the spacing between columns in the tablist
-- **Tabcomplete player names** - Ability to tab complete player names in the chat all the time
-- **Hide toggle sprint HUD** - Hide the toggle sprint HUD from OrangeMarshall's SimpleMod
-- **Fix tablist rect background** - Fix the background of the tablist not being symmetric and sometimes missing pixels on one side
-- **Fix actionbar text overlap** - Prevent the actionbar text from overlapping with the armor bar if the player has more than 2 rows of health
-- **Fix case commands tabcomplete** - Fix not being able to tabcomplete commands if the command contains uppercased letters
-- **Hide Optifine hats** - Hide cosmetic hats added by Optifine during certain seasons
-- **Command keybinds** - Keybinds to run the commands `/kill` & `/surface`
-- **Clean chat logs** - Remove formatting codes from the chat logs
-- **Wither Hurt Color** - Gives a team colored hurt color to withers if they have a team
+- **Sound warning low HP** - Plays a sound when your health drops below a certain threshold
+- **Sword Drop Protection** - Prevents you from dropping your sword
+
+### Hypixel
+
+- **Short coins messages** - on Hypixel, removes the booster info in the coin and token messages to make the messages smaller
+- **Warp Protection** - Adds confirmation when clicking the "Play Again" paper if you have players in your squad
+
+### Squad System
+
+Add players to your squad using the `/squad` command, your squadmates will appear with a pink nametag and a distinctive icon in front of their name. You can use `/squad add <name> as <alias>` to change the name of a squadmate.
+
+- **Squad Icons** - Toggle the icons in front of nametags for your squadmates
+- **Squad HUD** - A mini tablist that will display only members of your squad
+- **Pink Squadmates** - Nametags of squadmates will appear pink as well as their hitboxes and hurt color
+- **Nick hider** - Display to yourself your own name when you are nicked in a squad
+- **Keep First Letter** - Keeps the first letter of a squadmate when giving them an alias, so you can track them on the compass
 
 ### Hitbox mod, better f3+b:
 
@@ -98,13 +127,12 @@ Allows you to customize the look of the f3+b hitboxes.
 - **Draw red eyeline** - Draw a red square at the eye level of entities
 - **Draw blue vector** - Draw a blue line representing the look direction of entities
 - **Blue line for players only** - Draws the blue line for players only
-- **3m blue line** - Make the blue line 3 meters long, to match the reach of players
-- **Hide close hitboxes** - Stop rendering hitboxes that are closer than a certain distance that you can choose
+- **3m blue line** - Make the blue line 3m long, to match the reach of players
+- **Hide close hitboxes** - Stops rendering hitboxes that are closer than a certain distance that you can choose
 - **Hitboxes remain enable after restart** - Unlike vanilla minecraft you won't need to enable it everytime you play
 
 ### Mega Walls features
 
-- **Colored Leather Armor** - Changes iron armor pieces to team colored leather armor
 - **Base Location HUD** - Shows in which base you are located
 - **Creeper primed TNT HUD** - Displays the cooldown of the primed TNT when playing Creeper
 - **Energy display HUD** - Displays the amount of energy you have
@@ -113,51 +141,58 @@ Allows you to customize the look of the f3+b hitboxes.
 - **Strength HUD** - Displays the duration of the strength in Mega Walls when playing Dreadlord, Herobrine, Hunter, Zombie. Plays a sound and shows the countdown before getting strength with Hunter.
 - **Warcry HUD** - Displays the warcry cooldown
 - **Wither death time HUD** - Displays the time left before the last wither standing automatically dies, HUD can be placed in the sidebar
+- **Colored Leather Armor** - Changes iron armor pieces to team colored leather armor
 - **Hide hunger title** - Stop rendering the hunger message in the middle of the screen during deathmatch
-- **Hide repetitive msg** - Hide certain messages that spam the chat in Mega Walls
-- **More strength particles** - Spawn particles around the player when a dreadlord or herobrine gets strength on kill
-- **Renegade arrow count** - Display the amount of arrows you have pinned in them above player heads when playing Renegade
-- **Nick hider** - Display to yourself your own name when you are nicked in Mega Walls
-- **Pink Squadmates** - Squadmates' nametags will appear pink as well as their hitboxes
+- **Hide repetitive msg** - Hides certain messages that spam the chat in Mega Walls
+- **More strength particles** - Spawns particles around the player when a dreadlord or herobrine gets strength on kill
+- **Renegade arrow count** - Displays the amount of arrows you have pinned in them above player heads when playing Renegade
 - **Command Keybinds** - Keybinds to run the following commands : `/enderchest`, `/kill`, `/surface`, `/teamchest`, `/warcry`
-- **AFK kick sound** - plays a sound when you are about to get kicked for AFK
-- **Wither Outlines** - renders a team colored outlines around withers
-- **Draw damage** - in case of a draw prints the deathmatch damage directly in the chat when the game ends
-- **Squad Halo Player** - adds to the squad the player you give your halo to when playing the Angel class
-- **Warp Protection** - adds confirmation when clicking the "Play Again" paper if you have players in your squad
+- **AFK kick sound** - Plays a sound when you are about to get kicked for AFK
+- **Wither Outlines** - Renders a team colored outlines around withers
+- **Deathmatch damage** - In case of draw, it prints the deathmatch damage directly in the chat when the game ends
+- **Safe Inventory** - "Prevents hotkeying important kit items out of your inventory"
+- **Squad Halo Player** - Adds to the squad the player you give your halo to when playing the Angel class
 - Notification at 5 mins before a game ends, and 10 seconds before the walls fall if you are not on the game
 - Shows class and kit in the chat message when you hit an arrow
 
-#### Final Kill Counter:
+### NoCheaters:
 
-Tracks final kills in Hypixel's Mega Walls.
-- **Select HUD style** - Final kill HUD can take 3 form, classic (show finals per team), players (show finals per player), compact (show 4 colored numbers) and compact in sidebar
-- **Final in tablist** - Display the amount of final kills per player in the tablist next to their name
-- **Kill diff in chat** - When a player with final kills dies, it appends at the end of the chat message the amount of finals lost
-- `/fks say` - Sends a chat message with the current final score for your teammates to see
+NoCheaters saves players reported via `/wdr name` (not /report) and warns you about them ingame.
+To remove a player from your report list use : `/unwdr name` or click the name on the warning message.
+You can see all the players you have reported using `/nocheaters reportlist`.
+Players reported for blatant cheats will have a red icon, others will have a yellow icon.
+You can define in the config which cheats give a red icon or no icon at all.
+
+- **Icons on names** - Adds an icon in front of nametags and in the tablist for players you have reported
+- **Warning message** - Prints a warning message in chat when a reported player joins your lobby
+- **Ban reveal** - Reveals the name of the player getting banned when playing on hypixel
+- **Delete old reports** - Choose if you want to delete old reports and if so after how many days
+- **Report suggestion** - Highlights certain chat messages sent by players that warn about other players cheating
+- **Censor cheaters in chat** - Deletes or censors chat messages sent by players you have reported
+- You can use `/report name boosting` & `/report name crossteaming` as a one step command to report on Hypixel instead of using the book
+- Shows who joined in party with a certain player when you `/wdr` them, to report the other members for boosting
 
 ### Hacker Detector:
 
-Detects players using certain cheats and warns you about those players. It can also automatically report them and save those players in NoCheaters.
-- **Autoblock check**
-- **Fastbreak check**
-- **Ghosthand check**
-- **Keepsprint check**
-- **Killaura check** - checks attacking through blocks and players, check attacking while eating/drinking
-- **Noslowdown check**
-- **Scaffold check**
+Detects players using certain cheats and warns you about these players. It can also automatically report them and save those players in NoCheaters.
+Currently has detection for : Autoblock, Fastbreak, Ghosthand, Keepsprint, Killaura, Noslowdown, Scaffold
 
-### NoCheaters:
-
-Saves all the players you report with `/wdr` (not /report), and gives you warnings about those players when you come across them ingame. Use `/unwdr <name>` to remove a player.
-Players reported for blatant cheats will have a red icon, others will have a yellow icon. You can define in the config which cheats give a red icon or no icon at all.
-- **Icons on names** - Add an icon in front of nametags and in the tablist for players you have reported
-- **Warning message** - Print a warning message in chat when a reported player joins your lobby
-- **Report suggestion** - Highlight certain chat messages sent by players that warn about other players cheating
-- **Censor cheaters in chat** - Deletes or censors chat messages sent by players you have reported for cheating
+- **Add to report list** - Adds detected players to NoCheater's reportlist
+- **Show flag message** - Shows a flag message in the chat when it detets someone
+- **Compact flag messages** - Deletes previous flag message when printing a new identical flag message
+- **Show single flag message** - Prints flag messages only once per game per player
+- **Sound when flagging** - Plays a sound when it flags a player
+- **Show report button** - Shows report buttons on flag messages
+- **Flag message prefix** - Lets you chose the prefix of flags messages
+- **Auto-report cheaters** - Sends a /report automatically to Hypixel when it flags a cheater, only works for Mega Walls
+- **Replay killaura flags** - In the replay only, it will print a message when someone attacks another player through blocks
 - **Report HUD** - Displays a small text when the mod has a report to send, and which report it is typing
-- You can use `/report name boosting` & `/report name crossteaming` as a one step command to report on Hypixel instead of using the book
-- Shows who joined in party with a certain player when you `/wdr` them, to report the other members for boosting
+Fix Autoblock animation bypass : certain cheating clients send certain packets that make you not see them blocking their sword when they are in reality constantly blocking their sword while attacking.
+
+### External
+
+- **Hide toggle sprint HUD** - Hides the toggle sprint HUD from OrangeMarshall's SimpleMod
+- **Hide Optifine hats** - Hides cosmetic hats added by Optifine during certain seasons
 
 ### Commands
 
