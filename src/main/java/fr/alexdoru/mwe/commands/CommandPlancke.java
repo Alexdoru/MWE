@@ -69,7 +69,9 @@ public class CommandPlancke extends MyAbstractCommand {
 
         if (args[1].equalsIgnoreCase("bw") || args[1].equalsIgnoreCase("bedwars")) { // general stats for bedwars
 
-            ChatUtil.addChatMessage(EnumChatFormatting.RED + "WIP bedwars");
+            // ChatUtil.addChatMessage(EnumChatFormatting.RED + "WIP bedwars");
+            new BedwarsStats(playerdata).printMessage(formattedName, playername);
+
 
         } else if (args[1].equalsIgnoreCase("bsg") || args[1].equalsIgnoreCase("blitz")) { // general stats for blitz survival games
 
