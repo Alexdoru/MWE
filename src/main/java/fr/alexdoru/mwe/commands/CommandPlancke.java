@@ -79,7 +79,7 @@ public class CommandPlancke extends MyAbstractCommand {
 
         } else if (args[1].equalsIgnoreCase("duel") || args[1].equalsIgnoreCase("duels")) { // general stats for duels
 
-            ChatUtil.addChatMessage(EnumChatFormatting.RED + "WIP duels");
+            new DuelsStats(playerdata).printMessage(formattedName, playername);
 
         } else if (args[1].equalsIgnoreCase("mw") || args[1].equalsIgnoreCase("megawalls")) { // stats for mega walls
 
