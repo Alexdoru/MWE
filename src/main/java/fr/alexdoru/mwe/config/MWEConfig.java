@@ -69,6 +69,11 @@ public class MWEConfig extends AbstractConfig {
     @ConfigCategory(displayname = "§6Vanilla")
     public static final String VANILLA = "Vanilla";
 
+    @ConfigCategory(
+        displayname = "§1§mPot8o §2Addons",
+        comment = "§fIm Pot8o, I took over this project because I want to add some feature. It's a cool mod.§r")
+    public static final String POT8O_ADDONS = "Pot8o Addons";
+
     @ConfigCategory(displayname = "§8Hypixel")
     public static final String HYPIXEL = "Hypixel";
 
@@ -80,7 +85,7 @@ public class MWEConfig extends AbstractConfig {
 
     @ConfigCategory(
             displayname = "§bFinal Kill Counter",
-            comment = "For Mega Walls")
+            comment = "§fFor Mega Walls§r")
     public static final String FINAL_KILL_COUNTER = "Final Kill Counter";
 
     @ConfigCategory(
@@ -349,6 +354,18 @@ public class MWEConfig extends AbstractConfig {
             name = "Clean chat logs",
             comment = "Removes formatting codes from the chat logs")
     public static boolean cleanChatLogs = true;
+
+    @ConfigProperty(
+            category = POT8O_ADDONS, subCategory = "Held Item Counter",
+            name = "Held Item Counter",
+            comment = "Displays the amount of the item you're holding that you have. Includes arrow counter.")
+    public static final GuiPosition heldItemCountDisplay = new GuiPosition(true, 0.5d, 0.917d);
+
+    @ConfigProperty(
+            category = POT8O_ADDONS, subCategory = "Held Item Counter",
+            name = "Arrow Counter",
+            comment = "Displays the amount of arrows you have while holding a bow. Disables count of all other items.")
+    public static boolean arrowCountDisplay = false;
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Armor HUD",

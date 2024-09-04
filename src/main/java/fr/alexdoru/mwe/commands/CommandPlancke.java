@@ -22,7 +22,7 @@ public class CommandPlancke extends MyAbstractCommand {
 
     @Override
     public String getCommandName() {
-        return "plancke";
+        return "stat";
     }
 
     @Override
@@ -155,15 +155,17 @@ public class CommandPlancke extends MyAbstractCommand {
     protected void printCommandHelp() {
         ChatUtil.addChatMessage(
                 EnumChatFormatting.AQUA + ChatUtil.bar() + "\n"
-                        + ChatUtil.centerLine(EnumChatFormatting.GOLD + "Plancke Help\n\n")
-                        + EnumChatFormatting.YELLOW + "/plancke <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "General Hypixel stats\n"
-                        + EnumChatFormatting.YELLOW + "/plancke <player> bsg" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Blitz stats\n"
-                        + EnumChatFormatting.YELLOW + "/plancke <player> sw" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Skywars stats\n"
-                        + EnumChatFormatting.YELLOW + "/plancke <player> uhc" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "UHC stats\n"
-                        + EnumChatFormatting.YELLOW + "/plancke <player> mw" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "General Mega Walls stats\n"
-                        + EnumChatFormatting.YELLOW + "/plancke <player> mw classname" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Class specific Mega Walls stats\n"
-                        + EnumChatFormatting.YELLOW + "/plancke <player> mw cp" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Mega Walls classpoints\n"
-                        + EnumChatFormatting.YELLOW + "/plancke <player> mw leg" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Mega Walls legendary skins\n"
+                        + ChatUtil.centerLine(EnumChatFormatting.GOLD + "Stats Help\n\n")
+                        + EnumChatFormatting.YELLOW + "/stat <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "General Hypixel stats\n"
+                        + EnumChatFormatting.YELLOW + "/stat <player> bw" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Bedwars stats\n"
+                        + EnumChatFormatting.YELLOW + "/stat <player> sw" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Skywars stats\n"
+                        + EnumChatFormatting.YELLOW + "/stat <player> duels" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Duels stats\n"
+                        + EnumChatFormatting.YELLOW + "/stat <player> bsg" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Blitz stats\n"
+                        + EnumChatFormatting.YELLOW + "/stat <player> uhc" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "UHC stats\n"
+                        + EnumChatFormatting.YELLOW + "/stat <player> mw" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "General Mega Walls stats\n"
+                        + EnumChatFormatting.YELLOW + "/stat <player> mw classname" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Class specific Mega Walls stats\n"
+                        + EnumChatFormatting.YELLOW + "/stat <player> mw cp" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Mega Walls classpoints\n"
+                        + EnumChatFormatting.YELLOW + "/stat <player> mw leg" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Mega Walls legendary skins\n"
                         + EnumChatFormatting.AQUA + ChatUtil.bar()
         );
     }

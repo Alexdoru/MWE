@@ -201,7 +201,7 @@ Most commands require a working Hypixel API Key, use `/mwe set <key>` to set you
 - `/addalias` - Give nicknames to players that will show in the tablist behind their name, use `/addalias` for details
 - `/mwe` - Open the config menu
 - `/nocheaters` - Shows reported players in chat, use `/nocheaters help` for details
-- `/plancke` - Checks stats of players for different games, use `/plancke` for details
+- `/stat` - Checks stats of players for different games, use `/plancke` for details
 - `/scangame` - In Mega Walls, reveals which accouns are alt accounts with high stats, most likely cheaters
 - `/squad` - Add and remove players from your squad, use `/squad` for details
 - `/stalk <name>` - Reveals what a player is currently doing on the Hypixel Network

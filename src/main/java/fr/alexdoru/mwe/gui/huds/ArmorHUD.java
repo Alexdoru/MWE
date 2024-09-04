@@ -20,7 +20,7 @@ public class ArmorHUD extends AbstractRenderer {
         dummyArmor[0] = new ItemStack(Items.diamond_boots);
         dummyArmor[1] = new ItemStack(Items.iron_leggings);
         dummyArmor[2] = new ItemStack(Items.iron_chestplate);
-        dummyArmor[3] = new ItemStack(Items.iron_helmet);
+        dummyArmor[3] = new ItemStack(Items.golden_helmet);
     }
 
     @Override

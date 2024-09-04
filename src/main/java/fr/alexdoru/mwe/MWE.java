@@ -18,10 +18,13 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.updater.ModUpdater;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,9 +38,9 @@ import java.io.File;
         clientSideOnly = true)
 public class MWE {
 
-    public static final String modid = "mwenhancements";
-    public static final String modName = "MWE";
-    public static final String version = "4.0";
+    public static final String modid = "mwe-pot8o-fork";
+    public static final String modName = "MWEnhancments";
+    public static final String version = "4.5";
     public static final Logger logger = LogManager.getLogger(modName);
     public static File jarFile;
 

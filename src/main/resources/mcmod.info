@@ -1,14 +1,15 @@
 [
   {
-    "modid": "mwenhancements",
-    "name": "MWE",
-    "description": "A mod designed for PVP players with extra features for Mega Walls",
+    "modid": "mwe-pot8o-fork",
+    "name": "MWEnhancements",
+    "description": "A mostly Mega Walls based PVP mod with many QOL features for any PVP player. I've taken it over to add my own features. /mwe",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "https://github.com/Alexdoru/MWE",
+    "url": "https://github.com/ImPot8o/MWE-pot8o-fork",
     "updateUrl": "",
     "authorList": [
-      "Alexdoru"
+      "Alexdoru",
+      "ImPot8o"
     ],
     "credits": "Alexdoru",
     "logoFile": "MegaWalls-logo.png",

@@ -12,9 +12,9 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "4.0"
+version = "4.5"
 group = "fr.alexdoru"
-archivesBaseName = "[1.8.9] MWE"
+archivesBaseName = "[1.8.9] MWE (pot8o-fork)"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8

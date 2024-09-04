@@ -13,6 +13,7 @@ public final class GuiManager {
 
     private static final ArrayList<IRenderer> registeredRenderers = new ArrayList<>();
     private static final Minecraft mc = Minecraft.getMinecraft();
+    public static final ItemCountHUD itemCountHUD = new ItemCountHUD();
     public static final ArmorHUD armorHUD = new ArmorHUD();
     public static final ArrowHitHUD arrowHitHUD = new ArrowHitHUD();
     public static final BaseLocationHUD baseLocationHUD = new BaseLocationHUD();
@@ -30,7 +31,9 @@ public final class GuiManager {
     public static final SquadHealthHUD squadHealthHUD = new SquadHealthHUD();
     public static final WarcryHUD warcryHUD = new WarcryHUD();
 
+
     static {
+        registeredRenderers.add(itemCountHUD);
         registeredRenderers.add(armorHUD);
         registeredRenderers.add(arrowHitHUD);
         registeredRenderers.add(baseLocationHUD);
@@ -57,7 +60,7 @@ public final class GuiManager {
     public void onRenderGUI(RenderGameOverlayEvent.Post event) {
         if (event.type == ElementType.TEXT && !(mc.currentScreen instanceof PositionEditGuiScreen)) {
             final long time = System.currentTimeMillis();
-            mc.mcProfiler.startSection("MWE HUD");
+            mc.mcProfiler.startSection("MWE HUD (pot8o-patch)");
             for (final IRenderer renderer : registeredRenderers) {
                 if (renderer.isEnabled(time)) {
                     renderer.render(event.resolution);
