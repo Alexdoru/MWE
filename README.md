@@ -23,6 +23,7 @@
   - [Hacker Detector](https://github.com/Alexdoru/MWE#hacker-detector)
   - [External](https://github.com/Alexdoru/MWE#external)
   - [Commands](https://github.com/Alexdoru/MWE#commands)
+- [License and Contribution](https://github.com/Alexdoru/MWE#license-and-contribution)
 
 ## Download
 
@@ -205,3 +206,13 @@ Most commands require a working Hypixel API Key, use `/mwe set <key>` to set you
 - `/scangame` - In Mega Walls, reveals which accouns are alt accounts with high stats, most likely cheaters
 - `/squad` - Add and remove players from your squad, use `/squad` for details
 - `/stalk <name>` - Reveals what a player is currently doing on the Hypixel Network
+
+## License and Contribution
+
+This project doesn't have a license which means it defaults to exclusive copyright.
+
+You can fork this project, read its code, but you are not allowed to ditribute it. Read the license.
+
+If you want to contribute to this project you can make a pull request.
+
+If you want to add features that have nothing to do with this project, consider creating your own mod instead of forking this project "because it's a nice mod".
