@@ -43,16 +43,17 @@ public class PotionHUD extends AbstractRenderer {
         if (amountEffects == 0) return;
         final int width;
         final int height;
+        final int ICON_WIDTH = 27;
         if (MWEConfig.horizontalPotionHUD) {
-            width = (27 + 2) * amountEffects - 2;
-            height = 27 + 5;
+            width = (ICON_WIDTH + 2) * amountEffects - 2;
+            height = ICON_WIDTH + 5;
         } else {
             if (MWEConfig.showPotionEffectNames) {
-                width = 27 + 4 + maxWidth;
+                width = ICON_WIDTH + 4 + maxWidth;
             } else {
-                width = 27;
+                width = ICON_WIDTH;
             }
-            height = (27 + 7) * amountEffects - 7;
+            height = (ICON_WIDTH + 7) * amountEffects - 7;
         }
         this.guiPosition.updateAdjustedAbsolutePosition(resolution, width, height, -width / 2, -height / 2);
         this.renderPotionEffects(potionEffects, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY());
@@ -74,16 +75,17 @@ public class PotionHUD extends AbstractRenderer {
         }
         final int width;
         final int height;
+        final int ICON_WIDTH = 27;
         if (MWEConfig.horizontalPotionHUD) {
-            width = (27 + 2) * amountEffects - 2;
-            height = 27 + 5;
+            width = (ICON_WIDTH + 2) * amountEffects - 2;
+            height = ICON_WIDTH + 5;
         } else {
             if (MWEConfig.showPotionEffectNames) {
-                width = 27 + 4 + maxWidth;
+                width = ICON_WIDTH + 4 + maxWidth;
             } else {
-                width = 27;
+                width = ICON_WIDTH;
             }
-            height = (27 + 7) * amountEffects - 7;
+            height = (ICON_WIDTH + 7) * amountEffects - 7;
         }
         final int xDrawPots = this.guiPosition.getAbsoluteRenderX() - width / 2;
         final int yDrawPots = this.guiPosition.getAbsoluteRenderY() - height / 2;
@@ -110,21 +112,22 @@ public class PotionHUD extends AbstractRenderer {
                 GlStateManager.scale(2d / 3d, 2d / 3d, 2d / 3d);
                 GlStateManager.translate(-xDrawPots, -yDrawPots, 0d);
                 final String potDuration = potioneffect.getDuration() > 60 * 60 * 20 ? "**:**" : Potion.getDurationString(potioneffect);
+                final int ICON_WIDTH = 27;
                 if (!MWEConfig.horizontalPotionHUD && MWEConfig.showPotionEffectNames) {
                     final String fullName = getFormattedEffect(potioneffect, potion);
-                    fr.drawStringWithShadow(fullName, xDrawPots + 27 + 4, yDrawPots + 2, MWEConfig.potionHUDTextColor);
-                    fr.drawStringWithShadow(potDuration, xDrawPots + 27 + 4, yDrawPots + 27 - fr.FONT_HEIGHT - 2, MWEConfig.potionHUDTextColor);
+                    fr.drawStringWithShadow(fullName, xDrawPots + ICON_WIDTH + 4, (float) (yDrawPots + ICON_WIDTH / 2 - fr.FONT_HEIGHT + 1), MWEConfig.potionHUDTextColor);
+                    fr.drawStringWithShadow(potDuration, xDrawPots + ICON_WIDTH + 4, (float) (yDrawPots + ICON_WIDTH / 2 + 2), MWEConfig.potionHUDTextColor);
                 } else {
-                    fr.drawStringWithShadow(potDuration, xDrawPots + 27 - fr.getStringWidth(potDuration) - 1, yDrawPots + 27 - fr.FONT_HEIGHT + 5, MWEConfig.potionHUDTextColor);
+                    fr.drawStringWithShadow(potDuration, xDrawPots + ICON_WIDTH - fr.getStringWidth(potDuration) - 1, yDrawPots + ICON_WIDTH - fr.FONT_HEIGHT + 5, MWEConfig.potionHUDTextColor);
                     if (potioneffect.getAmplifier() != 0) {
                         final String potionLevel = ChatUtil.intToRoman(potioneffect.getAmplifier() + 1);
-                        fr.drawStringWithShadow(potionLevel, xDrawPots + 27 - fr.getStringWidth(potionLevel) - 1, yDrawPots, MWEConfig.potionHUDTextColor);
+                        fr.drawStringWithShadow(potionLevel, xDrawPots + ICON_WIDTH - fr.getStringWidth(potionLevel) - 1, yDrawPots, MWEConfig.potionHUDTextColor);
                     }
                 }
                 if (MWEConfig.horizontalPotionHUD) {
-                    xDrawPots += 27 + 2;
+                    xDrawPots += ICON_WIDTH + 2;
                 } else {
-                    yDrawPots += 27 + 7;
+                    yDrawPots += ICON_WIDTH + 7;
                 }
             }
         }
