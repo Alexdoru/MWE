@@ -39,7 +39,7 @@ public class WarningMessages {
     }
 
     public static void printWarningMessage(UUID uuid, Team team, String playername, WDR wdr) {
-        final String wdrmapKey = uuid.version() == 4 ? uuid.toString() : playername;
+        final String wdrmapKey = NameUtil.isRealPlayer(uuid) ? uuid.toString() : playername;
         final IChatComponent imsg = new WarningChatComponent(playername, RED + "Warning : ")
                 .appendSibling(getPlayernameWithHoverText(null, team, playername, wdrmapKey, wdr))
                 .appendText(GRAY + " joined, Cheats :")

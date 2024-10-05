@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
+import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.UUIDUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -47,14 +48,14 @@ public class WdrData {
     }
 
     public static WDR getWdr(UUID uuid, String playername) {
-        if (uuid.version() == 4) {
+        if (NameUtil.isRealPlayer(uuid)) {
             return uuidMap.get(uuid);
         }
         return nickMap.get(playername);
     }
 
     public static void put(UUID uuid, String playername, WDR wdr) {
-        if (uuid.version() == 4) {
+        if (NameUtil.isRealPlayer(uuid)) {
             uuidMap.put(uuid, wdr);
             return;
         }

@@ -263,7 +263,7 @@ public class NameUtil {
                 teamColor = StringUtil.getLastColorCharOf(teamprefix);
                 mwClass = MWClass.fromTeamTag(ScoreboardTracker.isMWReplay() ? teamprefix : colorSuffix);
                 final boolean isobf = teamprefix.contains("§k");
-                final boolean isNicked = id.version() == 1;
+                final boolean isNicked = NameUtil.isNickedPlayer(id);
                 final String alias = AliasData.getAlias(isNicked ? username : uuid);
                 if (iExtraPrefix != null || isobf || isNicked || squadname != null || alias != null) {
                     final StringBuilder sb = new StringBuilder();
@@ -368,22 +368,16 @@ public class NameUtil {
         return deobfString(team.formatString(playername));
     }
 
-    /**
-     * Returns true if it's the uuid of an NPC
-     * from experimentation, on Hypixel :
-     * <p>
-     * - nicked players are v1
-     * <p>
-     * - NPCs are v2
-     * <p>
-     * - real players are v4
-     */
-    public static boolean isNPC(UUID uuid) {
+    public static boolean isNickedPlayer(UUID uuid) {
+        return uuid.version() == 1;
+    }
+
+    public static boolean isNPCPlayer(UUID uuid) {
         return uuid.version() == 2;
     }
 
-    public static boolean isntRealPlayer(UUID uuid) {
-        return uuid.version() != 4;
+    public static boolean isRealPlayer(UUID uuid) {
+        return uuid.version() == 4;
     }
 
     /**

@@ -76,7 +76,7 @@ public class CommandScanGame extends MyAbstractCommand {
     private static boolean scanPlayer(NetworkPlayerInfo netInfo, boolean isMythicHourInPreGameLobby) {
 
         final UUID uuid = netInfo.getGameProfile().getId();
-        if (NameUtil.isntRealPlayer(uuid) || ScangameData.skipScan(uuid)) {
+        if (!NameUtil.isRealPlayer(uuid) || ScangameData.skipScan(uuid)) {
             return false;
         }
 

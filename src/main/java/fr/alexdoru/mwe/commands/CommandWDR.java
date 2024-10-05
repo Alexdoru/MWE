@@ -76,7 +76,7 @@ public class CommandWDR extends MyAbstractCommand {
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
                 final UUID uuid = netInfo.getGameProfile().getId();
-                if (uuid.version() == 1 || uuid.version() == 4) {
+                if (NameUtil.isNickedPlayer(uuid) || NameUtil.isRealPlayer(uuid)) {
                     addPlayerToReportList(
                             uuid,
                             netInfo.getGameProfile().getName(),
@@ -111,7 +111,6 @@ public class CommandWDR extends MyAbstractCommand {
 
     private static void addPlayerToReportList(UUID uuid, String playername, String formattedName, List<String> cheats) {
         final WDR wdr = WdrData.getWdr(uuid, playername);
-        final boolean isNicked = uuid.version() != 4;
         if (wdr == null) {
             WdrData.put(uuid, playername, new WDR(cheats));
         } else {
@@ -120,6 +119,7 @@ public class CommandWDR extends MyAbstractCommand {
         WdrData.saveReportedPlayers();
         NameUtil.updateMWPlayerDataAndEntityData(playername, false);
         if (wdr == null) {
+            final boolean isNicked = !NameUtil.isRealPlayer(uuid);
             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() +
                     EnumChatFormatting.GREEN + "You reported " + (isNicked ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
                     + EnumChatFormatting.RED + (formattedName == null ? playername : EnumChatFormatting.RESET + formattedName) + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"

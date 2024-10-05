@@ -178,7 +178,7 @@ public class CommandAddAlias extends MyAbstractCommand {
         ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "In this lobby :\n");
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             final String key;
-            if (netInfo.getGameProfile().getId().version() == 4) {
+            if (NameUtil.isRealPlayer(netInfo.getGameProfile().getId())) {
                 key = netInfo.getGameProfile().getId().toString().replace("-", "");
             } else {
                 key = netInfo.getGameProfile().getName();
@@ -194,20 +194,18 @@ public class CommandAddAlias extends MyAbstractCommand {
         final String alias = args[1];
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
-                if (netInfo.getGameProfile().getId().version() == 4) {
+                if (NameUtil.isRealPlayer(netInfo.getGameProfile().getId())) {
                     this.addAlias(
                             netInfo.getGameProfile().getId().toString(),
                             netInfo.getGameProfile().getName(),
                             alias,
-                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName())
-                    );
-                } else if (netInfo.getGameProfile().getId().version() == 1) {
+                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()));
+                } else if (NameUtil.isNickedPlayer(netInfo.getGameProfile().getId())) {
                     this.addAlias(
                             null,
                             netInfo.getGameProfile().getName(),
                             alias,
-                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName())
-                    );
+                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()));
                 }
                 return;
             }
@@ -251,18 +249,16 @@ public class CommandAddAlias extends MyAbstractCommand {
     private void removeAlias(String playername) {
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
-                if (netInfo.getGameProfile().getId().version() == 4) {
+                if (NameUtil.isRealPlayer(netInfo.getGameProfile().getId())) {
                     this.removeAlias(
                             netInfo.getGameProfile().getId().toString(),
                             netInfo.getGameProfile().getName(),
-                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName())
-                    );
-                } else if (netInfo.getGameProfile().getId().version() == 1) {
+                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()));
+                } else if (NameUtil.isNickedPlayer(netInfo.getGameProfile().getId())) {
                     this.removeAlias(
                             null,
                             netInfo.getGameProfile().getName(),
-                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName())
-                    );
+                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()));
                 }
                 return;
             }
