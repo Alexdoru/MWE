@@ -36,7 +36,7 @@ public class HackerDetector {
     private final List<BrokenBlock> brokenBlocksList = new ArrayList<>();
     private final TickingBlockMap recentPlacedBlocks = new TickingBlockMap();
     private final Queue<Runnable> scheduledTasks = new ArrayDeque<>();
-    public final Set<String> playersToLog = new HashSet<>();
+    public final List<String> playersToLog = new ArrayList<>();
 
     private final FastbreakCheck fastbreakCheck;
 
@@ -78,7 +78,7 @@ public class HackerDetector {
             final long timeStart = System.nanoTime();
             this.onTickStart();
             this.timeElapsedTemp += System.nanoTime() - timeStart;
-        } else  if (event.phase == TickEvent.Phase.END) {
+        } else if (event.phase == TickEvent.Phase.END) {
             final long timeStart = System.nanoTime();
             this.onTickEnd();
             this.timeElapsedTemp += System.nanoTime() - timeStart;
