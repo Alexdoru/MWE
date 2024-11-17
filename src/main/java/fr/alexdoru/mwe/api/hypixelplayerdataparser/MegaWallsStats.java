@@ -23,7 +23,7 @@ public class MegaWallsStats {
     /**
      * First element of the array is the prestige level, second element is the amount of classpoints
      */
-    private final LinkedHashMap<String, Integer[]> classpointsMap = new LinkedHashMap<>();
+    private final LinkedHashMap<String, Classpoints> classpointsMap = new LinkedHashMap<>();
     private String chosen_class;
     private String chosen_skin_class;
     private int coins;
@@ -110,14 +110,21 @@ public class MegaWallsStats {
             for (final MWClass mwclass : MWClass.values()) {
                 final String classname = mwclass.className.toLowerCase();
                 final JsonObject classeobj = JsonUtil.getJsonObject(classesdata, classname);
-                if (classeobj == null) {
-                    continue;
+                final boolean unlocked;
+                final int prestige;
+                if (classeobj != null) {
+                    prestige = JsonUtil.getInt(classeobj, "prestige");
+                    unlocked = JsonUtil.getBoolean(classeobj, "unlocked");
+                } else {
+                    prestige = 0;
+                    unlocked = false;
                 }
-                final int prestige = JsonUtil.getInt(classeobj, "prestige");
                 nbprestiges += prestige;
                 final int classpoints = MegaWallsClassStats.computeClasspoints(megaWallsStatsObj, classname);
                 total_classpoints += classpoints;
-                classpointsMap.put(classname, new Integer[]{prestige, classpoints});
+                if (unlocked || classpoints != 0) {
+                    classpointsMap.put(classname, new Classpoints(prestige, classpoints));
+                }
             }
         }
 
@@ -173,15 +180,17 @@ public class MegaWallsStats {
     public void printClassPointsMessage(String formattedname, String playername) {
         final IChatComponent imsg = new ChatComponentText(EnumChatFormatting.AQUA + ChatUtil.bar() + "\n")
                 .appendSibling(ChatUtil.PlanckeHeaderText(formattedname, playername, " - Mega Walls Classpoints\n\n"));
-        for (final Map.Entry<String, Integer[]> entry : classpointsMap.entrySet()) {
-            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + StringUtil.uppercaseFirstLetter(entry.getKey()))
+        for (final Map.Entry<String, Classpoints> entry : classpointsMap.entrySet()) {
+            final String classname = entry.getKey();
+            final int prestige = entry.getValue().prestige;
+            final int classpoints = entry.getValue().classpoints;
+            imsg.appendSibling(new ChatComponentText(EnumChatFormatting.GREEN + StringUtil.uppercaseFirstLetter(classname))
                     .setChatStyle(new ChatStyle()
-                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for " + entry.getKey() + " stats")))
-                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + entry.getKey()))));
-            if (entry.getValue()[0] != 0) {
-                imsg.appendText(EnumChatFormatting.GOLD + " P" + ChatUtil.intToRoman(entry.getValue()[0]));
+                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click for " + classname + " stats")))
+                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plancke " + playername + " mw " + classname))));
+            if (prestige != 0) {
+                imsg.appendText(EnumChatFormatting.GOLD + " P" + ChatUtil.intToRoman(prestige));
             }
-            final Integer classpoints = entry.getValue()[1];
             imsg.appendText(" : " + ColorUtil.getPrestige4Color(classpoints) + classpoints + "\n");
         }
         imsg.appendText(EnumChatFormatting.GREEN + "Total class points : " + EnumChatFormatting.GOLD + total_classpoints + "\n");
@@ -191,9 +200,9 @@ public class MegaWallsStats {
         int cpMissingForP4 = AMOUNT_OF_KITS * 2000;
         int coinsMissingForP4 = AMOUNT_OF_KITS * 2_000_000 - this.coins;
         int baseCoinsBonus = 0;
-        for (final Map.Entry<String, Integer[]> entry : classpointsMap.entrySet()) {
-            final int prestige = entry.getValue()[0];
-            final int cp = entry.getValue()[1];
+        for (final Map.Entry<String, Classpoints> entry : classpointsMap.entrySet()) {
+            final int prestige = entry.getValue().prestige;
+            final int cp = entry.getValue().classpoints;
             cpMissingForP5 -= Math.min(cp, 5000);
             cpMissingForP4 -= Math.min(cp, 2000);
             if (prestige == 5) {
@@ -330,6 +339,16 @@ public class MegaWallsStats {
         }
         imsg.appendText(EnumChatFormatting.AQUA + ChatUtil.bar());
         ChatUtil.addChatMessage(imsg);
+    }
+
+    private static class Classpoints {
+        public final int prestige;
+        public final int classpoints;
+
+        private Classpoints(int prestige, int classpoints) {
+            this.prestige = prestige;
+            this.classpoints = classpoints;
+        }
     }
 
 }
