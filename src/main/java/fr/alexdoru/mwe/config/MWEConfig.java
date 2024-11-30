@@ -624,9 +624,9 @@ public class MWEConfig extends AbstractConfig {
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "General",
-            name = "Strength particules",
+            name = "Strength particles",
             comment = "Spawns strength particles when a herobrine or dreadlord gets a kill")
-    public static boolean strengthParticules = true;
+    public static boolean strengthParticles = true;
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "General",
