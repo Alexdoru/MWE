@@ -407,7 +407,7 @@ public class FinalKillCounter {
 
     private static void spawnParticles(String killer) {
 
-        if (!MWEConfig.strengthParticules) {
+        if (!MWEConfig.strengthParticles) {
             return;
         }
 

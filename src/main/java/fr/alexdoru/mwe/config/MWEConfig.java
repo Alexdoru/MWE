@@ -102,8 +102,8 @@ public class MWEConfig extends AbstractConfig {
     public static final String HACKER_DETECTOR = "Hacker Detector";
 
     @ConfigCategory(
-            displayname = "§9Hitboxes, better F3+b",
-            comment = "§7You obviously need to press F3+b to enable hitboxes")
+            displayname = "§9Hitboxes, better F3+B",
+            comment = "§7You obviously need to press F3+B to enable hitboxes")
     public static final String HITBOXES = "Hitbox";
 
     @ConfigCategory(displayname = "§dExternal")
@@ -130,7 +130,7 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = VANILLA, subCategory = "Chat",
             name = "Chat Heads",
-            comment = "Renders heads of players in front of chat messages")
+            comment = "Renders player heads in front of chat messages")
     public static boolean chatHeads = true;
 
     @ConfigPropertyHideOverride(name = "Chat Heads")
@@ -177,13 +177,13 @@ public class MWEConfig extends AbstractConfig {
             category = VANILLA, subCategory = "Chat Search",
             name = "Always render search box",
             comment = "Always renders the search box icon in the chat."
-                    + " If the box is not rendered you can still use the chat search by pressing ctrl + F")
+                    + " If the box is not rendered, you can still use the chat search by pressing CTRL + F")
     public static boolean showSearchBoxUnfocused = true;
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Chat Search",
             name = "Search box shortcuts",
-            comment = "Enables using ctrl + F shortcut to enter chat search")
+            comment = "Enables using CTRL + F shortcut to enter chat search")
     public static boolean searchBoxChatShortcuts = true;
 
     @ConfigProperty(
@@ -195,14 +195,14 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = VANILLA, subCategory = "Chat Search",
             name = "Search box X offset",
-            comment = "Allows to move the search box right and left. Positive values move to the right",
+            comment = "Allows moving the search box right and left. Positive values move to the right",
             sliderMin = -20, sliderMax = 400)
     public static int searchBoxXOffset = 0;
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Chat Search",
             name = "Search box Y offset",
-            comment = "Allows to move the search box up and down. Positive values move up",
+            comment = "Allows moving the search box up and down. Positive values move up",
             sliderMin = -20, sliderMax = 400)
     public static int searchBoxYOffset = 0;
 
@@ -216,53 +216,53 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = VANILLA, subCategory = "Hurt Color",
             name = "Color armor when hurt",
-            comment = "The armor will be colored as well when a player is hurt, like it does in 1.7\n"
-                    + "§eIf you have a 1.7 Old animation mod, you might need to turn off their \"Red Armor\" setting for this to work.")
+            comment = "Armor will be colored as well when a player is hurt, like it does in 1.7\n"
+                    + "§eIf you have a 1.7 old animation mod, you might need to turn off their \"Red Armor\" setting for this to work.")
     public static boolean colorArmorWhenHurt = true;
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Hurt Color",
             name = "Team colored hurt color for players",
-            comment = "When hurt the players will take the color of their team, other entities will take the custom color defined above.\n"
+            comment = "When hurt, players will take the color of their team. Other entities will take the custom color defined above.\n"
                     + "§eWhen this is enabled, it still uses the alpha level defined in the custom color.")
     public static boolean teamColoredPlayerHurt;
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Hurt Color",
             name = "Team colored hurt color for withers",
-            comment = "When hurt the withers will take the color of their name")
+            comment = "When hurt, withers will take the color of their name")
     public static boolean teamColoredWitherHurt = true;
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Performance",
-            name = "Limit dropped item rendered",
-            comment = "Dynamically modifies the render distance of dropped items entities to preserve performance. It starts reducing the render distance when exceeding the threshold set below.\n"
+            name = "Limit dropped items rendered",
+            comment = "Dynamically modifies the render distance of dropped item entities to preserve performance. It starts reducing the render distance when exceeding the threshold set below.\n"
                     + "There is a keybind (ESC -> options -> controls -> MWE) to toggle it")
     public static boolean limitDroppedEntityRendered = true;
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Performance",
-            name = "Max amount of dropped item",
-            comment = "Max amount of item rendered",
+            name = "Max amount of dropped items",
+            comment = "Max amount of items rendered",
             sliderMin = 40, sliderMax = 200)
     public static int maxDroppedEntityRendered = 80;
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Render",
             name = "Cancel Night Vision Effect",
-            comment = "Removes the visual effets of night vision")
+            comment = "Removes the visual effects of night vision")
     public static boolean cancelNightVisionEffect;
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Render",
             name = "Clear View",
-            comment = "Stops rendering particles that are too close (75cm) to the camera for a better visibility")
+            comment = "Stops rendering particles that are too close (75cm) to the camera for better visibility")
     public static boolean clearVision = true;
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Render",
             name = "Colored health/scores above head",
-            comment = "Renders the health/scores above head in color according to the score's value compared to the player's maximum health points\n"
+            comment = "Renders the health/scores above head in the color according to the score's value compared to the player's maximum health points\n"
                     + "\n"
                     + "    §222§c ❤\n"
                     + "    §a17§c ❤\n"
@@ -274,7 +274,7 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = VANILLA, subCategory = "Tablist",
             name = "Colored health/scores in Tablist",
-            comment = "Renders the health/scores in the tablist in color according to the score's value compared to the player's maximum health points\n"
+            comment = "Renders the health/scores in the tablist in the color according to the score's value compared to the player's maximum health points\n"
                     + "\n"
                     + "§cOrangeMarshall " + "§222§c ❤\n"
                     + "§cOrangeMarshall " + "§a17§c ❤\n"
@@ -316,20 +316,20 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = VANILLA, subCategory = "Tablist",
             name = "Hide ping tablist",
-            comment = "Stops rendering the ping in the tablist when all values are equal to 1")
+            comment = "Stops rendering ping in the tablist when all values are equal to 1")
     public static boolean hidePingTablist = true;
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Tablist",
             name = "Tablist column separator",
-            comment = "Spacing between columns in the tablist, in pixels. (Vanilla 5)",
+            comment = "Spacing between columns in the tablist, in pixels (Vanilla 5)",
             sliderMin = 1, sliderMax = 20)
     public static int tablistColumnSpacing = 1;
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Tablist",
             name = "De-obfuscate names in tab",
-            comment = "Removes obfuscation in the names in the tablist")
+            comment = "Removes obfuscation in names in the tablist")
     public static boolean deobfNamesInTab;
 
     @ConfigProperty(
@@ -347,7 +347,7 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = VANILLA, subCategory = "Logs",
             name = "Clean chat logs",
-            comment = "Removes formatting codes from the chat logs")
+            comment = "Removes formatting codes from chat logs")
     public static boolean cleanChatLogs = true;
 
     @ConfigProperty(
@@ -460,7 +460,7 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Other HUD",
             name = "Arrow Hit HUD",
-            comment = "Displays the HP of opponents on arrow hits, also works with Spider Leap damage in Mega Walls and Renegade Rend")
+            comment = "Displays the HP of opponents on arrow hits, also works with Spider Leap damage and Renegade Rend in Mega Walls")
     public static final GuiPosition arrowHitHUDPosition = new GuiPosition(true, 0.5d, 9d / 20d);
 
     @ConfigProperty(
@@ -529,12 +529,12 @@ public class MWEConfig extends AbstractConfig {
 
     @ConfigProperty(
             category = HITBOXES, subCategory = "Render hitbox for : ",
-            name = "Hitbox for item frame")
+            name = "Hitbox for item frames")
     public static boolean drawHitboxItemFrame = true;
 
     @ConfigProperty(
             category = HITBOXES, subCategory = "Render hitbox for : ",
-            name = "Hitbox for other entity")
+            name = "Hitbox for other entities")
     public static boolean drawHitboxForOtherEntity = true;
 
     @ConfigProperty(
@@ -546,25 +546,25 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = HITBOXES, subCategory = "Blue Vector",
             name = "Render blue vector",
-            comment = "Renders a blue line comming out of the eyes of entities that represent where they look at")
+            comment = "Renders a blue line coming out of the eyes of entities that represents where they look at")
     public static boolean drawBlueVect = true;
 
     @ConfigProperty(
             category = HITBOXES, subCategory = "Blue Vector",
-            name = "Blue vect for players only",
+            name = "Blue vector for players only",
             comment = "Renders the blue line for players only")
     public static boolean drawBlueVectForPlayersOnly;
 
     @ConfigProperty(
             category = HITBOXES, subCategory = "Blue Vector",
             name = "Make blue vector 3m long",
-            comment = "Make the blue vector 3 meters long, just like the player's attack reach")
+            comment = "Make the blue line 3 meters long, just like the player's attack reach")
     public static boolean makeBlueVect3Meters = true;
 
     @ConfigProperty(
             category = HITBOXES, subCategory = "Color",
             name = "Hitbox Color",
-            comment = "A custom color for the hitboxes",
+            comment = "A custom color for hitboxes",
             isColor = true)
     public static int hitboxColor = 0xFFFFFF;
 
@@ -589,13 +589,13 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = HITBOXES, subCategory = "Other",
             name = "Real size hitbox",
-            comment = "The hitboxes will be larger and accurately represent the hitbox where you can attack the entities")
+            comment = "Hitboxes will be larger and accurately represent the hitbox where you can attack the entities")
     public static boolean realSizeHitbox;
 
     @ConfigProperty(
             category = HITBOXES, subCategory = "Other",
             name = "Hide close hitbox",
-            comment = "Stops rendering the hitboxes that are closer than the range defined below")
+            comment = "Stops rendering hitboxes that are closer than the range defined below")
     public static boolean hideCloseHitbox;
 
     @ConfigProperty(
@@ -624,9 +624,9 @@ public class MWEConfig extends AbstractConfig {
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "General",
-            name = "Strength particules",
-            comment = "Spawns strength particules when a herobrine or dreadlord gets a kill")
-    public static boolean strengthParticules = true;
+            name = "Strength particles",
+            comment = "Spawns strength particles when a herobrine or dreadlord gets a kill")
+    public static boolean strengthParticles = true;
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "General",
@@ -717,7 +717,7 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Creeper primed TNT HUD",
-            comment = "Displays the cooldown of the primed TNT when playing Creeper")
+            comment = "Displays the cooldown of primed TNT when playing Creeper")
     public static final GuiPosition creeperTNTHUDPosition = new GuiPosition(true, 0.5d, 8d / 20d);
 
     @ConfigProperty(
@@ -753,7 +753,7 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Base Location HUD",
-            comment = "Displays in which base you are currently located")
+            comment = "Displays which base you are currently located in")
     public static final GuiPosition baseLocationHUDPosition = new GuiPosition(true, 0.90d, 0d);
 
     @ConfigPropertyEvent(name = "Base Location HUD")
@@ -925,7 +925,7 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = NOCHEATERS, subCategory = "Chat",
             name = "Report suggestions",
-            comment = "Highlights chat messages that calls out a player for cheating. It will match the messages that respect the following patterns :\n"
+            comment = "Highlights chat messages that call out a player for cheating. It will match the messages that respect the following patterns :\n"
                     + "\n"
                     + "§aPlayer: §fplayername is bhoping\n"
                     + "§aPlayer: §fwdr playername cheat\n"
@@ -954,14 +954,14 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = NOCHEATERS,
             name = "List of cheats that give a red icon",
-            comment = "Players reported with one of theses cheats will appear with a red icon on their name",
+            comment = "Players reported with one of these cheats will appear with a red icon on their name",
             hidden = true)
     public static final List<String> redIconCheats = new ArrayList<>(Arrays.asList("autoblock", "bhop", "fastbreak", "noslowdown", "scaffold"));
 
     @ConfigProperty(
             category = NOCHEATERS,
             name = "List of cheats that don't give an icon",
-            comment = "Players reported with only theses cheats will have no icon on their name",
+            comment = "Players reported with only these cheats will have no icon on their name",
             hidden = true)
     public static final List<String> noIconCheats = new ArrayList<>();
 
@@ -1016,7 +1016,7 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Flags",
             name = "Flag message prefix",
-            comment = "Lets you chose the prefix of flags messages",
+            comment = "Lets you choose the prefix of flags messages",
             hidden = true)
     public static String flagMessagePrefix = EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "NoCheaters" + EnumChatFormatting.GOLD + "]";
 
