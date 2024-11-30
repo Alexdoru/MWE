@@ -546,19 +546,19 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = HITBOXES, subCategory = "Blue Vector",
             name = "Render blue vector",
-            comment = "Renders a blue line coming out of the eyes of entities that represents where they look at")
+            comment = "Renders a blue vector coming out of the eyes of entities that represents where they look at")
     public static boolean drawBlueVect = true;
 
     @ConfigProperty(
             category = HITBOXES, subCategory = "Blue Vector",
             name = "Blue vector for players only",
-            comment = "Renders the blue line for players only")
+            comment = "Renders the blue vector for players only")
     public static boolean drawBlueVectForPlayersOnly;
 
     @ConfigProperty(
             category = HITBOXES, subCategory = "Blue Vector",
             name = "Make blue vector 3m long",
-            comment = "Make the blue line 3 meters long, just like the player's attack reach")
+            comment = "Make the blue vector 3 meters long, just like the player's attack reach")
     public static boolean makeBlueVect3Meters = true;
 
     @ConfigProperty(
@@ -624,9 +624,9 @@ public class MWEConfig extends AbstractConfig {
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "General",
-            name = "Strength particles",
+            name = "Strength particules",
             comment = "Spawns strength particles when a herobrine or dreadlord gets a kill")
-    public static boolean strengthParticles = true;
+    public static boolean strengthParticules = true;
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "General",
