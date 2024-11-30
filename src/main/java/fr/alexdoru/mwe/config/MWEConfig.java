@@ -102,8 +102,8 @@ public class MWEConfig extends AbstractConfig {
     public static final String HACKER_DETECTOR = "Hacker Detector";
 
     @ConfigCategory(
-            displayname = "§9Hitboxes, better F3+B",
-            comment = "§7You obviously need to press F3+B to enable hitboxes")
+            displayname = "§9Hitboxes, better F3+b",
+            comment = "§7You obviously need to press F3+b to enable hitboxes")
     public static final String HITBOXES = "Hitbox";
 
     @ConfigCategory(displayname = "§dExternal")
@@ -235,14 +235,14 @@ public class MWEConfig extends AbstractConfig {
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Performance",
-            name = "Limit dropped items rendered",
+            name = "Limit dropped item rendered",
             comment = "Dynamically modifies the render distance of dropped item entities to preserve performance. It starts reducing the render distance when exceeding the threshold set below.\n"
                     + "There is a keybind (ESC -> options -> controls -> MWE) to toggle it")
     public static boolean limitDroppedEntityRendered = true;
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Performance",
-            name = "Max amount of dropped items",
+            name = "Max amount of dropped item",
             comment = "Max amount of items rendered",
             sliderMin = 40, sliderMax = 200)
     public static int maxDroppedEntityRendered = 80;
@@ -529,12 +529,12 @@ public class MWEConfig extends AbstractConfig {
 
     @ConfigProperty(
             category = HITBOXES, subCategory = "Render hitbox for : ",
-            name = "Hitbox for item frames")
+            name = "Hitbox for item frame")
     public static boolean drawHitboxItemFrame = true;
 
     @ConfigProperty(
             category = HITBOXES, subCategory = "Render hitbox for : ",
-            name = "Hitbox for other entities")
+            name = "Hitbox for other entity")
     public static boolean drawHitboxForOtherEntity = true;
 
     @ConfigProperty(
@@ -551,7 +551,7 @@ public class MWEConfig extends AbstractConfig {
 
     @ConfigProperty(
             category = HITBOXES, subCategory = "Blue Vector",
-            name = "Blue vector for players only",
+            name = "Blue vect for players only",
             comment = "Renders the blue vector for players only")
     public static boolean drawBlueVectForPlayersOnly;
 
