@@ -4,7 +4,11 @@ import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.asm.loader.ASMLoadingPlugin;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.LocrawListener;
-import fr.alexdoru.mwe.config.lib.*;
+import fr.alexdoru.mwe.config.lib.AbstractConfig;
+import fr.alexdoru.mwe.config.lib.ConfigCategory;
+import fr.alexdoru.mwe.config.lib.ConfigProperty;
+import fr.alexdoru.mwe.config.lib.ConfigPropertyEvent;
+import fr.alexdoru.mwe.config.lib.ConfigPropertyHideOverride;
 import fr.alexdoru.mwe.features.LeatherArmorManager;
 import fr.alexdoru.mwe.gui.guiapi.GuiManager;
 import fr.alexdoru.mwe.gui.guiapi.GuiPosition;
@@ -102,8 +106,8 @@ public class MWEConfig extends AbstractConfig {
     public static final String HACKER_DETECTOR = "Hacker Detector";
 
     @ConfigCategory(
-            displayname = "§9Hitboxes, better F3+b",
-            comment = "§7You obviously need to press F3+b to enable hitboxes")
+            displayname = "§9Hitboxes, better F3+B",
+            comment = "§7You obviously need to press F3+B to enable hitboxes")
     public static final String HITBOXES = "Hitbox";
 
     @ConfigCategory(displayname = "§dExternal")
@@ -551,7 +555,7 @@ public class MWEConfig extends AbstractConfig {
 
     @ConfigProperty(
             category = HITBOXES, subCategory = "Blue Vector",
-            name = "Blue vect for players only",
+            name = "Blue vector for players only",
             comment = "Renders the blue vector for players only")
     public static boolean drawBlueVectForPlayersOnly;
 
