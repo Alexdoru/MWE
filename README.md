@@ -69,7 +69,7 @@ Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, th
 #### Tablist
 
 - **Colored scores** - Render the scores/health in color, according to the score value/health and the player's maximum health points
-- **Change size** - Change the amount of players displayed in the tablist (disabled with Patcher)
+- **Change size** - Change the amount of players displayed in the tablist
 - **Display playercount** - Display the amount of players in your current lobby at the top of the tablist
 - **Hide header/footer** - Hide the header and footer text of the tablist
 - **Hide ping** - Hide the ping values in the tablist if all the values are equal to 1
