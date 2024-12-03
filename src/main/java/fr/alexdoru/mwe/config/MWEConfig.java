@@ -308,14 +308,10 @@ public class MWEConfig extends AbstractConfig {
     @ConfigProperty(
             category = VANILLA, subCategory = "Tablist",
             name = "Tablist size",
-            comment = "Amount of players displayed in the tablist (Vanilla 80)",
+            comment = "Amount of players displayed in the tablist (Vanilla 80)\n"
+                    + "§eThis setting may not apply if you have another mod changing the tablist size, set the other mod to 80 for this one to work!",
             sliderMin = 60, sliderMax = 120)
     public static int tablistSize = 100;
-
-    @ConfigPropertyHideOverride(name = "Tablist size")
-    public static boolean hideTabSizeSetting() {
-        return ASMLoadingPlugin.isPatcherLoaded();
-    }
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Tablist",

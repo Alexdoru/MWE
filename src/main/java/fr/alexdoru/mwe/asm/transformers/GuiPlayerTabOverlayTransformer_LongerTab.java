@@ -1,6 +1,5 @@
 package fr.alexdoru.mwe.asm.transformers;
 
-import fr.alexdoru.mwe.asm.loader.ASMLoadingPlugin;
 import fr.alexdoru.mwe.asm.loader.InjectionStatus;
 import fr.alexdoru.mwe.asm.loader.MWETransformer;
 import fr.alexdoru.mwe.asm.mappings.MethodMapping;
@@ -18,8 +17,7 @@ public class GuiPlayerTabOverlayTransformer_LongerTab implements MWETransformer 
 
     @Override
     public void transform(ClassNode classNode, InjectionStatus status) {
-        final boolean isPatcherLoaded = ASMLoadingPlugin.isPatcherLoaded();
-        status.setInjectionPoints(isPatcherLoaded ? 1 : 2);
+        status.setInjectionPoints(2);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.GUIPLAYERTABOVERLAY$RENDERPLAYERLIST)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
@@ -33,7 +31,7 @@ public class GuiPlayerTabOverlayTransformer_LongerTab implements MWETransformer 
                         ));
                         status.addInjection();
                     }
-                    if (!isPatcherLoaded && checkIntInsnNode(insnNode, BIPUSH, 80)) {
+                    if (checkIntInsnNode(insnNode, BIPUSH, 80)) {
                         methodNode.instructions.insert(insnNode, new MethodInsnNode(
                                 INVOKESTATIC,
                                 getHookClass("GuiPlayerTabOverlayHook_LongerTab"),

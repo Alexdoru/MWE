@@ -10,7 +10,7 @@ public class GuiPlayerTabOverlayHook_LongerTab {
     }
 
     public static int getTotalPlayerAmount(int original) {
-        return MWEConfig.tablistSize;
+        return original == 80 ? MWEConfig.tablistSize : original;
     }
 
 }
