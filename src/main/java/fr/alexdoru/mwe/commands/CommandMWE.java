@@ -28,11 +28,11 @@ public class CommandMWE extends MyAbstractCommand {
             }
         } else if (args.length >= 1 && (args[0].equalsIgnoreCase("howplaygame") || args[0].equalsIgnoreCase("hpg") || args[0].equalsIgnoreCase("explain"))) {
             if (ScoreboardTracker.isMWEnvironement()) {
-                final String msg1 = "During the first 6.5 minutes mine iron to make armor and store it + food in your enderchest";
-                final String msg2 = "When the walls fall, rush to mid and fight for the initial diamond ore blocks and chests";
+                final String msg1 = "Before the walls fall, mine iron to make armor and store it + food in your enderchest";
+                final String msg2 = "When the walls fall, rush mid to fight for the initial diamonds";
                 final String msg3 = "Each team has a wither, protect yours and kill enemy withers. Wither death = No Respawns";
-                final String msg4 = "Be the last team standing or cause the most damage during Deathmatch (all withers dead) to win";
-                final String msg5 = "In the lobby, upgrade your starting armor or change classes for different abilities";
+                final String msg4 = "To win, Be the last team standing or cause the most player damage during Deathmatch (the last phase)";
+                final String msg5 = "You can upgrade your starting armor or change classes for different abilities in the lobby";
                 sendChatMessage(msg1);
                 new DelayedTask(() -> sendChatMessage(msg2), 80);
                 new DelayedTask(() -> sendChatMessage(msg3), 155);
