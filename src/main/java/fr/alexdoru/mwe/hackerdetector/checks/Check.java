@@ -67,7 +67,7 @@ public abstract class Check implements ICheck {
 
     private void printFlagMessage(EntityPlayer player) {
         final String cheatType = this.getCheatName() + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")");
-        final String playername = ScoreboardTracker.isReplayMode() ? StringUtil.removeFormattingCodes(player.getName()) : player.getName();
+        final String playername = (ScoreboardTracker.isReplayMode() || ScoreboardTracker.isAtlasMode()) ? StringUtil.removeFormattingCodes(player.getName()) : player.getName();
         if (MWEConfig.debugLogging) {
             HackerDetector.log(player.getName() + " flags " + cheatType);
         }
@@ -90,7 +90,7 @@ public abstract class Check implements ICheck {
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.RED + this.getCheatDescription()))));
         ChatUtil.addSkinToComponent(imsg, player.getName());
         if (MWEConfig.showReportButtonOnFlags) {
-            if (!(ScoreboardTracker.isInMwGame() && MWEConfig.autoreportFlaggedPlayers)) {
+            if (!(ScoreboardTracker.isInMwGame() && MWEConfig.autoreportFlaggedPlayers) && !ScoreboardTracker.isAtlasMode()) {
                 imsg.appendSibling(ChatUtil.getReportButton(playername, "cheating " + this.getCheatName().toLowerCase(), ClickEvent.Action.RUN_COMMAND));
             }
             if (ScoreboardTracker.isReplayMode() || !MWEConfig.addToReportList) {
@@ -104,7 +104,7 @@ public abstract class Check implements ICheck {
     }
 
     private void addToReportList(EntityPlayer player) {
-        if (!ScoreboardTracker.isReplayMode() && MWEConfig.addToReportList && SquadHandler.getSquad().get(player.getName()) == null) {
+        if (!ScoreboardTracker.isReplayMode() && !ScoreboardTracker.isAtlasMode() && MWEConfig.addToReportList && SquadHandler.getSquad().get(player.getName()) == null) {
             final String cheat = this.getCheatName().toLowerCase() + "[H]";
             final UUID uuid = player.getUniqueID();
             final WDR wdr = WdrData.getWdr(uuid, player.getName());

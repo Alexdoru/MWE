@@ -22,6 +22,8 @@ public class ScoreboardTracker {
     private static boolean isMWEnvironement = false;
     /** True when in the Replay Mode */
     private static boolean isReplayMode = false;
+    /** True when in the Atlas Mode */
+    private static boolean isAtlasMode = false;
     /** True when in a mega walls replay **/
     private static boolean isMWReplay = false;
     /** True when is Skyblock */
@@ -54,6 +56,7 @@ public class ScoreboardTracker {
         isPreGameLobby = parser.isPreGameLobby();
         isPrepPhase = parser.isPrepPhase();
         isReplayMode = parser.isReplayMode();
+        isAtlasMode = parser.isAtlasMode();
         isMWReplay = parser.isMWReplay();
         isInSkyblock = parser.isInSkyblock();
         if (isMWReplay) {
@@ -119,6 +122,10 @@ public class ScoreboardTracker {
 
     public static boolean isReplayMode() {
         return isReplayMode;
+    }
+
+    public static boolean isAtlasMode() {
+        return isAtlasMode;
     }
 
     public static boolean isMWReplay() {

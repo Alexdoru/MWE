@@ -37,6 +37,7 @@ public class ScoreboardParser {
     private boolean isInMwGame = false;
     private boolean isMWEnvironement = false;
     private boolean isReplayMode = false;
+    private boolean isAtlasMode = false;
     private boolean isMWReplay = false;
     private String replayMap = null;
     private boolean isInSkyblock = false;
@@ -70,6 +71,9 @@ public class ScoreboardParser {
             this.parseMegaWallsScoreboard(scoreboard, teamColor);
         } else if (cleanTitle.contains("REPLAY")) {
             isReplayMode = true;
+            this.parseReplayScoreboard(scoreboard);
+        } else if (cleanTitle.contains("ATLAS")) {
+            isAtlasMode = true;
             this.parseReplayScoreboard(scoreboard);
         } else if (cleanTitle.contains("SKYBLOCK")) {
             isInSkyblock = true;
@@ -231,6 +235,10 @@ public class ScoreboardParser {
 
     public boolean isReplayMode() {
         return isReplayMode;
+    }
+
+    public boolean isAtlasMode() {
+        return isAtlasMode;
     }
 
     public boolean isMWReplay() {

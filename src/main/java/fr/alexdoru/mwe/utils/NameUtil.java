@@ -127,7 +127,7 @@ public class NameUtil {
     private static final Pattern MINECRAFT_NAME_PATTERN = Pattern.compile("\\w{1,16}");
 
     public static boolean isValidMinecraftName(String name) {
-        return !StringUtil.isNullOrEmpty(name) && (MINECRAFT_NAME_PATTERN.matcher(name).matches() || ScoreboardTracker.isReplayMode());
+        return !StringUtil.isNullOrEmpty(name) && (MINECRAFT_NAME_PATTERN.matcher(name).matches() || ScoreboardTracker.isReplayMode() || ScoreboardTracker.isAtlasMode());
     }
 
     public static void onTeamPacket(String playername) {

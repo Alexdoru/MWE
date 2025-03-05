@@ -124,7 +124,7 @@ public class HackerDetector {
 
     public static boolean isValidPlayer(UUID uuid) {
         final int v = uuid.version();
-        if (ScoreboardTracker.isReplayMode()) {
+        if (ScoreboardTracker.isReplayMode() || ScoreboardTracker.isAtlasMode()) {
             return v == 2;
         }
         return v == 1 || v == 4;
