@@ -770,6 +770,14 @@ public class MWEConfig extends AbstractConfig {
     public static final GuiPosition warcryHUDPosition = new GuiPosition(true, 0.65d, 1d);
 
     @ConfigProperty(
+        category = FINAL_KILL_COUNTER, subCategory = "General",
+        name = "Reset Final Kills on DM",
+        comment = "Resets everyones finals once Deathmatch begins.\n"
+                + "Since damage is tracked only in DM, this can help you keep better track\n"
+                + "of who is winning damage")
+    public static boolean clearFkcounterOnDM = false;
+
+    @ConfigProperty(
             category = FINAL_KILL_COUNTER, subCategory = "HUD",
             name = "Final Kill Counter HUD",
             comment = "Displays the HUD of the final kill counter\n"

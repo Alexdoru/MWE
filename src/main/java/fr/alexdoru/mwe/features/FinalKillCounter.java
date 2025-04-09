@@ -156,6 +156,16 @@ public class FinalKillCounter {
         GuiManager.fkCounterHUD.updateDisplayText();
     }
 
+    @SubscribeEvent
+    public void onDeathmatch(MegaWallsGameEvent event) {
+        if (
+            event.getType() == MegaWallsGameEvent.EventType.DEATHMATCH_START
+            && MWEConfig.clearFkcounterOnDM
+        ) {
+            removeAllPlayers();
+        }
+    }
+
     /**
      * Resets the Killcounter and assigns it to a new game ID
      */
@@ -174,6 +184,26 @@ public class FinalKillCounter {
             }
         });
         GuiManager.fkCounterHUD.updateDisplayText();
+    }
+
+    /**
+     * Removes ALL players from the final kill array.
+     * The reason for this is due to wanting to reset all finals just before deathmatch starts.
+     * 
+     * This function should not add the player to the `deadPlayers` list
+     * nor block them from being able to get more finals
+     */
+    public static void removeAllPlayers() {
+        final HashMap<String, Integer>[] teamKillsArray = getTeamKillsArray();
+        if (teamKillsArray != null) {
+            for (int team = 0; team < TEAMS; team++) {
+                clearAllKilledPlayersFromTeam(team);
+            }
+            GuiManager.fkCounterHUD.updateDisplayText();
+            ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Reset all final kills, good luck in deathmatch!");
+        } else {
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "No finals initialized, couldn't clear what doesnt exist");
+        }
     }
 
     public static boolean processMessage(ClientChatReceivedEvent event, String formattedText, String unformattedText) {
@@ -310,6 +340,29 @@ public class FinalKillCounter {
 
     public static void removeKilledPlayer(String player, int team) {
         removeKilledPlayer(player, getColorPrefixFromTeam(team).replace("§", ""));
+    }
+
+    
+    /**
+     *  Removes all players from a specific team
+     *  from the fkcounter but does not
+     *  add them to the deadPlayers list.
+     * 
+     *  Useful for when wanting to wipe everyones finals
+     *  but continue to allow them to gain more final kills.
+     * 
+     *  This method will work as expected if, and only if,
+     *  `teamKillsArray` is updated to include the same players as
+     *  `allPlayerKills`. Otherwise, unexpected behavior will occur
+     */
+    public static void clearAllKilledPlayersFromTeam(int team) {
+
+        for (Map.Entry<String, Integer> player : teamKillsArray[team].entrySet()) {
+            String playerName = player.getKey();
+            allPlayerKills.remove(playerName);
+            updateNetworkPlayerinfo(playerName, 0);
+        }
+        teamKillsArray[team].clear();
     }
 
     /**

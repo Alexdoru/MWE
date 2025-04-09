@@ -4,6 +4,7 @@ import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.gui.guiapi.GuiManager;
 import fr.alexdoru.mwe.utils.MapUtil;
+import fr.alexdoru.mwe.features.FinalKillCounter;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
@@ -47,6 +48,9 @@ public class CommandFKCounter extends MyAbstractCommand {
             }
 
             ChatUtil.addChatMessage(strBuilder.toString());
+        } else if (args.length == 1 && args[0].equalsIgnoreCase("clear")) {
+
+            removeAllPlayers();
 
         } else if (args.length == 2 && args[0].equalsIgnoreCase("remove")) {
 
@@ -108,6 +112,7 @@ public class CommandFKCounter extends MyAbstractCommand {
                         + EnumChatFormatting.YELLOW + "/fks" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the amount of finals per team in the chat\n"
                         + EnumChatFormatting.YELLOW + "/fks players" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the amount of finals per player in the chat\n"
                         + EnumChatFormatting.YELLOW + "/fks settings" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "opens the settings GUI\n"
+                        + EnumChatFormatting.YELLOW + "/fks clear" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "clears the current final kill counter\n"
                         + EnumChatFormatting.AQUA + ChatUtil.bar()
         );
     }
@@ -128,6 +133,7 @@ public class CommandFKCounter extends MyAbstractCommand {
         }
         ChatUtil.addChatMessage(EnumChatFormatting.RED + "Cannot find " + playerName + " in the FKCounter.");
     }
+
 
     private ArrayList<String> getPlayerListInKillCounter() {
         final ArrayList<String> playerList = new ArrayList<>();
