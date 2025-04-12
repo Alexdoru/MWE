@@ -3,8 +3,10 @@ package fr.alexdoru.mwe.gui.huds;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
+import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -84,6 +86,13 @@ public class WarcryHUD extends AbstractRenderer {
     @SubscribeEvent
     public void onMWEvent(MegaWallsGameEvent event) {
         if (event.getType() == MegaWallsGameEvent.EventType.DEATHMATCH_START) {
+            this.activationTime = 0;
+        }
+    }
+
+    @SubscribeEvent
+    public void onGuiScreen(GuiScreenEvent.InitGuiEvent.Pre event) {
+        if (event.gui instanceof GuiGameOver) {
             this.activationTime = 0;
         }
     }
