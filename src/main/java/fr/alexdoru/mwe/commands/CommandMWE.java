@@ -26,13 +26,13 @@ public class CommandMWE extends MyAbstractCommand {
             } else {
                 HypixelApiKeyUtil.setApiKey(args[1]);
             }
-        } else if (args.length >= 1 && args[0].equalsIgnoreCase("howplaygame")) {
+        } else if (args.length >= 1 && (args[0].equalsIgnoreCase("howplaygame") || args[0].equalsIgnoreCase("hpg") || args[0].equalsIgnoreCase("explain"))) {
             if (ScoreboardTracker.isMWEnvironement()) {
-                final String msg1 = "During the first 6 minutes you have to mine iron, make armor and store everything in your enderchest";
-                final String msg2 = "Once the walls fall down you can go to mid and fight other players, each class has unique abilities";
-                final String msg3 = "Every team has a wither, you have to protect yours and kill the withers from the other teams";
-                final String msg4 = "Once a wither is dead the players from that team can't respawn, be the last team standing to win";
-                final String msg5 = "More informations about the game: https://hypixel.net/threads/the-complete-mega-walls-guide.3489088/";
+                final String msg1 = "Before the walls fall, mine iron to make armor and store it + food in your enderchest.";
+                final String msg2 = "When the walls fall, rush mid to fight for the initial diamonds. Each team has a wither.";
+                final String msg3 = "Protect yours and kill enemy withers to stop player respawns. Win by being the last team alive or by";
+                final String msg4 = "causing the most player damage during Deathmatch (the last phase). Upgrade your kit in the lobby.";
+                final String msg5 = "Outdated but more detailed guide: https://hypixel.net/threads/the-complete-mega-walls-guide.3489088/";
                 sendChatMessage(msg1);
                 new DelayedTask(() -> sendChatMessage(msg2), 80);
                 new DelayedTask(() -> sendChatMessage(msg3), 155);
