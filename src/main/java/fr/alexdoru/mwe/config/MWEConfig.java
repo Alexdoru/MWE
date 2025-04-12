@@ -701,7 +701,7 @@ public class MWEConfig extends AbstractConfig {
     public static boolean witherHUDinSidebar = true;
 
     @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "HUD",
+            category = MEGA_WALLS, subCategory = "Class-Specific HUD",
             name = "Strength HUD",
             comment = "Displays the duration of the strength effect when you have it or when you are about to have it with Hunter."
                     + " Works with Dreadlord, Herobrine, Hunter and Zombie.")
@@ -715,7 +715,7 @@ public class MWEConfig extends AbstractConfig {
     }
 
     @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "HUD",
+            category = MEGA_WALLS, subCategory = "Class-Specific HUD",
             name = "Creeper primed TNT HUD",
             comment = "Displays the cooldown of primed TNT when playing Creeper")
     public static final GuiPosition creeperTNTHUDPosition = new GuiPosition(true, 0.5d, 8d / 20d);

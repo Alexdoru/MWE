@@ -34,7 +34,7 @@ public class PositionEditGuiScreen extends GuiScreen {
         this.renderCrosshair();
         final boolean prevEnabled = this.guiPosition.isEnabled();
         this.guiPosition.setEnabled(false);
-        GuiManager.renderAllDummy();
+        GuiManager.renderDummiesForPositionEditScreen(renderer);
         this.guiPosition.setEnabled(prevEnabled);
         super.drawDefaultBackground();
         renderer.renderDummy();
