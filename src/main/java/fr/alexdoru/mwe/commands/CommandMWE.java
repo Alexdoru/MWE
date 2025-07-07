@@ -32,7 +32,7 @@ public class CommandMWE extends MyAbstractCommand {
                 final String msg2 = "When the walls fall, rush mid for diamonds then attack enemy withers or defend yours.";
                 final String msg3 = "When your wither dies, you can't respawn so meet team at spawn and stay together.";
                 final String msg4 = "Win by causing the most damage after all withers die or by being the last team alive.";
-                final String msg5 = "You can share resources with your team using /tc. You can upgrade your kit at the shop in the lobby.";
+                final String msg5 = "You can share resources with your team using /tc. Your kit can be upgraded at the shop in the lobby.";
                 sendChatMessage(msg1);
                 new DelayedTask(() -> sendChatMessage(msg2), 80);
                 new DelayedTask(() -> sendChatMessage(msg3), 155);
