@@ -26,13 +26,13 @@ public class CommandMWE extends MyAbstractCommand {
             } else {
                 HypixelApiKeyUtil.setApiKey(args[1]);
             }
-        } else if (args.length >= 1 && args[0].equalsIgnoreCase("howplaygame")) {
+        } else if (args.length >= 1 && (args[0].equalsIgnoreCase("howplaygame") || args[0].equalsIgnoreCase("hpg") || args[0].equalsIgnoreCase("explain"))) {
             if (ScoreboardTracker.isMWEnvironement()) {
-                final String msg1 = "During the first 6 minutes you have to mine iron, make armor and store everything in your enderchest";
-                final String msg2 = "Once the walls fall down you can go to mid and fight other players, each class has unique abilities";
-                final String msg3 = "Every team has a wither, you have to protect yours and kill the withers from the other teams";
-                final String msg4 = "Once a wither is dead the players from that team can't respawn, be the last team standing to win";
-                final String msg5 = "More informations about the game: https://hypixel.net/threads/the-complete-mega-walls-guide.3489088/";
+                final String msg1 = "Before the walls fall, mine iron to make armor. Store armor, blocks and food in your ender chest.";
+                final String msg2 = "When the walls fall, rush mid for diamonds then attack enemy withers or defend yours.";
+                final String msg3 = "After your wither dies, you can't respawn, so meet your team at spawn and stay together.";
+                final String msg4 = "Win by being the last team standing, or the team with most damage during deathmatch.";
+                final String msg5 = "You can share resources with your team using /tc. Upgrade your kit using the shop in the lobby.";
                 sendChatMessage(msg1);
                 new DelayedTask(() -> sendChatMessage(msg2), 80);
                 new DelayedTask(() -> sendChatMessage(msg3), 155);
