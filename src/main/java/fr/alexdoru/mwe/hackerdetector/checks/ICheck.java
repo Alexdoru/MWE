@@ -1,7 +1,6 @@
 package fr.alexdoru.mwe.hackerdetector.checks;
 
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
-import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
 
 public interface ICheck {
@@ -28,11 +27,5 @@ public interface ICheck {
      * this method
      */
     boolean check(EntityPlayer player, PlayerDataSamples data);
-
-    /**
-     * Checks the violation level of each ViolationLevelTracker of this check
-     * and prints chat output if the player exceeds one of the violation levels
-     */
-    void checkViolationLevel(EntityPlayer player, boolean failedCheck, ViolationLevelTracker... tracker);
 
 }

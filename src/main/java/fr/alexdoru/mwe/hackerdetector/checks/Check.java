@@ -42,9 +42,8 @@ public abstract class Check implements ICheck {
 
     protected static final Minecraft mc = Minecraft.getMinecraft();
     private static final HashSet<String> flagMessages = new HashSet<>();
-    private static long lastSoundTime;
+    private long lastSoundTime;
 
-    @Override
     public final void checkViolationLevel(EntityPlayer player, boolean failedCheck, ViolationLevelTracker... trackers) {
         for (final ViolationLevelTracker tracker : trackers) {
             if (tracker.isFlagging(failedCheck)) {
