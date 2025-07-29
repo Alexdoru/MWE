@@ -120,8 +120,8 @@ public class MWEClassTransformer implements IClassTransformer {
         if (bytes == null || !transformers.containsKey(transformedName)) {
             return bytes;
         }
-        final long l = System.nanoTime();
         try {
+            final long l = System.nanoTime();
             final ClassReader classReader = new ClassReader(bytes);
             final ClassNode classNode = new ClassNode();
             classReader.accept(classNode, 0);
@@ -149,7 +149,7 @@ public class MWEClassTransformer implements IClassTransformer {
             final byte[] transformedBytes = classWriter.toByteArray();
             final long l2 = (System.nanoTime() - l) / 1_000_000L;
             debugLog("Transformed " + transformedName + " in " + l2 + "ms");
-            saveTransformedClass(transformedBytes, transformedName);
+            saveTransformedClass(bytes, transformedBytes, transformedName);
             return transformedBytes;
         } catch (Throwable t) {
             ASMLoadingPlugin.logger.error("Failed to transform " + transformedName, t);
@@ -181,7 +181,7 @@ public class MWEClassTransformer implements IClassTransformer {
         }
     }
 
-    private void saveTransformedClass(final byte[] data, final String transformedName) {
+    private void saveTransformedClass(byte[] bytes, byte[] transformedBytes, String transformedName) {
         if (!ASMLoadingPlugin.classDump() && !ASMLoadingPlugin.moreClassDump()) {
             return;
         }
@@ -189,10 +189,11 @@ public class MWEClassTransformer implements IClassTransformer {
             emptyClassOutputFolder();
         }
         final String fileName = transformedName.replace('.', File.separatorChar);
-        writeClassFile(data, transformedName, fileName);
+        writeClassFile(bytes, transformedName, fileName + "_PRE");
+        writeClassFile(transformedBytes, transformedName, fileName + "_POST");
         if (ASMLoadingPlugin.moreClassDump()) {
-            writeBytecodeFile(data, transformedName, fileName);
-            writeASMFile(data, transformedName, fileName);
+            writeBytecodeFile(transformedBytes, transformedName, fileName);
+            writeASMFile(transformedBytes, transformedName, fileName);
         }
     }
 
@@ -209,9 +210,9 @@ public class MWEClassTransformer implements IClassTransformer {
         }
         try (final OutputStream output = Files.newOutputStream(classFile.toPath())) {
             output.write(data);
-            ASMLoadingPlugin.logger.info("Saved transformed class (byte[]) to " + classFile.toPath());
+            ASMLoadingPlugin.logger.info("Saved class (byte[]) to " + classFile.toPath());
         } catch (IOException e) {
-            ASMLoadingPlugin.logger.error("Could not save transformed class (byte[]) " + transformedName, e);
+            ASMLoadingPlugin.logger.error("Could not save class (byte[]) " + transformedName, e);
         }
     }
 
@@ -229,9 +230,9 @@ public class MWEClassTransformer implements IClassTransformer {
         try (final OutputStream output = Files.newOutputStream(bytecodeFile.toPath())) {
             final ClassReader classReader = new ClassReader(data);
             classReader.accept(new TraceClassVisitor(null, new Textifier(), new PrintWriter(output)), 0);
-            ASMLoadingPlugin.logger.info("Saved transformed class (bytecode) to " + bytecodeFile.toPath());
+            ASMLoadingPlugin.logger.info("Saved class (bytecode) to " + bytecodeFile.toPath());
         } catch (IOException e) {
-            ASMLoadingPlugin.logger.error("Could not save transformed class (bytecode) " + transformedName, e);
+            ASMLoadingPlugin.logger.error("Could not save class (bytecode) " + transformedName, e);
         }
     }
 
@@ -249,9 +250,9 @@ public class MWEClassTransformer implements IClassTransformer {
         try (final OutputStream output = Files.newOutputStream(asmifiedFile.toPath())) {
             final ClassReader classReader = new ClassReader(data);
             classReader.accept(new TraceClassVisitor(null, new ASMifier(), new PrintWriter(output)), 0);
-            ASMLoadingPlugin.logger.info("Saved transformed class (ASM) to " + asmifiedFile.toPath());
+            ASMLoadingPlugin.logger.info("Saved class (ASM) to " + asmifiedFile.toPath());
         } catch (IOException e) {
-            ASMLoadingPlugin.logger.error("Could not save transformed class (ASM) " + transformedName, e);
+            ASMLoadingPlugin.logger.error("Could not save class (ASM) " + transformedName, e);
         }
     }
 
