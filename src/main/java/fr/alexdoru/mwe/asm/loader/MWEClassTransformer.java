@@ -127,12 +127,12 @@ public class MWEClassTransformer implements IClassTransformer {
             classReader.accept(classNode, 0);
             boolean transformed = false;
             for (final MWETransformer transformer : transformers.get(transformedName)) {
-                final InjectionStatus status = new InjectionStatus();
-                transformer.transform(classNode, status);
-                if (status.isSkippingTransformation()) {
+                if (!transformer.shouldApply(classNode)) {
                     debugLog("Skipping application of " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
                     continue;
                 }
+                final InjectionStatus status = new InjectionStatus();
+                transformer.transform(classNode, status);
                 transformed = true;
                 if (status.isTransformationSuccessful()) {
                     debugLog("Applied " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);

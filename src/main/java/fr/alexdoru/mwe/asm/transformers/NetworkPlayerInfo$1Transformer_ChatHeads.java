@@ -16,11 +16,12 @@ public class NetworkPlayerInfo$1Transformer_ChatHeads implements MWETransformer 
     }
 
     @Override
+    public boolean shouldApply(ClassNode classNode) {
+        return !ASMLoadingPlugin.isFeatherLoaded();
+    }
+
+    @Override
     public void transform(ClassNode classNode, InjectionStatus status) {
-        if (ASMLoadingPlugin.isFeatherLoaded()) {
-            status.skipTransformation();
-            return;
-        }
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals(MethodMapping.NETWORKPLAYERINFO$1$SKINAVAILABLE.name)) {

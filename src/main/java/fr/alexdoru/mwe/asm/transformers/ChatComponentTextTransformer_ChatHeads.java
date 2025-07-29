@@ -14,11 +14,12 @@ public class ChatComponentTextTransformer_ChatHeads implements MWETransformer {
     }
 
     @Override
+    public boolean shouldApply(ClassNode classNode) {
+        return !ASMLoadingPlugin.isFeatherLoaded();
+    }
+
+    @Override
     public void transform(ClassNode classNode, InjectionStatus status) {
-        if (ASMLoadingPlugin.isFeatherLoaded()) {
-            status.skipTransformation();
-            return;
-        }
         status.setInjectionPoints(0);
         addInterface(classNode, "ChatComponentTextAccessor");
         final String SKIN_FIELD_NAME = "mwe$skin";

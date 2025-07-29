@@ -18,9 +18,18 @@ public interface MWETransformer extends Opcodes {
     String[] getTargetClassName();
 
     /**
+     * Returns true if this transformer should apply
+     */
+    default boolean shouldApply(ClassNode classNode) {
+        return true;
+    }
+
+    /**
      * Performs transformations to the ClassNode
      */
     void transform(ClassNode classNode, InjectionStatus status);
+
+    /* ========= ASM helper methods ========= */
 
     default void addInterface(ClassNode classNode, String interfaceName) {
         classNode.interfaces.add("fr/alexdoru/mwe/asm/interfaces/" + interfaceName);

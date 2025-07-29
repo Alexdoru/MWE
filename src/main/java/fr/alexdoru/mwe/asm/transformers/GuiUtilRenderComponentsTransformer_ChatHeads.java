@@ -15,11 +15,12 @@ public class GuiUtilRenderComponentsTransformer_ChatHeads implements MWETransfor
     }
 
     @Override
+    public boolean shouldApply(ClassNode classNode) {
+        return !ASMLoadingPlugin.isFeatherLoaded();
+    }
+
+    @Override
     public void transform(ClassNode classNode, InjectionStatus status) {
-        if (ASMLoadingPlugin.isFeatherLoaded()) {
-            status.skipTransformation();
-            return;
-        }
         status.setInjectionPoints(6);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.GUIUTILRENDERCOMPONENTS$SPLITTEXT)) {

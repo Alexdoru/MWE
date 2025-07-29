@@ -13,14 +13,24 @@ public class EntityCullingTransformer_FixOutlineCulling implements MWETransforme
     }
 
     @Override
-    public void transform(ClassNode classNode, InjectionStatus status) {
+    public boolean shouldApply(ClassNode classNode) {
         for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals("checkEntity") && methodNode.desc.equals("(Lnet/minecraft/entity/Entity;)Z")) {
                 if (needsFixing(methodNode)) {
-                    status.setInjectionPoints(1);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void transform(ClassNode classNode, InjectionStatus status) {
+        status.setInjectionPoints(1);
+        for (final MethodNode methodNode : classNode.methods) {
+            if (methodNode.name.equals("checkEntity") && methodNode.desc.equals("(Lnet/minecraft/entity/Entity;)Z")) {
+                if (needsFixing(methodNode)) {
                     injectFix(status, methodNode);
-                } else {
-                    status.skipTransformation();
                 }
             }
         }
