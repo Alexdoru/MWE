@@ -22,7 +22,7 @@ public class MWELoadingPlugin implements IFMLLoadingPlugin {
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[]{MWEClassTransformer.class.getName()};
+        return new String[]{"fr.alexdoru.mwe.asm.loader.MWEClassTransformer"};
     }
 
     @Override
