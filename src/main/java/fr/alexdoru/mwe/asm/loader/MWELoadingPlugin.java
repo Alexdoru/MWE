@@ -48,11 +48,11 @@ public class MWELoadingPlugin implements IFMLLoadingPlugin {
     private static Boolean isPatcherLoaded;
     private static Boolean isFeatherLoaded;
 
-    public static boolean isPatcherLoaded() {
+    public static boolean isPatcherPresent() {
         if (isPatcherLoaded == null) {
             try {
                 final String PATCHER_CLASS = "club/sk1er/patcher/Patcher.class";
-                isPatcherLoaded = ClassLoader.getSystemClassLoader().getResource(PATCHER_CLASS) != null;
+                isPatcherLoaded = MWELoadingPlugin.class.getClassLoader().getResource(PATCHER_CLASS) != null;
             } catch (Exception e) {
                 isPatcherLoaded = Boolean.FALSE;
             }
@@ -60,11 +60,11 @@ public class MWELoadingPlugin implements IFMLLoadingPlugin {
         return isPatcherLoaded;
     }
 
-    public static boolean isFeatherLoaded() {
+    public static boolean isFeatherPresent() {
         if (isFeatherLoaded == null) {
             try {
                 final String FEATHER_CLASS = "net/digitalingot/featheropt/FeatherOptMixinPlugin.class";
-                isFeatherLoaded = ClassLoader.getSystemClassLoader().getResource(FEATHER_CLASS) != null;
+                isFeatherLoaded = MWELoadingPlugin.class.getClassLoader().getResource(FEATHER_CLASS) != null;
             } catch (Exception e) {
                 isFeatherLoaded = Boolean.FALSE;
             }

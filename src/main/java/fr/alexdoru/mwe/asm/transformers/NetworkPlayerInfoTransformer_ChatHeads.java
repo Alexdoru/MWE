@@ -18,7 +18,7 @@ public class NetworkPlayerInfoTransformer_ChatHeads implements MWETransformer {
 
     @Override
     public boolean shouldApply(ClassNode classNode) {
-        return !MWELoadingPlugin.isFeatherLoaded();
+        return !MWELoadingPlugin.isFeatherPresent();
     }
 
     @Override

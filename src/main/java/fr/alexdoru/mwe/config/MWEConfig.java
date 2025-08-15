@@ -135,7 +135,7 @@ public class MWEConfig extends AbstractConfig {
 
     @ConfigPropertyHideOverride(name = "Chat Heads")
     public static boolean hideChatHeadSetting() {
-        return MWELoadingPlugin.isFeatherLoaded();
+        return MWELoadingPlugin.isFeatherPresent();
     }
 
     @ConfigPropertyEvent(name = "Chat Heads")
