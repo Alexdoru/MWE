@@ -96,14 +96,19 @@ public enum ClassMapping {
     WORLDRENDERER("bfd", "net/minecraft/client/renderer/WorldRenderer"),
     WORLDSETTINGS$GAMETYPE("adp$a", "net/minecraft/world/WorldSettings$GameType");
 
+    /** Internal name */
     public final String name;
 
-    ClassMapping(String clearName) {
-        this.name = clearName;
+    ClassMapping(String name) {
+        this.name = name;
     }
 
     ClassMapping(String obfName, String clearName) {
-        this.name = MWELoadingPlugin.isObf() ? obfName : clearName;
+        this(MWELoadingPlugin.isObf() ? obfName : clearName);
+    }
+
+    public String desc() {
+        return "L" + name + ";";
     }
 
     @Override

@@ -55,28 +55,26 @@ public enum FieldMapping {
     public final String name;
     public final String desc;
 
-    FieldMapping(ClassMapping owner, String mcpName, String desc) {
-        this.owner = owner.toString();
-        this.name = mcpName;
+    FieldMapping(String owner, String name, String desc) {
+        this.owner = owner;
+        this.name = name;
         this.desc = desc;
     }
 
-    FieldMapping(ClassMapping owner, String mcpName, ClassMapping classMapping) {
-        this.owner = owner.toString();
-        this.name = mcpName;
-        this.desc = "L" + classMapping + ";";
+    FieldMapping(ClassMapping owner, String clearName, String desc) {
+        this(owner.name, clearName, desc);
     }
 
-    FieldMapping(ClassMapping owner, String obfName, String mcpName, String desc) {
-        this.owner = owner.toString();
-        this.name = MWELoadingPlugin.isObf() ? obfName : mcpName;
-        this.desc = desc;
+    FieldMapping(ClassMapping owner, String clearName, ClassMapping type) {
+        this(owner.name, clearName, type.desc());
     }
 
-    FieldMapping(ClassMapping owner, String obfName, String mcpName, ClassMapping classMapping) {
-        this.owner = owner.toString();
-        this.name = MWELoadingPlugin.isObf() ? obfName : mcpName;
-        this.desc = "L" + classMapping + ";";
+    FieldMapping(ClassMapping owner, String obfName, String clearName, String desc) {
+        this(owner.name, MWELoadingPlugin.isObf() ? obfName : clearName, desc);
+    }
+
+    FieldMapping(ClassMapping owner, String obfName, String clearName, ClassMapping type) {
+        this(owner.name, MWELoadingPlugin.isObf() ? obfName : clearName, type.desc());
     }
 
 }

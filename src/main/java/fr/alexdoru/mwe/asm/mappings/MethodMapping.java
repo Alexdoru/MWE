@@ -123,39 +123,27 @@ public enum MethodMapping {
     public final String name;
     public final String desc;
 
-    MethodMapping(String mcpName, String desc) {
-        this.opcode = -1;
-        this.owner = null;
-        this.name = mcpName;
-        this.desc = desc;
-    }
-
-    MethodMapping(String obfName, String mcpName, String desc) {
-        this.opcode = -1;
-        this.owner = null;
-        this.name = MWELoadingPlugin.isObf() ? obfName : mcpName;
-        this.desc = desc;
-    }
-
-    MethodMapping(int opcode, ClassMapping owner, String mcpName, String desc) {
-        this.opcode = opcode;
-        this.owner = owner.toString();
-        this.name = mcpName;
-        this.desc = desc;
-    }
-
-    MethodMapping(int opcode, ClassMapping owner, String obfName, String mcpName, String desc) {
-        this.opcode = opcode;
-        this.owner = owner.toString();
-        this.name = MWELoadingPlugin.isObf() ? obfName : mcpName;
-        this.desc = desc;
-    }
-
-    MethodMapping(int opcode, String owner, String mcpName, String desc) {
+    MethodMapping(int opcode, String owner, String clearName, String desc) {
         this.opcode = opcode;
         this.owner = owner;
-        this.name = mcpName;
+        this.name = clearName;
         this.desc = desc;
+    }
+
+    MethodMapping(String name, String desc) {
+        this(-1, (String) null, name, desc);
+    }
+
+    MethodMapping(String obfName, String clearName, String desc) {
+        this(-1, (String) null, MWELoadingPlugin.isObf() ? obfName : clearName, desc);
+    }
+
+    MethodMapping(int opcode, ClassMapping owner, String clearName, String desc) {
+        this(opcode, owner.name, clearName, desc);
+    }
+
+    MethodMapping(int opcode, ClassMapping owner, String obfName, String clearName, String desc) {
+        this(opcode, owner.name, MWELoadingPlugin.isObf() ? obfName : clearName, desc);
     }
 
 }
