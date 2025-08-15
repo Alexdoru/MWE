@@ -163,10 +163,10 @@ public class MWEClassTransformer implements IClassTransformer {
     }
 
     private static void debugLog(String msg) {
-        if (MWELoadingPlugin.classDump()) {
-            MWELoadingPlugin.logger.info(msg);
-        } else {
+        if (MWELoadingPlugin.isObf()) {
             MWELoadingPlugin.logger.debug(msg);
+        } else {
+            MWELoadingPlugin.logger.info(msg);
         }
     }
 
