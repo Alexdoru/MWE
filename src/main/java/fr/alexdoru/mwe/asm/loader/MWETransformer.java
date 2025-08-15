@@ -82,6 +82,7 @@ public interface MWETransformer extends Opcodes {
     }
 
     default boolean checkMethodInsnNode(AbstractInsnNode insnNode, MethodMapping method) {
+        method.validate();
         return insnNode instanceof MethodInsnNode && insnNode.getOpcode() == method.opcode
                 && ((MethodInsnNode) insnNode).owner.equals(method.owner)
                 && ((MethodInsnNode) insnNode).name.equals(method.name)
@@ -112,6 +113,7 @@ public interface MWETransformer extends Opcodes {
     }
 
     default MethodInsnNode getNewMethodInsnNode(MethodMapping method) {
+        method.validate();
         return new MethodInsnNode(method.opcode, method.owner, method.name, method.desc, method.opcode == INVOKEINTERFACE);
     }
 

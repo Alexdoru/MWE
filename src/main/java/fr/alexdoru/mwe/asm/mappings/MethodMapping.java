@@ -146,4 +146,10 @@ public enum MethodMapping {
         this(opcode, owner.name, MWELoadingPlugin.isObf() ? obfName : clearName, desc);
     }
 
+    public final void validate() {
+        if (opcode == -1) {
+            throw new IllegalArgumentException("MethodMapping doesn't have opcode defined");
+        }
+    }
+
 }
