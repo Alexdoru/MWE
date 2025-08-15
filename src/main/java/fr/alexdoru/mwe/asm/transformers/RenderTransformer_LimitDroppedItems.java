@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.asm.transformers;
 
-import fr.alexdoru.mwe.asm.loader.ASMLoadingPlugin;
 import fr.alexdoru.mwe.asm.loader.InjectionStatus;
+import fr.alexdoru.mwe.asm.loader.MWELoadingPlugin;
 import fr.alexdoru.mwe.asm.loader.MWETransformer;
 import fr.alexdoru.mwe.asm.mappings.ClassMapping;
 import fr.alexdoru.mwe.asm.mappings.FieldMapping;
@@ -44,7 +44,7 @@ public class RenderTransformer_LimitDroppedItems implements MWETransformer {
         } else if (ClassMapping.RENDERENTITYITEM.name.equals(classNode.name)) {
             for (final MethodNode methodNode : classNode.methods) {
                 if (checkMethodNode(methodNode, MethodMapping.RENDER$SHOULDRENDER)) {
-                    ASMLoadingPlugin.logger.error("RenderEntityItem is already overriding shouldRender() !");
+                    MWELoadingPlugin.logger.error("RenderEntityItem is already overriding shouldRender() !");
                     return;
                 }
             }

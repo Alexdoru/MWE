@@ -42,14 +42,14 @@ public interface MWETransformer extends Opcodes {
     default void nodeToString(AbstractInsnNode insnNode) {
         if (insnNode instanceof FieldInsnNode) {
             final FieldInsnNode fieldInsnNode = (FieldInsnNode) insnNode;
-            ASMLoadingPlugin.logger.info("FieldInsnNode :"
+            MWELoadingPlugin.logger.info("FieldInsnNode :"
                     + " opcode '" + fieldInsnNode.getOpcode()
                     + "' name '" + fieldInsnNode.name
                     + "' owner '" + fieldInsnNode.owner
                     + "' desc '" + fieldInsnNode.desc + "'");
         } else if (insnNode instanceof MethodInsnNode) {
             final MethodInsnNode methodInsnNode = (MethodInsnNode) insnNode;
-            ASMLoadingPlugin.logger.info("MethodInsnNode :"
+            MWELoadingPlugin.logger.info("MethodInsnNode :"
                     + " opcode '" + methodInsnNode.getOpcode()
                     + "' name '" + methodInsnNode.name
                     + "' owner '" + methodInsnNode.owner

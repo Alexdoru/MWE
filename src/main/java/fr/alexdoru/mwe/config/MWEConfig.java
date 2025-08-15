@@ -1,14 +1,10 @@
 package fr.alexdoru.mwe.config;
 
 import fr.alexdoru.mwe.MWE;
-import fr.alexdoru.mwe.asm.loader.ASMLoadingPlugin;
+import fr.alexdoru.mwe.asm.loader.MWELoadingPlugin;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.LocrawListener;
-import fr.alexdoru.mwe.config.lib.AbstractConfig;
-import fr.alexdoru.mwe.config.lib.ConfigCategory;
-import fr.alexdoru.mwe.config.lib.ConfigProperty;
-import fr.alexdoru.mwe.config.lib.ConfigPropertyEvent;
-import fr.alexdoru.mwe.config.lib.ConfigPropertyHideOverride;
+import fr.alexdoru.mwe.config.lib.*;
 import fr.alexdoru.mwe.features.LeatherArmorManager;
 import fr.alexdoru.mwe.gui.guiapi.GuiManager;
 import fr.alexdoru.mwe.gui.guiapi.GuiPosition;
@@ -139,7 +135,7 @@ public class MWEConfig extends AbstractConfig {
 
     @ConfigPropertyHideOverride(name = "Chat Heads")
     public static boolean hideChatHeadSetting() {
-        return ASMLoadingPlugin.isFeatherLoaded();
+        return MWELoadingPlugin.isFeatherLoaded();
     }
 
     @ConfigPropertyEvent(name = "Chat Heads")

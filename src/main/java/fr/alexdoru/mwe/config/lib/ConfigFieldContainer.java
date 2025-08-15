@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.config.lib;
 
-import fr.alexdoru.mwe.asm.loader.ASMLoadingPlugin;
+import fr.alexdoru.mwe.asm.loader.MWELoadingPlugin;
 import fr.alexdoru.mwe.config.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.mwe.config.lib.gui.elements.*;
 import fr.alexdoru.mwe.gui.guiapi.GuiPosition;
@@ -116,7 +116,7 @@ public class ConfigFieldContainer {
 
     public ConfigUIElement getConfigButton(ConfigGuiScreen configGuiScreen) throws IllegalAccessException {
         if (annotation.hidden()) return null;
-        if (ASMLoadingPlugin.isObf() && hideOverride != null) {
+        if (MWELoadingPlugin.isObf() && hideOverride != null) {
             try {
                 final boolean shouldHide = (boolean) hideOverride.invoke(null);
                 if (shouldHide) return null;

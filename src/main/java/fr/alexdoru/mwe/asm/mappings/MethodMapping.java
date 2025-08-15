@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.mappings;
 
-import fr.alexdoru.mwe.asm.loader.ASMLoadingPlugin;
+import fr.alexdoru.mwe.asm.loader.MWELoadingPlugin;
 
 import static fr.alexdoru.mwe.asm.mappings.ClassMapping.*;
 import static org.objectweb.asm.Opcodes.*;
@@ -133,7 +133,7 @@ public enum MethodMapping {
     MethodMapping(String obfName, String mcpName, String desc) {
         this.opcode = -1;
         this.owner = null;
-        this.name = ASMLoadingPlugin.isObf() ? obfName : mcpName;
+        this.name = MWELoadingPlugin.isObf() ? obfName : mcpName;
         this.desc = desc;
     }
 
@@ -147,7 +147,7 @@ public enum MethodMapping {
     MethodMapping(int opcode, ClassMapping owner, String obfName, String mcpName, String desc) {
         this.opcode = opcode;
         this.owner = owner.toString();
-        this.name = ASMLoadingPlugin.isObf() ? obfName : mcpName;
+        this.name = MWELoadingPlugin.isObf() ? obfName : mcpName;
         this.desc = desc;
     }
 

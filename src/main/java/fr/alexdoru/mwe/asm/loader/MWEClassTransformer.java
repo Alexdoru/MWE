@@ -137,7 +137,7 @@ public class MWEClassTransformer implements IClassTransformer {
                 if (status.isTransformationSuccessful()) {
                     debugLog("Applied " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
                 } else {
-                    ASMLoadingPlugin.logger.error("Class transformation incomplete, transformer " + stripClassName(transformer.getClass().getName()) + " missing " + status.getInjectionCount() + " injections in " + transformedName);
+                    MWELoadingPlugin.logger.error("Class transformation incomplete, transformer " + stripClassName(transformer.getClass().getName()) + " missing " + status.getInjectionCount() + " injections in " + transformedName);
                 }
             }
             if (!transformed) {
@@ -152,7 +152,7 @@ public class MWEClassTransformer implements IClassTransformer {
             saveTransformedClass(bytes, transformedBytes, transformedName);
             return transformedBytes;
         } catch (Throwable t) {
-            ASMLoadingPlugin.logger.error("Failed to transform " + transformedName, t);
+            MWELoadingPlugin.logger.error("Failed to transform " + transformedName, t);
             return bytes;
         }
     }
@@ -163,10 +163,10 @@ public class MWEClassTransformer implements IClassTransformer {
     }
 
     private static void debugLog(String msg) {
-        if (ASMLoadingPlugin.classDump()) {
-            ASMLoadingPlugin.logger.info(msg);
+        if (MWELoadingPlugin.classDump()) {
+            MWELoadingPlugin.logger.info(msg);
         } else {
-            ASMLoadingPlugin.logger.debug(msg);
+            MWELoadingPlugin.logger.debug(msg);
         }
     }
 
@@ -182,7 +182,7 @@ public class MWEClassTransformer implements IClassTransformer {
     }
 
     private void saveTransformedClass(byte[] bytes, byte[] transformedBytes, String transformedName) {
-        if (!ASMLoadingPlugin.classDump() && !ASMLoadingPlugin.moreClassDump()) {
+        if (!MWELoadingPlugin.classDump() && !MWELoadingPlugin.moreClassDump()) {
             return;
         }
         if (outputDir == null) {
@@ -191,7 +191,7 @@ public class MWEClassTransformer implements IClassTransformer {
         final String fileName = transformedName.replace('.', File.separatorChar);
         writeClassFile(bytes, transformedName, fileName + "_PRE");
         writeClassFile(transformedBytes, transformedName, fileName + "_POST");
-        if (ASMLoadingPlugin.moreClassDump()) {
+        if (MWELoadingPlugin.moreClassDump()) {
             writeBytecodeFile(transformedBytes, transformedName, fileName);
             writeASMFile(transformedBytes, transformedName, fileName);
         }
@@ -210,9 +210,9 @@ public class MWEClassTransformer implements IClassTransformer {
         }
         try (final OutputStream output = Files.newOutputStream(classFile.toPath())) {
             output.write(data);
-            ASMLoadingPlugin.logger.info("Saved class (byte[]) to " + classFile.toPath());
+            MWELoadingPlugin.logger.info("Saved class (byte[]) to " + classFile.toPath());
         } catch (IOException e) {
-            ASMLoadingPlugin.logger.error("Could not save class (byte[]) " + transformedName, e);
+            MWELoadingPlugin.logger.error("Could not save class (byte[]) " + transformedName, e);
         }
     }
 
@@ -230,9 +230,9 @@ public class MWEClassTransformer implements IClassTransformer {
         try (final OutputStream output = Files.newOutputStream(bytecodeFile.toPath())) {
             final ClassReader classReader = new ClassReader(data);
             classReader.accept(new TraceClassVisitor(null, new Textifier(), new PrintWriter(output)), 0);
-            ASMLoadingPlugin.logger.info("Saved class (bytecode) to " + bytecodeFile.toPath());
+            MWELoadingPlugin.logger.info("Saved class (bytecode) to " + bytecodeFile.toPath());
         } catch (IOException e) {
-            ASMLoadingPlugin.logger.error("Could not save class (bytecode) " + transformedName, e);
+            MWELoadingPlugin.logger.error("Could not save class (bytecode) " + transformedName, e);
         }
     }
 
@@ -250,9 +250,9 @@ public class MWEClassTransformer implements IClassTransformer {
         try (final OutputStream output = Files.newOutputStream(asmifiedFile.toPath())) {
             final ClassReader classReader = new ClassReader(data);
             classReader.accept(new TraceClassVisitor(null, new ASMifier(), new PrintWriter(output)), 0);
-            ASMLoadingPlugin.logger.info("Saved class (ASM) to " + asmifiedFile.toPath());
+            MWELoadingPlugin.logger.info("Saved class (ASM) to " + asmifiedFile.toPath());
         } catch (IOException e) {
-            ASMLoadingPlugin.logger.error("Could not save class (ASM) " + transformedName, e);
+            MWELoadingPlugin.logger.error("Could not save class (ASM) " + transformedName, e);
         }
     }
 

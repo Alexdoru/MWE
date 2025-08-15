@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.mappings;
 
-import fr.alexdoru.mwe.asm.loader.ASMLoadingPlugin;
+import fr.alexdoru.mwe.asm.loader.MWELoadingPlugin;
 
 public enum ClassMapping {
 
@@ -103,7 +103,7 @@ public enum ClassMapping {
     }
 
     ClassMapping(String obfName, String clearName) {
-        this.name = ASMLoadingPlugin.isObf() ? obfName : clearName;
+        this.name = MWELoadingPlugin.isObf() ? obfName : clearName;
     }
 
     @Override

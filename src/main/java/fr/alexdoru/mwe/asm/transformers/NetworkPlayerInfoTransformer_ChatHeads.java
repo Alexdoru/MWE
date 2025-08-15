@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.asm.transformers;
 
-import fr.alexdoru.mwe.asm.loader.ASMLoadingPlugin;
 import fr.alexdoru.mwe.asm.loader.InjectionStatus;
+import fr.alexdoru.mwe.asm.loader.MWELoadingPlugin;
 import fr.alexdoru.mwe.asm.loader.MWETransformer;
 import fr.alexdoru.mwe.asm.mappings.ClassMapping;
 import fr.alexdoru.mwe.asm.mappings.FieldMapping;
@@ -18,7 +18,7 @@ public class NetworkPlayerInfoTransformer_ChatHeads implements MWETransformer {
 
     @Override
     public boolean shouldApply(ClassNode classNode) {
-        return !ASMLoadingPlugin.isFeatherLoaded();
+        return !MWELoadingPlugin.isFeatherLoaded();
     }
 
     @Override

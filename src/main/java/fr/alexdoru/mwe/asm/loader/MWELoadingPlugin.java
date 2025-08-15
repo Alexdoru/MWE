@@ -6,13 +6,14 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 
+@IFMLLoadingPlugin.Name("MWE ASM")
 @IFMLLoadingPlugin.MCVersion("1.8.9")
 @IFMLLoadingPlugin.TransformerExclusions({
         "fr.alexdoru.mwe.asm.loader",
         "fr.alexdoru.mwe.asm.mappings",
         "fr.alexdoru.mwe.asm.transformers",
 })
-public class ASMLoadingPlugin implements IFMLLoadingPlugin {
+public class MWELoadingPlugin implements IFMLLoadingPlugin {
 
     public static final Logger logger = LogManager.getLogger("ASM MWE");
     // JVM flags

@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.mappings;
 
-import fr.alexdoru.mwe.asm.loader.ASMLoadingPlugin;
+import fr.alexdoru.mwe.asm.loader.MWELoadingPlugin;
 
 import static fr.alexdoru.mwe.asm.mappings.ClassMapping.*;
 
@@ -69,13 +69,13 @@ public enum FieldMapping {
 
     FieldMapping(ClassMapping owner, String obfName, String mcpName, String desc) {
         this.owner = owner.toString();
-        this.name = ASMLoadingPlugin.isObf() ? obfName : mcpName;
+        this.name = MWELoadingPlugin.isObf() ? obfName : mcpName;
         this.desc = desc;
     }
 
     FieldMapping(ClassMapping owner, String obfName, String mcpName, ClassMapping classMapping) {
         this.owner = owner.toString();
-        this.name = ASMLoadingPlugin.isObf() ? obfName : mcpName;
+        this.name = MWELoadingPlugin.isObf() ? obfName : mcpName;
         this.desc = "L" + classMapping + ";";
     }
 
