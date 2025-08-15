@@ -18,7 +18,7 @@ public class MWELoadingPlugin implements IFMLLoadingPlugin {
     public static final Logger logger = LogManager.getLogger("ASM MWE");
     private static final boolean MORE_CLASS_DUMP = Boolean.getBoolean("mwe.moreclassdump");
     private static final boolean CLASS_DUMP = MORE_CLASS_DUMP || Boolean.getBoolean("mwe.classdump");
-    private static boolean isObf;
+    private static Boolean isObf;
 
     @Override
     public String[] getASMTransformerClass() {
@@ -37,7 +37,7 @@ public class MWELoadingPlugin implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
-        isObf = (boolean) data.get("runtimeDeobfuscationEnabled");
+        isObf = (Boolean) data.get("runtimeDeobfuscationEnabled");
     }
 
     @Override
@@ -73,6 +73,9 @@ public class MWELoadingPlugin implements IFMLLoadingPlugin {
     }
 
     public static boolean isObf() {
+        if (isObf == null) {
+            throw new IllegalStateException("Obfuscation state has been accessed too early!");
+        }
         return isObf;
     }
 
