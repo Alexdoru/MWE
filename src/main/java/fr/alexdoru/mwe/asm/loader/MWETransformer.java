@@ -27,7 +27,7 @@ public interface MWETransformer extends Opcodes {
     /**
      * Performs transformations to the ClassNode
      */
-    void transform(ClassNode classNode, InjectionStatus status);
+    void transform(ClassNode classNode, InjectionCallback status);
 
     /* ========= ASM helper methods ========= */
 

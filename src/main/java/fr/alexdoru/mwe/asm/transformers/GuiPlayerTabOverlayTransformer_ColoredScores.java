@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.transformers;
 
-import fr.alexdoru.mwe.asm.loader.InjectionStatus;
+import fr.alexdoru.mwe.asm.loader.InjectionCallback;
 import fr.alexdoru.mwe.asm.loader.MWETransformer;
 import fr.alexdoru.mwe.asm.mappings.ClassMapping;
 import fr.alexdoru.mwe.asm.mappings.FieldMapping;
@@ -15,7 +15,7 @@ public class GuiPlayerTabOverlayTransformer_ColoredScores implements MWETransfor
     }
 
     @Override
-    public void transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.GUIPLAYERTABOVERLAY$DRAWSCOREBOARDVALUES)) {

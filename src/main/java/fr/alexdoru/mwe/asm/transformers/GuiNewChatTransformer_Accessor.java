@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.transformers;
 
-import fr.alexdoru.mwe.asm.loader.InjectionStatus;
+import fr.alexdoru.mwe.asm.loader.InjectionCallback;
 import fr.alexdoru.mwe.asm.loader.MWETransformer;
 import fr.alexdoru.mwe.asm.mappings.ClassMapping;
 import fr.alexdoru.mwe.asm.mappings.FieldMapping;
@@ -14,7 +14,7 @@ public class GuiNewChatTransformer_Accessor implements MWETransformer {
     }
 
     @Override
-    public void transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(0);
         addInterface(classNode, "GuiNewChatAccessor");
         addGetterMethod(

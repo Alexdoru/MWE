@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.transformers;
 
-import fr.alexdoru.mwe.asm.loader.InjectionStatus;
+import fr.alexdoru.mwe.asm.loader.InjectionCallback;
 import fr.alexdoru.mwe.asm.loader.MWELoadingPlugin;
 import fr.alexdoru.mwe.asm.loader.MWETransformer;
 import fr.alexdoru.mwe.asm.mappings.ClassMapping;
@@ -20,7 +20,7 @@ public class ChatComponentStyleTransformer_ChatHeads implements MWETransformer {
     }
 
     @Override
-    public void transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.CHATCOMPONENTSTYLE$APPENDSIBLING)) {

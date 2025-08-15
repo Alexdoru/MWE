@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.transformers;
 
-import fr.alexdoru.mwe.asm.loader.InjectionStatus;
+import fr.alexdoru.mwe.asm.loader.InjectionCallback;
 import fr.alexdoru.mwe.asm.loader.MWETransformer;
 import fr.alexdoru.mwe.asm.mappings.ClassMapping;
 import fr.alexdoru.mwe.asm.mappings.FieldMapping;
@@ -15,7 +15,7 @@ public class MinecraftTransformer_DropProtection implements MWETransformer {
     }
 
     @Override
-    public void transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(3);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.MINECRAFT$RUNTICK)) {
@@ -25,7 +25,7 @@ public class MinecraftTransformer_DropProtection implements MWETransformer {
         }
     }
 
-    private void injectUpdateCurrentSlot(MethodNode methodNode, InjectionStatus status) {
+    private void injectUpdateCurrentSlot(MethodNode methodNode, InjectionCallback status) {
         for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
             if (checkMethodInsnNode(insnNode, MethodMapping.INVENTORYPLAYER$CHANGECURRENTITEM) ||
                     checkFieldInsnNode(insnNode, PUTFIELD, FieldMapping.INVENTORYPLAYER$CURRENTITEM)) {
@@ -44,7 +44,7 @@ public class MinecraftTransformer_DropProtection implements MWETransformer {
         }
     }
 
-    private void injectDropItemCheck(MethodNode methodNode, InjectionStatus status) {
+    private void injectDropItemCheck(MethodNode methodNode, InjectionCallback status) {
         boolean slice = false;
         AbstractInsnNode targetNode = null;
         LabelNode label = null;

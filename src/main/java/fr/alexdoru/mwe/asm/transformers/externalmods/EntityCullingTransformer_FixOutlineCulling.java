@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.transformers.externalmods;
 
-import fr.alexdoru.mwe.asm.loader.InjectionStatus;
+import fr.alexdoru.mwe.asm.loader.InjectionCallback;
 import fr.alexdoru.mwe.asm.loader.MWETransformer;
 import org.objectweb.asm.tree.*;
 
@@ -25,7 +25,7 @@ public class EntityCullingTransformer_FixOutlineCulling implements MWETransforme
     }
 
     @Override
-    public void transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals("checkEntity") && methodNode.desc.equals("(Lnet/minecraft/entity/Entity;)Z")) {
@@ -54,7 +54,7 @@ public class EntityCullingTransformer_FixOutlineCulling implements MWETransforme
         return true;
     }
 
-    private void injectFix(InjectionStatus status, MethodNode methodNode) {
+    private void injectFix(InjectionCallback status, MethodNode methodNode) {
         final InsnList list = new InsnList();
         list.add(new MethodInsnNode(
                 INVOKESTATIC,

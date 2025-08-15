@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.transformers;
 
-import fr.alexdoru.mwe.asm.loader.InjectionStatus;
+import fr.alexdoru.mwe.asm.loader.InjectionCallback;
 import fr.alexdoru.mwe.asm.loader.MWETransformer;
 import fr.alexdoru.mwe.asm.mappings.ClassMapping;
 import fr.alexdoru.mwe.asm.mappings.MethodMapping;
@@ -20,7 +20,7 @@ public class CommandHandlerTransformer_FixCaseCommand implements MWETransformer 
     }
 
     @Override
-    public void transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionCallback status) {
         if (ClassMapping.CLIENTCOMMANDHANDLER.name.equals(classNode.name)) {
             status.setInjectionPoints(1);
         } else {

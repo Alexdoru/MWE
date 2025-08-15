@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.transformers;
 
-import fr.alexdoru.mwe.asm.loader.InjectionStatus;
+import fr.alexdoru.mwe.asm.loader.InjectionCallback;
 import fr.alexdoru.mwe.asm.loader.MWETransformer;
 import fr.alexdoru.mwe.asm.mappings.ClassMapping;
 import fr.alexdoru.mwe.asm.mappings.FieldMapping;
@@ -15,7 +15,7 @@ public class GuiNewChatTransformer_SearchBox implements MWETransformer {
     }
 
     @Override
-    public void transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(11);
         addInterface(classNode, "GuiNewChatExt");
         classNode.visitField(ACC_PRIVATE, FieldMapping.GUINEWCHAT$SEARCHBOXHOOK.name, FieldMapping.GUINEWCHAT$SEARCHBOXHOOK.desc, null, null);

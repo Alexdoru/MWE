@@ -131,13 +131,13 @@ public class MWEClassTransformer implements IClassTransformer {
                     debugLog("Skipping application of " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
                     continue;
                 }
-                final InjectionStatus status = new InjectionStatus();
-                transformer.transform(classNode, status);
+                final InjectionCallback callback = new InjectionCallback();
+                transformer.transform(classNode, callback);
                 transformed = true;
-                if (status.isTransformationSuccessful()) {
+                if (callback.isTransformationSuccessful()) {
                     debugLog("Applied " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
                 } else {
-                    MWELoadingPlugin.logger.error("Class transformation incomplete, transformer " + stripClassName(transformer.getClass().getName()) + " missing " + status.getInjectionCount() + " injections in " + transformedName);
+                    MWELoadingPlugin.logger.error("Class transformation incomplete, transformer " + stripClassName(transformer.getClass().getName()) + " missing " + callback.getCount() + " injections in " + transformedName);
                 }
             }
             if (!transformed) {

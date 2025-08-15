@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.transformers;
 
-import fr.alexdoru.mwe.asm.loader.InjectionStatus;
+import fr.alexdoru.mwe.asm.loader.InjectionCallback;
 import fr.alexdoru.mwe.asm.loader.MWETransformer;
 import fr.alexdoru.mwe.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -16,7 +16,7 @@ public class GuiPlayerTabOverlayTransformer_ColumnSpacing implements MWETransfor
     }
 
     @Override
-    public void transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(3);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.GUIPLAYERTABOVERLAY$RENDERPLAYERLIST)) {
@@ -44,7 +44,7 @@ public class GuiPlayerTabOverlayTransformer_ColumnSpacing implements MWETransfor
         }
     }
 
-    private void injectHook(MethodNode methodNode, InjectionStatus status, AbstractInsnNode target) {
+    private void injectHook(MethodNode methodNode, InjectionCallback status, AbstractInsnNode target) {
         methodNode.instructions.insert(target, new MethodInsnNode(
                 INVOKESTATIC,
                 getHookClass("GuiPlayerTabOverlayHook_ColumnSpacing"),

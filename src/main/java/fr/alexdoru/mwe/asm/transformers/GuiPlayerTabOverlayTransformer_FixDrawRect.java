@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.transformers;
 
-import fr.alexdoru.mwe.asm.loader.InjectionStatus;
+import fr.alexdoru.mwe.asm.loader.InjectionCallback;
 import fr.alexdoru.mwe.asm.loader.MWETransformer;
 import fr.alexdoru.mwe.asm.mappings.MethodMapping;
 import org.objectweb.asm.tree.*;
@@ -13,7 +13,7 @@ public class GuiPlayerTabOverlayTransformer_FixDrawRect implements MWETransforme
     }
 
     @Override
-    public void transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(4);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.GUIPLAYERTABOVERLAY$RENDERPLAYERLIST)) {
@@ -23,7 +23,7 @@ public class GuiPlayerTabOverlayTransformer_FixDrawRect implements MWETransforme
         }
     }
 
-    private void fixHeight(MethodNode methodNode, InjectionStatus status) {
+    private void fixHeight(MethodNode methodNode, InjectionCallback status) {
         //    ILOAD 15 <- search
         //    ICONST_1
         //    ISUB
@@ -60,7 +60,7 @@ public class GuiPlayerTabOverlayTransformer_FixDrawRect implements MWETransforme
         }
     }
 
-    private void fixWidth(MethodNode methodNode, InjectionStatus status) {
+    private void fixWidth(MethodNode methodNode, InjectionCallback status) {
         //    ILOAD 16 <-- capture var
         //    ICONST_2
         //    IDIV

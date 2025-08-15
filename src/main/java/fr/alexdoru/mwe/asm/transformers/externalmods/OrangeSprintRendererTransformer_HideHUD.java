@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.transformers.externalmods;
 
-import fr.alexdoru.mwe.asm.loader.InjectionStatus;
+import fr.alexdoru.mwe.asm.loader.InjectionCallback;
 import fr.alexdoru.mwe.asm.loader.MWETransformer;
 import org.objectweb.asm.tree.*;
 
@@ -12,7 +12,7 @@ public class OrangeSprintRendererTransformer_HideHUD implements MWETransformer {
     }
 
     @Override
-    public void transform(ClassNode classNode, InjectionStatus status) {
+    public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
             if (methodNode.name.equals("render")) {
