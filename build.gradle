@@ -19,14 +19,23 @@ archivesBaseName = "[1.8.9] MWE"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-compileJava.options.encoding = "UTF-8"
-compileTestJava.options.encoding = "UTF-8"
+compileJava {
+    options.encoding = "UTF-8"
+    options.encoding = "UTF-8"
+}
 
 minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"
     runDir = "run"
     mappings = "stable_22"
     makeObfSourceJar = false
+}
+
+runClient {
+    jvmArgs += [
+            "-Dmwe.classdump=true"
+            //,"-Dmwe.moreclassdump=true"
+    ]
 }
 
 dependencies {}

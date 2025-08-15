@@ -182,18 +182,17 @@ public class MWEClassTransformer implements IClassTransformer {
     }
 
     private void saveTransformedClass(byte[] bytes, byte[] transformedBytes, String transformedName) {
-        if (!MWELoadingPlugin.classDump() && !MWELoadingPlugin.moreClassDump()) {
-            return;
-        }
-        if (outputDir == null) {
-            emptyClassOutputFolder();
-        }
-        final String fileName = transformedName.replace('.', File.separatorChar);
-        writeClassFile(bytes, transformedName, fileName + "_PRE");
-        writeClassFile(transformedBytes, transformedName, fileName + "_POST");
-        if (MWELoadingPlugin.moreClassDump()) {
-            writeBytecodeFile(transformedBytes, transformedName, fileName);
-            writeASMFile(transformedBytes, transformedName, fileName);
+        if (MWELoadingPlugin.classDump()) {
+            if (outputDir == null) {
+                emptyClassOutputFolder();
+            }
+            final String fileName = transformedName.replace('.', File.separatorChar);
+            writeClassFile(bytes, transformedName, fileName + "_PRE");
+            writeClassFile(transformedBytes, transformedName, fileName + "_POST");
+            if (MWELoadingPlugin.moreClassDump()) {
+                writeBytecodeFile(transformedBytes, transformedName, fileName);
+                writeASMFile(transformedBytes, transformedName, fileName);
+            }
         }
     }
 
