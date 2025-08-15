@@ -4,7 +4,7 @@ import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.gui.huds.DebugScoreboardHUD;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
-import fr.alexdoru.mwe.http.hypixelplayerdataparser.LoginData;
+import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
 import fr.alexdoru.mwe.http.requests.HypixelPlayerData;
 import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
 import fr.alexdoru.mwe.nocheaters.WDR;

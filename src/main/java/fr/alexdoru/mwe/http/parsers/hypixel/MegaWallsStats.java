@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.http.hypixelplayerdataparser;
+package fr.alexdoru.mwe.http.parsers.hypixel;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

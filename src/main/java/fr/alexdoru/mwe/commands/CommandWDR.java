@@ -6,7 +6,7 @@ import fr.alexdoru.mwe.features.PartyDetection;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.cache.CachedHypixelPlayerData;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
-import fr.alexdoru.mwe.http.hypixelplayerdataparser.LoginData;
+import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.nocheaters.WdrData;

@@ -6,7 +6,7 @@ import fr.alexdoru.mwe.enums.MWClass;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.cache.CachedHypixelPlayerData;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
-import fr.alexdoru.mwe.http.hypixelplayerdataparser.*;
+import fr.alexdoru.mwe.http.parsers.hypixel.*;
 import fr.alexdoru.mwe.http.requests.HypixelGuild;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
