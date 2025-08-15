@@ -1,8 +1,8 @@
 package fr.alexdoru.mwe.commands;
 
-import fr.alexdoru.mwe.api.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import net.minecraft.command.ICommandSender;

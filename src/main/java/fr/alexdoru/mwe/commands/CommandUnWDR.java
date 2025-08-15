@@ -1,9 +1,9 @@
 package fr.alexdoru.mwe.commands;
 
-import fr.alexdoru.mwe.api.exceptions.ApiException;
-import fr.alexdoru.mwe.api.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.http.exceptions.ApiException;
+import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.nocheaters.WdrData;

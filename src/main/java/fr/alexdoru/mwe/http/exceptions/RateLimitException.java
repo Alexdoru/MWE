@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.api.exceptions;
+package fr.alexdoru.mwe.http.exceptions;
 
 public class RateLimitException extends ApiException {
 

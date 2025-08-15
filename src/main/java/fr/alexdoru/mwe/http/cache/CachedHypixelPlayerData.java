@@ -1,8 +1,8 @@
-package fr.alexdoru.mwe.api.cache;
+package fr.alexdoru.mwe.http.cache;
 
 import com.google.gson.JsonObject;
-import fr.alexdoru.mwe.api.exceptions.ApiException;
-import fr.alexdoru.mwe.api.requests.HypixelPlayerData;
+import fr.alexdoru.mwe.http.exceptions.ApiException;
+import fr.alexdoru.mwe.http.requests.HypixelPlayerData;
 import fr.alexdoru.mwe.utils.TimerUtil;
 
 public class CachedHypixelPlayerData {

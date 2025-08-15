@@ -1,15 +1,15 @@
 package fr.alexdoru.mwe.features;
 
-import fr.alexdoru.mwe.api.apikey.HypixelApiKeyUtil;
-import fr.alexdoru.mwe.api.exceptions.ApiException;
-import fr.alexdoru.mwe.api.hypixelplayerdataparser.LoginData;
-import fr.alexdoru.mwe.api.hypixelplayerdataparser.MegaWallsClassSkinData;
-import fr.alexdoru.mwe.api.hypixelplayerdataparser.MegaWallsClassStats;
-import fr.alexdoru.mwe.api.requests.HypixelPlayerData;
 import fr.alexdoru.mwe.asm.hooks.GuiScreenHook_CustomChatClickEvent;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.enums.MWClass;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
+import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
+import fr.alexdoru.mwe.http.exceptions.ApiException;
+import fr.alexdoru.mwe.http.hypixelplayerdataparser.LoginData;
+import fr.alexdoru.mwe.http.hypixelplayerdataparser.MegaWallsClassSkinData;
+import fr.alexdoru.mwe.http.hypixelplayerdataparser.MegaWallsClassStats;
+import fr.alexdoru.mwe.http.requests.HypixelPlayerData;
 import fr.alexdoru.mwe.utils.DateUtil;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;

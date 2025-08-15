@@ -1,8 +1,8 @@
-package fr.alexdoru.mwe.api.requests;
+package fr.alexdoru.mwe.http.requests;
 
 import com.google.gson.JsonObject;
-import fr.alexdoru.mwe.api.HttpClient;
-import fr.alexdoru.mwe.api.exceptions.ApiException;
+import fr.alexdoru.mwe.http.HttpClient;
+import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.utils.JsonUtil;
 import net.minecraft.util.EnumChatFormatting;
 

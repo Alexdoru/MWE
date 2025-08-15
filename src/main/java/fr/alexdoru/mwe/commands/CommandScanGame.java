@@ -1,19 +1,19 @@
 package fr.alexdoru.mwe.commands;
 
 import com.google.gson.JsonObject;
-import fr.alexdoru.mwe.api.apikey.HypixelApiKeyUtil;
-import fr.alexdoru.mwe.api.exceptions.RateLimitException;
-import fr.alexdoru.mwe.api.hypixelplayerdataparser.GeneralInfo;
-import fr.alexdoru.mwe.api.hypixelplayerdataparser.LoginData;
-import fr.alexdoru.mwe.api.hypixelplayerdataparser.MegaWallsClassStats;
-import fr.alexdoru.mwe.api.hypixelplayerdataparser.MegaWallsStats;
-import fr.alexdoru.mwe.api.requests.HypixelPlayerData;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.LocrawListener;
 import fr.alexdoru.mwe.chat.ScanFlagChatComponent;
 import fr.alexdoru.mwe.data.ScangameData;
 import fr.alexdoru.mwe.enums.MWClass;
+import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
+import fr.alexdoru.mwe.http.exceptions.RateLimitException;
+import fr.alexdoru.mwe.http.hypixelplayerdataparser.GeneralInfo;
+import fr.alexdoru.mwe.http.hypixelplayerdataparser.LoginData;
+import fr.alexdoru.mwe.http.hypixelplayerdataparser.MegaWallsClassStats;
+import fr.alexdoru.mwe.http.hypixelplayerdataparser.MegaWallsStats;
+import fr.alexdoru.mwe.http.requests.HypixelPlayerData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;

@@ -1,14 +1,14 @@
-package fr.alexdoru.mwe.api;
+package fr.alexdoru.mwe.http;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.alexdoru.mwe.api.apikey.HypixelApiKeyUtil;
-import fr.alexdoru.mwe.api.exceptions.ApiException;
-import fr.alexdoru.mwe.api.exceptions.RateLimitException;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
+import fr.alexdoru.mwe.http.exceptions.ApiException;
+import fr.alexdoru.mwe.http.exceptions.RateLimitException;
 import net.minecraft.client.Minecraft;
 
 import java.io.BufferedReader;

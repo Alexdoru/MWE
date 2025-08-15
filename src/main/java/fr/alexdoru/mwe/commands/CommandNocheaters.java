@@ -1,12 +1,12 @@
 package fr.alexdoru.mwe.commands;
 
-import fr.alexdoru.mwe.api.apikey.HypixelApiKeyUtil;
-import fr.alexdoru.mwe.api.exceptions.ApiException;
-import fr.alexdoru.mwe.api.hypixelplayerdataparser.LoginData;
-import fr.alexdoru.mwe.api.requests.HypixelPlayerData;
-import fr.alexdoru.mwe.api.requests.MojangUUIDToName;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.gui.huds.DebugScoreboardHUD;
+import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
+import fr.alexdoru.mwe.http.exceptions.ApiException;
+import fr.alexdoru.mwe.http.hypixelplayerdataparser.LoginData;
+import fr.alexdoru.mwe.http.requests.HypixelPlayerData;
+import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
 import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.nocheaters.WarningMessages;
 import fr.alexdoru.mwe.nocheaters.WdrData;

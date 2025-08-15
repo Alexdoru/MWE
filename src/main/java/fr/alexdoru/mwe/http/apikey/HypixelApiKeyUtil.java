@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.api.apikey;
+package fr.alexdoru.mwe.http.apikey;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
