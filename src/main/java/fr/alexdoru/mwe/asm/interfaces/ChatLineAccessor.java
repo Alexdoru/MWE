@@ -5,5 +5,4 @@ public interface ChatLineAccessor {
     void setmwe$Text(String text);
 
     String getmwe$Text();
-
 }

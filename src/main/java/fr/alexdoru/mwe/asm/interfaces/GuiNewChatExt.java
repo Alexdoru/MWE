@@ -5,5 +5,4 @@ public interface GuiNewChatExt {
     void mwe$setSearchText(Object text);
 
     void mwe$clearSearch();
-
 }

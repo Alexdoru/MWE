@@ -3,7 +3,10 @@ package fr.alexdoru.mwe.asm.interfaces;
 import net.minecraft.util.IChatComponent;
 
 public interface NetworkPlayerInfoAccessor {
-    void setFinalKills(int playerFinalkills);
+
     int getFinalKills();
+
+    void setFinalKills(int playerFinalkills);
+
     void setCustomDisplayname(IChatComponent customDisplaynameIn);
 }
