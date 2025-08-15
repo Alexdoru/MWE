@@ -5,7 +5,6 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 
-@SuppressWarnings("unused")
 public class EntityOtherPlayerMPHook_PositionTracker {
 
     public static void setPositionAndRotation(EntityOtherPlayerMP player, double x, double y, double z, float yaw, float pitch) {

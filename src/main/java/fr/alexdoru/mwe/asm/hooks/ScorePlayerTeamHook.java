@@ -5,7 +5,6 @@ import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.gui.guiapi.GuiManager;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 
-@SuppressWarnings("unused")
 public class ScorePlayerTeamHook {
 
     public static String spoofSidebarLine(String playername) {

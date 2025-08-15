@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@SuppressWarnings("unused")
 public class GuiContainerHook_ListenClicks {
 
     private static final Item STAINED_HARDENED_CLAY = Item.getItemFromBlock(Blocks.stained_hardened_clay);

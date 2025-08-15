@@ -5,7 +5,6 @@ import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.entity.Entity;
 
-@SuppressWarnings("unused")
 public class NetHandlerPlayClientHook_EntityMetadata {
 
     public static void onEntityMetadata(Entity entity) {

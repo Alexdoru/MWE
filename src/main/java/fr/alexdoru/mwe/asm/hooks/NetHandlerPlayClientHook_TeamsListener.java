@@ -4,7 +4,6 @@ import fr.alexdoru.mwe.utils.NameUtil;
 import net.minecraft.network.play.server.S3EPacketTeams;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 
-@SuppressWarnings("unused")
 public class NetHandlerPlayClientHook_TeamsListener {
 
     public static void handleTeamPacket(S3EPacketTeams teamPacket, ScorePlayerTeam team) {

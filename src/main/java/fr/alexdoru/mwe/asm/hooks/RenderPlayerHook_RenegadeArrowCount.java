@@ -18,7 +18,6 @@ public class RenderPlayerHook_RenegadeArrowCount {
     private static final TimerUtil timer = new TimerUtil(1000L);
     private static final HashMap<String, List<Long>> arrowHitMap = new HashMap<>();
 
-    @SuppressWarnings("unused")
     public static StringBuilder getArrowCount(StringBuilder str, AbstractClientPlayer entityIn) {
         if (MWEConfig.renegadeArrowCount) {
             final List<Long> list = arrowHitMap.get(entityIn.getName());

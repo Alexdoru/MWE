@@ -13,7 +13,6 @@ import org.lwjgl.input.Keyboard;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-@SuppressWarnings("unused")
 public class GuiChatHook_SearchBox {
 
     private static Object lastSearch;

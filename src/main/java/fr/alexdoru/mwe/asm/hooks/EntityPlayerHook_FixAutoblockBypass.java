@@ -8,7 +8,6 @@ import net.minecraft.item.ItemSword;
 
 import java.util.Objects;
 
-@SuppressWarnings("unused")
 public class EntityPlayerHook_FixAutoblockBypass {
 
     public static boolean areItemStackSemiEquals(ItemStack currentStack, ItemStack itemInUse, EntityPlayer player) {

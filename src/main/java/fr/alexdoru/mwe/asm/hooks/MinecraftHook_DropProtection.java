@@ -5,7 +5,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.item.ItemSword;
 
-@SuppressWarnings("unused")
 public class MinecraftHook_DropProtection {
 
     private static long lastSlotChangeFromSwordSlot;

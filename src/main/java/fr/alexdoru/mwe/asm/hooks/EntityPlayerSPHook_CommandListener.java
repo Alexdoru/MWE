@@ -5,7 +5,6 @@ import fr.alexdoru.mwe.gui.guiapi.GuiManager;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.StringUtil;
 
-@SuppressWarnings("unused")
 public class EntityPlayerSPHook_CommandListener {
 
     public static void onMessageSent(String message) {

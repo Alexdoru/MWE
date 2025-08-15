@@ -5,7 +5,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
-@SuppressWarnings("unused")
 public class MinecraftHook_DebugMessages {
 
     public static void onSettingChange(Minecraft mc, boolean settingIn, String settingName) {

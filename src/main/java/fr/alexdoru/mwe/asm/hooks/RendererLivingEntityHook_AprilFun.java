@@ -6,7 +6,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityZombie;
 
-@SuppressWarnings("unused")
 public class RendererLivingEntityHook_AprilFun {
 
     public static void doFunny(EntityLivingBase entity) {

@@ -22,12 +22,10 @@ public class NetHandlerPlayClientHook_PlayerMapTracker {
     private static final Map<String, NetworkPlayerInfo> playerInfoMap = new HashMap<>();
     private static final Map<String, ResourceLocation> skinMap = new HashMap<>();
 
-    @SuppressWarnings("unused")
     public static void putPlayerInMap(NetworkPlayerInfo netInfo) {
         playerInfoMap.put(netInfo.getGameProfile().getName(), netInfo);
     }
 
-    @SuppressWarnings("unused")
     public static Object removePlayerFromMap(Object o) {
         if (o instanceof NetworkPlayerInfo) {
             final NetworkPlayerInfo netInfo = (NetworkPlayerInfo) o;
@@ -41,7 +39,6 @@ public class NetHandlerPlayClientHook_PlayerMapTracker {
         return o;
     }
 
-    @SuppressWarnings("unused")
     public static void clearPlayerMap() {
         playerInfoMap.clear();
         skinMap.clear();

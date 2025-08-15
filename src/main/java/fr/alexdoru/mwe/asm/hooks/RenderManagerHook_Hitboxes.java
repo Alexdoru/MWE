@@ -9,7 +9,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.util.AxisAlignedBB;
 
-@SuppressWarnings("unused")
 public class RenderManagerHook_Hitboxes {
 
     public static boolean shouldToggleOnStart(boolean original) {

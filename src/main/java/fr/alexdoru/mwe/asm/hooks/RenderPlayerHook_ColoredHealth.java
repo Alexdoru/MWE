@@ -5,7 +5,6 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.ColorUtil;
 import net.minecraft.client.entity.AbstractClientPlayer;
 
-@SuppressWarnings("unused")
 public class RenderPlayerHook_ColoredHealth {
 
     public static StringBuilder getColoredScore(StringBuilder str, int score, AbstractClientPlayer entity) {

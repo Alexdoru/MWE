@@ -5,7 +5,6 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 
-@SuppressWarnings("unused")
 public class GuiUtilRenderComponentsHook_ChatHeads {
 
     private static boolean offsetLine = false;

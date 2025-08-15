@@ -5,7 +5,6 @@ import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.utils.NameUtil;
 import net.minecraft.util.IChatComponent;
 
-@SuppressWarnings("unused")
 public class NetworkPlayerInfoHook_CustomTab {
 
     public static IChatComponent getDisplayName(GameProfile gameProfileIn) {

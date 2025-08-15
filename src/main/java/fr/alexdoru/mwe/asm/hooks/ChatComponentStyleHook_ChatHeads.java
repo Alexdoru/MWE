@@ -3,7 +3,6 @@ package fr.alexdoru.mwe.asm.hooks;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import net.minecraft.util.IChatComponent;
 
-@SuppressWarnings("unused")
 public class ChatComponentStyleHook_ChatHeads {
 
     public static void transferHeadToComponent(IChatComponent thisComponent, IChatComponent otherComponent) {

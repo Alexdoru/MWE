@@ -14,7 +14,6 @@ import org.lwjgl.opengl.GL11;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@SuppressWarnings("unused")
 public class GuiNewChatHook_ChatHeads {
 
     private static boolean isHeadLine = false;

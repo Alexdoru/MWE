@@ -9,7 +9,6 @@ public class GuiChatHook_CopyMessages {
 
     private static boolean copyChatLine = false;
 
-    @SuppressWarnings("unused")
     public static void onChatRightClick(int mouseButton) {
         if (MWEConfig.rightClickChatCopy && mouseButton == 1) {
             copyChatLine = true;
@@ -18,7 +17,6 @@ public class GuiChatHook_CopyMessages {
         }
     }
 
-    @SuppressWarnings("unused")
     public static boolean onChatLeftClick(boolean ranClickEvent, IChatComponent component) {
         if (ranClickEvent) {
             return true;

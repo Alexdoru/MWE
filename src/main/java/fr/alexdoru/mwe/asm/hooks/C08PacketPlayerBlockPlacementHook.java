@@ -6,7 +6,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 
-@SuppressWarnings("unused")
 public class C08PacketPlayerBlockPlacementHook {
 
     public static void onBlockPlace(BlockPos pos, int placedBlockDirectionIn, ItemStack stack) {

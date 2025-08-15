@@ -19,7 +19,6 @@ import net.minecraftforge.client.MinecraftForgeClient;
 
 import java.util.List;
 
-@SuppressWarnings("unused")
 public class RenderGlobalHook_EntityOutlines {
 
     private static final Minecraft mc = Minecraft.getMinecraft();

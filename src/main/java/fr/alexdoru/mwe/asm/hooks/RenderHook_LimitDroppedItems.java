@@ -3,7 +3,6 @@ package fr.alexdoru.mwe.asm.hooks;
 import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.entity.Entity;
 
-@SuppressWarnings("unused")
 public class RenderHook_LimitDroppedItems {
 
     private static final int[] entityItemCount = new int[256];

@@ -16,7 +16,6 @@ import org.lwjgl.input.Keyboard;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@SuppressWarnings("unused")
 public class GuiScreenBookHook {
 
     private static boolean isOnNickGenerationPage = false;

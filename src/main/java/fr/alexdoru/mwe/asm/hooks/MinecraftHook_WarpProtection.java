@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 
-@SuppressWarnings("unused")
 public class MinecraftHook_WarpProtection {
 
     private static final TimerUtil warpTimer = new TimerUtil(5000L);

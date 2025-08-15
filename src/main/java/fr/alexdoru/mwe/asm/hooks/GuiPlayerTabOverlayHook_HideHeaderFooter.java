@@ -4,7 +4,6 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 
-@SuppressWarnings("unused")
 public class GuiPlayerTabOverlayHook_HideHeaderFooter {
 
     public static boolean shouldRenderHeader() {

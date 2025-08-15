@@ -5,7 +5,6 @@ import fr.alexdoru.mwe.asm.interfaces.IWitherColor;
 import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.entity.EntityLivingBase;
 
-@SuppressWarnings("unused")
 public class RendererLivingEntityHook_HitColor {
 
     private static int hitColor;

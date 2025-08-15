@@ -22,7 +22,6 @@ import net.minecraft.util.EnumChatFormatting;
 import java.util.HashSet;
 import java.util.List;
 
-@SuppressWarnings("unused")
 public class GuiContainerHook_SafeInventory {
 
     private static final HashSet<Item> itemWhitelist = new HashSet<>();

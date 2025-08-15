@@ -5,7 +5,6 @@ import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import net.minecraft.network.play.server.S22PacketMultiBlockChange;
 import net.minecraft.network.play.server.S23PacketBlockChange;
 
-@SuppressWarnings("unused")
 public class NetHandlerPlayClientHook_BlockChangeListener {
 
     public static void onBlockChange(S23PacketBlockChange packet) {

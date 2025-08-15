@@ -7,7 +7,6 @@ import net.minecraft.item.ItemSword;
 
 import java.util.Objects;
 
-@SuppressWarnings("unused")
 public class EntityOtherPlayerMPHook_FixAutoblockBypass {
 
     public static boolean shouldCancelEquipmentUpdate(EntityOtherPlayerMP player, int slotIn, ItemStack stack) {

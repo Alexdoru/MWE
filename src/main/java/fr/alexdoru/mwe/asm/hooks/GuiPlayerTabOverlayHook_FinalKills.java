@@ -5,7 +5,6 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
 
-@SuppressWarnings("unused")
 public class GuiPlayerTabOverlayHook_FinalKills {
 
     private static int finalsScoreWidth = 0;

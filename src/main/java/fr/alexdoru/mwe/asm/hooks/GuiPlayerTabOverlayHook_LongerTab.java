@@ -2,7 +2,6 @@ package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.config.MWEConfig;
 
-@SuppressWarnings("unused")
 public class GuiPlayerTabOverlayHook_LongerTab {
 
     public static int getTablistHeight(int original) {

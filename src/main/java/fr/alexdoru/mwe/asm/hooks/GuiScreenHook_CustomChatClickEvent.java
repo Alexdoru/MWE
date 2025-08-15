@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiScreen;
 
-@SuppressWarnings("unused")
 public class GuiScreenHook_CustomChatClickEvent {
 
     public static final String COPY_TO_CLIPBOARD_COMMAND = "/copyToClipBoard ";

@@ -2,7 +2,6 @@ package fr.alexdoru.mwe.asm.hooks;
 
 import java.util.Locale;
 
-@SuppressWarnings("unused")
 public class CommandHandlerHook_FixCaseCommand {
 
     public static String[] putToLowerCase(String[] split) {

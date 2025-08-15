@@ -6,7 +6,6 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 
 import java.util.List;
 
-@SuppressWarnings("unused")
 public class GuiPlayerTabOverlayHook_HidePing {
 
     private static boolean drawPing = true;

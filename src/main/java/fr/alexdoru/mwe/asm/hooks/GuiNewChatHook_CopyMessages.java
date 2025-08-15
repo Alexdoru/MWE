@@ -7,7 +7,6 @@ import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.IChatComponent;
 
-@SuppressWarnings("unused")
 public class GuiNewChatHook_CopyMessages {
 
     private static String text;

@@ -6,7 +6,6 @@ import fr.alexdoru.mwe.gui.guiapi.GuiManager;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.gui.FontRenderer;
 
-@SuppressWarnings("unused")
 public class GuiIngameHook_CustomSidebarLines {
 
     public static String getSidebarTextLine(String textIn, int lineNumber) {

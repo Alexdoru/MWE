@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-@SuppressWarnings("unused")
 public class GuiNewChatHook_SearchBox {
 
     private final GuiNewChat guiNewChat;

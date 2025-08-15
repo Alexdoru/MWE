@@ -4,7 +4,6 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.hackerdetector.AttackDetector;
 import net.minecraft.network.Packet;
 
-@SuppressWarnings("unused")
 public class NetworkManagerHook_PacketListener {
 
     // Careful, this code isn't called from the main thread

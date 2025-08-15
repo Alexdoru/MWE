@@ -6,7 +6,6 @@ import fr.alexdoru.mwe.hackerdetector.checks.FastbreakCheck;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 
-@SuppressWarnings("unused")
 public class RenderGlobalHook_ListenDestroyedBlocks {
 
     public static void listenDestroyedBlocks(IBlockState state, BlockPos blockPos) {

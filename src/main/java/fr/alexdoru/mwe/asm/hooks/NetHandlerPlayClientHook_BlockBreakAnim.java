@@ -8,7 +8,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemTool;
 import net.minecraft.network.play.server.S25PacketBlockBreakAnim;
 
-@SuppressWarnings("unused")
 public class NetHandlerPlayClientHook_BlockBreakAnim {
 
     public static void handleBlockBreakAnim(WorldClient world, S25PacketBlockBreakAnim packet) {
