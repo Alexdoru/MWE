@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.mappings;
 
-import fr.alexdoru.mwe.asm.loader.MWELoadingPlugin;
+import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 
 public enum ClassMapping {
 

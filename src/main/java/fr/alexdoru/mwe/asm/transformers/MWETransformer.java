@@ -1,5 +1,6 @@
-package fr.alexdoru.mwe.asm.loader;
+package fr.alexdoru.mwe.asm.transformers;
 
+import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.asm.mappings.ClassMapping;
 import fr.alexdoru.mwe.asm.mappings.FieldMapping;
 import fr.alexdoru.mwe.asm.mappings.MethodMapping;

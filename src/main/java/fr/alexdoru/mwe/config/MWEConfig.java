@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.config;
 
 import fr.alexdoru.mwe.MWE;
-import fr.alexdoru.mwe.asm.loader.MWELoadingPlugin;
+import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.LocrawListener;
 import fr.alexdoru.mwe.config.lib.*;

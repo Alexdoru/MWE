@@ -1,11 +1,11 @@
 package fr.alexdoru.mwe.asm.transformers.mc.render;
 
-import fr.alexdoru.mwe.asm.loader.InjectionCallback;
-import fr.alexdoru.mwe.asm.loader.MWELoadingPlugin;
-import fr.alexdoru.mwe.asm.loader.MWETransformer;
+import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.asm.mappings.ClassMapping;
 import fr.alexdoru.mwe.asm.mappings.FieldMapping;
 import fr.alexdoru.mwe.asm.mappings.MethodMapping;
+import fr.alexdoru.mwe.asm.transformers.InjectionCallback;
+import fr.alexdoru.mwe.asm.transformers.MWETransformer;
 import org.objectweb.asm.tree.*;
 
 public class RenderTransformer_LimitDroppedItems implements MWETransformer {

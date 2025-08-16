@@ -1,8 +1,8 @@
 package fr.alexdoru.mwe.asm.transformers.mc.other;
 
-import fr.alexdoru.mwe.asm.loader.InjectionCallback;
-import fr.alexdoru.mwe.asm.loader.MWETransformer;
 import fr.alexdoru.mwe.asm.mappings.MethodMapping;
+import fr.alexdoru.mwe.asm.transformers.InjectionCallback;
+import fr.alexdoru.mwe.asm.transformers.MWETransformer;
 import org.objectweb.asm.tree.*;
 
 public class ClientCommandHandlerTransformer_FixSlash implements MWETransformer {

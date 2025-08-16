@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.asm.transformers.externalmods;
 
-import fr.alexdoru.mwe.asm.loader.InjectionCallback;
-import fr.alexdoru.mwe.asm.loader.MWETransformer;
+import fr.alexdoru.mwe.asm.transformers.InjectionCallback;
+import fr.alexdoru.mwe.asm.transformers.MWETransformer;
 import org.objectweb.asm.tree.*;
 
 public class OrangeSprintRendererTransformer_HideHUD implements MWETransformer {

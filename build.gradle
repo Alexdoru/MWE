@@ -42,7 +42,7 @@ dependencies {}
 
 jar {
     manifest.attributes(
-            "FMLCorePlugin": 'fr.alexdoru.mwe.asm.loader.MWELoadingPlugin',
+            "FMLCorePlugin": 'fr.alexdoru.mwe.asm.MWELoadingPlugin',
             'FMLCorePluginContainsFMLMod': 'Yes, yes it does'
     )
 }

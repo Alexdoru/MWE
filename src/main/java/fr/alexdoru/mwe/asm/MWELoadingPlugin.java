@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.asm.loader;
+package fr.alexdoru.mwe.asm;
 
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.apache.logging.log4j.LogManager;
@@ -9,7 +9,6 @@ import java.util.Map;
 @IFMLLoadingPlugin.Name("MWE ASM")
 @IFMLLoadingPlugin.MCVersion("1.8.9")
 @IFMLLoadingPlugin.TransformerExclusions({
-        "fr.alexdoru.mwe.asm.loader",
         "fr.alexdoru.mwe.asm.mappings",
         "fr.alexdoru.mwe.asm.transformers",
 })
@@ -22,7 +21,7 @@ public class MWELoadingPlugin implements IFMLLoadingPlugin {
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[]{"fr.alexdoru.mwe.asm.loader.MWEClassTransformer"};
+        return new String[]{"fr.alexdoru.mwe.asm.transformers.MWEClassTransformer"};
     }
 
     @Override

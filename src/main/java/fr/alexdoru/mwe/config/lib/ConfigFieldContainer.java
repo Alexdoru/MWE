@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.config.lib;
 
-import fr.alexdoru.mwe.asm.loader.MWELoadingPlugin;
+import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.config.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.mwe.config.lib.gui.elements.*;
 import fr.alexdoru.mwe.gui.guiapi.GuiPosition;
