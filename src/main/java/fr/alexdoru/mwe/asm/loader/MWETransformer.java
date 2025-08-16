@@ -224,7 +224,7 @@ public interface MWETransformer extends Opcodes {
             case "I":
             case "Z":
                 return ILOAD;
-            case "L":
+            case "J":
                 return LLOAD;
             default:
                 return ALOAD;
