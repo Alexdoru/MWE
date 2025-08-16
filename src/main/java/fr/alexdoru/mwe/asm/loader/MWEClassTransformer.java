@@ -1,7 +1,17 @@
 package fr.alexdoru.mwe.asm.loader;
 
-import fr.alexdoru.mwe.asm.transformers.*;
 import fr.alexdoru.mwe.asm.transformers.externalmods.*;
+import fr.alexdoru.mwe.asm.transformers.mc.MinecraftTransformer_DebugMessages;
+import fr.alexdoru.mwe.asm.transformers.mc.MinecraftTransformer_DropProtection;
+import fr.alexdoru.mwe.asm.transformers.mc.MinecraftTransformer_WarpProtection;
+import fr.alexdoru.mwe.asm.transformers.mc.chat.*;
+import fr.alexdoru.mwe.asm.transformers.mc.entity.*;
+import fr.alexdoru.mwe.asm.transformers.mc.gui.*;
+import fr.alexdoru.mwe.asm.transformers.mc.network.*;
+import fr.alexdoru.mwe.asm.transformers.mc.other.ClientCommandHandlerTransformer_FixSlash;
+import fr.alexdoru.mwe.asm.transformers.mc.other.CommandHandlerTransformer_FixCaseCommand;
+import fr.alexdoru.mwe.asm.transformers.mc.other.ScorePlayerTeamTransformer;
+import fr.alexdoru.mwe.asm.transformers.mc.render.*;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
 import org.apache.commons.io.FileUtils;
