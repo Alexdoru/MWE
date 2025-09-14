@@ -71,6 +71,7 @@ public class MWE {
         ClientCommandHandler.instance.registerCommand(new CommandUnWDR());
         ClientCommandHandler.instance.registerCommand(new CommandSquad());
         ClientCommandHandler.instance.registerCommand(new CommandStalk());
+        ClientCommandHandler.instance.registerCommand(new CommandWallrun());
         ClientCommandHandler.instance.registerCommand(new CommandReport());
         ClientCommandHandler.instance.registerCommand(new CommandPlancke());
         ClientCommandHandler.instance.registerCommand(new CommandAddAlias());
