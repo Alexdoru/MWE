@@ -39,29 +39,54 @@ public class CommandWallrun extends MyAbstractCommand {
             JsonObject json = new JsonParser().parse(jsonMessage).getAsJsonObject();
             String map = json.has("map") ? json.get("map").getAsString() : "Unknown";
 
-            String msg;
+            StringBuilder sb = new StringBuilder();
+            sb.append(AQUA).append("Wallruns you can't wall run on:\n");
+
             switch (map) {
                 case "Bloodmoon":
-                    msg = GREEN + "You can't wallrun on " + BLUE + "Blue Back Wall " + GREEN + "and " + YELLOW + "Yellow Opposite Spawn Wall";
+                    sb.append(RED).append("❌ ").append(BLUE).append("Blue Back Wall\n");
+                    sb.append(RED).append("❌ ").append(YELLOW).append("Yellow Opposite Spawn Wall\n");
                     break;
+
                 case "Dragonkeep":
-                    msg = GREEN + "You can't wallrun on " + BLACK + "All Spawn Walls " + GREEN + "and " + BLACK + "All Opposite Spawn Walls";
+                    sb.append(RED).append("❌ ").append(RED).append("Red Spawn Wall\n");
+                    sb.append(RED).append("❌ ").append(RED).append("Red Opposite Spawn Wall\n");
+                    sb.append(RED).append("❌ ").append(BLUE).append("Blue Spawn Wall\n");
+                    sb.append(RED).append("❌ ").append(BLUE).append("Blue Opposite Spawn Wall\n");
+                    sb.append(RED).append("❌ ").append(GREEN).append("Green Spawn Wall\n");
+                    sb.append(RED).append("❌ ").append(GREEN).append("Green Opposite Spawn Wall\n");
+                    sb.append(RED).append("❌ ").append(BLACK).append("Yellow Spawn Wall\n");
+                    sb.append(RED).append("❌ ").append(BLACK).append("Yellow Opposite Spawn Wall\n");
+
                     break;
+
                 case "Wonderland":
-                    msg = GREEN + "You can't wallrun on " + RED + "Red Spawn Wall";
+                    sb.append(RED).append("❌ ").append(RED).append("Red Spawn Wall\n");
                     break;
+
                 case "Ebonveil":
-                    msg = GREEN + "You can't wallrun on " + YELLOW + "Yellow Spawn Wall " + GREEN + "and " + YELLOW + "Yellow Opposite Spawn Wall";
+                    sb.append(RED).append("❌ ").append(YELLOW).append("Yellow Spawn Wall\n");
+                    sb.append(RED).append("❌ ").append(YELLOW).append("Yellow Opposite Spawn Wall\n");
                     break;
+
                 case "Mad Pixel":
-                    msg = BLACK + "Ikiab all these wallruns are chopped idk which ones work";
+                    sb.append(RED).append("❌ ").append(RED).append("Red Spawn Wall\n");
+                    sb.append(RED).append("❌ ").append(RED).append("Red Opposite Spawn Wall\n");
+                    sb.append(RED).append("❌ ").append(BLUE).append("Blue Spawn Wall\n");
+                    sb.append(RED).append("❌ ").append(BLUE).append("Blue Opposite Spawn Wall\n");
+                    sb.append(RED).append("❌ ").append(GREEN).append("Green Spawn Wall\n");
+                    sb.append(RED).append("❌ ").append(GREEN).append("Green Opposite Spawn Wall\n");
+                    sb.append(RED).append("❌ ").append(BLACK).append("Yellow Spawn Wall\n");
+                    sb.append(RED).append("❌ ").append(BLACK).append("Yellow Opposite Spawn Wall\n");
                     break;
+
                 default:
-                    msg = YELLOW + map + GREEN + "has no broken wallruns";
-                    break;
+                    String defaultSb = AQUA + "There are no broken wallruns!";
+                    Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(defaultSb));
+                    return; // stop so we don’t also print the original sb
             }
 
-            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(msg));
+            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(sb.toString()));
 
         } catch (Exception e) {
             Minecraft.getMinecraft().thePlayer.addChatMessage(
