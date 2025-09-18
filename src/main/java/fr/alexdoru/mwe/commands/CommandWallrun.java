@@ -70,13 +70,9 @@ public class CommandWallrun extends MyAbstractCommand {
                     break;
 
                 case "Mad Pixel":
-                    sb.append(RED).append("❌ ").append(RED).append("Red Spawn Wall\n");
                     sb.append(RED).append("❌ ").append(RED).append("Red Opposite Spawn Wall\n");
                     sb.append(RED).append("❌ ").append(BLUE).append("Blue Spawn Wall\n");
-                    sb.append(RED).append("❌ ").append(BLUE).append("Blue Opposite Spawn Wall\n");
                     sb.append(RED).append("❌ ").append(GREEN).append("Green Spawn Wall\n");
-                    sb.append(RED).append("❌ ").append(GREEN).append("Green Opposite Spawn Wall\n");
-                    sb.append(RED).append("❌ ").append(BLACK).append("Yellow Spawn Wall\n");
                     sb.append(RED).append("❌ ").append(BLACK).append("Yellow Opposite Spawn Wall\n");
                     break;
 
