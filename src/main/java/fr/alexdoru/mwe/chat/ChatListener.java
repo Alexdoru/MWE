@@ -68,6 +68,16 @@ public class ChatListener {
         /*normal chat messages*/
         if (event.type == 0) {
 
+            if (msg.contains("\"server\"") &&
+                    msg.contains("\"gametype\"") &&
+                    msg.contains("\"mode\"") &&
+                    msg.contains("\"map\"")) {
+
+                CommandWallrun.handleLocrawResponse(msg);
+
+                event.setCanceled(true);
+            }
+
             if (ScoreboardTracker.isInMwGame()) {
 
                 if (MWEConfig.hideRepetitiveMWChatMsg && MW_REPETITVE_MSG.contains(msg)) {
@@ -79,17 +89,6 @@ public class ChatListener {
                     GuiManager.killCooldownHUD.hideHUD();
                     return;
                 }
-
-                if (msg.contains("\"server\"") &&
-                        msg.contains("\"gametype\"") &&
-                        msg.contains("\"mode\"") &&
-                        msg.contains("\"map\"")) {
-
-                    CommandWallrun.handleLocrawResponse(msg);
-
-                    event.setCanceled(true);
-                }
-
 
                 if (msg.equals(AFK_MESSAGE)) {
                     AFKSoundWarning.playAFKKickSound();
