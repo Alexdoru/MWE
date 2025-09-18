@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.chat;
 
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
+import fr.alexdoru.mwe.commands.CommandWallrun;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.ScangameData;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
@@ -78,6 +79,17 @@ public class ChatListener {
                     GuiManager.killCooldownHUD.hideHUD();
                     return;
                 }
+
+                if (msg.contains("\"server\"") &&
+                        msg.contains("\"gametype\"") &&
+                        msg.contains("\"mode\"") &&
+                        msg.contains("\"map\"")) {
+
+                    CommandWallrun.handleLocrawResponse(msg);
+
+                    event.setCanceled(true);
+                }
+
 
                 if (msg.equals(AFK_MESSAGE)) {
                     AFKSoundWarning.playAFKKickSound();
