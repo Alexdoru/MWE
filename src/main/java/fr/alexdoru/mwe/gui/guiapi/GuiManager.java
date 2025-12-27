@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public final class GuiManager {
 
     private static final ArrayList<IRenderer> registeredRenderers = new ArrayList<>();
+    private static final ArrayList<IRenderer> classSpecificRenderers = new ArrayList<>();
     private static final Minecraft mc = Minecraft.getMinecraft();
     public static final ArmorHUD armorHUD = new ArmorHUD();
     public static final ArrowHitHUD arrowHitHUD = new ArrowHitHUD();
@@ -48,6 +49,9 @@ public final class GuiManager {
         registeredRenderers.add(squadHealthHUD);
         registeredRenderers.add(warcryHUD);
         registeredRenderers.trimToSize();
+        classSpecificRenderers.add(creeperPrimedTntHUD);
+        classSpecificRenderers.add(strengthHUD);
+        classSpecificRenderers.trimToSize();
     }
 
     /**
@@ -83,13 +87,18 @@ public final class GuiManager {
         return null;
     }
 
-    public static void renderAllDummy() {
+    /**
+     * renders the appropriate HUDs for the PositionEditGuiScreen instance
+     * @param c the renderer which is being positioned in the PositionEditGuiScreen
+     */
+    public static void renderDummiesForPositionEditScreen(IRenderer c) {
         final ScaledResolution resolution = new ScaledResolution(mc);
         for (final IRenderer renderer : registeredRenderers) {
-            if (renderer.getGuiPosition().isEnabled()) {
-                renderer.getGuiPosition().updateAbsolutePosition(resolution);
-                renderer.renderDummy();
+            if (!renderer.getGuiPosition().isEnabled() || classSpecificRenderers.contains(renderer) && !renderer.getClass().isInstance(c)) {
+                continue;
             }
+            renderer.getGuiPosition().updateAbsolutePosition(resolution);
+            renderer.renderDummy();
         }
     }
 
