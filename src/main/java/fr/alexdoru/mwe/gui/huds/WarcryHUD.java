@@ -97,4 +97,8 @@ public class WarcryHUD extends AbstractRenderer {
         }
     }
 
+    public void resetActivationTime() {
+        this.activationTime = 0;
+    }
+
 }

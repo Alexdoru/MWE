@@ -201,6 +201,9 @@ public class FinalKillCounter {
                         }
                         GuiManager.fkCounterHUD.updateDisplayText();
                     }
+                    if (killedPlayer.equals(Minecraft.getMinecraft().thePlayer.getName())) {
+                        GuiManager.warcryHUD.resetActivationTime();
+                    }
                     spawnParticles(killer);
                     final String s = formattedText.replace(killer, SquadHandler.getSquadname(killer))
                             .replace(killedPlayer, SquadHandler.getSquadname(killedPlayer))
@@ -222,6 +225,9 @@ public class FinalKillCounter {
                             playersPresentInGame.add(killedPlayer);
                         }
                         GuiManager.fkCounterHUD.updateDisplayText();
+                    }
+                    if (killedPlayer.equals(Minecraft.getMinecraft().thePlayer.getName())) {
+                        GuiManager.warcryHUD.resetActivationTime();
                     }
                     final String s = formattedText.replace(killedPlayer, SquadHandler.getSquadname(killedPlayer))
                             + getKillDiffString(killsOfKilledPlayer, killedTeamColor);
