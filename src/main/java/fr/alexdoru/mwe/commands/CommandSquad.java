@@ -41,14 +41,14 @@ public class CommandSquad extends MyAbstractCommand {
 
         if (args[0].equalsIgnoreCase("add")) {
 
-            this.addSquadMembers(args);
+            addSquadMembers(args);
 
         } else if (args[0].equalsIgnoreCase("addteam")) {
 
             if (ScoreboardTracker.isPreGameLobby()) {
                 SquadHandler.formSquad();
             } else {
-                this.addTeamToSquad();
+                addTeamToSquad();
             }
 
         } else if (args[0].equalsIgnoreCase("formsquad")) {
@@ -57,15 +57,15 @@ public class CommandSquad extends MyAbstractCommand {
 
         } else if (args[0].equalsIgnoreCase("disband")) {
 
-            this.disbandSquad();
+            disbandSquad();
 
         } else if (args[0].equalsIgnoreCase("l") || args[0].equalsIgnoreCase("list")) {
 
-            this.listSquadMembers();
+            listSquadMembers();
 
         } else if (args[0].equalsIgnoreCase("remove")) {
 
-            this.removeSquadMembers(args);
+            removeSquadMembers(args);
 
         } else {
 
@@ -107,7 +107,7 @@ public class CommandSquad extends MyAbstractCommand {
         );
     }
 
-    private void addSquadMembers(String[] args) {
+    private static void addSquadMembers(String[] args) {
         if (args.length < 2) {
             ChatUtil.addChatMessage(RED + "Usage : /squad <add> <playername>");
             return;
@@ -124,44 +124,44 @@ public class CommandSquad extends MyAbstractCommand {
                 }
             }
             String alias = stringBuilder.toString();
-            if (!args[1].equals(Minecraft.getMinecraft().thePlayer.getName()) && !args[1].equals(MWEConfig.hypixelNick)) {
+            final String playername = tryGetNameFromTab(args[1]);
+            if (!playername.equals(Minecraft.getMinecraft().thePlayer.getName()) && !playername.equals(MWEConfig.hypixelNick)) {
                 if (MWEConfig.keepFirstLetterSquadnames) {
-                    if (!args[1].isEmpty() && !alias.isEmpty()) {
-                        if (args[1].charAt(0) != alias.charAt(0)) {
-                            alias = args[1].charAt(0) + " ❘ " + alias;
+                    if (!playername.isEmpty() && !alias.isEmpty()) {
+                        if (playername.charAt(0) != alias.charAt(0)) {
+                            alias = playername.charAt(0) + " ❘ " + alias;
                         }
                     }
                 }
             }
-            SquadHandler.addPlayer(args[1], alias);
+            SquadHandler.addPlayer(playername, alias);
             ChatUtil.addChatMessage(ChatUtil.getTagMW() +
-                    GREEN + "Added " + GOLD + args[1] + GREEN + " as " +
+                    GREEN + "Added " + GOLD + playername + GREEN + " as " +
                     GOLD + alias + GREEN + " to the squad.");
             return;
         }
 
         for (int i = 1; i < args.length; i++) {
-            SquadHandler.addPlayer(args[i]);
+            final String playername = tryGetNameFromTab(args[i]);
+            SquadHandler.addPlayer(playername);
             ChatUtil.addChatMessage(ChatUtil.getTagMW() +
-                    GREEN + "Added " + GOLD + args[i] + GREEN + " to the squad.");
+                    GREEN + "Added " + GOLD + playername + GREEN + " to the squad.");
         }
     }
 
-    private void addTeamToSquad() {
-        if (mc.thePlayer == null) {
-            return;
-        }
+    private static void addTeamToSquad() {
+        final Minecraft mc = Minecraft.getMinecraft();
         final NetworkPlayerInfo playerInfo = mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID());
         if (playerInfo == null) {
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + RED + "Couldn't find your team!");
             return;
         }
-        final char myColor = this.getTeamColor(playerInfo);
+        final char myColor = getTeamColor(playerInfo);
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (netInfo.getGameProfile().getId().equals(mc.thePlayer.getUniqueID())) {
                 continue;
             }
-            if (myColor == this.getTeamColor(netInfo)) {
+            if (myColor == getTeamColor(netInfo)) {
                 SquadHandler.addSelf();
                 SquadHandler.addPlayer(netInfo.getGameProfile().getName());
             }
@@ -169,28 +169,29 @@ public class CommandSquad extends MyAbstractCommand {
         ChatUtil.addChatMessage(ChatUtil.getTagMW() + GREEN + "Added all your team to the squad!");
     }
 
-    private char getTeamColor(NetworkPlayerInfo networkPlayerInfo) {
+    private static char getTeamColor(NetworkPlayerInfo networkPlayerInfo) {
         if (networkPlayerInfo == null || networkPlayerInfo.getPlayerTeam() == null) {
             return 'f';
         }
         return StringUtil.getLastColorCharOf(networkPlayerInfo.getPlayerTeam().getColorPrefix());
     }
 
-    private void removeSquadMembers(String[] args) {
+    private static void removeSquadMembers(String[] args) {
         if (args.length < 2) {
             ChatUtil.addChatMessage(RED + "Usage : /squad <remove> <playername>");
             return;
         }
         for (int i = 1; i < args.length; i++) {
-            if (SquadHandler.removePlayer(args[i])) {
-                ChatUtil.addChatMessage(ChatUtil.getTagMW() + GREEN + "Removed " + GOLD + args[i] + GREEN + " from the squad.");
+            final String playername = tryGetNameFromTab(args[i]);
+            if (SquadHandler.removePlayer(playername)) {
+                ChatUtil.addChatMessage(ChatUtil.getTagMW() + GREEN + "Removed " + GOLD + playername + GREEN + " from the squad.");
             } else {
                 ChatUtil.addChatMessage(ChatUtil.getTagMW() + GOLD + args[i] + RED + " isn't in the squad.");
             }
         }
     }
 
-    private void listSquadMembers() {
+    private static void listSquadMembers() {
         if (SquadHandler.getSquad().isEmpty()) {
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + RED + "No one in the squad right now.");
             return;
@@ -205,9 +206,19 @@ public class CommandSquad extends MyAbstractCommand {
         ChatUtil.addChatMessage(imsg);
     }
 
-    private void disbandSquad() {
+    private static void disbandSquad() {
         SquadHandler.clearSquad();
         ChatUtil.addChatMessage(ChatUtil.getTagMW() + GREEN + "Removed all players from the squad.");
+    }
+
+    private static String tryGetNameFromTab(String name) {
+        String candidateName = null;
+        for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+            if (netInfo.getGameProfile().getName().equalsIgnoreCase(name)) {
+                candidateName = netInfo.getGameProfile().getName();
+            }
+        }
+        return candidateName == null ? name : candidateName;
     }
 
 }
