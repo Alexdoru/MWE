@@ -180,7 +180,9 @@ class CreateReportLineTask implements Callable<IChatComponent> {
         } else if (mapKey instanceof String) {
             this.uuid = null;
             this.nickname = (String) mapKey;
-        } else throw new IllegalArgumentException();
+        } else {
+            throw new IllegalArgumentException();
+        }
         this.wdr = wdr;
         this.doStalk = doStalk;
     }

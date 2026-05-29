@@ -116,8 +116,9 @@ public class MWEClassTransformer implements IClassTransformer {
         register(new OrangeSprintRendererTransformer_HideHUD());
         register(new SidebarmodReloadedTransformer_CustomSidebarLines());
         register(new SidebarmodRevampTransformer_CustomSidebarLines());
-        if ("01/04".equals(new SimpleDateFormat("dd/MM").format(new Date().getTime())))
+        if ("01/04".equals(new SimpleDateFormat("dd/MM").format(new Date().getTime()))) {
             register(new RendererLivingEntityTransformer_AprilFun());
+        }
     }
 
     private void register(MWETransformer transformer) {

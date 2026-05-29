@@ -77,8 +77,9 @@ public final class GuiManager {
     public static IRenderer getRendererFromPosition(GuiPosition guiPosition) {
         if (guiPosition == null) return null;
         for (final IRenderer renderer : registeredRenderers) {
-            if (guiPosition == renderer.getGuiPosition())
+            if (guiPosition == renderer.getGuiPosition()) {
                 return renderer;
+            }
         }
         return null;
     }

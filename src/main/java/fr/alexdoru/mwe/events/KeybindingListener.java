@@ -54,8 +54,11 @@ public class KeybindingListener {
             mc.thePlayer.sendChatMessage("/teamchest");
         } else if (toggleSprintKey.isPressed()) {
             MWEConfig.toggleSprint = !MWEConfig.toggleSprint;
-            if (MWEConfig.toggleSprint) ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Toggle Sprint On");
-            else ChatUtil.addChatMessage(EnumChatFormatting.RED + "Toggle Sprint Off");
+            if (MWEConfig.toggleSprint) {
+                ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Toggle Sprint On");
+            } else {
+                ChatUtil.addChatMessage(EnumChatFormatting.RED + "Toggle Sprint Off");
+            }
             MWEConfig.saveConfig();
         } else if (ScoreboardTracker.isInMwGame() && !ScoreboardTracker.isPrepPhase() && warcryKey.isPressed()) {
             mc.thePlayer.sendChatMessage("/warcry");

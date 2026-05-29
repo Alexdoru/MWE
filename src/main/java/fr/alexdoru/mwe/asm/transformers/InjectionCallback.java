@@ -9,7 +9,7 @@ public class InjectionCallback {
     }
 
     public void setInjectionPoints(int injectionPoints) {
-        if (count!=-1) {
+        if (count != -1) {
             throw new IllegalStateException("Count can only be set once");
         }
         count = injectionPoints;

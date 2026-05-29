@@ -35,8 +35,9 @@ public class JsonUtil {
 
     public static long getLong(JsonObject object, String name) {
         final JsonElement element = object.get(name);
-        if (element == null || element.isJsonNull())
+        if (element == null || element.isJsonNull()) {
             return 0L;
+        }
         return element.getAsLong();
     }
 

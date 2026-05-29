@@ -391,8 +391,9 @@ public class FinalKillCounter {
      */
     public static boolean wasPlayerInThisGame(String playername) {
         for (final String name : playersPresentInGame) {
-            if (name.equalsIgnoreCase(playername))
+            if (name.equalsIgnoreCase(playername)) {
                 return true;
+            }
         }
         return false;
     }

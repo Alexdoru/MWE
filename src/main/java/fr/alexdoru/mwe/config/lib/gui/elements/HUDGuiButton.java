@@ -83,7 +83,9 @@ public class HUDGuiButton extends ConfigGuiButton {
                 final IRenderer renderer = GuiManager.getRendererFromPosition(guiPosition);
                 if (renderer != null) {
                     mc.displayGuiScreen(new PositionEditGuiScreen(renderer, parentScreen));
-                } else throw new RuntimeException("No registered HUD associated to " + field.getName());
+                } else {
+                    throw new RuntimeException("No registered HUD associated to " + field.getName());
+                }
                 return true;
             } else if (buttonResetPos.mousePressed(mc, mouseX, mouseY)) {
                 guiPosition.resetToDefault();

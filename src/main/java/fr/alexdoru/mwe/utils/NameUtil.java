@@ -269,10 +269,16 @@ public class NameUtil {
                 if (iExtraPrefix != null || isobf || isNicked || squadname != null || alias != null) {
                     final StringBuilder sb = new StringBuilder();
                     if (iExtraPrefix != null) sb.append(extraPrefix);
-                    if (isobf && MWEConfig.deobfNamesInTab) sb.append(deobfString(teamprefix));
-                    else sb.append(teamprefix);
-                    if (squadname != null) sb.append(squadname);
-                    else sb.append(username);
+                    if (isobf && MWEConfig.deobfNamesInTab) {
+                        sb.append(deobfString(teamprefix));
+                    } else {
+                        sb.append(teamprefix);
+                    }
+                    if (squadname != null) {
+                        sb.append(squadname);
+                    } else {
+                        sb.append(username);
+                    }
                     sb.append(colorSuffix);
                     if (isNicked && MWEConfig.showFakePlayersInTab) {
                         sb.append(EnumChatFormatting.DARK_RED).append(EnumChatFormatting.BOLD).append(" *");
