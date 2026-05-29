@@ -12,7 +12,6 @@ import java.util.ArrayList;
 public final class GuiManager {
 
     private static final ArrayList<IRenderer> registeredRenderers = new ArrayList<>();
-    private static final Minecraft mc = Minecraft.getMinecraft();
     public static final ArmorHUD armorHUD = new ArmorHUD();
     public static final ArrowHitHUD arrowHitHUD = new ArrowHitHUD();
     public static final BaseLocationHUD baseLocationHUD = new BaseLocationHUD();
@@ -55,6 +54,7 @@ public final class GuiManager {
      */
     @SubscribeEvent
     public void onRenderGUI(RenderGameOverlayEvent.Post event) {
+        final Minecraft mc = Minecraft.getMinecraft();
         if (event.type == ElementType.TEXT && !(mc.currentScreen instanceof PositionEditGuiScreen)) {
             final long time = System.currentTimeMillis();
             mc.mcProfiler.startSection("MWE HUD");
@@ -84,7 +84,7 @@ public final class GuiManager {
     }
 
     public static void renderAllDummy() {
-        final ScaledResolution resolution = new ScaledResolution(mc);
+        final ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
         for (final IRenderer renderer : registeredRenderers) {
             if (renderer.getGuiPosition().isEnabled()) {
                 renderer.getGuiPosition().updateAbsolutePosition(resolution);

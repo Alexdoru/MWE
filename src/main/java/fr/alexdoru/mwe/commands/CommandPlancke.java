@@ -11,6 +11,7 @@ import fr.alexdoru.mwe.http.requests.HypixelGuild;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import fr.alexdoru.mwe.utils.TabCompletionUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
@@ -40,7 +41,7 @@ public class CommandPlancke extends MyAbstractCommand {
                 final MojangNameToUUID apiname = new MojangNameToUUID(args[0]);
                 final JsonObject playerdata = CachedHypixelPlayerData.getPlayerData(apiname.getUuid());
                 final HypixelGuild hypixelGuild = args.length == 1 ? new HypixelGuild(apiname.getUuid()) : null;
-                mc.addScheduledTask(() -> this.plancke(args, apiname, playerdata, hypixelGuild));
+                Minecraft.getMinecraft().addScheduledTask(() -> this.plancke(args, apiname, playerdata, hypixelGuild));
             } catch (ApiException e) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + e.getMessage());
                 return null;

@@ -5,6 +5,7 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
 
@@ -48,7 +49,7 @@ public class GhosthandCheck extends Check {
         final int MAX_TICK_DELAY = 10;
         final List<PlayerDataSamples> nearbyPlayers = getPlayersDataInAABBexcluding(player,
                 player.getEntityBoundingBox().addCoord(lookVect.xCoord * distance, lookVect.yCoord * distance, lookVect.zCoord * distance).expand(f, f, f),
-                p -> p != mc.thePlayer && p.canBeCollidedWith() && HackerDetector.isValidPlayer(p.getUniqueID()) && !p.isInvisible() && ((EntityPlayerAccessor) p).getPlayerDataSamples().posXList.size() >= MAX_TICK_DELAY);
+                p -> p != Minecraft.getMinecraft().thePlayer && p.canBeCollidedWith() && HackerDetector.isValidPlayer(p.getUniqueID()) && !p.isInvisible() && ((EntityPlayerAccessor) p).getPlayerDataSamples().posXList.size() >= MAX_TICK_DELAY);
         if (nearbyPlayers.isEmpty()) {
             data.ghosthandVL.substract(1);
             return false;

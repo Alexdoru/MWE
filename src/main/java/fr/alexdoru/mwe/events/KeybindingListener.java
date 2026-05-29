@@ -13,7 +13,6 @@ import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 
 public class KeybindingListener {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
     private static final KeyBinding killKey = new KeyBinding("/Kill", 0, "MWE");
     private static final KeyBinding surfaceKey = new KeyBinding("/Surface", 0, "MWE");
     private static final KeyBinding echestKey = new KeyBinding("/enderchest", 0, "MWE");
@@ -38,6 +37,8 @@ public class KeybindingListener {
 
     @SubscribeEvent
     public void key(KeyInputEvent e) {
+
+        final Minecraft mc = Minecraft.getMinecraft();
 
         if (mc.theWorld == null || mc.thePlayer == null) {
             return;

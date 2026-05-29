@@ -66,6 +66,7 @@ public class CommandScanGame extends MyAbstractCommand {
         }
         int i = 0;
         final boolean isMythicHour = ScoreboardUtils.isMegaWallsMythicGame();
+        final Minecraft mc = Minecraft.getMinecraft();
         for (final NetworkPlayerInfo netInfo : NameUtil.sortedCopyOf(mc.getNetHandler().getPlayerInfoMap())) {
             if (mc.thePlayer != null && netInfo.getGameProfile().getId().equals(mc.thePlayer.getUniqueID())) continue;
             if (scanPlayer(netInfo, isMythicHour)) i++;

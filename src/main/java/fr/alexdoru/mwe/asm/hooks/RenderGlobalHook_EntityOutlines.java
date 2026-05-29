@@ -21,7 +21,6 @@ import java.util.List;
 
 public class RenderGlobalHook_EntityOutlines {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
     private static boolean hasRendered = false;
 
     public static boolean renderWitherOutline(
@@ -35,6 +34,7 @@ public class RenderGlobalHook_EntityOutlines {
             hasRendered = false;
             return true;
         }
+        final Minecraft mc = Minecraft.getMinecraft();
         final boolean b = MinecraftForgeClient.getRenderPass() == 1 &&
                 MWEConfig.renderWitherOutline &&
                 entityOutlineFramebuffer != null &&
@@ -80,6 +80,7 @@ public class RenderGlobalHook_EntityOutlines {
             Framebuffer entityOutlineFramebuffer,
             ShaderGroup entityOutlineShader,
             Entity entity) {
+        final Minecraft mc = Minecraft.getMinecraft();
         final double d0 = renderViewEntity.prevPosX + (renderViewEntity.posX - renderViewEntity.prevPosX) * (double) partialTicks;
         final double d1 = renderViewEntity.prevPosY + (renderViewEntity.posY - renderViewEntity.prevPosY) * (double) partialTicks;
         final double d2 = renderViewEntity.prevPosZ + (renderViewEntity.posZ - renderViewEntity.prevPosZ) * (double) partialTicks;
@@ -116,7 +117,7 @@ public class RenderGlobalHook_EntityOutlines {
     }
 
     public static boolean isRenderOutlines() {
-        return ((RenderManagerAccessor) mc.getRenderManager()).isRenderOutlines();
+        return ((RenderManagerAccessor) Minecraft.getMinecraft().getRenderManager()).isRenderOutlines();
     }
 
 }

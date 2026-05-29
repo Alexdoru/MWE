@@ -61,7 +61,6 @@ import java.util.regex.Pattern;
  */
 public class NameUtil {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
     public static final String WARNING_ICON = EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET;
     public static final String RED_WARNING_ICON = EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET;
     public static final String PINK_WARNING_ICON = EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET;
@@ -119,7 +118,7 @@ public class NameUtil {
     }
 
     public static void refreshAllNamesInWorld() {
-        for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
+        for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
             updateMWPlayerDataAndEntityData(netInfo, true);
         }
     }
@@ -136,6 +135,7 @@ public class NameUtil {
         if (netInfo == null) return;
         final MWPlayerData.PlayerData mwPlayerData = getMWPlayerData(netInfo.getGameProfile(), true);
         ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(mwPlayerData.displayName);
+        final Minecraft mc = Minecraft.getMinecraft();
         if (mc.theWorld != null) {
             final EntityPlayer player;
             if (playername.equals(MWEConfig.hypixelNick)) {
@@ -252,6 +252,7 @@ public class NameUtil {
         IChatComponent displayName = null;
         char teamColor = '\0';
         MWClass mwClass = null;
+        final Minecraft mc = Minecraft.getMinecraft();
         if (mc.theWorld != null) {
             ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
             if (team == null && mc.thePlayer != null && mc.thePlayer.getName().equals(username) && !MWEConfig.hypixelNick.isEmpty()) {
@@ -303,7 +304,7 @@ public class NameUtil {
     public static EntityPlayer getPlayerEntityByName(String playername) {
         // we loop backwards because the player list contains duplicate entities
         // and the "active" ones are the latest inserted
-        final List<EntityPlayer> playerList = mc.theWorld.playerEntities;
+        final List<EntityPlayer> playerList = Minecraft.getMinecraft().theWorld.playerEntities;
         for (int i = playerList.size() - 1; i >= 0; --i) {
             if (playername.equals(playerList.get(i).getName())) {
                 return playerList.get(i);

@@ -21,8 +21,6 @@ import java.util.stream.Collectors;
 
 public class ScoreboardUtils {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
-
     public static boolean isPlayingHypixelPit() {
         final String title = getUnformattedSidebarTitle();
         return title != null && title.contains("THE HYPIXEL PIT");
@@ -49,6 +47,7 @@ public class ScoreboardUtils {
      * Item at index 0 is the first line etc
      */
     public static List<String> getFormattedSidebarText() {
+        final Minecraft mc = Minecraft.getMinecraft();
         final List<String> lines = new ArrayList<>();
         if (mc.theWorld == null) {
             return lines;
@@ -111,6 +110,7 @@ public class ScoreboardUtils {
      * Returns unformatted top of the scoreboard/sidebar
      */
     public static String getUnformattedSidebarTitle() {
+        final Minecraft mc = Minecraft.getMinecraft();
         return mc.theWorld == null ? null : getUnformattedSidebarTitle(mc.theWorld.getScoreboard());
     }
 
@@ -139,6 +139,7 @@ public class ScoreboardUtils {
      * Prints scoreboard in chat
      */
     public static void printScoreboard() {
+        final Minecraft mc = Minecraft.getMinecraft();
         if (mc.theWorld == null) {
             return;
         }

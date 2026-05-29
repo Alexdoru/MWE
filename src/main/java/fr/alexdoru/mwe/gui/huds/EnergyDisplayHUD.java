@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -30,6 +31,7 @@ public class EnergyDisplayHUD extends AbstractRenderer {
 
     @Override
     public void render(ScaledResolution resolution) {
+        final Minecraft mc = Minecraft.getMinecraft();
         final ItemStack itemStack = mc.thePlayer.getHeldItem();
         if (itemStack == null) {
             return;
@@ -63,9 +65,9 @@ public class EnergyDisplayHUD extends AbstractRenderer {
     public void renderDummy() {
         final int energy = 50;
         if (energy >= MWEConfig.highEnergyThreshold) {
-            drawCenteredString(mc.fontRendererObj, EnumChatFormatting.BOLD.toString() + energy, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.highEnergyHUDColor);
+            drawCenteredString(Minecraft.getMinecraft().fontRendererObj, EnumChatFormatting.BOLD.toString() + energy, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.highEnergyHUDColor);
         } else {
-            drawCenteredString(mc.fontRendererObj, String.valueOf(energy), this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.lowEnergyHUDColor);
+            drawCenteredString(Minecraft.getMinecraft().fontRendererObj, String.valueOf(energy), this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.lowEnergyHUDColor);
         }
     }
 

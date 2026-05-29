@@ -28,8 +28,6 @@ import net.minecraft.util.Vec3;
  */
 public class AttackDetector {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
-
     private static boolean lastPacketWasSwing;
     private static long lastSwingTime;
     private static int attackerID;
@@ -111,7 +109,7 @@ public class AttackDetector {
 
     private static void onEntitySwing(int entityID) {
         HackerDetector.addScheduledTask(() -> {
-            final Entity attacker = mc.theWorld.getEntityByID(entityID);
+            final Entity attacker = Minecraft.getMinecraft().theWorld.getEntityByID(entityID);
             if (attacker instanceof EntityPlayerAccessor) {
                 ((EntityPlayerAccessor) attacker).getPlayerDataSamples().hasSwung = true;
             }
@@ -123,7 +121,7 @@ public class AttackDetector {
             if (!ScoreboardTracker.isInMwGame() && !ScoreboardTracker.isMWReplay()) {
                 return;
             }
-            final Entity player = mc.theWorld.getEntityByID(playerId);
+            final Entity player = Minecraft.getMinecraft().theWorld.getEntityByID(playerId);
             if (!(player instanceof EntityPlayer)) {
                 return;
             }

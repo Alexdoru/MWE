@@ -8,6 +8,7 @@ import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.NameUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -33,6 +34,7 @@ public class SquadHealthHUD extends AbstractRenderer {
 
     @Override
     public void render(ScaledResolution resolution) {
+        final Minecraft mc = Minecraft.getMinecraft();
         final Scoreboard scoreboard = mc.theWorld.getScoreboard();
         final ScoreObjective scoreobjective = scoreboard.getObjectiveInDisplaySlot(0);
         if (mc.isIntegratedServerRunning() && scoreobjective == null) {
@@ -125,6 +127,7 @@ public class SquadHealthHUD extends AbstractRenderer {
     public void renderDummy() {
         GlStateManager.pushMatrix();
         {
+            final Minecraft mc = Minecraft.getMinecraft();
             final int hudXpos = this.guiPosition.getAbsoluteRenderX();
             final int hudYpos = this.guiPosition.getAbsoluteRenderY();
             final int listSize = 4;

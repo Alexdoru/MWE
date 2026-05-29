@@ -1,14 +1,16 @@
 package fr.alexdoru.mwe.gui.huds;
 
-import fr.alexdoru.mwe.asm.interfaces.GuiNewChatAccessor;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
+import fr.alexdoru.mwe.asm.interfaces.GuiNewChatAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.NameUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -133,6 +135,7 @@ public class ArrowHitHUD extends AbstractRenderer {
         if (!hpValue.equals("0")) {
             return false;
         }
+        final Minecraft mc = Minecraft.getMinecraft();
         final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
         if (chatLines.isEmpty()) {
             return false;
@@ -146,11 +149,12 @@ public class ArrowHitHUD extends AbstractRenderer {
     }
 
     private EnumChatFormatting getColor(String healthPoints) {
-        return ColorUtil.getHPColor(mc.thePlayer.getMaxHealth(), Float.parseFloat(healthPoints));
+        return ColorUtil.getHPColor(Minecraft.getMinecraft().thePlayer.getMaxHealth(), Float.parseFloat(healthPoints));
     }
 
     @Override
     public void render(ScaledResolution resolution) {
+        final Minecraft mc = Minecraft.getMinecraft();
         this.guiPosition.updateAbsolutePosition(resolution);
         int x = this.guiPosition.getAbsoluteRenderX();
         int y = this.guiPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT;
@@ -170,7 +174,8 @@ public class ArrowHitHUD extends AbstractRenderer {
 
     @Override
     public void renderDummy() {
-        drawCenteredString(mc.fontRendererObj, EnumChatFormatting.GREEN + "20.0", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+        final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+        drawCenteredString(fr, EnumChatFormatting.GREEN + "20.0", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY() - fr.FONT_HEIGHT, 0xFFFFFF);
     }
 
     @Override

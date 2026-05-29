@@ -5,6 +5,8 @@ import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.MapUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -43,14 +45,14 @@ public class FKCounterHUD extends AbstractRenderer {
 
     private int getHeight() {
         if (MWEConfig.fkcounterHUDCompact || MWEConfig.fkcounterHUDinSidebar) {
-            return mc.fontRendererObj.FONT_HEIGHT;
+            return Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT;
         }
-        return mc.fontRendererObj.FONT_HEIGHT * 4;
+        return Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT * 4;
     }
 
     private int getWidth() {
         if (MWEConfig.fkcounterHUDCompact || MWEConfig.fkcounterHUDinSidebar) {
-            return mc.fontRendererObj.getStringWidth(this.displayText);
+            return Minecraft.getMinecraft().fontRendererObj.getStringWidth(this.displayText);
         }
         return getMultilineWidth(this.textToRender);
     }
@@ -64,7 +66,7 @@ public class FKCounterHUD extends AbstractRenderer {
             drawRect(x - 2, y - 2, x + getWidth() + 1, y + getHeight(), BACKGROUND_COLOR);
         }
         if (MWEConfig.fkcounterHUDCompact) {
-            mc.fontRendererObj.drawStringWithShadow(this.displayText, x, y, 0xFFFFFF);
+            Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(this.displayText, x, y, 0xFFFFFF);
         } else {
             drawStringList(this.textToRender, x, y);
         }
@@ -78,7 +80,7 @@ public class FKCounterHUD extends AbstractRenderer {
 
         final int width;
         if (MWEConfig.fkcounterHUDCompact || MWEConfig.fkcounterHUDinSidebar) {
-            width = mc.fontRendererObj.getStringWidth(DUMMY_TEXT_COMPACT);
+            width = Minecraft.getMinecraft().fontRendererObj.getStringWidth(DUMMY_TEXT_COMPACT);
         } else if (MWEConfig.fkcounterHUDShowPlayers) {
             width = getMultilineWidth(DUMMY_TEXT_PLAYERS);
         } else {
@@ -96,7 +98,7 @@ public class FKCounterHUD extends AbstractRenderer {
         drawVerticalLine(left, top, bottom, Color.RED.getRGB());
         drawVerticalLine(right, top, bottom, Color.RED.getRGB());
         if (MWEConfig.fkcounterHUDCompact || MWEConfig.fkcounterHUDinSidebar) {
-            mc.fontRendererObj.drawStringWithShadow(DUMMY_TEXT_COMPACT, x, y, 0xFFFFFF);
+            Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(DUMMY_TEXT_COMPACT, x, y, 0xFFFFFF);
         } else if (MWEConfig.fkcounterHUDShowPlayers) {
             drawStringList(DUMMY_TEXT_PLAYERS, x, y);
         } else {
@@ -177,16 +179,17 @@ public class FKCounterHUD extends AbstractRenderer {
     }
 
     private void drawStringList(List<String> list, int x, int y) {
+        final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
         for (final String line : list) {
-            mc.fontRendererObj.drawStringWithShadow(line, x, y, 0xFFFFFF);
-            y += mc.fontRendererObj.FONT_HEIGHT;
+            fr.drawStringWithShadow(line, x, y, 0xFFFFFF);
+            y += fr.FONT_HEIGHT;
         }
     }
 
     private int getMultilineWidth(List<String> list) {
         int maxwidth = 0;
         for (final String line : list) {
-            final int width = mc.fontRendererObj.getStringWidth(line);
+            final int width = Minecraft.getMinecraft().fontRendererObj.getStringWidth(line);
             if (width > maxwidth) {
                 maxwidth = width;
             }

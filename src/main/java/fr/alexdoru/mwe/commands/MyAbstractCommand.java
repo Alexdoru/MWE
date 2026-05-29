@@ -6,8 +6,6 @@ import net.minecraft.command.ICommandSender;
 
 public abstract class MyAbstractCommand extends CommandBase {
 
-    protected static final Minecraft mc = Minecraft.getMinecraft();
-
     @Override
     public boolean canCommandSenderUseCommand(ICommandSender sender) {
         return true;
@@ -29,6 +27,7 @@ public abstract class MyAbstractCommand extends CommandBase {
     }
 
     protected static void sendChatMessage(String msg) {
+        final Minecraft mc = Minecraft.getMinecraft();
         if (mc.thePlayer != null) {
             mc.thePlayer.sendChatMessage(msg);
         }

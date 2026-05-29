@@ -19,11 +19,10 @@ public class ChatHandler {
     //drawnChatLines : contains the messages printed in the chat according to the width off the chat, each item in the list is one line of chat and not necessarily one message
     //as a result drawnChatLines.size() >= chatLines.size()
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
     private static final IChatComponent stopMovingMsg = new ChatComponentText(ChatUtil.getTagHackerDetector() + EnumChatFormatting.RED + "Stop moving for a second to send a report!");
 
     public static void deleteMessageFromChat(IChatComponent messageToDelete) {
-        final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
+        final List<ChatLine> chatLines = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getChatLines();
         final String textToMatch = messageToDelete.getUnformattedText();
         final int chatSearchLength = 100;
         final Iterator<ChatLine> iterator = chatLines.iterator();
@@ -46,7 +45,7 @@ public class ChatHandler {
     }
 
     public static void deleteStopMovingInstruction() {
-        final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
+        final List<ChatLine> chatLines = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getChatLines();
         final int chatSearchLength = 40;
         final Iterator<ChatLine> iterator = chatLines.iterator();
         int i = 0;
@@ -62,7 +61,7 @@ public class ChatHandler {
     }
 
     public static void deleteFlagFromChat(String flagKey) {
-        final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
+        final List<ChatLine> chatLines = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getChatLines();
         final int chatSearchLength = 100;
         final Iterator<ChatLine> iterator = chatLines.iterator();
         int i = 0;
@@ -78,7 +77,7 @@ public class ChatHandler {
     }
 
     public static void deleteScanFlagFromChat(String key) {
-        final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
+        final List<ChatLine> chatLines = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getChatLines();
         final int chatSearchLength = 250;
         final Iterator<ChatLine> iterator = chatLines.iterator();
         int i = 0;
@@ -94,7 +93,7 @@ public class ChatHandler {
     }
 
     public static void deleteWarningFromChat(String playername) {
-        final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
+        final List<ChatLine> chatLines = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getChatLines();
         final int chatSearchLength = 100;
         final Iterator<ChatLine> iterator = chatLines.iterator();
         int i = 0;
@@ -110,7 +109,7 @@ public class ChatHandler {
     }
 
     public static void deleteAllWarningMessages() {
-        final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
+        final List<ChatLine> chatLines = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getChatLines();
         final int chatSearchLength = 300;
         final Iterator<ChatLine> iterator = chatLines.iterator();
         int i = 0;
@@ -125,6 +124,7 @@ public class ChatHandler {
     }
 
     private static void deleteFromDrawnChatLines(IChatComponent componentToDelete, int searchLength) {
+        final Minecraft mc = Minecraft.getMinecraft();
         final List<ChatLine> drawnChatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getDrawnChatLines();
         final int width = MathHelper.floor_float((float) mc.ingameGUI.getChatGUI().getChatWidth() / mc.ingameGUI.getChatGUI().getChatScale());
         final List<IChatComponent> toDeleteList = GuiUtilRenderComponents.splitText(componentToDelete, width, Minecraft.getMinecraft().fontRendererObj, false, false);

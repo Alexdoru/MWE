@@ -13,8 +13,9 @@ import java.util.*;
 
 public class ReportQueue {
 
+    private static final long TIME_ABORPT_REPORT = 30_000L;
+
     public static ReportQueue INSTANCE;
-    private static final Minecraft mc = Minecraft.getMinecraft();
 
     private int standStillCounter;
     private int standStillLimit = 22;
@@ -25,8 +26,6 @@ public class ReportQueue {
     private final Set<String> boostingAdvicePrinted = new HashSet<>();
     private final Random random = new Random();
 
-    private static final long TIME_ABORPT_REPORT = 30_000L;
-
     public ReportQueue() {
         INSTANCE = this;
     }
@@ -34,7 +33,7 @@ public class ReportQueue {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
 
-        if (event.phase != TickEvent.Phase.START || queueList.isEmpty() || mc.thePlayer == null) {
+        if (event.phase != TickEvent.Phase.START || queueList.isEmpty() || Minecraft.getMinecraft().thePlayer == null) {
             return;
         }
 
@@ -112,6 +111,7 @@ public class ReportQueue {
     private int prevItemHeld;
 
     private boolean isPlayerStandingStill() {
+        final Minecraft mc = Minecraft.getMinecraft();
         final boolean sameItem = mc.thePlayer.inventory.currentItem == prevItemHeld;
         prevItemHeld = mc.thePlayer.inventory.currentItem;
         return (mc.inGameHasFocus || mc.currentScreen instanceof GuiChatAccessor && ((GuiChatAccessor) mc.currentScreen).getInputField().getText().isEmpty())

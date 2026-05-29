@@ -2,6 +2,8 @@ package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.utils.ColorUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -25,9 +27,10 @@ public class ArmorHUD extends AbstractRenderer {
 
     @Override
     public void render(ScaledResolution resolution) {
+        final EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
         if (MWEConfig.lowDuraArmorHUD) {
             boolean shouldRender = false;
-            for (final ItemStack stack : mc.thePlayer.inventory.armorInventory) {
+            for (final ItemStack stack : thePlayer.inventory.armorInventory) {
                 if (stack != null) {
                     final int durability = stack.getMaxDamage() - stack.getItemDamage();
                     if (durability <= MWEConfig.lowDuraArmorHUDValue) {
@@ -48,7 +51,7 @@ public class ArmorHUD extends AbstractRenderer {
             height = 18 * 4;
         }
         this.guiPosition.updateAdjustedAbsolutePosition(resolution, width, height, -width / 2, -height / 2);
-        this.renderArmorBar(mc.thePlayer.inventory.armorInventory, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY());
+        this.renderArmorBar(thePlayer.inventory.armorInventory, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY());
     }
 
     @Override
@@ -87,6 +90,7 @@ public class ArmorHUD extends AbstractRenderer {
     }
 
     private void drawItemStack(ItemStack stack, int x, int y) {
+        final Minecraft mc = Minecraft.getMinecraft();
         GlStateManager.pushMatrix();
         RenderHelper.enableGUIStandardItemLighting();
         final RenderItem itemRender = mc.getRenderItem();

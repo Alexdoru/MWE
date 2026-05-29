@@ -8,11 +8,11 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class LowHPIndicator {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
     private boolean playedSound = false;
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
+        final Minecraft mc = Minecraft.getMinecraft();
         if (!MWEConfig.playSoundLowHP || event.phase == TickEvent.Phase.START || mc.theWorld == null || mc.thePlayer == null) {
             return;
         }

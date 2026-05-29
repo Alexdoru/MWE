@@ -11,6 +11,7 @@ import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.TabCompletionUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
@@ -176,7 +177,7 @@ public class CommandAddAlias extends MyAbstractCommand {
 
     private void listAliasInLobby() {
         ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "In this lobby :\n");
-        for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
+        for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
             final String key;
             if (NameUtil.isRealPlayer(netInfo.getGameProfile().getId())) {
                 key = netInfo.getGameProfile().getId().toString().replace("-", "");
@@ -192,6 +193,7 @@ public class CommandAddAlias extends MyAbstractCommand {
     private void addAlias(String[] args) {
         final String playername = args[0];
         final String alias = args[1];
+        final Minecraft mc = Minecraft.getMinecraft();
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
                 if (NameUtil.isRealPlayer(netInfo.getGameProfile().getId())) {
@@ -247,6 +249,7 @@ public class CommandAddAlias extends MyAbstractCommand {
     }
 
     private void removeAlias(String playername) {
+        final Minecraft mc = Minecraft.getMinecraft();
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
                 if (NameUtil.isRealPlayer(netInfo.getGameProfile().getId())) {

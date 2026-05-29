@@ -24,7 +24,6 @@ import java.util.*;
 
 public class HackerDetector {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
     public static HackerDetector INSTANCE;
     private static FileLogger logger;
     private final List<ICheck> checkList = new ArrayList<>();
@@ -59,7 +58,7 @@ public class HackerDetector {
 
     @SubscribeEvent
     public void onDrawDebugText(RenderGameOverlayEvent.Text event) {
-        if (mc.gameSettings.showDebugInfo && MWEConfig.hackerDetector) {
+        if (Minecraft.getMinecraft().gameSettings.showDebugInfo && MWEConfig.hackerDetector) {
             event.left.add("");
             event.left.add("Hacker Detector:");
             event.left.add("Block Cache: " + brokenBlocksList.size() + "/" + recentPlacedBlocks.size());
@@ -72,6 +71,7 @@ public class HackerDetector {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
+        final Minecraft mc = Minecraft.getMinecraft();
         mc.mcProfiler.startSection("Hacker Detector");
         if (event.phase == TickEvent.Phase.START) {
             this.playersCheckedTemp = 0;
@@ -92,6 +92,8 @@ public class HackerDetector {
     }
 
     private void onTickStart() {
+
+        final Minecraft mc = Minecraft.getMinecraft();
 
         if (!MWEConfig.hackerDetector || ScoreboardTracker.isInSkyblock() || mc.theWorld == null || mc.thePlayer == null || !mc.theWorld.isRemote) {
             synchronized (this.scheduledTasks) {
@@ -139,7 +141,7 @@ public class HackerDetector {
     }
 
     private void performChecksOnPlayer(EntityPlayer player) {
-        if (player == mc.thePlayer) {
+        if (player == Minecraft.getMinecraft().thePlayer) {
             this.fastbreakCheck.checkPlayerSP(player);
             return;
         }
@@ -174,6 +176,7 @@ public class HackerDetector {
     }
 
     public static void addPlacedBlock(BlockPos pos, IBlockState state) {
+        final Minecraft mc = Minecraft.getMinecraft();
         if (mc.thePlayer == null || mc.theWorld == null) {
             return;
         }

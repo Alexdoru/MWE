@@ -6,6 +6,7 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.utils.MapUtil;
 import fr.alexdoru.mwe.utils.SkinUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -86,6 +87,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
     private PhxHealLine getLine(String playername, String amountHealed) {
         final NetworkPlayerInfo netInfo;
         final String formattedName;
+        final Minecraft mc = Minecraft.getMinecraft();
         if (playername == null) { // myself
             netInfo = mc.thePlayer == null ? null : mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID());
             formattedName = EnumChatFormatting.AQUA.toString() + EnumChatFormatting.BOLD + "You";
@@ -118,6 +120,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
     }
 
     private void renderPhxHUD(List<PhxHealLine> toRenderList) {
+        final Minecraft mc = Minecraft.getMinecraft();
         int maxLeft = 0;
         int maxRight = 0;
         int maxTotal = 0;

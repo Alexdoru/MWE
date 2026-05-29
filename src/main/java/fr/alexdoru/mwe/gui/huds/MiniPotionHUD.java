@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumChatFormatting;
@@ -16,6 +17,7 @@ public class MiniPotionHUD extends AbstractRenderer {
 
     @Override
     public void render(ScaledResolution resolution) {
+        final Minecraft mc = Minecraft.getMinecraft();
         final Collection<PotionEffect> potionEffects = mc.thePlayer.getActivePotionEffects();
         if (potionEffects.isEmpty()) return;
         this.guiPosition.updateAbsolutePosition(resolution);
@@ -74,7 +76,7 @@ public class MiniPotionHUD extends AbstractRenderer {
 
     @Override
     public void renderDummy() {
-        drawCenteredString(mc.fontRendererObj, EnumChatFormatting.LIGHT_PURPLE + "3", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, EnumChatFormatting.LIGHT_PURPLE + "3", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override

@@ -11,6 +11,7 @@ import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.TabCompletionUtil;
 import fr.alexdoru.mwe.utils.UUIDUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
@@ -45,6 +46,7 @@ public class CommandUnWDR extends MyAbstractCommand {
 
     private void unwdrPlayer(String playername) {
         MultithreadingUtil.addTaskToQueue(() -> {
+            final Minecraft mc = Minecraft.getMinecraft();
             try {
                 final MojangNameToUUID apireq = new MojangNameToUUID(playername);
                 mc.addScheduledTask(() -> this.unwdr(apireq.getUuid(), apireq.getName()));

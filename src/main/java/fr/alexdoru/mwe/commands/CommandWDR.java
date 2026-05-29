@@ -14,6 +14,7 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.TabCompletionUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.scoreboard.ScorePlayerTeam;
@@ -73,6 +74,7 @@ public class CommandWDR extends MyAbstractCommand {
     }
 
     private static void addPlayerToReportList(String playername, List<String> cheats) {
+        final Minecraft mc = Minecraft.getMinecraft();
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
                 final UUID uuid = netInfo.getGameProfile().getId();

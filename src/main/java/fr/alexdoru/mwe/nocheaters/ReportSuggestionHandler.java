@@ -25,7 +25,6 @@ import java.util.regex.Pattern;
 
 public class ReportSuggestionHandler {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
     private static final Pattern REPORT_PATTERN1 = Pattern.compile("(\\w{2,16}) (?:|is )b?hop?ping", Pattern.CASE_INSENSITIVE);
     private static final Pattern REPORT_PATTERN2 = Pattern.compile("/?(?:wdr|report) (\\w{2,16}) (\\w{2,16})", Pattern.CASE_INSENSITIVE);
 
@@ -183,7 +182,7 @@ public class ReportSuggestionHandler {
     }
 
     private static boolean isPlayerMyself(@Nullable String name) {
-        return (mc.thePlayer != null && mc.thePlayer.getName().equalsIgnoreCase(name)) || (!MWEConfig.hypixelNick.isEmpty() && MWEConfig.hypixelNick.equals(name));
+        return (Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().thePlayer.getName().equalsIgnoreCase(name)) || (!MWEConfig.hypixelNick.isEmpty() && MWEConfig.hypixelNick.equals(name));
     }
 
 }

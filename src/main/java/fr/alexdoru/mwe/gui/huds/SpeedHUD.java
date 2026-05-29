@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.config.MWEConfig;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -12,6 +13,7 @@ public class SpeedHUD extends AbstractRenderer {
 
     @Override
     public void render(ScaledResolution resolution) {
+        final Minecraft mc = Minecraft.getMinecraft();
         final double vX = mc.thePlayer.motionX;
         final double vZ = mc.thePlayer.motionZ;
         final double velocity = Math.sqrt(vX * vX + vZ * vZ) * 20d;
@@ -22,7 +24,7 @@ public class SpeedHUD extends AbstractRenderer {
 
     @Override
     public void renderDummy() {
-        mc.fontRendererObj.drawStringWithShadow("Speed: " + EnumChatFormatting.WHITE + "5.65m/s", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.speedHUDColor);
+        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow("Speed: " + EnumChatFormatting.WHITE + "5.65m/s", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.speedHUDColor);
     }
 
     @Override

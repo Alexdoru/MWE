@@ -17,8 +17,6 @@ import static net.minecraft.util.EnumChatFormatting.*;
 
 public class ChatUtil {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
-
     public static String getTagMW() {
         return GOLD + "[" + DARK_GRAY + "MWE" + GOLD + "] " + RESET;
     }
@@ -40,11 +38,12 @@ public class ChatUtil {
     }
 
     public static void addChatMessage(IChatComponent msg) {
-        addChatMessage(msg, mc.isCallingFromMinecraftThread());
+        addOrQueueMessage(msg);
     }
 
-    private static void addChatMessage(IChatComponent msg, boolean isCallingFromMinecraftThread) {
-        if (isCallingFromMinecraftThread) {
+    private static void addOrQueueMessage(IChatComponent msg) {
+        final Minecraft mc = Minecraft.getMinecraft();
+        if (mc.isCallingFromMinecraftThread()) {
             mc.ingameGUI.getChatGUI().printChatMessage(msg);
         } else {
             mc.addScheduledTask(() -> mc.ingameGUI.getChatGUI().printChatMessage(msg));
@@ -52,6 +51,7 @@ public class ChatUtil {
     }
 
     public static void sendChatMessage(String msg, boolean addToHistory) {
+        final Minecraft mc = Minecraft.getMinecraft();
         if (mc.thePlayer == null) return;
         mc.thePlayer.sendChatMessage(msg);
         if (!addToHistory) return;
@@ -146,6 +146,7 @@ public class ChatUtil {
     }
 
     public static String repeatToChatWidth(char c) {
+        final Minecraft mc = Minecraft.getMinecraft();
         final int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
         final int charWidth = mc.fontRendererObj.getCharWidth(c);
         return StringUtil.getRepetitionOf(c, chatWidth / charWidth);
@@ -162,6 +163,7 @@ public class ChatUtil {
      * Returns the amounts of spaces needed to make a message centered
      */
     public static String getSeparatorToCenter(String message) {
+        final Minecraft mc = Minecraft.getMinecraft();
         final int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
         final int messageWidth = mc.fontRendererObj.getStringWidth(message);
         if (messageWidth >= chatWidth) return "";
@@ -170,7 +172,7 @@ public class ChatUtil {
 
     public static String getSeparatorOfLength(int length) {
         final char space = ' ';
-        final int separatorWidth = mc.fontRendererObj.getCharWidth(space);
+        final int separatorWidth = Minecraft.getMinecraft().fontRendererObj.getCharWidth(space);
         final int amountChars = length / separatorWidth;
         if (amountChars < 1) return "";
         return StringUtil.getRepetitionOf(space, amountChars);
@@ -182,6 +184,7 @@ public class ChatUtil {
      */
     public static String alignText(String[][] messagematrix) {
 
+        final Minecraft mc = Minecraft.getMinecraft();
         final char separator = ' ';
         final int chatWidth = mc.ingameGUI.getChatGUI().getChatWidth();
         final int separatorWidth = mc.fontRendererObj.getCharWidth(separator);

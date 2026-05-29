@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -26,6 +27,7 @@ public class PotionHUD extends AbstractRenderer {
 
     @Override
     public void render(ScaledResolution resolution) {
+        final Minecraft mc = Minecraft.getMinecraft();
         final Collection<PotionEffect> potionEffects = mc.thePlayer.getActivePotionEffects();
         if (potionEffects.isEmpty()) return;
         int amountEffects = 0;
@@ -69,7 +71,7 @@ public class PotionHUD extends AbstractRenderer {
             if (potion.hasStatusIcon()) {
                 amountEffects++;
                 if (!MWEConfig.horizontalPotionHUD && MWEConfig.showPotionEffectNames) {
-                    maxWidth = Math.max(maxWidth, mc.fontRendererObj.getStringWidth(getFormattedEffect(potioneffect, potion)));
+                    maxWidth = Math.max(maxWidth, Minecraft.getMinecraft().fontRendererObj.getStringWidth(getFormattedEffect(potioneffect, potion)));
                 }
             }
         }
@@ -98,6 +100,7 @@ public class PotionHUD extends AbstractRenderer {
     }
 
     private void renderPotionEffects(Collection<PotionEffect> potionEffects, int xDrawPots, int yDrawPots) {
+        final Minecraft mc = Minecraft.getMinecraft();
         final FontRenderer fr = mc.fontRendererObj;
         for (final PotionEffect potioneffect : potionEffects) {
             if (potioneffect.getDuration() == 0) continue;

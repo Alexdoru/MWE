@@ -40,7 +40,6 @@ import java.util.function.Predicate;
  */
 public abstract class Check implements ICheck {
 
-    protected static final Minecraft mc = Minecraft.getMinecraft();
     private static final HashSet<String> flagMessages = new HashSet<>();
     private long lastSoundTime;
 
@@ -196,6 +195,7 @@ public abstract class Check implements ICheck {
     }
 
     protected static boolean isPlayerLookingAtBlock(EntityPlayer player, PlayerDataSamples data, BlockPos pos) {
+        final Minecraft mc = Minecraft.getMinecraft();
         final Vector3D eyesToBlockCenter;
         if (player == mc.thePlayer) {
             eyesToBlockCenter = new Vector3D(
@@ -546,7 +546,7 @@ public abstract class Check implements ICheck {
 
     protected static List<EntityPlayer> getPlayersInAABBexcluding(Entity entity, AxisAlignedBB aabb, Predicate<? super EntityPlayer> predicate) {
         final List<EntityPlayer> list = new ArrayList<>();
-        for (final EntityPlayer player : mc.theWorld.playerEntities) {
+        for (final EntityPlayer player : Minecraft.getMinecraft().theWorld.playerEntities) {
             if (player != entity && player.getEntityBoundingBox().intersectsWith(aabb) && predicate.test(player)) {
                 list.add(player);
             }
@@ -556,7 +556,7 @@ public abstract class Check implements ICheck {
 
     protected static List<PlayerDataSamples> getPlayersDataInAABBexcluding(Entity entity, AxisAlignedBB aabb, Predicate<? super EntityPlayer> predicate) {
         final List<PlayerDataSamples> list = new ArrayList<>();
-        for (final EntityPlayer player : mc.theWorld.playerEntities) {
+        for (final EntityPlayer player : Minecraft.getMinecraft().theWorld.playerEntities) {
             if (player != entity && player.getEntityBoundingBox().intersectsWith(aabb) && predicate.test(player)) {
                 list.add(((EntityPlayerAccessor) player).getPlayerDataSamples());
             }

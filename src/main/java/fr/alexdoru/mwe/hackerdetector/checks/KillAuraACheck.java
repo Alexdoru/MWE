@@ -11,6 +11,7 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.NameUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
@@ -57,6 +58,7 @@ public class KillAuraACheck extends Check {
 
         if (!data.hasAttackedTarget()) return false;
         if (player.isRiding()) return false;
+        final Minecraft mc = Minecraft.getMinecraft();
         if (data.attackInfo.target == mc.thePlayer) return false;
 
         final double maxReach = 3.15D;

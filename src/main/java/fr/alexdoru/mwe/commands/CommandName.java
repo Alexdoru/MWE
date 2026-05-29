@@ -6,6 +6,7 @@ import fr.alexdoru.mwe.http.requests.LabyModNameHistory;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import fr.alexdoru.mwe.utils.TabCompletionUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
 import net.minecraft.util.BlockPos;
@@ -38,7 +39,7 @@ public class CommandName extends MyAbstractCommand {
             try {
                 final MojangNameToUUID nameApi = new MojangNameToUUID(args[0]);
                 final List<String> history = LabyModNameHistory.getNameHistory(nameApi.getUUID());
-                mc.addScheduledTask(() -> printNameList(history, args));
+                Minecraft.getMinecraft().addScheduledTask(() -> printNameList(history, args));
             } catch (ApiException e1) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + e1.getMessage());
             }

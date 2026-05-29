@@ -9,6 +9,7 @@ import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemAxe;
@@ -105,6 +106,7 @@ public class FastbreakCheck extends Check {
      * at the same block when breaking it, for example when double-mining
      */
     public void onTickEnd() {
+        final Minecraft mc = Minecraft.getMinecraft();
         if (isCheckActive() && mc.theWorld != null && mc.thePlayer != null && mc.theWorld.isRemote) {
             for (final BrokenBlock brokenBlock : this.brokenBlocksList) {
                 if (brokenBlock.playerList == null) continue;
