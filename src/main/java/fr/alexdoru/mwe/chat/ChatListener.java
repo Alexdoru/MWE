@@ -13,6 +13,7 @@ import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.MapUtil;
+import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -41,14 +42,16 @@ public class ChatListener {
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
     private static final String PREP_PHASE = "Prepare your defenses!";
     private static final Pattern COINS_DOUBLED_GUILD_PATTERN = Pattern.compile("^(?:Tokens|Coins) just earned DOUBLED as a Guild Level Reward!$");
-    private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ (tokens|coins)!.*");
-    private static final Pattern COINS_BOOSTER_PATTERN = Pattern.compile("^\\+\\d+ (tokens|coins)!( \\([^()]*(?:Coins \\+ EXP|Booster)[^()]*\\)).*");
+    private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ (tokens|coins)!");
+    private static final Pattern COINS_BOOSTER_PATTERN = Pattern.compile("^\\+\\d+ (tokens|coins)!( \\([^()]*(?:Coins \\+ EXP|Booster)[^()]*\\))");
+    private static final Pattern ASSIST_PATTERN = Pattern.compile("^\\+\\d+ tokens|coins!.+ASSIST on (\\w{1,16})");
     private static final Pattern PLAYER_JOIN_PATTERN = Pattern.compile("^(\\w{1,16}) has joined \\([0-9]{1,3}/[0-9]{1,3}\\)!");
     private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:\\[[^\\[\\]]+] )*(\\w{2,16}):.*");
     private static final Pattern HALO_GIVE_PATTERN = Pattern.compile("^You gave your halo to (\\w+)!");
     private static final Pattern HALO_HOTBAR_PATTERN = Pattern.compile("^HALO (\\w+) .+");
     private static final HashSet<String> MW_REPETITVE_MSG = new HashSet<>();
-    private static boolean addGuildCoinsBonus;
+
+    private boolean addGuildCoinsBonus;
 
     static {
         MW_REPETITVE_MSG.add("You broke your protected chest");
@@ -269,39 +272,53 @@ public class ChatListener {
         return false;
     }
 
-    private static boolean processCoinsMessages(ClientChatReceivedEvent event, String fmsg, String msg) {
-        if (!MWEConfig.shortCoinMessage) return false;
-        if (COINS_DOUBLED_GUILD_PATTERN.matcher(msg).matches()) {
-            event.setCanceled(true);
-            addGuildCoinsBonus = true;
-            return true;
-        }
-        final Matcher matcherBooster = COINS_BOOSTER_PATTERN.matcher(msg);
-        if (matcherBooster.matches()) {
-            if (addGuildCoinsBonus) {
-                final String currency = matcherBooster.group(1);
-                final boolean isCoins = "coins".equals(currency);
-                event.message = new ChatComponentText(fmsg
-                        .replaceFirst(currency + "!", currency + "! (" + (isCoins ? EnumChatFormatting.DARK_GREEN : "") + "Guild " + (isCoins ? EnumChatFormatting.GOLD : "") + "bonus)")
-                        .replace(matcherBooster.group(2), ""));
-                addGuildCoinsBonus = false;
-            } else {
-                event.message = new ChatComponentText(fmsg.replace(matcherBooster.group(2), ""));
-            }
-            return true;
-        }
-        final Matcher matcherCoins = COINS_PATTERN.matcher(msg);
-        if (matcherCoins.matches()) {
-            if (addGuildCoinsBonus) {
-                final String currency = matcherCoins.group(1);
-                final boolean isCoins = "coins".equals(currency);
-                event.message = new ChatComponentText(fmsg.replaceFirst(currency + "!", currency + "! (" + (isCoins ? EnumChatFormatting.DARK_GREEN : "") + "Guild " + (isCoins ? EnumChatFormatting.GOLD : "") + "bonus)"));
-                addGuildCoinsBonus = false;
+    private boolean processCoinsMessages(ClientChatReceivedEvent event, String fmsg, String msg) {
+        if (MWEConfig.shortCoinMessage) {
+            if (COINS_DOUBLED_GUILD_PATTERN.matcher(msg).matches()) {
+                event.setCanceled(true);
+                addGuildCoinsBonus = true;
                 return true;
             }
         }
-        if (addGuildCoinsBonus) {
-            addGuildCoinsBonus = false;
+        final Matcher matcherCoins = COINS_PATTERN.matcher(msg);
+        if (matcherCoins.find()) {
+            boolean changed = false;
+            if (MWEConfig.shortCoinMessage) {
+                final Matcher matcherBooster = COINS_BOOSTER_PATTERN.matcher(msg);
+                if (matcherBooster.find()) {
+                    if (addGuildCoinsBonus) {
+                        final String currency = matcherBooster.group(1);
+                        final boolean isCoins = "coins".equals(currency);
+                        fmsg = fmsg.replaceFirst(currency + "!", currency + "! (" + (isCoins ? EnumChatFormatting.DARK_GREEN : "") + "Guild " + (isCoins ? EnumChatFormatting.GOLD : "") + "bonus)")
+                                .replace(matcherBooster.group(2), "");
+                    } else {
+                        fmsg = fmsg.replace(matcherBooster.group(2), "");
+                    }
+                    changed = true;
+                } else {
+                    if (addGuildCoinsBonus) {
+                        final String currency = matcherCoins.group(1);
+                        final boolean isCoins = "coins".equals(currency);
+                        fmsg = fmsg.replaceFirst(currency + "!", currency + "! (" + (isCoins ? EnumChatFormatting.DARK_GREEN : "") + "Guild " + (isCoins ? EnumChatFormatting.GOLD : "") + "bonus)");
+                        changed = true;
+                    }
+                }
+                if (addGuildCoinsBonus) {
+                    addGuildCoinsBonus = false;
+                }
+            }
+            if (ScoreboardTracker.isInMwGame()) {
+                final Matcher assistMatcher = ASSIST_PATTERN.matcher(msg);
+                if (assistMatcher.find()) {
+                    final String playername = assistMatcher.group(1);
+                    fmsg = fmsg.replace(playername, NameUtil.getFormattedNameWithoutIcons(playername));
+                    changed = true;
+                }
+            }
+            if (changed) {
+                event.message = new ChatComponentText(fmsg);
+                return true;
+            }
         }
         return false;
     }
