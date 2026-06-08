@@ -166,7 +166,7 @@ public class SquadHealthHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return this.guiPosition.isEnabled() && SquadHandler.getSquad().size() > 1;
+        return this.guiPosition.isEnabled();
     }
 
 }

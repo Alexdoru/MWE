@@ -100,7 +100,7 @@ public abstract class Check implements ICheck {
     }
 
     private void addToReportList(EntityPlayer player) {
-        if (!ScoreboardTracker.isReplayMode() && MWEConfig.addToReportList && SquadHandler.getSquad().get(player.getName()) == null) {
+        if (!ScoreboardTracker.isReplayMode() && MWEConfig.addToReportList && !SquadHandler.isSquadmate(player.getName())) {
             final String cheat = this.getCheatName().toLowerCase() + "[H]";
             final UUID uuid = player.getUniqueID();
             final WDR wdr = WdrData.getWdr(uuid, player.getName());
@@ -117,7 +117,7 @@ public abstract class Check implements ICheck {
     }
 
     private void sendReport(EntityPlayer player) {
-        if (this.canSendReport() && ScoreboardTracker.isInMwGame() && MWEConfig.autoreportFlaggedPlayers && SquadHandler.getSquad().get(player.getName()) == null) {
+        if (this.canSendReport() && ScoreboardTracker.isInMwGame() && MWEConfig.autoreportFlaggedPlayers && !SquadHandler.isSquadmate(player.getName())) {
             ReportQueue.INSTANCE.addReportToQueue(player.getName());
         }
     }

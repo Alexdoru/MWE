@@ -225,7 +225,7 @@ public class NameUtil {
         final WDR wdr = WdrData.getWdr(id, username);
         String extraPrefix = "";
         IChatComponent iExtraPrefix = null;
-        final String squadname = SquadHandler.getSquad().get(username);
+        final String squadname = SquadHandler.getSquadnameUnsafe(username);
 
         if (squadname != null) {
             if (MWEConfig.squadIconOnNames) {

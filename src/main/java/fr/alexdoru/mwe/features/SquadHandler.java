@@ -9,10 +9,9 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class SquadHandler {
 
@@ -53,16 +52,14 @@ public class SquadHandler {
     }
 
     public static void clearSquad() {
-        final List<String> playerlist = new ArrayList<>();
-        squadmap.forEach((key, value) -> playerlist.add(key));
-        squadmap.clear();
-        for (final String playername : playerlist) {
-            NameUtil.updateMWPlayerDataAndEntityData(playername, true);
-        }
+        new ArrayList<>(squadmap.keySet()).forEach(SquadHandler::removePlayer);
     }
 
-    public static HashMap<String, String> getSquad() {
-        return squadmap;
+    /**
+     * Returns an unmodifiable view of the squad map
+     */
+    public static Map<String, String> getSquad() {
+        return Collections.unmodifiableMap(squadmap);
     }
 
     /**
@@ -76,6 +73,15 @@ public class SquadHandler {
             return playername;
         }
         return squadname;
+    }
+
+    @Nullable
+    public static String getSquadnameUnsafe(@NotNull String playername) {
+        return squadmap.get(playername);
+    }
+
+    public static boolean isSquadmate(String playername) {
+        return squadmap.containsKey(playername);
     }
 
     /**

@@ -147,7 +147,7 @@ public class ChatListener {
             String squadname = null;
             if (matcher.matches()) {
                 messageSender = matcher.group(1);
-                squadname = SquadHandler.getSquad().get(messageSender);
+                squadname = SquadHandler.getSquadnameUnsafe(messageSender);
             }
 
             if (ReportSuggestionHandler.processMessage(event, messageSender, squadname, fmsg, msg)) {
@@ -212,7 +212,7 @@ public class ChatListener {
             final Matcher haloMatcher = HALO_HOTBAR_PATTERN.matcher(msg);
             if (haloMatcher.find()) {
                 final String name = haloMatcher.group(1);
-                final String squadname = SquadHandler.getSquad().get(name);
+                final String squadname = SquadHandler.getSquadnameUnsafe(name);
                 if (squadname == null) return;
                 if (squadname.equals(name)) {
                     if (MWEConfig.pinkSquadmates) {
