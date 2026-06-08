@@ -1,11 +1,13 @@
 package fr.alexdoru.mwe.features;
 
+import fr.alexdoru.mwe.api.events.SquadEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import fr.alexdoru.mwe.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
@@ -39,14 +41,21 @@ public class SquadHandler {
     }
 
     public static void addPlayer(String playername, String friendlyName) {
+        final boolean alreadyInSquad = squadmap.containsKey(playername);
         squadmap.put(playername, friendlyName);
         NameUtil.updateMWPlayerDataAndEntityData(playername, true);
+        if (alreadyInSquad) {
+            MinecraftForge.EVENT_BUS.post(new SquadEvent(SquadEvent.Type.NAME_CHANGED, playername));
+        } else {
+            MinecraftForge.EVENT_BUS.post(new SquadEvent(SquadEvent.Type.ADDED, playername));
+        }
     }
 
     public static boolean removePlayer(String playername) {
         final boolean success = squadmap.remove(playername) != null;
         if (success) {
             NameUtil.updateMWPlayerDataAndEntityData(playername, true);
+            MinecraftForge.EVENT_BUS.post(new SquadEvent(SquadEvent.Type.REMOVED, playername));
         }
         return success;
     }
