@@ -27,8 +27,8 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldSettings;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -210,7 +210,7 @@ public class NameUtil {
      * For each new player spawned in the world it will create a new networkplayerinfo instance
      * a rerun all the code in the method to generate the MWPlayerData instance
      */
-    @Nonnull
+    @NotNull
     public static MWPlayerData.PlayerData getMWPlayerData(GameProfile gameProfile, boolean forceRefresh) {
 
         final UUID id = gameProfile.getId();

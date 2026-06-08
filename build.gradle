@@ -38,7 +38,9 @@ runClient {
     ]
 }
 
-dependencies {}
+dependencies {
+    compileOnly 'org.jetbrains:annotations:26.1.0'
+}
 
 jar {
     manifest.attributes(

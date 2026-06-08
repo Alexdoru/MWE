@@ -5,8 +5,8 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -122,7 +122,7 @@ public class WDR implements Comparable<WDR> {
     }
 
     @Override
-    public int compareTo(@Nonnull WDR wdr) {
+    public int compareTo(@NotNull WDR wdr) {
         return Long.compare(this.timestamp, wdr.timestamp);
     }
 

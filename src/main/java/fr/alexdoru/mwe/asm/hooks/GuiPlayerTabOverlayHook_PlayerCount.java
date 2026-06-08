@@ -4,16 +4,16 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.EnumChatFormatting;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class GuiPlayerTabOverlayHook_PlayerCount {
 
-    @Nonnull
-    public static List<String> addPlayerCountInHeader(@Nonnull List<String> listIn) {
+    @NotNull
+    public static List<String> addPlayerCountInHeader(@NotNull List<String> listIn) {
         if (!MWEConfig.showPlayercountTablist) {
             return listIn;
         }

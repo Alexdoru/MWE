@@ -5,8 +5,8 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 
 public class StringUtil {
@@ -179,7 +179,7 @@ public class StringUtil {
      * after first split : "§6[MVP§8++§6] " + "Kyotone" + "§f§r§f: §r§eAlexdoru§r§f is bhopping§r"
      * after second split :"§6[MVP§8++§6] " + "Kyotone" + "§f§r§f" + ": " + "§r§eAlexdoru§r§f is bhopping§r"
      */
-    public static String insertAfterName(String message, String messageSender, @Nonnull String injectedText, String injectAtMsgStart, boolean cleanEnd) {
+    public static String insertAfterName(String message, String messageSender, @NotNull String injectedText, String injectAtMsgStart, boolean cleanEnd) {
         final String[] split = message.split(messageSender, 2);
         if (split.length != 2) {
             return message;
