@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.data;
 
-import fr.alexdoru.mwe.events.MegaWallsGameEvent;
+import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import fr.alexdoru.mwe.utils.NameUtil;
 import net.minecraft.client.Minecraft;
@@ -25,13 +25,13 @@ public class ScangameData {
 
     @SubscribeEvent
     public void onMwGame(MegaWallsGameEvent event) {
-        if (event.getType() == MegaWallsGameEvent.EventType.GAME_START) {
+        if (event.type == MegaWallsGameEvent.Type.GAME_START) {
             final String currentGameId = ScoreboardUtils.getGameIdFromScoreboard();
             if (currentGameId != null && !currentGameId.equals(scanGameId)) {
                 clearScanGameData();
             }
         }
-        if (event.getType() == MegaWallsGameEvent.EventType.GAME_END) {
+        if (event.type == MegaWallsGameEvent.Type.GAME_END) {
             clearScanGameData();
         }
     }

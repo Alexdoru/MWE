@@ -1,9 +1,9 @@
 package fr.alexdoru.mwe.nocheaters;
 
+import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.asm.interfaces.GuiChatAccessor;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.features.PartyDetection;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -75,7 +75,7 @@ public class ReportQueue {
 
     @SubscribeEvent
     public void onMegaWallsGameEvent(MegaWallsGameEvent event) {
-        if (event.getType() == MegaWallsGameEvent.EventType.GAME_START || event.getType() == MegaWallsGameEvent.EventType.GAME_END) {
+        if (event.type == MegaWallsGameEvent.Type.GAME_START || event.type == MegaWallsGameEvent.Type.GAME_END) {
             playersReportedThisGame.clear();
             boostingAdvicePrinted.clear();
         }

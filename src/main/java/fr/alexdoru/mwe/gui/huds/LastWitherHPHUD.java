@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.gui.huds;
 
+import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -38,7 +38,7 @@ public class LastWitherHPHUD extends AbstractRenderer {
 
     @SubscribeEvent
     public void onMWEvent(MegaWallsGameEvent event) {
-        if (event.getType() == MegaWallsGameEvent.EventType.THIRD_WITHER_DEATH) {
+        if (event.type == MegaWallsGameEvent.Type.THIRD_WITHER_DEATH) {
             thirdWitherDeathTime = System.currentTimeMillis();
             color = "§" + ScoreboardTracker.getParser().getAliveWithers().get(0);
         }

@@ -1,9 +1,9 @@
 package fr.alexdoru.mwe.features;
 
+import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.asm.hooks.GuiScreenHook_CustomChatClickEvent;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.enums.MWClass;
-import fr.alexdoru.mwe.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
@@ -38,9 +38,9 @@ public class MegaWallsEndGameStats {
 
     @SubscribeEvent
     public void onMwGame(MegaWallsGameEvent event) {
-        if (event.getType() == MegaWallsGameEvent.EventType.GAME_START) {
+        if (event.type == MegaWallsGameEvent.Type.GAME_START) {
             onGameStart();
-        } else if (event.getType() == MegaWallsGameEvent.EventType.GAME_END) {
+        } else if (event.type == MegaWallsGameEvent.Type.GAME_END) {
             new DelayedTask(MegaWallsEndGameStats::onGameEnd, 300);
         }
     }

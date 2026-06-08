@@ -1,9 +1,9 @@
 package fr.alexdoru.mwe.chat;
 
+import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.ScangameData;
-import fr.alexdoru.mwe.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.features.*;
 import fr.alexdoru.mwe.gui.HUDRenderer;
 import fr.alexdoru.mwe.hackerdetector.checks.Check;
@@ -134,7 +134,7 @@ public class ChatListener {
             }
 
             if (msg.equals(PREP_PHASE)) {
-                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.EventType.GAME_START));
+                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.Type.GAME_START));
                 return;
             }
 

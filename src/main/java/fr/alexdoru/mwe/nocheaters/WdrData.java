@@ -3,8 +3,8 @@ package fr.alexdoru.mwe.nocheaters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.UUIDUtil;
 import net.minecraft.client.Minecraft;
@@ -29,7 +29,7 @@ public class WdrData {
 
     @SubscribeEvent
     public void onMWGameEvent(MegaWallsGameEvent event) {
-        if (event.getType() == MegaWallsGameEvent.EventType.GAME_START || event.getType() == MegaWallsGameEvent.EventType.GAME_END) {
+        if (event.type == MegaWallsGameEvent.Type.GAME_START || event.type == MegaWallsGameEvent.Type.GAME_END) {
             if (dirty) {
                 WdrData.saveReportedPlayers();
             }

@@ -1,12 +1,12 @@
 package fr.alexdoru.mwe.features;
 
+import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.enums.MWClass;
-import fr.alexdoru.mwe.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.gui.HUDRenderer;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
@@ -458,7 +458,7 @@ public class FinalKillCounter {
     public void onMwGame(MegaWallsGameEvent event) {
 
         // to fix the bug where the FKCounter doesn't work properly if you play two games in a row on a server with the same serverID
-        if (event.getType() == MegaWallsGameEvent.EventType.GAME_START) {
+        if (event.type == MegaWallsGameEvent.Type.GAME_START) {
             final String currentGameId = ScoreboardTracker.getParser().getGameId();
             if (currentGameId != null) {
                 resetKillCounterTo(currentGameId);
@@ -467,7 +467,7 @@ public class FinalKillCounter {
             return;
         }
 
-        if (event.getType() == MegaWallsGameEvent.EventType.CONNECT) {
+        if (event.type == MegaWallsGameEvent.Type.CONNECT) {
             final String currentGameId = ScoreboardTracker.getParser().getGameId();
             if (gameId == null || !gameId.equals(currentGameId)) {
                 resetKillCounterTo(currentGameId);

@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.scoreboard;
 
-import fr.alexdoru.mwe.events.MegaWallsGameEvent;
+import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.gui.HUDRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
@@ -37,7 +37,7 @@ public class ScoreboardTracker {
 
     @SubscribeEvent
     public void onGameStart(MegaWallsGameEvent event) {
-        if (event.getType() == MegaWallsGameEvent.EventType.GAME_START) {
+        if (event.type == MegaWallsGameEvent.Type.GAME_START) {
             ScoreboardParser.onGameStart();
         }
     }
@@ -74,25 +74,25 @@ public class ScoreboardTracker {
         if (gameId == null) { // not in MW game
 
             if (this.prevGameId != null) {
-                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.EventType.DISCONNECT));
+                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.Type.DISCONNECT));
             }
 
         } else { // is in MW game
 
             if (amountWitherAlive == 1 && prevAmountWitherAlive > 1) {
-                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.EventType.THIRD_WITHER_DEATH));
+                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.Type.THIRD_WITHER_DEATH));
             } else if (amountWitherAlive == 0 && prevAmountWitherAlive > 0) {
-                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.EventType.DEATHMATCH_START));
+                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.Type.DEATHMATCH_START));
             }
 
             if (!gameId.equals(this.prevGameId)) {
-                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.EventType.CONNECT));
+                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.Type.CONNECT));
             }
 
         }
 
         if (hasgameended && !this.prevHasGameEnded) {
-            MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.EventType.GAME_END));
+            MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.Type.GAME_END));
         }
 
         this.prevGameId = gameId;
