@@ -1,13 +1,13 @@
 package fr.alexdoru.mwe.config;
 
 import fr.alexdoru.mwe.MWE;
+import fr.alexdoru.mwe.api.GuiPosition;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.LocrawListener;
 import fr.alexdoru.mwe.config.lib.*;
 import fr.alexdoru.mwe.features.LeatherArmorManager;
-import fr.alexdoru.mwe.gui.guiapi.GuiManager;
-import fr.alexdoru.mwe.gui.guiapi.GuiPosition;
+import fr.alexdoru.mwe.gui.HUDRenderer;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.nocheaters.WarningMessages;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
@@ -804,7 +804,7 @@ public class MWEConfig extends AbstractConfig {
             "Players mode",
             "Player amount"})
     public static void onFKSHUDSetting() {
-        GuiManager.fkCounterHUD.updateDisplayText();
+        HUDRenderer.fkCounterHUD.updateDisplayText();
     }
 
     @ConfigProperty(

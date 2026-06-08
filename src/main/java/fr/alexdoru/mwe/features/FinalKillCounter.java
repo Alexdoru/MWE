@@ -7,7 +7,7 @@ import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.enums.MWClass;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
-import fr.alexdoru.mwe.gui.guiapi.GuiManager;
+import fr.alexdoru.mwe.gui.HUDRenderer;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import fr.alexdoru.mwe.utils.DelayedTask;
@@ -153,7 +153,7 @@ public class FinalKillCounter {
         for (int i = 0; i < KILL_MESSAGES.length; i++) {
             KILL_PATTERNS[i] = Pattern.compile(KILL_MESSAGES[i]);
         }
-        GuiManager.fkCounterHUD.updateDisplayText();
+        HUDRenderer.fkCounterHUD.updateDisplayText();
     }
 
     /**
@@ -173,7 +173,7 @@ public class FinalKillCounter {
                 ((NetworkPlayerInfoAccessor) netInfo).setFinalKills(0);
             }
         });
-        GuiManager.fkCounterHUD.updateDisplayText();
+        HUDRenderer.fkCounterHUD.updateDisplayText();
     }
 
     public static boolean processMessage(ClientChatReceivedEvent event, String formattedText, String unformattedText) {
@@ -199,7 +199,7 @@ public class FinalKillCounter {
                             playersPresentInGame.add(killedPlayer);
                             playersPresentInGame.add(killer);
                         }
-                        GuiManager.fkCounterHUD.updateDisplayText();
+                        HUDRenderer.fkCounterHUD.updateDisplayText();
                     }
                     spawnParticles(killer);
                     final String s = formattedText.replace(killer, SquadHandler.getSquadname(killer))
@@ -221,7 +221,7 @@ public class FinalKillCounter {
                         if (killsOfKilledPlayer != -1) {
                             playersPresentInGame.add(killedPlayer);
                         }
-                        GuiManager.fkCounterHUD.updateDisplayText();
+                        HUDRenderer.fkCounterHUD.updateDisplayText();
                     }
                     final String s = formattedText.replace(killedPlayer, SquadHandler.getSquadname(killedPlayer))
                             + getKillDiffString(killsOfKilledPlayer, killedTeamColor);
@@ -305,7 +305,7 @@ public class FinalKillCounter {
                 }
             }
         }
-        GuiManager.fkCounterHUD.updateDisplayText();
+        HUDRenderer.fkCounterHUD.updateDisplayText();
     }
 
     public static void removeKilledPlayer(String player, int team) {

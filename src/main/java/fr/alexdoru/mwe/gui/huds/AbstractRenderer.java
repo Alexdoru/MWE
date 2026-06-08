@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.gui.huds;
 
-import fr.alexdoru.mwe.gui.guiapi.GuiPosition;
-import fr.alexdoru.mwe.gui.guiapi.IRenderer;
+import fr.alexdoru.mwe.api.GuiPosition;
+import fr.alexdoru.mwe.api.IRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
 

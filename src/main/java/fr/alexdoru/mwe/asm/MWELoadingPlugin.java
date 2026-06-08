@@ -14,7 +14,7 @@ import java.util.Map;
 })
 public class MWELoadingPlugin implements IFMLLoadingPlugin {
 
-    public static final Logger logger = LogManager.getLogger("ASM MWE");
+    public static final Logger logger = LogManager.getLogger("MWE ASM");
     private static final boolean MORE_CLASS_DUMP = Boolean.getBoolean("mwe.moreclassdump");
     private static final boolean CLASS_DUMP = MORE_CLASS_DUMP || Boolean.getBoolean("mwe.classdump");
     private static Boolean isObf;

@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.features.SquadHandler;
-import fr.alexdoru.mwe.gui.guiapi.GuiManager;
+import fr.alexdoru.mwe.gui.HUDRenderer;
 import fr.alexdoru.mwe.utils.MapUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
@@ -119,7 +119,7 @@ public class CommandFKCounter extends MyAbstractCommand {
                 final Integer kills = teamKillsArray[team].get(playerName);
                 if (kills != null) {
                     removeKilledPlayer(playerName, team);
-                    GuiManager.fkCounterHUD.updateDisplayText();
+                    HUDRenderer.fkCounterHUD.updateDisplayText();
                     ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Removed " + getColorPrefixFromTeam(team) + playerName
                             + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + kills + EnumChatFormatting.GREEN + " final" + (kills > 1 ? "s" : "") + " from the " + getColorPrefixFromTeam(team) + getTeamNameFromTeam(team) + EnumChatFormatting.GREEN + " team.");
                     return;

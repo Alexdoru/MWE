@@ -6,7 +6,7 @@ import net.minecraftforge.fml.client.config.GuiUtils;
 
 import java.util.List;
 
-public class GuiUtil {
+public final class GuiUtil {
 
     public static void drawBoxWithOutline(int left, int top, int right, int bot, int boxColor, int outlineColor) {
         drawHorizontalLine(left, right - 1, top, outlineColor);

@@ -5,7 +5,7 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.ScangameData;
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.features.*;
-import fr.alexdoru.mwe.gui.guiapi.GuiManager;
+import fr.alexdoru.mwe.gui.HUDRenderer;
 import fr.alexdoru.mwe.hackerdetector.checks.Check;
 import fr.alexdoru.mwe.nocheaters.ReportSuggestionHandler;
 import fr.alexdoru.mwe.nocheaters.WDR;
@@ -78,7 +78,7 @@ public class ChatListener {
                 }
 
                 if (msg.equals(OWN_WITHER_DEATH_MESSAGE)) {
-                    GuiManager.killCooldownHUD.hideHUD();
+                    HUDRenderer.killCooldownHUD.hideHUD();
                     return;
                 }
 
@@ -105,16 +105,16 @@ public class ChatListener {
                     return;
                 }
 
-                if (GuiManager.phoenixBondHUD.processMessage(event.message, msg)) {
+                if (HUDRenderer.phoenixBondHUD.processMessage(event.message, msg)) {
                     return;
                 }
 
-                if (GuiManager.warcryHUD.processMessage(msg)) {
+                if (HUDRenderer.warcryHUD.processMessage(msg)) {
                     return;
                 }
 
                 if (MWEConfig.strengthHUDPosition.isEnabled() && msg.equals(HUNTER_STRENGTH_MESSAGE)) {
-                    GuiManager.strengthHUD.setStrengthRenderStart(5000L);
+                    HUDRenderer.strengthHUD.setStrengthRenderStart(5000L);
                     return;
                 }
 
@@ -138,7 +138,7 @@ public class ChatListener {
                 return;
             }
 
-            if (GuiManager.arrowHitHUD.processMessage(event, fmsg, msg)) {
+            if (HUDRenderer.arrowHitHUD.processMessage(event, fmsg, msg)) {
                 return;
             }
 
@@ -201,11 +201,11 @@ public class ChatListener {
             /*Status messages*/
         } else if (event.type == 2 && ScoreboardTracker.isInMwGame()) {
 
-            if (GuiManager.strengthHUD.processMessage(fmsg)) {
+            if (HUDRenderer.strengthHUD.processMessage(fmsg)) {
                 return;
             }
 
-            if (GuiManager.creeperPrimedTntHUD.processMessage(fmsg)) {
+            if (HUDRenderer.creeperPrimedTntHUD.processMessage(fmsg)) {
                 return;
             }
 

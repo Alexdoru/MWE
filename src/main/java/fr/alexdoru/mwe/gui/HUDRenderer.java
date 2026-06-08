@@ -1,5 +1,7 @@
-package fr.alexdoru.mwe.gui.guiapi;
+package fr.alexdoru.mwe.gui;
 
+import fr.alexdoru.mwe.api.GuiPosition;
+import fr.alexdoru.mwe.api.IRenderer;
 import fr.alexdoru.mwe.gui.huds.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -8,45 +10,43 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
-public final class GuiManager {
+public final class HUDRenderer {
 
-    private static final ArrayList<IRenderer> registeredRenderers = new ArrayList<>();
-    public static final ArmorHUD armorHUD = new ArmorHUD();
+    private static final ArrayList<IRenderer> RENDERERS = new ArrayList<>();
     public static final ArrowHitHUD arrowHitHUD = new ArrowHitHUD();
     public static final BaseLocationHUD baseLocationHUD = new BaseLocationHUD();
     public static final CreeperPrimedTntHUD creeperPrimedTntHUD = new CreeperPrimedTntHUD();
-    public static final EnergyDisplayHUD energyDisplayHUD = new EnergyDisplayHUD();
     public static final FKCounterHUD fkCounterHUD = new FKCounterHUD();
     public static final StrengthHUD strengthHUD = new StrengthHUD();
     public static final KillCooldownHUD killCooldownHUD = new KillCooldownHUD();
     public static final LastWitherHPHUD lastWitherHPHUD = new LastWitherHPHUD();
-    public static final MiniPotionHUD miniPotionHUD = new MiniPotionHUD();
-    public static final PendingReportHUD pendingReportHUD = new PendingReportHUD();
     public static final PhoenixBondHUD phoenixBondHUD = new PhoenixBondHUD();
-    public static final PotionHUD potionHUD = new PotionHUD();
-    public static final SpeedHUD speedHUD = new SpeedHUD();
-    public static final SquadHealthHUD squadHealthHUD = new SquadHealthHUD();
     public static final WarcryHUD warcryHUD = new WarcryHUD();
 
     static {
-        registeredRenderers.add(armorHUD);
-        registeredRenderers.add(arrowHitHUD);
-        registeredRenderers.add(baseLocationHUD);
-        registeredRenderers.add(creeperPrimedTntHUD);
-        registeredRenderers.add(energyDisplayHUD);
-        registeredRenderers.add(fkCounterHUD);
-        registeredRenderers.add(strengthHUD);
-        registeredRenderers.add(killCooldownHUD);
-        registeredRenderers.add(lastWitherHPHUD);
-        registeredRenderers.add(miniPotionHUD);
-        registeredRenderers.add(pendingReportHUD);
-        registeredRenderers.add(phoenixBondHUD);
-        registeredRenderers.add(potionHUD);
-        registeredRenderers.add(speedHUD);
-        registeredRenderers.add(squadHealthHUD);
-        registeredRenderers.add(warcryHUD);
-        registeredRenderers.trimToSize();
+        RENDERERS.add(new ArmorHUD());
+        RENDERERS.add(arrowHitHUD);
+        RENDERERS.add(baseLocationHUD);
+        RENDERERS.add(creeperPrimedTntHUD);
+        RENDERERS.add(new EnergyDisplayHUD());
+        RENDERERS.add(fkCounterHUD);
+        RENDERERS.add(strengthHUD);
+        RENDERERS.add(killCooldownHUD);
+        RENDERERS.add(lastWitherHPHUD);
+        RENDERERS.add(new MiniPotionHUD());
+        RENDERERS.add(new PendingReportHUD());
+        RENDERERS.add(phoenixBondHUD);
+        RENDERERS.add(new PotionHUD());
+        RENDERERS.add(new SpeedHUD());
+        RENDERERS.add(new SquadHealthHUD());
+        RENDERERS.add(warcryHUD);
+    }
+
+    public static void registerRenderer(IRenderer renderer) {
+        Objects.requireNonNull(renderer);
+        RENDERERS.add(renderer);
     }
 
     /**
@@ -58,7 +58,7 @@ public final class GuiManager {
         if (event.type == ElementType.TEXT && !(mc.currentScreen instanceof PositionEditGuiScreen)) {
             final long time = System.currentTimeMillis();
             mc.mcProfiler.startSection("MWE HUD");
-            for (final IRenderer renderer : registeredRenderers) {
+            for (final IRenderer renderer : RENDERERS) {
                 if (renderer.isEnabled(time)) {
                     renderer.render(event.resolution);
                 }
@@ -76,7 +76,7 @@ public final class GuiManager {
 
     public static IRenderer getRendererFromPosition(GuiPosition guiPosition) {
         if (guiPosition == null) return null;
-        for (final IRenderer renderer : registeredRenderers) {
+        for (final IRenderer renderer : RENDERERS) {
             if (guiPosition == renderer.getGuiPosition()) {
                 return renderer;
             }
@@ -86,7 +86,7 @@ public final class GuiManager {
 
     public static void renderAllDummy() {
         final ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
-        for (final IRenderer renderer : registeredRenderers) {
+        for (final IRenderer renderer : RENDERERS) {
             if (renderer.getGuiPosition().isEnabled()) {
                 renderer.getGuiPosition().updateAbsolutePosition(resolution);
                 renderer.renderDummy();

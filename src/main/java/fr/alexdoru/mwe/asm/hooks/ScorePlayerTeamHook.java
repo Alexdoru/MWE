@@ -2,17 +2,17 @@ package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.features.FinalKillCounter;
-import fr.alexdoru.mwe.gui.guiapi.GuiManager;
+import fr.alexdoru.mwe.gui.HUDRenderer;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 
 public class ScorePlayerTeamHook {
 
     public static String spoofSidebarLine(String playername) {
         if (MWEConfig.witherHUDinSidebar && MWEConfig.lastWitherHUDPosition.isEnabled() && ScoreboardTracker.isInMwGame() && "\ud83d\udca3".equals(playername) && ScoreboardTracker.getParser().isOnlyOneWitherAlive()) {
-            return GuiManager.lastWitherHPHUD.displayText;
+            return HUDRenderer.lastWitherHPHUD.displayText;
         }
         if (MWEConfig.fkcounterHUDinSidebar && MWEConfig.fkcounterHUDPosition.isEnabled() && ScoreboardTracker.isInMwGame() && "\ud83d\udc7d".equals(playername) && FinalKillCounter.getGameId() != null) {
-            return GuiManager.fkCounterHUD.displayText;
+            return HUDRenderer.fkCounterHUD.displayText;
         }
         return null;
     }

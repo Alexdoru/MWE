@@ -1,11 +1,11 @@
 package fr.alexdoru.mwe.config.lib.gui.elements;
 
+import fr.alexdoru.mwe.api.GuiPosition;
+import fr.alexdoru.mwe.api.IRenderer;
 import fr.alexdoru.mwe.config.lib.ConfigProperty;
 import fr.alexdoru.mwe.config.lib.gui.ConfigGuiScreen;
-import fr.alexdoru.mwe.gui.guiapi.GuiManager;
-import fr.alexdoru.mwe.gui.guiapi.GuiPosition;
-import fr.alexdoru.mwe.gui.guiapi.IRenderer;
-import fr.alexdoru.mwe.gui.guiapi.PositionEditGuiScreen;
+import fr.alexdoru.mwe.gui.HUDRenderer;
+import fr.alexdoru.mwe.gui.PositionEditGuiScreen;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
@@ -80,7 +80,7 @@ public class HUDGuiButton extends ConfigGuiButton {
                 return true;
             } else if (buttonMoveHud.mousePressed(mc, mouseX, mouseY)) {
                 buttonEnabled.playPressSound(mc.getSoundHandler());
-                final IRenderer renderer = GuiManager.getRendererFromPosition(guiPosition);
+                final IRenderer renderer = HUDRenderer.getRendererFromPosition(guiPosition);
                 if (renderer != null) {
                     mc.displayGuiScreen(new PositionEditGuiScreen(renderer, parentScreen));
                 } else {

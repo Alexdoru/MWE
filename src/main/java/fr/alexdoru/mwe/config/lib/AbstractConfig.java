@@ -1,8 +1,8 @@
 package fr.alexdoru.mwe.config.lib;
 
+import fr.alexdoru.mwe.api.GuiPosition;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.lib.gui.ConfigGuiScreen;
-import fr.alexdoru.mwe.gui.guiapi.GuiPosition;
 import fr.alexdoru.mwe.utils.MapUtil;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;

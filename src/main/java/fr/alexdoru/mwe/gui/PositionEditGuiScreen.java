@@ -1,5 +1,7 @@
-package fr.alexdoru.mwe.gui.guiapi;
+package fr.alexdoru.mwe.gui;
 
+import fr.alexdoru.mwe.api.GuiPosition;
+import fr.alexdoru.mwe.api.IRenderer;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -34,7 +36,7 @@ public class PositionEditGuiScreen extends GuiScreen {
         this.renderCrosshair();
         final boolean prevEnabled = this.guiPosition.isEnabled();
         this.guiPosition.setEnabled(false);
-        GuiManager.renderAllDummy();
+        HUDRenderer.renderAllDummy();
         this.guiPosition.setEnabled(prevEnabled);
         super.drawDefaultBackground();
         renderer.renderDummy();

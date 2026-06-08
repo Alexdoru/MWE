@@ -9,7 +9,7 @@ import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.LowHPIndicator;
 import fr.alexdoru.mwe.features.MegaWallsEndGameStats;
 import fr.alexdoru.mwe.features.SquadHandler;
-import fr.alexdoru.mwe.gui.guiapi.GuiManager;
+import fr.alexdoru.mwe.gui.HUDRenderer;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.nocheaters.PlayerJoinListener;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
@@ -51,8 +51,8 @@ public class MWE {
     public void init(FMLInitializationEvent event) {
 
         MinecraftForge.EVENT_BUS.register(new WdrData());
-        MinecraftForge.EVENT_BUS.register(new GuiManager());
         MinecraftForge.EVENT_BUS.register(new ModUpdater());
+        MinecraftForge.EVENT_BUS.register(new HUDRenderer());
         MinecraftForge.EVENT_BUS.register(new ReportQueue());
         MinecraftForge.EVENT_BUS.register(new ChatListener());
         MinecraftForge.EVENT_BUS.register(new SquadHandler());

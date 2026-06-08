@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.gui.guiapi;
+package fr.alexdoru.mwe.api;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;

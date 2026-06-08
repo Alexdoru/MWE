@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.scoreboard;
 
 import fr.alexdoru.mwe.events.MegaWallsGameEvent;
-import fr.alexdoru.mwe.gui.guiapi.GuiManager;
+import fr.alexdoru.mwe.gui.HUDRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -60,7 +60,7 @@ public class ScoreboardTracker {
         isMWReplay = parser.isMWReplay();
         isInSkyblock = parser.isInSkyblock();
         if (isMWReplay) {
-            GuiManager.baseLocationHUD.setCurrentMap(parser.getReplayMap());
+            HUDRenderer.baseLocationHUD.setCurrentMap(parser.getReplayMap());
         }
         this.fireScoreboardRelatedEvents();
         Minecraft.getMinecraft().mcProfiler.endSection();

@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.scoreboard;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.features.AFKSoundWarning;
-import fr.alexdoru.mwe.gui.guiapi.GuiManager;
+import fr.alexdoru.mwe.gui.HUDRenderer;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
@@ -163,7 +163,7 @@ public class ScoreboardParser {
             }
 
             if (!triggeredKillCooldownReset && witherHP < 100 && !colorCode.isEmpty() && colorCode.equals(teamColor)) {
-                GuiManager.killCooldownHUD.hideHUD();
+                HUDRenderer.killCooldownHUD.hideHUD();
                 triggeredKillCooldownReset = true;
             }
 
@@ -178,7 +178,7 @@ public class ScoreboardParser {
         }
 
         if (isOnlyOneWitherAlive()) {
-            GuiManager.lastWitherHPHUD.updateWitherHP(witherHP);
+            HUDRenderer.lastWitherHPHUD.updateWitherHP(witherHP);
         }
     }
 
