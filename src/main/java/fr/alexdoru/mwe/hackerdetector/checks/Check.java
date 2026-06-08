@@ -43,14 +43,12 @@ public abstract class Check implements ICheck {
     private static final HashSet<String> flagMessages = new HashSet<>();
     private long lastSoundTime;
 
-    public final void checkViolationLevel(EntityPlayer player, boolean failedCheck, ViolationLevelTracker... trackers) {
-        for (final ViolationLevelTracker tracker : trackers) {
-            if (tracker.isFlagging(failedCheck)) {
-                this.playFlagSound();
-                this.printFlagMessage(player);
-                this.addToReportList(player);
-                this.sendReport(player);
-            }
+    public final void checkViolationLevel(EntityPlayer player, boolean failedCheck, ViolationLevelTracker tracker) {
+        if (tracker.isFlagging(failedCheck)) {
+            this.playFlagSound();
+            this.printFlagMessage(player);
+            this.addToReportList(player);
+            this.sendReport(player);
         }
     }
 
