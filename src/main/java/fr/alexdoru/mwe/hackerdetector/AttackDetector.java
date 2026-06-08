@@ -146,6 +146,7 @@ public class AttackDetector {
 
     private static void checkPlayerAttack(int attackerEntityId, int targetEntityId, AttackType attackType, Vec3 soundPos) {
         HackerDetector.addScheduledTask(() -> {
+            final Minecraft mc = Minecraft.getMinecraft();
             final Entity attacker = mc.theWorld.getEntityByID(attackerEntityId);
             final Entity target = mc.theWorld.getEntityByID(targetEntityId);
             if (!(attacker instanceof EntityPlayer) || !(target instanceof EntityPlayer) || attacker == target) {
