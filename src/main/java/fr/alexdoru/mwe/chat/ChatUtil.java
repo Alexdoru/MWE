@@ -65,24 +65,35 @@ public class ChatUtil {
         }
     }
 
-    public static void addSkinToComponent(IChatComponent msg, String playername) {
+    public static boolean addSkinToComponent(IChatComponent msg, ResourceLocation locationSkin) {
         if (msg instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) msg).getSkinChatHead() == null) {
-            tryAddSkinToComponent(msg, playername);
+            ((ChatComponentTextAccessor) msg).setSkinChatHead(new SkinChatHead(locationSkin));
+            return true;
         }
+        return false;
+    }
+
+    public static boolean addSkinToComponent(IChatComponent msg, String playername) {
+        if (msg instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) msg).getSkinChatHead() == null) {
+            return tryAddSkinToComponent(msg, playername);
+        }
+        return false;
     }
 
     public static boolean tryAddSkinToComponent(IChatComponent msg, String playername) {
-        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
-        if (netInfo instanceof NetworkPlayerInfoAccessor_ChatHeads) {
-            final SkinChatHead skin = new SkinChatHead(netInfo.getLocationSkin());
-            ((ChatComponentTextAccessor) msg).setSkinChatHead(skin);
-            ((NetworkPlayerInfoAccessor_ChatHeads) netInfo).setSkinChatHead(skin);
-            return true;
-        } else {
-            final ResourceLocation resourceLocation = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerSkin(playername);
-            if (resourceLocation != null) {
-                ((ChatComponentTextAccessor) msg).setSkinChatHead(new SkinChatHead(resourceLocation));
+        if (msg instanceof ChatComponentTextAccessor) {
+            final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+            if (netInfo instanceof NetworkPlayerInfoAccessor_ChatHeads) {
+                final SkinChatHead skin = new SkinChatHead(netInfo.getLocationSkin());
+                ((ChatComponentTextAccessor) msg).setSkinChatHead(skin);
+                ((NetworkPlayerInfoAccessor_ChatHeads) netInfo).setSkinChatHead(skin);
                 return true;
+            } else {
+                final ResourceLocation resourceLocation = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerSkin(playername);
+                if (resourceLocation != null) {
+                    ((ChatComponentTextAccessor) msg).setSkinChatHead(new SkinChatHead(resourceLocation));
+                    return true;
+                }
             }
         }
         return false;

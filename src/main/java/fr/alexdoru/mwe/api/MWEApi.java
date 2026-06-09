@@ -1,18 +1,77 @@
 package fr.alexdoru.mwe.api;
 
+import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
+import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.chat.SkinChatHead;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.gui.HUDRenderer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
 public final class MWEApi {
 
-    private static final Logger LOGGER = LogManager.getLogger("MWE API");
-
     private MWEApi() {}
+
+    public static final class Chat {
+
+        private Chat() {}
+
+        /**
+         * Adds a message to the chat
+         */
+        public static void addChatMessage(String msg) {
+            ChatUtil.addChatMessage(new ChatComponentText(msg));
+        }
+
+        /**
+         * Adds a message to the chat
+         */
+        public static void addChatMessage(IChatComponent msg) {
+            ChatUtil.addChatMessage(msg);
+        }
+
+        /**
+         * Returns true if the IChatComponent already has a skin attached to
+         */
+        public static boolean hasChatHead(IChatComponent msg) {
+            return msg instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) msg).getSkinChatHead() != null;
+        }
+
+        /**
+         * Adds a chat head to the IChatComponent
+         *
+         * @return true if it succeeds
+         */
+        public static boolean addChatHead(IChatComponent msg, ResourceLocation locationSkin) {
+            return ChatUtil.addSkinToComponent(msg, locationSkin);
+        }
+
+        /**
+         * Adds a chat head to the IChatComponent
+         *
+         * @return true if it succeeds
+         */
+        public static boolean addChatHeadOfPlayer(IChatComponent msg, String playername) {
+            return ChatUtil.addSkinToComponent(msg, playername);
+        }
+
+        /**
+         * Gets the ResourceLocation of the skin attached to this IChatComponent
+         */
+        @Nullable
+        public static ResourceLocation getSkin(IChatComponent msg) {
+            if (msg instanceof ChatComponentTextAccessor) {
+                final SkinChatHead skin = ((ChatComponentTextAccessor) msg).getSkinChatHead();
+                if (skin != null) return skin.getSkin();
+            }
+            return null;
+        }
+    }
 
     public static final class Hud {
 
@@ -23,7 +82,6 @@ public final class MWEApi {
          */
         public static void registerHUD(@NotNull IRenderer renderer) {
             HUDRenderer.registerRenderer(renderer);
-            LOGGER.debug("Registered HUD {}", renderer.getClass().getName());
         }
     }
 
