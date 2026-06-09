@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.hackerdetector.checks;
 
+import fr.alexdoru.mwe.api.events.HackerFlagEvent;
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
@@ -28,6 +29,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -49,6 +51,7 @@ public abstract class Check implements ICheck {
             this.printFlagMessage(player);
             this.addToReportList(player);
             this.sendReport(player);
+            MinecraftForge.EVENT_BUS.post(new HackerFlagEvent(player, this.getCheatName(), this.getFlagType()));
         }
     }
 

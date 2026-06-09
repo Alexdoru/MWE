@@ -1,8 +1,12 @@
 package fr.alexdoru.mwe.api.events;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * This event is fired on the {@link MinecraftForge#EVENT_BUS}.
+ */
 public class MegaWallsGameEvent extends Event {
 
     @NotNull
