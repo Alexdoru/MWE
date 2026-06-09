@@ -1,12 +1,12 @@
 package fr.alexdoru.mwe.features;
 
+import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.enums.MWClass;
 import fr.alexdoru.mwe.gui.HUDRenderer;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
@@ -144,7 +144,7 @@ public class FinalKillCounter {
 
     static {
         KILL_PATTERNS = new Pattern[KILL_MESSAGES.length];
-        prefixes = Arrays.copyOf(DEFAULT_PREFIXES, DEFAULT_PREFIXES.length);
+        prefixes = DEFAULT_PREFIXES.clone();
         //noinspection unchecked
         teamKillsArray = new HashMap[TEAMS];
         for (int i = 0; i < TEAMS; i++) {

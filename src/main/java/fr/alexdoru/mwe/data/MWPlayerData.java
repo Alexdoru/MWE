@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.data;
 
-import fr.alexdoru.mwe.enums.MWClass;
+import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.nocheaters.WDR;
 import net.minecraft.util.IChatComponent;
 

@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.enums;
+package fr.alexdoru.mwe.http;
 
 import java.util.HashMap;
 import java.util.Map;

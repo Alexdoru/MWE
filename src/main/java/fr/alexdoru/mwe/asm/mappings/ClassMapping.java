@@ -55,7 +55,7 @@ public enum ClassMapping {
     MAP("java/util/Map"),
     MATH("java/lang/Math"),
     MINECRAFT("ave", "net/minecraft/client/Minecraft"),
-    MWCLASS("fr/alexdoru/mwe/enums/MWClass"),
+    MWCLASS("fr/alexdoru/mwe/api/enums/MWClass"),
     NETHANDLERPLAYCLIENT("bcy", "net/minecraft/client/network/NetHandlerPlayClient"),
     NETWORKMANAGER("ek", "net/minecraft/network/NetworkManager"),
     NETWORKPLAYERINFO("bdc", "net/minecraft/client/network/NetworkPlayerInfo"),

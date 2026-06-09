@@ -1,9 +1,9 @@
 package fr.alexdoru.mwe.gui.huds;
 
+import fr.alexdoru.mwe.api.enums.MWMap;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.chat.LocrawListener;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.enums.MegaWallsMap;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class BaseLocationHUD extends AbstractRenderer {
 
-    private MegaWallsMap currentMap;
+    private MWMap currentMap;
 
     public BaseLocationHUD() {
         super(MWEConfig.baseLocationHUDPosition);
@@ -50,7 +50,7 @@ public class BaseLocationHUD extends AbstractRenderer {
         if (mapName == null) {
             currentMap = null;
         } else {
-            currentMap = MegaWallsMap.fromName(mapName);
+            currentMap = MWMap.fromName(mapName);
         }
     }
 

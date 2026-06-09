@@ -1,15 +1,14 @@
-package fr.alexdoru.mwe.enums;
+package fr.alexdoru.mwe.api.enums;
 
-import fr.alexdoru.mwe.features.FinalKillCounter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static fr.alexdoru.mwe.enums.MegaWallsMap.TeamColor.*;
+import static fr.alexdoru.mwe.api.enums.MWTeamColor.*;
 
-public enum MegaWallsMap {
+public enum MWMap {
 
     ANCHORED(RED, YELLOW, BLUE, GREEN, -53, 54, 54, -53, 65),
     AZTEC(YELLOW, BLUE, RED, GREEN, 820, -902, 927, -1009, 36),
@@ -38,19 +37,20 @@ public enum MegaWallsMap {
     STONEHOLD(YELLOW, BLUE, RED, GREEN, -53, 54, 54, -53, 65),
     WONDERLAND(GREEN, YELLOW, BLUE, RED, -53, 54, 54, -53, 58);
 
-    private final TeamColor northBase, eastBase, southBase, westBase;
-    private final double northLimit, eastLimit, southLimit, westLimit;
-    private final double innerNorthLimit, innerEastLimit, innerSouthLimit, innerWestLimit;
-    private final double surfaceLevel;
-    private static final Map<String, MegaWallsMap> fromNameMap = new HashMap<>();
+    private static final Map<String, MWMap> fromNameMap = new HashMap<>();
 
     static {
-        for (final MegaWallsMap map : MegaWallsMap.values()) {
+        for (final MWMap map : MWMap.values()) {
             fromNameMap.put(map.name().toLowerCase(), map);
         }
     }
 
-    MegaWallsMap(TeamColor northBase, TeamColor eastBase, TeamColor southBase, TeamColor westBase, double northLimit, double eastLimit, double southLimit, double westLimit, double surfaceLevel) {
+    public final MWTeamColor northBase, eastBase, southBase, westBase;
+    public final double northLimit, eastLimit, southLimit, westLimit;
+    public final double innerNorthLimit, innerEastLimit, innerSouthLimit, innerWestLimit;
+    public final double surfaceLevel;
+
+    MWMap(MWTeamColor northBase, MWTeamColor eastBase, MWTeamColor southBase, MWTeamColor westBase, double northLimit, double eastLimit, double southLimit, double westLimit, double surfaceLevel) {
         this.northBase = northBase;
         this.eastBase = eastBase;
         this.southBase = southBase;
@@ -97,11 +97,11 @@ public enum MegaWallsMap {
         return "";
     }
 
-    private boolean isPlayerAtMiddle(EntityPlayer player) {
+    public boolean isPlayerAtMiddle(EntityPlayer player) {
         return player.posX < eastLimit && player.posX > westLimit && player.posZ < southLimit && player.posZ > northLimit;
     }
 
-    private boolean isPlayerAtMidMid(EntityPlayer player) {
+    public boolean isPlayerAtMidMid(EntityPlayer player) {
         return player.posX < innerEastLimit && player.posX > innerWestLimit && player.posZ < innerSouthLimit && player.posZ > innerNorthLimit;
     }
 
@@ -113,31 +113,8 @@ public enum MegaWallsMap {
         return player.posX > player.posZ + westLimit - northLimit;
     }
 
-    public static MegaWallsMap fromName(String name) {
+    public static MWMap fromName(String name) {
         return fromNameMap.get(name.replace(" ", "").toLowerCase());
-    }
-
-    enum TeamColor {
-
-        BLUE,
-        GREEN,
-        RED,
-        YELLOW;
-
-        public String formattedName() {
-            switch (this) {
-                case BLUE:
-                    return FinalKillCounter.getColorPrefixFromTeam(3) + "BLUE";
-                case GREEN:
-                    return FinalKillCounter.getColorPrefixFromTeam(1) + "GREEN";
-                case RED:
-                    return FinalKillCounter.getColorPrefixFromTeam(0) + "RED";
-                case YELLOW:
-                    return FinalKillCounter.getColorPrefixFromTeam(2) + "YELLOW";
-                default:
-                    throw new IllegalStateException(this.name() + " shoudn't exist in this enum");
-            }
-        }
     }
 
 }

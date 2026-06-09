@@ -1,8 +1,8 @@
 package fr.alexdoru.mwe.hackerdetector.checks;
 
+import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.enums.MWClass;
 import fr.alexdoru.mwe.hackerdetector.data.BrokenBlock;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;

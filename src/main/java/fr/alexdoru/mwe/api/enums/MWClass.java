@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.enums;
+package fr.alexdoru.mwe.api.enums;
 
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
@@ -38,9 +38,6 @@ public enum MWClass {
     WEREWOLF("WER"),
     ZOMBIE("ZOM");
 
-    public final String TAG;
-    public final String className;
-
     private static final Map<String, MWClass> tagMap = new HashMap<>();
 
     static {
@@ -48,6 +45,9 @@ public enum MWClass {
             tagMap.put(mwClass.TAG, mwClass);
         }
     }
+
+    public final String TAG;
+    public final String className;
 
     MWClass(String TAG) {
         this.TAG = TAG;

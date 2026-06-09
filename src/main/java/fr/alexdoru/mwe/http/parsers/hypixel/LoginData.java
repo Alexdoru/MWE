@@ -3,7 +3,7 @@ package fr.alexdoru.mwe.http.parsers.hypixel;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import fr.alexdoru.mwe.enums.GameType;
+import fr.alexdoru.mwe.http.GameType;
 import fr.alexdoru.mwe.utils.JsonUtil;
 import net.minecraft.util.EnumChatFormatting;
 

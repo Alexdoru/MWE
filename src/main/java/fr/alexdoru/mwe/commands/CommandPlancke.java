@@ -1,8 +1,8 @@
 package fr.alexdoru.mwe.commands;
 
 import com.google.gson.JsonObject;
+import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.enums.MWClass;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.cache.CachedHypixelPlayerData;
 import fr.alexdoru.mwe.http.exceptions.ApiException;

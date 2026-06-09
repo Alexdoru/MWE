@@ -1,12 +1,12 @@
 package fr.alexdoru.mwe.commands;
 
 import com.google.gson.JsonObject;
+import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.LocrawListener;
 import fr.alexdoru.mwe.chat.ScanFlagChatComponent;
 import fr.alexdoru.mwe.data.ScangameData;
-import fr.alexdoru.mwe.enums.MWClass;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.exceptions.RateLimitException;
 import fr.alexdoru.mwe.http.parsers.hypixel.GeneralInfo;
