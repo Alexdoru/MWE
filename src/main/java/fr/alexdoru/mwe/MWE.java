@@ -5,6 +5,7 @@ import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.mwe.chat.ChatListener;
 import fr.alexdoru.mwe.commands.*;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.config.lib.ConfigHandler;
 import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.LowHPIndicator;
@@ -97,7 +98,8 @@ public class MWE {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        MWEConfig.loadConfig(new File(event.getModConfigurationDirectory(), "mwe.cfg"));
+        ConfigHandler.loadConfigFile(new File(event.getModConfigurationDirectory(), "mwe.cfg"));
+        ConfigHandler.registerConfig(MWEConfig.class);
         jarFile = event.getSourceFile();
         this.loadedAddons.forEach(a -> a.preInit(event));
     }

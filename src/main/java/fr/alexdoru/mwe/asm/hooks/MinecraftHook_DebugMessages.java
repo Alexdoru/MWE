@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.config.lib.ConfigHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
@@ -11,7 +12,7 @@ public class MinecraftHook_DebugMessages {
         mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "[Debug]: " + EnumChatFormatting.WHITE + settingName + ":" + (settingIn ? EnumChatFormatting.GREEN + " On" : EnumChatFormatting.RED + " Off")));
         if ("Hitboxes".equals(settingName)) {
             MWEConfig.isDebugHitboxOn = settingIn;
-            MWEConfig.saveConfig();
+            ConfigHandler.saveConfig();
         }
     }
 

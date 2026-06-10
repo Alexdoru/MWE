@@ -1,6 +1,5 @@
 package fr.alexdoru.mwe.config;
 
-import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.GuiPosition;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.chat.ChatHandler;
@@ -11,7 +10,6 @@ import fr.alexdoru.mwe.gui.HUDRenderer;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.nocheaters.WarningMessages;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import net.minecraft.client.Minecraft;
@@ -19,102 +17,62 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Loader;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class MWEConfig extends AbstractConfig {
+@SuppressWarnings("unused")
+public final class MWEConfig {
 
-    private static AbstractConfig INSTANCE;
-
-    private MWEConfig(File file) {
-        super(MWEConfig.class, file);
-    }
-
-    public static void loadConfig(File file) {
-        if (INSTANCE != null) {
-            throw new IllegalStateException("Config already created!");
-        }
-        INSTANCE = new MWEConfig(file);
-        if (!MWEConfig.modVersion.equals(MWE.version)) {
-            if (!MWEConfig.modVersion.isEmpty()) {
-                MWEConfig.onModUpdate();
-            }
-            MWEConfig.modVersion = MWE.version;
-            MWEConfig.saveConfig();
-        }
-    }
-
-    public static void saveConfig() {
-        if (INSTANCE == null) {
-            throw new NullPointerException("Config didn't load when the game started, this shouldn't happen !");
-        }
-        INSTANCE.save();
-    }
-
-    public static void displayConfigGuiScreen() {
-        if (INSTANCE == null) {
-            throw new NullPointerException("Config didn't load when the game started, this shouldn't happen !");
-        }
-        new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(INSTANCE.getConfigGuiScreen()));
-    }
-
+    @ConfigUpdate
     private static void onModUpdate() {
-        // code to run on mod version update
+        // code that runs on mod version update
     }
 
     @ConfigCategory(displayname = "§6Vanilla")
-    public static final String VANILLA = "Vanilla";
+    private static final String VANILLA = "Vanilla";
 
     @ConfigCategory(displayname = "§8Hypixel")
-    public static final String HYPIXEL = "Hypixel";
+    private static final String HYPIXEL = "Hypixel";
 
     @ConfigCategory(displayname = "§aMega Walls")
-    public static final String MEGA_WALLS = "Mega Walls";
+    private static final String MEGA_WALLS = "Mega Walls";
 
     @ConfigCategory(displayname = "§5PVP Stuff")
-    public static final String PVP_STUFF = "PVP Stuff";
+    private static final String PVP_STUFF = "PVP Stuff";
 
     @ConfigCategory(
             displayname = "§bFinal Kill Counter",
             comment = "For Mega Walls")
-    public static final String FINAL_KILL_COUNTER = "Final Kill Counter";
+    private static final String FINAL_KILL_COUNTER = "Final Kill Counter";
 
     @ConfigCategory(
             displayname = "§2Squad",
             comment = "§fAdd players to your squad using the §e/squad§f command!")
-    public static final String SQUAD = "Squad";
+    private static final String SQUAD = "Squad";
 
     @ConfigCategory(
             displayname = "§cNoCheaters",
             comment = "§fNoCheaters saves players reported via §e/wdr name§f (not /report) and warns you about them ingame."
                     + "§fTo remove a player from your report list use : §e/unwdr name§f or click the name on the warning message."
                     + "§fYou can see all the players you have reported using §e/nocheaters reportlist§f.")
-    public static final String NOCHEATERS = "NoCheaters";
+    private static final String NOCHEATERS = "NoCheaters";
 
     @ConfigCategory(
             displayname = "§4Hacker Detector",
             comment = "§eDisclaimer : §fthis is not 100% accurate and can sometimes flag legit players, "
                     + "it won't flag every cheater either, however players that are regularly flagging are definitely cheating")
-    public static final String HACKER_DETECTOR = "Hacker Detector";
+    private static final String HACKER_DETECTOR = "Hacker Detector";
 
     @ConfigCategory(
             displayname = "§9Hitboxes, better F3+B",
             comment = "§7You obviously need to press F3+B to enable hitboxes")
-    public static final String HITBOXES = "Hitbox";
+    private static final String HITBOXES = "Hitbox";
 
     @ConfigCategory(displayname = "§dExternal")
-    public static final String EXTERNAL = "External";
-
-    @ConfigProperty(
-            category = "General",
-            name = "Mod Version",
-            comment = "The version of the mod the config was saved with",
-            hidden = true)
-    public static String modVersion = "";
+    private static final String EXTERNAL = "External";
 
     @ConfigProperty(
             category = "April Fools",
@@ -123,7 +81,7 @@ public class MWEConfig extends AbstractConfig {
     public static boolean aprilFools = true;
 
     @ConfigPropertyHideOverride(name = "April Fun")
-    public static boolean hideAprilFoolsSetting() {
+    private static boolean hideAprilFoolsSetting() {
         return !"01/04".equals(new SimpleDateFormat("dd/MM").format(new Date().getTime()));
     }
 
@@ -134,12 +92,12 @@ public class MWEConfig extends AbstractConfig {
     public static boolean chatHeads = true;
 
     @ConfigPropertyHideOverride(name = "Chat Heads")
-    public static boolean hideChatHeadSetting() {
+    private static boolean hideChatHeadSetting() {
         return MWELoadingPlugin.isFeatherPresent();
     }
 
     @ConfigPropertyEvent(name = "Chat Heads")
-    public static void onChatHeadsSetting() {
+    private static void onChatHeadsSetting() {
         Minecraft.getMinecraft().ingameGUI.getChatGUI().refreshChat();
     }
 
@@ -434,7 +392,7 @@ public class MWEConfig extends AbstractConfig {
     public static boolean playSoundLowHP;
 
     @ConfigPropertyEvent(name = "Sound warning low HP")
-    public static void onLowHPSoundSetting() {
+    private static void onLowHPSoundSetting() {
         if (MWEConfig.playSoundLowHP) {
             SoundUtil.playLowHPSound();
         }
@@ -608,7 +566,7 @@ public class MWEConfig extends AbstractConfig {
     public static boolean coloredLeatherArmor;
 
     @ConfigPropertyEvent(name = "Colored leather armor")
-    public static void onColoredLeatherArmorSetting() {
+    private static void onColoredLeatherArmorSetting() {
         LeatherArmorManager.onSettingChange();
     }
 
@@ -704,7 +662,7 @@ public class MWEConfig extends AbstractConfig {
     public static final GuiPosition strengthHUDPosition = new GuiPosition(true, 0.5d, 8d / 20d);
 
     @ConfigPropertyEvent(name = "Strength HUD")
-    public static void onStrengthHUDSetting() {
+    private static void onStrengthHUDSetting() {
         if (MWEConfig.strengthHUDPosition.isEnabled()) {
             SoundUtil.playStrengthSound();
         }
@@ -753,7 +711,7 @@ public class MWEConfig extends AbstractConfig {
     public static final GuiPosition baseLocationHUDPosition = new GuiPosition(true, 0.90d, 0d);
 
     @ConfigPropertyEvent(name = "Base Location HUD")
-    public static void onBaseLocationSetting() {
+    private static void onBaseLocationSetting() {
         if (MWEConfig.baseLocationHUDPosition.isEnabled() && ScoreboardTracker.isInMwGame()) {
             LocrawListener.setMegaWallsMap();
         }
@@ -803,7 +761,7 @@ public class MWEConfig extends AbstractConfig {
             "Compact HUD in Sidebar",
             "Players mode",
             "Player amount"})
-    public static void onFKSHUDSetting() {
+    private static void onFKSHUDSetting() {
         HUDRenderer.fkCounterHUD.updateDisplayText();
     }
 
@@ -862,7 +820,7 @@ public class MWEConfig extends AbstractConfig {
     public static boolean warningMessages;
 
     @ConfigPropertyEvent(name = "Warning messages in chat")
-    public static void onWarningMessageSetting() {
+    private static void onWarningMessageSetting() {
         if (MWEConfig.warningMessages) {
             WarningMessages.printReportMessagesForWorld(false);
         } else {
@@ -914,7 +872,7 @@ public class MWEConfig extends AbstractConfig {
             "Show Warning Icons",
             "Warning Icons In Tab Only",
             "Pink squadmates"})
-    public static void refreshAllNames() {
+    private static void refreshAllNames() {
         NameUtil.refreshAllNamesInWorld();
     }
 
@@ -929,7 +887,7 @@ public class MWEConfig extends AbstractConfig {
     public static boolean reportSuggestions = true;
 
     @ConfigPropertyEvent(name = "Report suggestions")
-    public static void onReportSuggestionSetting() {
+    private static void onReportSuggestionSetting() {
         if (MWEConfig.reportSuggestions) {
             SoundUtil.playChatNotifSound();
         }
@@ -1025,7 +983,7 @@ public class MWEConfig extends AbstractConfig {
     public static boolean autoreportFlaggedPlayers = true;
 
     @ConfigPropertyEvent(name = "Auto-report cheaters")
-    public static void onAutoreportSetting() {
+    private static void onAutoreportSetting() {
         if (!MWEConfig.autoreportFlaggedPlayers) {
             ReportQueue.INSTANCE.queueList.clear();
         }
@@ -1065,7 +1023,7 @@ public class MWEConfig extends AbstractConfig {
     public static boolean hideOptifineHats;
 
     @ConfigPropertyHideOverride(name = "Hide Optifine Hats")
-    public static boolean hideOptifineHatsSetting() {
+    private static boolean hideOptifineHatsSetting() {
         return !FMLClientHandler.instance().hasOptifine();
     }
 
@@ -1076,7 +1034,7 @@ public class MWEConfig extends AbstractConfig {
     public static boolean hideToggleSprintText;
 
     @ConfigPropertyHideOverride(name = "Hide Orange's Toggle Sprint HUD")
-    public static boolean hideOrangeToggleSprintSetting() {
+    private static boolean hideOrangeToggleSprintSetting() {
         return !Loader.isModLoaded("orangesimplemod");
     }
 

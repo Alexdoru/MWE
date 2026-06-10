@@ -1,9 +1,9 @@
 package fr.alexdoru.mwe.config.lib.gui;
 
 import fr.alexdoru.mwe.MWE;
-import fr.alexdoru.mwe.config.lib.AbstractConfig;
 import fr.alexdoru.mwe.config.lib.ConfigCategoryContainer;
 import fr.alexdoru.mwe.config.lib.ConfigFieldContainer;
+import fr.alexdoru.mwe.config.lib.ConfigHandler;
 import fr.alexdoru.mwe.config.lib.gui.elements.*;
 import fr.alexdoru.mwe.gui.GuiUtil;
 import fr.alexdoru.mwe.utils.SoundUtil;
@@ -27,7 +27,7 @@ public class ConfigGuiScreen extends GuiScreen {
 
     private static final ResourceLocation BLUR = new ResourceLocation("mwe", "blur.json");
     private static final ResourceLocation DORU_SKIN = new ResourceLocation("mwe", "doru_skin.png");
-    private final AbstractConfig config;
+
     private final Map<String, ConfigCategoryContainer> categoryContainerMap;
     private final List<CategoryGuiButton> categoryElements = new ArrayList<>();
     private final List<ConfigUIElement> configElements = new ArrayList<>();
@@ -50,8 +50,7 @@ public class ConfigGuiScreen extends GuiScreen {
     private int SEARCH_BOX_LEFT, SEARCH_BOX_TOP, SEARCH_BOX_RIGHT, SEARCH_BOX_BOTTOM;
     private int SCROLL_BAR_LEFT, SCROLL_BAR_TOP, SCROLL_BAR_RIGHT, SCROLL_BAR_BOTTOM;
 
-    public ConfigGuiScreen(AbstractConfig config, List<ConfigCategoryContainer> categories, List<ConfigFieldContainer> configFields, LinkedHashMap<String, LinkedHashMap<String, List<String>>> configStructure) throws IllegalAccessException {
-        this.config = config;
+    public ConfigGuiScreen(List<ConfigCategoryContainer> categories, List<ConfigFieldContainer> configFields, LinkedHashMap<String, LinkedHashMap<String, List<String>>> configStructure) throws IllegalAccessException {
         this.categoryContainerMap = new HashMap<>();
         for (final ConfigCategoryContainer container : categories) {
             this.categoryContainerMap.put(container.getCategoryName(), container);
@@ -365,7 +364,7 @@ public class ConfigGuiScreen extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
-        config.save();
+        ConfigHandler.saveConfig();
         if (ForgeVersion.getVersion().contains("2318")) {
             mc.entityRenderer.stopUseShader();
         }

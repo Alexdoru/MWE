@@ -149,8 +149,4 @@ public class ConfigFieldContainer {
         return annotation;
     }
 
-    public Class<?> getType() {
-        return field.getType();
-    }
-
 }

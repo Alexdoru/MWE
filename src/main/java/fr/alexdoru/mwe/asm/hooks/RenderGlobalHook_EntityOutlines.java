@@ -4,6 +4,7 @@ import fr.alexdoru.mwe.asm.interfaces.IWitherColor;
 import fr.alexdoru.mwe.asm.interfaces.RenderManagerAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.config.lib.ConfigHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -48,7 +49,7 @@ public class RenderGlobalHook_EntityOutlines {
         }
         if (!OpenGlHelper.isFramebufferEnabled()) {
             MWEConfig.renderWitherOutline = false;
-            MWEConfig.saveConfig();
+            ConfigHandler.saveConfig();
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "Wither outline rendering has been disabled, frame buffers aren't supported!");
             return false;
         }

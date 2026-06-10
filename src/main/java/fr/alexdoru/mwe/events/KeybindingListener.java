@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.events;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.config.lib.ConfigHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGameOver;
@@ -59,12 +60,12 @@ public class KeybindingListener {
             } else {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + "Toggle Sprint Off");
             }
-            MWEConfig.saveConfig();
+            ConfigHandler.saveConfig();
         } else if (ScoreboardTracker.isInMwGame() && !ScoreboardTracker.isPrepPhase() && warcryKey.isPressed()) {
             mc.thePlayer.sendChatMessage("/warcry");
         } else if (toggleDroppedItemLimit.isPressed()) {
             MWEConfig.limitDroppedEntityRendered = !MWEConfig.limitDroppedEntityRendered;
-            MWEConfig.saveConfig();
+            ConfigHandler.saveConfig();
             if (MWEConfig.limitDroppedEntityRendered) {
                 ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Limit dropped items rendered: " + EnumChatFormatting.GREEN + "On");
             } else {
@@ -72,7 +73,7 @@ public class KeybindingListener {
             }
         } else if (playerHitboxes.isPressed()) {
             MWEConfig.drawHitboxForPlayers = !MWEConfig.drawHitboxForPlayers;
-            MWEConfig.saveConfig();
+            ConfigHandler.saveConfig();
             if (MWEConfig.drawHitboxForPlayers) {
                 ChatUtil.addChatMessage(ChatUtil.getTagHitboxes() + EnumChatFormatting.WHITE + "Draw hitboxes for players: " + EnumChatFormatting.GREEN + "On");
             } else {
