@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.config.lib;
+package fr.alexdoru.mwe.api.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,9 +7,9 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ConfigPropertyHideOverride {
+public @interface ConfigPropertyEvent {
 
-    /** The names of the config settings that use this condition to hide from the config gui screen */
+    /** The names of the config settings that when switched will trigger this method event */
     String[] name();
 
 }

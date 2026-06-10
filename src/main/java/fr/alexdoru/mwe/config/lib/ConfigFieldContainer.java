@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.config.lib;
 
 import fr.alexdoru.mwe.api.GuiPosition;
+import fr.alexdoru.mwe.api.config.ConfigProperty;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.config.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.mwe.config.lib.gui.elements.*;
@@ -11,27 +12,28 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ConfigFieldContainer {
 
-    private final Map<String, Property> propertyMap;
+    /** Keys are config ConfigProperty#name */
+    private static final Map<String, Property> propertyMap = new HashMap<>();
+
     private final Field field;
     private final ConfigProperty annotation;
     private final Method event;
     private final Method hideOverride;
 
-    public ConfigFieldContainer(
+    ConfigFieldContainer(
+            Configuration config,
             Field field,
             Map<String, Method> configEvents,
-            Map<String, Method> configHideOverrides,
-            Map<String, Property> propertyMap,
-            Configuration config) throws IllegalAccessException {
-        this.propertyMap = propertyMap;
+            Map<String, Method> configHideOverrides) throws IllegalAccessException {
         this.field = field;
         this.annotation = field.getAnnotation(ConfigProperty.class);
-        if (this.propertyMap.containsKey(annotation.name())) {
+        if (propertyMap.containsKey(annotation.name())) {
             throw new IllegalStateException("Duplicate key names in config properties : " + annotation.name());
         }
         this.event = configEvents.get(annotation.name());

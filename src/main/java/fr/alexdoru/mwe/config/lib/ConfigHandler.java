@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.config.lib;
 
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.GuiPosition;
+import fr.alexdoru.mwe.api.config.*;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.mwe.utils.DelayedTask;
@@ -30,9 +31,7 @@ public final class ConfigHandler {
     private static Configuration config;
     private static boolean hasUpdated;
     private static final List<Class<?>> registeredConfigs = new ArrayList<>();
-    private static final Map<String, Property> propertyMap = new HashMap<>();
     private static final List<ConfigFieldContainer> configFields = new ArrayList<>();
-    private static final Set<String> categoryNames = new HashSet<>();
     private static final List<ConfigCategoryContainer> categories = new ArrayList<>();
     /** CategoryName -> SubCategoryName -> List of ConfigSetting */
     private static final LinkedHashMap<String, LinkedHashMap<String, List<String>>> configStructure = new LinkedHashMap<>();
@@ -88,18 +87,13 @@ public final class ConfigHandler {
             }
             for (final Field field : clazz.getDeclaredFields()) {
                 if (field.isAnnotationPresent(ConfigProperty.class)) {
-                    final ConfigFieldContainer fieldContainer = new ConfigFieldContainer(field, configEvents, configHideOverrides, propertyMap, config);
+                    final ConfigFieldContainer fieldContainer = new ConfigFieldContainer(config, field, configEvents, configHideOverrides);
                     eventUsages.remove(fieldContainer.getAnnotation().name());
                     hideUsages.remove(fieldContainer.getAnnotation().name());
                     configFields.add(fieldContainer);
                 } else if (field.isAnnotationPresent(ConfigCategory.class)) {
                     field.setAccessible(true);
-                    final ConfigCategoryContainer categoryContainer = new ConfigCategoryContainer(field);
-                    final String categoryName = categoryContainer.getCategoryName();
-                    if (!categoryNames.add(categoryName)) {
-                        throw new IllegalStateException("Duplicate category names : " + categoryName);
-                    }
-                    categories.add(categoryContainer);
+                    categories.add(new ConfigCategoryContainer(field));
                 }
             }
             if (!eventUsages.isEmpty()) {

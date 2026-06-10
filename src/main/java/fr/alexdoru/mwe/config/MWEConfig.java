@@ -1,10 +1,10 @@
 package fr.alexdoru.mwe.config;
 
 import fr.alexdoru.mwe.api.GuiPosition;
+import fr.alexdoru.mwe.api.config.*;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.LocrawListener;
-import fr.alexdoru.mwe.config.lib.*;
 import fr.alexdoru.mwe.features.LeatherArmorManager;
 import fr.alexdoru.mwe.gui.HUDRenderer;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;

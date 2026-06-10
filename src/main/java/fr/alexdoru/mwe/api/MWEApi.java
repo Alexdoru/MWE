@@ -3,6 +3,7 @@ package fr.alexdoru.mwe.api;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
+import fr.alexdoru.mwe.config.lib.ConfigHandler;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.gui.HUDRenderer;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
@@ -10,6 +11,7 @@ import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
@@ -17,10 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
@@ -94,6 +93,41 @@ public final class MWEApi {
                 if (skin != null) return skin.getSkin();
             }
             return null;
+        }
+    }
+
+    public static final class Config {
+
+        private Config() {}
+
+        /**
+         * Register your configuration class, fields and methods of the class
+         * should be static and annotated with annotations from the fr.alexdoru.mwe.api.config package
+         */
+        public static void registerConfig(Class<?> clazz) {
+            Objects.requireNonNull(clazz);
+            ConfigHandler.registerConfig(clazz);
+        }
+
+        /**
+         * Saves config values to the config file
+         */
+        public static void saveConfig() {
+            ConfigHandler.saveConfig();
+        }
+
+        /**
+         * Gets the config gui screen
+         */
+        public static GuiScreen getConfigGuiScreen() {
+            return ConfigHandler.getConfigGuiScreen();
+        }
+
+        /**
+         * Displays the config gui screen
+         */
+        public static void displayConfigGuiScreen() {
+            ConfigHandler.displayConfigGuiScreen();
         }
     }
 
@@ -214,6 +248,5 @@ public final class MWEApi {
         public static <V> Future<V> addTaskToQueue(Callable<V> c) {
             return MultithreadingUtil.addTaskToQueue(c);
         }
-
     }
 }

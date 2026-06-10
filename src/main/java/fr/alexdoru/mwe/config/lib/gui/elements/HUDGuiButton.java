@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.config.lib.gui.elements;
 
 import fr.alexdoru.mwe.api.GuiPosition;
 import fr.alexdoru.mwe.api.IRenderer;
-import fr.alexdoru.mwe.config.lib.ConfigProperty;
+import fr.alexdoru.mwe.api.config.ConfigProperty;
 import fr.alexdoru.mwe.config.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.mwe.gui.HUDRenderer;
 import fr.alexdoru.mwe.gui.PositionEditGuiScreen;

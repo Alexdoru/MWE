@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.config.lib;
+package fr.alexdoru.mwe.api.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

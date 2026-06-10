@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.config.lib.gui.elements;
 
-import fr.alexdoru.mwe.config.lib.ConfigProperty;
+import fr.alexdoru.mwe.api.config.ConfigProperty;
 import fr.alexdoru.mwe.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
