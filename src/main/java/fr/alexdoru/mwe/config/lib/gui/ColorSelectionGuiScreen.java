@@ -5,7 +5,6 @@ import fr.alexdoru.mwe.utils.DelayedTask;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.awt.Color;
@@ -45,9 +44,7 @@ public class ColorSelectionGuiScreen extends GuiScreen {
         }
         this.buttonList.add(new GuiButton(5, getxCenter() - 150, getButtonYPos(this.hasAlpha ? 6 : 5), 150, 20, "Reset default color"));
         this.buttonList.add(new GuiButton(6, getxCenter() - 150 / 2, getButtonYPos(this.hasAlpha ? 8 : 7), 150, 20, "Done"));
-        if (ForgeVersion.getVersion().contains("2318")) {
-            mc.entityRenderer.loadShader(BLUR);
-        }
+        this.mc.entityRenderer.loadShader(BLUR);
         super.initGui();
     }
 
@@ -83,9 +80,7 @@ public class ColorSelectionGuiScreen extends GuiScreen {
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Couldn't set color!");
         }
-        if (ForgeVersion.getVersion().contains("2318")) {
-            mc.entityRenderer.stopUseShader();
-        }
+        this.mc.entityRenderer.stopUseShader();
         super.onGuiClosed();
         new DelayedTask(() -> mc.displayGuiScreen(parent));
     }

@@ -17,7 +17,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Util;
-import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -47,7 +46,6 @@ public class ModUpdater {
         final Minecraft mc = Minecraft.getMinecraft();
         if (mc.theWorld != null && mc.thePlayer != null && !hasTriggered) {
             hasTriggered = true;
-            checkForgeVersion();
             MultithreadingUtil.addTaskToQueue(() -> {
                 try {
                     checkForUpdate();
@@ -57,17 +55,6 @@ public class ModUpdater {
                 return null;
             });
             MinecraftForge.EVENT_BUS.unregister(this);
-        }
-    }
-
-    private static void checkForgeVersion() {
-        if (!ForgeVersion.getVersion().contains("2318")) {
-            final String forgeUrl = "https://files.minecraftforge.net/net/minecraftforge/forge/index_1.8.9.html";
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + "You are using an outdated version of forge, " +
-                    "things might not work properly! Click this message to open the download page for Forge.")
-                    .setChatStyle(new ChatStyle()
-                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, forgeUrl))
-                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + forgeUrl)))));
         }
     }
 

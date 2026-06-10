@@ -39,6 +39,11 @@ import java.util.*;
         modid = MWE.modid,
         name = MWE.modName,
         version = MWE.version,
+        dependencies = "required-after:Forge@["
+                + net.minecraftforge.common.ForgeVersion.majorVersion + '.'
+                + net.minecraftforge.common.ForgeVersion.minorVersion + '.'
+                + net.minecraftforge.common.ForgeVersion.revisionVersion + '.'
+                + net.minecraftforge.common.ForgeVersion.buildVersion + ",);",
         acceptedMinecraftVersions = "[1.8.9]",
         clientSideOnly = true)
 public class MWE {

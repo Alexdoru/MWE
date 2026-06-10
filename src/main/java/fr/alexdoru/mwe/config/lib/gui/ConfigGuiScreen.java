@@ -15,7 +15,6 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.ForgeVersion;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -155,9 +154,7 @@ public class ConfigGuiScreen extends GuiScreen {
         this.scroll(-lastScroll);
         this.lastInteractedSlider = null;
 
-        if (ForgeVersion.getVersion().contains("2318")) {
-            mc.entityRenderer.loadShader(BLUR);
-        }
+        this.mc.entityRenderer.loadShader(BLUR);
         super.initGui();
     }
 
@@ -365,9 +362,7 @@ public class ConfigGuiScreen extends GuiScreen {
     @Override
     public void onGuiClosed() {
         ConfigHandler.saveConfig();
-        if (ForgeVersion.getVersion().contains("2318")) {
-            mc.entityRenderer.stopUseShader();
-        }
+        this.mc.entityRenderer.stopUseShader();
         super.onGuiClosed();
     }
 
