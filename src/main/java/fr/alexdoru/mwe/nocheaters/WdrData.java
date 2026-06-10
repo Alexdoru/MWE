@@ -4,10 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
+import fr.alexdoru.mwe.api.events.ReportListEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.UUIDUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.*;
@@ -54,11 +56,12 @@ public class WdrData {
      * Adds or update a report for a player, returns true if it added a new report
      */
     public static boolean addReport(UUID uuid, String playername, String cheat) {
-        final WDR wdr = WdrData.getWdr(uuid, playername);
+        WDR wdr = WdrData.getWdr(uuid, playername);
         boolean added = false;
         final boolean refreshName;
         if (wdr == null) {
-            added = WdrData.put(uuid, playername, new WDR(cheat));
+            wdr = new WDR(cheat);
+            added = WdrData.put(uuid, playername, wdr);
             refreshName = true;
         } else {
             refreshName = wdr.addCheat(cheat);
@@ -67,6 +70,9 @@ public class WdrData {
             NameUtil.updateMWPlayerDataAndEntityData(playername, false);
         }
         dirty = true;
+        if (added) {
+            MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.ADDED, uuid, playername, wdr));
+        }
         return added;
     }
 
@@ -74,15 +80,19 @@ public class WdrData {
      * Adds or update a report for a player, returns true if it added a new report
      */
     public static boolean addReport(UUID uuid, String playername, List<String> cheats) {
-        final WDR wdr = WdrData.getWdr(uuid, playername);
+        WDR wdr = WdrData.getWdr(uuid, playername);
         boolean added = false;
         if (wdr == null) {
-            added = WdrData.put(uuid, playername, new WDR(cheats));
+            wdr = new WDR(cheats);
+            added = WdrData.put(uuid, playername, wdr);
         } else {
             wdr.addCheats(cheats);
         }
         NameUtil.updateMWPlayerDataAndEntityData(playername, false);
         dirty = true;
+        if (added) {
+            MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.ADDED, uuid, playername, wdr));
+        }
         return added;
     }
 
@@ -102,18 +112,17 @@ public class WdrData {
      * Removes a player from the reportlist, returns true if the player was succesfully removed
      */
     public static boolean remove(UUID uuid, String playername) {
-        final boolean removed;
+        WDR removed = null;
         if (uuid != null) {
-            removed = uuidMap.remove(uuid) != null;
+            removed = uuidMap.remove(uuid);
         } else if (playername != null) {
-            removed = nickMap.remove(playername) != null;
-        } else {
-            removed = false;
+            removed = nickMap.remove(playername);
         }
-        if (removed) {
+        if (removed != null) {
             NameUtil.updateMWPlayerDataAndEntityData(playername, false);
+            MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.REMOVED, uuid, playername, removed));
         }
-        return removed;
+        return removed != null;
     }
 
     public static void saveReportedPlayers() {
