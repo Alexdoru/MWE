@@ -5,19 +5,24 @@ import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.requests.HypixelPlayerData;
 import fr.alexdoru.mwe.utils.TimerUtil;
 
+import java.util.Objects;
+import java.util.UUID;
+
 public class CachedHypixelPlayerData {
 
-    private static final TimerUtil timer = new TimerUtil(60000L);
-    private static JsonObject playerData;
-    private static String uuid;
+    private static final TimerUtil TIMER = new TimerUtil(60000L);
 
-    public static synchronized JsonObject getPlayerData(String uuidIn) throws ApiException {
-        if (!timer.update() && uuidIn.equals(uuid)) {
-            return playerData;
+    private static JsonObject cachedData;
+    private static UUID cachedUUID;
+
+    public static synchronized JsonObject getPlayerData(UUID id) throws ApiException {
+        Objects.requireNonNull(id);
+        if (!TIMER.update() && id.equals(cachedUUID)) {
+            return cachedData;
         }
-        playerData = new HypixelPlayerData(uuidIn).getPlayerData();
-        uuid = uuidIn;
-        return playerData;
+        cachedData = new HypixelPlayerData(id).getPlayerData();
+        cachedUUID = id;
+        return cachedData;
     }
 
 }

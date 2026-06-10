@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.commands;
 
 import com.google.gson.JsonObject;
+import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
@@ -38,10 +39,10 @@ public class CommandPlancke extends MyAbstractCommand {
         }
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
-                final MojangNameToUUID apiname = new MojangNameToUUID(args[0]);
-                final JsonObject playerdata = CachedHypixelPlayerData.getPlayerData(apiname.getUuid());
-                final HypixelGuild hypixelGuild = args.length == 1 ? new HypixelGuild(apiname.getUuid()) : null;
-                Minecraft.getMinecraft().addScheduledTask(() -> this.plancke(args, apiname, playerdata, hypixelGuild));
+                final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(args[0]);
+                final JsonObject playerdata = CachedHypixelPlayerData.getPlayerData(playerID.getId());
+                final HypixelGuild hypixelGuild = args.length == 1 ? new HypixelGuild(playerID.getId()) : null;
+                Minecraft.getMinecraft().addScheduledTask(() -> this.plancke(args, playerID, playerdata, hypixelGuild));
             } catch (ApiException e) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + e.getMessage());
                 return null;
@@ -50,16 +51,16 @@ public class CommandPlancke extends MyAbstractCommand {
         });
     }
 
-    private void plancke(String[] args, MojangNameToUUID apiname, JsonObject playerdata, HypixelGuild hypixelGuild) {
+    private void plancke(String[] args, IPlayerUUID playerID, JsonObject playerdata, HypixelGuild hypixelGuild) {
 
         final LoginData loginData = new LoginData(playerdata);
 
-        if (!apiname.getName().equals(loginData.getdisplayname()) || loginData.hasNeverJoinedHypixel()) {
+        if (!playerID.getName().equals(loginData.getdisplayname()) || loginData.hasNeverJoinedHypixel()) {
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "This player never joined Hypixel, it might be a nick.");
             return;
         }
 
-        final String playername = apiname.getName();
+        final String playername = playerID.getName();
         final String formattedName = loginData.getFormattedName();
 
         if (args.length == 1) {

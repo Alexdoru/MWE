@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.commands;
 
+import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.requests.LabyModNameHistory;
@@ -37,8 +38,8 @@ public class CommandName extends MyAbstractCommand {
 
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
-                final MojangNameToUUID nameApi = new MojangNameToUUID(args[0]);
-                final List<String> history = LabyModNameHistory.getNameHistory(nameApi.getUUID());
+                final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(args[0]);
+                final List<String> history = LabyModNameHistory.getNameHistory(playerID.getId());
                 Minecraft.getMinecraft().addScheduledTask(() -> printNameList(history, args));
             } catch (ApiException e1) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + e1.getMessage());

@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.commands;
 
+import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.PartyDetection;
@@ -89,20 +90,20 @@ public class CommandWDR extends MyAbstractCommand {
         }
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
-                final MojangNameToUUID mojangReq = new MojangNameToUUID(playername);
+                final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
                 if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                    mc.addScheduledTask(() -> addPlayerToReportList(mojangReq.getUUID(), mojangReq.getName(), null, cheats));
+                    mc.addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), null, cheats));
                     return null;
                 }
                 try {
-                    final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(mojangReq.getUuid()));
-                    if (!loginData.hasNeverJoinedHypixel() && mojangReq.getName().equals(loginData.getdisplayname())) {
+                    final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(playerID.getId()));
+                    if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
                         // real player
-                        mc.addScheduledTask(() -> addPlayerToReportList(mojangReq.getUUID(), mojangReq.getName(), loginData.getFormattedName(), cheats));
+                        mc.addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), loginData.getFormattedName(), cheats));
                         return null;
                     }
                 } catch (ApiException e) {
-                    mc.addScheduledTask(() -> addPlayerToReportList(mojangReq.getUUID(), mojangReq.getName(), null, cheats));
+                    mc.addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), null, cheats));
                     return null;
                 }
             } catch (ApiException ignored) {}

@@ -6,6 +6,8 @@ import fr.alexdoru.mwe.http.HttpClient;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.utils.JsonUtil;
 
+import java.util.UUID;
+
 public class HypixelPlayerStatus {
 
     private final boolean online;
@@ -13,8 +15,8 @@ public class HypixelPlayerStatus {
     private String mode;
     private String map;
 
-    public HypixelPlayerStatus(String uuid) throws ApiException {
-        final JsonObject obj = HttpClient.getAsJsonObject("https://api.hypixel.net/status?uuid=" + uuid);
+    public HypixelPlayerStatus(UUID uuid) throws ApiException {
+        final JsonObject obj = HttpClient.getAsJsonObject("https://api.hypixel.net/status?uuid=" + uuid.toString());
         final JsonObject sessionobj = JsonUtil.getJsonObject(obj, "session");
         if (sessionobj == null) {
             throw new ApiException("Failed to retreive data from Hypixel's Api for this player");

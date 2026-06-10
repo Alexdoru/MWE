@@ -6,13 +6,15 @@ import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.utils.JsonUtil;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.util.UUID;
+
 public class HypixelGuild {
 
     private String guildName;
     private String formattedGuildTag;
 
-    public HypixelGuild(String uuid) throws ApiException {
-        final JsonObject jsonObject = HttpClient.getAsJsonObject("https://api.hypixel.net/guild?player=" + uuid);
+    public HypixelGuild(UUID uuid) throws ApiException {
+        final JsonObject jsonObject = HttpClient.getAsJsonObject("https://api.hypixel.net/guild?player=" + uuid.toString());
         final JsonObject guildData = JsonUtil.getJsonObject(jsonObject, "guild");
         if (guildData == null) {
             return;

@@ -5,7 +5,11 @@ import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.gui.HUDRenderer;
+import fr.alexdoru.mwe.http.exceptions.ApiException;
+import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
+import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
 import fr.alexdoru.mwe.nocheaters.WdrData;
+import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
@@ -15,6 +19,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 @SuppressWarnings("unused")
 public final class MWEApi {
@@ -86,6 +92,27 @@ public final class MWEApi {
          */
         public static void registerHUD(@NotNull IRenderer renderer) {
             HUDRenderer.registerRenderer(renderer);
+        }
+    }
+
+    public static final class MojangApi {
+
+        private MojangApi() {}
+
+        /**
+         * Queries the mojang api to get the name of a player from their UUID,
+         * this should not be called from the main thread to avoid blocking
+         */
+        public static String getPlayerName(UUID id) throws ApiException {
+            return MojangUUIDToName.getName(id);
+        }
+
+        /**
+         * Queries the mojang api to get the UUID of a player from their name,
+         * this should not be called from the main thread to avoid blocking
+         */
+        public static IPlayerUUID getPlayerUUID(String playername) throws ApiException {
+            return MojangNameToUUID.getPlayerUUID(playername);
         }
     }
 
@@ -161,5 +188,18 @@ public final class MWEApi {
         public static Map<String, String> getSquadMap() {
             return SquadHandler.getSquad();
         }
+    }
+
+    public static final class Threads {
+
+        private Threads() {}
+
+        /**
+         * Runs a task asynchronously
+         */
+        public static <V> Future<V> addTaskToQueue(Callable<V> c) {
+            return MultithreadingUtil.addTaskToQueue(c);
+        }
+
     }
 }

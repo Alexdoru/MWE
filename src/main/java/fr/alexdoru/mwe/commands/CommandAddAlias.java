@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.commands;
 
+import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.data.AliasData;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
@@ -198,7 +199,7 @@ public class CommandAddAlias extends MyAbstractCommand {
             if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
                 if (NameUtil.isRealPlayer(netInfo.getGameProfile().getId())) {
                     this.addAlias(
-                            netInfo.getGameProfile().getId().toString(),
+                            netInfo.getGameProfile().getId(),
                             netInfo.getGameProfile().getName(),
                             alias,
                             ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()));
@@ -214,13 +215,13 @@ public class CommandAddAlias extends MyAbstractCommand {
         }
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
-                final MojangNameToUUID mojangReq = new MojangNameToUUID(playername);
+                final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
                 if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
                     try {
-                        final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(mojangReq.getUuid()));
-                        if (!loginData.hasNeverJoinedHypixel() && mojangReq.getName().equals(loginData.getdisplayname())) {
+                        final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(playerID.getId()));
+                        if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
                             // real player
-                            mc.addScheduledTask(() -> this.addAlias(mojangReq.getUuid(), mojangReq.getName(), alias, loginData.getFormattedName()));
+                            mc.addScheduledTask(() -> this.addAlias(playerID.getId(), playerID.getName(), alias, loginData.getFormattedName()));
                             return null;
                         }
                     } catch (ApiException ignored) {}
@@ -232,7 +233,7 @@ public class CommandAddAlias extends MyAbstractCommand {
         });
     }
 
-    private void addAlias(String uuid, String playername, String alias, String formattedName) {
+    private void addAlias(UUID uuid, String playername, String alias, String formattedName) {
         if (formattedName == null) {
             formattedName = playername;
         }
@@ -241,7 +242,7 @@ public class CommandAddAlias extends MyAbstractCommand {
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Added alias for the " + EnumChatFormatting.DARK_PURPLE + "nicked " + EnumChatFormatting.GREEN + "player "
                     + EnumChatFormatting.GOLD + formattedName + EnumChatFormatting.WHITE + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.WHITE + ")");
         } else {
-            AliasData.putAlias(uuid.replace("-", ""), alias);
+            AliasData.putAlias(uuid.toString().replace("-", ""), alias);
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Added alias for "
                     + EnumChatFormatting.GOLD + formattedName + EnumChatFormatting.WHITE + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.WHITE + ")");
         }
@@ -254,7 +255,7 @@ public class CommandAddAlias extends MyAbstractCommand {
             if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
                 if (NameUtil.isRealPlayer(netInfo.getGameProfile().getId())) {
                     this.removeAlias(
-                            netInfo.getGameProfile().getId().toString(),
+                            netInfo.getGameProfile().getId(),
                             netInfo.getGameProfile().getName(),
                             ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()));
                 } else if (NameUtil.isNickedPlayer(netInfo.getGameProfile().getId())) {
@@ -268,13 +269,13 @@ public class CommandAddAlias extends MyAbstractCommand {
         }
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
-                final MojangNameToUUID mojangReq = new MojangNameToUUID(playername);
+                final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
                 if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
                     try {
-                        final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(mojangReq.getUuid()));
-                        if (!loginData.hasNeverJoinedHypixel() && mojangReq.getName().equals(loginData.getdisplayname())) {
+                        final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(playerID.getId()));
+                        if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
                             // real player
-                            mc.addScheduledTask(() -> this.removeAlias(mojangReq.getUuid(), mojangReq.getName(), loginData.getFormattedName()));
+                            mc.addScheduledTask(() -> this.removeAlias(playerID.getId(), playerID.getName(), loginData.getFormattedName()));
                             return null;
                         }
                     } catch (ApiException ignored) {}
@@ -286,14 +287,14 @@ public class CommandAddAlias extends MyAbstractCommand {
         });
     }
 
-    private void removeAlias(String uuid, String playername, String formattedName) {
+    private void removeAlias(UUID uuid, String playername, String formattedName) {
         if (formattedName == null) {
             formattedName = playername;
         }
         if (uuid == null) {
             AliasData.removeAlias(playername);
         } else {
-            AliasData.removeAlias(uuid.replace("-", ""));
+            AliasData.removeAlias(uuid.toString().replace("-", ""));
         }
         NameUtil.updateMWPlayerDataAndEntityData(playername, false);
         ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Removed alias for " + EnumChatFormatting.GOLD + formattedName);

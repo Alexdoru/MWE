@@ -1,65 +1,70 @@
 package fr.alexdoru.mwe.http.requests;
 
 import com.google.gson.JsonObject;
+import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.http.HttpClient;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.utils.JsonUtil;
 import fr.alexdoru.mwe.utils.UUIDUtil;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
-public class MojangNameToUUID {
+public final class MojangNameToUUID {
 
-    private static final ConcurrentHashMap<String, NameUuidData> nameUuidCache = new ConcurrentHashMap<>();
-    private final String name;
-    private final String uuid;
+    private static final Pattern NAME_PATTERN = Pattern.compile("\\w{1,16}");
+    private static final Map<String, IPlayerUUID> CACHE = new ConcurrentHashMap<>();
 
-    public MojangNameToUUID(String playername) throws ApiException {
-        final String lowerCaseName = playername.toLowerCase();
-        if (!Pattern.compile("\\w{1,16}").matcher(lowerCaseName).matches()) {
+    public static IPlayerUUID getPlayerUUID(String playername) throws ApiException {
+        if (!NAME_PATTERN.matcher(playername).matches()) {
             throw new ApiException(ChatUtil.invalidMinecraftNameMsg(playername));
         }
-        final NameUuidData cachedData = nameUuidCache.get(lowerCaseName);
-        if (cachedData != null) {
-            this.name = cachedData.name;
-            this.uuid = cachedData.uuid;
-            return;
+        final String nameKEY = playername.toLowerCase();
+        if (CACHE.containsKey(nameKEY)) {
+            return CACHE.get(nameKEY);
         }
         final JsonObject jsonObject = HttpClient.getAsJsonObject("https://api.mojang.com/users/profiles/minecraft/" + playername);
-        this.name = JsonUtil.getString(jsonObject, "name");
+        final String name = JsonUtil.getString(jsonObject, "name");
         final String id = JsonUtil.getString(jsonObject, "id");
-        if (this.name == null || id == null) {
+        if (name == null || id == null) {
             throw new ApiException(ChatUtil.inexistantMinecraftNameMsg(playername));
         }
-        this.uuid = id.replace("-", "");
-        nameUuidCache.put(lowerCaseName, new NameUuidData(this.name, this.uuid));
+        final UUID uuid = UUIDUtil.fromString(id);
+        if (uuid == null) {
+            throw new ApiException("Malformed UUID");
+        }
+        final IPlayerUUID playerUUID = new NameUuidData(name, uuid);
+        CACHE.put(nameKEY, playerUUID);
+        return playerUUID;
     }
 
-    public String getName() {
-        return this.name;
-    }
+    private static class NameUuidData implements IPlayerUUID {
 
-    public String getUuid() {
-        return this.uuid;
-    }
+        @NotNull
+        private final String name;
+        @NotNull
+        private final UUID id;
 
-    public UUID getUUID() {
-        return UUIDUtil.fromString(this.uuid);
-    }
-
-    static class NameUuidData {
-
-        public final String name;
-        public final String uuid;
-
-        NameUuidData(String name, String uuid) {
+        NameUuidData(@NotNull String name, @NotNull UUID id) {
             this.name = name;
-            this.uuid = uuid;
+            this.id = id;
         }
 
+        @NotNull
+        @Override
+        public String getName() {
+            return this.name;
+        }
+
+        @NotNull
+        @Override
+        public UUID getId() {
+            return this.id;
+        }
     }
 
 }

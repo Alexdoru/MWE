@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.commands;
 
+import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
@@ -52,14 +53,14 @@ public class CommandStalk extends MyAbstractCommand {
     private void stalkPlayer(String name) {
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
-                final MojangNameToUUID apiname = new MojangNameToUUID(name);
-                final HypixelPlayerData playerData = new HypixelPlayerData(apiname.getUuid());
+                final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(name);
+                final HypixelPlayerData playerData = new HypixelPlayerData(playerID.getId());
                 final LoginData loginData = new LoginData(playerData.getPlayerData());
-                if (!apiname.getName().equals(loginData.getdisplayname()) || loginData.hasNeverJoinedHypixel()) {
+                if (!playerID.getName().equals(loginData.getdisplayname()) || loginData.hasNeverJoinedHypixel()) {
                     ChatUtil.addChatMessage(ChatUtil.getTagMW() + RED + "This player never joined Hypixel, it might be a nick.");
                     return null;
                 }
-                final HypixelPlayerStatus playerStatus = loginData.isHidingFromAPI() ? null : new HypixelPlayerStatus(apiname.getUuid());
+                final HypixelPlayerStatus playerStatus = loginData.isHidingFromAPI() ? null : new HypixelPlayerStatus(playerID.getId());
                 Minecraft.getMinecraft().addScheduledTask(() -> this.stalkPlayer(playerData, loginData, playerStatus));
             } catch (ApiException e) {
                 ChatUtil.addChatMessage(RED + e.getMessage());

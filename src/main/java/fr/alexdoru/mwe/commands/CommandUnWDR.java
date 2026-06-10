@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.commands;
 
+import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
@@ -46,18 +47,26 @@ public class CommandUnWDR extends MyAbstractCommand {
         MultithreadingUtil.addTaskToQueue(() -> {
             final Minecraft mc = Minecraft.getMinecraft();
             try {
-                final MojangNameToUUID apireq = new MojangNameToUUID(playername);
-                mc.addScheduledTask(() -> this.unwdr(apireq.getUuid(), apireq.getName()));
+                final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
+                mc.addScheduledTask(() -> this.unwdr(playerID.getId(), playerID.getName()));
             } catch (ApiException e) {
-                mc.addScheduledTask(() -> this.unwdr(null, playername));
+                mc.addScheduledTask(() -> this.unwdr((UUID) null, playername));
             }
             return null;
         });
     }
 
-    private void unwdr(String uuidstr, String playername) {
+    private void unwdr(String uuid, String playername) {
+        final UUID id = UUIDUtil.fromString(uuid);
+        if (id == null) {
+            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Invalid UUID");
+            return;
+        }
+        this.unwdr(id, playername);
+    }
+
+    private void unwdr(UUID uuid, String playername) {
         ReportQueue.INSTANCE.removePlayerFromReportQueue(playername);
-        final UUID uuid = UUIDUtil.fromString(uuidstr);
         if (!WdrData.remove(uuid, playername)) {
             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list.");
             return;
