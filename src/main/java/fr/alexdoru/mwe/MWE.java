@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe;
 
+import fr.alexdoru.mwe.api.IMWEAddon;
 import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.mwe.chat.ChatListener;
 import fr.alexdoru.mwe.commands.*;
@@ -16,16 +17,22 @@ import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.updater.ModUpdater;
+import net.minecraft.launchwrapper.Launch;
+import net.minecraft.launchwrapper.LaunchClassLoader;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.versioning.ComparableVersion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.util.*;
 
 @Mod(
         modid = MWE.modid,
@@ -40,11 +47,59 @@ public class MWE {
     public static final String version = "4.0";
     public static final Logger logger = LogManager.getLogger(modName);
     public static File jarFile;
+    private final List<IMWEAddon> loadedAddons = new ArrayList<>();
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public MWE() {
+        final Object o = Launch.blackboard.get("mwe.addons");
+        if (o instanceof ArrayList) {
+            Map<String, Class<?>> cachedClasses = null;
+            try {
+                final Field field = LaunchClassLoader.class.getDeclaredField("cachedClasses");
+                field.setAccessible(true);
+                cachedClasses = (Map<String, Class<?>>) field.get(Launch.classLoader);
+            } catch (Exception ex) {
+                logger.error("Could not reflect classloader's cached classes", ex);
+            }
+            final ArrayList addonNames = ((ArrayList) o);
+            final Set<String> loadedAddonNames = new HashSet<>();
+            for (final Object name : addonNames) {
+                if (name instanceof String) {
+                    final String addonName = ((String) name);
+                    if (cachedClasses != null && cachedClasses.containsKey(name)) {
+                        throw new IllegalStateException("Class " + addonName + " was loaded too early");
+                    }
+                    try {
+                        final Class<?> addonClass = Class.forName(addonName);
+                        if (!IMWEAddon.class.isAssignableFrom(addonClass)) {
+                            throw new IllegalStateException("Addon " + addonName + " does not implement IMWEAddon interface");
+                        }
+                        final IMWEAddon addon = (IMWEAddon) addonClass.newInstance();
+                        final ComparableVersion requestedVersion = new ComparableVersion(addon.targetVersion());
+                        final ComparableVersion MWEVersion = new ComparableVersion(version);
+                        if (requestedVersion.compareTo(MWEVersion) > 0) {
+                            logger.fatal("Addon {} requested version {}, but MWE version is {}", addonName, addon.targetVersion(), version);
+                            throw new IllegalStateException("Invalid MWE version");
+                        }
+                        if (loadedAddonNames.contains(addon.name())) {
+                            throw new IllegalStateException("Duplicate addons with same name loaded : " + addon.name());
+                        }
+                        this.loadedAddons.add(addon);
+                        loadedAddonNames.add(addon.name());
+                        logger.info("Successfully loaded addon {}", addonName);
+                    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
+    }
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         MWEConfig.loadConfig(new File(event.getModConfigurationDirectory(), "mwe.cfg"));
         jarFile = event.getSourceFile();
+        this.loadedAddons.forEach(a -> a.preInit(event));
     }
 
     @EventHandler
@@ -79,6 +134,13 @@ public class MWE {
         ClientCommandHandler.instance.registerCommand(new CommandNocheaters());
         ClientCommandHandler.instance.registerCommand(new CommandHypixelShout());
 
+        this.loadedAddons.forEach(a -> a.init(event));
+
+    }
+
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        this.loadedAddons.forEach(a -> a.postInit(event));
     }
 
 }

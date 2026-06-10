@@ -10,12 +10,14 @@ import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -26,6 +28,18 @@ import java.util.concurrent.Future;
 public final class MWEApi {
 
     private MWEApi() {}
+
+    /**
+     * Register the main class of your addon, this should be the name of the class,
+     * For example : "net.myname.myaddon.MWEAddon"
+     */
+    public static void registerAddon(String classname) {
+        final Object o = Launch.blackboard.computeIfAbsent("mwe.addons", k -> new ArrayList<>());
+        if (o instanceof ArrayList) {
+            //noinspection unchecked
+            ((ArrayList<String>) o).add(classname);
+        }
+    }
 
     public static final class Chat {
 
