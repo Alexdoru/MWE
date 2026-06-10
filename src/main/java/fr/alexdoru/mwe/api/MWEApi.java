@@ -10,6 +10,7 @@ import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
 import fr.alexdoru.mwe.nocheaters.WdrData;
+import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.launchwrapper.Launch;
@@ -238,15 +239,22 @@ public final class MWEApi {
         }
     }
 
-    public static final class Threads {
+    public static final class Tasks {
 
-        private Threads() {}
+        private Tasks() {}
 
         /**
-         * Runs a task asynchronously
+         * Schedules a task to run asynchronously
          */
-        public static <V> Future<V> addTaskToQueue(Callable<V> c) {
+        public static <V> Future<V> queueAsyncTask(Callable<V> c) {
             return MultithreadingUtil.addTaskToQueue(c);
+        }
+
+        /**
+         * Schedules a task to run in X ticks on the main thread
+         */
+        public static void queueSyncDelayedTask(Runnable task, int ticks) {
+            new DelayedTask(task, ticks);
         }
     }
 }
