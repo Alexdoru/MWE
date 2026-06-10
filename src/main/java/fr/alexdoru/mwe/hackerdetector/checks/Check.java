@@ -12,7 +12,6 @@ import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.mwe.hackerdetector.utils.Vector3D;
 import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
-import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.NameUtil;
@@ -34,7 +33,6 @@ import net.minecraftforge.common.MinecraftForge;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.UUID;
 import java.util.function.Predicate;
 
 /**
@@ -105,17 +103,7 @@ public abstract class Check implements ICheck {
     private void addToReportList(EntityPlayer player) {
         if (!ScoreboardTracker.isReplayMode() && MWEConfig.addToReportList && !SquadHandler.isSquadmate(player.getName())) {
             final String cheat = this.getCheatName().toLowerCase() + "[H]";
-            final UUID uuid = player.getUniqueID();
-            final WDR wdr = WdrData.getWdr(uuid, player.getName());
-            final boolean refreshName;
-            if (wdr == null) {
-                WdrData.put(uuid, player.getName(), new WDR(cheat));
-                refreshName = true;
-            } else {
-                refreshName = wdr.addCheat(cheat);
-            }
-            WdrData.markDirty();
-            if (refreshName) NameUtil.updateMWPlayerDataAndEntityData(player, false);
+            WdrData.addReport(player.getUniqueID(), player.getName(), cheat);
         }
     }
 

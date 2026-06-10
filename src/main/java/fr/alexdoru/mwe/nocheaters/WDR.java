@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.nocheaters;
 
+import fr.alexdoru.mwe.api.IReportInfo;
 import fr.alexdoru.mwe.commands.CommandReport;
 import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.util.ChatComponentText;
@@ -8,10 +9,11 @@ import net.minecraft.util.IChatComponent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-public class WDR implements Comparable<WDR> {
+public class WDR implements IReportInfo, Comparable<WDR> {
 
     private final ArrayList<String> cheats;
     private boolean redIcon;
@@ -80,14 +82,22 @@ public class WDR implements Comparable<WDR> {
         this.yellowIcon = false;
     }
 
+    @Override
+    public List<String> getCheats() {
+        return Collections.unmodifiableList(cheats);
+    }
+
+    @Override
     public boolean hasRedIcon() {
         return this.redIcon;
     }
 
+    @Override
     public boolean hasYellowIcon() {
         return this.yellowIcon;
     }
 
+    @Override
     public long getTimestamp() {
         return timestamp;
     }

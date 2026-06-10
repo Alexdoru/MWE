@@ -5,14 +5,18 @@ import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.gui.HUDRenderer;
+import fr.alexdoru.mwe.nocheaters.WdrData;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+@SuppressWarnings("unused")
 public final class MWEApi {
 
     private MWEApi() {}
@@ -85,6 +89,40 @@ public final class MWEApi {
         }
     }
 
+    public static final class ReportList {
+
+        private ReportList() {}
+
+        /**
+         * Returns true if the player is in the report list
+         */
+        public static boolean isPlayerReported(@NotNull UUID uuid, @Nullable String playername) {
+            return WdrData.getWdr(uuid, playername) != null;
+        }
+
+        /**
+         * Returns information about the report for the player, might be null
+         */
+        @Nullable
+        public static IReportInfo getReportInfoFor(@NotNull UUID uuid, @Nullable String playername) {
+            return WdrData.getWdr(uuid, playername);
+        }
+
+        /**
+         * Adds a player to the reportlist
+         */
+        public static void addToReportList(@NotNull UUID uuid, @Nullable String playername, List<String> cheats) {
+            WdrData.addReport(uuid, playername, cheats);
+        }
+
+        /**
+         * Removes a player from the reportlist, returns true if the player was succesfully removed
+         */
+        public static boolean removeFromReportList(@NotNull UUID uuid, @Nullable String playername) {
+            return WdrData.remove(uuid, playername);
+        }
+    }
+
     public static final class Squad {
 
         private Squad() {}
@@ -111,10 +149,10 @@ public final class MWEApi {
         }
 
         /**
-         * Removes a player from the squad
+         * Removes a player from the squad, returns true if the player was succesfully removed
          */
-        public static void removeSquadmate(String playername) {
-            SquadHandler.removePlayer(playername);
+        public static boolean removeSquadmate(String playername) {
+            return SquadHandler.removePlayer(playername);
         }
 
         /**

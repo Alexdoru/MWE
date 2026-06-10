@@ -8,7 +8,6 @@ import fr.alexdoru.mwe.http.cache.CachedHypixelPlayerData;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
-import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
@@ -112,15 +111,9 @@ public class CommandWDR extends MyAbstractCommand {
     }
 
     private static void addPlayerToReportList(UUID uuid, String playername, String formattedName, List<String> cheats) {
-        final WDR wdr = WdrData.getWdr(uuid, playername);
-        if (wdr == null) {
-            WdrData.put(uuid, playername, new WDR(cheats));
-        } else {
-            wdr.addCheats(cheats);
-        }
+        final boolean added = WdrData.addReport(uuid, playername, cheats);
         WdrData.saveReportedPlayers();
-        NameUtil.updateMWPlayerDataAndEntityData(playername, false);
-        if (wdr == null) {
+        if (added) {
             final boolean isNicked = !NameUtil.isRealPlayer(uuid);
             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() +
                     EnumChatFormatting.GREEN + "You reported " + (isNicked ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")

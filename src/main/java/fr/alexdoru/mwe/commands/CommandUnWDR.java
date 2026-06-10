@@ -5,10 +5,8 @@ import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
-import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
-import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.TabCompletionUtil;
 import fr.alexdoru.mwe.utils.UUIDUtil;
 import net.minecraft.client.Minecraft;
@@ -60,14 +58,12 @@ public class CommandUnWDR extends MyAbstractCommand {
     private void unwdr(String uuidstr, String playername) {
         ReportQueue.INSTANCE.removePlayerFromReportQueue(playername);
         final UUID uuid = UUIDUtil.fromString(uuidstr);
-        final WDR wdr = WdrData.remove(uuid, playername);
-        if (wdr == null) {
+        if (!WdrData.remove(uuid, playername)) {
             ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list.");
             return;
         }
         WdrData.saveReportedPlayers();
         ChatHandler.deleteWarningFromChat(playername);
-        NameUtil.updateMWPlayerDataAndEntityData(playername, false);
         ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + ".");
     }
 

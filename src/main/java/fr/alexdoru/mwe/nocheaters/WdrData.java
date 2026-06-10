@@ -36,10 +36,6 @@ public class WdrData {
         }
     }
 
-    public static void markDirty() {
-        dirty = true;
-    }
-
     public static Map<Object, WDR> getAllWDRs() {
         final Map<Object, WDR> mergedMap = new HashMap<>(uuidMap.size() + nickMap.size());
         mergedMap.putAll(uuidMap);
@@ -54,21 +50,70 @@ public class WdrData {
         return nickMap.get(playername);
     }
 
-    public static void put(UUID uuid, String playername, WDR wdr) {
-        if (NameUtil.isRealPlayer(uuid)) {
-            uuidMap.put(uuid, wdr);
-            return;
+    /**
+     * Adds or update a report for a player, returns true if it added a new report
+     */
+    public static boolean addReport(UUID uuid, String playername, String cheat) {
+        final WDR wdr = WdrData.getWdr(uuid, playername);
+        boolean added = false;
+        final boolean refreshName;
+        if (wdr == null) {
+            added = WdrData.put(uuid, playername, new WDR(cheat));
+            refreshName = true;
+        } else {
+            refreshName = wdr.addCheat(cheat);
         }
-        nickMap.put(playername, wdr);
+        if (refreshName) {
+            NameUtil.updateMWPlayerDataAndEntityData(playername, false);
+        }
+        dirty = true;
+        return added;
     }
 
-    public static WDR remove(UUID uuid, String playername) {
-        if (uuid != null) {
-            return uuidMap.remove(uuid);
-        } else if (playername != null) {
-            return nickMap.remove(playername);
+    /**
+     * Adds or update a report for a player, returns true if it added a new report
+     */
+    public static boolean addReport(UUID uuid, String playername, List<String> cheats) {
+        final WDR wdr = WdrData.getWdr(uuid, playername);
+        boolean added = false;
+        if (wdr == null) {
+            added = WdrData.put(uuid, playername, new WDR(cheats));
+        } else {
+            wdr.addCheats(cheats);
         }
-        return null;
+        NameUtil.updateMWPlayerDataAndEntityData(playername, false);
+        dirty = true;
+        return added;
+    }
+
+    private static boolean put(UUID uuid, String playername, WDR wdr) {
+        if (NameUtil.isRealPlayer(uuid)) {
+            uuidMap.put(uuid, wdr);
+            return true;
+        }
+        if (playername != null) {
+            nickMap.put(playername, wdr);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Removes a player from the reportlist, returns true if the player was succesfully removed
+     */
+    public static boolean remove(UUID uuid, String playername) {
+        final boolean removed;
+        if (uuid != null) {
+            removed = uuidMap.remove(uuid) != null;
+        } else if (playername != null) {
+            removed = nickMap.remove(playername) != null;
+        } else {
+            removed = false;
+        }
+        if (removed) {
+            NameUtil.updateMWPlayerDataAndEntityData(playername, false);
+        }
+        return removed;
     }
 
     public static void saveReportedPlayers() {

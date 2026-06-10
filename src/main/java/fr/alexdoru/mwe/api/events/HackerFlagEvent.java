@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * This event is fired on the {@link MinecraftForge#EVENT_BUS}.
  */
-public class HackerFlagEvent extends Event {
+public final class HackerFlagEvent extends Event {
 
     /**
      * The player that flagged

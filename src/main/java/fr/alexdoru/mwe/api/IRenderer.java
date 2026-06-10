@@ -20,8 +20,6 @@ public interface IRenderer {
 
     /**
      * Can be used to disable the renderer
-     * more conveniently than unregistering
-     * it from the API.
      */
     boolean isEnabled(long currentTimeMillis);
 

@@ -19,7 +19,7 @@ public enum MWTeamColor {
     }
 
     /**
-     * Returns the chat color code for the team according to the colorblind setting set used by the player
+     * Returns the chat color code for the team according to the colorblind setting set by the player
      */
     public String getColorPrefix() {
         switch (this) {

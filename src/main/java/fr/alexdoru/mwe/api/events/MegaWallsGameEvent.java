@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * This event is fired on the {@link MinecraftForge#EVENT_BUS}.
  */
-public class MegaWallsGameEvent extends Event {
+public final class MegaWallsGameEvent extends Event {
 
     @NotNull
     public final Type type;
