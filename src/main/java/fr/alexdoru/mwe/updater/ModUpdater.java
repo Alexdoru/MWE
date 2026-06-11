@@ -112,10 +112,14 @@ public class ModUpdater {
         downloadFileTo(artifactInfo.url, modCacheFile);
         LOGGER.info("Downloaded {}", artifactInfo.name);
 
-        final String GITHUB_DELETER_URL = "https://github.com/Alexdoru/Deleter/releases/download/1.0/Deleter.jar";
         final File deleterFile = new File(cacheDir, "Deleter.jar");
-        downloadFileTo(GITHUB_DELETER_URL, deleterFile);
-        LOGGER.info("Downloaded Mod Deleter");
+        try (InputStream bundledDeleter = ModUpdater.class.getResourceAsStream("/jarjar/Deleter.jar")) {
+            if (bundledDeleter == null) {
+                throw new IllegalStateException("Could not find bundled Deleter.jar in mod resources");
+            }
+            Files.copy(bundledDeleter, deleterFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+        LOGGER.info("Unpacked Mod Deleter");
 
         if (modCacheFile.exists() && deleterFile.exists()) {
 
@@ -174,7 +178,7 @@ public class ModUpdater {
         }
 
         if (!maxRelease.has("assets")) {
-            LOGGER.error("Latest release doesn't have assests");
+            LOGGER.error("Latest release doesn't have assets");
             return null;
         }
 
