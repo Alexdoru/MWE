@@ -38,7 +38,7 @@ import java.util.*;
 @Mod(
         modid = MWE.modid,
         name = MWE.modName,
-        version = MWE.version,
+        version = BuildConfig.VERSION,
         dependencies = "required-after:Forge@["
                 + net.minecraftforge.common.ForgeVersion.majorVersion + '.'
                 + net.minecraftforge.common.ForgeVersion.minorVersion + '.'
@@ -50,7 +50,7 @@ public class MWE {
 
     public static final String modid = "mwenhancements";
     public static final String modName = "MWE";
-    public static final String version = "4.0";
+    public static final String version = BuildConfig.VERSION;
     public static final Logger logger = LogManager.getLogger(modName);
     private File jarFile;
     private final List<IMWEAddon> loadedAddons = new ArrayList<>();

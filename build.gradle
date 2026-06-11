@@ -19,6 +19,37 @@ archivesBaseName = "[1.8.9] MWE"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+def generatedSourcesDir = file("$buildDir/generated/sources/mwe")
+
+task generateBuildConfig {
+    outputs.dir generatedSourcesDir
+
+    doLast {
+        generatedSourcesDir.mkdirs()
+
+        file("$generatedSourcesDir/fr/alexdoru/mwe/BuildConfig.java").with {
+            parentFile.mkdirs()
+            text = """
+package fr.alexdoru.mwe;
+
+public final class BuildConfig {
+    public static final String VERSION = "${project.version}";
+}
+"""
+        }
+    }
+}
+
+compileJava.dependsOn generateBuildConfig
+
+sourceSets {
+    main {
+        java {
+            srcDir generatedSourcesDir
+        }
+    }
+}
+
 compileJava {
     options.encoding = "UTF-8"
     options.encoding = "UTF-8"
