@@ -35,12 +35,16 @@ import java.nio.file.StandardCopyOption;
 
 public class ModUpdater {
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
-    private static boolean hasTriggered = false;
-    public static boolean isUpTodate = false;
+    private final File jarFile;
+    private boolean hasTriggered = false;
+
+    public ModUpdater(File file) {
+        this.jarFile = file;
+    }
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
+        final Minecraft mc = Minecraft.getMinecraft();
         if (mc.theWorld != null && mc.thePlayer != null && !hasTriggered) {
             hasTriggered = true;
             checkForgeVersion();
@@ -68,7 +72,7 @@ public class ModUpdater {
     }
 
     // https://github.com/DeDiamondPro/Auto-Updater
-    private static void checkForUpdate() throws ApiException, IOException {
+    private void checkForUpdate() throws ApiException, IOException {
 
         MWE.logger.info("Checking for updates");
 
@@ -104,7 +108,6 @@ public class ModUpdater {
         }
         if (currentVersion.compareTo(latestVersion) >= 0) {
             MWE.logger.info("The mod is up to date!");
-            isUpTodate = true;
             return;
         }
 
@@ -146,7 +149,7 @@ public class ModUpdater {
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 try {
-                    final File oldJarFile = MWE.jarFile;
+                    final File oldJarFile = this.jarFile;
                     final File newJarFile = new File(oldJarFile.getParent(), newModFileName);
                     if (newJarFile.createNewFile() && modCacheFile.exists() && oldJarFile.exists()) {
                         try (final InputStream source = Files.newInputStream(modCacheFile.toPath()); final OutputStream dest = Files.newOutputStream(newJarFile.toPath())) {

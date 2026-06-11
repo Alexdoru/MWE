@@ -46,7 +46,7 @@ public class MWE {
     public static final String modName = "MWE";
     public static final String version = "4.0";
     public static final Logger logger = LogManager.getLogger(modName);
-    public static File jarFile;
+    private File jarFile;
     private final List<IMWEAddon> loadedAddons = new ArrayList<>();
 
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -106,7 +106,7 @@ public class MWE {
     public void init(FMLInitializationEvent event) {
 
         MinecraftForge.EVENT_BUS.register(new WdrData());
-        MinecraftForge.EVENT_BUS.register(new ModUpdater());
+        MinecraftForge.EVENT_BUS.register(new ModUpdater(this.jarFile));
         MinecraftForge.EVENT_BUS.register(new HUDRenderer());
         MinecraftForge.EVENT_BUS.register(new ReportQueue());
         MinecraftForge.EVENT_BUS.register(new ChatListener());
