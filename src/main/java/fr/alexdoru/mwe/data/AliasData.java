@@ -3,8 +3,10 @@ package fr.alexdoru.mwe.data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import fr.alexdoru.mwe.api.events.AliasEvent;
 import fr.alexdoru.mwe.utils.NameUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
@@ -40,12 +42,23 @@ public class AliasData {
     }
 
     public static void putAlias(@Nullable UUID id, @Nullable String playername, String alias) {
+        String prevAlias = null;
+        boolean added = false;
         if (id != null && NameUtil.isRealPlayer(id)) {
-            aliasMap.put(id.toString().replace("-", ""), alias);
+            prevAlias = aliasMap.put(id.toString().replace("-", ""), alias);
+            added = true;
         } else if (playername != null) {
-            aliasMap.put(playername, alias);
+            prevAlias = aliasMap.put(playername, alias);
+            added = true;
         }
-        NameUtil.updateMWPlayerDataAndEntityData(playername, false);
+        if (added) {
+            NameUtil.updateMWPlayerDataAndEntityData(playername, false);
+            if (prevAlias == null) {
+                MinecraftForge.EVENT_BUS.post(new AliasEvent(AliasEvent.Type.ADDED, id, playername));
+            } else if (!prevAlias.equals(alias)) {
+                MinecraftForge.EVENT_BUS.post(new AliasEvent(AliasEvent.Type.ALIAS_CHANGED, id, playername));
+            }
+        }
     }
 
     /**
@@ -60,6 +73,7 @@ public class AliasData {
         }
         if (removed != null) {
             NameUtil.updateMWPlayerDataAndEntityData(playername, false);
+            MinecraftForge.EVENT_BUS.post(new AliasEvent(AliasEvent.Type.REMOVED, id, playername));
         }
         return removed != null;
     }
