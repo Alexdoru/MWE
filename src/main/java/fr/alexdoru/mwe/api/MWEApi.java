@@ -4,6 +4,7 @@ import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
 import fr.alexdoru.mwe.config.lib.ConfigHandler;
+import fr.alexdoru.mwe.data.AliasData;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.gui.HUDRenderer;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
@@ -38,6 +39,40 @@ public final class MWEApi {
         if (o instanceof ArrayList) {
             //noinspection unchecked
             ((ArrayList<String>) o).add(classname);
+        }
+    }
+
+    public static final class Alias {
+
+        private Alias() {}
+
+        /**
+         * Returns true if the player has an alias
+         */
+        public static boolean hasAlias(@Nullable UUID id, @Nullable String playername) {
+            return AliasData.getAlias(id, playername) != null;
+        }
+
+        /**
+         * Returns the alias for this player, if any
+         */
+        @Nullable
+        public static String getAlias(@Nullable UUID id, @Nullable String playername) {
+            return AliasData.getAlias(id, playername);
+        }
+
+        /**
+         * Sets the alias for the specified player
+         */
+        public static void setAlias(@Nullable UUID id, @Nullable String playername, String alias) {
+            AliasData.putAlias(id, playername, alias);
+        }
+
+        /**
+         * Removes a player from the alias list, returns true if the player was succesfully removed
+         */
+        public static boolean removeAlias(@Nullable UUID id, @Nullable String playername) {
+            return AliasData.removeAlias(id, playername);
         }
     }
 

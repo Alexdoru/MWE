@@ -3,7 +3,9 @@ package fr.alexdoru.mwe.data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import fr.alexdoru.mwe.utils.NameUtil;
 import net.minecraft.client.Minecraft;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.util.*;
@@ -23,20 +25,43 @@ public class AliasData {
         return new ArrayList<>(aliasMap.keySet());
     }
 
-    public static Map<String, String> getAliasMap() {
-        return aliasMap;
+    public static List<Map.Entry<String, String>> getEntries() {
+        return new ArrayList<>(aliasMap.entrySet());
     }
 
-    public static String getAlias(String key) {
-        return aliasMap.get(key);
+    @Nullable
+    public static String getAlias(@Nullable UUID id, @Nullable String playername) {
+        if (id != null && NameUtil.isRealPlayer(id)) {
+            return aliasMap.get(id.toString().replace("-", ""));
+        } else if (playername != null) {
+            return aliasMap.get(playername);
+        }
+        return null;
     }
 
-    public static void putAlias(String key, String alias) {
-        aliasMap.put(key, alias);
+    public static void putAlias(@Nullable UUID id, @Nullable String playername, String alias) {
+        if (id != null && NameUtil.isRealPlayer(id)) {
+            aliasMap.put(id.toString().replace("-", ""), alias);
+        } else if (playername != null) {
+            aliasMap.put(playername, alias);
+        }
+        NameUtil.updateMWPlayerDataAndEntityData(playername, false);
     }
 
-    public static void removeAlias(String key) {
-        aliasMap.remove(key);
+    /**
+     * Removes a player from the alias list, returns true if the player was succesfully removed
+     */
+    public static boolean removeAlias(@Nullable UUID id, @Nullable String playername) {
+        String removed = null;
+        if (id != null && NameUtil.isRealPlayer(id)) {
+            removed = aliasMap.remove(id.toString().replace("-", ""));
+        } else if (playername != null) {
+            removed = aliasMap.remove(playername);
+        }
+        if (removed != null) {
+            NameUtil.updateMWPlayerDataAndEntityData(playername, false);
+        }
+        return removed != null;
     }
 
     private static void readDataFromFile() {

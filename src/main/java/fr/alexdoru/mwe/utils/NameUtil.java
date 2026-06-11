@@ -221,7 +221,6 @@ public class NameUtil {
         }
 
         final String username = gameProfile.getName();
-        final String uuid = id.toString().replace("-", "");
         final WDR wdr = WdrData.getWdr(id, username);
         String extraPrefix = "";
         IChatComponent iExtraPrefix = null;
@@ -265,8 +264,8 @@ public class NameUtil {
                 mwClass = MWClass.fromTeamTag(ScoreboardTracker.isMWReplay() ? teamprefix : colorSuffix);
                 final boolean isobf = teamprefix.contains("§k");
                 final boolean isNicked = NameUtil.isNickedPlayer(id);
-                final String alias = AliasData.getAlias(isNicked ? username : uuid);
-                if (iExtraPrefix != null || isobf || isNicked || squadname != null || alias != null) {
+                final String alias = AliasData.getAlias(id, username);
+                if (iExtraPrefix != null || isobf || isNicked && MWEConfig.showFakePlayersInTab || squadname != null || alias != null) {
                     final StringBuilder sb = new StringBuilder();
                     if (iExtraPrefix != null) sb.append(extraPrefix);
                     if (isobf && MWEConfig.deobfNamesInTab) {

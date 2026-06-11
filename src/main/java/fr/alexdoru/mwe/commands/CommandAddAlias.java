@@ -104,15 +104,15 @@ public class CommandAddAlias extends MyAbstractCommand {
             displaypage = 1;
         }
 
-        final ArrayList<Map.Entry<String, String>> entryList = new ArrayList<>(AliasData.getAliasMap().entrySet());
-        Collections.reverse(entryList);
+        final List<Map.Entry<String, String>> entryList = AliasData.getEntries();
 
         final List<Future<IChatComponent>> futureList = new ArrayList<>();
         int nbAlias = 1;
         int nbpage = 1;
         boolean warning = true;
 
-        for (final Map.Entry<String, String> entry : entryList) {
+        for (int i = entryList.size() - 1; i >= 0; i--) {
+            final Map.Entry<String, String> entry = entryList.get(i);
             if (nbAlias == 11) {
                 nbAlias = 1;
                 nbpage++;
@@ -179,13 +179,7 @@ public class CommandAddAlias extends MyAbstractCommand {
     private void listAliasInLobby() {
         ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "In this lobby :\n");
         for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
-            final String key;
-            if (NameUtil.isRealPlayer(netInfo.getGameProfile().getId())) {
-                key = netInfo.getGameProfile().getId().toString().replace("-", "");
-            } else {
-                key = netInfo.getGameProfile().getName();
-            }
-            if (AliasData.getAlias(key) != null) {
+            if (AliasData.getAlias(netInfo.getGameProfile().getId(), netInfo.getGameProfile().getName()) != null) {
                 ChatUtil.addChatMessage(NameUtil.getFormattedName(netInfo));
             }
         }
@@ -238,15 +232,14 @@ public class CommandAddAlias extends MyAbstractCommand {
             formattedName = playername;
         }
         if (uuid == null) {
-            AliasData.putAlias(playername, alias);
+            AliasData.putAlias(null, playername, alias);
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Added alias for the " + EnumChatFormatting.DARK_PURPLE + "nicked " + EnumChatFormatting.GREEN + "player "
                     + EnumChatFormatting.GOLD + formattedName + EnumChatFormatting.WHITE + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.WHITE + ")");
         } else {
-            AliasData.putAlias(uuid.toString().replace("-", ""), alias);
+            AliasData.putAlias(uuid, null, alias);
             ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Added alias for "
                     + EnumChatFormatting.GOLD + formattedName + EnumChatFormatting.WHITE + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.WHITE + ")");
         }
-        NameUtil.updateMWPlayerDataAndEntityData(playername, false);
     }
 
     private void removeAlias(String playername) {
@@ -291,12 +284,10 @@ public class CommandAddAlias extends MyAbstractCommand {
         if (formattedName == null) {
             formattedName = playername;
         }
-        if (uuid == null) {
-            AliasData.removeAlias(playername);
-        } else {
-            AliasData.removeAlias(uuid.toString().replace("-", ""));
+        if (!AliasData.removeAlias(uuid, playername)) {
+            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "Player does not have an alias.");
+            return;
         }
-        NameUtil.updateMWPlayerDataAndEntityData(playername, false);
         ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Removed alias for " + EnumChatFormatting.GOLD + formattedName);
     }
 
