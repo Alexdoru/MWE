@@ -1084,6 +1084,12 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = "Updates",
+            name = "Check for Update",
+            comment = "Checks if an update is available")
+    public static boolean checkForUpdate = true;
+
+    @ConfigProperty(
+            category = "Updates",
             name = "Automatic Update",
             comment = "Updates the mod automatically")
     public static boolean automaticUpdate = true;

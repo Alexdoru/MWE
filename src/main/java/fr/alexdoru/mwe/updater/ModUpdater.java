@@ -16,54 +16,67 @@ import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.Util;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.versioning.ComparableVersion;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModUpdater {
 
+    private final Logger LOGGER = LogManager.getLogger("MWE Updater");
     private final File jarFile;
-    private boolean hasTriggered = false;
+    private final boolean isFeatherClient = Loader.isModLoaded("feather");
+    private final List<IChatComponent> pendingMessages = new ArrayList<>();
+    private volatile boolean finishedRunning = false;
 
     public ModUpdater(File file) {
         this.jarFile = file;
+        MultithreadingUtil.addTaskToQueue(() -> {
+            try {
+                checkForUpdate();
+            } catch (Throwable t) {
+                t.printStackTrace();
+            } finally {
+                finishedRunning = true;
+            }
+            return null;
+        });
     }
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        final Minecraft mc = Minecraft.getMinecraft();
-        if (mc.theWorld != null && mc.thePlayer != null && !hasTriggered) {
-            hasTriggered = true;
-            MultithreadingUtil.addTaskToQueue(() -> {
-                try {
-                    checkForUpdate();
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-                return null;
-            });
-            MinecraftForge.EVENT_BUS.unregister(this);
+        if (finishedRunning) {
+            final Minecraft mc = Minecraft.getMinecraft();
+            if (mc.theWorld != null && mc.thePlayer != null) {
+                pendingMessages.forEach(ChatUtil::addChatMessage);
+                MinecraftForge.EVENT_BUS.unregister(this);
+            }
         }
     }
 
     // https://github.com/DeDiamondPro/Auto-Updater
     private void checkForUpdate() throws ApiException, IOException {
 
-        MWE.logger.info("Checking for updates");
+        LOGGER.info("Checking for updates...");
 
-        final JsonArray jsonArray = HttpClient.getAsJsonArray("https://api.github.com/repos/Alexdoru/MWE/releases");
+        final String GITHUB_MWE_RELEASE_API = "https://api.github.com/repos/Alexdoru/MWE/releases";
+        final String GITHUB_MWE_RELEASE = "https://github.com/Alexdoru/MWE/releases";
+
+        final JsonArray jsonArray = HttpClient.getAsJsonArray(GITHUB_MWE_RELEASE_API);
 
         String downloadUrl = null;
         ComparableVersion latestVersion = null;
@@ -89,26 +102,27 @@ public class ModUpdater {
             }
         }
 
-        final ComparableVersion currentVersion = new ComparableVersion(MWE.version);
         if (latestVersion == null) {
             return;
         }
+
+        final ComparableVersion currentVersion = new ComparableVersion(MWE.version);
+
         if (currentVersion.compareTo(latestVersion) >= 0) {
-            MWE.logger.info("The mod is up to date!");
+            LOGGER.info("The mod is up to date!");
             return;
         }
 
-        final String GITHUB_URL = "https://github.com/Alexdoru/MWE/releases";
-        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements "
+        this.pendingMessages.add(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements "
                 + EnumChatFormatting.GOLD + "version v" + latestVersion + EnumChatFormatting.GREEN + " is available, click this message to see the changelog and download page.")
                 .setChatStyle(new ChatStyle()
-                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, GITHUB_URL))
-                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + GITHUB_URL)))));
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, GITHUB_MWE_RELEASE))
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + GITHUB_MWE_RELEASE)))));
 
         if (!MWEConfig.automaticUpdate || downloadUrl == null || !downloadUrl.endsWith(".jar")) return;
 
-        if (Loader.isModLoaded("feather")) {
-            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "The automatic updater is disabled on Feather.");
+        if (isFeatherClient) {
+            this.pendingMessages.add(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + "The automatic updater is disabled on Feather."));
             return;
         }
 
@@ -120,67 +134,62 @@ public class ModUpdater {
         final String newModFileName = getFileName(downloadUrl);
         final File modCacheFile = new File(cacheDir, newModFileName);
         downloadFileTo(downloadUrl, modCacheFile);
-        MWE.logger.info("Downloaded MWE Update");
+        LOGGER.info("Downloaded {}", newModFileName);
 
         final String GITHUB_DELETER_URL = "https://github.com/Alexdoru/Deleter/releases/download/1.0/Deleter.jar";
         final String deleterFileName = getFileName(GITHUB_DELETER_URL);
         final File deleterFile = new File(cacheDir, deleterFileName);
         downloadFileTo(GITHUB_DELETER_URL, deleterFile);
-        MWE.logger.info("Downloaded Mod Deleter");
+        LOGGER.info("Downloaded Mod Deleter");
 
         if (modCacheFile.exists() && deleterFile.exists()) {
 
-            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements "
+            this.pendingMessages.add(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements "
                     + EnumChatFormatting.GOLD + "version v" + latestVersion
-                    + EnumChatFormatting.GREEN + " has been downloaded and will be installed to your mods folder automatically when closing your game.");
+                    + EnumChatFormatting.GREEN + " has been downloaded and will be installed to your mods folder automatically when closing your game."));
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 try {
                     final File oldJarFile = this.jarFile;
                     final File newJarFile = new File(oldJarFile.getParent(), newModFileName);
-                    if (newJarFile.createNewFile() && modCacheFile.exists() && oldJarFile.exists()) {
-                        try (final InputStream source = Files.newInputStream(modCacheFile.toPath()); final OutputStream dest = Files.newOutputStream(newJarFile.toPath())) {
-                            final byte[] buffer = new byte[1024];
-                            int length;
-                            while ((length = source.read(buffer)) > 0) {
-                                dest.write(buffer, 0, length);
-                            }
+                    if (modCacheFile.exists() && oldJarFile.exists()) {
+                        Files.copy(
+                                modCacheFile.toPath(),
+                                newJarFile.toPath(),
+                                StandardCopyOption.REPLACE_EXISTING
+                        );
+                        if (!modCacheFile.delete()) {
+                            LOGGER.error("Failed to delete temp file {}", modCacheFile);
                         }
-                        modCacheFile.delete();
-                        deleteOldJar(oldJarFile.getAbsolutePath(), deleterFile);
+                        final String javaExe = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+                        new ProcessBuilder(javaExe, "-jar", deleterFile.getName(), oldJarFile.getAbsolutePath())
+                                .directory(deleterFile.getParentFile())
+                                .inheritIO()
+                                .start();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }));
+            }, "MWE Updater Thread"));
 
         }
 
     }
 
-    private static void downloadFileTo(String browser_download_url, File cacheFile) throws IOException {
-        final URLConnection connection = new URL(browser_download_url).openConnection();
+    private static void downloadFileTo(String url, File cacheFile) throws IOException {
+        final URLConnection connection = new URL(url).openConnection();
         connection.setRequestProperty("User-Agent", "Updater");
-        final InputStream inputStream = connection.getInputStream();
-        Files.copy(inputStream, cacheFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        inputStream.close();
+        try (InputStream inputStream = connection.getInputStream()) {
+            Files.copy(
+                    inputStream,
+                    cacheFile.toPath(),
+                    StandardCopyOption.REPLACE_EXISTING
+            );
+        }
     }
 
     private static String getFileName(String downloadUrl) {
         return downloadUrl.substring(downloadUrl.lastIndexOf("/") + 1);
-    }
-
-    private static void deleteOldJar(String absolutePathToDelete, File deleter) throws IOException {
-        if (Util.getOSType() == Util.EnumOS.LINUX) {
-            Runtime.getRuntime().exec(new String[]{"chmod", "+x", deleter.getAbsolutePath()});
-        } else if (Util.getOSType() == Util.EnumOS.OSX) {
-            Runtime.getRuntime().exec(new String[]{"chmod", "755", deleter.getAbsolutePath()});
-        }
-        Runtime.getRuntime().exec(
-                new String[]{"java", "-jar", deleter.getName(), absolutePathToDelete},
-                null,
-                deleter.getParentFile()
-        );
     }
 
 }

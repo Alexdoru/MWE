@@ -66,6 +66,7 @@ runClient {
     jvmArgs += [
             "-Dmwe.classdump=true"
             //,"-Dmwe.moreclassdump=true"
+            , "-Dmwe.disableUpdater=true"
     ]
 }
 
