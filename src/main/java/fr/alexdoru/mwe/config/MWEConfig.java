@@ -1007,6 +1007,10 @@ public final class MWEConfig {
             comment = "Patches a bypass that allows cheaters to not appear to be blocking their sword when they are in fact blocking and attacking at the same time")
     public static boolean fixAutoblockAnimationBypass = true;
 
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Debug",
+            name = "Enable debug log",
+            comment = "Logs every hacker detector related action in .minecraft/logs/HackerDetector.log")
     public static boolean debugLogging;
 
     @ConfigProperty(

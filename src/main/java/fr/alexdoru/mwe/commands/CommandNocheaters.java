@@ -14,7 +14,6 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import fr.alexdoru.mwe.utils.DateUtil;
 import fr.alexdoru.mwe.utils.MapUtil;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
-import fr.alexdoru.mwe.utils.TabCompletionUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
 import net.minecraft.event.ClickEvent;
@@ -73,9 +72,6 @@ public class CommandNocheaters extends MyAbstractCommand {
         final String[] arguments = {"help", "reportlist"};
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, arguments);
-        }
-        if (args.length >= 2 && args[0].equalsIgnoreCase("log")) {
-            return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
         }
         return null;
     }

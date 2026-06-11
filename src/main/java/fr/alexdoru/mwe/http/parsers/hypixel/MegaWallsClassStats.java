@@ -354,4 +354,12 @@ public class MegaWallsClassStats {
         return classpoints;
     }
 
+    public float getFkdr() {
+        return fkdr;
+    }
+
+    public float getWlr() {
+        return wlr;
+    }
+
 }
