@@ -12,7 +12,7 @@ import java.util.*;
 @IFMLLoadingPlugin.Name("MWE ASM")
 @IFMLLoadingPlugin.MCVersion("1.8.9")
 @IFMLLoadingPlugin.TransformerExclusions({
-        "fr.alexdoru.mwe.api.asm.IClassNodeTransformer",
+        "fr.alexdoru.mwe.api.asm",
         "fr.alexdoru.mwe.asm.mappings",
         "fr.alexdoru.mwe.asm.transformers",
 })

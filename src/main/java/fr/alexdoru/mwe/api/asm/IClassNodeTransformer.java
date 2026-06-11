@@ -1,6 +1,5 @@
 package fr.alexdoru.mwe.api.asm;
 
-import fr.alexdoru.mwe.asm.transformers.InjectionCallback;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;

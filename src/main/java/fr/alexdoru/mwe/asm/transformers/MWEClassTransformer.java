@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.asm.transformers;
 
 import fr.alexdoru.mwe.api.asm.IClassNodeTransformer;
+import fr.alexdoru.mwe.api.asm.InjectionCallback;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.asm.transformers.externalmods.*;
 import fr.alexdoru.mwe.asm.transformers.mc.MinecraftTransformer_DebugMessages;

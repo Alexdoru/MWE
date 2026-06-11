@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.asm.transformers;
+package fr.alexdoru.mwe.api.asm;
 
 public class InjectionCallback {
 
