@@ -41,13 +41,13 @@ public class SquadHandler {
     }
 
     public static void addPlayer(String playername, String friendlyName) {
-        final boolean alreadyInSquad = squadmap.containsKey(playername);
+        final String prevSquadname = squadmap.get(playername);
         squadmap.put(playername, friendlyName);
         NameUtil.updateMWPlayerDataAndEntityData(playername, true);
-        if (alreadyInSquad) {
-            MinecraftForge.EVENT_BUS.post(new SquadEvent(SquadEvent.Type.NAME_CHANGED, playername));
-        } else {
+        if (prevSquadname == null) {
             MinecraftForge.EVENT_BUS.post(new SquadEvent(SquadEvent.Type.ADDED, playername));
+        } else if (!prevSquadname.equals(friendlyName)) {
+            MinecraftForge.EVENT_BUS.post(new SquadEvent(SquadEvent.Type.NAME_CHANGED, playername));
         }
     }
 
