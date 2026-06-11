@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.asm.transformers;
 
+import fr.alexdoru.mwe.api.asm.IClassNodeTransformer;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.asm.transformers.externalmods.*;
 import fr.alexdoru.mwe.asm.transformers.mc.MinecraftTransformer_DebugMessages;
@@ -29,17 +30,28 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class MWEClassTransformer implements IClassTransformer {
 
     private File outputDir = null;
-    private final HashMap<String, List<MWETransformer>> transformers = new HashMap<>();
+    private final Map<String, List<IClassNodeTransformer>> transformers = new HashMap<>();
+    private int count;
 
     public MWEClassTransformer() {
+        MWELoadingPlugin.logger.info("");
+        MWELoadingPlugin.logger.info("");
+        MWELoadingPlugin.logger.info(" __       __  __       __  ________         ______    ______   __       __ ");
+        MWELoadingPlugin.logger.info("|  \\     /  \\|  \\  _  |  \\|        \\       /      \\  /      \\ |  \\     /  \\");
+        MWELoadingPlugin.logger.info("| $$\\   /  $$| $$ / \\ | $$| $$$$$$$$      |  $$$$$$\\|  $$$$$$\\| $$\\   /  $$");
+        MWELoadingPlugin.logger.info("| $$$\\ /  $$$| $$/  $\\| $$| $$__          | $$__| $$| $$___\\$$| $$$\\ /  $$$");
+        MWELoadingPlugin.logger.info("| $$$$\\  $$$$| $$  $$$\\ $$| $$  \\         | $$    $$ \\$$    \\ | $$$$\\  $$$$");
+        MWELoadingPlugin.logger.info("| $$\\$$ $$ $$| $$ $$\\$$\\$$| $$$$$         | $$$$$$$$ _\\$$$$$$\\| $$\\$$ $$ $$");
+        MWELoadingPlugin.logger.info("| $$ \\$$$| $$| $$$$  \\$$$$| $$_____       | $$  | $$|  \\__| $$| $$ \\$$$| $$");
+        MWELoadingPlugin.logger.info("| $$  \\$ | $$| $$$    \\$$$| $$     \\      | $$  | $$ \\$$    $$| $$  \\$ | $$");
+        MWELoadingPlugin.logger.info(" \\$$      \\$$ \\$$      \\$$ \\$$$$$$$$       \\$$   \\$$  \\$$$$$$  \\$$      \\$$");
+        MWELoadingPlugin.logger.info("");
+        MWELoadingPlugin.logger.info("");
         register(new C08PacketPlayerBlockPlacementTransformer());
         register(new ChatComponentStyleTransformer_ChatHeads());
         register(new ChatComponentTextTransformer_ChatHeads());
@@ -119,9 +131,12 @@ public class MWEClassTransformer implements IClassTransformer {
         if ("01/04".equals(new SimpleDateFormat("dd/MM").format(new Date().getTime()))) {
             register(new RendererLivingEntityTransformer_AprilFun());
         }
+        MWELoadingPlugin.loadClasses("mwe.transformers", IClassNodeTransformer.class).forEach(this::register);
+        MWELoadingPlugin.logger.info("Loaded {} transformers", count);
     }
 
-    private void register(MWETransformer transformer) {
+    private void register(IClassNodeTransformer transformer) {
+        count++;
         for (final String className : transformer.getTargetClassName()) {
             transformers.computeIfAbsent(className, k -> new ArrayList<>()).add(transformer);
         }
@@ -138,7 +153,7 @@ public class MWEClassTransformer implements IClassTransformer {
             final ClassNode classNode = new ClassNode();
             classReader.accept(classNode, 0);
             boolean transformed = false;
-            for (final MWETransformer transformer : transformers.get(transformedName)) {
+            for (final IClassNodeTransformer transformer : transformers.get(transformedName)) {
                 if (!transformer.shouldApply(classNode)) {
                     debugLog("Skipping application of " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
                     continue;

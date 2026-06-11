@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe;
 
 import fr.alexdoru.mwe.api.IMWEAddon;
+import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.mwe.chat.ChatListener;
 import fr.alexdoru.mwe.commands.*;
@@ -18,8 +19,6 @@ import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.updater.ModUpdater;
-import net.minecraft.launchwrapper.Launch;
-import net.minecraft.launchwrapper.LaunchClassLoader;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -32,8 +31,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Mod(
         modid = MWE.modid,
@@ -54,50 +53,17 @@ public class MWE {
     public static final Logger logger = LogManager.getLogger(modName);
     private final List<IMWEAddon> loadedAddons = new ArrayList<>();
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
     public MWE() {
-        final Object o = Launch.blackboard.get("mwe.addons");
-        if (o instanceof ArrayList) {
-            Map<String, Class<?>> cachedClasses = null;
-            try {
-                final Field field = LaunchClassLoader.class.getDeclaredField("cachedClasses");
-                field.setAccessible(true);
-                cachedClasses = (Map<String, Class<?>>) field.get(Launch.classLoader);
-            } catch (Exception ex) {
-                logger.error("Could not reflect classloader's cached classes", ex);
+        MWELoadingPlugin.loadClasses("mwe.addons", IMWEAddon.class).forEach(addon -> {
+            final ComparableVersion MWEVersion = new ComparableVersion(version);
+            final ComparableVersion requestedVersion = new ComparableVersion(addon.targetVersion());
+            if (requestedVersion.compareTo(MWEVersion) > 0) {
+                logger.fatal("Addon {} requested version {}, but MWE version is {}", addon.name(), addon.targetVersion(), version);
+                throw new IllegalStateException("Invalid MWE version");
             }
-            final ArrayList addonNames = ((ArrayList) o);
-            final Set<String> loadedAddonNames = new HashSet<>();
-            for (final Object name : addonNames) {
-                if (name instanceof String) {
-                    final String addonName = ((String) name);
-                    if (cachedClasses != null && cachedClasses.containsKey(name)) {
-                        throw new IllegalStateException("Class " + addonName + " was loaded too early");
-                    }
-                    try {
-                        final Class<?> addonClass = Class.forName(addonName);
-                        if (!IMWEAddon.class.isAssignableFrom(addonClass)) {
-                            throw new IllegalStateException("Addon " + addonName + " does not implement IMWEAddon interface");
-                        }
-                        final IMWEAddon addon = (IMWEAddon) addonClass.newInstance();
-                        final ComparableVersion requestedVersion = new ComparableVersion(addon.targetVersion());
-                        final ComparableVersion MWEVersion = new ComparableVersion(version);
-                        if (requestedVersion.compareTo(MWEVersion) > 0) {
-                            logger.fatal("Addon {} requested version {}, but MWE version is {}", addonName, addon.targetVersion(), version);
-                            throw new IllegalStateException("Invalid MWE version");
-                        }
-                        if (loadedAddonNames.contains(addon.name())) {
-                            throw new IllegalStateException("Duplicate addons with same name loaded : " + addon.name());
-                        }
-                        this.loadedAddons.add(addon);
-                        loadedAddonNames.add(addon.name());
-                        logger.info("Successfully loaded addon {}", addonName);
-                    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-        }
+            this.loadedAddons.add(addon);
+            logger.info("Successfully loaded addon {}", addon.name());
+        });
     }
 
     @EventHandler

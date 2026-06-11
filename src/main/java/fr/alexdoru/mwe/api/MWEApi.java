@@ -1,5 +1,7 @@
 package fr.alexdoru.mwe.api;
 
+import fr.alexdoru.mwe.api.asm.IClassNodeTransformer;
+import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
@@ -32,6 +34,8 @@ public final class MWEApi {
 
     /**
      * Register the main class of your addon, this should be the name of the class,
+     * must be called before mods are constructed e.g. from a coremod.
+     * The addon must implement {@link fr.alexdoru.mwe.api.IMWEAddon}.
      * For example : "net.myname.myaddon.MWEAddon"
      */
     public static void registerAddon(String classname) {
@@ -73,6 +77,32 @@ public final class MWEApi {
          */
         public static boolean removeAlias(@Nullable UUID id, @Nullable String playername) {
             return AliasData.removeAlias(id, playername);
+        }
+    }
+
+    public static final class Asm {
+
+        private Asm() {}
+
+        /**
+         * Register your ASM transformers using the name of their class,
+         * this must be called from the constructor of your coremod.
+         * The transformer must implement {@link IClassNodeTransformer}.
+         * For example : "net.myname.myaddon.asm.MinecraftTransformer"
+         */
+        public static void registerTransformer(String classname) {
+            final Object o = Launch.blackboard.computeIfAbsent("mwe.transformers", k -> new ArrayList<>());
+            if (o instanceof ArrayList) {
+                //noinspection unchecked
+                ((ArrayList<String>) o).add(classname);
+            }
+        }
+
+        /**
+         * Returns true if we are in an obfuscated environment
+         */
+        public static boolean isObfuscatedEnvironment() {
+            return MWELoadingPlugin.isObf();
         }
     }
 
