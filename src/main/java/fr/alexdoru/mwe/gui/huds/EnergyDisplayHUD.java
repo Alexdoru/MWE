@@ -14,15 +14,17 @@ import java.util.Set;
 
 public class EnergyDisplayHUD extends AbstractRenderer {
 
-    private static final Set<Item> itemsForRender = new HashSet<>();
+    private static final Set<Item> VALID_ITEMS = new HashSet<>();
+
     private long timeStartRender;
     private int prevEnergyValue;
 
     static {
-        itemsForRender.add(Items.diamond_sword);
-        itemsForRender.add(Items.iron_sword);
-        itemsForRender.add(Items.bow);
-        itemsForRender.add(Items.diamond_shovel);
+        VALID_ITEMS.add(Items.diamond_sword);
+        VALID_ITEMS.add(Items.iron_sword);
+        VALID_ITEMS.add(Items.golden_sword);
+        VALID_ITEMS.add(Items.bow);
+        VALID_ITEMS.add(Items.diamond_shovel);
     }
 
     public EnergyDisplayHUD() {
@@ -42,7 +44,7 @@ public class EnergyDisplayHUD extends AbstractRenderer {
         }
         final int energy = mc.thePlayer.experienceLevel;
         final long currentTime = System.currentTimeMillis();
-        if (itemsForRender.contains(item)) {
+        if (VALID_ITEMS.contains(item)) {
             if (energy != prevEnergyValue) {
                 this.timeStartRender = currentTime;
             }
