@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.scoreboard;
 
+import fr.alexdoru.mwe.api.IScoreboardParser;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.features.AFKSoundWarning;
 import fr.alexdoru.mwe.gui.HUDRenderer;
@@ -15,9 +16,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ScoreboardParser {
+public final class ScoreboardParser implements IScoreboardParser {
 
-    public static final Pattern GAME_ID_PATTERN = Pattern.compile("\\d+/\\d+/\\d+\\s+(\\w+)");
+    private static final Pattern GAME_ID_PATTERN = Pattern.compile("\\d+/\\d+/\\d+\\s+(\\w+)");
     private static final Pattern GATES_OPEN_PATTERN = Pattern.compile("Gates Open: \\d+:\\d+");
     private static final Pattern WALLS_FALL_PATTERN = Pattern.compile("Walls Fall: (\\d+):(\\d+)");
     private static final Pattern GAME_END_PATTERN = Pattern.compile("Game End: (\\d+):(\\d+)");
@@ -26,11 +27,11 @@ public class ScoreboardParser {
     private static final Pattern WITHER_ALIVE_PATTERN = Pattern.compile("\\[[BGRY]] Wither HP: ([,\\d]+)");
     private static final Pattern REPLAY_MAP_PATTERN = Pattern.compile("Map: ([a-zA-Z0-9_ ]+)");
 
-    private static boolean triggeredWallsFallAlert = false;
-    private static boolean triggeredGameEndAlert = false;
-    private static boolean triggeredKillCooldownReset = false;
+    private boolean triggeredWallsFallAlert = false;
+    private boolean triggeredGameEndAlert = false;
+    private boolean triggeredKillCooldownReset = false;
 
-    private static int prevGameEndTime;
+    private int prevGameEndTime;
 
     private final List<String> aliveWithers = new ArrayList<>(4);
     private String gameId = null;
@@ -45,14 +46,28 @@ public class ScoreboardParser {
     private boolean isPrepPhase = false;
     private boolean hasGameEnded = false;
 
-    public static void onGameStart() {
+    void onGameStart() {
         triggeredWallsFallAlert = false;
         triggeredGameEndAlert = false;
         triggeredKillCooldownReset = false;
     }
 
-    /* This runs on every tick to parse the scoreboard data */
-    public ScoreboardParser() {
+    void reset() {
+        aliveWithers.clear();
+        gameId = null;
+        isInMwGame = false;
+        isMWEnvironement = false;
+        isReplayMode = false;
+        isAtlasMode = false;
+        isMWReplay = false;
+        replayMap = null;
+        isInSkyblock = false;
+        isPreGameLobby = false;
+        isPrepPhase = false;
+        hasGameEnded = false;
+    }
+
+    void update() {
 
         if (Minecraft.getMinecraft().theWorld == null) {
             return;
@@ -226,22 +241,27 @@ public class ScoreboardParser {
         return hasGameEnded;
     }
 
+    @Override
     public boolean isPrepPhase() {
         return isPrepPhase;
     }
 
+    @Override
     public boolean isMWEnvironement() {
         return isMWEnvironement;
     }
 
+    @Override
     public boolean isReplayMode() {
         return isReplayMode;
     }
 
+    @Override
     public boolean isAtlasMode() {
         return isAtlasMode;
     }
 
+    @Override
     public boolean isMWReplay() {
         return isMWReplay;
     }
@@ -250,14 +270,17 @@ public class ScoreboardParser {
         return replayMap;
     }
 
+    @Override
     public boolean isInSkyblock() {
         return isInSkyblock;
     }
 
+    @Override
     public boolean isInMwGame() {
         return isInMwGame;
     }
 
+    @Override
     public boolean isPreGameLobby() {
         return isPreGameLobby;
     }

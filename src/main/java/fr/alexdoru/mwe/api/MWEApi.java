@@ -13,6 +13,7 @@ import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
 import fr.alexdoru.mwe.nocheaters.WdrData;
+import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import net.minecraft.client.gui.GuiScreen;
@@ -267,6 +268,19 @@ public final class MWEApi {
          */
         public static boolean removeFromReportList(@NotNull UUID uuid, @Nullable String playername) {
             return WdrData.remove(uuid, playername);
+        }
+
+    }
+
+    public static final class Scoreboard {
+
+        private Scoreboard() {}
+
+        /**
+         * Returns the reference to the scoreboard parser singleton, this can be saved in a field
+         */
+        public static IScoreboardParser getScoreboarParser() {
+            return ScoreboardTracker.getParser();
         }
 
     }

@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ScoreboardUtils {
@@ -190,13 +191,15 @@ public class ScoreboardUtils {
         return list;
     }
 
+    private static final Pattern GAME_ID_PATTERN = Pattern.compile("\\d+/\\d+/\\d+\\s+(\\w+)");
+
     public static String getGameIdFromScoreboard() {
         final List<String> scoresRaw = getUnformattedSidebarText();
         if (scoresRaw.isEmpty()) {
             return null;
         }
         for (final String line : scoresRaw) {
-            final Matcher matcher = ScoreboardParser.GAME_ID_PATTERN.matcher(line);
+            final Matcher matcher = GAME_ID_PATTERN.matcher(line);
             if (matcher.find()) {
                 return matcher.group(1);
             }
