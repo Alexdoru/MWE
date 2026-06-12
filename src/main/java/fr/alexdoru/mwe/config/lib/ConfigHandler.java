@@ -30,6 +30,8 @@ import java.util.*;
 public final class ConfigHandler implements IConfigHandler {
 
     private final Configuration config;
+    private final String savedVersion;
+    private final String version;
     private final boolean hasUpdated;
     private final IConfigTitleRenderer titleRenderer;
     private final List<Class<?>> registeredConfigs = new ArrayList<>();
@@ -44,9 +46,10 @@ public final class ConfigHandler implements IConfigHandler {
         config = new Configuration(configFile);
         config.load();
         final Property modVersion = config.get("General", "Mod Version", configVersion);
-        final String savedVersion = modVersion.getString();
-        hasUpdated = !savedVersion.equals(configVersion);
-        if (hasUpdated) {
+        this.savedVersion = modVersion.getString();
+        this.version = configVersion;
+        this.hasUpdated = !this.savedVersion.equals(configVersion);
+        if (this.hasUpdated) {
             modVersion.set(configVersion);
             config.save();
         }
@@ -83,7 +86,7 @@ public final class ConfigHandler implements IConfigHandler {
                         hideUsages.add(name);
                     }
                 } else if (method.isAnnotationPresent(ConfigUpdate.class)) {
-                    validateMethod(method, "update", "()V");
+                    validateMethod(method, "update", "(Ljava/lang/String;Ljava/lang/String;)V");
                     method.setAccessible(true);
                     updateEvents.add(method);
                 }
@@ -123,7 +126,7 @@ public final class ConfigHandler implements IConfigHandler {
         if (hasUpdated) {
             for (final Method method : updateEvents) {
                 try {
-                    method.invoke(null);
+                    method.invoke(null, this.savedVersion, this.version);
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }

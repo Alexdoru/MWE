@@ -27,7 +27,7 @@ import java.util.List;
 public final class MWEConfig {
 
     @ConfigUpdate
-    private static void onModUpdate() {
+    private static void onModUpdate(String savedVersion, String version) {
         // code that runs on mod version update
     }
 
