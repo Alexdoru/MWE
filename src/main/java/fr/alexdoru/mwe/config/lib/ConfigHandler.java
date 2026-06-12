@@ -1,6 +1,5 @@
 package fr.alexdoru.mwe.config.lib;
 
-import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.GuiPosition;
 import fr.alexdoru.mwe.api.config.*;
 import fr.alexdoru.mwe.chat.ChatUtil;
@@ -11,6 +10,8 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AnnotationNode;
@@ -26,32 +27,34 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
-public final class ConfigHandler {
+public final class ConfigHandler implements IConfigHandler {
 
-    private static Configuration config;
-    private static boolean hasUpdated;
-    private static final List<Class<?>> registeredConfigs = new ArrayList<>();
-    private static final List<ConfigFieldContainer> configFields = new ArrayList<>();
-    private static final List<ConfigCategoryContainer> categories = new ArrayList<>();
+    private final Configuration config;
+    private final boolean hasUpdated;
+    private final IConfigTitleRenderer titleRenderer;
+    private final List<Class<?>> registeredConfigs = new ArrayList<>();
+    private final Map<String, Property> propertyMap = new HashMap<>();
+    private final List<ConfigFieldContainer> configFields = new ArrayList<>();
+    private final Set<String> categoryNames = new HashSet<>();
+    private final List<ConfigCategoryContainer> categories = new ArrayList<>();
     /** CategoryName -> SubCategoryName -> List of ConfigSetting */
-    private static final LinkedHashMap<String, LinkedHashMap<String, List<String>>> configStructure = new LinkedHashMap<>();
+    private final LinkedHashMap<String, LinkedHashMap<String, List<String>>> configStructure = new LinkedHashMap<>();
 
-    public static void loadConfigFile(File file) {
-        if (config != null) {
-            throw new IllegalStateException("Config already created!");
-        }
-        config = new Configuration(file);
+    public ConfigHandler(@NotNull File configFile, @NotNull String configVersion, @Nullable IConfigTitleRenderer titleRenderer) {
+        config = new Configuration(configFile);
         config.load();
-        final Property modVersion = config.get("General", "Mod Version", MWE.version);
+        final Property modVersion = config.get("General", "Mod Version", configVersion);
         final String savedVersion = modVersion.getString();
-        hasUpdated = !savedVersion.equals(MWE.version);
+        hasUpdated = !savedVersion.equals(configVersion);
         if (hasUpdated) {
-            modVersion.set(MWE.version);
+            modVersion.set(configVersion);
             config.save();
         }
+        this.titleRenderer = titleRenderer;
     }
 
-    public static void registerConfig(Class<?> clazz) {
+    @Override
+    public void registerConfig(Class<?> clazz) {
         if (config == null) {
             throw new IllegalStateException("Config file is not loaded yet");
         }
@@ -87,13 +90,18 @@ public final class ConfigHandler {
             }
             for (final Field field : clazz.getDeclaredFields()) {
                 if (field.isAnnotationPresent(ConfigProperty.class)) {
-                    final ConfigFieldContainer fieldContainer = new ConfigFieldContainer(config, field, configEvents, configHideOverrides);
+                    final ConfigFieldContainer fieldContainer = new ConfigFieldContainer(config, propertyMap, field, configEvents, configHideOverrides);
                     eventUsages.remove(fieldContainer.getAnnotation().name());
                     hideUsages.remove(fieldContainer.getAnnotation().name());
                     configFields.add(fieldContainer);
                 } else if (field.isAnnotationPresent(ConfigCategory.class)) {
                     field.setAccessible(true);
-                    categories.add(new ConfigCategoryContainer(field));
+                    final ConfigCategoryContainer categoryContainer = new ConfigCategoryContainer(field);
+                    final String categoryName = categoryContainer.getCategoryName();
+                    if (!categoryNames.add(categoryName)) {
+                        throw new IllegalStateException("Duplicate category names : " + categoryName);
+                    }
+                    categories.add(categoryContainer);
                 }
             }
             if (!eventUsages.isEmpty()) {
@@ -135,7 +143,8 @@ public final class ConfigHandler {
         }
     }
 
-    public static void saveConfig() {
+    @Override
+    public void saveConfig() {
         if (registeredConfigs.isEmpty()) {
             throw new IllegalStateException("Config is not loaded");
         }
@@ -152,22 +161,24 @@ public final class ConfigHandler {
         }
     }
 
-    public static GuiScreen getConfigGuiScreen() {
+    @Override
+    public GuiScreen getConfigGuiScreen() {
         if (registeredConfigs.isEmpty()) {
             throw new IllegalStateException("Config is not loaded");
         }
         try {
-            return new ConfigGuiScreen(categories, configFields, configStructure);
+            return new ConfigGuiScreen(this, this.titleRenderer, categories, configFields, configStructure);
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Failed to generate the config menu!");
         }
     }
 
-    public static void displayConfigGuiScreen() {
+    @Override
+    public void displayConfigGuiScreen() {
         new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(getConfigGuiScreen()));
     }
 
-    private static void readConfigInDefinitionOrder(Class<?> clazz) throws IOException {
+    private void readConfigInDefinitionOrder(Class<?> clazz) throws IOException {
         // We need to parse the class bytes with ASM because
         // the reflection method class.getDeclaredFields()
         // returns the fields in no specific order.
@@ -211,7 +222,7 @@ public final class ConfigHandler {
         }
     }
 
-    private static void readConfigInAlphabeticalOrder(Class<?> clazz) {
+    private void readConfigInAlphabeticalOrder(Class<?> clazz) {
         for (final Field field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(ConfigProperty.class)) {
                 final ConfigProperty annotation = field.getAnnotation(ConfigProperty.class);
@@ -228,7 +239,7 @@ public final class ConfigHandler {
         sortCategoriesAndSubCategories();
     }
 
-    private static void sortCategoriesAndSubCategories() {
+    private void sortCategoriesAndSubCategories() {
         final List<Map.Entry<String, LinkedHashMap<String, List<String>>>> categories = new ArrayList<>(configStructure.entrySet());
         categories.sort(Map.Entry.comparingByKey());
         configStructure.clear();
@@ -247,7 +258,7 @@ public final class ConfigHandler {
         }
     }
 
-    private static void setConfigPropertyOrder() {
+    private void setConfigPropertyOrder() {
         for (final Map.Entry<String, LinkedHashMap<String, List<String>>> entry : configStructure.entrySet()) {
             final LinkedHashMap<String, List<String>> subCategory = entry.getValue();
             final List<String> categoryConfigs = new ArrayList<>();

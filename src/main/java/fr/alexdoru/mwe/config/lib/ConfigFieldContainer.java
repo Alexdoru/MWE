@@ -2,7 +2,6 @@ package fr.alexdoru.mwe.config.lib;
 
 import fr.alexdoru.mwe.api.GuiPosition;
 import fr.alexdoru.mwe.api.config.ConfigProperty;
-import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.config.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.mwe.config.lib.gui.elements.*;
 import net.minecraftforge.common.config.Configuration;
@@ -12,15 +11,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ConfigFieldContainer {
 
-    /** Keys are config ConfigProperty#name */
-    private static final Map<String, Property> propertyMap = new HashMap<>();
+    private static final boolean FORCE_SHOW_HIDDEN = Boolean.getBoolean("config.lib.showHidden");
 
+    private final Map<String, Property> propertyMap;
     private final Field field;
     private final ConfigProperty annotation;
     private final Method event;
@@ -28,12 +26,14 @@ public class ConfigFieldContainer {
 
     ConfigFieldContainer(
             Configuration config,
+            Map<String, Property> propertyMap,
             Field field,
             Map<String, Method> configEvents,
             Map<String, Method> configHideOverrides) throws IllegalAccessException {
+        this.propertyMap = propertyMap;
         this.field = field;
         this.annotation = field.getAnnotation(ConfigProperty.class);
-        if (propertyMap.containsKey(annotation.name())) {
+        if (this.propertyMap.containsKey(annotation.name())) {
             throw new IllegalStateException("Duplicate key names in config properties : " + annotation.name());
         }
         this.event = configEvents.get(annotation.name());
@@ -118,7 +118,7 @@ public class ConfigFieldContainer {
 
     public ConfigUIElement getConfigButton(ConfigGuiScreen configGuiScreen) throws IllegalAccessException {
         if (annotation.hidden()) return null;
-        if (MWELoadingPlugin.isObf() && hideOverride != null) {
+        if (!FORCE_SHOW_HIDDEN && hideOverride != null) {
             try {
                 final boolean shouldHide = (boolean) hideOverride.invoke(null);
                 if (shouldHide) return null;

@@ -67,6 +67,7 @@ runClient {
             "-Dmwe.classdump=true"
             //,"-Dmwe.moreclassdump=true"
             , "-Dmwe.disableUpdater=true"
+            , "-Dconfig.lib.showHidden=true"
     ]
 }
 

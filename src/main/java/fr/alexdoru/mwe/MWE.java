@@ -1,11 +1,13 @@
 package fr.alexdoru.mwe;
 
 import fr.alexdoru.mwe.api.IMWEAddon;
+import fr.alexdoru.mwe.api.config.IConfigHandler;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.mwe.chat.ChatListener;
 import fr.alexdoru.mwe.commands.*;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.config.MWEConfigTitle;
 import fr.alexdoru.mwe.config.lib.ConfigHandler;
 import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.FinalKillCounter;
@@ -51,9 +53,14 @@ public class MWE {
     public static final String modName = "MWE";
     public static final String version = BuildConfig.VERSION;
     public static final Logger logger = LogManager.getLogger(modName);
+
+    private static MWE INSTANCE;
     private final List<IMWEAddon> loadedAddons = new ArrayList<>();
 
+    private IConfigHandler configHandler;
+
     public MWE() {
+        INSTANCE = this;
         MWELoadingPlugin.loadClasses("mwe.addons", IMWEAddon.class).forEach(addon -> {
             final ComparableVersion MWEVersion = new ComparableVersion(version);
             final ComparableVersion requestedVersion = new ComparableVersion(addon.targetVersion());
@@ -68,8 +75,8 @@ public class MWE {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        ConfigHandler.loadConfigFile(new File(event.getModConfigurationDirectory(), "mwe.cfg"));
-        ConfigHandler.registerConfig(MWEConfig.class);
+        this.configHandler = new ConfigHandler(new File(event.getModConfigurationDirectory(), "mwe.cfg"), version, new MWEConfigTitle());
+        this.configHandler.registerConfig(MWEConfig.class);
         if (MWEConfig.checkForUpdate && !Boolean.getBoolean("mwe.disableUpdater")) {
             MinecraftForge.EVENT_BUS.register(new ModUpdater(event.getSourceFile()));
         }
@@ -114,6 +121,14 @@ public class MWE {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         this.loadedAddons.forEach(a -> a.postInit(event));
+    }
+
+    public static MWE INSTANCE() {
+        return INSTANCE;
+    }
+
+    public IConfigHandler getConfigHandler() {
+        return configHandler;
     }
 
 }

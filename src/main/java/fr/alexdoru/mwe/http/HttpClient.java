@@ -4,9 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.config.lib.ConfigHandler;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.exceptions.RateLimitException;
@@ -59,7 +59,7 @@ public class HttpClient {
                     } else if (status == 403) {
                         Minecraft.getMinecraft().addScheduledTask(() -> {
                             MWEConfig.APIKey = "";
-                            ConfigHandler.saveConfig();
+                            MWE.INSTANCE().getConfigHandler().saveConfig();
                             return null;
                         });
                         throw new ApiException("Invalid API key");

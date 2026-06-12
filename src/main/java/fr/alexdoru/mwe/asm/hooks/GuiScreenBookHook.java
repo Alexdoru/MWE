@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks;
 
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.config.lib.ConfigHandler;
 import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.utils.StringUtil;
@@ -55,7 +55,7 @@ public class GuiScreenBookHook {
                                     }
                                 }
                                 MWEConfig.hypixelNick = newNick;
-                                ConfigHandler.saveConfig();
+                                MWE.INSTANCE().getConfigHandler().saveConfig();
                                 return;
                             }
                         }

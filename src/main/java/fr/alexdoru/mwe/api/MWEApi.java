@@ -1,6 +1,9 @@
 package fr.alexdoru.mwe.api;
 
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.asm.IClassNodeTransformer;
+import fr.alexdoru.mwe.api.config.IConfigHandler;
+import fr.alexdoru.mwe.api.config.IConfigTitleRenderer;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
@@ -25,6 +28,7 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -172,33 +176,45 @@ public final class MWEApi {
         private Config() {}
 
         /**
-         * Register your configuration class, fields and methods of the class
+         * Creates a new config handler, this allows you to have your own unique config menu.
+         *
+         * @param configFile    - the config file
+         * @param configVersion - the current version of your mod
+         * @param titleRenderer - a custom renderer to render the title of your config screen, may be null
+         */
+        public static IConfigHandler createNewConfigHandler(@NotNull File configFile, @NotNull String configVersion, @Nullable IConfigTitleRenderer titleRenderer) {
+            return new ConfigHandler(configFile, configVersion, titleRenderer);
+        }
+
+        /**
+         * Register your configuration class to the MWE config, your config settings
+         * will appear in the MWE config menu. Fields and methods of the class
          * should be static and annotated with annotations from the fr.alexdoru.mwe.api.config package
          */
         public static void registerConfig(Class<?> clazz) {
             Objects.requireNonNull(clazz);
-            ConfigHandler.registerConfig(clazz);
+            MWE.INSTANCE().getConfigHandler().registerConfig(clazz);
         }
 
         /**
-         * Saves config values to the config file
+         * Saves the MWE config values to the config file
          */
         public static void saveConfig() {
-            ConfigHandler.saveConfig();
+            MWE.INSTANCE().getConfigHandler().saveConfig();
         }
 
         /**
-         * Gets the config gui screen
+         * Gets the MWE config gui screen
          */
         public static GuiScreen getConfigGuiScreen() {
-            return ConfigHandler.getConfigGuiScreen();
+            return MWE.INSTANCE().getConfigHandler().getConfigGuiScreen();
         }
 
         /**
-         * Displays the config gui screen
+         * Displays the MWE config gui screen
          */
         public static void displayConfigGuiScreen() {
-            ConfigHandler.displayConfigGuiScreen();
+            MWE.INSTANCE().getConfigHandler().displayConfigGuiScreen();
         }
 
     }

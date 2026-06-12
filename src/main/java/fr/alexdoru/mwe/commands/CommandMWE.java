@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.commands;
 
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.config.lib.ConfigHandler;
 import fr.alexdoru.mwe.gui.huds.DebugScoreboardHUD;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
@@ -57,7 +57,7 @@ public class CommandMWE extends MyAbstractCommand {
                 ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "Command only works in Mega Walls");
             }
         } else {
-            ConfigHandler.displayConfigGuiScreen();
+            MWE.INSTANCE().getConfigHandler().displayConfigGuiScreen();
         }
     }
 

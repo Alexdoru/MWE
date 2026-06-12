@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.config.lib.gui;
 
-import fr.alexdoru.mwe.MWE;
+import fr.alexdoru.mwe.api.config.IConfigTitleRenderer;
 import fr.alexdoru.mwe.config.lib.ConfigCategoryContainer;
 import fr.alexdoru.mwe.config.lib.ConfigFieldContainer;
 import fr.alexdoru.mwe.config.lib.ConfigHandler;
@@ -12,7 +12,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
@@ -25,8 +24,9 @@ import java.util.*;
 public class ConfigGuiScreen extends GuiScreen {
 
     private static final ResourceLocation BLUR = new ResourceLocation("mwe", "blur.json");
-    private static final ResourceLocation DORU_SKIN = new ResourceLocation("mwe", "doru_skin.png");
 
+    private final ConfigHandler configHandler;
+    private final IConfigTitleRenderer titleRenderer;
     private final Map<String, ConfigCategoryContainer> categoryContainerMap;
     private final List<CategoryGuiButton> categoryElements = new ArrayList<>();
     private final List<ConfigUIElement> configElements = new ArrayList<>();
@@ -49,7 +49,14 @@ public class ConfigGuiScreen extends GuiScreen {
     private int SEARCH_BOX_LEFT, SEARCH_BOX_TOP, SEARCH_BOX_RIGHT, SEARCH_BOX_BOTTOM;
     private int SCROLL_BAR_LEFT, SCROLL_BAR_TOP, SCROLL_BAR_RIGHT, SCROLL_BAR_BOTTOM;
 
-    public ConfigGuiScreen(List<ConfigCategoryContainer> categories, List<ConfigFieldContainer> configFields, LinkedHashMap<String, LinkedHashMap<String, List<String>>> configStructure) throws IllegalAccessException {
+    public ConfigGuiScreen(
+            ConfigHandler configHandler,
+            IConfigTitleRenderer titleRenderer,
+            List<ConfigCategoryContainer> categories,
+            List<ConfigFieldContainer> configFields,
+            LinkedHashMap<String, LinkedHashMap<String, List<String>>> configStructure) throws IllegalAccessException {
+        this.configHandler = configHandler;
+        this.titleRenderer = titleRenderer;
         this.categoryContainerMap = new HashMap<>();
         for (final ConfigCategoryContainer container : categories) {
             this.categoryContainerMap.put(container.getCategoryName(), container);
@@ -176,17 +183,10 @@ public class ConfigGuiScreen extends GuiScreen {
         }
 
         GuiUtil.drawBoxWithOutline(GUI_BORDER_LEFT, GUI_BORDER_TOP, GUI_BORDER_RIGHT, GUI_BORDER_BOTTOM, 0xFF323237, 0xFF4C4C51);
-        final String modnameText = MWE.modName + " - " + MWE.version + EnumChatFormatting.GRAY + " created by ";
-        fontRendererObj.drawStringWithShadow(modnameText, GUI_INSIDE_LEFT, GUI_INSIDE_TOP, 0xFFFFFFFF);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.enableAlpha();
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-        mc.getTextureManager().bindTexture(DORU_SKIN);
-        final int headPosX = GUI_INSIDE_LEFT + fontRendererObj.getStringWidth(modnameText);
-        Gui.drawScaledCustomSizeModalRect(headPosX, GUI_INSIDE_TOP, 8, 8, 8, 8, 8, 8, 64.0F, 32.0F);
-        Gui.drawScaledCustomSizeModalRect(headPosX, GUI_INSIDE_TOP, 40, 8, 8, 8, 8, 8, 64.0F, 32.0F);
-        fontRendererObj.drawStringWithShadow(EnumChatFormatting.GOLD + "Alexdoru", headPosX + 10, GUI_INSIDE_TOP, 0xFFFFFFFF);
+
+        if (this.titleRenderer != null) {
+            this.titleRenderer.renderTitle(fontRendererObj, GUI_INSIDE_LEFT, GUI_INSIDE_TOP);
+        }
 
         searchField.xPosition = GUI_INSIDE_RIGHT - Math.min(searchField.width, mc.fontRendererObj.getStringWidth(searchField.getText())) - 8;
         drawRect(SEARCH_BOX_LEFT, SEARCH_BOX_TOP, SEARCH_BOX_RIGHT, SEARCH_BOX_BOTTOM, 0xFF515156);
@@ -361,7 +361,7 @@ public class ConfigGuiScreen extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
-        ConfigHandler.saveConfig();
+        this.configHandler.saveConfig();
         this.mc.entityRenderer.stopUseShader();
         super.onGuiClosed();
     }
