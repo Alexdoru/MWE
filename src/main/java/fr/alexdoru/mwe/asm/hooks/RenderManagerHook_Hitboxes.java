@@ -34,12 +34,12 @@ public class RenderManagerHook_Hitboxes {
 
     public static int getRedHitboxColor(int r, Entity entity) {
         if (MWEConfig.teamColoredPlayerHitbox && entity instanceof EntityPlayerAccessor) {
-            hitboxColor = ((EntityPlayerAccessor) entity).getPlayerTeamColorInt();
+            hitboxColor = ((EntityPlayerAccessor) entity).getPlayerSpecialRenderColor();
         } else if (MWEConfig.teamColoredWitherHitbox && entity instanceof IWitherColor) {
             final int i = ((IWitherColor) entity).getmwe$Color();
             hitboxColor = i == 0 ? MWEConfig.hitboxColor : i;
         } else if (MWEConfig.teamColoredArrowHitbox && entity instanceof EntityArrow && ((EntityArrow) entity).shootingEntity instanceof EntityPlayerAccessor) {
-            hitboxColor = ((EntityPlayerAccessor) ((EntityArrow) entity).shootingEntity).getPlayerTeamColorInt();
+            hitboxColor = ((EntityPlayerAccessor) ((EntityArrow) entity).shootingEntity).getPlayerSpecialRenderColor();
         } else {
             hitboxColor = MWEConfig.hitboxColor;
         }

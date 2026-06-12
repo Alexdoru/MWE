@@ -11,7 +11,7 @@ public class RendererLivingEntityHook_HitColor {
 
     public static float getRed(float r, EntityLivingBase entity) {
         if (MWEConfig.teamColoredPlayerHurt && entity instanceof EntityPlayerAccessor) {
-            hitColor = ((EntityPlayerAccessor) entity).getPlayerTeamColorInt();
+            hitColor = ((EntityPlayerAccessor) entity).getPlayerSpecialRenderColor();
         } else if (MWEConfig.teamColoredWitherHurt && entity instanceof IWitherColor) {
             final int i = ((IWitherColor) entity).getmwe$Color();
             hitColor = i == 0 ? MWEConfig.hitColor : i;

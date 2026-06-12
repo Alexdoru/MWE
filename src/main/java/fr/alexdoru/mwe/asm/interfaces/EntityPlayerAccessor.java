@@ -1,21 +1,14 @@
 package fr.alexdoru.mwe.asm.interfaces;
 
+import fr.alexdoru.mwe.api.IPlayerInfoAccessor;
 import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
 
-public interface EntityPlayerAccessor {
+public interface EntityPlayerAccessor extends IPlayerInfoAccessor {
 
     PlayerDataSamples getPlayerDataSamples();
 
-    char getPlayerTeamColor();
-
     void setPlayerTeamColor(char color);
-
-    int getPlayerTeamColorInt();
-
-    void setPlayerTeamColorInt(int color);
-
-    MWClass getMWClass();
 
     void setMWClass(MWClass mwclass);
 

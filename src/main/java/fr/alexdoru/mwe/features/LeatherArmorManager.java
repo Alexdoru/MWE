@@ -17,7 +17,7 @@ public class LeatherArmorManager {
                 player instanceof EntityPlayerAccessor &&
                 ((EntityPlayerAccessor) player).getPlayerTeamColor() != '\0' &&
                 isCleanIronArmor(stack)) {
-            return createColoredLeatherArmor(stack, ((EntityPlayerAccessor) player).getPlayerTeamColorInt());
+            return createColoredLeatherArmor(stack, ((EntityPlayerAccessor) player).getPlayerSpecialRenderColor());
         }
         return stack;
     }
@@ -47,7 +47,7 @@ public class LeatherArmorManager {
                     final ItemStack stack = player.inventory.armorInventory[i];
                     if (MWEConfig.coloredLeatherArmor) {
                         if (isCleanIronArmor(stack)) {
-                            player.inventory.armorInventory[i] = createColoredLeatherArmor(stack, ((EntityPlayerAccessor) player).getPlayerTeamColorInt());
+                            player.inventory.armorInventory[i] = createColoredLeatherArmor(stack, ((EntityPlayerAccessor) player).getPlayerSpecialRenderColor());
                         }
                     } else if (isColoredLeatherArmor(stack)) {
                         final ItemArmor itemArmor = (ItemArmor) stack.getItem();

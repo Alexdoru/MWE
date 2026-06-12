@@ -151,15 +151,15 @@ public class NameUtil {
 
     private static void updateEntityPlayerFields(EntityPlayer player, MWPlayerData.PlayerData mwPlayerData) {
         final EntityPlayerAccessor playerAccessor = (EntityPlayerAccessor) player;
-        final int oldColor = playerAccessor.getPlayerTeamColorInt();
+        final int oldColor = playerAccessor.getPlayerSpecialRenderColor();
         playerAccessor.setPlayerTeamColor(mwPlayerData.teamColor);
         if (MWEConfig.pinkSquadmates && mwPlayerData.squadname != null) {
-            playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt('d'));
+            playerAccessor.setPlayerSpecialRenderColor(ColorUtil.getColorInt('d'));
         } else {
-            playerAccessor.setPlayerTeamColorInt(ColorUtil.getColorInt(mwPlayerData.teamColor));
+            playerAccessor.setPlayerSpecialRenderColor(ColorUtil.getColorInt(mwPlayerData.teamColor));
         }
         playerAccessor.setMWClass(mwPlayerData.mwClass);
-        LeatherArmorManager.onColorChange(player, oldColor, playerAccessor.getPlayerTeamColorInt());
+        LeatherArmorManager.onColorChange(player, oldColor, playerAccessor.getPlayerSpecialRenderColor());
     }
 
     /**

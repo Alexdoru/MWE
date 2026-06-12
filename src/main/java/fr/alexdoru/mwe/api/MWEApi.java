@@ -17,6 +17,7 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
@@ -233,6 +234,22 @@ public final class MWEApi {
          */
         public static IPlayerUUID getPlayerUUID(String playername) throws ApiException {
             return MojangNameToUUID.getPlayerUUID(playername);
+        }
+
+    }
+
+    public static final class Player {
+
+        private Player() {}
+
+        /**
+         * Returns an accessor to get and set certain player specific data
+         */
+        public static IPlayerInfoAccessor getPlayerInfo(EntityPlayer player) {
+            if (player instanceof IPlayerInfoAccessor) {
+                return ((IPlayerInfoAccessor) player);
+            }
+            return null;
         }
 
     }
