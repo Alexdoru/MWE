@@ -121,6 +121,7 @@ public class WdrData {
         if (removed != null) {
             NameUtil.updateMWPlayerDataAndEntityData(playername, false);
             MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.REMOVED, uuid, playername, removed));
+            dirty = true;
         }
         return removed != null;
     }
@@ -155,29 +156,31 @@ public class WdrData {
         legacyReportLines.forEach(WdrData::loadReportLine);
         if (deleteLegacyFile) {
             WdrData.saveReportedPlayers();
-            legacywdrFile.deleteOnExit();
+            //noinspection ResultOfMethodCallIgnored
+            legacywdrFile.delete();
         }
     }
 
     private static List<String> loadReportsFromJSONFile() {
+        if (!wdrJsonFile.exists()) {
+            return Collections.emptyList();
+        }
         final List<String> reportLines = new ArrayList<>();
-        if (wdrJsonFile.exists()) {
-            try {
-                final Gson gson = new Gson();
-                final List<String> list = gson.fromJson(new FileReader(wdrJsonFile), new TypeToken<List<String>>() {}.getType());
-                if (list != null) reportLines.addAll(list);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            final Gson gson = new Gson();
+            final List<String> list = gson.fromJson(new FileReader(wdrJsonFile), new TypeToken<List<String>>() {}.getType());
+            if (list != null) reportLines.addAll(list);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return reportLines;
     }
 
     private static List<String> loadReportsFromLegacyFile() {
-        final List<String> reportLines = new ArrayList<>();
         if (!legacywdrFile.exists()) {
-            return reportLines;
+            return Collections.emptyList();
         }
+        final List<String> reportLines = new ArrayList<>();
         try (final BufferedReader reader = new BufferedReader(new FileReader(legacywdrFile))) {
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 reportLines.add(line);
