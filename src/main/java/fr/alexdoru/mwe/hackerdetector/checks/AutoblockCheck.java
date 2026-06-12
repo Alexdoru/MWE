@@ -25,6 +25,11 @@ public class AutoblockCheck extends Check {
     }
 
     @Override
+    public boolean isEnabled() {
+        return MWEConfig.enableAutoblockCheck;
+    }
+
+    @Override
     public void performCheck(EntityPlayer player, PlayerDataSamples data) {
         super.checkViolationLevel(player, this.check(player, data), data.autoblockAVL);
     }

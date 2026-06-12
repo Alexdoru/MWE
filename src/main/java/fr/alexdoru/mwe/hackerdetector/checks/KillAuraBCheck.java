@@ -25,6 +25,11 @@ public class KillAuraBCheck extends Check {
     }
 
     @Override
+    public boolean isEnabled() {
+        return MWEConfig.enableKillauraBCheck;
+    }
+
+    @Override
     public boolean canSendReport() {
         return true;
     }

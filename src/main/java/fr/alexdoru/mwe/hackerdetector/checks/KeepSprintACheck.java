@@ -26,6 +26,11 @@ public class KeepSprintACheck extends Check {
     }
 
     @Override
+    public boolean isEnabled() {
+        return MWEConfig.enableKeepsprintACheck;
+    }
+
+    @Override
     public boolean canSendReport() {
         return false;
     }

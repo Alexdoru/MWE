@@ -15,6 +15,9 @@ public interface ICheck {
         return "";
     }
 
+    /** Wether or not this check should run */
+    boolean isEnabled();
+
     /** Wether or not this check should send a report to the server */
     boolean canSendReport();
 

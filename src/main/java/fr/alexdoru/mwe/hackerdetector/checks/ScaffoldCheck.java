@@ -26,6 +26,11 @@ public class ScaffoldCheck extends Check {
     }
 
     @Override
+    public boolean isEnabled() {
+        return MWEConfig.enableScaffoldCheck;
+    }
+
+    @Override
     public void performCheck(EntityPlayer player, PlayerDataSamples data) {
         super.checkViolationLevel(player, this.check(player, data), data.scaffoldVL);
     }

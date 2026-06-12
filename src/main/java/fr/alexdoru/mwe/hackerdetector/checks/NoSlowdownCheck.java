@@ -26,6 +26,11 @@ public class NoSlowdownCheck extends Check {
     }
 
     @Override
+    public boolean isEnabled() {
+        return MWEConfig.enableNoslowdownCheck;
+    }
+
+    @Override
     public void performCheck(EntityPlayer player, PlayerDataSamples data) {
         super.checkViolationLevel(player, this.check(player, data), data.noSlowdownVL);
     }

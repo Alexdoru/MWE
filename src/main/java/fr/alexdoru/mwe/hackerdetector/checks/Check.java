@@ -66,7 +66,7 @@ public abstract class Check implements ICheck {
         final String cheatType = this.getCheatName() + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")");
         final String playername = ScoreboardTracker.isReplayMode() ? StringUtil.removeFormattingCodes(player.getName()) : player.getName();
         if (MWEConfig.debugLogging) {
-            HackerDetector.log(player.getName() + " flags " + cheatType);
+            HackerDetector.INSTANCE.log(player.getName() + " flags " + cheatType);
         }
         if (!MWEConfig.showFlagMessages) {
             return;
@@ -126,7 +126,7 @@ public abstract class Check implements ICheck {
     }
 
     protected void log(EntityPlayer player, PlayerDataSamples data, ViolationLevelTracker vl, String extramsg) {
-        HackerDetector.log(player.getName() + " failed " + this.getCheatName()
+        HackerDetector.INSTANCE.log(player.getName() + " failed " + this.getCheatName()
                 + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")") + " check"
                 + " | vl " + vl.getViolationLevel()
                 + (extramsg == null ? "" : extramsg)

@@ -25,7 +25,8 @@ import java.util.*;
 public class HackerDetector {
 
     public static HackerDetector INSTANCE;
-    private static FileLogger logger;
+
+    private FileLogger logger;
     private final List<ICheck> checkList = new ArrayList<>();
     private long timeElapsedTemp = 0L;
     private long timeElapsed = 0L;
@@ -39,10 +40,6 @@ public class HackerDetector {
 
     private final FastbreakCheck fastbreakCheck;
 
-    static {
-        if (MWEConfig.debugLogging) initLogger();
-    }
-
     public HackerDetector() {
         INSTANCE = this;
         this.checkList.add(new AutoblockCheck());
@@ -54,6 +51,7 @@ public class HackerDetector {
         this.checkList.add(new KillAuraBCheck());
         this.checkList.add(new NoSlowdownCheck());
         this.checkList.add(new ScaffoldCheck());
+        if (MWEConfig.debugLogging) initLogger();
     }
 
     @SubscribeEvent
@@ -149,7 +147,9 @@ public class HackerDetector {
         if (data.checkedThisTick) return;
         data.onTick(player);
         for (final ICheck check : this.checkList) {
-            check.performCheck(player, data);
+            if (check.isEnabled()) {
+                check.performCheck(player, data);
+            }
         }
         data.onPostChecks();
         this.playersCheckedTemp++;
@@ -162,12 +162,12 @@ public class HackerDetector {
         }
     }
 
-    public static void log(String message) {
+    public void log(String message) {
         if (logger == null) initLogger();
         logger.log(message);
     }
 
-    private static void initLogger() {
+    private void initLogger() {
         logger = new FileLogger("HackerDetector.log", "HH:mm:ss.SSS");
     }
 

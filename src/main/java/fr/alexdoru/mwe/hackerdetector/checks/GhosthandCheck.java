@@ -29,6 +29,11 @@ public class GhosthandCheck extends Check {
     }
 
     @Override
+    public boolean isEnabled() {
+        return MWEConfig.enableGhosthandCheck;
+    }
+
+    @Override
     public void performCheck(EntityPlayer player, PlayerDataSamples data) {
         super.checkViolationLevel(player, this.check(player, data), data.ghosthandVL);
     }

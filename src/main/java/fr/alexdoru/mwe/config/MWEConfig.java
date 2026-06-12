@@ -1008,6 +1008,60 @@ public final class MWEConfig {
     public static boolean fixAutoblockAnimationBypass = true;
 
     @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Checks",
+            name = "Autobock check",
+            comment = "Checks if the player can attack while their sword is blocked")
+    public static boolean enableAutoblockCheck = true;
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Checks",
+            name = "Fastbreak check",
+            comment = "Checks if the player can break blocks faster than normal")
+    public static boolean enableFastbreakCheck = true;
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Checks",
+            name = "Chosthand check",
+            comment = "Checks if the player can mine blocks through other players")
+    public static boolean enableGhosthandCheck = true;
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Checks",
+            name = "Keepsprint A check",
+            comment = "Checks if the player's sprint doesn't turn off when using items")
+    public static boolean enableKeepsprintACheck = true;
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Checks",
+            name = "Keepsprint B check",
+            comment = "Checks if the player's velocity doesn't decrease after attacking other players")
+    public static boolean enableKeepsprintBCheck = true;
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Checks",
+            name = "Killaura A check",
+            comment = "Checks if the player can attack through blocks/entities")
+    public static boolean enableKillauraACheck = true;
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Checks",
+            name = "Killaura B check",
+            comment = "Checks if the player can attack while eating and drinking potions")
+    public static boolean enableKillauraBCheck = true;
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Checks",
+            name = "Noslowdown check",
+            comment = "Checks if the player is running while using items")
+    public static boolean enableNoslowdownCheck = true;
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Checks",
+            name = "Scaffold check",
+            comment = "Checks if the player is scaffolding")
+    public static boolean enableScaffoldCheck = true;
+
+    @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Debug",
             name = "Enable debug log",
             comment = "Logs every hacker detector related action in .minecraft/logs/HackerDetector.log")

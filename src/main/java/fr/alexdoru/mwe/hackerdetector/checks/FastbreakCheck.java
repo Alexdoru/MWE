@@ -22,9 +22,8 @@ import java.util.List;
 
 public class FastbreakCheck extends Check {
 
-    private boolean sendReport;
-
     private final List<BrokenBlock> brokenBlocksList;
+    private boolean sendReport;
 
     public FastbreakCheck(List<BrokenBlock> list) {
         this.brokenBlocksList = list;
@@ -43,6 +42,11 @@ public class FastbreakCheck extends Check {
     @Override
     public boolean canSendReport() {
         return sendReport;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return MWEConfig.enableFastbreakCheck;
     }
 
     @Override
@@ -168,7 +172,7 @@ public class FastbreakCheck extends Check {
     }
 
     public static boolean isCheckActive() {
-        return ScoreboardTracker.isInMwGame() || ScoreboardTracker.isMWReplay();
+        return MWEConfig.enableFastbreakCheck && (ScoreboardTracker.isInMwGame() || ScoreboardTracker.isMWReplay());
     }
 
     /**
