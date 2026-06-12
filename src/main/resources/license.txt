@@ -11,15 +11,11 @@ to the following conditions:
 
     * Selling the Software or any portion of it;
     * Charging for access to the Software or any portion of it;
-    * Using the Software, any portion of it, or any derivative work based upon it in a product or service for which
-      payment is received;
-    * Using the Software, any portion of it, or any derivative work based upon it to generate revenue directly or
-      indirectly;
-    * Incorporating any code, functionality, algorithms, components, modules, or substantial portions of the Software
-      into any commercial product, service, or business activity.
+    * Using the Software, any portion of it, or any derivative work based upon it in a product or service for which payment is received;
+    * Using the Software, any portion of it, or any derivative work based upon it to generate revenue directly or indirectly;
+    * Incorporating any code, functionality, algorithms, components, modules, or substantial portions of the Software into any commercial product, service, or business activity.
 
-3. No portion of the Software may be copied, incorporated, adapted, modified, or redistributed for commercial purposes,
-   whether in its original form or as part of another work, product, or service.
+3. No portion of the Software may be copied, incorporated, adapted, modified, or redistributed for commercial purposes, whether in its original form or as part of another work, product, or service.
 
 4. This copyright notice and permission notice shall be included in all copies
    or substantial portions of the Software.
