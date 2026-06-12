@@ -62,12 +62,11 @@ public class MegaWallsEndGameStats {
                     selectedClass = MWClass.fromTagOrName(new MegaWallsClassSkinData(playerdata.getPlayerData()).getCurrentmwclass());
                 }
                 if (selectedClass == null) {
-                    return null;
+                    return;
                 }
                 mwClassStartGameStats = new MegaWallsClassStats(playerdata.getPlayerData(), selectedClass.className);
             } catch (ApiException ignored) {}
             isRandom = false;
-            return null;
         });
     }
 
@@ -92,7 +91,6 @@ public class MegaWallsEndGameStats {
                 ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Click to view the stats of your " + EnumChatFormatting.AQUA + "Mega Walls " + EnumChatFormatting.YELLOW + "game!")
                         .setChatStyle(new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, GuiScreenHook_CustomChatClickEvent.MW_GAME_END_STATS))));
             } catch (Exception ignored) {}
-            return null;
         });
     }
 

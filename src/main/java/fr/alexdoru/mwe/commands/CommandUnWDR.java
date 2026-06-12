@@ -52,7 +52,6 @@ public class CommandUnWDR extends MyAbstractCommand {
             } catch (ApiException e) {
                 mc.addScheduledTask(() -> this.unwdr((UUID) null, playername));
             }
-            return null;
         });
     }
 

@@ -311,6 +311,13 @@ public final class MWEApi {
         /**
          * Schedules a task to run asynchronously
          */
+        public static Future<?> queueAsyncTask(Runnable c) {
+            return MultithreadingUtil.addTaskToQueue(c);
+        }
+
+        /**
+         * Schedules a task to run asynchronously
+         */
         public static <V> Future<V> queueAsyncTask(Callable<V> c) {
             return MultithreadingUtil.addTaskToQueue(c);
         }

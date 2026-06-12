@@ -45,9 +45,7 @@ public class CommandPlancke extends MyAbstractCommand {
                 Minecraft.getMinecraft().addScheduledTask(() -> this.plancke(args, playerID, playerdata, hypixelGuild));
             } catch (ApiException e) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + e.getMessage());
-                return null;
             }
-            return null;
         });
     }
 

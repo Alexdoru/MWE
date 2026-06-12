@@ -58,7 +58,7 @@ public class CommandStalk extends MyAbstractCommand {
                 final LoginData loginData = new LoginData(playerData.getPlayerData());
                 if (!playerID.getName().equals(loginData.getdisplayname()) || loginData.hasNeverJoinedHypixel()) {
                     ChatUtil.addChatMessage(ChatUtil.getTagMW() + RED + "This player never joined Hypixel, it might be a nick.");
-                    return null;
+                    return;
                 }
                 final HypixelPlayerStatus playerStatus = loginData.isHidingFromAPI() ? null : new HypixelPlayerStatus(playerID.getId());
                 Minecraft.getMinecraft().addScheduledTask(() -> this.stalkPlayer(playerData, loginData, playerStatus));
@@ -68,7 +68,6 @@ public class CommandStalk extends MyAbstractCommand {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return null;
         });
     }
 

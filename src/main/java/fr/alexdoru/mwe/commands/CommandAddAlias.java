@@ -216,14 +216,13 @@ public class CommandAddAlias extends MyAbstractCommand {
                         if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
                             // real player
                             mc.addScheduledTask(() -> this.addAlias(playerID.getId(), playerID.getName(), alias, loginData.getFormattedName()));
-                            return null;
+                            return;
                         }
                     } catch (ApiException ignored) {}
                 }
             } catch (ApiException ignored) {}
             // nicked player
             mc.addScheduledTask(() -> this.addAlias(null, playername, alias, null));
-            return null;
         });
     }
 
@@ -269,14 +268,13 @@ public class CommandAddAlias extends MyAbstractCommand {
                         if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
                             // real player
                             mc.addScheduledTask(() -> this.removeAlias(playerID.getId(), playerID.getName(), loginData.getFormattedName()));
-                            return null;
+                            return;
                         }
                     } catch (ApiException ignored) {}
                 }
             } catch (ApiException ignored) {}
             // nicked player
             mc.addScheduledTask(() -> this.removeAlias(null, playername, null));
-            return null;
         });
     }
 

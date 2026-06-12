@@ -54,7 +54,6 @@ public class ModUpdater {
             } finally {
                 finishedRunning = true;
             }
-            return null;
         });
     }
 

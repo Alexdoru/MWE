@@ -93,21 +93,18 @@ public class CommandWDR extends MyAbstractCommand {
                 final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
                 if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
                     mc.addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), null, cheats));
-                    return null;
+                    return;
                 }
                 try {
                     final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(playerID.getId()));
                     if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
                         // real player
                         mc.addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), loginData.getFormattedName(), cheats));
-                        return null;
                     }
                 } catch (ApiException e) {
                     mc.addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), null, cheats));
-                    return null;
                 }
             } catch (ApiException ignored) {}
-            return null;
         });
     }
 

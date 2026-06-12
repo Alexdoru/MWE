@@ -8,7 +8,6 @@ import fr.alexdoru.mwe.chat.LocrawListener;
 import fr.alexdoru.mwe.chat.ScanFlagChatComponent;
 import fr.alexdoru.mwe.data.ScangameData;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
-import fr.alexdoru.mwe.http.exceptions.RateLimitException;
 import fr.alexdoru.mwe.http.parsers.hypixel.GeneralInfo;
 import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
 import fr.alexdoru.mwe.http.parsers.hypixel.MegaWallsClassStats;
@@ -106,13 +105,7 @@ public class CommandScanGame extends MyAbstractCommand {
             try {
                 final HypixelPlayerData playerdata = new HypixelPlayerData(uuid);
                 Minecraft.getMinecraft().addScheduledTask(() -> checkPlayerStats(networkPlayerInfo, playerdata, doRandomKitCheck));
-                return null;
-            } catch (RateLimitException e) {
-                // return here to not fill the data map with requests
-                // that failed and have a chance to retry later
-                return null;
             } catch (Exception ignored) {}
-            return null;
         });
     }
 

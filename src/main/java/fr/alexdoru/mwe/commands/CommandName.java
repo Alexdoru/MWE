@@ -44,7 +44,6 @@ public class CommandName extends MyAbstractCommand {
             } catch (ApiException e1) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + e1.getMessage());
             }
-            return null;
         });
 
     }
