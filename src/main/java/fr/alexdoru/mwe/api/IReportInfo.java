@@ -23,4 +23,5 @@ public interface IReportInfo {
      * Returns the last time the player has been reported
      */
     long getTimestamp();
+
 }

@@ -42,4 +42,5 @@ public final class MegaWallsGameEvent extends Event {
          */
         DEATHMATCH_START
     }
+
 }

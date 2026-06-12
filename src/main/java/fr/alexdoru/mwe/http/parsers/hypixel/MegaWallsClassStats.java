@@ -274,7 +274,6 @@ public class MegaWallsClassStats {
                 }
         };
 
-
         final IChatComponent msg;
 
         if (this.isUnlocked()) {

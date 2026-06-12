@@ -47,6 +47,7 @@ public class TickingBlockMap {
     }
 
     private static class BlockPlaced {
+
         final int tickPlaced;
         final BlockPos pos;
 
@@ -54,6 +55,7 @@ public class TickingBlockMap {
             this.tickPlaced = tickPlaced;
             this.pos = pos;
         }
+
     }
 
 }

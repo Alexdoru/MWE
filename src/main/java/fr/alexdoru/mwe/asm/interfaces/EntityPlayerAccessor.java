@@ -18,4 +18,5 @@ public interface EntityPlayerAccessor {
     MWClass getMWClass();
 
     void setMWClass(MWClass mwclass);
+
 }

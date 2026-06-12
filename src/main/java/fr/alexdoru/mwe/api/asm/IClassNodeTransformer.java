@@ -120,7 +120,6 @@ public interface IClassNodeTransformer extends Opcodes {
         }
     }
 
-
     /**
      * Adds a setter method for the specified field in the classnode
      */
@@ -162,4 +161,5 @@ public interface IClassNodeTransformer extends Opcodes {
                 return ALOAD;
         }
     }
+
 }

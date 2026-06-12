@@ -228,5 +228,7 @@ public class ModUpdater {
             this.url = url;
             this.version = version;
         }
+
     }
+
 }

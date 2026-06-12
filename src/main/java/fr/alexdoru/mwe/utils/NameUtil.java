@@ -404,6 +404,7 @@ public class NameUtil {
     }
 
     private static class PlayerComparator implements Comparator<NetworkPlayerInfo> {
+
         @Override
         public int compare(NetworkPlayerInfo netInfo1, NetworkPlayerInfo netInfo2) {
             final ScorePlayerTeam team1 = netInfo1.getPlayerTeam();
@@ -414,6 +415,7 @@ public class NameUtil {
                     .compare(netInfo1.getGameProfile().getName(), netInfo2.getGameProfile().getName())
                     .result();
         }
+
     }
 
 }

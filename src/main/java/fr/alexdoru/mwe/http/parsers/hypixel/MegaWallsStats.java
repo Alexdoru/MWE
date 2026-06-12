@@ -342,6 +342,7 @@ public class MegaWallsStats {
     }
 
     private static class Classpoints {
+
         public final int prestige;
         public final int classpoints;
 
@@ -349,6 +350,7 @@ public class MegaWallsStats {
             this.prestige = prestige;
             this.classpoints = classpoints;
         }
+
     }
 
 }

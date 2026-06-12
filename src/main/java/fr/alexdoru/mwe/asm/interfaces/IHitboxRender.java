@@ -7,4 +7,5 @@ public interface IHitboxRender {
      * hitbox around it when f3+b is enabled
      */
     boolean mwe$shouldRenderHitbox();
+
 }

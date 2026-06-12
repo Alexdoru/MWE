@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-
 public class RenderPlayerHook_RenegadeArrowCount {
 
     private static final TimerUtil timer = new TimerUtil(1000L);

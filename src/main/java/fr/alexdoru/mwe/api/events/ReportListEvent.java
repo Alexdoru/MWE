@@ -45,4 +45,5 @@ public final class ReportListEvent extends Event {
          */
         REMOVED
     }
+
 }

@@ -45,4 +45,5 @@ public final class AliasEvent extends Event {
          */
         REMOVED
     }
+
 }

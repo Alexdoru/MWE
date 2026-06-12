@@ -7,4 +7,5 @@ public interface ChatComponentTextAccessor {
     SkinChatHead getSkinChatHead();
 
     void setSkinChatHead(SkinChatHead skinChatHead);
+
 }

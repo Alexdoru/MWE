@@ -65,6 +65,7 @@ public final class MojangNameToUUID {
         public UUID getId() {
             return this.id;
         }
+
     }
 
 }

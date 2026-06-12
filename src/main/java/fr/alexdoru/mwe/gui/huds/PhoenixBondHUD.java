@@ -170,6 +170,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
     }
 
     private static class PhxHealLine {
+
         public final String hpHealed;
         public final ResourceLocation skin;
         public final String name;
@@ -179,6 +180,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
             this.skin = skin;
             this.name = name;
         }
+
     }
 
 }

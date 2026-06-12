@@ -24,4 +24,5 @@ public interface IMWEAddon {
     void init(FMLInitializationEvent event);
 
     void postInit(FMLPostInitializationEvent event);
+
 }

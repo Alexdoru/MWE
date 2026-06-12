@@ -78,6 +78,7 @@ public final class MWEApi {
         public static boolean removeAlias(@Nullable UUID id, @Nullable String playername) {
             return AliasData.removeAlias(id, playername);
         }
+
     }
 
     public static final class Asm {
@@ -104,6 +105,7 @@ public final class MWEApi {
         public static boolean isObfuscatedEnvironment() {
             return MWELoadingPlugin.isObf();
         }
+
     }
 
     public static final class Chat {
@@ -160,6 +162,7 @@ public final class MWEApi {
             }
             return null;
         }
+
     }
 
     public static final class Config {
@@ -195,6 +198,7 @@ public final class MWEApi {
         public static void displayConfigGuiScreen() {
             ConfigHandler.displayConfigGuiScreen();
         }
+
     }
 
     public static final class Hud {
@@ -207,6 +211,7 @@ public final class MWEApi {
         public static void registerHUD(@NotNull IRenderer renderer) {
             HUDRenderer.registerRenderer(renderer);
         }
+
     }
 
     public static final class MojangApi {
@@ -228,6 +233,7 @@ public final class MWEApi {
         public static IPlayerUUID getPlayerUUID(String playername) throws ApiException {
             return MojangNameToUUID.getPlayerUUID(playername);
         }
+
     }
 
     public static final class ReportList {
@@ -262,6 +268,7 @@ public final class MWEApi {
         public static boolean removeFromReportList(@NotNull UUID uuid, @Nullable String playername) {
             return WdrData.remove(uuid, playername);
         }
+
     }
 
     public static final class Squad {
@@ -302,6 +309,7 @@ public final class MWEApi {
         public static Map<String, String> getSquadMap() {
             return SquadHandler.getSquad();
         }
+
     }
 
     public static final class Tasks {
@@ -328,5 +336,7 @@ public final class MWEApi {
         public static void queueSyncDelayedTask(Runnable task, int ticks) {
             new DelayedTask(task, ticks);
         }
+
     }
+
 }

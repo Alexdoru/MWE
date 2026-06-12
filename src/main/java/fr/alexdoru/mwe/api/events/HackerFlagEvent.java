@@ -25,4 +25,5 @@ public final class HackerFlagEvent extends Event {
         this.cheatname = cheatname;
         this.flagtype = flagtype;
     }
+
 }

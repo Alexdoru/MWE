@@ -5,4 +5,5 @@ public interface EntityArrowAccessor {
     boolean isInGround();
 
     boolean isPinnedToPlayer();
+
 }

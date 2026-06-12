@@ -36,4 +36,5 @@ public final class SquadEvent extends Event {
          */
         REMOVED
     }
+
 }

@@ -33,4 +33,5 @@ public class HypixelPlayerData {
     public String getUuid() {
         return this.uuid;
     }
+
 }

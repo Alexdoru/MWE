@@ -9,4 +9,5 @@ public interface NetworkPlayerInfoAccessor {
     void setFinalKills(int playerFinalkills);
 
     void setCustomDisplayname(IChatComponent customDisplaynameIn);
+
 }

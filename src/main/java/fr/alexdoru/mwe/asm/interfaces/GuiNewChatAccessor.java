@@ -9,4 +9,5 @@ public interface GuiNewChatAccessor {
     List<ChatLine> getChatLines();
 
     List<ChatLine> getDrawnChatLines();
+
 }

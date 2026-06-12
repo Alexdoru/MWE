@@ -9,4 +9,5 @@ public interface GuiChatAccessor {
     void setSentHistoryCursor(int i);
 
     GuiTextField getInputField();
+
 }

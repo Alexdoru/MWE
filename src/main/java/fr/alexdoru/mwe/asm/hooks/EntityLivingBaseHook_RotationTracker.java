@@ -6,6 +6,7 @@ import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import net.minecraft.entity.EntityLivingBase;
 
 public class EntityLivingBaseHook_RotationTracker {
+
     public static void setRotationYawHead(EntityLivingBase entity, float yawHead) {
         if (MWEConfig.hackerDetector && entity instanceof EntityPlayerAccessor) {
             HackerDetector.addScheduledTask(() ->
@@ -13,4 +14,5 @@ public class EntityLivingBaseHook_RotationTracker {
             );
         }
     }
+
 }

@@ -126,12 +126,14 @@ public class ReportQueue {
     }
 
     public static class ReportInQueue {
+
         public long time = System.currentTimeMillis();
         public final String name;
 
         public ReportInQueue(String name) {
             this.name = name;
         }
+
     }
 
 }

@@ -15,7 +15,6 @@ import net.minecraft.util.*;
 
 import java.util.*;
 
-
 public class NetHandlerPlayClientHook_PlayerMapTracker {
 
     private static final SampleList<DisconnectedPlayer> latestDisconnected = new SampleList<>(20);
@@ -96,6 +95,7 @@ public class NetHandlerPlayClientHook_PlayerMapTracker {
     }
 
     private static class DisconnectedPlayer {
+
         public final long disconnectTime;
         public final UUID uuid;
         public final String playername;
@@ -107,6 +107,7 @@ public class NetHandlerPlayClientHook_PlayerMapTracker {
             this.playername = netInfo.getGameProfile().getName();
             this.formattedName = NameUtil.getFormattedName(netInfo);
         }
+
     }
 
 }
