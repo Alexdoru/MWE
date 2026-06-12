@@ -1,7 +1,6 @@
 package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.gui.huds.DebugScoreboardHUD;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
@@ -10,7 +9,6 @@ import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
 import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.nocheaters.WarningMessages;
 import fr.alexdoru.mwe.nocheaters.WdrData;
-import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import fr.alexdoru.mwe.utils.DateUtil;
 import fr.alexdoru.mwe.utils.MapUtil;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
@@ -22,7 +20,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
-import net.minecraftforge.common.MinecraftForge;
 
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -32,8 +29,6 @@ import static net.minecraft.util.EnumChatFormatting.*;
 
 public class CommandNocheaters extends MyAbstractCommand {
 
-    private DebugScoreboardHUD debugHUD;
-
     @Override
     public String getCommandName() {
         return "nocheaters";
@@ -41,30 +36,15 @@ public class CommandNocheaters extends MyAbstractCommand {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-
         if (args.length == 0) {
             WarningMessages.printReportMessagesForWorld(true);
             return;
         }
-
         if (args[0].equalsIgnoreCase("reportlist")) {
-
-            printReportList(args);
-
-        } else if (args[0].equalsIgnoreCase("getscoreboard")) {
-
-            ScoreboardUtils.printScoreboard();
-
-        } else if (args[0].equalsIgnoreCase("debugscoreboard")) {
-
-            debugScoreboard();
-
+            this.printReportList(args);
         } else {
-
             this.printCommandHelp();
-
         }
-
     }
 
     @Override
@@ -148,16 +128,6 @@ public class CommandNocheaters extends MyAbstractCommand {
             );
             return null;
         });
-    }
-
-    private void debugScoreboard() {
-        if (this.debugHUD == null) {
-            this.debugHUD = new DebugScoreboardHUD();
-            MinecraftForge.EVENT_BUS.register(this.debugHUD);
-        } else {
-            MinecraftForge.EVENT_BUS.unregister(this.debugHUD);
-            this.debugHUD = null;
-        }
     }
 
 }

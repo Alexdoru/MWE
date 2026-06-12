@@ -2,19 +2,23 @@ package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.lib.ConfigHandler;
+import fr.alexdoru.mwe.gui.huds.DebugScoreboardHUD;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
+import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.TimerUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.List;
 
 public class CommandMWE extends MyAbstractCommand {
 
     private final TimerUtil timer = new TimerUtil(5 * 60 * 1000);
+    private DebugScoreboardHUD debugHUD;
 
     @Override
     public String getCommandName() {
@@ -23,7 +27,11 @@ public class CommandMWE extends MyAbstractCommand {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        if (args.length >= 1 && args[0].equalsIgnoreCase("setapikey")) {
+        if (args.length >= 1 && args[0].equalsIgnoreCase("debugscoreboard")) {
+            debugScoreboard();
+        } else if (args.length >= 1 && args[0].equalsIgnoreCase("getscoreboard")) {
+            ScoreboardUtils.printScoreboard();
+        } else if (args.length >= 1 && args[0].equalsIgnoreCase("setapikey")) {
             if (args.length != 2) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + " setapikey <key>");
             } else {
@@ -57,6 +65,16 @@ public class CommandMWE extends MyAbstractCommand {
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         final String[] possibilities = {"howplaygame", "setapikey"};
         return getListOfStringsMatchingLastWord(args, possibilities);
+    }
+
+    private void debugScoreboard() {
+        if (this.debugHUD == null) {
+            this.debugHUD = new DebugScoreboardHUD();
+            MinecraftForge.EVENT_BUS.register(this.debugHUD);
+        } else {
+            MinecraftForge.EVENT_BUS.unregister(this.debugHUD);
+            this.debugHUD = null;
+        }
     }
 
 }
