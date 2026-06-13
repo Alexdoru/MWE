@@ -2,8 +2,6 @@ package fr.alexdoru.mwe.api.enums;
 
 import fr.alexdoru.mwe.features.FinalKillCounter;
 
-import static fr.alexdoru.mwe.features.FinalKillCounter.*;
-
 public enum MWTeam {
 
     BLUE,
@@ -22,15 +20,19 @@ public enum MWTeam {
      * Returns the chat color code for the team according to the colorblind setting set by the player
      */
     public String getColorPrefix() {
+        return FinalKillCounter.getColorPrefixOfTeam(this);
+    }
+
+    public String getName() {
         switch (this) {
             case BLUE:
-                return FinalKillCounter.getColorPrefixOfTeam(BLUE_TEAM);
+                return "Blue";
             case GREEN:
-                return FinalKillCounter.getColorPrefixOfTeam(GREEN_TEAM);
+                return "Green";
             case RED:
-                return FinalKillCounter.getColorPrefixOfTeam(RED_TEAM);
+                return "Red";
             case YELLOW:
-                return FinalKillCounter.getColorPrefixOfTeam(YELLOW_TEAM);
+                return "Yellow";
         }
         throw new IllegalStateException();
     }

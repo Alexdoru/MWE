@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.features;
 
 import fr.alexdoru.mwe.api.enums.MWClass;
+import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
@@ -22,6 +23,8 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -29,11 +32,6 @@ import java.util.regex.Pattern;
 
 public final class FinalKillCounter {
 
-    public static final int TEAMS = 4;
-    public static final int RED_TEAM = 0;
-    public static final int GREEN_TEAM = 1;
-    public static final int YELLOW_TEAM = 2;
-    public static final int BLUE_TEAM = 3;
     private static final Pattern MESSAGE_START_PATTERN = Pattern.compile("^(\\w{1,16}) ");
     private static final String[] KILL_MESSAGES = {
             /*Banana messages, put those messages at the top to not conflict with the other pattern (\w{1,16}) was killed by (\w{1,16})*/
@@ -131,28 +129,29 @@ public final class FinalKillCounter {
             "^(\\w{1,16}) drowned\\.",
             "^(\\w{1,16}) died from a cactus\\."
     };
-    private static final String[] SCOREBOARD_PREFIXES = {"[R]", "[G]", "[Y]", "[B]"};
-    private static final String[] DEFAULT_PREFIXES = {"c", "a", "e", "9"}; // RED GREEN YELLOW BLUE
+    private static final Pattern[] KILL_PATTERNS;
+    private static final Map<MWTeam, Character> DEFAULT_PREFIXES = new EnumMap<>(MWTeam.class);
+    private static final Map<MWTeam, Character> COLOR_PREFIXES;
+    private static final Map<MWTeam, Map<String, Integer>> KILLS_MAP = new EnumMap<>(MWTeam.class);
     private static final HashMap<String, Integer> allPlayerKills = new HashMap<>();
     private static final Set<String> deadPlayers = new HashSet<>();
     /** Used to save the names of players present in the game for tab completion & reporting suggestions */
     private static final Set<String> playersPresentInGame = new HashSet<>();
-    private static final Pattern[] KILL_PATTERNS;
-    private static final String[] playerDefinedColorPrefixes; // color codes prefix that you are using in your hypixel mega walls settings
-    private static final HashMap<String, Integer>[] teamKillsArray;
     private static final Random rand = new Random();
     private static String gameId;
 
     static {
-        playerDefinedColorPrefixes = DEFAULT_PREFIXES.clone();
-        //noinspection unchecked
-        teamKillsArray = new HashMap[TEAMS];
-        for (int i = 0; i < TEAMS; i++) {
-            teamKillsArray[i] = new HashMap<>();
-        }
         KILL_PATTERNS = new Pattern[KILL_MESSAGES.length];
         for (int i = 0; i < KILL_MESSAGES.length; i++) {
             KILL_PATTERNS[i] = Pattern.compile(KILL_MESSAGES[i]);
+        }
+        DEFAULT_PREFIXES.put(MWTeam.BLUE, '9');
+        DEFAULT_PREFIXES.put(MWTeam.GREEN, 'a');
+        DEFAULT_PREFIXES.put(MWTeam.RED, 'c');
+        DEFAULT_PREFIXES.put(MWTeam.YELLOW, 'e');
+        COLOR_PREFIXES = new EnumMap<>(DEFAULT_PREFIXES);
+        for (final MWTeam team : MWTeam.values()) {
+            KILLS_MAP.put(team, new HashMap<>());
         }
         HUDRenderer.fkCounterHUD.updateDisplayText();
     }
@@ -165,10 +164,8 @@ public final class FinalKillCounter {
         gameId = gameIdIn;
         allPlayerKills.clear();
         deadPlayers.clear();
-        for (int i = 0; i < TEAMS; i++) {
-            playerDefinedColorPrefixes[i] = DEFAULT_PREFIXES[i];
-            teamKillsArray[i].clear();
-        }
+        COLOR_PREFIXES.putAll(DEFAULT_PREFIXES);
+        KILLS_MAP.values().forEach(Map::clear);
         Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap().forEach(netInfo -> {
             if (netInfo != null) {
                 ((NetworkPlayerInfoAccessor) netInfo).setFinalKills(0);
@@ -191,48 +188,48 @@ public final class FinalKillCounter {
 
                 // "player1 killed by player 2" format
                 if (matcher.groupCount() == 2) {
-                    final String killedPlayer = matcher.group(1);
+                    final String victim = matcher.group(1);
                     final String killer = matcher.group(2);
-                    RenderPlayerHook_RenegadeArrowCount.removeArrowsFrom(killedPlayer, -1);
-                    final String killedTeamColor = StringUtil.getLastColorCodeBefore(formattedText, killedPlayer);
+                    RenderPlayerHook_RenegadeArrowCount.removeArrowsFrom(victim, -1);
+                    final char victimTeamColor = StringUtil.getLastColorCharBefore(formattedText, victim);
                     // need to replace first in case the name of the killer contains the name of the killed player
-                    final String killerTeamColor = StringUtil.getLastColorCodeBefore(formattedText.replaceFirst(killedPlayer, ""), killer);
-                    int killsOfKilledPlayer = 0;
-                    if (!killedTeamColor.isEmpty() && !killerTeamColor.isEmpty()) {
-                        killsOfKilledPlayer = tryRemoveKilledPlayer(killedPlayer, killedTeamColor);
-                        if (killsOfKilledPlayer != -1) {
+                    final char killerTeamColor = StringUtil.getLastColorCharBefore(formattedText.replaceFirst(victim, ""), killer);
+                    int killsOfVictim = 0;
+                    if (victimTeamColor != '\0' && killerTeamColor != '\0') {
+                        killsOfVictim = tryRemoveKilledPlayer(victim, victimTeamColor);
+                        if (killsOfVictim != -1) {
                             tryAddKill(killer, killerTeamColor);
-                            playersPresentInGame.add(killedPlayer);
+                            playersPresentInGame.add(victim);
                             playersPresentInGame.add(killer);
                         }
                         HUDRenderer.fkCounterHUD.updateDisplayText();
                     }
                     spawnParticles(killer);
                     final String s = formattedText.replace(killer, SquadHandler.getSquadname(killer))
-                            .replace(killedPlayer, SquadHandler.getSquadname(killedPlayer))
-                            + getKillDiffString(killsOfKilledPlayer, killedTeamColor);
+                            .replace(victim, SquadHandler.getSquadname(victim))
+                            + getKillDiffString(killsOfVictim, victimTeamColor);
                     event.message = new ChatComponentText(s);
-                    ChatUtil.addSkinToComponent(event.message, killedPlayer);
+                    ChatUtil.addSkinToComponent(event.message, victim);
                     return true;
                 }
 
                 // "player1 died on his own" format
                 if (matcher.groupCount() == 1) {
-                    final String killedPlayer = matcher.group(1);
-                    RenderPlayerHook_RenegadeArrowCount.removeArrowsFrom(killedPlayer, -1);
-                    final String killedTeamColor = StringUtil.getLastColorCodeBefore(formattedText, killedPlayer);
-                    int killsOfKilledPlayer = 0;
-                    if (!killedTeamColor.isEmpty()) {
-                        killsOfKilledPlayer = tryRemoveKilledPlayer(killedPlayer, killedTeamColor);
-                        if (killsOfKilledPlayer != -1) {
-                            playersPresentInGame.add(killedPlayer);
+                    final String victim = matcher.group(1);
+                    RenderPlayerHook_RenegadeArrowCount.removeArrowsFrom(victim, -1);
+                    final char victimTeamColor = StringUtil.getLastColorCharBefore(formattedText, victim);
+                    int killsOfVictim = 0;
+                    if (victimTeamColor != '\0') {
+                        killsOfVictim = tryRemoveKilledPlayer(victim, victimTeamColor);
+                        if (killsOfVictim != -1) {
+                            playersPresentInGame.add(victim);
                         }
                         HUDRenderer.fkCounterHUD.updateDisplayText();
                     }
-                    final String s = formattedText.replace(killedPlayer, SquadHandler.getSquadname(killedPlayer))
-                            + getKillDiffString(killsOfKilledPlayer, killedTeamColor);
+                    final String s = formattedText.replace(victim, SquadHandler.getSquadname(victim))
+                            + getKillDiffString(killsOfVictim, victimTeamColor);
                     event.message = new ChatComponentText(s);
-                    ChatUtil.addSkinToComponent(event.message, killedPlayer);
+                    ChatUtil.addSkinToComponent(event.message, victim);
                     return true;
                 }
 
@@ -244,70 +241,66 @@ public final class FinalKillCounter {
 
     }
 
-    private static String getKillDiffString(int killsOfKilledPlayer, String killedTeamColor) {
-        if (!MWEConfig.showKillDiffInChat || killsOfKilledPlayer < 1) {
+    private static String getKillDiffString(int killsOfVictim, char victimTeamColor) {
+        if (!MWEConfig.showKillDiffInChat || killsOfVictim < 1) {
             return "";
         }
-        return EnumChatFormatting.WHITE + " (" + '§' + killedTeamColor + "-" + killsOfKilledPlayer + EnumChatFormatting.WHITE + ")";
+        return EnumChatFormatting.WHITE + " (" + '§' + victimTeamColor + "-" + killsOfVictim + EnumChatFormatting.WHITE + ")";
     }
 
     public static String getGameId() {
         return gameId;
     }
 
-    /**
-     * Can return null if the fkcounter isn't initialized yet
-     */
-    public static HashMap<String, Integer>[] getTeamKillsArray() {
-        return teamKillsArray;
+    public static int getKillsOfTeam(MWTeam team) {
+        int teamKills = 0;
+        for (final int kills : KILLS_MAP.get(team).values()) {
+            teamKills += kills;
+        }
+        return teamKills;
     }
 
-    public static int getKillsOfTeam(int team) {
-        if (isNotValidTeam(team)) {
-            return 0;
-        }
-        int kills = 0;
-        for (final int k : teamKillsArray[team].values()) {
-            kills += k;
-        }
-        return kills;
+    @NotNull
+    public static Map<String, Integer> getKillMapOfTeam(MWTeam team) {
+        return Collections.unmodifiableMap(KILLS_MAP.get(team));
     }
 
     /**
      * Returns a sorted hashmap where the Keys are the Team integer, and the values are the amounts of finals for that team
      */
-    public static Map<Integer, Integer> getSortedTeamKillsMap() {
-        final Map<Integer, Integer> hashmap = new HashMap<>();
-        hashmap.put(RED_TEAM, getKillsOfTeam(RED_TEAM));
-        hashmap.put(GREEN_TEAM, getKillsOfTeam(GREEN_TEAM));
-        hashmap.put(YELLOW_TEAM, getKillsOfTeam(YELLOW_TEAM));
-        hashmap.put(BLUE_TEAM, getKillsOfTeam(BLUE_TEAM));
-        return MapUtil.sortByDecreasingValue(hashmap);
-    }
-
-    public static HashMap<String, Integer> getPlayersOfTeam(int team) {
-        if (isNotValidTeam(team)) {
-            return new HashMap<>();
-        }
-        return teamKillsArray[team];
+    public static Map<MWTeam, Integer> getSortedTeamKillsMap() {
+        final Map<MWTeam, Integer> map = new EnumMap<>(MWTeam.class);
+        map.put(MWTeam.BLUE, getKillsOfTeam(MWTeam.BLUE));
+        map.put(MWTeam.GREEN, getKillsOfTeam(MWTeam.GREEN));
+        map.put(MWTeam.RED, getKillsOfTeam(MWTeam.RED));
+        map.put(MWTeam.YELLOW, getKillsOfTeam(MWTeam.YELLOW));
+        return MapUtil.sortByDecreasingValue(map);
     }
 
     /**
      * Detects the color codes you are using in your mega walls settings by looking at the scoreboard/sidebartext
      */
     private static void setTeamPrefixes() {
+        final String[] WITHER_PREFIXES = {"[B]", "[G]", "[R]", "[Y]"};
+        final Map<String, MWTeam> prefixToTeam = new HashMap<>();
+        prefixToTeam.put(WITHER_PREFIXES[0], MWTeam.BLUE);
+        prefixToTeam.put(WITHER_PREFIXES[1], MWTeam.GREEN);
+        prefixToTeam.put(WITHER_PREFIXES[2], MWTeam.RED);
+        prefixToTeam.put(WITHER_PREFIXES[3], MWTeam.YELLOW);
         for (final String line : ScoreboardUtils.getFormattedSidebarText()) {
-            for (int team = 0; team < TEAMS; team++) {
-                if (line.contains(SCOREBOARD_PREFIXES[team])) {
-                    playerDefinedColorPrefixes[team] = StringUtil.getLastColorCodeBefore(line, SCOREBOARD_PREFIXES[team]);
+            for (final String prefix : WITHER_PREFIXES) {
+                if (line.contains(prefix)) {
+                    final MWTeam team = prefixToTeam.get(prefix);
+                    final char color = StringUtil.getLastColorCharBefore(line, prefix);
+                    COLOR_PREFIXES.put(team, color);
                 }
             }
         }
         HUDRenderer.fkCounterHUD.updateDisplayText();
     }
 
-    public static void tryRemoveKilledPlayer(String player, int team) {
-        tryRemoveKilledPlayer(player, getColorPrefixOfTeam(team).replace("§", ""));
+    public static void tryRemoveKilledPlayer(String player, MWTeam team) {
+        tryRemoveKilledPlayer(player, COLOR_PREFIXES.get(team));
     }
 
     /**
@@ -315,13 +308,13 @@ public final class FinalKillCounter {
      * and is not already killed, and returns the amount of finals the
      * player had when successfull, returns -1 otherwise.
      */
-    private static int tryRemoveKilledPlayer(String player, String color) {
-        final int team = getTeamFromColor(color);
-        if (isNotValidTeam(team)) {
+    private static int tryRemoveKilledPlayer(String player, char color) {
+        final MWTeam team = getTeamFromColor(color);
+        if (team == null) {
             return -1;
         }
-        if (!ScoreboardTracker.getParser().isWitherAlive(color)) {
-            final Integer kills = teamKillsArray[team].remove(player);
+        if (!ScoreboardTracker.getParser().isWitherAlive(String.valueOf(color))) {
+            final Integer kills = KILLS_MAP.get(team).remove(player);
             allPlayerKills.remove(player);
             deadPlayers.add(player);
             updateNetworkPlayerinfo(player, 0);
@@ -330,15 +323,15 @@ public final class FinalKillCounter {
         return -1;
     }
 
-    private static void tryAddKill(String killer, String killerTeamColor) {
-        final int team = getTeamFromColor(killerTeamColor);
-        if (isNotValidTeam(team)) {
+    private static void tryAddKill(String killer, char killerTeamColor) {
+        final MWTeam team = getTeamFromColor(killerTeamColor);
+        if (team == null) {
             return;
         }
         if (deadPlayers.contains(killer)) {
             return;
         }
-        final Integer finals = teamKillsArray[team].merge(killer, 1, Integer::sum);
+        final Integer finals = KILLS_MAP.get(team).merge(killer, 1, Integer::sum);
         allPlayerKills.merge(killer, 1, Integer::sum);
         updateNetworkPlayerinfo(killer, finals);
     }
@@ -355,32 +348,18 @@ public final class FinalKillCounter {
         }
     }
 
-    private static int getTeamFromColor(String color) {
-        for (int team = 0; team < TEAMS; team++) {
-            if (playerDefinedColorPrefixes[team].equalsIgnoreCase(color)) {
-                return team;
+    @Nullable
+    private static MWTeam getTeamFromColor(char color) {
+        for (final Map.Entry<MWTeam, Character> entry : COLOR_PREFIXES.entrySet()) {
+            if (entry.getValue() == color) {
+                return entry.getKey();
             }
         }
-        return -1;
+        return null;
     }
 
-    public static String getColorPrefixOfTeam(int team) {
-        return "§" + playerDefinedColorPrefixes[team];
-    }
-
-    public static String getNameOfTeam(int team) {
-        switch (team) {
-            case 0:
-                return "Red";
-            case 1:
-                return "Green";
-            case 2:
-                return "Yellow";
-            case 3:
-                return "Blue";
-            default:
-                return "?";
-        }
+    public static String getColorPrefixOfTeam(MWTeam team) {
+        return "§" + COLOR_PREFIXES.get(team);
     }
 
     /**
@@ -397,10 +376,6 @@ public final class FinalKillCounter {
 
     public static List<String> getPlayersInThisGame() {
         return new ArrayList<>(playersPresentInGame);
-    }
-
-    private static boolean isNotValidTeam(int team) {
-        return (team < 0 || team >= TEAMS);
     }
 
     private static void spawnParticles(String killer) {
