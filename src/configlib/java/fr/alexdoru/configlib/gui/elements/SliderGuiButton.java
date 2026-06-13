@@ -1,8 +1,7 @@
 package fr.alexdoru.configlib.gui.elements;
 
 import fr.alexdoru.configlib.ConfigProperty;
-import fr.alexdoru.mwe.gui.GuiUtil;
-import fr.alexdoru.mwe.utils.SoundUtil;
+import fr.alexdoru.configlib.gui.GuiUtil;
 import net.minecraft.util.MathHelper;
 
 import java.lang.reflect.Field;
@@ -103,15 +102,15 @@ public class SliderGuiButton extends ConfigGuiButton {
             if (isMouseOnButton(mouseX, mouseY, sliderButtonX, sliderButtonY, SLIDER_BUTTON_SIZE, SLIDER_BUTTON_SIZE)) {
                 updateSliderFromPosition(mouseX - sliderBarX);
                 dragging = true;
-                SoundUtil.playButtonPress();
+                this.playPressSound();
                 return true;
             } else if (isMouseOnButton(mouseX, mouseY, minusButtonX, minusButtonY, PLUS_BUTTON_SIZE, PLUS_BUTTON_SIZE)) {
                 updateSliderFromIncrement(-1);
-                SoundUtil.playButtonPress();
+                this.playPressSound();
                 return true;
             } else if (isMouseOnButton(mouseX, mouseY, plusButtonX, plusButtonY, PLUS_BUTTON_SIZE, PLUS_BUTTON_SIZE)) {
                 updateSliderFromIncrement(1);
-                SoundUtil.playButtonPress();
+                this.playPressSound();
                 return true;
             }
         }

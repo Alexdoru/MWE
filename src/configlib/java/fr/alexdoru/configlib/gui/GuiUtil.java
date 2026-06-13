@@ -1,10 +1,6 @@
-package fr.alexdoru.mwe.gui;
+package fr.alexdoru.configlib.gui;
 
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.fml.client.config.GuiUtils;
-
-import java.util.List;
 
 public final class GuiUtil {
 
@@ -32,10 +28,6 @@ public final class GuiUtil {
             endY = i;
         }
         Gui.drawRect(x, startY + 1, x + 1, endY, color);
-    }
-
-    public static void drawHoveringText(List<String> textLines, int x, int y, GuiScreen guiScreen) {
-        GuiUtils.drawHoveringText(textLines, x, y, guiScreen.width, guiScreen.height, -1, guiScreen.mc.fontRendererObj);
     }
 
 }

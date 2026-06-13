@@ -1,13 +1,12 @@
 package fr.alexdoru.configlib.gui;
 
-import fr.alexdoru.mwe.gui.GuiUtil;
-import fr.alexdoru.mwe.utils.DelayedTask;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.awt.Color;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.function.Consumer;
 
@@ -68,8 +67,17 @@ public class ColorSelectionGuiScreen extends GuiScreen {
         if (button.id == 5) {
             this.resetDefaultColor();
         } else if (button.id == 6) {
-            new DelayedTask(() -> mc.displayGuiScreen(parent));
+            this.mc.displayGuiScreen(parent);
         }
+    }
+
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        if (keyCode == 1) {
+            this.mc.displayGuiScreen(parent);
+            return;
+        }
+        super.keyTyped(typedChar, keyCode);
     }
 
     @Override
@@ -82,7 +90,6 @@ public class ColorSelectionGuiScreen extends GuiScreen {
         }
         this.mc.entityRenderer.stopUseShader();
         super.onGuiClosed();
-        new DelayedTask(() -> mc.displayGuiScreen(parent));
     }
 
     @Override

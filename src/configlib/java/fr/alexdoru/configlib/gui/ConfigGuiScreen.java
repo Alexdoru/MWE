@@ -5,9 +5,7 @@ import fr.alexdoru.configlib.ConfigFieldContainer;
 import fr.alexdoru.configlib.ConfigHandler;
 import fr.alexdoru.configlib.IConfigTitleRenderer;
 import fr.alexdoru.configlib.gui.elements.*;
-import fr.alexdoru.mwe.gui.GuiUtil;
-import fr.alexdoru.mwe.utils.SoundUtil;
-import fr.alexdoru.mwe.utils.StringUtil;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -147,7 +145,7 @@ public class ConfigGuiScreen extends GuiScreen {
         searchField.setMaxStringLength(128);
         searchField.setEnableBackgroundDrawing(false);
         searchField.setFocused(prevFocus);
-        if (!StringUtil.isNullOrEmpty(prevSearch)) {
+        if (prevSearch != null && !prevSearch.isEmpty()) {
             searchField.setText(prevSearch);
             updateSearch(prevSearch);
         }
@@ -317,7 +315,7 @@ public class ConfigGuiScreen extends GuiScreen {
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (lastInteractedSlider != null && (keyCode == Keyboard.KEY_LEFT || keyCode == Keyboard.KEY_RIGHT)) {
             lastInteractedSlider.updateSliderFromIncrement(keyCode == Keyboard.KEY_LEFT ? -1 : 1);
-            SoundUtil.playButtonPress();
+            this.mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
             return;
         }
         if (searchField != null) {

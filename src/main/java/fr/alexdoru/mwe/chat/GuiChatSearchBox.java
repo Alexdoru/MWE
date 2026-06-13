@@ -1,10 +1,10 @@
 package fr.alexdoru.mwe.chat;
 
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.gui.GuiUtil;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraftforge.fml.client.config.GuiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,7 +115,7 @@ public class GuiChatSearchBox extends GuiTextField {
                 tooltip.add("");
                 tooltip.add(GRAY + "Click to switch to " + (!isRegexSearch ? AQUA + "REGEX" : GREEN + "NORMAL") + GRAY + " search");
             }
-            GuiUtil.drawHoveringText(tooltip, mouseX, mouseY - guiscreen.mc.fontRendererObj.FONT_HEIGHT * tooltip.size() - 3, guiscreen);
+            GuiUtils.drawHoveringText(tooltip, mouseX, mouseY - guiscreen.mc.fontRendererObj.FONT_HEIGHT * tooltip.size() - 3, guiscreen.width, guiscreen.height, -1, guiscreen.mc.fontRendererObj);
         }
     }
 

@@ -1,9 +1,11 @@
 package fr.alexdoru.configlib.gui.elements;
 
 import fr.alexdoru.configlib.ConfigProperty;
-import fr.alexdoru.mwe.gui.GuiUtil;
+import fr.alexdoru.configlib.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -86,6 +88,10 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    protected void playPressSound() {
+        this.mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
     }
 
 }

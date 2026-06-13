@@ -3,7 +3,7 @@ package fr.alexdoru.configlib.gui.elements;
 import fr.alexdoru.configlib.ConfigProperty;
 import fr.alexdoru.configlib.gui.ColorSelectionGuiScreen;
 import fr.alexdoru.configlib.gui.ConfigGuiScreen;
-import fr.alexdoru.mwe.gui.GuiUtil;
+import fr.alexdoru.configlib.gui.GuiUtil;
 import net.minecraft.client.gui.GuiButton;
 
 import java.awt.Color;

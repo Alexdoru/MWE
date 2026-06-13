@@ -19,6 +19,7 @@ import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.launchwrapper.Launch;
@@ -214,7 +215,7 @@ public final class MWEApi {
          * Displays the MWE config gui screen
          */
         public static void displayConfigGuiScreen() {
-            MWE.INSTANCE().getConfigHandler().displayConfigGuiScreen();
+            Tasks.queueSyncDelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(Config.getConfigGuiScreen()), 0);
         }
 
     }

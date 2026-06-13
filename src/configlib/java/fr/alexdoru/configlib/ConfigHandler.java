@@ -2,11 +2,7 @@ package fr.alexdoru.configlib;
 
 import fr.alexdoru.configlib.gui.ConfigGuiScreen;
 import fr.alexdoru.mwe.api.GuiPosition;
-import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.utils.DelayedTask;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import org.jetbrains.annotations.NotNull;
@@ -155,7 +151,6 @@ public final class ConfigHandler implements IConfigHandler {
                 configField.saveFieldValueToConfig();
             }
         } catch (IllegalAccessException e) {
-            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.DARK_RED + "Failed to save the config!");
             e.printStackTrace();
         }
         if (config.hasChanged()) {
@@ -173,11 +168,6 @@ public final class ConfigHandler implements IConfigHandler {
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Failed to generate the config menu!");
         }
-    }
-
-    @Override
-    public void displayConfigGuiScreen() {
-        new DelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(getConfigGuiScreen()));
     }
 
     private void readConfigInDefinitionOrder(Class<?> clazz) throws IOException {

@@ -1,8 +1,9 @@
 package fr.alexdoru.configlib.gui.elements;
 
 import fr.alexdoru.configlib.gui.ConfigGuiScreen;
-import fr.alexdoru.mwe.utils.SoundUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.util.ResourceLocation;
 
 public class CategoryGuiButton {
 
@@ -31,7 +32,7 @@ public class CategoryGuiButton {
     public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) {
         if (mouseButton == 0 && mouseX >= posX && mouseX < posX + getWidth() && mouseY >= posY && mouseY < posY + getHeight()) {
             this.configGui.setFocusedCategory(this.categoryName);
-            SoundUtil.playButtonPress();
+            Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
             return true;
         }
         return false;

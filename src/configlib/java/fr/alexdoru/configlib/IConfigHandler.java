@@ -21,9 +21,4 @@ public interface IConfigHandler {
      */
     GuiScreen getConfigGuiScreen();
 
-    /**
-     * Display the config gui screen
-     */
-    void displayConfigGuiScreen();
-
 }
