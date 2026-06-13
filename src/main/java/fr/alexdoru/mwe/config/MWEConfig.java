@@ -631,6 +631,12 @@ public final class MWEConfig {
     public static boolean hideHungerTitleInMW = true;
 
     @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Screen",
+            name = "Hide automaton title",
+            comment = "Hide the enemy energy indicator in the middle of the screen when playing automaton")
+    public static boolean hideAutomatonTitleInMW;
+
+    @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Kill cooldown HUD",
             comment = "Displays the cooldown of the /kill command")
