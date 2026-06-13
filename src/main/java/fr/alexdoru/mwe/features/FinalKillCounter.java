@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.features;
 
 import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.api.enums.MWTeam;
+import fr.alexdoru.mwe.api.events.FinalKillEvent;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
@@ -22,6 +23,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -194,13 +196,22 @@ public final class FinalKillCounter {
                     final char victimTeamColor = StringUtil.getLastColorCharBefore(formattedText, victim);
                     // need to replace first in case the name of the killer contains the name of the killed player
                     final char killerTeamColor = StringUtil.getLastColorCharBefore(formattedText.replaceFirst(victim, ""), killer);
+                    final MWTeam victimTeam = getTeamFromColor(victimTeamColor);
+                    final MWTeam killerTeam = getTeamFromColor(killerTeamColor);
                     int killsOfVictim = 0;
-                    if (victimTeamColor != '\0' && killerTeamColor != '\0') {
-                        killsOfVictim = tryRemoveKilledPlayer(victim, victimTeamColor);
+                    if (victimTeam != null && killerTeam != null) {
+                        killsOfVictim = tryRemoveKilledPlayer(victim, victimTeam);
                         if (killsOfVictim != -1) {
-                            tryAddKill(killer, killerTeamColor);
                             playersPresentInGame.add(victim);
                             playersPresentInGame.add(killer);
+                            if (tryAddKill(killer, killerTeam)) {
+                                MinecraftForge.EVENT_BUS.post(new FinalKillEvent.PlayerKill(
+                                        victim,
+                                        victimTeam,
+                                        killer,
+                                        killerTeam
+                                ));
+                            }
                         }
                         HUDRenderer.fkCounterHUD.updateDisplayText();
                     }
@@ -218,11 +229,16 @@ public final class FinalKillCounter {
                     final String victim = matcher.group(1);
                     RenderPlayerHook_RenegadeArrowCount.removeArrowsFrom(victim, -1);
                     final char victimTeamColor = StringUtil.getLastColorCharBefore(formattedText, victim);
+                    final MWTeam victimTeam = getTeamFromColor(victimTeamColor);
                     int killsOfVictim = 0;
-                    if (victimTeamColor != '\0') {
-                        killsOfVictim = tryRemoveKilledPlayer(victim, victimTeamColor);
+                    if (victimTeam != null) {
+                        killsOfVictim = tryRemoveKilledPlayer(victim, victimTeam);
                         if (killsOfVictim != -1) {
                             playersPresentInGame.add(victim);
+                            MinecraftForge.EVENT_BUS.post(new FinalKillEvent.NaturalDeath(
+                                    victim,
+                                    victimTeam
+                            ));
                         }
                         HUDRenderer.fkCounterHUD.updateDisplayText();
                     }
@@ -299,21 +315,13 @@ public final class FinalKillCounter {
         HUDRenderer.fkCounterHUD.updateDisplayText();
     }
 
-    public static void tryRemoveKilledPlayer(String player, MWTeam team) {
-        tryRemoveKilledPlayer(player, COLOR_PREFIXES.get(team));
-    }
-
     /**
      * Tries to remove a player from the fkcounter if the player has no wither
      * and is not already killed, and returns the amount of finals the
      * player had when successfull, returns -1 otherwise.
      */
-    private static int tryRemoveKilledPlayer(String player, char color) {
-        final MWTeam team = getTeamFromColor(color);
-        if (team == null) {
-            return -1;
-        }
-        if (!ScoreboardTracker.getParser().isWitherAlive(String.valueOf(color))) {
+    public static int tryRemoveKilledPlayer(String player, @NotNull MWTeam team) {
+        if (!ScoreboardTracker.getParser().isWitherAlive(String.valueOf(COLOR_PREFIXES.get(team)))) {
             final Integer kills = KILLS_MAP.get(team).remove(player);
             allPlayerKills.remove(player);
             deadPlayers.add(player);
@@ -323,17 +331,17 @@ public final class FinalKillCounter {
         return -1;
     }
 
-    private static void tryAddKill(String killer, char killerTeamColor) {
-        final MWTeam team = getTeamFromColor(killerTeamColor);
-        if (team == null) {
-            return;
-        }
+    /**
+     * Returns true if the kill was added
+     */
+    private static boolean tryAddKill(String killer, @NotNull MWTeam killerTeam) {
         if (deadPlayers.contains(killer)) {
-            return;
+            return false;
         }
-        final Integer finals = KILLS_MAP.get(team).merge(killer, 1, Integer::sum);
+        final Integer finals = KILLS_MAP.get(killerTeam).merge(killer, 1, Integer::sum);
         allPlayerKills.merge(killer, 1, Integer::sum);
         updateNetworkPlayerinfo(killer, finals);
+        return true;
     }
 
     public static int getFinalKillsOfPlayer(String playername) {
