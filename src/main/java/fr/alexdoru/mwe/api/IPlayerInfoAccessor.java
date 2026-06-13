@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.api;
 
 import fr.alexdoru.mwe.api.enums.MWClass;
+import org.jetbrains.annotations.Nullable;
 
 public interface IPlayerInfoAccessor {
 
@@ -27,6 +28,7 @@ public interface IPlayerInfoAccessor {
      * Returns the Mega Walls class that this player is using,
      * may be null outside Mega Walls.
      */
+    @Nullable
     MWClass getMWClass();
 
 }
