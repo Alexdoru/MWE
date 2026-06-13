@@ -2,7 +2,6 @@ package fr.alexdoru.mwe.features;
 
 import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.api.events.FinalKillEvent;
-import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
@@ -19,7 +18,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -128,13 +126,15 @@ public final class FinalKillCounter {
     };
     private static final Pattern[] KILL_PATTERNS;
     private static final Map<MWTeam, Character> DEFAULT_PREFIXES = new EnumMap<>(MWTeam.class);
-    private static final Map<MWTeam, Character> COLOR_PREFIXES;
-    private static final Map<MWTeam, Map<String, Integer>> KILLS_MAP = new EnumMap<>(MWTeam.class);
-    private static final HashMap<String, Integer> allPlayerKills = new HashMap<>();
-    private static final Set<String> deadPlayers = new HashSet<>();
+
+    @NotNull
+    private final String gameId;
+    private final Map<MWTeam, Character> COLOR_PREFIXES;
+    private final Map<MWTeam, Map<String, Integer>> KILLS_MAP = new EnumMap<>(MWTeam.class);
+    private final Map<String, Integer> allPlayerKills = new HashMap<>();
+    private final Set<String> deadPlayers = new HashSet<>();
     /** Used to save the names of players present in the game for tab completion & reporting suggestions */
-    private static final Set<String> playersPresentInGame = new HashSet<>();
-    private static String gameId;
+    private final Set<String> playersPresentInGame = new HashSet<>();
 
     static {
         KILL_PATTERNS = new Pattern[KILL_MESSAGES.length];
@@ -145,32 +145,24 @@ public final class FinalKillCounter {
         DEFAULT_PREFIXES.put(MWTeam.GREEN, 'a');
         DEFAULT_PREFIXES.put(MWTeam.RED, 'c');
         DEFAULT_PREFIXES.put(MWTeam.YELLOW, 'e');
-        COLOR_PREFIXES = new EnumMap<>(DEFAULT_PREFIXES);
-        for (final MWTeam team : MWTeam.values()) {
-            KILLS_MAP.put(team, new HashMap<>());
-        }
         HUDRenderer.fkCounterHUD.updateDisplayText();
     }
 
-    /**
-     * Resets the Killcounter and assigns it to a new game ID
-     */
-    private static void resetKillCounterTo(String gameIdIn) {
-        playersPresentInGame.clear();
-        gameId = gameIdIn;
-        allPlayerKills.clear();
-        deadPlayers.clear();
-        COLOR_PREFIXES.putAll(DEFAULT_PREFIXES);
-        KILLS_MAP.values().forEach(Map::clear);
+    FinalKillCounter(@NotNull String gameId) {
+        this.gameId = gameId;
+        this.COLOR_PREFIXES = new EnumMap<>(DEFAULT_PREFIXES);
+        for (final MWTeam team : MWTeam.values()) {
+            KILLS_MAP.put(team, new HashMap<>());
+        }
         Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap().forEach(netInfo -> {
-            if (netInfo != null) {
+            if (netInfo instanceof NetworkPlayerInfoAccessor) {
                 ((NetworkPlayerInfoAccessor) netInfo).setFinalKills(0);
             }
         });
         HUDRenderer.fkCounterHUD.updateDisplayText();
     }
 
-    public static boolean processMessage(ClientChatReceivedEvent event, String formattedText, String unformattedText) {
+    public boolean processMessage(ClientChatReceivedEvent event, String formattedText, String unformattedText) {
 
         if (!MESSAGE_START_PATTERN.matcher(unformattedText).find()) {
             return false;
@@ -257,11 +249,12 @@ public final class FinalKillCounter {
         return EnumChatFormatting.WHITE + " (" + '§' + victimTeamColor + "-" + killsOfVictim + EnumChatFormatting.WHITE + ")";
     }
 
-    public static String getGameId() {
+    @NotNull
+    public String getGameId() {
         return gameId;
     }
 
-    public static int getKillsOfTeam(MWTeam team) {
+    public int getKillsOfTeam(MWTeam team) {
         int teamKills = 0;
         for (final int kills : KILLS_MAP.get(team).values()) {
             teamKills += kills;
@@ -270,14 +263,14 @@ public final class FinalKillCounter {
     }
 
     @NotNull
-    public static Map<String, Integer> getKillMapOfTeam(MWTeam team) {
+    public Map<String, Integer> getKillMapOfTeam(MWTeam team) {
         return Collections.unmodifiableMap(KILLS_MAP.get(team));
     }
 
     /**
      * Returns a sorted hashmap where the Keys are the Team integer, and the values are the amounts of finals for that team
      */
-    public static Map<MWTeam, Integer> getSortedTeamKillsMap() {
+    public Map<MWTeam, Integer> getSortedTeamKillsMap() {
         final Map<MWTeam, Integer> map = new EnumMap<>(MWTeam.class);
         map.put(MWTeam.BLUE, getKillsOfTeam(MWTeam.BLUE));
         map.put(MWTeam.GREEN, getKillsOfTeam(MWTeam.GREEN));
@@ -289,7 +282,7 @@ public final class FinalKillCounter {
     /**
      * Detects the color codes you are using in your mega walls settings by looking at the scoreboard/sidebartext
      */
-    private static void setTeamPrefixes() {
+    void setTeamPrefixes() {
         final String[] WITHER_PREFIXES = {"[B]", "[G]", "[R]", "[Y]"};
         final Map<String, MWTeam> prefixToTeam = new HashMap<>();
         prefixToTeam.put(WITHER_PREFIXES[0], MWTeam.BLUE);
@@ -313,7 +306,7 @@ public final class FinalKillCounter {
      * and is not already killed, and returns the amount of finals the
      * player had when successfull, returns -1 otherwise.
      */
-    public static int tryRemoveKilledPlayer(String player, @NotNull MWTeam team) {
+    public int tryRemoveKilledPlayer(String player, @NotNull MWTeam team) {
         if (!ScoreboardTracker.getParser().isWitherAlive(String.valueOf(COLOR_PREFIXES.get(team)))) {
             final Integer kills = KILLS_MAP.get(team).remove(player);
             allPlayerKills.remove(player);
@@ -327,7 +320,7 @@ public final class FinalKillCounter {
     /**
      * Returns true if the kill was added
      */
-    private static boolean tryAddKill(String killer, @NotNull MWTeam killerTeam) {
+    private boolean tryAddKill(String killer, @NotNull MWTeam killerTeam) {
         if (deadPlayers.contains(killer)) {
             return false;
         }
@@ -337,7 +330,7 @@ public final class FinalKillCounter {
         return true;
     }
 
-    public static int getFinalKillsOfPlayer(String playername) {
+    public int getFinalKillsOfPlayer(String playername) {
         final Integer finals = allPlayerKills.get(playername);
         return finals == null ? 0 : finals;
     }
@@ -350,7 +343,7 @@ public final class FinalKillCounter {
     }
 
     @Nullable
-    private static MWTeam getTeamFromColor(char color) {
+    private MWTeam getTeamFromColor(char color) {
         for (final Map.Entry<MWTeam, Character> entry : COLOR_PREFIXES.entrySet()) {
             if (entry.getValue() == color) {
                 return entry.getKey();
@@ -359,14 +352,18 @@ public final class FinalKillCounter {
         return null;
     }
 
-    public static String getColorPrefixOfTeam(MWTeam team) {
+    public static String getDefaultColorPrefix(MWTeam team) {
+        return "§" + DEFAULT_PREFIXES.get(team);
+    }
+
+    public String getColorPrefixOfTeam(MWTeam team) {
         return "§" + COLOR_PREFIXES.get(team);
     }
 
     /**
      * Used by the report suggestion system
      */
-    public static boolean wasPlayerInThisGame(String playername) {
+    public boolean wasPlayerInThisGame(String playername) {
         for (final String name : playersPresentInGame) {
             if (name.equalsIgnoreCase(playername)) {
                 return true;
@@ -375,33 +372,8 @@ public final class FinalKillCounter {
         return false;
     }
 
-    public static List<String> getPlayersInThisGame() {
+    public List<String> getPlayersInThisGame() {
         return new ArrayList<>(playersPresentInGame);
-    }
-
-    @SubscribeEvent
-    public void onMwGame(MegaWallsGameEvent event) {
-
-        // to fix the bug where the FKCounter doesn't work properly if you play two games in a row on a server with the same serverID
-        if (event.type == MegaWallsGameEvent.Type.GAME_START) {
-            final String currentGameId = ScoreboardTracker.getParser().getGameId();
-            if (currentGameId != null) {
-                resetKillCounterTo(currentGameId);
-            }
-            setTeamPrefixes();
-            return;
-        }
-
-        if (event.type == MegaWallsGameEvent.Type.CONNECT) {
-            final String currentGameId = ScoreboardTracker.getParser().getGameId();
-            if (gameId == null || !gameId.equals(currentGameId)) {
-                resetKillCounterTo(currentGameId);
-            }
-            // this is here to fix the bug where the killcounter doesn't work if you re-start your minecraft during a game of MW
-            // or if you changed your colors for the teams in your MW settings and rejoined the game
-            setTeamPrefixes();
-        }
-
     }
 
 }

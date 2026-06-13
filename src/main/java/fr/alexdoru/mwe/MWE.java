@@ -28,6 +28,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.versioning.ComparableVersion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,11 +51,10 @@ public class MWE {
     public static final String modName = "MWE";
     public static final String version = BuildConfig.VERSION;
     public static final Logger logger = LogManager.getLogger(modName);
-
     private static MWE INSTANCE;
     private final List<IMWEAddon> loadedAddons = new ArrayList<>();
-
     private IConfigHandler configHandler;
+    private FinalKillCounterManager fkManager;
 
     public MWE() {
         INSTANCE = this;
@@ -83,6 +83,9 @@ public class MWE {
     @EventHandler
     public void init(FMLInitializationEvent event) {
 
+        this.fkManager = new FinalKillCounterManager();
+        MinecraftForge.EVENT_BUS.register(this.fkManager);
+
         MinecraftForge.EVENT_BUS.register(new WdrData());
         MinecraftForge.EVENT_BUS.register(new HUDRenderer());
         MinecraftForge.EVENT_BUS.register(new ReportQueue());
@@ -90,7 +93,6 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(new SquadHandler());
         MinecraftForge.EVENT_BUS.register(new HackerDetector());
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
-        MinecraftForge.EVENT_BUS.register(new FinalKillCounter());
         MinecraftForge.EVENT_BUS.register(new StrengthParticles());
         MinecraftForge.EVENT_BUS.register(new ScoreboardTracker());
         MinecraftForge.EVENT_BUS.register(new PlayerJoinListener());
@@ -127,6 +129,11 @@ public class MWE {
 
     public IConfigHandler getConfigHandler() {
         return configHandler;
+    }
+
+    @Nullable
+    public FinalKillCounter getFinalKillCounter() {
+        return this.fkManager.getFkCounter();
     }
 
 }

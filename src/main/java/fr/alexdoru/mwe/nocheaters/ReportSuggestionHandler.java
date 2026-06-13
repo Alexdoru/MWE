@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.nocheaters;
 
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.commands.CommandReport;
@@ -178,7 +179,11 @@ public class ReportSuggestionHandler {
     }
 
     private static boolean isNameValid(String playername) {
-        return NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername) != null || isPlayerMyself(playername) || FinalKillCounter.wasPlayerInThisGame(playername);
+        if (NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername) != null || isPlayerMyself(playername)) {
+            return true;
+        }
+        final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
+        return fkCounter != null && fkCounter.wasPlayerInThisGame(playername);
     }
 
     private static boolean isPlayerMyself(@Nullable String name) {

@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.gui.huds;
 
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.features.FinalKillCounter;
@@ -110,17 +111,21 @@ public class FKCounterHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return !MWEConfig.fkcounterHUDinSidebar && this.guiPosition.isEnabled() && ScoreboardTracker.isInMwGame() && FinalKillCounter.getGameId() != null;
+        return !MWEConfig.fkcounterHUDinSidebar
+                && this.guiPosition.isEnabled()
+                && ScoreboardTracker.isInMwGame()
+                && MWE.INSTANCE().getFinalKillCounter() != null;
     }
 
     public void updateDisplayText() {
 
-        if (FinalKillCounter.getGameId() == null) {
+        final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
+        if (fkCounter == null) {
             return;
         }
 
         this.textToRender.clear();
-        final Map<MWTeam, Integer> sortedKillMap = FinalKillCounter.getSortedTeamKillsMap();
+        final Map<MWTeam, Integer> sortedKillMap = fkCounter.getSortedTeamKillsMap();
 
         if (MWEConfig.fkcounterHUDCompact || MWEConfig.fkcounterHUDinSidebar) {
 
@@ -132,7 +137,7 @@ public class FKCounterHUD extends AbstractRenderer {
                 } else {
                     strBuilder.append(EnumChatFormatting.DARK_GRAY).append(" / ");
                 }
-                strBuilder.append(FinalKillCounter.getColorPrefixOfTeam(entry.getKey())).append(entry.getValue());
+                strBuilder.append(fkCounter.getColorPrefixOfTeam(entry.getKey())).append(entry.getValue());
             }
             this.displayText = strBuilder.toString();
 
@@ -141,8 +146,8 @@ public class FKCounterHUD extends AbstractRenderer {
             for (final Entry<MWTeam, Integer> teamEntry : sortedKillMap.entrySet()) {
                 final StringBuilder strBuilder = new StringBuilder();
                 final MWTeam team = teamEntry.getKey();
-                strBuilder.append(FinalKillCounter.getColorPrefixOfTeam(team)).append(team.getName().charAt(0)).append(EnumChatFormatting.WHITE).append(" ").append(FinalKillCounter.getKillsOfTeam(team));
-                final Map<String, Integer> teamKillMap = MapUtil.sortByDecreasingValue(FinalKillCounter.getKillMapOfTeam(team));
+                strBuilder.append(fkCounter.getColorPrefixOfTeam(team)).append(team.getName().charAt(0)).append(EnumChatFormatting.WHITE).append(" ").append(fkCounter.getKillsOfTeam(team));
+                final Map<String, Integer> teamKillMap = MapUtil.sortByDecreasingValue(fkCounter.getKillMapOfTeam(team));
                 if (!teamKillMap.isEmpty()) {
                     int playerAmount = 0;
                     boolean first = true;
@@ -168,10 +173,10 @@ public class FKCounterHUD extends AbstractRenderer {
             for (final Entry<MWTeam, Integer> entry : sortedKillMap.entrySet()) {
                 final StringBuilder strBuilder = new StringBuilder();
                 final MWTeam team = entry.getKey();
-                strBuilder.append(FinalKillCounter.getColorPrefixOfTeam(team))
+                strBuilder.append(fkCounter.getColorPrefixOfTeam(team))
                         .append(team.getName())
                         .append(EnumChatFormatting.WHITE).append(": ")
-                        .append(FinalKillCounter.getKillsOfTeam(team));
+                        .append(fkCounter.getKillsOfTeam(team));
                 this.textToRender.add(strBuilder.toString());
             }
 

@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.chat;
 
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.config.MWEConfig;
@@ -101,7 +102,8 @@ public class ChatListener {
                     }
                 }
 
-                if (FinalKillCounter.processMessage(event, fmsg, msg)) {
+                final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
+                if (fkCounter != null && fkCounter.processMessage(event, fmsg, msg)) {
                     return;
                 }
 

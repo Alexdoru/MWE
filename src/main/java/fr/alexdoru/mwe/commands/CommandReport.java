@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.commands;
 
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.TabCompletionUtil;
@@ -58,7 +59,9 @@ public class CommandReport extends MyAbstractCommand {
                 if (ScoreboardTracker.isPrepPhase()) {
                     return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
                 } else {
-                    final List<String> playersInThisGame = FinalKillCounter.getPlayersInThisGame();
+                    final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
+                    if (fkCounter == null) return null;
+                    final List<String> playersInThisGame = fkCounter.getPlayersInThisGame();
                     playersInThisGame.removeAll(TabCompletionUtil.getOnlinePlayersByName());
                     return getListOfStringsMatchingLastWord(args, playersInThisGame);
                 }

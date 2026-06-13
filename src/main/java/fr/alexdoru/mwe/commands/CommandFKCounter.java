@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.commands;
 
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.features.FinalKillCounter;
@@ -24,18 +25,20 @@ public class CommandFKCounter extends MyAbstractCommand {
 
         if (args.length > 0 && (args[0].equalsIgnoreCase("players") || args[0].equalsIgnoreCase("player") || args[0].equalsIgnoreCase("p"))) {
 
-            if (FinalKillCounter.getGameId() == null) {
+            final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
+
+            if (fkCounter == null) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + "This is not available right now");
                 return;
             }
 
             final StringBuilder strBuilder = new StringBuilder();
             for (final MWTeam team : MWTeam.values()) {
-                strBuilder.append(FinalKillCounter.getColorPrefixOfTeam(team))
+                strBuilder.append(fkCounter.getColorPrefixOfTeam(team))
                         .append(team.getName())
                         .append(EnumChatFormatting.WHITE)
                         .append(": ");
-                final Iterator<Map.Entry<String, Integer>> iterator = MapUtil.sortByDecreasingValue(FinalKillCounter.getKillMapOfTeam(team)).entrySet().iterator();
+                final Iterator<Map.Entry<String, Integer>> iterator = MapUtil.sortByDecreasingValue(fkCounter.getKillMapOfTeam(team)).entrySet().iterator();
                 while (iterator.hasNext()) {
                     final Map.Entry<String, Integer> entry = iterator.next();
                     strBuilder.append(SquadHandler.getSquadname(entry.getKey())).append(" (").append(entry.getValue()).append(")");
@@ -54,7 +57,7 @@ public class CommandFKCounter extends MyAbstractCommand {
 
         } else if (args.length > 0 && args[0].equalsIgnoreCase("say")) {
 
-            if (FinalKillCounter.getGameId() == null) {
+            if (MWE.INSTANCE().getFinalKillCounter() == null) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + "This is not available right now");
                 return;
             }
@@ -67,7 +70,9 @@ public class CommandFKCounter extends MyAbstractCommand {
 
         } else {
 
-            if (FinalKillCounter.getGameId() == null) {
+            final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
+
+            if (fkCounter == null) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + "This is not available right now");
                 return;
             }
@@ -76,7 +81,7 @@ public class CommandFKCounter extends MyAbstractCommand {
             final MWTeam[] TEAM_VALUES = MWTeam.values();
             for (int i = 0; i < TEAM_VALUES.length; i++) {
                 final MWTeam team = TEAM_VALUES[i];
-                msg.append(FinalKillCounter.getColorPrefixOfTeam(team)).append(team.getName()).append(EnumChatFormatting.WHITE).append(": ").append(FinalKillCounter.getKillsOfTeam(team));
+                msg.append(fkCounter.getColorPrefixOfTeam(team)).append(team.getName()).append(EnumChatFormatting.WHITE).append(": ").append(fkCounter.getKillsOfTeam(team));
                 if (i != 3) {
                     msg.append('\n');
                 }
@@ -119,24 +124,29 @@ public class CommandFKCounter extends MyAbstractCommand {
     }
 
     private void removePlayer(String playerName) {
+        final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
+        if (fkCounter == null) return;
         for (final MWTeam team : MWTeam.values()) {
-            final Map<String, Integer> killMapOfTeam = FinalKillCounter.getKillMapOfTeam(team);
+            final Map<String, Integer> killMapOfTeam = fkCounter.getKillMapOfTeam(team);
             final Integer kills = killMapOfTeam.get(playerName);
             if (kills != null) {
-                FinalKillCounter.tryRemoveKilledPlayer(playerName, team);
+                fkCounter.tryRemoveKilledPlayer(playerName, team);
                 HUDRenderer.fkCounterHUD.updateDisplayText();
-                ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Removed " + FinalKillCounter.getColorPrefixOfTeam(team) + playerName
-                        + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + kills + EnumChatFormatting.GREEN + " final" + (kills > 1 ? "s" : "") + " from the " + FinalKillCounter.getColorPrefixOfTeam(team) + ((MWTeam) team).getName() + EnumChatFormatting.GREEN + " team.");
+                ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Removed " + fkCounter.getColorPrefixOfTeam(team) + playerName
+                        + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + kills + EnumChatFormatting.GREEN + " final" + (kills > 1 ? "s" : "")
+                        + " from the " + fkCounter.getColorPrefixOfTeam(team) + team.getName() + EnumChatFormatting.GREEN + " team.");
                 return;
             }
         }
         ChatUtil.addChatMessage(EnumChatFormatting.RED + "Cannot find " + playerName + " in the FKCounter.");
     }
 
-    private ArrayList<String> getPlayerListInKillCounter() {
+    private List<String> getPlayerListInKillCounter() {
+        final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
+        if (fkCounter == null) return Collections.emptyList();
         final ArrayList<String> playerList = new ArrayList<>();
         for (final MWTeam team : MWTeam.values()) {
-            final Map<String, Integer> killMapOfTeam = FinalKillCounter.getKillMapOfTeam(team);
+            final Map<String, Integer> killMapOfTeam = fkCounter.getKillMapOfTeam(team);
             playerList.addAll(killMapOfTeam.keySet());
         }
         return playerList;
