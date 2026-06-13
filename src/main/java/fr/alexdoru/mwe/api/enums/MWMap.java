@@ -6,7 +6,7 @@ import net.minecraft.util.EnumChatFormatting;
 import java.util.HashMap;
 import java.util.Map;
 
-import static fr.alexdoru.mwe.api.enums.MWTeamColor.*;
+import static fr.alexdoru.mwe.api.enums.MWTeam.*;
 
 public enum MWMap {
 
@@ -45,12 +45,12 @@ public enum MWMap {
         }
     }
 
-    public final MWTeamColor northBase, eastBase, southBase, westBase;
+    public final MWTeam northBase, eastBase, southBase, westBase;
     public final double northLimit, eastLimit, southLimit, westLimit;
     public final double innerNorthLimit, innerEastLimit, innerSouthLimit, innerWestLimit;
     public final double surfaceLevel;
 
-    MWMap(MWTeamColor northBase, MWTeamColor eastBase, MWTeamColor southBase, MWTeamColor westBase, double northLimit, double eastLimit, double southLimit, double westLimit, double surfaceLevel) {
+    MWMap(MWTeam northBase, MWTeam eastBase, MWTeam southBase, MWTeam westBase, double northLimit, double eastLimit, double southLimit, double westLimit, double surfaceLevel) {
         this.northBase = northBase;
         this.eastBase = eastBase;
         this.southBase = southBase;

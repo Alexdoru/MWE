@@ -4,7 +4,7 @@ import fr.alexdoru.mwe.features.FinalKillCounter;
 
 import static fr.alexdoru.mwe.features.FinalKillCounter.*;
 
-public enum MWTeamColor {
+public enum MWTeam {
 
     BLUE,
     GREEN,
