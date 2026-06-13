@@ -131,7 +131,7 @@ public class FKCounterHUD extends AbstractRenderer {
                 } else {
                     strBuilder.append(EnumChatFormatting.DARK_GRAY).append(" / ");
                 }
-                strBuilder.append(FinalKillCounter.getColorPrefixFromTeam(entry.getKey())).append(entry.getValue());
+                strBuilder.append(FinalKillCounter.getColorPrefixOfTeam(entry.getKey())).append(entry.getValue());
             }
             this.displayText = strBuilder.toString();
 
@@ -140,8 +140,8 @@ public class FKCounterHUD extends AbstractRenderer {
             for (final Entry<Integer, Integer> teamEntry : sortedmap.entrySet()) {
                 final StringBuilder strBuilder = new StringBuilder();
                 final int team = teamEntry.getKey();
-                strBuilder.append(FinalKillCounter.getColorPrefixFromTeam(team)).append(FinalKillCounter.getTeamNameFromTeam(team).charAt(0)).append(EnumChatFormatting.WHITE).append(" ").append(FinalKillCounter.getKills(team));
-                final Map<String, Integer> teamKillMap = MapUtil.sortByDecreasingValue(FinalKillCounter.getPlayers(team));
+                strBuilder.append(FinalKillCounter.getColorPrefixOfTeam(team)).append(FinalKillCounter.getNameOfTeam(team).charAt(0)).append(EnumChatFormatting.WHITE).append(" ").append(FinalKillCounter.getKillsOfTeam(team));
+                final Map<String, Integer> teamKillMap = MapUtil.sortByDecreasingValue(FinalKillCounter.getPlayersOfTeam(team));
                 if (!teamKillMap.isEmpty()) {
                     int playerAmount = 0;
                     boolean first = true;
@@ -167,10 +167,10 @@ public class FKCounterHUD extends AbstractRenderer {
             for (final Entry<Integer, Integer> entry : sortedmap.entrySet()) {
                 final StringBuilder strBuilder = new StringBuilder();
                 final int team = entry.getKey();
-                strBuilder.append(FinalKillCounter.getColorPrefixFromTeam(team))
-                        .append(FinalKillCounter.getTeamNameFromTeam(team))
+                strBuilder.append(FinalKillCounter.getColorPrefixOfTeam(team))
+                        .append(FinalKillCounter.getNameOfTeam(team))
                         .append(EnumChatFormatting.WHITE).append(": ")
-                        .append(FinalKillCounter.getKills(team));
+                        .append(FinalKillCounter.getKillsOfTeam(team));
                 this.textToRender.add(strBuilder.toString());
             }
 

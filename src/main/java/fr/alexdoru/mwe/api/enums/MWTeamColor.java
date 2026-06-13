@@ -24,13 +24,13 @@ public enum MWTeamColor {
     public String getColorPrefix() {
         switch (this) {
             case BLUE:
-                return FinalKillCounter.getColorPrefixFromTeam(BLUE_TEAM);
+                return FinalKillCounter.getColorPrefixOfTeam(BLUE_TEAM);
             case GREEN:
-                return FinalKillCounter.getColorPrefixFromTeam(GREEN_TEAM);
+                return FinalKillCounter.getColorPrefixOfTeam(GREEN_TEAM);
             case RED:
-                return FinalKillCounter.getColorPrefixFromTeam(RED_TEAM);
+                return FinalKillCounter.getColorPrefixOfTeam(RED_TEAM);
             case YELLOW:
-                return FinalKillCounter.getColorPrefixFromTeam(YELLOW_TEAM);
+                return FinalKillCounter.getColorPrefixOfTeam(YELLOW_TEAM);
         }
         throw new IllegalStateException();
     }

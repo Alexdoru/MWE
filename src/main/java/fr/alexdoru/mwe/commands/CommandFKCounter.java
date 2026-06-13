@@ -31,11 +31,11 @@ public class CommandFKCounter extends MyAbstractCommand {
 
             final StringBuilder strBuilder = new StringBuilder();
             for (int TEAM = RED_TEAM; TEAM <= BLUE_TEAM; TEAM++) {
-                strBuilder.append(getColorPrefixFromTeam(TEAM))
-                        .append(getTeamNameFromTeam(TEAM))
+                strBuilder.append(getColorPrefixOfTeam(TEAM))
+                        .append(getNameOfTeam(TEAM))
                         .append(EnumChatFormatting.WHITE)
                         .append(": ");
-                final Iterator<Map.Entry<String, Integer>> iterator = MapUtil.sortByDecreasingValue(getPlayers(TEAM)).entrySet().iterator();
+                final Iterator<Map.Entry<String, Integer>> iterator = MapUtil.sortByDecreasingValue(getPlayersOfTeam(TEAM)).entrySet().iterator();
                 while (iterator.hasNext()) {
                     final Map.Entry<String, Integer> entry = iterator.next();
                     strBuilder.append(SquadHandler.getSquadname(entry.getKey())).append(" (").append(entry.getValue()).append(")");
@@ -71,10 +71,10 @@ public class CommandFKCounter extends MyAbstractCommand {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + "This is not available right now");
                 return;
             }
-            final String msg = getColorPrefixFromTeam(RED_TEAM) + getTeamNameFromTeam(RED_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(RED_TEAM) + "\n" +
-                    getColorPrefixFromTeam(GREEN_TEAM) + getTeamNameFromTeam(GREEN_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(GREEN_TEAM) + "\n" +
-                    getColorPrefixFromTeam(YELLOW_TEAM) + getTeamNameFromTeam(YELLOW_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(YELLOW_TEAM) + "\n" +
-                    getColorPrefixFromTeam(BLUE_TEAM) + getTeamNameFromTeam(BLUE_TEAM) + EnumChatFormatting.WHITE + ": " + getKills(BLUE_TEAM);
+            final String msg = getColorPrefixOfTeam(RED_TEAM) + getNameOfTeam(RED_TEAM) + EnumChatFormatting.WHITE + ": " + getKillsOfTeam(RED_TEAM) + "\n" +
+                    getColorPrefixOfTeam(GREEN_TEAM) + getNameOfTeam(GREEN_TEAM) + EnumChatFormatting.WHITE + ": " + getKillsOfTeam(GREEN_TEAM) + "\n" +
+                    getColorPrefixOfTeam(YELLOW_TEAM) + getNameOfTeam(YELLOW_TEAM) + EnumChatFormatting.WHITE + ": " + getKillsOfTeam(YELLOW_TEAM) + "\n" +
+                    getColorPrefixOfTeam(BLUE_TEAM) + getNameOfTeam(BLUE_TEAM) + EnumChatFormatting.WHITE + ": " + getKillsOfTeam(BLUE_TEAM);
             ChatUtil.addChatMessage(msg);
 
         }
@@ -118,10 +118,10 @@ public class CommandFKCounter extends MyAbstractCommand {
             for (int team = 0; team < TEAMS; team++) {
                 final Integer kills = teamKillsArray[team].get(playerName);
                 if (kills != null) {
-                    removeKilledPlayer(playerName, team);
+                    tryRemoveKilledPlayer(playerName, team);
                     HUDRenderer.fkCounterHUD.updateDisplayText();
-                    ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Removed " + getColorPrefixFromTeam(team) + playerName
-                            + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + kills + EnumChatFormatting.GREEN + " final" + (kills > 1 ? "s" : "") + " from the " + getColorPrefixFromTeam(team) + getTeamNameFromTeam(team) + EnumChatFormatting.GREEN + " team.");
+                    ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Removed " + getColorPrefixOfTeam(team) + playerName
+                            + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + kills + EnumChatFormatting.GREEN + " final" + (kills > 1 ? "s" : "") + " from the " + getColorPrefixOfTeam(team) + getNameOfTeam(team) + EnumChatFormatting.GREEN + " team.");
                     return;
                 }
             }

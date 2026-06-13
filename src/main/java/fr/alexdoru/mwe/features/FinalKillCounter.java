@@ -134,17 +134,17 @@ public final class FinalKillCounter {
     private static final String[] SCOREBOARD_PREFIXES = {"[R]", "[G]", "[Y]", "[B]"};
     private static final String[] DEFAULT_PREFIXES = {"c", "a", "e", "9"}; // RED GREEN YELLOW BLUE
     private static final HashMap<String, Integer> allPlayerKills = new HashMap<>();
-    private static final ArrayList<String> deadPlayers = new ArrayList<>();
+    private static final Set<String> deadPlayers = new HashSet<>();
     /** Used to save the names of players present in the game for tab completion & reporting suggestions */
     private static final Set<String> playersPresentInGame = new HashSet<>();
     private static final Pattern[] KILL_PATTERNS;
-    private static final String[] prefixes; // color codes prefix that you are using in your hypixel mega walls settings
+    private static final String[] playerDefinedColorPrefixes; // color codes prefix that you are using in your hypixel mega walls settings
     private static final HashMap<String, Integer>[] teamKillsArray;
     private static final Random rand = new Random();
     private static String gameId;
 
     static {
-        prefixes = DEFAULT_PREFIXES.clone();
+        playerDefinedColorPrefixes = DEFAULT_PREFIXES.clone();
         //noinspection unchecked
         teamKillsArray = new HashMap[TEAMS];
         for (int i = 0; i < TEAMS; i++) {
@@ -166,7 +166,7 @@ public final class FinalKillCounter {
         allPlayerKills.clear();
         deadPlayers.clear();
         for (int i = 0; i < TEAMS; i++) {
-            prefixes[i] = DEFAULT_PREFIXES[i];
+            playerDefinedColorPrefixes[i] = DEFAULT_PREFIXES[i];
             teamKillsArray[i].clear();
         }
         Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap().forEach(netInfo -> {
@@ -195,12 +195,13 @@ public final class FinalKillCounter {
                     final String killer = matcher.group(2);
                     RenderPlayerHook_RenegadeArrowCount.removeArrowsFrom(killedPlayer, -1);
                     final String killedTeamColor = StringUtil.getLastColorCodeBefore(formattedText, killedPlayer);
+                    // need to replace first in case the name of the killer contains the name of the killed player
                     final String killerTeamColor = StringUtil.getLastColorCodeBefore(formattedText.replaceFirst(killedPlayer, ""), killer);
                     int killsOfKilledPlayer = 0;
                     if (!killedTeamColor.isEmpty() && !killerTeamColor.isEmpty()) {
-                        killsOfKilledPlayer = removeKilledPlayer(killedPlayer, killedTeamColor);
+                        killsOfKilledPlayer = tryRemoveKilledPlayer(killedPlayer, killedTeamColor);
                         if (killsOfKilledPlayer != -1) {
-                            addKill(killer, killerTeamColor);
+                            tryAddKill(killer, killerTeamColor);
                             playersPresentInGame.add(killedPlayer);
                             playersPresentInGame.add(killer);
                         }
@@ -222,7 +223,7 @@ public final class FinalKillCounter {
                     final String killedTeamColor = StringUtil.getLastColorCodeBefore(formattedText, killedPlayer);
                     int killsOfKilledPlayer = 0;
                     if (!killedTeamColor.isEmpty()) {
-                        killsOfKilledPlayer = removeKilledPlayer(killedPlayer, killedTeamColor);
+                        killsOfKilledPlayer = tryRemoveKilledPlayer(killedPlayer, killedTeamColor);
                         if (killsOfKilledPlayer != -1) {
                             playersPresentInGame.add(killedPlayer);
                         }
@@ -261,7 +262,7 @@ public final class FinalKillCounter {
         return teamKillsArray;
     }
 
-    public static int getKills(int team) {
+    public static int getKillsOfTeam(int team) {
         if (isNotValidTeam(team)) {
             return 0;
         }
@@ -277,14 +278,14 @@ public final class FinalKillCounter {
      */
     public static Map<Integer, Integer> getSortedTeamKillsMap() {
         final Map<Integer, Integer> hashmap = new HashMap<>();
-        hashmap.put(RED_TEAM, getKills(RED_TEAM));
-        hashmap.put(GREEN_TEAM, getKills(GREEN_TEAM));
-        hashmap.put(YELLOW_TEAM, getKills(YELLOW_TEAM));
-        hashmap.put(BLUE_TEAM, getKills(BLUE_TEAM));
+        hashmap.put(RED_TEAM, getKillsOfTeam(RED_TEAM));
+        hashmap.put(GREEN_TEAM, getKillsOfTeam(GREEN_TEAM));
+        hashmap.put(YELLOW_TEAM, getKillsOfTeam(YELLOW_TEAM));
+        hashmap.put(BLUE_TEAM, getKillsOfTeam(BLUE_TEAM));
         return MapUtil.sortByDecreasingValue(hashmap);
     }
 
-    public static HashMap<String, Integer> getPlayers(int team) {
+    public static HashMap<String, Integer> getPlayersOfTeam(int team) {
         if (isNotValidTeam(team)) {
             return new HashMap<>();
         }
@@ -298,24 +299,23 @@ public final class FinalKillCounter {
         for (final String line : ScoreboardUtils.getFormattedSidebarText()) {
             for (int team = 0; team < TEAMS; team++) {
                 if (line.contains(SCOREBOARD_PREFIXES[team])) {
-                    prefixes[team] = StringUtil.getLastColorCodeBefore(line, SCOREBOARD_PREFIXES[team]);
+                    playerDefinedColorPrefixes[team] = StringUtil.getLastColorCodeBefore(line, SCOREBOARD_PREFIXES[team]);
                 }
             }
         }
         HUDRenderer.fkCounterHUD.updateDisplayText();
     }
 
-    public static void removeKilledPlayer(String player, int team) {
-        removeKilledPlayer(player, getColorPrefixFromTeam(team).replace("§", ""));
+    public static void tryRemoveKilledPlayer(String player, int team) {
+        tryRemoveKilledPlayer(player, getColorPrefixOfTeam(team).replace("§", ""));
     }
 
     /**
-     * Removes a player from the fkcounter and returns the amount of finals the
+     * Tries to remove a player from the fkcounter if the player has no wither
+     * and is not already killed, and returns the amount of finals the
      * player had when successfull, returns -1 otherwise.
-     * i.e. if the players was in final kill and if the player wasn't already dead,
-     * it sometime happens when a player gets double tapped
      */
-    private static int removeKilledPlayer(String player, String color) {
+    private static int tryRemoveKilledPlayer(String player, String color) {
         final int team = getTeamFromColor(color);
         if (isNotValidTeam(team)) {
             return -1;
@@ -330,20 +330,20 @@ public final class FinalKillCounter {
         return -1;
     }
 
-    private static void addKill(String playerGettingTheKill, String color) {
-        final int team = getTeamFromColor(color);
+    private static void tryAddKill(String killer, String killerTeamColor) {
+        final int team = getTeamFromColor(killerTeamColor);
         if (isNotValidTeam(team)) {
             return;
         }
-        if (deadPlayers.contains(playerGettingTheKill)) {
+        if (deadPlayers.contains(killer)) {
             return;
         }
-        final Integer finals = teamKillsArray[team].merge(playerGettingTheKill, 1, Integer::sum);
-        allPlayerKills.merge(playerGettingTheKill, 1, Integer::sum);
-        updateNetworkPlayerinfo(playerGettingTheKill, finals);
+        final Integer finals = teamKillsArray[team].merge(killer, 1, Integer::sum);
+        allPlayerKills.merge(killer, 1, Integer::sum);
+        updateNetworkPlayerinfo(killer, finals);
     }
 
-    public static int getPlayersFinals(String playername) {
+    public static int getFinalKillsOfPlayer(String playername) {
         final Integer finals = allPlayerKills.get(playername);
         return finals == null ? 0 : finals;
     }
@@ -357,18 +357,18 @@ public final class FinalKillCounter {
 
     private static int getTeamFromColor(String color) {
         for (int team = 0; team < TEAMS; team++) {
-            if (prefixes[team].equalsIgnoreCase(color)) {
+            if (playerDefinedColorPrefixes[team].equalsIgnoreCase(color)) {
                 return team;
             }
         }
         return -1;
     }
 
-    public static String getColorPrefixFromTeam(int team) {
-        return "§" + prefixes[team];
+    public static String getColorPrefixOfTeam(int team) {
+        return "§" + playerDefinedColorPrefixes[team];
     }
 
-    public static String getTeamNameFromTeam(int team) {
+    public static String getNameOfTeam(int team) {
         switch (team) {
             case 0:
                 return "Red";

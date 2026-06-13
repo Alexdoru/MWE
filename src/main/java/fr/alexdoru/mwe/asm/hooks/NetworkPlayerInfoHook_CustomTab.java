@@ -12,7 +12,7 @@ public class NetworkPlayerInfoHook_CustomTab {
     }
 
     public static int getPlayersFinals(String playername) {
-        return FinalKillCounter.getPlayersFinals(playername);
+        return FinalKillCounter.getFinalKillsOfPlayer(playername);
     }
 
     public static IChatComponent changeDisplayName(IChatComponent original, IChatComponent customName) {
