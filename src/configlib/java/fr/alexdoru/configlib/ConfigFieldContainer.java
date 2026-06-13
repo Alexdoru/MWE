@@ -1,9 +1,8 @@
-package fr.alexdoru.mwe.config.lib;
+package fr.alexdoru.configlib;
 
+import fr.alexdoru.configlib.gui.ConfigGuiScreen;
+import fr.alexdoru.configlib.gui.elements.*;
 import fr.alexdoru.mwe.api.GuiPosition;
-import fr.alexdoru.mwe.api.config.ConfigProperty;
-import fr.alexdoru.mwe.config.lib.gui.ConfigGuiScreen;
-import fr.alexdoru.mwe.config.lib.gui.elements.*;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 

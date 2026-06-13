@@ -1,6 +1,6 @@
-package fr.alexdoru.mwe.config.lib.gui.elements;
+package fr.alexdoru.configlib.gui.elements;
 
-import fr.alexdoru.mwe.config.lib.gui.ConfigGuiScreen;
+import fr.alexdoru.configlib.gui.ConfigGuiScreen;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import net.minecraft.client.Minecraft;
 

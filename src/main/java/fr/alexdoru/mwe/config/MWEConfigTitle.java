@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.config;
 
+import fr.alexdoru.configlib.IConfigTitleRenderer;
 import fr.alexdoru.mwe.MWE;
-import fr.alexdoru.mwe.api.config.IConfigTitleRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;

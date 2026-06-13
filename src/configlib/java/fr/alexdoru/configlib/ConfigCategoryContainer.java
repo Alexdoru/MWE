@@ -1,8 +1,7 @@
-package fr.alexdoru.mwe.config.lib;
+package fr.alexdoru.configlib;
 
-import fr.alexdoru.mwe.api.config.ConfigCategory;
-import fr.alexdoru.mwe.config.lib.gui.ConfigGuiScreen;
-import fr.alexdoru.mwe.config.lib.gui.elements.CategoryGuiButton;
+import fr.alexdoru.configlib.gui.ConfigGuiScreen;
+import fr.alexdoru.configlib.gui.elements.CategoryGuiButton;
 
 import java.lang.reflect.Field;
 

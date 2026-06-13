@@ -1,14 +1,14 @@
 package fr.alexdoru.mwe.api;
 
+import fr.alexdoru.configlib.ConfigHandler;
+import fr.alexdoru.configlib.IConfigHandler;
+import fr.alexdoru.configlib.IConfigTitleRenderer;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.asm.IClassNodeTransformer;
-import fr.alexdoru.mwe.api.config.IConfigHandler;
-import fr.alexdoru.mwe.api.config.IConfigTitleRenderer;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
-import fr.alexdoru.mwe.config.lib.ConfigHandler;
 import fr.alexdoru.mwe.data.AliasData;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.gui.HUDRenderer;

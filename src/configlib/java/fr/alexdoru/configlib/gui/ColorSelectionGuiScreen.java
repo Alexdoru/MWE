@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.config.lib.gui;
+package fr.alexdoru.configlib.gui;
 
 import fr.alexdoru.mwe.gui.GuiUtil;
 import fr.alexdoru.mwe.utils.DelayedTask;

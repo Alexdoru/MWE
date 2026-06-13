@@ -1,10 +1,10 @@
-package fr.alexdoru.mwe.config.lib.gui;
+package fr.alexdoru.configlib.gui;
 
-import fr.alexdoru.mwe.api.config.IConfigTitleRenderer;
-import fr.alexdoru.mwe.config.lib.ConfigCategoryContainer;
-import fr.alexdoru.mwe.config.lib.ConfigFieldContainer;
-import fr.alexdoru.mwe.config.lib.ConfigHandler;
-import fr.alexdoru.mwe.config.lib.gui.elements.*;
+import fr.alexdoru.configlib.ConfigCategoryContainer;
+import fr.alexdoru.configlib.ConfigFieldContainer;
+import fr.alexdoru.configlib.ConfigHandler;
+import fr.alexdoru.configlib.IConfigTitleRenderer;
+import fr.alexdoru.configlib.gui.elements.*;
 import fr.alexdoru.mwe.gui.GuiUtil;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import fr.alexdoru.mwe.utils.StringUtil;

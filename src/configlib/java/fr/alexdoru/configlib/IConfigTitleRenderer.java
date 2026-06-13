@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.api.config;
+package fr.alexdoru.configlib;
 
 import net.minecraft.client.gui.FontRenderer;
 

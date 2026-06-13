@@ -1,8 +1,8 @@
-package fr.alexdoru.mwe.config.lib.gui.elements;
+package fr.alexdoru.configlib.gui.elements;
 
-import fr.alexdoru.mwe.api.config.ConfigProperty;
-import fr.alexdoru.mwe.config.lib.gui.ColorSelectionGuiScreen;
-import fr.alexdoru.mwe.config.lib.gui.ConfigGuiScreen;
+import fr.alexdoru.configlib.ConfigProperty;
+import fr.alexdoru.configlib.gui.ColorSelectionGuiScreen;
+import fr.alexdoru.configlib.gui.ConfigGuiScreen;
 import fr.alexdoru.mwe.gui.GuiUtil;
 import net.minecraft.client.gui.GuiButton;
 

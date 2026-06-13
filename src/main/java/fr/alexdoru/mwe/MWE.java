@@ -1,14 +1,14 @@
 package fr.alexdoru.mwe;
 
+import fr.alexdoru.configlib.ConfigHandler;
+import fr.alexdoru.configlib.IConfigHandler;
 import fr.alexdoru.mwe.api.IMWEAddon;
-import fr.alexdoru.mwe.api.config.IConfigHandler;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.mwe.chat.ChatListener;
 import fr.alexdoru.mwe.commands.*;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.config.MWEConfigTitle;
-import fr.alexdoru.mwe.config.lib.ConfigHandler;
 import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.*;
 import fr.alexdoru.mwe.gui.HUDRenderer;

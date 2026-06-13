@@ -1,9 +1,8 @@
-package fr.alexdoru.mwe.config.lib;
+package fr.alexdoru.configlib;
 
+import fr.alexdoru.configlib.gui.ConfigGuiScreen;
 import fr.alexdoru.mwe.api.GuiPosition;
-import fr.alexdoru.mwe.api.config.*;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.config.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;

@@ -43,15 +43,24 @@ public final class BuildConfig {
 compileJava.dependsOn generateBuildConfig
 
 sourceSets {
+    configlib {
+        java.srcDirs = ['src/configlib/java']
+        resources.srcDirs = ['src/configlib/resources']
+        compileClasspath += sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
     main {
         java {
+            srcDir 'src/main/java'
             srcDir generatedSourcesDir
         }
+        resources.srcDirs = ['src/main/resources']
+        compileClasspath += configlib.output
+        runtimeClasspath += configlib.output
     }
 }
 
 compileJava {
-    options.encoding = "UTF-8"
     options.encoding = "UTF-8"
 }
 
@@ -76,6 +85,7 @@ dependencies {
 }
 
 jar {
+    from sourceSets.configlib.output
     manifest.attributes(
             "FMLCorePlugin": 'fr.alexdoru.mwe.asm.MWELoadingPlugin',
             'FMLCorePluginContainsFMLMod': 'Yes, yes it does'

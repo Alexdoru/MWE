@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.config.lib.gui.elements;
+package fr.alexdoru.configlib.gui.elements;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;

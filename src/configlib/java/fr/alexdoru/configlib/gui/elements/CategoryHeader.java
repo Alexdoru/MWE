@@ -1,6 +1,6 @@
-package fr.alexdoru.mwe.config.lib.gui.elements;
+package fr.alexdoru.configlib.gui.elements;
 
-import fr.alexdoru.mwe.config.lib.ConfigCategoryContainer;
+import fr.alexdoru.configlib.ConfigCategoryContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 

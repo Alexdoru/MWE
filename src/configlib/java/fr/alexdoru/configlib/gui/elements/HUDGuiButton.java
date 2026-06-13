@@ -1,9 +1,9 @@
-package fr.alexdoru.mwe.config.lib.gui.elements;
+package fr.alexdoru.configlib.gui.elements;
 
+import fr.alexdoru.configlib.ConfigProperty;
+import fr.alexdoru.configlib.gui.ConfigGuiScreen;
 import fr.alexdoru.mwe.api.GuiPosition;
 import fr.alexdoru.mwe.api.IRenderer;
-import fr.alexdoru.mwe.api.config.ConfigProperty;
-import fr.alexdoru.mwe.config.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.mwe.gui.HUDRenderer;
 import fr.alexdoru.mwe.gui.PositionEditGuiScreen;
 import net.minecraft.client.gui.Gui;
