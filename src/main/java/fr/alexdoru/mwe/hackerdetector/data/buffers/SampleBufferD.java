@@ -27,11 +27,11 @@ public final class SampleBufferD {
     }
 
     /**
-     * get(0) will return the latest element insert,
-     * get(capacity - 1) will return the oldest element
+     * get(0) will return the latest element inserted,
+     * get(size() - 1) will return the oldest element
      */
     public double get(int index) {
-        if (index < 0 || index > this.size) {
+        if (index < 0 || index >= this.size) {
             throw new ArrayIndexOutOfBoundsException();
         }
         final int i = this.latestIndex - index;
@@ -51,7 +51,7 @@ public final class SampleBufferD {
         return this.capacity;
     }
 
-    public boolean hasCollected() {
+    public boolean isFull() {
         return size == capacity;
     }
 

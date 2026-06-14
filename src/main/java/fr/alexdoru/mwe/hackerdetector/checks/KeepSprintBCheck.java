@@ -44,7 +44,7 @@ public class KeepSprintBCheck extends Check {
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
         if (player.isRiding()) return false;
         if (data.isNotMovingXZ()) return false;
-        if (!data.serverPosXList.hasCollected()) return false;
+        if (!data.serverPosXList.isFull()) return false;
         if (checkAttack(data) && (data.isOnFlatGround() || accel(data.serverPosYList) < -25d)) {
             final double speedXZ = speedXZ(data, 0);
             final double prevSpeedXZ = speedXZ(data, 1);
