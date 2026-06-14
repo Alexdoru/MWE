@@ -4,7 +4,6 @@ import fr.alexdoru.configlib.ConfigHandler;
 import fr.alexdoru.configlib.IConfigHandler;
 import fr.alexdoru.mwe.api.IMWEAddon;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
-import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.mwe.chat.ChatListener;
 import fr.alexdoru.mwe.commands.*;
 import fr.alexdoru.mwe.config.MWEConfig;
@@ -56,6 +55,7 @@ public class MWE {
     private IConfigHandler configHandler;
     private MWERendererManager rendererManager;
     private FinalKillCounterManager fkManager;
+    private RenegadeArrowTracker renegadeTracker;
 
     public MWE() {
         INSTANCE = this;
@@ -89,10 +89,12 @@ public class MWE {
 
         this.fkManager = new FinalKillCounterManager();
         MinecraftForge.EVENT_BUS.register(this.fkManager);
-
-        MinecraftForge.EVENT_BUS.register(new WdrData());
+        this.renegadeTracker = new RenegadeArrowTracker();
+        MinecraftForge.EVENT_BUS.register(this.renegadeTracker);
         this.rendererManager.loadRenderers();
         MinecraftForge.EVENT_BUS.register(this.rendererManager);
+
+        MinecraftForge.EVENT_BUS.register(new WdrData());
         MinecraftForge.EVENT_BUS.register(new ReportQueue());
         MinecraftForge.EVENT_BUS.register(new ChatListener());
         MinecraftForge.EVENT_BUS.register(new SquadHandler());
@@ -103,7 +105,6 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(new PlayerJoinListener());
         MinecraftForge.EVENT_BUS.register(new KeybindingListener());
         MinecraftForge.EVENT_BUS.register(new MegaWallsEndGameStats());
-        MinecraftForge.EVENT_BUS.register(new RenderPlayerHook_RenegadeArrowCount());
 
         ClientCommandHandler.instance.registerCommand(new CommandMWE());
         ClientCommandHandler.instance.registerCommand(new CommandWDR());
@@ -143,6 +144,10 @@ public class MWE {
     @Nullable
     public FinalKillCounter getFinalKillCounter() {
         return this.fkManager.getFkCounter();
+    }
+
+    public RenegadeArrowTracker getRenegadeTracker() {
+        return renegadeTracker;
     }
 
 }

@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.gui.huds;
 
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
-import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.mwe.asm.interfaces.GuiNewChatAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
@@ -70,7 +70,7 @@ public class ArrowHitHUD extends AbstractRenderer {
             final String playername = matcherRenegadeHit.group(1);
             final String hitValue = matcherRenegadeHit.group(2);
             final String arrowsPinned = matcherRenegadeHit.group(3);
-            RenderPlayerHook_RenegadeArrowCount.addArrowOnPlayer(playername, hitTime, Integer.parseInt(arrowsPinned));
+            MWE.INSTANCE().getRenegadeTracker().addArrowOnPlayer(playername, Integer.parseInt(arrowsPinned));
             final boolean bool = Float.parseFloat(hitValue) > (Float.parseFloat(arrowsPinned)) * 2.0f;
             displayText = getColor(hitValue) + hitValue + EnumChatFormatting.GRAY + " (" + (bool ? EnumChatFormatting.GREEN : EnumChatFormatting.GOLD) + arrowsPinned + EnumChatFormatting.GRAY + ")";
             setPlayerHead(playername);
@@ -113,7 +113,7 @@ public class ArrowHitHUD extends AbstractRenderer {
                 final float damage = Float.parseFloat(matcherRend2.group(1));
                 final String playername = matcherRend2.group(2);
                 totalDamage += damage;
-                RenderPlayerHook_RenegadeArrowCount.removeArrowsFrom(playername, (int) (damage / 2));
+                MWE.INSTANCE().getRenegadeTracker().removeArrowsFrom(playername, (int) (damage / 2));
                 s = ScoreboardTracker.isInMwGame() ? s.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : s;
             }
             if (!s.equals(fmsg)) event.message = new ChatComponentText(s);

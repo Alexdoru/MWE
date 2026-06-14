@@ -3,7 +3,6 @@ package fr.alexdoru.mwe.features;
 import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.api.events.KillCounterEvent;
 import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
-import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
@@ -177,7 +176,6 @@ public final class FinalKillCounter {
                 if (matcher.groupCount() == 2) {
                     final String victim = matcher.group(1);
                     final String killer = matcher.group(2);
-                    RenderPlayerHook_RenegadeArrowCount.removeArrowsFrom(victim, -1);
                     final char victimTeamColor = StringUtil.getLastColorCharBefore(formattedText, victim);
                     // need to replace first in case the name of the killer contains the name of the killed player
                     final char killerTeamColor = StringUtil.getLastColorCharBefore(formattedText.replaceFirst(victim, ""), killer);
@@ -219,7 +217,6 @@ public final class FinalKillCounter {
                 // "player1 died on his own" format
                 if (matcher.groupCount() == 1) {
                     final String victim = matcher.group(1);
-                    RenderPlayerHook_RenegadeArrowCount.removeArrowsFrom(victim, -1);
                     final char victimTeamColor = StringUtil.getLastColorCharBefore(formattedText, victim);
                     final MWTeam victimTeam = getTeamFromColor(victimTeamColor);
                     int killsOfVictim = 0;
