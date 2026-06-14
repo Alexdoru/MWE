@@ -35,9 +35,10 @@ import java.util.*;
 
 public class MWEClassTransformer implements IClassTransformer {
 
-    private static final boolean CLASS_DUMP = Boolean.getBoolean("mwe.classdump");
-    private static final boolean CLASS_DUMP_FINER = CLASS_DUMP && Boolean.getBoolean("mwe.classdump.finer");
-    private static final boolean DECOMPILE_CLASS_DUMP = Boolean.getBoolean("mwe.classdump.decompile");
+    private static final boolean STRICT_MODE = Boolean.getBoolean("mwe.asm.strict");
+    private static final boolean CLASS_DUMP = Boolean.getBoolean("mwe.asm.classdump");
+    private static final boolean CLASS_DUMP_FINER = CLASS_DUMP && Boolean.getBoolean("mwe.asm.classdump.finer");
+    private static final boolean DECOMPILE_CLASS_DUMP = Boolean.getBoolean("mwe.asm.classdump.decompile");
 
     private File outputDir = null;
     private final Map<String, List<IClassNodeTransformer>> transformers = new HashMap<>();
@@ -172,7 +173,12 @@ public class MWEClassTransformer implements IClassTransformer {
                 if (callback.isTransformationSuccessful()) {
                     debugLog("Applied " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
                 } else {
-                    MWELoadingPlugin.logger.error("Class transformation incomplete, transformer {} missing {} injections in {}", stripClassName(transformer.getClass().getName()), callback.getCount(), transformedName);
+                    if (STRICT_MODE) {
+                        MWELoadingPlugin.logger.fatal("Class transformation incomplete, transformer {} missing {} injections in {}", stripClassName(transformer.getClass().getName()), callback.getCount(), transformedName);
+                        throw new InvalidTransformationException();
+                    } else {
+                        MWELoadingPlugin.logger.error("Class transformation incomplete, transformer {} missing {} injections in {}", stripClassName(transformer.getClass().getName()), callback.getCount(), transformedName);
+                    }
                 }
                 if (CLASS_DUMP_FINER && transformersList.size() > 1) {
                     saveClassNode(classNode, transformedName, i, transformer);
@@ -191,8 +197,15 @@ public class MWEClassTransformer implements IClassTransformer {
                 saveTransformedClass(basicClass, transformedBytes, transformedName);
             }
             return transformedBytes;
+        } catch (InvalidTransformationException e) {
+            throw e;
         } catch (Throwable t) {
-            MWELoadingPlugin.logger.error("Failed to transform {}", transformedName, t);
+            if (STRICT_MODE) {
+                MWELoadingPlugin.logger.fatal("Failed to transform {}", transformedName, t);
+                throw new InvalidTransformationException();
+            } else {
+                MWELoadingPlugin.logger.error("Failed to transform {}", transformedName, t);
+            }
             return basicClass;
         }
     }
