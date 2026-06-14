@@ -68,11 +68,11 @@ public class ArrowHitHUD extends AbstractRenderer {
         if (matcherRenegadeHit.matches()) {
             hitTime = System.currentTimeMillis();
             final String playername = matcherRenegadeHit.group(1);
-            final String hitValue = matcherRenegadeHit.group(2);
+            final String health = matcherRenegadeHit.group(2);
             final String arrowsPinned = matcherRenegadeHit.group(3);
             MWE.INSTANCE().getRenegadeTracker().addArrowOnPlayer(playername, Integer.parseInt(arrowsPinned));
-            final boolean bool = Float.parseFloat(hitValue) > (Float.parseFloat(arrowsPinned)) * 2.0f;
-            displayText = getColor(hitValue) + hitValue + EnumChatFormatting.GRAY + " (" + (bool ? EnumChatFormatting.GREEN : EnumChatFormatting.GOLD) + arrowsPinned + EnumChatFormatting.GRAY + ")";
+            final boolean canKill = Float.parseFloat(health) <= (Float.parseFloat(arrowsPinned)) * 2.0f;
+            displayText = getColor(health) + health + EnumChatFormatting.GRAY + " (" + (canKill ? EnumChatFormatting.GOLD : EnumChatFormatting.GREEN) + arrowsPinned + EnumChatFormatting.GRAY + ")";
             setPlayerHead(playername);
             final String s = ScoreboardTracker.isInMwGame() ? fmsg.replaceFirst(playername, NameUtil.getFormattedNameWithoutIcons(playername)) : fmsg;
             event.message = new ChatComponentText(s);

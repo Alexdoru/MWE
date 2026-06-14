@@ -584,7 +584,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "General",
             name = "Show pinned arrows as renegade",
-            comment = "Renders above player heads the amount of arrows pinned in each player when playing renegade")
+            comment = "Renders amount of pinned arrows on player nametags when playing renegade")
     public static boolean renegadeArrowCount = true;
 
     @ConfigProperty(
