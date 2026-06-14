@@ -1,7 +1,5 @@
 package fr.alexdoru.mwe.hackerdetector.data.buffers;
 
-import java.util.Objects;
-
 public final class SampleBuffer<T> {
 
     private final Object[] data;
@@ -74,19 +72,6 @@ public final class SampleBuffer<T> {
                 return b.append(']').toString();
             }
             b.append(", ");
-        }
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) return true;
-        if (other == null || getClass() != other.getClass()) return false;
-        final SampleBuffer<?> list = (SampleBuffer<?>) other;
-        if (size != list.size) return false;
-        if (size == 0) return true;
-        for (int i = 0; ; i++) {
-            if (!Objects.equals(this.get(i), list.get(i))) return false;
-            if (i == this.size - 1) return true;
         }
     }
 

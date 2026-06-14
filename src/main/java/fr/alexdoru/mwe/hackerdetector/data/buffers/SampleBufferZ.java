@@ -92,17 +92,4 @@ public final class SampleBufferZ {
         }
     }
 
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) return true;
-        if (other == null || getClass() != other.getClass()) return false;
-        final SampleBufferZ list = (SampleBufferZ) other;
-        if (size != list.size) return false;
-        if (size == 0) return true;
-        for (int i = 0; ; i++) {
-            if (this.get(i) != list.get(i)) return false;
-            if (i == this.size - 1) return true;
-        }
-    }
-
 }
