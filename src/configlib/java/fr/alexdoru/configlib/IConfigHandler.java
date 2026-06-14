@@ -8,7 +8,7 @@ public interface IConfigHandler {
     /**
      * Registers a config class to your config handler.
      * Fields and methods of the class should be static and annotated
-     * with annotations from the import fr.alexdoru.configlib package
+     * with annotations from the {@link fr.alexdoru.configlib} package
      */
     void registerConfig(Class<?> clazz);
 

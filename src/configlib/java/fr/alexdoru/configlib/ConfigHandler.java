@@ -58,6 +58,7 @@ public final class ConfigHandler implements IConfigHandler {
             throw new IllegalStateException("Config file is not loaded yet");
         }
         registeredConfigs.add(clazz);
+        final List<Method> loadEvents = new ArrayList<>();
         final List<Method> updateEvents = new ArrayList<>();
         try {
             final Map<String, Method> configEvents = new HashMap<>();
@@ -74,17 +75,21 @@ public final class ConfigHandler implements IConfigHandler {
                         eventUsages.add(name);
                     }
                 } else if (method.isAnnotationPresent(ConfigPropertyHideOverride.class)) {
-                    validateMethod(method, "hide condition ", "()Z");
+                    validateMethod(method, "hide condition", "()Z");
                     method.setAccessible(true);
                     final String[] configName = method.getAnnotation(ConfigPropertyHideOverride.class).name();
                     for (final String name : configName) {
                         configHideOverrides.put(name, method);
                         hideUsages.add(name);
                     }
-                } else if (method.isAnnotationPresent(ConfigUpdate.class)) {
+                } else if (method.isAnnotationPresent(ConfigUpdatedEvent.class)) {
                     validateMethod(method, "update", "(Ljava/lang/String;Ljava/lang/String;)V");
                     method.setAccessible(true);
                     updateEvents.add(method);
+                } else if (method.isAnnotationPresent(ConfigLoadedEvent.class)) {
+                    validateMethod(method, "load", "()V");
+                    method.setAccessible(true);
+                    loadEvents.add(method);
                 }
             }
             for (final Field field : clazz.getDeclaredFields()) {
@@ -119,6 +124,13 @@ public final class ConfigHandler implements IConfigHandler {
             e.printStackTrace();
         }
         setConfigPropertyOrder();
+        for (final Method method : loadEvents) {
+            try {
+                method.invoke(null);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        }
         if (hasUpdated) {
             for (final Method method : updateEvents) {
                 try {

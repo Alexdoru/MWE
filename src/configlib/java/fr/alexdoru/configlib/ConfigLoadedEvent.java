@@ -6,13 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Methods annotated with this will be called when the associated config is switched
+ * Methods annotated with this will be called
+ * when the config class they are in is loaded
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ConfigPropertyEvent {
-
-    /** The names of the config settings that when switched will trigger this method event */
-    String[] name();
-
-}
+public @interface ConfigLoadedEvent {}

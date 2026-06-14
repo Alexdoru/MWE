@@ -25,7 +25,12 @@ import java.util.List;
 @SuppressWarnings("unused")
 public final class MWEConfig {
 
-    @ConfigUpdate
+    @ConfigLoadedEvent
+    private static void onConfigLoad() {
+        MWEConfig.aprilFools = true;
+    }
+
+    @ConfigUpdatedEvent
     private static void onModUpdate(String savedVersion, String version) {
         // code that runs on mod version update
     }
