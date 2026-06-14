@@ -19,7 +19,7 @@ import java.util.*;
 
 public class ConfigGuiScreen extends GuiScreen {
 
-    private static final ResourceLocation BLUR = new ResourceLocation("mwe", "blur.json");
+    private static final ResourceLocation BLUR = new ResourceLocation("configlib", "blur.json");
 
     private final ConfigHandler configHandler;
     private final IConfigTitleRenderer titleRenderer;

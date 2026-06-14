@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 
 public class ColorSelectionGuiScreen extends GuiScreen {
 
-    private static final ResourceLocation BLUR = new ResourceLocation("mwe", "blur.json");
+    private static final ResourceLocation BLUR = new ResourceLocation("configlib", "blur.json");
     private final GuiScreen parent;
     private final Field field;
     private final int initialColor;

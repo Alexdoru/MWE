@@ -18,8 +18,8 @@ import java.lang.reflect.Method;
 
 public class RendererGuiButton extends ConfigGuiButton {
 
-    private static final ResourceLocation MOVE_ICON = new ResourceLocation("mwe", "move_icon_64x64.png");
-    private static final ResourceLocation RESET_ICON = new ResourceLocation("mwe", "reset_icon_64x64.png");
+    private static final ResourceLocation MOVE_ICON = new ResourceLocation("configlib", "move_icon_64x64.png");
+    private static final ResourceLocation RESET_ICON = new ResourceLocation("configlib", "reset_icon_64x64.png");
 
     private final ConfigGuiScreen parentScreen;
     private final IRendererManager rendererManager;
