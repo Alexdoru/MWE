@@ -41,20 +41,20 @@ public class PendingReportHUD extends AbstractRenderer {
             text = str.toString();
         }
         final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
-        this.guiPosition.updateAdjustedAbsolutePosition(resolution, fr.getStringWidth(text), fr.FONT_HEIGHT);
-        final int x = this.guiPosition.getAbsoluteRenderX();
-        final int y = this.guiPosition.getAbsoluteRenderY();
+        this.rendererPosition.updateAdjustedAbsolutePosition(resolution, fr.getStringWidth(text), fr.FONT_HEIGHT);
+        final int x = this.rendererPosition.getAbsoluteRenderX();
+        final int y = this.rendererPosition.getAbsoluteRenderY();
         fr.drawStringWithShadow(text, x + 1, y, 0xFFFF55);
     }
 
     @Override
     public void renderDummy() {
-        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(EnumChatFormatting.RED + "1 report to send..", this.guiPosition.getAbsoluteRenderX() + 1, this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(EnumChatFormatting.RED + "1 report to send..", this.rendererPosition.getAbsoluteRenderX() + 1, this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return this.guiPosition.isEnabled() && !ReportQueue.INSTANCE.queueList.isEmpty();
+        return this.rendererPosition.isEnabled() && !ReportQueue.INSTANCE.queueList.isEmpty();
     }
 
 }

@@ -31,18 +31,18 @@ public class WarcryHUD extends AbstractRenderer {
     @Override
     public void render(ScaledResolution resolution) {
         final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
-        this.guiPosition.updateAdjustedAbsolutePosition(resolution, fr.getStringWidth(displayText), fr.FONT_HEIGHT);
-        drawCenteredString(fr, this.displayText, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        this.rendererPosition.updateAdjustedAbsolutePosition(resolution, fr.getStringWidth(displayText), fr.FONT_HEIGHT);
+        drawCenteredString(fr, this.displayText, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
     public void renderDummy() {
-        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, EnumChatFormatting.RED + "4m 15s", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, EnumChatFormatting.RED + "4m 15s", this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        if (this.guiPosition.isEnabled() && ScoreboardTracker.isInMwGame()) {
+        if (this.rendererPosition.isEnabled() && ScoreboardTracker.isInMwGame()) {
             return updateDisplayText(currentTimeMillis);
         }
         return false;

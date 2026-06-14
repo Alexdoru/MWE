@@ -50,8 +50,8 @@ public class ArmorHUD extends AbstractRenderer {
             width = 18;
             height = 18 * 4;
         }
-        this.guiPosition.updateAdjustedAbsolutePosition(resolution, width, height, -width / 2, -height / 2);
-        this.renderArmorBar(thePlayer.inventory.armorInventory, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY());
+        this.rendererPosition.updateAdjustedAbsolutePosition(resolution, width, height, -width / 2, -height / 2);
+        this.renderArmorBar(thePlayer.inventory.armorInventory, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY());
     }
 
     @Override
@@ -65,14 +65,14 @@ public class ArmorHUD extends AbstractRenderer {
             width = 18;
             height = 18 * 4;
         }
-        final int x = this.guiPosition.getAbsoluteRenderX() - width / 2;
-        final int y = this.guiPosition.getAbsoluteRenderY() - height / 2;
+        final int x = this.rendererPosition.getAbsoluteRenderX() - width / 2;
+        final int y = this.rendererPosition.getAbsoluteRenderY() - height / 2;
         this.renderArmorBar(dummyArmor, x, y);
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return this.guiPosition.isEnabled();
+        return this.rendererPosition.isEnabled();
     }
 
     private void renderArmorBar(ItemStack[] armorInventory, int x, int y) {

@@ -1,7 +1,9 @@
 package fr.alexdoru.mwe.gui;
 
-import fr.alexdoru.mwe.api.GuiPosition;
-import fr.alexdoru.mwe.api.IRenderer;
+import fr.alexdoru.configlib.IRenderer;
+import fr.alexdoru.configlib.IRendererManager;
+import fr.alexdoru.configlib.RendererPosition;
+import fr.alexdoru.configlib.gui.RendererEditGuiScreen;
 import fr.alexdoru.mwe.gui.huds.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -12,20 +14,29 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public final class HUDRenderer {
+public final class MWERendererManager implements IRendererManager {
 
     private static final ArrayList<IRenderer> RENDERERS = new ArrayList<>();
-    public static final ArrowHitHUD arrowHitHUD = new ArrowHitHUD();
-    public static final BaseLocationHUD baseLocationHUD = new BaseLocationHUD();
-    public static final CreeperPrimedTntHUD creeperPrimedTntHUD = new CreeperPrimedTntHUD();
-    public static final FKCounterHUD fkCounterHUD = new FKCounterHUD();
-    public static final StrengthHUD strengthHUD = new StrengthHUD();
-    public static final KillCooldownHUD killCooldownHUD = new KillCooldownHUD();
-    public static final LastWitherHPHUD lastWitherHPHUD = new LastWitherHPHUD();
-    public static final PhoenixBondHUD phoenixBondHUD = new PhoenixBondHUD();
-    public static final WarcryHUD warcryHUD = new WarcryHUD();
+    public static ArrowHitHUD arrowHitHUD;
+    public static BaseLocationHUD baseLocationHUD;
+    public static CreeperPrimedTntHUD creeperPrimedTntHUD;
+    public static FKCounterHUD fkCounterHUD;
+    public static StrengthHUD strengthHUD;
+    public static KillCooldownHUD killCooldownHUD;
+    public static LastWitherHPHUD lastWitherHPHUD;
+    public static PhoenixBondHUD phoenixBondHUD;
+    public static WarcryHUD warcryHUD;
 
-    static {
+    public void loadRenderers() {
+        arrowHitHUD = new ArrowHitHUD();
+        baseLocationHUD = new BaseLocationHUD();
+        creeperPrimedTntHUD = new CreeperPrimedTntHUD();
+        fkCounterHUD = new FKCounterHUD();
+        strengthHUD = new StrengthHUD();
+        killCooldownHUD = new KillCooldownHUD();
+        lastWitherHPHUD = new LastWitherHPHUD();
+        phoenixBondHUD = new PhoenixBondHUD();
+        warcryHUD = new WarcryHUD();
         RENDERERS.add(new ArmorHUD());
         RENDERERS.add(arrowHitHUD);
         RENDERERS.add(baseLocationHUD);
@@ -44,7 +55,7 @@ public final class HUDRenderer {
         RENDERERS.add(warcryHUD);
     }
 
-    public static void registerRenderer(IRenderer renderer) {
+    public void registerRenderer(IRenderer renderer) {
         Objects.requireNonNull(renderer);
         RENDERERS.add(renderer);
     }
@@ -55,7 +66,7 @@ public final class HUDRenderer {
     @SubscribeEvent
     public void onRenderGUI(RenderGameOverlayEvent.Post event) {
         final Minecraft mc = Minecraft.getMinecraft();
-        if (event.type == ElementType.TEXT && !(mc.currentScreen instanceof PositionEditGuiScreen)) {
+        if (event.type == ElementType.TEXT && !(mc.currentScreen instanceof RendererEditGuiScreen)) {
             final long time = System.currentTimeMillis();
             mc.mcProfiler.startSection("MWE HUD");
             for (final IRenderer renderer : RENDERERS) {
@@ -72,23 +83,25 @@ public final class HUDRenderer {
      * Hook injected in {@link net.minecraft.client.renderer.EntityRenderer#updateCameraAndRender}
      * after this.mc.ingameGUI.renderGameOverlay(partialTicks) call
      */
-    public static void onPostRenderGameOverlay(float partialTicks) {}
+    public void onPostRenderGameOverlay(float partialTicks) {}
 
-    public static IRenderer getRendererFromPosition(GuiPosition guiPosition) {
-        if (guiPosition == null) return null;
+    @Override
+    public IRenderer getRendererFromPosition(RendererPosition rendererPosition) {
+        if (rendererPosition == null) return null;
         for (final IRenderer renderer : RENDERERS) {
-            if (guiPosition == renderer.getGuiPosition()) {
+            if (rendererPosition == renderer.getPosition()) {
                 return renderer;
             }
         }
         return null;
     }
 
-    public static void renderAllDummy() {
+    @Override
+    public void renderEditScreenBackground(IRenderer editedRenderer) {
         final ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
         for (final IRenderer renderer : RENDERERS) {
-            if (renderer.getGuiPosition().isEnabled()) {
-                renderer.getGuiPosition().updateAbsolutePosition(resolution);
+            if (renderer.getPosition().isEnabled()) {
+                renderer.getPosition().updateAbsolutePosition(resolution);
                 renderer.renderDummy();
             }
         }

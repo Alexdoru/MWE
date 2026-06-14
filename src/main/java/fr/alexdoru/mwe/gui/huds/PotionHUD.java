@@ -57,8 +57,8 @@ public class PotionHUD extends AbstractRenderer {
             }
             height = (ICON_WIDTH + 7) * amountEffects - 7;
         }
-        this.guiPosition.updateAdjustedAbsolutePosition(resolution, width, height, -width / 2, -height / 2);
-        this.renderPotionEffects(potionEffects, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY());
+        this.rendererPosition.updateAdjustedAbsolutePosition(resolution, width, height, -width / 2, -height / 2);
+        this.renderPotionEffects(potionEffects, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY());
     }
 
     @Override
@@ -89,14 +89,14 @@ public class PotionHUD extends AbstractRenderer {
             }
             height = (ICON_WIDTH + 7) * amountEffects - 7;
         }
-        final int xDrawPots = this.guiPosition.getAbsoluteRenderX() - width / 2;
-        final int yDrawPots = this.guiPosition.getAbsoluteRenderY() - height / 2;
+        final int xDrawPots = this.rendererPosition.getAbsoluteRenderX() - width / 2;
+        final int yDrawPots = this.rendererPosition.getAbsoluteRenderY() - height / 2;
         this.renderPotionEffects(dummyList, xDrawPots, yDrawPots);
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return this.guiPosition.isEnabled();
+        return this.rendererPosition.isEnabled();
     }
 
     private void renderPotionEffects(Collection<PotionEffect> potionEffects, int xDrawPots, int yDrawPots) {

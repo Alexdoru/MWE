@@ -61,9 +61,9 @@ public class FKCounterHUD extends AbstractRenderer {
 
     @Override
     public void render(ScaledResolution resolution) {
-        this.guiPosition.updateAdjustedAbsolutePosition(resolution, getWidth(), getHeight());
-        final int x = this.guiPosition.getAbsoluteRenderX();
-        final int y = this.guiPosition.getAbsoluteRenderY();
+        this.rendererPosition.updateAdjustedAbsolutePosition(resolution, getWidth(), getHeight());
+        final int x = this.rendererPosition.getAbsoluteRenderX();
+        final int y = this.rendererPosition.getAbsoluteRenderY();
         if (MWEConfig.fkcounterHUDDrawBackground) {
             drawRect(x - 2, y - 2, x + getWidth() + 1, y + getHeight(), BACKGROUND_COLOR);
         }
@@ -77,8 +77,8 @@ public class FKCounterHUD extends AbstractRenderer {
     @Override
     public void renderDummy() {
 
-        final int x = this.guiPosition.getAbsoluteRenderX();
-        final int y = this.guiPosition.getAbsoluteRenderY();
+        final int x = this.rendererPosition.getAbsoluteRenderX();
+        final int y = this.rendererPosition.getAbsoluteRenderY();
 
         final int width;
         if (MWEConfig.fkcounterHUDCompact || MWEConfig.fkcounterHUDinSidebar) {
@@ -112,7 +112,7 @@ public class FKCounterHUD extends AbstractRenderer {
     @Override
     public boolean isEnabled(long currentTimeMillis) {
         return !MWEConfig.fkcounterHUDinSidebar
-                && this.guiPosition.isEnabled()
+                && this.rendererPosition.isEnabled()
                 && ScoreboardTracker.isInMwGame()
                 && MWE.INSTANCE().getFinalKillCounter() != null;
     }

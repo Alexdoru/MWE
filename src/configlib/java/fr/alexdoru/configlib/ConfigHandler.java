@@ -1,7 +1,6 @@
 package fr.alexdoru.configlib;
 
 import fr.alexdoru.configlib.gui.ConfigGuiScreen;
-import fr.alexdoru.mwe.api.GuiPosition;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -28,7 +27,6 @@ public final class ConfigHandler implements IConfigHandler {
     private final String savedVersion;
     private final String version;
     private final boolean hasUpdated;
-    private final IConfigTitleRenderer titleRenderer;
     private final List<Class<?>> registeredConfigs = new ArrayList<>();
     private final Map<String, Property> propertyMap = new HashMap<>();
     private final List<ConfigFieldContainer> configFields = new ArrayList<>();
@@ -36,8 +34,12 @@ public final class ConfigHandler implements IConfigHandler {
     private final List<ConfigCategoryContainer> categories = new ArrayList<>();
     /** CategoryName -> SubCategoryName -> List of ConfigSetting */
     private final LinkedHashMap<String, LinkedHashMap<String, List<String>>> configStructure = new LinkedHashMap<>();
+    @Nullable
+    private IConfigTitleRenderer titleRenderer;
+    @Nullable
+    private IRendererManager rendererManager;
 
-    public ConfigHandler(@NotNull File configFile, @NotNull String configVersion, @Nullable IConfigTitleRenderer titleRenderer) {
+    public ConfigHandler(@NotNull File configFile, @NotNull String configVersion) {
         config = new Configuration(configFile);
         config.load();
         final Property modVersion = config.get("General", "Mod Version", configVersion);
@@ -48,7 +50,6 @@ public final class ConfigHandler implements IConfigHandler {
             modVersion.set(configVersion);
             config.save();
         }
-        this.titleRenderer = titleRenderer;
     }
 
     @Override
@@ -164,10 +165,22 @@ public final class ConfigHandler implements IConfigHandler {
             throw new IllegalStateException("Config is not loaded");
         }
         try {
-            return new ConfigGuiScreen(this, this.titleRenderer, categories, configFields, configStructure);
+            return new ConfigGuiScreen(this, categories, configFields, configStructure, titleRenderer, rendererManager);
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Failed to generate the config menu!");
         }
+    }
+
+    @Override
+    public void setConfigTitleRenderer(@NotNull IConfigTitleRenderer titleRenderer) {
+        Objects.requireNonNull(titleRenderer);
+        this.titleRenderer = titleRenderer;
+    }
+
+    @Override
+    public void setRendererManager(@NotNull IRendererManager rendererManager) {
+        Objects.requireNonNull(rendererManager);
+        this.rendererManager = rendererManager;
     }
 
     private void readConfigInDefinitionOrder(Class<?> clazz) throws IOException {
@@ -180,7 +193,7 @@ public final class ConfigHandler implements IConfigHandler {
         final ClassNode cn = new ClassNode();
         cr.accept(cn, ClassReader.SKIP_CODE);
         final String annotationDesc = Type.getDescriptor(ConfigProperty.class);
-        final String guiPositionDesc = Type.getDescriptor(GuiPosition.class);
+        final String rendererPositionDesc = Type.getDescriptor(RendererPosition.class);
         for (final FieldNode field : cn.fields) {
             if (field.visibleAnnotations == null) continue;
             for (final AnnotationNode annotation : field.visibleAnnotations) {
@@ -202,8 +215,8 @@ public final class ConfigHandler implements IConfigHandler {
                 if (configCategory != null && configName != null) {
                     final LinkedHashMap<String, List<String>> subCategory = configStructure.computeIfAbsent(configCategory, m -> new LinkedHashMap<>());
                     final List<String> subCatConfigs = subCategory.computeIfAbsent(configSubCategory, l -> new ArrayList<>());
-                    final boolean isGuiPosition = field.desc.equals(guiPositionDesc);
-                    if (isGuiPosition) {
+                    final boolean isRendererPosition = field.desc.equals(rendererPositionDesc);
+                    if (isRendererPosition) {
                         subCatConfigs.add("Show " + configName);
                         subCatConfigs.add("Xpos " + configName);
                         subCatConfigs.add("Ypos " + configName);
@@ -220,7 +233,7 @@ public final class ConfigHandler implements IConfigHandler {
                 final ConfigProperty annotation = field.getAnnotation(ConfigProperty.class);
                 final LinkedHashMap<String, List<String>> subCategory = configStructure.computeIfAbsent(annotation.category(), m -> new LinkedHashMap<>());
                 final List<String> subCatConfigs = subCategory.computeIfAbsent(annotation.subCategory(), l -> new ArrayList<>());
-                if (field.getType() == GuiPosition.class) {
+                if (field.getType() == RendererPosition.class) {
                     subCatConfigs.add("Show " + annotation.name());
                     subCatConfigs.add("Xpos " + annotation.name());
                     subCatConfigs.add("Ypos " + annotation.name());

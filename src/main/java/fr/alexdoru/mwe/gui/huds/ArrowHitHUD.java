@@ -155,9 +155,9 @@ public class ArrowHitHUD extends AbstractRenderer {
     @Override
     public void render(ScaledResolution resolution) {
         final Minecraft mc = Minecraft.getMinecraft();
-        this.guiPosition.updateAbsolutePosition(resolution);
-        int x = this.guiPosition.getAbsoluteRenderX();
-        int y = this.guiPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT;
+        this.rendererPosition.updateAbsolutePosition(resolution);
+        int x = this.rendererPosition.getAbsoluteRenderX();
+        int y = this.rendererPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT;
         drawCenteredString(mc.fontRendererObj, displayText, x, y, 0xFFFFFF);
         if (MWEConfig.showHeadOnArrowHitHUD && skin != null) {
             x -= 4;
@@ -175,12 +175,12 @@ public class ArrowHitHUD extends AbstractRenderer {
     @Override
     public void renderDummy() {
         final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
-        drawCenteredString(fr, EnumChatFormatting.GREEN + "20.0", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY() - fr.FONT_HEIGHT, 0xFFFFFF);
+        drawCenteredString(fr, EnumChatFormatting.GREEN + "20.0", this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY() - fr.FONT_HEIGHT, 0xFFFFFF);
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return this.guiPosition.isEnabled() && currentTimeMillis - hitTime < 1000L;
+        return this.rendererPosition.isEnabled() && currentTimeMillis - hitTime < 1000L;
     }
 
 }

@@ -1,11 +1,11 @@
 package fr.alexdoru.configlib.gui.elements;
 
 import fr.alexdoru.configlib.ConfigProperty;
+import fr.alexdoru.configlib.IRenderer;
+import fr.alexdoru.configlib.IRendererManager;
+import fr.alexdoru.configlib.RendererPosition;
 import fr.alexdoru.configlib.gui.ConfigGuiScreen;
-import fr.alexdoru.mwe.api.GuiPosition;
-import fr.alexdoru.mwe.api.IRenderer;
-import fr.alexdoru.mwe.gui.HUDRenderer;
-import fr.alexdoru.mwe.gui.PositionEditGuiScreen;
+import fr.alexdoru.configlib.gui.RendererEditGuiScreen;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
@@ -16,23 +16,30 @@ import org.lwjgl.opengl.GL11;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class HUDGuiButton extends ConfigGuiButton {
+public class RendererGuiButton extends ConfigGuiButton {
 
-    private static final ResourceLocation moveIcon = new ResourceLocation("mwe", "move_icon_64x64.png");
-    private static final ResourceLocation resetIcon = new ResourceLocation("mwe", "reset_icon_64x64.png");
+    private static final ResourceLocation MOVE_ICON = new ResourceLocation("mwe", "move_icon_64x64.png");
+    private static final ResourceLocation RESET_ICON = new ResourceLocation("mwe", "reset_icon_64x64.png");
 
     private final ConfigGuiScreen parentScreen;
-    private final GuiPosition guiPosition;
+    private final IRendererManager rendererManager;
+    private final RendererPosition rendererPosition;
     private boolean toggled;
     private final GuiButton buttonEnabled;
     private final GuiButton buttonMoveHud;
     private final GuiButton buttonResetPos;
 
-    public HUDGuiButton(ConfigGuiScreen configGuiScreen, Field field, Method event, ConfigProperty annotation) throws IllegalAccessException {
+    public RendererGuiButton(
+            ConfigGuiScreen configGuiScreen,
+            IRendererManager rendererManager,
+            Field field,
+            Method event,
+            ConfigProperty annotation) throws IllegalAccessException {
         super(field, event, annotation);
         this.parentScreen = configGuiScreen;
-        this.guiPosition = ((GuiPosition) field.get(null));
-        this.toggled = this.guiPosition.isEnabled();
+        this.rendererManager = rendererManager;
+        this.rendererPosition = ((RendererPosition) field.get(null));
+        this.toggled = this.rendererPosition.isEnabled();
         this.buttonEnabled = new GuiButton(0, 0, 0, mc.fontRendererObj.getStringWidth(" Disabled "), 20, getButtonText());
         this.buttonMoveHud = new GuiButton(0, 0, 0, 20, 20, "");
         this.buttonResetPos = new GuiButton(0, 0, 0, 20, 20, "");
@@ -56,8 +63,8 @@ public class HUDGuiButton extends ConfigGuiButton {
         buttonResetPos.xPosition = buttonEnabled.xPosition + buttonEnabled.width - buttonResetPos.width - 1;
         buttonResetPos.yPosition = buttonMoveHud.yPosition;
         buttonResetPos.drawButton(mc, mouseX, mouseY);
-        drawIcon(moveIcon, buttonMoveHud.xPosition, buttonMoveHud.yPosition);
-        drawIcon(resetIcon, buttonResetPos.xPosition, buttonResetPos.yPosition);
+        drawIcon(MOVE_ICON, buttonMoveHud.xPosition, buttonMoveHud.yPosition);
+        drawIcon(RESET_ICON, buttonResetPos.xPosition, buttonResetPos.yPosition);
         if (buttonMoveHud.isMouseOver()) {
             final int textX = buttonEnabled.xPosition - 4 - mc.fontRendererObj.getStringWidth("Move HUD");
             final int textY = buttonMoveHud.yPosition + mc.fontRendererObj.FONT_HEIGHT / 2 + 1;
@@ -80,15 +87,15 @@ public class HUDGuiButton extends ConfigGuiButton {
                 return true;
             } else if (buttonMoveHud.mousePressed(mc, mouseX, mouseY)) {
                 buttonEnabled.playPressSound(mc.getSoundHandler());
-                final IRenderer renderer = HUDRenderer.getRendererFromPosition(guiPosition);
+                final IRenderer renderer = this.rendererManager.getRendererFromPosition(rendererPosition);
                 if (renderer != null) {
-                    mc.displayGuiScreen(new PositionEditGuiScreen(renderer, parentScreen));
+                    mc.displayGuiScreen(new RendererEditGuiScreen(this.rendererManager, renderer, parentScreen));
                 } else {
-                    throw new RuntimeException("No registered HUD associated to " + field.getName());
+                    throw new RuntimeException("No registered renderer associated to " + field.getName());
                 }
                 return true;
             } else if (buttonResetPos.mousePressed(mc, mouseX, mouseY)) {
-                guiPosition.resetToDefault();
+                rendererPosition.resetToDefault();
                 buttonEnabled.playPressSound(mc.getSoundHandler());
                 return true;
             }
@@ -116,8 +123,8 @@ public class HUDGuiButton extends ConfigGuiButton {
     }
 
     private void flipBooleanConfig() {
-        guiPosition.setEnabled(!guiPosition.isEnabled());
-        toggled = guiPosition.isEnabled();
+        rendererPosition.setEnabled(!rendererPosition.isEnabled());
+        toggled = rendererPosition.isEnabled();
         invokeConfigEvent();
     }
 

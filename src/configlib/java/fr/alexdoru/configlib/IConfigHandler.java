@@ -1,6 +1,7 @@
 package fr.alexdoru.configlib;
 
 import net.minecraft.client.gui.GuiScreen;
+import org.jetbrains.annotations.NotNull;
 
 public interface IConfigHandler {
 
@@ -20,5 +21,15 @@ public interface IConfigHandler {
      * Get the config gui screen
      */
     GuiScreen getConfigGuiScreen();
+
+    /**
+     * Adds a custom title renderer for your config gui screen
+     */
+    void setConfigTitleRenderer(@NotNull IConfigTitleRenderer titleRenderer);
+
+    /**
+     * If your config has renderers, you need to set a renderer manager
+     */
+    void setRendererManager(@NotNull IRendererManager rendererManager);
 
 }

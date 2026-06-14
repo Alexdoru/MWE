@@ -31,15 +31,15 @@ public class StrengthHUD extends AbstractRenderer {
 
     @Override
     public void render(ScaledResolution resolution) {
-        this.guiPosition.updateAbsolutePosition(resolution);
+        this.rendererPosition.updateAbsolutePosition(resolution);
         final int timeLeft = (int) ((timeStartRender + renderDuration - System.currentTimeMillis()) / 1000L);
         final String displayText = (isStrengthRender ? STRENGTH_TEXT : PRE_STRENGTH_TEXT) + timeLeft;
-        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, displayText, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, displayText, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
     public void renderDummy() {
-        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, DUMMY_TEXT, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, DUMMY_TEXT, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override

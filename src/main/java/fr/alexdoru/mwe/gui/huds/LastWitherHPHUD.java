@@ -47,18 +47,18 @@ public class LastWitherHPHUD extends AbstractRenderer {
     @Override
     public void render(ScaledResolution resolution) {
         final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
-        this.guiPosition.updateAdjustedAbsolutePosition(resolution, fr.getStringWidth(displayText), fr.FONT_HEIGHT);
-        fr.drawStringWithShadow(displayText, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        this.rendererPosition.updateAdjustedAbsolutePosition(resolution, fr.getStringWidth(displayText), fr.FONT_HEIGHT);
+        fr.drawStringWithShadow(displayText, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
     public void renderDummy() {
-        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(EnumChatFormatting.GREEN + "Wither dies in 148s", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(EnumChatFormatting.GREEN + "Wither dies in 148s", this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return this.guiPosition.isEnabled() && !MWEConfig.witherHUDinSidebar && ScoreboardTracker.isInMwGame() && ScoreboardTracker.getParser().isOnlyOneWitherAlive();
+        return this.rendererPosition.isEnabled() && !MWEConfig.witherHUDinSidebar && ScoreboardTracker.isInMwGame() && ScoreboardTracker.getParser().isOnlyOneWitherAlive();
     }
 
 }

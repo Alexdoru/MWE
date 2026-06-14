@@ -73,9 +73,9 @@ public class SquadHealthHUD extends AbstractRenderer {
             final int listSize = playerlistToRender.size();
             final int hudWidth = maxLineWidth + 2;
             final int hudHight = listSize * 9 + 1;
-            this.guiPosition.updateAdjustedAbsolutePosition(resolution, hudWidth, hudHight);
-            final int hudXpos = this.guiPosition.getAbsoluteRenderX();
-            final int hudYpos = this.guiPosition.getAbsoluteRenderY();
+            this.rendererPosition.updateAdjustedAbsolutePosition(resolution, hudWidth, hudHight);
+            final int hudXpos = this.rendererPosition.getAbsoluteRenderX();
+            final int hudYpos = this.rendererPosition.getAbsoluteRenderY();
             Gui.drawRect(hudXpos, hudYpos, hudXpos + hudWidth, hudYpos + hudHight, Integer.MIN_VALUE);
             for (int i = 0; i < listSize; i++) {
                 int xDrawingPos = hudXpos + 1;
@@ -128,8 +128,8 @@ public class SquadHealthHUD extends AbstractRenderer {
         GlStateManager.pushMatrix();
         {
             final Minecraft mc = Minecraft.getMinecraft();
-            final int hudXpos = this.guiPosition.getAbsoluteRenderX();
-            final int hudYpos = this.guiPosition.getAbsoluteRenderY();
+            final int hudXpos = this.rendererPosition.getAbsoluteRenderX();
+            final int hudYpos = this.rendererPosition.getAbsoluteRenderY();
             final int listSize = 4;
             final int maxNameWidth = mc.fontRendererObj.getStringWidth(mc.thePlayer.getName());
             final int maxScoreWidth = mc.fontRendererObj.getStringWidth(" 00");
@@ -166,7 +166,7 @@ public class SquadHealthHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return this.guiPosition.isEnabled();
+        return this.rendererPosition.isEnabled();
     }
 
 }

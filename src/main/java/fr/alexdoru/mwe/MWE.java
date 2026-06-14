@@ -11,7 +11,7 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.config.MWEConfigTitle;
 import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.*;
-import fr.alexdoru.mwe.gui.HUDRenderer;
+import fr.alexdoru.mwe.gui.MWERendererManager;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.nocheaters.PlayerJoinListener;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
@@ -54,6 +54,7 @@ public class MWE {
     private static MWE INSTANCE;
     private final List<IMWEAddon> loadedAddons = new ArrayList<>();
     private IConfigHandler configHandler;
+    private MWERendererManager rendererManager;
     private FinalKillCounterManager fkManager;
 
     public MWE() {
@@ -72,7 +73,10 @@ public class MWE {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        this.configHandler = new ConfigHandler(new File(event.getModConfigurationDirectory(), "mwe.cfg"), version, new MWEConfigTitle());
+        this.configHandler = new ConfigHandler(new File(event.getModConfigurationDirectory(), "mwe.cfg"), MWE.version);
+        this.configHandler.setConfigTitleRenderer(new MWEConfigTitle());
+        this.rendererManager = new MWERendererManager();
+        this.configHandler.setRendererManager(this.rendererManager);
         this.configHandler.registerConfig(MWEConfig.class);
         if (MWEConfig.checkForUpdate && !Boolean.getBoolean("mwe.disableUpdater")) {
             MinecraftForge.EVENT_BUS.register(new ModUpdater(event.getSourceFile()));
@@ -87,7 +91,8 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(this.fkManager);
 
         MinecraftForge.EVENT_BUS.register(new WdrData());
-        MinecraftForge.EVENT_BUS.register(new HUDRenderer());
+        this.rendererManager.loadRenderers();
+        MinecraftForge.EVENT_BUS.register(this.rendererManager);
         MinecraftForge.EVENT_BUS.register(new ReportQueue());
         MinecraftForge.EVENT_BUS.register(new ChatListener());
         MinecraftForge.EVENT_BUS.register(new SquadHandler());
@@ -129,6 +134,10 @@ public class MWE {
 
     public IConfigHandler getConfigHandler() {
         return configHandler;
+    }
+
+    public MWERendererManager getRendererManager() {
+        return rendererManager;
     }
 
     @Nullable

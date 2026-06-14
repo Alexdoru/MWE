@@ -1,49 +1,49 @@
-package fr.alexdoru.mwe.gui;
+package fr.alexdoru.configlib.gui;
 
-import fr.alexdoru.mwe.api.GuiPosition;
-import fr.alexdoru.mwe.api.IRenderer;
-import fr.alexdoru.mwe.utils.DelayedTask;
-import net.minecraft.client.Minecraft;
+import fr.alexdoru.configlib.IRenderer;
+import fr.alexdoru.configlib.IRendererManager;
+import fr.alexdoru.configlib.RendererPosition;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 
 import java.io.IOException;
 
-public class PositionEditGuiScreen extends GuiScreen {
+public class RendererEditGuiScreen extends GuiScreen {
 
-    private final Minecraft mc = Minecraft.getMinecraft();
+    private final IRendererManager rendererManager;
     private final IRenderer renderer;
-    private final GuiPosition guiPosition;
+    private final RendererPosition rendererPosition;
     private final GuiScreen parent;
     private boolean dragging;
     private int prevX, prevY;
 
-    public PositionEditGuiScreen(IRenderer renderer, GuiScreen parent) {
+    public RendererEditGuiScreen(IRendererManager rendererManager, IRenderer renderer, GuiScreen parent) {
+        this.rendererManager = rendererManager;
         this.renderer = renderer;
-        this.guiPosition = renderer.getGuiPosition();
+        this.rendererPosition = renderer.getPosition();
         this.parent = parent;
     }
 
     @Override
     public void initGui() {
-        this.guiPosition.updateAbsolutePosition();
+        this.rendererPosition.updateAbsolutePosition();
         this.adjustBounds();
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.renderCrosshair();
-        final boolean prevEnabled = this.guiPosition.isEnabled();
-        this.guiPosition.setEnabled(false);
-        HUDRenderer.renderAllDummy();
-        this.guiPosition.setEnabled(prevEnabled);
+        final boolean prevEnabled = this.rendererPosition.isEnabled();
+        this.rendererPosition.setEnabled(false);
+        this.rendererManager.renderEditScreenBackground(this.renderer);
+        this.rendererPosition.setEnabled(prevEnabled);
         super.drawDefaultBackground();
-        renderer.renderDummy();
+        this.renderer.renderDummy();
         if (this.dragging) {
-            this.guiPosition.setAbsolutePositionForRender(
-                    this.guiPosition.getAbsoluteRenderX() + mouseX - this.prevX,
-                    this.guiPosition.getAbsoluteRenderY() + mouseY - this.prevY
+            this.rendererPosition.setAbsolutePositionForRender(
+                    this.rendererPosition.getAbsoluteRenderX() + mouseX - this.prevX,
+                    this.rendererPosition.getAbsoluteRenderY() + mouseY - this.prevY
             );
         }
         this.prevX = mouseX;
@@ -63,9 +63,15 @@ public class PositionEditGuiScreen extends GuiScreen {
     }
 
     @Override
+    protected void keyTyped(char typedChar, int keyCode) {
+        if (keyCode == 1) {
+            this.mc.displayGuiScreen(parent);
+        }
+    }
+
+    @Override
     public void onGuiClosed() {
-        this.guiPosition.saveAbsoluteToRelative();
-        new DelayedTask(() -> mc.displayGuiScreen(parent));
+        this.rendererPosition.saveAbsoluteToRelative();
     }
 
     @Override
@@ -80,9 +86,9 @@ public class PositionEditGuiScreen extends GuiScreen {
         final ScaledResolution res = new ScaledResolution(mc);
         final int screenWidth = res.getScaledWidth();
         final int screenHeight = res.getScaledHeight();
-        final int absoluteX = Math.max(0, Math.min(guiPosition.getAbsoluteRenderX(), screenWidth));
-        final int absoluteY = Math.max(0, Math.min(guiPosition.getAbsoluteRenderY(), screenHeight));
-        this.guiPosition.setAbsolutePositionForRender(absoluteX, absoluteY);
+        final int absoluteX = Math.max(0, Math.min(rendererPosition.getAbsoluteRenderX(), screenWidth));
+        final int absoluteY = Math.max(0, Math.min(rendererPosition.getAbsoluteRenderY(), screenHeight));
+        this.rendererPosition.setAbsolutePositionForRender(absoluteX, absoluteY);
     }
 
     private void renderCrosshair() {

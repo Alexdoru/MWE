@@ -54,11 +54,11 @@ public class EnergyDisplayHUD extends AbstractRenderer {
             return;
         }
         if (this.timeStartRender + 2500L - currentTime > 0L) {
-            this.guiPosition.updateAbsolutePosition(resolution);
+            this.rendererPosition.updateAbsolutePosition(resolution);
             if (energy >= MWEConfig.highEnergyThreshold) {
-                drawCenteredString(mc.fontRendererObj, EnumChatFormatting.BOLD.toString() + energy, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.highEnergyHUDColor);
+                drawCenteredString(mc.fontRendererObj, EnumChatFormatting.BOLD.toString() + energy, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), MWEConfig.highEnergyHUDColor);
             } else {
-                drawCenteredString(mc.fontRendererObj, String.valueOf(energy), this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.lowEnergyHUDColor);
+                drawCenteredString(mc.fontRendererObj, String.valueOf(energy), this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), MWEConfig.lowEnergyHUDColor);
             }
         }
     }
@@ -67,15 +67,15 @@ public class EnergyDisplayHUD extends AbstractRenderer {
     public void renderDummy() {
         final int energy = 50;
         if (energy >= MWEConfig.highEnergyThreshold) {
-            drawCenteredString(Minecraft.getMinecraft().fontRendererObj, EnumChatFormatting.BOLD.toString() + energy, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.highEnergyHUDColor);
+            drawCenteredString(Minecraft.getMinecraft().fontRendererObj, EnumChatFormatting.BOLD.toString() + energy, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), MWEConfig.highEnergyHUDColor);
         } else {
-            drawCenteredString(Minecraft.getMinecraft().fontRendererObj, String.valueOf(energy), this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.lowEnergyHUDColor);
+            drawCenteredString(Minecraft.getMinecraft().fontRendererObj, String.valueOf(energy), this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), MWEConfig.lowEnergyHUDColor);
         }
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return this.guiPosition.isEnabled() && ScoreboardTracker.isInMwGame();
+        return this.rendererPosition.isEnabled() && ScoreboardTracker.isInMwGame();
     }
 
 }

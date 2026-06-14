@@ -22,16 +22,16 @@ public class CreeperPrimedTntHUD extends AbstractRenderer {
 
     @Override
     public void render(ScaledResolution resolution) {
-        this.guiPosition.updateAbsolutePosition(resolution);
+        this.rendererPosition.updateAbsolutePosition(resolution);
         final long temp = (timeStartRender + renderDuration - System.currentTimeMillis());
         final String timeLeft = String.format("%.1f", (float) temp / 1000);
         final String displayText = EnumChatFormatting.GREEN + "Tnt " + (colorPrefix + timeLeft + "s");
-        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, displayText, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, displayText, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
     public void renderDummy() {
-        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, EnumChatFormatting.GREEN + "Tnt " + EnumChatFormatting.RED + "3.0s", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, EnumChatFormatting.GREEN + "Tnt " + EnumChatFormatting.RED + "3.0s", this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class CreeperPrimedTntHUD extends AbstractRenderer {
     }
 
     public boolean processMessage(String fmsg) {
-        if (this.guiPosition.isEnabled()) {
+        if (this.rendererPosition.isEnabled()) {
             final Matcher creeperMatcher = CREEPER_FISSION_HEART_PATTERN.matcher(fmsg);
             if (creeperMatcher.find()) {
                 final String cooldown = creeperMatcher.group(1);

@@ -34,13 +34,13 @@ public class KillCooldownHUD extends AbstractRenderer {
         final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
         final int timeleft = 60 - ((int) (System.currentTimeMillis() - lastkilltime)) / 1000;
         final String displayText = "/kill cooldown : " + timeleft + "s";
-        this.guiPosition.updateAdjustedAbsolutePosition(resolution, fr.getStringWidth(displayText), fr.FONT_HEIGHT);
-        fr.drawStringWithShadow(displayText, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.killCooldownHUDColor);
+        this.rendererPosition.updateAdjustedAbsolutePosition(resolution, fr.getStringWidth(displayText), fr.FONT_HEIGHT);
+        fr.drawStringWithShadow(displayText, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), MWEConfig.killCooldownHUDColor);
     }
 
     @Override
     public void renderDummy() {
-        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow("/kill cooldown : 60s", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), MWEConfig.killCooldownHUDColor);
+        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow("/kill cooldown : 60s", this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), MWEConfig.killCooldownHUDColor);
     }
 
     @Override

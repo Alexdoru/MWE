@@ -110,7 +110,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
 
     @Override
     public void render(ScaledResolution resolution) {
-        this.guiPosition.updateAbsolutePosition(resolution);
+        this.rendererPosition.updateAbsolutePosition(resolution);
         this.renderPhxHUD(this.textToRender);
     }
 
@@ -132,8 +132,8 @@ public class PhoenixBondHUD extends AbstractRenderer {
             maxTotal = Math.max(maxTotal, leftWidth + rightWidth);
         }
         maxTotal += 10;
-        final int x = this.guiPosition.getAbsoluteRenderX() - maxTotal / 2;
-        int y = this.guiPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT * toRenderList.size() / 2;
+        final int x = this.rendererPosition.getAbsoluteRenderX() - maxTotal / 2;
+        int y = this.rendererPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT * toRenderList.size() / 2;
         GlStateManager.pushMatrix();
         {
             for (final PhxHealLine phxHealLine : toRenderList) {
@@ -154,7 +154,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return guiPosition.isEnabled() && timeStartRender + 5000L > currentTimeMillis;
+        return rendererPosition.isEnabled() && timeStartRender + 5000L > currentTimeMillis;
     }
 
     private EnumChatFormatting getHealColor(float heal) {

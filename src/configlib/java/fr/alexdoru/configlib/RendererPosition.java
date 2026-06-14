@@ -1,9 +1,9 @@
-package fr.alexdoru.mwe.api;
+package fr.alexdoru.configlib;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 
-public final class GuiPosition {
+public final class RendererPosition {
 
     private boolean enabled;
     /** The default relative x and y coordinates for this HUD. Ranging from 0 to 1 */
@@ -13,7 +13,7 @@ public final class GuiPosition {
     /** The absolute position to render this hud, needs to be updated before rendering */
     private int absoluteRenderX, absoluteRenderY;
 
-    public GuiPosition(boolean enabled, double defaultX, double defaultY) {
+    public RendererPosition(boolean enabled, double defaultX, double defaultY) {
         this.enabled = enabled;
         this.defaultRelativeX = defaultX;
         this.defaultRelativeY = defaultY;

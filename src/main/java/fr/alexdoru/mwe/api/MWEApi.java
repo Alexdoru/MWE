@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.api;
 
 import fr.alexdoru.configlib.ConfigHandler;
 import fr.alexdoru.configlib.IConfigHandler;
-import fr.alexdoru.configlib.IConfigTitleRenderer;
+import fr.alexdoru.configlib.IRenderer;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.asm.IClassNodeTransformer;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
@@ -11,7 +11,6 @@ import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
 import fr.alexdoru.mwe.data.AliasData;
 import fr.alexdoru.mwe.features.SquadHandler;
-import fr.alexdoru.mwe.gui.HUDRenderer;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
@@ -181,10 +180,9 @@ public final class MWEApi {
          *
          * @param configFile    - the config file
          * @param configVersion - the current version of your mod
-         * @param titleRenderer - a custom renderer to render the title of your config screen, may be null
          */
-        public static IConfigHandler createNewConfigHandler(@NotNull File configFile, @NotNull String configVersion, @Nullable IConfigTitleRenderer titleRenderer) {
-            return new ConfigHandler(configFile, configVersion, titleRenderer);
+        public static IConfigHandler createNewConfigHandler(@NotNull File configFile, @NotNull String configVersion) {
+            return new ConfigHandler(configFile, configVersion);
         }
 
         /**
@@ -228,7 +226,7 @@ public final class MWEApi {
          * Register a HUD to render
          */
         public static void registerHUD(@NotNull IRenderer renderer) {
-            HUDRenderer.registerRenderer(renderer);
+            MWE.INSTANCE().getRendererManager().registerRenderer(renderer);
         }
 
     }

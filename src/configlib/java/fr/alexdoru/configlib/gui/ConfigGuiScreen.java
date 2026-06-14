@@ -1,9 +1,6 @@
 package fr.alexdoru.configlib.gui;
 
-import fr.alexdoru.configlib.ConfigCategoryContainer;
-import fr.alexdoru.configlib.ConfigFieldContainer;
-import fr.alexdoru.configlib.ConfigHandler;
-import fr.alexdoru.configlib.IConfigTitleRenderer;
+import fr.alexdoru.configlib.*;
 import fr.alexdoru.configlib.gui.elements.*;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
@@ -12,6 +9,7 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -49,10 +47,11 @@ public class ConfigGuiScreen extends GuiScreen {
 
     public ConfigGuiScreen(
             ConfigHandler configHandler,
-            IConfigTitleRenderer titleRenderer,
             List<ConfigCategoryContainer> categories,
             List<ConfigFieldContainer> configFields,
-            LinkedHashMap<String, LinkedHashMap<String, List<String>>> configStructure) throws IllegalAccessException {
+            LinkedHashMap<String, LinkedHashMap<String, List<String>>> configStructure,
+            @Nullable IConfigTitleRenderer titleRenderer,
+            @Nullable IRendererManager rendererManager) throws IllegalAccessException {
         this.configHandler = configHandler;
         this.titleRenderer = titleRenderer;
         this.categoryContainerMap = new HashMap<>();
@@ -61,7 +60,7 @@ public class ConfigGuiScreen extends GuiScreen {
         }
         final Map<String, ConfigUIElement> configButtonsMap = new HashMap<>();
         for (final ConfigFieldContainer configField : configFields) {
-            final ConfigUIElement guiButton = configField.getConfigButton(this);
+            final ConfigUIElement guiButton = configField.getConfigButton(this, rendererManager);
             if (guiButton != null) {
                 configButtonsMap.put(configField.getAnnotation().name(), guiButton);
             }

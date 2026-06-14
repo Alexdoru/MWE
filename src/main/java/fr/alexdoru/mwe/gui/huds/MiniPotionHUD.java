@@ -20,7 +20,7 @@ public class MiniPotionHUD extends AbstractRenderer {
         final Minecraft mc = Minecraft.getMinecraft();
         final Collection<PotionEffect> potionEffects = mc.thePlayer.getActivePotionEffects();
         if (potionEffects.isEmpty()) return;
-        this.guiPosition.updateAbsolutePosition(resolution);
+        this.rendererPosition.updateAbsolutePosition(resolution);
         final String[] strings = new String[5];
         final int[] colors = new int[5];
         int index = 0;
@@ -66,25 +66,25 @@ public class MiniPotionHUD extends AbstractRenderer {
             }
         }
         len -= 2;
-        int x = this.guiPosition.getAbsoluteRenderX() - len / 2;
+        int x = this.rendererPosition.getAbsoluteRenderX() - len / 2;
         for (int i = 0; i < 5; i++) {
             if (strings[i] == null) return;
-            mc.fontRendererObj.drawStringWithShadow(strings[i], x, this.guiPosition.getAbsoluteRenderY(), colors[i]);
+            mc.fontRendererObj.drawStringWithShadow(strings[i], x, this.rendererPosition.getAbsoluteRenderY(), colors[i]);
             x += mc.fontRendererObj.getStringWidth(strings[i]) + 2;
         }
     }
 
     @Override
     public void renderDummy() {
-        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, EnumChatFormatting.LIGHT_PURPLE + "3", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, EnumChatFormatting.LIGHT_PURPLE + "3", this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
         if (MWEConfig.showMiniPotionHUDOnlyMW) {
-            return this.guiPosition.isEnabled() && ScoreboardTracker.isInMwGame();
+            return this.rendererPosition.isEnabled() && ScoreboardTracker.isInMwGame();
         }
-        return this.guiPosition.isEnabled();
+        return this.rendererPosition.isEnabled();
     }
 
     private String formatDuration(PotionEffect effect) {

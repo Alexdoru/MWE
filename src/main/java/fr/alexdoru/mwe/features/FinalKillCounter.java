@@ -7,7 +7,7 @@ import fr.alexdoru.mwe.asm.hooks.RenderPlayerHook_RenegadeArrowCount;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.gui.HUDRenderer;
+import fr.alexdoru.mwe.gui.MWERendererManager;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import fr.alexdoru.mwe.utils.MapUtil;
@@ -145,7 +145,7 @@ public final class FinalKillCounter {
         DEFAULT_PREFIXES.put(MWTeam.GREEN, 'a');
         DEFAULT_PREFIXES.put(MWTeam.RED, 'c');
         DEFAULT_PREFIXES.put(MWTeam.YELLOW, 'e');
-        HUDRenderer.fkCounterHUD.updateDisplayText();
+        MWERendererManager.fkCounterHUD.updateDisplayText();
     }
 
     FinalKillCounter(@NotNull String gameId) {
@@ -159,7 +159,7 @@ public final class FinalKillCounter {
                 ((NetworkPlayerInfoAccessor) netInfo).setFinalKills(0);
             }
         });
-        HUDRenderer.fkCounterHUD.updateDisplayText();
+        MWERendererManager.fkCounterHUD.updateDisplayText();
     }
 
     public boolean processMessage(ClientChatReceivedEvent event, String formattedText, String unformattedText) {
@@ -199,7 +199,7 @@ public final class FinalKillCounter {
                                 ));
                             }
                         }
-                        HUDRenderer.fkCounterHUD.updateDisplayText();
+                        MWERendererManager.fkCounterHUD.updateDisplayText();
                     }
                     final String s = formattedText.replace(killer, SquadHandler.getSquadname(killer))
                             .replace(victim, SquadHandler.getSquadname(victim))
@@ -225,7 +225,7 @@ public final class FinalKillCounter {
                                     victimTeam
                             ));
                         }
-                        HUDRenderer.fkCounterHUD.updateDisplayText();
+                        MWERendererManager.fkCounterHUD.updateDisplayText();
                     }
                     final String s = formattedText.replace(victim, SquadHandler.getSquadname(victim))
                             + getKillDiffString(killsOfVictim, victimTeamColor);
@@ -298,7 +298,7 @@ public final class FinalKillCounter {
                 }
             }
         }
-        HUDRenderer.fkCounterHUD.updateDisplayText();
+        MWERendererManager.fkCounterHUD.updateDisplayText();
     }
 
     /**

@@ -2,9 +2,9 @@ package fr.alexdoru.configlib;
 
 import fr.alexdoru.configlib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.gui.elements.*;
-import fr.alexdoru.mwe.api.GuiPosition;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -42,14 +42,14 @@ public class ConfigFieldContainer {
     }
 
     private void createPropertyFromField(Configuration config) throws IllegalAccessException {
-        if (field.getType() == GuiPosition.class) {
+        if (field.getType() == RendererPosition.class) {
             final String showKey = "Show " + annotation.name();
             final String xKey = "Xpos " + annotation.name();
             final String yKey = "Ypos " + annotation.name();
-            final GuiPosition guiPosition = (GuiPosition) field.get(null);
-            propertyMap.put(showKey, config.get(annotation.category(), showKey, guiPosition.isEnabled()));
-            propertyMap.put(xKey, config.get(annotation.category(), xKey, guiPosition.getRelativeX()));
-            propertyMap.put(yKey, config.get(annotation.category(), yKey, guiPosition.getRelativeY()));
+            final RendererPosition rendererPosition = (RendererPosition) field.get(null);
+            propertyMap.put(showKey, config.get(annotation.category(), showKey, rendererPosition.isEnabled()));
+            propertyMap.put(xKey, config.get(annotation.category(), xKey, rendererPosition.getRelativeX()));
+            propertyMap.put(yKey, config.get(annotation.category(), yKey, rendererPosition.getRelativeY()));
         } else if (field.getType() == String.class) {
             propertyMap.put(annotation.name(), config.get(annotation.category(), annotation.name(), (String) field.get(null)));
         } else if (field.getType() == boolean.class) {
@@ -63,13 +63,13 @@ public class ConfigFieldContainer {
             final String[] defaultStrings = ((List<String>) field.get(null)).toArray(new String[0]);
             propertyMap.put(annotation.name(), config.get(annotation.category(), annotation.name(), defaultStrings));
         } else {
-            throw new IllegalArgumentException("Type of field not handled by config " + field.getType());
+            throw new IllegalArgumentException("Type of field not handled by config lib " + field.getType());
         }
     }
 
     private void loadConfigValueToField() throws IllegalAccessException {
-        if (field.getType() == GuiPosition.class) {
-            final GuiPosition position = ((GuiPosition) field.get(null));
+        if (field.getType() == RendererPosition.class) {
+            final RendererPosition position = ((RendererPosition) field.get(null));
             position.setEnabled(propertyMap.get("Show " + annotation.name()).getBoolean());
             position.setRelativePosition(
                     propertyMap.get("Xpos " + annotation.name()).getDouble(),
@@ -89,16 +89,16 @@ public class ConfigFieldContainer {
             list.clear();
             list.addAll(Arrays.asList(strings));
         } else {
-            throw new IllegalArgumentException("Type of field not handled by config " + field.getType());
+            throw new IllegalArgumentException("Type of field not handled by config lib " + field.getType());
         }
     }
 
     public void saveFieldValueToConfig() throws IllegalAccessException {
-        if (field.getType() == GuiPosition.class) {
-            final GuiPosition guiPosition = (GuiPosition) field.get(null);
-            propertyMap.get("Show " + annotation.name()).set(guiPosition.isEnabled());
-            propertyMap.get("Xpos " + annotation.name()).set(guiPosition.getRelativeX());
-            propertyMap.get("Ypos " + annotation.name()).set(guiPosition.getRelativeY());
+        if (field.getType() == RendererPosition.class) {
+            final RendererPosition rendererPosition = (RendererPosition) field.get(null);
+            propertyMap.get("Show " + annotation.name()).set(rendererPosition.isEnabled());
+            propertyMap.get("Xpos " + annotation.name()).set(rendererPosition.getRelativeX());
+            propertyMap.get("Ypos " + annotation.name()).set(rendererPosition.getRelativeY());
         } else if (field.getType() == String.class) {
             propertyMap.get(annotation.name()).set((String) field.get(null));
         } else if (field.getType() == boolean.class) {
@@ -111,11 +111,11 @@ public class ConfigFieldContainer {
             //noinspection unchecked
             propertyMap.get(annotation.name()).set(((List<String>) field.get(null)).toArray(new String[0]));
         } else {
-            throw new IllegalArgumentException("Type of field not handled by config " + field.getType());
+            throw new IllegalArgumentException("Type of field not handled by config lib " + field.getType());
         }
     }
 
-    public ConfigUIElement getConfigButton(ConfigGuiScreen configGuiScreen) throws IllegalAccessException {
+    public ConfigUIElement getConfigButton(ConfigGuiScreen configGuiScreen, @Nullable IRendererManager rendererManager) throws IllegalAccessException {
         if (annotation.hidden()) return null;
         if (!FORCE_SHOW_HIDDEN && hideOverride != null) {
             try {
@@ -123,8 +123,11 @@ public class ConfigFieldContainer {
                 if (shouldHide) return null;
             } catch (InvocationTargetException ignored) {}
         }
-        if (field.getType() == GuiPosition.class) {
-            return new HUDGuiButton(configGuiScreen, field, event, annotation);
+        if (field.getType() == RendererPosition.class) {
+            if (rendererManager == null) {
+                throw new IllegalStateException("Config must have an IRendererManager to handle renderers");
+            }
+            return new RendererGuiButton(configGuiScreen, rendererManager, field, event, annotation);
         } else if (field.getType() == boolean.class) {
             return new BooleanGuiButton(field, event, annotation);
         } else if (field.getType() == double.class) {
@@ -143,7 +146,7 @@ public class ConfigFieldContainer {
                 return new SliderGuiButton(field, event, annotation);
             }
         }
-        throw new IllegalArgumentException("Type of field not handled by config GUI " + field.getType());
+        throw new IllegalArgumentException("Type of field not handled by config lib " + field.getType());
     }
 
     public ConfigProperty getAnnotation() {

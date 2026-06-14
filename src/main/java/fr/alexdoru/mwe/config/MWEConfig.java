@@ -1,12 +1,11 @@
 package fr.alexdoru.mwe.config;
 
 import fr.alexdoru.configlib.*;
-import fr.alexdoru.mwe.api.GuiPosition;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.LocrawListener;
 import fr.alexdoru.mwe.features.LeatherArmorManager;
-import fr.alexdoru.mwe.gui.HUDRenderer;
+import fr.alexdoru.mwe.gui.MWERendererManager;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.nocheaters.WarningMessages;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
@@ -308,7 +307,7 @@ public final class MWEConfig {
             category = PVP_STUFF, subCategory = "Armor HUD",
             name = "Armor HUD",
             comment = "Displays your currently equipped armor")
-    public static final GuiPosition armorHUDPositon = new GuiPosition(false, 0.25d, 1d);
+    public static final RendererPosition armorHUDPositon = new RendererPosition(false, 0.25d, 1d);
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Armor HUD",
@@ -345,7 +344,7 @@ public final class MWEConfig {
             name = "Mini Potion HUD",
             comment = "Displays a minimalist potion HUD with the remaining duration of the following potion buffs :"
                     + " §dregeneration§7, §8resistance§7, §bspeed§7, §cstrength§7, §finvisibility§7, §ajump boost§7")
-    public static final GuiPosition miniPotionHUDPosition = new GuiPosition(false, 0.5d, 7.5d / 20d);
+    public static final RendererPosition miniPotionHUDPosition = new RendererPosition(false, 0.5d, 7.5d / 20d);
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Potion HUD",
@@ -357,7 +356,7 @@ public final class MWEConfig {
             category = PVP_STUFF, subCategory = "Potion HUD",
             name = "Potion HUD",
             comment = "Displays your potions effects")
-    public static final GuiPosition potionHUDPosition = new GuiPosition(false, 0d, 0.5d);
+    public static final RendererPosition potionHUDPosition = new RendererPosition(false, 0d, 0.5d);
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Potion HUD",
@@ -415,7 +414,7 @@ public final class MWEConfig {
             category = PVP_STUFF, subCategory = "Other HUD",
             name = "Arrow Hit HUD",
             comment = "Displays the HP of opponents on arrow hits, also works with Spider Leap damage and Renegade Rend in Mega Walls")
-    public static final GuiPosition arrowHitHUDPosition = new GuiPosition(true, 0.5d, 9d / 20d);
+    public static final RendererPosition arrowHitHUDPosition = new RendererPosition(true, 0.5d, 9d / 20d);
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Other HUD",
@@ -427,7 +426,7 @@ public final class MWEConfig {
             category = PVP_STUFF, subCategory = "Other HUD",
             name = "Speed HUD",
             comment = "Displays your own speed in the XZ plane")
-    public static final GuiPosition speedHUDPosition = new GuiPosition(false, 1d, 1d);
+    public static final RendererPosition speedHUDPosition = new RendererPosition(false, 1d, 1d);
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Other HUD",
@@ -640,7 +639,7 @@ public final class MWEConfig {
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Kill cooldown HUD",
             comment = "Displays the cooldown of the /kill command")
-    public static final GuiPosition killCooldownHUDPosition = new GuiPosition(true, 0d, 0d);
+    public static final RendererPosition killCooldownHUDPosition = new RendererPosition(true, 0d, 0d);
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
@@ -652,7 +651,7 @@ public final class MWEConfig {
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Last wither HUD",
             comment = "Displays the time it takes for the last wither to die")
-    public static final GuiPosition lastWitherHUDPosition = new GuiPosition(true, 0.75d, 0d);
+    public static final RendererPosition lastWitherHUDPosition = new RendererPosition(true, 0.75d, 0d);
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
@@ -665,7 +664,7 @@ public final class MWEConfig {
             name = "Strength HUD",
             comment = "Displays the duration of the strength effect when you have it or when you are about to have it with Hunter."
                     + " Works with Dreadlord, Herobrine, Hunter and Zombie.")
-    public static final GuiPosition strengthHUDPosition = new GuiPosition(true, 0.5d, 8d / 20d);
+    public static final RendererPosition strengthHUDPosition = new RendererPosition(true, 0.5d, 8d / 20d);
 
     @ConfigPropertyEvent(name = "Strength HUD")
     private static void onStrengthHUDSetting() {
@@ -678,13 +677,13 @@ public final class MWEConfig {
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Creeper primed TNT HUD",
             comment = "Displays the cooldown of primed TNT when playing Creeper")
-    public static final GuiPosition creeperTNTHUDPosition = new GuiPosition(true, 0.5d, 8d / 20d);
+    public static final RendererPosition creeperTNTHUDPosition = new RendererPosition(true, 0.5d, 8d / 20d);
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Energy display HUD",
             comment = "Displays a HUD with the amount of energy you have. Turns a different color when your energy level exceeds the amount set below.")
-    public static final GuiPosition energyHUDPosition = new GuiPosition(true, 0.5d, 10.5 / 20d);
+    public static final RendererPosition energyHUDPosition = new RendererPosition(true, 0.5d, 10.5 / 20d);
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
@@ -708,13 +707,13 @@ public final class MWEConfig {
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Phoenix Bond HUD",
             comment = "Displays the hearts healed from a Phoenix bond")
-    public static final GuiPosition phxBondHUDPosition = new GuiPosition(true, 0.5d, 0.75d);
+    public static final RendererPosition phxBondHUDPosition = new RendererPosition(true, 0.5d, 0.75d);
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Base Location HUD",
             comment = "Displays which base you are currently located in")
-    public static final GuiPosition baseLocationHUDPosition = new GuiPosition(true, 0.90d, 0d);
+    public static final RendererPosition baseLocationHUDPosition = new RendererPosition(true, 0.90d, 0d);
 
     @ConfigPropertyEvent(name = "Base Location HUD")
     private static void onBaseLocationSetting() {
@@ -727,14 +726,14 @@ public final class MWEConfig {
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Warcry HUD",
             comment = "Displays the warcry cooldown")
-    public static final GuiPosition warcryHUDPosition = new GuiPosition(true, 0.65d, 1d);
+    public static final RendererPosition warcryHUDPosition = new RendererPosition(true, 0.65d, 1d);
 
     @ConfigProperty(
             category = FINAL_KILL_COUNTER, subCategory = "HUD",
             name = "Final Kill Counter HUD",
             comment = "Displays the HUD of the final kill counter\n"
                     + "§cThis will only work if you have your Hypixel language set to English")
-    public static final GuiPosition fkcounterHUDPosition = new GuiPosition(false, 0d, 0.1d);
+    public static final RendererPosition fkcounterHUDPosition = new RendererPosition(false, 0d, 0.1d);
 
     @ConfigProperty(
             category = FINAL_KILL_COUNTER, subCategory = "HUD",
@@ -768,7 +767,7 @@ public final class MWEConfig {
             "Players mode",
             "Player amount"})
     private static void onFKSHUDSetting() {
-        HUDRenderer.fkCounterHUD.updateDisplayText();
+        MWERendererManager.fkCounterHUD.updateDisplayText();
     }
 
     @ConfigProperty(
@@ -999,7 +998,7 @@ public final class MWEConfig {
             category = HACKER_DETECTOR, subCategory = "Report",
             name = "Report HUD",
             comment = "Displays a small text when the mod has reports to send to the server and when it is typing the report")
-    public static final GuiPosition reportHUDPosition = new GuiPosition(true, 0d, 1d);
+    public static final RendererPosition reportHUDPosition = new RendererPosition(true, 0d, 1d);
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Report",
@@ -1140,7 +1139,7 @@ public final class MWEConfig {
             category = SQUAD, subCategory = "HUD",
             name = "Squad HUD",
             comment = "Displays a mini-tablist with your squadmates")
-    public static final GuiPosition squadHUDPosition = new GuiPosition(true, 0.25d, 0d);
+    public static final RendererPosition squadHUDPosition = new RendererPosition(true, 0.25d, 0d);
 
     @ConfigProperty(
             category = "Updates",

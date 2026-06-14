@@ -24,23 +24,23 @@ public class BaseLocationHUD extends AbstractRenderer {
     public void render(ScaledResolution resolution) {
         final Minecraft mc = Minecraft.getMinecraft();
         final String text = currentMap.getPlayerBaseLocation(mc.thePlayer);
-        this.guiPosition.updateAdjustedAbsolutePosition(resolution, mc.fontRendererObj.getStringWidth(text), mc.fontRendererObj.FONT_HEIGHT);
-        drawCenteredString(mc.fontRendererObj, text, this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        this.rendererPosition.updateAdjustedAbsolutePosition(resolution, mc.fontRendererObj.getStringWidth(text), mc.fontRendererObj.FONT_HEIGHT);
+        drawCenteredString(mc.fontRendererObj, text, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
     public void renderDummy() {
-        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, EnumChatFormatting.GREEN + "GREEN", this.guiPosition.getAbsoluteRenderX(), this.guiPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, EnumChatFormatting.GREEN + "GREEN", this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return this.guiPosition.isEnabled() && (ScoreboardTracker.isInMwGame() || ScoreboardTracker.isMWReplay()) && this.currentMap != null;
+        return this.rendererPosition.isEnabled() && (ScoreboardTracker.isInMwGame() || ScoreboardTracker.isMWReplay()) && this.currentMap != null;
     }
 
     @SubscribeEvent
     public void onMWEvent(MegaWallsGameEvent event) {
-        if (!this.guiPosition.isEnabled()) return;
+        if (!this.rendererPosition.isEnabled()) return;
         if (event.type == MegaWallsGameEvent.Type.CONNECT) {
             LocrawListener.setMegaWallsMap();
         }

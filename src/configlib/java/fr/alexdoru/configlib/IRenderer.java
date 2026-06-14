@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.api;
+package fr.alexdoru.configlib;
 
 import net.minecraft.client.gui.ScaledResolution;
 
@@ -24,8 +24,8 @@ public interface IRenderer {
     boolean isEnabled(long currentTimeMillis);
 
     /**
-     * Returns the GuiPosition of the Renderer
+     * Returns the RendererPosition of the Renderer
      */
-    GuiPosition getGuiPosition();
+    RendererPosition getPosition();
 
 }
