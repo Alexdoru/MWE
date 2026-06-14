@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.features;
 
 import fr.alexdoru.mwe.api.enums.MWClass;
-import fr.alexdoru.mwe.api.events.FinalKillEvent;
+import fr.alexdoru.mwe.api.events.KillCounterEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.NameUtil;
@@ -17,7 +17,7 @@ public final class StrengthParticles {
     private final Random random = new Random();
 
     @SubscribeEvent
-    public void onFinalKill(FinalKillEvent.PlayerKill event) {
+    public void onFinalKill(KillCounterEvent.FinalKill event) {
         if (!MWEConfig.strengthParticles) {
             return;
         }
