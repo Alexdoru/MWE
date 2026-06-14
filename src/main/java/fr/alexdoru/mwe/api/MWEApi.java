@@ -38,6 +38,8 @@ public final class MWEApi {
 
     private MWEApi() {}
 
+    public static final int API_VERSION = 1;
+
     /**
      * Register the main class of your addon, this should be the name of the class,
      * must be called before mods are constructed e.g. from a coremod.
