@@ -19,8 +19,6 @@ import java.util.*;
 public class MWELoadingPlugin implements IFMLLoadingPlugin {
 
     public static final Logger logger = LogManager.getLogger("MWE ASM");
-    private static final boolean MORE_CLASS_DUMP = Boolean.getBoolean("mwe.moreclassdump");
-    private static final boolean CLASS_DUMP = MORE_CLASS_DUMP || Boolean.getBoolean("mwe.classdump");
     private static Boolean isObf;
 
     @Override
@@ -80,14 +78,6 @@ public class MWELoadingPlugin implements IFMLLoadingPlugin {
             throw new IllegalStateException("Obfuscation state has been accessed too early!");
         }
         return isObf;
-    }
-
-    public static boolean classDump() {
-        return CLASS_DUMP;
-    }
-
-    public static boolean moreClassDump() {
-        return MORE_CLASS_DUMP;
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})

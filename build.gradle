@@ -74,7 +74,8 @@ minecraft {
 runClient {
     jvmArgs += [
             "-Dmwe.classdump=true"
-            //,"-Dmwe.moreclassdump=true"
+            //,"-Dmwe.classdump.decompile=true"
+            , "-Dmwe.classdump.finer=true"
             , "-Dmwe.disableUpdater=true"
             , "-Dconfig.lib.showHidden=true"
     ]

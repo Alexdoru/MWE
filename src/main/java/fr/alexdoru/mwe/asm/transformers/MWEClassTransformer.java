@@ -35,6 +35,10 @@ import java.util.*;
 
 public class MWEClassTransformer implements IClassTransformer {
 
+    private static final boolean CLASS_DUMP = Boolean.getBoolean("mwe.classdump");
+    private static final boolean CLASS_DUMP_FINER = CLASS_DUMP && Boolean.getBoolean("mwe.classdump.finer");
+    private static final boolean DECOMPILE_CLASS_DUMP = Boolean.getBoolean("mwe.classdump.decompile");
+
     private File outputDir = null;
     private final Map<String, List<IClassNodeTransformer>> transformers = new HashMap<>();
     private int count;
@@ -144,17 +148,19 @@ public class MWEClassTransformer implements IClassTransformer {
     }
 
     @Override
-    public byte[] transform(String name, String transformedName, byte[] bytes) {
-        if (bytes == null || !transformers.containsKey(transformedName)) {
-            return bytes;
+    public byte[] transform(String name, String transformedName, byte[] basicClass) {
+        if (basicClass == null || !transformers.containsKey(transformedName)) {
+            return basicClass;
         }
         try {
             final long l = System.nanoTime();
-            final ClassReader classReader = new ClassReader(bytes);
+            final ClassReader classReader = new ClassReader(basicClass);
             final ClassNode classNode = new ClassNode();
             classReader.accept(classNode, 0);
             boolean transformed = false;
-            for (final IClassNodeTransformer transformer : transformers.get(transformedName)) {
+            final List<IClassNodeTransformer> transformersList = transformers.get(transformedName);
+            for (int i = 0; i < transformersList.size(); i++) {
+                final IClassNodeTransformer transformer = transformersList.get(i);
                 if (!transformer.shouldApply(classNode)) {
                     debugLog("Skipping application of " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
                     continue;
@@ -165,23 +171,28 @@ public class MWEClassTransformer implements IClassTransformer {
                 if (callback.isTransformationSuccessful()) {
                     debugLog("Applied " + stripClassName(transformer.getClass().getName()) + " to " + transformedName);
                 } else {
-                    MWELoadingPlugin.logger.error("Class transformation incomplete, transformer " + stripClassName(transformer.getClass().getName()) + " missing " + callback.getCount() + " injections in " + transformedName);
+                    MWELoadingPlugin.logger.error("Class transformation incomplete, transformer {} missing {} injections in {}", stripClassName(transformer.getClass().getName()), callback.getCount(), transformedName);
+                }
+                if (CLASS_DUMP_FINER && transformersList.size() > 1) {
+                    saveClassNode(classNode, transformedName, i, transformer);
                 }
             }
             if (!transformed) {
                 debugLog("Skipping transformation of " + transformedName);
-                return bytes;
+                return basicClass;
             }
             final ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
             classNode.accept(classWriter);
             final byte[] transformedBytes = classWriter.toByteArray();
             final long l2 = (System.nanoTime() - l) / 1_000_000L;
             debugLog("Transformed " + transformedName + " in " + l2 + "ms");
-            saveTransformedClass(bytes, transformedBytes, transformedName);
+            if (CLASS_DUMP) {
+                saveTransformedClass(basicClass, transformedBytes, transformedName);
+            }
             return transformedBytes;
         } catch (Throwable t) {
-            MWELoadingPlugin.logger.error("Failed to transform " + transformedName, t);
-            return bytes;
+            MWELoadingPlugin.logger.error("Failed to transform {}", transformedName, t);
+            return basicClass;
         }
     }
 
@@ -209,22 +220,38 @@ public class MWEClassTransformer implements IClassTransformer {
         }
     }
 
-    private void saveTransformedClass(byte[] bytes, byte[] transformedBytes, String transformedName) {
-        if (MWELoadingPlugin.classDump()) {
-            if (outputDir == null) {
-                emptyClassOutputFolder();
-            }
-            final String fileName = transformedName.replace('.', File.separatorChar);
-            writeClassFile(bytes, transformedName, fileName + "_PRE");
-            writeClassFile(transformedBytes, transformedName, fileName + "_POST");
-            if (MWELoadingPlugin.moreClassDump()) {
-                writeBytecodeFile(transformedBytes, transformedName, fileName);
-                writeASMFile(transformedBytes, transformedName, fileName);
-            }
+    private void saveClassNode(ClassNode classNode, String classname, int index, IClassNodeTransformer transformer) {
+        if (outputDir == null) {
+            emptyClassOutputFolder();
+        }
+        final ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+        classNode.accept(cw);
+        final byte[] bytes = cw.toByteArray();
+        final String fileName =
+                classname.replace('.', File.separatorChar)
+                        + "_" + index + "_"
+                        + stripClassName(transformer.getClass().getName());
+        writeClassFile(bytes, classname, fileName);
+    }
+
+    private void saveTransformedClass(byte[] bytesPre, byte[] bytesPost, String classname) {
+        if (outputDir == null) {
+            emptyClassOutputFolder();
+        }
+        final String fileName = classname.replace('.', File.separatorChar);
+        final String fileNamePre = fileName + "_PRE";
+        final String fileNamePost = fileName + "_POST";
+        writeClassFile(bytesPre, classname, fileNamePre);
+        writeClassFile(bytesPost, classname, fileNamePost);
+        if (DECOMPILE_CLASS_DUMP) {
+            writeBytecodeFile(bytesPre, classname, fileNamePre);
+            writeASMFile(bytesPre, classname, fileNamePre);
+            writeBytecodeFile(bytesPost, classname, fileNamePost);
+            writeASMFile(bytesPost, classname, fileNamePost);
         }
     }
 
-    private void writeClassFile(byte[] data, String transformedName, String fileName) {
+    private void writeClassFile(byte[] data, String classname, String fileName) {
         final File classFile = new File(outputDir, fileName + ".class");
         final File outDir = classFile.getParentFile();
         if (!outDir.exists()) {
@@ -237,13 +264,13 @@ public class MWEClassTransformer implements IClassTransformer {
         }
         try (final OutputStream output = Files.newOutputStream(classFile.toPath())) {
             output.write(data);
-            MWELoadingPlugin.logger.info("Saved class (byte[]) to " + classFile.toPath());
+            MWELoadingPlugin.logger.info("Saved class (byte[]) to {}", classFile.toPath());
         } catch (IOException e) {
-            MWELoadingPlugin.logger.error("Could not save class (byte[]) " + transformedName, e);
+            MWELoadingPlugin.logger.error("Could not save class (byte[]) {}", classname, e);
         }
     }
 
-    private void writeBytecodeFile(byte[] data, String transformedName, String fileName) {
+    private void writeBytecodeFile(byte[] data, String classname, String fileName) {
         final File bytecodeFile = new File(outputDir, fileName + "_BYTE.txt");
         final File outDir = bytecodeFile.getParentFile();
         if (!outDir.exists()) {
@@ -257,13 +284,13 @@ public class MWEClassTransformer implements IClassTransformer {
         try (final OutputStream output = Files.newOutputStream(bytecodeFile.toPath())) {
             final ClassReader classReader = new ClassReader(data);
             classReader.accept(new TraceClassVisitor(null, new Textifier(), new PrintWriter(output)), 0);
-            MWELoadingPlugin.logger.info("Saved class (bytecode) to " + bytecodeFile.toPath());
+            MWELoadingPlugin.logger.info("Saved class (bytecode) to {}", bytecodeFile.toPath());
         } catch (IOException e) {
-            MWELoadingPlugin.logger.error("Could not save class (bytecode) " + transformedName, e);
+            MWELoadingPlugin.logger.error("Could not save class (bytecode) {}", classname, e);
         }
     }
 
-    private void writeASMFile(byte[] data, String transformedName, String fileName) {
+    private void writeASMFile(byte[] data, String classname, String fileName) {
         final File asmifiedFile = new File(outputDir, fileName + "_ASM.txt");
         final File outDir = asmifiedFile.getParentFile();
         if (!outDir.exists()) {
@@ -277,9 +304,9 @@ public class MWEClassTransformer implements IClassTransformer {
         try (final OutputStream output = Files.newOutputStream(asmifiedFile.toPath())) {
             final ClassReader classReader = new ClassReader(data);
             classReader.accept(new TraceClassVisitor(null, new ASMifier(), new PrintWriter(output)), 0);
-            MWELoadingPlugin.logger.info("Saved class (ASM) to " + asmifiedFile.toPath());
+            MWELoadingPlugin.logger.info("Saved class (ASM) to {}", asmifiedFile.toPath());
         } catch (IOException e) {
-            MWELoadingPlugin.logger.error("Could not save class (ASM) " + transformedName, e);
+            MWELoadingPlugin.logger.error("Could not save class (ASM) {}", classname, e);
         }
     }
 
