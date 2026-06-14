@@ -4,13 +4,13 @@ import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Ordering;
 import com.mojang.authlib.GameProfile;
 import fr.alexdoru.mwe.api.enums.MWClass;
-import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.AliasData;
 import fr.alexdoru.mwe.data.MWPlayerData;
+import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.data.ScangameData;
 import fr.alexdoru.mwe.features.LeatherArmorManager;
 import fr.alexdoru.mwe.features.SquadHandler;
@@ -81,7 +81,7 @@ public class NameUtil {
      */
     public static void updateMWPlayerDataAndEntityData(String playername, boolean refreshDisplayName) {
         if (isValidMinecraftName(playername)) {
-            final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+            final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
             if (netInfo != null) {
                 ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(getMWPlayerData(netInfo.getGameProfile(), true).displayName);
             }
@@ -96,7 +96,7 @@ public class NameUtil {
     }
 
     public static void updateMWPlayerDataAndEntityData(EntityPlayer player, boolean refreshDisplayName) {
-        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(player.getName());
+        final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(player.getName());
         if (netInfo != null) {
             ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(getMWPlayerData(netInfo.getGameProfile(), true).displayName);
         }
@@ -131,7 +131,7 @@ public class NameUtil {
 
     public static void onTeamPacket(String playername) {
         if (!isValidMinecraftName(playername)) return;
-        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+        final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
         if (netInfo == null) return;
         final MWPlayerData.PlayerData mwPlayerData = getMWPlayerData(netInfo.getGameProfile(), true);
         ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(mwPlayerData.displayName);
@@ -323,7 +323,7 @@ public class NameUtil {
      * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay#getPlayerName}
      */
     public static String getFormattedName(String playername) {
-        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+        final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
         if (netInfo == null) {
             return playername;
         }
@@ -346,7 +346,7 @@ public class NameUtil {
      * This doesn't return the icons in front that the player may have.
      */
     public static String getFormattedNameWithoutIcons(String playername) {
-        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+        final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
         if (netInfo == null) {
             return SquadHandler.getSquadname(playername);
         }

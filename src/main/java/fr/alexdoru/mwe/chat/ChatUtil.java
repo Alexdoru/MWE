@@ -1,10 +1,10 @@
 package fr.alexdoru.mwe.chat;
 
-import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.asm.interfaces.GuiChatAccessor;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor_ChatHeads;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
@@ -82,14 +82,14 @@ public class ChatUtil {
 
     public static boolean tryAddSkinToComponent(IChatComponent msg, String playername) {
         if (msg instanceof ChatComponentTextAccessor) {
-            final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+            final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
             if (netInfo instanceof NetworkPlayerInfoAccessor_ChatHeads) {
                 final SkinChatHead skin = new SkinChatHead(netInfo.getLocationSkin());
                 ((ChatComponentTextAccessor) msg).setSkinChatHead(skin);
                 ((NetworkPlayerInfoAccessor_ChatHeads) netInfo).setSkinChatHead(skin);
                 return true;
             } else {
-                final ResourceLocation resourceLocation = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerSkin(playername);
+                final ResourceLocation resourceLocation = NetPlayerInfoTracker.getSkinFromCache(playername);
                 if (resourceLocation != null) {
                     ((ChatComponentTextAccessor) msg).setSkinChatHead(new SkinChatHead(resourceLocation));
                     return true;

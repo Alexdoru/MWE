@@ -1,8 +1,8 @@
 package fr.alexdoru.mwe.gui.huds;
 
-import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.utils.MapUtil;
 import fr.alexdoru.mwe.utils.SkinUtil;
@@ -92,7 +92,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
             netInfo = mc.thePlayer == null ? null : mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID());
             formattedName = EnumChatFormatting.AQUA.toString() + EnumChatFormatting.BOLD + "You";
         } else {
-            netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+            netInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
             formattedName = getColoredName(playername, netInfo);
         }
         return new PhxHealLine(

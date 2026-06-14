@@ -1,10 +1,10 @@
 package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.MWE;
-import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.interfaces.GuiNewChatAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.NameUtil;
@@ -127,7 +127,7 @@ public class ArrowHitHUD extends AbstractRenderer {
     }
 
     private void setPlayerHead(String playername) {
-        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+        final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
         if (netInfo != null && netInfo.hasLocationSkin()) skin = netInfo.getLocationSkin();
     }
 

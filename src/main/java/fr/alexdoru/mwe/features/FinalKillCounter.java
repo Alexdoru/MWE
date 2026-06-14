@@ -2,10 +2,10 @@ package fr.alexdoru.mwe.features;
 
 import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.api.events.KillCounterEvent;
-import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.gui.MWERendererManager;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
@@ -346,7 +346,7 @@ public final class FinalKillCounter {
     }
 
     private static void updateNetworkPlayerinfo(String playername, int finals) {
-        final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+        final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
         if (netInfo instanceof NetworkPlayerInfoAccessor) {
             ((NetworkPlayerInfoAccessor) netInfo).setFinalKills(finals);
         }

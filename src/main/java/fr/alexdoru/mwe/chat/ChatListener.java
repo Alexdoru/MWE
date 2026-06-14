@@ -2,8 +2,8 @@ package fr.alexdoru.mwe.chat;
 
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
-import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.data.ScangameData;
 import fr.alexdoru.mwe.features.*;
 import fr.alexdoru.mwe.gui.MWERendererManager;
@@ -160,7 +160,7 @@ public class ChatListener {
 
             // Chat Censoring
             if ((MWEConfig.censorCheaterChatMsg || MWEConfig.deleteCheaterChatMsg) && messageSender != null) {
-                final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(messageSender);
+                final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(messageSender);
                 if (netInfo != null) {
                     final WDR wdr = WdrData.getWdr(netInfo.getGameProfile().getId(), messageSender);
                     if (wdr != null && wdr.hasValidCheats()) {
@@ -198,7 +198,7 @@ public class ChatListener {
             }
 
             if (MWEConfig.showBannedPlayers && msg.equals(BAN_MESSAGE)) {
-                new DelayedTask(NetHandlerPlayClientHook_PlayerMapTracker::printDisconnectedPlayers, 10);
+                new DelayedTask(NetPlayerInfoTracker::printDisconnectedPlayers, 10);
             }
 
             /*Status messages*/

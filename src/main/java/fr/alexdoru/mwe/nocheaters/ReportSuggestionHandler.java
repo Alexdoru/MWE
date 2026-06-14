@@ -1,10 +1,10 @@
 package fr.alexdoru.mwe.nocheaters;
 
 import fr.alexdoru.mwe.MWE;
-import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.commands.CommandReport;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.data.ScangameData;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
@@ -79,7 +79,7 @@ public class ReportSuggestionHandler {
 
         } else if (messageSender != null) {
 
-            final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(messageSender);
+            final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(messageSender);
             if (netInfo != null) {
                 isSenderInTablist = true;
                 final UUID uuid = netInfo.getGameProfile().getId();
@@ -179,7 +179,7 @@ public class ReportSuggestionHandler {
     }
 
     private static boolean isNameValid(String playername) {
-        if (NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername) != null || isPlayerMyself(playername)) {
+        if (NetPlayerInfoTracker.getPlayerInfo(playername) != null || isPlayerMyself(playername)) {
             return true;
         }
         final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();

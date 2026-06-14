@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.features;
 
-import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
@@ -66,7 +66,7 @@ public class PartyDetection {
     public static void printBoostingReportAdvice(String playername) {
         final List<String> partyList = partysMap.get(playername);
         if (partyList != null) {
-            final NetworkPlayerInfo cheaterNetInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(playername);
+            final NetworkPlayerInfo cheaterNetInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
             if (cheaterNetInfo == null) {
                 return;
             }
@@ -75,7 +75,7 @@ public class PartyDetection {
             boolean containsPlayers = false;
             for (final String player : partyList) {
                 if (!player.equals(playername)) {
-                    final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(player);
+                    final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(player);
                     if (netInfo != null) {
                         final String teamColorPlayer = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), player), player);
                         if (!cheaterTeamColor.isEmpty() && cheaterTeamColor.equals(teamColorPlayer)) {

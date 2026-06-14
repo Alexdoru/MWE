@@ -1,9 +1,9 @@
 package fr.alexdoru.mwe.gui.huds;
 
 import com.mojang.authlib.GameProfile;
-import fr.alexdoru.mwe.asm.hooks.NetHandlerPlayClientHook_PlayerMapTracker;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.ColorUtil;
@@ -42,7 +42,7 @@ public class SquadHealthHUD extends AbstractRenderer {
         }
         final List<NetworkPlayerInfo> list = new ArrayList<>();
         for (final String squadmateName : SquadHandler.getSquad().keySet()) {
-            final NetworkPlayerInfo netInfo = NetHandlerPlayClientHook_PlayerMapTracker.getPlayerInfo(squadmateName);
+            final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(squadmateName);
             if (netInfo != null) {
                 list.add(netInfo);
             }
