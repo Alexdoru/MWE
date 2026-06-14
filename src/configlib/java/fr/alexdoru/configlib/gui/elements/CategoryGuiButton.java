@@ -1,5 +1,6 @@
 package fr.alexdoru.configlib.gui.elements;
 
+import fr.alexdoru.configlib.gui.ColorPalette;
 import fr.alexdoru.configlib.gui.ConfigGuiScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -23,10 +24,10 @@ public class CategoryGuiButton {
         this.displayname = displayname;
     }
 
-    public void draw(int drawX, int drawY) {
+    public void draw(ColorPalette colorPalette, int drawX, int drawY) {
         this.posX = drawX;
         this.posY = drawY;
-        mc.fontRendererObj.drawStringWithShadow(displayname, drawX, drawY, 0xFFFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow(displayname, drawX, drawY, colorPalette.CATEGORY_BUTTON_TEXT);
     }
 
     public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) {

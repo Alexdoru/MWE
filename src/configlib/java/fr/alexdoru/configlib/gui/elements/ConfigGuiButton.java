@@ -1,10 +1,10 @@
 package fr.alexdoru.configlib.gui.elements;
 
 import fr.alexdoru.configlib.ConfigProperty;
+import fr.alexdoru.configlib.gui.ColorPalette;
 import fr.alexdoru.configlib.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 
 import java.lang.reflect.Field;
@@ -36,20 +36,21 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
         this.boxWidth = boxWidth;
         if (hasComment) {
             final int wrapWidth = boxWidth - mc.fontRendererObj.getStringWidth(" Disabled ") - 20 - 20;
-            resizeCommentLines(commentToRender, annotation.comment(), wrapWidth, mc);
+            this.commentToRender.clear();
+            this.commentToRender.addAll(resizeCommentLines(annotation.comment(), wrapWidth, mc));
         }
     }
 
     @Override
-    public void draw(int drawX, int drawY, int mouseX, int mouseY) {
+    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         this.posX = drawX;
         this.posY = drawY;
-        GuiUtil.drawBoxWithOutline(drawX, drawY, drawX + boxWidth, drawY + getHeight(), 0xFF505050, 0xFF8D8D8D);
-        mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.GREEN + annotation.name(), drawX + 8, drawY + 8, 0xFFFFFFFF);
+        GuiUtil.drawBoxWithOutline(drawX, drawY, drawX + boxWidth, drawY + getHeight(), colorPalette.SETTING_BACKGROUND, colorPalette.SETTING_BACKGROUND_BORDER);
+        mc.fontRendererObj.drawStringWithShadow(annotation.name(), drawX + 8, drawY + 8, colorPalette.SETTING_NAME_TEXT);
         if (hasComment) {
             int commentY = drawY + 8 + mc.fontRendererObj.FONT_HEIGHT + 8;
             for (final String line : commentToRender) {
-                mc.fontRendererObj.drawStringWithShadow(line, drawX + 8, commentY, 0xFFFFFFFF);
+                mc.fontRendererObj.drawStringWithShadow(line, drawX + 8, commentY, colorPalette.SETTING_COMMENT_TEXT);
                 commentY += mc.fontRendererObj.FONT_HEIGHT;
             }
         }

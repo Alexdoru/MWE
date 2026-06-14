@@ -1,6 +1,7 @@
 package fr.alexdoru.configlib.gui.elements;
 
 import fr.alexdoru.configlib.ConfigProperty;
+import fr.alexdoru.configlib.gui.ColorPalette;
 import fr.alexdoru.configlib.gui.GuiUtil;
 import net.minecraft.util.MathHelper;
 
@@ -56,8 +57,8 @@ public class SliderGuiButton extends ConfigGuiButton {
     }
 
     @Override
-    public void draw(int drawX, int drawY, int mouseX, int mouseY) {
-        super.draw(drawX, drawY, mouseX, mouseY);
+    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
+        super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
         if (dragging) {
             updateSliderFromPosition(mouseX - sliderBarX);
         }
@@ -70,12 +71,12 @@ public class SliderGuiButton extends ConfigGuiButton {
         minusButtonY = sliderBarY + (SLIDER_HEIGHT - PLUS_BUTTON_SIZE) / 2;
         plusButtonX = sliderBarX + SLIDER_WIDTH + SLIDER_BUTTON_SIZE / 2;
         plusButtonY = sliderBarY + (SLIDER_HEIGHT - PLUS_BUTTON_SIZE) / 2;
-        GuiUtil.drawBoxWithOutline(sliderBarX, sliderBarY, sliderBarX + SLIDER_WIDTH, sliderBarY + SLIDER_HEIGHT, 0xFF595959, 0xFFBFBFBF);
-        GuiUtil.drawBoxWithOutline(sliderButtonX, sliderButtonY, sliderButtonX + SLIDER_BUTTON_SIZE, sliderButtonY + SLIDER_BUTTON_SIZE, 0xFF5D83FF, 0xFFE6E6E6);
-        GuiUtil.drawBoxWithOutline(minusButtonX, minusButtonY, minusButtonX + PLUS_BUTTON_SIZE, minusButtonY + PLUS_BUTTON_SIZE, 0xFF707070, 0xFF606060);
-        mc.fontRendererObj.drawStringWithShadow("-", minusButtonX + 2, minusButtonY + 1, 0xFFFFFFFF);
-        GuiUtil.drawBoxWithOutline(plusButtonX, plusButtonY, plusButtonX + PLUS_BUTTON_SIZE, plusButtonY + PLUS_BUTTON_SIZE, 0xFF707070, 0xFF606060);
-        mc.fontRendererObj.drawStringWithShadow("+", plusButtonX + 2, plusButtonY + 1, 0xFFFFFFFF);
+        GuiUtil.drawBoxWithOutline(sliderBarX, sliderBarY, sliderBarX + SLIDER_WIDTH, sliderBarY + SLIDER_HEIGHT, colorPalette.SLIDER_BUTTON_TRACK, colorPalette.SLIDER_BUTTON_TRACK_BORDER);
+        GuiUtil.drawBoxWithOutline(sliderButtonX, sliderButtonY, sliderButtonX + SLIDER_BUTTON_SIZE, sliderButtonY + SLIDER_BUTTON_SIZE, colorPalette.SLIDER_BUTTON_THUMB, colorPalette.SLIDER_BUTTON_THUMB_BORDER);
+        GuiUtil.drawBoxWithOutline(minusButtonX, minusButtonY, minusButtonX + PLUS_BUTTON_SIZE, minusButtonY + PLUS_BUTTON_SIZE, colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND, colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND_BORDER);
+        mc.fontRendererObj.drawStringWithShadow("-", minusButtonX + 2, minusButtonY + 1, colorPalette.SLIDER_BUTTON_PLUS_TEXT);
+        GuiUtil.drawBoxWithOutline(plusButtonX, plusButtonY, plusButtonX + PLUS_BUTTON_SIZE, plusButtonY + PLUS_BUTTON_SIZE, colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND, colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND_BORDER);
+        mc.fontRendererObj.drawStringWithShadow("+", plusButtonX + 2, plusButtonY + 1, colorPalette.SLIDER_BUTTON_PLUS_TEXT);
         final String valueText;
         if (isIntValue) {
             valueText = String.valueOf(sliderValueI);
@@ -88,7 +89,7 @@ public class SliderGuiButton extends ConfigGuiButton {
         }
         final int valueX = sliderButtonX + (SLIDER_BUTTON_SIZE - mc.fontRendererObj.getStringWidth(valueText)) / 2;
         final int valueY = sliderBarY - mc.fontRendererObj.FONT_HEIGHT - 4;
-        mc.fontRendererObj.drawStringWithShadow(valueText, valueX, valueY, 0xFFFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow(valueText, valueX, valueY, colorPalette.SLIDER_BUTTON_VALUE_TEXT);
     }
 
     @Override

@@ -4,6 +4,7 @@ import fr.alexdoru.configlib.ConfigProperty;
 import fr.alexdoru.configlib.IRenderer;
 import fr.alexdoru.configlib.IRendererManager;
 import fr.alexdoru.configlib.RendererPosition;
+import fr.alexdoru.configlib.gui.ColorPalette;
 import fr.alexdoru.configlib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.gui.RendererEditGuiScreen;
 import net.minecraft.client.gui.Gui;
@@ -52,8 +53,8 @@ public class RendererGuiButton extends ConfigGuiButton {
     }
 
     @Override
-    public void draw(int drawX, int drawY, int mouseX, int mouseY) {
-        super.draw(drawX, drawY, mouseX, mouseY);
+    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
+        super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
         buttonEnabled.xPosition = drawX + boxWidth - buttonEnabled.width - 20;
         buttonEnabled.yPosition = drawY + 8;
         buttonEnabled.drawButton(mc, mouseX, mouseY);
@@ -68,12 +69,12 @@ public class RendererGuiButton extends ConfigGuiButton {
         if (buttonMoveHud.isMouseOver()) {
             final int textX = buttonEnabled.xPosition - 4 - mc.fontRendererObj.getStringWidth("Move HUD");
             final int textY = buttonMoveHud.yPosition + mc.fontRendererObj.FONT_HEIGHT / 2 + 1;
-            mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.YELLOW + "Move HUD", textX, textY, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow("Move HUD", textX, textY, colorPalette.HUD_BUTTON_HINT_TEXT);
         }
         if (buttonResetPos.isMouseOver()) {
             final int textX = buttonEnabled.xPosition - 4 - mc.fontRendererObj.getStringWidth("Reset Position");
             final int textY = buttonResetPos.yPosition + mc.fontRendererObj.FONT_HEIGHT / 2 + 1;
-            mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.YELLOW + "Reset Position", textX, textY, 0xFFFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow("Reset Position", textX, textY, colorPalette.HUD_BUTTON_HINT_TEXT);
         }
     }
 

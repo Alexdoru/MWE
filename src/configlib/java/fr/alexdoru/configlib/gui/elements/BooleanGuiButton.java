@@ -1,6 +1,7 @@
 package fr.alexdoru.configlib.gui.elements;
 
 import fr.alexdoru.configlib.ConfigProperty;
+import fr.alexdoru.configlib.gui.ColorPalette;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -19,8 +20,8 @@ public class BooleanGuiButton extends ConfigGuiButton {
     }
 
     @Override
-    public void draw(int drawX, int drawY, int mouseX, int mouseY) {
-        super.draw(drawX, drawY, mouseX, mouseY);
+    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
+        super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
         button.xPosition = drawX + boxWidth - button.width - 20;
         button.yPosition = drawY + (hasComment ? 8 + mc.fontRendererObj.FONT_HEIGHT / 2 : (getHeight() - button.height) / 2);
         button.drawButton(mc, mouseX, mouseY);

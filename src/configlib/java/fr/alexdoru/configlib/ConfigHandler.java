@@ -1,5 +1,6 @@
 package fr.alexdoru.configlib;
 
+import fr.alexdoru.configlib.gui.ColorPalette;
 import fr.alexdoru.configlib.gui.ConfigGuiScreen;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.Configuration;
@@ -38,6 +39,8 @@ public final class ConfigHandler implements IConfigHandler {
     private IConfigTitleRenderer titleRenderer;
     @Nullable
     private IRendererManager rendererManager;
+    @NotNull
+    private ColorPalette colorPalette = new ColorPalette();
 
     public ConfigHandler(@NotNull File configFile, @NotNull String configVersion) {
         config = new Configuration(configFile);
@@ -177,7 +180,7 @@ public final class ConfigHandler implements IConfigHandler {
             throw new IllegalStateException("Config is not loaded");
         }
         try {
-            return new ConfigGuiScreen(this, categories, configFields, configStructure, titleRenderer, rendererManager);
+            return new ConfigGuiScreen(this, categories, configFields, configStructure, colorPalette, titleRenderer, rendererManager);
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Failed to generate the config menu!");
         }
@@ -193,6 +196,12 @@ public final class ConfigHandler implements IConfigHandler {
     public void setRendererManager(@NotNull IRendererManager rendererManager) {
         Objects.requireNonNull(rendererManager);
         this.rendererManager = rendererManager;
+    }
+
+    @Override
+    public void setColorPalette(@NotNull ColorPalette colorPalette) {
+        Objects.requireNonNull(colorPalette);
+        this.colorPalette = colorPalette;
     }
 
     private void readConfigInDefinitionOrder(Class<?> clazz) throws IOException {

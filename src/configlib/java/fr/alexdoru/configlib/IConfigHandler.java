@@ -1,5 +1,6 @@
 package fr.alexdoru.configlib;
 
+import fr.alexdoru.configlib.gui.ColorPalette;
 import net.minecraft.client.gui.GuiScreen;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,8 +29,13 @@ public interface IConfigHandler {
     void setConfigTitleRenderer(@NotNull IConfigTitleRenderer titleRenderer);
 
     /**
-     * If your config has renderers, you need to set a renderer manager
+     * Sets the renderer manager, needed if your config has renderers
      */
     void setRendererManager(@NotNull IRendererManager rendererManager);
+
+    /**
+     * Sets the color palette to use for the config gui screen
+     */
+    void setColorPalette(@NotNull ColorPalette colorPalette);
 
 }

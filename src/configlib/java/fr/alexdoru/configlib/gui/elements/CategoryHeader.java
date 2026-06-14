@@ -1,6 +1,7 @@
 package fr.alexdoru.configlib.gui.elements;
 
 import fr.alexdoru.configlib.ConfigCategoryContainer;
+import fr.alexdoru.configlib.gui.ColorPalette;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 
@@ -14,7 +15,7 @@ public class CategoryHeader implements ConfigUIElement {
     private final String displayname;
     private final String comment;
     private final List<String> commentToRender = new ArrayList<>();
-    protected final boolean hasComment;
+    private final boolean hasComment;
     private int boxWidth;
 
     public CategoryHeader(String name) {
@@ -36,23 +37,24 @@ public class CategoryHeader implements ConfigUIElement {
         this.boxWidth = boxWidth;
         if (hasComment) {
             final int wrapWidth = boxWidth * 4 / 5;
-            resizeCommentLines(commentToRender, this.comment, wrapWidth, mc);
+            this.commentToRender.clear();
+            this.commentToRender.addAll(resizeCommentLines(this.comment, wrapWidth, mc));
         }
     }
 
     @Override
-    public void draw(int drawX, int drawY, int mouseX, int mouseY) {
+    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         final int textX = drawX + (boxWidth - mc.fontRendererObj.getStringWidth(displayname) * 2) / 2;
         GlStateManager.translate(textX, drawY, 0);
         GlStateManager.scale(2, 2, 2);
-        mc.fontRendererObj.drawStringWithShadow(displayname, 0, 0, 0xFFFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow(displayname, 0, 0, colorPalette.CATEGORY_HEADER_TITLE_TEXT);
         GlStateManager.scale(0.5, 0.5, 0.5);
         GlStateManager.translate(-textX, -drawY, 0);
         if (hasComment) {
             int commentY = drawY + mc.fontRendererObj.FONT_HEIGHT * 2 + 8;
             for (final String line : commentToRender) {
                 final int lineX = drawX + (boxWidth - mc.fontRendererObj.getStringWidth(line)) / 2;
-                mc.fontRendererObj.drawStringWithShadow(line, lineX, commentY, 0xFFFFFFFF);
+                mc.fontRendererObj.drawStringWithShadow(line, lineX, commentY, colorPalette.CATEGORY_HEADER_COMMENT_TEXT);
                 commentY += mc.fontRendererObj.FONT_HEIGHT;
             }
         }

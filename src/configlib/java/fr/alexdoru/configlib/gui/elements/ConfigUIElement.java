@@ -1,16 +1,17 @@
 package fr.alexdoru.configlib.gui.elements;
 
+import fr.alexdoru.configlib.gui.ColorPalette;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public interface ConfigUIElement {
 
     void setBoxWidth(int boxWidth);
 
-    void draw(int drawX, int drawY, int mouseX, int mouseY);
+    void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY);
 
     boolean mouseClicked(int mouseX, int mouseY, int mouseButton) throws IllegalAccessException;
 
@@ -28,19 +29,16 @@ public interface ConfigUIElement {
         return mouseX >= buttonX && mouseX < buttonX + buttonWidth && mouseY >= buttonY && mouseY < buttonY + buttonHeight;
     }
 
-    default void resizeCommentLines(List<String> commentToRender, String comment, int wrapWidth, Minecraft mc) {
-        final List<String> splitLines = new ArrayList<>();
+    default List<String> resizeCommentLines(String comment, int wrapWidth, Minecraft mc) {
         final String[] split = comment.split("\n");
-        for (final String line : split) {
-            splitLines.add(EnumChatFormatting.GRAY + line);
-        }
-        commentToRender.clear();
         if (wrapWidth <= 0) {
-            commentToRender.addAll(splitLines);
+            return Arrays.asList(split);
         } else {
-            for (final String line : splitLines) {
-                commentToRender.addAll(mc.fontRendererObj.listFormattedStringToWidth(line, wrapWidth));
+            final List<String> resizedLines = new ArrayList<>();
+            for (final String line : split) {
+                resizedLines.addAll(mc.fontRendererObj.listFormattedStringToWidth(line, wrapWidth));
             }
+            return resizedLines;
         }
     }
 

@@ -9,6 +9,7 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -22,6 +23,7 @@ public class ConfigGuiScreen extends GuiScreen {
     private static final ResourceLocation BLUR = new ResourceLocation("configlib", "blur.json");
 
     private final ConfigHandler configHandler;
+    private final ColorPalette colorPalette;
     private final IConfigTitleRenderer titleRenderer;
     private final Map<String, ConfigCategoryContainer> categoryContainerMap;
     private final List<CategoryGuiButton> categoryElements = new ArrayList<>();
@@ -50,9 +52,11 @@ public class ConfigGuiScreen extends GuiScreen {
             List<ConfigCategoryContainer> categories,
             List<ConfigFieldContainer> configFields,
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> configStructure,
+            @NotNull ColorPalette colorPalette,
             @Nullable IConfigTitleRenderer titleRenderer,
             @Nullable IRendererManager rendererManager) throws IllegalAccessException {
         this.configHandler = configHandler;
+        this.colorPalette = colorPalette;
         this.titleRenderer = titleRenderer;
         this.categoryContainerMap = new HashMap<>();
         for (final ConfigCategoryContainer container : categories) {
@@ -179,24 +183,24 @@ public class ConfigGuiScreen extends GuiScreen {
             }
         }
 
-        GuiUtil.drawBoxWithOutline(GUI_BORDER_LEFT, GUI_BORDER_TOP, GUI_BORDER_RIGHT, GUI_BORDER_BOTTOM, 0xFF323237, 0xFF4C4C51);
+        GuiUtil.drawBoxWithOutline(GUI_BORDER_LEFT, GUI_BORDER_TOP, GUI_BORDER_RIGHT, GUI_BORDER_BOTTOM, colorPalette.BACK_GROUND, colorPalette.BACK_GROUND_BORDER);
 
         if (this.titleRenderer != null) {
-            this.titleRenderer.renderTitle(fontRendererObj, GUI_INSIDE_LEFT, GUI_INSIDE_TOP);
+            this.titleRenderer.renderTitle(fontRendererObj, colorPalette, GUI_INSIDE_LEFT, GUI_INSIDE_TOP);
         }
 
         searchField.xPosition = GUI_INSIDE_RIGHT - Math.min(searchField.width, mc.fontRendererObj.getStringWidth(searchField.getText())) - 8;
-        drawRect(SEARCH_BOX_LEFT, SEARCH_BOX_TOP, SEARCH_BOX_RIGHT, SEARCH_BOX_BOTTOM, 0xFF515156);
+        Gui.drawRect(SEARCH_BOX_LEFT, SEARCH_BOX_TOP, SEARCH_BOX_RIGHT, SEARCH_BOX_BOTTOM, colorPalette.SEARCH_BOX);
         if (!searchField.isFocused()) {
             final int xSearchText = GUI_INSIDE_RIGHT - mc.fontRendererObj.getStringWidth("Search...") - 8;
-            fontRendererObj.drawStringWithShadow("Search...", xSearchText, searchField.yPosition, 0xFFFFFFFF);
+            fontRendererObj.drawStringWithShadow("Search...", xSearchText, searchField.yPosition, colorPalette.SEARCH_BOX_TEXT);
         } else {
             searchField.drawTextBox();
         }
 
-        GuiUtil.drawHorizontalLine(GUI_INSIDE_LEFT, GUI_INSIDE_RIGHT - 1, GUI_INSIDE_TOP + fontRendererObj.FONT_HEIGHT + 1, 0xFF545459);
-        GuiUtil.drawBoxWithOutline(CATEGORY_BOX_LEFT, CATEGORY_BOX_TOP, CATEGORY_BOX_RIGHT, CATEGORY_BOX_BOTTOM, 0xFF3C3C41, 0xFF171717);
-        GuiUtil.drawBoxWithOutline(CONFIG_BOX_LEFT, CONFIG_BOX_TOP, CONFIG_BOX_RIGHT, CONFIG_BOX_BOTTOM, 0xFF3C3C41, 0xFF171717);
+        GuiUtil.drawHorizontalLine(GUI_INSIDE_LEFT, GUI_INSIDE_RIGHT - 1, GUI_INSIDE_TOP + fontRendererObj.FONT_HEIGHT + 1, colorPalette.BELOW_TITLE_LINE);
+        GuiUtil.drawBoxWithOutline(CATEGORY_BOX_LEFT, CATEGORY_BOX_TOP, CATEGORY_BOX_RIGHT, CATEGORY_BOX_BOTTOM, colorPalette.INNER_BACKGROUND, colorPalette.INNER_BACKGROUND_BORDER);
+        GuiUtil.drawBoxWithOutline(CONFIG_BOX_LEFT, CONFIG_BOX_TOP, CONFIG_BOX_RIGHT, CONFIG_BOX_BOTTOM, colorPalette.INNER_BACKGROUND, colorPalette.INNER_BACKGROUND_BORDER);
 
         final ScaledResolution res = new ScaledResolution(mc);
         final double scaleW = mc.displayWidth / res.getScaledWidth_double();
@@ -212,7 +216,7 @@ public class ConfigGuiScreen extends GuiScreen {
         final int categoryDrawX = CATEGORY_BOX_LEFT + 6;
         int categoryDrawY = CATEGORY_BOX_TOP + 6;
         for (final CategoryGuiButton category : this.categoryElements) {
-            category.draw(categoryDrawX, categoryDrawY);
+            category.draw(colorPalette, categoryDrawX, categoryDrawY);
             categoryDrawY += category.getHeight() + 4;
         }
 
@@ -228,14 +232,15 @@ public class ConfigGuiScreen extends GuiScreen {
         for (final ConfigUIElement element : this.renderedConfigElements) {
             final int elementHeight = element.getHeight();
             if (configDrawY + elementHeight + 4 >= CONFIG_BOX_TOP && configDrawY <= CONFIG_BOX_BOTTOM) {
-                element.draw(configDrawX, configDrawY, mouseX, mouseY);
+                element.draw(colorPalette, configDrawX, configDrawY, mouseX, mouseY);
             }
             configDrawY += elementHeight + 4;
             allElementsHeight += elementHeight + 4;
         }
 
         final int configBoxHeight = CONFIG_BOX_BOTTOM - CONFIG_BOX_TOP - 2;
-        if (allElementsHeight > configBoxHeight) {
+        final boolean renderScrollbar = allElementsHeight > configBoxHeight;
+        if (renderScrollbar) {
             final int scrollBarSize = configBoxHeight * configBoxHeight / allElementsHeight;
             final int minScrollBarY = CONFIG_BOX_TOP + 1 + 1;
             final int maxScrollBarY = CONFIG_BOX_BOTTOM - 1 - scrollBarSize - 1;
@@ -248,8 +253,8 @@ public class ConfigGuiScreen extends GuiScreen {
             SCROLL_BAR_TOP = ((maxScrollBarY - minScrollBarY) * scroll) / (allElementsHeight - configBoxHeight) + minScrollBarY;
             SCROLL_BAR_RIGHT = CONFIG_BOX_RIGHT - 5 + 3;
             SCROLL_BAR_BOTTOM = SCROLL_BAR_TOP + scrollBarSize;
-            GuiUtil.drawVerticalLine(CONFIG_BOX_RIGHT - 4, CONFIG_BOX_TOP + 4, CONFIG_BOX_BOTTOM - 4, 0xFF202020);
-            Gui.drawRect(SCROLL_BAR_LEFT, SCROLL_BAR_TOP, SCROLL_BAR_RIGHT, SCROLL_BAR_BOTTOM, 0xFFC0C0C0);
+            GuiUtil.drawVerticalLine(CONFIG_BOX_RIGHT - 4, CONFIG_BOX_TOP + 4, CONFIG_BOX_BOTTOM - 4, colorPalette.SCROLLBAR_TRACK);
+            Gui.drawRect(SCROLL_BAR_LEFT, SCROLL_BAR_TOP, SCROLL_BAR_RIGHT, SCROLL_BAR_BOTTOM, colorPalette.SCROLLBAR_THUMB);
         }
 
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
@@ -276,7 +281,7 @@ public class ConfigGuiScreen extends GuiScreen {
                     }
                 }
             } catch (IllegalAccessException ignored) {
-                throw new RuntimeException("Caught  to generate the config menu!");
+                throw new RuntimeException("Caught exception running mouse click events!");
             }
             if (mouseButton == 0 && isMouseInBox(mouseX, mouseY, SCROLL_BAR_LEFT, SCROLL_BAR_RIGHT, SCROLL_BAR_TOP, SCROLL_BAR_BOTTOM)) {
                 draggingScrollBar = true;

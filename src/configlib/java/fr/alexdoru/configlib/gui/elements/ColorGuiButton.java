@@ -1,12 +1,12 @@
 package fr.alexdoru.configlib.gui.elements;
 
 import fr.alexdoru.configlib.ConfigProperty;
+import fr.alexdoru.configlib.gui.ColorPalette;
 import fr.alexdoru.configlib.gui.ColorSelectionGuiScreen;
 import fr.alexdoru.configlib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.gui.GuiUtil;
 import net.minecraft.client.gui.GuiButton;
 
-import java.awt.Color;
 import java.lang.reflect.Field;
 
 public class ColorGuiButton extends ConfigGuiButton {
@@ -25,14 +25,14 @@ public class ColorGuiButton extends ConfigGuiButton {
     }
 
     @Override
-    public void draw(int drawX, int drawY, int mouseX, int mouseY) {
-        super.draw(drawX, drawY, mouseX, mouseY);
+    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
+        super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
         button.xPosition = drawX + boxWidth - button.width - 20;
         button.yPosition = drawY + (hasComment ? 8 + mc.fontRendererObj.FONT_HEIGHT / 2 : (getHeight() - button.height) / 2);
         button.drawButton(mc, mouseX, mouseY);
         final int left = button.xPosition - 20 - 1;
         final int top = button.yPosition;
-        GuiUtil.drawBoxWithOutline(left, top, left + 20, top + 20, 255 << 24 | color, Color.BLACK.getRGB());
+        GuiUtil.drawBoxWithOutline(left, top, left + 20, top + 20, 255 << 24 | color, colorPalette.COLOR_BUTTON_INDICATOR_BORDER);
     }
 
     @Override

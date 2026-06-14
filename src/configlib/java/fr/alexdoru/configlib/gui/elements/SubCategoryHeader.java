@@ -1,5 +1,6 @@
 package fr.alexdoru.configlib.gui.elements;
 
+import fr.alexdoru.configlib.gui.ColorPalette;
 import net.minecraft.client.Minecraft;
 
 public class SubCategoryHeader implements ConfigUIElement {
@@ -20,7 +21,7 @@ public class SubCategoryHeader implements ConfigUIElement {
     }
 
     @Override
-    public void draw(int drawX, int drawY, int mouseX, int mouseY) {
+    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         final int textX = drawX + (boxWidth - mc.fontRendererObj.getStringWidth(subCategoryName)) / 2;
         mc.fontRendererObj.drawStringWithShadow(subCategoryName, textX, drawY, 0xFFFFFFFF);
     }

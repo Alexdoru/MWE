@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.config;
 
 import fr.alexdoru.configlib.IConfigTitleRenderer;
+import fr.alexdoru.configlib.gui.ColorPalette;
 import fr.alexdoru.mwe.MWE;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -15,7 +16,7 @@ public final class MWEConfigTitle implements IConfigTitleRenderer {
     private static final ResourceLocation DORU_SKIN = new ResourceLocation("mwe", "doru_skin.png");
 
     @Override
-    public void renderTitle(FontRenderer fontRenderer, int x, int y) {
+    public void renderTitle(FontRenderer fontRenderer, ColorPalette colorPalette, int x, int y) {
         final String modnameText = MWE.modName + " - " + MWE.version + EnumChatFormatting.GRAY + " created by ";
         fontRenderer.drawStringWithShadow(modnameText, x, y, 0xFFFFFFFF);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
