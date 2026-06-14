@@ -5,12 +5,12 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.utils.MapUtil;
-import fr.alexdoru.mwe.utils.SkinUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
@@ -97,7 +97,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
         }
         return new PhxHealLine(
                 getHealColor(Float.parseFloat(amountHealed)) + amountHealed + EnumChatFormatting.RED + "❤",
-                SkinUtil.getSkin(netInfo),
+                netInfo,
                 formattedName);
     }
 
@@ -175,9 +175,13 @@ public class PhoenixBondHUD extends AbstractRenderer {
         public final ResourceLocation skin;
         public final String name;
 
-        public PhxHealLine(String hpHealed, ResourceLocation skin, String name) {
+        public PhxHealLine(String hpHealed, NetworkPlayerInfo netInfo, String name) {
             this.hpHealed = hpHealed;
-            this.skin = skin;
+            if (netInfo == null) {
+                this.skin = DefaultPlayerSkin.getDefaultSkinLegacy();
+            } else {
+                this.skin = netInfo.getLocationSkin();
+            }
             this.name = name;
         }
 
