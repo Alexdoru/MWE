@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.hackerdetector.checks;
 
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
-import fr.alexdoru.mwe.hackerdetector.data.SampleListD;
+import fr.alexdoru.mwe.hackerdetector.data.buffers.SampleBufferD;
 import fr.alexdoru.mwe.hackerdetector.utils.Vector2D;
 import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
@@ -96,7 +96,7 @@ public class KeepSprintBCheck extends Check {
         return Math.sqrt(ax * ax + az * az);
     }
 
-    private static double accel(SampleListD list) {
+    private static double accel(SampleBufferD list) {
         return 10d * 10d * (list.get(2) - 2d * list.get(1) + list.get(0));
     }
 

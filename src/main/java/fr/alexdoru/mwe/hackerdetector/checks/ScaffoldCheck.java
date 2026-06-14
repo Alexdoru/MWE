@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.hackerdetector.checks;
 
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
-import fr.alexdoru.mwe.hackerdetector.data.SampleListD;
+import fr.alexdoru.mwe.hackerdetector.data.buffers.SampleBufferD;
 import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -70,7 +70,7 @@ public class ScaffoldCheck extends Check {
         return new ViolationLevelTracker(2, 1, 24);
     }
 
-    private static double avgAccel(SampleListD list) {
+    private static double avgAccel(SampleBufferD list) {
         return 50d * (list.get(3) - list.get(2) - list.get(1) + list.get(0));
     }
 

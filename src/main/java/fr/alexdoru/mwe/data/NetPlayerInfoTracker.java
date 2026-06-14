@@ -3,7 +3,7 @@ package fr.alexdoru.mwe.data;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
-import fr.alexdoru.mwe.hackerdetector.data.SampleList;
+import fr.alexdoru.mwe.hackerdetector.data.buffers.SampleBuffer;
 import fr.alexdoru.mwe.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
@@ -17,7 +17,7 @@ import java.util.*;
 public final class NetPlayerInfoTracker {
 
     private static final int SKIN_CACHE_SIZE = 256;
-    private static final SampleList<DisconnectedPlayer> latestDisconnected = new SampleList<>(32);
+    private static final SampleBuffer<DisconnectedPlayer> latestDisconnected = new SampleBuffer<>(32);
     private static final Map<String, NetworkPlayerInfo> NET_INFO_CACHE = new HashMap<>();
     private static final Map<String, ResourceLocation> SKIN_CACHE = new LinkedHashMap<String, ResourceLocation>(SKIN_CACHE_SIZE) {
         @Override

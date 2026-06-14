@@ -1,8 +1,8 @@
-package fr.alexdoru.mwe.hackerdetector.data;
+package fr.alexdoru.mwe.hackerdetector.data.buffers;
 
-public class SampleListL {
+public final class SampleBufferZ {
 
-    private final long[] data;
+    private final boolean[] data;
     /** The maximum size */
     private final int capacity;
     /** The current size of the list */
@@ -10,19 +10,19 @@ public class SampleListL {
     /** The array index of the last element inserted */
     private int latestIndex;
 
-    public SampleListL(int capacity) {
+    public SampleBufferZ(int capacity) {
         if (capacity < 2) {
             throw new IllegalArgumentException("Size must be at least 2");
         }
-        this.data = new long[capacity];
+        this.data = new boolean[capacity];
         this.capacity = capacity;
         this.size = 0;
         this.latestIndex = -1;
     }
 
-    public void add(long e) {
+    public void add(boolean b) {
         this.latestIndex = (this.latestIndex + 1) % this.capacity;
-        this.data[this.latestIndex] = e;
+        this.data[this.latestIndex] = b;
         if (this.size < this.capacity) this.size++;
     }
 
@@ -30,7 +30,7 @@ public class SampleListL {
      * get(0) will return the latest element insert,
      * get(capacity - 1) will return the oldest element
      */
-    public long get(int index) {
+    public boolean get(int index) {
         if (index < 0 || index > this.size) {
             throw new ArrayIndexOutOfBoundsException();
         }
@@ -55,10 +55,10 @@ public class SampleListL {
         return size == capacity;
     }
 
-    public long sum() {
-        long s = 0;
+    public int sum() {
+        int s = 0;
         for (int i = 0; i < this.size; i++) {
-            s += this.data[i];
+            if (this.data[i]) s++;
         }
         return s;
     }
@@ -69,7 +69,7 @@ public class SampleListL {
 
     public boolean isSameValues() {
         if (this.size < 2) return false;
-        final long v = this.get(0);
+        final boolean v = this.get(0);
         for (int i = 1; i < this.size; i++) {
             if (v != this.get(i)) return false;
         }
@@ -84,7 +84,7 @@ public class SampleListL {
         final StringBuilder b = new StringBuilder();
         b.append('[');
         for (int i = 0; ; i++) {
-            b.append(this.get(i));
+            b.append(this.get(i) ? "1" : "0");
             if (i == this.size - 1) {
                 return b.append(']').toString();
             }
@@ -96,7 +96,7 @@ public class SampleListL {
     public boolean equals(Object other) {
         if (this == other) return true;
         if (other == null || getClass() != other.getClass()) return false;
-        final SampleListL list = (SampleListL) other;
+        final SampleBufferZ list = (SampleBufferZ) other;
         if (size != list.size) return false;
         if (size == 0) return true;
         for (int i = 0; ; i++) {

@@ -1,8 +1,10 @@
-package fr.alexdoru.mwe.hackerdetector.data;
+package fr.alexdoru.mwe.hackerdetector.data.buffers;
 
-public class SampleListD {
+import java.util.Objects;
 
-    private final double[] data;
+public final class SampleBuffer<T> {
+
+    private final Object[] data;
     /** The maximum size */
     private final int capacity;
     /** The current size of the list */
@@ -10,19 +12,19 @@ public class SampleListD {
     /** The array index of the last element inserted */
     private int latestIndex;
 
-    public SampleListD(int capacity) {
+    public SampleBuffer(int capacity) {
         if (capacity < 2) {
             throw new IllegalArgumentException("Size must be at least 2");
         }
-        this.data = new double[capacity];
+        this.data = new Object[capacity];
         this.capacity = capacity;
         this.size = 0;
         this.latestIndex = -1;
     }
 
-    public void add(double d) {
+    public void add(T f) {
         this.latestIndex = (this.latestIndex + 1) % this.capacity;
-        this.data[this.latestIndex] = d;
+        this.data[this.latestIndex] = f;
         if (this.size < this.capacity) this.size++;
     }
 
@@ -30,15 +32,19 @@ public class SampleListD {
      * get(0) will return the latest element insert,
      * get(capacity - 1) will return the oldest element
      */
-    public double get(int index) {
+    @SuppressWarnings("unchecked")
+    public T get(int index) {
         if (index < 0 || index > this.size) {
             throw new ArrayIndexOutOfBoundsException();
         }
         final int i = this.latestIndex - index;
-        return this.data[i < 0 ? i + this.capacity : i];
+        return (T) this.data[i < 0 ? i + this.capacity : i];
     }
 
     public void clear() {
+        for (int i = 0; i < this.size; i++) {
+            this.data[i] = null;
+        }
         this.size = 0;
         this.latestIndex = -1;
     }
@@ -55,27 +61,6 @@ public class SampleListD {
         return size == capacity;
     }
 
-    public double sum() {
-        double s = 0D;
-        for (int i = 0; i < this.size; i++) {
-            s += this.data[i];
-        }
-        return s;
-    }
-
-    public double average() {
-        return this.sum() / this.size;
-    }
-
-    public boolean isSameValues() {
-        if (this.size < 2) return false;
-        final double v = this.get(0);
-        for (int i = 1; i < this.size; i++) {
-            if (v != this.get(i)) return false;
-        }
-        return true;
-    }
-
     @Override
     public String toString() {
         if (this.size == 0) {
@@ -84,7 +69,7 @@ public class SampleListD {
         final StringBuilder b = new StringBuilder();
         b.append('[');
         for (int i = 0; ; i++) {
-            b.append(String.format("%.2f", this.get(i)));
+            b.append(this.get(i));
             if (i == this.size - 1) {
                 return b.append(']').toString();
             }
@@ -96,11 +81,11 @@ public class SampleListD {
     public boolean equals(Object other) {
         if (this == other) return true;
         if (other == null || getClass() != other.getClass()) return false;
-        final SampleListD list = (SampleListD) other;
+        final SampleBuffer<?> list = (SampleBuffer<?>) other;
         if (size != list.size) return false;
         if (size == 0) return true;
         for (int i = 0; ; i++) {
-            if (this.get(i) != list.get(i)) return false;
+            if (!Objects.equals(this.get(i), list.get(i))) return false;
             if (i == this.size - 1) return true;
         }
     }

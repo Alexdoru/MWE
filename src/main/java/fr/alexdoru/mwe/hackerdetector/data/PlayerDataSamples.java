@@ -1,6 +1,10 @@
 package fr.alexdoru.mwe.hackerdetector.data;
 
 import fr.alexdoru.mwe.hackerdetector.checks.*;
+import fr.alexdoru.mwe.hackerdetector.data.buffers.SampleBufferD;
+import fr.alexdoru.mwe.hackerdetector.data.buffers.SampleBufferF;
+import fr.alexdoru.mwe.hackerdetector.data.buffers.SampleBufferI;
+import fr.alexdoru.mwe.hackerdetector.data.buffers.SampleBufferZ;
 import fr.alexdoru.mwe.hackerdetector.utils.Vector2D;
 import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,37 +32,37 @@ public class PlayerDataSamples {
     public boolean usedItemIsConsumable = false;
     /** True when we receive a swing packet from this entity during the last tick */
     public boolean hasSwung = false;
-    public final SampleListZ swingList = new SampleListZ(20);
+    public final SampleBufferZ swingList = new SampleBufferZ(20);
     /** Info about attack that happend this tick if any */
     public AttackInfo attackInfo;
-    public final SampleListZ attackList = new SampleListZ(20);
+    public final SampleBufferZ attackList = new SampleBufferZ(20);
     /** Last time the player broke a block */
     public long lastBreakBlockTime = System.currentTimeMillis();
-    public final SampleListF breakTimeRatio = new SampleListF(8);
+    public final SampleBufferF breakTimeRatio = new SampleBufferF(8);
     /** Last block touched by this player */
     public BlockPos blockTouched;
 
     /* ----- Samples of rotations/positions interpolated by the client ----- */
-    public final SampleListD posXList = new SampleListD(10);
-    public final SampleListD posYList = new SampleListD(10);
-    public final SampleListD posZList = new SampleListD(10);
-    public final SampleListD speedXList = new SampleListD(5);
-    public final SampleListD speedYList = new SampleListD(5);
-    public final SampleListD speedZList = new SampleListD(5);
+    public final SampleBufferD posXList = new SampleBufferD(10);
+    public final SampleBufferD posYList = new SampleBufferD(10);
+    public final SampleBufferD posZList = new SampleBufferD(10);
+    public final SampleBufferD speedXList = new SampleBufferD(5);
+    public final SampleBufferD speedYList = new SampleBufferD(5);
+    public final SampleBufferD speedZList = new SampleBufferD(5);
     /* ----- Client samples end ----- */
 
     /* ----- Samples of rotations/positions received from the server ----- */
     private int serverUpdates;
-    public final SampleListI serverUpdatesList = new SampleListI(20);
-    public final SampleListD serverPosXList = new SampleListD(5);
-    public final SampleListD serverPosYList = new SampleListD(5);
-    public final SampleListD serverPosZList = new SampleListD(5);
+    public final SampleBufferI serverUpdatesList = new SampleBufferI(20);
+    public final SampleBufferD serverPosXList = new SampleBufferD(5);
+    public final SampleBufferD serverPosYList = new SampleBufferD(5);
+    public final SampleBufferD serverPosZList = new SampleBufferD(5);
     /** Yaw of the player's body [-180, 180] */
-    public final SampleListF serverYawList = new SampleListF(5);
+    public final SampleBufferF serverYawList = new SampleBufferF(5);
     /** Pitch of the player's head [-90, 90] */
-    public final SampleListF serverPitchList = new SampleListF(5);
+    public final SampleBufferF serverPitchList = new SampleBufferF(5);
     /** Yaw of the player's head [-180, 180], directly equals to player.rotationYawHead */
-    public final SampleListF serverYawHeadList = new SampleListF(5);
+    public final SampleBufferF serverYawHeadList = new SampleBufferF(5);
     /* ----- Server samples end ----- */
 
     public final ViolationLevelTracker autoblockAVL = AutoblockCheck.newVL();

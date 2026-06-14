@@ -1,8 +1,8 @@
-package fr.alexdoru.mwe.hackerdetector.data;
+package fr.alexdoru.mwe.hackerdetector.data.buffers;
 
-public class SampleListF {
+public final class SampleBufferL {
 
-    private final float[] data;
+    private final long[] data;
     /** The maximum size */
     private final int capacity;
     /** The current size of the list */
@@ -10,19 +10,19 @@ public class SampleListF {
     /** The array index of the last element inserted */
     private int latestIndex;
 
-    public SampleListF(int capacity) {
+    public SampleBufferL(int capacity) {
         if (capacity < 2) {
             throw new IllegalArgumentException("Size must be at least 2");
         }
-        this.data = new float[capacity];
+        this.data = new long[capacity];
         this.capacity = capacity;
         this.size = 0;
         this.latestIndex = -1;
     }
 
-    public void add(float f) {
+    public void add(long e) {
         this.latestIndex = (this.latestIndex + 1) % this.capacity;
-        this.data[this.latestIndex] = f;
+        this.data[this.latestIndex] = e;
         if (this.size < this.capacity) this.size++;
     }
 
@@ -30,7 +30,7 @@ public class SampleListF {
      * get(0) will return the latest element insert,
      * get(capacity - 1) will return the oldest element
      */
-    public float get(int index) {
+    public long get(int index) {
         if (index < 0 || index > this.size) {
             throw new ArrayIndexOutOfBoundsException();
         }
@@ -55,8 +55,8 @@ public class SampleListF {
         return size == capacity;
     }
 
-    public float sum() {
-        float s = 0F;
+    public long sum() {
+        long s = 0;
         for (int i = 0; i < this.size; i++) {
             s += this.data[i];
         }
@@ -64,12 +64,12 @@ public class SampleListF {
     }
 
     public float average() {
-        return this.sum() / this.size;
+        return this.sum() / (float) this.size;
     }
 
     public boolean isSameValues() {
         if (this.size < 2) return false;
-        final float v = this.get(0);
+        final long v = this.get(0);
         for (int i = 1; i < this.size; i++) {
             if (v != this.get(i)) return false;
         }
@@ -84,7 +84,7 @@ public class SampleListF {
         final StringBuilder b = new StringBuilder();
         b.append('[');
         for (int i = 0; ; i++) {
-            b.append(String.format("%.2f", this.get(i)));
+            b.append(this.get(i));
             if (i == this.size - 1) {
                 return b.append(']').toString();
             }
@@ -96,7 +96,7 @@ public class SampleListF {
     public boolean equals(Object other) {
         if (this == other) return true;
         if (other == null || getClass() != other.getClass()) return false;
-        final SampleListF list = (SampleListF) other;
+        final SampleBufferL list = (SampleBufferL) other;
         if (size != list.size) return false;
         if (size == 0) return true;
         for (int i = 0; ; i++) {

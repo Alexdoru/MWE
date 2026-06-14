@@ -1,8 +1,8 @@
-package fr.alexdoru.mwe.hackerdetector.data;
+package fr.alexdoru.mwe.hackerdetector.data.buffers;
 
-public class SampleListZ {
+public final class SampleBufferI {
 
-    private final boolean[] data;
+    private final int[] data;
     /** The maximum size */
     private final int capacity;
     /** The current size of the list */
@@ -10,19 +10,19 @@ public class SampleListZ {
     /** The array index of the last element inserted */
     private int latestIndex;
 
-    public SampleListZ(int capacity) {
+    public SampleBufferI(int capacity) {
         if (capacity < 2) {
             throw new IllegalArgumentException("Size must be at least 2");
         }
-        this.data = new boolean[capacity];
+        this.data = new int[capacity];
         this.capacity = capacity;
         this.size = 0;
         this.latestIndex = -1;
     }
 
-    public void add(boolean b) {
+    public void add(int e) {
         this.latestIndex = (this.latestIndex + 1) % this.capacity;
-        this.data[this.latestIndex] = b;
+        this.data[this.latestIndex] = e;
         if (this.size < this.capacity) this.size++;
     }
 
@@ -30,7 +30,7 @@ public class SampleListZ {
      * get(0) will return the latest element insert,
      * get(capacity - 1) will return the oldest element
      */
-    public boolean get(int index) {
+    public int get(int index) {
         if (index < 0 || index > this.size) {
             throw new ArrayIndexOutOfBoundsException();
         }
@@ -58,7 +58,7 @@ public class SampleListZ {
     public int sum() {
         int s = 0;
         for (int i = 0; i < this.size; i++) {
-            if (this.data[i]) s++;
+            s += this.data[i];
         }
         return s;
     }
@@ -69,7 +69,7 @@ public class SampleListZ {
 
     public boolean isSameValues() {
         if (this.size < 2) return false;
-        final boolean v = this.get(0);
+        final int v = this.get(0);
         for (int i = 1; i < this.size; i++) {
             if (v != this.get(i)) return false;
         }
@@ -84,7 +84,7 @@ public class SampleListZ {
         final StringBuilder b = new StringBuilder();
         b.append('[');
         for (int i = 0; ; i++) {
-            b.append(this.get(i) ? "1" : "0");
+            b.append(this.get(i));
             if (i == this.size - 1) {
                 return b.append(']').toString();
             }
@@ -96,7 +96,7 @@ public class SampleListZ {
     public boolean equals(Object other) {
         if (this == other) return true;
         if (other == null || getClass() != other.getClass()) return false;
-        final SampleListZ list = (SampleListZ) other;
+        final SampleBufferI list = (SampleBufferI) other;
         if (size != list.size) return false;
         if (size == 0) return true;
         for (int i = 0; ; i++) {
