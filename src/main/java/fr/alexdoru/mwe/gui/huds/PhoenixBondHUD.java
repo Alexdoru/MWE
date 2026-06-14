@@ -73,8 +73,8 @@ public class PhoenixBondHUD extends AbstractRenderer {
                 final String amountHealed = playerHealedMatcher.group(2);
                 map.put(playerName, Float.parseFloat(amountHealed));
             }
-            final Map<String, Float> sortedMap = MapUtil.sortByDecreasingValue(map);
-            for (final Map.Entry<String, Float> entry : sortedMap.entrySet()) {
+            final List<Map.Entry<String, Float>> sortedEntries = MapUtil.sortByValueReversed(map);
+            for (final Map.Entry<String, Float> entry : sortedEntries) {
                 this.textToRender.add(getLine(entry.getKey(), entry.getValue().toString()));
             }
             return true;

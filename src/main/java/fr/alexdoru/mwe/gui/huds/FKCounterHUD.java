@@ -125,13 +125,13 @@ public class FKCounterHUD extends AbstractRenderer {
         }
 
         this.textToRender.clear();
-        final Map<MWTeam, Integer> sortedKillMap = fkCounter.getSortedTeamKillsMap();
+        final List<Map.Entry<MWTeam, Integer>> sortedKillList = fkCounter.getSortedTeamKillsList();
 
         if (MWEConfig.fkcounterHUDCompact || MWEConfig.fkcounterHUDinSidebar) {
 
             boolean first = true;
             final StringBuilder strBuilder = new StringBuilder();
-            for (final Entry<MWTeam, Integer> entry : sortedKillMap.entrySet()) {
+            for (final Entry<MWTeam, Integer> entry : sortedKillList) {
                 if (first) {
                     first = false;
                 } else {
@@ -143,15 +143,15 @@ public class FKCounterHUD extends AbstractRenderer {
 
         } else if (MWEConfig.fkcounterHUDShowPlayers) {
 
-            for (final Entry<MWTeam, Integer> teamEntry : sortedKillMap.entrySet()) {
+            for (final Entry<MWTeam, Integer> teamEntry : sortedKillList) {
                 final StringBuilder strBuilder = new StringBuilder();
                 final MWTeam team = teamEntry.getKey();
                 strBuilder.append(fkCounter.getColorPrefixOfTeam(team)).append(team.getName().charAt(0)).append(EnumChatFormatting.WHITE).append(" ").append(fkCounter.getKillsOfTeam(team));
-                final Map<String, Integer> teamKillMap = MapUtil.sortByDecreasingValue(fkCounter.getKillMapOfTeam(team));
-                if (!teamKillMap.isEmpty()) {
+                final List<Map.Entry<String, Integer>> teamKillList = MapUtil.sortByValueReversed(fkCounter.getKillMapOfTeam(team));
+                if (!teamKillList.isEmpty()) {
                     int playerAmount = 0;
                     boolean first = true;
-                    for (final Entry<String, Integer> playerEntry : teamKillMap.entrySet()) {
+                    for (final Entry<String, Integer> playerEntry : teamKillList) {
                         if (first) {
                             strBuilder.append(" : ");
                         } else {
@@ -170,7 +170,7 @@ public class FKCounterHUD extends AbstractRenderer {
 
         } else {
 
-            for (final Entry<MWTeam, Integer> entry : sortedKillMap.entrySet()) {
+            for (final Entry<MWTeam, Integer> entry : sortedKillList) {
                 final StringBuilder strBuilder = new StringBuilder();
                 final MWTeam team = entry.getKey();
                 strBuilder.append(fkCounter.getColorPrefixOfTeam(team))

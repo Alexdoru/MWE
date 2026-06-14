@@ -38,7 +38,7 @@ public class CommandFKCounter extends MyAbstractCommand {
                         .append(team.getName())
                         .append(EnumChatFormatting.WHITE)
                         .append(": ");
-                final Iterator<Map.Entry<String, Integer>> iterator = MapUtil.sortByDecreasingValue(fkCounter.getKillMapOfTeam(team)).entrySet().iterator();
+                final Iterator<Map.Entry<String, Integer>> iterator = MapUtil.sortByValueReversed(fkCounter.getKillMapOfTeam(team)).iterator();
                 while (iterator.hasNext()) {
                     final Map.Entry<String, Integer> entry = iterator.next();
                     strBuilder.append(SquadHandler.getSquadname(entry.getKey())).append(" (").append(entry.getValue()).append(")");

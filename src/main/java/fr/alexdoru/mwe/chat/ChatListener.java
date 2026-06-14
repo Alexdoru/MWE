@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -247,10 +248,10 @@ public class ChatListener {
                     }
                 }
                 if (map.size() > 1) {
-                    final Map<String, Integer> sortedMap = MapUtil.sortByDecreasingValue(map);
+                    final List<Map.Entry<String, Integer>> sortedEntries = MapUtil.sortByValueReversed(map);
                     final String hoverFmsg = hoverEvent.getValue().getFormattedText();
                     final StringBuilder sb = new StringBuilder();
-                    for (final Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
+                    for (final Map.Entry<String, Integer> entry : sortedEntries) {
                         final char color = StringUtil.getLastColorCharBefore(hoverFmsg, entry.getKey());
                         if (color != '\0') sb.append('§').append(color);
                         sb.append(entry.getKey()).append(EnumChatFormatting.WHITE).append(": ").append(entry.getValue()).append(" ");

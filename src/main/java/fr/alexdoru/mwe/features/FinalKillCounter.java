@@ -280,13 +280,13 @@ public final class FinalKillCounter {
     /**
      * Returns a sorted hashmap where the Keys are the Team integer, and the values are the amounts of finals for that team
      */
-    public Map<MWTeam, Integer> getSortedTeamKillsMap() {
+    public List<Map.Entry<MWTeam, Integer>> getSortedTeamKillsList() {
         final Map<MWTeam, Integer> map = new EnumMap<>(MWTeam.class);
         map.put(MWTeam.BLUE, getKillsOfTeam(MWTeam.BLUE));
         map.put(MWTeam.GREEN, getKillsOfTeam(MWTeam.GREEN));
         map.put(MWTeam.RED, getKillsOfTeam(MWTeam.RED));
         map.put(MWTeam.YELLOW, getKillsOfTeam(MWTeam.YELLOW));
-        return MapUtil.sortByDecreasingValue(map);
+        return MapUtil.sortByValueReversed(map);
     }
 
     /**

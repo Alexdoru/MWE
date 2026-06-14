@@ -81,14 +81,14 @@ public class CommandNocheaters extends MyAbstractCommand {
             displaypage = 1;
         }
 
-        final Map<Object, WDR> sortedMap = MapUtil.sortByDecreasingValue(WdrData.getAllWDRs());
+        final List<Map.Entry<Object, WDR>> sortedEntries = MapUtil.sortByValueReversed(WdrData.getAllWDRs());
         final List<Future<IChatComponent>> futureList = new ArrayList<>();
         int nbreport = 1; // pour compter le nb de report et en afficher que 8 par page
         int nbpage = 1;
         boolean warning = true;
         final boolean doStalk = !HypixelApiKeyUtil.apiKeyIsNotSetup();
 
-        for (final Map.Entry<Object, WDR> entry : sortedMap.entrySet()) {
+        for (final Map.Entry<Object, WDR> entry : sortedEntries) {
             if (nbreport == 11) {
                 nbreport = 1;
                 nbpage++;
@@ -100,7 +100,7 @@ public class CommandNocheaters extends MyAbstractCommand {
             nbreport++;
         }
 
-        if (sortedMap.isEmpty()) {
+        if (sortedEntries.isEmpty()) {
             ChatUtil.addChatMessage(GREEN + "You have no one reported!");
             return;
         }
