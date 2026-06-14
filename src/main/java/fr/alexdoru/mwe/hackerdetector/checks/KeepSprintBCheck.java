@@ -81,7 +81,7 @@ public class KeepSprintBCheck extends Check {
     }
 
     private static boolean checkAttack(PlayerDataSamples data) {
-        return data.serverUpdatesList.get(0) == 1 && (data.attackList.get(0) || !data.attackList.get(0) && data.attackList.get(1));
+        return data.serverUpdatesList.get(0) == 1 && (data.attackList.get(0) || data.attackList.size() > 2 && !data.attackList.get(0) && data.attackList.get(1));
     }
 
     private static double speedXZ(PlayerDataSamples data, int i) {
