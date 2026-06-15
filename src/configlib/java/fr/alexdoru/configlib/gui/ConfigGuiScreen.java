@@ -23,6 +23,7 @@ public class ConfigGuiScreen extends GuiScreen {
     private static final ResourceLocation BLUR = new ResourceLocation("configlib", "blur.json");
 
     private final ConfigHandler configHandler;
+    private final String configName;
     private final ColorPalette colorPalette;
     private final IConfigTitleRenderer titleRenderer;
     private final Map<String, ConfigCategoryContainer> categoryContainerMap;
@@ -49,6 +50,7 @@ public class ConfigGuiScreen extends GuiScreen {
 
     public ConfigGuiScreen(
             ConfigHandler configHandler,
+            String configName,
             List<ConfigCategoryContainer> categories,
             List<ConfigFieldContainer> configFields,
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> configStructure,
@@ -56,6 +58,7 @@ public class ConfigGuiScreen extends GuiScreen {
             @Nullable IConfigTitleRenderer titleRenderer,
             @Nullable IRendererManager rendererManager) throws IllegalAccessException {
         this.configHandler = configHandler;
+        this.configName = configName;
         this.colorPalette = colorPalette;
         this.titleRenderer = titleRenderer;
         this.categoryContainerMap = new HashMap<>();
@@ -78,8 +81,8 @@ public class ConfigGuiScreen extends GuiScreen {
                 boolean addedSubCategoryTitle = false;
                 final String subCategoryName = subCategoryEntry.getKey();
                 final List<String> subCatConfigs = subCategoryEntry.getValue();
-                for (final String configName : subCatConfigs) {
-                    final ConfigUIElement guiButton = configButtonsMap.get(configName);
+                for (final String propertyName : subCatConfigs) {
+                    final ConfigUIElement guiButton = configButtonsMap.get(propertyName);
                     if (guiButton != null) {
                         if (!addedCategory && !categoryName.isEmpty()) {
                             final ConfigCategoryContainer categoryContainer = this.categoryContainerMap.get(entry.getKey());
@@ -187,6 +190,8 @@ public class ConfigGuiScreen extends GuiScreen {
 
         if (this.titleRenderer != null) {
             this.titleRenderer.renderTitle(fontRendererObj, colorPalette, GUI_INSIDE_LEFT, GUI_INSIDE_TOP);
+        } else {
+            fontRendererObj.drawStringWithShadow(configName, GUI_INSIDE_LEFT, GUI_INSIDE_TOP, colorPalette.TITLE_TEXT);
         }
 
         searchField.xPosition = GUI_INSIDE_RIGHT - Math.min(searchField.width, mc.fontRendererObj.getStringWidth(searchField.getText())) - 8;

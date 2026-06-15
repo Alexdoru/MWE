@@ -73,7 +73,8 @@ public class MWE {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        this.configHandler = new ConfigHandler(new File(event.getModConfigurationDirectory(), "mwe.cfg"), MWE.version);
+        final File configFile = new File(event.getModConfigurationDirectory(), "mwe.cfg");
+        this.configHandler = new ConfigHandler(configFile, "MWE", MWE.version);
         this.configHandler.setConfigTitleRenderer(new MWEConfigTitle());
         this.rendererManager = new MWERendererManager();
         this.configHandler.setRendererManager(this.rendererManager);

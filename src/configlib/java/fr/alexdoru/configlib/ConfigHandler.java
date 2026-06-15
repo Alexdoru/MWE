@@ -26,6 +26,7 @@ import java.util.*;
 public final class ConfigHandler implements IConfigHandler {
 
     private final Configuration config;
+    private final String configName;
     private final String savedVersion;
     private final String version;
     private final boolean hasUpdated;
@@ -43,9 +44,27 @@ public final class ConfigHandler implements IConfigHandler {
     private ColorPalette colorPalette = new ColorPalette();
     private boolean hasCommand;
 
-    public ConfigHandler(@NotNull File configFile, @NotNull String configVersion) {
-        config = new Configuration(configFile);
-        config.load();
+    /**
+     * Creates a new config handler
+     *
+     * @param configFile - the config file to load from
+     * @param configName - the name of your config, this will show as the title in the config scren
+     */
+    public ConfigHandler(@NotNull File configFile, @NotNull String configName) {
+        this(configFile, configName, "1.0");
+    }
+
+    /**
+     * Creates a new config handler
+     *
+     * @param configFile    - the config file to load from
+     * @param configName    - the name of your config, this will show as the title in the config scren
+     * @param configVersion - the current version of your mod
+     */
+    public ConfigHandler(@NotNull File configFile, @NotNull String configName, @NotNull String configVersion) {
+        this.config = new Configuration(configFile);
+        this.config.load();
+        this.configName = configName;
         final Property modVersion = config.get("Config", "version", configVersion);
         this.savedVersion = modVersion.getString();
         this.version = configVersion;
@@ -180,7 +199,7 @@ public final class ConfigHandler implements IConfigHandler {
             throw new IllegalStateException("Config is empty!");
         }
         try {
-            return new ConfigGuiScreen(this, categories, configFields, configStructure, colorPalette, titleRenderer, rendererManager);
+            return new ConfigGuiScreen(this, configName, categories, configFields, configStructure, colorPalette, titleRenderer, rendererManager);
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Failed to generate the config menu!", e);
         }

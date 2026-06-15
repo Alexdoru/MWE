@@ -1,7 +1,5 @@
 package fr.alexdoru.mwe.api;
 
-import fr.alexdoru.configlib.ConfigHandler;
-import fr.alexdoru.configlib.IConfigHandler;
 import fr.alexdoru.configlib.IRenderer;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.asm.IClassNodeTransformer;
@@ -28,7 +26,6 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -176,16 +173,6 @@ public final class MWEApi {
     public static final class Config {
 
         private Config() {}
-
-        /**
-         * Creates a new config handler, this allows you to have your own unique config menu.
-         *
-         * @param configFile    - the config file
-         * @param configVersion - the current version of your mod
-         */
-        public static IConfigHandler createNewConfigHandler(@NotNull File configFile, @NotNull String configVersion) {
-            return new ConfigHandler(configFile, configVersion);
-        }
 
         /**
          * Register your configuration class to the MWE config, your config settings

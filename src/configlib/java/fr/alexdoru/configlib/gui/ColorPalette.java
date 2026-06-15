@@ -4,6 +4,7 @@ import java.awt.Color;
 
 public class ColorPalette {
 
+    public int TITLE_TEXT = new Color(0xFFFFFFFF).getRGB();
     public int BACK_GROUND = new Color(0xFF323237).getRGB();
     public int BACK_GROUND_BORDER = new Color(0xFF4C4C51).getRGB();
     public int SEARCH_BOX = new Color(0xFF515156).getRGB();

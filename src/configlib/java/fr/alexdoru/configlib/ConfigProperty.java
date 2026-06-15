@@ -12,14 +12,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ConfigProperty {
 
+    /** The name of this config property, used as a unique key in forge's property system */
+    String name();
+
     /** The name of the category this config property belongs to */
     String category();
 
     /** The name of the subcategory this config property belongs to, if any */
     String subCategory() default "";
-
-    /** The name of this config property, used as a unique key in forge's property system */
-    String name();
 
     /** A comment with formatting to show in the config menu */
     String comment() default "";
@@ -31,6 +31,7 @@ public @interface ConfigProperty {
 
     int sliderMax() default 0;
 
+    /** Set this to true for int fields that represent a color */
     boolean isColor() default false;
 
 }
