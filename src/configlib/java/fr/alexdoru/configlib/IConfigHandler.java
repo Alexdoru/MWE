@@ -11,7 +11,7 @@ public interface IConfigHandler {
      * Fields and methods of the class should be static and annotated
      * with annotations from the {@link fr.alexdoru.configlib} package
      */
-    void registerConfig(Class<?> clazz);
+    void registerConfig(@NotNull Class<?> clazz);
 
     /**
      * Saves config values to the config file
@@ -21,7 +21,14 @@ public interface IConfigHandler {
     /**
      * Get the config gui screen
      */
+    @NotNull
     GuiScreen getConfigGuiScreen();
+
+    /**
+     * Automatically creates and registers a command that will
+     * open your config gui screen
+     */
+    void registerConfigCommand(@NotNull String commandName);
 
     /**
      * Adds a custom title renderer for your config gui screen

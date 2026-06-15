@@ -5,7 +5,7 @@ import fr.alexdoru.configlib.gui.elements.CategoryGuiButton;
 
 import java.lang.reflect.Field;
 
-public class ConfigCategoryContainer {
+public final class ConfigCategoryContainer {
 
     private final String categoryName;
     private final ConfigCategory annotation;

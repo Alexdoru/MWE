@@ -3,6 +3,7 @@ package fr.alexdoru.configlib;
 import fr.alexdoru.configlib.gui.ColorPalette;
 import fr.alexdoru.configlib.gui.ConfigGuiScreen;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +29,6 @@ public final class ConfigHandler implements IConfigHandler {
     private final String savedVersion;
     private final String version;
     private final boolean hasUpdated;
-    private final List<Class<?>> registeredConfigs = new ArrayList<>();
     private final Map<String, Property> propertyMap = new HashMap<>();
     private final List<ConfigFieldContainer> configFields = new ArrayList<>();
     private final Set<String> categoryNames = new HashSet<>();
@@ -41,6 +41,7 @@ public final class ConfigHandler implements IConfigHandler {
     private IRendererManager rendererManager;
     @NotNull
     private ColorPalette colorPalette = new ColorPalette();
+    private boolean hasCommand;
 
     public ConfigHandler(@NotNull File configFile, @NotNull String configVersion) {
         config = new Configuration(configFile);
@@ -56,11 +57,10 @@ public final class ConfigHandler implements IConfigHandler {
     }
 
     @Override
-    public void registerConfig(Class<?> clazz) {
+    public void registerConfig(@NotNull Class<?> clazz) {
         if (config == null) {
             throw new IllegalStateException("Config file is not loaded yet");
         }
-        registeredConfigs.add(clazz);
         final List<Method> loadEvents = new ArrayList<>();
         final List<Method> updateEvents = new ArrayList<>();
         try {
@@ -118,7 +118,7 @@ public final class ConfigHandler implements IConfigHandler {
                 throw new IllegalStateException("Some config hide conditions are not used anywhere : " + Arrays.toString(hideUsages.toArray()));
             }
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Failed to create the config!");
+            throw new RuntimeException("Caught exception while registering config class " + clazz.getName(), e);
         }
         try {
             readConfigInDefinitionOrder(clazz);
@@ -159,8 +159,8 @@ public final class ConfigHandler implements IConfigHandler {
 
     @Override
     public void saveConfig() {
-        if (registeredConfigs.isEmpty()) {
-            throw new IllegalStateException("Config is not loaded");
+        if (configFields.isEmpty()) {
+            throw new IllegalStateException("Config is empty!");
         }
         try {
             for (final ConfigFieldContainer configField : configFields) {
@@ -175,15 +175,25 @@ public final class ConfigHandler implements IConfigHandler {
     }
 
     @Override
-    public GuiScreen getConfigGuiScreen() {
-        if (registeredConfigs.isEmpty()) {
-            throw new IllegalStateException("Config is not loaded");
+    public @NotNull GuiScreen getConfigGuiScreen() {
+        if (configFields.isEmpty()) {
+            throw new IllegalStateException("Config is empty!");
         }
         try {
             return new ConfigGuiScreen(this, categories, configFields, configStructure, colorPalette, titleRenderer, rendererManager);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Failed to generate the config menu!");
+            throw new RuntimeException("Failed to generate the config menu!", e);
         }
+    }
+
+    @Override
+    public void registerConfigCommand(@NotNull String commandName) {
+        Objects.requireNonNull(commandName);
+        if (this.hasCommand) {
+            throw new IllegalStateException("Config command already registered");
+        }
+        ClientCommandHandler.instance.registerCommand(new ConfigCommand(this, commandName));
+        this.hasCommand = true;
     }
 
     @Override

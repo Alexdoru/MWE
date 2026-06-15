@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class ConfigFieldContainer {
+public final class ConfigFieldContainer {
 
     private static final boolean FORCE_SHOW_HIDDEN = Boolean.getBoolean("config.lib.showHidden");
 
@@ -93,7 +93,7 @@ public class ConfigFieldContainer {
         }
     }
 
-    public void saveFieldValueToConfig() throws IllegalAccessException {
+    void saveFieldValueToConfig() throws IllegalAccessException {
         if (field.getType() == RendererPosition.class) {
             final RendererPosition rendererPosition = (RendererPosition) field.get(null);
             propertyMap.get("Show " + annotation.name()).set(rendererPosition.isEnabled());
