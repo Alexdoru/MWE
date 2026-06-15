@@ -45,7 +45,7 @@ public final class ConfigHandler implements IConfigHandler {
     public ConfigHandler(@NotNull File configFile, @NotNull String configVersion) {
         config = new Configuration(configFile);
         config.load();
-        final Property modVersion = config.get("General", "Mod Version", configVersion);
+        final Property modVersion = config.get("Config", "version", configVersion);
         this.savedVersion = modVersion.getString();
         this.version = configVersion;
         this.hasUpdated = !this.savedVersion.equals(configVersion);
