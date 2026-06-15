@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe;
 
-import fr.alexdoru.configlib.ConfigHandler;
-import fr.alexdoru.configlib.IConfigHandler;
+import fr.alexdoru.configlib.api.ConfigLib;
+import fr.alexdoru.configlib.api.IConfigHandler;
 import fr.alexdoru.mwe.api.IMWEAddon;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.chat.ChatListener;
@@ -74,7 +74,7 @@ public class MWE {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         final File configFile = new File(event.getModConfigurationDirectory(), "mwe.cfg");
-        this.configHandler = new ConfigHandler(configFile, "MWE", MWE.version);
+        this.configHandler = ConfigLib.newConfigHandler(configFile, "MWE", MWE.version);
         this.configHandler.setConfigTitleRenderer(new MWEConfigTitle());
         this.rendererManager = new MWERendererManager();
         this.configHandler.setRendererManager(this.rendererManager);

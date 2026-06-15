@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.api;
 
-import fr.alexdoru.configlib.IRenderer;
+import fr.alexdoru.configlib.api.IRenderer;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.asm.IClassNodeTransformer;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;

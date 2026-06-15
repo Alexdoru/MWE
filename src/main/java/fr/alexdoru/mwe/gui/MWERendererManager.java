@@ -1,9 +1,9 @@
 package fr.alexdoru.mwe.gui;
 
-import fr.alexdoru.configlib.IRenderer;
-import fr.alexdoru.configlib.IRendererManager;
-import fr.alexdoru.configlib.RendererPosition;
-import fr.alexdoru.configlib.gui.RendererEditGuiScreen;
+import fr.alexdoru.configlib.api.IRenderer;
+import fr.alexdoru.configlib.api.IRendererManager;
+import fr.alexdoru.configlib.api.RendererPosition;
+import fr.alexdoru.configlib.lib.gui.RendererEditGuiScreen;
 import fr.alexdoru.mwe.gui.huds.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
