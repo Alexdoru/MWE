@@ -31,6 +31,7 @@ public class ColorPalette {
     public int SLIDER_BUTTON_THUMB = new Color(0xFF5D83FF).getRGB();
     public int SLIDER_BUTTON_THUMB_BORDER = new Color(0xFFE6E6E6).getRGB();
     public int SLIDER_BUTTON_VALUE_TEXT = new Color(0xFFFFFFFF).getRGB();
+    public int LABEL_TEXT = new Color(0xFFFFFFFF).getRGB();
 
     @SuppressWarnings("unused")
     public static final class VanillaColors {

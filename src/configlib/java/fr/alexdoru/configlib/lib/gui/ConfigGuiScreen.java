@@ -429,30 +429,31 @@ public class ConfigGuiScreen extends GuiScreen {
         this.amountToScroll = 0;
         this.lastInteractedSlider = null;
         this.renderedConfigElements.clear();
-        String lastHeader = null;
+        String lastKey = null;
         final int configBoxWidth = getConfigBoxWidth();
         for (final ConfigUIElement element : this.configElements) {
             if (!(element instanceof SubCategoryHeader) && element.matchSearch(search)) {
-                final ConfigCategoryContainer categoryContainer = this.categoryContainerMap.get(element.getCategory());
-                final String headerKey;
-                if (categoryContainer != null) {
-                    headerKey = categoryContainer.getAnnotation().displayname() + EnumChatFormatting.RESET + (element.getSubCategory().isEmpty() ? "" : " - " + element.getSubCategory());
-                } else {
-                    headerKey = element.getCategory() + (element.getSubCategory().isEmpty() ? "" : " - " + element.getSubCategory());
-                }
-                if (!Objects.equals(lastHeader, headerKey)) {
-                    final SubCategoryHeader header = new SubCategoryHeader(null, headerKey);
-                    header.setBoxWidth(configBoxWidth);
-                    this.renderedConfigElements.add(header);
-                    lastHeader = headerKey;
+                final String subCategoryKey = element.getCategory() + "$" + element.getSubCategory();
+                if (!Objects.equals(lastKey, subCategoryKey)) {
+                    final ConfigCategoryContainer categoryContainer = this.categoryContainerMap.get(element.getCategory());
+                    final String displayText;
+                    if (categoryContainer != null) {
+                        displayText = categoryContainer.getAnnotation().displayname() + EnumChatFormatting.RESET + (element.getSubCategory().isEmpty() ? "" : " - " + element.getSubCategory());
+                    } else {
+                        displayText = element.getCategory() + (element.getSubCategory().isEmpty() ? "" : " - " + element.getSubCategory());
+                    }
+                    final TextLabel textLabel = new TextLabel(displayText);
+                    textLabel.setBoxWidth(configBoxWidth);
+                    this.renderedConfigElements.add(textLabel);
+                    lastKey = displayText;
                 }
                 this.renderedConfigElements.add(element);
             }
         }
         if (this.renderedConfigElements.isEmpty()) {
-            final SubCategoryHeader header = new SubCategoryHeader(null, "Nothing was found! :(");
-            header.setBoxWidth(configBoxWidth);
-            this.renderedConfigElements.add(header);
+            final TextLabel textLabel = new TextLabel("Nothing was found! :(");
+            textLabel.setBoxWidth(configBoxWidth);
+            this.renderedConfigElements.add(textLabel);
         }
     }
 
