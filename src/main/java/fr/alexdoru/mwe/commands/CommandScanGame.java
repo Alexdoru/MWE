@@ -70,7 +70,7 @@ public class CommandScanGame extends MyAbstractCommand {
             if (mc.thePlayer != null && netInfo.getGameProfile().getId().equals(mc.thePlayer.getUniqueID())) continue;
             if (scanPlayer(netInfo, isMythicHour)) i++;
         }
-        ChatUtil.addChatMessage(ChatUtil.getTagMW() + GREEN + "Scanning " + i + " players...");
+        ChatUtil.addChatMessage(GREEN + "Scanning " + i + " players...");
     }
 
     private static boolean scanPlayer(NetworkPlayerInfo netInfo, boolean isMythicHourInPreGameLobby) {
@@ -232,7 +232,7 @@ public class CommandScanGame extends MyAbstractCommand {
 
     private static void addScanMessageToChat(NetworkPlayerInfo netInfo, IChatComponent imsg) {
         ChatHandler.deleteScanFlagFromChat(netInfo.getGameProfile().getName());
-        final IChatComponent msg = new ScanFlagChatComponent(netInfo.getGameProfile().getName(), ChatUtil.getTagMW())
+        final IChatComponent msg = new ScanFlagChatComponent(netInfo.getGameProfile().getName(), ChatUtil.getScanTag())
                 .appendSibling(getFormattedNameWithPlanckeClickEvent(netInfo))
                 .appendSibling(imsg);
         ChatUtil.addSkinToComponent(msg, netInfo.getGameProfile().getName());

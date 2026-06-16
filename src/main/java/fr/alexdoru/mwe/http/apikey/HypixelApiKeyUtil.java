@@ -12,7 +12,7 @@ public class HypixelApiKeyUtil {
     }
 
     public static void setApiKey(String key) {
-        ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Api key set successfully");
+        ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Api key set successfully");
         MWEConfig.APIKey = key;
         MWE.INSTANCE().getConfigHandler().saveConfig();
     }

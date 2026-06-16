@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.config;
 
 import fr.alexdoru.configlib.api.*;
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.LocrawListener;
@@ -33,6 +34,10 @@ public final class MWEConfig {
     @ConfigUpdatedEvent
     private static void onModUpdate(String savedVersion, String version) {
         // code that runs on mod version update
+        if (flagMessagePrefix.equals(EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "NoCheaters" + EnumChatFormatting.GOLD + "]")) {
+            flagMessagePrefix = EnumChatFormatting.DARK_PURPLE + "[Hack]";
+            MWE.INSTANCE().getConfigHandler().saveConfig();
+        }
     }
 
     @ConfigCategory(displayname = "§6Vanilla")
@@ -982,7 +987,7 @@ public final class MWEConfig {
             name = "Flag message prefix",
             comment = "Lets you choose the prefix of flags messages",
             hidden = true)
-    public static String flagMessagePrefix = EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "NoCheaters" + EnumChatFormatting.GOLD + "]";
+    public static String flagMessagePrefix = EnumChatFormatting.DARK_PURPLE + "[Hack]";
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Report",

@@ -18,11 +18,11 @@ import static net.minecraft.util.EnumChatFormatting.*;
 public class ChatUtil {
 
     public static String getTagMW() {
-        return GOLD + "[" + DARK_GRAY + "MWE" + GOLD + "] " + RESET;
+        return DARK_RED + "[MWE] " + RESET;
     }
 
-    public static String getTagNoCheaters() {
-        return GOLD + "[" + DARK_GRAY + "NoCheaters" + GOLD + "] " + RESET;
+    public static String getScanTag() {
+        return LIGHT_PURPLE + "[SCAN] " + RESET;
     }
 
     public static String getTagHackerDetector() {
@@ -136,7 +136,7 @@ public class ChatUtil {
     }
 
     public static void printApikeySetupInfo() {
-        addChatMessage(getTagMW() + RED + "You didn't set up your Api key. If you have an Api Key, use "
+        addChatMessage(RED + "You didn't set up your Api key. If you have an Api Key, use "
                 + YELLOW + "\"/mwe setapikey <key>\""
                 + RED + " to use it with the mod.");
     }
@@ -341,7 +341,7 @@ public class ChatUtil {
     }
 
     public static void printReportingAdvice() {
-        addChatMessage(getTagNoCheaters() + RED + "To make reporting efficient, be sure to use /report"
+        addChatMessage(RED + "To make reporting efficient, be sure to use /report"
                 + DARK_RED + " when you are ingame with the cheater and they are currently cheating "
                 + RED + ", not 2 minutes after, not after the game ended or before the game starts." +
                 " This way a replay with a timestamp can be attached to the report for review.");

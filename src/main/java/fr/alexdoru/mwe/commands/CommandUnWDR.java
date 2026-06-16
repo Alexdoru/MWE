@@ -58,7 +58,7 @@ public class CommandUnWDR extends MyAbstractCommand {
     private void unwdr(String uuid, String playername) {
         final UUID id = UUIDUtil.fromString(uuid);
         if (id == null) {
-            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Invalid UUID");
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Invalid UUID");
             return;
         }
         this.unwdr(id, playername);
@@ -67,12 +67,12 @@ public class CommandUnWDR extends MyAbstractCommand {
     private void unwdr(UUID uuid, String playername) {
         ReportQueue.INSTANCE.removePlayerFromReportQueue(playername);
         if (!WdrData.remove(uuid, playername)) {
-            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.RED + "Player not found in your report list.");
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Player not found in your report list.");
             return;
         }
         WdrData.saveReportedPlayers();
         ChatHandler.deleteWarningFromChat(playername);
-        ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + ".");
+        ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + ".");
     }
 
 }

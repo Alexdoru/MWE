@@ -116,7 +116,7 @@ public class CommandWDR extends MyAbstractCommand {
         WdrData.saveReportedPlayers();
         if (added) {
             final boolean isNicked = !NameUtil.isRealPlayer(uuid);
-            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() +
+            ChatUtil.addChatMessage(
                     EnumChatFormatting.GREEN + "You reported " + (isNicked ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
                     + EnumChatFormatting.RED + (formattedName == null ? playername : EnumChatFormatting.RESET + formattedName) + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
                     + EnumChatFormatting.GREEN + (isNicked ? " for the next 24 hours." : "."));

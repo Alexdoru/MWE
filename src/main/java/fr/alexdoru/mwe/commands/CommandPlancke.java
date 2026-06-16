@@ -54,7 +54,7 @@ public class CommandPlancke extends MyAbstractCommand {
         final LoginData loginData = new LoginData(playerdata);
 
         if (!playerID.getName().equals(loginData.getdisplayname()) || loginData.hasNeverJoinedHypixel()) {
-            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "This player never joined Hypixel, it might be a nick.");
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "This player never joined Hypixel, it might be a nick.");
             return;
         }
 
@@ -99,7 +99,7 @@ public class CommandPlancke extends MyAbstractCommand {
 
                     final MWClass mwclass = MWClass.fromTagOrName(args[2]);
                     if (mwclass == null) {
-                        ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + args[2] + EnumChatFormatting.RED + " isn't a valid mega walls class name.");
+                        ChatUtil.addChatMessage(EnumChatFormatting.YELLOW + args[2] + EnumChatFormatting.RED + " isn't a valid mega walls class name.");
                         return;
                     }
                     new MegaWallsClassStats(playerdata, mwclass.className).printMessage(formattedName, playername);
@@ -122,7 +122,7 @@ public class CommandPlancke extends MyAbstractCommand {
 
         } else {
 
-            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + args[1] + EnumChatFormatting.RED + " isn't a valid/supported game name.");
+            ChatUtil.addChatMessage(EnumChatFormatting.YELLOW + args[1] + EnumChatFormatting.RED + " isn't a valid/supported game name.");
 
         }
 

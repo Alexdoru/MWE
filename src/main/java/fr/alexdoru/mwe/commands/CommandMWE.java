@@ -51,10 +51,10 @@ public class CommandMWE extends MyAbstractCommand {
                     new DelayedTask(() -> sendChatMessage(msg4), 240);
                     new DelayedTask(() -> sendChatMessage(msg5), 320);
                 } else {
-                    ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "Command is on cooldown");
+                    ChatUtil.addChatMessage(EnumChatFormatting.RED + "Command is on cooldown");
                 }
             } else {
-                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "Command only works in Mega Walls");
+                ChatUtil.addChatMessage(EnumChatFormatting.RED + "Command only works in Mega Walls");
             }
         } else {
             MWEApi.Config.displayConfigGuiScreen();

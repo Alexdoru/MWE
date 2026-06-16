@@ -34,7 +34,7 @@ public class WarningMessages {
             printWarningMessage(uuid, netInfo.getPlayerTeam(), playerName, wdr);
         }
         if (callFromCommand && !foundReport) {
-            ChatUtil.addChatMessage(ChatUtil.getTagNoCheaters() + GREEN + "No reported player here !");
+            ChatUtil.addChatMessage(GREEN + "No reported player here !");
         }
     }
 

@@ -57,7 +57,7 @@ public class CommandStalk extends MyAbstractCommand {
                 final HypixelPlayerData playerData = new HypixelPlayerData(playerID.getId());
                 final LoginData loginData = new LoginData(playerData.getPlayerData());
                 if (!playerID.getName().equals(loginData.getdisplayname()) || loginData.hasNeverJoinedHypixel()) {
-                    ChatUtil.addChatMessage(ChatUtil.getTagMW() + RED + "This player never joined Hypixel, it might be a nick.");
+                    ChatUtil.addChatMessage(RED + "This player never joined Hypixel, it might be a nick.");
                     return;
                 }
                 final HypixelPlayerStatus playerStatus = loginData.isHidingFromAPI() ? null : new HypixelPlayerStatus(playerID.getId());
@@ -77,16 +77,16 @@ public class CommandStalk extends MyAbstractCommand {
         final String formattedName = loginData.getFormattedName();
 
         if (loginData.isStaffonHypixel()) {
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW())
-                    .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
-                    .appendText(RED + " is completely hiding their online status from the API." + DARK_GRAY + " It happens for staff members."));
+            ChatUtil.addChatMessage(
+                    ChatUtil.formattedNameWithReportButton(playername, formattedName)
+                            .appendText(RED + " is completely hiding their online status from the API." + DARK_GRAY + " It happens for staff members.")
+            );
             return;
         }
 
         if (playerStatus != null) {
             if (playerStatus.isOnline()) {
-                final IChatComponent imsg = new ChatComponentText(ChatUtil.getTagMW())
-                        .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
+                final IChatComponent imsg = ChatUtil.formattedNameWithReportButton(playername, formattedName)
                         .appendText(GREEN + " is in " + YELLOW + playerStatus.getGamemode() + " " + playerStatus.getMode()
                                 + (playerStatus.getMap() == null ? "" : (GREEN + " on " + YELLOW + playerStatus.getMap()))
                                 + GREEN + ".");
@@ -95,8 +95,7 @@ public class CommandStalk extends MyAbstractCommand {
                 }
                 ChatUtil.addChatMessage(imsg);
             } else { // offline
-                ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW())
-                        .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
+                ChatUtil.addChatMessage(ChatUtil.formattedNameWithReportButton(playername, formattedName)
                         .appendText(RED + " has been offline for " + YELLOW + DateUtil.timeSince(loginData.getLastLogout())
                                 + RED + "." + (loginData.getMostRecentGameType().equals("?") ? "" : RED + " Last seen in : " + YELLOW + loginData.getMostRecentGameType())));
             }
@@ -108,9 +107,7 @@ public class CommandStalk extends MyAbstractCommand {
         final long latestActivityTime = loginData.getLatestActivityTime();
         final String latestActivity = loginData.getLatestActivity();
 
-        final IChatComponent imsg = new ChatComponentText(ChatUtil.getTagMW())
-                .appendSibling(ChatUtil.formattedNameWithReportButton(playername, formattedName))
-                .appendText(RED + " is blocking their API.");
+        final IChatComponent imsg = ChatUtil.formattedNameWithReportButton(playername, formattedName).appendText(RED + " is blocking their API.");
 
         if (latestActivityTime != 0 && latestActivity != null) {
             imsg.appendText(RED + " Latest activity : " + YELLOW + DateUtil.timeSince(latestActivityTime) + GRAY + " ago " + latestActivity + RED + ".");

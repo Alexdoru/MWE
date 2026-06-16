@@ -177,7 +177,7 @@ public class CommandAddAlias extends MyAbstractCommand {
     }
 
     private void listAliasInLobby() {
-        ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "In this lobby :\n");
+        ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "In this lobby :\n");
         for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
             if (AliasData.getAlias(netInfo.getGameProfile().getId(), netInfo.getGameProfile().getName()) != null) {
                 ChatUtil.addChatMessage(NameUtil.getFormattedName(netInfo));
@@ -232,11 +232,11 @@ public class CommandAddAlias extends MyAbstractCommand {
         }
         if (uuid == null) {
             AliasData.putAlias(null, playername, alias);
-            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Added alias for the " + EnumChatFormatting.DARK_PURPLE + "nicked " + EnumChatFormatting.GREEN + "player "
+            ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Added alias for the " + EnumChatFormatting.DARK_PURPLE + "nicked " + EnumChatFormatting.GREEN + "player "
                     + EnumChatFormatting.GOLD + formattedName + EnumChatFormatting.WHITE + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.WHITE + ")");
         } else {
             AliasData.putAlias(uuid, null, alias);
-            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Added alias for "
+            ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Added alias for "
                     + EnumChatFormatting.GOLD + formattedName + EnumChatFormatting.WHITE + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.WHITE + ")");
         }
     }
@@ -283,10 +283,10 @@ public class CommandAddAlias extends MyAbstractCommand {
             formattedName = playername;
         }
         if (!AliasData.removeAlias(uuid, playername)) {
-            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "Player does not have an alias.");
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Player does not have an alias.");
             return;
         }
-        ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.GREEN + "Removed alias for " + EnumChatFormatting.GOLD + formattedName);
+        ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Removed alias for " + EnumChatFormatting.GOLD + formattedName);
     }
 
 }

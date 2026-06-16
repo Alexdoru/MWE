@@ -19,7 +19,7 @@ public class ChatHandler {
     //drawnChatLines : contains the messages printed in the chat according to the width off the chat, each item in the list is one line of chat and not necessarily one message
     //as a result drawnChatLines.size() >= chatLines.size()
 
-    private static final IChatComponent stopMovingMsg = new ChatComponentText(ChatUtil.getTagHackerDetector() + EnumChatFormatting.RED + "Stop moving for a second to send a report!");
+    private static final IChatComponent stopMovingMsg = new ChatComponentText(EnumChatFormatting.RED + "Stop moving for a second to send a report!");
 
     public static void deleteMessageFromChat(IChatComponent messageToDelete) {
         final List<ChatLine> chatLines = ((GuiNewChatAccessor) Minecraft.getMinecraft().ingameGUI.getChatGUI()).getChatLines();

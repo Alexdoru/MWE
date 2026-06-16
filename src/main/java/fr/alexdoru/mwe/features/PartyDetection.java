@@ -71,7 +71,7 @@ public class PartyDetection {
                 return;
             }
             final String cheaterTeamColor = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(cheaterNetInfo.getPlayerTeam(), playername), playername);
-            final ChatComponentText imsg = new ChatComponentText(ChatUtil.getTagNoCheaters() + EnumChatFormatting.GREEN + "This player joined in a party with : ");
+            final ChatComponentText imsg = new ChatComponentText(EnumChatFormatting.GREEN + "This player joined in a party with : ");
             boolean containsPlayers = false;
             for (final String player : partyList) {
                 if (!player.equals(playername)) {
