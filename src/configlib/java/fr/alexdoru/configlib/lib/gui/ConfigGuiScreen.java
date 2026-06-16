@@ -185,8 +185,9 @@ public class ConfigGuiScreen extends GuiScreen {
         if (amountToScroll > 0) {
             final long time = System.currentTimeMillis();
             if (time - lastScrollTime > 1) {
-                this.scroll(scrollDirection * 3);
-                amountToScroll -= 3;
+                final int step = Math.min(amountToScroll, Math.max(3, amountToScroll / 8));
+                this.scroll(scrollDirection * step);
+                amountToScroll -= step;
                 lastScrollTime = time;
             }
         }
@@ -362,14 +363,8 @@ public class ConfigGuiScreen extends GuiScreen {
         super.handleMouseInput();
         final int i = Mouse.getEventDWheel();
         if (i != 0) {
-            if (i > 0) {
-                scrollDirection = 1;
-                amountToScroll = 100;
-            }
-            if (i < 0) {
-                scrollDirection = -1;
-                amountToScroll = 100;
-            }
+            scrollDirection = i > 0 ? 1 : -1;
+            amountToScroll = Math.min(Math.abs(i) * 2, 240);
         }
     }
 
