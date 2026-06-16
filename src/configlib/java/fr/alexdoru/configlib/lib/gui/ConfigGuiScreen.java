@@ -256,8 +256,10 @@ public class ConfigGuiScreen extends GuiScreen {
             final int maxScrollBarY = CONFIG_BOX_BOTTOM - 1 - scrollBarSize - 1;
             if (draggingScrollBar) {
                 final int relativeMouseY = mouseY - minScrollBarY - scrollGrabbedAtY;
-                final int newScroll = relativeMouseY * (allElementsHeight - (CONFIG_BOX_BOTTOM - CONFIG_BOX_TOP)) / (maxScrollBarY - minScrollBarY);
-                this.scroll(this.scroll - newScroll);
+                if (maxScrollBarY != minScrollBarY) {
+                    final int newScroll = relativeMouseY * (allElementsHeight - (CONFIG_BOX_BOTTOM - CONFIG_BOX_TOP)) / (maxScrollBarY - minScrollBarY);
+                    this.scroll(this.scroll - newScroll);
+                }
             }
             SCROLL_BAR_LEFT = CONFIG_BOX_RIGHT - 5;
             SCROLL_BAR_TOP = ((maxScrollBarY - minScrollBarY) * scroll) / (allElementsHeight - configBoxHeight) + minScrollBarY;
@@ -290,8 +292,8 @@ public class ConfigGuiScreen extends GuiScreen {
                         return;
                     }
                 }
-            } catch (IllegalAccessException ignored) {
-                throw new RuntimeException("Caught exception running mouse click events!");
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Caught exception running mouse click events!", e);
             }
             if (mouseButton == 0 && isMouseInBox(mouseX, mouseY, SCROLL_BAR_LEFT, SCROLL_BAR_RIGHT, SCROLL_BAR_TOP, SCROLL_BAR_BOTTOM)) {
                 draggingScrollBar = true;
@@ -360,11 +362,11 @@ public class ConfigGuiScreen extends GuiScreen {
         super.handleMouseInput();
         final int i = Mouse.getEventDWheel();
         if (i != 0) {
-            if (i > 1) {
+            if (i > 0) {
                 scrollDirection = 1;
                 amountToScroll = 100;
             }
-            if (i < -1) {
+            if (i < 0) {
                 scrollDirection = -1;
                 amountToScroll = 100;
             }
@@ -419,9 +421,7 @@ public class ConfigGuiScreen extends GuiScreen {
 
     private void updateSearch(String search) {
         if (search.isEmpty()) {
-            if (selectedCategory != null) {
-                this.setFocusedCategory(selectedCategory);
-            }
+            this.setFocusedCategory(selectedCategory);
             return;
         }
         search = search.toLowerCase();
