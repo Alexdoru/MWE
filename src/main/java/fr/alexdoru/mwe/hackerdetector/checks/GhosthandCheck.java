@@ -42,10 +42,12 @@ public class GhosthandCheck extends Check {
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
         if (data.blockTouched == null) return false;
         if (player.isRiding()) return false;
+        if (!data.hasServerPostion()) return false;
+        if (!data.hasLookServer()) return false;
         if (getEyesToBlockVect(player, data, data.blockTouched).normSquared() > 28.79422863D) return false;
-        final double maxReach = 5D;
         final Vec3 eyePos = data.getPositionEyesServer(player);
         final Vec3 lookVect = data.getLookServer();
+        final double maxReach = 5D;
         final Vec3 lookEndPos = eyePos.addVector(lookVect.xCoord * maxReach, lookVect.yCoord * maxReach, lookVect.zCoord * maxReach);
         final Vec3 hitVect = getHitVectOnBlock(data.blockTouched, eyePos, lookEndPos);
         if (hitVect == null) return false;

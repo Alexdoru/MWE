@@ -84,12 +84,14 @@ public class FastbreakCheck extends Check {
             final ItemStack stack = player.getHeldItem();
             if (stack == null) return;
             for (final BrokenBlock brokenBlock : this.brokenBlocksList) {
-                if (isAppropriateTool(stack, brokenBlock) && isPlayerLookingAtBlock(player, data, brokenBlock.blockPos)) {
-                    brokenBlock.addPlayer(player);
-                    // return after one block, otherwise it can false flag when a golem
-                    // uses their ability, it does 6 or more breaking block animations
-                    // in the same area
-                    return;
+                if (data.hasServerPostion() && data.hasLookServer()) {
+                    if (isAppropriateTool(stack, brokenBlock) && isPlayerLookingAtBlock(player, data, brokenBlock.blockPos)) {
+                        brokenBlock.addPlayer(player);
+                        // return after one block, otherwise it can false flag when a golem
+                        // uses their ability, it does 6 or more breaking block animations
+                        // in the same area
+                        return;
+                    }
                 }
             }
         }

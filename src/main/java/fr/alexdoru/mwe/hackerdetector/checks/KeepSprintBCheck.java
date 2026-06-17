@@ -44,7 +44,7 @@ public class KeepSprintBCheck extends Check {
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
         if (player.isRiding()) return false;
         if (data.isNotMovingXZ()) return false;
-        if (!data.serverPosXList.isFull()) return false;
+        if (data.serverPosXList.size() < 5) return false;
         if (checkAttack(data) && (data.isOnFlatGround() || accel(data.serverPosYList) < -25d)) {
             final double speedXZ = speedXZ(data, 0);
             final double prevSpeedXZ = speedXZ(data, 1);
@@ -81,7 +81,8 @@ public class KeepSprintBCheck extends Check {
     }
 
     private static boolean checkAttack(PlayerDataSamples data) {
-        return data.serverUpdatesList.get(0) == 1 && (data.attackList.get(0) || data.attackList.size() > 2 && !data.attackList.get(0) && data.attackList.get(1));
+        if (data.attackList.size() < 2) return false;
+        return data.serverUpdatesList.get(0) == 1 && (data.attackList.get(0) || !data.attackList.get(0) && data.attackList.get(1));
     }
 
     private static double speedXZ(PlayerDataSamples data, int i) {

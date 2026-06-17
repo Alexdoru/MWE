@@ -162,8 +162,16 @@ public class PlayerDataSamples {
         return vx * vx + vz * vz;
     }
 
+    public boolean hasServerPostion() {
+        return !this.serverPosXList.isEmpty();
+    }
+
     public Vec3 getPositionEyesServer(EntityPlayer player) {
         return new Vec3(this.serverPosXList.get(0), this.serverPosYList.get(0) + (double) player.getEyeHeight(), this.serverPosZList.get(0));
+    }
+
+    public boolean hasLookServer() {
+        return !this.serverPitchList.isEmpty() && !this.serverYawHeadList.isEmpty();
     }
 
     public Vec3 getLookServer() {

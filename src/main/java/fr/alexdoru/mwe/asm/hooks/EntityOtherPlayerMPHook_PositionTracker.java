@@ -9,8 +9,8 @@ public class EntityOtherPlayerMPHook_PositionTracker {
 
     public static void setPositionAndRotation(EntityOtherPlayerMP player, double x, double y, double z, float yaw, float pitch) {
         if (MWEConfig.hackerDetector) {
-            HackerDetector.addScheduledTask(
-                    () -> ((EntityPlayerAccessor) player).getPlayerDataSamples().setPositionAndRotation(x, y, z, yaw, pitch)
+            HackerDetector.addScheduledTask(() ->
+                    ((EntityPlayerAccessor) player).getPlayerDataSamples().setPositionAndRotation(x, y, z, yaw, pitch)
             );
         }
     }
