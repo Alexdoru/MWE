@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -79,12 +80,12 @@ public class FastbreakCheck extends Check {
         checkPlayerBreakingBlocks(player, null);
     }
 
-    private void checkPlayerBreakingBlocks(EntityPlayer player, PlayerDataSamples data) {
+    private void checkPlayerBreakingBlocks(EntityPlayer player, @Nullable PlayerDataSamples data) {
         if (isCheckActive() && player.isSwingInProgress && !this.brokenBlocksList.isEmpty()) {
             final ItemStack stack = player.getHeldItem();
             if (stack == null) return;
             for (final BrokenBlock brokenBlock : this.brokenBlocksList) {
-                if (data.hasServerPostion() && data.hasLookServer()) {
+                if (data == null || data.hasServerPostion() && data.hasLookServer()) {
                     if (isAppropriateTool(stack, brokenBlock) && isPlayerLookingAtBlock(player, data, brokenBlock.blockPos)) {
                         brokenBlock.addPlayer(player);
                         // return after one block, otherwise it can false flag when a golem

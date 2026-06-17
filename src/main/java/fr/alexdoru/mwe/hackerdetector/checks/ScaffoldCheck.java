@@ -38,6 +38,7 @@ public class ScaffoldCheck extends Check {
     @Override
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
         if (player.isRiding() || data.serverPosYList.size() < 4) return false;
+        if (!data.hasLookServer()) return false;
         if (player.isSwingInProgress && player.hurtTime == 0 && data.serverPitchList.get(0) > 50f && data.getSpeedXZSq() > 9d) {
             final ItemStack itemStack = player.getHeldItem();
             if (itemStack != null && itemStack.getItem() instanceof ItemBlock) {

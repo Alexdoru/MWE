@@ -58,7 +58,6 @@ public class KeepSprintBCheck extends Check {
                                         " | speedXZ " + String.format("%.4f", speedXZ) +
                                         " | onGround " + player.onGround +
                                         " | moveDiff " + String.format("%.2f", getMoveAngleDiff(data)) +
-                                        " | moveLookDiff " + String.format("%.2f", data.getMoveLookAngleDiff()) +
                                         " | posY " + data.serverPosYList);
                         this.fail(player);
                     }

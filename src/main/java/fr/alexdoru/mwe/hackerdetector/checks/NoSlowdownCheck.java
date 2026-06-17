@@ -39,6 +39,7 @@ public class NoSlowdownCheck extends Check {
     public boolean check(EntityPlayer player, PlayerDataSamples data) {
         // If the player is moving slower than the base running speed, we consider it is keepsprint
         if (data.isNotMovingXZ() || player.isRiding()) return false;
+        if (!data.hasLookServer()) return false;
         if (data.useItemTime > 5 && data.sprintTime > 0) {
             if (Math.abs(data.getMoveLookAngleDiff()) > 135d) {
                 data.noSlowdownVL.substract(3);
