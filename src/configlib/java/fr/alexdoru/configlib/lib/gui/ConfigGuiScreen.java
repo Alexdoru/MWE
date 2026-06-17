@@ -430,6 +430,7 @@ public class ConfigGuiScreen extends GuiScreen {
             if (!(element instanceof SubCategoryHeader) && element.matchSearch(search)) {
                 final String subCategoryKey = element.getCategory() + "$" + element.getSubCategory();
                 if (!Objects.equals(lastKey, subCategoryKey)) {
+                    lastKey = subCategoryKey;
                     final ConfigCategoryContainer categoryContainer = this.categoryContainerMap.get(element.getCategory());
                     final String displayText;
                     if (categoryContainer != null) {
@@ -440,7 +441,6 @@ public class ConfigGuiScreen extends GuiScreen {
                     final TextLabel textLabel = new TextLabel(displayText);
                     textLabel.setBoxWidth(configBoxWidth);
                     this.renderedConfigElements.add(textLabel);
-                    lastKey = displayText;
                 }
                 this.renderedConfigElements.add(element);
             }
