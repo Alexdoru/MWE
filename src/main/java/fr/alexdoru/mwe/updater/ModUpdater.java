@@ -16,7 +16,6 @@ import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -33,19 +32,28 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ModUpdater {
 
-    private final Logger LOGGER = LogManager.getLogger("MWE Updater");
+    private final Logger LOGGER;
     private final File jarFile;
-    private final boolean isFeatherClient = Loader.isModLoaded("feather");
-    private final List<IChatComponent> pendingMessages = new ArrayList<>();
-    private volatile boolean finishedRunning = false;
+    private final String apiEndpoint;
+    private final String releaseLink;
+    private final String currentVersion;
+    private final boolean isFeatherClient;
+    private final boolean automaticUpdate;
+    private volatile ArtifactInfo updateInfo;
+    private volatile boolean downloadSuccess;
+    private volatile boolean finishedRunning;
 
     public ModUpdater(File file) {
+        this.LOGGER = LogManager.getLogger("MWE Updater");
         this.jarFile = file;
+        this.apiEndpoint = "https://api.github.com/repos/Alexdoru/MWE/releases";
+        this.releaseLink = "https://github.com/Alexdoru/MWE/releases";
+        this.currentVersion = MWE.version;
+        this.isFeatherClient = Loader.isModLoaded("feather");
+        this.automaticUpdate = MWEConfig.automaticUpdate;
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
                 checkForUpdate();
@@ -62,8 +70,27 @@ public class ModUpdater {
         if (finishedRunning) {
             final Minecraft mc = Minecraft.getMinecraft();
             if (mc.theWorld != null && mc.thePlayer != null) {
-                pendingMessages.forEach(ChatUtil::addChatMessage);
                 MinecraftForge.EVENT_BUS.unregister(this);
+                this.printMessages();
+            }
+        }
+    }
+
+    private void printMessages() {
+        if (this.updateInfo != null) {
+            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements "
+                    + EnumChatFormatting.GOLD + "version v" + this.updateInfo.version + EnumChatFormatting.GREEN + " is available, click this message to see the changelog and download page.")
+                    .setChatStyle(new ChatStyle()
+                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, this.releaseLink))
+                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + this.releaseLink)))));
+            if (this.automaticUpdate) {
+                if (this.isFeatherClient) {
+                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + "The automatic updater is disabled on Feather."));
+                } else if (this.downloadSuccess) {
+                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements "
+                            + EnumChatFormatting.GOLD + "version v" + this.updateInfo.version
+                            + EnumChatFormatting.GREEN + " has been downloaded and will be installed to your mods folder automatically when closing your game."));
+                }
             }
         }
     }
@@ -72,33 +99,27 @@ public class ModUpdater {
 
         LOGGER.info("Checking for updates...");
 
-        final String GITHUB_MWE_RELEASE_API = "https://api.github.com/repos/Alexdoru/MWE/releases";
-        final String GITHUB_MWE_RELEASE = "https://github.com/Alexdoru/MWE/releases";
-
-        final JsonArray jsonArray = HttpClient.getAsJsonArray(GITHUB_MWE_RELEASE_API);
+        final JsonArray jsonArray = HttpClient.getAsJsonArray(this.apiEndpoint);
         final ArtifactInfo artifactInfo = findLatestVersion(jsonArray);
 
         if (artifactInfo == null) {
             return;
         }
 
-        final ComparableVersion currentVersion = new ComparableVersion(MWE.version);
+        final ComparableVersion currentVersion = new ComparableVersion(this.currentVersion);
 
         if (currentVersion.compareTo(artifactInfo.version) >= 0) {
             LOGGER.info("The mod is up to date!");
             return;
         }
 
-        this.pendingMessages.add(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements "
-                + EnumChatFormatting.GOLD + "version v" + artifactInfo.version + EnumChatFormatting.GREEN + " is available, click this message to see the changelog and download page.")
-                .setChatStyle(new ChatStyle()
-                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, GITHUB_MWE_RELEASE))
-                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + GITHUB_MWE_RELEASE)))));
+        LOGGER.info("New version available {}", artifactInfo.version);
 
-        if (!MWEConfig.automaticUpdate) return;
+        this.updateInfo = artifactInfo;
+
+        if (!this.automaticUpdate) return;
 
         if (isFeatherClient) {
-            this.pendingMessages.add(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + "The automatic updater is disabled on Feather."));
             return;
         }
 
@@ -122,9 +143,7 @@ public class ModUpdater {
 
         if (modCacheFile.exists() && deleterFile.exists()) {
 
-            this.pendingMessages.add(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements "
-                    + EnumChatFormatting.GOLD + "version v" + artifactInfo.version
-                    + EnumChatFormatting.GREEN + " has been downloaded and will be installed to your mods folder automatically when closing your game."));
+            this.downloadSuccess = true;
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 try {
@@ -148,7 +167,7 @@ public class ModUpdater {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }, "MWE Updater Thread"));
+            }, "Update installer Thread"));
 
         }
 
