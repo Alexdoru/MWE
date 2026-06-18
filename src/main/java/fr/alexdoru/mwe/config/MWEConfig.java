@@ -1036,7 +1036,7 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Checks",
-            name = "Chosthand check",
+            name = "Ghosthand check",
             comment = "Checks if the player can mine blocks through other players")
     public static boolean enableGhosthandCheck = true;
 
