@@ -15,7 +15,6 @@ import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -32,6 +31,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+
+import static net.minecraft.util.EnumChatFormatting.*;
 
 public class ModUpdater {
 
@@ -78,20 +79,21 @@ public class ModUpdater {
 
     private void printMessages() {
         if (this.updateInfo != null) {
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements "
-                    + EnumChatFormatting.GOLD + "version v" + this.updateInfo.version + EnumChatFormatting.GREEN + " is available, click this message to see the changelog and download page.")
+            ChatUtil.addChatMessage(DARK_GRAY + ChatUtil.bar());
+            ChatUtil.addChatMessage(ChatUtil.centerLine(DARK_RED.toString() + BOLD + "    MWE " + GOLD + "v" + this.updateInfo.version + GREEN + " is available!"));
+            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.centerLine(YELLOW + "    Click here to view the changelog & download page."))
                     .setChatStyle(new ChatStyle()
                             .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, this.releaseLink))
-                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + this.releaseLink)))));
+                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(YELLOW + this.releaseLink)))));
             if (this.automaticUpdate) {
+                ChatUtil.addChatMessage("");
                 if (this.isFeatherClient) {
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + "The automatic updater is disabled on Feather."));
+                    ChatUtil.addChatMessage(new ChatComponentText(RED + "✘ The automatic updater is disabled on Feather."));
                 } else if (this.downloadSuccess) {
-                    ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.getTagMW() + EnumChatFormatting.RED + EnumChatFormatting.BOLD + "Mega Walls Enhancements "
-                            + EnumChatFormatting.GOLD + "version v" + this.updateInfo.version
-                            + EnumChatFormatting.GREEN + " has been downloaded and will be installed to your mods folder automatically when closing your game."));
+                    ChatUtil.addChatMessage(new ChatComponentText(GREEN + "✔ Update has been downloaded and will be installed automatically when closing the game."));
                 }
             }
+            ChatUtil.addChatMessage(DARK_GRAY + ChatUtil.bar());
         }
     }
 
