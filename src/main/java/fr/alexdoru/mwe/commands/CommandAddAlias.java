@@ -3,6 +3,7 @@ package fr.alexdoru.mwe.commands;
 import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.data.AliasData;
+import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.cache.CachedHypixelPlayerData;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
@@ -10,7 +11,6 @@ import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
 import fr.alexdoru.mwe.http.requests.HypixelPlayerData;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
-import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -180,7 +180,7 @@ public class CommandAddAlias extends MyAbstractCommand {
         ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "In this lobby :\n");
         for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
             if (AliasData.getAlias(netInfo.getGameProfile().getId(), netInfo.getGameProfile().getName()) != null) {
-                ChatUtil.addChatMessage(NameUtil.getFormattedName(netInfo));
+                ChatUtil.addChatMessage(NameFormatter.getFormattedName(netInfo));
             }
         }
     }
@@ -191,13 +191,13 @@ public class CommandAddAlias extends MyAbstractCommand {
         final Minecraft mc = Minecraft.getMinecraft();
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
-                if (NameUtil.isRealPlayer(netInfo.getGameProfile().getId())) {
+                if (NameFormatter.isRealPlayer(netInfo.getGameProfile().getId())) {
                     this.addAlias(
                             netInfo.getGameProfile().getId(),
                             netInfo.getGameProfile().getName(),
                             alias,
                             ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()));
-                } else if (NameUtil.isNickedPlayer(netInfo.getGameProfile().getId())) {
+                } else if (NameFormatter.isNickedPlayer(netInfo.getGameProfile().getId())) {
                     this.addAlias(
                             null,
                             netInfo.getGameProfile().getName(),
@@ -245,12 +245,12 @@ public class CommandAddAlias extends MyAbstractCommand {
         final Minecraft mc = Minecraft.getMinecraft();
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
-                if (NameUtil.isRealPlayer(netInfo.getGameProfile().getId())) {
+                if (NameFormatter.isRealPlayer(netInfo.getGameProfile().getId())) {
                     this.removeAlias(
                             netInfo.getGameProfile().getId(),
                             netInfo.getGameProfile().getName(),
                             ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()));
-                } else if (NameUtil.isNickedPlayer(netInfo.getGameProfile().getId())) {
+                } else if (NameFormatter.isNickedPlayer(netInfo.getGameProfile().getId())) {
                     this.removeAlias(
                             null,
                             netInfo.getGameProfile().getName(),

@@ -1,24 +1,25 @@
-package fr.alexdoru.mwe.utils;
+package fr.alexdoru.mwe.features;
 
-import com.google.common.collect.ComparisonChain;
-import com.google.common.collect.Ordering;
 import com.mojang.authlib.GameProfile;
 import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.chat.ChatHandler;
+import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.AliasData;
-import fr.alexdoru.mwe.data.MWPlayerData;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.data.ScangameData;
-import fr.alexdoru.mwe.features.LeatherArmorManager;
-import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.nocheaters.WarningMessages;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
+import fr.alexdoru.mwe.utils.ColorUtil;
+import fr.alexdoru.mwe.utils.DelayedTask;
+import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
@@ -26,7 +27,10 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
-import net.minecraft.world.WorldSettings;
+import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -59,7 +63,9 @@ import java.util.regex.Pattern;
  * - receive once new Networkplayerinfo packet
  * - fire the playerjoin event once
  */
-public class NameUtil {
+public final class NameFormatter {
+
+    private NameFormatter() {}
 
     public static final String WARNING_ICON = EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET;
     public static final String RED_WARNING_ICON = EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET;
@@ -71,94 +77,89 @@ public class NameUtil {
     private static final IChatComponent ISQUAD_ICON = new ChatComponentText(SQUAD_ICON);
     private static final List<IChatComponent> ALL_ICONS_LIST = Arrays.asList(IWARNING_ICON, IRED_WARNING_ICON, IPINK_WARNING_ICON, ISQUAD_ICON);
     private static final Set<UUID> warningMsgPrinted = new HashSet<>();
+    private static final Map<UUID, PlayerData> PLAYER_DATA_CACHE = new HashMap<>();
+
+    public static void clearPlayerDataCache() {
+        PLAYER_DATA_CACHE.clear();
+    }
+
+    public static void removeFromDataCache(UUID uuid) {
+        PLAYER_DATA_CACHE.remove(uuid);
+    }
 
     /**
-     * This updates the infos storred in MWPlayerData.dataCache for the player : playername
+     * This updates the infos storred in PlayerDataCache for the player : playername
      * and refreshes the name in the tablist and the nametag.
-     * Set refreshDisplayName to true to fire the NameFormat Event and
-     * update the name of the player as well, in case you changed it via a command
-     * for example : /squad add player as aliasname
      */
-    public static void updateMWPlayerDataAndEntityData(String playername, boolean refreshDisplayName) {
+    public static void updatePlayerDataAndEntityData(String playername) {
         if (isValidMinecraftName(playername)) {
             final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
-            if (netInfo != null) {
-                ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(getMWPlayerData(netInfo.getGameProfile(), true).displayName);
+            if (netInfo instanceof NetworkPlayerInfoAccessor) {
+                ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(updatePlayerData(netInfo.getGameProfile()).displayName);
             }
             final EntityPlayer player = getPlayerEntityByName(playername);
             if (player != null) {
-                updateEntityPlayerFields(player, false);
-                if (refreshDisplayName) {
-                    player.refreshDisplayName();
-                }
-            }
-        }
-    }
-
-    public static void updateMWPlayerDataAndEntityData(EntityPlayer player, boolean refreshDisplayName) {
-        final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(player.getName());
-        if (netInfo != null) {
-            ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(getMWPlayerData(netInfo.getGameProfile(), true).displayName);
-        }
-        updateEntityPlayerFields(player, false);
-        if (refreshDisplayName) {
-            player.refreshDisplayName();
-        }
-    }
-
-    public static void updateMWPlayerDataAndEntityData(NetworkPlayerInfo netInfo, boolean refreshDisplayName) {
-        ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(getMWPlayerData(netInfo.getGameProfile(), true).displayName);
-        final EntityPlayer player = getPlayerEntityByName(netInfo.getGameProfile().getName());
-        if (player != null) {
-            updateEntityPlayerFields(player, false);
-            if (refreshDisplayName) {
+                updateEntityPlayerFields(player);
                 player.refreshDisplayName();
             }
         }
     }
 
-    public static void refreshAllNamesInWorld() {
-        for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
-            updateMWPlayerDataAndEntityData(netInfo, true);
+    public static void updatePlayerDataAndEntityData(@NotNull UUID id) {
+        updatePlayerDataAndEntityData(Minecraft.getMinecraft().getNetHandler().getPlayerInfo(id));
+    }
+
+    public static void updatePlayerDataAndEntityData(NetworkPlayerInfo netInfo) {
+        ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(updatePlayerData(netInfo.getGameProfile()).displayName);
+        final EntityPlayer player = getPlayerEntityByUUID(netInfo.getGameProfile().getId());
+        if (player != null) {
+            updateEntityPlayerFields(player);
+            player.refreshDisplayName();
         }
     }
 
-    private static final Pattern MINECRAFT_NAME_PATTERN = Pattern.compile("\\w{1,16}");
+    public static void refreshAllNamesInWorld() {
+        for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+            updatePlayerDataAndEntityData(netInfo);
+        }
+    }
 
-    public static boolean isValidMinecraftName(String name) {
+    private static final Pattern MINECRAFT_NAME_PATTERN = Pattern.compile("[a-zA-Z0-9_]{1,16}");
+
+    private static boolean isValidMinecraftName(String name) {
         return !StringUtil.isNullOrEmpty(name) && (MINECRAFT_NAME_PATTERN.matcher(name).matches() || ScoreboardTracker.isReplayMode());
     }
 
     public static void onTeamPacket(String playername) {
         if (!isValidMinecraftName(playername)) return;
         final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
-        if (netInfo == null) return;
-        final MWPlayerData.PlayerData mwPlayerData = getMWPlayerData(netInfo.getGameProfile(), true);
-        ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(mwPlayerData.displayName);
+        if (!(netInfo instanceof NetworkPlayerInfoAccessor)) return;
+        final PlayerData playerData = updatePlayerData(netInfo.getGameProfile());
+        ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(playerData.displayName);
         final Minecraft mc = Minecraft.getMinecraft();
         if (mc.theWorld != null) {
             final EntityPlayer player;
             if (playername.equals(MWEConfig.hypixelNick)) {
                 player = mc.thePlayer;
             } else {
-                player = getPlayerEntityByName(netInfo.getGameProfile().getName());
+                player = getPlayerEntityByUUID(netInfo.getGameProfile().getId());
             }
             if (player != null) {
-                updateEntityPlayerFields(player, mwPlayerData);
+                updateEntityPlayerColor(player, playerData);
             }
         }
     }
 
-    private static void updateEntityPlayerFields(EntityPlayer player, MWPlayerData.PlayerData mwPlayerData) {
+    private static void updateEntityPlayerColor(EntityPlayer player, PlayerData playerData) {
         final EntityPlayerAccessor playerAccessor = (EntityPlayerAccessor) player;
         final int oldColor = playerAccessor.getPlayerSpecialRenderColor();
-        playerAccessor.setPlayerTeamColor(mwPlayerData.teamColor);
-        if (MWEConfig.pinkSquadmates && mwPlayerData.squadname != null) {
+        playerAccessor.setPlayerTeamColor(playerData.teamColor);
+        if (MWEConfig.pinkSquadmates && SquadHandler.isSquadmate(player.getName())) {
             playerAccessor.setPlayerSpecialRenderColor(ColorUtil.getColorInt('d'));
         } else {
-            playerAccessor.setPlayerSpecialRenderColor(ColorUtil.getColorInt(mwPlayerData.teamColor));
+            playerAccessor.setPlayerSpecialRenderColor(ColorUtil.getColorInt(playerData.teamColor));
         }
-        playerAccessor.setMWClass(mwPlayerData.mwClass);
+        playerAccessor.setMWClass(playerData.mwClass);
         LeatherArmorManager.onColorChange(player, oldColor, playerAccessor.getPlayerSpecialRenderColor());
     }
 
@@ -166,14 +167,14 @@ public class NameUtil {
      * Updates the custom fields in the entity player, the icon on nametags and also checks to print
      * the warning message if player was reported and is currently joining the world
      */
-    public static void updateEntityPlayerFields(EntityPlayer player, boolean onPlayerJoin) {
+    private static void updateEntityPlayerFields(EntityPlayer player) {
 
-        final MWPlayerData.PlayerData playerData = MWPlayerData.get(player.getUniqueID());
+        final PlayerData playerData = PLAYER_DATA_CACHE.get(player.getUniqueID());
         if (playerData == null) {
             return;
         }
 
-        updateEntityPlayerFields(player, playerData);
+        updateEntityPlayerColor(player, playerData);
 
         player.getPrefixes().removeAll(ALL_ICONS_LIST);
 
@@ -189,37 +190,37 @@ public class NameUtil {
             }
         }
 
-        if (onPlayerJoin && playerData.wdr != null) {
-            if (MWEConfig.warningMessages) {
-                if (!warningMsgPrinted.contains(player.getUniqueID())) {
-                    warningMsgPrinted.add(player.getUniqueID());
-                    ChatHandler.deleteWarningFromChat(player.getName());
-                    WarningMessages.printWarningMessage(player.getUniqueID(), player.getTeam(), player.getName(), playerData.wdr);
-                }
-            }
-        }
-
     }
 
-    public static void clearWarningMessagesPrinted() {
-        warningMsgPrinted.clear();
+    private static void tryPrintWarningMessage(EntityPlayer player) {
+        if (MWEConfig.warningMessages && !warningMsgPrinted.contains(player.getUniqueID())) {
+            final WDR wdr = WdrData.getWdr(player.getUniqueID(), player.getName());
+            if (wdr != null) {
+                warningMsgPrinted.add(player.getUniqueID());
+                ChatHandler.deleteWarningFromChat(player.getName());
+                WarningMessages.printWarningMessage(player.getUniqueID(), player.getTeam(), player.getName(), wdr);
+            }
+        }
     }
 
     /**
-     * Transforms the infos storred in MWPlayerData.dataCache and returns the MWplayerData for the player
-     * For each new player spawned in the world it will create a new networkplayerinfo instance
-     * a rerun all the code in the method to generate the MWPlayerData instance
+     * Called on NetworkPlayerinfo instantiation
      */
-    @NotNull
-    public static MWPlayerData.PlayerData getMWPlayerData(GameProfile gameProfile, boolean forceRefresh) {
+    public static IChatComponent getDisplayName(GameProfile gameProfile) {
+        return NameFormatter.getPlayerData(gameProfile).displayName;
+    }
 
-        final UUID id = gameProfile.getId();
-        MWPlayerData.PlayerData playerData = MWPlayerData.get(id);
-
-        if (!forceRefresh && playerData != null) {
+    private static @NotNull PlayerData getPlayerData(GameProfile gameProfile) {
+        final PlayerData playerData = PLAYER_DATA_CACHE.get(gameProfile.getId());
+        if (playerData != null) {
             return playerData;
         }
+        return updatePlayerData(gameProfile);
+    }
 
+    @NotNull
+    private static PlayerData updatePlayerData(GameProfile gameProfile) {
+        final UUID id = gameProfile.getId();
         final String username = gameProfile.getName();
         final WDR wdr = WdrData.getWdr(id, username);
         String extraPrefix = "";
@@ -263,7 +264,7 @@ public class NameUtil {
                 teamColor = StringUtil.getLastColorCharOf(teamprefix);
                 mwClass = MWClass.fromTeamTag(ScoreboardTracker.isMWReplay() ? teamprefix : colorSuffix);
                 final boolean isobf = teamprefix.contains("§k");
-                final boolean isNicked = NameUtil.isNickedPlayer(id);
+                final boolean isNicked = NameFormatter.isNickedPlayer(id);
                 final String alias = AliasData.getAlias(id, username);
                 if (iExtraPrefix != null || isobf || isNicked && MWEConfig.showFakePlayersInTab || squadname != null || alias != null) {
                     final StringBuilder sb = new StringBuilder();
@@ -290,14 +291,10 @@ public class NameUtil {
             }
         }
 
-        if (playerData == null) {
-            playerData = new MWPlayerData.PlayerData(id, wdr, iExtraPrefix, squadname, displayName, teamColor, mwClass);
-        } else {
-            playerData.setData(wdr, iExtraPrefix, squadname, displayName, teamColor, mwClass);
-        }
+        final PlayerData playerData = new PlayerData(iExtraPrefix, displayName, teamColor, mwClass);
+        PLAYER_DATA_CACHE.put(id, playerData);
 
         return playerData;
-
     }
 
     private static final Pattern obfPattern = Pattern.compile("§k[OX]*");
@@ -312,6 +309,18 @@ public class NameUtil {
         final List<EntityPlayer> playerList = Minecraft.getMinecraft().theWorld.playerEntities;
         for (int i = playerList.size() - 1; i >= 0; --i) {
             if (playername.equals(playerList.get(i).getName())) {
+                return playerList.get(i);
+            }
+        }
+        return null;
+    }
+
+    private static EntityPlayer getPlayerEntityByUUID(UUID uuid) {
+        // we loop backwards because the player list contains duplicate entities
+        // and the "active" ones are the latest inserted
+        final List<EntityPlayer> playerList = Minecraft.getMinecraft().theWorld.playerEntities;
+        for (int i = playerList.size() - 1; i >= 0; --i) {
+            if (uuid.equals(playerList.get(i).getUniqueID())) {
                 return playerList.get(i);
             }
         }
@@ -369,7 +378,8 @@ public class NameUtil {
         if (team == null) {
             return SquadHandler.getSquadname(playername);
         } else if (team instanceof ScorePlayerTeam) {
-            return deobfString(((ScorePlayerTeam) team).getColorPrefix()) + SquadHandler.getSquadname(playername) + ((ScorePlayerTeam) team).getColorSuffix();
+            final ScorePlayerTeam scorePlayerTeam = (ScorePlayerTeam) team;
+            return deobfString(scorePlayerTeam.getColorPrefix()) + SquadHandler.getSquadname(playername) + scorePlayerTeam.getColorSuffix();
         }
         return deobfString(team.formatString(playername));
     }
@@ -390,30 +400,74 @@ public class NameUtil {
      * Returns true if the player is using a random class
      */
     public static boolean isPlayerUsingRandom(NetworkPlayerInfo netInfo) {
-        final String skinHash = "512a44f6c022dfaa6f61274c85aa1594cb304f0136fd5d1d3a27c1379e875692";
         if (!netInfo.hasLocationSkin()) {
             return false;
         }
-        return skinHash.equals(netInfo.getLocationSkin().toString().substring(16));
+        final String RANDOM_SKIN_HASH = "512a44f6c022dfaa6f61274c85aa1594cb304f0136fd5d1d3a27c1379e875692";
+        return RANDOM_SKIN_HASH.equals(netInfo.getLocationSkin().toString().substring(16));
     }
 
-    private static final Ordering<NetworkPlayerInfo> netInfoOrdering = Ordering.from(new NameUtil.PlayerComparator());
+    private static class PlayerData {
 
-    public static List<NetworkPlayerInfo> sortedCopyOf(Collection<NetworkPlayerInfo> list) {
-        return netInfoOrdering.sortedCopy(list);
+        public final IChatComponent extraPrefix;
+        public final IChatComponent displayName;
+        public final char teamColor;
+        public final MWClass mwClass;
+
+        public PlayerData(IChatComponent extraPrefix, IChatComponent displayNameIn, char teamColor, MWClass mwClass) {
+            this.extraPrefix = extraPrefix;
+            this.displayName = displayNameIn;
+            this.teamColor = teamColor;
+            this.mwClass = mwClass;
+        }
+
     }
 
-    private static class PlayerComparator implements Comparator<NetworkPlayerInfo> {
+    public static class PlayerJoinListener {
 
-        @Override
-        public int compare(NetworkPlayerInfo netInfo1, NetworkPlayerInfo netInfo2) {
-            final ScorePlayerTeam team1 = netInfo1.getPlayerTeam();
-            final ScorePlayerTeam team2 = netInfo2.getPlayerTeam();
-            return ComparisonChain.start()
-                    .compareTrueFirst(netInfo1.getGameType() != WorldSettings.GameType.SPECTATOR, netInfo2.getGameType() != WorldSettings.GameType.SPECTATOR)
-                    .compare(team1 != null ? team1.getRegisteredName() : "", team2 != null ? team2.getRegisteredName() : "")
-                    .compare(netInfo1.getGameProfile().getName(), netInfo2.getGameProfile().getName())
-                    .result();
+        private long lastDeathTime;
+
+        @SubscribeEvent
+        public void onWorldLoad(WorldEvent.Load event) {
+            if (event.world.isRemote && (System.currentTimeMillis() - lastDeathTime > 5000L)) {
+                warningMsgPrinted.clear();
+            }
+        }
+
+        @SubscribeEvent
+        public void onGuiScreen(GuiScreenEvent.InitGuiEvent.Pre event) {
+            if (event.gui instanceof GuiGameOver) {
+                lastDeathTime = System.currentTimeMillis();
+            }
+        }
+
+        @SubscribeEvent
+        public void onPlayerJoin(EntityJoinWorldEvent event) {
+            if (event.entity instanceof EntityPlayer && event.entity.worldObj.isRemote) {
+                try {
+                    final EntityPlayer player = (EntityPlayer) event.entity;
+                    if (event.entity instanceof EntityPlayerSP) {
+                        // Delaying the transformation for self because :
+                        // - certain fields such as mc.theWorld.getScoreboard().getPlayersTeam(username) are null when you just joined the world
+                        // - for self the player spawn before receiving a networkplayerinfo packet
+                        new DelayedTask(() -> {
+                            try {
+                                updatePlayerData(player.getGameProfile());
+                                updateEntityPlayerFields(player);
+                            } catch (Exception e) {
+                                ChatUtil.addChatMessage(EnumChatFormatting.RED + "Caught an exception when spawning " + event.entity.getName());
+                                e.printStackTrace();
+                            }
+                        }, 1);
+                    } else {
+                        updateEntityPlayerFields(player);
+                        tryPrintWarningMessage(player);
+                    }
+                } catch (Exception e) {
+                    ChatUtil.addChatMessage(EnumChatFormatting.RED + "Caught an exception when spawning " + event.entity.getName());
+                    e.printStackTrace();
+                }
+            }
         }
 
     }

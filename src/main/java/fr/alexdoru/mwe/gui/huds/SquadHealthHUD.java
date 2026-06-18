@@ -4,10 +4,11 @@ import com.mojang.authlib.GameProfile;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
+import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.ColorUtil;
-import fr.alexdoru.mwe.utils.NameUtil;
+import fr.alexdoru.mwe.utils.NetInfoOrdering;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -50,7 +51,7 @@ public class SquadHealthHUD extends AbstractRenderer {
         if (list.size() <= 1) {
             return;
         }
-        final List<NetworkPlayerInfo> playerlistToRender = NameUtil.sortedCopyOf(list);
+        final List<NetworkPlayerInfo> playerlistToRender = NetInfoOrdering.vanillaSortingCopyOf(list);
         int maxNameWidth = 0;
         int maxScoreWidth = 0;
         int maxFinalWidth = 0;
@@ -119,8 +120,8 @@ public class SquadHealthHUD extends AbstractRenderer {
     }
 
     private String getPlayerName(NetworkPlayerInfo netInfo) {
-        final String name = NameUtil.getFormattedName(netInfo);
-        return name.startsWith(NameUtil.SQUAD_ICON) ? name.substring(NameUtil.SQUAD_ICON.length()) : name;
+        final String name = NameFormatter.getFormattedName(netInfo);
+        return name.startsWith(NameFormatter.SQUAD_ICON) ? name.substring(NameFormatter.SQUAD_ICON.length()) : name;
     }
 
     @Override

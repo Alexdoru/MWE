@@ -12,7 +12,6 @@ import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.*;
 import fr.alexdoru.mwe.gui.MWERendererManager;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
-import fr.alexdoru.mwe.nocheaters.PlayerJoinListener;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
@@ -103,7 +102,7 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
         MinecraftForge.EVENT_BUS.register(new StrengthParticles());
         MinecraftForge.EVENT_BUS.register(new ScoreboardTracker());
-        MinecraftForge.EVENT_BUS.register(new PlayerJoinListener());
+        MinecraftForge.EVENT_BUS.register(new NameFormatter.PlayerJoinListener());
         MinecraftForge.EVENT_BUS.register(new KeybindingListener());
         MinecraftForge.EVENT_BUS.register(new MegaWallsEndGameStats());
 

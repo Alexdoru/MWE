@@ -6,6 +6,7 @@ import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.FlagChatComponent;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
@@ -14,7 +15,6 @@ import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.block.state.IBlockState;
@@ -73,7 +73,7 @@ public abstract class Check implements ICheck {
         }
         final String flagKey = playername + (MWEConfig.showFlagMessageType ? cheatType : this.getCheatName());
         final String msg = ChatUtil.getTagHackerDetector()
-                + NameUtil.getFormattedNameWithoutIcons(player.getName())
+                + NameFormatter.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.YELLOW + " flags "
                 + EnumChatFormatting.RED + (MWEConfig.showFlagMessageType ? cheatType : this.getCheatName());
         if (MWEConfig.oneFlagMessagePerGame) {
@@ -118,7 +118,7 @@ public abstract class Check implements ICheck {
     }
 
     protected void fail(EntityPlayer player, String extramsg) {
-        ChatUtil.debug(NameUtil.getFormattedNameWithoutIcons(player.getName())
+        ChatUtil.debug(NameFormatter.getFormattedNameWithoutIcons(player.getName())
                 + EnumChatFormatting.GRAY + " failed "
                 + EnumChatFormatting.RED + this.getCheatName()
                 + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")")

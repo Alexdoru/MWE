@@ -7,6 +7,7 @@ import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.LocrawListener;
 import fr.alexdoru.mwe.chat.ScanFlagChatComponent;
 import fr.alexdoru.mwe.data.ScangameData;
+import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.parsers.hypixel.GeneralInfo;
 import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
@@ -16,7 +17,7 @@ import fr.alexdoru.mwe.http.requests.HypixelPlayerData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
-import fr.alexdoru.mwe.utils.NameUtil;
+import fr.alexdoru.mwe.utils.NetInfoOrdering;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;
@@ -61,12 +62,12 @@ public class CommandScanGame extends MyAbstractCommand {
             ScangameData.clearScanGameData();
             if (ScoreboardTracker.isPreGameLobby()) ScangameData.clearRandomKits();
             ScangameData.setScanGameId(currentGameId);
-            NameUtil.refreshAllNamesInWorld();
+            NameFormatter.refreshAllNamesInWorld();
         }
         int i = 0;
         final boolean isMythicHour = ScoreboardUtils.isMegaWallsMythicGame();
         final Minecraft mc = Minecraft.getMinecraft();
-        for (final NetworkPlayerInfo netInfo : NameUtil.sortedCopyOf(mc.getNetHandler().getPlayerInfoMap())) {
+        for (final NetworkPlayerInfo netInfo : NetInfoOrdering.vanillaSortingCopyOf(mc.getNetHandler().getPlayerInfoMap())) {
             if (mc.thePlayer != null && netInfo.getGameProfile().getId().equals(mc.thePlayer.getUniqueID())) continue;
             if (scanPlayer(netInfo, isMythicHour)) i++;
         }
@@ -76,12 +77,12 @@ public class CommandScanGame extends MyAbstractCommand {
     private static boolean scanPlayer(NetworkPlayerInfo netInfo, boolean isMythicHourInPreGameLobby) {
 
         final UUID uuid = netInfo.getGameProfile().getId();
-        if (!NameUtil.isRealPlayer(uuid) || ScangameData.skipScan(uuid)) {
+        if (!NameFormatter.isRealPlayer(uuid) || ScangameData.skipScan(uuid)) {
             return false;
         }
 
         final ScangameData.ScanResult scanResult = ScangameData.get(uuid);
-        final boolean doRandomKitCheck = isMythicHourInPreGameLobby && NameUtil.isPlayerUsingRandom(netInfo) || ScangameData.didPlayerPickRandom(uuid);
+        final boolean doRandomKitCheck = isMythicHourInPreGameLobby && NameFormatter.isPlayerUsingRandom(netInfo) || ScangameData.didPlayerPickRandom(uuid);
         if (scanResult != null) {
             if (scanResult.msg != null) {
                 addScanMessageToChat(netInfo, scanResult.msg);
@@ -89,7 +90,7 @@ public class CommandScanGame extends MyAbstractCommand {
             } else if (scanResult.isLowLevelAccount() && doRandomKitCheck) {
                 scanResult.msg = getMythicRandomMsg(scanResult.networkLvl, scanResult.questamount);
                 addScanMessageToChat(netInfo, scanResult.msg);
-                NameUtil.updateMWPlayerDataAndEntityData(netInfo, false);
+                NameFormatter.updatePlayerDataAndEntityData(netInfo);
             }
             return false;
         }
@@ -129,7 +130,7 @@ public class CommandScanGame extends MyAbstractCommand {
         if (imsg != null) {
             addScanMessageToChat(networkPlayerInfo, imsg);
             ScangameData.put(uuid, imsg);
-            NameUtil.updateMWPlayerDataAndEntityData(networkPlayerInfo, false);
+            NameFormatter.updatePlayerDataAndEntityData(networkPlayerInfo);
         } else {
             ScangameData.put(uuid, (int) generalInfo.getNetworkLevel(), generalInfo.getCompletedQuests());
         }
@@ -240,7 +241,7 @@ public class CommandScanGame extends MyAbstractCommand {
     }
 
     private static IChatComponent getFormattedNameWithPlanckeClickEvent(NetworkPlayerInfo netInfo) {
-        final String formattedName = NameUtil.getFormattedNameWithoutIcons(netInfo);
+        final String formattedName = NameFormatter.getFormattedNameWithoutIcons(netInfo);
         return new ChatComponentText(formattedName)
                 .setChatStyle(new ChatStyle()
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to see the mega walls stats of that player")))

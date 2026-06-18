@@ -3,8 +3,9 @@ package fr.alexdoru.mwe.nocheaters;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.WarningChatComponent;
+import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.utils.DateUtil;
-import fr.alexdoru.mwe.utils.NameUtil;
+import fr.alexdoru.mwe.utils.NetInfoOrdering;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
@@ -23,7 +24,7 @@ public class WarningMessages {
     public static void printReportMessagesForWorld(boolean callFromCommand) {
         ChatHandler.deleteAllWarningMessages();
         boolean foundReport = false;
-        for (final NetworkPlayerInfo netInfo : NameUtil.sortedCopyOf(Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap())) {
+        for (final NetworkPlayerInfo netInfo : NetInfoOrdering.vanillaSortingCopyOf(Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap())) {
             final UUID uuid = netInfo.getGameProfile().getId();
             final String playerName = netInfo.getGameProfile().getName();
             final WDR wdr = WdrData.getWdr(uuid, playerName);
@@ -39,7 +40,7 @@ public class WarningMessages {
     }
 
     public static void printWarningMessage(UUID uuid, Team team, String playername, WDR wdr) {
-        final String wdrmapKey = NameUtil.isRealPlayer(uuid) ? uuid.toString() : playername;
+        final String wdrmapKey = NameFormatter.isRealPlayer(uuid) ? uuid.toString() : playername;
         final IChatComponent imsg = new WarningChatComponent(playername, RED + "Warning : ")
                 .appendSibling(getPlayernameWithHoverText(null, team, playername, wdrmapKey, wdr))
                 .appendText(GRAY + " joined, Cheats :")
@@ -50,7 +51,7 @@ public class WarningMessages {
 
     public static IChatComponent getPlayernameWithHoverText(String formattedName, Team team, String playername, String wdrmapKey, WDR wdr) {
         if (formattedName == null) {
-            formattedName = NameUtil.getFormattedNameWithoutIcons(team, playername);
+            formattedName = NameFormatter.getFormattedNameWithoutIcons(team, playername);
         }
         return new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + wdrmapKey + " " + playername))

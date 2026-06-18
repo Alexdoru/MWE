@@ -4,6 +4,7 @@ import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.features.FinalKillCounter;
+import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.features.PartyDetection;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.cache.CachedHypixelPlayerData;
@@ -13,7 +14,6 @@ import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
-import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -81,7 +81,7 @@ public class CommandWDR extends MyAbstractCommand {
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
                 final UUID uuid = netInfo.getGameProfile().getId();
-                if (NameUtil.isNickedPlayer(uuid) || NameUtil.isRealPlayer(uuid)) {
+                if (NameFormatter.isNickedPlayer(uuid) || NameFormatter.isRealPlayer(uuid)) {
                     addPlayerToReportList(
                             uuid,
                             netInfo.getGameProfile().getName(),
@@ -115,7 +115,7 @@ public class CommandWDR extends MyAbstractCommand {
         final boolean added = WdrData.addReport(uuid, playername, cheats);
         WdrData.saveReportedPlayers();
         if (added) {
-            final boolean isNicked = !NameUtil.isRealPlayer(uuid);
+            final boolean isNicked = !NameFormatter.isRealPlayer(uuid);
             ChatUtil.addChatMessage(
                     EnumChatFormatting.GREEN + "You reported " + (isNicked ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
                     + EnumChatFormatting.RED + (formattedName == null ? playername : EnumChatFormatting.RESET + formattedName) + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"

@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.asm.hooks;
 
-import fr.alexdoru.mwe.utils.NameUtil;
+import fr.alexdoru.mwe.features.NameFormatter;
 import net.minecraft.network.play.server.S3EPacketTeams;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 
@@ -15,11 +15,11 @@ public class NetHandlerPlayClientHook_TeamsListener {
         final int action = teamPacket.getAction();
         if (action == 0 || action == 3 || action == 4) {
             for (final String playername : teamPacket.getPlayers()) {
-                NameUtil.onTeamPacket(playername);
+                NameFormatter.onTeamPacket(playername);
             }
         } else if (team != null && (action == 1 || action == 2)) {
             for (final String playername : team.getMembershipCollection()) {
-                NameUtil.onTeamPacket(playername);
+                NameFormatter.onTeamPacket(playername);
             }
         }
     }

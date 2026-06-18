@@ -7,8 +7,8 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.data.ScangameData;
 import fr.alexdoru.mwe.features.FinalKillCounter;
+import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
@@ -156,7 +156,7 @@ public class ReportSuggestionHandler {
 
     private static String getReportTextWithFormattedName(String fmsg, String reportText, String reportedPlayer) {
         if (ScoreboardTracker.isInMwGame()) {
-            final String newReportText = EnumChatFormatting.DARK_RED + reportText.replace(reportedPlayer, NameUtil.getFormattedNameWithoutIcons(reportedPlayer) + EnumChatFormatting.DARK_RED);
+            final String newReportText = EnumChatFormatting.DARK_RED + reportText.replace(reportedPlayer, NameFormatter.getFormattedNameWithoutIcons(reportedPlayer) + EnumChatFormatting.DARK_RED);
             return StringUtil.replaceTargetWith(fmsg, reportText, newReportText);
         }
         return StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED);

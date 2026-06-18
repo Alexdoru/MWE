@@ -6,11 +6,11 @@ import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.LocrawListener;
 import fr.alexdoru.mwe.features.LeatherArmorManager;
+import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.gui.MWERendererManager;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.nocheaters.WarningMessages;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
@@ -888,7 +888,7 @@ public final class MWEConfig {
             "Warning Icons In Tab Only",
             "Pink squadmates"})
     private static void refreshAllNames() {
-        NameUtil.refreshAllNamesInWorld();
+        NameFormatter.refreshAllNamesInWorld();
     }
 
     @ConfigProperty(

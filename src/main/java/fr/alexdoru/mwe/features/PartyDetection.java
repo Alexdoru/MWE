@@ -3,7 +3,6 @@ package fr.alexdoru.mwe.features;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
-import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
@@ -80,7 +79,7 @@ public class PartyDetection {
                         final String teamColorPlayer = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), player), player);
                         if (!cheaterTeamColor.isEmpty() && cheaterTeamColor.equals(teamColorPlayer)) {
                             containsPlayers = true;
-                            imsg.appendSibling(new ChatComponentText(NameUtil.getFormattedName(netInfo) + " ")
+                            imsg.appendSibling(new ChatComponentText(NameFormatter.getFormattedName(netInfo) + " ")
                                     .setChatStyle(new ChatStyle()
                                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report " + player + " for boosting")))
                                             .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + player + " boo"))));

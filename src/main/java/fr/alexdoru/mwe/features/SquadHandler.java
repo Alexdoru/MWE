@@ -4,7 +4,6 @@ import fr.alexdoru.mwe.api.events.SquadEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
-import fr.alexdoru.mwe.utils.NameUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
@@ -43,7 +42,7 @@ public class SquadHandler {
     public static void addPlayer(String playername, String friendlyName) {
         final String prevSquadname = squadmap.get(playername);
         squadmap.put(playername, friendlyName);
-        NameUtil.updateMWPlayerDataAndEntityData(playername, true);
+        NameFormatter.updatePlayerDataAndEntityData(playername);
         if (prevSquadname == null) {
             MinecraftForge.EVENT_BUS.post(new SquadEvent(SquadEvent.Type.ADDED, playername));
         } else if (!prevSquadname.equals(friendlyName)) {
@@ -54,7 +53,7 @@ public class SquadHandler {
     public static boolean removePlayer(String playername) {
         final boolean success = squadmap.remove(playername) != null;
         if (success) {
-            NameUtil.updateMWPlayerDataAndEntityData(playername, true);
+            NameFormatter.updatePlayerDataAndEntityData(playername);
             MinecraftForge.EVENT_BUS.post(new SquadEvent(SquadEvent.Type.REMOVED, playername));
         }
         return success;

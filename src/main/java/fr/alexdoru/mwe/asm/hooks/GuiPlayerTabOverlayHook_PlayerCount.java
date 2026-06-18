@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.utils.NameUtil;
+import fr.alexdoru.mwe.features.NameFormatter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +28,7 @@ public class GuiPlayerTabOverlayHook_PlayerCount {
         if (MWEConfig.showFakePlayersInTab) {
             int nicks = 0;
             for (final NetworkPlayerInfo netInfo : playerInfoMap) {
-                if (NameUtil.isNickedPlayer(netInfo.getGameProfile().getId())) {
+                if (NameFormatter.isNickedPlayer(netInfo.getGameProfile().getId())) {
                     nicks++;
                 }
             }

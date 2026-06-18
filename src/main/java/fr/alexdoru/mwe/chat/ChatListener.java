@@ -14,7 +14,6 @@ import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.MapUtil;
-import fr.alexdoru.mwe.utils.NameUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -314,7 +313,7 @@ public class ChatListener {
                 final Matcher assistMatcher = ASSIST_PATTERN.matcher(msg);
                 if (assistMatcher.find()) {
                     final String playername = assistMatcher.group(1);
-                    fmsg = fmsg.replace(playername, NameUtil.getFormattedNameWithoutIcons(playername));
+                    fmsg = fmsg.replace(playername, NameFormatter.getFormattedNameWithoutIcons(playername));
                     changed = true;
                 }
             }
