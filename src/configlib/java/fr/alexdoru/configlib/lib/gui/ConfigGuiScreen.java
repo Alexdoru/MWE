@@ -2,10 +2,10 @@ package fr.alexdoru.configlib.lib.gui;
 
 import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.api.IConfigTitleRenderer;
-import fr.alexdoru.configlib.api.IRendererManager;
 import fr.alexdoru.configlib.lib.ConfigCategoryContainer;
 import fr.alexdoru.configlib.lib.ConfigFieldContainer;
 import fr.alexdoru.configlib.lib.ConfigHandler;
+import fr.alexdoru.configlib.lib.RendererManager;
 import fr.alexdoru.configlib.lib.gui.elements.*;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
@@ -61,7 +61,7 @@ public class ConfigGuiScreen extends GuiScreen {
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> configStructure,
             @NotNull ColorPalette colorPalette,
             @Nullable IConfigTitleRenderer titleRenderer,
-            @Nullable IRendererManager rendererManager) throws IllegalAccessException {
+            RendererManager rendererManager) throws IllegalAccessException {
         this.configHandler = configHandler;
         this.configName = configName;
         this.colorPalette = colorPalette;

@@ -1,13 +1,11 @@
 package fr.alexdoru.configlib.lib;
 
 import fr.alexdoru.configlib.api.ConfigProperty;
-import fr.alexdoru.configlib.api.IRendererManager;
 import fr.alexdoru.configlib.api.RendererPosition;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.elements.*;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -118,7 +116,7 @@ public final class ConfigFieldContainer {
         }
     }
 
-    public ConfigUIElement getConfigButton(ConfigGuiScreen configGuiScreen, @Nullable IRendererManager rendererManager) throws IllegalAccessException {
+    public ConfigUIElement getConfigButton(ConfigGuiScreen configGuiScreen, RendererManager rendererManager) throws IllegalAccessException {
         if (annotation.hidden()) return null;
         if (!FORCE_SHOW_HIDDEN && hideOverride != null) {
             try {
@@ -127,9 +125,6 @@ public final class ConfigFieldContainer {
             } catch (InvocationTargetException ignored) {}
         }
         if (field.getType() == RendererPosition.class) {
-            if (rendererManager == null) {
-                throw new IllegalStateException("Config must have an IRendererManager to handle renderers");
-            }
             return new RendererGuiButton(configGuiScreen, rendererManager, field, event, annotation);
         } else if (field.getType() == boolean.class) {
             return new BooleanGuiButton(field, event, annotation);

@@ -1,18 +1,19 @@
 package fr.alexdoru.configlib.api;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface IRendererManager {
 
     /**
-     * Returns the IRenderer associated to this RendererPosition
+     * Registers a HUD renderer to the config,
+     * this renderer will be automatically rendered
      */
-    IRenderer getRendererFromPosition(RendererPosition position);
+    void registerHUDRenderer(@NotNull IRenderer renderer);
 
     /**
-     * Method called when rendering the background of the gui screen
-     * used to edit the position of a renderer
-     *
-     * @param editedRenderer - the renderer currently edited
+     * Registers a renderer to the config,
+     * this renderer will NOT be automatically rendered
      */
-    void renderEditScreenBackground(IRenderer editedRenderer);
+    void registerRenderer(@NotNull IRenderer renderer);
 
 }

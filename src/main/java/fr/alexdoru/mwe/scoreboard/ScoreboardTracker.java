@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.scoreboard;
 
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
-import fr.alexdoru.mwe.gui.MWERendererManager;
+import fr.alexdoru.mwe.gui.MWERenderers;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -29,7 +29,7 @@ public final class ScoreboardTracker {
             PARSER.reset();
             PARSER.update();
             if (PARSER.isMWReplay()) {
-                MWERendererManager.baseLocationHUD.setCurrentMap(PARSER.getReplayMap());
+                MWERenderers.baseLocationHUD.setCurrentMap(PARSER.getReplayMap());
             }
             this.fireScoreboardRelatedEvents();
             Minecraft.getMinecraft().mcProfiler.endSection();

@@ -10,7 +10,7 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.config.MWEConfigTitle;
 import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.*;
-import fr.alexdoru.mwe.gui.MWERendererManager;
+import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.nocheaters.WdrData;
@@ -52,7 +52,6 @@ public class MWE {
     private static MWE INSTANCE;
     private final List<IMWEAddon> loadedAddons = new ArrayList<>();
     private IConfigHandler configHandler;
-    private MWERendererManager rendererManager;
     private FinalKillCounterManager fkManager;
     private RenegadeArrowTracker renegadeTracker;
 
@@ -75,8 +74,6 @@ public class MWE {
         final File configFile = new File(event.getModConfigurationDirectory(), "mwe.cfg");
         this.configHandler = ConfigLib.newConfigHandler(configFile, "MWE", MWE.version);
         this.configHandler.setConfigTitleRenderer(new MWEConfigTitle());
-        this.rendererManager = new MWERendererManager();
-        this.configHandler.setRendererManager(this.rendererManager);
         this.configHandler.registerConfig(MWEConfig.class);
         if (MWEConfig.checkForUpdate && !Boolean.getBoolean("mwe.disableUpdater")) {
             MinecraftForge.EVENT_BUS.register(new ModUpdater(event.getSourceFile()));
@@ -91,8 +88,8 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(this.fkManager);
         this.renegadeTracker = new RenegadeArrowTracker();
         MinecraftForge.EVENT_BUS.register(this.renegadeTracker);
-        this.rendererManager.loadRenderers();
-        MinecraftForge.EVENT_BUS.register(this.rendererManager);
+
+        MWERenderers.loadRenderers(this.configHandler.getRendererManager());
 
         MinecraftForge.EVENT_BUS.register(new WdrData());
         MinecraftForge.EVENT_BUS.register(new ReportQueue());
@@ -135,10 +132,6 @@ public class MWE {
 
     public IConfigHandler getConfigHandler() {
         return configHandler;
-    }
-
-    public MWERendererManager getRendererManager() {
-        return rendererManager;
     }
 
     @Nullable

@@ -75,7 +75,6 @@ public class MWEClassTransformer implements IClassTransformer {
         register(new EntityPlayerSPTransformer_CommandListener());
         register(new EntityPlayerSPTransformer_Sprint());
         register(new EntityRendererTransformer_CancelNightVision());
-        register(new EntityRendererTransformer_RenderOverlayHook());
         register(new EntityWitherTransformer_Color());
         register(new GuiChatTransformer_Accessor());
         register(new GuiChatTransformer_CopyMessages());

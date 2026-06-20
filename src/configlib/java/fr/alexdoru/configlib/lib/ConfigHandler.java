@@ -36,10 +36,9 @@ public final class ConfigHandler implements IConfigHandler {
     private final List<ConfigCategoryContainer> categories = new ArrayList<>();
     /** CategoryName -> SubCategoryName -> List of ConfigSetting */
     private final LinkedHashMap<String, LinkedHashMap<String, List<String>>> configStructure = new LinkedHashMap<>();
+    private final RendererManager rendererManager;
     @Nullable
     private IConfigTitleRenderer titleRenderer;
-    @Nullable
-    private IRendererManager rendererManager;
     @NotNull
     private ColorPalette colorPalette = new ColorPalette();
     private boolean hasCommand;
@@ -76,6 +75,7 @@ public final class ConfigHandler implements IConfigHandler {
             modVersion.set(configVersion);
             config.save();
         }
+        this.rendererManager = new RendererManager(this.configName);
     }
 
     @Override
@@ -224,10 +224,10 @@ public final class ConfigHandler implements IConfigHandler {
         this.titleRenderer = titleRenderer;
     }
 
+    @NotNull
     @Override
-    public void setRendererManager(@NotNull IRendererManager rendererManager) {
-        Objects.requireNonNull(rendererManager);
-        this.rendererManager = rendererManager;
+    public IRendererManager getRendererManager() {
+        return this.rendererManager;
     }
 
     @Override

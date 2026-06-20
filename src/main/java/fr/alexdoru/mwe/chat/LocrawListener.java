@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.chat;
 
 import fr.alexdoru.mwe.commands.CommandScanGame;
-import fr.alexdoru.mwe.gui.MWERendererManager;
+import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -43,7 +43,7 @@ public class LocrawListener {
                 if (action == LocrawAction.RUNSCANGAME) {
                     CommandScanGame.handleScangameCommand(gameId);
                 }
-                MWERendererManager.baseLocationHUD.setCurrentMap(map); // can't hurt to set the map everytime
+                MWERenderers.baseLocationHUD.setCurrentMap(map); // can't hurt to set the map everytime
                 event.setCanceled(true);
                 MinecraftForge.EVENT_BUS.unregister(this);
             }

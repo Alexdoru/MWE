@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.gui.MWERendererManager;
+import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.StringUtil;
 
@@ -14,7 +14,7 @@ public class EntityPlayerSPHook_CommandListener {
         if (MWEConfig.killCooldownHUDPosition.isEnabled() && ScoreboardTracker.isInMwGame()) {
             message = message.toLowerCase();
             if (message.equals("/kill") || message.startsWith("/kill ")) {
-                MWERendererManager.killCooldownHUD.drawCooldownHUD();
+                MWERenderers.killCooldownHUD.drawCooldownHUD();
             }
         }
     }

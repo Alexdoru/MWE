@@ -6,7 +6,7 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.data.ScangameData;
 import fr.alexdoru.mwe.features.*;
-import fr.alexdoru.mwe.gui.MWERendererManager;
+import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.hackerdetector.checks.Check;
 import fr.alexdoru.mwe.nocheaters.ReportSuggestionHandler;
 import fr.alexdoru.mwe.nocheaters.WDR;
@@ -79,7 +79,7 @@ public class ChatListener {
                 }
 
                 if (msg.equals(OWN_WITHER_DEATH_MESSAGE)) {
-                    MWERendererManager.killCooldownHUD.hideHUD();
+                    MWERenderers.killCooldownHUD.hideHUD();
                     return;
                 }
 
@@ -107,16 +107,16 @@ public class ChatListener {
                     return;
                 }
 
-                if (MWERendererManager.phoenixBondHUD.processMessage(event.message, msg)) {
+                if (MWERenderers.phoenixBondHUD.processMessage(event.message, msg)) {
                     return;
                 }
 
-                if (MWERendererManager.warcryHUD.processMessage(msg)) {
+                if (MWERenderers.warcryHUD.processMessage(msg)) {
                     return;
                 }
 
                 if (MWEConfig.strengthHUDPosition.isEnabled() && msg.equals(HUNTER_STRENGTH_MESSAGE)) {
-                    MWERendererManager.strengthHUD.setStrengthRenderStart(5000L);
+                    MWERenderers.strengthHUD.setStrengthRenderStart(5000L);
                     return;
                 }
 
@@ -140,7 +140,7 @@ public class ChatListener {
                 return;
             }
 
-            if (MWERendererManager.arrowHitHUD.processMessage(event, fmsg, msg)) {
+            if (MWERenderers.arrowHitHUD.processMessage(event, fmsg, msg)) {
                 return;
             }
 
@@ -203,11 +203,11 @@ public class ChatListener {
             /*Status messages*/
         } else if (event.type == 2 && ScoreboardTracker.isInMwGame()) {
 
-            if (MWERendererManager.strengthHUD.processMessage(fmsg)) {
+            if (MWERenderers.strengthHUD.processMessage(fmsg)) {
                 return;
             }
 
-            if (MWERendererManager.creeperPrimedTntHUD.processMessage(fmsg)) {
+            if (MWERenderers.creeperPrimedTntHUD.processMessage(fmsg)) {
                 return;
             }
 

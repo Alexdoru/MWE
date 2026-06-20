@@ -1,8 +1,8 @@
 package fr.alexdoru.configlib.lib.gui;
 
 import fr.alexdoru.configlib.api.IRenderer;
-import fr.alexdoru.configlib.api.IRendererManager;
 import fr.alexdoru.configlib.api.RendererPosition;
+import fr.alexdoru.configlib.lib.RendererManager;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -11,14 +11,14 @@ import java.io.IOException;
 
 public class RendererEditGuiScreen extends GuiScreen {
 
-    private final IRendererManager rendererManager;
+    private final RendererManager rendererManager;
     private final IRenderer renderer;
     private final RendererPosition rendererPosition;
     private final GuiScreen parent;
     private boolean dragging;
     private int prevX, prevY;
 
-    public RendererEditGuiScreen(IRendererManager rendererManager, IRenderer renderer, GuiScreen parent) {
+    public RendererEditGuiScreen(RendererManager rendererManager, IRenderer renderer, GuiScreen parent) {
         this.rendererManager = rendererManager;
         this.renderer = renderer;
         this.rendererPosition = renderer.getPosition();

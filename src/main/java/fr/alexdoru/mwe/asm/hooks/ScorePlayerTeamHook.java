@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.asm.hooks;
 
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.gui.MWERendererManager;
+import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 
 public class ScorePlayerTeamHook {
@@ -13,14 +13,14 @@ public class ScorePlayerTeamHook {
                 && ScoreboardTracker.isInMwGame()
                 && "\ud83d\udca3".equals(playername)
                 && ScoreboardTracker.getParser().isOnlyOneWitherAlive()) {
-            return MWERendererManager.lastWitherHPHUD.displayText;
+            return MWERenderers.lastWitherHPHUD.displayText;
         }
         if (MWEConfig.fkcounterHUDinSidebar
                 && MWEConfig.fkcounterHUDPosition.isEnabled()
                 && ScoreboardTracker.isInMwGame()
                 && "\ud83d\udc7d".equals(playername)
                 && MWE.INSTANCE().getFinalKillCounter() != null) {
-            return MWERendererManager.fkCounterHUD.displayText;
+            return MWERenderers.fkCounterHUD.displayText;
         }
         return null;
     }

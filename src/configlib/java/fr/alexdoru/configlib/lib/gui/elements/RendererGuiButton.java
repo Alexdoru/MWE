@@ -1,6 +1,10 @@
 package fr.alexdoru.configlib.lib.gui.elements;
 
-import fr.alexdoru.configlib.api.*;
+import fr.alexdoru.configlib.api.ColorPalette;
+import fr.alexdoru.configlib.api.ConfigProperty;
+import fr.alexdoru.configlib.api.IRenderer;
+import fr.alexdoru.configlib.api.RendererPosition;
+import fr.alexdoru.configlib.lib.RendererManager;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.RendererEditGuiScreen;
 import net.minecraft.client.gui.Gui;
@@ -19,7 +23,7 @@ public class RendererGuiButton extends ConfigGuiButton {
     private static final ResourceLocation RESET_ICON = new ResourceLocation("configlib", "reset_icon_64x64.png");
 
     private final ConfigGuiScreen parentScreen;
-    private final IRendererManager rendererManager;
+    private final RendererManager rendererManager;
     private final RendererPosition rendererPosition;
     private boolean toggled;
     private final GuiButton buttonEnabled;
@@ -28,7 +32,7 @@ public class RendererGuiButton extends ConfigGuiButton {
 
     public RendererGuiButton(
             ConfigGuiScreen configGuiScreen,
-            IRendererManager rendererManager,
+            RendererManager rendererManager,
             Field field,
             Method event,
             ConfigProperty annotation) throws IllegalAccessException {

@@ -35,9 +35,10 @@ public interface IConfigHandler {
     void setConfigTitleRenderer(@NotNull IConfigTitleRenderer titleRenderer);
 
     /**
-     * Sets the renderer manager, needed if your config has renderers
+     * Returns IRendererManager, used to register your IRenderers
      */
-    void setRendererManager(@NotNull IRendererManager rendererManager);
+    @NotNull
+    IRendererManager getRendererManager();
 
     /**
      * Sets the color palette to use for the config gui screen

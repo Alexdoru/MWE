@@ -215,7 +215,7 @@ public final class MWEApi {
          * Register a HUD to render
          */
         public static void registerHUD(@NotNull IRenderer renderer) {
-            MWE.INSTANCE().getRendererManager().registerRenderer(renderer);
+            MWE.INSTANCE().getConfigHandler().getRendererManager().registerHUDRenderer(renderer);
         }
 
     }

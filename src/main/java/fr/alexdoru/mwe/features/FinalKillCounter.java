@@ -6,7 +6,7 @@ import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
-import fr.alexdoru.mwe.gui.MWERendererManager;
+import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import fr.alexdoru.mwe.utils.MapUtil;
@@ -157,7 +157,7 @@ public final class FinalKillCounter {
                 ((NetworkPlayerInfoAccessor) netInfo).setFinalKills(0);
             }
         });
-        MWERendererManager.fkCounterHUD.updateDisplayText();
+        MWERenderers.fkCounterHUD.updateDisplayText();
     }
 
     public boolean processMessage(ClientChatReceivedEvent event, String formattedText, String unformattedText) {
@@ -196,7 +196,7 @@ public final class FinalKillCounter {
                                         killerTeam
                                 ));
                             }
-                            MWERendererManager.fkCounterHUD.updateDisplayText();
+                            MWERenderers.fkCounterHUD.updateDisplayText();
                         } else {
                             MinecraftForge.EVENT_BUS.post(new KillCounterEvent.NormalKill(
                                     victim,
@@ -229,7 +229,7 @@ public final class FinalKillCounter {
                                     victim,
                                     victimTeam
                             ));
-                            MWERendererManager.fkCounterHUD.updateDisplayText();
+                            MWERenderers.fkCounterHUD.updateDisplayText();
                         } else {
                             MinecraftForge.EVENT_BUS.post(new KillCounterEvent.NormalDeath(
                                     victim,
@@ -308,7 +308,7 @@ public final class FinalKillCounter {
                 }
             }
         }
-        MWERendererManager.fkCounterHUD.updateDisplayText();
+        MWERenderers.fkCounterHUD.updateDisplayText();
     }
 
     /**

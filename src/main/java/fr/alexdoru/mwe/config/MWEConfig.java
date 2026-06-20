@@ -7,7 +7,7 @@ import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.LocrawListener;
 import fr.alexdoru.mwe.features.LeatherArmorManager;
 import fr.alexdoru.mwe.features.NameFormatter;
-import fr.alexdoru.mwe.gui.MWERendererManager;
+import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.nocheaters.WarningMessages;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
@@ -777,7 +777,7 @@ public final class MWEConfig {
             "Players mode",
             "Player amount"})
     private static void onFKSHUDSetting() {
-        MWERendererManager.fkCounterHUD.updateDisplayText();
+        MWERenderers.fkCounterHUD.updateDisplayText();
     }
 
     @ConfigProperty(
