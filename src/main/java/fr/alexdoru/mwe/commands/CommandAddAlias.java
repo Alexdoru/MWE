@@ -39,8 +39,8 @@ public class CommandAddAlias extends MyAbstractCommand {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        if (args.length < 1) {
-            this.printCommandHelp();
+        if (args.length == 0) {
+            this.listAliasInLobby();
             return;
         }
         if (args[0].equalsIgnoreCase("list")) {
@@ -78,6 +78,7 @@ public class CommandAddAlias extends MyAbstractCommand {
         ChatUtil.addChatMessage(
                 EnumChatFormatting.GREEN + ChatUtil.bar() + "\n"
                         + ChatUtil.centerLine(EnumChatFormatting.GOLD + "AddAlias Help\n\n")
+                        + EnumChatFormatting.YELLOW + "/addalias" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Lists the alias in the lobby\n"
                         + EnumChatFormatting.YELLOW + "/addalias <player> <alias>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Adds an alias for the player\n"
                         + EnumChatFormatting.YELLOW + "/addalias <remove> <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Removes the alias for the player\n"
                         + EnumChatFormatting.YELLOW + "/addalias list" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Prints list of alias\n"
@@ -88,7 +89,6 @@ public class CommandAddAlias extends MyAbstractCommand {
     private void listAlias(String[] args) {
 
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-            this.listAliasInLobby();
             return;
         }
 
@@ -177,11 +177,21 @@ public class CommandAddAlias extends MyAbstractCommand {
     }
 
     private void listAliasInLobby() {
-        ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "In this lobby :\n");
+        boolean found = false;
         for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
             if (AliasData.getAlias(netInfo.getGameProfile().getId(), netInfo.getGameProfile().getName()) != null) {
+                if (!found) {
+                    ChatUtil.addChatMessage(EnumChatFormatting.GREEN + ChatUtil.bar());
+                    ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "In this lobby :\n");
+                    found = true;
+                }
                 ChatUtil.addChatMessage(NameFormatter.getFormattedName(netInfo));
             }
+        }
+        if (found) {
+            ChatUtil.addChatMessage(EnumChatFormatting.GREEN + ChatUtil.bar());
+        } else {
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "No one in this lobby has an alias");
         }
     }
 
