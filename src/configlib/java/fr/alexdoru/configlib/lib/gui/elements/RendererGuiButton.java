@@ -8,7 +8,6 @@ import fr.alexdoru.configlib.lib.RendererManager;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.RendererEditGuiScreen;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
@@ -26,9 +25,9 @@ public class RendererGuiButton extends ConfigGuiButton {
     private final RendererManager rendererManager;
     private final RendererPosition rendererPosition;
     private boolean toggled;
-    private final GuiButton buttonEnabled;
-    private final GuiButton buttonMoveHud;
-    private final GuiButton buttonResetPos;
+    private final ClickGuiButton buttonEnabled;
+    private final ClickGuiButton buttonMoveHud;
+    private final ClickGuiButton buttonResetPos;
 
     public RendererGuiButton(
             ConfigGuiScreen configGuiScreen,
@@ -41,9 +40,9 @@ public class RendererGuiButton extends ConfigGuiButton {
         this.rendererManager = rendererManager;
         this.rendererPosition = ((RendererPosition) field.get(null));
         this.toggled = this.rendererPosition.isEnabled();
-        this.buttonEnabled = new GuiButton(0, 0, 0, mc.fontRendererObj.getStringWidth(" Disabled "), 20, getButtonText());
-        this.buttonMoveHud = new GuiButton(0, 0, 0, 20, 20, "");
-        this.buttonResetPos = new GuiButton(0, 0, 0, 20, 20, "");
+        this.buttonEnabled = new ClickGuiButton(0, 0, 0, mc.fontRendererObj.getStringWidth(" Disabled "), 20, getButtonText());
+        this.buttonMoveHud = new ClickGuiButton(0, 0, 0, 20, 20, "");
+        this.buttonResetPos = new ClickGuiButton(0, 0, 0, 20, 20, "");
     }
 
     @Override
@@ -57,13 +56,13 @@ public class RendererGuiButton extends ConfigGuiButton {
         super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
         buttonEnabled.xPosition = drawX + boxWidth - buttonEnabled.width - 20;
         buttonEnabled.yPosition = drawY + 8;
-        buttonEnabled.drawButton(mc, mouseX, mouseY);
+        buttonEnabled.drawButton(colorPalette, mc, mouseX, mouseY);
         buttonMoveHud.xPosition = buttonEnabled.xPosition;
         buttonMoveHud.yPosition = buttonEnabled.yPosition + buttonEnabled.height + 1;
-        buttonMoveHud.drawButton(mc, mouseX, mouseY);
+        buttonMoveHud.drawButton(colorPalette, mc, mouseX, mouseY);
         buttonResetPos.xPosition = buttonEnabled.xPosition + buttonEnabled.width - buttonResetPos.width - 1;
         buttonResetPos.yPosition = buttonMoveHud.yPosition;
-        buttonResetPos.drawButton(mc, mouseX, mouseY);
+        buttonResetPos.drawButton(colorPalette, mc, mouseX, mouseY);
         drawIcon(MOVE_ICON, buttonMoveHud.xPosition, buttonMoveHud.yPosition);
         drawIcon(RESET_ICON, buttonResetPos.xPosition, buttonResetPos.yPosition);
         if (buttonMoveHud.isMouseOver()) {
