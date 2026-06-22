@@ -6,7 +6,7 @@
 - add separate configs for each hacker detector check
 - add config for the warp protection feature
 - add setting to show full name on potion hud
-- add separate configs for updater : check for updater and automatic download
+- add separate configs for updater : check for update and automatic download
 - show formatted names on assists
 - make `/squad` command case-insensitive
 - fix : support gold sword in energy HUD
@@ -19,6 +19,8 @@ Added a public API allowing you to create addon mods.
 By making an addon mod, users can install latest version of official MWE and multiple addons of their liking.
 Whereas if you modify MWE and distribute it, users are stuck with your modified MWE at whatever version it was made.
 So they can't install latest version of MWE, and they can't install other modified MWE that have different features.
+
+### Example addon mod [here](https://github.com/Alexdoru/ExampleMod1.8.9/tree/mwe-addon)
 
 To make your addon you should only use the contents of
 the [mwe/api](https://github.com/Alexdoru/MWE/tree/master/src/main/java/fr/alexdoru/mwe/api) package, the main class
