@@ -144,9 +144,10 @@ Allows you to customize the look of the f3+b hitboxes.
 - **Wither death time HUD** - Displays the time left before the last wither standing automatically dies, HUD can be placed in the sidebar
 - **Colored Leather Armor** - Changes iron armor pieces to team colored leather armor
 - **Hide hunger title** - Stop rendering the hunger message in the middle of the screen during deathmatch
+- **Hide automaton title** - Hides the energy indicator subtitle when playing automaton
 - **Hide repetitive msg** - Hides certain messages that spam the chat in Mega Walls
 - **More strength particles** - Spawns particles around the player when a dreadlord or herobrine gets strength on kill
-- **Renegade arrow count** - Displays the amount of arrows you have pinned in them above player heads when playing Renegade
+- **Renegade arrow count** - Displays the amount of pinned arrows on player nametags when playing Renegade
 - **Command Keybinds** - Keybinds to run the following commands : `/enderchest`, `/kill`, `/surface`, `/teamchest`, `/warcry`
 - **AFK kick sound** - Plays a sound when you are about to get kicked for AFK
 - **Wither Outlines** - Renders a team colored outlines around withers
