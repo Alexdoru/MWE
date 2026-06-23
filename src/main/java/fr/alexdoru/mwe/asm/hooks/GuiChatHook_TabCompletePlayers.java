@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.asm.hooks;
 
+import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
@@ -23,7 +24,7 @@ public class GuiChatHook_TabCompletePlayers {
                 tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
             } else {
                 final String lowerCase = leftOfCursor.toLowerCase();
-                if (lowerCase.startsWith("/msg ") || lowerCase.startsWith("/w ") || lowerCase.startsWith("/r ")) {
+                if (lowerCase.startsWith("/msg ") || lowerCase.startsWith("/w ") || lowerCase.startsWith("/r ") || ScoreboardTracker.isPrepPhase() && lowerCase.startsWith("/shout ")) {
                     final String[] args = leftOfCursor.split(" ", -1);
                     tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
                 }
