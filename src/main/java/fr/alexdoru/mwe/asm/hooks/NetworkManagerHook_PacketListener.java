@@ -15,6 +15,4 @@ public class NetworkManagerHook_PacketListener {
         } catch (Throwable ignored) {}
     }
 
-    public static void listenSentPacket(Packet<?> packet) {}
-
 }
