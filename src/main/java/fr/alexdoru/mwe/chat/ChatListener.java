@@ -190,7 +190,7 @@ public class ChatListener {
                 final Matcher playerJoinMatcher = PLAYER_JOIN_PATTERN.matcher(msg);
                 if (playerJoinMatcher.matches()) {
                     final String playername = playerJoinMatcher.group(1);
-                    PartyDetection.onPlayerJoin(playername, System.currentTimeMillis());
+                    PartyDetection.onPlayerJoin(playername);
                     ChatUtil.addSkinToComponent(event.message, playername);
                     return;
                 }

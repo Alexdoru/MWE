@@ -11,42 +11,32 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class PartyDetection {
 
-    private static String lastPlayerJoining = "";
+    private static final long TIME_RESET_PARTYS = 20L * 60L * 1000L;
+    private static final long TIME_SAME_PARTY = 101L;
+
+    private static final Map<String, Set<String>> PARTYS = new HashMap<>();
+    private static String lastPlayerJoining;
     private static long timeLastJoin = 0;
-    private static final HashMap<String, List<String>> partysMap = new HashMap<>();
 
-    public static void onPlayerJoin(String playername, long jointime) {
+    public static void onPlayerJoin(String playername) {
 
-        if (timeLastJoin != 0 && jointime - timeLastJoin > 25L * 60L * 1000L) {
-            partysMap.clear();
+        final long jointime = System.currentTimeMillis();
+
+        if (jointime - timeLastJoin > TIME_RESET_PARTYS) {
+            PARTYS.clear();
         }
 
-        if (jointime - timeLastJoin < 101L && !lastPlayerJoining.isEmpty()) {
-            final List<String> partyLastPlayer = partysMap.get(lastPlayerJoining);
-            final List<String> partyPlayer = partysMap.get(playername);
-            if (partyLastPlayer != null && partyPlayer != null) {
-                addAllWithoutDuplicates(partyLastPlayer, partyPlayer);
-                partysMap.put(playername, partyLastPlayer);
-            } else if (partyLastPlayer != null) {
-                partyLastPlayer.add(playername);
-                partysMap.put(playername, partyLastPlayer);
-            } else if (partyPlayer != null) {
-                partyPlayer.add(lastPlayerJoining);
-                partysMap.put(lastPlayerJoining, partyPlayer);
-            } else {
-                final List<String> newParty = new ArrayList<>();
-                newParty.add(lastPlayerJoining);
-                newParty.add(playername);
-                partysMap.put(lastPlayerJoining, newParty);
-                partysMap.put(playername, newParty);
-            }
+        if (lastPlayerJoining != null && jointime - timeLastJoin < TIME_SAME_PARTY) {
+            final Set<String> partyLastPlayer = PARTYS.computeIfAbsent(lastPlayerJoining, name -> new HashSet<>(Collections.singletonList(name)));
+            final Set<String> partyPlayer = PARTYS.computeIfAbsent(playername, name -> new HashSet<>(Collections.singletonList(name)));
+            partyLastPlayer.addAll(partyPlayer);
+            partyPlayer.addAll(partyLastPlayer);
         }
 
         lastPlayerJoining = playername;
@@ -54,44 +44,47 @@ public class PartyDetection {
 
     }
 
-    private static void addAllWithoutDuplicates(List<String> listToKeep, List<String> listToAdd) {
-        for (final String s : listToAdd) {
-            if (!listToKeep.contains(s)) {
-                listToKeep.add(s);
-            }
-        }
-    }
-
     public static void printBoostingReportAdvice(String playername) {
-        final List<String> partyList = partysMap.get(playername);
-        if (partyList != null) {
-            final NetworkPlayerInfo cheaterNetInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
-            if (cheaterNetInfo == null) {
-                return;
-            }
-            final String cheaterTeamColor = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(cheaterNetInfo.getPlayerTeam(), playername), playername);
-            final ChatComponentText imsg = new ChatComponentText(EnumChatFormatting.GREEN + "This player joined in a party with : ");
-            boolean containsPlayers = false;
-            for (final String player : partyList) {
-                if (!player.equals(playername)) {
-                    final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(player);
-                    if (netInfo != null) {
-                        final String teamColorPlayer = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), player), player);
-                        if (!cheaterTeamColor.isEmpty() && cheaterTeamColor.equals(teamColorPlayer)) {
-                            containsPlayers = true;
-                            imsg.appendSibling(new ChatComponentText(NameFormatter.getFormattedName(netInfo) + " ")
-                                    .setChatStyle(new ChatStyle()
-                                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report " + player + " for boosting")))
-                                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + player + " boo"))));
-                        }
+        final Set<String> party = PARTYS.get(playername);
+        if (party == null) return;
+        final NetworkPlayerInfo cheaterNetInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
+        if (cheaterNetInfo == null) {
+            return;
+        }
+        final String cheaterTeamColor = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(cheaterNetInfo.getPlayerTeam(), playername), playername);
+        final ChatComponentText imsg = new ChatComponentText(EnumChatFormatting.GREEN + "This player joined in a party with : ");
+        boolean containsPlayers = false;
+        for (final String player : party) {
+            if (!player.equals(playername)) {
+                final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(player);
+                if (netInfo != null) {
+                    final String teamColorPlayer = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), player), player);
+                    if (!cheaterTeamColor.isEmpty() && cheaterTeamColor.equals(teamColorPlayer)) {
+                        containsPlayers = true;
+                        imsg.appendSibling(new ChatComponentText(NameFormatter.getFormattedName(netInfo) + " ")
+                                .setChatStyle(new ChatStyle()
+                                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report " + player + " for boosting")))
+                                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + player + " boo"))));
                     }
                 }
             }
-            imsg.appendText(EnumChatFormatting.GREEN + "you can click their name to report them for boosting.");
-            if (containsPlayers) {
-                new DelayedTask(() -> ChatUtil.addChatMessage(imsg), 10);
-            }
         }
+        imsg.appendText(EnumChatFormatting.GREEN + "you can click their name to report them for boosting.");
+        if (containsPlayers) {
+            new DelayedTask(() -> ChatUtil.addChatMessage(imsg), 10);
+        }
+    }
+
+    @NotNull
+    public static Set<String> getPlayersWithParty() {
+        return Collections.unmodifiableSet(PARTYS.keySet());
+    }
+
+    @NotNull
+    public static Set<String> getPartyOf(String playername) {
+        final Set<String> p = PARTYS.get(playername);
+        if (p == null) return Collections.emptySet();
+        return Collections.unmodifiableSet(p);
     }
 
 }
