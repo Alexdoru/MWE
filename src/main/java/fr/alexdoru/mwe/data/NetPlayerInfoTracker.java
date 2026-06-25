@@ -60,21 +60,22 @@ public final class NetPlayerInfoTracker {
     }
 
     public static void printDisconnectedPlayers() {
-        final List<String> disconnectList = new ArrayList<>();
+        final long DISCONNECT_TIME_THRESHOLD = 3000L;
+        final Set<String> disconnectSet = new HashSet<>();
         final StringBuilder commandBuilder = new StringBuilder();
         final StringBuilder messageBuilder = new StringBuilder();
         final long timenow = System.currentTimeMillis();
         ResourceLocation skin = null;
         for (int i = 0; i < latestDisconnected.size(); i++) {
             final DisconnectedPlayer disconnectedPlayer = latestDisconnected.get(i);
-            if (disconnectedPlayer.playername != null && timenow - disconnectedPlayer.disconnectTime <= 1000L && !disconnectList.contains(disconnectedPlayer.playername)) {
+            if (disconnectedPlayer.playername != null && timenow - disconnectedPlayer.disconnectTime <= DISCONNECT_TIME_THRESHOLD && !disconnectSet.contains(disconnectedPlayer.playername)) {
                 final NetHandlerPlayClient netHandler = Minecraft.getMinecraft().getNetHandler();
                 NetworkPlayerInfo netInfo = null;
                 if (netHandler != null) {
                     netInfo = netHandler.getPlayerInfo(disconnectedPlayer.uuid);
                 }
                 if (netInfo == null) {
-                    disconnectList.add(disconnectedPlayer.playername);
+                    disconnectSet.add(disconnectedPlayer.playername);
                     commandBuilder.append(" ").append(disconnectedPlayer.playername);
                     messageBuilder.append(" ").append(disconnectedPlayer.formattedName);
                     if (skin == null) {
@@ -83,15 +84,15 @@ public final class NetPlayerInfoTracker {
                 }
             }
         }
-        if (disconnectList.isEmpty()) {
+        if (disconnectSet.isEmpty()) {
             return;
         }
         final String command = commandBuilder.toString();
         final String formattedString = messageBuilder.toString();
-        final IChatComponent msg = new ChatComponentText(EnumChatFormatting.RED + "Player" + (disconnectList.size() == 1 ? "" : "s") + " disconnected :" + EnumChatFormatting.AQUA + command)
+        final IChatComponent msg = new ChatComponentText(EnumChatFormatting.RED + "Player" + (disconnectSet.size() == 1 ? "" : "s") + " disconnected :" + EnumChatFormatting.AQUA + command)
                 .setChatStyle(new ChatStyle()
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(
-                                EnumChatFormatting.GREEN + "Player" + (disconnectList.size() == 1 ? "" : "s") + " disconnected in the last second :" + formattedString + "\n\n" +
+                                EnumChatFormatting.GREEN + "Player" + (disconnectSet.size() == 1 ? "" : "s") + " disconnected in the last second :" + formattedString + "\n\n" +
                                         EnumChatFormatting.YELLOW + "Click this message to run : \n" + EnumChatFormatting.YELLOW + "/stalk" + command)))
                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stalk" + command)));
         if (skin != null && msg instanceof ChatComponentTextAccessor) {
