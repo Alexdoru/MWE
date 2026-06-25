@@ -8,6 +8,7 @@ import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
 import fr.alexdoru.mwe.data.AliasData;
+import fr.alexdoru.mwe.features.PartyDetection;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
@@ -238,6 +239,28 @@ public final class MWEApi {
          */
         public static IPlayerUUID getPlayerUUID(String playername) throws ApiException {
             return MojangNameToUUID.getPlayerUUID(playername);
+        }
+
+    }
+
+    public static final class Partys {
+
+        private Partys() {}
+
+        /**
+         * Returns the names of all players that have a party
+         */
+        @NotNull
+        public static Set<String> getPlayersWithParty() {
+            return PartyDetection.getPlayersWithParty();
+        }
+
+        /**
+         * Returns a set containing the names of party members of a player, set might be empty
+         */
+        @NotNull
+        public static Set<String> getPartyOf(String playername) {
+            return PartyDetection.getPartyOf(playername);
         }
 
     }
