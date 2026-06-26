@@ -154,8 +154,8 @@ public final class NameFormatter {
         final EntityPlayerAccessor playerAccessor = (EntityPlayerAccessor) player;
         final int oldColor = playerAccessor.getPlayerSpecialRenderColor();
         playerAccessor.setPlayerTeamColor(playerData.teamColor);
-        if (MWEConfig.pinkSquadmates && SquadHandler.isSquadmate(player.getName())) {
-            playerAccessor.setPlayerSpecialRenderColor(ColorUtil.getColorInt('d'));
+        if (MWEConfig.coloredSquadmates && SquadHandler.isSquadmate(player.getName())) {
+            playerAccessor.setPlayerSpecialRenderColor(ColorUtil.getColorInt(MWEConfig.squadmateColor));
         } else {
             playerAccessor.setPlayerSpecialRenderColor(ColorUtil.getColorInt(playerData.teamColor));
         }
@@ -275,6 +275,9 @@ public final class NameFormatter {
                         sb.append(teamprefix);
                     }
                     if (squadname != null) {
+                        if (MWEConfig.coloredSquadmates && MWEConfig.coloredSquadTabname) {
+                            sb.append(MWEConfig.squadmateColor);
+                        }
                         sb.append(squadname);
                     } else {
                         sb.append(username);

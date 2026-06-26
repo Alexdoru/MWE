@@ -215,11 +215,11 @@ public class ChatListener {
                 final String squadname = SquadHandler.getSquadnameUnsafe(name);
                 if (squadname == null) return;
                 if (squadname.equals(name)) {
-                    if (MWEConfig.pinkSquadmates) {
-                        event.message = new ChatComponentText(StringUtil.changeColorOf(fmsg, name, EnumChatFormatting.LIGHT_PURPLE));
+                    if (MWEConfig.coloredSquadmates) {
+                        event.message = new ChatComponentText(StringUtil.changeColorOf(fmsg, name, MWEConfig.squadmateColor));
                     }
                 } else {
-                    final String replacement = MWEConfig.pinkSquadmates ? EnumChatFormatting.LIGHT_PURPLE + squadname : squadname;
+                    final String replacement = MWEConfig.coloredSquadmates ? MWEConfig.squadmateColor + squadname : squadname;
                     event.message = new ChatComponentText(fmsg.replaceFirst(name, replacement));
                 }
             }

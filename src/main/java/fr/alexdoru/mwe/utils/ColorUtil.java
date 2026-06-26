@@ -69,6 +69,10 @@ public class ColorUtil {
         }
     }
 
+    public static int getColorInt(EnumChatFormatting color) {
+        return getColorInt(color.toString().charAt(1));
+    }
+
     public static int getColorInt(char colorChar) {
         if (colorChar == '\0') {
             return 0xFFFFFF;

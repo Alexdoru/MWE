@@ -898,8 +898,7 @@ public final class MWEConfig {
             "Show Squad Icons",
             "Squad Icons In Tab Only",
             "Show Warning Icons",
-            "Warning Icons In Tab Only",
-            "Pink squadmates"})
+            "Warning Icons In Tab Only"})
     private static void refreshAllNames() {
         NameFormatter.refreshAllNamesInWorld();
     }
@@ -1126,9 +1125,29 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = SQUAD, subCategory = "General",
-            name = "Pink squadmates",
-            comment = "Your squadmates will have a pink nametag, hitbox color and hurt color")
-    public static boolean pinkSquadmates = true;
+            name = "Colored squadmates",
+            comment = "Your squadmates will have a fixed color for nametag, hitbox color and hurt color")
+    public static boolean coloredSquadmates = true;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "General",
+            name = "Colored tab name",
+            comment = "Use the squadmate color in the tablist as well")
+    public static boolean coloredSquadTabname = true;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "General",
+            name = "Squadmate color")
+    public static EnumChatFormatting squadmateColor = EnumChatFormatting.LIGHT_PURPLE;
+
+    @ConfigPropertyEvent(name = {
+            "Colored squadmates",
+            "Colored tab name",
+            "Squadmate color"
+    })
+    private static void refreshSquadName() {
+        NameFormatter.refreshAllNamesInWorld();
+    }
 
     @ConfigProperty(
             category = SQUAD, subCategory = "General",
