@@ -604,6 +604,19 @@ public final class MWEConfig {
     public static boolean squadHaloPlayer = true;
 
     @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "General",
+            name = "Wither alerts",
+            comment = "Gives an alert when a wither's HP falls below a certain threshold")
+    public static boolean witherAlerts = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "General",
+            name = "Wither alerts threshold",
+            comment = "HP to give an alert",
+            sliderMax = 500)
+    public static int witherAlertsThreshold = 100;
+
+    @ConfigProperty(
             category = MEGA_WALLS, subCategory = "Chat",
             name = "Print deathmatch damage in chat",
             comment = "Prints the deathmatch damage as a separate message in chat instead of having to hover over the message")

@@ -1,7 +1,9 @@
 package fr.alexdoru.mwe.scoreboard;
 
 import fr.alexdoru.mwe.api.IScoreboardParser;
+import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.features.AFKSoundWarning;
 import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.utils.SoundUtil;
@@ -26,6 +28,10 @@ public final class ScoreboardParser implements IScoreboardParser {
     private static final Pattern WITHER_ALIVE_PATTERN = Pattern.compile("\\[[BGRY]] Wither HP: ([,\\d]+)");
     private static final Pattern REPLAY_MAP_PATTERN = Pattern.compile("Map: ([a-zA-Z0-9_ ]+)");
 
+    private boolean triggeredBlueWitherAlert = false;
+    private boolean triggeredGreenWitherAlert = false;
+    private boolean triggeredRedWitherAlert = false;
+    private boolean triggeredYellowWitherAlert = false;
     private boolean triggeredWallsFallAlert = false;
     private boolean triggeredGameEndAlert = false;
     private boolean triggeredKillCooldownReset = false;
@@ -46,6 +52,10 @@ public final class ScoreboardParser implements IScoreboardParser {
     private boolean hasGameEnded = false;
 
     void onGameStart() {
+        triggeredBlueWitherAlert = false;
+        triggeredGreenWitherAlert = false;
+        triggeredRedWitherAlert = false;
+        triggeredYellowWitherAlert = false;
         triggeredWallsFallAlert = false;
         triggeredGameEndAlert = false;
         triggeredKillCooldownReset = false;
@@ -170,11 +180,16 @@ public final class ScoreboardParser implements IScoreboardParser {
             final String line = cleanLines.get(i);
             /*Wither alive detection*/
             final Matcher witherAliveMatcher = WITHER_ALIVE_PATTERN.matcher(line);
-            String colorCode = "";
+            final String colorCode;
             if (witherAliveMatcher.find()) {
                 colorCode = StringUtil.getLastColorCodeBefore(formattedLines.get(i), "[");
                 aliveWithers.add(colorCode);
                 witherHP = Integer.parseInt(witherAliveMatcher.group(1).replace(",", ""));
+            } else {
+                if (line.contains("eliminated!")) {
+                    eliminatedTeams++;
+                }
+                continue;
             }
 
             if (!triggeredKillCooldownReset && witherHP < 100 && !colorCode.isEmpty() && colorCode.equals(teamColor)) {
@@ -182,8 +197,25 @@ public final class ScoreboardParser implements IScoreboardParser {
                 triggeredKillCooldownReset = true;
             }
 
-            if (line.contains("eliminated!")) {
-                eliminatedTeams++;
+            if (MWEConfig.witherAlerts && witherHP < MWEConfig.witherAlertsThreshold) {
+                MWTeam witherTeam = null;
+                if (!triggeredBlueWitherAlert && line.contains("[B]")) {
+                    witherTeam = MWTeam.BLUE;
+                    triggeredBlueWitherAlert = true;
+                } else if (!triggeredGreenWitherAlert && line.contains("[G]")) {
+                    witherTeam = MWTeam.GREEN;
+                    triggeredGreenWitherAlert = true;
+                } else if (!triggeredRedWitherAlert && line.contains("[R]")) {
+                    witherTeam = MWTeam.RED;
+                    triggeredRedWitherAlert = true;
+                } else if (!triggeredYellowWitherAlert && line.contains("[Y]")) {
+                    witherTeam = MWTeam.YELLOW;
+                    triggeredYellowWitherAlert = true;
+                }
+                if (witherTeam != null) {
+                    ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "The " + witherTeam.getColorPrefix() + witherTeam.getName() + " Wither " + EnumChatFormatting.GREEN + "is below " + EnumChatFormatting.YELLOW + MWEConfig.witherAlertsThreshold + "HP!");
+                    SoundUtil.playNotePling();
+                }
             }
 
         }
@@ -192,7 +224,7 @@ public final class ScoreboardParser implements IScoreboardParser {
             hasGameEnded = true;
         }
 
-        if (isOnlyOneWitherAlive()) {
+        if (aliveWithers.size() == 1) {
             MWERenderers.lastWitherHPHUD.updateWitherHP(witherHP);
         }
     }
