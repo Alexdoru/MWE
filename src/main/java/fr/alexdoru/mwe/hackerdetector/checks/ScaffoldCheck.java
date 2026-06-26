@@ -22,7 +22,7 @@ public class ScaffoldCheck extends Check {
 
     @Override
     public boolean canSendReport() {
-        return true;
+        return false;
     }
 
     @Override
