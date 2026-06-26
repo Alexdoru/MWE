@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.features;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
+import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -12,6 +13,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -21,12 +23,18 @@ public class PartyDetection {
     private static final long TIME_SAME_PARTY = 101L;
 
     private static final Map<String, Set<String>> PARTYS = new HashMap<>();
+    private static String savedServerID;
     private static String lastPlayerJoining;
     private static long timeLastJoin = 0;
 
     public static void onPlayerJoin(String playername) {
 
         final long jointime = System.currentTimeMillis();
+        final String serverID = ScoreboardTracker.getServerID();
+
+        if (serverID != null && savedServerID != null && !serverID.equals(savedServerID)) {
+            PARTYS.clear();
+        }
 
         if (jointime - timeLastJoin > TIME_RESET_PARTYS) {
             PARTYS.clear();
@@ -39,6 +47,7 @@ public class PartyDetection {
             partyPlayer.addAll(partyLastPlayer);
         }
 
+        if (serverID != null) savedServerID = serverID;
         lastPlayerJoining = playername;
         timeLastJoin = jointime;
 
@@ -85,6 +94,11 @@ public class PartyDetection {
         final Set<String> p = PARTYS.get(playername);
         if (p == null) return Collections.emptySet();
         return Collections.unmodifiableSet(p);
+    }
+
+    @Nullable
+    public static String getServerID() {
+        return savedServerID;
     }
 
 }

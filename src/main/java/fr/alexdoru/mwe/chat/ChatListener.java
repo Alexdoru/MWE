@@ -186,14 +186,12 @@ public class ChatListener {
                 return;
             }
 
-            if (ScoreboardTracker.isPreGameLobby()) {
-                final Matcher playerJoinMatcher = PLAYER_JOIN_PATTERN.matcher(msg);
-                if (playerJoinMatcher.matches()) {
-                    final String playername = playerJoinMatcher.group(1);
-                    PartyDetection.onPlayerJoin(playername);
-                    ChatUtil.addSkinToComponent(event.message, playername);
-                    return;
-                }
+            final Matcher playerJoinMatcher = PLAYER_JOIN_PATTERN.matcher(msg);
+            if (playerJoinMatcher.matches()) {
+                final String playername = playerJoinMatcher.group(1);
+                PartyDetection.onPlayerJoin(playername);
+                ChatUtil.addSkinToComponent(event.message, playername);
+                return;
             }
 
             if (MWEConfig.showBannedPlayers && msg.equals(BAN_MESSAGE)) {

@@ -263,6 +263,14 @@ public final class MWEApi {
             return PartyDetection.getPartyOf(playername);
         }
 
+        /**
+         * Returns the server ID of the current party data
+         */
+        @Nullable
+        public static String getServerID() {
+            return PartyDetection.getServerID();
+        }
+
     }
 
     public static final class Player {

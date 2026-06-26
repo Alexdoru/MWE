@@ -27,7 +27,7 @@ public class CommandPartyDetection extends MyAbstractCommand {
         }
 
         ChatUtil.addChatMessage(EnumChatFormatting.GREEN + ChatUtil.bar());
-        ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Partys :");
+        ChatUtil.addChatMessage(ChatUtil.centerLine(EnumChatFormatting.GREEN + "Partys in lobby " + EnumChatFormatting.YELLOW + PartyDetection.getServerID()));
 
         final Set<String> playerPrinted = new HashSet<>();
         for (final String player : PartyDetection.getPlayersWithParty()) {
