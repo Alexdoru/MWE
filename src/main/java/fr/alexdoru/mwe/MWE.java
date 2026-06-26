@@ -115,6 +115,7 @@ public class MWE {
         ClientCommandHandler.instance.registerCommand(new CommandScanGame());
         ClientCommandHandler.instance.registerCommand(new CommandFKCounter());
         ClientCommandHandler.instance.registerCommand(new CommandNocheaters());
+        ClientCommandHandler.instance.registerCommand(new CommandPartyDetection());
 
         this.loadedAddons.forEach(a -> a.init(event));
 
