@@ -29,4 +29,9 @@ public interface IScoreboardParser {
     /** True when is Skyblock */
     boolean isInSkyblock();
 
+    /**
+     * Returns the ID of the current server
+     */
+    String getServerID();
+
 }

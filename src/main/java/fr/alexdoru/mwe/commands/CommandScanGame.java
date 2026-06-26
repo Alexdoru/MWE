@@ -49,19 +49,19 @@ public class CommandScanGame extends MyAbstractCommand {
             ChatUtil.addChatMessage(RED + "This is only available in Mega Walls!");
             return;
         }
-        final String currentGameId = ScoreboardUtils.getGameIdFromScoreboard();
-        if (currentGameId == null) {
+        final String serverID = ScoreboardTracker.getServerID();
+        if (serverID == null) {
             LocrawListener.runScangame();
         } else {
-            handleScangameCommand(currentGameId);
+            handleScangameCommand(serverID);
         }
     }
 
-    public static void handleScangameCommand(String currentGameId) {
-        if (!currentGameId.equals(ScangameData.getScanGameId())) {
+    public static void handleScangameCommand(String currentServerId) {
+        if (!currentServerId.equals(ScangameData.getScanGameId())) {
             ScangameData.clearScanGameData();
             if (ScoreboardTracker.isPreGameLobby()) ScangameData.clearRandomKits();
-            ScangameData.setScanGameId(currentGameId);
+            ScangameData.setScanGameId(currentServerId);
             NameFormatter.refreshAllNamesInWorld();
         }
         int i = 0;

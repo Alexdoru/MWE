@@ -6,8 +6,7 @@ import fr.alexdoru.mwe.features.AFKSoundWarning;
 import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.opengl.Display;
 
@@ -34,7 +33,7 @@ public final class ScoreboardParser implements IScoreboardParser {
     private int prevGameEndTime;
 
     private final List<String> aliveWithers = new ArrayList<>(4);
-    private String gameId = null;
+    private String serverID = null;
     private boolean isInMwGame = false;
     private boolean isMWEnvironement = false;
     private boolean isReplayMode = false;
@@ -54,7 +53,7 @@ public final class ScoreboardParser implements IScoreboardParser {
 
     void reset() {
         aliveWithers.clear();
-        gameId = null;
+        serverID = null;
         isInMwGame = false;
         isMWEnvironement = false;
         isReplayMode = false;
@@ -69,37 +68,42 @@ public final class ScoreboardParser implements IScoreboardParser {
 
     void update() {
 
-        if (Minecraft.getMinecraft().theWorld == null) {
+        final ScoreObjective objective = ScoreboardUtils.getActiveObjective();
+
+        if (objective == null) {
             return;
         }
 
-        final Scoreboard scoreboard = Minecraft.getMinecraft().theWorld.getScoreboard();
-        if (scoreboard == null) {
-            return;
-        }
-
-        final String title = ScoreboardUtils.getSidebarTitle(scoreboard);
+        final String title = objective.getDisplayName();
         final String cleanTitle = StringUtil.removeFormattingCodes(title);
+        final List<String> formattedLines = ScoreboardUtils.getFormattedSidebarText(objective);
+        final List<String> cleanLines = ScoreboardUtils.stripControlCodes(formattedLines);
+
+        if (!cleanLines.isEmpty()) {
+            final Matcher gameIDMatcher = GAME_ID_PATTERN.matcher(cleanLines.get(0));
+            if (gameIDMatcher.find()) {
+                serverID = gameIDMatcher.group(1);
+            }
+        }
+
         if (cleanTitle.contains("MEGA WALLS")) {
             isMWEnvironement = true;
             final String teamColor = StringUtil.getLastColorCodeBefore(title, "MEGA WALLS");
-            this.parseMegaWallsScoreboard(scoreboard, teamColor);
+            this.parseMegaWallsScoreboard(formattedLines, cleanLines, teamColor);
         } else if (cleanTitle.contains("REPLAY")) {
             isReplayMode = true;
-            this.parseReplayScoreboard(scoreboard);
+            this.parseReplayScoreboard(cleanLines);
         } else if (cleanTitle.contains("ATLAS")) {
             isReplayMode = true;
             isAtlasMode = true;
-            this.parseReplayScoreboard(scoreboard);
+            this.parseReplayScoreboard(cleanLines);
         } else if (cleanTitle.contains("SKYBLOCK")) {
             isInSkyblock = true;
         }
 
     }
 
-    private void parseMegaWallsScoreboard(Scoreboard scoreboard, String teamColor) {
-        final List<String> formattedLines = ScoreboardUtils.getFormattedSidebarText(scoreboard);
-        final List<String> cleanLines = ScoreboardUtils.stripControlCodes(formattedLines);
+    private void parseMegaWallsScoreboard(List<String> formattedLines, List<String> cleanLines, String teamColor) {
 
         if (cleanLines.size() < 10) {
             return;
@@ -107,10 +111,6 @@ public final class ScoreboardParser implements IScoreboardParser {
 
         if (MW_INGAME_PATTERN.matcher(cleanLines.get(9)).find()) {
             isInMwGame = true;
-            final Matcher gameIDMatcher = GAME_ID_PATTERN.matcher(cleanLines.get(0));
-            if (gameIDMatcher.find()) {
-                gameId = gameIDMatcher.group(1);
-            }
         } else {
             for (final String line : cleanLines) {
                 if (PREGAME_LOBBY_PATTERN.matcher(line).find()) {
@@ -121,7 +121,7 @@ public final class ScoreboardParser implements IScoreboardParser {
         }
 
         this.parseMWTimeLine(cleanLines.get(1));
-        this.parseWitherAndTeamsLines(teamColor, cleanLines, formattedLines);
+        this.parseWitherAndTeamsLines(teamColor, formattedLines, cleanLines);
     }
 
     private void parseMWTimeLine(String gameTimeLine) {
@@ -161,7 +161,7 @@ public final class ScoreboardParser implements IScoreboardParser {
         }
     }
 
-    private void parseWitherAndTeamsLines(String teamColor, List<String> cleanLines, List<String> formattedLines) {
+    private void parseWitherAndTeamsLines(String teamColor, List<String> formattedLines, List<String> cleanLines) {
         int eliminatedTeams = 0;
         int witherHP = 1000;
 
@@ -197,12 +197,7 @@ public final class ScoreboardParser implements IScoreboardParser {
         }
     }
 
-    private void parseReplayScoreboard(Scoreboard scoreboard) {
-        final List<String> formattedLines = ScoreboardUtils.getFormattedSidebarText(scoreboard);
-        final List<String> cleanLines = ScoreboardUtils.stripControlCodes(formattedLines);
-        if (cleanLines.isEmpty()) {
-            return;
-        }
+    private void parseReplayScoreboard(List<String> cleanLines) {
         for (final String line : cleanLines) {
             final Matcher mapMatcher = REPLAY_MAP_PATTERN.matcher(line);
             if (mapMatcher.find()) {
@@ -215,14 +210,6 @@ public final class ScoreboardParser implements IScoreboardParser {
 
     public boolean isWitherAlive(String colorCode) {
         return aliveWithers.contains(colorCode);
-    }
-
-    public boolean areAllWithersAlive() {
-        return aliveWithers.size() == 4;
-    }
-
-    public String getGameId() {
-        return gameId;
     }
 
     public List<String> getAliveWithers() {
@@ -283,6 +270,11 @@ public final class ScoreboardParser implements IScoreboardParser {
     @Override
     public boolean isPreGameLobby() {
         return isPreGameLobby;
+    }
+
+    @Override
+    public String getServerID() {
+        return serverID;
     }
 
 }

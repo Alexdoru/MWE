@@ -9,6 +9,7 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.TimerUtil;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
@@ -30,7 +31,11 @@ public class CommandMWE extends MyAbstractCommand {
         if (args.length >= 1 && args[0].equalsIgnoreCase("debugscoreboard")) {
             debugScoreboard();
         } else if (args.length >= 1 && args[0].equalsIgnoreCase("getscoreboard")) {
-            ScoreboardUtils.printScoreboard();
+            final ScoreObjective objective = ScoreboardUtils.getActiveObjective();
+            if (objective != null) {
+                ChatUtil.addChatMessage(objective.getDisplayName());
+            }
+            ScoreboardUtils.getFormattedSidebarText().forEach(ChatUtil::addChatMessage);
         } else if (args.length >= 1 && args[0].equalsIgnoreCase("setapikey")) {
             if (args.length != 2) {
                 ChatUtil.addChatMessage(EnumChatFormatting.RED + "Usage : " + getCommandUsage(sender) + " setapikey <key>");

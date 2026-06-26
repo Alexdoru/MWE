@@ -1,23 +1,25 @@
 package fr.alexdoru.mwe.scoreboard;
 
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
+import fr.alexdoru.mwe.api.events.MegaWallsGameEvent.Type;
 import fr.alexdoru.mwe.gui.MWERenderers;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.jetbrains.annotations.NotNull;
 
 public final class ScoreboardTracker {
 
     private static final ScoreboardParser PARSER = new ScoreboardParser();
 
-    private String prevGameId = null;
+    private boolean prevIsInMW = false;
     private boolean prevHasGameEnded = false;
     private int prevAmountWitherAlive = 4;
 
     @SubscribeEvent
     public void onGameStart(MegaWallsGameEvent event) {
-        if (event.type == MegaWallsGameEvent.Type.GAME_START) {
+        if (event.type == Type.GAME_START) {
             PARSER.onGameStart();
         }
     }
@@ -37,39 +39,40 @@ public final class ScoreboardTracker {
     }
 
     private void fireScoreboardRelatedEvents() {
-        final String gameId = PARSER.getGameId();
+        final boolean isInMW = PARSER.isInMwGame();
         final boolean hasgameended = PARSER.hasGameEnded();
         final int amountWitherAlive = PARSER.getAliveWithers().size();
 
-        if (gameId == null) { // not in MW game
-
-            if (this.prevGameId != null) {
-                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.Type.DISCONNECT));
-            }
-
-        } else { // is in MW game
+        if (isInMW) {
 
             if (amountWitherAlive == 1 && prevAmountWitherAlive > 1) {
-                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.Type.THIRD_WITHER_DEATH));
+                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(Type.THIRD_WITHER_DEATH));
             } else if (amountWitherAlive == 0 && prevAmountWitherAlive > 0) {
-                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.Type.DEATHMATCH_START));
+                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(Type.DEATHMATCH_START));
             }
 
-            if (!gameId.equals(this.prevGameId)) {
-                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.Type.CONNECT));
+            if (!this.prevIsInMW) {
+                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(Type.CONNECT));
+            }
+
+        } else {
+
+            if (this.prevIsInMW) {
+                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(Type.DISCONNECT));
             }
 
         }
 
         if (hasgameended && !this.prevHasGameEnded) {
-            MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(MegaWallsGameEvent.Type.GAME_END));
+            MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(Type.GAME_END));
         }
 
-        this.prevGameId = gameId;
+        this.prevIsInMW = isInMW;
         this.prevHasGameEnded = hasgameended;
         this.prevAmountWitherAlive = amountWitherAlive;
     }
 
+    @NotNull
     public static ScoreboardParser getParser() {
         return PARSER;
     }
@@ -104,6 +107,10 @@ public final class ScoreboardTracker {
 
     public static boolean isInSkyblock() {
         return PARSER.isInSkyblock();
+    }
+
+    public static String getServerID() {
+        return PARSER.getServerID();
     }
 
 }

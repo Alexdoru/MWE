@@ -2,89 +2,77 @@ package fr.alexdoru.mwe.scoreboard;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import fr.alexdoru.mwe.MWE;
-import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.util.EnumChatFormatting;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
-public class ScoreboardUtils {
+public final class ScoreboardUtils {
 
-    public static boolean isPlayingHypixelPit() {
-        final String title = getUnformattedSidebarTitle();
-        return title != null && title.contains("THE HYPIXEL PIT");
-    }
-
-    public static boolean isMegaWallsMythicGame() {
-        if (!ScoreboardTracker.isMWEnvironement()) {
-            return false;
-        }
-        final List<String> scoresRaw = getUnformattedSidebarText();
-        if (scoresRaw.isEmpty()) {
-            return false;
-        }
-        for (final String line : scoresRaw) {
-            if (line.contains("MYTHIC GAME!")) {
-                return true;
-            }
-        }
-        return false;
-    }
+    private ScoreboardUtils() {}
 
     /**
-     * Returns a list of formatted strings containing each line of the scoreboard/sidebar
-     * Item at index 0 is the first line etc
+     * Returns the current ScoreObjective displayed in the sidebar
      */
-    public static List<String> getFormattedSidebarText() {
+    @Nullable
+    public static ScoreObjective getActiveObjective() {
         final Minecraft mc = Minecraft.getMinecraft();
-        final List<String> lines = new ArrayList<>();
-        if (mc.theWorld == null) {
-            return lines;
+        if (mc.theWorld == null || mc.theWorld.getScoreboard() == null) {
+            return null;
         }
         final Scoreboard scoreboard = mc.theWorld.getScoreboard();
-        if (scoreboard == null) {
-            return lines;
+        final ScorePlayerTeam scoreplayerteam = scoreboard.getPlayersTeam(mc.thePlayer.getName());
+        if (scoreplayerteam != null) {
+            final int slot = scoreplayerteam.getChatFormat().getColorIndex();
+            if (slot >= 0) {
+                final ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(3 + slot);
+                if (objective != null) return objective;
+            }
         }
-        return getFormattedSidebarText(scoreboard);
+        return scoreboard.getObjectiveInDisplaySlot(1);
     }
 
     /**
-     * Returns a list of formatted strings containing each line of the scoreboard/sidebar
-     * Item at index 0 is the first line
+     * Returns the contents of the sidebar as a list of formatted strings
+     */
+    @NotNull
+    public static List<String> getFormattedSidebarText() {
+        final ScoreObjective objective = getActiveObjective();
+        if (objective == null) return Collections.emptyList();
+        return getFormattedSidebarText(objective);
+    }
+
+    /**
+     * Returns the contents of the sidebar as a list of formatted strings
      * See Vanilla code at {@link net.minecraft.client.gui.GuiIngame#renderScoreboard}
      */
-    public static List<String> getFormattedSidebarText(Scoreboard scoreboard) {
-        final ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(1);
-        if (objective == null) {
-            return new ArrayList<>();
-        }
-        final Collection<Score> scores = scoreboard.getSortedScores(objective);
-        List<Score> list = new ArrayList<>();
-        for (final Score input : scores) {
-            if (input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#")) {
+    @NotNull
+    public static List<String> getFormattedSidebarText(@NotNull ScoreObjective objective) {
+        final Scoreboard scoreboard = objective.getScoreboard();
+        final Collection<Score> sortedScores = scoreboard.getSortedScores(objective);
+        List<Score> list = new ArrayList<>(sortedScores.size());
+        for (final Score input : sortedScores) {
+            if (input.getPlayerName() != null && !input.getPlayerName().startsWith("#")) {
                 list.add(input);
             }
         }
         if (list.size() > 15) {
-            list = Lists.newArrayList(Iterables.skip(list, scores.size() - 15));
+            list = Lists.newArrayList(Iterables.skip(list, list.size() - 15));
         }
-        final List<String> lines = new ArrayList<>();
-        for (final Score score : list) {
+        final List<String> lines = new ArrayList<>(list.size());
+        for (int i = list.size() - 1; i >= 0; i--) {
+            final Score score = list.get(i);
             lines.add(ScorePlayerTeam.formatPlayerName(scoreboard.getPlayersTeam(score.getPlayerName()), ""));
         }
-        Collections.reverse(lines);
         return lines;
     }
 
@@ -92,90 +80,9 @@ public class ScoreboardUtils {
      * Returns the sidebar text as a list of unformatted strings, each element is a line of the scoreboard/sidebar
      * Item at index 0 is the first line etc
      */
+    @NotNull
     public static List<String> getUnformattedSidebarText() {
         return stripControlCodes(getFormattedSidebarText());
-    }
-
-    /**
-     * Returns the sidebar text as a list of unformatted strings, each element is a line of the scoreboard/sidebar
-     * Item at index 0 is the first line etc
-     *
-     * @param scoreboard - raw minecraft scoreboard - mc.theWorld.getScoreboard()
-     */
-    public static List<String> getUnformattedSidebarText(Scoreboard scoreboard) {
-        final List<String> lines = getFormattedSidebarText(scoreboard);
-        return stripControlCodes(lines);
-    }
-
-    /**
-     * Returns unformatted top of the scoreboard/sidebar
-     */
-    public static String getUnformattedSidebarTitle() {
-        final Minecraft mc = Minecraft.getMinecraft();
-        return mc.theWorld == null ? null : getUnformattedSidebarTitle(mc.theWorld.getScoreboard());
-    }
-
-    /**
-     * Returns unformatted top of the scoreboard/sidebar
-     */
-    public static String getUnformattedSidebarTitle(Scoreboard scoreboard) {
-        return StringUtil.removeFormattingCodes(getSidebarTitle(scoreboard));
-    }
-
-    /**
-     * Returns formatted top of the scoreboard/sidebar
-     */
-    public static String getSidebarTitle(Scoreboard scoreboard) {
-        if (scoreboard == null) {
-            return "";
-        }
-        final ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(1);
-        if (objective == null) {
-            return "";
-        }
-        return objective.getDisplayName();
-    }
-
-    /**
-     * Prints scoreboard in chat
-     */
-    public static void printScoreboard() {
-        final Minecraft mc = Minecraft.getMinecraft();
-        if (mc.theWorld == null) {
-            return;
-        }
-        final Scoreboard scoreboard = mc.theWorld.getScoreboard();
-        if (scoreboard == null) {
-            return;
-        }
-        final ScoreObjective objective = scoreboard.getObjectiveInDisplaySlot(1);
-        if (objective == null) {
-            return;
-        }
-        Collection<Score> scores = scoreboard.getSortedScores(objective);
-        final List<Score> list = scores.stream().filter(input -> input != null && input.getPlayerName() != null && !input.getPlayerName().startsWith("#")).collect(Collectors.toList());
-        if (list.size() > 15) {
-            scores = Lists.newArrayList(Iterables.skip(list, scores.size() - 15));
-        } else {
-            scores = list;
-        }
-        final List<String> printChat = new ArrayList<>();
-        final List<String> printConsole = new ArrayList<>();
-        for (final Score score : scores) {
-            final ScorePlayerTeam scoreplayerteam = scoreboard.getPlayersTeam(score.getPlayerName());
-            final String s1;
-            if (scoreplayerteam == null) {
-                s1 = score.getPlayerName() + EnumChatFormatting.RED + score.getScorePoints();
-                printChat.add(s1);
-                printConsole.add("playername : '" + StringUtil.getStringAsUnicode(score.getPlayerName()) + "' points : '" + score.getScorePoints());
-            } else {
-                s1 = scoreplayerteam.getColorPrefix() + score.getPlayerName() + scoreplayerteam.getColorSuffix() + EnumChatFormatting.RED + score.getScorePoints();
-                printChat.add(s1);
-                printConsole.add("prefix : '" + scoreplayerteam.getColorPrefix() + "' playername : '" + StringUtil.getStringAsUnicode(score.getPlayerName()) + "' suffix : " + scoreplayerteam.getColorSuffix() + "' points : '" + score.getScorePoints());
-            }
-        }
-        printChat.forEach(ChatUtil::addChatMessage);
-        printConsole.forEach(MWE.logger::info);
     }
 
     /**
@@ -183,7 +90,9 @@ public class ScoreboardUtils {
      *
      * @param listIn - String list with chat color control codes
      */
-    public static List<String> stripControlCodes(List<String> listIn) {
+    @NotNull
+    public static List<String> stripControlCodes(@NotNull List<String> listIn) {
+        if (listIn.isEmpty()) return Collections.emptyList();
         final List<String> list = new ArrayList<>(listIn.size());
         for (final String line : listIn) {
             list.add(StringUtil.removeFormattingCodes(line));
@@ -191,20 +100,20 @@ public class ScoreboardUtils {
         return list;
     }
 
-    private static final Pattern GAME_ID_PATTERN = Pattern.compile("\\d+/\\d+/\\d+\\s+(\\w+)");
+    public static boolean isPlayingHypixelPit() {
+        final ScoreObjective objective = getActiveObjective();
+        return objective != null && StringUtil.removeFormattingCodes(objective.getDisplayName()).contains("THE HYPIXEL PIT");
+    }
 
-    public static String getGameIdFromScoreboard() {
-        final List<String> scoresRaw = getUnformattedSidebarText();
-        if (scoresRaw.isEmpty()) {
-            return null;
-        }
-        for (final String line : scoresRaw) {
-            final Matcher matcher = GAME_ID_PATTERN.matcher(line);
-            if (matcher.find()) {
-                return matcher.group(1);
+    public static boolean isMegaWallsMythicGame() {
+        if (ScoreboardTracker.isMWEnvironement()) {
+            for (final String line : getUnformattedSidebarText()) {
+                if (line.contains("MYTHIC GAME!")) {
+                    return true;
+                }
             }
         }
-        return null;
+        return false;
     }
 
 }

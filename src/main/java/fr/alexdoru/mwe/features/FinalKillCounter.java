@@ -127,7 +127,7 @@ public final class FinalKillCounter {
     private static final Map<MWTeam, Character> DEFAULT_PREFIXES = new EnumMap<>(MWTeam.class);
 
     @NotNull
-    private final String gameId;
+    private final String serverID;
     private final Map<MWTeam, Character> COLOR_PREFIXES;
     private final Map<MWTeam, Map<String, Integer>> KILLS_MAP = new EnumMap<>(MWTeam.class);
     private final Map<String, Integer> allPlayerKills = new HashMap<>();
@@ -146,8 +146,8 @@ public final class FinalKillCounter {
         DEFAULT_PREFIXES.put(MWTeam.YELLOW, 'e');
     }
 
-    FinalKillCounter(@NotNull String gameId) {
-        this.gameId = gameId;
+    FinalKillCounter(@NotNull String serverID) {
+        this.serverID = serverID;
         this.COLOR_PREFIXES = new EnumMap<>(DEFAULT_PREFIXES);
         for (final MWTeam team : MWTeam.values()) {
             KILLS_MAP.put(team, new HashMap<>());
@@ -260,8 +260,8 @@ public final class FinalKillCounter {
     }
 
     @NotNull
-    public String getGameId() {
-        return gameId;
+    public String getServerID() {
+        return serverID;
     }
 
     public int getKillsOfTeam(MWTeam team) {

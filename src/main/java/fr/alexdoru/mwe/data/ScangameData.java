@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.data;
 
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.features.NameFormatter;
+import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -26,7 +27,7 @@ public class ScangameData {
     @SubscribeEvent
     public void onMwGame(MegaWallsGameEvent event) {
         if (event.type == MegaWallsGameEvent.Type.GAME_START) {
-            final String currentGameId = ScoreboardUtils.getGameIdFromScoreboard();
+            final String currentGameId = ScoreboardTracker.getServerID();
             if (currentGameId != null && !currentGameId.equals(scanGameId)) {
                 clearScanGameData();
             }
