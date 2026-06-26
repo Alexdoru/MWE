@@ -4,8 +4,10 @@ import fr.alexdoru.configlib.api.ConfigProperty;
 import fr.alexdoru.configlib.api.RendererPosition;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.elements.*;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -13,6 +15,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public final class ConfigFieldContainer {
 
@@ -59,6 +62,13 @@ public final class ConfigFieldContainer {
             propertyMap.put(annotation.name(), config.get(annotation.category(), annotation.name(), (double) field.get(null)));
         } else if (field.getType() == int.class) {
             propertyMap.put(annotation.name(), config.get(annotation.category(), annotation.name(), (int) field.get(null)));
+        } else if (field.getType() == EnumChatFormatting.class) {
+            final EnumChatFormatting color = (EnumChatFormatting) field.get(null);
+            Objects.requireNonNull(color);
+            if (!color.isColor()) {
+                throw new IllegalArgumentException("EnumChatFormatting fields must be colors!");
+            }
+            propertyMap.put(annotation.name(), config.get(annotation.category(), annotation.name(), color.name()));
         } else if (field.getGenericType().toString().equals("java.util.List<java.lang.String>")) {
             //noinspection unchecked
             final String[] defaultStrings = ((List<String>) field.get(null)).toArray(new String[0]);
@@ -83,6 +93,12 @@ public final class ConfigFieldContainer {
             field.setDouble(null, propertyMap.get(annotation.name()).getDouble());
         } else if (field.getType() == int.class) {
             field.setInt(null, propertyMap.get(annotation.name()).getInt());
+        } else if (field.getType() == EnumChatFormatting.class) {
+            EnumChatFormatting color = getColorFromString(propertyMap.get(annotation.name()).toString());
+            if (color == null) {
+                color = getColorFromString(propertyMap.get(annotation.name()).getDefault());
+            }
+            field.set(null, color);
         } else if (field.getGenericType().toString().equals("java.util.List<java.lang.String>")) {
             final String[] strings = propertyMap.get(annotation.name()).getStringList();
             //noinspection unchecked
@@ -108,6 +124,8 @@ public final class ConfigFieldContainer {
             propertyMap.get(annotation.name()).set((double) field.get(null));
         } else if (field.getType() == int.class) {
             propertyMap.get(annotation.name()).set((int) field.get(null));
+        } else if (field.getType() == EnumChatFormatting.class) {
+            propertyMap.get(annotation.name()).set(((EnumChatFormatting) field.get(null)).name());
         } else if (field.getGenericType().toString().equals("java.util.List<java.lang.String>")) {
             //noinspection unchecked
             propertyMap.get(annotation.name()).set(((List<String>) field.get(null)).toArray(new String[0]));
@@ -143,12 +161,23 @@ public final class ConfigFieldContainer {
                 }
                 return new SliderGuiButton(field, event, annotation);
             }
+        } else if (field.getType() == EnumChatFormatting.class) {
+            return new ColorEnumGuiButton(field, event, annotation);
         }
-        throw new IllegalArgumentException("Type of field not handled by config lib " + field.getType());
+        throw new IllegalArgumentException("Type of field not handled by config lib gui screen " + field.getType() + " you can mark the field as hidden to prevent crashing");
     }
 
     public ConfigProperty getAnnotation() {
         return annotation;
+    }
+
+    @Nullable
+    private static EnumChatFormatting getColorFromString(String s) {
+        try {
+            final EnumChatFormatting chatColor = EnumChatFormatting.valueOf(s);
+            if (chatColor.isColor()) return chatColor;
+        } catch (IllegalArgumentException ignored) {}
+        return null;
     }
 
 }
