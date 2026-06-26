@@ -36,9 +36,6 @@ public final class ConfigFieldContainer {
         this.field = field;
         this.fieldType = getFieldType(field);
         this.annotation = field.getAnnotation(ConfigProperty.class);
-        if (this.propertyMap.containsKey(annotation.name())) {
-            throw new IllegalStateException("Duplicate key names in config properties : " + annotation.name());
-        }
         this.event = configEvents.get(annotation.name());
         this.hideOverride = configHideOverrides.get(annotation.name());
         this.createPropertyFromField(config);
@@ -72,31 +69,35 @@ public final class ConfigFieldContainer {
     }
 
     private void createPropertyFromField(Configuration config) throws IllegalAccessException {
+        if (propertyMap.containsKey(this.fieldType == FieldType.RENDERER ? this.getKey("Show ") : this.getKey())) {
+            throw new IllegalStateException("Config properties with duplicate key names : " + annotation.category() + " " + annotation.name());
+        }
         switch (this.fieldType) {
             case RENDERER: {
-                final String showKey = "Show " + annotation.name();
-                final String xKey = "Xpos " + annotation.name();
-                final String yKey = "Ypos " + annotation.name();
+                final String showKey = this.getKey("Show ");
+                final String xKey = this.getKey("Xpos ");
+                final String yKey = this.getKey("Ypos ");
                 final RendererPosition rendererPosition = (RendererPosition) field.get(null);
+                Objects.requireNonNull(rendererPosition);
                 propertyMap.put(showKey, config.get(annotation.category(), showKey, rendererPosition.isEnabled()));
                 propertyMap.put(xKey, config.get(annotation.category(), xKey, rendererPosition.getRelativeX()));
                 propertyMap.put(yKey, config.get(annotation.category(), yKey, rendererPosition.getRelativeY()));
                 break;
             }
             case STRING: {
-                propertyMap.put(annotation.name(), config.get(annotation.category(), annotation.name(), (String) field.get(null)));
+                propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), Objects.requireNonNull((String) field.get(null))));
                 break;
             }
             case BOOLEAN: {
-                propertyMap.put(annotation.name(), config.get(annotation.category(), annotation.name(), (boolean) field.get(null)));
+                propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), (boolean) field.get(null)));
                 break;
             }
             case DOUBLE: {
-                propertyMap.put(annotation.name(), config.get(annotation.category(), annotation.name(), (double) field.get(null)));
+                propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), (double) field.get(null)));
                 break;
             }
             case INT: {
-                propertyMap.put(annotation.name(), config.get(annotation.category(), annotation.name(), (int) field.get(null)));
+                propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), (int) field.get(null)));
                 break;
             }
             case ENUM_COLOR: {
@@ -105,13 +106,13 @@ public final class ConfigFieldContainer {
                 if (!color.isColor()) {
                     throw new IllegalArgumentException("EnumChatFormatting fields must be colors!");
                 }
-                propertyMap.put(annotation.name(), config.get(annotation.category(), annotation.name(), color.name()));
+                propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), color.name()));
                 break;
             }
             case STRING_LIST: {
                 //noinspection unchecked
                 final String[] defaultStrings = ((List<String>) field.get(null)).toArray(new String[0]);
-                propertyMap.put(annotation.name(), config.get(annotation.category(), annotation.name(), defaultStrings));
+                propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), defaultStrings));
                 break;
             }
             default: {
@@ -124,38 +125,39 @@ public final class ConfigFieldContainer {
         switch (this.fieldType) {
             case RENDERER: {
                 final RendererPosition position = ((RendererPosition) field.get(null));
-                position.setEnabled(propertyMap.get("Show " + annotation.name()).getBoolean());
+                position.setEnabled(this.getProp("Show ").getBoolean());
                 position.setRelativePosition(
-                        propertyMap.get("Xpos " + annotation.name()).getDouble(),
-                        propertyMap.get("Ypos " + annotation.name()).getDouble());
+                        this.getProp("Xpos ").getDouble(),
+                        this.getProp("Ypos ").getDouble()
+                );
                 break;
             }
             case STRING: {
-                field.set(null, propertyMap.get(annotation.name()).getString());
+                field.set(null, this.getProp().getString());
                 break;
             }
             case BOOLEAN: {
-                field.setBoolean(null, propertyMap.get(annotation.name()).getBoolean());
+                field.setBoolean(null, this.getProp().getBoolean());
                 break;
             }
             case DOUBLE: {
-                field.setDouble(null, propertyMap.get(annotation.name()).getDouble());
+                field.setDouble(null, this.getProp().getDouble());
                 break;
             }
             case INT: {
-                field.setInt(null, propertyMap.get(annotation.name()).getInt());
+                field.setInt(null, this.getProp().getInt());
                 break;
             }
             case ENUM_COLOR: {
-                EnumChatFormatting color = getColorFromString(propertyMap.get(annotation.name()).toString());
+                EnumChatFormatting color = getColorFromString(this.getProp().toString());
                 if (color == null) {
-                    color = getColorFromString(propertyMap.get(annotation.name()).getDefault());
+                    color = getColorFromString(this.getProp().getDefault());
                 }
                 field.set(null, color);
                 break;
             }
             case STRING_LIST: {
-                final String[] strings = propertyMap.get(annotation.name()).getStringList();
+                final String[] strings = this.getProp().getStringList();
                 //noinspection unchecked
                 final List<String> list = (List<String>) field.get(null);
                 list.clear();
@@ -172,40 +174,56 @@ public final class ConfigFieldContainer {
         switch (this.fieldType) {
             case RENDERER: {
                 final RendererPosition rendererPosition = (RendererPosition) field.get(null);
-                propertyMap.get("Show " + annotation.name()).set(rendererPosition.isEnabled());
-                propertyMap.get("Xpos " + annotation.name()).set(rendererPosition.getRelativeX());
-                propertyMap.get("Ypos " + annotation.name()).set(rendererPosition.getRelativeY());
+                this.getProp("Show ").set(rendererPosition.isEnabled());
+                this.getProp("Xpos ").set(rendererPosition.getRelativeX());
+                this.getProp("Ypos ").set(rendererPosition.getRelativeY());
                 break;
             }
             case STRING: {
-                propertyMap.get(annotation.name()).set((String) field.get(null));
+                this.getProp().set((String) field.get(null));
                 break;
             }
             case BOOLEAN: {
-                propertyMap.get(annotation.name()).set((boolean) field.get(null));
+                this.getProp().set((boolean) field.get(null));
                 break;
             }
             case DOUBLE: {
-                propertyMap.get(annotation.name()).set((double) field.get(null));
+                this.getProp().set((double) field.get(null));
                 break;
             }
             case INT: {
-                propertyMap.get(annotation.name()).set((int) field.get(null));
+                this.getProp().set((int) field.get(null));
                 break;
             }
             case ENUM_COLOR: {
-                propertyMap.get(annotation.name()).set(((EnumChatFormatting) field.get(null)).name());
+                this.getProp().set(((EnumChatFormatting) field.get(null)).name());
                 break;
             }
             case STRING_LIST: {
                 //noinspection unchecked
-                propertyMap.get(annotation.name()).set(((List<String>) field.get(null)).toArray(new String[0]));
+                this.getProp().set(((List<String>) field.get(null)).toArray(new String[0]));
                 break;
             }
             default: {
                 throw new IllegalArgumentException("Type of field not handled by config lib " + field.getType());
             }
         }
+    }
+
+    private String getKey(String key) {
+        return key + annotation.name();
+    }
+
+    private Property getProp(String key) {
+        return propertyMap.get(this.getKey(key));
+    }
+
+    private String getKey() {
+        return annotation.name();
+    }
+
+    private Property getProp() {
+        return propertyMap.get(this.getKey());
     }
 
     public ConfigUIElement getConfigButton(ConfigGuiScreen configGuiScreen, RendererManager rendererManager) throws IllegalAccessException {
@@ -231,7 +249,7 @@ public final class ConfigFieldContainer {
             }
             case INT: {
                 if (annotation.isColor()) {
-                    final int defaultColor = Integer.parseInt(propertyMap.get(annotation.name()).getDefault());
+                    final int defaultColor = Integer.parseInt(this.getProp().getDefault());
                     return new ColorGuiButton(configGuiScreen, field, annotation, defaultColor);
                 } else {
                     if (annotation.sliderMin() == annotation.sliderMax()) {
