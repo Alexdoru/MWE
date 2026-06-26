@@ -9,9 +9,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -60,11 +58,17 @@ public final class ConfigFieldContainer {
             return FieldType.INT;
         } else if (field.getType() == EnumChatFormatting.class) {
             return FieldType.ENUM_COLOR;
-        } else if (field.getGenericType().toString().equals("java.util.List<java.lang.String>")) {
-            return FieldType.STRING_LIST;
-        } else {
-            throw new IllegalArgumentException("Type of field not handled by config lib " + field.getType());
+        } else if (List.class.isAssignableFrom(field.getType())) {
+            final Type genericType = field.getGenericType();
+            if (genericType instanceof ParameterizedType) {
+                final ParameterizedType parameterized = (ParameterizedType) genericType;
+                final Type[] typeArgs = parameterized.getActualTypeArguments();
+                if (typeArgs.length == 1 && typeArgs[0] == String.class) {
+                    return FieldType.STRING_LIST;
+                }
+            }
         }
+        throw new IllegalArgumentException("Type of field not handled by config lib " + field.getType());
     }
 
     private void createPropertyFromField(Configuration config) throws IllegalAccessException {
