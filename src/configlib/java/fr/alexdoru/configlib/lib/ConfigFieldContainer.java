@@ -7,6 +7,7 @@ import fr.alexdoru.configlib.lib.gui.elements.*;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.*;
@@ -55,6 +56,8 @@ public final class ConfigFieldContainer {
             return FieldType.INT;
         } else if (field.getType() == EnumChatFormatting.class) {
             return FieldType.ENUM_COLOR;
+        } else if (Enum.class.isAssignableFrom(field.getType())) {
+            return FieldType.ENUM;
         } else if (List.class.isAssignableFrom(field.getType())) {
             final Type genericType = field.getGenericType();
             if (genericType instanceof ParameterizedType) {
@@ -109,6 +112,12 @@ public final class ConfigFieldContainer {
                 propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), color.name()));
                 break;
             }
+            case ENUM: {
+                final Enum<?> value = (Enum<?>) field.get(null);
+                Objects.requireNonNull(value);
+                propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), value.name()));
+                break;
+            }
             case STRING_LIST: {
                 //noinspection unchecked
                 final String[] defaultStrings = ((List<String>) field.get(null)).toArray(new String[0]);
@@ -149,11 +158,19 @@ public final class ConfigFieldContainer {
                 break;
             }
             case ENUM_COLOR: {
-                EnumChatFormatting color = getColorFromString(this.getProp().toString());
-                if (color == null) {
-                    color = getColorFromString(this.getProp().getDefault());
+                EnumChatFormatting value = (EnumChatFormatting) this.getEnumValue(this.getProp().getString());
+                if (value == null || !value.isColor()) {
+                    value = (EnumChatFormatting) this.getEnumValue(this.getProp().getDefault());
                 }
-                field.set(null, color);
+                field.set(null, value);
+                break;
+            }
+            case ENUM: {
+                Enum<?> value = this.getEnumValue(this.getProp().getString());
+                if (value == null) {
+                    value = this.getEnumValue(this.getProp().getDefault());
+                }
+                field.set(null, value);
                 break;
             }
             case STRING_LIST: {
@@ -197,6 +214,10 @@ public final class ConfigFieldContainer {
             }
             case ENUM_COLOR: {
                 this.getProp().set(((EnumChatFormatting) field.get(null)).name());
+                break;
+            }
+            case ENUM: {
+                this.getProp().set(((Enum<?>) field.get(null)).name());
                 break;
             }
             case STRING_LIST: {
@@ -261,6 +282,9 @@ public final class ConfigFieldContainer {
             case ENUM_COLOR: {
                 return new ColorEnumGuiButton(field, event, annotation);
             }
+            case ENUM: {
+                return new EnumGuiButton(field, event, annotation);
+            }
         }
         throw new IllegalArgumentException("Type of field not handled by config lib gui screen " + field.getType() + " you can mark the field as hidden to prevent crashing");
     }
@@ -270,10 +294,13 @@ public final class ConfigFieldContainer {
     }
 
     @Nullable
-    private static EnumChatFormatting getColorFromString(String s) {
+    private Enum<?> getEnumValue(@NotNull String valueName) {
+        if (!Enum.class.isAssignableFrom(field.getType())) {
+            throw new IllegalArgumentException();
+        }
         try {
-            final EnumChatFormatting chatColor = EnumChatFormatting.valueOf(s);
-            if (chatColor.isColor()) return chatColor;
+            //noinspection rawtypes,unchecked
+            return Enum.valueOf((Class<? extends Enum>) field.getType(), valueName);
         } catch (IllegalArgumentException ignored) {}
         return null;
     }
@@ -285,6 +312,7 @@ public final class ConfigFieldContainer {
         DOUBLE,
         INT,
         ENUM_COLOR,
+        ENUM,
         STRING_LIST
     }
 

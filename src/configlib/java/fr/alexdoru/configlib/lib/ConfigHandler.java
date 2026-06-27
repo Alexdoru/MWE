@@ -119,11 +119,13 @@ public final class ConfigHandler implements IConfigHandler {
             }
             for (final Field field : clazz.getDeclaredFields()) {
                 if (field.isAnnotationPresent(ConfigProperty.class)) {
+                    validateField(field);
                     final ConfigFieldContainer fieldContainer = new ConfigFieldContainer(config, propertyMap, field, configEvents, configHideOverrides);
                     eventUsages.remove(fieldContainer.getAnnotation().name());
                     hideUsages.remove(fieldContainer.getAnnotation().name());
                     configFields.add(fieldContainer);
                 } else if (field.isAnnotationPresent(ConfigCategory.class)) {
+                    validateField(field);
                     field.setAccessible(true);
                     final ConfigCategoryContainer categoryContainer = new ConfigCategoryContainer(field);
                     final String categoryName = categoryContainer.getCategoryName();
@@ -176,6 +178,12 @@ public final class ConfigHandler implements IConfigHandler {
         }
         if (!desc.equals(Type.getMethodDescriptor(method))) {
             throw new IllegalStateException("Config " + methodType + " method " + method.getName() + " must be " + desc);
+        }
+    }
+
+    private static void validateField(Field field) {
+        if (!Modifier.isStatic(field.getModifiers())) {
+            throw new IllegalStateException("Config field " + field.getName() + " must be static");
         }
     }
 
