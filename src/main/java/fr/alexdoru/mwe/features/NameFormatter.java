@@ -29,6 +29,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
@@ -119,9 +120,13 @@ public final class NameFormatter {
     }
 
     public static void refreshAllNamesInWorld() {
-        for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
-            updatePlayerDataAndEntityData(netInfo);
-        }
+        Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap().forEach(netInfo ->
+                ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(updatePlayerData(netInfo.getGameProfile()).displayName)
+        );
+        Minecraft.getMinecraft().theWorld.playerEntities.forEach(player -> {
+            updateEntityPlayerFields(player);
+            player.refreshDisplayName();
+        });
     }
 
     private static final Pattern MINECRAFT_NAME_PATTERN = Pattern.compile("[a-zA-Z0-9_]{1,16}");
@@ -426,7 +431,7 @@ public final class NameFormatter {
 
     }
 
-    public static class PlayerJoinListener {
+    public static class EventHandler {
 
         private long lastDeathTime;
 
@@ -470,6 +475,14 @@ public final class NameFormatter {
                     ChatUtil.addChatMessage(EnumChatFormatting.RED + "Caught an exception when spawning " + event.entity.getName());
                     e.printStackTrace();
                 }
+            }
+        }
+
+        @SubscribeEvent
+        public void onNameFormat(PlayerEvent.NameFormat event) {
+            final String squadname = SquadHandler.getSquadnameUnsafe(event.username);
+            if (squadname != null) {
+                event.displayname = MWEConfig.coloredSquadmates ? MWEConfig.squadmateColor + squadname : squadname;
             }
         }
 

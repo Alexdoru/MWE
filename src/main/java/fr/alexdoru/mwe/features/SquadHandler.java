@@ -7,24 +7,16 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class SquadHandler {
+public final class SquadHandler {
+
+    private SquadHandler() {}
 
     private static final HashMap<String, String> squadmap = new HashMap<>();
-
-    @SubscribeEvent
-    public void onNameFormat(NameFormat event) {
-        final String squadname = squadmap.get(event.username);
-        if (squadname != null) {
-            event.displayname = MWEConfig.coloredSquadmates ? MWEConfig.squadmateColor + squadname : squadname;
-        }
-    }
 
     public static void addSelf() {
         if (squadmap.isEmpty()) {

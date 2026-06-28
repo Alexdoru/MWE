@@ -94,12 +94,11 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(new WdrData());
         MinecraftForge.EVENT_BUS.register(new ReportQueue());
         MinecraftForge.EVENT_BUS.register(new ChatListener());
-        MinecraftForge.EVENT_BUS.register(new SquadHandler());
         MinecraftForge.EVENT_BUS.register(new HackerDetector());
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
         MinecraftForge.EVENT_BUS.register(new StrengthParticles());
         MinecraftForge.EVENT_BUS.register(new ScoreboardTracker());
-        MinecraftForge.EVENT_BUS.register(new NameFormatter.PlayerJoinListener());
+        MinecraftForge.EVENT_BUS.register(new NameFormatter.EventHandler());
         MinecraftForge.EVENT_BUS.register(new KeybindingListener());
         MinecraftForge.EVENT_BUS.register(new MegaWallsEndGameStats());
 
