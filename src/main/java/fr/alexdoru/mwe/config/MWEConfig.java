@@ -83,6 +83,11 @@ public final class MWEConfig {
     @ConfigCategory(displayname = "§dExternal")
     private static final String EXTERNAL = "External";
 
+    @ConfigCategory(displayname = "§6Updater",
+            comment = "When starting your game the updater will check if a new version is available," +
+                    " if there is the new version will be downloaded and it will be installed when closing your game.")
+    private static final String UPDATES = "Updates";
+
     @ConfigProperty(
             category = "April Fools",
             name = "April Fun",
@@ -1190,13 +1195,13 @@ public final class MWEConfig {
     public static final RendererPosition squadHUDPosition = new RendererPosition(true, 0.25d, 0d);
 
     @ConfigProperty(
-            category = "Updates",
+            category = UPDATES,
             name = "Check for Update",
             comment = "Checks if an update is available")
     public static boolean checkForUpdate = true;
 
     @ConfigProperty(
-            category = "Updates",
+            category = UPDATES,
             name = "Automatic Update",
             comment = "Updates the mod automatically")
     public static boolean automaticUpdate = true;
