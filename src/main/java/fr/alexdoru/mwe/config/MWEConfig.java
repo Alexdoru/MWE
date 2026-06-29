@@ -239,6 +239,12 @@ public final class MWEConfig {
     public static boolean coloredScoreAboveHead = true;
 
     @ConfigProperty(
+            category = VANILLA, subCategory = "Render",
+            name = "Modern nametags",
+            comment = "Makes the nametags easier to see through walls like in modern minecraft")
+    public static boolean modernNametags = true;
+
+    @ConfigProperty(
             category = VANILLA, subCategory = "Tablist",
             name = "Colored health/scores in Tablist",
             comment = "Renders the health/scores in the tablist in the color according to the score's value compared to the player's maximum health points\n"
