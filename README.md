@@ -85,6 +85,7 @@ Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, th
 - **Cancel night vision** - Removes the blueish tint from night vision
 - **Clear view** - Stops rendering particles that are too close (75cm) to the screen for a better visibility
 - **Colored scores above head** - Renders the scores/health above player heads in color, according to the score value/health and the player's maximum health points
+- **Modern nametags** - Renders the nametags like in modern minecraft making them easier to see throught walls
 
 #### Bug Fix
 
@@ -112,7 +113,7 @@ Add players to your squad using the `/squad` command, your squadmates will appea
 
 - **Squad Icons** - Toggle the icons in front of nametags for your squadmates
 - **Squad HUD** - A mini tablist that will display only members of your squad
-- **Pink Squadmates** - Nametags of squadmates will appear pink as well as their hitboxes and hurt color
+- **Colored Squadmates** - Your squadmates will render with a fixed color that you can choose for their nametag, hitbox, hurt color
 - **Nick hider** - Display to yourself your own name when you are nicked in a squad
 - **Keep First Letter** - Keeps the first letter of a squadmate when giving them an alias, so you can track them on the compass
 
@@ -154,6 +155,7 @@ Allows you to customize the look of the f3+b hitboxes.
 - **Deathmatch damage** - In case of draw, it prints the deathmatch damage directly in the chat when the game ends
 - **Safe Inventory** - "Prevents hotkeying important kit items out of your inventory"
 - **Squad Halo Player** - Adds to the squad the player you give your halo to when playing the Angel class
+- **Wither alerts** - Plays an alert when a wither's health falls below a certain threshold
 - Notification at 5 mins before a game ends, and 10 seconds before the walls fall if you are not on the game
 - Shows class and kit in the chat message when you hit an arrow
 
@@ -177,7 +179,7 @@ You can define in the config which cheats give a red icon or no icon at all.
 ### Hacker Detector:
 
 Detects players using certain cheats and warns you about these players. It can also automatically report them and save those players in NoCheaters.
-Currently has detection for : Autoblock, Fastbreak, Ghosthand, Keepsprint, Killaura, Noslowdown, Scaffold
+Currently, has detection for : Autoblock, Fastbreak, Ghosthand, Keepsprint, Killaura, Noslowdown, Scaffold
 
 - **Add to report list** - Adds detected players to NoCheater's reportlist
 - **Show flag message** - Shows a flag message in the chat when it detets someone
@@ -203,6 +205,7 @@ Most commands require a working Hypixel API Key, use `/mwe set <key>` to set you
 - `/addalias` - Give nicknames to players that will show in the tablist behind their name, use `/addalias` for details
 - `/mwe` - Open the config menu
 - `/nocheaters` - Shows reported players in chat, use `/nocheaters help` for details
+- `/partydetection` - Lists the players that joined together
 - `/plancke` - Checks stats of players for different games, use `/plancke` for details
 - `/scangame` - In Mega Walls, reveals which accouns are alt accounts with high stats, most likely cheaters
 - `/squad` - Add and remove players from your squad, use `/squad` for details
