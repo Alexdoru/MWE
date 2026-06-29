@@ -27,7 +27,7 @@ public class GuiChatHook_TabCompletePlayers {
             final boolean isCommand = leftOfCursor.charAt(0) == '/';
             if (isCommand) {
                 final String lowerCase = leftOfCursor.toLowerCase();
-                if (lowerCase.startsWith("/msg ") || lowerCase.startsWith("/w ") || lowerCase.startsWith("/r ") || ScoreboardTracker.isPrepPhase() && lowerCase.startsWith("/shout ")) {
+                if (lowerCase.startsWith("/msg ") || lowerCase.startsWith("/w ") || lowerCase.startsWith("/r ") || ScoreboardTracker.isPrepPhase() && (lowerCase.startsWith("/shout ") || lowerCase.startsWith("/cr ") || lowerCase.startsWith("/chatreport "))) {
                     tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
                 } else if (lowerCase.startsWith("/report ")) {
                     tabCompleteReport(args);
