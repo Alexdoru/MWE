@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.nocheaters;
 
 import fr.alexdoru.mwe.api.IReportInfo;
-import fr.alexdoru.mwe.commands.CommandReport;
+import fr.alexdoru.mwe.commands.CommandWDR;
 import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
@@ -104,7 +104,7 @@ public class WDR implements IReportInfo, Comparable<WDR> {
 
     public boolean hasValidCheats() {
         for (final String cheat : this.cheats) {
-            if (CommandReport.cheatsList.contains(cheat)) {
+            if (CommandWDR.cheatsSet.contains(cheat)) {
                 return true;
             }
         }

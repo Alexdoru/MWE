@@ -26,6 +26,33 @@ import java.util.*;
 
 public class CommandWDR extends MyAbstractCommand {
 
+    public static final List<String> cheatsList = Collections.unmodifiableList(Arrays.asList("aura",
+            "aimbot",
+            "bhop",
+            "velocity",
+            "reach",
+            "speed",
+            "ka",
+            "killaura",
+            "multiaura",
+            "forcefield",
+            "autoblock",
+            "antiknockback",
+            "antikb",
+            "autoclicker",
+            "ac",
+            "fly",
+            "dolphin",
+            "jesus",
+            "keepsprint",
+            "noslowdown",
+            "fastbreak",
+            "speedmine",
+            "cheating",
+            "scaffold"));
+
+    public static final Set<String> cheatsSet = Collections.unmodifiableSet(new HashSet<>(cheatsList));
+
     @Override
     public String getCommandName() {
         return "wdr";
@@ -73,7 +100,7 @@ public class CommandWDR extends MyAbstractCommand {
             }
             return null;
         }
-        return args.length > 1 ? getListOfStringsMatchingLastWord(args, CommandReport.cheatsArray) : null;
+        return args.length > 1 ? getListOfStringsMatchingLastWord(args, cheatsList) : null;
     }
 
     private static void addPlayerToReportList(String playername, List<String> cheats) {
@@ -118,8 +145,8 @@ public class CommandWDR extends MyAbstractCommand {
             final boolean isNicked = !NameFormatter.isRealPlayer(uuid);
             ChatUtil.addChatMessage(
                     EnumChatFormatting.GREEN + "You reported " + (isNicked ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
-                    + EnumChatFormatting.RED + (formattedName == null ? playername : EnumChatFormatting.RESET + formattedName) + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
-                    + EnumChatFormatting.GREEN + (isNicked ? " for the next 24 hours." : "."));
+                            + EnumChatFormatting.RED + (formattedName == null ? playername : EnumChatFormatting.RESET + formattedName) + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"
+                            + EnumChatFormatting.GREEN + (isNicked ? " for the next 24 hours." : "."));
         }
     }
 

@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.nocheaters;
 
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.commands.CommandReport;
+import fr.alexdoru.mwe.commands.CommandWDR;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.data.ScangameData;
@@ -175,7 +175,7 @@ public class ReportSuggestionHandler {
     }
 
     private static boolean isCheatValid(String cheat) {
-        return CommandReport.cheatsList.contains(cheat);
+        return CommandWDR.cheatsSet.contains(cheat);
     }
 
     private static boolean isNameValid(String playername) {
