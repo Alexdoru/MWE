@@ -1,33 +1,14 @@
-<div style="text-align: center;">
-<a href="https://github.com/Alexdoru/MWE/releases" target="_blank">
-<img alt="release" src="https://img.shields.io/github/v/release/Alexdoru/MWE?color=0843B2&style=for-the-badge" />
-</a>
-<a href="https://github.com/Alexdoru/MWE/releases" target="_blank">
-<img alt="downloads" src="https://img.shields.io/github/downloads/Alexdoru/MWE/total?color=0843B2&style=for-the-badge" />
-</a>
-</div>
+<p align="center">
+  <img src="https://img.shields.io/github/v/release/Alexdoru/MWE?logo=github" alt="GitHub Release">
+  <img src="https://img.shields.io/github/downloads/Alexdoru/MWE/total?logo=github" alt="GitHub Downloads">
+  <img src="https://github.com/Alexdoru/MWE/actions/workflows/build.yml/badge.svg" alt="Build Status">
+</p>
 
 **This is a mod for Minecraft Forge 1.8.9 that contains numerous features and improvements for pvp players and for Hypixel's Mega Walls. Use `/mwe` to open the config menu.**
 
-## Summary
-- [Download](https://github.com/Alexdoru/MWE#download)
-- [Installation](https://github.com/Alexdoru/MWE#installation)
-- [Features](https://github.com/Alexdoru/MWE#features)
-  - [Vanilla Enhancements](https://github.com/Alexdoru/MWE#vanilla-enhancements)
-  - [PVP Stuff](https://github.com/Alexdoru/MWE#pvp-stuff)
-  - [Hypixel](https://github.com/Alexdoru/MWE#hypixel)
-  - [Squad System](https://github.com/Alexdoru/MWE#squad-system)
-  - [Hitbox Mod, Better f3+b](https://github.com/Alexdoru/MWE#hitbox-mod-better-f3b)
-  - [Mega Walls features](https://github.com/Alexdoru/MWE#mega-walls-features)
-  - [NoCheaters](https://github.com/Alexdoru/MWE#nocheaters)
-  - [Hacker Detector](https://github.com/Alexdoru/MWE#hacker-detector)
-  - [External](https://github.com/Alexdoru/MWE#external)
-  - [Commands](https://github.com/Alexdoru/MWE#commands)
-- [License and Contribution](https://github.com/Alexdoru/MWE#license-and-contribution)
-
 ## Download
 
-Download the latest release from the **[releases page](https://github.com/Alexdoru/MWE/releases)**
+Download the latest version of the mod from the **[releases page](https://github.com/Alexdoru/MWE/releases)**
 
 ## Installation
 
@@ -36,15 +17,12 @@ Download the latest release from the **[releases page](https://github.com/Alexdo
 3. Open your `.minecraft` folder, create a `mods` folder and place the mod inside
 4. Open the minecraft launcher, select the forge 1.8.9 installation and start the game
 
-#### Other mods I recommend using :
-- **[Optifine](https://optifine.net/downloads)** - Enhances performance
-- **[Sk1er's Patcher](https://sk1er.club/mods/patcher)** - `/patcher` Minecraft QOLs, performance improvements and vanilla bug fixes
-- **[Sk1er's Old Animation](https://discord.gg/sk1er)** - `/oldanimations` Brings back 1.7 animations, available in beta on their discord server
-- **[My Sidebar Mod](https://github.com/Alexdoru/SidebarMod/releases/)** - `/sidebarmod` Enhances the sidebar
-
 Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, the chat, tablist and hitbox related features from this mod will not work.
 
 ## Features
+
+<details>
+  <summary>Vanilla Enhancements</summary>
 
 ### Vanilla Enhancements
 
@@ -91,6 +69,11 @@ Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, th
 
 - **Fix actionbar text overlap** - Prevents the actionbar text from overlapping with the armor bar if the player has more than 2 rows of health
 
+</details>
+
+<details>
+  <summary>PVP Stuff</summary>
+
 ### PVP Stuff
 
 - **Armor HUD** - Renders your armor on the screen, render vertically or horizontally, choose to render durability, choose to only render when the durability is low
@@ -102,10 +85,20 @@ Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, th
 - **Sound warning low HP** - Plays a sound when your health drops below a certain threshold
 - **Sword Drop Protection** - Prevents you from dropping your sword
 
+</details>
+
+<details>
+  <summary>Hypixel</summary>
+
 ### Hypixel
 
 - **Short coins messages** - on Hypixel, removes the booster info in the coin and token messages to make the messages smaller
 - **Warp Protection** - Adds confirmation when clicking the "Play Again" paper if you have players in your squad
+
+</details>
+
+<details>
+  <summary>Squad System</summary>
 
 ### Squad System
 
@@ -116,6 +109,11 @@ Add players to your squad using the `/squad` command, your squadmates will appea
 - **Colored Squadmates** - Your squadmates will render with a fixed color that you can choose for their nametag, hitbox, hurt color
 - **Nick hider** - Display to yourself your own name when you are nicked in a squad
 - **Keep First Letter** - Keeps the first letter of a squadmate when giving them an alias, so you can track them on the compass
+
+</details>
+
+<details>
+  <summary>Hitbox mod, better f3+b</summary>
 
 ### Hitbox mod, better f3+b:
 
@@ -132,6 +130,11 @@ Allows you to customize the look of the f3+b hitboxes.
 - **3m blue line** - Make the blue line 3m long, to match the reach of players
 - **Hide close hitboxes** - Stops rendering hitboxes that are closer than a certain distance that you can choose
 - **Hitboxes remain enable after restart** - Unlike vanilla minecraft you won't need to enable it everytime you play
+
+</details>
+
+<details>
+  <summary>Mega Walls features</summary>
 
 ### Mega Walls features
 
@@ -159,6 +162,11 @@ Allows you to customize the look of the f3+b hitboxes.
 - Notification at 5 mins before a game ends, and 10 seconds before the walls fall if you are not on the game
 - Shows class and kit in the chat message when you hit an arrow
 
+</details>
+
+<details>
+  <summary>NoCheaters</summary>
+
 ### NoCheaters:
 
 NoCheaters saves players reported via `/wdr name` (not /report) and warns you about them ingame.
@@ -175,6 +183,11 @@ You can define in the config which cheats give a red icon or no icon at all.
 - **Censor cheaters in chat** - Deletes or censors chat messages sent by players you have reported
 - You can use `/report name boosting` & `/report name crossteaming` as a one step command to report on Hypixel instead of using the book
 - Shows who joined in party with a certain player when you `/wdr` them, to report the other members for boosting
+
+</details>
+
+<details>
+  <summary>Hacker Detector</summary>
 
 ### Hacker Detector:
 
@@ -193,10 +206,20 @@ Currently, has detection for : Autoblock, Fastbreak, Ghosthand, Keepsprint, Kill
 - **Report HUD** - Displays a small text when the mod has a report to send, and which report it is typing
 Fix Autoblock animation bypass : certain cheating clients send certain packets that make you not see them blocking their sword when they are in reality constantly blocking their sword while attacking.
 
+</details>
+
+<details>
+  <summary>External</summary>
+
 ### External
 
 - **Hide toggle sprint HUD** - Hides the toggle sprint HUD from OrangeMarshall's SimpleMod
 - **Hide Optifine hats** - Hides cosmetic hats added by Optifine during certain seasons
+
+</details>
+
+<details>
+  <summary>Commands</summary>
 
 ### Commands
 
@@ -210,3 +233,28 @@ Most commands require a working Hypixel API Key, use `/mwe set <key>` to set you
 - `/scangame` - In Mega Walls, reveals which accouns are alt accounts with high stats, most likely cheaters
 - `/squad` - Add and remove players from your squad, use `/squad` for details
 - `/stalk <name>` - Reveals what a player is currently doing on the Hypixel Network
+
+</details>
+
+## For developers
+
+### Contributing
+
+You can contribute to this project by making a [pull request](https://github.com/Alexdoru/MWE/pulls), please note that
+features considered as black listed modifications according to the hypixel's server rules will be automatically
+rejected.
+
+### MWE Addon
+
+The mod has a public API allowing you to create addon mods.
+By making an addon mod, users can install latest version of official MWE and multiple addons of their liking.
+Whereas if you modify MWE and distribute it, users are stuck with your modified MWE at whatever version it was made.
+So they can't install latest version of MWE, and they can't install other modified MWE that have different features.
+
+An example addon mod can be found [here](https://github.com/Alexdoru/ExampleMod1.8.9/tree/mwe-addon)
+
+To make your addon you should only use the contents of
+the [mwe/api](https://github.com/Alexdoru/MWE/tree/master/src/main/java/fr/alexdoru/mwe/api) package, the main class
+is [MWEApi](https://github.com/Alexdoru/MWE/blob/master/src/main/java/fr/alexdoru/mwe/api/MWEApi.java).
+
+If you need more api content to make you addon you can ask or make a pull request.
