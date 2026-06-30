@@ -32,4 +32,15 @@ public final class GuiUtil {
         Gui.drawRect(x, startY + 1, x + 1, endY, color);
     }
 
+    public static int brightenColor(int color, float amount) {
+        final int a = (color >> 24) & 0xFF;
+        int r = (color >> 16) & 0xFF;
+        int g = (color >> 8) & 0xFF;
+        int b = color & 0xFF;
+        r = r + (int) ((255 - r) * amount);
+        g = g + (int) ((255 - g) * amount);
+        b = b + (int) ((255 - b) * amount);
+        return (a << 24) | (r << 16) | (g << 8) | b;
+    }
+
 }

@@ -72,10 +72,16 @@ public class SliderGuiButton extends ConfigGuiButton {
         plusButtonX = sliderBarX + SLIDER_WIDTH + SLIDER_BUTTON_SIZE / 2;
         plusButtonY = sliderBarY + (SLIDER_HEIGHT - PLUS_BUTTON_SIZE) / 2;
         GuiUtil.drawBoxWithOutline(sliderBarX, sliderBarY, sliderBarX + SLIDER_WIDTH, sliderBarY + SLIDER_HEIGHT, colorPalette.SLIDER_BUTTON_TRACK, colorPalette.SLIDER_BUTTON_TRACK_BORDER);
-        GuiUtil.drawBoxWithOutline(sliderButtonX, sliderButtonY, sliderButtonX + SLIDER_BUTTON_SIZE, sliderButtonY + SLIDER_BUTTON_SIZE, colorPalette.SLIDER_BUTTON_THUMB, colorPalette.SLIDER_BUTTON_THUMB_BORDER);
-        GuiUtil.drawBoxWithOutline(minusButtonX, minusButtonY, minusButtonX + PLUS_BUTTON_SIZE, minusButtonY + PLUS_BUTTON_SIZE, colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND, colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND_BORDER);
+        final boolean silderHovered = isMouseOnButton(mouseX, mouseY, sliderButtonX, sliderButtonY, SLIDER_BUTTON_SIZE, SLIDER_BUTTON_SIZE);
+        final int sliderColor = silderHovered ? GuiUtil.brightenColor(colorPalette.SLIDER_BUTTON_THUMB, 0.12f) : colorPalette.SLIDER_BUTTON_THUMB;
+        GuiUtil.drawBoxWithOutline(sliderButtonX, sliderButtonY, sliderButtonX + SLIDER_BUTTON_SIZE, sliderButtonY + SLIDER_BUTTON_SIZE, sliderColor, colorPalette.SLIDER_BUTTON_THUMB_BORDER);
+        final boolean isMinusHovered = isMouseOnButton(mouseX, mouseY, minusButtonX, minusButtonY, PLUS_BUTTON_SIZE, PLUS_BUTTON_SIZE);
+        final int minusColor = isMinusHovered ? GuiUtil.brightenColor(colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND, 0.12f) : colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND;
+        GuiUtil.drawBoxWithOutline(minusButtonX, minusButtonY, minusButtonX + PLUS_BUTTON_SIZE, minusButtonY + PLUS_BUTTON_SIZE, minusColor, colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND_BORDER);
         mc.fontRendererObj.drawStringWithShadow("-", minusButtonX + 2, minusButtonY + 1, colorPalette.SLIDER_BUTTON_PLUS_TEXT);
-        GuiUtil.drawBoxWithOutline(plusButtonX, plusButtonY, plusButtonX + PLUS_BUTTON_SIZE, plusButtonY + PLUS_BUTTON_SIZE, colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND, colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND_BORDER);
+        final boolean isPlusHovered = isMouseOnButton(mouseX, mouseY, plusButtonX, plusButtonY, PLUS_BUTTON_SIZE, PLUS_BUTTON_SIZE);
+        final int plusColor = isPlusHovered ? GuiUtil.brightenColor(colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND, 0.12f) : colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND;
+        GuiUtil.drawBoxWithOutline(plusButtonX, plusButtonY, plusButtonX + PLUS_BUTTON_SIZE, plusButtonY + PLUS_BUTTON_SIZE, plusColor, colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND_BORDER);
         mc.fontRendererObj.drawStringWithShadow("+", plusButtonX + 2, plusButtonY + 1, colorPalette.SLIDER_BUTTON_PLUS_TEXT);
         final String valueText;
         if (isIntValue) {

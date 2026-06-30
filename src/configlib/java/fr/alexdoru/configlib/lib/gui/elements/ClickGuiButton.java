@@ -23,8 +23,8 @@ public class ClickGuiButton extends GuiButton {
                     this.yPosition,
                     this.xPosition + this.width,
                     this.yPosition + this.height,
-                    colorPalette.BUTTON_BACKGROUND,
-                    colorPalette.BUTTON_BACKGROUND_BORDER
+                    this.hovered ? GuiUtil.brightenColor(colorPalette.BUTTON_BACKGROUND, 0.12f) : colorPalette.BUTTON_BACKGROUND,
+                    this.hovered ? GuiUtil.brightenColor(colorPalette.BUTTON_BACKGROUND_BORDER, 0.12f) : colorPalette.BUTTON_BACKGROUND_BORDER
             );
             this.mouseDragged(mc, mouseX, mouseY);
             this.drawCenteredString(
