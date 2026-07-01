@@ -1,10 +1,10 @@
 package fr.alexdoru.mwe.features;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.StringUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -56,19 +56,19 @@ public class PartyDetection {
     public static void printBoostingReportAdvice(String playername) {
         final Set<String> party = PARTYS.get(playername);
         if (party == null) return;
-        final NetworkPlayerInfo cheaterNetInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
+        final NetworkPlayerInfo cheaterNetInfo = Minecraft.getMinecraft().getNetHandler().getPlayerInfo(playername);
         if (cheaterNetInfo == null) {
             return;
         }
-        final String cheaterTeamColor = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(cheaterNetInfo.getPlayerTeam(), playername), playername);
+        final char cheaterTeamColor = getTeamColor(cheaterNetInfo);
         final ChatComponentText imsg = new ChatComponentText(EnumChatFormatting.GREEN + "This player joined in a party with : ");
         boolean containsPlayers = false;
         for (final String player : party) {
             if (!player.equals(playername)) {
-                final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(player);
+                final NetworkPlayerInfo netInfo = Minecraft.getMinecraft().getNetHandler().getPlayerInfo(player);
                 if (netInfo != null) {
-                    final String teamColorPlayer = StringUtil.getLastColorCodeBefore(ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), player), player);
-                    if (!cheaterTeamColor.isEmpty() && cheaterTeamColor.equals(teamColorPlayer)) {
+                    final char teamColorPlayer = getTeamColor(netInfo);
+                    if (cheaterTeamColor == teamColorPlayer) {
                         containsPlayers = true;
                         imsg.appendSibling(new ChatComponentText(NameFormatter.getFormattedName(netInfo) + " ")
                                 .setChatStyle(new ChatStyle()
@@ -82,6 +82,13 @@ public class PartyDetection {
         if (containsPlayers) {
             new DelayedTask(() -> ChatUtil.addChatMessage(imsg), 10);
         }
+    }
+
+    private static char getTeamColor(NetworkPlayerInfo netInfo) {
+        return StringUtil.getLastColorCharBefore(
+                ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()),
+                netInfo.getGameProfile().getName()
+        );
     }
 
     @NotNull
