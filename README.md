@@ -258,3 +258,10 @@ the [mwe/api](https://github.com/Alexdoru/MWE/tree/master/src/main/java/fr/alexd
 is [MWEApi](https://github.com/Alexdoru/MWE/blob/master/src/main/java/fr/alexdoru/mwe/api/MWEApi.java).
 
 If you need more api content to make you addon you can ask or make a pull request.
+
+## Acknowledgment
+
+<img src="https://www.yourkit.com/images/yklogo.png"></img>
+
+When working on optimizations for Minecraft I use [Yourkit Profiler](https://www.yourkit.com/java/profiler/), many
+thanks to them for creating quality software and providing me with a license.
