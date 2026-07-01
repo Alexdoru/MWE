@@ -251,8 +251,9 @@ public final class ScoreboardParser implements IScoreboardParser {
         return this.getWitherCount() == 1;
     }
 
+    @Override
     public boolean isDeathmatch() {
-        return this.getWitherCount() == 0;
+        return isInMwGame && this.getWitherCount() == 0;
     }
 
     public boolean hasGameEnded() {

@@ -45,4 +45,7 @@ public interface IScoreboardParser {
     /** Returns the amount of alive withers in a Mega Walls game */
     int getWitherCount();
 
+    /** Returns true during Mega walls deathmatch */
+    boolean isDeathmatch();
+
 }
