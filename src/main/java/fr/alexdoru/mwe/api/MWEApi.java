@@ -15,6 +15,7 @@ import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
 import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
+import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import net.minecraft.client.Minecraft;
@@ -333,6 +334,20 @@ public final class MWEApi {
          */
         public static IScoreboardParser getScoreboarParser() {
             return ScoreboardTracker.getParser();
+        }
+
+        /**
+         * Returns the contents of the scoreboard as a list of formatted Strings
+         */
+        public static List<String> getFormattedSidebarText() {
+            return ScoreboardUtils.getFormattedSidebarText();
+        }
+
+        /**
+         * Returns the contents of the scoreboard as a list of unformatted Strings
+         */
+        public static List<String> getUnformattedSidebarText() {
+            return ScoreboardUtils.getUnformattedSidebarText();
         }
 
     }
