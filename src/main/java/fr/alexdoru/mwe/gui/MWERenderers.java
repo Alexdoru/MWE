@@ -8,7 +8,6 @@ public final class MWERenderers {
     private MWERenderers() {}
 
     public static ArrowHitHUD arrowHitHUD;
-    public static BaseLocationHUD baseLocationHUD;
     public static CreeperPrimedTntHUD creeperPrimedTntHUD;
     public static FKCounterHUD fkCounterHUD;
     public static StrengthHUD strengthHUD;
@@ -20,7 +19,7 @@ public final class MWERenderers {
     public static void loadRenderers(IRendererManager rendererManager) {
         rendererManager.registerHUDRenderer(new ArmorHUD());
         rendererManager.registerHUDRenderer(arrowHitHUD = new ArrowHitHUD());
-        rendererManager.registerHUDRenderer(baseLocationHUD = new BaseLocationHUD());
+        rendererManager.registerHUDRenderer(new BaseLocationHUD());
         rendererManager.registerHUDRenderer(creeperPrimedTntHUD = new CreeperPrimedTntHUD());
         rendererManager.registerHUDRenderer(new EnergyDisplayHUD());
         rendererManager.registerHUDRenderer(fkCounterHUD = new FKCounterHUD());

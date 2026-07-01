@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.api.enums.MWMap;
+import fr.alexdoru.mwe.api.events.MapEvent;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.chat.LocrawListener;
 import fr.alexdoru.mwe.config.MWEConfig;
@@ -46,12 +47,9 @@ public class BaseLocationHUD extends AbstractRenderer {
         }
     }
 
-    public void setCurrentMap(String mapName) {
-        if (mapName == null) {
-            currentMap = null;
-        } else {
-            currentMap = MWMap.fromName(mapName);
-        }
+    @SubscribeEvent
+    public void onMapEvent(MapEvent event) {
+        currentMap = MWMap.fromName(event.mapName);
     }
 
 }
