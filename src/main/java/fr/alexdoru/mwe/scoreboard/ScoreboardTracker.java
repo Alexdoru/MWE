@@ -5,6 +5,7 @@ import fr.alexdoru.mwe.api.events.MegaWallsGameEvent.Type;
 import fr.alexdoru.mwe.gui.MWERenderers;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +25,7 @@ public final class ScoreboardTracker {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             Minecraft.getMinecraft().mcProfiler.startSection("MWE Scoreboard");
