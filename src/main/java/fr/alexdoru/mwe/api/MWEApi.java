@@ -329,11 +329,9 @@ public final class MWEApi {
         /**
          * Returns an accessor to get and set certain player specific data
          */
-        public static IPlayerInfoAccessor getPlayerInfo(EntityPlayer player) {
-            if (player instanceof IPlayerInfoAccessor) {
-                return ((IPlayerInfoAccessor) player);
-            }
-            return null;
+        @NotNull
+        public static IPlayerInfoAccessor getPlayerInfo(@NotNull EntityPlayer player) {
+            return (IPlayerInfoAccessor) player;
         }
 
     }
