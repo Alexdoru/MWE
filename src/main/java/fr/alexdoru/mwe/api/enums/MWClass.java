@@ -1,12 +1,17 @@
 package fr.alexdoru.mwe.api.enums;
 
+import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.scoreboard.ScorePlayerTeam;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public enum MWClass {
 
@@ -54,7 +59,7 @@ public enum MWClass {
         this.className = StringUtil.uppercaseFirstLetter(this.name().toLowerCase());
     }
 
-    public static MWClass fromTagOrName(String nameIn) {
+    public static MWClass fromTagOrName(@NotNull String nameIn) {
         for (final MWClass mwClass : values()) {
             if (nameIn.equalsIgnoreCase(mwClass.TAG) || nameIn.equalsIgnoreCase(mwClass.className)) {
                 return mwClass;
@@ -63,19 +68,31 @@ public enum MWClass {
         return null;
     }
 
-    public static MWClass ofPlayer(String playername) {
+    /**
+     * Returns the MWClass of a player, might be bull
+     */
+    @Nullable
+    public static MWClass ofPlayer(@NotNull String playername) {
         final WorldClient world = Minecraft.getMinecraft().theWorld;
-        if (world == null) {
-            return null;
-        }
+        if (world == null) return null;
         final ScorePlayerTeam team = world.getScoreboard().getPlayersTeam(playername);
-        if (team == null) {
-            return null;
-        }
-        return MWClass.fromTeamTag(team.getColorSuffix());
+        if (team == null) return null;
+        return MWClass.fromTeamTag(ScoreboardTracker.isMWReplay() ? team.getColorPrefix() : team.getColorSuffix());
     }
 
-    public static MWClass fromTeamTag(String teamTag) {
+    /**
+     * Returns the MWClass of a player, might be bull
+     */
+    @Nullable
+    public static MWClass ofPlayer(@NotNull UUID uuid) {
+        final NetHandlerPlayClient netHandler = Minecraft.getMinecraft().getNetHandler();
+        if (netHandler == null) return null;
+        final ScorePlayerTeam team = netHandler.getPlayerInfo(uuid).getPlayerTeam();
+        if (team == null) return null;
+        return MWClass.fromTeamTag(ScoreboardTracker.isMWReplay() ? team.getColorPrefix() : team.getColorSuffix());
+    }
+
+    public static MWClass fromTeamTag(@NotNull String teamTag) {
         return MWClass.fromTag(StringUtil.removeFormattingCodes(teamTag).replaceAll("[\\[\\]\\s]", ""));
     }
 

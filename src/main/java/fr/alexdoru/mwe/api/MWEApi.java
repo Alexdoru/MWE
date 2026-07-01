@@ -255,16 +255,6 @@ public final class MWEApi {
             return fkCounter.getSortedTeamKillsList();
         }
 
-        /**
-         * Return the MWTeam from the color character of that team, may return null
-         */
-        @Nullable
-        public MWTeam getTeamFromColor(char color) {
-            final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
-            if (fkCounter == null) return null;
-            return fkCounter.getTeamFromColor(color);
-        }
-
     }
 
     public static final class Hud {
