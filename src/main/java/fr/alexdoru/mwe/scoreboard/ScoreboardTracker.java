@@ -42,7 +42,7 @@ public final class ScoreboardTracker {
     private void fireScoreboardRelatedEvents() {
         final boolean isInMW = PARSER.isInMwGame();
         final boolean hasgameended = PARSER.hasGameEnded();
-        final int amountWitherAlive = PARSER.getAliveWithers().size();
+        final int amountWitherAlive = PARSER.getWitherCount();
 
         if (isInMW) {
 

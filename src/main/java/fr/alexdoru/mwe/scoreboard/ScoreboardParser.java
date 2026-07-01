@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.scoreboard;
 
+import com.google.common.collect.ImmutableMap;
 import fr.alexdoru.mwe.api.IScoreboardParser;
 import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.chat.ChatUtil;
@@ -16,6 +17,7 @@ import org.lwjgl.opengl.Display;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,8 +29,14 @@ public final class ScoreboardParser implements IScoreboardParser {
     private static final Pattern GAME_END_PATTERN = Pattern.compile("Game End: (\\d+):(\\d+)");
     private static final Pattern MW_INGAME_PATTERN = Pattern.compile("[0-9]+\\sF\\.\\sKills?\\s[0-9]+\\sF\\.\\sAssists?");
     private static final Pattern PREGAME_LOBBY_PATTERN = Pattern.compile("Players:\\s*[0-9]+/[0-9]+");
-    private static final Pattern WITHER_ALIVE_PATTERN = Pattern.compile("\\[[BGRY]] Wither HP: ([,\\d]+)");
+    private static final Pattern WITHER_ALIVE_PATTERN = Pattern.compile("(\\[[BGRY]]) Wither HP: ([,\\d]+)");
     private static final Pattern REPLAY_MAP_PATTERN = Pattern.compile("Map: ([a-zA-Z0-9_ ]+)");
+    private static final Map<String, MWTeam> TEAM_PREFIXES = new ImmutableMap.Builder<String, MWTeam>()
+            .put("[B]", MWTeam.BLUE)
+            .put("[G]", MWTeam.GREEN)
+            .put("[R]", MWTeam.RED)
+            .put("[Y]", MWTeam.YELLOW)
+            .build();
 
     private boolean triggeredBlueWitherAlert = false;
     private boolean triggeredGreenWitherAlert = false;
@@ -40,8 +48,8 @@ public final class ScoreboardParser implements IScoreboardParser {
 
     private int prevGameEndTime;
 
-    private final List<String> aliveWithers = new ArrayList<>(4);
-    private final List<String> aliveWithersView = Collections.unmodifiableList(aliveWithers);
+    private final List<MWTeam> aliveWithers = new ArrayList<>(4);
+    private final List<MWTeam> aliveWithersView = Collections.unmodifiableList(aliveWithers);
     private String serverID = null;
     private boolean isInMwGame = false;
     private boolean isMWEnvironement = false;
@@ -182,12 +190,14 @@ public final class ScoreboardParser implements IScoreboardParser {
 
             final String line = cleanLines.get(i);
             /*Wither alive detection*/
-            final Matcher witherAliveMatcher = WITHER_ALIVE_PATTERN.matcher(line);
             final String colorCode;
-            if (witherAliveMatcher.find()) {
+            final MWTeam witherTeam;
+            final Matcher matcher = WITHER_ALIVE_PATTERN.matcher(line);
+            if (matcher.find()) {
                 colorCode = StringUtil.getLastColorCodeBefore(formattedLines.get(i), "[");
-                aliveWithers.add(colorCode);
-                witherHP = Integer.parseInt(witherAliveMatcher.group(1).replace(",", ""));
+                witherTeam = TEAM_PREFIXES.get(matcher.group(1));
+                aliveWithers.add(witherTeam);
+                witherHP = Integer.parseInt(matcher.group(2).replace(",", ""));
             } else {
                 if (line.contains("eliminated!")) {
                     eliminatedTeams++;
@@ -201,21 +211,38 @@ public final class ScoreboardParser implements IScoreboardParser {
             }
 
             if (MWEConfig.witherAlerts && witherHP < MWEConfig.witherAlertsThreshold) {
-                MWTeam witherTeam = null;
-                if (!triggeredBlueWitherAlert && line.contains("[B]")) {
-                    witherTeam = MWTeam.BLUE;
-                    triggeredBlueWitherAlert = true;
-                } else if (!triggeredGreenWitherAlert && line.contains("[G]")) {
-                    witherTeam = MWTeam.GREEN;
-                    triggeredGreenWitherAlert = true;
-                } else if (!triggeredRedWitherAlert && line.contains("[R]")) {
-                    witherTeam = MWTeam.RED;
-                    triggeredRedWitherAlert = true;
-                } else if (!triggeredYellowWitherAlert && line.contains("[Y]")) {
-                    witherTeam = MWTeam.YELLOW;
-                    triggeredYellowWitherAlert = true;
+                boolean playNotif = false;
+                switch (witherTeam) {
+                    case BLUE: {
+                        if (!triggeredBlueWitherAlert) {
+                            triggeredBlueWitherAlert = true;
+                            playNotif = true;
+                        }
+                        break;
+                    }
+                    case GREEN: {
+                        if (!triggeredGreenWitherAlert) {
+                            triggeredGreenWitherAlert = true;
+                            playNotif = true;
+                        }
+                        break;
+                    }
+                    case RED: {
+                        if (!triggeredRedWitherAlert) {
+                            triggeredRedWitherAlert = true;
+                            playNotif = true;
+                        }
+                        break;
+                    }
+                    case YELLOW: {
+                        if (!triggeredYellowWitherAlert) {
+                            triggeredYellowWitherAlert = true;
+                            playNotif = true;
+                        }
+                        break;
+                    }
                 }
-                if (witherTeam != null) {
+                if (playNotif) {
                     ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "The " + witherTeam.getColorPrefix() + witherTeam.getName() + " Wither " + EnumChatFormatting.GREEN + "is below " + EnumChatFormatting.YELLOW + MWEConfig.witherAlertsThreshold + "HP!");
                     SoundUtil.playNotePling();
                 }
@@ -243,8 +270,8 @@ public final class ScoreboardParser implements IScoreboardParser {
         }
     }
 
-    public boolean isWitherAlive(String colorCode) {
-        return aliveWithers.contains(colorCode);
+    public boolean isWitherAlive(@NotNull MWTeam team) {
+        return aliveWithers.contains(team);
     }
 
     public boolean isOnlyOneWitherAlive() {
@@ -310,7 +337,7 @@ public final class ScoreboardParser implements IScoreboardParser {
     }
 
     @Override
-    public @NotNull List<String> getAliveWithers() {
+    public @NotNull List<MWTeam> getAliveWithers() {
         return aliveWithersView;
     }
 

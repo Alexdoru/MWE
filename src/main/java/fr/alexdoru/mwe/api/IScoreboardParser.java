@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.api;
 
+import fr.alexdoru.mwe.api.enums.MWTeam;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -40,7 +41,7 @@ public interface IScoreboardParser {
     /** Returns the list of alive withers in a Mega Walls game, each element is a color character */
     @NotNull
     @UnmodifiableView
-    List<String> getAliveWithers();
+    List<MWTeam> getAliveWithers();
 
     /** Returns the amount of alive withers in a Mega Walls game */
     int getWitherCount();

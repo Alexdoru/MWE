@@ -317,7 +317,7 @@ public final class FinalKillCounter {
      * player had when successfull, returns -1 otherwise.
      */
     public int tryRemoveKilledPlayer(String player, @NotNull MWTeam team) {
-        if (!ScoreboardTracker.getParser().isWitherAlive(String.valueOf(COLOR_PREFIXES.get(team)))) {
+        if (!ScoreboardTracker.getParser().isWitherAlive(team)) {
             final Integer kills = KILLS_MAP.get(team).remove(player);
             allPlayerKills.remove(player);
             deadPlayers.add(player);
@@ -353,7 +353,7 @@ public final class FinalKillCounter {
     }
 
     @Nullable
-    private MWTeam getTeamFromColor(char color) {
+    public MWTeam getTeamFromColor(char color) {
         for (final Map.Entry<MWTeam, Character> entry : COLOR_PREFIXES.entrySet()) {
             if (entry.getValue() == color) {
                 return entry.getKey();
