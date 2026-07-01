@@ -15,7 +15,7 @@ public class NetworkPlayerInfoHook_CustomTab {
     public static int getPlayersFinals(GameProfile gameProfileIn) {
         final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
         if (fkCounter == null) return 0;
-        return fkCounter.getFinalKillsOfPlayer(gameProfileIn.getName());
+        return fkCounter.getKillsOfPlayer(gameProfileIn.getName());
     }
 
     public static IChatComponent changeDisplayName(IChatComponent original, IChatComponent customName) {

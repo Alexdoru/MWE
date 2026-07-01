@@ -278,7 +278,7 @@ public final class FinalKillCounter {
     }
 
     /**
-     * Returns a sorted hashmap where the Keys are the Team integer, and the values are the amounts of finals for that team
+     * Returns a sorted list of entries where the Keys are the Team, and the values are the amounts of finals for that team
      */
     public List<Map.Entry<MWTeam, Integer>> getSortedTeamKillsList() {
         final Map<MWTeam, Integer> map = new EnumMap<>(MWTeam.class);
@@ -340,7 +340,7 @@ public final class FinalKillCounter {
         return true;
     }
 
-    public int getFinalKillsOfPlayer(String playername) {
+    public int getKillsOfPlayer(String playername) {
         final Integer finals = allPlayerKills.get(playername);
         return finals == null ? 0 : finals;
     }

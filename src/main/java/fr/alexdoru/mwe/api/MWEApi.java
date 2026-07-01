@@ -3,11 +3,13 @@ package fr.alexdoru.mwe.api;
 import fr.alexdoru.configlib.api.IRenderer;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.asm.IClassNodeTransformer;
+import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
 import fr.alexdoru.mwe.data.AliasData;
+import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.PartyDetection;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
@@ -27,6 +29,7 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -205,6 +208,51 @@ public final class MWEApi {
          */
         public static void displayConfigGuiScreen() {
             Tasks.queueSyncDelayedTask(() -> Minecraft.getMinecraft().displayGuiScreen(Config.getConfigGuiScreen()), 0);
+        }
+
+    }
+
+    public static final class FinalKills {
+
+        private FinalKills() {}
+
+        /**
+         * Returns the amount of final kills of a player
+         */
+        public static int getKillsOfPlayer(String playername) {
+            final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
+            if (fkCounter == null) return 0;
+            return fkCounter.getKillsOfPlayer(playername);
+        }
+
+        /**
+         * Returns the amount of final kills of a team
+         */
+        public static int getKillsOfTeam(MWTeam team) {
+            final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
+            if (fkCounter == null) return 0;
+            return fkCounter.getKillsOfTeam(team);
+        }
+
+        /**
+         * Returns the map of final kills of a team
+         */
+        @Nullable
+        @Unmodifiable
+        public static Map<String, Integer> getKillMapOfTeam(MWTeam team) {
+            final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
+            if (fkCounter == null) return null;
+            return fkCounter.getKillMapOfTeam(team);
+        }
+
+        /**
+         * Returns a sorted list of entries where the Keys are the Team, and the values are the amounts of finals for that team
+         */
+        @Nullable
+        public static List<Map.Entry<MWTeam, Integer>> getSortedTeamKillsList() {
+            final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
+            if (fkCounter == null) return null;
+            return fkCounter.getSortedTeamKillsList();
         }
 
     }
