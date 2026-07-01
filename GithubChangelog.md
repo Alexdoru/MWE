@@ -1,13 +1,14 @@
 ## Changelog
 
-- new : modern nametags, renders the nametags like in modern minecraft
-- new : add `/partdetection` command, lists the players that joined together
-- new : wither alerts, plays an alert when a wither's health falls below a certain threshold
-- new : added config to select the squadmate color
+- fix boosting report advice not printing all the players in the party
 
 ## Api
 
-- add party info
+- add scoreboard lines api
+- add final kill counter api
+- add `IScoreboardParser.getAliveWithers`, `IScoreboardParser.isDeathmatch`
+- add `MWClass.ofPlayer` and `MWTeam.ofPlayer`
+- add map event when it sets a map
 
 Use `/mwe` to open the config menu. To install the mod you need to use forge and drop the .jar file in your `.minecraft\mods` folder.
 See more information about installation [here](https://github.com/Alexdoru/MegaWallsEnhancements#installation).
