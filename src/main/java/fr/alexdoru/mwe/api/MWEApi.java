@@ -378,9 +378,17 @@ public final class MWEApi {
         private Scoreboard() {}
 
         /**
+         * Use {@link Scoreboard#getScoreboardParser()}
+         */
+        @Deprecated
+        public static IScoreboardParser getScoreboarParser() {
+            return Scoreboard.getScoreboardParser();
+        }
+
+        /**
          * Returns the reference to the scoreboard parser singleton, this can be saved in a field
          */
-        public static IScoreboardParser getScoreboarParser() {
+        public static IScoreboardParser getScoreboardParser() {
             return ScoreboardTracker.getParser();
         }
 
