@@ -46,12 +46,20 @@ public class ConfigGuiScreen extends GuiScreen {
     private int scrollGrabbedAtY;
     private long lastScrollTime;
 
+    private int categoryScroll;
+    private int categoryScrollDirection;
+    private int categoryAmountToScroll;
+    private boolean categoryDraggingScrollBar;
+    private int categoryScrollGrabbedAtY;
+    private long categoryLastScrollTime;
+
     private int GUI_BORDER_LEFT, GUI_BORDER_TOP, GUI_BORDER_RIGHT, GUI_BORDER_BOTTOM;
     private int GUI_INSIDE_LEFT, GUI_INSIDE_TOP, GUI_INSIDE_RIGHT, GUI_INSIDE_BOTTOM;
     private int CATEGORY_BOX_LEFT, CATEGORY_BOX_TOP, CATEGORY_BOX_RIGHT, CATEGORY_BOX_BOTTOM;
     private int CONFIG_BOX_LEFT, CONFIG_BOX_TOP, CONFIG_BOX_RIGHT, CONFIG_BOX_BOTTOM;
     private int SEARCH_BOX_LEFT, SEARCH_BOX_TOP, SEARCH_BOX_RIGHT, SEARCH_BOX_BOTTOM;
     private int SCROLL_BAR_LEFT, SCROLL_BAR_TOP, SCROLL_BAR_RIGHT, SCROLL_BAR_BOTTOM;
+    private int CATEGORY_SCROLL_BAR_LEFT, CATEGORY_SCROLL_BAR_TOP, CATEGORY_SCROLL_BAR_RIGHT, CATEGORY_SCROLL_BAR_BOTTOM;
 
     public ConfigGuiScreen(
             ConfigHandler configHandler,
@@ -132,11 +140,13 @@ public class ConfigGuiScreen extends GuiScreen {
         CATEGORY_BOX_LEFT = GUI_INSIDE_LEFT;
         CATEGORY_BOX_TOP = GUI_INSIDE_TOP + fontRendererObj.FONT_HEIGHT + 1 + 6;
         CATEGORY_BOX_RIGHT = GUI_INSIDE_LEFT + GUI_WIDTH / 5;
-        int categoryDrawY = CATEGORY_BOX_TOP + 6;
+        int categoryContentHeight = 0;
         for (final CategoryGuiButton category : this.categoryElements) {
-            categoryDrawY += category.getHeight() + 4;
+            categoryContentHeight += category.getHeight() + 4;
         }
-        CATEGORY_BOX_BOTTOM = categoryDrawY - 4 + 6;
+        categoryContentHeight -= 4;
+        final int categoryMaxY = CATEGORY_BOX_TOP + 6 + categoryContentHeight + 6;
+        CATEGORY_BOX_BOTTOM = Math.min(categoryMaxY, GUI_INSIDE_BOTTOM);
 
         CONFIG_BOX_LEFT = CATEGORY_BOX_RIGHT + 6;
         CONFIG_BOX_TOP = GUI_INSIDE_TOP + fontRendererObj.FONT_HEIGHT + 1 + 6;
@@ -152,6 +162,7 @@ public class ConfigGuiScreen extends GuiScreen {
         final String prevSearch = isFirstOpening ? null : searchField.getText();
         final boolean prevFocus = !isFirstOpening && searchField.isFocused();
         final int lastScroll = this.scroll;
+        final int lastCategoryScroll = this.categoryScroll;
         searchField = new GuiTextField(0, mc.fontRendererObj, GUI_INSIDE_RIGHT - 55 - 6, GUI_INSIDE_TOP, 55, 20);
         searchField.setMaxStringLength(128);
         searchField.setEnableBackgroundDrawing(false);
@@ -168,6 +179,10 @@ public class ConfigGuiScreen extends GuiScreen {
 
         this.scroll = 0;
         this.scroll(-lastScroll);
+
+        this.categoryScroll = 0;
+        this.categoryScroll(-lastCategoryScroll);
+
         this.lastInteractedSlider = null;
 
         this.mc.entityRenderer.loadShader(BLUR);
@@ -189,6 +204,16 @@ public class ConfigGuiScreen extends GuiScreen {
                 this.scroll(scrollDirection * step);
                 amountToScroll -= step;
                 lastScrollTime = time;
+            }
+        }
+
+        if (categoryAmountToScroll > 0) {
+            final long time = System.currentTimeMillis();
+            if (time - categoryLastScrollTime > 1) {
+                final int step = Math.min(categoryAmountToScroll, Math.max(3, categoryAmountToScroll / 8));
+                this.categoryScroll(categoryScrollDirection * step);
+                categoryAmountToScroll -= step;
+                categoryLastScrollTime = time;
             }
         }
 
@@ -225,10 +250,36 @@ public class ConfigGuiScreen extends GuiScreen {
                 (int) ((CATEGORY_BOX_BOTTOM - CATEGORY_BOX_TOP) * scaleH));
 
         final int categoryDrawX = CATEGORY_BOX_LEFT + 6;
-        int categoryDrawY = CATEGORY_BOX_TOP + 6;
+        int categoryDrawY = CATEGORY_BOX_TOP + 6 - categoryScroll;
+        int allCategoriesHeight = 0;
         for (final CategoryGuiButton category : this.categoryElements) {
-            category.draw(colorPalette, categoryDrawX, categoryDrawY);
-            categoryDrawY += category.getHeight() + 4;
+            final int categoryHeight = category.getHeight();
+            if (categoryDrawY + categoryHeight + 4 >= CATEGORY_BOX_TOP && categoryDrawY <= CATEGORY_BOX_BOTTOM) {
+                category.draw(colorPalette, categoryDrawX, categoryDrawY);
+            }
+            categoryDrawY += categoryHeight + 4;
+            allCategoriesHeight += categoryHeight + 4;
+        }
+
+        final int categoryBoxHeight = CATEGORY_BOX_BOTTOM - CATEGORY_BOX_TOP - 2;
+        final boolean renderCategoryScrollbar = allCategoriesHeight > categoryBoxHeight;
+        if (renderCategoryScrollbar) {
+            final int scrollBarSize = categoryBoxHeight * categoryBoxHeight / allCategoriesHeight;
+            final int minScrollBarY = CATEGORY_BOX_TOP + 1 + 1;
+            final int maxScrollBarY = CATEGORY_BOX_BOTTOM - 1 - scrollBarSize - 1;
+            if (categoryDraggingScrollBar) {
+                final int relativeMouseY = mouseY - minScrollBarY - categoryScrollGrabbedAtY;
+                if (maxScrollBarY != minScrollBarY) {
+                    final int newScroll = relativeMouseY * (allCategoriesHeight - (CATEGORY_BOX_BOTTOM - CATEGORY_BOX_TOP)) / (maxScrollBarY - minScrollBarY);
+                    this.categoryScroll(this.categoryScroll - newScroll);
+                }
+            }
+            CATEGORY_SCROLL_BAR_LEFT = CATEGORY_BOX_RIGHT - 5;
+            CATEGORY_SCROLL_BAR_TOP = ((maxScrollBarY - minScrollBarY) * categoryScroll) / (allCategoriesHeight - categoryBoxHeight) + minScrollBarY;
+            CATEGORY_SCROLL_BAR_RIGHT = CATEGORY_BOX_RIGHT - 5 + 3;
+            CATEGORY_SCROLL_BAR_BOTTOM = CATEGORY_SCROLL_BAR_TOP + scrollBarSize;
+            GuiUtil.drawVerticalLine(CATEGORY_BOX_RIGHT - 4, CATEGORY_BOX_TOP + 4, CATEGORY_BOX_BOTTOM - 4, colorPalette.SCROLLBAR_TRACK);
+            Gui.drawRect(CATEGORY_SCROLL_BAR_LEFT, CATEGORY_SCROLL_BAR_TOP, CATEGORY_SCROLL_BAR_RIGHT, CATEGORY_SCROLL_BAR_BOTTOM, colorPalette.SCROLLBAR_THUMB);
         }
 
         GL11.glScissor(
@@ -283,6 +334,11 @@ public class ConfigGuiScreen extends GuiScreen {
                     return;
                 }
             }
+            if (mouseButton == 0 && isMouseInBox(mouseX, mouseY, CATEGORY_SCROLL_BAR_LEFT, CATEGORY_SCROLL_BAR_RIGHT, CATEGORY_SCROLL_BAR_TOP, CATEGORY_SCROLL_BAR_BOTTOM)) {
+                categoryDraggingScrollBar = true;
+                categoryScrollGrabbedAtY = mouseY - CATEGORY_SCROLL_BAR_TOP;
+                return;
+            }
         } else if (isMouseInBox(mouseX, mouseY, CONFIG_BOX_LEFT, CONFIG_BOX_RIGHT, CONFIG_BOX_TOP, CONFIG_BOX_BOTTOM)) {
             try {
                 for (final ConfigUIElement element : this.renderedConfigElements) {
@@ -325,6 +381,9 @@ public class ConfigGuiScreen extends GuiScreen {
         if (mouseButton == 0 && draggingScrollBar) {
             draggingScrollBar = false;
         }
+        if (mouseButton == 0 && categoryDraggingScrollBar) {
+            categoryDraggingScrollBar = false;
+        }
         super.mouseReleased(mouseX, mouseY, mouseButton);
     }
 
@@ -361,10 +420,19 @@ public class ConfigGuiScreen extends GuiScreen {
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
-        final int i = Mouse.getEventDWheel();
-        if (i != 0) {
-            scrollDirection = i > 0 ? 1 : -1;
-            amountToScroll = Math.min(Math.abs(i) * 2, 240);
+        final int wheel = Mouse.getEventDWheel();
+        if (wheel != 0) {
+            final int mouseX = Mouse.getEventX() * width / mc.displayWidth;
+            final int mouseY = height - Mouse.getEventY() * height / mc.displayHeight - 1;
+            final int direction = wheel > 0 ? 1 : -1;
+            final int amount = Math.min(Math.abs(wheel) * 2, 240);
+            if (isMouseInBox(mouseX, mouseY, CATEGORY_BOX_LEFT, CATEGORY_BOX_RIGHT, CATEGORY_BOX_TOP, CATEGORY_BOX_BOTTOM)) {
+                categoryScrollDirection = direction;
+                categoryAmountToScroll = amount;
+            } else if (isMouseInBox(mouseX, mouseY, CONFIG_BOX_LEFT, CONFIG_BOX_RIGHT, CONFIG_BOX_TOP, CONFIG_BOX_BOTTOM)) {
+                scrollDirection = direction;
+                amountToScroll = amount;
+            }
         }
     }
 
@@ -393,6 +461,22 @@ public class ConfigGuiScreen extends GuiScreen {
         if (this.scroll <= 0) {
             this.scroll = 0;
             this.amountToScroll = 0;
+        }
+    }
+
+    private void categoryScroll(int amount) {
+        this.categoryScroll = this.categoryScroll - amount;
+        int maxDrawY = 6;
+        for (final CategoryGuiButton category : this.categoryElements) {
+            maxDrawY += category.getHeight() + 4;
+        }
+        if (this.categoryScroll > maxDrawY - (CATEGORY_BOX_BOTTOM - CATEGORY_BOX_TOP)) {
+            this.categoryScroll = maxDrawY - (CATEGORY_BOX_BOTTOM - CATEGORY_BOX_TOP);
+            this.categoryAmountToScroll = 0;
+        }
+        if (this.categoryScroll <= 0) {
+            this.categoryScroll = 0;
+            this.categoryAmountToScroll = 0;
         }
     }
 
