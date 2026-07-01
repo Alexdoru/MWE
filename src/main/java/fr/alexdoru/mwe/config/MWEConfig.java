@@ -1047,7 +1047,7 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Checks",
-            name = "Autobock check",
+            name = "Autoblock check",
             comment = "Checks if the player can attack while their sword is blocked")
     public static boolean enableAutoblockCheck = true;
 
