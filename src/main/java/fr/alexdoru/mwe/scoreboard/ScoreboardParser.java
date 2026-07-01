@@ -10,9 +10,11 @@ import fr.alexdoru.mwe.utils.SoundUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.util.EnumChatFormatting;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.Display;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +41,7 @@ public final class ScoreboardParser implements IScoreboardParser {
     private int prevGameEndTime;
 
     private final List<String> aliveWithers = new ArrayList<>(4);
+    private final List<String> aliveWithersView = Collections.unmodifiableList(aliveWithers);
     private String serverID = null;
     private boolean isInMwGame = false;
     private boolean isMWEnvironement = false;
@@ -244,16 +247,12 @@ public final class ScoreboardParser implements IScoreboardParser {
         return aliveWithers.contains(colorCode);
     }
 
-    public List<String> getAliveWithers() {
-        return aliveWithers;
-    }
-
     public boolean isOnlyOneWitherAlive() {
-        return aliveWithers.size() == 1;
+        return this.getWitherCount() == 1;
     }
 
     public boolean isDeathmatch() {
-        return aliveWithers.isEmpty();
+        return this.getWitherCount() == 0;
     }
 
     public boolean hasGameEnded() {
@@ -307,6 +306,16 @@ public final class ScoreboardParser implements IScoreboardParser {
     @Override
     public String getServerID() {
         return serverID;
+    }
+
+    @Override
+    public @NotNull List<String> getAliveWithers() {
+        return aliveWithersView;
+    }
+
+    @Override
+    public int getWitherCount() {
+        return aliveWithers.size();
     }
 
 }

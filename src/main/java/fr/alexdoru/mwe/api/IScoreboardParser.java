@@ -1,5 +1,10 @@
 package fr.alexdoru.mwe.api;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
+
+import java.util.List;
+
 public interface IScoreboardParser {
 
     /**
@@ -29,9 +34,15 @@ public interface IScoreboardParser {
     /** True when is Skyblock */
     boolean isInSkyblock();
 
-    /**
-     * Returns the ID of the current server
-     */
+    /** Returns the ID of the current server */
     String getServerID();
+
+    /** Returns the list of alive withers in a Mega Walls game, each element is a color character */
+    @NotNull
+    @UnmodifiableView
+    List<String> getAliveWithers();
+
+    /** Returns the amount of alive withers in a Mega Walls game */
+    int getWitherCount();
 
 }
