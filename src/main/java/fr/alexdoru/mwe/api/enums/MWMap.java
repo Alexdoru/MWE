@@ -114,6 +114,7 @@ public enum MWMap {
     }
 
     public static MWMap fromName(String name) {
+        if (name == null) return null;
         return fromNameMap.get(name.replace(" ", "").toLowerCase());
     }
 
