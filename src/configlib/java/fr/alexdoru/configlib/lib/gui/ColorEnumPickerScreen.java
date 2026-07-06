@@ -94,22 +94,22 @@ public class ColorEnumPickerScreen extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == 2000) {
-            mc.displayGuiScreen(parent);
+            this.mc.displayGuiScreen(this.parent);
             return;
         }
         if (button instanceof ColorSquareButton) {
             this.current = ((ColorSquareButton) button).color;
             try {
-                field.set(null, this.current);
+                this.field.set(null, this.current);
             } catch (IllegalAccessException ignored) {}
-            if (onPick != null) onPick.run();
+            if (this.onPick != null) this.onPick.run();
         }
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (keyCode == 1) {
-            mc.displayGuiScreen(parent);
+            this.mc.displayGuiScreen(this.parent);
             return;
         }
         super.keyTyped(typedChar, keyCode);
