@@ -254,7 +254,7 @@ public class ConfigGuiScreen extends GuiScreen {
         int allCategoriesHeight = 0;
         for (final CategoryGuiButton category : this.categoryElements) {
             final int categoryHeight = category.getHeight();
-            if (categoryDrawY + categoryHeight + 4 >= CATEGORY_BOX_TOP && categoryDrawY <= CATEGORY_BOX_BOTTOM) {
+            if (categoryDrawY + categoryHeight >= CATEGORY_BOX_TOP && categoryDrawY <= CATEGORY_BOX_BOTTOM) {
                 category.draw(colorPalette, categoryDrawX, categoryDrawY);
             }
             categoryDrawY += categoryHeight + 4;
