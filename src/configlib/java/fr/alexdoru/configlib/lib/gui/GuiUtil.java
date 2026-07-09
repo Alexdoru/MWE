@@ -1,10 +1,14 @@
 package fr.alexdoru.configlib.lib.gui;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiScreen;
 
 public final class GuiUtil {
 
     private GuiUtil() {}
+
+    public static final int MOUSE_LEFT = 0;
 
     public static void drawBoxWithOutline(int left, int top, int right, int bot, int boxColor, int borderColor) {
         drawHorizontalLine(left, right - 1, top, borderColor);
@@ -43,4 +47,7 @@ public final class GuiUtil {
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
 
+    public static void drawFullTextureWithCustomSize(int left, int top, int drawWidth, int drawHeight) {
+        Gui.drawModalRectWithCustomSizedTexture(left, top, 0, 0, drawWidth, drawHeight, drawWidth, drawHeight);
+    }
 }
