@@ -293,7 +293,7 @@ public class ConfigGuiScreen extends GuiScreen {
         int allElementsHeight = 0;
         for (final ConfigUIElement element : this.renderedConfigElements) {
             final int elementHeight = element.getHeight();
-            if (configDrawY + elementHeight + 4 >= CONFIG_BOX_TOP && configDrawY <= CONFIG_BOX_BOTTOM) {
+            if (configDrawY + elementHeight >= CONFIG_BOX_TOP && configDrawY <= CONFIG_BOX_BOTTOM) {
                 element.draw(colorPalette, configDrawX, configDrawY, mouseX, mouseY);
             }
             configDrawY += elementHeight + 4;
