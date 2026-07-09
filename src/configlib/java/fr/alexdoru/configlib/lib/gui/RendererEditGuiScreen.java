@@ -3,13 +3,19 @@ package fr.alexdoru.configlib.lib.gui;
 import fr.alexdoru.configlib.api.IRenderer;
 import fr.alexdoru.configlib.api.RendererPosition;
 import fr.alexdoru.configlib.lib.RendererManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.ResourceLocation;
 
 import java.io.IOException;
 
 public class RendererEditGuiScreen extends GuiScreen {
+
+    private static final int BUTTON_SIZE = 10;
 
     private final RendererManager rendererManager;
     private final IRenderer renderer;
@@ -96,4 +102,34 @@ public class RendererEditGuiScreen extends GuiScreen {
         drawTexturedModalRect(this.width / 2 - 7, this.height / 2 - 7, 0, 0, 16, 16);
     }
 
+    private static class CustomButton {
+        private final ResourceLocation icon;
+        private final String hoveringText;
+        private final GuiButton button;
+
+        public CustomButton(ResourceLocation icon, String hoveringText) {
+            this.icon = icon;
+            this.hoveringText = hoveringText;
+            this.button = new GuiButton(-1, 0, 0, BUTTON_SIZE, BUTTON_SIZE, "");
+        }
+
+        public void onResize(int x, int y) {
+            this.button.xPosition = x;
+            this.button.yPosition = y;
+        }
+
+        public String draw(Minecraft mc, int mouseX, int mouseY) {
+            button.drawButton(mc, mouseX, mouseY);
+            GlStateManager.color(1f, 1f, 1f, 1f);
+            mc.getTextureManager().bindTexture(icon);
+            final int iconSize = 6;
+            final int iconOffset = (BUTTON_SIZE - iconSize) / 2;
+            GuiUtil.drawFullTextureWithCustomSize(button.xPosition + iconOffset, button.yPosition + iconOffset, iconSize, iconSize);
+            return button.isMouseOver() ? hoveringText : null;
+        }
+
+        public boolean isMouseOver(int mouseX, int mouseY) {
+            return button.isMouseOver();
+        }
+    }
 }
