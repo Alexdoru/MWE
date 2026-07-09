@@ -45,13 +45,13 @@ public class RendererEditGuiScreen extends GuiScreen {
         this.rendererManager.renderEditScreenBackground(this.renderer);
         this.rendererPosition.setEnabled(prevEnabled);
         super.drawDefaultBackground();
-        this.renderer.renderDummy();
         if (this.dragging) {
             this.rendererPosition.setAbsolutePositionForRender(
                     this.rendererPosition.getAbsoluteRenderX() + mouseX - this.prevX,
                     this.rendererPosition.getAbsoluteRenderY() + mouseY - this.prevY
             );
         }
+        this.renderer.renderDummy();
         this.prevX = mouseX;
         this.prevY = mouseY;
     }
