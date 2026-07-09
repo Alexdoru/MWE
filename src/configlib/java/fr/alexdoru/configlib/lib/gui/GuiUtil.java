@@ -1,8 +1,6 @@
 package fr.alexdoru.configlib.lib.gui;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiScreen;
 
 public final class GuiUtil {
 
