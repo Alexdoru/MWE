@@ -10,8 +10,10 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
+import java.util.Collections;
 
 public class RendererEditGuiScreen extends GuiScreen {
 
@@ -21,6 +23,8 @@ public class RendererEditGuiScreen extends GuiScreen {
     private final IRenderer renderer;
     private final RendererPosition rendererPosition;
     private final GuiScreen parent;
+    private final CustomButton[] customButtons;
+    private final double originalRelativeX, originalRelativeY;
     private boolean dragging;
     private int prevX, prevY;
 
@@ -29,12 +33,25 @@ public class RendererEditGuiScreen extends GuiScreen {
         this.renderer = renderer;
         this.rendererPosition = renderer.getPosition();
         this.parent = parent;
+        this.originalRelativeX = rendererPosition.getRelativeX();
+        this.originalRelativeY = rendererPosition.getRelativeY();
+        this.customButtons = new CustomButton[]{
+                new CustomButton(new ResourceLocation("configlib", "reload.png"), "Reset to Default Position"),
+                new CustomButton(new ResourceLocation("configlib", "undo.png"), "Undo Changes")
+        };
     }
 
     @Override
     public void initGui() {
-        this.rendererPosition.updateAbsolutePosition();
-        this.adjustBounds();
+        final int buttonX = this.width - BUTTON_SIZE - 2;
+        int buttonY = 2;
+        for (final CustomButton button : customButtons) {
+            button.onResize(buttonX, buttonY);
+            buttonY += BUTTON_SIZE + 2;
+        }
+        final ScaledResolution res = new ScaledResolution(mc);
+        this.rendererPosition.updateAbsolutePosition(res);
+        this.adjustBounds(res);
     }
 
     @Override
@@ -52,20 +69,56 @@ public class RendererEditGuiScreen extends GuiScreen {
             );
         }
         this.renderer.renderDummy();
+        if (!this.dragging) {
+            String hoveringText = null;
+            GlStateManager.enableAlpha();
+            GlStateManager.enableBlend();
+            GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+            for (final CustomButton button : customButtons) {
+                final String textIfHovered = button.draw(mc, mouseX, mouseY);
+                if (hoveringText == null || hoveringText.isEmpty()) hoveringText = textIfHovered;
+            }
+            GlStateManager.disableBlend();
+            GlStateManager.color(1f, 1f, 1f, 1f);
+            if (hoveringText != null && !hoveringText.isEmpty()) {
+                drawHoveringText(Collections.singletonList(hoveringText), mouseX, mouseY + fontRendererObj.FONT_HEIGHT + 6);
+            }
+        }
         this.prevX = mouseX;
         this.prevY = mouseY;
     }
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        if (mouseButton == GuiUtil.MOUSE_LEFT) {
+            if (!this.dragging) {
+                int clickedButtonIdx = -1;
+                for (int i = 0; i < customButtons.length; ++i) {
+                    if (customButtons[i].isMouseOver()) {
+                        clickedButtonIdx = i;
+                        break;
+                    }
+                }
+                if (clickedButtonIdx != -1) {
+                    if (clickedButtonIdx == 0) rendererPosition.resetToDefault();
+                    else rendererPosition.setRelativePosition(originalRelativeX, originalRelativeY);
+                    final ScaledResolution res = new ScaledResolution(mc);
+                    this.rendererPosition.updateAbsolutePosition(res);
+                    this.adjustBounds(res);
+                    return;
+                }
+            }
+            this.dragging = true;
+        }
         super.mouseClicked(mouseX, mouseY, mouseButton);
-        this.dragging = true;
     }
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         super.mouseReleased(mouseX, mouseY, state);
-        this.dragging = false;
+        if (state == GuiUtil.MOUSE_LEFT) {
+            this.dragging = false;
+        }
     }
 
     @Override
@@ -88,8 +141,7 @@ public class RendererEditGuiScreen extends GuiScreen {
     /**
      * Makes sure the HUD can't get out of the screen
      */
-    private void adjustBounds() {
-        final ScaledResolution res = new ScaledResolution(mc);
+    private void adjustBounds(ScaledResolution res) {
         final int screenWidth = res.getScaledWidth();
         final int screenHeight = res.getScaledHeight();
         final int absoluteX = Math.max(0, Math.min(rendererPosition.getAbsoluteRenderX(), screenWidth));
@@ -128,7 +180,7 @@ public class RendererEditGuiScreen extends GuiScreen {
             return button.isMouseOver() ? hoveringText : null;
         }
 
-        public boolean isMouseOver(int mouseX, int mouseY) {
+        public boolean isMouseOver() {
             return button.isMouseOver();
         }
     }
