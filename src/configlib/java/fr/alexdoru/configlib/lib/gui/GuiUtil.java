@@ -21,6 +21,12 @@ public final class GuiUtil {
         drawBoxOutline(left, top, right, bot, borderColor);
     }
 
+    /*
+    * because of that changes to drawHorizontalLine and drawVerticalLine
+    * you might need to update a lot of other rendering code that uses it
+    * example: line 237 in 'ConfigGuiScreen' should be:
+    * GuiUtil.drawHorizontalLine(GUI_INSIDE_LEFT, GUI_INSIDE_RIGHT, GUI_INSIDE_TOP + fontRendererObj.FONT_HEIGHT + 1, colorPalette.BELOW_TITLE_LINE);
+    * */
     public static void drawHorizontalLine(int startX, int endX, int y, int color) {
         if (endX < startX) {
             final int i = startX;
