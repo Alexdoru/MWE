@@ -5,6 +5,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiSlider;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class ColorSelectionGuiScreen extends GuiScreen implements GuiSlider.ISli
     private final boolean hasAlpha;
     private final List<GuiSlider> colorSliders = new ArrayList<>();
 
+    private int selectedSliderIndex = -1;
     private int allButtonsHeight;
 
     public ColorSelectionGuiScreen(GuiScreen parent, ColorGuiButton colorButton) {
@@ -60,6 +62,7 @@ public class ColorSelectionGuiScreen extends GuiScreen implements GuiSlider.ISli
         this.buttonList.add(new GuiButton(7, centerX - BUTTON_WIDTH / 2, drawY, BUTTON_WIDTH, BUTTON_HEIGHT, "Done"));
         this.mc.entityRenderer.loadShader(BLUR);
         super.initGui();
+        this.selectedSliderIndex = -1;
     }
 
     @Override
@@ -76,11 +79,25 @@ public class ColorSelectionGuiScreen extends GuiScreen implements GuiSlider.ISli
         }
         drawCenteredString(fontRendererObj, colorButton.getCategory() + " - " + colorButton.getName(), this.width / 2, firstSliderY - TOP_BOTTOM_MARGIN - fontRendererObj.FONT_HEIGHT / 2, Color.WHITE.getRGB());
         super.drawScreen(mouseX, mouseY, partialTicks);
+        if (this.selectedSliderIndex != -1) {
+            final GuiSlider slider = colorSliders.get(this.selectedSliderIndex);
+            GuiUtil.drawBoxOutline(slider.xPosition-1, slider.yPosition-1, slider.xPosition+slider.width+1, slider.yPosition+slider.height+1, 0xFF3C6EFF);
+        }
         GuiUtil.drawBoxWithOutline(colorBoxLeft, colorBoxTop, colorBoxRight, colorBoxBottom, hasAlpha ? colorButton.getColor() : (colorButton.getColor() | (0xFF << 24)), Color.BLACK.getRGB());
     }
 
     @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        this.selectedSliderIndex = -1;
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
     protected void actionPerformed(GuiButton button) {
+        if (button.id >= 1 && button.id <= 4) {
+            this.selectedSliderIndex = button.id-1;
+            return;
+        }
         switch (button.id) {
             case 5: updateToColor(initialColor); break;
             case 6: updateToColor(colorButton.getDefaultColor()); break;
@@ -92,6 +109,18 @@ public class ColorSelectionGuiScreen extends GuiScreen implements GuiSlider.ISli
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (keyCode == 1) {
             this.mc.displayGuiScreen(parent);
+            return;
+        }
+        if (keyCode == Keyboard.KEY_TAB) {
+            if ((++this.selectedSliderIndex) >= this.colorSliders.size())
+                this.selectedSliderIndex = 0;  // change to -1 if you want a "none selected buffer" between cycles
+            return;
+        }
+        else if (this.selectedSliderIndex != -1 && (keyCode == Keyboard.KEY_LEFT || keyCode == Keyboard.KEY_RIGHT)) {
+            final GuiSlider slider = colorSliders.get(this.selectedSliderIndex);
+            final int value = keyCode == Keyboard.KEY_LEFT ? -1 : 1;
+            slider.setValue(slider.getValueInt() + value);
+            slider.updateSlider();
             return;
         }
         super.keyTyped(typedChar, keyCode);
