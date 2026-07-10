@@ -1,5 +1,6 @@
 package fr.alexdoru.configlib.lib.gui;
 
+import fr.alexdoru.configlib.lib.gui.elements.ColorGuiButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
@@ -7,67 +8,83 @@ import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.function.Consumer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class ColorSelectionGuiScreen extends GuiScreen {
+public class ColorSelectionGuiScreen extends GuiScreen implements GuiSlider.ISlider {
 
     private static final ResourceLocation BLUR = new ResourceLocation("configlib", "blur.json");
-    private final GuiScreen parent;
-    private final Field field;
-    private final int initialColor;
-    private final int defaultColor;
-    private GuiSlider sliderRed;
-    private GuiSlider sliderGreen;
-    private GuiSlider sliderBlue;
-    private final boolean hasAlpha;
-    private GuiSlider sliderAlpha;
-    private final Consumer<Integer> setter;
+    private static final int BUTTON_WIDTH = 150;
+    private static final int BUTTON_HEIGHT = 20;
+    private static final int BUTTONS_GAP = 4;
+    private static final int TOP_BOTTOM_MARGIN = 16;
 
-    public ColorSelectionGuiScreen(ConfigGuiScreen parentScreen, Field field, int defaultColor, Consumer<Integer> setter) throws IllegalAccessException {
-        this.parent = parentScreen;
-        this.field = field;
-        this.initialColor = ((int) field.get(null));
-        this.defaultColor = defaultColor;
-        this.hasAlpha = ((defaultColor >> 24) & 0xff) != 0;
-        this.setter = setter;
+    private final GuiScreen parent;
+    private final ColorGuiButton colorButton;
+    private final int initialColor;
+    private final boolean hasAlpha;
+    private final List<GuiSlider> colorSliders = new ArrayList<>();
+
+    private int allButtonsHeight;
+
+    public ColorSelectionGuiScreen(GuiScreen parent, ColorGuiButton colorButton) {
+        this.parent = parent;
+        this.colorButton = colorButton;
+        this.initialColor = colorButton.getColor();
+        this.hasAlpha = ((colorButton.getDefaultColor() >> 24) & 0xff) != 0;
     }
 
     @Override
     public void initGui() {
-        this.buttonList.add(this.sliderRed = new GuiSlider(1, getxCenter() - 150, getButtonYPos(2), 150, 20, "Red: ", "", 0.0D, 255.0D, (this.initialColor >> 16 & 0xFF), false, true));
-        this.buttonList.add(this.sliderGreen = new GuiSlider(2, getxCenter() - 150, getButtonYPos(3), 150, 20, "Green: ", "", 0.0D, 255.0D, (this.initialColor >> 8 & 0xFF), false, true));
-        this.buttonList.add(this.sliderBlue = new GuiSlider(3, getxCenter() - 150, getButtonYPos(4), 150, 20, "Blue: ", "", 0.0D, 255.0D, (this.initialColor & 0xFF), false, true));
-        if (this.hasAlpha) {
-            this.buttonList.add(this.sliderAlpha = new GuiSlider(4, getxCenter() - 150, getButtonYPos(5), 150, 20, "Alpha: ", "", 0.0D, 255.0D, (this.initialColor >> 24 & 0xFF), false, true));
+        final int color = colorButton.getColor();
+        final int centerX = this.width / 2;
+        final int slidersX = centerX - BUTTON_WIDTH;
+        final List<String> colorChannels = new ArrayList<>(Arrays.asList("Red", "Green", "Blue"));
+        if (hasAlpha) colorChannels.add("Alpha");
+        this.allButtonsHeight = ((colorChannels.size() + 2) * (BUTTON_HEIGHT + BUTTONS_GAP) - BUTTONS_GAP) + TOP_BOTTOM_MARGIN + BUTTON_HEIGHT;
+        int drawY = (this.height - allButtonsHeight) / 2;
+        buttonList.clear();
+        colorSliders.clear();
+        for (int i = 0; i < colorChannels.size(); ++i) {
+            final int value = getColorChannelValue(color, i);
+            final GuiSlider slider = new GuiSlider(i + 1, slidersX, drawY, BUTTON_WIDTH, BUTTON_HEIGHT, colorChannels.get(i) + ": ", "", 0, 255, value, false, true, this);
+            this.colorSliders.add(slider);
+            this.buttonList.add(slider);
+            drawY += BUTTON_HEIGHT + BUTTONS_GAP;
         }
-        this.buttonList.add(new GuiButton(5, getxCenter() - 150, getButtonYPos(this.hasAlpha ? 6 : 5), 150, 20, "Reset default color"));
-        this.buttonList.add(new GuiButton(6, getxCenter() - 150 / 2, getButtonYPos(this.hasAlpha ? 8 : 7), 150, 20, "Done"));
+        this.buttonList.add(new GuiButton(5, slidersX, drawY, BUTTON_WIDTH, BUTTON_HEIGHT, "Undo Changes"));
+        drawY += BUTTON_HEIGHT + BUTTONS_GAP;
+        this.buttonList.add(new GuiButton(6, slidersX, drawY, BUTTON_WIDTH, BUTTON_HEIGHT, "Reset to Default"));
+        drawY += BUTTON_HEIGHT + TOP_BOTTOM_MARGIN;
+        this.buttonList.add(new GuiButton(7, centerX - BUTTON_WIDTH / 2, drawY, BUTTON_WIDTH, BUTTON_HEIGHT, "Done"));
         this.mc.entityRenderer.loadShader(BLUR);
         super.initGui();
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        try {
-            this.field.set(null, getCurrentColor());
-            this.setter.accept(getCurrentColor());
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException("Couldn't set color!");
+        final int firstSliderY = colorSliders.get(0).yPosition;
+        final int lineLength = allButtonsHeight - BUTTON_HEIGHT - TOP_BOTTOM_MARGIN;
+        final int colorBoxLeft = this.width / 2 + 10;
+        final int colorBoxTop = firstSliderY;
+        final int colorBoxRight = colorBoxLeft + lineLength;
+        final int colorBoxBottom = colorBoxTop + lineLength;
+        if (GuiUtil.beginClearRect(mc, colorBoxLeft, colorBoxTop, colorBoxRight, colorBoxBottom)) {
+            drawDefaultBackground();
+            GuiUtil.endClearRect();
         }
+        drawCenteredString(fontRendererObj, colorButton.getCategory() + " - " + colorButton.getName(), this.width / 2, firstSliderY - TOP_BOTTOM_MARGIN - fontRendererObj.FONT_HEIGHT / 2, Color.WHITE.getRGB());
         super.drawScreen(mouseX, mouseY, partialTicks);
-        final int sideLength = 10 + (20 + 4) * (this.hasAlpha ? 4 : 3) + 20 + 10;
-        final int leftX = getxCenter() + 10;
-        final int topY = getButtonYPos(2) - 10;
-        GuiUtil.drawBoxWithOutline(leftX, topY, leftX + sideLength, topY + sideLength, 255 << 24 | getCurrentColor(), Color.BLACK.getRGB());
+        GuiUtil.drawBoxWithOutline(colorBoxLeft, colorBoxTop, colorBoxRight, colorBoxBottom, hasAlpha ? colorButton.getColor() : (colorButton.getColor() | (0xFF << 24)), Color.BLACK.getRGB());
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        if (button.id == 5) {
-            this.resetDefaultColor();
-        } else if (button.id == 6) {
-            this.mc.displayGuiScreen(parent);
+        switch (button.id) {
+            case 5: updateToColor(initialColor); break;
+            case 6: updateToColor(colorButton.getDefaultColor()); break;
+            case 7: mc.displayGuiScreen(parent); break;
         }
     }
 
@@ -83,8 +100,7 @@ public class ColorSelectionGuiScreen extends GuiScreen {
     @Override
     public void onGuiClosed() {
         try {
-            this.field.set(null, getCurrentColor());
-            this.setter.accept(getCurrentColor());
+            colorButton.saveColorToField();
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Couldn't set color!");
         }
@@ -97,32 +113,31 @@ public class ColorSelectionGuiScreen extends GuiScreen {
         return false;
     }
 
-    private int getCurrentColor() {
-        if (this.hasAlpha) {
-            return this.sliderAlpha.getValueInt() << 24 | this.sliderRed.getValueInt() << 16 | this.sliderGreen.getValueInt() << 8 | this.sliderBlue.getValueInt();
-        }
-        return this.sliderRed.getValueInt() << 16 | this.sliderGreen.getValueInt() << 8 | this.sliderBlue.getValueInt();
-    }
-
-    private void resetDefaultColor() {
-        this.sliderRed.setValue(this.defaultColor >> 16 & 0xFF);
-        this.sliderRed.updateSlider();
-        this.sliderGreen.setValue(this.defaultColor >> 8 & 0xFF);
-        this.sliderGreen.updateSlider();
-        this.sliderBlue.setValue(this.defaultColor & 0xFF);
-        this.sliderBlue.updateSlider();
-        if (this.hasAlpha) {
-            this.sliderAlpha.setValue(this.defaultColor >> 24 & 0xFF);
-            this.sliderAlpha.updateSlider();
+    private void updateToColor(int newColor) {
+        for (final GuiSlider slider : colorSliders) {
+            slider.setValue(getColorChannelValue(newColor, slider.id-1));
+            slider.updateSlider();
         }
     }
 
-    private int getButtonYPos(int i) {
-        return this.height / 8 + 24 * (i + 1);
+    @Override
+    public void onChangeSliderValue(GuiSlider slider) {
+        colorButton.setColor(getColorWithUpdatedChannel(colorButton.getColor(), slider.id-1, slider.getValueInt()));
     }
 
-    private int getxCenter() {
-        return this.width / 2;
+    private static int getColorWithUpdatedChannel(int color, int channel, int channelValue) {
+        final int shiftBy = getColorChannelBitShift(channel);
+        final int mask = 0xFF << shiftBy;
+        return (color & ~mask) | ((channelValue & 0xFF) << shiftBy);
     }
 
+    private static int getColorChannelValue(int color, int channel) {
+        return (color >> getColorChannelBitShift(channel)) & 0xFF;
+    }
+
+    private static int getColorChannelBitShift(int channel) {
+        if (channel < 0 || channel > 3)
+            throw new IllegalArgumentException("Argument must be one of: (0, 1, 2, 3)");
+        return channel == 3 ? 24 : (16 - (channel << 3)); // 8 * (2-channel)
+    }
 }
