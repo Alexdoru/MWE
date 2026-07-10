@@ -27,7 +27,7 @@ public final class GuiUtil {
             startX = endX;
             endX = i;
         }
-        Gui.drawRect(startX, y, endX + 1, y + 1, color);
+        Gui.drawRect(startX, y, endX, y + 1, color);
     }
 
     public static void drawVerticalLine(int x, int startY, int endY, int color) {
@@ -36,7 +36,7 @@ public final class GuiUtil {
             startY = endY;
             endY = i;
         }
-        Gui.drawRect(x, startY + 1, x + 1, endY, color);
+        Gui.drawRect(x, startY, x + 1, endY, color);
     }
 
     public static int brightenColor(int color, float amount) {
