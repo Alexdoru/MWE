@@ -1,6 +1,9 @@
 package fr.alexdoru.configlib.lib.gui;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
+import org.lwjgl.opengl.GL11;
 
 public final class GuiUtil {
 
@@ -43,4 +46,34 @@ public final class GuiUtil {
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
 
+    /**
+     * Begins the stencil clear rect.
+     * Call {@link #endClearRect()} after rendering if this returned {@code true}.
+     * @return {@code true} if this operation worked
+     */
+    public static boolean beginClearRect(Minecraft mc, int left, int top, int right, int bottom) {
+        if (!mc.getFramebuffer().isStencilEnabled() && !mc.getFramebuffer().enableStencil()) return false;
+        GL11.glEnable(GL11.GL_STENCIL_TEST);
+        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+
+        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
+        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+
+        GlStateManager.colorMask(false, false, false, false);
+
+        Gui.drawRect(left, top, right, bottom, 0xFFFFFFFF);
+
+        GlStateManager.colorMask(true, true, true, true);
+
+        GL11.glStencilFunc(GL11.GL_NOTEQUAL, 1, 0xFF); // skip hole
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+
+        return true;
+        // GL11.glDisable(GL11.GL_STENCIL_TEST);
+    }
+
+    /** See {@link #beginClearRect(Minecraft, int, int, int, int)} */
+    public static void endClearRect() {
+        GL11.glDisable(GL11.GL_STENCIL_TEST);
+    }
 }
