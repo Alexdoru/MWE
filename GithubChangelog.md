@@ -1,14 +1,12 @@
 ## Changelog
 
-- fix boosting report advice not printing all the players in the party
+- fix crash related to a null MapEvent
 
 ## Api
 
-- add scoreboard lines api
-- add final kill counter api
-- add `IScoreboardParser.getAliveWithers`, `IScoreboardParser.isDeathmatch`
-- add `MWClass.ofPlayer` and `MWTeam.ofPlayer`
-- add map event when it sets a map
+- fixed crash happening if your addon's name is sorted before MWE by changing the example mod'
+  s [AddonBoostrap](https://github.com/Alexdoru/ExampleMod1.8.9/blob/mwe-addon/src/main/java/com/exampleaddon/AddonBootstrap.java)
+  registration methods
 
 Use `/mwe` to open the config menu. To install the mod you need to use forge and drop the .jar file in your `.minecraft\mods` folder.
 See more information about installation [here](https://github.com/Alexdoru/MegaWallsEnhancements#installation).
