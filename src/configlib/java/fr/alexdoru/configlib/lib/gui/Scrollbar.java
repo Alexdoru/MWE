@@ -71,8 +71,8 @@ public final class Scrollbar {
 
     private void scroll(int amount, int contentHeight, int boxHeight) {
         this.scroll = this.scroll - amount;
-        if (this.scroll > contentHeight + 2 * 6 - boxHeight) {
-            this.scroll = contentHeight + 2 * 6 - boxHeight;
+        if (this.scroll > contentHeight + 2 * ConfigGuiScreen.PADDING - boxHeight) {
+            this.scroll = contentHeight + 2 * ConfigGuiScreen.PADDING - boxHeight;
             this.amountToScroll = 0;
         }
         if (this.scroll <= 0) {

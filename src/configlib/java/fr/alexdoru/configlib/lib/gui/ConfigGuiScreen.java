@@ -24,6 +24,9 @@ import java.util.*;
 
 public class ConfigGuiScreen extends GuiScreen {
 
+    public static final int PADDING = 6;
+    public static final int ELEMENT_GAP = 4;
+
     private static final ResourceLocation BLUR = new ResourceLocation("configlib", "blur.json");
 
     private final ConfigHandler configHandler;
@@ -118,24 +121,24 @@ public class ConfigGuiScreen extends GuiScreen {
         GUI_BORDER.RIGHT = GUI_BORDER.LEFT + GUI_WIDTH;
         GUI_BORDER.BOTTOM = GUI_BORDER.TOP + GUI_HEIGHT;
 
-        GUI_INSIDE.LEFT = GUI_BORDER.LEFT + 6;
-        GUI_INSIDE.TOP = GUI_BORDER.TOP + 6;
-        GUI_INSIDE.RIGHT = GUI_BORDER.RIGHT - 6;
-        GUI_INSIDE.BOTTOM = GUI_BORDER.BOTTOM - 6;
+        GUI_INSIDE.LEFT = GUI_BORDER.LEFT + PADDING;
+        GUI_INSIDE.TOP = GUI_BORDER.TOP + PADDING;
+        GUI_INSIDE.RIGHT = GUI_BORDER.RIGHT - PADDING;
+        GUI_INSIDE.BOTTOM = GUI_BORDER.BOTTOM - PADDING;
 
         CATEGORY_BOX.LEFT = GUI_INSIDE.LEFT;
-        CATEGORY_BOX.TOP = GUI_INSIDE.TOP + fontRendererObj.FONT_HEIGHT + 1 + 6;
+        CATEGORY_BOX.TOP = GUI_INSIDE.TOP + fontRendererObj.FONT_HEIGHT + 1 + PADDING;
         CATEGORY_BOX.RIGHT = GUI_INSIDE.LEFT + GUI_WIDTH / 5;
         final int categoryContentHeight = getCategoryContentHeight();
-        final int categoryMaxY = CATEGORY_BOX.TOP + 6 + categoryContentHeight + 6;
+        final int categoryMaxY = CATEGORY_BOX.TOP + categoryContentHeight + 2 * PADDING;
         CATEGORY_BOX.BOTTOM = Math.min(categoryMaxY, GUI_INSIDE.BOTTOM);
 
-        CONFIG_BOX.LEFT = CATEGORY_BOX.RIGHT + 6;
-        CONFIG_BOX.TOP = GUI_INSIDE.TOP + fontRendererObj.FONT_HEIGHT + 1 + 6;
+        CONFIG_BOX.LEFT = CATEGORY_BOX.RIGHT + PADDING;
+        CONFIG_BOX.TOP = GUI_INSIDE.TOP + fontRendererObj.FONT_HEIGHT + 1 + PADDING;
         CONFIG_BOX.RIGHT = GUI_INSIDE.RIGHT;
         CONFIG_BOX.BOTTOM = GUI_INSIDE.BOTTOM;
 
-        final int elementWidth = CONFIG_BOX.getWidth() - 2 * 6;
+        final int elementWidth = CONFIG_BOX.getWidth() - 2 * PADDING;
         for (final ConfigUIElement element : this.configElements) {
             element.setBoxWidth(elementWidth);
         }
@@ -146,7 +149,8 @@ public class ConfigGuiScreen extends GuiScreen {
         final boolean isFirstOpening = searchField == null;
         final String prevSearch = isFirstOpening ? null : searchField.getText();
         final boolean prevFocus = !isFirstOpening && searchField.isFocused();
-        searchField = new GuiTextField(0, mc.fontRendererObj, GUI_INSIDE.RIGHT - 55 - 6, GUI_INSIDE.TOP, 55, 20);
+        final int searchBoxWidth = 55;
+        searchField = new GuiTextField(0, mc.fontRendererObj, GUI_INSIDE.RIGHT - searchBoxWidth - PADDING, GUI_INSIDE.TOP, searchBoxWidth, 20);
         searchField.setMaxStringLength(128);
         searchField.setEnableBackgroundDrawing(false);
         searchField.setFocused(prevFocus);
@@ -205,7 +209,7 @@ public class ConfigGuiScreen extends GuiScreen {
 
         CATEGORY_BOX.applyScissors(mc, res, 1);
 
-        final int categoryDrawX = CATEGORY_BOX.LEFT + 6;
+        final int categoryDrawX = CATEGORY_BOX.LEFT + PADDING;
         forEachVisible(this.categoryElements, CATEGORY_BOX, this.categoryScrollbar.getScroll(), (element, drawY) -> {
             element.draw(colorPalette, categoryDrawX, drawY);
             return false;
@@ -215,7 +219,7 @@ public class ConfigGuiScreen extends GuiScreen {
 
         CONFIG_BOX.applyScissors(mc, res, 1);
 
-        final int configDrawX = CONFIG_BOX.LEFT + 6;
+        final int configDrawX = CONFIG_BOX.LEFT + PADDING;
         forEachVisible(this.renderedConfigElements, CONFIG_BOX, this.configScrollbar.getScroll(), (element, drawY) -> {
             element.draw(colorPalette, configDrawX, drawY, mouseX, mouseY);
             return false;
@@ -340,18 +344,18 @@ public class ConfigGuiScreen extends GuiScreen {
     private int getCategoryContentHeight() {
         int height = 0;
         for (final CategoryGuiButton category : this.categoryElements) {
-            height += category.getHeight() + 4;
+            height += category.getHeight() + ELEMENT_GAP;
         }
-        if (!this.categoryElements.isEmpty()) height -= 4;
+        if (!this.categoryElements.isEmpty()) height -= ELEMENT_GAP;
         return height;
     }
 
     private int getConfigContentHeight() {
         int height = 0;
         for (final ConfigUIElement element : this.renderedConfigElements) {
-            height += element.getHeight() + 4;
+            height += element.getHeight() + ELEMENT_GAP;
         }
-        if (!this.renderedConfigElements.isEmpty()) height -= 4;
+        if (!this.renderedConfigElements.isEmpty()) height -= ELEMENT_GAP;
         return height;
     }
 
@@ -382,7 +386,7 @@ public class ConfigGuiScreen extends GuiScreen {
         this.lastInteractedSlider = null;
         this.renderedConfigElements.clear();
         String lastKey = null;
-        final int elementWidth = CONFIG_BOX.getWidth() - 2 * 6;
+        final int elementWidth = CONFIG_BOX.getWidth() - 2 * PADDING;
         for (final ConfigUIElement element : this.configElements) {
             if (!(element instanceof SubCategoryHeader) && element.matchSearch(search)) {
                 final String subCategoryKey = element.getCategory() + "$" + element.getSubCategory();
@@ -410,13 +414,13 @@ public class ConfigGuiScreen extends GuiScreen {
     }
 
     private static <T extends SizedElement> boolean forEachVisible(List<T> elements, Box box, int scroll, ElementVisitor<T> visitor) {
-        int drawY = box.TOP + 6 - scroll;
+        int drawY = box.TOP + PADDING - scroll;
         for (final T element : elements) {
             final int elementHeight = element.getHeight();
             if (drawY + elementHeight >= box.TOP && drawY <= box.BOTTOM) {
                 if (visitor.visit(element, drawY)) return true;
             }
-            drawY += elementHeight + 4;
+            drawY += elementHeight + ELEMENT_GAP;
         }
         return false;
     }
