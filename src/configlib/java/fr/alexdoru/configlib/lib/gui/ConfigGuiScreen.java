@@ -241,14 +241,15 @@ public class ConfigGuiScreen extends GuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         if (CATEGORY_BOX.isMouseInBox(mouseX, mouseY)) {
-            forEachVisible(this.categoryElements, CATEGORY_BOX, this.categoryScrollbar.getScroll(), (element, drawY) ->
+            final boolean consumedClick = forEachVisible(this.categoryElements, CATEGORY_BOX, this.categoryScrollbar.getScroll(), (element, drawY) ->
                     element.mouseClicked(mouseX, mouseY, mouseButton)
             );
+            if (consumedClick) return;
             if (this.categoryScrollbar.mouseClicked(mouseX, mouseY, mouseButton)) {
                 return;
             }
         } else if (CONFIG_BOX.isMouseInBox(mouseX, mouseY)) {
-            forEachVisible(this.renderedConfigElements, CONFIG_BOX, this.configScrollbar.getScroll(), (element, drawY) -> {
+            final boolean consumedClick = forEachVisible(this.renderedConfigElements, CONFIG_BOX, this.configScrollbar.getScroll(), (element, drawY) -> {
                 try {
                     if (element.mouseClicked(mouseX, mouseY, mouseButton)) {
                         if (element instanceof SliderGuiButton) {
@@ -261,6 +262,7 @@ public class ConfigGuiScreen extends GuiScreen {
                 }
                 return false;
             });
+            if (consumedClick) return;
             if (this.configScrollbar.mouseClicked(mouseX, mouseY, mouseButton)) {
                 return;
             }
@@ -417,15 +419,16 @@ public class ConfigGuiScreen extends GuiScreen {
         }
     }
 
-    private static <T extends SizedElement> void forEachVisible(List<T> elements, Box box, int scroll, ElementVisitor<T> visitor) {
+    private static <T extends SizedElement> boolean forEachVisible(List<T> elements, Box box, int scroll, ElementVisitor<T> visitor) {
         int drawY = box.TOP + 6 - scroll;
         for (final T element : elements) {
             final int elementHeight = element.getHeight();
             if (drawY + elementHeight >= box.TOP && drawY <= box.BOTTOM) {
-                if (visitor.visit(element, drawY)) return;
+                if (visitor.visit(element, drawY)) return true;
             }
             drawY += elementHeight + 4;
         }
+        return false;
     }
 
     @FunctionalInterface
