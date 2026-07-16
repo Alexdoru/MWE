@@ -12,6 +12,7 @@ public class ColorGuiButton extends ConfigGuiButton {
 
     private final ConfigGuiScreen parentScreen;
     private final ClickGuiButton button;
+    private final String name;
     private int color;
     private final int defaultColor;
 
@@ -21,6 +22,8 @@ public class ColorGuiButton extends ConfigGuiButton {
         this.color = (int) this.field.get(null);
         this.defaultColor = defaultColor;
         this.button = new ClickGuiButton(0, 0, 0, mc.fontRendererObj.getStringWidth(" Disabled "), 20, "Change");
+        // SHOULD NOT BE THE WAY WE GET NAME
+        this.name = annotation.name();
     }
 
     @Override
@@ -38,10 +41,23 @@ public class ColorGuiButton extends ConfigGuiButton {
     public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) throws IllegalAccessException {
         if (mouseButton == 0 && button.mousePressed(mc, mouseX, mouseY)) {
             button.playPressSound(mc.getSoundHandler());
-            mc.displayGuiScreen(new ColorSelectionGuiScreen(parentScreen, field, defaultColor, color -> this.color = color));
+            mc.displayGuiScreen(new ColorSelectionGuiScreen(parentScreen, this));
             return true;
         }
         return false;
     }
 
+    // THIS METHOD SHOULD BE DECLARED IN 'ConfigGuiButton'
+    public String getName() {
+        return name;
+    }
+
+    public void setColor(int color) { this.color = color; }
+    public int getColor() { return this.color; }
+
+    public int getDefaultColor() { return this.defaultColor; }
+
+    public void saveColorToField() throws IllegalAccessException {
+        this.field.set(null, this.color);
+    }
 }
