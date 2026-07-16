@@ -329,10 +329,15 @@ public class ConfigGuiScreen extends GuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         if (isMouseInBox(mouseX, mouseY, CATEGORY_BOX_LEFT, CATEGORY_BOX_RIGHT, CATEGORY_BOX_TOP, CATEGORY_BOX_BOTTOM)) {
+            int categoryDrawY = CATEGORY_BOX_TOP + 6 - categoryScroll;
             for (final CategoryGuiButton category : this.categoryElements) {
-                if (category.mouseClicked(mouseX, mouseY, mouseButton)) {
-                    return;
+                final int categoryHeight = category.getHeight();
+                if (categoryDrawY + categoryHeight >= CATEGORY_BOX_TOP && categoryDrawY <= CATEGORY_BOX_BOTTOM) {
+                    if (category.mouseClicked(mouseX, mouseY, mouseButton)) {
+                        return;
+                    }
                 }
+                categoryDrawY += categoryHeight + 4;
             }
             if (mouseButton == 0 && isMouseInBox(mouseX, mouseY, CATEGORY_SCROLL_BAR_LEFT, CATEGORY_SCROLL_BAR_RIGHT, CATEGORY_SCROLL_BAR_TOP, CATEGORY_SCROLL_BAR_BOTTOM)) {
                 categoryDraggingScrollBar = true;
