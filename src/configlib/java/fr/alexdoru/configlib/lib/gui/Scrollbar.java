@@ -1,9 +1,8 @@
 package fr.alexdoru.configlib.lib.gui;
 
 import fr.alexdoru.configlib.api.ColorPalette;
-import net.minecraft.client.gui.Gui;
 
-public class Scrollbar {
+public final class Scrollbar {
 
     private int scroll;
     private int scrollDirection;
@@ -13,7 +12,7 @@ public class Scrollbar {
     private boolean dragging;
     private int grabbedAtY;
 
-    private int thumbLeft, thumbTop, thumbRight, thumbBottom;
+    private final Box thumb = new Box();
 
     public void init(int lastScroll, int contentHeight, int boxHeight) {
         this.scroll = 0;
@@ -32,40 +31,36 @@ public class Scrollbar {
         }
     }
 
-    public void drawScrollbar(ColorPalette colorPalette, int mouseY, int boxTop, int boxRight, int boxBottom, int contentHeight) {
-        final int categoryBoxHeight = boxBottom - boxTop - 2;
+    public void drawScrollbar(ColorPalette colorPalette, Box box, int mouseY, int contentHeight) {
+        final int categoryBoxHeight = box.getHeight() - 2;
         final boolean renderCategoryScrollbar = contentHeight > categoryBoxHeight;
         if (renderCategoryScrollbar) {
             final int scrollBarSize = categoryBoxHeight * categoryBoxHeight / contentHeight;
-            final int minScrollBarY = boxTop + 1 + 1;
-            final int maxScrollBarY = boxBottom - 1 - scrollBarSize - 1;
+            final int minScrollBarY = box.TOP + 1 + 1;
+            final int maxScrollBarY = box.BOTTOM - 1 - scrollBarSize - 1;
             if (dragging) {
                 final int relativeMouseY = mouseY - minScrollBarY - grabbedAtY;
                 if (maxScrollBarY != minScrollBarY) {
-                    final int newScroll = relativeMouseY * (contentHeight - (boxBottom - boxTop)) / (maxScrollBarY - minScrollBarY);
-                    this.scroll(this.scroll - newScroll, contentHeight, boxBottom - boxTop);
+                    final int newScroll = relativeMouseY * (contentHeight - box.getHeight()) / (maxScrollBarY - minScrollBarY);
+                    this.scroll(this.scroll - newScroll, contentHeight, box.getHeight());
                 }
             }
-            this.thumbLeft = boxRight - 5;
-            this.thumbTop = ((maxScrollBarY - minScrollBarY) * this.scroll) / (contentHeight - categoryBoxHeight) + minScrollBarY;
-            this.thumbRight = this.thumbLeft + 3;
-            this.thumbBottom = this.thumbTop + scrollBarSize;
-            GuiUtil.drawVerticalLine(boxRight - 4, boxTop + 4, boxBottom - 4, colorPalette.SCROLLBAR_TRACK);
-            Gui.drawRect(this.thumbLeft, this.thumbTop, this.thumbRight, this.thumbBottom, colorPalette.SCROLLBAR_THUMB);
+            this.thumb.LEFT = box.RIGHT - 5;
+            this.thumb.TOP = ((maxScrollBarY - minScrollBarY) * this.scroll) / (contentHeight - categoryBoxHeight) + minScrollBarY;
+            this.thumb.RIGHT = this.thumb.LEFT + 3;
+            this.thumb.BOTTOM = this.thumb.TOP + scrollBarSize;
+            GuiUtil.drawVerticalLine(box.RIGHT - 4, box.TOP + 4, box.BOTTOM - 4, colorPalette.SCROLLBAR_TRACK);
+            GuiUtil.drawRect(this.thumb, colorPalette.SCROLLBAR_THUMB);
         }
     }
 
     public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        if (mouseButton == 0 && isMouseInBox(mouseX, mouseY, this.thumbLeft, this.thumbRight, this.thumbTop, this.thumbBottom)) {
+        if (mouseButton == 0 && this.thumb.isMouseInBox(mouseX, mouseY)) {
             dragging = true;
-            grabbedAtY = mouseY - this.thumbTop;
+            grabbedAtY = mouseY - this.thumb.TOP;
             return true;
         }
         return false;
-    }
-
-    private boolean isMouseInBox(int mouseX, int mouseY, int boxLeft, int boxRight, int boxTop, int boxBottom) {
-        return mouseX >= boxLeft && mouseX < boxRight && mouseY >= boxTop && mouseY < boxBottom;
     }
 
     public void mouseReleased(int mouseButton) {

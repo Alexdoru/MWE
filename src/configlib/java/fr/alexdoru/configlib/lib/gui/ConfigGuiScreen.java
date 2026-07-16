@@ -8,7 +8,6 @@ import fr.alexdoru.configlib.lib.ConfigHandler;
 import fr.alexdoru.configlib.lib.RendererManager;
 import fr.alexdoru.configlib.lib.gui.elements.*;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
@@ -42,11 +41,11 @@ public class ConfigGuiScreen extends GuiScreen {
     private final Scrollbar configScrollbar = new Scrollbar();
     private final Scrollbar categoryScrollbar = new Scrollbar();
 
-    private int GUI_BORDER_LEFT, GUI_BORDER_TOP, GUI_BORDER_RIGHT, GUI_BORDER_BOTTOM;
-    private int GUI_INSIDE_LEFT, GUI_INSIDE_TOP, GUI_INSIDE_RIGHT, GUI_INSIDE_BOTTOM;
-    private int CATEGORY_BOX_LEFT, CATEGORY_BOX_TOP, CATEGORY_BOX_RIGHT, CATEGORY_BOX_BOTTOM;
-    private int CONFIG_BOX_LEFT, CONFIG_BOX_TOP, CONFIG_BOX_RIGHT, CONFIG_BOX_BOTTOM;
-    private int SEARCH_BOX_LEFT, SEARCH_BOX_TOP, SEARCH_BOX_RIGHT, SEARCH_BOX_BOTTOM;
+    private final Box GUI_BORDER = new Box();
+    private final Box GUI_INSIDE = new Box();
+    private final Box CATEGORY_BOX = new Box();
+    private final Box CONFIG_BOX = new Box();
+    private final Box SEARCH_BOX = new Box();
 
     public ConfigGuiScreen(
             ConfigHandler configHandler,
@@ -114,31 +113,31 @@ public class ConfigGuiScreen extends GuiScreen {
         final int GUI_WIDTH = Math.min(600, width - 20);
         final int GUI_HEIGHT = Math.min(400, height - 20);
 
-        GUI_BORDER_LEFT = (width - GUI_WIDTH) / 2;
-        GUI_BORDER_TOP = (height - GUI_HEIGHT) / 2;
-        GUI_BORDER_RIGHT = GUI_BORDER_LEFT + GUI_WIDTH;
-        GUI_BORDER_BOTTOM = GUI_BORDER_TOP + GUI_HEIGHT;
+        GUI_BORDER.LEFT = (width - GUI_WIDTH) / 2;
+        GUI_BORDER.TOP = (height - GUI_HEIGHT) / 2;
+        GUI_BORDER.RIGHT = GUI_BORDER.LEFT + GUI_WIDTH;
+        GUI_BORDER.BOTTOM = GUI_BORDER.TOP + GUI_HEIGHT;
 
-        GUI_INSIDE_LEFT = GUI_BORDER_LEFT + 6;
-        GUI_INSIDE_TOP = GUI_BORDER_TOP + 6;
-        GUI_INSIDE_RIGHT = GUI_BORDER_RIGHT - 6;
-        GUI_INSIDE_BOTTOM = GUI_BORDER_BOTTOM - 6;
+        GUI_INSIDE.LEFT = GUI_BORDER.LEFT + 6;
+        GUI_INSIDE.TOP = GUI_BORDER.TOP + 6;
+        GUI_INSIDE.RIGHT = GUI_BORDER.RIGHT - 6;
+        GUI_INSIDE.BOTTOM = GUI_BORDER.BOTTOM - 6;
 
-        CATEGORY_BOX_LEFT = GUI_INSIDE_LEFT;
-        CATEGORY_BOX_TOP = GUI_INSIDE_TOP + fontRendererObj.FONT_HEIGHT + 1 + 6;
-        CATEGORY_BOX_RIGHT = GUI_INSIDE_LEFT + GUI_WIDTH / 5;
+        CATEGORY_BOX.LEFT = GUI_INSIDE.LEFT;
+        CATEGORY_BOX.TOP = GUI_INSIDE.TOP + fontRendererObj.FONT_HEIGHT + 1 + 6;
+        CATEGORY_BOX.RIGHT = GUI_INSIDE.LEFT + GUI_WIDTH / 5;
         final int categoryContentHeight = getCategoryContentHeight();
-        final int categoryMaxY = CATEGORY_BOX_TOP + 6 + categoryContentHeight + 6;
-        CATEGORY_BOX_BOTTOM = Math.min(categoryMaxY, GUI_INSIDE_BOTTOM);
+        final int categoryMaxY = CATEGORY_BOX.TOP + 6 + categoryContentHeight + 6;
+        CATEGORY_BOX.BOTTOM = Math.min(categoryMaxY, GUI_INSIDE.BOTTOM);
 
-        CONFIG_BOX_LEFT = CATEGORY_BOX_RIGHT + 6;
-        CONFIG_BOX_TOP = GUI_INSIDE_TOP + fontRendererObj.FONT_HEIGHT + 1 + 6;
-        CONFIG_BOX_RIGHT = GUI_INSIDE_RIGHT;
-        CONFIG_BOX_BOTTOM = GUI_INSIDE_BOTTOM;
+        CONFIG_BOX.LEFT = CATEGORY_BOX.RIGHT + 6;
+        CONFIG_BOX.TOP = GUI_INSIDE.TOP + fontRendererObj.FONT_HEIGHT + 1 + 6;
+        CONFIG_BOX.RIGHT = GUI_INSIDE.RIGHT;
+        CONFIG_BOX.BOTTOM = GUI_INSIDE.BOTTOM;
 
-        final int configBoxWidth = getConfigBoxWidth();
+        final int elementWidth = CONFIG_BOX.getWidth() - 2 * 6;
         for (final ConfigUIElement element : this.configElements) {
-            element.setBoxWidth(configBoxWidth);
+            element.setBoxWidth(elementWidth);
         }
 
         final int lastCategoryScroll = this.categoryScrollbar.getScroll();
@@ -147,7 +146,7 @@ public class ConfigGuiScreen extends GuiScreen {
         final boolean isFirstOpening = searchField == null;
         final String prevSearch = isFirstOpening ? null : searchField.getText();
         final boolean prevFocus = !isFirstOpening && searchField.isFocused();
-        searchField = new GuiTextField(0, mc.fontRendererObj, GUI_INSIDE_RIGHT - 55 - 6, GUI_INSIDE_TOP, 55, 20);
+        searchField = new GuiTextField(0, mc.fontRendererObj, GUI_INSIDE.RIGHT - 55 - 6, GUI_INSIDE.TOP, 55, 20);
         searchField.setMaxStringLength(128);
         searchField.setEnableBackgroundDrawing(false);
         searchField.setFocused(prevFocus);
@@ -156,22 +155,18 @@ public class ConfigGuiScreen extends GuiScreen {
             updateSearch(prevSearch);
         }
 
-        SEARCH_BOX_LEFT = GUI_INSIDE_RIGHT - searchField.width - 8 - 1;
-        SEARCH_BOX_TOP = GUI_INSIDE_TOP - 2;
-        SEARCH_BOX_RIGHT = GUI_INSIDE_RIGHT;
-        SEARCH_BOX_BOTTOM = GUI_INSIDE_TOP + mc.fontRendererObj.FONT_HEIGHT;
+        SEARCH_BOX.LEFT = GUI_INSIDE.RIGHT - searchField.width - 8 - 1;
+        SEARCH_BOX.TOP = GUI_INSIDE.TOP - 2;
+        SEARCH_BOX.RIGHT = GUI_INSIDE.RIGHT;
+        SEARCH_BOX.BOTTOM = GUI_INSIDE.TOP + mc.fontRendererObj.FONT_HEIGHT;
 
-        this.categoryScrollbar.init(lastCategoryScroll, categoryContentHeight, CATEGORY_BOX_BOTTOM - CATEGORY_BOX_TOP);
-        this.configScrollbar.init(lastConfigScroll, this.getConfigContentHeight(), CONFIG_BOX_BOTTOM - CONFIG_BOX_TOP);
+        this.categoryScrollbar.init(lastCategoryScroll, categoryContentHeight, CATEGORY_BOX.getHeight());
+        this.configScrollbar.init(lastConfigScroll, this.getConfigContentHeight(), CONFIG_BOX.getHeight());
 
         this.lastInteractedSlider = null;
 
         this.mc.entityRenderer.loadShader(BLUR);
         super.initGui();
-    }
-
-    private int getConfigBoxWidth() {
-        return CONFIG_BOX_RIGHT - 6 - (CONFIG_BOX_LEFT + 6);
     }
 
     @Override
@@ -180,29 +175,29 @@ public class ConfigGuiScreen extends GuiScreen {
         final int categoryContentHeight = this.getCategoryContentHeight();
         final int configContentHeight = this.getConfigContentHeight();
 
-        this.categoryScrollbar.updateScrollPos(categoryContentHeight, CATEGORY_BOX_BOTTOM - CATEGORY_BOX_TOP);
-        this.configScrollbar.updateScrollPos(configContentHeight, CONFIG_BOX_BOTTOM - CONFIG_BOX_TOP);
+        this.categoryScrollbar.updateScrollPos(categoryContentHeight, CATEGORY_BOX.getHeight());
+        this.configScrollbar.updateScrollPos(configContentHeight, CONFIG_BOX.getHeight());
 
-        GuiUtil.drawBoxWithOutline(GUI_BORDER_LEFT, GUI_BORDER_TOP, GUI_BORDER_RIGHT, GUI_BORDER_BOTTOM, colorPalette.BACK_GROUND, colorPalette.BACK_GROUND_BORDER);
+        GuiUtil.drawBoxWithOutline(GUI_BORDER, colorPalette.BACK_GROUND, colorPalette.BACK_GROUND_BORDER);
 
         if (this.titleRenderer != null) {
-            this.titleRenderer.renderTitle(fontRendererObj, colorPalette, GUI_INSIDE_LEFT, GUI_INSIDE_TOP);
+            this.titleRenderer.renderTitle(fontRendererObj, colorPalette, GUI_INSIDE.LEFT, GUI_INSIDE.TOP);
         } else {
-            fontRendererObj.drawStringWithShadow(configName, GUI_INSIDE_LEFT, GUI_INSIDE_TOP, colorPalette.TITLE_TEXT);
+            fontRendererObj.drawStringWithShadow(configName, GUI_INSIDE.LEFT, GUI_INSIDE.TOP, colorPalette.TITLE_TEXT);
         }
 
-        searchField.xPosition = GUI_INSIDE_RIGHT - Math.min(searchField.width, mc.fontRendererObj.getStringWidth(searchField.getText())) - 8;
-        Gui.drawRect(SEARCH_BOX_LEFT, SEARCH_BOX_TOP, SEARCH_BOX_RIGHT, SEARCH_BOX_BOTTOM, colorPalette.SEARCH_BOX);
+        searchField.xPosition = GUI_INSIDE.RIGHT - Math.min(searchField.width, mc.fontRendererObj.getStringWidth(searchField.getText())) - 8;
+        GuiUtil.drawRect(SEARCH_BOX, colorPalette.SEARCH_BOX);
         if (!searchField.isFocused()) {
-            final int xSearchText = GUI_INSIDE_RIGHT - mc.fontRendererObj.getStringWidth("Search...") - 8;
+            final int xSearchText = GUI_INSIDE.RIGHT - mc.fontRendererObj.getStringWidth("Search...") - 8;
             fontRendererObj.drawStringWithShadow("Search...", xSearchText, searchField.yPosition, colorPalette.SEARCH_BOX_TEXT);
         } else {
             searchField.drawTextBox();
         }
 
-        GuiUtil.drawHorizontalLine(GUI_INSIDE_LEFT, GUI_INSIDE_RIGHT - 1, GUI_INSIDE_TOP + fontRendererObj.FONT_HEIGHT + 1, colorPalette.BELOW_TITLE_LINE);
-        GuiUtil.drawBoxWithOutline(CATEGORY_BOX_LEFT, CATEGORY_BOX_TOP, CATEGORY_BOX_RIGHT, CATEGORY_BOX_BOTTOM, colorPalette.INNER_BACKGROUND, colorPalette.INNER_BACKGROUND_BORDER);
-        GuiUtil.drawBoxWithOutline(CONFIG_BOX_LEFT, CONFIG_BOX_TOP, CONFIG_BOX_RIGHT, CONFIG_BOX_BOTTOM, colorPalette.INNER_BACKGROUND, colorPalette.INNER_BACKGROUND_BORDER);
+        GuiUtil.drawHorizontalLine(GUI_INSIDE.LEFT, GUI_INSIDE.RIGHT - 1, GUI_INSIDE.TOP + fontRendererObj.FONT_HEIGHT + 1, colorPalette.BELOW_TITLE_LINE);
+        GuiUtil.drawBoxWithOutline(CATEGORY_BOX, colorPalette.INNER_BACKGROUND, colorPalette.INNER_BACKGROUND_BORDER);
+        GuiUtil.drawBoxWithOutline(CONFIG_BOX, colorPalette.INNER_BACKGROUND, colorPalette.INNER_BACKGROUND_BORDER);
 
         final ScaledResolution res = new ScaledResolution(mc);
         final double scaleW = mc.displayWidth / res.getScaledWidth_double();
@@ -211,46 +206,32 @@ public class ConfigGuiScreen extends GuiScreen {
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
 
         GL11.glScissor(
-                (int) ((CATEGORY_BOX_LEFT + 1) * scaleW),
-                (int) (mc.displayHeight - (CATEGORY_BOX_BOTTOM * scaleH)),
-                (int) ((CATEGORY_BOX_RIGHT - 1 - (CATEGORY_BOX_LEFT + 1)) * scaleW),
-                (int) ((CATEGORY_BOX_BOTTOM - CATEGORY_BOX_TOP) * scaleH));
+                (int) ((CATEGORY_BOX.LEFT + 1) * scaleW),
+                (int) (mc.displayHeight - (CATEGORY_BOX.BOTTOM * scaleH)),
+                (int) ((CATEGORY_BOX.RIGHT - 1 - (CATEGORY_BOX.LEFT + 1)) * scaleW),
+                (int) ((CATEGORY_BOX.BOTTOM - CATEGORY_BOX.TOP) * scaleH));
 
-        final int categoryDrawX = CATEGORY_BOX_LEFT + 6;
-        forEachVisible(this.categoryElements, CATEGORY_BOX_TOP + 6 - this.categoryScrollbar.getScroll(), CATEGORY_BOX_TOP, CATEGORY_BOX_BOTTOM, (element, drawY) -> {
+        final int categoryDrawX = CATEGORY_BOX.LEFT + 6;
+        forEachVisible(this.categoryElements, CATEGORY_BOX, this.categoryScrollbar.getScroll(), (element, drawY) -> {
             element.draw(colorPalette, categoryDrawX, drawY);
             return false;
         });
 
-        this.categoryScrollbar.drawScrollbar(
-                colorPalette,
-                mouseY,
-                CATEGORY_BOX_TOP,
-                CATEGORY_BOX_RIGHT,
-                CATEGORY_BOX_BOTTOM,
-                categoryContentHeight
-        );
+        this.categoryScrollbar.drawScrollbar(colorPalette, CATEGORY_BOX, mouseY, categoryContentHeight);
 
         GL11.glScissor(
-                (int) (CONFIG_BOX_LEFT * scaleW),
-                (int) (mc.displayHeight - ((CONFIG_BOX_BOTTOM - 1) * scaleH)),
-                (int) ((CONFIG_BOX_RIGHT - CONFIG_BOX_LEFT) * scaleW),
-                (int) ((CONFIG_BOX_BOTTOM - 1 - (CONFIG_BOX_TOP + 1)) * scaleH));
+                (int) (CONFIG_BOX.LEFT * scaleW),
+                (int) (mc.displayHeight - ((CONFIG_BOX.BOTTOM - 1) * scaleH)),
+                (int) ((CONFIG_BOX.RIGHT - CONFIG_BOX.LEFT) * scaleW),
+                (int) ((CONFIG_BOX.BOTTOM - 1 - (CONFIG_BOX.TOP + 1)) * scaleH));
 
-        final int configDrawX = CONFIG_BOX_LEFT + 6;
-        forEachVisible(this.renderedConfigElements, CONFIG_BOX_TOP + 6 - this.configScrollbar.getScroll(), CONFIG_BOX_TOP, CONFIG_BOX_BOTTOM, (element, drawY) -> {
+        final int configDrawX = CONFIG_BOX.LEFT + 6;
+        forEachVisible(this.renderedConfigElements, CONFIG_BOX, this.configScrollbar.getScroll(), (element, drawY) -> {
             element.draw(colorPalette, configDrawX, drawY, mouseX, mouseY);
             return false;
         });
 
-        this.configScrollbar.drawScrollbar(
-                colorPalette,
-                mouseY,
-                CONFIG_BOX_TOP,
-                CONFIG_BOX_RIGHT,
-                CONFIG_BOX_BOTTOM,
-                configContentHeight
-        );
+        this.configScrollbar.drawScrollbar(colorPalette, CONFIG_BOX, mouseY, configContentHeight);
 
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
@@ -259,13 +240,15 @@ public class ConfigGuiScreen extends GuiScreen {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        if (isMouseInBox(mouseX, mouseY, CATEGORY_BOX_LEFT, CATEGORY_BOX_RIGHT, CATEGORY_BOX_TOP, CATEGORY_BOX_BOTTOM)) {
-            forEachVisible(this.categoryElements, CATEGORY_BOX_TOP + 6 - this.categoryScrollbar.getScroll(), CATEGORY_BOX_TOP, CATEGORY_BOX_BOTTOM, (element, drawY) -> element.mouseClicked(mouseX, mouseY, mouseButton));
+        if (CATEGORY_BOX.isMouseInBox(mouseX, mouseY)) {
+            forEachVisible(this.categoryElements, CATEGORY_BOX, this.categoryScrollbar.getScroll(), (element, drawY) ->
+                    element.mouseClicked(mouseX, mouseY, mouseButton)
+            );
             if (this.categoryScrollbar.mouseClicked(mouseX, mouseY, mouseButton)) {
                 return;
             }
-        } else if (isMouseInBox(mouseX, mouseY, CONFIG_BOX_LEFT, CONFIG_BOX_RIGHT, CONFIG_BOX_TOP, CONFIG_BOX_BOTTOM)) {
-            forEachVisible(this.renderedConfigElements, CONFIG_BOX_TOP + 6 - this.configScrollbar.getScroll(), CONFIG_BOX_TOP, CONFIG_BOX_BOTTOM, (element, drawY) -> {
+        } else if (CONFIG_BOX.isMouseInBox(mouseX, mouseY)) {
+            forEachVisible(this.renderedConfigElements, CONFIG_BOX, this.configScrollbar.getScroll(), (element, drawY) -> {
                 try {
                     if (element.mouseClicked(mouseX, mouseY, mouseButton)) {
                         if (element instanceof SliderGuiButton) {
@@ -281,15 +264,11 @@ public class ConfigGuiScreen extends GuiScreen {
             if (this.configScrollbar.mouseClicked(mouseX, mouseY, mouseButton)) {
                 return;
             }
-        } else if (mouseButton == 0 && isMouseInBox(mouseX, mouseY, SEARCH_BOX_LEFT, SEARCH_BOX_RIGHT, SEARCH_BOX_TOP, SEARCH_BOX_BOTTOM)) {
+        } else if (mouseButton == 0 && SEARCH_BOX.isMouseInBox(mouseX, mouseY)) {
             searchField.setFocused(true);
             return;
         }
         super.mouseClicked(mouseX, mouseY, mouseButton);
-    }
-
-    private boolean isMouseInBox(int mouseX, int mouseY, int boxLeft, int boxRight, int boxTop, int boxBottom) {
-        return mouseX >= boxLeft && mouseX < boxRight && mouseY >= boxTop && mouseY < boxBottom;
     }
 
     @Override
@@ -346,9 +325,9 @@ public class ConfigGuiScreen extends GuiScreen {
             final int mouseY = height - Mouse.getEventY() * height / mc.displayHeight - 1;
             final int direction = wheel > 0 ? 1 : -1;
             final int amount = Math.min(Math.abs(wheel) * 2, 240);
-            if (isMouseInBox(mouseX, mouseY, CATEGORY_BOX_LEFT, CATEGORY_BOX_RIGHT, CATEGORY_BOX_TOP, CATEGORY_BOX_BOTTOM)) {
+            if (CATEGORY_BOX.isMouseInBox(mouseX, mouseY)) {
                 this.categoryScrollbar.scheduleScroll(direction, amount);
-            } else if (isMouseInBox(mouseX, mouseY, CONFIG_BOX_LEFT, CONFIG_BOX_RIGHT, CONFIG_BOX_TOP, CONFIG_BOX_BOTTOM)) {
+            } else if (CONFIG_BOX.isMouseInBox(mouseX, mouseY)) {
                 this.configScrollbar.scheduleScroll(direction, amount);
             }
         }
@@ -411,7 +390,7 @@ public class ConfigGuiScreen extends GuiScreen {
         this.lastInteractedSlider = null;
         this.renderedConfigElements.clear();
         String lastKey = null;
-        final int configBoxWidth = getConfigBoxWidth();
+        final int elementWidth = CONFIG_BOX.getWidth() - 2 * 6;
         for (final ConfigUIElement element : this.configElements) {
             if (!(element instanceof SubCategoryHeader) && element.matchSearch(search)) {
                 final String subCategoryKey = element.getCategory() + "$" + element.getSubCategory();
@@ -425,7 +404,7 @@ public class ConfigGuiScreen extends GuiScreen {
                         displayText = element.getCategory() + (element.getSubCategory().isEmpty() ? "" : " - " + element.getSubCategory());
                     }
                     final TextLabel textLabel = new TextLabel(displayText);
-                    textLabel.setBoxWidth(configBoxWidth);
+                    textLabel.setBoxWidth(elementWidth);
                     this.renderedConfigElements.add(textLabel);
                 }
                 this.renderedConfigElements.add(element);
@@ -433,16 +412,16 @@ public class ConfigGuiScreen extends GuiScreen {
         }
         if (this.renderedConfigElements.isEmpty()) {
             final TextLabel textLabel = new TextLabel("Nothing was found! :(");
-            textLabel.setBoxWidth(configBoxWidth);
+            textLabel.setBoxWidth(elementWidth);
             this.renderedConfigElements.add(textLabel);
         }
     }
 
-    private static <T extends SizedElement> void forEachVisible(List<T> elements, int startY, int boxTop, int boxBottom, ElementVisitor<T> visitor) {
-        int drawY = startY;
+    private static <T extends SizedElement> void forEachVisible(List<T> elements, Box box, int scroll, ElementVisitor<T> visitor) {
+        int drawY = box.TOP + 6 - scroll;
         for (final T element : elements) {
             final int elementHeight = element.getHeight();
-            if (drawY + elementHeight >= boxTop && drawY <= boxBottom) {
+            if (drawY + elementHeight >= box.TOP && drawY <= box.BOTTOM) {
                 if (visitor.visit(element, drawY)) return;
             }
             drawY += elementHeight + 4;
