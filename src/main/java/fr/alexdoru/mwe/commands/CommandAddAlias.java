@@ -63,7 +63,7 @@ public class CommandAddAlias extends MyAbstractCommand {
         if (args.length == 2 && args[0].equalsIgnoreCase("remove")) {
             return getListOfStringsMatchingLastWord(args, AliasData.getAllNames());
         }
-        final List<String> onlinePlayersByName = TabCompletionUtil.getOnlinePlayersByName();
+        final List<String> onlinePlayersByName = TabCompletionUtil.getPlayers();
         onlinePlayersByName.addAll(Arrays.asList("list", "remove"));
         return getListOfStringsMatchingLastWord(args, onlinePlayersByName);
     }

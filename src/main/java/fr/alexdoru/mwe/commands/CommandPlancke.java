@@ -131,7 +131,7 @@ public class CommandPlancke extends MyAbstractCommand {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
-            return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+            return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAlias());
         }
         if (args.length == 2) {
             final String[] games = {"blitz", "megawalls", "skywars", "uhc"};

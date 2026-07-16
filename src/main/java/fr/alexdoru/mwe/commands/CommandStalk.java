@@ -46,7 +46,7 @@ public class CommandStalk extends MyAbstractCommand {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+        return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAlias());
     }
 
     private void stalkPlayer(String name) {
