@@ -200,16 +200,10 @@ public class ConfigGuiScreen extends GuiScreen {
         GuiUtil.drawBoxWithOutline(CONFIG_BOX, colorPalette.INNER_BACKGROUND, colorPalette.INNER_BACKGROUND_BORDER);
 
         final ScaledResolution res = new ScaledResolution(mc);
-        final double scaleW = mc.displayWidth / res.getScaledWidth_double();
-        final double scaleH = mc.displayHeight / res.getScaledHeight_double();
 
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
 
-        GL11.glScissor(
-                (int) ((CATEGORY_BOX.LEFT + 1) * scaleW),
-                (int) (mc.displayHeight - (CATEGORY_BOX.BOTTOM * scaleH)),
-                (int) ((CATEGORY_BOX.RIGHT - 1 - (CATEGORY_BOX.LEFT + 1)) * scaleW),
-                (int) ((CATEGORY_BOX.BOTTOM - CATEGORY_BOX.TOP) * scaleH));
+        CATEGORY_BOX.applyScissors(mc, res, 1);
 
         final int categoryDrawX = CATEGORY_BOX.LEFT + 6;
         forEachVisible(this.categoryElements, CATEGORY_BOX, this.categoryScrollbar.getScroll(), (element, drawY) -> {
@@ -219,11 +213,7 @@ public class ConfigGuiScreen extends GuiScreen {
 
         this.categoryScrollbar.drawScrollbar(colorPalette, CATEGORY_BOX, mouseY, categoryContentHeight);
 
-        GL11.glScissor(
-                (int) (CONFIG_BOX.LEFT * scaleW),
-                (int) (mc.displayHeight - ((CONFIG_BOX.BOTTOM - 1) * scaleH)),
-                (int) ((CONFIG_BOX.RIGHT - CONFIG_BOX.LEFT) * scaleW),
-                (int) ((CONFIG_BOX.BOTTOM - 1 - (CONFIG_BOX.TOP + 1)) * scaleH));
+        CONFIG_BOX.applyScissors(mc, res, 1);
 
         final int configDrawX = CONFIG_BOX.LEFT + 6;
         forEachVisible(this.renderedConfigElements, CONFIG_BOX, this.configScrollbar.getScroll(), (element, drawY) -> {
