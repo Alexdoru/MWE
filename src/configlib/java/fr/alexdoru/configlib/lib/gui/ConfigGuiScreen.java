@@ -341,17 +341,18 @@ public class ConfigGuiScreen extends GuiScreen {
             }
         } else if (isMouseInBox(mouseX, mouseY, CONFIG_BOX_LEFT, CONFIG_BOX_RIGHT, CONFIG_BOX_TOP, CONFIG_BOX_BOTTOM)) {
             try {
-                int drawY = CONFIG_BOX_TOP + 6 - scroll;
+                int configDrawY = CONFIG_BOX_TOP + 6 - scroll;
                 for (final ConfigUIElement element : this.renderedConfigElements) {
-                    final int height = element.getHeight();
-                    if ((drawY + height >= CONFIG_BOX_TOP && drawY <= CONFIG_BOX_BOTTOM)
-                            && element.mouseClicked(mouseX, mouseY, mouseButton)) {
-                        if (element instanceof SliderGuiButton) {
-                            lastInteractedSlider = ((SliderGuiButton) element);
+                    final int elementHeight = element.getHeight();
+                    if (configDrawY + elementHeight >= CONFIG_BOX_TOP && configDrawY <= CONFIG_BOX_BOTTOM) {
+                        if (element.mouseClicked(mouseX, mouseY, mouseButton)) {
+                            if (element instanceof SliderGuiButton) {
+                                lastInteractedSlider = ((SliderGuiButton) element);
+                            }
+                            return;
                         }
-                        return;
                     }
-                    drawY += height + 4;
+                    configDrawY += elementHeight + 4;
                 }
             } catch (IllegalAccessException e) {
                 throw new RuntimeException("Caught exception running mouse click events!", e);
