@@ -140,11 +140,7 @@ public class ConfigGuiScreen extends GuiScreen {
         CATEGORY_BOX_LEFT = GUI_INSIDE_LEFT;
         CATEGORY_BOX_TOP = GUI_INSIDE_TOP + fontRendererObj.FONT_HEIGHT + 1 + 6;
         CATEGORY_BOX_RIGHT = GUI_INSIDE_LEFT + GUI_WIDTH / 5;
-        int categoryContentHeight = 0;
-        for (final CategoryGuiButton category : this.categoryElements) {
-            categoryContentHeight += category.getHeight() + 4;
-        }
-        categoryContentHeight -= 4;
+        final int categoryContentHeight = getCategoryContentHeight();
         final int categoryMaxY = CATEGORY_BOX_TOP + 6 + categoryContentHeight + 6;
         CATEGORY_BOX_BOTTOM = Math.min(categoryMaxY, GUI_INSIDE_BOTTOM);
 
@@ -178,10 +174,10 @@ public class ConfigGuiScreen extends GuiScreen {
         SEARCH_BOX_BOTTOM = GUI_INSIDE_TOP + mc.fontRendererObj.FONT_HEIGHT;
 
         this.scroll = 0;
-        this.scroll(-lastScroll);
+        this.scroll(-lastScroll, this.getConfigContentHeight());
 
         this.categoryScroll = 0;
-        this.categoryScroll(-lastCategoryScroll);
+        this.categoryScroll(-lastCategoryScroll, categoryContentHeight);
 
         this.lastInteractedSlider = null;
 
@@ -196,12 +192,15 @@ public class ConfigGuiScreen extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
+        final int configContentHeight = this.getConfigContentHeight();
+        final int categoryContentHeight = this.getCategoryContentHeight();
+
         // smooth scrolling updated on every frame instead of once per tick
         if (amountToScroll > 0) {
             final long time = System.currentTimeMillis();
             if (time - lastScrollTime > 1) {
                 final int step = Math.min(amountToScroll, Math.max(3, amountToScroll / 8));
-                this.scroll(scrollDirection * step);
+                this.scroll(scrollDirection * step, configContentHeight);
                 amountToScroll -= step;
                 lastScrollTime = time;
             }
@@ -211,7 +210,7 @@ public class ConfigGuiScreen extends GuiScreen {
             final long time = System.currentTimeMillis();
             if (time - categoryLastScrollTime > 1) {
                 final int step = Math.min(categoryAmountToScroll, Math.max(3, categoryAmountToScroll / 8));
-                this.categoryScroll(categoryScrollDirection * step);
+                this.categoryScroll(categoryScrollDirection * step, categoryContentHeight);
                 categoryAmountToScroll -= step;
                 categoryLastScrollTime = time;
             }
@@ -251,31 +250,29 @@ public class ConfigGuiScreen extends GuiScreen {
 
         final int categoryDrawX = CATEGORY_BOX_LEFT + 6;
         int categoryDrawY = CATEGORY_BOX_TOP + 6 - categoryScroll;
-        int allCategoriesHeight = 0;
         for (final CategoryGuiButton category : this.categoryElements) {
             final int categoryHeight = category.getHeight();
             if (categoryDrawY + categoryHeight >= CATEGORY_BOX_TOP && categoryDrawY <= CATEGORY_BOX_BOTTOM) {
                 category.draw(colorPalette, categoryDrawX, categoryDrawY);
             }
             categoryDrawY += categoryHeight + 4;
-            allCategoriesHeight += categoryHeight + 4;
         }
 
         final int categoryBoxHeight = CATEGORY_BOX_BOTTOM - CATEGORY_BOX_TOP - 2;
-        final boolean renderCategoryScrollbar = allCategoriesHeight > categoryBoxHeight;
+        final boolean renderCategoryScrollbar = categoryContentHeight > categoryBoxHeight;
         if (renderCategoryScrollbar) {
-            final int scrollBarSize = categoryBoxHeight * categoryBoxHeight / allCategoriesHeight;
+            final int scrollBarSize = categoryBoxHeight * categoryBoxHeight / categoryContentHeight;
             final int minScrollBarY = CATEGORY_BOX_TOP + 1 + 1;
             final int maxScrollBarY = CATEGORY_BOX_BOTTOM - 1 - scrollBarSize - 1;
             if (categoryDraggingScrollBar) {
                 final int relativeMouseY = mouseY - minScrollBarY - categoryScrollGrabbedAtY;
                 if (maxScrollBarY != minScrollBarY) {
-                    final int newScroll = relativeMouseY * (allCategoriesHeight - (CATEGORY_BOX_BOTTOM - CATEGORY_BOX_TOP)) / (maxScrollBarY - minScrollBarY);
-                    this.categoryScroll(this.categoryScroll - newScroll);
+                    final int newScroll = relativeMouseY * (categoryContentHeight - (CATEGORY_BOX_BOTTOM - CATEGORY_BOX_TOP)) / (maxScrollBarY - minScrollBarY);
+                    this.categoryScroll(this.categoryScroll - newScroll, categoryContentHeight);
                 }
             }
             CATEGORY_SCROLL_BAR_LEFT = CATEGORY_BOX_RIGHT - 5;
-            CATEGORY_SCROLL_BAR_TOP = ((maxScrollBarY - minScrollBarY) * categoryScroll) / (allCategoriesHeight - categoryBoxHeight) + minScrollBarY;
+            CATEGORY_SCROLL_BAR_TOP = ((maxScrollBarY - minScrollBarY) * categoryScroll) / (categoryContentHeight - categoryBoxHeight) + minScrollBarY;
             CATEGORY_SCROLL_BAR_RIGHT = CATEGORY_BOX_RIGHT - 5 + 3;
             CATEGORY_SCROLL_BAR_BOTTOM = CATEGORY_SCROLL_BAR_TOP + scrollBarSize;
             GuiUtil.drawVerticalLine(CATEGORY_BOX_RIGHT - 4, CATEGORY_BOX_TOP + 4, CATEGORY_BOX_BOTTOM - 4, colorPalette.SCROLLBAR_TRACK);
@@ -290,31 +287,29 @@ public class ConfigGuiScreen extends GuiScreen {
 
         final int configDrawX = CONFIG_BOX_LEFT + 6;
         int configDrawY = CONFIG_BOX_TOP + 6 - scroll;
-        int allElementsHeight = 0;
         for (final ConfigUIElement element : this.renderedConfigElements) {
             final int elementHeight = element.getHeight();
             if (configDrawY + elementHeight >= CONFIG_BOX_TOP && configDrawY <= CONFIG_BOX_BOTTOM) {
                 element.draw(colorPalette, configDrawX, configDrawY, mouseX, mouseY);
             }
             configDrawY += elementHeight + 4;
-            allElementsHeight += elementHeight + 4;
         }
 
         final int configBoxHeight = CONFIG_BOX_BOTTOM - CONFIG_BOX_TOP - 2;
-        final boolean renderScrollbar = allElementsHeight > configBoxHeight;
+        final boolean renderScrollbar = configContentHeight > configBoxHeight;
         if (renderScrollbar) {
-            final int scrollBarSize = configBoxHeight * configBoxHeight / allElementsHeight;
+            final int scrollBarSize = configBoxHeight * configBoxHeight / configContentHeight;
             final int minScrollBarY = CONFIG_BOX_TOP + 1 + 1;
             final int maxScrollBarY = CONFIG_BOX_BOTTOM - 1 - scrollBarSize - 1;
             if (draggingScrollBar) {
                 final int relativeMouseY = mouseY - minScrollBarY - scrollGrabbedAtY;
                 if (maxScrollBarY != minScrollBarY) {
-                    final int newScroll = relativeMouseY * (allElementsHeight - (CONFIG_BOX_BOTTOM - CONFIG_BOX_TOP)) / (maxScrollBarY - minScrollBarY);
-                    this.scroll(this.scroll - newScroll);
+                    final int newScroll = relativeMouseY * (configContentHeight - (CONFIG_BOX_BOTTOM - CONFIG_BOX_TOP)) / (maxScrollBarY - minScrollBarY);
+                    this.scroll(this.scroll - newScroll, configContentHeight);
                 }
             }
             SCROLL_BAR_LEFT = CONFIG_BOX_RIGHT - 5;
-            SCROLL_BAR_TOP = ((maxScrollBarY - minScrollBarY) * scroll) / (allElementsHeight - configBoxHeight) + minScrollBarY;
+            SCROLL_BAR_TOP = ((maxScrollBarY - minScrollBarY) * scroll) / (configContentHeight - configBoxHeight) + minScrollBarY;
             SCROLL_BAR_RIGHT = CONFIG_BOX_RIGHT - 5 + 3;
             SCROLL_BAR_BOTTOM = SCROLL_BAR_TOP + scrollBarSize;
             GuiUtil.drawVerticalLine(CONFIG_BOX_RIGHT - 4, CONFIG_BOX_TOP + 4, CONFIG_BOX_BOTTOM - 4, colorPalette.SCROLLBAR_TRACK);
@@ -458,14 +453,10 @@ public class ConfigGuiScreen extends GuiScreen {
         return false;
     }
 
-    private void scroll(int amount) {
+    private void scroll(int amount, int contentHeight) {
         this.scroll = this.scroll - amount;
-        int maxDrawY = 6;
-        for (final ConfigUIElement element : this.renderedConfigElements) {
-            maxDrawY += element.getHeight() + 4;
-        }
-        if (this.scroll > maxDrawY - (CONFIG_BOX_BOTTOM - CONFIG_BOX_TOP)) {
-            this.scroll = maxDrawY - (CONFIG_BOX_BOTTOM - CONFIG_BOX_TOP);
+        if (this.scroll > contentHeight + 2 * 6 - (CONFIG_BOX_BOTTOM - CONFIG_BOX_TOP)) {
+            this.scroll = contentHeight + 2 * 6 - (CONFIG_BOX_BOTTOM - CONFIG_BOX_TOP);
             this.amountToScroll = 0;
         }
         if (this.scroll <= 0) {
@@ -474,20 +465,34 @@ public class ConfigGuiScreen extends GuiScreen {
         }
     }
 
-    private void categoryScroll(int amount) {
+    private void categoryScroll(int amount, int contentHeight) {
         this.categoryScroll = this.categoryScroll - amount;
-        int maxDrawY = 6;
-        for (final CategoryGuiButton category : this.categoryElements) {
-            maxDrawY += category.getHeight() + 4;
-        }
-        if (this.categoryScroll > maxDrawY - (CATEGORY_BOX_BOTTOM - CATEGORY_BOX_TOP)) {
-            this.categoryScroll = maxDrawY - (CATEGORY_BOX_BOTTOM - CATEGORY_BOX_TOP);
+        if (this.categoryScroll > contentHeight + 2 * 6 - (CATEGORY_BOX_BOTTOM - CATEGORY_BOX_TOP)) {
+            this.categoryScroll = contentHeight + 2 * 6 - (CATEGORY_BOX_BOTTOM - CATEGORY_BOX_TOP);
             this.categoryAmountToScroll = 0;
         }
         if (this.categoryScroll <= 0) {
             this.categoryScroll = 0;
             this.categoryAmountToScroll = 0;
         }
+    }
+
+    private int getCategoryContentHeight() {
+        int height = 0;
+        for (final CategoryGuiButton category : this.categoryElements) {
+            height += category.getHeight() + 4;
+        }
+        if (!this.categoryElements.isEmpty()) height -= 4;
+        return height;
+    }
+
+    private int getConfigContentHeight() {
+        int height = 0;
+        for (final ConfigUIElement element : this.renderedConfigElements) {
+            height += element.getHeight() + 4;
+        }
+        if (!this.renderedConfigElements.isEmpty()) height -= 4;
+        return height;
     }
 
     public void setFocusedCategory(String categoryName) {
