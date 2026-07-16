@@ -249,14 +249,10 @@ public class ConfigGuiScreen extends GuiScreen {
                 (int) ((CATEGORY_BOX_BOTTOM - CATEGORY_BOX_TOP) * scaleH));
 
         final int categoryDrawX = CATEGORY_BOX_LEFT + 6;
-        int categoryDrawY = CATEGORY_BOX_TOP + 6 - categoryScroll;
-        for (final CategoryGuiButton category : this.categoryElements) {
-            final int categoryHeight = category.getHeight();
-            if (categoryDrawY + categoryHeight >= CATEGORY_BOX_TOP && categoryDrawY <= CATEGORY_BOX_BOTTOM) {
-                category.draw(colorPalette, categoryDrawX, categoryDrawY);
-            }
-            categoryDrawY += categoryHeight + 4;
-        }
+        forEachVisible(this.categoryElements, CATEGORY_BOX_TOP + 6 - categoryScroll, CATEGORY_BOX_TOP, CATEGORY_BOX_BOTTOM, (element, drawY) -> {
+            element.draw(colorPalette, categoryDrawX, drawY);
+            return false;
+        });
 
         final int categoryBoxHeight = CATEGORY_BOX_BOTTOM - CATEGORY_BOX_TOP - 2;
         final boolean renderCategoryScrollbar = categoryContentHeight > categoryBoxHeight;
@@ -286,14 +282,10 @@ public class ConfigGuiScreen extends GuiScreen {
                 (int) ((CONFIG_BOX_BOTTOM - 1 - (CONFIG_BOX_TOP + 1)) * scaleH));
 
         final int configDrawX = CONFIG_BOX_LEFT + 6;
-        int configDrawY = CONFIG_BOX_TOP + 6 - scroll;
-        for (final ConfigUIElement element : this.renderedConfigElements) {
-            final int elementHeight = element.getHeight();
-            if (configDrawY + elementHeight >= CONFIG_BOX_TOP && configDrawY <= CONFIG_BOX_BOTTOM) {
-                element.draw(colorPalette, configDrawX, configDrawY, mouseX, mouseY);
-            }
-            configDrawY += elementHeight + 4;
-        }
+        forEachVisible(this.renderedConfigElements, CONFIG_BOX_TOP + 6 - scroll, CONFIG_BOX_TOP, CONFIG_BOX_BOTTOM, (element, drawY) -> {
+            element.draw(colorPalette, configDrawX, drawY, mouseX, mouseY);
+            return false;
+        });
 
         final int configBoxHeight = CONFIG_BOX_BOTTOM - CONFIG_BOX_TOP - 2;
         final boolean renderScrollbar = configContentHeight > configBoxHeight;
@@ -324,39 +316,26 @@ public class ConfigGuiScreen extends GuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         if (isMouseInBox(mouseX, mouseY, CATEGORY_BOX_LEFT, CATEGORY_BOX_RIGHT, CATEGORY_BOX_TOP, CATEGORY_BOX_BOTTOM)) {
-            int categoryDrawY = CATEGORY_BOX_TOP + 6 - categoryScroll;
-            for (final CategoryGuiButton category : this.categoryElements) {
-                final int categoryHeight = category.getHeight();
-                if (categoryDrawY + categoryHeight >= CATEGORY_BOX_TOP && categoryDrawY <= CATEGORY_BOX_BOTTOM) {
-                    if (category.mouseClicked(mouseX, mouseY, mouseButton)) {
-                        return;
-                    }
-                }
-                categoryDrawY += categoryHeight + 4;
-            }
+            forEachVisible(this.categoryElements, CATEGORY_BOX_TOP + 6 - categoryScroll, CATEGORY_BOX_TOP, CATEGORY_BOX_BOTTOM, (element, drawY) -> element.mouseClicked(mouseX, mouseY, mouseButton));
             if (mouseButton == 0 && isMouseInBox(mouseX, mouseY, CATEGORY_SCROLL_BAR_LEFT, CATEGORY_SCROLL_BAR_RIGHT, CATEGORY_SCROLL_BAR_TOP, CATEGORY_SCROLL_BAR_BOTTOM)) {
                 categoryDraggingScrollBar = true;
                 categoryScrollGrabbedAtY = mouseY - CATEGORY_SCROLL_BAR_TOP;
                 return;
             }
         } else if (isMouseInBox(mouseX, mouseY, CONFIG_BOX_LEFT, CONFIG_BOX_RIGHT, CONFIG_BOX_TOP, CONFIG_BOX_BOTTOM)) {
-            try {
-                int configDrawY = CONFIG_BOX_TOP + 6 - scroll;
-                for (final ConfigUIElement element : this.renderedConfigElements) {
-                    final int elementHeight = element.getHeight();
-                    if (configDrawY + elementHeight >= CONFIG_BOX_TOP && configDrawY <= CONFIG_BOX_BOTTOM) {
-                        if (element.mouseClicked(mouseX, mouseY, mouseButton)) {
-                            if (element instanceof SliderGuiButton) {
-                                lastInteractedSlider = ((SliderGuiButton) element);
-                            }
-                            return;
+            forEachVisible(this.renderedConfigElements, CONFIG_BOX_TOP + 6 - scroll, CONFIG_BOX_TOP, CONFIG_BOX_BOTTOM, (element, drawY) -> {
+                try {
+                    if (element.mouseClicked(mouseX, mouseY, mouseButton)) {
+                        if (element instanceof SliderGuiButton) {
+                            lastInteractedSlider = ((SliderGuiButton) element);
                         }
+                        return true;
                     }
-                    configDrawY += elementHeight + 4;
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException("Caught exception running mouse click events!", e);
                 }
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException("Caught exception running mouse click events!", e);
-            }
+                return false;
+            });
             if (mouseButton == 0 && isMouseInBox(mouseX, mouseY, SCROLL_BAR_LEFT, SCROLL_BAR_RIGHT, SCROLL_BAR_TOP, SCROLL_BAR_BOTTOM)) {
                 draggingScrollBar = true;
                 scrollGrabbedAtY = mouseY - SCROLL_BAR_TOP;
@@ -549,6 +528,24 @@ public class ConfigGuiScreen extends GuiScreen {
             textLabel.setBoxWidth(configBoxWidth);
             this.renderedConfigElements.add(textLabel);
         }
+    }
+
+    private static <T extends SizedElement> void forEachVisible(List<T> elements, int startY, int boxTop, int boxBottom, ElementVisitor<T> visitor) {
+        int drawY = startY;
+        for (final T element : elements) {
+            final int elementHeight = element.getHeight();
+            if (drawY + elementHeight >= boxTop && drawY <= boxBottom) {
+                if (visitor.visit(element, drawY)) return;
+            }
+            drawY += elementHeight + 4;
+        }
+    }
+
+    @FunctionalInterface
+    interface ElementVisitor<T extends SizedElement> {
+
+        boolean visit(T element, int drawY);
+
     }
 
 }
