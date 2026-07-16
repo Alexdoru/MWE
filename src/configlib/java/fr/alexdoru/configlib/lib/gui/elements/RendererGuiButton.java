@@ -66,7 +66,7 @@ public class RendererGuiButton extends ConfigGuiButton {
                 buttonEnabled.playPressSound(mc.getSoundHandler());
                 final IRenderer renderer = this.rendererManager.getRendererFromPosition(rendererPosition);
                 if (renderer != null) {
-                    mc.displayGuiScreen(new RendererEditGuiScreen(this.rendererManager, renderer, parentScreen));
+                    mc.displayGuiScreen(new RendererEditGuiScreen(this.rendererManager, renderer, parentScreen, parentScreen.getColorPalette()));
                 } else {
                     throw new RuntimeException("No registered renderer associated to " + field.getName());
                 }
