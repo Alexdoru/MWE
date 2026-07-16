@@ -31,7 +31,7 @@ public final class ScoreboardTracker {
             Minecraft.getMinecraft().mcProfiler.startSection("MWE Scoreboard");
             PARSER.reset();
             PARSER.update();
-            if (PARSER.isMWReplay()) {
+            if (PARSER.isMWReplay() && PARSER.getReplayMap() != null) {
                 MinecraftForge.EVENT_BUS.post(new MapEvent(PARSER.getReplayMap()));
             }
             this.fireScoreboardRelatedEvents();
