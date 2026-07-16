@@ -254,7 +254,7 @@ public class ConfigGuiScreen extends GuiScreen {
         int allCategoriesHeight = 0;
         for (final CategoryGuiButton category : this.categoryElements) {
             final int categoryHeight = category.getHeight();
-            if (categoryDrawY + categoryHeight + 4 >= CATEGORY_BOX_TOP && categoryDrawY <= CATEGORY_BOX_BOTTOM) {
+            if (categoryDrawY + categoryHeight >= CATEGORY_BOX_TOP && categoryDrawY <= CATEGORY_BOX_BOTTOM) {
                 category.draw(colorPalette, categoryDrawX, categoryDrawY);
             }
             categoryDrawY += categoryHeight + 4;
@@ -293,7 +293,7 @@ public class ConfigGuiScreen extends GuiScreen {
         int allElementsHeight = 0;
         for (final ConfigUIElement element : this.renderedConfigElements) {
             final int elementHeight = element.getHeight();
-            if (configDrawY + elementHeight + 4 >= CONFIG_BOX_TOP && configDrawY <= CONFIG_BOX_BOTTOM) {
+            if (configDrawY + elementHeight >= CONFIG_BOX_TOP && configDrawY <= CONFIG_BOX_BOTTOM) {
                 element.draw(colorPalette, configDrawX, configDrawY, mouseX, mouseY);
             }
             configDrawY += elementHeight + 4;
@@ -329,10 +329,15 @@ public class ConfigGuiScreen extends GuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         if (isMouseInBox(mouseX, mouseY, CATEGORY_BOX_LEFT, CATEGORY_BOX_RIGHT, CATEGORY_BOX_TOP, CATEGORY_BOX_BOTTOM)) {
+            int categoryDrawY = CATEGORY_BOX_TOP + 6 - categoryScroll;
             for (final CategoryGuiButton category : this.categoryElements) {
-                if (category.mouseClicked(mouseX, mouseY, mouseButton)) {
-                    return;
+                final int categoryHeight = category.getHeight();
+                if (categoryDrawY + categoryHeight >= CATEGORY_BOX_TOP && categoryDrawY <= CATEGORY_BOX_BOTTOM) {
+                    if (category.mouseClicked(mouseX, mouseY, mouseButton)) {
+                        return;
+                    }
                 }
+                categoryDrawY += categoryHeight + 4;
             }
             if (mouseButton == 0 && isMouseInBox(mouseX, mouseY, CATEGORY_SCROLL_BAR_LEFT, CATEGORY_SCROLL_BAR_RIGHT, CATEGORY_SCROLL_BAR_TOP, CATEGORY_SCROLL_BAR_BOTTOM)) {
                 categoryDraggingScrollBar = true;
@@ -341,13 +346,18 @@ public class ConfigGuiScreen extends GuiScreen {
             }
         } else if (isMouseInBox(mouseX, mouseY, CONFIG_BOX_LEFT, CONFIG_BOX_RIGHT, CONFIG_BOX_TOP, CONFIG_BOX_BOTTOM)) {
             try {
+                int configDrawY = CONFIG_BOX_TOP + 6 - scroll;
                 for (final ConfigUIElement element : this.renderedConfigElements) {
-                    if (element.mouseClicked(mouseX, mouseY, mouseButton)) {
-                        if (element instanceof SliderGuiButton) {
-                            lastInteractedSlider = ((SliderGuiButton) element);
+                    final int elementHeight = element.getHeight();
+                    if (configDrawY + elementHeight >= CONFIG_BOX_TOP && configDrawY <= CONFIG_BOX_BOTTOM) {
+                        if (element.mouseClicked(mouseX, mouseY, mouseButton)) {
+                            if (element instanceof SliderGuiButton) {
+                                lastInteractedSlider = ((SliderGuiButton) element);
+                            }
+                            return;
                         }
-                        return;
                     }
+                    configDrawY += elementHeight + 4;
                 }
             } catch (IllegalAccessException e) {
                 throw new RuntimeException("Caught exception running mouse click events!", e);
