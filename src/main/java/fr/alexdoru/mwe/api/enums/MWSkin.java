@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -377,17 +378,17 @@ public enum MWSkin {
     }
 
     @Nullable
-    public static MWSkin fromResourceLocation(ResourceLocation resourceLocation) {
+    public static MWSkin fromResourceLocation(@NotNull ResourceLocation resourceLocation) {
         return fromHashMap.get(resourceLocation.toString().substring(16));
     }
 
     @Nullable
-    public static MWSkin ofPlayer(AbstractClientPlayer player) {
+    public static MWSkin ofPlayer(@NotNull AbstractClientPlayer player) {
         return MWSkin.fromResourceLocation(player.getLocationSkin());
     }
 
     @Nullable
-    public static MWSkin ofPlayer(NetworkPlayerInfo netInfo) {
+    public static MWSkin ofPlayer(@NotNull NetworkPlayerInfo netInfo) {
         if (netInfo.hasLocationSkin()) {
             return MWSkin.fromResourceLocation(netInfo.getLocationSkin());
         }
