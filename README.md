@@ -1,6 +1,7 @@
 <p align="center">
   <img src="https://img.shields.io/github/v/release/Alexdoru/MWE?logo=github" alt="GitHub Release">
   <img src="https://img.shields.io/github/downloads/Alexdoru/MWE/total?logo=github" alt="GitHub Downloads">
+  <img src="https://img.shields.io/modrinth/dt/mwe?logo=modrinth&label=Downloads" alt="Modrinth Downloads">
   <img src="https://github.com/Alexdoru/MWE/actions/workflows/build.yml/badge.svg" alt="Build Status">
 </p>
 
