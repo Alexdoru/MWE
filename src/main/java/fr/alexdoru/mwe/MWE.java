@@ -49,6 +49,7 @@ public class MWE {
     public static final String modName = "MWE";
     public static final String version = BuildConfig.VERSION;
     public static final Logger logger = LogManager.getLogger(modName);
+
     private static MWE INSTANCE;
     private final List<IMWEAddon> loadedAddons = new ArrayList<>();
     private IConfigHandler configHandler;
@@ -56,6 +57,9 @@ public class MWE {
     private RenegadeArrowTracker renegadeTracker;
 
     public MWE() {
+        if (INSTANCE != null) {
+            throw new IllegalStateException("MWE already created");
+        }
         INSTANCE = this;
         MWELoadingPlugin.loadClasses("mwe.addons", IMWEAddon.class).forEach(addon -> {
             final ComparableVersion MWEVersion = new ComparableVersion(version);
@@ -98,6 +102,7 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
         MinecraftForge.EVENT_BUS.register(new StrengthParticles());
         MinecraftForge.EVENT_BUS.register(new ScoreboardTracker());
+        MinecraftForge.EVENT_BUS.register(new ClassSelectorOverlay());
         MinecraftForge.EVENT_BUS.register(new NameFormatter.EventHandler());
         MinecraftForge.EVENT_BUS.register(new KeybindingListener());
         MinecraftForge.EVENT_BUS.register(new MegaWallsEndGameStats());
