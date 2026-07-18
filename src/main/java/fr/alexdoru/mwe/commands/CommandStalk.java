@@ -1,7 +1,10 @@
 package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.api.IPlayerUUID;
+import fr.alexdoru.mwe.api.enums.MWSkin;
+import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
@@ -14,8 +17,13 @@ import fr.alexdoru.mwe.utils.DateUtil;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import fr.alexdoru.mwe.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.event.ClickEvent;
+import net.minecraft.event.HoverEvent;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
 
 import java.util.List;
@@ -90,7 +98,7 @@ public class CommandStalk extends MyAbstractCommand {
                                 + (playerStatus.getMap() == null ? "" : (GREEN + " on " + YELLOW + playerStatus.getMap()))
                                 + GREEN + ".");
                 if ("Mega Walls".equals(playerStatus.getGamemode())) {
-                    this.appendSelectedClass(imsg, playerData);
+                    this.appendSelectedClass(imsg, playerData, loginData);
                 }
                 ChatUtil.addChatMessage(imsg);
             } else { // offline
@@ -113,18 +121,49 @@ public class CommandStalk extends MyAbstractCommand {
         }
 
         if (ScoreboardTracker.isMWEnvironement()) {
-            this.appendSelectedClass(imsg, playerData);
+            this.appendSelectedClass(imsg, playerData, loginData);
         }
 
         ChatUtil.addChatMessage(imsg);
 
     }
 
-    private void appendSelectedClass(IChatComponent imsg, HypixelPlayerData playerData) {
+    private void appendSelectedClass(IChatComponent imsg, HypixelPlayerData playerData, LoginData loginData) {
         final MegaWallsClassSkinData skinData = new MegaWallsClassSkinData(playerData.getPlayerData());
         imsg.appendText(GREEN + " Selected class : "
                 + YELLOW + (skinData.getCurrentmwclass() == null ? "?" : skinData.getCurrentmwclass())
                 + GREEN + " with the " + YELLOW + (skinData.getCurrentmwskin() == null ? "?" : skinData.getCurrentmwskin()) + GREEN + " skin.");
+        this.addChatHead(imsg, skinData, loginData);
+    }
+
+    private void addChatHead(IChatComponent imsg, MegaWallsClassSkinData skinData, LoginData loginData) {
+        if (skinData.getCurrentmwskin() == null) {
+            return;
+        }
+        final MWSkin skin = MWSkin.fromName(skinData.getCurrentmwskin());
+        if (skin == null) {
+            return;
+        }
+        if (imsg instanceof ChatComponentTextAccessor) {
+            ((ChatComponentTextAccessor) imsg).setSkinChatHead(skin.getSkinChatHead());
+        }
+        if (!loginData.isMVPPlusPlus()) return;
+        if (ScoreboardTracker.isInMwGame() || ScoreboardTracker.isPreGameLobby()) {
+            boolean flag = false;
+            final IChatComponent nickMsg = new ChatComponentText("\n" + YELLOW + "Could be : ");
+            for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+                if (NameFormatter.isNickedPlayer(netInfo.getGameProfile().getId()) && skin.hasSkinEquipped(netInfo)) {
+                    flag = true;
+                    nickMsg.appendSibling(new ChatComponentText(RESET + NameFormatter.getFormattedNameWithoutIcons(netInfo) + " ")
+                            .setChatStyle(new ChatStyle()
+                                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ad " + netInfo.getGameProfile().getName() + " " + loginData.getdisplayname()))
+                                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(YELLOW + "Click to add an allias " + RESET + NameFormatter.getFormattedNameWithoutIcons(netInfo) + GOLD + " -> " + RESET + loginData.getFormattedName())))));
+                }
+            }
+            if (flag) {
+                imsg.appendSibling(nickMsg);
+            }
+        }
     }
 
 }
