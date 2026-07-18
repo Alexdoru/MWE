@@ -16,6 +16,7 @@ import java.util.List;
 public abstract class ConfigGuiButton implements ConfigUIElement {
 
     protected static final int PADDING = 8;
+    protected static final int BUTTON_RIGHT_MARGIN = 20;
 
     protected final Minecraft mc = Minecraft.getMinecraft();
     protected final Field field;
