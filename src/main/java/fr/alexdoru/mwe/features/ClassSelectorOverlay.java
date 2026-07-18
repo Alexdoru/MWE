@@ -23,8 +23,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.opengl.GL11;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Properties;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,21 +42,16 @@ public final class ClassSelectorOverlay {
     private final Minecraft mc = Minecraft.getMinecraft();
     private final ScoreboardParser parser = ScoreboardTracker.getParser();
     private final Map<MWClass, MWSkin> selectedSkins = new EnumMap<>(MWClass.class);
+    private final File configFolder;
+    private UUID loadedUUID;
     private boolean active;
     private boolean dirty;
 
-    public ClassSelectorOverlay() {
-        for (final MWClass value : MWClass.values()) {
-            final MWSkin skin = MWSkin.fromName(value.className);
-            if (skin != null) {
-                this.selectedSkins.put(value, skin);
-            }
-        }
-        // TODO load selected classes from file
+    public ClassSelectorOverlay(File configFolder) {
+        this.configFolder = configFolder;
     }
 
     // TODO add random kit
-
     @SubscribeEvent
     public void onRenderSlot(ContainerSlotRenderEvent event) {
         if (this.active && event.itemStack != null && event.guiContainer instanceof GuiChest && !(event.slot.inventory instanceof InventoryPlayer)) {
@@ -76,7 +77,23 @@ public final class ClassSelectorOverlay {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
+            final boolean prevActive = this.active;
             this.active = this.mc.thePlayer != null && MWEConfig.classSelectorOverlay && parser.isMWEnvironement() && (parser.isPreGameLobby() || !parser.isInMwGame());
+            if (this.active && !prevActive) {
+                final UUID uuid = this.mc.thePlayer.getUniqueID();
+                if (uuid != null && (this.loadedUUID == null || !this.loadedUUID.equals(uuid))) {
+                    this.loadDefaultSkins();
+                    this.loadSkins(uuid);
+                    this.loadedUUID = uuid;
+                    this.dirty = false;
+                }
+            }
+            if (prevActive && !this.active) {
+                if (this.dirty && this.loadedUUID != null) {
+                    this.saveSkins(this.loadedUUID);
+                    this.dirty = false;
+                }
+            }
             if (this.mc.thePlayer != null && this.active && parser.isPreGameLobby()) {
                 final MWSkin skin = MWSkin.ofPlayer(this.mc.thePlayer);
                 if (skin != null && skin.mwClass != null) {
@@ -86,6 +103,58 @@ public final class ClassSelectorOverlay {
                     }
                 }
             }
+        }
+    }
+
+    private void loadDefaultSkins() {
+        for (final MWClass value : MWClass.values()) {
+            final MWSkin skin = MWSkin.fromName(value.className);
+            if (skin != null) {
+                this.selectedSkins.put(value, skin);
+            }
+        }
+    }
+
+    private File getSkinsFile(UUID uuid) {
+        return new File(this.configFolder, "class_selector_" + uuid + ".properties");
+    }
+
+    private void loadSkins(UUID uuid) {
+        final File file = this.getSkinsFile(uuid);
+        if (!file.exists()) {
+            return;
+        }
+        final Properties props = new Properties();
+        try (FileInputStream in = new FileInputStream(file)) {
+            props.load(in);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        for (final MWClass mwClass : MWClass.values()) {
+            final String skinName = props.getProperty(mwClass.name());
+            if (skinName == null) continue;
+            final MWSkin skin = MWSkin.fromName(skinName);
+            if (skin != null) {
+                this.selectedSkins.put(mwClass, skin);
+            }
+        }
+    }
+
+    private void saveSkins(UUID uuid) {
+        if (!this.configFolder.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            this.configFolder.mkdirs();
+        }
+        final File file = this.getSkinsFile(uuid);
+        final Properties props = new Properties();
+        for (final Map.Entry<MWClass, MWSkin> entry : this.selectedSkins.entrySet()) {
+            props.setProperty(entry.getKey().name(), entry.getValue().skinName);
+        }
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            props.store(out, "Class selector skin choices for " + uuid);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

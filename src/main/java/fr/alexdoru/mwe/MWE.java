@@ -55,6 +55,7 @@ public class MWE {
     private IConfigHandler configHandler;
     private FinalKillCounterManager fkManager;
     private RenegadeArrowTracker renegadeTracker;
+    private File configFolder;
 
     public MWE() {
         if (INSTANCE != null) {
@@ -75,6 +76,7 @@ public class MWE {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        this.configFolder = new File(event.getModConfigurationDirectory(), "mwe");
         final File configFile = new File(event.getModConfigurationDirectory(), "mwe.cfg");
         this.configHandler = ConfigLib.newConfigHandler(configFile, "MWE", MWE.version);
         this.configHandler.setConfigTitleRenderer(new MWEConfigTitle());
@@ -102,7 +104,7 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
         MinecraftForge.EVENT_BUS.register(new StrengthParticles());
         MinecraftForge.EVENT_BUS.register(new ScoreboardTracker());
-        MinecraftForge.EVENT_BUS.register(new ClassSelectorOverlay());
+        MinecraftForge.EVENT_BUS.register(new ClassSelectorOverlay(this.configFolder));
         MinecraftForge.EVENT_BUS.register(new NameFormatter.EventHandler());
         MinecraftForge.EVENT_BUS.register(new KeybindingListener());
         MinecraftForge.EVENT_BUS.register(new MegaWallsEndGameStats());
