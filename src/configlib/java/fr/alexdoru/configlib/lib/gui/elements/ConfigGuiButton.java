@@ -16,6 +16,7 @@ import java.util.List;
 public abstract class ConfigGuiButton implements ConfigUIElement {
 
     protected static final int PADDING = 8;
+
     protected final Minecraft mc = Minecraft.getMinecraft();
     protected final Field field;
     private final Method event;
@@ -47,11 +48,12 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
         this.posX = drawX;
         this.posY = drawY;
         GuiUtil.drawBoxWithOutline(drawX, drawY, drawX + boxWidth, drawY + getHeight(), colorPalette.SETTING_BACKGROUND, colorPalette.SETTING_BACKGROUND_BORDER);
-        mc.fontRendererObj.drawStringWithShadow(annotation.name(), drawX + PADDING, drawY + PADDING, colorPalette.SETTING_NAME_TEXT);
+        final int textX = drawX + getLeftPadding();
+        mc.fontRendererObj.drawStringWithShadow(annotation.name(), textX, drawY + PADDING, colorPalette.SETTING_NAME_TEXT);
         if (hasComment) {
             int commentY = drawY + PADDING + mc.fontRendererObj.FONT_HEIGHT + 8; // '8' here represents the vertical space between name and comment (can be different from padding)
             for (final String line : commentToRender) {
-                mc.fontRendererObj.drawStringWithShadow(line, drawX + PADDING, commentY, colorPalette.SETTING_COMMENT_TEXT);
+                mc.fontRendererObj.drawStringWithShadow(line, textX, commentY, colorPalette.SETTING_COMMENT_TEXT);
                 commentY += mc.fontRendererObj.FONT_HEIGHT;
             }
         }
@@ -95,4 +97,6 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     protected void playPressSound() {
         this.mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
     }
+
+    protected int getLeftPadding() { return PADDING; }
 }
