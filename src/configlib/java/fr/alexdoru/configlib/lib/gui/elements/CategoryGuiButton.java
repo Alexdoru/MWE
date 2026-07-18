@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
 
-public class CategoryGuiButton {
+public class CategoryGuiButton implements SizedElement {
 
     private final Minecraft mc = Minecraft.getMinecraft();
     private final ConfigGuiScreen configGui;
@@ -43,6 +43,7 @@ public class CategoryGuiButton {
         return mc.fontRendererObj.getStringWidth(displayname);
     }
 
+    @Override
     public int getHeight() {
         return mc.fontRendererObj.FONT_HEIGHT;
     }

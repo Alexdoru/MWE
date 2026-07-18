@@ -8,6 +8,14 @@ public final class GuiUtil {
 
     public static final int MOUSE_LEFT = 0;
 
+    public static void drawRect(Box box, int color) {
+        Gui.drawRect(box.LEFT, box.TOP, box.RIGHT, box.BOTTOM, color);
+    }
+
+    public static void drawBoxWithOutline(Box box, int boxColor, int borderColor) {
+        GuiUtil.drawBoxWithOutline(box.LEFT, box.TOP, box.RIGHT, box.BOTTOM, boxColor, borderColor);
+    }
+
     public static void drawBoxWithOutline(int left, int top, int right, int bot, int boxColor, int borderColor) {
         drawHorizontalLine(left, right - 1, top, borderColor);
         drawHorizontalLine(left, right - 1, bot - 1, borderColor);

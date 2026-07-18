@@ -83,7 +83,7 @@ public class CommandSquad extends MyAbstractCommand {
         }
         if (args.length >= 2) {
             if (args[0].equalsIgnoreCase("add")) {
-                return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+                return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayers());
             } else if (args[0].equalsIgnoreCase("remove")) {
                 return getListOfStringsMatchingLastWord(args, SquadHandler.getSquad().keySet());
             }
