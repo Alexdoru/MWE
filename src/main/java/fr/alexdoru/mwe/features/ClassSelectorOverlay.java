@@ -208,12 +208,18 @@ public final class ClassSelectorOverlay {
         return 0;
     }
 
-    private void renderIcon(int x, int y, MWSkin skin, int prestiges, int classpoints) { // FIXME ca flicker
+    private void renderIcon(int x, int y, MWSkin skin, int prestiges, int classpoints) {
         final Minecraft mc = Minecraft.getMinecraft();
         GlStateManager.enableDepth();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.pushMatrix();
+        GlStateManager.enableRescaleNormal();
         GlStateManager.enableAlpha();
+        GlStateManager.alphaFunc(516, 0.1F);
+        GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.translate(0, 0, 250F);
+        GlStateManager.disableLighting();
         mc.getTextureManager().bindTexture(skin.getSkin());
         final int headSize = 16;
         Gui.drawScaledCustomSizeModalRect(x, y, 8F, 8F, 8, 8, headSize, headSize, 64.0F, 64.0F);
@@ -238,16 +244,20 @@ public final class ClassSelectorOverlay {
                     classpointColor
             );
         }
+        GlStateManager.disableAlpha();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.disableLighting();
+        GlStateManager.popMatrix();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     @SuppressWarnings("SameParameterValue")
     private void drawTextAt(float x, float y, Minecraft mc, String prestigeText, float scale, int color) {
+        GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, 0);
         GlStateManager.scale(scale, scale, scale);
         mc.fontRendererObj.drawStringWithShadow(prestigeText, 0, 0, color);
-        GlStateManager.scale(1F / scale, 1F / scale, 1F / scale);
-        GlStateManager.translate(-x, -y, 0);
+        GlStateManager.popMatrix();
     }
 
     private String formatPrestiges(int prestiges) {
