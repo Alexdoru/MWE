@@ -104,4 +104,8 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     }
 
     protected int getLeftPadding() { return PADDING; }
+
+    protected final int getMainButtonWidth() {
+        return mc.fontRendererObj.getStringWidth("Disabled") + 9;
+    }
 }
