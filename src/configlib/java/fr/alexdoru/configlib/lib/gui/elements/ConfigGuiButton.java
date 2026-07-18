@@ -33,11 +33,16 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
         this.hasComment = !this.annotation.comment().isEmpty();
     }
 
+    /**
+     * @return The distance between the left-most position of the content (button) and the right side of the rect
+     */
+    protected abstract int getRightSideContentWidth();
+
     @Override
     public void setBoxWidth(int boxWidth) {
         this.boxWidth = boxWidth;
         if (hasComment) {
-            final int wrapWidth = boxWidth - mc.fontRendererObj.getStringWidth(" Disabled ") - 20 - 20;
+            final int wrapWidth = boxWidth - getLeftPadding() - getRightSideContentWidth() - 12; // 20
             this.commentToRender.clear();
             this.commentToRender.addAll(resizeCommentLines(annotation.comment(), wrapWidth, mc));
         }
