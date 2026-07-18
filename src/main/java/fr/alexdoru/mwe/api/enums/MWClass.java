@@ -70,6 +70,11 @@ public enum MWClass {
         }
     }
 
+    public MWClass next() {
+        final MWClass[] values = values();
+        return values[(this.ordinal() + 1) % values.length];
+    }
+
     @Nullable
     public static MWClass fromTag(@NotNull String tag) {
         return FROM_TAG_MAP.get(tag.toLowerCase());

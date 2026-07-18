@@ -12,6 +12,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagList;
@@ -44,19 +45,26 @@ public final class ClassSelectorOverlay {
     private UUID loadedUUID;
     private boolean active;
     private boolean dirty;
+    private int tickCount;
+    private MWSkin randomSkin = MWSkin.COW$COW;
 
     public ClassSelectorOverlay(File configFolder) {
         this.configFolder = configFolder;
     }
 
-    // TODO add random kit
     @SubscribeEvent
     public void onRenderSlot(ContainerSlotRenderEvent event) {
         if (this.active && event.itemStack != null && event.guiContainer instanceof GuiChest && !(event.slot.inventory instanceof InventoryPlayer)) {
             final Item item = event.itemStack.getItem();
             if (item == null) return;
+            if (!event.itemStack.hasDisplayName()) return;
+            if (this.randomSkin != null && this.isRandomItem(event.itemStack)) {
+                this.renderIcon(event.slot.xDisplayPosition, event.slot.yDisplayPosition, this.randomSkin, 0, 0);
+                event.setCanceled(true);
+                return;
+            }
             final MWClass mwClass = MWClass.fromItem(item);
-            if (mwClass == null || !event.itemStack.hasDisplayName()) return;
+            if (mwClass == null) return;
             final String displayName = StringUtil.removeFormattingCodes(event.itemStack.getDisplayName());
             final Matcher matcher = DISPLAY_NAME_PATTERN.matcher(displayName);
             if (matcher.find()) {
@@ -70,6 +78,10 @@ public final class ClassSelectorOverlay {
                 event.setCanceled(true);
             }
         }
+    }
+
+    private boolean isRandomItem(ItemStack itemStack) {
+        return itemStack.getItem() == Items.nether_star && (itemStack.getDisplayName()).contains("Random!");
     }
 
     @SubscribeEvent
@@ -98,6 +110,15 @@ public final class ClassSelectorOverlay {
                     final MWSkin oldValue = this.selectedSkins.put(skin.mwClass, skin);
                     if (oldValue != skin) {
                         this.dirty = true;
+                    }
+                }
+            }
+            if (this.active) {
+                this.tickCount++;
+                if (this.tickCount % 5 == 0) {
+                    final MWSkin nextSkin = this.selectedSkins.get(this.randomSkin.mwClass.next());
+                    if (nextSkin != null) {
+                        this.randomSkin = nextSkin;
                     }
                 }
             }
