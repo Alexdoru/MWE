@@ -28,17 +28,17 @@ public class GuiChatHook_TabCompletePlayers {
             if (isCommand) {
                 final String lowerCase = leftOfCursor.toLowerCase();
                 if (lowerCase.startsWith("/msg ") || lowerCase.startsWith("/w ") || lowerCase.startsWith("/r ") || ScoreboardTracker.isPrepPhase() && (lowerCase.startsWith("/shout ") || lowerCase.startsWith("/cr ") || lowerCase.startsWith("/chatreport "))) {
-                    tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+                    tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAlias());
                 } else if (lowerCase.startsWith("/report ")) {
                     tabCompleteReport(args);
                 }
             } else {
-                tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+                tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAlias());
             }
             return original;
         } else {
             ClientCommandHandler.instance.latestAutoComplete = null;
-            tabCompleteOptions = TabCompletionUtil.getOnlinePlayersByName();
+            tabCompleteOptions = TabCompletionUtil.getPlayersAndAlias();
             new DelayedTask(() -> {
                 if (Minecraft.getMinecraft().currentScreen instanceof GuiChat && tabCompleteOptions != null) {
                     ((GuiChat) Minecraft.getMinecraft().currentScreen).onAutocompleteResponse(tabCompleteOptions.toArray(new String[0]));
@@ -62,13 +62,13 @@ public class GuiChatHook_TabCompletePlayers {
         if (args.length == 2) {
             if (ScoreboardTracker.isInMwGame()) {
                 if (ScoreboardTracker.isPrepPhase()) {
-                    tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getOnlinePlayersByName());
+                    tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAlias());
                     return;
                 } else {
                     final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
                     if (fkCounter == null) return;
                     final List<String> playersInThisGame = fkCounter.getPlayersInThisGame();
-                    playersInThisGame.removeAll(TabCompletionUtil.getOnlinePlayersByName());
+                    playersInThisGame.removeAll(TabCompletionUtil.getPlayersAndAlias());
                     tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, playersInThisGame);
                 }
             }

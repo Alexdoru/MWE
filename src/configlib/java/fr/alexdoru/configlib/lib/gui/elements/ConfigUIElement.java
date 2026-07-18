@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public interface ConfigUIElement {
+public interface ConfigUIElement extends SizedElement {
 
     void setBoxWidth(int boxWidth);
 
@@ -16,8 +16,6 @@ public interface ConfigUIElement {
     boolean mouseClicked(int mouseX, int mouseY, int mouseButton) throws IllegalAccessException;
 
     default boolean mouseReleased(int mouseX, int mouseY, int mouseButton) {return false;}
-
-    int getHeight();
 
     String getCategory();
 
