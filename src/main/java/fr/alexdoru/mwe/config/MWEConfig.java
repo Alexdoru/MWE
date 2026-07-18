@@ -787,6 +787,12 @@ public final class MWEConfig {
     public static final RendererPosition warcryHUDPosition = new RendererPosition(true, 0.65d, 1d);
 
     @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Class in lobby HUD",
+            comment = "Displays the amount of each class selected by the players in the current mega walls queue")
+    public static final RendererPosition classInLobbyHUDPosition = new RendererPosition(true, 0.15d, 0.15d);
+
+    @ConfigProperty(
             category = FINAL_KILL_COUNTER, subCategory = "HUD",
             name = "Final Kill Counter HUD",
             comment = "Displays the HUD of the final kill counter\n"
