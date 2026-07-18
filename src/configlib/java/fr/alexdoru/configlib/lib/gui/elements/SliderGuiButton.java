@@ -19,7 +19,7 @@ public class SliderGuiButton extends ConfigGuiButton {
     private int plusButtonX, plusButtonY;
     private int sliderIncrement;
     private final boolean isIntValue;
-    private boolean isPourcentage;
+    private boolean isPercentage;
     private final int minValue, maxValue;
     private int sliderValueI;
     private double sliderValueD;
@@ -38,7 +38,7 @@ public class SliderGuiButton extends ConfigGuiButton {
             isIntValue = false;
             sliderValueD = (double) field.get(null);
             if (minValue == 0 && maxValue == 1) {
-                isPourcentage = true;
+                isPercentage = true;
                 sliderValueI = (int) ((double) field.get(null) * 100d);
                 sliderIncrement = MathHelper.clamp_int((SLIDER_WIDTH - 1) * (sliderValueI) / 100, 0, SLIDER_WIDTH - 1);
             } else {
@@ -87,7 +87,7 @@ public class SliderGuiButton extends ConfigGuiButton {
         if (isIntValue) {
             valueText = String.valueOf(sliderValueI);
         } else {
-            if (isPourcentage) {
+            if (isPercentage) {
                 valueText = MathHelper.floor_double(sliderValueI) + "%";
             } else {
                 valueText = String.format("%.2f", sliderValueD);
@@ -143,7 +143,7 @@ public class SliderGuiButton extends ConfigGuiButton {
                 if (prevValue != sliderValueI) {
                     invokeConfigEvent();
                 }
-            } else if (isPourcentage) {
+            } else if (isPercentage) {
                 final int prevValue = sliderValueI;
                 sliderValueI = MathHelper.clamp_int(sliderIncrement * 100 / (SLIDER_WIDTH - 1), 0, 100);
                 field.setDouble(null, MathHelper.clamp_double(sliderValueI / 100d, 0, 1));
@@ -170,7 +170,7 @@ public class SliderGuiButton extends ConfigGuiButton {
                 sliderValueI = MathHelper.clamp_int(sliderValueI + valueIncrement, minValue, maxValue);
                 sliderIncrement = MathHelper.clamp_int((SLIDER_WIDTH - 1) * (sliderValueI - minValue) / (maxValue - minValue), 0, SLIDER_WIDTH - 1);
                 field.setInt(null, sliderValueI);
-            } else if (isPourcentage) {
+            } else if (isPercentage) {
                 sliderValueI = MathHelper.clamp_int(sliderValueI + valueIncrement, 0, 100);
                 sliderIncrement = MathHelper.clamp_int((SLIDER_WIDTH - 1) * sliderValueI / (100), 0, SLIDER_WIDTH - 1);
                 field.setDouble(null, MathHelper.clamp_double(sliderValueI / 100d, 0, 1));
