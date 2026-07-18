@@ -35,7 +35,7 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnusedReturnValue"})
 public final class MWEApi {
 
     private MWEApi() {}
@@ -463,6 +463,13 @@ public final class MWEApi {
          */
         public static <V> Future<V> queueAsyncTask(Callable<V> c) {
             return MultithreadingUtil.addTaskToQueue(c);
+        }
+
+        /**
+         * Schedules a task to run asynchronously on a single threaded executor
+         */
+        public static void queueIOTask(Runnable r) {
+            MultithreadingUtil.queueIOTask(r);
         }
 
         /**

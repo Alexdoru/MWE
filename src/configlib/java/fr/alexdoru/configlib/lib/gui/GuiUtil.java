@@ -17,11 +17,15 @@ public final class GuiUtil {
     }
 
     public static void drawBoxWithOutline(int left, int top, int right, int bot, int boxColor, int borderColor) {
-        drawHorizontalLine(left, right - 1, top, borderColor);
-        drawHorizontalLine(left, right - 1, bot - 1, borderColor);
-        drawVerticalLine(left, top - 1, bot - 1, borderColor);
-        drawVerticalLine(right - 1, top - 1, bot - 1, borderColor);
+        GuiUtil.drawOutline(left, top, right, bot, borderColor);
         Gui.drawRect(left + 1, top + 1, right - 1, bot - 1, boxColor);
+    }
+
+    public static void drawOutline(int left, int top, int right, int bot, int borderColor) {
+        GuiUtil.drawHorizontalLine(left, right - 1, top, borderColor);
+        GuiUtil.drawHorizontalLine(left, right - 1, bot - 1, borderColor);
+        GuiUtil.drawVerticalLine(left, top - 1, bot - 1, borderColor);
+        GuiUtil.drawVerticalLine(right - 1, top - 1, bot - 1, borderColor);
     }
 
     public static void drawHorizontalLine(int startX, int endX, int y, int color) {

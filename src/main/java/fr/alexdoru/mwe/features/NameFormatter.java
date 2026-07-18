@@ -111,6 +111,7 @@ public final class NameFormatter {
     }
 
     public static void updatePlayerDataAndEntityData(NetworkPlayerInfo netInfo) {
+        if (netInfo == null) return;
         ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(updatePlayerData(netInfo.getGameProfile()).displayName);
         final EntityPlayer player = getPlayerEntityByUUID(netInfo.getGameProfile().getId());
         if (player != null) {

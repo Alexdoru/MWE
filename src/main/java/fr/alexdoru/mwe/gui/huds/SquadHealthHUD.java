@@ -69,8 +69,7 @@ public class SquadHealthHUD extends AbstractRenderer {
         }
         GlStateManager.pushMatrix();
         {
-            final boolean flag = mc.isIntegratedServerRunning() || mc.getNetHandler().getNetworkManager().getIsencrypted();
-            final int maxLineWidth = (flag ? 9 : 0) + maxNameWidth + maxFinalWidth + maxScoreWidth;
+            final int maxLineWidth = 9 + maxNameWidth + maxFinalWidth + maxScoreWidth;
             final int listSize = playerlistToRender.size();
             final int hudWidth = maxLineWidth + 2;
             final int hudHight = listSize * 9 + 1;
@@ -88,15 +87,13 @@ public class SquadHealthHUD extends AbstractRenderer {
                 GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
                 final NetworkPlayerInfo netInfo = playerlistToRender.get(i);
                 final GameProfile gameprofile = netInfo.getGameProfile();
-                if (flag) {
-                    final EntityPlayer entityplayer = mc.theWorld.getPlayerEntityByUUID(gameprofile.getId());
-                    mc.getTextureManager().bindTexture(netInfo.getLocationSkin());
-                    Gui.drawScaledCustomSizeModalRect(xDrawingPos, yDrawingPos, 8, 8, 8, 8, 8, 8, 64.0F, 64.0F);
-                    if (entityplayer == null || entityplayer.isWearing(EnumPlayerModelParts.HAT)) {
-                        Gui.drawScaledCustomSizeModalRect(xDrawingPos, yDrawingPos, 40, 8, 8, 8, 8, 8, 64.0F, 64.0F);
-                    }
-                    xDrawingPos += 9;
+                final EntityPlayer entityplayer = mc.theWorld.getPlayerEntityByUUID(gameprofile.getId());
+                mc.getTextureManager().bindTexture(netInfo.getLocationSkin());
+                Gui.drawScaledCustomSizeModalRect(xDrawingPos, yDrawingPos, 8, 8, 8, 8, 8, 8, 64.0F, 64.0F);
+                if (entityplayer == null || entityplayer.isWearing(EnumPlayerModelParts.HAT)) {
+                    Gui.drawScaledCustomSizeModalRect(xDrawingPos, yDrawingPos, 40, 8, 8, 8, 8, 8, 64.0F, 64.0F);
                 }
+                xDrawingPos += 9;
                 mc.fontRendererObj.drawStringWithShadow(this.getPlayerName(netInfo), (float) xDrawingPos, (float) yDrawingPos, 0xFFFFFF);
                 final int xStartFinalDrawingPos = xDrawingPos + maxNameWidth + 1;
                 final int xStartScoreDrawingPos = xStartFinalDrawingPos + maxFinalWidth;

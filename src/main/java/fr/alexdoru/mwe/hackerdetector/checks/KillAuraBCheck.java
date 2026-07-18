@@ -31,7 +31,7 @@ public class KillAuraBCheck extends Check {
 
     @Override
     public boolean canSendReport() {
-        return true;
+        return false;
     }
 
     @Override
