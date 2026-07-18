@@ -39,7 +39,7 @@ public class RendererGuiButton extends ConfigGuiButton {
 
     @Override
     public void setBoxWidth(int boxWidth) {
-        super.setBoxWidth(boxWidth - mc.fontRendererObj.getStringWidth("Reset Position") - 10);
+        super.setBoxWidth(boxWidth);
         this.boxWidth = boxWidth;
     }
 
