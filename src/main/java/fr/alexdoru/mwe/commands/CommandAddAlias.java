@@ -11,6 +11,7 @@ import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
 import fr.alexdoru.mwe.http.requests.HypixelPlayerData;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
+import fr.alexdoru.mwe.utils.NetInfoOrdering;
 import fr.alexdoru.mwe.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -47,21 +48,21 @@ public class CommandAddAlias extends MyAbstractCommand {
             this.listAlias(args);
             return;
         }
-        if (args.length != 2) {
+        if (args.length == 2) {
+            if (args[0].equalsIgnoreCase("remove")) {
+                this.removeAlias(args[1]);
+            } else {
+                this.addAlias(args[0], args[1]);
+            }
+        } else {
             this.printCommandHelp();
-            return;
         }
-        if (args[0].equalsIgnoreCase("remove")) {
-            this.removeAlias(args[1]);
-            return;
-        }
-        this.addAlias(args);
     }
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 2 && args[0].equalsIgnoreCase("remove")) {
-            return getListOfStringsMatchingLastWord(args, AliasData.getAllNames());
+            return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayers());
         }
         final List<String> onlinePlayersByName = TabCompletionUtil.getPlayers();
         onlinePlayersByName.addAll(Arrays.asList("list", "remove"));
@@ -89,6 +90,7 @@ public class CommandAddAlias extends MyAbstractCommand {
     private void listAlias(String[] args) {
 
         if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
+            ChatUtil.printApikeySetupInfo();
             return;
         }
 
@@ -178,7 +180,7 @@ public class CommandAddAlias extends MyAbstractCommand {
 
     private void listAliasInLobby() {
         boolean found = false;
-        for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+        for (final NetworkPlayerInfo netInfo : NetInfoOrdering.vanillaSortingCopyOf(Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap())) {
             if (AliasData.getAlias(netInfo.getGameProfile().getId(), netInfo.getGameProfile().getName()) != null) {
                 if (!found) {
                     ChatUtil.addChatMessage(EnumChatFormatting.GREEN + ChatUtil.bar());
@@ -195,41 +197,34 @@ public class CommandAddAlias extends MyAbstractCommand {
         }
     }
 
-    private void addAlias(String[] args) {
-        final String playername = args[0];
-        final String alias = args[1];
+    private void addAlias(String playername, String alias) {
         final Minecraft mc = Minecraft.getMinecraft();
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
-                if (NameFormatter.isRealPlayer(netInfo.getGameProfile().getId())) {
-                    this.addAlias(
-                            netInfo.getGameProfile().getId(),
-                            netInfo.getGameProfile().getName(),
-                            alias,
-                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()));
-                } else if (NameFormatter.isNickedPlayer(netInfo.getGameProfile().getId())) {
-                    this.addAlias(
-                            null,
-                            netInfo.getGameProfile().getName(),
-                            alias,
-                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()));
-                }
+            if (NameFormatter.isNickedPlayer(netInfo.getGameProfile().getId()) && netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
+                this.addAlias(
+                        null,
+                        netInfo.getGameProfile().getName(),
+                        alias,
+                        ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName())
+                );
                 return;
             }
         }
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
                 final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
+                String formattedName = null;
                 if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
                     try {
                         final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(playerID.getId()));
                         if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
-                            // real player
-                            mc.addScheduledTask(() -> this.addAlias(playerID.getId(), playerID.getName(), alias, loginData.getFormattedName()));
-                            return;
+                            formattedName = loginData.getFormattedName();
                         }
                     } catch (ApiException ignored) {}
                 }
+                final String finalFormattedName = formattedName;
+                mc.addScheduledTask(() -> this.addAlias(playerID.getId(), playerID.getName(), alias, finalFormattedName));
+                return;
             } catch (ApiException ignored) {}
             // nicked player
             mc.addScheduledTask(() -> this.addAlias(null, playername, alias, null));
@@ -254,34 +249,31 @@ public class CommandAddAlias extends MyAbstractCommand {
     private void removeAlias(String playername) {
         final Minecraft mc = Minecraft.getMinecraft();
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
+            if (NameFormatter.isNickedPlayer(netInfo.getGameProfile().getId()) && netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
                 if (NameFormatter.isRealPlayer(netInfo.getGameProfile().getId())) {
-                    this.removeAlias(
-                            netInfo.getGameProfile().getId(),
-                            netInfo.getGameProfile().getName(),
-                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()));
-                } else if (NameFormatter.isNickedPlayer(netInfo.getGameProfile().getId())) {
                     this.removeAlias(
                             null,
                             netInfo.getGameProfile().getName(),
-                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()));
+                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName())
+                    );
+                    return;
                 }
-                return;
             }
         }
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
                 final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
+                String formattedName = null;
                 if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
                     try {
                         final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(playerID.getId()));
                         if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
-                            // real player
-                            mc.addScheduledTask(() -> this.removeAlias(playerID.getId(), playerID.getName(), loginData.getFormattedName()));
-                            return;
+                            formattedName = loginData.getFormattedName();
                         }
                     } catch (ApiException ignored) {}
                 }
+                final String finalFormattedName = formattedName;
+                mc.addScheduledTask(() -> this.removeAlias(playerID.getId(), playerID.getName(), finalFormattedName));
             } catch (ApiException ignored) {}
             // nicked player
             mc.addScheduledTask(() -> this.removeAlias(null, playername, null));
