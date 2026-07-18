@@ -6,10 +6,7 @@ import fr.alexdoru.mwe.api.events.ContainerSlotRenderEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardParser;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import fr.alexdoru.mwe.utils.ColorUtil;
-import fr.alexdoru.mwe.utils.ItemStackUtil;
-import fr.alexdoru.mwe.utils.RenderHelper;
-import fr.alexdoru.mwe.utils.StringUtil;
+import fr.alexdoru.mwe.utils.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiChest;
@@ -21,6 +18,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
 import java.io.File;
@@ -82,16 +80,16 @@ public final class ClassSelectorOverlay {
             if (this.active && !prevActive) {
                 final UUID uuid = this.mc.thePlayer.getUniqueID();
                 if (uuid != null && (this.loadedUUID == null || !this.loadedUUID.equals(uuid))) {
-                    this.loadDefaultSkins();
-                    this.loadSkins(uuid);
                     this.loadedUUID = uuid;
                     this.dirty = false;
+                    this.loadDefaultSkins();
+                    this.loadSkinsAsync(uuid);
                 }
             }
             if (prevActive && !this.active) {
                 if (this.dirty && this.loadedUUID != null) {
-                    this.saveSkins(this.loadedUUID);
                     this.dirty = false;
+                    this.saveSkinsAsync(this.loadedUUID);
                 }
             }
             if (this.mc.thePlayer != null && this.active && parser.isPreGameLobby()) {
@@ -115,47 +113,59 @@ public final class ClassSelectorOverlay {
         }
     }
 
-    private File getSkinsFile(UUID uuid) {
+    private File getSkinsFile(@NotNull UUID uuid) {
         return new File(this.configFolder, "class_selector_" + uuid + ".properties");
     }
 
-    private void loadSkins(UUID uuid) {
-        final File file = this.getSkinsFile(uuid);
-        if (!file.exists()) {
-            return;
-        }
-        final Properties props = new Properties();
-        try (FileInputStream in = new FileInputStream(file)) {
-            props.load(in);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        for (final MWClass mwClass : MWClass.values()) {
-            final String skinName = props.getProperty(mwClass.name());
-            if (skinName == null) continue;
-            final MWSkin skin = MWSkin.fromName(skinName);
-            if (skin != null) {
-                this.selectedSkins.put(mwClass, skin);
+    private void loadSkinsAsync(@NotNull UUID uuid) {
+        MultithreadingUtil.queueIOTask(() -> {
+            final File file = this.getSkinsFile(uuid);
+            if (!file.exists()) {
+                return;
             }
-        }
+            final Properties props = new Properties();
+            try (FileInputStream in = new FileInputStream(file)) {
+                props.load(in);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+            final Map<MWClass, MWSkin> map = new EnumMap<>(MWClass.class);
+            for (final MWClass mwClass : MWClass.values()) {
+                final String skinName = props.getProperty(mwClass.name());
+                if (skinName == null) continue;
+                final MWSkin skin = MWSkin.fromName(skinName);
+                if (skin != null) {
+                    map.put(mwClass, skin);
+                }
+            }
+            this.mc.addScheduledTask(() -> {
+                if (uuid.equals(this.loadedUUID)) {
+                    this.dirty = false;
+                    this.selectedSkins.putAll(map);
+                }
+            });
+        });
     }
 
-    private void saveSkins(UUID uuid) {
-        if (!this.configFolder.exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            this.configFolder.mkdirs();
-        }
-        final File file = this.getSkinsFile(uuid);
-        final Properties props = new Properties();
-        for (final Map.Entry<MWClass, MWSkin> entry : this.selectedSkins.entrySet()) {
-            props.setProperty(entry.getKey().name(), entry.getValue().skinName);
-        }
-        try (FileOutputStream out = new FileOutputStream(file)) {
-            props.store(out, "Class selector skin choices for " + uuid);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void saveSkinsAsync(@NotNull UUID uuid) {
+        final Map<MWClass, MWSkin> snapshot = new EnumMap<>(this.selectedSkins);
+        MultithreadingUtil.queueIOTask(() -> {
+            if (!this.configFolder.exists()) {
+                //noinspection ResultOfMethodCallIgnored
+                this.configFolder.mkdirs();
+            }
+            final File file = this.getSkinsFile(uuid);
+            final Properties props = new Properties();
+            for (final Map.Entry<MWClass, MWSkin> entry : snapshot.entrySet()) {
+                props.setProperty(entry.getKey().name(), entry.getValue().skinName);
+            }
+            try (FileOutputStream out = new FileOutputStream(file)) {
+                props.store(out, "Class selector skin choices for " + uuid);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private int getClasspoints(ItemStack itemStack) {
