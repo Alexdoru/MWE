@@ -27,6 +27,7 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     protected final boolean hasComment;
     protected int boxWidth;
     protected int posX, posY;
+    protected int contentLeft;
 
     protected ConfigGuiButton(Field field, Method event, ConfigProperty annotation) {
         this.field = field;
@@ -54,7 +55,9 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         this.posX = drawX;
         this.posY = drawY;
-        GuiUtil.drawBoxWithOutline(drawX, drawY, drawX + boxWidth, drawY + getHeight(), colorPalette.SETTING_BACKGROUND, colorPalette.SETTING_BACKGROUND_BORDER);
+        final int right = drawX + boxWidth;
+        this.contentLeft = right - getRightSideContentWidth();
+        GuiUtil.drawBoxWithOutline(drawX, drawY, right, drawY + getHeight(), colorPalette.SETTING_BACKGROUND, colorPalette.SETTING_BACKGROUND_BORDER);
         final int textX = drawX + getLeftPadding();
         mc.fontRendererObj.drawStringWithShadow(annotation.name(), textX, drawY + PADDING, colorPalette.SETTING_NAME_TEXT);
         if (hasComment) {
