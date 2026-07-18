@@ -5,6 +5,7 @@ import fr.alexdoru.configlib.api.ConfigProperty;
 import fr.alexdoru.configlib.lib.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 
 import java.lang.reflect.Field;
@@ -112,5 +113,9 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
 
     protected final int getMainButtonWidth() {
         return mc.fontRendererObj.getStringWidth("Disabled") + 9;
+    }
+
+    protected static String getBooleanText(boolean value) {
+        return value ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled";
     }
 }
