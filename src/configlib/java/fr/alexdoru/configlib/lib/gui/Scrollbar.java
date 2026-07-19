@@ -4,6 +4,9 @@ import fr.alexdoru.configlib.api.ColorPalette;
 
 public final class Scrollbar {
 
+    public static final int SCROLL_STEP = 180;
+    public static final int SCROLL_CONSUMED_PER_FRAME = 12;
+
     private int scroll;
     private int scrollDirection;
     private int amountToScroll;
@@ -23,7 +26,7 @@ public final class Scrollbar {
         if (amountToScroll > 0) {
             final long time = System.currentTimeMillis();
             if (time - lastScrollTime > 1) {
-                final int step = Math.min(amountToScroll, Math.max(3, amountToScroll / 8));
+                final int step = Math.min(amountToScroll, Math.max(3, amountToScroll / SCROLL_CONSUMED_PER_FRAME));
                 this.scroll(scrollDirection * step, contentHeight, boxHeight);
                 amountToScroll -= step;
                 lastScrollTime = time;

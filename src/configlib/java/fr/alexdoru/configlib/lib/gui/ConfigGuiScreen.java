@@ -320,7 +320,7 @@ public class ConfigGuiScreen extends GuiScreen {
             final int mouseX = Mouse.getEventX() * width / mc.displayWidth;
             final int mouseY = height - Mouse.getEventY() * height / mc.displayHeight - 1;
             final int direction = wheel > 0 ? 1 : -1;
-            final int amount = Math.min(Math.abs(wheel) * 2, 240);
+            final int amount = Math.min(Math.abs(wheel) * 2, Scrollbar.SCROLL_STEP);
             if (CATEGORY_BOX.isMouseInBox(mouseX, mouseY)) {
                 this.categoryScrollbar.scheduleScroll(direction, amount);
             } else if (CONFIG_BOX.isMouseInBox(mouseX, mouseY)) {
