@@ -5,7 +5,9 @@
   <img src="https://github.com/Alexdoru/MWE/actions/workflows/build.yml/badge.svg" alt="Build Status">
 </p>
 
-**This is a mod for Minecraft Forge 1.8.9 that contains numerous features and improvements for pvp players and for Hypixel's Mega Walls. Use `/mwe` to open the config menu.**
+<p align="center"><strong>This is a mod for Minecraft Forge 1.8.9 that contains numerous features and improvements for vanilla minecraft, pvp players and for Hypixel's Mega Walls. Use `/mwe` to open the config menu.</strong></p>
+
+<p align="center"><strong>This mod is build with performance in mind, it does not affect FPS and can be used without concerns by players that do not play Mega Walls.</strong></p>
 
 ## Download
 
