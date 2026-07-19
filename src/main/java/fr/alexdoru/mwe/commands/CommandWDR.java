@@ -3,8 +3,8 @@ package fr.alexdoru.mwe.commands;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.features.FinalKillCounter;
-import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.features.PartyDetection;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.cache.CachedHypixelPlayerData;
@@ -108,7 +108,7 @@ public class CommandWDR extends MyAbstractCommand {
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
                 final UUID uuid = netInfo.getGameProfile().getId();
-                if (NameFormatter.isNickedPlayer(uuid) || NameFormatter.isRealPlayer(uuid)) {
+                if (PlayerDataManager.isNickedPlayer(uuid) || PlayerDataManager.isRealPlayer(uuid)) {
                     addPlayerToReportList(
                             uuid,
                             netInfo.getGameProfile().getName(),
@@ -142,7 +142,7 @@ public class CommandWDR extends MyAbstractCommand {
         final boolean added = WdrData.addReport(uuid, playername, cheats);
         WdrData.saveReportedPlayers();
         if (added) {
-            final boolean isNicked = !NameFormatter.isRealPlayer(uuid);
+            final boolean isNicked = !PlayerDataManager.isRealPlayer(uuid);
             ChatUtil.addChatMessage(
                     EnumChatFormatting.GREEN + "You reported " + (isNicked ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
                             + EnumChatFormatting.RED + (formattedName == null ? playername : EnumChatFormatting.RESET + formattedName) + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"

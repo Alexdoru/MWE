@@ -6,7 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.api.events.ReportListEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.features.NameFormatter;
+import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.utils.UUIDUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
@@ -46,7 +46,7 @@ public class WdrData {
     }
 
     public static WDR getWdr(UUID uuid, String playername) {
-        if (NameFormatter.isRealPlayer(uuid)) {
+        if (PlayerDataManager.isRealPlayer(uuid)) {
             return uuidMap.get(uuid);
         }
         return nickMap.get(playername);
@@ -67,10 +67,10 @@ public class WdrData {
             refreshName = wdr.addCheat(cheat);
         }
         if (refreshName) {
-            if (NameFormatter.isRealPlayer(uuid)) {
-                NameFormatter.updatePlayerDataAndEntityData(uuid);
+            if (PlayerDataManager.isRealPlayer(uuid)) {
+                PlayerDataManager.updatePlayerDataAndEntityData(uuid);
             } else {
-                NameFormatter.updatePlayerDataAndEntityData(playername);
+                PlayerDataManager.updatePlayerDataAndEntityData(playername);
             }
         }
         dirty = true;
@@ -92,10 +92,10 @@ public class WdrData {
         } else {
             wdr.addCheats(cheats);
         }
-        if (NameFormatter.isRealPlayer(uuid)) {
-            NameFormatter.updatePlayerDataAndEntityData(uuid);
+        if (PlayerDataManager.isRealPlayer(uuid)) {
+            PlayerDataManager.updatePlayerDataAndEntityData(uuid);
         } else {
-            NameFormatter.updatePlayerDataAndEntityData(playername);
+            PlayerDataManager.updatePlayerDataAndEntityData(playername);
         }
         dirty = true;
         if (added) {
@@ -105,7 +105,7 @@ public class WdrData {
     }
 
     private static boolean put(UUID uuid, String playername, WDR wdr) {
-        if (NameFormatter.isRealPlayer(uuid)) {
+        if (PlayerDataManager.isRealPlayer(uuid)) {
             uuidMap.put(uuid, wdr);
             return true;
         }
@@ -123,10 +123,10 @@ public class WdrData {
         WDR removed = null;
         if (uuid != null) {
             removed = uuidMap.remove(uuid);
-            NameFormatter.updatePlayerDataAndEntityData(uuid);
+            PlayerDataManager.updatePlayerDataAndEntityData(uuid);
         } else if (playername != null) {
             removed = nickMap.remove(playername);
-            NameFormatter.updatePlayerDataAndEntityData(playername);
+            PlayerDataManager.updatePlayerDataAndEntityData(playername);
         }
         if (removed != null) {
             MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.REMOVED, uuid, playername, removed));

@@ -3,7 +3,8 @@ package fr.alexdoru.mwe.nocheaters;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.WarningChatComponent;
-import fr.alexdoru.mwe.features.NameFormatter;
+import fr.alexdoru.mwe.data.NameFormatter;
+import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.utils.DateUtil;
 import fr.alexdoru.mwe.utils.NetInfoOrdering;
 import net.minecraft.client.Minecraft;
@@ -40,7 +41,7 @@ public class WarningMessages {
     }
 
     public static void printWarningMessage(UUID uuid, Team team, String playername, WDR wdr) {
-        final String wdrmapKey = NameFormatter.isRealPlayer(uuid) ? uuid.toString() : playername;
+        final String wdrmapKey = PlayerDataManager.isRealPlayer(uuid) ? uuid.toString() : playername;
         final IChatComponent imsg = new WarningChatComponent(playername, RED + "Warning : ")
                 .appendSibling(getPlayernameWithHoverText(null, team, playername, wdrmapKey, wdr))
                 .appendText(GRAY + " joined, Cheats :")

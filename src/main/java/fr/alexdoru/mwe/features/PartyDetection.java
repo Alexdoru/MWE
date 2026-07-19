@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.features;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.StringUtil;

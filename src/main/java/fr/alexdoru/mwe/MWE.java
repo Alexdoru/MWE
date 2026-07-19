@@ -8,6 +8,7 @@ import fr.alexdoru.mwe.chat.ChatListener;
 import fr.alexdoru.mwe.commands.*;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.config.MWEConfigTitle;
+import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.*;
 import fr.alexdoru.mwe.gui.MWERenderers;
@@ -105,7 +106,7 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(new StrengthParticles());
         MinecraftForge.EVENT_BUS.register(new ScoreboardTracker());
         MinecraftForge.EVENT_BUS.register(new ClassSelectorOverlay(this.configFolder));
-        MinecraftForge.EVENT_BUS.register(new NameFormatter.EventHandler());
+        MinecraftForge.EVENT_BUS.register(new PlayerDataManager.EventHandler());
         MinecraftForge.EVENT_BUS.register(new KeybindingListener());
         MinecraftForge.EVENT_BUS.register(new MegaWallsEndGameStats());
 

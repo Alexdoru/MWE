@@ -3,6 +3,7 @@ package fr.alexdoru.mwe.features;
 import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.api.events.KillCounterEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,7 +36,7 @@ public final class StrengthParticles {
             return;
         }
 
-        final EntityPlayer player = NameFormatter.getPlayerEntityByName(event.killer);
+        final EntityPlayer player = PlayerDataManager.getPlayerEntityByName(event.killer);
         if (player == null) {
             return;
         }

@@ -3,7 +3,8 @@ package fr.alexdoru.mwe.commands;
 import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.data.AliasData;
-import fr.alexdoru.mwe.features.NameFormatter;
+import fr.alexdoru.mwe.data.NameFormatter;
+import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.cache.CachedHypixelPlayerData;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
@@ -200,7 +201,7 @@ public class CommandAddAlias extends MyAbstractCommand {
     private void addAlias(String playername, String alias) {
         final Minecraft mc = Minecraft.getMinecraft();
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            if (NameFormatter.isNickedPlayer(netInfo.getGameProfile().getId()) && netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
+            if (PlayerDataManager.isNickedPlayer(netInfo.getGameProfile().getId()) && netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
                 this.addAlias(
                         null,
                         netInfo.getGameProfile().getName(),
@@ -249,8 +250,8 @@ public class CommandAddAlias extends MyAbstractCommand {
     private void removeAlias(String playername) {
         final Minecraft mc = Minecraft.getMinecraft();
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            if (NameFormatter.isNickedPlayer(netInfo.getGameProfile().getId()) && netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
-                if (NameFormatter.isRealPlayer(netInfo.getGameProfile().getId())) {
+            if (PlayerDataManager.isNickedPlayer(netInfo.getGameProfile().getId()) && netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
+                if (PlayerDataManager.isRealPlayer(netInfo.getGameProfile().getId())) {
                     this.removeAlias(
                             null,
                             netInfo.getGameProfile().getName(),

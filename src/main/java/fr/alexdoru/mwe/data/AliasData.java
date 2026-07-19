@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import fr.alexdoru.mwe.api.events.AliasEvent;
-import fr.alexdoru.mwe.features.NameFormatter;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +28,7 @@ public class AliasData {
 
     @Nullable
     public static String getAlias(@Nullable UUID id, @Nullable String playername) {
-        if (id != null && NameFormatter.isRealPlayer(id)) {
+        if (id != null && PlayerDataManager.isRealPlayer(id)) {
             return aliasMap.get(id.toString().replace("-", ""));
         } else if (playername != null) {
             return aliasMap.get(playername);
@@ -40,13 +39,13 @@ public class AliasData {
     public static void putAlias(@Nullable UUID id, @Nullable String playername, String alias) {
         String prevAlias = null;
         boolean added = false;
-        if (id != null && NameFormatter.isRealPlayer(id)) {
+        if (id != null && PlayerDataManager.isRealPlayer(id)) {
             prevAlias = aliasMap.put(id.toString().replace("-", ""), alias);
-            NameFormatter.updatePlayerDataAndEntityData(id);
+            PlayerDataManager.updatePlayerDataAndEntityData(id);
             added = true;
         } else if (playername != null) {
             prevAlias = aliasMap.put(playername, alias);
-            NameFormatter.updatePlayerDataAndEntityData(playername);
+            PlayerDataManager.updatePlayerDataAndEntityData(playername);
             added = true;
         }
         if (added) {
@@ -63,12 +62,12 @@ public class AliasData {
      */
     public static boolean removeAlias(@Nullable UUID id, @Nullable String playername) {
         String removed = null;
-        if (id != null && NameFormatter.isRealPlayer(id)) {
+        if (id != null && PlayerDataManager.isRealPlayer(id)) {
             removed = aliasMap.remove(id.toString().replace("-", ""));
-            NameFormatter.updatePlayerDataAndEntityData(id);
+            PlayerDataManager.updatePlayerDataAndEntityData(id);
         } else if (playername != null) {
             removed = aliasMap.remove(playername);
-            NameFormatter.updatePlayerDataAndEntityData(playername);
+            PlayerDataManager.updatePlayerDataAndEntityData(playername);
         }
         if (removed != null) {
             MinecraftForge.EVENT_BUS.post(new AliasEvent(AliasEvent.Type.REMOVED, id, playername));

@@ -5,8 +5,8 @@ import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.LocrawListener;
+import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.features.LeatherArmorManager;
-import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.nocheaters.WarningMessages;
@@ -941,7 +941,7 @@ public final class MWEConfig {
             "Show Warning Icons",
             "Warning Icons In Tab Only"})
     private static void refreshAllNames() {
-        NameFormatter.refreshAllNamesInWorld();
+        PlayerDataManager.refreshAllNamesInWorld();
     }
 
     @ConfigProperty(
@@ -1187,7 +1187,7 @@ public final class MWEConfig {
             "Squadmate color"
     })
     private static void refreshSquadName() {
-        NameFormatter.refreshAllNamesInWorld();
+        PlayerDataManager.refreshAllNamesInWorld();
     }
 
     @ConfigProperty(

@@ -3,6 +3,7 @@ package fr.alexdoru.mwe.chat;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.data.ScangameData;
 import fr.alexdoru.mwe.features.*;

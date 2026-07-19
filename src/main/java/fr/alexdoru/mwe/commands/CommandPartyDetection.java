@@ -2,8 +2,8 @@ package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
-import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.features.PartyDetection;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.network.NetworkPlayerInfo;

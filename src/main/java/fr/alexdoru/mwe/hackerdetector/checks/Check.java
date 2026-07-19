@@ -6,7 +6,7 @@ import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.FlagChatComponent;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.features.NameFormatter;
+import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
