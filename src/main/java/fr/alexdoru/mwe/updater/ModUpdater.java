@@ -33,10 +33,17 @@ import java.nio.file.StandardCopyOption;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.minecraft.util.EnumChatFormatting.*;
 
 public class ModUpdater {
+
+    private static final AtomicBoolean unpackedDeleter = new AtomicBoolean(false);
+    private static final AtomicBoolean registeredShutdownHook = new AtomicBoolean(false);
+    private static final List<PendingInstall> pendingInstallations = new ArrayList<>();
 
     private final Logger LOGGER;
     private final File jarFile;
@@ -57,7 +64,7 @@ public class ModUpdater {
         this.currentVersion = version;
         this.isFeatherClient = Loader.isModLoaded("feather");
         this.automaticUpdate = autoInstall;
-        MultithreadingUtil.addTaskToQueue(() -> {
+        MultithreadingUtil.queueIOTask(() -> {
             try {
                 checkForUpdate();
             } catch (Throwable t) {
@@ -132,49 +139,72 @@ public class ModUpdater {
             throw new IllegalStateException("Could not create cache folder");
         }
 
-        final File newModCacheFile = new File(cacheDir, artifactInfo.name);
-        downloadFileTo(artifactInfo.url, newModCacheFile, artifactInfo.digest);
+        final File newJarCacheFile = new File(cacheDir, artifactInfo.name);
+        downloadFileTo(artifactInfo.url, newJarCacheFile, artifactInfo.digest);
         LOGGER.info("Downloaded {}", artifactInfo.name);
 
         final File deleterFile = new File(cacheDir, "Deleter.jar");
-        try (InputStream bundledDeleter = ModUpdater.class.getResourceAsStream("/jarjar/Deleter.jar")) {
-            if (bundledDeleter == null) {
-                throw new IllegalStateException("Could not find bundled Deleter.jar in mod resources");
+        if (!unpackedDeleter.get()) {
+            try (InputStream bundledDeleter = ModUpdater.class.getResourceAsStream("/jarjar/Deleter.jar")) {
+                if (bundledDeleter == null) {
+                    throw new IllegalStateException("Could not find bundled Deleter.jar in mod resources");
+                }
+                Files.copy(bundledDeleter, deleterFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                unpackedDeleter.set(true);
+                LOGGER.info("Unpacked Mod Deleter");
             }
-            Files.copy(bundledDeleter, deleterFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
-        LOGGER.info("Unpacked Mod Deleter");
 
-        if (newModCacheFile.exists() && deleterFile.exists()) {
-
+        if (newJarCacheFile.exists() && deleterFile.exists()) {
             this.downloadSuccess = true;
+            if (!registeredShutdownHook.get()) {
+                registeredShutdownHook.set(true);
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> this.performModInstallations(deleterFile), "Update installer Thread"));
+            }
+            synchronized (pendingInstallations) {
+                pendingInstallations.add(new PendingInstall(this.jarFile, newJarCacheFile, artifactInfo.name));
+            }
+        }
 
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+    }
+
+    private void performModInstallations(File deleterFile) {
+        final List<String> deleterArgs = new ArrayList<>();
+        deleterArgs.add(System.getProperty("java.home") + File.separator + "bin" + File.separator + "java");
+        deleterArgs.add("-jar");
+        deleterArgs.add(deleterFile.getName());
+
+        synchronized (pendingInstallations) {
+            for (final PendingInstall install : pendingInstallations) {
                 try {
-                    final File oldJarFile = this.jarFile;
-                    final File newJarFile = new File(oldJarFile.getParent(), artifactInfo.name);
-                    if (newModCacheFile.exists() && oldJarFile.exists()) {
+                    if (install.newJarCacheFile.exists() && install.oldJarFile.exists() && deleterFile.exists()) {
+                        final File newJarFile = new File(install.oldJarFile.getParent(), install.artifactName);
                         Files.copy(
-                                newModCacheFile.toPath(),
+                                install.newJarCacheFile.toPath(),
                                 newJarFile.toPath(),
                                 StandardCopyOption.REPLACE_EXISTING
                         );
-                        if (!newModCacheFile.delete()) {
-                            LOGGER.error("Failed to delete temp file {}", newModCacheFile);
+                        if (!install.newJarCacheFile.delete()) {
+                            LOGGER.error("Failed to delete temp file {}", install.newJarCacheFile);
                         }
-                        final String javaExe = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
-                        new ProcessBuilder(javaExe, "-jar", deleterFile.getName(), oldJarFile.getAbsolutePath())
-                                .directory(deleterFile.getParentFile())
-                                .inheritIO()
-                                .start();
+                        deleterArgs.add(install.oldJarFile.getAbsolutePath());
                     }
                 } catch (IOException e) {
-                    LOGGER.error("Failed to install update", e);
+                    LOGGER.error("Failed to stage install for {}", install.artifactName, e);
                 }
-            }, "Update installer Thread"));
-
+            }
         }
 
+        if (deleterArgs.size() > 3) {
+            try {
+                new ProcessBuilder(deleterArgs)
+                        .directory(deleterFile.getParentFile())
+                        .inheritIO()
+                        .start();
+            } catch (IOException e) {
+                LOGGER.error("Failed to start shared deleter process", e);
+            }
+        }
     }
 
     private ArtifactInfo parseArtifactInfo(JsonObject json) {
@@ -281,6 +311,20 @@ public class ModUpdater {
             this.url = url;
             this.version = new ComparableVersion(tag);
             this.digest = digest;
+        }
+
+    }
+
+    private static class PendingInstall {
+
+        public final File oldJarFile;
+        public final File newJarCacheFile;
+        public final String artifactName;
+
+        private PendingInstall(File oldJarFile, File newJarCacheFile, String artifactName) {
+            this.oldJarFile = oldJarFile;
+            this.newJarCacheFile = newJarCacheFile;
+            this.artifactName = artifactName;
         }
 
     }
