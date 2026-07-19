@@ -61,7 +61,7 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
         final int textX = drawX + getLeftPadding();
         mc.fontRendererObj.drawStringWithShadow(annotation.name(), textX, drawY + PADDING, colorPalette.SETTING_NAME_TEXT);
         if (hasComment) {
-            int commentY = drawY + PADDING + mc.fontRendererObj.FONT_HEIGHT + 8; // '8' here represents the vertical space between name and comment (can be different from padding)
+            int commentY = drawY + PADDING + mc.fontRendererObj.FONT_HEIGHT + 6; // '6' here represents the vertical space between name and comment
             for (final String line : commentToRender) {
                 mc.fontRendererObj.drawStringWithShadow(line, textX, commentY, colorPalette.SETTING_COMMENT_TEXT);
                 commentY += mc.fontRendererObj.FONT_HEIGHT;
@@ -72,7 +72,7 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     @Override
     public int getHeight() {
         if (hasComment) {
-            return PADDING + mc.fontRendererObj.FONT_HEIGHT + PADDING + mc.fontRendererObj.FONT_HEIGHT * commentToRender.size() + 8 - 1; // '8' here represents the vertical space between name and comment (can be different from padding)
+            return PADDING + mc.fontRendererObj.FONT_HEIGHT + PADDING + mc.fontRendererObj.FONT_HEIGHT * commentToRender.size() + 6 - 1; // '6' here represents the vertical space between name and comment
         }
         return PADDING + mc.fontRendererObj.FONT_HEIGHT + PADDING - 1;
     }
