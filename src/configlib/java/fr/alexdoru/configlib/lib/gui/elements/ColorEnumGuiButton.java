@@ -20,9 +20,10 @@ public class ColorEnumGuiButton extends EnumGuiButton {
     @Override
     public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
-        final int left = this.button.xPosition - 20 - 1;
+        final int colorBoxSize = button.height;
+        final int left = this.button.xPosition - colorBoxSize - 1;
         final int top = this.button.yPosition;
-        GuiUtil.drawBoxWithOutline(left, top, left + 20, top + 20, 255 << 24 | color, colorPalette.COLOR_BUTTON_INDICATOR_BORDER);
+        GuiUtil.drawBoxWithOutline(left, top, left + colorBoxSize, top + colorBoxSize, 255 << 24 | color, colorPalette.COLOR_BUTTON_INDICATOR_BORDER);
     }
 
     @Override

@@ -51,9 +51,8 @@ public class SliderGuiButton extends ConfigGuiButton {
     }
 
     @Override
-    public void setBoxWidth(int boxWidth) {
-        super.setBoxWidth(boxWidth - 60);
-        this.boxWidth = boxWidth;
+    protected int getRightSideContentWidth() {
+        return (PLUS_BUTTON_SIZE + SLIDER_BUTTON_SIZE / 2 + 1) * 2 + SLIDER_WIDTH + 6;
     }
 
     @Override
@@ -63,14 +62,15 @@ public class SliderGuiButton extends ConfigGuiButton {
             updateSliderFromPosition(mouseX - sliderBarX);
         }
         final int SLIDER_HEIGHT = 6;
-        sliderBarX = drawX + boxWidth - SLIDER_WIDTH - 20;
-        final int sliderBarY = drawY + 8 + mc.fontRendererObj.FONT_HEIGHT;
-        sliderButtonX = sliderBarX + sliderIncrement - SLIDER_BUTTON_SIZE / 2;
+        final int HALF_SLIDER_BUTTON_SIZE = SLIDER_BUTTON_SIZE / 2;
+        sliderBarX = contentLeft + PLUS_BUTTON_SIZE + HALF_SLIDER_BUTTON_SIZE + 1;
+        final int sliderBarY = drawY + PADDING + mc.fontRendererObj.FONT_HEIGHT;
+        sliderButtonX = sliderBarX + sliderIncrement - HALF_SLIDER_BUTTON_SIZE;
         sliderButtonY = sliderBarY + (SLIDER_HEIGHT - SLIDER_BUTTON_SIZE) / 2;
-        minusButtonX = sliderBarX - SLIDER_BUTTON_SIZE / 2 - PLUS_BUTTON_SIZE - 1;
+        minusButtonX = contentLeft;
         minusButtonY = sliderBarY + (SLIDER_HEIGHT - PLUS_BUTTON_SIZE) / 2;
-        plusButtonX = sliderBarX + SLIDER_WIDTH + SLIDER_BUTTON_SIZE / 2;
-        plusButtonY = sliderBarY + (SLIDER_HEIGHT - PLUS_BUTTON_SIZE) / 2;
+        plusButtonX = sliderBarX + SLIDER_WIDTH + HALF_SLIDER_BUTTON_SIZE + 1;
+        plusButtonY = minusButtonY;
         GuiUtil.drawBoxWithOutline(sliderBarX, sliderBarY, sliderBarX + SLIDER_WIDTH, sliderBarY + SLIDER_HEIGHT, colorPalette.SLIDER_BUTTON_TRACK, colorPalette.SLIDER_BUTTON_TRACK_BORDER);
         final boolean silderHovered = isMouseOnButton(mouseX, mouseY, sliderButtonX, sliderButtonY, SLIDER_BUTTON_SIZE, SLIDER_BUTTON_SIZE);
         final int sliderColor = silderHovered ? GuiUtil.brightenColor(colorPalette.SLIDER_BUTTON_THUMB, 0.12f) : colorPalette.SLIDER_BUTTON_THUMB;
@@ -100,7 +100,7 @@ public class SliderGuiButton extends ConfigGuiButton {
 
     @Override
     public int getHeight() {
-        return Math.max(super.getHeight(), 8 + mc.fontRendererObj.FONT_HEIGHT + SLIDER_BUTTON_SIZE + 8);
+        return Math.max(super.getHeight(), PADDING + mc.fontRendererObj.FONT_HEIGHT + SLIDER_BUTTON_SIZE + PADDING);
     }
 
     @Override
@@ -184,5 +184,4 @@ public class SliderGuiButton extends ConfigGuiButton {
         }
         invokeConfigEvent();
     }
-
 }

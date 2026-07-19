@@ -9,7 +9,6 @@ import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.RendererEditGuiScreen;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -40,22 +39,27 @@ public class RendererGuiButton extends ConfigGuiButton {
         this.rendererManager = rendererManager;
         this.rendererPosition = ((RendererPosition) field.get(null));
         this.toggled = this.rendererPosition.isEnabled();
-        this.buttonEnabled = new ClickGuiButton(0, 0, 0, mc.fontRendererObj.getStringWidth(" Disabled "), 20, getButtonText());
+        this.buttonEnabled = getMainButton(getBooleanText(toggled));
         this.buttonMoveHud = new ClickGuiButton(0, 0, 0, 20, 20, "");
         this.buttonResetPos = new ClickGuiButton(0, 0, 0, 20, 20, "");
     }
 
     @Override
+    protected int getRightSideContentWidth() {
+        return buttonEnabled.width + BUTTON_RIGHT_MARGIN;
+    }
+
+    @Override
     public void setBoxWidth(int boxWidth) {
-        super.setBoxWidth(boxWidth - mc.fontRendererObj.getStringWidth("Reset Position") - 10);
+        super.setBoxWidth(boxWidth - mc.fontRendererObj.getStringWidth("Reset Position"));
         this.boxWidth = boxWidth;
     }
 
     @Override
     public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
-        buttonEnabled.xPosition = drawX + boxWidth - buttonEnabled.width - 20;
-        buttonEnabled.yPosition = drawY + 8;
+        buttonEnabled.xPosition = contentLeft;
+        buttonEnabled.yPosition = drawY + PADDING;
         buttonEnabled.drawButton(colorPalette, mc, mouseX, mouseY);
         buttonMoveHud.xPosition = buttonEnabled.xPosition;
         buttonMoveHud.yPosition = buttonEnabled.yPosition + buttonEnabled.height + 1;
@@ -82,7 +86,7 @@ public class RendererGuiButton extends ConfigGuiButton {
         if (mouseButton == 0) {
             if (buttonEnabled.mousePressed(mc, mouseX, mouseY)) {
                 flipBooleanConfig();
-                buttonEnabled.displayString = getButtonText();
+                buttonEnabled.displayString = getBooleanText(toggled);
                 buttonEnabled.playPressSound(mc.getSoundHandler());
                 return true;
             } else if (buttonMoveHud.mousePressed(mc, mouseX, mouseY)) {
@@ -105,7 +109,7 @@ public class RendererGuiButton extends ConfigGuiButton {
 
     @Override
     public int getHeight() {
-        return Math.max(super.getHeight(), 8 + buttonEnabled.height + 1 + buttonMoveHud.height + 8 - 1);
+        return Math.max(super.getHeight(), PADDING + buttonEnabled.height + 1 + buttonMoveHud.height + PADDING - 1);
     }
 
     private void drawIcon(ResourceLocation icon, int drawX, int drawY) {
@@ -116,7 +120,7 @@ public class RendererGuiButton extends ConfigGuiButton {
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        parentScreen.mc.getTextureManager().bindTexture(icon);
+        mc.getTextureManager().bindTexture(icon);
         GlStateManager.color(1, 1, 1);
         Gui.drawModalRectWithCustomSizedTexture(drawX, drawY, 0f, 0f, 14, 14, 14f, 14f);
         GlStateManager.popMatrix();
@@ -127,9 +131,4 @@ public class RendererGuiButton extends ConfigGuiButton {
         toggled = rendererPosition.isEnabled();
         invokeConfigEvent();
     }
-
-    private String getButtonText() {
-        return toggled ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled";
-    }
-
 }
