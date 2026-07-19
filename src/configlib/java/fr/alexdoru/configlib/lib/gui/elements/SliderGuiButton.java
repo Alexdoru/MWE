@@ -3,6 +3,7 @@ package fr.alexdoru.configlib.lib.gui.elements;
 import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.api.ConfigProperty;
 import fr.alexdoru.configlib.lib.gui.GuiUtil;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.util.MathHelper;
 
 import java.lang.reflect.Field;
@@ -74,6 +75,10 @@ public class SliderGuiButton extends ConfigGuiButton {
         GuiUtil.drawBoxWithOutline(sliderBarX, sliderBarY, sliderBarX + SLIDER_WIDTH, sliderBarY + SLIDER_HEIGHT, colorPalette.SLIDER_BUTTON_TRACK, colorPalette.SLIDER_BUTTON_TRACK_BORDER);
         final boolean silderHovered = isMouseOnButton(mouseX, mouseY, sliderButtonX, sliderButtonY, SLIDER_BUTTON_SIZE, SLIDER_BUTTON_SIZE);
         final int sliderColor = silderHovered ? GuiUtil.brightenColor(colorPalette.SLIDER_BUTTON_THUMB, 0.12f) : colorPalette.SLIDER_BUTTON_THUMB;
+        if (sliderButtonX > (sliderBarX + 1)) {
+            final int top = sliderBarY + 1;
+            Gui.drawRect(sliderBarX + 1, top, sliderButtonX, top + SLIDER_HEIGHT - 2, sliderColor);
+        }
         GuiUtil.drawBoxWithOutline(sliderButtonX, sliderButtonY, sliderButtonX + SLIDER_BUTTON_SIZE, sliderButtonY + SLIDER_BUTTON_SIZE, sliderColor, colorPalette.SLIDER_BUTTON_THUMB_BORDER);
         final boolean isMinusHovered = isMouseOnButton(mouseX, mouseY, minusButtonX, minusButtonY, PLUS_BUTTON_SIZE, PLUS_BUTTON_SIZE);
         final int minusColor = isMinusHovered ? GuiUtil.brightenColor(colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND, 0.12f) : colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND;
