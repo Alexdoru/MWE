@@ -85,7 +85,7 @@ public class MWE {
         this.configHandler.setConfigTitleRenderer(new MWEConfigTitle());
         this.configHandler.registerConfig(MWEConfig.class);
         if (MWEConfig.checkForUpdate && !Boolean.getBoolean("mwe.disableUpdater")) {
-            MinecraftForge.EVENT_BUS.register(new ModUpdater(event.getSourceFile()));
+            MinecraftForge.EVENT_BUS.register(new ModUpdater(event.getSourceFile(), modName, version, MWEConfig.automaticUpdate));
         }
         AliasDataManager.loadData(this.configFolder);
         WdrDataManager.loadData(this.configFolder);
@@ -151,6 +151,10 @@ public class MWE {
 
     public RenegadeArrowTracker getRenegadeTracker() {
         return renegadeTracker;
+    }
+
+    public File getConfigFolder() {
+        return configFolder;
     }
 
 }

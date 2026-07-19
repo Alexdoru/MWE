@@ -1,11 +1,9 @@
 package fr.alexdoru.mwe.updater;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.http.HttpClient;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.utils.JsonUtil;
@@ -23,6 +21,7 @@ import net.minecraftforge.fml.common.versioning.ComparableVersion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +30,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import static net.minecraft.util.EnumChatFormatting.*;
 
@@ -47,19 +49,19 @@ public class ModUpdater {
     private volatile boolean downloadSuccess;
     private volatile boolean finishedRunning;
 
-    public ModUpdater(File file) {
-        this.LOGGER = LogManager.getLogger("MWE Updater");
+    public ModUpdater(File file, String name, String version, boolean autoInstall) {
+        this.LOGGER = LogManager.getLogger(name + " Updater");
         this.jarFile = file;
-        this.apiEndpoint = "https://api.github.com/repos/Alexdoru/MWE/releases";
+        this.apiEndpoint = "https://api.github.com/repos/Alexdoru/MWE/releases/latest";
         this.releaseLink = "https://github.com/Alexdoru/MWE/releases";
-        this.currentVersion = MWE.version;
+        this.currentVersion = version;
         this.isFeatherClient = Loader.isModLoaded("feather");
-        this.automaticUpdate = MWEConfig.automaticUpdate;
+        this.automaticUpdate = autoInstall;
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
                 checkForUpdate();
             } catch (Throwable t) {
-                t.printStackTrace();
+                LOGGER.error("Caught exception while checking for update", t);
             } finally {
                 finishedRunning = true;
             }
@@ -101,16 +103,16 @@ public class ModUpdater {
 
         LOGGER.info("Checking for updates...");
 
-        final JsonArray jsonArray = HttpClient.getAsJsonArray(this.apiEndpoint);
-        final ArtifactInfo artifactInfo = findLatestVersion(jsonArray);
+        final JsonObject jsonResponse = HttpClient.getAsJsonObject(this.apiEndpoint);
+        final ArtifactInfo artifactInfo = parseArtifactInfo(jsonResponse);
 
         if (artifactInfo == null) {
             return;
         }
 
-        final ComparableVersion currentVersion = new ComparableVersion(this.currentVersion);
+        final boolean isUpToDate = new ComparableVersion(this.currentVersion).compareTo(artifactInfo.version) >= 0;
 
-        if (currentVersion.compareTo(artifactInfo.version) >= 0) {
+        if (isUpToDate) {
             LOGGER.info("The mod is up to date!");
             return;
         }
@@ -125,13 +127,13 @@ public class ModUpdater {
             return;
         }
 
-        final File cacheDir = new File("config/updatecache");
+        final File cacheDir = MWE.INSTANCE().getConfigFolder();
         if (!cacheDir.exists() && !cacheDir.mkdir()) {
             throw new IllegalStateException("Could not create cache folder");
         }
 
-        final File modCacheFile = new File(cacheDir, artifactInfo.name);
-        downloadFileTo(artifactInfo.url, modCacheFile);
+        final File newModCacheFile = new File(cacheDir, artifactInfo.name);
+        downloadFileTo(artifactInfo.url, newModCacheFile, artifactInfo.digest);
         LOGGER.info("Downloaded {}", artifactInfo.name);
 
         final File deleterFile = new File(cacheDir, "Deleter.jar");
@@ -143,7 +145,7 @@ public class ModUpdater {
         }
         LOGGER.info("Unpacked Mod Deleter");
 
-        if (modCacheFile.exists() && deleterFile.exists()) {
+        if (newModCacheFile.exists() && deleterFile.exists()) {
 
             this.downloadSuccess = true;
 
@@ -151,14 +153,14 @@ public class ModUpdater {
                 try {
                     final File oldJarFile = this.jarFile;
                     final File newJarFile = new File(oldJarFile.getParent(), artifactInfo.name);
-                    if (modCacheFile.exists() && oldJarFile.exists()) {
+                    if (newModCacheFile.exists() && oldJarFile.exists()) {
                         Files.copy(
-                                modCacheFile.toPath(),
+                                newModCacheFile.toPath(),
                                 newJarFile.toPath(),
                                 StandardCopyOption.REPLACE_EXISTING
                         );
-                        if (!modCacheFile.delete()) {
-                            LOGGER.error("Failed to delete temp file {}", modCacheFile);
+                        if (!newModCacheFile.delete()) {
+                            LOGGER.error("Failed to delete temp file {}", newModCacheFile);
                         }
                         final String javaExe = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
                         new ProcessBuilder(javaExe, "-jar", deleterFile.getName(), oldJarFile.getAbsolutePath())
@@ -167,7 +169,7 @@ public class ModUpdater {
                                 .start();
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOGGER.error("Failed to install update", e);
                 }
             }, "Update installer Thread"));
 
@@ -175,34 +177,21 @@ public class ModUpdater {
 
     }
 
-    private ArtifactInfo findLatestVersion(JsonArray jsonArray) {
+    private ArtifactInfo parseArtifactInfo(JsonObject json) {
 
-        JsonObject maxRelease = null;
-        ComparableVersion maxVersion = null;
+        final String tag = JsonUtil.getString(json, "tag_name");
 
-        for (final JsonElement jsonElement : jsonArray) {
-            final JsonObject release = jsonElement.getAsJsonObject();
-            final String tag = JsonUtil.getString(release, "tag_name");
-            if (tag != null) {
-                final ComparableVersion releaseVersion = new ComparableVersion(tag);
-                if (maxVersion == null || releaseVersion.compareTo(maxVersion) > 0) {
-                    maxRelease = release;
-                    maxVersion = releaseVersion;
-                }
-            }
-        }
-
-        if (maxVersion == null) {
-            LOGGER.error("Could not find latest release");
+        if (tag == null) {
+            LOGGER.error("Latest release doesn't have a tag");
             return null;
         }
 
-        if (!maxRelease.has("assets")) {
+        if (!json.has("assets")) {
             LOGGER.error("Latest release doesn't have assets");
             return null;
         }
 
-        final JsonElement assets = maxRelease.get("assets");
+        final JsonElement assets = json.get("assets");
         if (assets != null && assets.isJsonArray()) {
             for (final JsonElement asset : assets.getAsJsonArray()) {
                 if (asset != null && asset.isJsonObject()) {
@@ -214,25 +203,66 @@ public class ModUpdater {
                             LOGGER.error(".jar artifact doesn't have download url");
                             return null;
                         }
-                        return new ArtifactInfo(fileName, downloadUrl, maxVersion);
+                        if (!downloadUrl.startsWith("https://github.com")) {
+                            LOGGER.error("Download URL doesn't point to Github!");
+                            return null;
+                        }
+                        final String digest = JsonUtil.getString(assetsJsonObject, "digest");
+                        return new ArtifactInfo(fileName, downloadUrl, tag, digest);
                     }
                 }
             }
         }
-        LOGGER.error("Could not find .jar file in release {} assets", maxVersion);
+        LOGGER.error("Could not find .jar file to download in lates release");
         return null;
     }
 
-    private static void downloadFileTo(String url, File cacheFile) throws IOException {
+    private void downloadFileTo(@NotNull String url, @NotNull File cacheFile, @Nullable String digest) throws IOException {
         final URLConnection connection = new URL(url).openConnection();
-        connection.setRequestProperty("User-Agent", "Updater");
-        try (InputStream inputStream = connection.getInputStream()) {
+        connection.setRequestProperty("User-Agent", "MWE-Updater");
+        connection.setConnectTimeout(10000);
+        connection.setReadTimeout(10000);
+
+        final MessageDigest sha256;
+        try {
+            sha256 = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            // SHA-256 is guaranteed to be available on every standard JVM, this should never happen
+            throw new IllegalStateException("SHA-256 algorithm not available", e);
+        }
+
+        try (InputStream inputStream = new DigestInputStream(connection.getInputStream(), sha256)) {
             Files.copy(
                     inputStream,
                     cacheFile.toPath(),
                     StandardCopyOption.REPLACE_EXISTING
             );
+        } catch (IOException e) {
+            // cleanup partial file left behind by a mid-stream failure
+            Files.deleteIfExists(cacheFile.toPath());
+            throw e;
         }
+
+        if (digest != null) {
+            if (!digest.startsWith("sha256:")) {
+                throw new IOException("Invalid digest signature from api");
+            }
+            final String computedDigest = "sha256:" + bytesToHex(sha256.digest());
+            if (!computedDigest.equalsIgnoreCase(digest)) {
+                Files.deleteIfExists(cacheFile.toPath());
+                throw new IOException("Digest mismatch for " + cacheFile.getName() + " (expected " + digest + ", got " + computedDigest + ")");
+            }
+        } else {
+            LOGGER.warn("No digest provided for {}, skipping integrity check", cacheFile.getName());
+        }
+    }
+
+    private static String bytesToHex(byte[] bytes) {
+        final StringBuilder sb = new StringBuilder(bytes.length * 2);
+        for (final byte b : bytes) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
     }
 
     private static class ArtifactInfo {
@@ -243,11 +273,14 @@ public class ModUpdater {
         public final String url;
         @NotNull
         public final ComparableVersion version;
+        @Nullable
+        public final String digest;
 
-        private ArtifactInfo(@NotNull String name, @NotNull String url, @NotNull ComparableVersion version) {
+        private ArtifactInfo(@NotNull String name, @NotNull String url, @NotNull String tag, @Nullable String digest) {
             this.name = name;
             this.url = url;
-            this.version = version;
+            this.version = new ComparableVersion(tag);
+            this.digest = digest;
         }
 
     }
