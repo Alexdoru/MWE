@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.utils;
 
-import fr.alexdoru.mwe.data.AliasData;
+import fr.alexdoru.mwe.data.AliasDataManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -27,7 +27,7 @@ public class TabCompletionUtil {
                 if (playerName != null) {
                     players.add(playerName);
                     if (collectAlias) {
-                        final String alias = AliasData.getAlias(netInfo.getGameProfile().getId(), playerName);
+                        final String alias = AliasDataManager.getAlias(netInfo.getGameProfile().getId(), playerName);
                         if (alias != null) players.add(alias);
                     }
                 }

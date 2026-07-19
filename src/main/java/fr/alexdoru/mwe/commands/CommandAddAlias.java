@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.data.AliasData;
+import fr.alexdoru.mwe.data.AliasDataManager;
 import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
@@ -28,10 +28,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 public class CommandAddAlias extends MyAbstractCommand {
-
-    public CommandAddAlias() {
-        AliasData.init();
-    }
 
     @Override
     public String getCommandName() {
@@ -106,7 +102,7 @@ public class CommandAddAlias extends MyAbstractCommand {
             displaypage = 1;
         }
 
-        final List<Map.Entry<String, String>> entryList = AliasData.getEntries();
+        final List<Map.Entry<String, String>> entryList = AliasDataManager.getEntries();
 
         final List<Future<IChatComponent>> futureList = new ArrayList<>();
         int nbAlias = 1;
@@ -181,7 +177,7 @@ public class CommandAddAlias extends MyAbstractCommand {
     private void listAliasInLobby() {
         boolean found = false;
         for (final NetworkPlayerInfo netInfo : NetInfoOrdering.vanillaSortingCopyOf(Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap())) {
-            if (AliasData.getAlias(netInfo.getGameProfile().getId(), netInfo.getGameProfile().getName()) != null) {
+            if (AliasDataManager.getAlias(netInfo.getGameProfile().getId(), netInfo.getGameProfile().getName()) != null) {
                 if (!found) {
                     ChatUtil.addChatMessage(EnumChatFormatting.GREEN + ChatUtil.bar());
                     ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "In this lobby :\n");
@@ -236,11 +232,11 @@ public class CommandAddAlias extends MyAbstractCommand {
             formattedName = playername;
         }
         if (uuid == null) {
-            AliasData.putAlias(null, playername, alias);
+            AliasDataManager.putAlias(null, playername, alias);
             ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Added alias for the " + EnumChatFormatting.DARK_PURPLE + "nicked " + EnumChatFormatting.GREEN + "player "
                     + EnumChatFormatting.GOLD + formattedName + EnumChatFormatting.WHITE + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.WHITE + ")");
         } else {
-            AliasData.putAlias(uuid, null, alias);
+            AliasDataManager.putAlias(uuid, null, alias);
             ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Added alias for "
                     + EnumChatFormatting.GOLD + formattedName + EnumChatFormatting.WHITE + " (" + EnumChatFormatting.GOLD + alias + EnumChatFormatting.WHITE + ")");
         }
@@ -284,7 +280,7 @@ public class CommandAddAlias extends MyAbstractCommand {
         if (formattedName == null) {
             formattedName = playername;
         }
-        if (!AliasData.removeAlias(uuid, playername)) {
+        if (!AliasDataManager.removeAlias(uuid, playername)) {
             ChatUtil.addChatMessage(EnumChatFormatting.RED + "Player does not have an alias.");
             return;
         }

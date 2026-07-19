@@ -8,6 +8,7 @@ import fr.alexdoru.mwe.chat.ChatListener;
 import fr.alexdoru.mwe.commands.*;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.config.MWEConfigTitle;
+import fr.alexdoru.mwe.data.AliasDataManager;
 import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.*;
@@ -85,6 +86,7 @@ public class MWE {
         if (MWEConfig.checkForUpdate && !Boolean.getBoolean("mwe.disableUpdater")) {
             MinecraftForge.EVENT_BUS.register(new ModUpdater(event.getSourceFile()));
         }
+        AliasDataManager.loadData(this.configFolder);
         this.loadedAddons.forEach(a -> a.preInit(event));
     }
 

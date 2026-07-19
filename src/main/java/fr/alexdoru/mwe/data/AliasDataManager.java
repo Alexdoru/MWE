@@ -3,7 +3,9 @@ package fr.alexdoru.mwe.data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.events.AliasEvent;
+import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.Nullable;
@@ -11,15 +13,21 @@ import org.jetbrains.annotations.Nullable;
 import java.io.*;
 import java.util.*;
 
-public class AliasData {
+public final class AliasDataManager {
+
+    private AliasDataManager() {}
 
     private static final Map<String, String> aliasMap = new LinkedHashMap<>();
-    private static File aliasDataFile;
+    private static boolean initialized;
 
-    public static void init() {
-        aliasDataFile = new File(Minecraft.getMinecraft().mcDataDir, "config/aliasData.json");
-        readDataFromFile();
-        Runtime.getRuntime().addShutdownHook(new Thread(AliasData::writeDataToFile));
+    public static void loadData(File configFolder) {
+        if (initialized) {
+            throw new IllegalStateException("Already initialized");
+        }
+        initialized = true;
+        final File aliasDataFile = new File(configFolder, "aliasData.json");
+        MultithreadingUtil.queueIOTask(() -> loadDataFromFiles(aliasDataFile));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> AliasDataManager.writeDataToFile(aliasDataFile, aliasMap)));
     }
 
     public static List<Map.Entry<String, String>> getEntries() {
@@ -58,7 +66,7 @@ public class AliasData {
     }
 
     /**
-     * Removes a player from the alias list, returns true if the player was succesfully removed
+     * Removes a player from the alias list, returns true if the player was successfully removed
      */
     public static boolean removeAlias(@Nullable UUID id, @Nullable String playername) {
         String removed = null;
@@ -75,25 +83,44 @@ public class AliasData {
         return removed != null;
     }
 
-    private static void readDataFromFile() {
-        if (!aliasDataFile.exists()) {
+    private static void loadDataFromFiles(File file) {
+        if (file.exists()) {
+            loadDataFromFile(file);
             return;
         }
-        try {
-            final Gson gson = new Gson();
-            final HashMap<String, String> hashMap = gson.fromJson(new FileReader(aliasDataFile), new TypeToken<HashMap<String, String>>() {}.getType());
-            if (hashMap != null) {
-                aliasMap.putAll(hashMap);
+        final File legacyFile = new File(Minecraft.getMinecraft().mcDataDir, "config/aliasData.json");
+        if (legacyFile.exists()) {
+            final Map<String, String> map = loadDataFromFile(legacyFile);
+            if (map != null) {
+                writeDataToFile(file, map);
+            }
+            if (legacyFile.delete()) {
+                MWE.logger.info("Deleted legacy alias data file: {}", legacyFile);
+            } else {
+                MWE.logger.error("Failed to delete legacy alias data file: {}", legacyFile);
+            }
+        }
+    }
+
+    private static Map<String, String> loadDataFromFile(File file) {
+        try (FileReader reader = new FileReader(file)) {
+            final HashMap<String, String> map = new Gson().fromJson(reader, new TypeToken<HashMap<String, String>>() {}.getType());
+            if (map != null) {
+                // off thread snapshot to feed to main thread
+                final Map<String, String> snapshot = new HashMap<>(map);
+                Minecraft.getMinecraft().addScheduledTask(() -> aliasMap.putAll(snapshot));
+                return map;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
-    private static void writeDataToFile() {
+    private static void writeDataToFile(File aliasDataFile, Map<String, String> map) {
         try (final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(aliasDataFile))) {
             final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
-            final String jsonString = gson.toJson(aliasMap);
+            final String jsonString = gson.toJson(map);
             bufferedWriter.write(jsonString);
         } catch (IOException e) {
             e.printStackTrace();

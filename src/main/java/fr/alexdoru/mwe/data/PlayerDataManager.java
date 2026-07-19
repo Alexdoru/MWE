@@ -265,7 +265,7 @@ public final class PlayerDataManager {
                 mwClass = MWClass.fromTeamTag(ScoreboardTracker.isMWReplay() ? teamprefix : colorSuffix);
                 final boolean isobf = teamprefix.contains("§k");
                 final boolean isNicked = PlayerDataManager.isNickedPlayer(id);
-                final String alias = AliasData.getAlias(id, username);
+                final String alias = AliasDataManager.getAlias(id, username);
                 if (iExtraPrefix != null || isobf || isNicked && MWEConfig.showFakePlayersInTab || squadname != null || alias != null) {
                     final StringBuilder sb = new StringBuilder();
                     if (iExtraPrefix != null) sb.append(extraPrefix);
