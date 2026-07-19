@@ -1,40 +1,42 @@
-package fr.alexdoru.mwe.nocheaters;
+package fr.alexdoru.mwe.data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.api.events.ReportListEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.data.PlayerDataManager;
+import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.utils.UUIDUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class WdrData {
+public final class WdrDataManager {
+
+    private WdrDataManager() {}
 
     private static final File legacywdrFile = new File(Minecraft.getMinecraft().mcDataDir, "config/wdred.txt");
     private static final File wdrJsonFile = new File(Minecraft.getMinecraft().mcDataDir, "config/WDRList.json");
     private static final Map<UUID, WDR> uuidMap = new HashMap<>();
     private static final Map<String, WDR> nickMap = new HashMap<>();
+    private static boolean initialized;
     private static boolean dirty;
 
-    public WdrData() {
-        WdrData.loadReportedPlayers();
-        Runtime.getRuntime().addShutdownHook(new Thread(WdrData::saveReportedPlayers));
+    public static void loadData(File configFolder) {
+        if (initialized) {
+            throw new IllegalStateException("Already initialized");
+        }
+        initialized = true;
+        WdrDataManager.loadReportedPlayers();
+        Runtime.getRuntime().addShutdownHook(new Thread(WdrDataManager::saveReportedPlayers));
     }
 
-    @SubscribeEvent
-    public void onMWGameEvent(MegaWallsGameEvent event) {
-        if (event.type == MegaWallsGameEvent.Type.GAME_START || event.type == MegaWallsGameEvent.Type.GAME_END) {
-            if (dirty) {
-                WdrData.saveReportedPlayers();
-            }
+    static void saveIfDirty() {
+        if (dirty) {
+            WdrDataManager.saveReportedPlayers();
         }
     }
 
@@ -56,12 +58,12 @@ public class WdrData {
      * Adds or update a report for a player, returns true if it added a new report
      */
     public static boolean addReport(UUID uuid, String playername, String cheat) {
-        WDR wdr = WdrData.getWdr(uuid, playername);
+        WDR wdr = WdrDataManager.getWdr(uuid, playername);
         boolean added = false;
         final boolean refreshName;
         if (wdr == null) {
             wdr = new WDR(cheat);
-            added = WdrData.put(uuid, playername, wdr);
+            added = WdrDataManager.put(uuid, playername, wdr);
             refreshName = true;
         } else {
             refreshName = wdr.addCheat(cheat);
@@ -84,11 +86,11 @@ public class WdrData {
      * Adds or update a report for a player, returns true if it added a new report
      */
     public static boolean addReport(UUID uuid, String playername, List<String> cheats) {
-        WDR wdr = WdrData.getWdr(uuid, playername);
+        WDR wdr = WdrDataManager.getWdr(uuid, playername);
         boolean added = false;
         if (wdr == null) {
             wdr = new WDR(cheats);
-            added = WdrData.put(uuid, playername, wdr);
+            added = WdrDataManager.put(uuid, playername, wdr);
         } else {
             wdr.addCheats(cheats);
         }
@@ -161,10 +163,10 @@ public class WdrData {
         final List<String> jsonReportLines = loadReportsFromJSONFile();
         final List<String> legacyReportLines = loadReportsFromLegacyFile();
         final boolean deleteLegacyFile = !legacyReportLines.isEmpty();
-        jsonReportLines.forEach(WdrData::loadReportLine);
-        legacyReportLines.forEach(WdrData::loadReportLine);
+        jsonReportLines.forEach(WdrDataManager::loadReportLine);
+        legacyReportLines.forEach(WdrDataManager::loadReportLine);
         if (deleteLegacyFile) {
-            WdrData.saveReportedPlayers();
+            WdrDataManager.saveReportedPlayers();
             //noinspection ResultOfMethodCallIgnored
             legacywdrFile.delete();
         }

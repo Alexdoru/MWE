@@ -9,13 +9,14 @@ import fr.alexdoru.mwe.commands.*;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.config.MWEConfigTitle;
 import fr.alexdoru.mwe.data.AliasDataManager;
+import fr.alexdoru.mwe.data.DataSaveScheduler;
 import fr.alexdoru.mwe.data.PlayerDataManager;
+import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.*;
 import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
-import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.updater.ModUpdater;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -87,6 +88,7 @@ public class MWE {
             MinecraftForge.EVENT_BUS.register(new ModUpdater(event.getSourceFile()));
         }
         AliasDataManager.loadData(this.configFolder);
+        WdrDataManager.loadData(this.configFolder);
         this.loadedAddons.forEach(a -> a.preInit(event));
     }
 
@@ -100,11 +102,11 @@ public class MWE {
 
         MWERenderers.loadRenderers(this.configHandler.getRendererManager());
 
-        MinecraftForge.EVENT_BUS.register(new WdrData());
         MinecraftForge.EVENT_BUS.register(new ReportQueue());
         MinecraftForge.EVENT_BUS.register(new ChatListener());
         MinecraftForge.EVENT_BUS.register(new HackerDetector());
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
+        MinecraftForge.EVENT_BUS.register(new DataSaveScheduler());
         MinecraftForge.EVENT_BUS.register(new StrengthParticles());
         MinecraftForge.EVENT_BUS.register(new ScoreboardTracker());
         MinecraftForge.EVENT_BUS.register(new ClassSelectorOverlay(this.configFolder));

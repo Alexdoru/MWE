@@ -5,6 +5,7 @@ import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.PlayerDataManager;
+import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.PartyDetection;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
@@ -12,7 +13,6 @@ import fr.alexdoru.mwe.http.cache.CachedHypixelPlayerData;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
-import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import fr.alexdoru.mwe.utils.TabCompletionUtil;
@@ -140,8 +140,8 @@ public class CommandWDR extends MyAbstractCommand {
     }
 
     private static void addPlayerToReportList(UUID uuid, String playername, String formattedName, List<String> cheats) {
-        final boolean added = WdrData.addReport(uuid, playername, cheats);
-        WdrData.saveReportedPlayers();
+        final boolean added = WdrDataManager.addReport(uuid, playername, cheats);
+        WdrDataManager.saveReportedPlayers();
         if (added) {
             final boolean isNicked = !PlayerDataManager.isRealPlayer(uuid);
             ChatUtil.addChatMessage(

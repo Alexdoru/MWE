@@ -9,13 +9,13 @@ import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
 import fr.alexdoru.mwe.data.AliasDataManager;
+import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.PartyDetection;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
-import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import fr.alexdoru.mwe.utils.DelayedTask;
@@ -344,7 +344,7 @@ public final class MWEApi {
          * Returns true if the player is in the report list
          */
         public static boolean isPlayerReported(@NotNull UUID uuid, @Nullable String playername) {
-            return WdrData.getWdr(uuid, playername) != null;
+            return WdrDataManager.getWdr(uuid, playername) != null;
         }
 
         /**
@@ -352,21 +352,21 @@ public final class MWEApi {
          */
         @Nullable
         public static IReportInfo getReportInfoFor(@NotNull UUID uuid, @Nullable String playername) {
-            return WdrData.getWdr(uuid, playername);
+            return WdrDataManager.getWdr(uuid, playername);
         }
 
         /**
          * Adds a player to the reportlist
          */
         public static void addToReportList(@NotNull UUID uuid, @Nullable String playername, List<String> cheats) {
-            WdrData.addReport(uuid, playername, cheats);
+            WdrDataManager.addReport(uuid, playername, cheats);
         }
 
         /**
          * Removes a player from the reportlist, returns true if the player was succesfully removed
          */
         public static boolean removeFromReportList(@NotNull UUID uuid, @Nullable String playername) {
-            return WdrData.remove(uuid, playername);
+            return WdrDataManager.remove(uuid, playername);
         }
 
     }

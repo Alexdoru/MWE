@@ -5,6 +5,7 @@ import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.WarningChatComponent;
 import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.PlayerDataManager;
+import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.utils.DateUtil;
 import fr.alexdoru.mwe.utils.NetInfoOrdering;
 import net.minecraft.client.Minecraft;
@@ -28,7 +29,7 @@ public class WarningMessages {
         for (final NetworkPlayerInfo netInfo : NetInfoOrdering.vanillaSortingCopyOf(Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap())) {
             final UUID uuid = netInfo.getGameProfile().getId();
             final String playerName = netInfo.getGameProfile().getName();
-            final WDR wdr = WdrData.getWdr(uuid, playerName);
+            final WDR wdr = WdrDataManager.getWdr(uuid, playerName);
             if (wdr == null) {
                 continue;
             }

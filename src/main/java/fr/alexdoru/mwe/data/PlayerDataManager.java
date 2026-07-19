@@ -11,7 +11,6 @@ import fr.alexdoru.mwe.features.LeatherArmorManager;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.nocheaters.WarningMessages;
-import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.DelayedTask;
@@ -194,7 +193,7 @@ public final class PlayerDataManager {
 
     private static void tryPrintWarningMessage(EntityPlayer player) {
         if (MWEConfig.warningMessages && !warningMsgPrinted.contains(player.getUniqueID())) {
-            final WDR wdr = WdrData.getWdr(player.getUniqueID(), player.getName());
+            final WDR wdr = WdrDataManager.getWdr(player.getUniqueID(), player.getName());
             if (wdr != null) {
                 warningMsgPrinted.add(player.getUniqueID());
                 ChatHandler.deleteWarningFromChat(player.getName());
@@ -222,7 +221,7 @@ public final class PlayerDataManager {
     private static PlayerData updatePlayerData(GameProfile gameProfile) {
         final UUID id = gameProfile.getId();
         final String username = gameProfile.getName();
-        final WDR wdr = WdrData.getWdr(id, username);
+        final WDR wdr = WdrDataManager.getWdr(id, username);
         String extraPrefix = "";
         IChatComponent iExtraPrefix = null;
         final String squadname = SquadHandler.getSquadnameUnsafe(username);
