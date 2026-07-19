@@ -138,7 +138,6 @@ public class CommandWDR extends MyAbstractCommand {
 
     private static void addPlayerToReportList(UUID uuid, String playername, String formattedName, List<String> cheats) {
         final boolean added = WdrDataManager.addReport(uuid, playername, cheats);
-        WdrDataManager.saveReportedPlayers();
         if (added) {
             final boolean isNicked = !PlayerDataManager.isRealPlayer(uuid);
             ChatUtil.addChatMessage(

@@ -70,7 +70,6 @@ public class CommandUnWDR extends MyAbstractCommand {
             ChatUtil.addChatMessage(EnumChatFormatting.RED + "Player not found in your report list.");
             return;
         }
-        WdrDataManager.saveReportedPlayers();
         ChatHandler.deleteWarningFromChat(playername);
         ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + ".");
     }

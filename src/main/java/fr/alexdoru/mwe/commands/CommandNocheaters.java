@@ -81,7 +81,7 @@ public class CommandNocheaters extends MyAbstractCommand {
             displaypage = 1;
         }
 
-        final List<Map.Entry<Object, WDR>> sortedEntries = MapUtil.sortByValueReversed(WdrDataManager.getAllWDRs());
+        final List<Map.Entry<Object, WDR>> sortedEntries = MapUtil.sortByValueReversed(WdrDataManager.getAllReports());
         final List<Future<IChatComponent>> futureList = new ArrayList<>();
         int nbreport = 1; // pour compter le nb de report et en afficher que 8 par page
         int nbpage = 1;

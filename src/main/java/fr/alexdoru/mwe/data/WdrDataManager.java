@@ -3,44 +3,73 @@ package fr.alexdoru.mwe.data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.events.ReportListEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.nocheaters.WDR;
+import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import fr.alexdoru.mwe.utils.UUIDUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
-import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class WdrDataManager {
 
     private WdrDataManager() {}
 
-    private static final File legacywdrFile = new File(Minecraft.getMinecraft().mcDataDir, "config/wdred.txt");
-    private static final File wdrJsonFile = new File(Minecraft.getMinecraft().mcDataDir, "config/WDRList.json");
     private static final Map<UUID, WDR> uuidMap = new HashMap<>();
     private static final Map<String, WDR> nickMap = new HashMap<>();
+    private static File wdrDataFile;
+    private static final AtomicBoolean dirty = new AtomicBoolean(false);
     private static boolean initialized;
-    private static boolean dirty;
 
     public static void loadData(File configFolder) {
         if (initialized) {
             throw new IllegalStateException("Already initialized");
         }
         initialized = true;
-        WdrDataManager.loadReportedPlayers();
-        Runtime.getRuntime().addShutdownHook(new Thread(WdrDataManager::saveReportedPlayers));
+        wdrDataFile = new File(configFolder, "ReportList.json");
+        MultithreadingUtil.queueIOTask(() -> {
+            final Map<Object, WDR> map = loadDataFromFiles();
+            final Map<UUID, WDR> uuidReports = new HashMap<>();
+            final Map<String, WDR> nameReports = new HashMap<>();
+            map.forEach((key, value) -> {
+                if (key instanceof String) {
+                    nameReports.put((String) key, value);
+                } else if (key instanceof UUID) {
+                    uuidReports.put((UUID) key, value);
+                }
+            });
+            Minecraft.getMinecraft().addScheduledTask(() -> {
+                uuidMap.putAll(uuidReports);
+                nickMap.putAll(nameReports);
+            });
+        });
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (dirty.get()) {
+                writeDataToFile(getAllReports());
+            }
+        }));
     }
 
     static void saveIfDirty() {
-        if (dirty) {
-            WdrDataManager.saveReportedPlayers();
+        if (dirty.get()) {
+            dirty.set(false);
+            final Map<Object, WDR> snapshot = getAllReports();
+            MultithreadingUtil.queueIOTask(() -> {
+                if (!writeDataToFile(snapshot)) {
+                    dirty.set(true);
+                }
+            });
         }
     }
 
-    public static Map<Object, WDR> getAllWDRs() {
+    public static Map<Object, WDR> getAllReports() {
         final Map<Object, WDR> mergedMap = new HashMap<>(uuidMap.size() + nickMap.size());
         mergedMap.putAll(uuidMap);
         mergedMap.putAll(nickMap);
@@ -58,12 +87,12 @@ public final class WdrDataManager {
      * Adds or update a report for a player, returns true if it added a new report
      */
     public static boolean addReport(UUID uuid, String playername, String cheat) {
-        WDR wdr = WdrDataManager.getWdr(uuid, playername);
+        WDR wdr = getWdr(uuid, playername);
         boolean added = false;
         final boolean refreshName;
         if (wdr == null) {
             wdr = new WDR(cheat);
-            added = WdrDataManager.put(uuid, playername, wdr);
+            added = put(uuid, playername, wdr);
             refreshName = true;
         } else {
             refreshName = wdr.addCheat(cheat);
@@ -75,7 +104,7 @@ public final class WdrDataManager {
                 PlayerDataManager.updatePlayerDataAndEntityData(playername);
             }
         }
-        dirty = true;
+        dirty.set(true);
         if (added) {
             MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.ADDED, uuid, playername, wdr));
         }
@@ -86,11 +115,11 @@ public final class WdrDataManager {
      * Adds or update a report for a player, returns true if it added a new report
      */
     public static boolean addReport(UUID uuid, String playername, List<String> cheats) {
-        WDR wdr = WdrDataManager.getWdr(uuid, playername);
+        WDR wdr = getWdr(uuid, playername);
         boolean added = false;
         if (wdr == null) {
             wdr = new WDR(cheats);
-            added = WdrDataManager.put(uuid, playername, wdr);
+            added = put(uuid, playername, wdr);
         } else {
             wdr.addCheats(cheats);
         }
@@ -99,7 +128,7 @@ public final class WdrDataManager {
         } else {
             PlayerDataManager.updatePlayerDataAndEntityData(playername);
         }
-        dirty = true;
+        dirty.set(true);
         if (added) {
             MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.ADDED, uuid, playername, wdr));
         }
@@ -132,95 +161,89 @@ public final class WdrDataManager {
         }
         if (removed != null) {
             MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.REMOVED, uuid, playername, removed));
-            dirty = true;
+            dirty.set(true);
         }
         return removed != null;
     }
 
-    public static void saveReportedPlayers() {
-        final ArrayList<String> reportLines = new ArrayList<>(uuidMap.size() + nickMap.size());
-        for (final Entry<UUID, WDR> entry : uuidMap.entrySet()) {
-            final String uuid = entry.getKey().toString();
-            final WDR wdr = entry.getValue();
-            reportLines.add(uuid + " " + wdr.getTimestamp() + wdr.cheatsToString());
-        }
-        for (final Entry<String, WDR> entry : nickMap.entrySet()) {
-            final String playername = entry.getKey();
-            final WDR wdr = entry.getValue();
-            reportLines.add(playername + " " + wdr.getTimestamp() + wdr.cheatsToString());
-        }
-        try (final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(wdrJsonFile))) {
-            final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
-            final String jsonString = gson.toJson(reportLines);
-            bufferedWriter.write(jsonString);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        dirty = false;
-    }
-
-    private static void loadReportedPlayers() {
-        final List<String> jsonReportLines = loadReportsFromJSONFile();
-        final List<String> legacyReportLines = loadReportsFromLegacyFile();
-        final boolean deleteLegacyFile = !legacyReportLines.isEmpty();
-        jsonReportLines.forEach(WdrDataManager::loadReportLine);
-        legacyReportLines.forEach(WdrDataManager::loadReportLine);
-        if (deleteLegacyFile) {
-            WdrDataManager.saveReportedPlayers();
-            //noinspection ResultOfMethodCallIgnored
-            legacywdrFile.delete();
-        }
-    }
-
-    private static List<String> loadReportsFromJSONFile() {
-        if (!wdrJsonFile.exists()) {
-            return Collections.emptyList();
-        }
-        final List<String> reportLines = new ArrayList<>();
-        try {
-            final Gson gson = new Gson();
-            final List<String> list = gson.fromJson(new FileReader(wdrJsonFile), new TypeToken<List<String>>() {}.getType());
-            if (list != null) reportLines.addAll(list);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return reportLines;
-    }
-
-    private static List<String> loadReportsFromLegacyFile() {
-        if (!legacywdrFile.exists()) {
-            return Collections.emptyList();
-        }
-        final List<String> reportLines = new ArrayList<>();
-        try (final BufferedReader reader = new BufferedReader(new FileReader(legacywdrFile))) {
-            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-                reportLines.add(line);
+    private static boolean writeDataToFile(Map<Object, WDR> map) {
+        final List<String> reportLines = new ArrayList<>(map.size());
+        map.forEach((key, value) -> {
+            if (key instanceof String || key instanceof UUID) {
+                reportLines.add(key + " " + value.getTimestamp() + value.cheatsToString());
             }
-        } catch (Exception ignored) {}
-        return reportLines;
+        });
+        try {
+            final File file = wdrDataFile;
+            if (file.getParentFile() != null) {
+                Files.createDirectories(file.getParentFile().toPath());
+            }
+            try (final BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+                final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+                final String jsonString = gson.toJson(reportLines);
+                bw.write(jsonString);
+                return true;
+            }
+        } catch (IOException e) {
+            MWE.logger.error(e);
+        }
+        return false;
     }
 
-    private static void loadReportLine(String reportLine) {
+    @NotNull
+    private static Map<Object, WDR> loadDataFromFiles() {
+        final Map<Object, WDR> map = new HashMap<>();
+        if (wdrDataFile.exists()) {
+            loadDataFromFile(wdrDataFile, map);
+            return map;
+        }
+        final File legacyFile = new File(Minecraft.getMinecraft().mcDataDir, "config/WDRList.json");
+        if (legacyFile.exists()) {
+            loadDataFromFile(legacyFile, map);
+            if (!map.isEmpty()) {
+                if (writeDataToFile(map)) {
+                    if (legacyFile.delete()) {
+                        MWE.logger.info("Deleted report data file: {}", legacyFile);
+                    } else {
+                        MWE.logger.error("Failed to delete legacy report data file: {}", legacyFile);
+                    }
+                }
+            }
+            return map;
+        }
+        return map;
+    }
+
+    private static void loadDataFromFile(File file, Map<Object, WDR> map) {
+        if (file.exists()) {
+            try (Reader reader = new FileReader(file)) {
+                final List<String> list = new Gson().fromJson(reader, new TypeToken<List<String>>() {}.getType());
+                if (list != null) {
+                    for (final String line : list) {
+                        loadReportLine(line, map);
+                    }
+                }
+            } catch (Exception e) {
+                MWE.logger.error(e);
+            }
+        }
+    }
+
+    private static void loadReportLine(String reportLine, Map<Object, WDR> map) {
         //In the wdr file the data is saved with the following pattern :
         //uuid timestamp hack1 hack2 hack3 hack4 hack5
         final String[] split = reportLine.split(" ");
         if (split.length < 3) return;
-        boolean oldDataFormat = false;
         long timestamp = 0L;
         try {
             timestamp = Long.parseLong(split[1]);
-            try {
-                Long.parseLong(split[2]);
-            } catch (Exception e) {
-                oldDataFormat = true;
-            }
         } catch (Exception ignored) {}
         if (timestamp == 0L) return;
         final long datenow = new Date().getTime();
         if (MWEConfig.deleteOldReports && datenow > timestamp + MWEConfig.timeDeleteReport * 24f * 3600f * 1000f) {
             return;
         }
-        final ArrayList<String> hacks = new ArrayList<>(Arrays.asList(split).subList(oldDataFormat ? 2 : 3, split.length));
+        final ArrayList<String> hacks = new ArrayList<>(Arrays.asList(split).subList(2, split.length));
         // remove reports for players that are only ignored
         // used for backwards compat
         final String IGNORED = "ignored";
@@ -235,14 +258,15 @@ public final class WdrDataManager {
         // - a uuid without ----
         // - a uuid with ----
         final UUID uuid = UUIDUtil.fromString(mapKey);
-        if (uuid == null && mapKey.length() < 17) {
+        final int VALID_NAME_MAX_LENGTH = 16;
+        if (uuid == null && mapKey.length() <= VALID_NAME_MAX_LENGTH) {
             final long TIME_TRANSFORM_NICKED_REPORT = 86400000L; // 24 hours
             if (datenow > timestamp + TIME_TRANSFORM_NICKED_REPORT) {
                 return;
             }
-            nickMap.put(mapKey, new WDR(hacks, timestamp));
+            map.put(mapKey, new WDR(hacks, timestamp));
         } else if (uuid != null) {
-            uuidMap.put(uuid, new WDR(hacks, timestamp));
+            map.put(uuid, new WDR(hacks, timestamp));
         }
     }
 
