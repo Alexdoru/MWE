@@ -73,9 +73,6 @@ public class CommandWDR extends MyAbstractCommand {
             cheats.addAll(Arrays.asList(args).subList(1, args.length));
         }
         PartyDetection.printBoostingReportAdvice(playername);
-        if (ScoreboardTracker.isPreGameLobby()) {
-            ChatUtil.printReportingAdvice();
-        }
         addPlayerToReportList(playername, cheats);
     }
 
