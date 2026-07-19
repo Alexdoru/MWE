@@ -32,7 +32,7 @@ public class KeepSprintBCheck extends Check {
 
     @Override
     public boolean canSendReport() {
-        return true;
+        return false;
     }
 
     @Override

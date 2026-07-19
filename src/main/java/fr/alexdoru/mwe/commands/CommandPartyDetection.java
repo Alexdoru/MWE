@@ -1,9 +1,11 @@
 package fr.alexdoru.mwe.commands;
 
+import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.features.PartyDetection;
+import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.EnumChatFormatting;
@@ -38,13 +40,21 @@ public class CommandPartyDetection extends MyAbstractCommand {
             sb.append(EnumChatFormatting.DARK_GRAY).append("- ");
             for (final String playername : party) {
                 final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
+                sb.append(EnumChatFormatting.DARK_GRAY);
                 if (netInfo == null) {
-                    sb.append(EnumChatFormatting.DARK_GRAY).append(playername).append(" ");
-                    continue;
+                    sb.append(playername);
                 } else {
                     flag = true;
+                    sb.append(NameFormatter.getFormattedName(netInfo));
                 }
-                sb.append(EnumChatFormatting.DARK_GRAY).append(NameFormatter.getFormattedName(netInfo)).append(EnumChatFormatting.RESET).append(" ");
+                sb.append(EnumChatFormatting.RESET);
+                if (ScoreboardTracker.isPreGameLobby() && netInfo != null) {
+                    final MWSkin skin = MWSkin.ofPlayer(netInfo);
+                    if (skin != null && skin.mwClass != null) {
+                        sb.append(EnumChatFormatting.GRAY).append(" [").append(skin.mwClass.TAG).append("]");
+                    }
+                }
+                sb.append(" ");
             }
             if (flag) {
                 if (isFirst) {

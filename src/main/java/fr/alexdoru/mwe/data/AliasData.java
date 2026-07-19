@@ -23,10 +23,6 @@ public class AliasData {
         Runtime.getRuntime().addShutdownHook(new Thread(AliasData::writeDataToFile));
     }
 
-    public static List<String> getAllNames() {
-        return new ArrayList<>(aliasMap.keySet());
-    }
-
     public static List<Map.Entry<String, String>> getEntries() {
         return new ArrayList<>(aliasMap.entrySet());
     }

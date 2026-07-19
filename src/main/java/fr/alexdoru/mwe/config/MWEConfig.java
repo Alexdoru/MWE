@@ -628,6 +628,30 @@ public final class MWEConfig {
     public static int witherAlertsThreshold = 100;
 
     @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Class Selector",
+            name = "Class selector overlay",
+            comment = "Renders an overlay on the class selector which shows the selected skin, prestiges and class points")
+    public static boolean classSelectorOverlay = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Class Selector",
+            name = "Render colored border",
+            comment = "Renders a prestige colored border")
+    public static boolean classSelectorColoredBorder = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Class Selector",
+            name = "Render prestige level",
+            comment = "Renders the amount of prestiges")
+    public static boolean classSelectorPrestigeLevel = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Class Selector",
+            name = "Render classpoints",
+            comment = "Renders the amount of classpoints")
+    public static boolean classSelectorClasspoints = true;
+
+    @ConfigProperty(
             category = MEGA_WALLS, subCategory = "Chat",
             name = "Print deathmatch damage in chat",
             comment = "Prints the deathmatch damage as a separate message in chat instead of having to hover over the message")
@@ -761,6 +785,12 @@ public final class MWEConfig {
             name = "Warcry HUD",
             comment = "Displays the warcry cooldown")
     public static final RendererPosition warcryHUDPosition = new RendererPosition(true, 0.65d, 1d);
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Class in lobby HUD",
+            comment = "Displays the amount of each class selected by the players in the current mega walls queue")
+    public static final RendererPosition classInLobbyHUDPosition = new RendererPosition(true, 0.15d, 0.15d);
 
     @ConfigProperty(
             category = FINAL_KILL_COUNTER, subCategory = "HUD",

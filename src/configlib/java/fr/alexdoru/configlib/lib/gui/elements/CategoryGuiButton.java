@@ -31,12 +31,17 @@ public class CategoryGuiButton implements SizedElement {
     }
 
     public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        if (mouseButton == 0 && mouseX >= posX && mouseX < posX + getWidth() && mouseY >= posY && mouseY < posY + getHeight()) {
+        if (mouseButton == 0 && this.isMouseHovering(mouseX, mouseY)) {
             this.configGui.setFocusedCategory(this.categoryName);
             Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
             return true;
         }
         return false;
+    }
+
+    private boolean isMouseHovering(int mouseX, int mouseY) {
+        final int extraY = ConfigGuiScreen.ELEMENT_GAP / 2;
+        return mouseX >= posX && mouseY >= posY - extraY && mouseX < posX + getWidth() && mouseY < posY + extraY + getHeight();
     }
 
     public int getWidth() {

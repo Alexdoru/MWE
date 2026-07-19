@@ -20,6 +20,7 @@ public final class MWERenderers {
         rendererManager.registerHUDRenderer(new ArmorHUD());
         rendererManager.registerHUDRenderer(arrowHitHUD = new ArrowHitHUD());
         rendererManager.registerHUDRenderer(new BaseLocationHUD());
+        rendererManager.registerHUDRenderer(new ClassInLobbyHUD());
         rendererManager.registerHUDRenderer(creeperPrimedTntHUD = new CreeperPrimedTntHUD());
         rendererManager.registerHUDRenderer(new EnergyDisplayHUD());
         rendererManager.registerHUDRenderer(fkCounterHUD = new FKCounterHUD());
