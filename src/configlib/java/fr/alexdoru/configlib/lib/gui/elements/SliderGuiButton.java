@@ -53,7 +53,7 @@ public class SliderGuiButton extends ConfigGuiButton {
 
     @Override
     protected int getRightSideContentWidth() {
-        return (PLUS_BUTTON_SIZE + SLIDER_BUTTON_SIZE / 2 + 1) * 2 + SLIDER_WIDTH + 6;
+        return (PLUS_BUTTON_SIZE + SLIDER_BUTTON_SIZE / 2) * 2 + 1 + SLIDER_WIDTH + 6;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class SliderGuiButton extends ConfigGuiButton {
         sliderButtonY = sliderBarY + (SLIDER_HEIGHT - SLIDER_BUTTON_SIZE) / 2;
         minusButtonX = contentLeft;
         minusButtonY = sliderBarY + (SLIDER_HEIGHT - PLUS_BUTTON_SIZE) / 2;
-        plusButtonX = sliderBarX + SLIDER_WIDTH + HALF_SLIDER_BUTTON_SIZE + 1;
+        plusButtonX = sliderBarX + SLIDER_WIDTH + HALF_SLIDER_BUTTON_SIZE;
         plusButtonY = minusButtonY;
         GuiUtil.drawBoxWithOutline(sliderBarX, sliderBarY, sliderBarX + SLIDER_WIDTH, sliderBarY + SLIDER_HEIGHT, colorPalette.SLIDER_BUTTON_TRACK, colorPalette.SLIDER_BUTTON_TRACK_BORDER);
         final boolean silderHovered = isMouseOnButton(mouseX, mouseY, sliderButtonX, sliderButtonY, SLIDER_BUTTON_SIZE, SLIDER_BUTTON_SIZE);
