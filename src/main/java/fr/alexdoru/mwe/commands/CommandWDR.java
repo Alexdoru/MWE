@@ -88,11 +88,13 @@ public class CommandWDR extends MyAbstractCommand {
                 if (ScoreboardTracker.isPrepPhase()) {
                     return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAlias());
                 } else {
+                    final List<String> players = TabCompletionUtil.getAlias();
                     final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
-                    if (fkCounter == null) return null;
-                    final List<String> playersInThisGame = fkCounter.getPlayersInThisGame();
-                    playersInThisGame.removeAll(TabCompletionUtil.getPlayersAndAlias());
-                    return getListOfStringsMatchingLastWord(args, playersInThisGame);
+                    if (fkCounter != null) {
+                        players.addAll(fkCounter.getPlayersInThisGame());
+                        players.removeAll(TabCompletionUtil.getPlayers());
+                    }
+                    return getListOfStringsMatchingLastWord(args, players);
                 }
             }
             return null;
