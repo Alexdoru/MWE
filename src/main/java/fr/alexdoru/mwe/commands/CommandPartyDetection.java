@@ -45,7 +45,7 @@ public class CommandPartyDetection extends MyAbstractCommand {
                     sb.append(playername);
                 } else {
                     flag = true;
-                    sb.append(NameFormatter.getFormattedName(netInfo));
+                    sb.append(NameFormatter.getTablistName(netInfo));
                 }
                 sb.append(EnumChatFormatting.RESET);
                 if (ScoreboardTracker.isPreGameLobby() && netInfo != null) {

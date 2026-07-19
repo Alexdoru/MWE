@@ -3,6 +3,7 @@ package fr.alexdoru.mwe.commands;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.PartyDetection;
@@ -18,7 +19,6 @@ import fr.alexdoru.mwe.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -112,8 +112,9 @@ public class CommandWDR extends MyAbstractCommand {
                     addPlayerToReportList(
                             uuid,
                             netInfo.getGameProfile().getName(),
-                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()),
-                            cheats);
+                            NameFormatter.getVanillaName(netInfo),
+                            cheats
+                    );
                     return;
                 }
             }

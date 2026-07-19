@@ -18,7 +18,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
@@ -188,7 +187,7 @@ public class CommandAddAlias extends MyAbstractCommand {
                     ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "In this lobby :\n");
                     found = true;
                 }
-                ChatUtil.addChatMessage(NameFormatter.getFormattedName(netInfo));
+                ChatUtil.addChatMessage(NameFormatter.getTablistName(netInfo));
             }
         }
         if (found) {
@@ -206,7 +205,7 @@ public class CommandAddAlias extends MyAbstractCommand {
                         null,
                         netInfo.getGameProfile().getName(),
                         alias,
-                        ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName())
+                        NameFormatter.getVanillaName(netInfo)
                 );
                 return;
             }
@@ -255,7 +254,7 @@ public class CommandAddAlias extends MyAbstractCommand {
                     this.removeAlias(
                             null,
                             netInfo.getGameProfile().getName(),
-                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName())
+                            NameFormatter.getVanillaName(netInfo)
                     );
                     return;
                 }

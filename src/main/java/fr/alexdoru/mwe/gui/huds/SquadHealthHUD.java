@@ -118,7 +118,7 @@ public class SquadHealthHUD extends AbstractRenderer {
     }
 
     private String getPlayerName(NetworkPlayerInfo netInfo) {
-        final String name = NameFormatter.getFormattedName(netInfo);
+        final String name = NameFormatter.getTablistName(netInfo);
         return name.startsWith(PlayerDataManager.SQUAD_ICON) ? name.substring(PlayerDataManager.SQUAD_ICON.length()) : name;
     }
 

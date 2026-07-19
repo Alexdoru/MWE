@@ -111,7 +111,7 @@ public final class NetPlayerInfoTracker {
             this.disconnectTime = System.currentTimeMillis();
             this.uuid = netInfo.getGameProfile().getId();
             this.playername = netInfo.getGameProfile().getName();
-            this.formattedName = NameFormatter.getFormattedName(netInfo);
+            this.formattedName = NameFormatter.getTablistName(netInfo);
         }
 
     }

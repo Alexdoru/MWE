@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.data;
 
 import fr.alexdoru.mwe.features.SquadHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Team;
@@ -18,30 +19,24 @@ public final class NameFormatter {
     }
 
     /**
-     * Returns the formatted name of the player, additionnal icons, squadname, alias and prestive V tag included
-     * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay#getPlayerName}
+     * Returns the player's name exactly as it is shown in the tablist
      */
-    public static String getFormattedName(String playername) {
-        final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
-        if (netInfo == null) {
-            return playername;
-        }
-        return getFormattedName(netInfo);
-    }
-
-    /**
-     * Returns the formatted name of the player, additionnal icons, squadname, alias not included
-     * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay#getPlayerName}
-     */
-    public static String getFormattedName(NetworkPlayerInfo netInfo) {
+    public static String getTablistName(NetworkPlayerInfo netInfo) {
+        try {
+            return Minecraft.getMinecraft().ingameGUI.getTabList().getPlayerName(netInfo);
+        } catch (Throwable ignored) {}
         if (netInfo.getDisplayName() == null) {
             return ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName());
         }
         return netInfo.getDisplayName().getFormattedText();
     }
 
-    // TODO hold a fake guiplayertab instance and use the method to get tablist name
-    // TODO redirect all usages of ScorePlayerTeam.formatPlayerName to this class
+    /**
+     * Returns the player's name formatted according to the vanilla team
+     */
+    public static String getVanillaName(NetworkPlayerInfo netInfo) {
+        return ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName());
+    }
 
     /**
      * Returns the formatted team name with additionnaly a squadname
