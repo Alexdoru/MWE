@@ -23,17 +23,22 @@ public class EnumGuiButton extends ConfigGuiButton {
         }
         int width = 0;
         for (final Enum<?> e : values) {
-            width = Math.max(width, mc.fontRendererObj.getStringWidth("  " + e.name()));
+            width = Math.max(width, mc.fontRendererObj.getStringWidth(e.name()) + 9);
         }
         this.button = new ClickGuiButton(0, 0, 0, width, 20, "");
         this.setValue((Enum<?>) this.field.get(null));
     }
 
     @Override
+    protected int getRightSideContentWidth() {
+        return button.width + BUTTON_RIGHT_MARGIN;
+    }
+
+    @Override
     public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
-        button.xPosition = drawX + boxWidth - button.width - 20;
-        button.yPosition = drawY + (hasComment ? 8 + mc.fontRendererObj.FONT_HEIGHT / 2 : (getHeight() - button.height) / 2);
+        button.xPosition = contentLeft;
+        button.yPosition = drawY + (hasComment ? PADDING + mc.fontRendererObj.FONT_HEIGHT / 2 : (getHeight() - button.height) / 2);
         button.drawButton(colorPalette, mc, mouseX, mouseY);
     }
 

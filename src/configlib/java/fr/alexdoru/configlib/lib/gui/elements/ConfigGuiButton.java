@@ -5,6 +5,7 @@ import fr.alexdoru.configlib.api.ConfigProperty;
 import fr.alexdoru.configlib.lib.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 
 import java.lang.reflect.Field;
@@ -15,6 +16,9 @@ import java.util.List;
 
 public abstract class ConfigGuiButton implements ConfigUIElement {
 
+    protected static final int PADDING = 8;
+    protected static final int BUTTON_RIGHT_MARGIN = 20;
+
     protected final Minecraft mc = Minecraft.getMinecraft();
     protected final Field field;
     private final Method event;
@@ -23,6 +27,7 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     protected final boolean hasComment;
     protected int boxWidth;
     protected int posX, posY;
+    protected int contentLeft;
 
     protected ConfigGuiButton(Field field, Method event, ConfigProperty annotation) {
         this.field = field;
@@ -31,11 +36,16 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
         this.hasComment = !this.annotation.comment().isEmpty();
     }
 
+    /**
+     * @return The distance between the left-most position of the content (button) and the right side of the rect
+     */
+    protected abstract int getRightSideContentWidth();
+
     @Override
     public void setBoxWidth(int boxWidth) {
         this.boxWidth = boxWidth;
         if (hasComment) {
-            final int wrapWidth = boxWidth - mc.fontRendererObj.getStringWidth(" Disabled ") - 20 - 20;
+            final int wrapWidth = boxWidth - getLeftPadding() - getRightSideContentWidth() - 12; // 20
             this.commentToRender.clear();
             this.commentToRender.addAll(resizeCommentLines(annotation.comment(), wrapWidth, mc));
         }
@@ -45,12 +55,15 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         this.posX = drawX;
         this.posY = drawY;
-        GuiUtil.drawBoxWithOutline(drawX, drawY, drawX + boxWidth, drawY + getHeight(), colorPalette.SETTING_BACKGROUND, colorPalette.SETTING_BACKGROUND_BORDER);
-        mc.fontRendererObj.drawStringWithShadow(annotation.name(), drawX + 8, drawY + 8, colorPalette.SETTING_NAME_TEXT);
+        final int right = drawX + boxWidth;
+        this.contentLeft = right - getRightSideContentWidth();
+        GuiUtil.drawBoxWithOutline(drawX, drawY, right, drawY + getHeight(), colorPalette.SETTING_BACKGROUND, colorPalette.SETTING_BACKGROUND_BORDER);
+        final int textX = drawX + getLeftPadding();
+        mc.fontRendererObj.drawStringWithShadow(annotation.name(), textX, drawY + PADDING, colorPalette.SETTING_NAME_TEXT);
         if (hasComment) {
-            int commentY = drawY + 8 + mc.fontRendererObj.FONT_HEIGHT + 8;
+            int commentY = drawY + PADDING + mc.fontRendererObj.FONT_HEIGHT + 6; // '6' here represents the vertical space between name and comment
             for (final String line : commentToRender) {
-                mc.fontRendererObj.drawStringWithShadow(line, drawX + 8, commentY, colorPalette.SETTING_COMMENT_TEXT);
+                mc.fontRendererObj.drawStringWithShadow(line, textX, commentY, colorPalette.SETTING_COMMENT_TEXT);
                 commentY += mc.fontRendererObj.FONT_HEIGHT;
             }
         }
@@ -59,9 +72,9 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     @Override
     public int getHeight() {
         if (hasComment) {
-            return 8 + mc.fontRendererObj.FONT_HEIGHT + 8 + mc.fontRendererObj.FONT_HEIGHT * commentToRender.size() + 8 - 1;
+            return PADDING + mc.fontRendererObj.FONT_HEIGHT + PADDING + mc.fontRendererObj.FONT_HEIGHT * commentToRender.size() + 6 - 1; // '6' here represents the vertical space between name and comment
         }
-        return 8 + mc.fontRendererObj.FONT_HEIGHT + 8 - 1;
+        return PADDING + mc.fontRendererObj.FONT_HEIGHT + PADDING - 1;
     }
 
     @Override
@@ -95,4 +108,17 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
         this.mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
     }
 
+    protected int getLeftPadding() { return PADDING; }
+
+    protected final ClickGuiButton getMainButton(String text) {
+        return new ClickGuiButton(-1, 0, 0, getMainButtonWidth(), 20, text);
+    }
+
+    protected final int getMainButtonWidth() {
+        return mc.fontRendererObj.getStringWidth("Disabled") + 9;
+    }
+
+    protected static String getBooleanText(boolean value) {
+        return value ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled";
+    }
 }

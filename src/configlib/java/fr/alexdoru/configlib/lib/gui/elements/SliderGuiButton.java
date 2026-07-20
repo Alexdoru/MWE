@@ -3,6 +3,7 @@ package fr.alexdoru.configlib.lib.gui.elements;
 import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.api.ConfigProperty;
 import fr.alexdoru.configlib.lib.gui.GuiUtil;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.util.MathHelper;
 
 import java.lang.reflect.Field;
@@ -19,7 +20,7 @@ public class SliderGuiButton extends ConfigGuiButton {
     private int plusButtonX, plusButtonY;
     private int sliderIncrement;
     private final boolean isIntValue;
-    private boolean isPourcentage;
+    private boolean isPercentage;
     private final int minValue, maxValue;
     private int sliderValueI;
     private double sliderValueD;
@@ -38,7 +39,7 @@ public class SliderGuiButton extends ConfigGuiButton {
             isIntValue = false;
             sliderValueD = (double) field.get(null);
             if (minValue == 0 && maxValue == 1) {
-                isPourcentage = true;
+                isPercentage = true;
                 sliderValueI = (int) ((double) field.get(null) * 100d);
                 sliderIncrement = MathHelper.clamp_int((SLIDER_WIDTH - 1) * (sliderValueI) / 100, 0, SLIDER_WIDTH - 1);
             } else {
@@ -51,9 +52,8 @@ public class SliderGuiButton extends ConfigGuiButton {
     }
 
     @Override
-    public void setBoxWidth(int boxWidth) {
-        super.setBoxWidth(boxWidth - 60);
-        this.boxWidth = boxWidth;
+    protected int getRightSideContentWidth() {
+        return (PLUS_BUTTON_SIZE + SLIDER_BUTTON_SIZE / 2) * 2 + 1 + SLIDER_WIDTH + 6;
     }
 
     @Override
@@ -63,17 +63,22 @@ public class SliderGuiButton extends ConfigGuiButton {
             updateSliderFromPosition(mouseX - sliderBarX);
         }
         final int SLIDER_HEIGHT = 6;
-        sliderBarX = drawX + boxWidth - SLIDER_WIDTH - 20;
-        final int sliderBarY = drawY + 8 + mc.fontRendererObj.FONT_HEIGHT;
-        sliderButtonX = sliderBarX + sliderIncrement - SLIDER_BUTTON_SIZE / 2;
+        final int HALF_SLIDER_BUTTON_SIZE = SLIDER_BUTTON_SIZE / 2;
+        sliderBarX = contentLeft + PLUS_BUTTON_SIZE + HALF_SLIDER_BUTTON_SIZE + 1;
+        final int sliderBarY = drawY + PADDING + mc.fontRendererObj.FONT_HEIGHT;
+        sliderButtonX = sliderBarX + sliderIncrement - HALF_SLIDER_BUTTON_SIZE;
         sliderButtonY = sliderBarY + (SLIDER_HEIGHT - SLIDER_BUTTON_SIZE) / 2;
-        minusButtonX = sliderBarX - SLIDER_BUTTON_SIZE / 2 - PLUS_BUTTON_SIZE - 1;
+        minusButtonX = contentLeft;
         minusButtonY = sliderBarY + (SLIDER_HEIGHT - PLUS_BUTTON_SIZE) / 2;
-        plusButtonX = sliderBarX + SLIDER_WIDTH + SLIDER_BUTTON_SIZE / 2;
-        plusButtonY = sliderBarY + (SLIDER_HEIGHT - PLUS_BUTTON_SIZE) / 2;
+        plusButtonX = sliderBarX + SLIDER_WIDTH + HALF_SLIDER_BUTTON_SIZE;
+        plusButtonY = minusButtonY;
         GuiUtil.drawBoxWithOutline(sliderBarX, sliderBarY, sliderBarX + SLIDER_WIDTH, sliderBarY + SLIDER_HEIGHT, colorPalette.SLIDER_BUTTON_TRACK, colorPalette.SLIDER_BUTTON_TRACK_BORDER);
         final boolean silderHovered = isMouseOnButton(mouseX, mouseY, sliderButtonX, sliderButtonY, SLIDER_BUTTON_SIZE, SLIDER_BUTTON_SIZE);
         final int sliderColor = silderHovered ? GuiUtil.brightenColor(colorPalette.SLIDER_BUTTON_THUMB, 0.12f) : colorPalette.SLIDER_BUTTON_THUMB;
+        if (sliderButtonX > (sliderBarX + 1)) {
+            final int top = sliderBarY + 1;
+            Gui.drawRect(sliderBarX + 1, top, sliderButtonX, top + SLIDER_HEIGHT - 2, sliderColor);
+        }
         GuiUtil.drawBoxWithOutline(sliderButtonX, sliderButtonY, sliderButtonX + SLIDER_BUTTON_SIZE, sliderButtonY + SLIDER_BUTTON_SIZE, sliderColor, colorPalette.SLIDER_BUTTON_THUMB_BORDER);
         final boolean isMinusHovered = isMouseOnButton(mouseX, mouseY, minusButtonX, minusButtonY, PLUS_BUTTON_SIZE, PLUS_BUTTON_SIZE);
         final int minusColor = isMinusHovered ? GuiUtil.brightenColor(colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND, 0.12f) : colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND;
@@ -87,7 +92,7 @@ public class SliderGuiButton extends ConfigGuiButton {
         if (isIntValue) {
             valueText = String.valueOf(sliderValueI);
         } else {
-            if (isPourcentage) {
+            if (isPercentage) {
                 valueText = MathHelper.floor_double(sliderValueI) + "%";
             } else {
                 valueText = String.format("%.2f", sliderValueD);
@@ -100,7 +105,7 @@ public class SliderGuiButton extends ConfigGuiButton {
 
     @Override
     public int getHeight() {
-        return Math.max(super.getHeight(), 8 + mc.fontRendererObj.FONT_HEIGHT + SLIDER_BUTTON_SIZE + 8);
+        return Math.max(super.getHeight(), PADDING + mc.fontRendererObj.FONT_HEIGHT + SLIDER_BUTTON_SIZE + PADDING);
     }
 
     @Override
@@ -143,7 +148,7 @@ public class SliderGuiButton extends ConfigGuiButton {
                 if (prevValue != sliderValueI) {
                     invokeConfigEvent();
                 }
-            } else if (isPourcentage) {
+            } else if (isPercentage) {
                 final int prevValue = sliderValueI;
                 sliderValueI = MathHelper.clamp_int(sliderIncrement * 100 / (SLIDER_WIDTH - 1), 0, 100);
                 field.setDouble(null, MathHelper.clamp_double(sliderValueI / 100d, 0, 1));
@@ -170,7 +175,7 @@ public class SliderGuiButton extends ConfigGuiButton {
                 sliderValueI = MathHelper.clamp_int(sliderValueI + valueIncrement, minValue, maxValue);
                 sliderIncrement = MathHelper.clamp_int((SLIDER_WIDTH - 1) * (sliderValueI - minValue) / (maxValue - minValue), 0, SLIDER_WIDTH - 1);
                 field.setInt(null, sliderValueI);
-            } else if (isPourcentage) {
+            } else if (isPercentage) {
                 sliderValueI = MathHelper.clamp_int(sliderValueI + valueIncrement, 0, 100);
                 sliderIncrement = MathHelper.clamp_int((SLIDER_WIDTH - 1) * sliderValueI / (100), 0, SLIDER_WIDTH - 1);
                 field.setDouble(null, MathHelper.clamp_double(sliderValueI / 100d, 0, 1));
@@ -184,5 +189,4 @@ public class SliderGuiButton extends ConfigGuiButton {
         }
         invokeConfigEvent();
     }
-
 }
