@@ -2,10 +2,10 @@ package fr.alexdoru.configlib.lib.gui.elements;
 
 import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.api.ConfigProperty;
-import fr.alexdoru.configlib.api.IRenderer;
 import fr.alexdoru.configlib.api.RendererPosition;
 import fr.alexdoru.configlib.lib.RendererManager;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
+import fr.alexdoru.configlib.lib.gui.MouseButton;
 import fr.alexdoru.configlib.lib.gui.RendererEditGuiScreen;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
@@ -78,8 +78,8 @@ public class RendererGuiButton extends ConfigGuiButton {
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        if (mouseButton == 0) {
+    public boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) {
+        if (mouseButton.isLeft()) {
             if (buttonEnabled.mousePressed(mc, mouseX, mouseY)) {
                 flipBooleanConfig();
                 buttonEnabled.displayString = getButtonText();
@@ -87,12 +87,7 @@ public class RendererGuiButton extends ConfigGuiButton {
                 return true;
             } else if (buttonMoveHud.mousePressed(mc, mouseX, mouseY)) {
                 buttonEnabled.playPressSound(mc.getSoundHandler());
-                final IRenderer renderer = this.rendererManager.getRendererFromPosition(rendererPosition);
-                if (renderer != null) {
-                    mc.displayGuiScreen(new RendererEditGuiScreen(this.rendererManager, renderer, parentScreen));
-                } else {
-                    throw new RuntimeException("No registered renderer associated to " + field.getName());
-                }
+                mc.displayGuiScreen(new RendererEditGuiScreen(rendererManager, rendererPosition, parentScreen, field));
                 return true;
             } else if (buttonResetPos.mousePressed(mc, mouseX, mouseY)) {
                 rendererPosition.resetToDefault();

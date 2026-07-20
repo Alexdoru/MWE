@@ -6,14 +6,14 @@ import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.FlagChatComponent;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.features.NameFormatter;
+import fr.alexdoru.mwe.data.NameFormatter;
+import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.mwe.hackerdetector.utils.Vector3D;
 import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
-import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
@@ -103,7 +103,7 @@ public abstract class Check implements ICheck {
     private void addToReportList(EntityPlayer player) {
         if (!ScoreboardTracker.isReplayMode() && MWEConfig.addToReportList && !SquadHandler.isSquadmate(player.getName())) {
             final String cheat = this.getCheatName().toLowerCase() + "[H]";
-            WdrData.addReport(player.getUniqueID(), player.getName(), cheat);
+            WdrDataManager.addReport(player.getUniqueID(), player.getName(), cheat);
         }
     }
 

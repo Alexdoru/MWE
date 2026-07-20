@@ -3,10 +3,10 @@ package fr.alexdoru.mwe.commands;
 import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
-import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import fr.alexdoru.mwe.utils.TabCompletionUtil;
 import fr.alexdoru.mwe.utils.UUIDUtil;
@@ -66,11 +66,10 @@ public class CommandUnWDR extends MyAbstractCommand {
 
     private void unwdr(UUID uuid, String playername) {
         ReportQueue.INSTANCE.removePlayerFromReportQueue(playername);
-        if (!WdrData.remove(uuid, playername)) {
+        if (!WdrDataManager.remove(uuid, playername)) {
             ChatUtil.addChatMessage(EnumChatFormatting.RED + "Player not found in your report list.");
             return;
         }
-        WdrData.saveReportedPlayers();
         ChatHandler.deleteWarningFromChat(playername);
         ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "You will no longer receive warnings for " + EnumChatFormatting.RED + playername + EnumChatFormatting.GREEN + ".");
     }

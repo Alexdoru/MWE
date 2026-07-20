@@ -8,14 +8,14 @@ import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
-import fr.alexdoru.mwe.data.AliasData;
+import fr.alexdoru.mwe.data.AliasDataManager;
+import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.PartyDetection;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
-import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import fr.alexdoru.mwe.utils.DelayedTask;
@@ -64,7 +64,7 @@ public final class MWEApi {
          * Returns true if the player has an alias
          */
         public static boolean hasAlias(@Nullable UUID id, @Nullable String playername) {
-            return AliasData.getAlias(id, playername) != null;
+            return AliasDataManager.getAlias(id, playername) != null;
         }
 
         /**
@@ -72,21 +72,21 @@ public final class MWEApi {
          */
         @Nullable
         public static String getAlias(@Nullable UUID id, @Nullable String playername) {
-            return AliasData.getAlias(id, playername);
+            return AliasDataManager.getAlias(id, playername);
         }
 
         /**
          * Sets the alias for the specified player
          */
         public static void setAlias(@Nullable UUID id, @Nullable String playername, String alias) {
-            AliasData.putAlias(id, playername, alias);
+            AliasDataManager.putAlias(id, playername, alias);
         }
 
         /**
          * Removes a player from the alias list, returns true if the player was succesfully removed
          */
         public static boolean removeAlias(@Nullable UUID id, @Nullable String playername) {
-            return AliasData.removeAlias(id, playername);
+            return AliasDataManager.removeAlias(id, playername);
         }
 
     }
@@ -344,7 +344,7 @@ public final class MWEApi {
          * Returns true if the player is in the report list
          */
         public static boolean isPlayerReported(@NotNull UUID uuid, @Nullable String playername) {
-            return WdrData.getWdr(uuid, playername) != null;
+            return WdrDataManager.getWdr(uuid, playername) != null;
         }
 
         /**
@@ -352,21 +352,21 @@ public final class MWEApi {
          */
         @Nullable
         public static IReportInfo getReportInfoFor(@NotNull UUID uuid, @Nullable String playername) {
-            return WdrData.getWdr(uuid, playername);
+            return WdrDataManager.getWdr(uuid, playername);
         }
 
         /**
          * Adds a player to the reportlist
          */
         public static void addToReportList(@NotNull UUID uuid, @Nullable String playername, List<String> cheats) {
-            WdrData.addReport(uuid, playername, cheats);
+            WdrDataManager.addReport(uuid, playername, cheats);
         }
 
         /**
          * Removes a player from the reportlist, returns true if the player was succesfully removed
          */
         public static boolean removeFromReportList(@NotNull UUID uuid, @Nullable String playername) {
-            return WdrData.remove(uuid, playername);
+            return WdrDataManager.remove(uuid, playername);
         }
 
     }

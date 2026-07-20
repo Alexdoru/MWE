@@ -3,14 +3,15 @@ package fr.alexdoru.mwe.chat;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.data.ScangameData;
+import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.features.*;
 import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.hackerdetector.checks.Check;
 import fr.alexdoru.mwe.nocheaters.ReportSuggestionHandler;
 import fr.alexdoru.mwe.nocheaters.WDR;
-import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.MapUtil;
@@ -161,7 +162,7 @@ public class ChatListener {
             if ((MWEConfig.censorCheaterChatMsg || MWEConfig.deleteCheaterChatMsg) && messageSender != null) {
                 final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(messageSender);
                 if (netInfo != null) {
-                    final WDR wdr = WdrData.getWdr(netInfo.getGameProfile().getId(), messageSender);
+                    final WDR wdr = WdrDataManager.getWdr(netInfo.getGameProfile().getId(), messageSender);
                     if (wdr != null && wdr.hasValidCheats()) {
                         if (MWEConfig.deleteCheaterChatMsg) {
                             event.setCanceled(true);

@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.features;
 
 import fr.alexdoru.mwe.api.events.SquadEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import net.minecraft.client.Minecraft;
@@ -34,7 +35,7 @@ public final class SquadHandler {
     public static void addPlayer(String playername, String friendlyName) {
         final String prevSquadname = squadmap.get(playername);
         squadmap.put(playername, friendlyName);
-        NameFormatter.updatePlayerDataAndEntityData(playername);
+        PlayerDataManager.updatePlayerDataAndEntityData(playername);
         if (prevSquadname == null) {
             MinecraftForge.EVENT_BUS.post(new SquadEvent(SquadEvent.Type.ADDED, playername));
         } else if (!prevSquadname.equals(friendlyName)) {
@@ -45,7 +46,7 @@ public final class SquadHandler {
     public static boolean removePlayer(String playername) {
         final boolean success = squadmap.remove(playername) != null;
         if (success) {
-            NameFormatter.updatePlayerDataAndEntityData(playername);
+            PlayerDataManager.updatePlayerDataAndEntityData(playername);
             MinecraftForge.EVENT_BUS.post(new SquadEvent(SquadEvent.Type.REMOVED, playername));
         }
         return success;

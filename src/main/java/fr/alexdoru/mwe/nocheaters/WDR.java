@@ -40,9 +40,6 @@ public class WDR implements IReportInfo, Comparable<WDR> {
 
     public boolean addCheat(String cheat) {
         if (!this.cheats.contains(cheat)) {
-            if (cheat.endsWith("[H]")) {
-                this.cheats.remove("cheating");
-            }
             this.cheats.add(cheat);
             this.cheats.trimToSize();
             this.updateIcon();
@@ -53,12 +50,10 @@ public class WDR implements IReportInfo, Comparable<WDR> {
     }
 
     public void addCheats(List<String> list) {
-        if (this.cheats.isEmpty() || list.size() != 1 || !list.get(0).equals("cheating")) {
-            list.removeAll(this.cheats);
-            this.cheats.addAll(list);
-            this.cheats.trimToSize();
-            this.updateIcon();
-        }
+        list.removeAll(this.cheats);
+        this.cheats.addAll(list);
+        this.cheats.trimToSize();
+        this.updateIcon();
         this.timestamp = new Date().getTime();
     }
 
