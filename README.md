@@ -2,7 +2,7 @@
   <img src="https://img.shields.io/github/v/release/Alexdoru/MWE?logo=github" alt="GitHub Release">
   <img src="https://img.shields.io/github/downloads/Alexdoru/MWE/total?logo=github" alt="GitHub Downloads">
   <img src="https://img.shields.io/modrinth/dt/mwe?logo=modrinth&label=Downloads" alt="Modrinth Downloads">
-  <img src="https://github.com/Alexdoru/MWE/actions/workflows/build.yml/badge.svg" alt="Build Status">
+  <img src="https://github.com/Alexdoru/MWE/actions/workflows/build-and-test.yml/badge.svg" alt="Build Status">
 </p>
 
 <p align="center"><strong>This is a mod for Minecraft Forge 1.8.9 that contains numerous features and improvements for vanilla minecraft, pvp players and for Hypixel's Mega Walls. Use `/mwe` to open the config menu.</strong></p>
