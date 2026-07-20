@@ -18,7 +18,7 @@ import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import fr.alexdoru.mwe.updater.ModUpdater;
+import fr.alexdoru.mwe.updater.MWEUpdater;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -85,7 +85,7 @@ public class MWE {
         this.configHandler.setConfigTitleRenderer(new MWEConfigTitle());
         this.configHandler.registerConfig(MWEConfig.class);
         if (MWEConfig.checkForUpdate && !Boolean.getBoolean("mwe.disableUpdater")) {
-            MinecraftForge.EVENT_BUS.register(new ModUpdater(event.getSourceFile(), modName, version, MWEConfig.automaticUpdate));
+            new MWEUpdater(event.getSourceFile()).start();
         }
         AliasDataManager.loadData(this.configFolder);
         WdrDataManager.loadData(this.configFolder);

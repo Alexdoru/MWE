@@ -1,20 +1,16 @@
-package fr.alexdoru.mwe.updater;
+package fr.alexdoru.mwe.api;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.alexdoru.mwe.MWE;
-import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.http.HttpClient;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.utils.JsonUtil;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.event.HoverEvent;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.versioning.ComparableVersion;
@@ -37,36 +33,48 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static net.minecraft.util.EnumChatFormatting.*;
-
-public class ModUpdater {
+public abstract class ModUpdater {
 
     private static final AtomicBoolean unpackedDeleter = new AtomicBoolean(false);
     private static final AtomicBoolean registeredShutdownHook = new AtomicBoolean(false);
     private static final List<PendingInstall> pendingInstallations = new ArrayList<>();
 
-    private final Logger LOGGER;
-    private final File jarFile;
-    private final String apiEndpoint;
-    private final String releaseLink;
-    private final String currentVersion;
-    private final boolean isFeatherClient;
-    private final boolean automaticUpdate;
-    private volatile ArtifactInfo updateInfo;
-    private volatile boolean downloadSuccess;
-    private volatile boolean finishedRunning;
+    protected final Logger LOGGER;
+    protected final File jarFile;
+    protected final String currentVersion;
+    protected final boolean isFeatherClient;
+    protected final boolean automaticUpdate;
+    protected volatile ArtifactInfo updateInfo;
+    protected volatile boolean downloadSuccess;
+    protected volatile boolean finishedRunning;
 
-    public ModUpdater(File file, String name, String version, boolean autoInstall) {
+    /**
+     * A mod update checker that will notify the user about updates for your mod and optionally download and install the update.
+     *
+     * @param modJarFile  - the mod jar to update, usually provided by {@link FMLPreInitializationEvent#getSourceFile()}
+     * @param name        - the name to use for the logger
+     * @param version     - the current version of your mod
+     * @param autoInstall - set to true to automatically install the update
+     */
+    public ModUpdater(File modJarFile, String name, String version, boolean autoInstall) {
         this.LOGGER = LogManager.getLogger(name + " Updater");
-        this.jarFile = file;
-        this.apiEndpoint = "https://api.github.com/repos/Alexdoru/MWE/releases/latest";
-        this.releaseLink = "https://github.com/Alexdoru/MWE/releases";
+        this.jarFile = modJarFile;
         this.currentVersion = version;
         this.isFeatherClient = Loader.isModLoaded("feather");
         this.automaticUpdate = autoInstall;
+    }
+
+    /**
+     * Starts the update checking processing
+     */
+    public final void start() {
+        MinecraftForge.EVENT_BUS.register(this);
         MultithreadingUtil.queueIOTask(() -> {
             try {
-                checkForUpdate();
+                this.updateInfo = this.checkForUpdate();
+                if (this.updateInfo != null && !this.isFeatherClient && this.automaticUpdate) {
+                    this.startUpdateInstallation(this.updateInfo);
+                }
             } catch (Throwable t) {
                 LOGGER.error("Caught exception while checking for update", t);
             } finally {
@@ -81,59 +89,31 @@ public class ModUpdater {
             final Minecraft mc = Minecraft.getMinecraft();
             if (mc.theWorld != null && mc.thePlayer != null) {
                 MinecraftForge.EVENT_BUS.unregister(this);
-                this.printMessages();
+                this.printChatNotification();
             }
         }
     }
 
-    private void printMessages() {
-        if (this.updateInfo != null) {
-            ChatUtil.addChatMessage(DARK_GRAY + ChatUtil.bar());
-            ChatUtil.addChatMessage(ChatUtil.centerLine(DARK_RED.toString() + BOLD + "    MWE " + GOLD + "v" + this.updateInfo.version + GREEN + " is available!"));
-            ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.centerLine(YELLOW + "    Click here to view the changelog & download page."))
-                    .setChatStyle(new ChatStyle()
-                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, this.releaseLink))
-                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(YELLOW + this.releaseLink)))));
-            if (this.automaticUpdate) {
-                ChatUtil.addChatMessage("");
-                if (this.isFeatherClient) {
-                    ChatUtil.addChatMessage(new ChatComponentText(RED + "✘ The automatic updater is disabled on Feather."));
-                } else if (this.downloadSuccess) {
-                    ChatUtil.addChatMessage(new ChatComponentText(GREEN + "✔ Update has been downloaded and will be installed automatically when closing the game."));
-                }
-            }
-            ChatUtil.addChatMessage(DARK_GRAY + ChatUtil.bar());
-        }
-    }
+    protected abstract void printChatNotification();
 
-    private void checkForUpdate() throws ApiException, IOException {
+    protected abstract String getApiEndpoint();
 
+    private ArtifactInfo checkForUpdate() throws ApiException {
         LOGGER.info("Checking for updates...");
-
-        final JsonObject jsonResponse = HttpClient.getAsJsonObject(this.apiEndpoint);
-        final ArtifactInfo artifactInfo = parseArtifactInfo(jsonResponse);
-
+        final ArtifactInfo artifactInfo = this.parseArtifactInfoFromApi(HttpClient.getAsJsonObject(this.getApiEndpoint()));
         if (artifactInfo == null) {
-            return;
+            return null;
         }
-
         final boolean isUpToDate = new ComparableVersion(this.currentVersion).compareTo(artifactInfo.version) >= 0;
-
         if (isUpToDate) {
             LOGGER.info("The mod is up to date!");
-            return;
+            return null;
         }
-
         LOGGER.info("New version available {}", artifactInfo.version);
+        return artifactInfo;
+    }
 
-        this.updateInfo = artifactInfo;
-
-        if (!this.automaticUpdate) return;
-
-        if (isFeatherClient) {
-            return;
-        }
-
+    private void startUpdateInstallation(ArtifactInfo artifactInfo) throws IOException {
         final File cacheDir = MWE.INSTANCE().getConfigFolder();
         if (!cacheDir.exists() && !cacheDir.mkdir()) {
             throw new IllegalStateException("Could not create cache folder");
@@ -165,7 +145,6 @@ public class ModUpdater {
                 pendingInstallations.add(new PendingInstall(this.jarFile, newJarCacheFile, artifactInfo.name));
             }
         }
-
     }
 
     private void performModInstallations(File deleterFile) {
@@ -207,21 +186,21 @@ public class ModUpdater {
         }
     }
 
-    private ArtifactInfo parseArtifactInfo(JsonObject json) {
+    protected ArtifactInfo parseArtifactInfoFromApi(JsonObject apiResponse) {
 
-        final String tag = JsonUtil.getString(json, "tag_name");
+        final String tag = JsonUtil.getString(apiResponse, "tag_name");
 
         if (tag == null) {
             LOGGER.error("Latest release doesn't have a tag");
             return null;
         }
 
-        if (!json.has("assets")) {
+        if (!apiResponse.has("assets")) {
             LOGGER.error("Latest release doesn't have assets");
             return null;
         }
 
-        final JsonElement assets = json.get("assets");
+        final JsonElement assets = apiResponse.get("assets");
         if (assets != null && assets.isJsonArray()) {
             for (final JsonElement asset : assets.getAsJsonArray()) {
                 if (asset != null && asset.isJsonObject()) {
@@ -247,7 +226,7 @@ public class ModUpdater {
         return null;
     }
 
-    private void downloadFileTo(@NotNull String url, @NotNull File cacheFile, @Nullable String digest) throws IOException {
+    protected void downloadFileTo(@NotNull String url, @NotNull File cacheFile, @Nullable String digest) throws IOException {
         final URLConnection connection = new URL(url).openConnection();
         connection.setRequestProperty("User-Agent", "MWE-Updater");
         connection.setConnectTimeout(10000);
@@ -295,7 +274,7 @@ public class ModUpdater {
         return sb.toString();
     }
 
-    private static class ArtifactInfo {
+    protected static class ArtifactInfo {
 
         @NotNull
         public final String name;
