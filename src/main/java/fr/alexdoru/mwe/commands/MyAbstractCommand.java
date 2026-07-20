@@ -41,7 +41,7 @@ public abstract class MyAbstractCommand extends CommandBase {
     }
 
     protected static boolean isHelpSubcommand(String subcommand) {
-        return "h".equals(subcommand) || "help".equals(subcommand);
+        return "h".equalsIgnoreCase(subcommand) || "help".equalsIgnoreCase(subcommand);
     }
 
     /**

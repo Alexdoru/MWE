@@ -64,7 +64,7 @@ public class CommandFKCounter extends MyAbstractCommand {
 
             sendChatMessage("You shouldn't ask for finals and instead try to final kill everyone to win the game!");
 
-        } else if (args.length > 0 && isHelpSubcommand(args[0].toLowerCase(Locale.ENGLISH))) {
+        } else if (args.length > 0 && isHelpSubcommand(args[0])) {
 
             this.printCommandHelp();
 
