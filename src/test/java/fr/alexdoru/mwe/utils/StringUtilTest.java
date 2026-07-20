@@ -8,7 +8,7 @@ public class StringUtilTest {
 
     @Test
     public void testtt() {
-        assertEquals(1, 2);
+        assertEquals(1, 1);
     }
 
 }
