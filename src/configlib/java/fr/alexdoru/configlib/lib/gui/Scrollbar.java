@@ -57,8 +57,8 @@ public final class Scrollbar {
         }
     }
 
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        if (mouseButton == 0 && this.thumb.isMouseInBox(mouseX, mouseY)) {
+    public boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) {
+        if (mouseButton.isLeft() && this.thumb.isMouseInBox(mouseX, mouseY)) {
             dragging = true;
             grabbedAtY = mouseY - this.thumb.TOP;
             return true;
@@ -66,8 +66,8 @@ public final class Scrollbar {
         return false;
     }
 
-    public void mouseReleased(int mouseButton) {
-        if (mouseButton == 0 && dragging) {
+    public void mouseReleased(MouseButton mouseButton) {
+        if (mouseButton.isLeft() && dragging) {
             dragging = false;
         }
     }

@@ -7,6 +7,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -68,7 +69,7 @@ public class RendererEditGuiScreen extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == 1) {
+        if (keyCode == Keyboard.KEY_ESCAPE) {
             this.mc.displayGuiScreen(parent);
         }
     }
