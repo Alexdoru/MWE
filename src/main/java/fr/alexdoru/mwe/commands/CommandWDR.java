@@ -102,14 +102,13 @@ public class CommandWDR extends MyAbstractCommand {
         return args.length > 1 ? getListOfStringsMatchingLastWord(args, cheatsList) : null;
     }
 
-    private static void addPlayerToReportList(String playername, List<String> cheats) {
+    private void addPlayerToReportList(String playername, List<String> cheats) {
         final Minecraft mc = Minecraft.getMinecraft();
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
-                final UUID uuid = netInfo.getGameProfile().getId();
-                if (PlayerDataManager.isNickedPlayer(uuid) || PlayerDataManager.isRealPlayer(uuid)) {
+            if (PlayerDataManager.isNickedPlayer(netInfo.getGameProfile().getId())) {
+                if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
                     addPlayerToReportList(
-                            uuid,
+                            netInfo.getGameProfile().getId(),
                             netInfo.getGameProfile().getName(),
                             NameFormatter.getVanillaName(netInfo),
                             cheats
@@ -121,24 +120,20 @@ public class CommandWDR extends MyAbstractCommand {
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
                 final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
-                if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                    mc.addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), null, cheats));
-                    return;
-                }
-                try {
+                String name = null;
+                if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
                     final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(playerID.getId()));
                     if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
-                        // real player
-                        mc.addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), loginData.getFormattedName(), cheats));
+                        name = loginData.getFormattedName();
                     }
-                } catch (ApiException e) {
-                    mc.addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), null, cheats));
                 }
+                final String formattedName = name;
+                mc.addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), formattedName, cheats));
             } catch (ApiException ignored) {}
         });
     }
 
-    private static void addPlayerToReportList(UUID uuid, String playername, String formattedName, List<String> cheats) {
+    private void addPlayerToReportList(UUID uuid, String playername, String formattedName, List<String> cheats) {
         final boolean added = WdrDataManager.addReport(uuid, playername, cheats);
         if (added) {
             final boolean isNicked = !PlayerDataManager.isRealPlayer(uuid);

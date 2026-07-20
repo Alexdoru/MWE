@@ -196,34 +196,31 @@ public class CommandAddAlias extends MyAbstractCommand {
     private void addAlias(String playername, String alias) {
         final Minecraft mc = Minecraft.getMinecraft();
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            if (PlayerDataManager.isNickedPlayer(netInfo.getGameProfile().getId()) && netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
-                this.addAlias(
-                        null,
-                        netInfo.getGameProfile().getName(),
-                        alias,
-                        NameFormatter.getVanillaName(netInfo)
-                );
-                return;
+            if (PlayerDataManager.isNickedPlayer(netInfo.getGameProfile().getId())) {
+                if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
+                    this.addAlias(
+                            null,
+                            netInfo.getGameProfile().getName(),
+                            alias,
+                            NameFormatter.getVanillaName(netInfo)
+                    );
+                    return;
+                }
             }
         }
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
                 final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
-                String formattedName = null;
+                String name = null;
                 if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                    try {
-                        final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(playerID.getId()));
-                        if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
-                            formattedName = loginData.getFormattedName();
-                        }
-                    } catch (ApiException ignored) {}
+                    final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(playerID.getId()));
+                    if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
+                        name = loginData.getFormattedName();
+                    }
                 }
-                final String finalFormattedName = formattedName;
-                mc.addScheduledTask(() -> this.addAlias(playerID.getId(), playerID.getName(), alias, finalFormattedName));
-                return;
+                final String formattedName = name;
+                mc.addScheduledTask(() -> this.addAlias(playerID.getId(), playerID.getName(), alias, formattedName));
             } catch (ApiException ignored) {}
-            // nicked player
-            mc.addScheduledTask(() -> this.addAlias(null, playername, alias, null));
         });
     }
 
@@ -245,14 +242,16 @@ public class CommandAddAlias extends MyAbstractCommand {
     private void removeAlias(String playername) {
         final Minecraft mc = Minecraft.getMinecraft();
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            if (PlayerDataManager.isNickedPlayer(netInfo.getGameProfile().getId()) && netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
-                if (PlayerDataManager.isRealPlayer(netInfo.getGameProfile().getId())) {
-                    this.removeAlias(
-                            null,
-                            netInfo.getGameProfile().getName(),
-                            NameFormatter.getVanillaName(netInfo)
-                    );
-                    return;
+            if (PlayerDataManager.isNickedPlayer(netInfo.getGameProfile().getId())) {
+                if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
+                    if (PlayerDataManager.isRealPlayer(netInfo.getGameProfile().getId())) {
+                        this.removeAlias(
+                                null,
+                                netInfo.getGameProfile().getName(),
+                                NameFormatter.getVanillaName(netInfo)
+                        );
+                        return;
+                    }
                 }
             }
         }
@@ -270,6 +269,7 @@ public class CommandAddAlias extends MyAbstractCommand {
                 }
                 final String finalFormattedName = formattedName;
                 mc.addScheduledTask(() -> this.removeAlias(playerID.getId(), playerID.getName(), finalFormattedName));
+                return;
             } catch (ApiException ignored) {}
             // nicked player
             mc.addScheduledTask(() -> this.removeAlias(null, playername, null));
