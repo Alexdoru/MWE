@@ -8,6 +8,13 @@ public final class DataSaveScheduler {
     private static final int SAVE_INTERVAL = 20 * 60 * 10; // 10 mins
     private int counter;
 
+    public DataSaveScheduler() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            AliasDataManager.onShutdown();
+            WdrDataManager.onShutdown();
+        }, "MWE Data save thread"));
+    }
+
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {

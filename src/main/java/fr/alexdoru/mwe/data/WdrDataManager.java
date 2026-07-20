@@ -50,11 +50,6 @@ public final class WdrDataManager {
                 nickMap.putAll(nameReports);
             });
         });
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (dirty.get()) {
-                writeDataToFile(getAllReports());
-            }
-        }));
     }
 
     static void saveIfDirty() {
@@ -66,6 +61,16 @@ public final class WdrDataManager {
                     dirty.set(true);
                 }
             });
+        }
+    }
+
+    static void onShutdown() {
+        try {
+            if (dirty.get()) {
+                writeDataToFile(getAllReports());
+            }
+        } catch (Exception e) {
+            MWE.logger.error("Error saving wdr data", e);
         }
     }
 

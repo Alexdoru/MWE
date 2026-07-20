@@ -37,11 +37,6 @@ public final class AliasDataManager {
                 Minecraft.getMinecraft().addScheduledTask(() -> aliasMap.putAll(map));
             }
         });
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (dirty.get()) {
-                writeDataToFile(aliasDataFile, aliasMap);
-            }
-        }));
     }
 
     static void saveIfDirty() {
@@ -53,6 +48,16 @@ public final class AliasDataManager {
                     dirty.set(true);
                 }
             });
+        }
+    }
+
+    static void onShutdown() {
+        try {
+            if (dirty.get()) {
+                writeDataToFile(aliasDataFile, aliasMap);
+            }
+        } catch (Exception e) {
+            MWE.logger.error("Error saving alias data", e);
         }
     }
 
