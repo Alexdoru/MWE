@@ -21,11 +21,13 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -167,7 +169,7 @@ public class ChatListener {
                         if (MWEConfig.deleteCheaterChatMsg) {
                             event.setCanceled(true);
                         } else {
-                            event.message = StringUtil.censorChatMessage(fmsg, messageSender);
+                            event.message = censorChatMessage(fmsg, messageSender);
                             ChatUtil.addSkinToComponent(event.message, messageSender);
                         }
                         return;
@@ -322,6 +324,20 @@ public class ChatListener {
             }
         }
         return false;
+    }
+
+    private static IChatComponent censorChatMessage(@NotNull String message, String messageSender) {
+        final String[] split = message.split(messageSender, 2);
+        if (split.length != 2) {
+            return new ChatComponentText(message);
+        }
+        final String[] secondSplit = split[1].split(": ", 2);
+        if (secondSplit.length != 2) {
+            return new ChatComponentText(message);
+        }
+        return (new ChatComponentText(split[0] + messageSender + secondSplit[0] + ": "))
+                .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + "Censored")
+                        .setChatStyle(new ChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(secondSplit[1])))));
     }
 
 }
