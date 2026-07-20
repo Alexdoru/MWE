@@ -86,7 +86,7 @@ public final class WdrDataManager {
     /**
      * Adds or update a report for a player, returns true if it added a new report
      */
-    public static boolean addReport(UUID uuid, String playername, String cheat) {
+    public static void addReport(UUID uuid, String playername, String cheat) {
         WDR wdr = getWdr(uuid, playername);
         boolean added = false;
         final boolean refreshName;
@@ -108,7 +108,6 @@ public final class WdrDataManager {
         if (added) {
             MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.ADDED, uuid, playername, wdr));
         }
-        return added;
     }
 
     /**
