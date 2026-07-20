@@ -84,6 +84,11 @@ runClient {
 
 dependencies {
     compileOnly 'org.jetbrains:annotations:26.1.0'
+    testImplementation 'junit:junit:4.13.2'
+}
+
+test {
+    ignoreFailures = false
 }
 
 jar {
