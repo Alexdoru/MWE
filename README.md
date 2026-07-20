@@ -162,6 +162,9 @@ Allows you to customize the look of the f3+b hitboxes.
 - **Safe Inventory** - "Prevents hotkeying important kit items out of your inventory"
 - **Squad Halo Player** - Adds to the squad the player you give your halo to when playing the Angel class
 - **Wither alerts** - Plays an alert when a wither's health falls below a certain threshold
+- **Class selector overlay** - in the class selector, renders your selected skins, prestige levels (default:off) and
+  classpoints (default:off)
+- **Class in lobby HUD** - shows how many of each class is in the current lobby
 - Notification at 5 mins before a game ends, and 10 seconds before the walls fall if you are not on the game
 - Shows class and kit in the chat message when you hit an arrow
 
