@@ -643,13 +643,13 @@ public final class MWEConfig {
             category = MEGA_WALLS, subCategory = "Class Selector",
             name = "Render prestige level",
             comment = "Renders the amount of prestiges")
-    public static boolean classSelectorPrestigeLevel = true;
+    public static boolean classSelectorPrestigeLevel;
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "Class Selector",
             name = "Render classpoints",
             comment = "Renders the amount of classpoints")
-    public static boolean classSelectorClasspoints = true;
+    public static boolean classSelectorClasspoints;
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "Chat",
