@@ -2,7 +2,6 @@ package fr.alexdoru.configlib.lib.gui.elements;
 
 import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.api.ConfigProperty;
-import fr.alexdoru.configlib.api.IRenderer;
 import fr.alexdoru.configlib.api.RendererPosition;
 import fr.alexdoru.configlib.lib.RendererManager;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
@@ -87,12 +86,7 @@ public class RendererGuiButton extends ConfigGuiButton {
                 return true;
             } else if (buttonMoveHud.mousePressed(mc, mouseX, mouseY)) {
                 buttonEnabled.playPressSound(mc.getSoundHandler());
-                final IRenderer renderer = this.rendererManager.getRendererFromPosition(rendererPosition);
-                if (renderer != null) {
-                    mc.displayGuiScreen(new RendererEditGuiScreen(this.rendererManager, renderer, parentScreen));
-                } else {
-                    throw new RuntimeException("No registered renderer associated to " + field.getName());
-                }
+                mc.displayGuiScreen(new RendererEditGuiScreen(rendererManager, rendererPosition, parentScreen, field));
                 return true;
             } else if (buttonResetPos.mousePressed(mc, mouseX, mouseY)) {
                 rendererPosition.resetToDefault();

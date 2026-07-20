@@ -6,23 +6,28 @@ import fr.alexdoru.configlib.lib.RendererManager;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 public class RendererEditGuiScreen extends GuiScreen {
 
     private final RendererManager rendererManager;
-    private final IRenderer renderer;
     private final RendererPosition rendererPosition;
     private final GuiScreen parent;
+    private final IRenderer renderer;
     private boolean dragging;
     private int prevX, prevY;
 
-    public RendererEditGuiScreen(RendererManager rendererManager, IRenderer renderer, GuiScreen parent) {
+    public RendererEditGuiScreen(RendererManager rendererManager, RendererPosition rendererPosition, GuiScreen parent, Field field) {
         this.rendererManager = rendererManager;
-        this.renderer = renderer;
-        this.rendererPosition = renderer.getPosition();
+        this.rendererPosition = rendererPosition;
         this.parent = parent;
+        this.renderer = rendererManager.getRendererFromPosition(rendererPosition);
+        if (this.renderer == null) {
+            throw new RuntimeException("No registered renderer associated to " + field.getName());
+        }
     }
 
     @Override
@@ -34,12 +39,11 @@ public class RendererEditGuiScreen extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.renderCrosshair();
-        final boolean prevEnabled = this.rendererPosition.isEnabled();
-        this.rendererPosition.setEnabled(false);
         this.rendererManager.renderEditScreenBackground(this.renderer);
-        this.rendererPosition.setEnabled(prevEnabled);
+        GlStateManager.translate(0, 0, 200F);
         super.drawDefaultBackground();
         this.renderer.renderDummy();
+        GlStateManager.translate(0, 0, -200F);
         if (this.dragging) {
             this.rendererPosition.setAbsolutePositionForRender(
                     this.rendererPosition.getAbsoluteRenderX() + mouseX - this.prevX,
