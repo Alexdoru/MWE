@@ -7,7 +7,7 @@ import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.mwe.hackerdetector.data.TickingBlockMap;
-import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
+import fr.alexdoru.mwe.hackerdetector.data.ViolationLevelTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
