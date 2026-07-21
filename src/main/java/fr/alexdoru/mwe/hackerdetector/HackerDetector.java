@@ -24,8 +24,6 @@ import java.util.*;
 
 public class HackerDetector {
 
-    public static HackerDetector INSTANCE;
-
     private FileLogger logger;
     private final List<ICheck> checkList = new ArrayList<>();
     private long timeElapsedTemp = 0L;
@@ -41,7 +39,6 @@ public class HackerDetector {
     private final FastbreakCheck fastbreakCheck;
 
     public HackerDetector() {
-        INSTANCE = this;
         this.checkList.add(new AutoblockCheck());
         this.checkList.add(this.fastbreakCheck = new FastbreakCheck(brokenBlocksList));
         this.checkList.add(new GhosthandCheck());
@@ -155,10 +152,10 @@ public class HackerDetector {
         this.playersCheckedTemp++;
     }
 
-    public static void addScheduledTask(Runnable runnable) {
+    public void addScheduledTask(Runnable runnable) {
         if (runnable == null) return;
-        synchronized (INSTANCE.scheduledTasks) {
-            INSTANCE.scheduledTasks.add(runnable);
+        synchronized (scheduledTasks) {
+            scheduledTasks.add(runnable);
         }
     }
 
@@ -171,11 +168,11 @@ public class HackerDetector {
         logger = new FileLogger("HackerDetector.log", "HH:mm:ss.SSS");
     }
 
-    public static void addBrokenBlock(Block block, BlockPos blockPos, String tool) {
-        HackerDetector.INSTANCE.brokenBlocksList.add(new BrokenBlock(block, blockPos, tool));
+    public void addBrokenBlock(Block block, BlockPos blockPos, String tool) {
+        brokenBlocksList.add(new BrokenBlock(block, blockPos, tool));
     }
 
-    public static void addPlacedBlock(BlockPos pos, IBlockState state) {
+    public void addPlacedBlock(BlockPos pos, IBlockState state) {
         final Minecraft mc = Minecraft.getMinecraft();
         if (mc.thePlayer == null || mc.theWorld == null) {
             return;
@@ -189,17 +186,17 @@ public class HackerDetector {
             return;
         }
         if (mc.theWorld.getBlockState(pos).getBlock().getMaterial() == Material.air) {
-            INSTANCE.recentPlacedBlocks.add(pos);
+            recentPlacedBlocks.add(pos);
         }
     }
 
-    public static void onPlayerBlockPacket(BlockPos pos, int placedBlockDirectionIn, Block block) {
+    public void onPlayerBlockPacket(BlockPos pos, int placedBlockDirectionIn, Block block) {
         if (block == null || !block.isFullBlock() || !block.canCollideCheck(block.getDefaultState(), false)) {
             return;
         }
         final EnumFacing enumfacing = EnumFacing.getFront(placedBlockDirectionIn);
         if (enumfacing == null) return;
-        INSTANCE.recentPlacedBlocks.add(pos.add(enumfacing.getDirectionVec()));
+        recentPlacedBlocks.add(pos.add(enumfacing.getDirectionVec()));
     }
 
 }

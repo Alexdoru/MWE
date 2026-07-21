@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.hackerdetector;
 
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.asm.interfaces.S19PacketEntityStatusAccessor;
@@ -108,7 +109,7 @@ public class AttackDetector {
     }
 
     private static void onEntitySwing(int entityID) {
-        HackerDetector.addScheduledTask(() -> {
+        MWE.INSTANCE().getHackerDetector().addScheduledTask(() -> {
             final Entity attacker = Minecraft.getMinecraft().theWorld.getEntityByID(entityID);
             if (attacker instanceof EntityPlayerAccessor) {
                 ((EntityPlayerAccessor) attacker).getPlayerDataSamples().hasSwung = true;
@@ -117,7 +118,7 @@ public class AttackDetector {
     }
 
     private static void checkPlayerHit(int playerId, AttackType attackType, Vec3 soundPos) {
-        HackerDetector.addScheduledTask(() -> {
+        MWE.INSTANCE().getHackerDetector().addScheduledTask(() -> {
             if (!ScoreboardTracker.isInMwGame() && !ScoreboardTracker.isMWReplay()) {
                 return;
             }
@@ -145,7 +146,7 @@ public class AttackDetector {
     }
 
     private static void checkPlayerAttack(int attackerEntityId, int targetEntityId, AttackType attackType, Vec3 soundPos) {
-        HackerDetector.addScheduledTask(() -> {
+        MWE.INSTANCE().getHackerDetector().addScheduledTask(() -> {
             final Minecraft mc = Minecraft.getMinecraft();
             final Entity attacker = mc.theWorld.getEntityByID(attackerEntityId);
             final Entity target = mc.theWorld.getEntityByID(targetEntityId);
