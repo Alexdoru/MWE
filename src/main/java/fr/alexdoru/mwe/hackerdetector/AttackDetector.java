@@ -1,6 +1,5 @@
 package fr.alexdoru.mwe.hackerdetector;
 
-import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.asm.interfaces.S19PacketEntityStatusAccessor;
@@ -29,16 +28,22 @@ import net.minecraft.util.Vec3;
  */
 public class AttackDetector {
 
-    private static boolean lastPacketWasSwing;
-    private static long lastSwingTime;
-    private static int attackerID;
-    private static boolean lastPacketWasHurt;
-    private static long lastHurtTime;
-    private static int lastHurtID;
-    private static boolean consecutiveSwingHurt;
+    private final HackerDetector hackerDetector;
+
+    private boolean lastPacketWasSwing;
+    private long lastSwingTime;
+    private int attackerID;
+    private boolean lastPacketWasHurt;
+    private long lastHurtTime;
+    private int lastHurtID;
+    private boolean consecutiveSwingHurt;
+
+    public AttackDetector(HackerDetector hackerDetector) {
+        this.hackerDetector = hackerDetector;
+    }
 
     // Careful, this code isn't called from the main thread
-    public static void lookForAttacks(Packet<?> packet) {
+    public void lookForAttacks(Packet<?> packet) {
         if (packet instanceof S0BPacketAnimation) {
             final S0BPacketAnimation packetAnimation = (S0BPacketAnimation) packet;
             final int animationType = packetAnimation.getAnimationType();
@@ -108,8 +113,8 @@ public class AttackDetector {
         consecutiveSwingHurt = false;
     }
 
-    private static void onEntitySwing(int entityID) {
-        MWE.INSTANCE().getHackerDetector().addScheduledTask(() -> {
+    private void onEntitySwing(int entityID) {
+        this.hackerDetector.addScheduledTask(() -> {
             final Entity attacker = Minecraft.getMinecraft().theWorld.getEntityByID(entityID);
             if (attacker instanceof EntityPlayerAccessor) {
                 ((EntityPlayerAccessor) attacker).getPlayerDataSamples().hasSwung = true;
@@ -117,8 +122,8 @@ public class AttackDetector {
         });
     }
 
-    private static void checkPlayerHit(int playerId, AttackType attackType, Vec3 soundPos) {
-        MWE.INSTANCE().getHackerDetector().addScheduledTask(() -> {
+    private void checkPlayerHit(int playerId, AttackType attackType, Vec3 soundPos) {
+        this.hackerDetector.addScheduledTask(() -> {
             if (!ScoreboardTracker.isInMwGame() && !ScoreboardTracker.isMWReplay()) {
                 return;
             }
@@ -145,8 +150,8 @@ public class AttackDetector {
         });
     }
 
-    private static void checkPlayerAttack(int attackerEntityId, int targetEntityId, AttackType attackType, Vec3 soundPos) {
-        MWE.INSTANCE().getHackerDetector().addScheduledTask(() -> {
+    private void checkPlayerAttack(int attackerEntityId, int targetEntityId, AttackType attackType, Vec3 soundPos) {
+        this.hackerDetector.addScheduledTask(() -> {
             final Minecraft mc = Minecraft.getMinecraft();
             final Entity attacker = mc.theWorld.getEntityByID(attackerEntityId);
             final Entity target = mc.theWorld.getEntityByID(targetEntityId);
@@ -205,7 +210,7 @@ public class AttackDetector {
         });
     }
 
-    private static void onPlayerAttack(EntityPlayer attacker, EntityPlayer target, AttackType attackType) {
+    private void onPlayerAttack(EntityPlayer attacker, EntityPlayer target, AttackType attackType) {
         final PlayerDataSamples data = ((EntityPlayerAccessor) attacker).getPlayerDataSamples();
         if (data.attackInfo == null) {
             data.attackInfo = new AttackInfo(target, attackType);

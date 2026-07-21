@@ -991,7 +991,7 @@ public final class MWEConfig {
             category = HACKER_DETECTOR, subCategory = "General",
             name = "Hacker Detector",
             comment = "Analyses movements and actions of players around you")
-    public static boolean hackerDetector = true;
+    public static volatile boolean hackerDetector = true;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "General",

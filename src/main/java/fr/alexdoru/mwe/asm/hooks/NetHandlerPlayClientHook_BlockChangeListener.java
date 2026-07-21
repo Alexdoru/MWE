@@ -11,7 +11,9 @@ public class NetHandlerPlayClientHook_BlockChangeListener {
         if (!MWEConfig.hackerDetector) return;
         try {
             MWE.INSTANCE().getHackerDetector().addPlacedBlock(packet.getBlockPosition(), packet.getBlockState());
-        } catch (Throwable ignored) {}
+        } catch (Throwable t) {
+            MWE.logger.error("Caught exception from Hacker Detector", t);
+        }
     }
 
     public static void onMultiBlockChange(S22PacketMultiBlockChange packet) {
@@ -20,7 +22,9 @@ public class NetHandlerPlayClientHook_BlockChangeListener {
             for (final S22PacketMultiBlockChange.BlockUpdateData blockData : packet.getChangedBlocks()) {
                 MWE.INSTANCE().getHackerDetector().addPlacedBlock(blockData.getPos(), blockData.getBlockState());
             }
-        } catch (Throwable ignored) {}
+        } catch (Throwable t) {
+            MWE.logger.error("Caught exception from Hacker Detector", t);
+        }
     }
 
 }

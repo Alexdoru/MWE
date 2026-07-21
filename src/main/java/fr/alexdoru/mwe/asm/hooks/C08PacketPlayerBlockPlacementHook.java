@@ -14,7 +14,9 @@ public class C08PacketPlayerBlockPlacementHook {
             if (placedBlockDirectionIn == 255) return;
             if (pos == null || stack == null || !(stack.getItem() instanceof ItemBlock)) return;
             MWE.INSTANCE().getHackerDetector().onPlayerBlockPacket(pos, placedBlockDirectionIn, ((ItemBlock) stack.getItem()).getBlock());
-        } catch (Throwable ignored) {}
+        } catch (Throwable t) {
+            MWE.logger.error("Caught exception from Hacker Detector", t);
+        }
     }
 
 }
