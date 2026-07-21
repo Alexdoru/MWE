@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.asm.transformers.mc.render;
 
 import fr.alexdoru.mwe.api.asm.InjectionCallback;
 import fr.alexdoru.mwe.asm.mappings.ClassMapping;
+import fr.alexdoru.mwe.asm.mappings.FieldMapping;
 import fr.alexdoru.mwe.asm.mappings.MethodMapping;
 import fr.alexdoru.mwe.asm.transformers.MWETransformer;
 import org.objectweb.asm.tree.*;
@@ -23,11 +24,12 @@ public class LayerArrowTransformer implements MWETransformer {
                         // Injects after line 32 :
                         // entity.pinnedToPlayer = true;
                         final InsnList list = new InsnList();
-                        list.add(new InsnNode(DUP));
+                        list.add(new VarInsnNode(ALOAD, 10));
                         list.add(new InsnNode(ICONST_1));
-                        list.add(new FieldInsnNode(PUTFIELD, ClassMapping.ENTITYARROW.toString(), "pinnedToPlayer", "Z"));
-                        methodNode.instructions.insertBefore(insnNode, list);
+                        list.add(new FieldInsnNode(PUTFIELD, ClassMapping.ENTITYARROW.toString(), FieldMapping.ENTITYARROW$PINNEDTOPLAYER.name, "Z"));
+                        methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
+                        return;
                     }
                 }
             }
