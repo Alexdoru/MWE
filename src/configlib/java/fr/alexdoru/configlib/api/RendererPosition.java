@@ -50,6 +50,7 @@ public final class RendererPosition {
      * Updates the position of the render : absoluteRenderX and absoluteRenderY
      * Needs to be called before getAbsoluteRenderX() and getAbsoluteRenderY()
      */
+    @Deprecated
     public void updateAbsolutePosition() {
         updateAbsolutePosition(new ScaledResolution(Minecraft.getMinecraft()));
     }
