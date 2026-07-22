@@ -67,42 +67,42 @@ public class SquadHealthHUD extends AbstractRenderer {
                 }
             }
         }
-            final int maxLineWidth = 9 + maxNameWidth + maxFinalWidth + maxScoreWidth;
-            final int listSize = playerlistToRender.size();
-            final int hudWidth = maxLineWidth + 2;
-            final int hudHight = listSize * 9 + 1;
-            this.rendererPosition.updateAdjustedAbsolutePosition(resolution, hudWidth, hudHight);
-            final int hudXpos = this.rendererPosition.getAbsoluteRenderX();
-            final int hudYpos = this.rendererPosition.getAbsoluteRenderY();
-            Gui.drawRect(hudXpos, hudYpos, hudXpos + hudWidth, hudYpos + hudHight, Integer.MIN_VALUE);
-            for (int i = 0; i < listSize; i++) {
-                int xDrawingPos = hudXpos + 1;
-                final int yDrawingPos = hudYpos + 1 + i * 9;
-                Gui.drawRect(xDrawingPos, yDrawingPos, hudXpos + maxLineWidth + 1, yDrawingPos + 8, 0x20FFFFFF);
-                final NetworkPlayerInfo netInfo = playerlistToRender.get(i);
-                final GameProfile gameprofile = netInfo.getGameProfile();
-                final EntityPlayer entityplayer = mc.theWorld.getPlayerEntityByUUID(gameprofile.getId());
-                final boolean renderHatLayer = entityplayer == null || entityplayer.isWearing(EnumPlayerModelParts.HAT);
-                RenderHelper.renderSkinHead(netInfo.getLocationSkin(), xDrawingPos, yDrawingPos, renderHatLayer, 8);
-                xDrawingPos += 9;
-                mc.fontRendererObj.drawStringWithShadow(this.getPlayerName(netInfo), (float) xDrawingPos, (float) yDrawingPos, 0xFFFFFF);
-                final int xStartFinalDrawingPos = xDrawingPos + maxNameWidth + 1;
-                final int xStartScoreDrawingPos = xStartFinalDrawingPos + maxFinalWidth;
-                if (maxScoreWidth + maxFinalWidth > 5) {
-                    if (scoreobjective != null && netInfo.getGameType() != WorldSettings.GameType.SPECTATOR && scoreobjective.getRenderType() != IScoreObjectiveCriteria.EnumRenderType.HEARTS) {
-                        final int scorePoints = scoreobjective.getScoreboard().getValueFromObjective(gameprofile.getName(), scoreobjective).getScorePoints();
-                        final String scoreString = ColorUtil.getColoredHP(EnumChatFormatting.YELLOW, scorePoints) + " " + scorePoints;
-                        mc.fontRendererObj.drawStringWithShadow(scoreString, xStartScoreDrawingPos, yDrawingPos, 0xFFFFFF);
-                    }
-                    if (ScoreboardTracker.isInMwGame()) {
-                        final int playersFinals = ((NetworkPlayerInfoAccessor) netInfo).getFinalKills();
-                        if (playersFinals != 0) {
-                            final String finalsString = EnumChatFormatting.GOLD + " " + playersFinals;
-                            mc.fontRendererObj.drawStringWithShadow(finalsString, xStartFinalDrawingPos, yDrawingPos, 0xFFFFFF);
-                        }
+        final int maxLineWidth = 9 + maxNameWidth + maxFinalWidth + maxScoreWidth;
+        final int listSize = playerlistToRender.size();
+        final int hudWidth = maxLineWidth + 2;
+        final int hudHight = listSize * 9 + 1;
+        this.rendererPosition.updateAdjustedAbsolutePosition(resolution, hudWidth, hudHight);
+        final int hudXpos = this.rendererPosition.getAbsoluteRenderX();
+        final int hudYpos = this.rendererPosition.getAbsoluteRenderY();
+        Gui.drawRect(hudXpos, hudYpos, hudXpos + hudWidth, hudYpos + hudHight, Integer.MIN_VALUE);
+        for (int i = 0; i < listSize; i++) {
+            int xDrawingPos = hudXpos + 1;
+            final int yDrawingPos = hudYpos + 1 + i * 9;
+            Gui.drawRect(xDrawingPos, yDrawingPos, hudXpos + maxLineWidth + 1, yDrawingPos + 8, 0x20FFFFFF);
+            final NetworkPlayerInfo netInfo = playerlistToRender.get(i);
+            final GameProfile gameprofile = netInfo.getGameProfile();
+            final EntityPlayer entityplayer = mc.theWorld.getPlayerEntityByUUID(gameprofile.getId());
+            final boolean renderHatLayer = entityplayer == null || entityplayer.isWearing(EnumPlayerModelParts.HAT);
+            RenderHelper.renderSkinHead(netInfo.getLocationSkin(), xDrawingPos, yDrawingPos, renderHatLayer, 8);
+            xDrawingPos += 9;
+            mc.fontRendererObj.drawStringWithShadow(this.getPlayerName(netInfo), (float) xDrawingPos, (float) yDrawingPos, 0xFFFFFF);
+            final int xStartFinalDrawingPos = xDrawingPos + maxNameWidth + 1;
+            final int xStartScoreDrawingPos = xStartFinalDrawingPos + maxFinalWidth;
+            if (maxScoreWidth + maxFinalWidth > 5) {
+                if (scoreobjective != null && netInfo.getGameType() != WorldSettings.GameType.SPECTATOR && scoreobjective.getRenderType() != IScoreObjectiveCriteria.EnumRenderType.HEARTS) {
+                    final int scorePoints = scoreobjective.getScoreboard().getValueFromObjective(gameprofile.getName(), scoreobjective).getScorePoints();
+                    final String scoreString = ColorUtil.getColoredHP(EnumChatFormatting.YELLOW, scorePoints) + " " + scorePoints;
+                    mc.fontRendererObj.drawStringWithShadow(scoreString, xStartScoreDrawingPos, yDrawingPos, 0xFFFFFF);
+                }
+                if (ScoreboardTracker.isInMwGame()) {
+                    final int playersFinals = ((NetworkPlayerInfoAccessor) netInfo).getFinalKills();
+                    if (playersFinals != 0) {
+                        final String finalsString = EnumChatFormatting.GOLD + " " + playersFinals;
+                        mc.fontRendererObj.drawStringWithShadow(finalsString, xStartFinalDrawingPos, yDrawingPos, 0xFFFFFF);
                     }
                 }
             }
+        }
     }
 
     private String getPlayerName(NetworkPlayerInfo netInfo) {
@@ -112,33 +112,33 @@ public class SquadHealthHUD extends AbstractRenderer {
 
     @Override
     public void renderDummy() {
-            final Minecraft mc = Minecraft.getMinecraft();
-            final int hudXpos = this.rendererPosition.getAbsoluteRenderX();
-            final int hudYpos = this.rendererPosition.getAbsoluteRenderY();
-            final int listSize = 4;
-            final int maxNameWidth = mc.fontRendererObj.getStringWidth(mc.thePlayer.getName());
-            final int maxScoreWidth = mc.fontRendererObj.getStringWidth(" 00");
-            final int maxFinalWidth = mc.fontRendererObj.getStringWidth(" 0");
-            final int maxLineWidth = maxNameWidth + maxFinalWidth + maxScoreWidth + 9;
-            Gui.drawRect(hudXpos, hudYpos, hudXpos + maxLineWidth + 2, hudYpos + listSize * 9 + 1, Integer.MIN_VALUE);
-            for (int i = 0; i < listSize; i++) {
-                int xDrawingPos = hudXpos + 1;
-                final int yDrawingPos = hudYpos + 1 + i * 9;
-                Gui.drawRect(xDrawingPos, yDrawingPos, hudXpos + maxLineWidth + 1, yDrawingPos + 8, 0x20FFFFFF);
-                RenderHelper.renderSkinHead(DefaultPlayerSkin.getDefaultSkinLegacy(), xDrawingPos, yDrawingPos, true, 8);
-                xDrawingPos += 9;
-                final String formattedName = EnumChatFormatting.GREEN + mc.thePlayer.getName();
-                mc.fontRendererObj.drawStringWithShadow(formattedName, (float) xDrawingPos, (float) yDrawingPos, -1);
-                final int xStartFinalDrawingPos = xDrawingPos + maxNameWidth + 1;
-                final int xStartScoreDrawingPos = xStartFinalDrawingPos + maxFinalWidth;
-                if (maxScoreWidth + maxFinalWidth > 5) {
-                    final int scorePoints = 12 + (i * 18 + 22) % 8;
-                    final String scoreString = ColorUtil.getColoredHP(EnumChatFormatting.YELLOW, scorePoints) + " " + scorePoints;
-                    mc.fontRendererObj.drawStringWithShadow(scoreString, xStartScoreDrawingPos, yDrawingPos, 0xFFFFFF);
-                    final String finalsString = EnumChatFormatting.GOLD + " " + (3 + (i * 28 + 15) % 5);
-                    mc.fontRendererObj.drawStringWithShadow(finalsString, xStartFinalDrawingPos, yDrawingPos, 0xFFFFFF);
-                }
+        final Minecraft mc = Minecraft.getMinecraft();
+        final int hudXpos = this.rendererPosition.getAbsoluteRenderX();
+        final int hudYpos = this.rendererPosition.getAbsoluteRenderY();
+        final int listSize = 4;
+        final int maxNameWidth = mc.fontRendererObj.getStringWidth(mc.thePlayer.getName());
+        final int maxScoreWidth = mc.fontRendererObj.getStringWidth(" 00");
+        final int maxFinalWidth = mc.fontRendererObj.getStringWidth(" 0");
+        final int maxLineWidth = maxNameWidth + maxFinalWidth + maxScoreWidth + 9;
+        Gui.drawRect(hudXpos, hudYpos, hudXpos + maxLineWidth + 2, hudYpos + listSize * 9 + 1, Integer.MIN_VALUE);
+        for (int i = 0; i < listSize; i++) {
+            int xDrawingPos = hudXpos + 1;
+            final int yDrawingPos = hudYpos + 1 + i * 9;
+            Gui.drawRect(xDrawingPos, yDrawingPos, hudXpos + maxLineWidth + 1, yDrawingPos + 8, 0x20FFFFFF);
+            RenderHelper.renderSkinHead(DefaultPlayerSkin.getDefaultSkinLegacy(), xDrawingPos, yDrawingPos, true, 8);
+            xDrawingPos += 9;
+            final String formattedName = EnumChatFormatting.GREEN + mc.thePlayer.getName();
+            mc.fontRendererObj.drawStringWithShadow(formattedName, (float) xDrawingPos, (float) yDrawingPos, -1);
+            final int xStartFinalDrawingPos = xDrawingPos + maxNameWidth + 1;
+            final int xStartScoreDrawingPos = xStartFinalDrawingPos + maxFinalWidth;
+            if (maxScoreWidth + maxFinalWidth > 5) {
+                final int scorePoints = 12 + (i * 18 + 22) % 8;
+                final String scoreString = ColorUtil.getColoredHP(EnumChatFormatting.YELLOW, scorePoints) + " " + scorePoints;
+                mc.fontRendererObj.drawStringWithShadow(scoreString, xStartScoreDrawingPos, yDrawingPos, 0xFFFFFF);
+                final String finalsString = EnumChatFormatting.GOLD + " " + (3 + (i * 28 + 15) % 5);
+                mc.fontRendererObj.drawStringWithShadow(finalsString, xStartFinalDrawingPos, yDrawingPos, 0xFFFFFF);
             }
+        }
     }
 
     @Override

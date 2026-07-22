@@ -56,14 +56,14 @@ public abstract class MyAbstractCommand extends CommandBase {
     }
 
     /**
-     * @param header Block Header
+     * @param header       Block Header
      * @param commandLines Each command-line must be in this format: { command, description, [commandToPutOnClick] }.
      *                     if (commandToPutOnClick) isn't provided will use (command)
      */
     private static void printCommandHelpBlock(String header, String[][] commandLines) {
         ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.centerLine(EnumChatFormatting.GOLD + header)));
         for (final String[] line : commandLines) {
-            if (line.length!=2) continue;
+            if (line.length != 2) continue;
             final String command = line[0];
             final String desc = line[1];
             ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + command + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + desc)
@@ -73,4 +73,5 @@ public abstract class MyAbstractCommand extends CommandBase {
             );
         }
     }
+
 }

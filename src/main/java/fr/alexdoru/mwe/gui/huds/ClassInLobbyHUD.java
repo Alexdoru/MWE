@@ -58,24 +58,24 @@ public class ClassInLobbyHUD extends AbstractRenderer {
     }
 
     private void renderClassHUD(List<Map.Entry<MWSkin, Integer>> list) {
-            int i = 0;
-            int x = this.rendererPosition.getAbsoluteRenderX();
-            int y = this.rendererPosition.getAbsoluteRenderY();
-            int maxWidth = 0;
-            final Minecraft mc = Minecraft.getMinecraft();
-            for (final Map.Entry<MWSkin, Integer> entry : list) {
-                maxWidth = Math.max(maxWidth, mc.fontRendererObj.getStringWidth(entry.getValue().toString()));
-                RenderHelper.renderSkinHead(entry.getKey().getSkin(), x, y, true, 8);
-                mc.fontRendererObj.drawStringWithShadow(entry.getValue().toString(), x + 9, y, 0xFFFFFF);
-                y += mc.fontRendererObj.FONT_HEIGHT;
-                i++;
-                if (i == 5) {
-                    i = 0;
-                    x = x + maxWidth + 10;
-                    y = this.rendererPosition.getAbsoluteRenderY();
-                    maxWidth = 0;
-                }
+        int i = 0;
+        int x = this.rendererPosition.getAbsoluteRenderX();
+        int y = this.rendererPosition.getAbsoluteRenderY();
+        int maxWidth = 0;
+        final Minecraft mc = Minecraft.getMinecraft();
+        for (final Map.Entry<MWSkin, Integer> entry : list) {
+            maxWidth = Math.max(maxWidth, mc.fontRendererObj.getStringWidth(entry.getValue().toString()));
+            RenderHelper.renderSkinHead(entry.getKey().getSkin(), x, y, true, 8);
+            mc.fontRendererObj.drawStringWithShadow(entry.getValue().toString(), x + 9, y, 0xFFFFFF);
+            y += mc.fontRendererObj.FONT_HEIGHT;
+            i++;
+            if (i == 5) {
+                i = 0;
+                x = x + maxWidth + 10;
+                y = this.rendererPosition.getAbsoluteRenderY();
+                maxWidth = 0;
             }
+        }
     }
 
     private void updateClassInLobby() {

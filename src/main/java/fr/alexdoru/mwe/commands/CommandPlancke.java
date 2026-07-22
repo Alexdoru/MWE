@@ -153,14 +153,15 @@ public class CommandPlancke extends MyAbstractCommand {
     protected void printCommandHelp() {
         final String slashCommand = '/' + getCommandName();
         printCommandHelpBlock(EnumChatFormatting.AQUA, "Plancke Help", new String[][]{
-                { slashCommand + " <player>", "General Hypixel stats" },
-                { slashCommand + " <player> bsg", "Blitz stats" },
-                { slashCommand + " <player> sw", "Skywars stats" },
-                { slashCommand + " <player> uhc", "UHC stats" },
-                { slashCommand + " <player> mw", "General Mega Walls stats" },
-                { slashCommand + " <player> mw classname", "Class specific Mega Walls stats" },
-                { slashCommand + " <player> mw cp", "Mega Walls classpoints" },
-                { slashCommand + " <player> mw leg", "Mega Walls legendary skins" },
+                {slashCommand + " <player>", "General Hypixel stats"},
+                {slashCommand + " <player> bsg", "Blitz stats"},
+                {slashCommand + " <player> sw", "Skywars stats"},
+                {slashCommand + " <player> uhc", "UHC stats"},
+                {slashCommand + " <player> mw", "General Mega Walls stats"},
+                {slashCommand + " <player> mw classname", "Class specific Mega Walls stats"},
+                {slashCommand + " <player> mw cp", "Mega Walls classpoints"},
+                {slashCommand + " <player> mw leg", "Mega Walls legendary skins"},
         });
     }
+
 }
