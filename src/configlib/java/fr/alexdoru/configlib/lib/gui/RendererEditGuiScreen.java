@@ -12,7 +12,6 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
@@ -101,7 +100,7 @@ public class RendererEditGuiScreen extends GuiScreen {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        if (mouseButton == GuiUtil.MOUSE_LEFT) {
+        if (MouseButton.from(mouseButton).isLeft()) {
             if (!this.dragging) {
                 int clickedButtonIdx = -1;
                 for (int i = 0; i < buttons.length; i++) {
@@ -131,7 +130,7 @@ public class RendererEditGuiScreen extends GuiScreen {
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         super.mouseReleased(mouseX, mouseY, state);
-        if (state == GuiUtil.MOUSE_LEFT) {
+        if (MouseButton.from(state).isLeft()) {
             this.dragging = false;
         }
     }
