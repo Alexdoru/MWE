@@ -434,5 +434,8 @@ public class ConfigGuiScreen extends GuiScreen {
 
     }
 
-    public ColorPalette getColorPalette() { return colorPalette; }
+    public ColorPalette getColorPalette() {
+        return colorPalette;
+    }
+
 }

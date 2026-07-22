@@ -2,7 +2,6 @@ package fr.alexdoru.configlib.lib.gui.elements;
 
 import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.api.ConfigProperty;
-import fr.alexdoru.configlib.api.IRenderer;
 import fr.alexdoru.configlib.api.RendererPosition;
 import fr.alexdoru.configlib.lib.RendererManager;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
@@ -21,7 +20,7 @@ public class RendererGuiButton extends ConfigGuiButton {
     private final RendererPosition rendererPosition;
     private boolean toggled;
     private final ClickGuiButton buttonEnabled;
-    private final ClickGuiButton.TexturedButton buttonMoveHud;
+    private final ClickGuiButton buttonMoveHud;
 
     public RendererGuiButton(
             ConfigGuiScreen configGuiScreen,
@@ -35,7 +34,9 @@ public class RendererGuiButton extends ConfigGuiButton {
         this.rendererPosition = ((RendererPosition) field.get(null));
         this.toggled = this.rendererPosition.isEnabled();
         this.buttonEnabled = new ClickGuiButton(0, 0, 0, mc.fontRendererObj.getStringWidth(" Disabled "), 20, getButtonText());
-        this.buttonMoveHud = new ClickGuiButton.TexturedButton(0, 0, 0, 20, 20, new ResourceLocation("configlib", "move.png"), "Move HUD");
+        this.buttonMoveHud = new ClickGuiButton(0, 0, 0, 20, 20, "");
+        this.buttonMoveHud.setTexture(new ResourceLocation("configlib", "move.png"));
+        this.buttonMoveHud.setHoveringText("Move HUD");
     }
 
     @Override
@@ -72,12 +73,8 @@ public class RendererGuiButton extends ConfigGuiButton {
                 buttonEnabled.playPressSound(mc.getSoundHandler());
                 return true;
             } else if (buttonMoveHud.mousePressed(mc, mouseX, mouseY)) {
-                final IRenderer renderer = this.rendererManager.getRendererFromPosition(rendererPosition);
-                if (renderer == null) {
-                    throw new RuntimeException("No registered renderer associated to " + field.getName());
-                }
                 buttonEnabled.playPressSound(mc.getSoundHandler());
-                mc.displayGuiScreen(new RendererEditGuiScreen(this.rendererManager, renderer, parentScreen));
+                mc.displayGuiScreen(new RendererEditGuiScreen(rendererManager, rendererPosition, parentScreen, field));
                 return true;
             }
         }

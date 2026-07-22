@@ -10,7 +10,6 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class ClickGuiButton extends GuiButton {
@@ -36,8 +35,9 @@ public class ClickGuiButton extends GuiButton {
     }
 
     public void drawButton(ColorPalette colorPalette, Minecraft mc, int mouseX, int mouseY) {
+        this.hovered = this.visible && mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
         if (this.visible) {
-            this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+            this.mouseDragged(mc, mouseX, mouseY);
             GuiUtil.drawBoxWithOutline(
                     this.xPosition,
                     this.yPosition,
@@ -46,7 +46,16 @@ public class ClickGuiButton extends GuiButton {
                     this.hovered ? GuiUtil.brightenColor(colorPalette.BUTTON_BACKGROUND, 0.12f) : colorPalette.BUTTON_BACKGROUND,
                     this.hovered ? GuiUtil.brightenColor(colorPalette.BUTTON_BACKGROUND_BORDER, 0.12f) : colorPalette.BUTTON_BACKGROUND_BORDER
             );
-            this.mouseDragged(mc, mouseX, mouseY);
+            if (this.texture != null) {
+                GlStateManager.enableAlpha();
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+                GlStateManager.color(1f, 1f, 1f, 1f);
+                mc.getTextureManager().bindTexture(texture);
+                final int PADDING = 2;
+                GuiUtil.drawFullTextureWithCustomSize(xPosition + PADDING, yPosition + PADDING, width - PADDING * 2, height - PADDING * 2);
+                GlStateManager.disableBlend();
+            }
             this.drawCenteredString(
                     mc.fontRendererObj,
                     this.displayString,
@@ -54,8 +63,6 @@ public class ClickGuiButton extends GuiButton {
                     this.yPosition + (this.height - 8) / 2,
                     colorPalette.BUTTON_TEXT
             );
-        } else {
-            this.hovered = false;
         }
     }
 
@@ -65,42 +72,6 @@ public class ClickGuiButton extends GuiButton {
 
     public boolean hasHoveringText() {
         return !hoveringTextLines.isEmpty();
-    }
-
-    public static class TexturedButton extends ClickGuiButton {
-
-        private final ResourceLocation texture;
-        public int topBottomPadding = 2;
-        public int leftRightPadding = 2;
-
-        public TexturedButton(int buttonId, int x, int y, int widthIn, int heightIn, ResourceLocation texture) {
-            super(buttonId, x, y, widthIn, heightIn, "");
-            this.texture = texture;
-        }
-
-        public TexturedButton(int buttonId, int x, int y, int widthIn, int heightIn, ResourceLocation texture, List<String> hoveringTextLines) {
-            super(buttonId, x, y, widthIn, heightIn, "", hoveringTextLines);
-            this.texture = texture;
-        }
-
-        public TexturedButton(int buttonId, int x, int y, int widthIn, int heightIn, ResourceLocation texture, String hoveringText) {
-            this(buttonId, x, y, widthIn, heightIn, texture, Collections.singletonList(hoveringText));
-        }
-
-        @Override
-        public void drawButton(ColorPalette colorPalette, Minecraft mc, int mouseX, int mouseY) {
-            if (visible) {
-                super.drawButton(colorPalette, mc, mouseX, mouseY);
-                GlStateManager.enableAlpha();
-                GlStateManager.enableBlend();
-                GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-                GlStateManager.color(1f, 1f, 1f, 1f);
-                mc.getTextureManager().bindTexture(texture);
-                GuiUtil.drawFullTextureWithCustomSize(xPosition + leftRightPadding, yPosition + topBottomPadding, width - leftRightPadding * 2, height - topBottomPadding * 2);
-                GlStateManager.disableBlend();
-            }
-        }
-
     }
 
 }

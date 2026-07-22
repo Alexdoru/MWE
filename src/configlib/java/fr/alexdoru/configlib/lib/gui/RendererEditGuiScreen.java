@@ -3,7 +3,7 @@ package fr.alexdoru.configlib.lib.gui;
 import fr.alexdoru.configlib.api.IRenderer;
 import fr.alexdoru.configlib.api.RendererPosition;
 import fr.alexdoru.configlib.lib.RendererManager;
-import fr.alexdoru.configlib.lib.gui.elements.ClickGuiButton.TexturedButton;
+import fr.alexdoru.configlib.lib.gui.elements.ClickGuiButton;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -12,6 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 public class RendererEditGuiScreen extends GuiScreen {
 
@@ -26,19 +27,25 @@ public class RendererEditGuiScreen extends GuiScreen {
     private int prevX, prevY;
     private ScaledResolution resolution;
 
-    private final TexturedButton resetButton;
-    private final TexturedButton undoButton;
+    private final ClickGuiButton resetButton;
+    private final ClickGuiButton undoButton;
 
-    public RendererEditGuiScreen(RendererManager rendererManager, IRenderer renderer, ConfigGuiScreen parent) {
+    public RendererEditGuiScreen(RendererManager rendererManager, RendererPosition rendererPosition, ConfigGuiScreen parent, Field field) {
         this.rendererManager = rendererManager;
-        this.renderer = renderer;
-        this.rendererPosition = renderer.getPosition();
+        this.rendererPosition = rendererPosition;
         this.parent = parent;
+        this.renderer = rendererManager.getRendererFromPosition(rendererPosition);
+        if (this.renderer == null) {
+            throw new RuntimeException("No registered renderer associated to " + field.getName());
+        }
         this.originalRelativeX = rendererPosition.getRelativeX();
         this.originalRelativeY = rendererPosition.getRelativeY();
-
-        this.resetButton = new TexturedButton(-1, 0, 0, BUTTON_SIZE, BUTTON_SIZE, new ResourceLocation("configlib", "reload.png"), "Reset to Default Position");
-        this.undoButton = new TexturedButton(-1, 0, 0, BUTTON_SIZE, BUTTON_SIZE, new ResourceLocation("configlib", "undo.png"), "Undo Changes");
+        this.resetButton = new ClickGuiButton(-1, 0, 0, BUTTON_SIZE, BUTTON_SIZE, "");
+        this.resetButton.setTexture(new ResourceLocation("configlib", "reload.png"));
+        this.resetButton.setHoveringText("Reset to Default Position");
+        this.undoButton = new ClickGuiButton(-1, 0, 0, BUTTON_SIZE, BUTTON_SIZE, "");
+        this.undoButton.setTexture(new ResourceLocation("configlib", "undo.png"));
+        this.undoButton.setHoveringText("Undo Changes");
     }
 
     @Override
@@ -75,8 +82,7 @@ public class RendererEditGuiScreen extends GuiScreen {
 
             if (resetButton.isMouseOver() && resetButton.hasHoveringText()) {
                 drawHoveringText(resetButton.getHoveringTextLines(), mouseX, mouseY + fontRendererObj.FONT_HEIGHT + 6);
-            }
-            else if (undoButton.isMouseOver() && undoButton.hasHoveringText()) {
+            } else if (undoButton.isMouseOver() && undoButton.hasHoveringText()) {
                 drawHoveringText(undoButton.getHoveringTextLines(), mouseX, mouseY + fontRendererObj.FONT_HEIGHT + 6);
             }
         }
@@ -150,4 +156,5 @@ public class RendererEditGuiScreen extends GuiScreen {
         mc.getTextureManager().bindTexture(Gui.icons);
         drawTexturedModalRect(this.width / 2 - 7, this.height / 2 - 7, 0, 0, 16, 16);
     }
+
 }
