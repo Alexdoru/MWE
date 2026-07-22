@@ -5,7 +5,12 @@ import fr.alexdoru.configlib.lib.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ClickGuiButton extends GuiButton {
+
+    private final List<String> hoveringTextLines = new ArrayList<>();
 
     public ClickGuiButton(int buttonId, int x, int y, String buttonText) {
         super(buttonId, x, y, buttonText);
@@ -13,6 +18,16 @@ public class ClickGuiButton extends GuiButton {
 
     public ClickGuiButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText) {
         super(buttonId, x, y, widthIn, heightIn, buttonText);
+    }
+
+    public ClickGuiButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, List<String> hoveringTextLines) {
+        this(buttonId, x, y, widthIn, heightIn, buttonText);
+        setHoveringTextLines(hoveringTextLines);
+    }
+
+    public ClickGuiButton(int buttonId, int x, int y, String buttonText, List<String> hoveringTextLines) {
+        this(buttonId, x, y, buttonText);
+        setHoveringTextLines(hoveringTextLines);
     }
 
     public void drawButton(ColorPalette colorPalette, Minecraft mc, int mouseX, int mouseY) {
@@ -37,4 +52,14 @@ public class ClickGuiButton extends GuiButton {
         }
     }
 
+    public void setHoveringTextLines(List<String> hoveringTextLines) {
+        this.hoveringTextLines.clear();
+        if (hoveringTextLines != null) {
+            this.hoveringTextLines.addAll(hoveringTextLines);
+        }
+    }
+
+    public List<String> getHoveringTextLinesForDrawing() {
+        return (visible && hovered) ? hoveringTextLines : null;
+    }
 }
