@@ -59,6 +59,7 @@ public class MWE {
     private FinalKillCounterManager fkManager;
     private RenegadeArrowTracker renegadeTracker;
     private HackerDetector hackerDetector;
+    private MWERenderers mweRenderers;
     private File configFolder;
 
     public MWE() {
@@ -96,17 +97,17 @@ public class MWE {
     @EventHandler
     public void init(FMLInitializationEvent event) {
 
-        this.fkManager = new FinalKillCounterManager();
-        MinecraftForge.EVENT_BUS.register(this.fkManager);
+        this.mweRenderers = new MWERenderers(this.configHandler.getRendererManager());
+
+        this.fkManager = new FinalKillCounterManager(this.mweRenderers.fkCounterHUD);
         this.renegadeTracker = new RenegadeArrowTracker();
-        MinecraftForge.EVENT_BUS.register(this.renegadeTracker);
         this.hackerDetector = new HackerDetector();
+        MinecraftForge.EVENT_BUS.register(this.fkManager);
+        MinecraftForge.EVENT_BUS.register(this.renegadeTracker);
         MinecraftForge.EVENT_BUS.register(this.hackerDetector);
 
-        MWERenderers.loadRenderers(this.configHandler.getRendererManager());
-
         MinecraftForge.EVENT_BUS.register(new ReportQueue());
-        MinecraftForge.EVENT_BUS.register(new ChatListener());
+        MinecraftForge.EVENT_BUS.register(new ChatListener(this.mweRenderers));
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
         MinecraftForge.EVENT_BUS.register(new DataSaveScheduler());
         MinecraftForge.EVENT_BUS.register(new StrengthParticles());
@@ -125,7 +126,7 @@ public class MWE {
         ClientCommandHandler.instance.registerCommand(new CommandPlancke());
         ClientCommandHandler.instance.registerCommand(new CommandAddAlias());
         ClientCommandHandler.instance.registerCommand(new CommandScanGame());
-        ClientCommandHandler.instance.registerCommand(new CommandFKCounter());
+        ClientCommandHandler.instance.registerCommand(new CommandFKCounter(this.mweRenderers.fkCounterHUD));
         ClientCommandHandler.instance.registerCommand(new CommandNocheaters());
         ClientCommandHandler.instance.registerCommand(new CommandPartyDetection());
 
@@ -157,6 +158,10 @@ public class MWE {
 
     public HackerDetector getHackerDetector() {
         return hackerDetector;
+    }
+
+    public MWERenderers getMweRenderers() {
+        return mweRenderers;
     }
 
     public File getConfigFolder() {

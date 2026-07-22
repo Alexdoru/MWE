@@ -55,6 +55,7 @@ public class ChatListener {
     private static final Pattern HALO_HOTBAR_PATTERN = Pattern.compile("^HALO (\\w+) .+");
     private static final HashSet<String> MW_REPETITVE_MSG = new HashSet<>();
 
+    private final MWERenderers renderers;
     private boolean addGuildCoinsBonus;
 
     static {
@@ -63,6 +64,10 @@ public class ChatListener {
         MW_REPETITVE_MSG.add("Get to the center to stop the hunger");
         MW_REPETITVE_MSG.add("Your Salvaging skill returned your arrow to you!");
         MW_REPETITVE_MSG.add("Your Efficiency skill got you an extra drop!");
+    }
+
+    public ChatListener(MWERenderers renderers) {
+        this.renderers = renderers;
     }
 
     @SubscribeEvent
@@ -82,7 +87,7 @@ public class ChatListener {
                 }
 
                 if (msg.equals(OWN_WITHER_DEATH_MESSAGE)) {
-                    MWERenderers.killCooldownHUD.hideHUD();
+                    this.renderers.killCooldownHUD.hideHUD();
                     return;
                 }
 
@@ -110,16 +115,16 @@ public class ChatListener {
                     return;
                 }
 
-                if (MWERenderers.phoenixBondHUD.processMessage(event.message, msg)) {
+                if (this.renderers.phoenixBondHUD.processMessage(event.message, msg)) {
                     return;
                 }
 
-                if (MWERenderers.warcryHUD.processMessage(msg)) {
+                if (this.renderers.warcryHUD.processMessage(msg)) {
                     return;
                 }
 
                 if (MWEConfig.strengthHUDPosition.isEnabled() && msg.equals(HUNTER_STRENGTH_MESSAGE)) {
-                    MWERenderers.strengthHUD.setStrengthRenderStart(5000L);
+                    this.renderers.strengthHUD.setStrengthRenderStart(5000L);
                     return;
                 }
 
@@ -143,7 +148,7 @@ public class ChatListener {
                 return;
             }
 
-            if (MWERenderers.arrowHitHUD.processMessage(event, fmsg, msg)) {
+            if (this.renderers.arrowHitHUD.processMessage(event, fmsg, msg)) {
                 return;
             }
 
@@ -204,11 +209,11 @@ public class ChatListener {
             /*Status messages*/
         } else if (event.type == 2 && ScoreboardTracker.isInMwGame()) {
 
-            if (MWERenderers.strengthHUD.processMessage(fmsg)) {
+            if (this.renderers.strengthHUD.processMessage(fmsg)) {
                 return;
             }
 
-            if (MWERenderers.creeperPrimedTntHUD.processMessage(fmsg)) {
+            if (this.renderers.creeperPrimedTntHUD.processMessage(fmsg)) {
                 return;
             }
 

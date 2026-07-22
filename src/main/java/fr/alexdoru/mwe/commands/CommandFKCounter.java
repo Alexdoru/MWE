@@ -6,7 +6,7 @@ import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.SquadHandler;
-import fr.alexdoru.mwe.gui.MWERenderers;
+import fr.alexdoru.mwe.gui.huds.FKCounterHUD;
 import fr.alexdoru.mwe.utils.MapUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
@@ -15,6 +15,12 @@ import net.minecraft.util.EnumChatFormatting;
 import java.util.*;
 
 public class CommandFKCounter extends MWECommandBase {
+
+    private final FKCounterHUD fkCounterHUD;
+
+    public CommandFKCounter(FKCounterHUD fkCounterHUD) {
+        this.fkCounterHUD = fkCounterHUD;
+    }
 
     @Override
     public String getCommandName() {
@@ -130,7 +136,7 @@ public class CommandFKCounter extends MWECommandBase {
             final Integer kills = killMapOfTeam.get(playerName);
             if (kills != null) {
                 fkCounter.tryRemoveKilledPlayer(playerName, team);
-                MWERenderers.fkCounterHUD.updateDisplayText();
+                this.fkCounterHUD.updateDisplayText();
                 ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Removed " + fkCounter.getColorPrefixOfTeam(team) + playerName
                         + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + kills + EnumChatFormatting.GREEN + " final" + (kills > 1 ? "s" : "")
                         + " from the " + fkCounter.getColorPrefixOfTeam(team) + team.getName() + EnumChatFormatting.GREEN + " team.");

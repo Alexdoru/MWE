@@ -1,12 +1,12 @@
 package fr.alexdoru.mwe.scoreboard;
 
 import com.google.common.collect.ImmutableMap;
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.IScoreboardParser;
 import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.features.AFKSoundWarning;
-import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.scoreboard.ScoreObjective;
@@ -206,7 +206,7 @@ public final class ScoreboardParser implements IScoreboardParser {
             }
 
             if (!triggeredKillCooldownReset && witherHP < 100 && !colorCode.isEmpty() && colorCode.equals(teamColor)) {
-                MWERenderers.killCooldownHUD.hideHUD();
+                MWE.INSTANCE().getMweRenderers().killCooldownHUD.hideHUD();
                 triggeredKillCooldownReset = true;
             }
 
@@ -255,7 +255,7 @@ public final class ScoreboardParser implements IScoreboardParser {
         }
 
         if (aliveWithers.size() == 1) {
-            MWERenderers.lastWitherHPHUD.updateWitherHP(witherHP);
+            MWE.INSTANCE().getMweRenderers().lastWitherHPHUD.updateWitherHP(witherHP);
         }
     }
 

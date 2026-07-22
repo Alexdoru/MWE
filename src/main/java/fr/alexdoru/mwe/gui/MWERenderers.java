@@ -5,18 +5,16 @@ import fr.alexdoru.mwe.gui.huds.*;
 
 public final class MWERenderers {
 
-    private MWERenderers() {}
+    public final ArrowHitHUD arrowHitHUD;
+    public final CreeperPrimedTntHUD creeperPrimedTntHUD;
+    public final FKCounterHUD fkCounterHUD;
+    public final StrengthHUD strengthHUD;
+    public final KillCooldownHUD killCooldownHUD;
+    public final LastWitherHPHUD lastWitherHPHUD;
+    public final PhoenixBondHUD phoenixBondHUD;
+    public final WarcryHUD warcryHUD;
 
-    public static ArrowHitHUD arrowHitHUD;
-    public static CreeperPrimedTntHUD creeperPrimedTntHUD;
-    public static FKCounterHUD fkCounterHUD;
-    public static StrengthHUD strengthHUD;
-    public static KillCooldownHUD killCooldownHUD;
-    public static LastWitherHPHUD lastWitherHPHUD;
-    public static PhoenixBondHUD phoenixBondHUD;
-    public static WarcryHUD warcryHUD;
-
-    public static void loadRenderers(IRendererManager rendererManager) {
+    public MWERenderers(IRendererManager rendererManager) {
         rendererManager.registerHUDRenderer(new ArmorHUD());
         rendererManager.registerHUDRenderer(arrowHitHUD = new ArrowHitHUD());
         rendererManager.registerHUDRenderer(new BaseLocationHUD());
