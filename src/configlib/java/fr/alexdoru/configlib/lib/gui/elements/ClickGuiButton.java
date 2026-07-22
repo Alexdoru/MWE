@@ -82,6 +82,8 @@ public class ClickGuiButton extends GuiButton {
     public static class TexturedButton extends ClickGuiButton {
 
         private ResourceLocation texture;
+        public int topBottomPadding = 2;
+        public int leftRightPadding = 2;
 
         public TexturedButton(int buttonId, int x, int y, int widthIn, int heightIn, ResourceLocation texture) {
             super(buttonId, x, y, widthIn, heightIn, "");
@@ -106,8 +108,7 @@ public class ClickGuiButton extends GuiButton {
                 GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
                 GlStateManager.color(1f, 1f, 1f, 1f);
                 mc.getTextureManager().bindTexture(texture);
-                final int texturePadding = 2;
-                GuiUtil.drawFullTextureWithCustomSize(xPosition + texturePadding, yPosition + texturePadding, width - texturePadding * 2, height - texturePadding * 2);
+                GuiUtil.drawFullTextureWithCustomSize(xPosition + leftRightPadding, yPosition + topBottomPadding, width - leftRightPadding * 2, height - topBottomPadding * 2);
                 GlStateManager.disableBlend();
             }
         }
