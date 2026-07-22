@@ -96,7 +96,7 @@ public class CommandSquad extends MyAbstractCommand {
         final String slashCommand = '/' + getCommandName();
         printCommandHelpBlock(GREEN, "Squad Help", new String[][]{
                 { slashCommand + " add <player>", "add a player to the squad" },
-                { slashCommand + " add <player> as Nickname", "add a player to the squad and change their name" },
+                {slashCommand + " add <player> as <nickname>", "add a player to the squad and change their name"},
                 { slashCommand + " addteam", "add all your teammates to the squad" },
                 { slashCommand + " formsquad", "add your teammates to the squad when in a MW pre game" },
                 { slashCommand + " remove <player>", "remove a player from the squad" },
