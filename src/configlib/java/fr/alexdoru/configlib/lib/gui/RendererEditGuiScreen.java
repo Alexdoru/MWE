@@ -16,19 +16,18 @@ import java.lang.reflect.Field;
 
 public class RendererEditGuiScreen extends GuiScreen {
 
-    private static final int BUTTON_SIZE = 10;
+    private static final int BUTTON_SIZE = 16;
 
     private final RendererManager rendererManager;
-    private final IRenderer renderer;
     private final RendererPosition rendererPosition;
     private final ConfigGuiScreen parent;
+    private final IRenderer renderer;
     private final double originalRelativeX, originalRelativeY;
+    private final ClickGuiButton resetButton;
+    private final ClickGuiButton undoButton;
     private boolean dragging;
     private int prevX, prevY;
     private ScaledResolution resolution;
-
-    private final ClickGuiButton resetButton;
-    private final ClickGuiButton undoButton;
 
     public RendererEditGuiScreen(RendererManager rendererManager, RendererPosition rendererPosition, ConfigGuiScreen parent, Field field) {
         this.rendererManager = rendererManager;
@@ -117,9 +116,9 @@ public class RendererEditGuiScreen extends GuiScreen {
     }
 
     @Override
-    protected void mouseReleased(int mouseX, int mouseY, int state) {
-        super.mouseReleased(mouseX, mouseY, state);
-        if (MouseButton.from(state).isLeft()) {
+    protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
+        super.mouseReleased(mouseX, mouseY, mouseButton);
+        if (MouseButton.from(mouseButton).isLeft()) {
             this.dragging = false;
         }
     }

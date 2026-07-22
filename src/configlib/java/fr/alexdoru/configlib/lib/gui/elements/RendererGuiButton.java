@@ -40,7 +40,7 @@ public class RendererGuiButton extends ConfigGuiButton {
 
     @Override
     public void setBoxWidth(int boxWidth) {
-        super.setBoxWidth(boxWidth - mc.fontRendererObj.getStringWidth(" Disabled ") - 10 - 1 - 20);
+        super.setBoxWidth(boxWidth - 20 - 1);
         this.boxWidth = boxWidth;
     }
 
@@ -78,11 +78,6 @@ public class RendererGuiButton extends ConfigGuiButton {
             }
         }
         return false;
-    }
-
-    @Override
-    public int getHeight() {
-        return Math.max(super.getHeight(), 8 + buttonEnabled.height + 1 + buttonMoveHud.height + 8 - 1);
     }
 
     private void flipBooleanConfig() {
