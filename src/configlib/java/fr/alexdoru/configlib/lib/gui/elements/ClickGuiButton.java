@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ClickGuiButton extends GuiButton {
 
-    private final List<String> hoveringTextLines = new ArrayList<>();
+    private List<String> hoveringTextLines = Collections.emptyList();
 
     public ClickGuiButton(int buttonId, int x, int y, String buttonText) {
         super(buttonId, x, y, buttonText);
@@ -68,10 +68,7 @@ public class ClickGuiButton extends GuiButton {
     }
 
     public void setHoveringTextLines(List<String> hoveringTextLines) {
-        this.hoveringTextLines.clear();
-        if (hoveringTextLines != null) {
-            this.hoveringTextLines.addAll(hoveringTextLines);
-        }
+        this.hoveringTextLines = hoveringTextLines != null ? Collections.unmodifiableList(new ArrayList<>(hoveringTextLines)) : Collections.emptyList();
     }
 
     public List<String> getHoveringTextLines() {
