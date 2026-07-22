@@ -68,7 +68,8 @@ public class ClickGuiButton extends GuiButton {
     }
 
     public void setHoveringTextLines(List<String> hoveringTextLines) {
-        this.hoveringTextLines = hoveringTextLines != null ? Collections.unmodifiableList(new ArrayList<>(hoveringTextLines)) : Collections.emptyList();
+        this.hoveringTextLines = (hoveringTextLines == null || hoveringTextLines.isEmpty()) ? Collections.emptyList()
+            : Collections.unmodifiableList(new ArrayList<>(hoveringTextLines));
     }
 
     public List<String> getHoveringTextLines() {
