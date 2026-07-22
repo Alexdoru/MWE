@@ -10,6 +10,11 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
     }
 }
+
+plugins {
+    id 'java-library'
+}
+
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = "4.4.1"
@@ -83,7 +88,7 @@ runClient {
 }
 
 dependencies {
-    compileOnly 'org.jetbrains:annotations:26.1.0'
+    api 'org.jetbrains:annotations:26.1.0'
     testImplementation 'junit:junit:4.13.2'
 }
 
