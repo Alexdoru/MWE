@@ -83,7 +83,7 @@ public class ClickGuiButton extends GuiButton {
 
     public static class TexturedButton extends ClickGuiButton {
 
-        protected final ResourceLocation texture;
+        private ResourceLocation texture;
 
         public TexturedButton(int buttonId, int x, int y, int widthIn, int heightIn, ResourceLocation texture) {
             super(buttonId, x, y, widthIn, heightIn, "");
@@ -113,5 +113,8 @@ public class ClickGuiButton extends GuiButton {
                 GlStateManager.disableBlend();
             }
         }
+
+        public void setTexture(ResourceLocation texture) { this.texture = texture; }
+        public ResourceLocation getTexture() { return this.texture; }
     }
 }
