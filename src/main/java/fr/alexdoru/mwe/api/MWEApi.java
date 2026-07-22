@@ -43,11 +43,16 @@ public final class MWEApi {
     public static final int API_VERSION = 1;
 
     /**
+     * !!! To register your addon, copy to content of this method to your mod,
+     * calling this method can cause your game to crash because this mod isn't
+     * loaded yet when your mod will call this method. !!!
+     * <p>
      * Register the main class of your addon, this should be the name of the class,
      * must be called before mods are constructed e.g. from a coremod.
      * The addon must implement {@link fr.alexdoru.mwe.api.IMWEAddon}.
      * For example : "net.myname.myaddon.MWEAddon"
      */
+    @Deprecated
     public static void registerAddon(String classname) {
         final Object o = Launch.blackboard.computeIfAbsent("mwe.addons", k -> new ArrayList<>());
         if (o instanceof ArrayList) {
@@ -96,11 +101,16 @@ public final class MWEApi {
         private Asm() {}
 
         /**
+         * !!! To register your ASM transformers, copy to content of this method to your mod,
+         * calling this method can cause your game to crash because this mod isn't
+         * loaded yet when your mod will call this method. !!!
+         * <p>
          * Register your ASM transformers using the name of their class,
          * this must be called from the constructor of your coremod.
          * The transformer must implement {@link IClassNodeTransformer}.
          * For example : "net.myname.myaddon.asm.MinecraftTransformer"
          */
+        @Deprecated
         public static void registerTransformer(String classname) {
             final Object o = Launch.blackboard.computeIfAbsent("mwe.transformers", k -> new ArrayList<>());
             if (o instanceof ArrayList) {
