@@ -3,13 +3,11 @@ package fr.alexdoru.mwe.asm.hooks;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.utils.RenderHelper;
 import fr.alexdoru.mwe.utils.StringUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.IChatComponent;
-import org.lwjgl.opengl.GL11;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,12 +19,14 @@ public class GuiNewChatHook_ChatHeads {
     public static void preRenderStringCall(ChatLine chatLine, int alpha, int x, int y) {
         if (MWEConfig.chatHeads && chatLine.getChatComponent() instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) chatLine.getChatComponent()).getSkinChatHead() != null) {
             isHeadLine = true;
-            GlStateManager.color(1.0F, 1.0F, 1.0F, ((float) alpha / 255.0F));
-            GlStateManager.enableAlpha();
-            GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-            Minecraft.getMinecraft().getTextureManager().bindTexture(((ChatComponentTextAccessor) chatLine.getChatComponent()).getSkinChatHead().getSkin());
-            Gui.drawScaledCustomSizeModalRect(x, y - 8, 8F, 8F, 8, 8, 8, 8, 64.0F, 64.0F);
-            Gui.drawScaledCustomSizeModalRect(x, y - 8, 40F, 8F, 8, 8, 8, 8, 64.0F, 64.0F);
+            RenderHelper.renderSkinHead(
+                    ((ChatComponentTextAccessor) chatLine.getChatComponent()).getSkinChatHead().getSkin(),
+                    x,
+                    y - 8,
+                    true,
+                    8,
+                    ((float) alpha / 255.0F)
+            );
             GlStateManager.translate(9F, 0F, 0F);
             return;
         }

@@ -95,7 +95,6 @@ public class ArmorHUD extends AbstractRenderer {
         FontRenderer fr = stack.getItem().getFontRenderer(stack);
         if (fr == null) fr = mc.fontRendererObj;
         final RenderItem itemRender = mc.getRenderItem();
-        GlStateManager.pushMatrix();
         RenderHelper.enableGUIStandardItemLighting();
         itemRender.renderItemAndEffectIntoGUI(stack, x, y);
         if (MWEConfig.showArmorDurability) {
@@ -114,7 +113,6 @@ public class ArmorHUD extends AbstractRenderer {
         }
         RenderHelper.disableStandardItemLighting();
         GlStateManager.disableLighting();
-        GlStateManager.popMatrix();
     }
 
 }

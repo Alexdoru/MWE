@@ -5,7 +5,7 @@ import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.hackerdetector.data.BrokenBlock;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
-import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
+import fr.alexdoru.mwe.hackerdetector.data.ViolationLevelTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

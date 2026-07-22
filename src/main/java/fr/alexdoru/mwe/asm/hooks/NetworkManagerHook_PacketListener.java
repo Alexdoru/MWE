@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks;
 
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.hackerdetector.AttackDetector;
 import net.minecraft.network.Packet;
 
 public class NetworkManagerHook_PacketListener {
@@ -11,8 +11,10 @@ public class NetworkManagerHook_PacketListener {
     public static void listen(Packet<?> packet) {
         if (!MWEConfig.hackerDetector) return;
         try {
-            AttackDetector.lookForAttacks(packet);
-        } catch (Throwable ignored) {}
+            MWE.INSTANCE().getHackerDetector().lookForAttacks(packet);
+        } catch (Throwable t) {
+            MWE.logger.error("Caught exception from Hacker Detector", t);
+        }
     }
 
 }

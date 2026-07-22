@@ -50,8 +50,11 @@ public class WDR implements IReportInfo, Comparable<WDR> {
     }
 
     public void addCheats(List<String> list) {
-        list.removeAll(this.cheats);
-        this.cheats.addAll(list);
+        list.forEach(cheat -> {
+            if (!this.cheats.contains(cheat)) {
+                this.cheats.add(cheat);
+            }
+        });
         this.cheats.trimToSize();
         this.updateIcon();
         this.timestamp = new Date().getTime();

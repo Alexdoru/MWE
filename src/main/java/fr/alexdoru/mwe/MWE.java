@@ -58,6 +58,7 @@ public class MWE {
     private IConfigHandler configHandler;
     private FinalKillCounterManager fkManager;
     private RenegadeArrowTracker renegadeTracker;
+    private HackerDetector hackerDetector;
     private File configFolder;
 
     public MWE() {
@@ -99,12 +100,13 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(this.fkManager);
         this.renegadeTracker = new RenegadeArrowTracker();
         MinecraftForge.EVENT_BUS.register(this.renegadeTracker);
+        this.hackerDetector = new HackerDetector();
+        MinecraftForge.EVENT_BUS.register(this.hackerDetector);
 
         MWERenderers.loadRenderers(this.configHandler.getRendererManager());
 
         MinecraftForge.EVENT_BUS.register(new ReportQueue());
         MinecraftForge.EVENT_BUS.register(new ChatListener());
-        MinecraftForge.EVENT_BUS.register(new HackerDetector());
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
         MinecraftForge.EVENT_BUS.register(new DataSaveScheduler());
         MinecraftForge.EVENT_BUS.register(new StrengthParticles());
@@ -151,6 +153,10 @@ public class MWE {
 
     public RenegadeArrowTracker getRenegadeTracker() {
         return renegadeTracker;
+    }
+
+    public HackerDetector getHackerDetector() {
+        return hackerDetector;
     }
 
     public File getConfigFolder() {
