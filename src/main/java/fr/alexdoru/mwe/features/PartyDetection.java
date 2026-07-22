@@ -41,8 +41,8 @@ public class PartyDetection {
         }
 
         if (lastPlayerJoining != null && jointime - timeLastJoin < TIME_SAME_PARTY) {
-            final Set<String> partyLastPlayer = PARTYS.computeIfAbsent(lastPlayerJoining, name -> new HashSet<>(Collections.singletonList(name)));
-            final Set<String> partyPlayer = PARTYS.computeIfAbsent(playername, name -> new HashSet<>(Collections.singletonList(name)));
+            final Set<String> partyLastPlayer = PARTYS.computeIfAbsent(lastPlayerJoining.toLowerCase(), name -> new HashSet<>(Collections.singletonList(lastPlayerJoining)));
+            final Set<String> partyPlayer = PARTYS.computeIfAbsent(playername.toLowerCase(), name -> new HashSet<>(Collections.singletonList(playername)));
             partyLastPlayer.addAll(partyPlayer);
             partyPlayer.addAll(partyLastPlayer);
         }
@@ -54,7 +54,8 @@ public class PartyDetection {
     }
 
     public static void printBoostingReportAdvice(String playername) {
-        final Set<String> party = PARTYS.get(playername);
+        if (playername == null) return;
+        final Set<String> party = PARTYS.get(playername.toLowerCase());
         if (party == null) return;
         final Minecraft mc = Minecraft.getMinecraft();
         final NetworkPlayerInfo cheaterNetInfo = mc.getNetHandler().getPlayerInfo(playername);
@@ -96,7 +97,8 @@ public class PartyDetection {
 
     @NotNull
     public static Set<String> getPartyOf(String playername) {
-        final Set<String> p = PARTYS.get(playername);
+        if (playername == null) return Collections.emptySet();
+        final Set<String> p = PARTYS.get(playername.toLowerCase());
         if (p == null) return Collections.emptySet();
         return Collections.unmodifiableSet(p);
     }
