@@ -4,7 +4,8 @@ import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.features.NameFormatter;
+import fr.alexdoru.mwe.data.NameFormatter;
+import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
@@ -152,7 +153,7 @@ public class CommandStalk extends MyAbstractCommand {
             boolean flag = false;
             final IChatComponent nickMsg = new ChatComponentText("\n" + YELLOW + "Could be : ");
             for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
-                if (NameFormatter.isNickedPlayer(netInfo.getGameProfile().getId()) && skin.hasSkinEquipped(netInfo)) {
+                if (PlayerDataManager.isNickedPlayer(netInfo.getGameProfile().getId()) && skin.hasSkinEquipped(netInfo)) {
                     flag = true;
                     nickMsg.appendSibling(new ChatComponentText(RESET + NameFormatter.getFormattedNameWithoutIcons(netInfo) + " ")
                             .setChatStyle(new ChatStyle()

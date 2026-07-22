@@ -7,12 +7,18 @@ import fr.alexdoru.configlib.api.RendererPosition;
 import fr.alexdoru.configlib.lib.RendererManager;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.RendererEditGuiScreen;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 public class RendererGuiButton extends ConfigGuiButton {
+
+    private static final ResourceLocation MOVE_ICON = new ResourceLocation("configlib", "move_icon_64x64.png");
 
     private final ConfigGuiScreen parentScreen;
     private final RendererManager rendererManager;
@@ -39,7 +45,8 @@ public class RendererGuiButton extends ConfigGuiButton {
 
     @Override
     public void setBoxWidth(int boxWidth) {
-        super.setBoxWidth(boxWidth);
+        // super.setBoxWidth(boxWidth);
+        super.setBoxWidth(boxWidth - mc.fontRendererObj.getStringWidth("Reset Position") - 10);
         this.boxWidth = boxWidth;
     }
 
@@ -52,11 +59,17 @@ public class RendererGuiButton extends ConfigGuiButton {
         buttonMoveHud.xPosition = buttonEnabled.xPosition;
         buttonMoveHud.yPosition = buttonEnabled.yPosition + buttonEnabled.height + 1;
         buttonMoveHud.drawButton(colorPalette, mc, mouseX, mouseY);
+        drawIcon(MOVE_ICON, buttonMoveHud.xPosition, buttonMoveHud.yPosition);
+        if (buttonMoveHud.isMouseOver()) {
+            final int textX = buttonEnabled.xPosition - 4 - mc.fontRendererObj.getStringWidth("Move HUD");
+            final int textY = buttonMoveHud.yPosition + mc.fontRendererObj.FONT_HEIGHT / 2 + 1;
+            mc.fontRendererObj.drawStringWithShadow("Move HUD", textX, textY, colorPalette.HUD_BUTTON_HINT_TEXT);
+        }
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        if (mouseButton == 0) {
+    public boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) {
+        if (mouseButton.isLeft()) {
             if (buttonEnabled.mousePressed(mc, mouseX, mouseY)) {
                 flipBooleanConfig();
                 buttonEnabled.displayString = getButtonText();
@@ -66,19 +79,38 @@ public class RendererGuiButton extends ConfigGuiButton {
                 buttonEnabled.playPressSound(mc.getSoundHandler());
                 final IRenderer renderer = this.rendererManager.getRendererFromPosition(rendererPosition);
                 if (renderer != null) {
-                    mc.displayGuiScreen(new RendererEditGuiScreen(this.rendererManager, renderer, parentScreen, parentScreen.getColorPalette()));
+                    mc.displayGuiScreen(new RendererEditGuiScreen(this.rendererManager, renderer, parentScreen));
                 } else {
                     throw new RuntimeException("No registered renderer associated to " + field.getName());
                 }
                 return true;
             }
         }
+//        else if (buttonMoveHud.mousePressed(mc, mouseX, mouseY)) {
+//            buttonEnabled.playPressSound(mc.getSoundHandler());
+//            mc.displayGuiScreen(new RendererEditGuiScreen(rendererManager, rendererPosition, parentScreen, field));
+//            return true;
+//        }
         return false;
     }
 
     @Override
     public int getHeight() {
         return Math.max(super.getHeight(), 8 + buttonEnabled.height + 1 + buttonMoveHud.height + 8 - 1);
+    }
+
+    private void drawIcon(ResourceLocation icon, int drawX, int drawY) {
+        drawX += 3;
+        drawY += 3;
+        GlStateManager.pushMatrix();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        parentScreen.mc.getTextureManager().bindTexture(icon);
+        GlStateManager.color(1, 1, 1);
+        Gui.drawModalRectWithCustomSizedTexture(drawX, drawY, 0f, 0f, 14, 14, 14f, 14f);
+        GlStateManager.popMatrix();
     }
 
     private void flipBooleanConfig() {

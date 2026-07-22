@@ -234,18 +234,19 @@ public class ConfigGuiScreen extends GuiScreen {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        final MouseButton button = MouseButton.from(mouseButton);
         if (CATEGORY_BOX.isMouseInBox(mouseX, mouseY)) {
             final boolean consumedClick = forEachVisible(this.categoryElements, CATEGORY_BOX, this.categoryScrollbar.getScroll(), (element, drawY) ->
-                    element.mouseClicked(mouseX, mouseY, mouseButton)
+                    element.mouseClicked(mouseX, mouseY, button)
             );
             if (consumedClick) return;
-            if (this.categoryScrollbar.mouseClicked(mouseX, mouseY, mouseButton)) {
+            if (this.categoryScrollbar.mouseClicked(mouseX, mouseY, button)) {
                 return;
             }
         } else if (CONFIG_BOX.isMouseInBox(mouseX, mouseY)) {
             final boolean consumedClick = forEachVisible(this.renderedConfigElements, CONFIG_BOX, this.configScrollbar.getScroll(), (element, drawY) -> {
                 try {
-                    if (element.mouseClicked(mouseX, mouseY, mouseButton)) {
+                    if (element.mouseClicked(mouseX, mouseY, button)) {
                         if (element instanceof SliderGuiButton) {
                             lastInteractedSlider = ((SliderGuiButton) element);
                         }
@@ -257,10 +258,10 @@ public class ConfigGuiScreen extends GuiScreen {
                 return false;
             });
             if (consumedClick) return;
-            if (this.configScrollbar.mouseClicked(mouseX, mouseY, mouseButton)) {
+            if (this.configScrollbar.mouseClicked(mouseX, mouseY, button)) {
                 return;
             }
-        } else if (mouseButton == 0 && SEARCH_BOX.isMouseInBox(mouseX, mouseY)) {
+        } else if (button.isLeft() && SEARCH_BOX.isMouseInBox(mouseX, mouseY)) {
             searchField.setFocused(true);
             return;
         }
@@ -269,16 +270,17 @@ public class ConfigGuiScreen extends GuiScreen {
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
+        final MouseButton button = MouseButton.from(mouseButton);
         for (final ConfigUIElement element : this.renderedConfigElements) {
-            if (element.mouseReleased(mouseX, mouseY, mouseButton)) {
+            if (element.mouseReleased(mouseX, mouseY, button)) {
                 if (element instanceof SliderGuiButton) {
                     lastInteractedSlider = ((SliderGuiButton) element);
                 }
                 return;
             }
         }
-        this.configScrollbar.mouseReleased(mouseButton);
-        this.categoryScrollbar.mouseReleased(mouseButton);
+        this.configScrollbar.mouseReleased(button);
+        this.categoryScrollbar.mouseReleased(button);
         super.mouseReleased(mouseX, mouseY, mouseButton);
     }
 
@@ -320,7 +322,7 @@ public class ConfigGuiScreen extends GuiScreen {
             final int mouseX = Mouse.getEventX() * width / mc.displayWidth;
             final int mouseY = height - Mouse.getEventY() * height / mc.displayHeight - 1;
             final int direction = wheel > 0 ? 1 : -1;
-            final int amount = Math.min(Math.abs(wheel) * 2, 240);
+            final int amount = Math.min(Math.abs(wheel) * 2, Scrollbar.SCROLL_STEP);
             if (CATEGORY_BOX.isMouseInBox(mouseX, mouseY)) {
                 this.categoryScrollbar.scheduleScroll(direction, amount);
             } else if (CONFIG_BOX.isMouseInBox(mouseX, mouseY)) {

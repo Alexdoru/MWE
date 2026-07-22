@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.features;
+package fr.alexdoru.mwe.data;
 
 import com.mojang.authlib.GameProfile;
 import fr.alexdoru.mwe.api.enums.MWClass;
@@ -7,12 +7,10 @@ import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.data.AliasData;
-import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
-import fr.alexdoru.mwe.data.ScangameData;
+import fr.alexdoru.mwe.features.LeatherArmorManager;
+import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.nocheaters.WarningMessages;
-import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.DelayedTask;
@@ -23,7 +21,6 @@ import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
-import net.minecraft.scoreboard.Team;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
@@ -40,7 +37,7 @@ import java.util.regex.Pattern;
 /**
  * What this class does :
  * on new NetworkPlayerInfo instance creation :
- * - updates/creates MWPlayerData stored in the cache
+ * - updates/creates PlayerData stored in the cache
  * - assigns custom displayName or null
  * - assigns the finals of the player
  * on Team packets :
@@ -64,9 +61,9 @@ import java.util.regex.Pattern;
  * - receive once new Networkplayerinfo packet
  * - fire the playerjoin event once
  */
-public final class NameFormatter {
+public final class PlayerDataManager {
 
-    private NameFormatter() {}
+    private PlayerDataManager() {}
 
     public static final String WARNING_ICON = EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET;
     public static final String RED_WARNING_ICON = EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET;
@@ -80,18 +77,14 @@ public final class NameFormatter {
     private static final Set<UUID> warningMsgPrinted = new HashSet<>();
     private static final Map<UUID, PlayerData> PLAYER_DATA_CACHE = new HashMap<>();
 
-    public static void clearPlayerDataCache() {
+    static void clearPlayerDataCache() {
         PLAYER_DATA_CACHE.clear();
     }
 
-    public static void removeFromDataCache(UUID uuid) {
+    static void removeFromDataCache(UUID uuid) {
         PLAYER_DATA_CACHE.remove(uuid);
     }
 
-    /**
-     * This updates the infos storred in PlayerDataCache for the player : playername
-     * and refreshes the name in the tablist and the nametag.
-     */
     public static void updatePlayerDataAndEntityData(String playername) {
         if (isValidMinecraftName(playername)) {
             final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
@@ -200,7 +193,7 @@ public final class NameFormatter {
 
     private static void tryPrintWarningMessage(EntityPlayer player) {
         if (MWEConfig.warningMessages && !warningMsgPrinted.contains(player.getUniqueID())) {
-            final WDR wdr = WdrData.getWdr(player.getUniqueID(), player.getName());
+            final WDR wdr = WdrDataManager.getWdr(player.getUniqueID(), player.getName());
             if (wdr != null) {
                 warningMsgPrinted.add(player.getUniqueID());
                 ChatHandler.deleteWarningFromChat(player.getName());
@@ -212,8 +205,8 @@ public final class NameFormatter {
     /**
      * Called on NetworkPlayerinfo instantiation
      */
-    public static IChatComponent getDisplayName(GameProfile gameProfile) {
-        return NameFormatter.getPlayerData(gameProfile).displayName;
+    public static IChatComponent getDisplaynameForTablist(GameProfile gameProfile) {
+        return PlayerDataManager.getPlayerData(gameProfile).displayName;
     }
 
     private static @NotNull PlayerData getPlayerData(GameProfile gameProfile) {
@@ -228,7 +221,7 @@ public final class NameFormatter {
     private static PlayerData updatePlayerData(GameProfile gameProfile) {
         final UUID id = gameProfile.getId();
         final String username = gameProfile.getName();
-        final WDR wdr = WdrData.getWdr(id, username);
+        final WDR wdr = WdrDataManager.getWdr(id, username);
         String extraPrefix = "";
         IChatComponent iExtraPrefix = null;
         final String squadname = SquadHandler.getSquadnameUnsafe(username);
@@ -270,13 +263,13 @@ public final class NameFormatter {
                 teamColor = StringUtil.getLastColorCharOf(teamprefix);
                 mwClass = MWClass.fromTeamTag(ScoreboardTracker.isMWReplay() ? teamprefix : colorSuffix);
                 final boolean isobf = teamprefix.contains("§k");
-                final boolean isNicked = NameFormatter.isNickedPlayer(id);
-                final String alias = AliasData.getAlias(id, username);
+                final boolean isNicked = PlayerDataManager.isNickedPlayer(id);
+                final String alias = AliasDataManager.getAlias(id, username);
                 if (iExtraPrefix != null || isobf || isNicked && MWEConfig.showFakePlayersInTab || squadname != null || alias != null) {
                     final StringBuilder sb = new StringBuilder();
                     if (iExtraPrefix != null) sb.append(extraPrefix);
                     if (isobf && MWEConfig.deobfNamesInTab) {
-                        sb.append(deobfString(teamprefix));
+                        sb.append(NameFormatter.deobfString(teamprefix));
                     } else {
                         sb.append(teamprefix);
                     }
@@ -306,12 +299,6 @@ public final class NameFormatter {
         return playerData;
     }
 
-    private static final Pattern obfPattern = Pattern.compile("§k[OX]*");
-
-    private static String deobfString(String obfText) {
-        return obfPattern.matcher(obfText).replaceAll("");
-    }
-
     public static EntityPlayer getPlayerEntityByName(String playername) {
         // we loop backwards because the player list contains duplicate entities
         // and the "active" ones are the latest inserted
@@ -324,7 +311,7 @@ public final class NameFormatter {
         return null;
     }
 
-    private static EntityPlayer getPlayerEntityByUUID(UUID uuid) {
+    public static EntityPlayer getPlayerEntityByUUID(UUID uuid) {
         // we loop backwards because the player list contains duplicate entities
         // and the "active" ones are the latest inserted
         final List<EntityPlayer> playerList = Minecraft.getMinecraft().theWorld.playerEntities;
@@ -334,63 +321,6 @@ public final class NameFormatter {
             }
         }
         return null;
-    }
-
-    /**
-     * Returns the formatted name of the player, additionnal icons, squadname, alias and prestive V tag included
-     * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay#getPlayerName}
-     */
-    public static String getFormattedName(String playername) {
-        final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
-        if (netInfo == null) {
-            return playername;
-        }
-        return getFormattedName(netInfo);
-    }
-
-    /**
-     * Returns the formatted name of the player, additionnal icons, squadname, alias not included
-     * Same method that the one in {@link net.minecraft.client.gui.GuiPlayerTabOverlay#getPlayerName}
-     */
-    public static String getFormattedName(NetworkPlayerInfo netInfo) {
-        if (netInfo.getDisplayName() == null) {
-            return ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName());
-        }
-        return netInfo.getDisplayName().getFormattedText();
-    }
-
-    /**
-     * Returns the formatted team name with additionnaly a squadname
-     * This doesn't return the icons in front that the player may have.
-     */
-    public static String getFormattedNameWithoutIcons(String playername) {
-        final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
-        if (netInfo == null) {
-            return SquadHandler.getSquadname(playername);
-        }
-        return getFormattedNameWithoutIcons(netInfo);
-    }
-
-    /**
-     * Returns the formatted team name with additionnaly a squadname
-     * This doesn't return the icons in front that the player may have.
-     */
-    public static String getFormattedNameWithoutIcons(NetworkPlayerInfo netInfo) {
-        return getFormattedNameWithoutIcons(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName());
-    }
-
-    /**
-     * Equivalent of {@link net.minecraft.scoreboard.ScorePlayerTeam#formatPlayerName}
-     * but with eventually a squadname
-     */
-    public static String getFormattedNameWithoutIcons(Team team, String playername) {
-        if (team == null) {
-            return SquadHandler.getSquadname(playername);
-        } else if (team instanceof ScorePlayerTeam) {
-            final ScorePlayerTeam scorePlayerTeam = (ScorePlayerTeam) team;
-            return deobfString(scorePlayerTeam.getColorPrefix()) + SquadHandler.getSquadname(playername) + scorePlayerTeam.getColorSuffix();
-        }
-        return deobfString(team.formatString(playername));
     }
 
     public static boolean isNickedPlayer(UUID uuid) {
@@ -403,17 +333,6 @@ public final class NameFormatter {
 
     public static boolean isRealPlayer(UUID uuid) {
         return uuid.version() == 4;
-    }
-
-    /**
-     * Returns true if the player is using a random class
-     */
-    public static boolean isPlayerUsingRandom(NetworkPlayerInfo netInfo) {
-        if (!netInfo.hasLocationSkin()) {
-            return false;
-        }
-        final String RANDOM_SKIN_HASH = "512a44f6c022dfaa6f61274c85aa1594cb304f0136fd5d1d3a27c1379e875692";
-        return RANDOM_SKIN_HASH.equals(netInfo.getLocationSkin().toString().substring(16));
     }
 
     private static class PlayerData {

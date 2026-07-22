@@ -3,7 +3,9 @@ package fr.alexdoru.mwe.nocheaters;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.WarningChatComponent;
-import fr.alexdoru.mwe.features.NameFormatter;
+import fr.alexdoru.mwe.data.NameFormatter;
+import fr.alexdoru.mwe.data.PlayerDataManager;
+import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.utils.DateUtil;
 import fr.alexdoru.mwe.utils.NetInfoOrdering;
 import net.minecraft.client.Minecraft;
@@ -27,7 +29,7 @@ public class WarningMessages {
         for (final NetworkPlayerInfo netInfo : NetInfoOrdering.vanillaSortingCopyOf(Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap())) {
             final UUID uuid = netInfo.getGameProfile().getId();
             final String playerName = netInfo.getGameProfile().getName();
-            final WDR wdr = WdrData.getWdr(uuid, playerName);
+            final WDR wdr = WdrDataManager.getWdr(uuid, playerName);
             if (wdr == null) {
                 continue;
             }
@@ -40,7 +42,7 @@ public class WarningMessages {
     }
 
     public static void printWarningMessage(UUID uuid, Team team, String playername, WDR wdr) {
-        final String wdrmapKey = NameFormatter.isRealPlayer(uuid) ? uuid.toString() : playername;
+        final String wdrmapKey = PlayerDataManager.isRealPlayer(uuid) ? uuid.toString() : playername;
         final IChatComponent imsg = new WarningChatComponent(playername, RED + "Warning : ")
                 .appendSibling(getPlayernameWithHoverText(null, team, playername, wdrmapKey, wdr))
                 .appendText(GRAY + " joined, Cheats :")

@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.data;
 
+import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
-import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import net.minecraft.client.Minecraft;
@@ -50,7 +50,7 @@ public class ScangameData {
         randomKitSet.clear();
         if (ScoreboardUtils.isMegaWallsMythicGame()) {
             for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
-                if (NameFormatter.isPlayerUsingRandom(netInfo)) {
+                if (MWSkin.RANDOM == MWSkin.ofPlayer(netInfo)) {
                     randomKitSet.add(netInfo.getGameProfile().getId());
                 }
             }

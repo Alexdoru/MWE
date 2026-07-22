@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
@@ -8,7 +9,6 @@ import fr.alexdoru.mwe.http.requests.HypixelPlayerData;
 import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
 import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.nocheaters.WarningMessages;
-import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.utils.DateUtil;
 import fr.alexdoru.mwe.utils.MapUtil;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
@@ -81,7 +81,7 @@ public class CommandNocheaters extends MyAbstractCommand {
             displaypage = 1;
         }
 
-        final List<Map.Entry<Object, WDR>> sortedEntries = MapUtil.sortByValueReversed(WdrData.getAllWDRs());
+        final List<Map.Entry<Object, WDR>> sortedEntries = MapUtil.sortByValueReversed(WdrDataManager.getAllReports());
         final List<Future<IChatComponent>> futureList = new ArrayList<>();
         int nbreport = 1; // pour compter le nb de report et en afficher que 8 par page
         int nbpage = 1;

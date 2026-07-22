@@ -12,9 +12,12 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+import net.minecraft.client.renderer.GlStateManager;
+import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.lang.reflect.Field;
 
 public class RendererEditGuiScreen extends GuiScreen {
 
@@ -44,6 +47,16 @@ public class RendererEditGuiScreen extends GuiScreen {
         };
     }
 
+//    public RendererEditGuiScreen(RendererManager rendererManager, RendererPosition rendererPosition, GuiScreen parent, Field field) {
+//        this.rendererManager = rendererManager;
+//        this.rendererPosition = rendererPosition;
+//        this.parent = parent;
+//        this.renderer = rendererManager.getRendererFromPosition(rendererPosition);
+//        if (this.renderer == null) {
+//            throw new RuntimeException("No registered renderer associated to " + field.getName());
+//        }
+//    }
+
     @Override
     public void initGui() {
         final ScaledResolution res = new ScaledResolution(mc);
@@ -54,11 +67,16 @@ public class RendererEditGuiScreen extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.renderCrosshair();
-        final boolean prevEnabled = this.rendererPosition.isEnabled();
-        this.rendererPosition.setEnabled(false);
+//        final boolean prevEnabled = this.rendererPosition.isEnabled();
+//        this.rendererPosition.setEnabled(false);
+//        this.rendererManager.renderEditScreenBackground(this.renderer);
+//        this.rendererPosition.setEnabled(prevEnabled);
+//        super.drawDefaultBackground();
         this.rendererManager.renderEditScreenBackground(this.renderer);
-        this.rendererPosition.setEnabled(prevEnabled);
+        GlStateManager.translate(0, 0, 200F);
         super.drawDefaultBackground();
+        this.renderer.renderDummy();
+        GlStateManager.translate(0, 0, -200F);
         if (this.dragging) {
             this.rendererPosition.setAbsolutePositionForRender(
                     this.rendererPosition.getAbsoluteRenderX() + mouseX - this.prevX,
@@ -131,7 +149,7 @@ public class RendererEditGuiScreen extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == 1) {
+        if (keyCode == Keyboard.KEY_ESCAPE) {
             this.mc.displayGuiScreen(parent);
         }
     }

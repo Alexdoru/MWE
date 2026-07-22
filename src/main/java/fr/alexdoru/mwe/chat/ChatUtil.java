@@ -340,13 +340,6 @@ public class ChatUtil {
         return "";
     }
 
-    public static void printReportingAdvice() {
-        addChatMessage(RED + "To make reporting efficient, be sure to use /report"
-                + DARK_RED + " when you are ingame with the cheater and they are currently cheating "
-                + RED + ", not 2 minutes after, not after the game ended or before the game starts." +
-                " This way a replay with a timestamp can be attached to the report for review.");
-    }
-
     public static IChatComponent formattedNameWithReportButton(String playername, String formattedName) {
         return new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + playername + " cheating"))
