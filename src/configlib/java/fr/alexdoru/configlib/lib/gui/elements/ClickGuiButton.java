@@ -6,8 +6,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ClickGuiButton extends GuiButton {
@@ -30,6 +32,14 @@ public class ClickGuiButton extends GuiButton {
     public ClickGuiButton(int buttonId, int x, int y, String buttonText, List<String> hoveringTextLines) {
         this(buttonId, x, y, buttonText);
         setHoveringTextLines(hoveringTextLines);
+    }
+
+    public ClickGuiButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, String hoveringText) {
+        this(buttonId, x, y, widthIn, heightIn, buttonText, Collections.singletonList(hoveringText));
+    }
+
+    public ClickGuiButton(int buttonId, int x, int y, String buttonText, String hoveringText) {
+        this(buttonId, x, y, buttonText, Collections.singletonList(hoveringText));
     }
 
     public void drawButton(ColorPalette colorPalette, Minecraft mc, int mouseX, int mouseY) {
@@ -68,6 +78,8 @@ public class ClickGuiButton extends GuiButton {
         return hoveringTextLines;
     }
 
+    public boolean hasHoveringText() { return !hoveringTextLines.isEmpty(); }
+
 
     public static class TexturedButton extends ClickGuiButton {
 
@@ -83,14 +95,22 @@ public class ClickGuiButton extends GuiButton {
             this.texture = texture;
         }
 
+        public TexturedButton(int buttonId, int x, int y, int widthIn, int heightIn, ResourceLocation texture, String hoveringText) {
+            this(buttonId, x, y, widthIn, heightIn, texture,Collections.singletonList(hoveringText));
+        }
+
         @Override
         public void drawButton(ColorPalette colorPalette, Minecraft mc, int mouseX, int mouseY) {
             if (visible) {
                 super.drawButton(colorPalette, mc, mouseX, mouseY);
+                GlStateManager.enableAlpha();
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
                 GlStateManager.color(1f, 1f, 1f, 1f);
                 mc.getTextureManager().bindTexture(texture);
                 final int texturePadding = 2;
                 GuiUtil.drawFullTextureWithCustomSize(xPosition + texturePadding, yPosition + texturePadding, width - texturePadding * 2, height - texturePadding * 2);
+                GlStateManager.disableBlend();
             }
         }
     }
