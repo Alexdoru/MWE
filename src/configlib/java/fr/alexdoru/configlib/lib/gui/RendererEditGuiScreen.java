@@ -17,7 +17,6 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.lang.reflect.Field;
 
 public class RendererEditGuiScreen extends GuiScreen {
 
@@ -26,19 +25,19 @@ public class RendererEditGuiScreen extends GuiScreen {
     private final RendererManager rendererManager;
     private final IRenderer renderer;
     private final RendererPosition rendererPosition;
-    private final GuiScreen parent;
+    private final ConfigGuiScreen parent;
     private final ColorPalette colorPalette;
     private final Button[] buttons;
     private final double originalRelativeX, originalRelativeY;
     private boolean dragging;
     private int prevX, prevY;
 
-    public RendererEditGuiScreen(RendererManager rendererManager, IRenderer renderer, GuiScreen parent, ColorPalette colorPalette) {
+    public RendererEditGuiScreen(RendererManager rendererManager, IRenderer renderer, ConfigGuiScreen parent) {
         this.rendererManager = rendererManager;
         this.renderer = renderer;
         this.rendererPosition = renderer.getPosition();
         this.parent = parent;
-        this.colorPalette = colorPalette;
+        this.colorPalette = parent.getColorPalette();
         this.originalRelativeX = rendererPosition.getRelativeX();
         this.originalRelativeY = rendererPosition.getRelativeY();
         this.buttons = new Button[]{
@@ -46,16 +45,6 @@ public class RendererEditGuiScreen extends GuiScreen {
                 new Button(new ResourceLocation("configlib", "undo.png"), "Undo Changes")
         };
     }
-
-//    public RendererEditGuiScreen(RendererManager rendererManager, RendererPosition rendererPosition, GuiScreen parent, Field field) {
-//        this.rendererManager = rendererManager;
-//        this.rendererPosition = rendererPosition;
-//        this.parent = parent;
-//        this.renderer = rendererManager.getRendererFromPosition(rendererPosition);
-//        if (this.renderer == null) {
-//            throw new RuntimeException("No registered renderer associated to " + field.getName());
-//        }
-//    }
 
     @Override
     public void initGui() {
