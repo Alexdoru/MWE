@@ -6,8 +6,6 @@ public final class GuiUtil {
 
     private GuiUtil() {}
 
-    public static final int MOUSE_LEFT = 0;
-
     public static void drawRect(Box box, int color) {
         Gui.drawRect(box.LEFT, box.TOP, box.RIGHT, box.BOTTOM, color);
     }
