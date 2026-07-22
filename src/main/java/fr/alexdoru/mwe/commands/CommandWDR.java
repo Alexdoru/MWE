@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.IPlayerUUID;
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.PlayerDataManager;
@@ -24,7 +25,7 @@ import net.minecraft.util.EnumChatFormatting;
 
 import java.util.*;
 
-public class CommandWDR extends MyAbstractCommand {
+public class CommandWDR extends MWECommandBase {
 
     public static final List<String> cheatsList = Collections.unmodifiableList(Arrays.asList("aura",
             "aimbot",

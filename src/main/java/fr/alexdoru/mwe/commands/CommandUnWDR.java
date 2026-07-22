@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.api.IPlayerUUID;
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.data.WdrDataManager;
@@ -18,7 +19,7 @@ import net.minecraft.util.EnumChatFormatting;
 import java.util.List;
 import java.util.UUID;
 
-public class CommandUnWDR extends MyAbstractCommand {
+public class CommandUnWDR extends MWECommandBase {
 
     @Override
     public String getCommandName() {

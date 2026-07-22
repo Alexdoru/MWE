@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.api.IPlayerUUID;
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
@@ -31,7 +32,7 @@ import java.util.List;
 
 import static net.minecraft.util.EnumChatFormatting.*;
 
-public class CommandStalk extends MyAbstractCommand {
+public class CommandStalk extends MWECommandBase {
 
     @Override
     public String getCommandName() {

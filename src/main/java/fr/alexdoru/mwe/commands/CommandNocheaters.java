@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.commands;
 
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
@@ -27,7 +28,7 @@ import java.util.concurrent.Future;
 
 import static net.minecraft.util.EnumChatFormatting.*;
 
-public class CommandNocheaters extends MyAbstractCommand {
+public class CommandNocheaters extends MWECommandBase {
 
     @Override
     public String getCommandName() {

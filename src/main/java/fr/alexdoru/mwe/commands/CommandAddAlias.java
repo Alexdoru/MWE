@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.api.IPlayerUUID;
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.data.AliasDataManager;
 import fr.alexdoru.mwe.data.NameFormatter;
@@ -27,7 +28,7 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
-public class CommandAddAlias extends MyAbstractCommand {
+public class CommandAddAlias extends MWECommandBase {
 
     @Override
     public String getCommandName() {

@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.commands;
 
 import com.google.gson.JsonObject;
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.chat.ChatHandler;
@@ -34,7 +35,7 @@ import java.util.UUID;
 
 import static net.minecraft.util.EnumChatFormatting.*;
 
-public class CommandScanGame extends MyAbstractCommand {
+public class CommandScanGame extends MWECommandBase {
 
     @Override
     public String getCommandName() {

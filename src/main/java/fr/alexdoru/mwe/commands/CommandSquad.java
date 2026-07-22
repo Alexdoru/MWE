@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.commands;
 
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.features.SquadHandler;
@@ -19,7 +20,7 @@ import java.util.Map.Entry;
 
 import static net.minecraft.util.EnumChatFormatting.*;
 
-public class CommandSquad extends MyAbstractCommand {
+public class CommandSquad extends MWECommandBase {
 
     @Override
     public String getCommandName() {

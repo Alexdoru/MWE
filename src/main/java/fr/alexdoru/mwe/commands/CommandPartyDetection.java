@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.commands;
 
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.data.NameFormatter;
@@ -13,7 +14,7 @@ import net.minecraft.util.EnumChatFormatting;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CommandPartyDetection extends MyAbstractCommand {
+public class CommandPartyDetection extends MWECommandBase {
 
     @Override
     public String getCommandName() {

@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.commands;
 
 import com.google.gson.JsonObject;
 import fr.alexdoru.mwe.api.IPlayerUUID;
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
@@ -20,7 +21,7 @@ import net.minecraft.util.EnumChatFormatting;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandPlancke extends MyAbstractCommand {
+public class CommandPlancke extends MWECommandBase {
 
     @Override
     public String getCommandName() {

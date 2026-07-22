@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.MWE;
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.features.FinalKillCounter;
@@ -13,7 +14,7 @@ import net.minecraft.util.EnumChatFormatting;
 
 import java.util.*;
 
-public class CommandFKCounter extends MyAbstractCommand {
+public class CommandFKCounter extends MWECommandBase {
 
     @Override
     public String getCommandName() {
