@@ -4,6 +4,8 @@ import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.lib.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,5 +63,32 @@ public class ClickGuiButton extends GuiButton {
 
     public List<String> getHoveringTextLinesForDrawing() {
         return (visible && hovered) ? hoveringTextLines : null;
+    }
+
+
+    public static class TexturedButton extends ClickGuiButton {
+
+        protected final ResourceLocation texture;
+
+        public TexturedButton(int buttonId, int x, int y, int widthIn, int heightIn, ResourceLocation texture) {
+            super(buttonId, x, y, widthIn, heightIn, "");
+            this.texture = texture;
+        }
+
+        public TexturedButton(int buttonId, int x, int y, int widthIn, int heightIn, ResourceLocation texture, List<String> hoveringTextLines) {
+            super(buttonId, x, y, widthIn, heightIn, "", hoveringTextLines);
+            this.texture = texture;
+        }
+
+        @Override
+        public void drawButton(ColorPalette colorPalette, Minecraft mc, int mouseX, int mouseY) {
+            if (visible) {
+                super.drawButton(colorPalette, mc, mouseX, mouseY);
+                GlStateManager.color(1f, 1f, 1f, 1f);
+                mc.getTextureManager().bindTexture(texture);
+                final int texturePadding = 2;
+                GuiUtil.drawFullTextureWithCustomSize(xPosition + texturePadding, yPosition + texturePadding, width - texturePadding * 2, height - texturePadding * 2);
+            }
+        }
     }
 }
