@@ -36,12 +36,11 @@ public class RendererGuiButton extends ConfigGuiButton {
         this.buttonEnabled = new ClickGuiButton(0, 0, 0, mc.fontRendererObj.getStringWidth(" Disabled "), 20, getButtonText());
         this.buttonMoveHud = new ClickGuiButton(0, 0, 0, 20, 20, "");
         this.buttonMoveHud.setTexture(new ResourceLocation("configlib", "move.png"));
-        this.buttonMoveHud.setHoveringText("Move HUD");
     }
 
     @Override
     public void setBoxWidth(int boxWidth) {
-        super.setBoxWidth(boxWidth - mc.fontRendererObj.getStringWidth(buttonMoveHud.getHoveringTextLines().get(0)) - 10);
+        super.setBoxWidth(boxWidth - mc.fontRendererObj.getStringWidth(" Disabled ") - 10 - 1 - 20);
         this.boxWidth = boxWidth;
     }
 
@@ -52,14 +51,14 @@ public class RendererGuiButton extends ConfigGuiButton {
         buttonEnabled.yPosition = drawY + 8;
         buttonEnabled.drawButton(colorPalette, mc, mouseX, mouseY);
 
-        buttonMoveHud.xPosition = buttonEnabled.xPosition + (buttonEnabled.width - buttonMoveHud.width) / 2;
-        buttonMoveHud.yPosition = buttonEnabled.yPosition + buttonEnabled.height + 1;
+        buttonMoveHud.xPosition = buttonEnabled.xPosition - buttonMoveHud.width - 1;
+        buttonMoveHud.yPosition = buttonEnabled.yPosition;
         buttonMoveHud.drawButton(colorPalette, mc, mouseX, mouseY);
 
-        if (buttonMoveHud.isMouseOver() && buttonMoveHud.hasHoveringText()) {
-            final String text = buttonMoveHud.getHoveringTextLines().get(0);
-            final int textX = buttonEnabled.xPosition - 4 - mc.fontRendererObj.getStringWidth(text);
-            final int textY = buttonMoveHud.yPosition + mc.fontRendererObj.FONT_HEIGHT / 2 + 1;
+        if (buttonMoveHud.isMouseOver()) {
+            final String text = "Move HUD";
+            final int textX = buttonMoveHud.xPosition - 4 - mc.fontRendererObj.getStringWidth(text);
+            final int textY = buttonMoveHud.yPosition + (buttonMoveHud.height - 8) / 2;
             mc.fontRendererObj.drawStringWithShadow(text, textX, textY, colorPalette.HUD_BUTTON_HINT_TEXT);
         }
     }
