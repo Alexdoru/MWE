@@ -52,6 +52,9 @@ public class ClickGuiButton extends GuiButton {
                     colorPalette.BUTTON_TEXT
             );
         }
+        else {
+            this.hovered = false;
+        }
     }
 
     public void setHoveringTextLines(List<String> hoveringTextLines) {
@@ -61,8 +64,8 @@ public class ClickGuiButton extends GuiButton {
         }
     }
 
-    public List<String> getHoveringTextLinesForDrawing() {
-        return (visible && hovered) ? hoveringTextLines : null;
+    public List<String> getHoveringTextLines() {
+        return hoveringTextLines;
     }
 
 
