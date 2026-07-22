@@ -72,15 +72,13 @@ public class CommandAddAlias extends MyAbstractCommand {
 
     @Override
     protected void printCommandHelp() {
-        ChatUtil.addChatMessage(
-                EnumChatFormatting.GREEN + ChatUtil.bar() + "\n"
-                        + ChatUtil.centerLine(EnumChatFormatting.GOLD + "AddAlias Help\n\n")
-                        + EnumChatFormatting.YELLOW + "/addalias" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Lists the alias in the lobby\n"
-                        + EnumChatFormatting.YELLOW + "/addalias <player> <alias>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Adds an alias for the player\n"
-                        + EnumChatFormatting.YELLOW + "/addalias <remove> <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Removes the alias for the player\n"
-                        + EnumChatFormatting.YELLOW + "/addalias list" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Prints list of alias\n"
-                        + EnumChatFormatting.GREEN + ChatUtil.bar()
-        );
+        final String slashCommand = '/' + getCommandName();
+        printCommandHelpBlock(EnumChatFormatting.GREEN, "AddAlias Help", new String[][]{
+                { slashCommand, "Lists the alias in the lobby" },
+                { slashCommand + " <player> <alias>", "Adds an alias for the player" },
+                { slashCommand + " <remove> <player>", "Removes the alias for the player" },
+                { slashCommand + " list", "Prints list of alias" }
+        });
     }
 
     private void listAlias(String[] args) {

@@ -93,18 +93,16 @@ public class CommandSquad extends MyAbstractCommand {
 
     @Override
     protected void printCommandHelp() {
-        ChatUtil.addChatMessage(
-                GREEN + ChatUtil.bar() + "\n"
-                        + ChatUtil.centerLine(GOLD + "Squad Help\n\n")
-                        + YELLOW + "/squad add <player>" + GRAY + " - " + AQUA + "add a player to the squad\n"
-                        + YELLOW + "/squad add <player> as Nickname" + GRAY + " - " + AQUA + "add a player to the squad and change their name\n"
-                        + YELLOW + "/squad addteam" + GRAY + " - " + AQUA + "add all your teamates to the squad\n"
-                        + YELLOW + "/squad formsquad" + GRAY + " - " + AQUA + "add your teamates to the squad when in a MW pre game\n"
-                        + YELLOW + "/squad remove <player>" + GRAY + " - " + AQUA + "remove a player from the squad\n"
-                        + YELLOW + "/squad list" + GRAY + " - " + AQUA + "list players in the squad\n"
-                        + YELLOW + "/squad disband" + GRAY + " - " + AQUA + "disband the squad\n"
-                        + GREEN + ChatUtil.bar()
-        );
+        final String slashCommand = '/' + getCommandName();
+        printCommandHelpBlock(GREEN, "Squad Help", new String[][]{
+                { slashCommand + " add <player>", "add a player to the squad" },
+                {slashCommand + " add <player> as <nickname>", "add a player to the squad and change their name"},
+                { slashCommand + " addteam", "add all your teammates to the squad" },
+                { slashCommand + " formsquad", "add your teammates to the squad when in a MW pre game" },
+                { slashCommand + " remove <player>", "remove a player from the squad" },
+                { slashCommand + " list", "list players in the squad" },
+                { slashCommand + " disband", "disband the squad" }
+        });
     }
 
     private static void addSquadMembers(String[] args) {

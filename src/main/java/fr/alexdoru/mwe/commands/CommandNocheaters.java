@@ -58,13 +58,11 @@ public class CommandNocheaters extends MyAbstractCommand {
 
     @Override
     protected void printCommandHelp() {
-        ChatUtil.addChatMessage(
-                RED + ChatUtil.bar() + "\n"
-                        + ChatUtil.centerLine(GOLD + "NoCheaters Help\n\n")
-                        + YELLOW + getCommandUsage(null) + GRAY + " - " + AQUA + "prints the list of reported players in your current world\n"
-                        + YELLOW + getCommandUsage(null) + " reportlist" + GRAY + " - " + AQUA + "prints the list of reported players\n"
-                        + RED + ChatUtil.bar()
-        );
+        final String slashCommand = '/' + getCommandName();
+        printCommandHelpBlock(RED, "NoCheaters Help", new String[][]{
+                { slashCommand, "prints the list of reported players in your current world" },
+                { slashCommand + " reportlist", "prints the list of reported players" }
+        });
     }
 
     private void printReportList(String[] args) {

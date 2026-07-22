@@ -64,7 +64,7 @@ public class CommandFKCounter extends MyAbstractCommand {
 
             sendChatMessage("You shouldn't ask for finals and instead try to final kill everyone to win the game!");
 
-        } else if (args.length > 0 && args[0].equalsIgnoreCase("help")) {
+        } else if (args.length > 0 && isHelpSubcommand(args[0])) {
 
             this.printCommandHelp();
 
@@ -113,14 +113,12 @@ public class CommandFKCounter extends MyAbstractCommand {
 
     @Override
     protected void printCommandHelp() {
-        ChatUtil.addChatMessage(
-                EnumChatFormatting.AQUA + ChatUtil.bar() + "\n"
-                        + ChatUtil.centerLine(EnumChatFormatting.GOLD + "Fks Help") + "\n\n"
-                        + EnumChatFormatting.YELLOW + "/fks" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the amount of finals per team in the chat\n"
-                        + EnumChatFormatting.YELLOW + "/fks players" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the amount of finals per player in the chat\n"
-                        + EnumChatFormatting.YELLOW + "/fks settings" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "opens the settings GUI\n"
-                        + EnumChatFormatting.AQUA + ChatUtil.bar()
-        );
+        final String slashCommand = '/' + getCommandName();
+        printCommandHelpBlock(EnumChatFormatting.AQUA, "Fks Help", new String[][]{
+                { slashCommand, "prints the amount of finals per team in the chat" },
+                { slashCommand + " players", "prints the amount of finals per player in the chat" },
+                { slashCommand + " settings", "opens the settings GUI" }
+        });
     }
 
     private void removePlayer(String playerName) {

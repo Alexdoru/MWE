@@ -8,7 +8,6 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardParser;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -20,7 +19,6 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.opengl.GL11;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -213,17 +211,10 @@ public final class ClassSelectorOverlay {
         GlStateManager.enableDepth();
         GlStateManager.pushMatrix();
         GlStateManager.enableRescaleNormal();
-        GlStateManager.enableAlpha();
         GlStateManager.alphaFunc(516, 0.1F);
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.translate(0, 0, 250F);
         GlStateManager.disableLighting();
-        mc.getTextureManager().bindTexture(skin.getSkin());
-        final int headSize = 16;
-        Gui.drawScaledCustomSizeModalRect(x, y, 8F, 8F, 8, 8, headSize, headSize, 64.0F, 64.0F);
-        Gui.drawScaledCustomSizeModalRect(x, y, 40F, 8F, 8, 8, headSize, headSize, 64.0F, 64.0F);
+        RenderHelper.renderSkinHead(skin.getSkin(), x, y, true, 16);
         final int classpointColor = ColorUtil.getColorInt(ColorUtil.getPrestige4Color(prestiges >= 4 ? classpoints : 0)) | 0xFF000000;
         if (MWEConfig.classSelectorColoredBorder && classpoints >= 2000 && prestiges >= 4) {
             RenderHelper.drawOutline(x - 1, y - 1, x + 16 + 1, y + 16 + 1, classpointColor);
