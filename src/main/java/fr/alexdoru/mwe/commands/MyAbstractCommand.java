@@ -63,13 +63,13 @@ public abstract class MyAbstractCommand extends CommandBase {
     protected static void printCommandHelpBlock(String header, String[][] commandLines) {
         ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.centerLine(EnumChatFormatting.GOLD + header)));
         for (final String[] line : commandLines) {
-            if (line.length!=2) continue;
             final String command = line[0];
             final String desc = line[1];
+            final String commandToPutOnClick = line.length == 3 ? line[2] : command;
             ChatUtil.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + command + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + desc)
                     .setChatStyle(new ChatStyle()
                             .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.GRAY + "Click to put the command in chat.")))
-                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, command)))
+                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, commandToPutOnClick)))
             );
         }
     }
