@@ -6,6 +6,7 @@ import fr.alexdoru.configlib.api.IRenderer;
 import fr.alexdoru.configlib.api.RendererPosition;
 import fr.alexdoru.configlib.lib.RendererManager;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
+import fr.alexdoru.configlib.lib.gui.MouseButton;
 import fr.alexdoru.configlib.lib.gui.RendererEditGuiScreen;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
@@ -76,21 +77,15 @@ public class RendererGuiButton extends ConfigGuiButton {
                 buttonEnabled.playPressSound(mc.getSoundHandler());
                 return true;
             } else if (buttonMoveHud.mousePressed(mc, mouseX, mouseY)) {
-                buttonEnabled.playPressSound(mc.getSoundHandler());
                 final IRenderer renderer = this.rendererManager.getRendererFromPosition(rendererPosition);
-                if (renderer != null) {
-                    mc.displayGuiScreen(new RendererEditGuiScreen(this.rendererManager, renderer, parentScreen));
-                } else {
+                if (renderer == null) {
                     throw new RuntimeException("No registered renderer associated to " + field.getName());
                 }
+                buttonEnabled.playPressSound(mc.getSoundHandler());
+                mc.displayGuiScreen(new RendererEditGuiScreen(this.rendererManager, renderer, parentScreen));
                 return true;
             }
         }
-//        else if (buttonMoveHud.mousePressed(mc, mouseX, mouseY)) {
-//            buttonEnabled.playPressSound(mc.getSoundHandler());
-//            mc.displayGuiScreen(new RendererEditGuiScreen(rendererManager, rendererPosition, parentScreen, field));
-//            return true;
-//        }
         return false;
     }
 
