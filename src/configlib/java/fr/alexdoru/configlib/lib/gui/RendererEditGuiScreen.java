@@ -1,6 +1,5 @@
 package fr.alexdoru.configlib.lib.gui;
 
-import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.api.IRenderer;
 import fr.alexdoru.configlib.api.RendererPosition;
 import fr.alexdoru.configlib.lib.RendererManager;
@@ -22,7 +21,6 @@ public class RendererEditGuiScreen extends GuiScreen {
     private final IRenderer renderer;
     private final RendererPosition rendererPosition;
     private final ConfigGuiScreen parent;
-    private final ColorPalette colorPalette;
     private final double originalRelativeX, originalRelativeY;
     private boolean dragging;
     private int prevX, prevY;
@@ -36,7 +34,6 @@ public class RendererEditGuiScreen extends GuiScreen {
         this.renderer = renderer;
         this.rendererPosition = renderer.getPosition();
         this.parent = parent;
-        this.colorPalette = parent.getColorPalette();
         this.originalRelativeX = rendererPosition.getRelativeX();
         this.originalRelativeY = rendererPosition.getRelativeY();
 
@@ -69,12 +66,12 @@ public class RendererEditGuiScreen extends GuiScreen {
             int buttonY = 2;
             resetButton.xPosition = buttonX;
             resetButton.yPosition = buttonY;
-            resetButton.drawButton(colorPalette, mc, mouseX, mouseY);
+            resetButton.drawButton(parent.getColorPalette(), mc, mouseX, mouseY);
 
             buttonY += 2 + resetButton.height;
             undoButton.xPosition = buttonX;
             undoButton.yPosition = buttonY;
-            undoButton.drawButton(colorPalette, mc, mouseX, mouseY);
+            undoButton.drawButton(parent.getColorPalette(), mc, mouseX, mouseY);
 
             if (resetButton.isMouseOver() && resetButton.hasHoveringText()) {
                 drawHoveringText(resetButton.getHoveringTextLines(), mouseX, mouseY + fontRendererObj.FONT_HEIGHT + 6);

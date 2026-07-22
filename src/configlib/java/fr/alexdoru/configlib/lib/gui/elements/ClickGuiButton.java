@@ -9,12 +9,14 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class ClickGuiButton extends GuiButton {
 
-    private List<String> hoveringTextLines = Collections.emptyList();
+    private final List<String> hoveringTextLines = new ArrayList<>();
+    private ResourceLocation texture;
 
     public ClickGuiButton(int buttonId, int x, int y, String buttonText) {
         super(buttonId, x, y, buttonText);
@@ -24,22 +26,13 @@ public class ClickGuiButton extends GuiButton {
         super(buttonId, x, y, widthIn, heightIn, buttonText);
     }
 
-    public ClickGuiButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, List<String> hoveringTextLines) {
-        this(buttonId, x, y, widthIn, heightIn, buttonText);
-        setHoveringTextLines(hoveringTextLines);
+    public void setHoveringText(String... hoverText) {
+        this.hoveringTextLines.clear();
+        this.hoveringTextLines.addAll(Arrays.asList(hoverText));
     }
 
-    public ClickGuiButton(int buttonId, int x, int y, String buttonText, List<String> hoveringTextLines) {
-        this(buttonId, x, y, buttonText);
-        setHoveringTextLines(hoveringTextLines);
-    }
-
-    public ClickGuiButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, String hoveringText) {
-        this(buttonId, x, y, widthIn, heightIn, buttonText, Collections.singletonList(hoveringText));
-    }
-
-    public ClickGuiButton(int buttonId, int x, int y, String buttonText, String hoveringText) {
-        this(buttonId, x, y, buttonText, Collections.singletonList(hoveringText));
+    public void setTexture(ResourceLocation texture) {
+        this.texture = texture;
     }
 
     public void drawButton(ColorPalette colorPalette, Minecraft mc, int mouseX, int mouseY) {
@@ -61,27 +54,22 @@ public class ClickGuiButton extends GuiButton {
                     this.yPosition + (this.height - 8) / 2,
                     colorPalette.BUTTON_TEXT
             );
-        }
-        else {
+        } else {
             this.hovered = false;
         }
-    }
-
-    public void setHoveringTextLines(List<String> hoveringTextLines) {
-        this.hoveringTextLines = (hoveringTextLines == null || hoveringTextLines.isEmpty()) ? Collections.emptyList()
-            : Collections.unmodifiableList(new ArrayList<>(hoveringTextLines));
     }
 
     public List<String> getHoveringTextLines() {
         return hoveringTextLines;
     }
 
-    public boolean hasHoveringText() { return !hoveringTextLines.isEmpty(); }
-
+    public boolean hasHoveringText() {
+        return !hoveringTextLines.isEmpty();
+    }
 
     public static class TexturedButton extends ClickGuiButton {
 
-        private ResourceLocation texture;
+        private final ResourceLocation texture;
         public int topBottomPadding = 2;
         public int leftRightPadding = 2;
 
@@ -96,7 +84,7 @@ public class ClickGuiButton extends GuiButton {
         }
 
         public TexturedButton(int buttonId, int x, int y, int widthIn, int heightIn, ResourceLocation texture, String hoveringText) {
-            this(buttonId, x, y, widthIn, heightIn, texture,Collections.singletonList(hoveringText));
+            this(buttonId, x, y, widthIn, heightIn, texture, Collections.singletonList(hoveringText));
         }
 
         @Override
@@ -113,7 +101,6 @@ public class ClickGuiButton extends GuiButton {
             }
         }
 
-        public void setTexture(ResourceLocation texture) { this.texture = texture; }
-        public ResourceLocation getTexture() { return this.texture; }
     }
+
 }
