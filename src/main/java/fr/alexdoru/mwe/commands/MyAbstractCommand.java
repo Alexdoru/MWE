@@ -60,7 +60,7 @@ public abstract class MyAbstractCommand extends CommandBase {
      * @param commandLines Each command-line must be in this format: { command, description, [commandToPutOnClick] }.
      *                     if (commandToPutOnClick) isn't provided will use (command)
      */
-    private static void printCommandHelpBlock(String header, String[][] commandLines) {
+    protected static void printCommandHelpBlock(String header, String[][] commandLines) {
         ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.centerLine(EnumChatFormatting.GOLD + header)));
         for (final String[] line : commandLines) {
             if (line.length!=2) continue;
