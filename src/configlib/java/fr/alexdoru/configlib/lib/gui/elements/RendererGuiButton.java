@@ -8,25 +8,20 @@ import fr.alexdoru.configlib.lib.RendererManager;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.MouseButton;
 import fr.alexdoru.configlib.lib.gui.RendererEditGuiScreen;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 public class RendererGuiButton extends ConfigGuiButton {
 
-    private static final ResourceLocation MOVE_ICON = new ResourceLocation("configlib", "move_icon_64x64.png");
-
     private final ConfigGuiScreen parentScreen;
     private final RendererManager rendererManager;
     private final RendererPosition rendererPosition;
     private boolean toggled;
     private final ClickGuiButton buttonEnabled;
-    private final ClickGuiButton buttonMoveHud;
+    private final ClickGuiButton.TexturedButton buttonMoveHud;
 
     public RendererGuiButton(
             ConfigGuiScreen configGuiScreen,
@@ -39,15 +34,13 @@ public class RendererGuiButton extends ConfigGuiButton {
         this.rendererManager = rendererManager;
         this.rendererPosition = ((RendererPosition) field.get(null));
         this.toggled = this.rendererPosition.isEnabled();
-        final int btnWidth = mc.fontRendererObj.getStringWidth(" Disabled ");
-        this.buttonEnabled = new ClickGuiButton(0, 0, 0, btnWidth, 20, getButtonText());
-        this.buttonMoveHud = new ClickGuiButton(0, 0, 0, btnWidth, 20, "Position");
+        this.buttonEnabled = new ClickGuiButton(0, 0, 0, mc.fontRendererObj.getStringWidth(" Disabled "), 20, getButtonText());
+        this.buttonMoveHud = new ClickGuiButton.TexturedButton(0, 0, 0, 20, 20, new ResourceLocation("configlib", "move.png"), "Move HUD");
     }
 
     @Override
     public void setBoxWidth(int boxWidth) {
-        // super.setBoxWidth(boxWidth);
-        super.setBoxWidth(boxWidth - mc.fontRendererObj.getStringWidth("Reset Position") - 10);
+        super.setBoxWidth(boxWidth - mc.fontRendererObj.getStringWidth(buttonMoveHud.getHoveringTextLines().get(0)) - 10);
         this.boxWidth = boxWidth;
     }
 
@@ -57,14 +50,16 @@ public class RendererGuiButton extends ConfigGuiButton {
         buttonEnabled.xPosition = drawX + boxWidth - buttonEnabled.width - 20;
         buttonEnabled.yPosition = drawY + 8;
         buttonEnabled.drawButton(colorPalette, mc, mouseX, mouseY);
-        buttonMoveHud.xPosition = buttonEnabled.xPosition;
+
+        buttonMoveHud.xPosition = buttonEnabled.xPosition + (buttonEnabled.width - buttonMoveHud.width) / 2;
         buttonMoveHud.yPosition = buttonEnabled.yPosition + buttonEnabled.height + 1;
         buttonMoveHud.drawButton(colorPalette, mc, mouseX, mouseY);
-        drawIcon(MOVE_ICON, buttonMoveHud.xPosition, buttonMoveHud.yPosition);
-        if (buttonMoveHud.isMouseOver()) {
-            final int textX = buttonEnabled.xPosition - 4 - mc.fontRendererObj.getStringWidth("Move HUD");
+
+        if (buttonMoveHud.isMouseOver() && buttonMoveHud.hasHoveringText()) {
+            final String text = buttonMoveHud.getHoveringTextLines().get(0);
+            final int textX = buttonEnabled.xPosition - 4 - mc.fontRendererObj.getStringWidth(text);
             final int textY = buttonMoveHud.yPosition + mc.fontRendererObj.FONT_HEIGHT / 2 + 1;
-            mc.fontRendererObj.drawStringWithShadow("Move HUD", textX, textY, colorPalette.HUD_BUTTON_HINT_TEXT);
+            mc.fontRendererObj.drawStringWithShadow(text, textX, textY, colorPalette.HUD_BUTTON_HINT_TEXT);
         }
     }
 
@@ -92,20 +87,6 @@ public class RendererGuiButton extends ConfigGuiButton {
     @Override
     public int getHeight() {
         return Math.max(super.getHeight(), 8 + buttonEnabled.height + 1 + buttonMoveHud.height + 8 - 1);
-    }
-
-    private void drawIcon(ResourceLocation icon, int drawX, int drawY) {
-        drawX += 3;
-        drawY += 3;
-        GlStateManager.pushMatrix();
-        GlStateManager.enableAlpha();
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        parentScreen.mc.getTextureManager().bindTexture(icon);
-        GlStateManager.color(1, 1, 1);
-        Gui.drawModalRectWithCustomSizedTexture(drawX, drawY, 0f, 0f, 14, 14, 14f, 14f);
-        GlStateManager.popMatrix();
     }
 
     private void flipBooleanConfig() {
