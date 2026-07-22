@@ -106,7 +106,6 @@ public class RendererGuiButton extends ConfigGuiButton {
     private void drawIcon(ResourceLocation icon, int drawX, int drawY) {
         drawX += 3;
         drawY += 3;
-        GlStateManager.pushMatrix();
         GlStateManager.enableAlpha();
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
@@ -114,7 +113,6 @@ public class RendererGuiButton extends ConfigGuiButton {
         parentScreen.mc.getTextureManager().bindTexture(icon);
         GlStateManager.color(1, 1, 1);
         Gui.drawModalRectWithCustomSizedTexture(drawX, drawY, 0f, 0f, 14, 14, 14f, 14f);
-        GlStateManager.popMatrix();
     }
 
     private void flipBooleanConfig() {

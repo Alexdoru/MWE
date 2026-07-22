@@ -8,18 +8,16 @@ import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.ColorUtil;
+import fr.alexdoru.mwe.utils.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -162,13 +160,7 @@ public class ArrowHitHUD extends AbstractRenderer {
         if (MWEConfig.showHeadOnArrowHitHUD && skin != null) {
             x -= 4;
             y += mc.fontRendererObj.FONT_HEIGHT + 1;
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            GlStateManager.enableAlpha();
-            GlStateManager.enableBlend();
-            GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-            mc.getTextureManager().bindTexture(skin);
-            Gui.drawScaledCustomSizeModalRect(x, y, 8, 8, 8, 8, 8, 8, 64.0F, 64.0F);
-            Gui.drawScaledCustomSizeModalRect(x, y, 40, 8, 8, 8, 8, 8, 64.0F, 64.0F);
+            RenderHelper.renderSkinHead(skin, x, y, true, 8);
         }
     }
 
