@@ -115,9 +115,9 @@ public class CommandFKCounter extends MyAbstractCommand {
     protected void printCommandHelp() {
         final String slashCommand = '/' + getCommandName();
         printCommandHelpBlock(EnumChatFormatting.AQUA, "Fks Help", new String[][]{
-                { slashCommand, "prints the amount of finals per team in the chat" },
-                { slashCommand + " players", "prints the amount of finals per player in the chat" },
-                { slashCommand + " settings", "opens the settings GUI" }
+                {slashCommand, "prints the amount of finals per team in the chat"},
+                {slashCommand + " players", "prints the amount of finals per player in the chat"},
+                {slashCommand + " settings", "opens the settings GUI"}
         });
     }
 

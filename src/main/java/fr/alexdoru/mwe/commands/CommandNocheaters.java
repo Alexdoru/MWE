@@ -60,8 +60,8 @@ public class CommandNocheaters extends MyAbstractCommand {
     protected void printCommandHelp() {
         final String slashCommand = '/' + getCommandName();
         printCommandHelpBlock(RED, "NoCheaters Help", new String[][]{
-                { slashCommand, "prints the list of reported players in your current world" },
-                { slashCommand + " reportlist", "prints the list of reported players" }
+                {slashCommand, "prints the list of reported players in your current world"},
+                {slashCommand + " reportlist", "prints the list of reported players"}
         });
     }
 

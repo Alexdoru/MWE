@@ -74,10 +74,10 @@ public class CommandAddAlias extends MyAbstractCommand {
     protected void printCommandHelp() {
         final String slashCommand = '/' + getCommandName();
         printCommandHelpBlock(EnumChatFormatting.GREEN, "AddAlias Help", new String[][]{
-                { slashCommand, "Lists the alias in the lobby" },
-                { slashCommand + " <player> <alias>", "Adds an alias for the player" },
-                { slashCommand + " <remove> <player>", "Removes the alias for the player" },
-                { slashCommand + " list", "Prints list of alias" }
+                {slashCommand, "Lists the alias in the lobby"},
+                {slashCommand + " <player> <alias>", "Adds an alias for the player"},
+                {slashCommand + " <remove> <player>", "Removes the alias for the player"},
+                {slashCommand + " list", "Prints list of alias"}
         });
     }
 
