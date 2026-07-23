@@ -34,7 +34,7 @@ public class EnumGuiButton extends ConfigGuiButton {
     public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
         button.xPosition = drawX + boxWidth - button.width - 20;
-        button.yPosition = drawY + (hasComment ? 8 + mc.fontRendererObj.FONT_HEIGHT / 2 : (getHeight() - button.height) / 2);
+        button.yPosition = drawY + (this.hasComment() ? 8 + mc.fontRendererObj.FONT_HEIGHT / 2 : (getHeight() - button.height) / 2);
         button.drawButton(colorPalette, mc, mouseX, mouseY);
     }
 
