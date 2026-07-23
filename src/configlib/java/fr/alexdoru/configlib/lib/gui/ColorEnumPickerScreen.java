@@ -149,6 +149,7 @@ public class ColorEnumPickerScreen extends GuiScreen {
                     rgb,
                     hover ? Color.WHITE.getRGB() : Color.BLACK.getRGB());
         }
+
     }
 
 }
