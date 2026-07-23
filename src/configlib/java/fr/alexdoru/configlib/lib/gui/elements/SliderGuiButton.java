@@ -3,6 +3,7 @@ package fr.alexdoru.configlib.lib.gui.elements;
 import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.api.ConfigProperty;
 import fr.alexdoru.configlib.lib.gui.GuiUtil;
+import fr.alexdoru.configlib.lib.gui.MouseButton;
 import net.minecraft.util.MathHelper;
 
 import java.lang.reflect.Field;
@@ -104,8 +105,8 @@ public class SliderGuiButton extends ConfigGuiButton {
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) throws IllegalAccessException {
-        if (mouseButton == 0) {
+    public boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) throws IllegalAccessException {
+        if (mouseButton.isLeft()) {
             if (isMouseOnButton(mouseX, mouseY, sliderButtonX, sliderButtonY, SLIDER_BUTTON_SIZE, SLIDER_BUTTON_SIZE)) {
                 updateSliderFromPosition(mouseX - sliderBarX);
                 dragging = true;
@@ -125,8 +126,8 @@ public class SliderGuiButton extends ConfigGuiButton {
     }
 
     @Override
-    public boolean mouseReleased(int mouseX, int mouseY, int mouseButton) {
-        if (mouseButton == 0 && this.dragging) {
+    public boolean mouseReleased(int mouseX, int mouseY, MouseButton mouseButton) {
+        if (mouseButton.isLeft() && this.dragging) {
             this.dragging = false;
             return true;
         }

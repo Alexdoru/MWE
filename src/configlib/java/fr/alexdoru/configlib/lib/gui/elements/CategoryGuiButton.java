@@ -2,6 +2,7 @@ package fr.alexdoru.configlib.lib.gui.elements;
 
 import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
+import fr.alexdoru.configlib.lib.gui.MouseButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
@@ -30,13 +31,18 @@ public class CategoryGuiButton implements SizedElement {
         mc.fontRendererObj.drawStringWithShadow(displayname, drawX, drawY, colorPalette.CATEGORY_BUTTON_TEXT);
     }
 
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        if (mouseButton == 0 && mouseX >= posX && mouseX < posX + getWidth() && mouseY >= posY && mouseY < posY + getHeight()) {
+    public boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) {
+        if (mouseButton.isLeft() && this.isMouseHovering(mouseX, mouseY)) {
             this.configGui.setFocusedCategory(this.categoryName);
             Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
             return true;
         }
         return false;
+    }
+
+    private boolean isMouseHovering(int mouseX, int mouseY) {
+        final int extraY = ConfigGuiScreen.ELEMENT_GAP / 2;
+        return mouseX >= posX && mouseY >= posY - extraY && mouseX < posX + getWidth() && mouseY < posY + extraY + getHeight();
     }
 
     public int getWidth() {

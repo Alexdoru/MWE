@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.utils;
 
-import fr.alexdoru.mwe.data.AliasData;
+import fr.alexdoru.mwe.data.AliasDataManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -10,24 +10,30 @@ import java.util.List;
 
 public class TabCompletionUtil {
 
+    public static List<String> getAlias() {
+        return collectPlayers(true, false);
+    }
+
     public static List<String> getPlayers() {
-        return collectPlayers(false);
+        return collectPlayers(false, true);
     }
 
     public static List<String> getPlayersAndAlias() {
-        return collectPlayers(true);
+        return collectPlayers(true, true);
     }
 
-    private static List<String> collectPlayers(boolean collectAlias) {
+    private static List<String> collectPlayers(boolean collectAlias, boolean collectPlayers) {
         final List<String> players = new ArrayList<>();
         final NetHandlerPlayClient netHandler = Minecraft.getMinecraft().getNetHandler();
         if (netHandler != null) {
             for (final NetworkPlayerInfo netInfo : netHandler.getPlayerInfoMap()) {
                 final String playerName = netInfo.getGameProfile().getName();
                 if (playerName != null) {
-                    players.add(playerName);
+                    if (collectPlayers) {
+                        players.add(playerName);
+                    }
                     if (collectAlias) {
-                        final String alias = AliasData.getAlias(netInfo.getGameProfile().getId(), playerName);
+                        final String alias = AliasDataManager.getAlias(netInfo.getGameProfile().getId(), playerName);
                         if (alias != null) players.add(alias);
                     }
                 }

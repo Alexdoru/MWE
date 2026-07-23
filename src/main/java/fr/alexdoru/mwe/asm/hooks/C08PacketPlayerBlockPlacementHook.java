@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks;
 
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -13,8 +13,10 @@ public class C08PacketPlayerBlockPlacementHook {
         try {
             if (placedBlockDirectionIn == 255) return;
             if (pos == null || stack == null || !(stack.getItem() instanceof ItemBlock)) return;
-            HackerDetector.onPlayerBlockPacket(pos, placedBlockDirectionIn, ((ItemBlock) stack.getItem()).getBlock());
-        } catch (Throwable ignored) {}
+            MWE.INSTANCE().getHackerDetector().onPlayerBlockPacket(pos, placedBlockDirectionIn, ((ItemBlock) stack.getItem()).getBlock());
+        } catch (Throwable t) {
+            MWE.logger.error("Caught exception from Hacker Detector", t);
+        }
     }
 
 }

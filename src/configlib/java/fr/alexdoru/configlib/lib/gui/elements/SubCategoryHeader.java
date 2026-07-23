@@ -1,6 +1,7 @@
 package fr.alexdoru.configlib.lib.gui.elements;
 
 import fr.alexdoru.configlib.api.ColorPalette;
+import fr.alexdoru.configlib.lib.gui.MouseButton;
 import net.minecraft.client.Minecraft;
 
 public class SubCategoryHeader implements ConfigUIElement {
@@ -27,7 +28,7 @@ public class SubCategoryHeader implements ConfigUIElement {
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) {
+    public boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) {
         return false;
     }
 

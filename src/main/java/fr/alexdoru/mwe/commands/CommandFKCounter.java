@@ -1,11 +1,12 @@
 package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.MWE;
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.SquadHandler;
-import fr.alexdoru.mwe.gui.MWERenderers;
+import fr.alexdoru.mwe.gui.huds.FKCounterHUD;
 import fr.alexdoru.mwe.utils.MapUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
@@ -13,7 +14,13 @@ import net.minecraft.util.EnumChatFormatting;
 
 import java.util.*;
 
-public class CommandFKCounter extends MyAbstractCommand {
+public class CommandFKCounter extends MWECommandBase {
+
+    private final FKCounterHUD fkCounterHUD;
+
+    public CommandFKCounter(FKCounterHUD fkCounterHUD) {
+        this.fkCounterHUD = fkCounterHUD;
+    }
 
     @Override
     public String getCommandName() {
@@ -64,7 +71,7 @@ public class CommandFKCounter extends MyAbstractCommand {
 
             sendChatMessage("You shouldn't ask for finals and instead try to final kill everyone to win the game!");
 
-        } else if (args.length > 0 && args[0].equalsIgnoreCase("help")) {
+        } else if (args.length > 0 && isHelpSubcommand(args[0])) {
 
             this.printCommandHelp();
 
@@ -113,14 +120,12 @@ public class CommandFKCounter extends MyAbstractCommand {
 
     @Override
     protected void printCommandHelp() {
-        ChatUtil.addChatMessage(
-                EnumChatFormatting.AQUA + ChatUtil.bar() + "\n"
-                        + ChatUtil.centerLine(EnumChatFormatting.GOLD + "Fks Help") + "\n\n"
-                        + EnumChatFormatting.YELLOW + "/fks" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the amount of finals per team in the chat\n"
-                        + EnumChatFormatting.YELLOW + "/fks players" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "prints the amount of finals per player in the chat\n"
-                        + EnumChatFormatting.YELLOW + "/fks settings" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "opens the settings GUI\n"
-                        + EnumChatFormatting.AQUA + ChatUtil.bar()
-        );
+        final String slashCommand = '/' + getCommandName();
+        printCommandHelpBlock(EnumChatFormatting.AQUA, "Fks Help", new String[][]{
+                {slashCommand, "prints the amount of finals per team in the chat"},
+                {slashCommand + " players", "prints the amount of finals per player in the chat"},
+                {slashCommand + " settings", "opens the settings GUI"}
+        });
     }
 
     private void removePlayer(String playerName) {
@@ -131,7 +136,7 @@ public class CommandFKCounter extends MyAbstractCommand {
             final Integer kills = killMapOfTeam.get(playerName);
             if (kills != null) {
                 fkCounter.tryRemoveKilledPlayer(playerName, team);
-                MWERenderers.fkCounterHUD.updateDisplayText();
+                this.fkCounterHUD.updateDisplayText();
                 ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Removed " + fkCounter.getColorPrefixOfTeam(team) + playerName
                         + EnumChatFormatting.GREEN + " with " + EnumChatFormatting.GOLD + kills + EnumChatFormatting.GREEN + " final" + (kills > 1 ? "s" : "")
                         + " from the " + fkCounter.getColorPrefixOfTeam(team) + team.getName() + EnumChatFormatting.GREEN + " team.");

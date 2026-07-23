@@ -8,14 +8,14 @@ import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
-import fr.alexdoru.mwe.data.AliasData;
+import fr.alexdoru.mwe.data.AliasDataManager;
+import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.PartyDetection;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
-import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
 import fr.alexdoru.mwe.utils.DelayedTask;
@@ -35,7 +35,7 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnusedReturnValue"})
 public final class MWEApi {
 
     private MWEApi() {}
@@ -43,11 +43,16 @@ public final class MWEApi {
     public static final int API_VERSION = 1;
 
     /**
+     * !!! To register your addon, copy to content of this method to your mod,
+     * calling this method can cause your game to crash because this mod isn't
+     * loaded yet when your mod will call this method. !!!
+     * <p>
      * Register the main class of your addon, this should be the name of the class,
      * must be called before mods are constructed e.g. from a coremod.
      * The addon must implement {@link fr.alexdoru.mwe.api.IMWEAddon}.
      * For example : "net.myname.myaddon.MWEAddon"
      */
+    @Deprecated
     public static void registerAddon(String classname) {
         final Object o = Launch.blackboard.computeIfAbsent("mwe.addons", k -> new ArrayList<>());
         if (o instanceof ArrayList) {
@@ -64,7 +69,7 @@ public final class MWEApi {
          * Returns true if the player has an alias
          */
         public static boolean hasAlias(@Nullable UUID id, @Nullable String playername) {
-            return AliasData.getAlias(id, playername) != null;
+            return AliasDataManager.getAlias(id, playername) != null;
         }
 
         /**
@@ -72,21 +77,21 @@ public final class MWEApi {
          */
         @Nullable
         public static String getAlias(@Nullable UUID id, @Nullable String playername) {
-            return AliasData.getAlias(id, playername);
+            return AliasDataManager.getAlias(id, playername);
         }
 
         /**
          * Sets the alias for the specified player
          */
         public static void setAlias(@Nullable UUID id, @Nullable String playername, String alias) {
-            AliasData.putAlias(id, playername, alias);
+            AliasDataManager.putAlias(id, playername, alias);
         }
 
         /**
          * Removes a player from the alias list, returns true if the player was succesfully removed
          */
         public static boolean removeAlias(@Nullable UUID id, @Nullable String playername) {
-            return AliasData.removeAlias(id, playername);
+            return AliasDataManager.removeAlias(id, playername);
         }
 
     }
@@ -96,11 +101,16 @@ public final class MWEApi {
         private Asm() {}
 
         /**
+         * !!! To register your ASM transformers, copy to content of this method to your mod,
+         * calling this method can cause your game to crash because this mod isn't
+         * loaded yet when your mod will call this method. !!!
+         * <p>
          * Register your ASM transformers using the name of their class,
          * this must be called from the constructor of your coremod.
          * The transformer must implement {@link IClassNodeTransformer}.
          * For example : "net.myname.myaddon.asm.MinecraftTransformer"
          */
+        @Deprecated
         public static void registerTransformer(String classname) {
             final Object o = Launch.blackboard.computeIfAbsent("mwe.transformers", k -> new ArrayList<>());
             if (o instanceof ArrayList) {
@@ -344,7 +354,7 @@ public final class MWEApi {
          * Returns true if the player is in the report list
          */
         public static boolean isPlayerReported(@NotNull UUID uuid, @Nullable String playername) {
-            return WdrData.getWdr(uuid, playername) != null;
+            return WdrDataManager.getWdr(uuid, playername) != null;
         }
 
         /**
@@ -352,21 +362,21 @@ public final class MWEApi {
          */
         @Nullable
         public static IReportInfo getReportInfoFor(@NotNull UUID uuid, @Nullable String playername) {
-            return WdrData.getWdr(uuid, playername);
+            return WdrDataManager.getWdr(uuid, playername);
         }
 
         /**
          * Adds a player to the reportlist
          */
         public static void addToReportList(@NotNull UUID uuid, @Nullable String playername, List<String> cheats) {
-            WdrData.addReport(uuid, playername, cheats);
+            WdrDataManager.addReport(uuid, playername, cheats);
         }
 
         /**
          * Removes a player from the reportlist, returns true if the player was succesfully removed
          */
         public static boolean removeFromReportList(@NotNull UUID uuid, @Nullable String playername) {
-            return WdrData.remove(uuid, playername);
+            return WdrDataManager.remove(uuid, playername);
         }
 
     }
@@ -463,6 +473,13 @@ public final class MWEApi {
          */
         public static <V> Future<V> queueAsyncTask(Callable<V> c) {
             return MultithreadingUtil.addTaskToQueue(c);
+        }
+
+        /**
+         * Schedules a task to run asynchronously on a single threaded executor
+         */
+        public static void queueIOTask(Runnable r) {
+            MultithreadingUtil.queueIOTask(r);
         }
 
         /**

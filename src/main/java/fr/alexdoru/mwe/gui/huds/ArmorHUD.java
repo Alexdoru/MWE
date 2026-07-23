@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 
 public class ArmorHUD extends AbstractRenderer {
 
+    private static final int ICON_SIZE = 18;
     private final ItemStack[] dummyArmor;
 
     public ArmorHUD() {
@@ -44,11 +45,11 @@ public class ArmorHUD extends AbstractRenderer {
         final int width;
         final int height;
         if (MWEConfig.horizontalArmorHUD) {
-            width = 18 * 4;
-            height = 18;
+            width = ICON_SIZE * 4;
+            height = ICON_SIZE;
         } else {
-            width = 18;
-            height = 18 * 4;
+            width = ICON_SIZE;
+            height = ICON_SIZE * 4;
         }
         this.rendererPosition.updateAdjustedAbsolutePosition(resolution, width, height, -width / 2, -height / 2);
         this.renderArmorBar(thePlayer.inventory.armorInventory, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY());
@@ -59,11 +60,11 @@ public class ArmorHUD extends AbstractRenderer {
         final int width;
         final int height;
         if (MWEConfig.horizontalArmorHUD) {
-            width = 18 * 4;
-            height = 18;
+            width = ICON_SIZE * 4;
+            height = ICON_SIZE;
         } else {
-            width = 18;
-            height = 18 * 4;
+            width = ICON_SIZE;
+            height = ICON_SIZE * 4;
         }
         final int x = this.rendererPosition.getAbsoluteRenderX() - width / 2;
         final int y = this.rendererPosition.getAbsoluteRenderY() - height / 2;
@@ -82,22 +83,19 @@ public class ArmorHUD extends AbstractRenderer {
                 drawItemStack(stack, x, y);
             }
             if (MWEConfig.horizontalArmorHUD) {
-                x += 18;
+                x += ICON_SIZE;
             } else {
-                y += 18;
+                y += ICON_SIZE;
             }
         }
     }
 
     private void drawItemStack(ItemStack stack, int x, int y) {
         final Minecraft mc = Minecraft.getMinecraft();
-        GlStateManager.pushMatrix();
-        RenderHelper.enableGUIStandardItemLighting();
-        final RenderItem itemRender = mc.getRenderItem();
         FontRenderer fr = stack.getItem().getFontRenderer(stack);
-        if (fr == null) {
-            fr = mc.fontRendererObj;
-        }
+        if (fr == null) fr = mc.fontRendererObj;
+        final RenderItem itemRender = mc.getRenderItem();
+        RenderHelper.enableGUIStandardItemLighting();
         itemRender.renderItemAndEffectIntoGUI(stack, x, y);
         if (MWEConfig.showArmorDurability) {
             if (MWEConfig.showArmorDurabilityAsNumber) {
@@ -106,7 +104,7 @@ public class ArmorHUD extends AbstractRenderer {
                 GlStateManager.disableLighting();
                 GlStateManager.disableDepth();
                 GlStateManager.disableBlend();
-                fr.drawStringWithShadow(s, (float) (x + 19 - 2 - fr.getStringWidth(s)), (float) (y + 6 + 3), 0xFFFFFFFF);
+                fr.drawStringWithShadow(s, (float) (x + ICON_SIZE + 1 - 2 - fr.getStringWidth(s)), (float) (y + 6 + 3), 0xFFFFFFFF);
                 GlStateManager.enableLighting();
                 GlStateManager.enableDepth();
             } else {
@@ -115,7 +113,6 @@ public class ArmorHUD extends AbstractRenderer {
         }
         RenderHelper.disableStandardItemLighting();
         GlStateManager.disableLighting();
-        GlStateManager.popMatrix();
     }
 
 }

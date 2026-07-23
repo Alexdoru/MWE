@@ -44,6 +44,7 @@ public enum MethodMapping {
     GUICHAT$ONGUICLOSED("m", "onGuiClosed", "()V"),
     GUICHAT$SENDAUTOCOMPLETEREQUEST("a", "sendAutocompleteRequest", "(Ljava/lang/String;Ljava/lang/String;)V"),
     GUICONTAINER$CHECKHOTBARKEYS("b", "checkHotbarKeys", "(I)Z"),
+    GUICONTAINER$DRAWSLOT("a", "drawSlot", "(L" + SLOT + ";)V"),
     GUICONTAINER$HANDLEMOUSECLICK(INVOKEVIRTUAL, GUICONTAINER, "a", "handleMouseClick", "(L" + SLOT + ";III)V"),
     GUIINGAME$DISPLAYTITLE("a", "displayTitle", "(Ljava/lang/String;Ljava/lang/String;III)V"),
     GUIINGAME$GETFONTRENDERER(INVOKEVIRTUAL, GUIINGAME, "f", "getFontRenderer", "()L" + FONTRENDERER + ";"),

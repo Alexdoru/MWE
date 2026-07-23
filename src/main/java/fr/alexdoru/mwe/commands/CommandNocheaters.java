@@ -1,6 +1,8 @@
 package fr.alexdoru.mwe.commands;
 
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
@@ -8,7 +10,6 @@ import fr.alexdoru.mwe.http.requests.HypixelPlayerData;
 import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
 import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.nocheaters.WarningMessages;
-import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.utils.DateUtil;
 import fr.alexdoru.mwe.utils.MapUtil;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
@@ -27,7 +28,7 @@ import java.util.concurrent.Future;
 
 import static net.minecraft.util.EnumChatFormatting.*;
 
-public class CommandNocheaters extends MyAbstractCommand {
+public class CommandNocheaters extends MWECommandBase {
 
     @Override
     public String getCommandName() {
@@ -58,13 +59,11 @@ public class CommandNocheaters extends MyAbstractCommand {
 
     @Override
     protected void printCommandHelp() {
-        ChatUtil.addChatMessage(
-                RED + ChatUtil.bar() + "\n"
-                        + ChatUtil.centerLine(GOLD + "NoCheaters Help\n\n")
-                        + YELLOW + getCommandUsage(null) + GRAY + " - " + AQUA + "prints the list of reported players in your current world\n"
-                        + YELLOW + getCommandUsage(null) + " reportlist" + GRAY + " - " + AQUA + "prints the list of reported players\n"
-                        + RED + ChatUtil.bar()
-        );
+        final String slashCommand = '/' + getCommandName();
+        printCommandHelpBlock(RED, "NoCheaters Help", new String[][]{
+                {slashCommand, "prints the list of reported players in your current world"},
+                {slashCommand + " reportlist", "prints the list of reported players"}
+        });
     }
 
     private void printReportList(String[] args) {
@@ -81,7 +80,7 @@ public class CommandNocheaters extends MyAbstractCommand {
             displaypage = 1;
         }
 
-        final List<Map.Entry<Object, WDR>> sortedEntries = MapUtil.sortByValueReversed(WdrData.getAllWDRs());
+        final List<Map.Entry<Object, WDR>> sortedEntries = MapUtil.sortByValueReversed(WdrDataManager.getAllReports());
         final List<Future<IChatComponent>> futureList = new ArrayList<>();
         int nbreport = 1; // pour compter le nb de report et en afficher que 8 par page
         int nbpage = 1;

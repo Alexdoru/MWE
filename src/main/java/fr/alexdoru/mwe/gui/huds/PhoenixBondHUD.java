@@ -5,16 +5,14 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.utils.MapUtil;
+import fr.alexdoru.mwe.utils.RenderHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -134,22 +132,12 @@ public class PhoenixBondHUD extends AbstractRenderer {
         maxTotal += 10;
         final int x = this.rendererPosition.getAbsoluteRenderX() - maxTotal / 2;
         int y = this.rendererPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT * toRenderList.size() / 2;
-        GlStateManager.pushMatrix();
-        {
-            for (final PhxHealLine phxHealLine : toRenderList) {
-                mc.fontRendererObj.drawStringWithShadow(phxHealLine.hpHealed, x + maxLeft - mc.fontRendererObj.getStringWidth(phxHealLine.hpHealed) - 1, y, 0xFFFFFF);
-                mc.fontRendererObj.drawStringWithShadow(phxHealLine.name, x + maxLeft + 9, y, 0xFFFFFF);
-                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-                GlStateManager.enableAlpha();
-                GlStateManager.enableBlend();
-                GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-                mc.getTextureManager().bindTexture(phxHealLine.skin);
-                Gui.drawScaledCustomSizeModalRect(x + maxLeft, y, 8, 8, 8, 8, 8, 8, 64.0F, 64.0F);
-                Gui.drawScaledCustomSizeModalRect(x + maxLeft, y, 40, 8, 8, 8, 8, 8, 64.0F, 64.0F);
-                y += mc.fontRendererObj.FONT_HEIGHT;
-            }
+        for (final PhxHealLine phxHealLine : toRenderList) {
+            mc.fontRendererObj.drawStringWithShadow(phxHealLine.hpHealed, x + maxLeft - mc.fontRendererObj.getStringWidth(phxHealLine.hpHealed) - 1, y, 0xFFFFFF);
+            mc.fontRendererObj.drawStringWithShadow(phxHealLine.name, x + maxLeft + 9, y, 0xFFFFFF);
+            RenderHelper.renderSkinHead(phxHealLine.skin, x + maxLeft, y, true, 8);
+            y += mc.fontRendererObj.FONT_HEIGHT;
         }
-        GlStateManager.popMatrix();
     }
 
     @Override

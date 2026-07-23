@@ -8,14 +8,17 @@ import fr.alexdoru.mwe.chat.ChatListener;
 import fr.alexdoru.mwe.commands.*;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.config.MWEConfigTitle;
+import fr.alexdoru.mwe.data.AliasDataManager;
+import fr.alexdoru.mwe.data.DataSaveScheduler;
+import fr.alexdoru.mwe.data.PlayerDataManager;
+import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.*;
 import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
-import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import fr.alexdoru.mwe.updater.ModUpdater;
+import fr.alexdoru.mwe.updater.MWEUpdater;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -49,13 +52,20 @@ public class MWE {
     public static final String modName = "MWE";
     public static final String version = BuildConfig.VERSION;
     public static final Logger logger = LogManager.getLogger(modName);
+
     private static MWE INSTANCE;
     private final List<IMWEAddon> loadedAddons = new ArrayList<>();
     private IConfigHandler configHandler;
     private FinalKillCounterManager fkManager;
     private RenegadeArrowTracker renegadeTracker;
+    private HackerDetector hackerDetector;
+    private MWERenderers mweRenderers;
+    private File configFolder;
 
     public MWE() {
+        if (INSTANCE != null) {
+            throw new IllegalStateException("MWE already created");
+        }
         INSTANCE = this;
         MWELoadingPlugin.loadClasses("mwe.addons", IMWEAddon.class).forEach(addon -> {
             final ComparableVersion MWEVersion = new ComparableVersion(version);
@@ -71,34 +81,39 @@ public class MWE {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        this.configFolder = new File(event.getModConfigurationDirectory(), "mwe");
         final File configFile = new File(event.getModConfigurationDirectory(), "mwe.cfg");
         this.configHandler = ConfigLib.newConfigHandler(configFile, "MWE", MWE.version);
         this.configHandler.setConfigTitleRenderer(new MWEConfigTitle());
         this.configHandler.registerConfig(MWEConfig.class);
         if (MWEConfig.checkForUpdate && !Boolean.getBoolean("mwe.disableUpdater")) {
-            MinecraftForge.EVENT_BUS.register(new ModUpdater(event.getSourceFile()));
+            new MWEUpdater(event.getSourceFile()).start();
         }
+        AliasDataManager.loadData(this.configFolder);
+        WdrDataManager.loadData(this.configFolder);
         this.loadedAddons.forEach(a -> a.preInit(event));
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
 
-        this.fkManager = new FinalKillCounterManager();
-        MinecraftForge.EVENT_BUS.register(this.fkManager);
+        this.mweRenderers = new MWERenderers(this.configHandler.getRendererManager());
+
+        this.fkManager = new FinalKillCounterManager(this.mweRenderers.fkCounterHUD);
         this.renegadeTracker = new RenegadeArrowTracker();
+        this.hackerDetector = new HackerDetector();
+        MinecraftForge.EVENT_BUS.register(this.fkManager);
         MinecraftForge.EVENT_BUS.register(this.renegadeTracker);
+        MinecraftForge.EVENT_BUS.register(this.hackerDetector);
 
-        MWERenderers.loadRenderers(this.configHandler.getRendererManager());
-
-        MinecraftForge.EVENT_BUS.register(new WdrData());
         MinecraftForge.EVENT_BUS.register(new ReportQueue());
-        MinecraftForge.EVENT_BUS.register(new ChatListener());
-        MinecraftForge.EVENT_BUS.register(new HackerDetector());
+        MinecraftForge.EVENT_BUS.register(new ChatListener(this.mweRenderers));
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
+        MinecraftForge.EVENT_BUS.register(new DataSaveScheduler());
         MinecraftForge.EVENT_BUS.register(new StrengthParticles());
         MinecraftForge.EVENT_BUS.register(new ScoreboardTracker());
-        MinecraftForge.EVENT_BUS.register(new NameFormatter.EventHandler());
+        MinecraftForge.EVENT_BUS.register(new ClassSelectorOverlay(this.configFolder));
+        MinecraftForge.EVENT_BUS.register(new PlayerDataManager.EventHandler());
         MinecraftForge.EVENT_BUS.register(new KeybindingListener());
         MinecraftForge.EVENT_BUS.register(new MegaWallsEndGameStats());
 
@@ -111,7 +126,7 @@ public class MWE {
         ClientCommandHandler.instance.registerCommand(new CommandPlancke());
         ClientCommandHandler.instance.registerCommand(new CommandAddAlias());
         ClientCommandHandler.instance.registerCommand(new CommandScanGame());
-        ClientCommandHandler.instance.registerCommand(new CommandFKCounter());
+        ClientCommandHandler.instance.registerCommand(new CommandFKCounter(this.mweRenderers.fkCounterHUD));
         ClientCommandHandler.instance.registerCommand(new CommandNocheaters());
         ClientCommandHandler.instance.registerCommand(new CommandPartyDetection());
 
@@ -139,6 +154,18 @@ public class MWE {
 
     public RenegadeArrowTracker getRenegadeTracker() {
         return renegadeTracker;
+    }
+
+    public HackerDetector getHackerDetector() {
+        return hackerDetector;
+    }
+
+    public MWERenderers getMweRenderers() {
+        return mweRenderers;
+    }
+
+    public File getConfigFolder() {
+        return configFolder;
     }
 
 }
