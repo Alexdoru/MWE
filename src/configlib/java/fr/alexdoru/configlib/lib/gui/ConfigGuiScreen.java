@@ -39,7 +39,7 @@ public class ConfigGuiScreen extends GuiScreen {
     private final List<ConfigUIElement> renderedConfigElements = new ArrayList<>();
     private GuiTextField searchField;
     private String selectedCategory = "";
-    private ConfigUIElement lastInteractedButton;
+    private SliderGuiButton lastInteractedSlider;
 
     private final Scrollbar configScrollbar = new Scrollbar();
     private final Scrollbar categoryScrollbar = new Scrollbar();
@@ -167,7 +167,7 @@ public class ConfigGuiScreen extends GuiScreen {
         this.categoryScrollbar.init(lastCategoryScroll, categoryContentHeight, CATEGORY_BOX.getHeight());
         this.configScrollbar.init(lastConfigScroll, this.getConfigContentHeight(), CONFIG_BOX.getHeight());
 
-        this.lastInteractedButton = null;
+        this.lastInteractedSlider = null;
 
         this.mc.entityRenderer.loadShader(BLUR);
         super.initGui();
@@ -248,7 +248,7 @@ public class ConfigGuiScreen extends GuiScreen {
                 try {
                     if (element.mouseClicked(mouseX, mouseY, button)) {
                         if (element instanceof SliderGuiButton) {
-                            lastInteractedButton = element;
+                            lastInteractedSlider = ((SliderGuiButton) element);
                         }
                         return true;
                     }
@@ -274,7 +274,7 @@ public class ConfigGuiScreen extends GuiScreen {
         for (final ConfigUIElement element : this.renderedConfigElements) {
             if (element.mouseReleased(mouseX, mouseY, button)) {
                 if (element instanceof SliderGuiButton) {
-                    lastInteractedButton = element;
+                    lastInteractedSlider = ((SliderGuiButton) element);
                 }
                 return;
             }
@@ -286,8 +286,8 @@ public class ConfigGuiScreen extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if (lastInteractedButton instanceof SliderGuiButton && (keyCode == Keyboard.KEY_LEFT || keyCode == Keyboard.KEY_RIGHT)) {
-            ((SliderGuiButton) lastInteractedButton).updateSliderFromIncrement(keyCode == Keyboard.KEY_LEFT ? -1 : 1);
+        if (lastInteractedSlider != null && (keyCode == Keyboard.KEY_LEFT || keyCode == Keyboard.KEY_RIGHT)) {
+            lastInteractedSlider.updateSliderFromIncrement(keyCode == Keyboard.KEY_LEFT ? -1 : 1);
             this.mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
             return;
         }
@@ -369,7 +369,7 @@ public class ConfigGuiScreen extends GuiScreen {
             this.searchField.setFocused(false);
         }
         this.configScrollbar.resetScroll();
-        this.lastInteractedButton = null;
+        this.lastInteractedSlider = null;
         this.renderedConfigElements.clear();
         for (final ConfigUIElement element : this.configElements) {
             if (categoryName.equals(element.getCategory())) {
@@ -385,7 +385,7 @@ public class ConfigGuiScreen extends GuiScreen {
         }
         search = search.toLowerCase();
         this.configScrollbar.resetScroll();
-        this.lastInteractedButton = null;
+        this.lastInteractedSlider = null;
         this.renderedConfigElements.clear();
         String lastKey = null;
         final int elementWidth = CONFIG_BOX.getWidth() - 2 * PADDING;
@@ -436,6 +436,10 @@ public class ConfigGuiScreen extends GuiScreen {
 
     public ColorPalette getColorPalette() {
         return colorPalette;
+    }
+
+    public Box getConfigBoxSize() {
+        return CONFIG_BOX;
     }
 
 }

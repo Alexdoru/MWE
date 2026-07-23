@@ -1,5 +1,7 @@
 package fr.alexdoru.configlib.lib.gui;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 
 public final class GuiUtil {
@@ -57,6 +59,11 @@ public final class GuiUtil {
 
     public static void drawFullTextureWithCustomSize(int left, int top, int drawWidth, int drawHeight) {
         Gui.drawModalRectWithCustomSizedTexture(left, top, 0, 0, drawWidth, drawHeight, drawWidth, drawHeight);
+    }
+
+    public static void drawCenteredString(String text, int x, int y, int color) {
+        final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+        fr.drawStringWithShadow(text, (float) (x - fr.getStringWidth(text) / 2), (float) y, color);
     }
 
 }
