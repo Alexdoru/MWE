@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ColorEnumGuiButton extends ConfigGuiButton {
+public class ColorEnumGuiButton extends OverlayConfigGuiButton {
 
     private static final int SQUARE = 18;
     private static final int GAP = 4;
@@ -27,7 +27,6 @@ public class ColorEnumGuiButton extends ConfigGuiButton {
     private final List<ColorSquareButton> colorButtons = new ArrayList<>();
     private final Box panelBox = new Box();
     private int color;
-    private boolean isExpanded;
 
     public ColorEnumGuiButton(ConfigGuiScreen parentScreen, Field field, Method event, ConfigProperty annotation) throws IllegalAccessException {
         super(field, event, annotation);
@@ -52,7 +51,7 @@ public class ColorEnumGuiButton extends ConfigGuiButton {
         final int left = button.xPosition - 20 - 1;
         final int top = button.yPosition;
         GuiUtil.drawBoxWithOutline(left, top, left + 20, top + 20, 255 << 24 | color, colorPalette.COLOR_BUTTON_INDICATOR_BORDER);
-        if (isExpanded) {
+        if (isOverlayOpen) {
             GlStateManager.translate(0, 0, 200);
 
             final Box configBox = this.parentScreen.getConfigBoxSize();
@@ -92,7 +91,7 @@ public class ColorEnumGuiButton extends ConfigGuiButton {
     @Override
     public boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) throws IllegalAccessException {
         if (!mouseButton.isLeft()) return false;
-        if (isExpanded) {
+        if (isOverlayOpen) {
             if (panelBox.isMouseInBox(mouseX, mouseY)) {
                 for (final ColorSquareButton colorButton : this.colorButtons) {
                     if (colorButton.isMouseOver()) {
@@ -102,13 +101,14 @@ public class ColorEnumGuiButton extends ConfigGuiButton {
                     }
                 }
             } else {
-                isExpanded = false;
+                isOverlayOpen = false;
             }
             return true;
         }
         if (button.mousePressed(mc, mouseX, mouseY)) {
             button.playPressSound(mc.getSoundHandler());
-            isExpanded = true;
+            isOverlayOpen = true;
+            return true;
         }
         return false;
     }
