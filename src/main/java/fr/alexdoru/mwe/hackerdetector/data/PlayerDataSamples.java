@@ -5,8 +5,6 @@ import fr.alexdoru.mwe.hackerdetector.data.buffers.SampleBufferD;
 import fr.alexdoru.mwe.hackerdetector.data.buffers.SampleBufferF;
 import fr.alexdoru.mwe.hackerdetector.data.buffers.SampleBufferI;
 import fr.alexdoru.mwe.hackerdetector.data.buffers.SampleBufferZ;
-import fr.alexdoru.mwe.hackerdetector.utils.Vector2D;
-import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;

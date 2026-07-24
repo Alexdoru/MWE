@@ -280,7 +280,7 @@ public final class ConfigFieldContainer {
                 }
             }
             case ENUM_COLOR: {
-                return new ColorEnumGuiButton(field, event, annotation);
+                return new ColorEnumGuiButton(configGuiScreen, field, event, annotation);
             }
             case ENUM: {
                 return new EnumGuiButton(field, event, annotation);

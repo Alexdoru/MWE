@@ -68,6 +68,7 @@ public final class SampleBufferD {
     }
 
     public double average() {
+        if (this.size == 0) return 0D;
         return this.sum() / this.size;
     }
 

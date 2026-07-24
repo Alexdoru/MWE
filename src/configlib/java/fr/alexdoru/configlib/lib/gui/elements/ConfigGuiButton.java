@@ -24,7 +24,6 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     private final Method event;
     private final ConfigProperty annotation;
     private final List<String> commentToRender = new ArrayList<>();
-    protected final boolean hasComment;
     protected int boxWidth;
     protected int posX, posY;
     protected int contentLeft;
@@ -33,7 +32,6 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
         this.field = field;
         this.event = event;
         this.annotation = annotation;
-        this.hasComment = !this.annotation.comment().isEmpty();
     }
 
     /**
@@ -44,7 +42,7 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     @Override
     public void setBoxWidth(int boxWidth) {
         this.boxWidth = boxWidth;
-        if (hasComment) {
+        if (this.hasComment()) {
             final int wrapWidth = boxWidth - getLeftPadding() - getRightSideContentWidth() - 12; // 20
             this.commentToRender.clear();
             this.commentToRender.addAll(resizeCommentLines(annotation.comment(), wrapWidth, mc));
@@ -60,10 +58,10 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
         GuiUtil.drawBoxWithOutline(drawX, drawY, right, drawY + getHeight(), colorPalette.SETTING_BACKGROUND, colorPalette.SETTING_BACKGROUND_BORDER);
         final int textX = drawX + getLeftPadding();
         mc.fontRendererObj.drawStringWithShadow(annotation.name(), textX, drawY + PADDING, colorPalette.SETTING_NAME_TEXT);
-        if (hasComment) {
+        if (this.hasComment()) {
             int commentY = drawY + PADDING + mc.fontRendererObj.FONT_HEIGHT + 6; // '6' here represents the vertical space between name and comment
             for (final String line : commentToRender) {
-                mc.fontRendererObj.drawStringWithShadow(line, textX, commentY, colorPalette.SETTING_COMMENT_TEXT);
+                mc.fontRendererObj.drawStringWithShadow(line, drawX + 8, commentY, colorPalette.SETTING_COMMENT_TEXT);
                 commentY += mc.fontRendererObj.FONT_HEIGHT;
             }
         }
@@ -71,7 +69,7 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
 
     @Override
     public int getHeight() {
-        if (hasComment) {
+        if (this.hasComment()) {
             return PADDING + mc.fontRendererObj.FONT_HEIGHT + PADDING + mc.fontRendererObj.FONT_HEIGHT * commentToRender.size() + 6 - 1; // '6' here represents the vertical space between name and comment
         }
         return PADDING + mc.fontRendererObj.FONT_HEIGHT + PADDING - 1;
@@ -92,6 +90,10 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
         return annotation.category().toLowerCase().contains(search)
                 || annotation.subCategory().toLowerCase().contains(search)
                 || annotation.name().toLowerCase().contains(search);
+    }
+
+    protected boolean hasComment() {
+        return !this.annotation.comment().isEmpty();
     }
 
     protected void invokeConfigEvent() {

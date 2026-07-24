@@ -4,10 +4,11 @@ import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.commands.CommandWDR;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.data.ScangameData;
+import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.features.FinalKillCounter;
-import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
@@ -84,7 +85,7 @@ public class ReportSuggestionHandler {
                 isSenderInTablist = true;
                 final UUID uuid = netInfo.getGameProfile().getId();
                 isSenderFlaging = ScangameData.doesPlayerFlag(uuid);
-                final WDR wdr = WdrData.getWdr(uuid, messageSender);
+                final WDR wdr = WdrDataManager.getWdr(uuid, messageSender);
                 if (wdr != null) {
                     isSenderCheating = wdr.hasValidCheats();
                 }

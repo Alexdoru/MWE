@@ -1,13 +1,16 @@
 package fr.alexdoru.mwe.commands;
 
 import com.google.gson.JsonObject;
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.api.enums.MWClass;
+import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.LocrawListener;
 import fr.alexdoru.mwe.chat.ScanFlagChatComponent;
+import fr.alexdoru.mwe.data.NameFormatter;
+import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.data.ScangameData;
-import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.parsers.hypixel.GeneralInfo;
 import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
@@ -32,7 +35,7 @@ import java.util.UUID;
 
 import static net.minecraft.util.EnumChatFormatting.*;
 
-public class CommandScanGame extends MyAbstractCommand {
+public class CommandScanGame extends MWECommandBase {
 
     @Override
     public String getCommandName() {
@@ -62,7 +65,7 @@ public class CommandScanGame extends MyAbstractCommand {
             ScangameData.clearScanGameData();
             if (ScoreboardTracker.isPreGameLobby()) ScangameData.clearRandomKits();
             ScangameData.setScanGameId(currentServerId);
-            NameFormatter.refreshAllNamesInWorld();
+            PlayerDataManager.refreshAllNamesInWorld();
         }
         int i = 0;
         final boolean isMythicHour = ScoreboardUtils.isMegaWallsMythicGame();
@@ -77,12 +80,12 @@ public class CommandScanGame extends MyAbstractCommand {
     private static boolean scanPlayer(NetworkPlayerInfo netInfo, boolean isMythicHourInPreGameLobby) {
 
         final UUID uuid = netInfo.getGameProfile().getId();
-        if (!NameFormatter.isRealPlayer(uuid) || ScangameData.skipScan(uuid)) {
+        if (!PlayerDataManager.isRealPlayer(uuid) || ScangameData.skipScan(uuid)) {
             return false;
         }
 
         final ScangameData.ScanResult scanResult = ScangameData.get(uuid);
-        final boolean doRandomKitCheck = isMythicHourInPreGameLobby && NameFormatter.isPlayerUsingRandom(netInfo) || ScangameData.didPlayerPickRandom(uuid);
+        final boolean doRandomKitCheck = isMythicHourInPreGameLobby && MWSkin.RANDOM == MWSkin.ofPlayer(netInfo) || ScangameData.didPlayerPickRandom(uuid);
         if (scanResult != null) {
             if (scanResult.msg != null) {
                 addScanMessageToChat(netInfo, scanResult.msg);
@@ -90,7 +93,7 @@ public class CommandScanGame extends MyAbstractCommand {
             } else if (scanResult.isLowLevelAccount() && doRandomKitCheck) {
                 scanResult.msg = getMythicRandomMsg(scanResult.networkLvl, scanResult.questamount);
                 addScanMessageToChat(netInfo, scanResult.msg);
-                NameFormatter.updatePlayerDataAndEntityData(netInfo);
+                PlayerDataManager.updatePlayerDataAndEntityData(netInfo);
             }
             return false;
         }
@@ -130,7 +133,7 @@ public class CommandScanGame extends MyAbstractCommand {
         if (imsg != null) {
             addScanMessageToChat(networkPlayerInfo, imsg);
             ScangameData.put(uuid, imsg);
-            NameFormatter.updatePlayerDataAndEntityData(networkPlayerInfo);
+            PlayerDataManager.updatePlayerDataAndEntityData(networkPlayerInfo);
         } else {
             ScangameData.put(uuid, (int) generalInfo.getNetworkLevel(), generalInfo.getCompletedQuests());
         }

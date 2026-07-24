@@ -3,7 +3,6 @@ package fr.alexdoru.mwe.data;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
-import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.hackerdetector.data.buffers.SampleBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
@@ -31,7 +30,7 @@ public final class NetPlayerInfoTracker {
     public static void clearData() {
         NET_INFO_CACHE.clear();
         latestDisconnected.clear();
-        NameFormatter.clearPlayerDataCache();
+        PlayerDataManager.clearPlayerDataCache();
     }
 
     public static void addPlayer(NetworkPlayerInfo netInfo) {
@@ -43,7 +42,7 @@ public final class NetPlayerInfoTracker {
             final NetworkPlayerInfo netInfo = (NetworkPlayerInfo) o;
             NET_INFO_CACHE.remove(netInfo.getGameProfile().getName());
             latestDisconnected.add(new DisconnectedPlayer(netInfo));
-            NameFormatter.removeFromDataCache(netInfo.getGameProfile().getId());
+            PlayerDataManager.removeFromDataCache(netInfo.getGameProfile().getId());
             if (netInfo.hasLocationSkin()) {
                 SKIN_CACHE.put(netInfo.getGameProfile().getName(), netInfo.getLocationSkin());
             }
@@ -112,7 +111,7 @@ public final class NetPlayerInfoTracker {
             this.disconnectTime = System.currentTimeMillis();
             this.uuid = netInfo.getGameProfile().getId();
             this.playername = netInfo.getGameProfile().getName();
-            this.formattedName = NameFormatter.getFormattedName(netInfo);
+            this.formattedName = NameFormatter.getTablistName(netInfo);
         }
 
     }

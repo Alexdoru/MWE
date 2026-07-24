@@ -9,10 +9,14 @@ import java.util.Map;
 
 public class TickingBlockMap {
 
-    private static final int MAX_TICK = 20;
+    private final int MAX_TICK;
     private int tickTime;
-    private final Deque<BlockPlaced> deque = new ArrayDeque<>(100);
-    private final Map<BlockPos, Integer> map = new HashMap<>(100);
+    private final Deque<BlockPlaced> deque = new ArrayDeque<>(128);
+    private final Map<BlockPos, Integer> map = new HashMap<>(128);
+
+    public TickingBlockMap(int maxTick) {
+        MAX_TICK = maxTick;
+    }
 
     public void add(BlockPos pos) {
         deque.add(new BlockPlaced(tickTime, pos));

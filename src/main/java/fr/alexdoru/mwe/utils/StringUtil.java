@@ -1,15 +1,25 @@
 package fr.alexdoru.mwe.utils;
 
-import net.minecraft.event.HoverEvent;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-public class StringUtil {
+public final class StringUtil {
+
+    private StringUtil() {}
+
+    public static boolean isFormatCharacter(char c) {
+        return isFormatColor(c) || isFormatSpecial(c);
+    }
+
+    public static boolean isFormatColor(char c) {
+        return c >= 48 && c <= 57 || c >= 97 && c <= 102 || c >= 65 && c <= 70;
+    }
+
+    public static boolean isFormatSpecial(char c) {
+        return c >= 107 && c <= 111 || c >= 75 && c <= 79 || c == 114 || c == 82;
+    }
 
     /**
      * A faster version of {@link net.minecraft.util.EnumChatFormatting#getTextWithoutFormattingCodes(String)}
@@ -21,7 +31,7 @@ public class StringUtil {
         int count = 0;
         for (int i = 0; i < len; i++) {
             final char c = chars[i];
-            if (c == '§' && i + 1 < len && "0123456789abcdefklmnorABCDEFKLMNOR".indexOf(chars[i + 1]) != -1) {
+            if (c == '§' && i + 1 < len && isFormatCharacter(chars[i + 1])) {
                 i++;
                 continue;
             }
@@ -211,20 +221,6 @@ public class StringUtil {
             return message;
         }
         return split[0] + replacement + '§' + getLastFormattingCodeOf(split[0]) + split[1];
-    }
-
-    public static IChatComponent censorChatMessage(String message, String messageSender) {
-        final String[] split = message.split(messageSender, 2);
-        if (split.length != 2) {
-            return new ChatComponentText(message);
-        }
-        final String[] secondSplit = split[1].split(": ", 2);
-        if (secondSplit.length != 2) {
-            return new ChatComponentText(message);
-        }
-        return (new ChatComponentText(split[0] + messageSender + secondSplit[0] + ": "))
-                .appendSibling(new ChatComponentText(EnumChatFormatting.DARK_GRAY + "Censored")
-                        .setChatStyle(new ChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(secondSplit[1])))));
     }
 
 }

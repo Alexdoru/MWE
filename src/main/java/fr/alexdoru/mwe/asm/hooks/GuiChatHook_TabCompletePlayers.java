@@ -65,11 +65,13 @@ public class GuiChatHook_TabCompletePlayers {
                     tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAlias());
                     return;
                 } else {
+                    final List<String> players = TabCompletionUtil.getAlias();
                     final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
-                    if (fkCounter == null) return;
-                    final List<String> playersInThisGame = fkCounter.getPlayersInThisGame();
-                    playersInThisGame.removeAll(TabCompletionUtil.getPlayersAndAlias());
-                    tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, playersInThisGame);
+                    if (fkCounter != null) {
+                        players.addAll(fkCounter.getPlayersInThisGame());
+                        players.removeAll(TabCompletionUtil.getPlayers());
+                    }
+                    tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, players);
                 }
             }
             return;

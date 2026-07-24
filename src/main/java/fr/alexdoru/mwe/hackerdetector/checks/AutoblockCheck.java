@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.hackerdetector.checks;
 
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
-import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
+import fr.alexdoru.mwe.hackerdetector.data.ViolationLevelTracker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;

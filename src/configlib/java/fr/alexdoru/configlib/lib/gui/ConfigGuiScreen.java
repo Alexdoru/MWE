@@ -40,6 +40,7 @@ public class ConfigGuiScreen extends GuiScreen {
     private GuiTextField searchField;
     private String selectedCategory = "";
     private SliderGuiButton lastInteractedSlider;
+    private OverlayConfigGuiButton lastInteractedOverlay;
 
     private final Scrollbar configScrollbar = new Scrollbar();
     private final Scrollbar categoryScrollbar = new Scrollbar();
@@ -168,6 +169,7 @@ public class ConfigGuiScreen extends GuiScreen {
         this.configScrollbar.init(lastConfigScroll, this.getConfigContentHeight(), CONFIG_BOX.getHeight());
 
         this.lastInteractedSlider = null;
+        this.lastInteractedOverlay = null;
 
         this.mc.entityRenderer.loadShader(BLUR);
         super.initGui();
@@ -234,20 +236,37 @@ public class ConfigGuiScreen extends GuiScreen {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        final MouseButton button = MouseButton.from(mouseButton);
+        if (lastInteractedOverlay != null) {
+            try {
+                lastInteractedOverlay.mouseClicked(mouseX, mouseY, button);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Caught exception running mouse click events!", e);
+            }
+            if (!lastInteractedOverlay.isOverlayOpen()) {
+                lastInteractedOverlay = null;
+            }
+            return;
+        }
         if (CATEGORY_BOX.isMouseInBox(mouseX, mouseY)) {
             final boolean consumedClick = forEachVisible(this.categoryElements, CATEGORY_BOX, this.categoryScrollbar.getScroll(), (element, drawY) ->
-                    element.mouseClicked(mouseX, mouseY, mouseButton)
+                    element.mouseClicked(mouseX, mouseY, button)
             );
             if (consumedClick) return;
-            if (this.categoryScrollbar.mouseClicked(mouseX, mouseY, mouseButton)) {
+            if (this.categoryScrollbar.mouseClicked(mouseX, mouseY, button)) {
                 return;
             }
         } else if (CONFIG_BOX.isMouseInBox(mouseX, mouseY)) {
             final boolean consumedClick = forEachVisible(this.renderedConfigElements, CONFIG_BOX, this.configScrollbar.getScroll(), (element, drawY) -> {
                 try {
-                    if (element.mouseClicked(mouseX, mouseY, mouseButton)) {
+                    if (element.mouseClicked(mouseX, mouseY, button)) {
                         if (element instanceof SliderGuiButton) {
                             lastInteractedSlider = ((SliderGuiButton) element);
+                        } else if (element instanceof OverlayConfigGuiButton) {
+                            final OverlayConfigGuiButton overlay = (OverlayConfigGuiButton) element;
+                            if (overlay.isOverlayOpen()) {
+                                lastInteractedOverlay = overlay;
+                            }
                         }
                         return true;
                     }
@@ -257,10 +276,10 @@ public class ConfigGuiScreen extends GuiScreen {
                 return false;
             });
             if (consumedClick) return;
-            if (this.configScrollbar.mouseClicked(mouseX, mouseY, mouseButton)) {
+            if (this.configScrollbar.mouseClicked(mouseX, mouseY, button)) {
                 return;
             }
-        } else if (mouseButton == 0 && SEARCH_BOX.isMouseInBox(mouseX, mouseY)) {
+        } else if (button.isLeft() && SEARCH_BOX.isMouseInBox(mouseX, mouseY)) {
             searchField.setFocused(true);
             return;
         }
@@ -269,21 +288,22 @@ public class ConfigGuiScreen extends GuiScreen {
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
+        final MouseButton button = MouseButton.from(mouseButton);
         for (final ConfigUIElement element : this.renderedConfigElements) {
-            if (element.mouseReleased(mouseX, mouseY, mouseButton)) {
-                if (element instanceof SliderGuiButton) {
-                    lastInteractedSlider = ((SliderGuiButton) element);
-                }
+            if (element.mouseReleased(mouseX, mouseY, button)) {
                 return;
             }
         }
-        this.configScrollbar.mouseReleased(mouseButton);
-        this.categoryScrollbar.mouseReleased(mouseButton);
+        this.configScrollbar.mouseReleased(button);
+        this.categoryScrollbar.mouseReleased(button);
         super.mouseReleased(mouseX, mouseY, mouseButton);
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        if (lastInteractedOverlay != null) {
+            return;
+        }
         if (lastInteractedSlider != null && (keyCode == Keyboard.KEY_LEFT || keyCode == Keyboard.KEY_RIGHT)) {
             lastInteractedSlider.updateSliderFromIncrement(keyCode == Keyboard.KEY_LEFT ? -1 : 1);
             this.mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
@@ -315,12 +335,15 @@ public class ConfigGuiScreen extends GuiScreen {
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
+        if (lastInteractedOverlay != null) {
+            return;
+        }
         final int wheel = Mouse.getEventDWheel();
         if (wheel != 0) {
             final int mouseX = Mouse.getEventX() * width / mc.displayWidth;
             final int mouseY = height - Mouse.getEventY() * height / mc.displayHeight - 1;
             final int direction = wheel > 0 ? 1 : -1;
-            final int amount = Math.min(Math.abs(wheel) * 2, 240);
+            final int amount = Math.min(Math.abs(wheel) * 2, Scrollbar.SCROLL_STEP);
             if (CATEGORY_BOX.isMouseInBox(mouseX, mouseY)) {
                 this.categoryScrollbar.scheduleScroll(direction, amount);
             } else if (CONFIG_BOX.isMouseInBox(mouseX, mouseY)) {
@@ -368,6 +391,7 @@ public class ConfigGuiScreen extends GuiScreen {
         }
         this.configScrollbar.resetScroll();
         this.lastInteractedSlider = null;
+        this.lastInteractedOverlay = null;
         this.renderedConfigElements.clear();
         for (final ConfigUIElement element : this.configElements) {
             if (categoryName.equals(element.getCategory())) {
@@ -384,6 +408,7 @@ public class ConfigGuiScreen extends GuiScreen {
         search = search.toLowerCase();
         this.configScrollbar.resetScroll();
         this.lastInteractedSlider = null;
+        this.lastInteractedOverlay = null;
         this.renderedConfigElements.clear();
         String lastKey = null;
         final int elementWidth = CONFIG_BOX.getWidth() - 2 * PADDING;
@@ -430,6 +455,14 @@ public class ConfigGuiScreen extends GuiScreen {
 
         boolean visit(T element, int drawY);
 
+    }
+
+    public ColorPalette getColorPalette() {
+        return colorPalette;
+    }
+
+    public Box getConfigBoxSize() {
+        return CONFIG_BOX;
     }
 
 }

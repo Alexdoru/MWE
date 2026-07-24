@@ -3,7 +3,10 @@ package fr.alexdoru.mwe.asm.transformers.mc.render;
 import fr.alexdoru.mwe.api.asm.InjectionCallback;
 import fr.alexdoru.mwe.asm.mappings.MethodMapping;
 import fr.alexdoru.mwe.asm.transformers.MWETransformer;
-import org.objectweb.asm.tree.*;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
 
 public class LayerArmorBaseTransformer_HitColor implements MWETransformer {
 
@@ -17,15 +20,18 @@ public class LayerArmorBaseTransformer_HitColor implements MWETransformer {
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.LAYERARMORBASE$SHOULDCOMBINETEXTURES)) {
-                final InsnList list = new InsnList();
-                final LabelNode notCanceled = new LabelNode();
-                list.add(getNewConfigFieldInsnNode("colorArmorWhenHurt"));
-                list.add(new JumpInsnNode(IFEQ, notCanceled));
-                list.add(new InsnNode(ICONST_1));
-                list.add(new InsnNode(IRETURN));
-                list.add(notCanceled);
-                methodNode.instructions.insert(list);
-                status.addInjection();
+                for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {
+                    if (checkInsnNode(insnNode, IRETURN)) {
+                        methodNode.instructions.insertBefore(insnNode, new MethodInsnNode(
+                                INVOKESTATIC,
+                                getHookClass("mc/render/LayerArmorBaseHook_HitColor"),
+                                "shouldCombineTextures",
+                                "(Z)Z",
+                                false
+                        ));
+                        status.addInjection();
+                    }
+                }
             }
         }
     }

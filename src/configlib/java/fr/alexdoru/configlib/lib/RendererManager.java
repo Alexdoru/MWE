@@ -69,7 +69,7 @@ public final class RendererManager implements IRendererManager {
     public void renderEditScreenBackground(IRenderer editedRenderer) {
         final ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
         for (final IRenderer renderer : HUD_RENDERERS) {
-            if (renderer.getPosition().isEnabled()) {
+            if (renderer != editedRenderer && renderer.getPosition().isEnabled()) {
                 renderer.getPosition().updateAbsolutePosition(resolution);
                 renderer.renderDummy();
             }

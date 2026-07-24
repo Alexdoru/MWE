@@ -2,29 +2,30 @@ package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.IPlayerUUID;
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.data.NameFormatter;
+import fr.alexdoru.mwe.data.PlayerDataManager;
+import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.features.FinalKillCounter;
-import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.features.PartyDetection;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.cache.CachedHypixelPlayerData;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
-import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import fr.alexdoru.mwe.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.*;
 
-public class CommandWDR extends MyAbstractCommand {
+public class CommandWDR extends MWECommandBase {
 
     public static final List<String> cheatsList = Collections.unmodifiableList(Arrays.asList("aura",
             "aimbot",
@@ -73,9 +74,6 @@ public class CommandWDR extends MyAbstractCommand {
             cheats.addAll(Arrays.asList(args).subList(1, args.length));
         }
         PartyDetection.printBoostingReportAdvice(playername);
-        if (ScoreboardTracker.isPreGameLobby()) {
-            ChatUtil.printReportingAdvice();
-        }
         addPlayerToReportList(playername, cheats);
     }
 
@@ -91,11 +89,13 @@ public class CommandWDR extends MyAbstractCommand {
                 if (ScoreboardTracker.isPrepPhase()) {
                     return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAlias());
                 } else {
+                    final List<String> players = TabCompletionUtil.getAlias();
                     final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
-                    if (fkCounter == null) return null;
-                    final List<String> playersInThisGame = fkCounter.getPlayersInThisGame();
-                    playersInThisGame.removeAll(TabCompletionUtil.getPlayersAndAlias());
-                    return getListOfStringsMatchingLastWord(args, playersInThisGame);
+                    if (fkCounter != null) {
+                        players.addAll(fkCounter.getPlayersInThisGame());
+                        players.removeAll(TabCompletionUtil.getPlayers());
+                    }
+                    return getListOfStringsMatchingLastWord(args, players);
                 }
             }
             return null;
@@ -103,17 +103,17 @@ public class CommandWDR extends MyAbstractCommand {
         return args.length > 1 ? getListOfStringsMatchingLastWord(args, cheatsList) : null;
     }
 
-    private static void addPlayerToReportList(String playername, List<String> cheats) {
+    private void addPlayerToReportList(String playername, List<String> cheats) {
         final Minecraft mc = Minecraft.getMinecraft();
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
-                final UUID uuid = netInfo.getGameProfile().getId();
-                if (NameFormatter.isNickedPlayer(uuid) || NameFormatter.isRealPlayer(uuid)) {
+            if (PlayerDataManager.isNickedPlayer(netInfo.getGameProfile().getId())) {
+                if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
                     addPlayerToReportList(
-                            uuid,
+                            netInfo.getGameProfile().getId(),
                             netInfo.getGameProfile().getName(),
-                            ScorePlayerTeam.formatPlayerName(netInfo.getPlayerTeam(), netInfo.getGameProfile().getName()),
-                            cheats);
+                            NameFormatter.getVanillaName(netInfo),
+                            cheats
+                    );
                     return;
                 }
             }
@@ -121,28 +121,23 @@ public class CommandWDR extends MyAbstractCommand {
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
                 final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
-                if (HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                    mc.addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), null, cheats));
-                    return;
-                }
-                try {
+                String name = null;
+                if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
                     final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(playerID.getId()));
                     if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
-                        // real player
-                        mc.addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), loginData.getFormattedName(), cheats));
+                        name = loginData.getFormattedName();
                     }
-                } catch (ApiException e) {
-                    mc.addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), null, cheats));
                 }
+                final String formattedName = name;
+                mc.addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), formattedName, cheats));
             } catch (ApiException ignored) {}
         });
     }
 
-    private static void addPlayerToReportList(UUID uuid, String playername, String formattedName, List<String> cheats) {
-        final boolean added = WdrData.addReport(uuid, playername, cheats);
-        WdrData.saveReportedPlayers();
+    private void addPlayerToReportList(UUID uuid, String playername, String formattedName, List<String> cheats) {
+        final boolean added = WdrDataManager.addReport(uuid, playername, cheats);
         if (added) {
-            final boolean isNicked = !NameFormatter.isRealPlayer(uuid);
+            final boolean isNicked = !PlayerDataManager.isRealPlayer(uuid);
             ChatUtil.addChatMessage(
                     EnumChatFormatting.GREEN + "You reported " + (isNicked ? EnumChatFormatting.GREEN + "the" + EnumChatFormatting.DARK_PURPLE + " nicked player " : "")
                             + EnumChatFormatting.RED + (formattedName == null ? playername : EnumChatFormatting.RESET + formattedName) + EnumChatFormatting.GREEN + " and will receive warnings about this player in-game"

@@ -68,6 +68,7 @@ public final class SampleBufferZ {
     }
 
     public float average() {
+        if (this.size == 0) return 0F;
         return this.sum() / (float) this.size;
     }
 

@@ -1,6 +1,7 @@
 package fr.alexdoru.configlib.lib.gui.elements;
 
 import fr.alexdoru.configlib.api.ColorPalette;
+import fr.alexdoru.configlib.lib.gui.MouseButton;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
@@ -13,9 +14,9 @@ public interface ConfigUIElement extends SizedElement {
 
     void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY);
 
-    boolean mouseClicked(int mouseX, int mouseY, int mouseButton) throws IllegalAccessException;
+    boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) throws IllegalAccessException;
 
-    default boolean mouseReleased(int mouseX, int mouseY, int mouseButton) {return false;}
+    default boolean mouseReleased(int mouseX, int mouseY, MouseButton mouseButton) {return false;}
 
     String getCategory();
 

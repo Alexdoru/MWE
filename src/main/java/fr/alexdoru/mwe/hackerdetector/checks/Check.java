@@ -1,19 +1,20 @@
 package fr.alexdoru.mwe.hackerdetector.checks;
 
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.events.HackerFlagEvent;
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.FlagChatComponent;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.features.NameFormatter;
+import fr.alexdoru.mwe.data.NameFormatter;
+import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
-import fr.alexdoru.mwe.hackerdetector.utils.Vector3D;
-import fr.alexdoru.mwe.hackerdetector.utils.ViolationLevelTracker;
+import fr.alexdoru.mwe.hackerdetector.data.Vector3D;
+import fr.alexdoru.mwe.hackerdetector.data.ViolationLevelTracker;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
-import fr.alexdoru.mwe.nocheaters.WdrData;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
@@ -33,6 +34,7 @@ import net.minecraftforge.common.MinecraftForge;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
 /**
@@ -40,7 +42,8 @@ import java.util.function.Predicate;
  */
 public abstract class Check implements ICheck {
 
-    private static final HashSet<String> flagMessages = new HashSet<>();
+    private static final Set<String> flagMessages = new HashSet<>();
+    private final HackerDetector hackerDetector = MWE.INSTANCE().getHackerDetector();
     private long lastSoundTime;
 
     public final void checkViolationLevel(EntityPlayer player, boolean failedCheck, ViolationLevelTracker tracker) {
@@ -66,7 +69,7 @@ public abstract class Check implements ICheck {
         final String cheatType = this.getCheatName() + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")");
         final String playername = ScoreboardTracker.isReplayMode() ? StringUtil.removeFormattingCodes(player.getName()) : player.getName();
         if (MWEConfig.debugLogging) {
-            HackerDetector.INSTANCE.log(player.getName() + " flags " + cheatType);
+            this.hackerDetector.log(player.getName() + " flags " + cheatType);
         }
         if (!MWEConfig.showFlagMessages) {
             return;
@@ -103,7 +106,7 @@ public abstract class Check implements ICheck {
     private void addToReportList(EntityPlayer player) {
         if (!ScoreboardTracker.isReplayMode() && MWEConfig.addToReportList && !SquadHandler.isSquadmate(player.getName())) {
             final String cheat = this.getCheatName().toLowerCase() + "[H]";
-            WdrData.addReport(player.getUniqueID(), player.getName(), cheat);
+            WdrDataManager.addReport(player.getUniqueID(), player.getName(), cheat);
         }
     }
 
@@ -126,7 +129,7 @@ public abstract class Check implements ICheck {
     }
 
     protected void log(EntityPlayer player, PlayerDataSamples data, ViolationLevelTracker vl, String extramsg) {
-        HackerDetector.INSTANCE.log(player.getName() + " failed " + this.getCheatName()
+        this.hackerDetector.log(player.getName() + " failed " + this.getCheatName()
                 + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")") + " check"
                 + " | vl " + vl.getViolationLevel()
                 + (extramsg == null ? "" : extramsg)

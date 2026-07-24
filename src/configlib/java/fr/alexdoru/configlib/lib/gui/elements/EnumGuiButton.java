@@ -2,6 +2,7 @@ package fr.alexdoru.configlib.lib.gui.elements;
 
 import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.api.ConfigProperty;
+import fr.alexdoru.configlib.lib.gui.MouseButton;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.lang.reflect.Field;
@@ -38,15 +39,15 @@ public class EnumGuiButton extends ConfigGuiButton {
     public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
         button.xPosition = contentLeft;
-        button.yPosition = drawY + (hasComment ? PADDING + mc.fontRendererObj.FONT_HEIGHT / 2 : (getHeight() - button.height) / 2);
+        button.yPosition = drawY + (this.hasComment() ? PADDING + mc.fontRendererObj.FONT_HEIGHT / 2 : (getHeight() - button.height) / 2);
         button.drawButton(colorPalette, mc, mouseX, mouseY);
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton) throws IllegalAccessException {
-        if ((mouseButton == 0 || mouseButton == 1) && button.mousePressed(mc, mouseX, mouseY)) {
+    public boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) throws IllegalAccessException {
+        if ((mouseButton.isLeft() || mouseButton.isRight()) && button.mousePressed(mc, mouseX, mouseY)) {
             button.playPressSound(mc.getSoundHandler());
-            this.cycleEnum(mouseButton == 0 ? 1 : -1);
+            this.cycleEnum(mouseButton.isLeft() ? 1 : -1);
             return true;
         }
         return false;

@@ -1,9 +1,10 @@
 package fr.alexdoru.mwe.commands;
 
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
-import fr.alexdoru.mwe.features.NameFormatter;
 import fr.alexdoru.mwe.features.PartyDetection;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -13,7 +14,7 @@ import net.minecraft.util.EnumChatFormatting;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CommandPartyDetection extends MyAbstractCommand {
+public class CommandPartyDetection extends MWECommandBase {
 
     @Override
     public String getCommandName() {
@@ -45,7 +46,7 @@ public class CommandPartyDetection extends MyAbstractCommand {
                     sb.append(playername);
                 } else {
                     flag = true;
-                    sb.append(NameFormatter.getFormattedName(netInfo));
+                    sb.append(NameFormatter.getTablistName(netInfo));
                 }
                 sb.append(EnumChatFormatting.RESET);
                 if (ScoreboardTracker.isPreGameLobby() && netInfo != null) {

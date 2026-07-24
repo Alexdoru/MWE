@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.api.MWEApi;
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.gui.huds.DebugScoreboardHUD;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
@@ -16,7 +17,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import java.util.List;
 
-public class CommandMWE extends MyAbstractCommand {
+public class CommandMWE extends MWECommandBase {
 
     private final TimerUtil timer = new TimerUtil(5 * 60 * 1000);
     private DebugScoreboardHUD debugHUD;

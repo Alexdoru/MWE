@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.commands;
 
 import com.google.gson.JsonObject;
 import fr.alexdoru.mwe.api.IPlayerUUID;
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
@@ -20,7 +21,7 @@ import net.minecraft.util.EnumChatFormatting;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandPlancke extends MyAbstractCommand {
+public class CommandPlancke extends MWECommandBase {
 
     @Override
     public String getCommandName() {
@@ -151,19 +152,17 @@ public class CommandPlancke extends MyAbstractCommand {
 
     @Override
     protected void printCommandHelp() {
-        ChatUtil.addChatMessage(
-                EnumChatFormatting.AQUA + ChatUtil.bar() + "\n"
-                        + ChatUtil.centerLine(EnumChatFormatting.GOLD + "Plancke Help\n\n")
-                        + EnumChatFormatting.YELLOW + "/plancke <player>" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "General Hypixel stats\n"
-                        + EnumChatFormatting.YELLOW + "/plancke <player> bsg" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Blitz stats\n"
-                        + EnumChatFormatting.YELLOW + "/plancke <player> sw" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Skywars stats\n"
-                        + EnumChatFormatting.YELLOW + "/plancke <player> uhc" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "UHC stats\n"
-                        + EnumChatFormatting.YELLOW + "/plancke <player> mw" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "General Mega Walls stats\n"
-                        + EnumChatFormatting.YELLOW + "/plancke <player> mw classname" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Class specific Mega Walls stats\n"
-                        + EnumChatFormatting.YELLOW + "/plancke <player> mw cp" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Mega Walls classpoints\n"
-                        + EnumChatFormatting.YELLOW + "/plancke <player> mw leg" + EnumChatFormatting.GRAY + " - " + EnumChatFormatting.AQUA + "Mega Walls legendary skins\n"
-                        + EnumChatFormatting.AQUA + ChatUtil.bar()
-        );
+        final String slashCommand = '/' + getCommandName();
+        printCommandHelpBlock(EnumChatFormatting.AQUA, "Plancke Help", new String[][]{
+                {slashCommand + " <player>", "General Hypixel stats"},
+                {slashCommand + " <player> bsg", "Blitz stats"},
+                {slashCommand + " <player> sw", "Skywars stats"},
+                {slashCommand + " <player> uhc", "UHC stats"},
+                {slashCommand + " <player> mw", "General Mega Walls stats"},
+                {slashCommand + " <player> mw classname", "Class specific Mega Walls stats"},
+                {slashCommand + " <player> mw cp", "Mega Walls classpoints"},
+                {slashCommand + " <player> mw leg", "Mega Walls legendary skins"},
+        });
     }
 
 }

@@ -5,7 +5,9 @@ import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.util.EnumChatFormatting;
 
-public class HypixelApiKeyUtil {
+public final class HypixelApiKeyUtil {
+
+    private HypixelApiKeyUtil() {}
 
     public static String getApiKey() {
         return MWEConfig.APIKey;

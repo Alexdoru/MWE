@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.hackerdetector.utils;
+package fr.alexdoru.mwe.hackerdetector.data;
 
 import net.minecraft.util.MathHelper;
 

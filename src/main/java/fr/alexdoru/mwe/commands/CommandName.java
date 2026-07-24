@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.api.IPlayerUUID;
+import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.requests.LabyModNameHistory;
@@ -18,7 +19,7 @@ import net.minecraft.util.IChatComponent;
 import java.util.Collections;
 import java.util.List;
 
-public class CommandName extends MyAbstractCommand {
+public class CommandName extends MWECommandBase {
 
     @Override
     public String getCommandName() {
