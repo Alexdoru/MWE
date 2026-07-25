@@ -49,7 +49,8 @@ public class WDR implements IReportInfo, Comparable<WDR> {
         return false;
     }
 
-    public void addCheats(List<String> list) {
+    public boolean addCheats(List<String> list) {
+        final int size = this.cheats.size();
         list.forEach(cheat -> {
             if (!this.cheats.contains(cheat)) {
                 this.cheats.add(cheat);
@@ -58,6 +59,7 @@ public class WDR implements IReportInfo, Comparable<WDR> {
         this.cheats.trimToSize();
         this.updateIcon();
         this.timestamp = new Date().getTime();
+        return size != this.cheats.size();
     }
 
     private void updateIcon() {

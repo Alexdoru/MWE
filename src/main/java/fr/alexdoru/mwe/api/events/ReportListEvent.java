@@ -41,6 +41,10 @@ public final class ReportListEvent extends Event {
          */
         ADDED,
         /**
+         * fired when the player is already reported and cheats are added
+         */
+        CHEATS_ADDED,
+        /**
          * fired when a player is removed from the report list
          */
         REMOVED

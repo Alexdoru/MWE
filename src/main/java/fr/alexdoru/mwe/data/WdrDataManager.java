@@ -94,15 +94,14 @@ public final class WdrDataManager {
     public static void addReport(UUID uuid, String playername, String cheat) {
         WDR wdr = getWdr(uuid, playername);
         boolean added = false;
-        final boolean refreshName;
+        boolean cheatsAdded = false;
         if (wdr == null) {
             wdr = new WDR(cheat);
             added = put(uuid, playername, wdr);
-            refreshName = true;
         } else {
-            refreshName = wdr.addCheat(cheat);
+            cheatsAdded = wdr.addCheat(cheat);
         }
-        if (refreshName) {
+        if (added || cheatsAdded) {
             if (PlayerDataManager.isRealPlayer(uuid)) {
                 PlayerDataManager.updatePlayerDataAndEntityData(uuid);
             } else {
@@ -112,6 +111,8 @@ public final class WdrDataManager {
         dirty.set(true);
         if (added) {
             MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.ADDED, uuid, playername, wdr));
+        } else if (cheatsAdded) {
+            MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.CHEATS_ADDED, uuid, playername, wdr));
         }
     }
 
@@ -121,11 +122,12 @@ public final class WdrDataManager {
     public static boolean addReport(UUID uuid, String playername, List<String> cheats) {
         WDR wdr = getWdr(uuid, playername);
         boolean added = false;
+        boolean cheatsAdded = false;
         if (wdr == null) {
             wdr = new WDR(cheats);
             added = put(uuid, playername, wdr);
         } else {
-            wdr.addCheats(cheats);
+            cheatsAdded = wdr.addCheats(cheats);
         }
         if (PlayerDataManager.isRealPlayer(uuid)) {
             PlayerDataManager.updatePlayerDataAndEntityData(uuid);
@@ -135,6 +137,8 @@ public final class WdrDataManager {
         dirty.set(true);
         if (added) {
             MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.ADDED, uuid, playername, wdr));
+        } else if (cheatsAdded) {
+            MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.CHEATS_ADDED, uuid, playername, wdr));
         }
         return added;
     }
