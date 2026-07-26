@@ -41,10 +41,38 @@ public class PartyDetection {
         }
 
         if (lastPlayerJoining != null && jointime - timeLastJoin < TIME_SAME_PARTY) {
-            final Set<String> partyLastPlayer = PARTYS.computeIfAbsent(lastPlayerJoining.toLowerCase(), name -> new HashSet<>(Collections.singletonList(lastPlayerJoining)));
-            final Set<String> partyPlayer = PARTYS.computeIfAbsent(playername.toLowerCase(), name -> new HashSet<>(Collections.singletonList(playername)));
-            partyLastPlayer.addAll(partyPlayer);
-            partyPlayer.addAll(partyLastPlayer);
+
+            final String lastKey = lastPlayerJoining.toLowerCase();
+            final String curKey = playername.toLowerCase();
+            final Set<String> partyLast = PARTYS.get(lastKey);
+            final Set<String> partyCur = PARTYS.get(curKey);
+
+            if (partyLast == null && partyCur == null) {
+
+                final Set<String> party = new HashSet<>(Arrays.asList(lastPlayerJoining, playername));
+                PARTYS.put(lastKey, party);
+                PARTYS.put(curKey, party);
+
+            } else if (partyLast == null || partyCur == null) {
+
+                if (partyLast == null) {
+
+                    partyCur.add(lastPlayerJoining);
+                    PARTYS.put(lastKey, partyCur);
+
+                } else { // partyCur == null
+
+                    partyLast.add(playername);
+                    PARTYS.put(curKey, partyLast);
+
+                }
+
+            } else { // partyLast != null && partyCur != null
+
+                partyLast.addAll(partyCur);
+                partyLast.forEach(p -> PARTYS.put(p.toLowerCase(), partyLast));
+
+            }
         }
 
         if (serverID != null) savedServerID = serverID;
