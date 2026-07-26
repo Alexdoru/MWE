@@ -4,6 +4,7 @@ import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
@@ -12,6 +13,7 @@ import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import fr.alexdoru.mwe.utils.TabCompletionUtil;
 import fr.alexdoru.mwe.utils.UUIDUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
@@ -45,8 +47,16 @@ public class CommandUnWDR extends MWECommandBase {
     }
 
     private void unwdrPlayer(String playername) {
+        final Minecraft mc = Minecraft.getMinecraft();
+        for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
+            if (PlayerDataManager.isNickedPlayer(netInfo.getGameProfile().getId())) {
+                if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
+                    this.unwdr((UUID) null, netInfo.getGameProfile().getName());
+                    return;
+                }
+            }
+        }
         MultithreadingUtil.addTaskToQueue(() -> {
-            final Minecraft mc = Minecraft.getMinecraft();
             try {
                 final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
                 mc.addScheduledTask(() -> this.unwdr(playerID.getId(), playerID.getName()));
@@ -57,12 +67,7 @@ public class CommandUnWDR extends MWECommandBase {
     }
 
     private void unwdr(String uuid, String playername) {
-        final UUID id = UUIDUtil.fromString(uuid);
-        if (id == null) {
-            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Invalid UUID");
-            return;
-        }
-        this.unwdr(id, playername);
+        this.unwdr(UUIDUtil.fromString(uuid), playername);
     }
 
     private void unwdr(UUID uuid, String playername) {
