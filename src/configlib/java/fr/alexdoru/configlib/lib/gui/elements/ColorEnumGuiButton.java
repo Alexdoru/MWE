@@ -94,7 +94,7 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
         if (isOverlayOpen) {
             if (panelBox.isMouseInBox(mouseX, mouseY)) {
                 for (final ColorSquareButton colorButton : this.colorButtons) {
-                    if (colorButton.isMouseOver()) {
+                    if (colorButton.mousePressed(mc, mouseX, mouseY)) {
                         button.playPressSound(mc.getSoundHandler());
                         this.setNewValue(colorButton.color);
                         return true;
