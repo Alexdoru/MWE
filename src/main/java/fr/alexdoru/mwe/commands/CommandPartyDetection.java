@@ -35,7 +35,7 @@ public class CommandPartyDetection extends MWECommandBase {
         for (final String player : PartyDetection.getPlayersWithParty()) {
             if (playerPrinted.contains(player)) continue;
             final Set<String> party = PartyDetection.getPartyOf(player);
-            playerPrinted.addAll(party);
+            party.forEach(p -> playerPrinted.add(p.toLowerCase()));
             final StringBuilder sb = new StringBuilder();
             boolean flag = false;
             sb.append(EnumChatFormatting.DARK_GRAY).append("- ");
