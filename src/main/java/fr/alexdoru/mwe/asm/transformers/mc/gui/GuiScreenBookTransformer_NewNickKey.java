@@ -26,7 +26,7 @@ public class GuiScreenBookTransformer_NewNickKey implements MWETransformer {
                         list.add(new VarInsnNode(ALOAD, 2));
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("GuiScreenBookHook"),
+                                getHookClass("mc/gui/GuiScreenBookHook"),
                                 "onBookInit",
                                 "(L" + ClassMapping.ITEMSTACK + ";)V",
                                 false
@@ -42,7 +42,7 @@ public class GuiScreenBookTransformer_NewNickKey implements MWETransformer {
                 // GuiScreenBookHook.onKeyTyped(keyCode);
                 final InsnList list = new InsnList();
                 list.add(new VarInsnNode(ILOAD, 2));
-                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiScreenBookHook"), "onKeyTyped", "(I)V", false));
+                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("mc/gui/GuiScreenBookHook"), "onKeyTyped", "(I)V", false));
                 methodNode.instructions.insert(list);
                 status.addInjection();
             }
@@ -57,7 +57,7 @@ public class GuiScreenBookTransformer_NewNickKey implements MWETransformer {
                         list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.GUISCREENBOOK$WIDTH));
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.GUISCREENBOOK$BOOKIMAGEHEIGHT));
-                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiScreenBookHook"), "renderInstructions", "(II)V", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("mc/gui/GuiScreenBookHook"), "renderInstructions", "(II)V", false));
                         methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
                         break;

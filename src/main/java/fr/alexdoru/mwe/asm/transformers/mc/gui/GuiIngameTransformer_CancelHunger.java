@@ -25,7 +25,7 @@ public class GuiIngameTransformer_CancelHunger implements MWETransformer {
                     if (checkVarInsnNode(insnNode, ALOAD, 2) && checkFieldInsnNode(insnNode.getNext(), PUTFIELD, FieldMapping.GUIINGAME$DISPLAYEDSUBTITLE)) {
                         methodNode.instructions.insert(insnNode, new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("GuiIngameHook_CancelHunger"),
+                                getHookClass("mc/gui/GuiIngameHook_CancelHunger"),
                                 "cancelHungerTitle",
                                 "(Ljava/lang/String;)Ljava/lang/String;",
                                 false

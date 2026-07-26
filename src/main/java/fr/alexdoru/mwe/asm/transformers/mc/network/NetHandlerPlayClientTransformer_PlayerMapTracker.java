@@ -23,7 +23,7 @@ public class NetHandlerPlayClientTransformer_PlayerMapTracker implements MWETran
                     if (checkInsnNode(insnNode, RETURN)) {
                         methodNode.instructions.insertBefore(insnNode, new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("NetHandlerPlayClientHook_PlayerMapTracker"),
+                                getHookClass("mc/network/NetHandlerPlayClientHook_PlayerMapTracker"),
                                 "onInit",
                                 "()V",
                                 false
@@ -57,7 +57,7 @@ public class NetHandlerPlayClientTransformer_PlayerMapTracker implements MWETran
 
                     methodNode.instructions.insertBefore(targetRemoveNode, new MethodInsnNode(
                             INVOKESTATIC,
-                            getHookClass("NetHandlerPlayClientHook_PlayerMapTracker"),
+                            getHookClass("mc/network/NetHandlerPlayClientHook_PlayerMapTracker"),
                             "onRemovePlayerPacket",
                             "(Ljava/lang/Object;)Ljava/lang/Object;",
                             false
@@ -68,7 +68,7 @@ public class NetHandlerPlayClientTransformer_PlayerMapTracker implements MWETran
                     listPut.add(new VarInsnNode(ALOAD, 4));
                     listPut.add(new MethodInsnNode(
                             INVOKESTATIC,
-                            getHookClass("NetHandlerPlayClientHook_PlayerMapTracker"),
+                            getHookClass("mc/network/NetHandlerPlayClientHook_PlayerMapTracker"),
                             "onAddPlayerPacket",
                             "(L" + ClassMapping.NETWORKPLAYERINFO + ";)V",
                             false

@@ -3,7 +3,7 @@ package fr.alexdoru.mwe.http.parsers.hypixel;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import fr.alexdoru.mwe.asm.hooks.GuiScreenHook_CustomChatClickEvent;
+import fr.alexdoru.mwe.asm.hooks.mc.gui.GuiScreenHook_CustomChatClickEvent;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.utils.DateUtil;
 import fr.alexdoru.mwe.utils.HypixelLevelingUtil;

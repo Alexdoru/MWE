@@ -47,7 +47,7 @@ public class GuiPlayerTabOverlayTransformer_ColumnSpacing implements MWETransfor
     private void injectHook(MethodNode methodNode, InjectionCallback status, AbstractInsnNode target) {
         methodNode.instructions.insert(target, new MethodInsnNode(
                 INVOKESTATIC,
-                getHookClass("GuiPlayerTabOverlayHook_ColumnSpacing"),
+                getHookClass("mc/gui/GuiPlayerTabOverlayHook_ColumnSpacing"),
                 "getColumnSpacing",
                 "(I)I",
                 false

@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.features;
 
 import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
-import fr.alexdoru.mwe.asm.hooks.GuiScreenHook_CustomChatClickEvent;
+import fr.alexdoru.mwe.asm.hooks.mc.gui.GuiScreenHook_CustomChatClickEvent;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
 import fr.alexdoru.mwe.http.exceptions.ApiException;

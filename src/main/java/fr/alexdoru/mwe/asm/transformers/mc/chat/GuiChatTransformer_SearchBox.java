@@ -47,7 +47,7 @@ public class GuiChatTransformer_SearchBox implements MWETransformer {
                         list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.GUICHAT$SEARCHBOXHOOK));
                         list.add(new MethodInsnNode(
                                 INVOKEVIRTUAL,
-                                getHookClass("GuiChatHook_SearchBox"),
+                                getHookClass("mc/chat/GuiChatHook_SearchBox"),
                                 "onInitGui",
                                 "()V",
                                 false
@@ -62,7 +62,7 @@ public class GuiChatTransformer_SearchBox implements MWETransformer {
                 list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.GUICHAT$SEARCHBOXHOOK));
                 list.add(new MethodInsnNode(
                         INVOKEVIRTUAL,
-                        getHookClass("GuiChatHook_SearchBox"),
+                        getHookClass("mc/chat/GuiChatHook_SearchBox"),
                         "onGuiClosed",
                         "()V",
                         false
@@ -81,7 +81,7 @@ public class GuiChatTransformer_SearchBox implements MWETransformer {
                         list.add(new VarInsnNode(ILOAD, 2));
                         list.add(new MethodInsnNode(
                                 INVOKEVIRTUAL,
-                                getHookClass("GuiChatHook_SearchBox"),
+                                getHookClass("mc/chat/GuiChatHook_SearchBox"),
                                 "onDrawScreen",
                                 "(II)V",
                                 false
@@ -99,7 +99,7 @@ public class GuiChatTransformer_SearchBox implements MWETransformer {
                 list.add(new VarInsnNode(ILOAD, 2));
                 list.add(new MethodInsnNode(
                         INVOKEVIRTUAL,
-                        getHookClass("GuiChatHook_SearchBox"),
+                        getHookClass("mc/chat/GuiChatHook_SearchBox"),
                         "onKeyTyped",
                         "(CI)Z",
                         false
@@ -119,7 +119,7 @@ public class GuiChatTransformer_SearchBox implements MWETransformer {
                 list.add(new VarInsnNode(ILOAD, 3));
                 list.add(new MethodInsnNode(
                         INVOKEVIRTUAL,
-                        getHookClass("GuiChatHook_SearchBox"),
+                        getHookClass("mc/chat/GuiChatHook_SearchBox"),
                         "onMouseClicked",
                         "(III)Z",
                         false

@@ -18,7 +18,7 @@ public class GuiPlayerTabOverlayTransformer_FinalKills implements MWETransformer
         status.setInjectionPoints(5);
         for (final MethodNode methodNode : classNode.methods) {
             if (checkMethodNode(methodNode, MethodMapping.GUIPLAYERTABOVERLAY$RENDERPLAYERLIST)) {
-                methodNode.instructions.insert(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook_FinalKills"), "resetFinalsScoreWidth", "()V", false));
+                methodNode.instructions.insert(new MethodInsnNode(INVOKESTATIC, getHookClass("mc/gui/GuiPlayerTabOverlayHook_FinalKills"), "resetFinalsScoreWidth", "()V", false));
                 status.addInjection();
                 boolean injectedMax = false;
                 boolean lookFork5k2 = false;
@@ -35,7 +35,7 @@ public class GuiPlayerTabOverlayTransformer_FinalKills implements MWETransformer
                             final InsnList list = new InsnList();
                             list.add(new VarInsnNode(ALOAD, 9));
                             list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.NETWORKPLAYERINFO$MWE$FINALKILLS));
-                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook_FinalKills"), "computeFKScoreWidth", "(I)V", false));
+                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("mc/gui/GuiPlayerTabOverlayHook_FinalKills"), "computeFKScoreWidth", "(I)V", false));
                             methodNode.instructions.insert(nextNode, list);
                             status.addInjection();
                             injectedMax = true;
@@ -43,7 +43,7 @@ public class GuiPlayerTabOverlayTransformer_FinalKills implements MWETransformer
                     } else if (checkVarInsnNode(insnNode, ILOAD, 7) && checkVarInsnNode(insnNode.getNext(), ISTORE, 12) ||
                             checkInsnNode(insnNode, ICONST_0) && checkVarInsnNode(insnNode.getNext(), ISTORE, 12)) {
                         final InsnList list = new InsnList();
-                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook_FinalKills"), "getRenderScoreWidth", "()I", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("mc/gui/GuiPlayerTabOverlayHook_FinalKills"), "getRenderScoreWidth", "()I", false));
                         list.add(new InsnNode(IADD));
                         methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
@@ -86,7 +86,7 @@ public class GuiPlayerTabOverlayTransformer_FinalKills implements MWETransformer
                         list.add(new VarInsnNode(ILOAD, index_j2));
                         list.add(new VarInsnNode(ILOAD, index_i));
                         list.add(new VarInsnNode(ILOAD, index_k2));
-                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("GuiPlayerTabOverlayHook_FinalKills"), "renderFinals", "(IIII)V", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("mc/gui/GuiPlayerTabOverlayHook_FinalKills"), "renderFinals", "(IIII)V", false));
                         methodNode.instructions.insertBefore(latestAload0, list);
                         status.addInjection();
                     } else if (checkVarInsnNode(insnNode, ALOAD, 0)) {

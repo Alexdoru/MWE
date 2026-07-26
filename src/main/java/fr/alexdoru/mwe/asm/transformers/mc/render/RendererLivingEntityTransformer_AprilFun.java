@@ -26,7 +26,7 @@ public class RendererLivingEntityTransformer_AprilFun implements MWETransformer 
                         methodNode.instructions.insertBefore(insnNode, list);
                         final InsnList list2 = new InsnList();
                         list2.add(new VarInsnNode(ALOAD, 1));
-                        list2.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RendererLivingEntityHook_AprilFun"), "doFunny", "(L" + ClassMapping.ENTITYLIVINGBASE + ";)V", false));
+                        list2.add(new MethodInsnNode(INVOKESTATIC, getHookClass("mc/render/RendererLivingEntityHook_AprilFun"), "doFunny", "(L" + ClassMapping.ENTITYLIVINGBASE + ";)V", false));
                         methodNode.instructions.insert(insnNode, list2);
                         status.addInjection();
                     }

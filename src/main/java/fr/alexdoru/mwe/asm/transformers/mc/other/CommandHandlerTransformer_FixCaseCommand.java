@@ -33,7 +33,7 @@ public class CommandHandlerTransformer_FixCaseCommand implements MWETransformer 
                     if (isSplitMethod(insnNode)) {
                         methodNode.instructions.insert(insnNode, new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("CommandHandlerHook_FixCaseCommand"),
+                                getHookClass("mc/other/CommandHandlerHook_FixCaseCommand"),
                                 "putToLowerCase",
                                 "([Ljava/lang/String;)[Ljava/lang/String;",
                                 false
@@ -48,7 +48,7 @@ public class CommandHandlerTransformer_FixCaseCommand implements MWETransformer 
                         if (checkMethodInsnNode(nextNode, MethodMapping.MAP$PUT)) {
                             methodNode.instructions.insertBefore(insnNode, new MethodInsnNode(
                                     INVOKESTATIC,
-                                    getHookClass("CommandHandlerHook_FixCaseCommand"),
+                                    getHookClass("mc/other/CommandHandlerHook_FixCaseCommand"),
                                     "putToLowerCase",
                                     "(Ljava/lang/String;)Ljava/lang/String;",
                                     false

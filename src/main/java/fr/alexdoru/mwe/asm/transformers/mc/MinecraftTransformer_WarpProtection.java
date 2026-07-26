@@ -27,7 +27,7 @@ public class MinecraftTransformer_WarpProtection implements MWETransformer {
                             list.add(new VarInsnNode(ALOAD, ((VarInsnNode) nextNode).var));
                             list.add(new MethodInsnNode(
                                     INVOKESTATIC,
-                                    getHookClass("MinecraftHook_WarpProtection"),
+                                    getHookClass("mc/MinecraftHook_WarpProtection"),
                                     "shouldCancelRightClick",
                                     "(L" + ClassMapping.ITEMSTACK + ";)Z",
                                     false

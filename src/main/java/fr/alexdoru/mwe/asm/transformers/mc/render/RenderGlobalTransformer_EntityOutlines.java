@@ -44,7 +44,7 @@ public class RenderGlobalTransformer_EntityOutlines implements MWETransformer {
             status.addInjection();
             targetMethod2.instructions.insert(targetInsn2, new MethodInsnNode(
                     INVOKESTATIC,
-                    getHookClass("RenderGlobalHook_EntityOutlines"),
+                    getHookClass("mc/render/RenderGlobalHook_EntityOutlines"),
                     "shouldDoFinalDraw",
                     "(Z)Z",
                     false
@@ -66,7 +66,7 @@ public class RenderGlobalTransformer_EntityOutlines implements MWETransformer {
         list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.RENDERGLOBAL$ENTITYOUTLINESHADER)); // this.entityOutlineShader
         list.add(new MethodInsnNode(
                 INVOKESTATIC,
-                getHookClass("RenderGlobalHook_EntityOutlines"),
+                getHookClass("mc/render/RenderGlobalHook_EntityOutlines"),
                 "renderWitherOutline",
                 "(Z" +
                         "L" + ClassMapping.ENTITY + ";" +

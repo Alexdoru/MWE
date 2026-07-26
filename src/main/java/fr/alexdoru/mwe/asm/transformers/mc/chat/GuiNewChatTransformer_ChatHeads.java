@@ -33,7 +33,7 @@ public class GuiNewChatTransformer_ChatHeads implements MWETransformer {
                         list.add(new VarInsnNode(ILOAD, 16)); // int j2
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("GuiNewChatHook_ChatHeads"),
+                                getHookClass("mc/chat/GuiNewChatHook_ChatHeads"),
                                 "preRenderStringCall",
                                 "(L" + ClassMapping.CHATLINE + ";III)V",
                                 false
@@ -44,7 +44,7 @@ public class GuiNewChatTransformer_ChatHeads implements MWETransformer {
                         final AbstractInsnNode nextNode = insnNode.getNext();
                         methodNode.instructions.insert(nextNode, new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("GuiNewChatHook_ChatHeads"),
+                                getHookClass("mc/chat/GuiNewChatHook_ChatHeads"),
                                 "postRenderStringCall",
                                 "()V",
                                 false
@@ -57,7 +57,7 @@ public class GuiNewChatTransformer_ChatHeads implements MWETransformer {
                 list.add(new VarInsnNode(ALOAD, 1));
                 list.add(new MethodInsnNode(
                         INVOKESTATIC,
-                        getHookClass("GuiNewChatHook_ChatHeads"),
+                        getHookClass("mc/chat/GuiNewChatHook_ChatHeads"),
                         "addHeadToMessage",
                         "(L" + ClassMapping.ICHATCOMPONENT + ";)V",
                         false
@@ -75,7 +75,7 @@ public class GuiNewChatTransformer_ChatHeads implements MWETransformer {
                                 list.add(new VarInsnNode(ALOAD, 10));
                                 list.add(new MethodInsnNode(
                                         INVOKESTATIC,
-                                        getHookClass("GuiNewChatHook_ChatHeads"),
+                                        getHookClass("mc/chat/GuiNewChatHook_ChatHeads"),
                                         "fixComponentHover",
                                         "(L" + ClassMapping.CHATLINE + ";)I",
                                         false

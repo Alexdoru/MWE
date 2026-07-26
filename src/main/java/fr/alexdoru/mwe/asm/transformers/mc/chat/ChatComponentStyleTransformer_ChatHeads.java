@@ -27,7 +27,13 @@ public class ChatComponentStyleTransformer_ChatHeads implements MWETransformer {
                 final InsnList list = new InsnList();
                 list.add(new VarInsnNode(ALOAD, 0));
                 list.add(new VarInsnNode(ALOAD, 1));
-                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("ChatComponentStyleHook_ChatHeads"), "transferHeadToComponent", "(L" + ClassMapping.ICHATCOMPONENT + ";L" + ClassMapping.ICHATCOMPONENT + ";)V", false));
+                list.add(new MethodInsnNode(
+                        INVOKESTATIC,
+                        getHookClass("mc/chat/ChatComponentStyleHook_ChatHeads"),
+                        "transferHeadToComponent",
+                        "(L" + ClassMapping.ICHATCOMPONENT + ";L" + ClassMapping.ICHATCOMPONENT + ";)V",
+                        false
+                ));
                 methodNode.instructions.insert(list);
                 status.addInjection();
             }

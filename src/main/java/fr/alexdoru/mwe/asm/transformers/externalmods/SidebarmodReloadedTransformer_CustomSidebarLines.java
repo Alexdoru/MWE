@@ -34,7 +34,7 @@ public class SidebarmodReloadedTransformer_CustomSidebarLines implements MWETran
                             list.add(new FieldInsnNode(GETFIELD, "fr/alexdoru/sidebarmod/gui/CustomSidebar", "redNumbers", "Z"));
                             list.add(new MethodInsnNode(
                                     INVOKESTATIC,
-                                    getHookClass("GuiIngameHook_CustomSidebarLines"),
+                                    getHookClass("mc/gui/GuiIngameHook_CustomSidebarLines"),
                                     "getSidebarTextLineWidth",
                                     "(ILnet/minecraft/client/gui/FontRenderer;Z)I",
                                     false
@@ -56,7 +56,7 @@ public class SidebarmodReloadedTransformer_CustomSidebarLines implements MWETran
                             list.add(new VarInsnNode(ILOAD, 9));
                             list.add(new MethodInsnNode(
                                     INVOKESTATIC,
-                                    getHookClass("GuiIngameHook_CustomSidebarLines"),
+                                    getHookClass("mc/gui/GuiIngameHook_CustomSidebarLines"),
                                     "getSidebarTextLine",
                                     "(Ljava/lang/String;I)Ljava/lang/String;",
                                     false

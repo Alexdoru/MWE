@@ -29,7 +29,7 @@ public class MinecraftTransformer_DebugMessages implements MWETransformer {
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("MinecraftHook_DebugMessages"),
+                                getHookClass("mc/MinecraftHook_DebugMessages"),
                                 "onReloadChunks",
                                 "(L" + ClassMapping.MINECRAFT + ";)V",
                                 false
@@ -49,7 +49,7 @@ public class MinecraftTransformer_DebugMessages implements MWETransformer {
                         list.add(new LdcInsnNode("Advanced Item Tooltips"));
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("MinecraftHook_DebugMessages"),
+                                getHookClass("mc/MinecraftHook_DebugMessages"),
                                 "onSettingChange",
                                 "(L" + ClassMapping.MINECRAFT + ";ZLjava/lang/String;)V",
                                 false
@@ -69,7 +69,7 @@ public class MinecraftTransformer_DebugMessages implements MWETransformer {
                         list.add(new LdcInsnNode("Hitboxes"));
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("MinecraftHook_DebugMessages"),
+                                getHookClass("mc/MinecraftHook_DebugMessages"),
                                 "onSettingChange",
                                 "(L" + ClassMapping.MINECRAFT + ";ZLjava/lang/String;)V",
                                 false
@@ -89,7 +89,7 @@ public class MinecraftTransformer_DebugMessages implements MWETransformer {
                         list.add(new LdcInsnNode("Pause on lost focus"));
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("MinecraftHook_DebugMessages"),
+                                getHookClass("mc/MinecraftHook_DebugMessages"),
                                 "onSettingChange",
                                 "(L" + ClassMapping.MINECRAFT + ";ZLjava/lang/String;)V",
                                 false

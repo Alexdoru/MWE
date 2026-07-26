@@ -22,7 +22,7 @@ public class GuiChatTransformer_CopyMessages implements MWETransformer {
                 list.add(new VarInsnNode(ILOAD, 3));
                 list.add(new MethodInsnNode(
                         INVOKESTATIC,
-                        getHookClass("GuiChatHook_CopyMessages"),
+                        getHookClass("mc/chat/GuiChatHook_CopyMessages"),
                         "onChatRightClick",
                         "(I)V",
                         false
@@ -37,7 +37,7 @@ public class GuiChatTransformer_CopyMessages implements MWETransformer {
                             list2.add(new VarInsnNode(ALOAD, 4));
                             list2.add(new MethodInsnNode(
                                     INVOKESTATIC,
-                                    getHookClass("GuiChatHook_CopyMessages"),
+                                    getHookClass("mc/chat/GuiChatHook_CopyMessages"),
                                     "onChatLeftClick",
                                     "(ZL" + ClassMapping.ICHATCOMPONENT + ";)Z",
                                     false

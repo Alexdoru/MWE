@@ -25,7 +25,7 @@ public class GuiPlayerTabOverlayTransformer_ColoredScores implements MWETransfor
                         list.add(new VarInsnNode(ILOAD, 7));
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("GuiPlayerTabOverlayHook_ColoredScores"),
+                                getHookClass("mc/gui/GuiPlayerTabOverlayHook_ColoredScores"),
                                 "getColoredHP",
                                 "(L" + ClassMapping.ENUMCHATFORMATTING + ";I)L" + ClassMapping.ENUMCHATFORMATTING + ";",
                                 false

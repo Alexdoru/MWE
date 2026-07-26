@@ -24,7 +24,7 @@ public class NetHandlerPlayClientTransformer_EntityMetadata implements MWETransf
                         list.add(new VarInsnNode(ALOAD, 2));
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("NetHandlerPlayClientHook_EntityMetadata"),
+                                getHookClass("mc/network/NetHandlerPlayClientHook_EntityMetadata"),
                                 "onEntityMetadata",
                                 "(L" + ClassMapping.ENTITY + ";)V",
                                 false

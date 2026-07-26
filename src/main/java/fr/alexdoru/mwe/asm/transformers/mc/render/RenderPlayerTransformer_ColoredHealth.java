@@ -24,7 +24,7 @@ public class RenderPlayerTransformer_ColoredHealth implements MWETransformer {
                         if (checkMethodInsnNode(nextNode, MethodMapping.STRINGBUILDER$APPEND_I)) {
                             final InsnList list = new InsnList();
                             list.add(new VarInsnNode(ALOAD, 1));
-                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RenderPlayerHook_ColoredHealth"), "getColoredScore", "(Ljava/lang/StringBuilder;IL" + ClassMapping.ABSTRACTCLIENTPLAYER + ";)Ljava/lang/StringBuilder;", false));
+                            list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("mc/render/RenderPlayerHook_ColoredHealth"), "getColoredScore", "(Ljava/lang/StringBuilder;IL" + ClassMapping.ABSTRACTCLIENTPLAYER + ";)Ljava/lang/StringBuilder;", false));
                             methodNode.instructions.insert(insnNode, list);
                             methodNode.instructions.remove(nextNode);
                             status.addInjection();

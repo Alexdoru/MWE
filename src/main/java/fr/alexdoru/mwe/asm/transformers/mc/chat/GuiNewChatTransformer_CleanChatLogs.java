@@ -24,7 +24,7 @@ public class GuiNewChatTransformer_CleanChatLogs implements MWETransformer {
                     if (checkMethodInsnNode(insnNode, MethodMapping.LOGGER$INFO)) {
                         methodNode.instructions.insertBefore(insnNode, new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("GuiNewChatHook_CleanChatLogs"),
+                                getHookClass("mc/chat/GuiNewChatHook_CleanChatLogs"),
                                 "removeFormatting",
                                 "(Ljava/lang/String;)Ljava/lang/String;",
                                 false));

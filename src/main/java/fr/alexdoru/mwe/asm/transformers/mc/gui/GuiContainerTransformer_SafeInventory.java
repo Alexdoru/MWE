@@ -32,7 +32,7 @@ public class GuiContainerTransformer_SafeInventory implements MWETransformer {
                         list.add(new VarInsnNode(ILOAD, 2));
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("GuiContainerHook_SafeInventory"),
+                                getHookClass("mc/gui/GuiContainerHook_SafeInventory"),
                                 "shouldCancelHotkey",
                                 "(L" + ClassMapping.SLOT + ";I)Z",
                                 false

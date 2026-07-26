@@ -24,7 +24,7 @@ public class RendererLivingEntityTransformer_ColorOutlines implements MWETransfo
                         list.add(new VarInsnNode(ALOAD, 1));
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("RendererLivingEntityHook_ColorOutlines"),
+                                getHookClass("mc/render/RendererLivingEntityHook_ColorOutlines"),
                                 "getEntityOutlineColor",
                                 "(IL" + ClassMapping.ENTITYLIVINGBASE + ";)I",
                                 false

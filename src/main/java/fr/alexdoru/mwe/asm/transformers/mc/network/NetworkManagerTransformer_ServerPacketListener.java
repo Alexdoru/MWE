@@ -29,7 +29,7 @@ public class NetworkManagerTransformer_ServerPacketListener implements MWETransf
                     list.add(new VarInsnNode(ALOAD, 2));
                     list.add(new MethodInsnNode(
                             INVOKESTATIC,
-                            getHookClass("NetworkManagerHook_PacketListener"),
+                            getHookClass("mc/network/NetworkManagerHook_PacketListener"),
                             "listen",
                             "(L" + ClassMapping.PACKET + ";)V",
                             false));

@@ -46,7 +46,7 @@ public class GuiPlayerTabOverlayTransformer_FixDrawRect implements MWETransforme
                     if (checkInsnNode(thirdNode, ISUB)) {
                         methodNode.instructions.insert(thirdNode, new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("GuiPlayerTabOverlayHook_FixDrawRect"),
+                                getHookClass("mc/gui/GuiPlayerTabOverlayHook_FixDrawRect"),
                                 "fixDrawRectHeight",
                                 "(I)I",
                                 false
@@ -80,7 +80,7 @@ public class GuiPlayerTabOverlayTransformer_FixDrawRect implements MWETransforme
                                 list.add(new VarInsnNode(ILOAD, ((VarInsnNode) insnNode).var));
                                 list.add(new MethodInsnNode(
                                         INVOKESTATIC,
-                                        getHookClass("GuiPlayerTabOverlayHook_FixDrawRect"),
+                                        getHookClass("mc/gui/GuiPlayerTabOverlayHook_FixDrawRect"),
                                         "fixDrawRectWidth",
                                         "(I)I",
                                         false

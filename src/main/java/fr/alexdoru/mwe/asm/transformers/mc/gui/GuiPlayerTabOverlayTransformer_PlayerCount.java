@@ -24,7 +24,7 @@ public class GuiPlayerTabOverlayTransformer_PlayerCount implements MWETransforme
                     if (checkMethodInsnNode(insnNode, MethodMapping.FONTRENDERER$LISTFORMATTEDSTRINGTOWIDTH)) {
                         methodNode.instructions.insert(insnNode, new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("GuiPlayerTabOverlayHook_PlayerCount"),
+                                getHookClass("mc/gui/GuiPlayerTabOverlayHook_PlayerCount"),
                                 "addPlayerCountInHeader",
                                 "(Ljava/util/List;)Ljava/util/List;",
                                 false

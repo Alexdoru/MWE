@@ -25,7 +25,7 @@ public class ScorePlayerTeamTransformer implements MWETransformer {
             if (checkMethodNode(methodNode, MethodMapping.SCOREPLAYERTEAM$FORMATPLAYERNAME)) {
                 final InsnList list = new InsnList();
                 list.add(new VarInsnNode(ALOAD, 1));
-                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("ScorePlayerTeamHook"), "spoofSidebarLine", "(Ljava/lang/String;)Ljava/lang/String;", false));
+                list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("mc/other/ScorePlayerTeamHook"), "spoofSidebarLine", "(Ljava/lang/String;)Ljava/lang/String;", false));
                 list.add((new VarInsnNode(ASTORE, 2)));
                 list.add(new VarInsnNode(ALOAD, 2));
                 final LabelNode label = new LabelNode();

@@ -26,7 +26,7 @@ public class NetHandlerPlayClientTransformer_BlockChangeListener implements MWET
                         list.add(new VarInsnNode(ALOAD, 1));
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("NetHandlerPlayClientHook_BlockChangeListener"),
+                                getHookClass("mc/network/NetHandlerPlayClientHook_BlockChangeListener"),
                                 isBlockChange ? "onBlockChange" : "onMultiBlockChange",
                                 "(L" + (isBlockChange ? ClassMapping.S23PACKETBLOCKCHANGE : ClassMapping.S22PACKETMULTIBLOCKCHANGE) + ";)V",
                                 false));

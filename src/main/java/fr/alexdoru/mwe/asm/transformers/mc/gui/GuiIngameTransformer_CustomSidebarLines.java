@@ -29,7 +29,7 @@ public class GuiIngameTransformer_CustomSidebarLines implements MWETransformer {
                             list.add(new InsnNode(ICONST_1));
                             list.add(new MethodInsnNode(
                                     INVOKESTATIC,
-                                    getHookClass("GuiIngameHook_CustomSidebarLines"),
+                                    getHookClass("mc/gui/GuiIngameHook_CustomSidebarLines"),
                                     "getSidebarTextLineWidth", "(IL" + ClassMapping.FONTRENDERER + ";Z)I",
                                     false
                             ));
@@ -46,7 +46,7 @@ public class GuiIngameTransformer_CustomSidebarLines implements MWETransformer {
                         list.add(new VarInsnNode(ILOAD, 11));
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("GuiIngameHook_CustomSidebarLines"),
+                                getHookClass("mc/gui/GuiIngameHook_CustomSidebarLines"),
                                 "getSidebarTextLine",
                                 "(Ljava/lang/String;I)Ljava/lang/String;",
                                 false

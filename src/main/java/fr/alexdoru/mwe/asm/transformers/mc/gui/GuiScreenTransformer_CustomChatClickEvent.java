@@ -46,7 +46,7 @@ public class GuiScreenTransformer_CustomChatClickEvent implements MWETransformer
         list.add(getNewMethodInsnNode(MethodMapping.CLICKEVENT$GETVALUE));
         list.add(new MethodInsnNode(
                 INVOKESTATIC,
-                getHookClass("GuiScreenHook_CustomChatClickEvent"),
+                getHookClass("mc/gui/GuiScreenHook_CustomChatClickEvent"),
                 "executeMWEClickEvent",
                 "(Ljava/lang/String;)Z",
                 false

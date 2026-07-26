@@ -31,12 +31,12 @@ public class NetworkPlayerInfoTransformer_CustomTab implements MWETransformer {
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.NETWORKPLAYERINFO$GAMEPROFILE));
-                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("NetworkPlayerInfoHook_CustomTab"), "getDisplayName", "(L" + ClassMapping.GAMEPROFILE + ";)L" + ClassMapping.ICHATCOMPONENT + ";", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("mc/network/NetworkPlayerInfoHook_CustomTab"), "getDisplayName", "(L" + ClassMapping.GAMEPROFILE + ";)L" + ClassMapping.ICHATCOMPONENT + ";", false));
                         list.add(getNewFieldInsnNode(PUTFIELD, FieldMapping.NETWORKPLAYERINFO$MWE$DISPLAYNAME));
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(new VarInsnNode(ALOAD, 0));
                         list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.NETWORKPLAYERINFO$GAMEPROFILE));
-                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("NetworkPlayerInfoHook_CustomTab"), "getPlayersFinals", "(L" + ClassMapping.GAMEPROFILE + ";)I", false));
+                        list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("mc/network/NetworkPlayerInfoHook_CustomTab"), "getPlayersFinals", "(L" + ClassMapping.GAMEPROFILE + ";)I", false));
                         list.add(getNewFieldInsnNode(PUTFIELD, FieldMapping.NETWORKPLAYERINFO$MWE$FINALKILLS));
                         methodNode.instructions.insertBefore(insnNode, list);
                         status.addInjection();
@@ -52,7 +52,7 @@ public class NetworkPlayerInfoTransformer_CustomTab implements MWETransformer {
                         list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.NETWORKPLAYERINFO$MWE$DISPLAYNAME));
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("NetworkPlayerInfoHook_CustomTab"),
+                                getHookClass("mc/network/NetworkPlayerInfoHook_CustomTab"),
                                 "changeDisplayName",
                                 "(L" + ClassMapping.ICHATCOMPONENT + ";L" + ClassMapping.ICHATCOMPONENT + ";)L" + ClassMapping.ICHATCOMPONENT + ";",
                                 false

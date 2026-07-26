@@ -31,7 +31,7 @@ public class EntityPlayerTransformer_FixAutoblockBypass implements MWETransforme
                                     list.add(new VarInsnNode(ALOAD, 0));
                                     list.add(new MethodInsnNode(
                                             INVOKESTATIC,
-                                            getHookClass("EntityPlayerHook_FixAutoblockBypass"),
+                                            getHookClass("mc/entity/EntityPlayerHook_FixAutoblockBypass"),
                                             "areItemStackSemiEquals",
                                             "(L" + ClassMapping.ITEMSTACK + ";L" + ClassMapping.ITEMSTACK + ";L" + ClassMapping.ENTITYPLAYER + ";)Z",
                                             false));

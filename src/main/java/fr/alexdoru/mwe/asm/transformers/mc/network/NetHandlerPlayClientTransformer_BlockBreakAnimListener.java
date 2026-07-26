@@ -28,7 +28,7 @@ public class NetHandlerPlayClientTransformer_BlockBreakAnimListener implements M
                         list.add(new VarInsnNode(ALOAD, 1));
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("NetHandlerPlayClientHook_BlockBreakAnim"),
+                                getHookClass("mc/network/NetHandlerPlayClientHook_BlockBreakAnim"),
                                 "handleBlockBreakAnim",
                                 "(L" + ClassMapping.WORLDCLIENT + ";L" + ClassMapping.S25PACKETBLOCKBREAKANIM + ";)V",
                                 false

@@ -30,21 +30,45 @@ public class RendererLivingEntityTransformer_HitColor implements MWETransformer 
                                 if (checkInsnNode(thirdNode, FCONST_1)) {
                                     final InsnList list = new InsnList();
                                     list.add(new VarInsnNode(ALOAD, 1));
-                                    list.add(new MethodInsnNode(INVOKESTATIC, getHookClass("RendererLivingEntityHook_HitColor"), "getRed", "(FL" + ClassMapping.ENTITYLIVINGBASE + ";)F", false));
+                                    list.add(new MethodInsnNode(
+                                            INVOKESTATIC,
+                                            getHookClass("mc/render/RendererLivingEntityHook_HitColor"),
+                                            "getRed",
+                                            "(FL" + ClassMapping.ENTITYLIVINGBASE + ";)F",
+                                            false
+                                    ));
                                     methodNode.instructions.insert(thirdNode, list);
                                     status.addInjection();
                                 } else if (checkInsnNode(thirdNode, FCONST_0)) {
                                     if (ordinal == 0) {
-                                        methodNode.instructions.insert(thirdNode, new MethodInsnNode(INVOKESTATIC, getHookClass("RendererLivingEntityHook_HitColor"), "getGreen", "(F)F", false));
+                                        methodNode.instructions.insert(thirdNode, new MethodInsnNode(
+                                                INVOKESTATIC,
+                                                getHookClass("mc/render/RendererLivingEntityHook_HitColor"),
+                                                "getGreen",
+                                                "(F)F",
+                                                false
+                                        ));
                                         status.addInjection();
                                         ordinal++;
                                     } else if (ordinal == 1) {
-                                        methodNode.instructions.insert(thirdNode, new MethodInsnNode(INVOKESTATIC, getHookClass("RendererLivingEntityHook_HitColor"), "getBlue", "(F)F", false));
+                                        methodNode.instructions.insert(thirdNode, new MethodInsnNode(
+                                                INVOKESTATIC,
+                                                getHookClass("mc/render/RendererLivingEntityHook_HitColor"),
+                                                "getBlue",
+                                                "(F)F",
+                                                false
+                                        ));
                                         status.addInjection();
                                         ordinal++;
                                     }
                                 } else if (checkLdcInsnNode(thirdNode, new Float("0.3"))) {
-                                    methodNode.instructions.insert(thirdNode, new MethodInsnNode(INVOKESTATIC, getHookClass("RendererLivingEntityHook_HitColor"), "getAlpha", "(F)F", false));
+                                    methodNode.instructions.insert(thirdNode, new MethodInsnNode(
+                                            INVOKESTATIC,
+                                            getHookClass("mc/render/RendererLivingEntityHook_HitColor"),
+                                            "getAlpha",
+                                            "(F)F",
+                                            false
+                                    ));
                                     status.addInjection();
                                 }
                             }

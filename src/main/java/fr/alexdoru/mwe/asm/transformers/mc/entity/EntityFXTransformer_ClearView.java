@@ -28,7 +28,7 @@ public class EntityFXTransformer_ClearView implements MWETransformer {
                 list.add(new VarInsnNode(ALOAD, 2));
                 list.add(new MethodInsnNode(
                         INVOKESTATIC,
-                        getHookClass("EntityFXHook_CleanView"),
+                        getHookClass("mc/entity/EntityFXHook_CleanView"),
                         "shouldHideParticle",
                         "(L" + ClassMapping.ENTITYFX + ";L" + ClassMapping.ENTITY + ";)Z",
                         false

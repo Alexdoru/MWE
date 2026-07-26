@@ -28,7 +28,7 @@ public class GuiPlayerTabOverlayTransformer_HidePing implements MWETransformer {
                                 list.add(new VarInsnNode(ALOAD, 5));
                                 list.add(new MethodInsnNode(
                                         INVOKESTATIC,
-                                        getHookClass("GuiPlayerTabOverlayHook_HidePing"),
+                                        getHookClass("mc/gui/GuiPlayerTabOverlayHook_HidePing"),
                                         "getPingWidth",
                                         "(ILjava/util/List;)I",
                                         false
@@ -44,7 +44,7 @@ public class GuiPlayerTabOverlayTransformer_HidePing implements MWETransformer {
                         final InsnList list = new InsnList();
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("GuiPlayerTabOverlayHook_HidePing"),
+                                getHookClass("mc/gui/GuiPlayerTabOverlayHook_HidePing"),
                                 "shouldDrawPing",
                                 "()Z",
                                 false

@@ -28,7 +28,7 @@ public class EntityPlayerSPTransformer_Sprint implements MWETransformer {
                             list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.ENTITYPLAYERSP$MC));
                             list.add(new MethodInsnNode(
                                     INVOKESTATIC,
-                                    getHookClass("EntityPlayerSPHook_Sprint"),
+                                    getHookClass("mc/entity/EntityPlayerSPHook_Sprint"),
                                     "shouldSprint",
                                     "(ZL" + ClassMapping.MINECRAFT + ";)Z",
                                     false

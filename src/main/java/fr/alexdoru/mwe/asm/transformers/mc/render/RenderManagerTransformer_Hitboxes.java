@@ -24,7 +24,7 @@ public class RenderManagerTransformer_Hitboxes implements MWETransformer {
                     if (checkFieldInsnNode(insnNode, PUTFIELD, FieldMapping.RENDERMANAGER$DEBUGBOUNDINGBOX)) {
                         methodNode.instructions.insertBefore(insnNode, new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("RenderManagerHook_Hitboxes"),
+                                getHookClass("mc/render/RenderManagerHook_Hitboxes"),
                                 "shouldToggleOnStart",
                                 "(Z)Z",
                                 false
@@ -63,7 +63,7 @@ public class RenderManagerTransformer_Hitboxes implements MWETransformer {
                         list.add(new VarInsnNode(ALOAD, 1));
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("RenderManagerHook_Hitboxes"),
+                                getHookClass("mc/render/RenderManagerHook_Hitboxes"),
                                 "getAxisAlignedBB",
                                 "(L" + ClassMapping.AXISALIGNEDBB + ";L" + ClassMapping.ENTITY + ";)L" + ClassMapping.AXISALIGNEDBB + ";",
                                 false
@@ -78,7 +78,7 @@ public class RenderManagerTransformer_Hitboxes implements MWETransformer {
                             list.add(new VarInsnNode(ALOAD, 1));
                             list.add(new MethodInsnNode(
                                     INVOKESTATIC,
-                                    getHookClass("RenderManagerHook_Hitboxes"),
+                                    getHookClass("mc/render/RenderManagerHook_Hitboxes"),
                                     "getRedHitboxColor",
                                     "(IL" + ClassMapping.ENTITY + ";)I",
                                     false
@@ -88,7 +88,7 @@ public class RenderManagerTransformer_Hitboxes implements MWETransformer {
                         } else if (count255 == 1) {
                             methodNode.instructions.insert(insnNode, new MethodInsnNode(
                                     INVOKESTATIC,
-                                    getHookClass("RenderManagerHook_Hitboxes"),
+                                    getHookClass("mc/render/RenderManagerHook_Hitboxes"),
                                     "getGreenHitboxColor",
                                     "(I)I",
                                     false
@@ -97,7 +97,7 @@ public class RenderManagerTransformer_Hitboxes implements MWETransformer {
                         } else {
                             methodNode.instructions.insert(insnNode, new MethodInsnNode(
                                     INVOKESTATIC,
-                                    getHookClass("RenderManagerHook_Hitboxes"),
+                                    getHookClass("mc/render/RenderManagerHook_Hitboxes"),
                                     "getBlueHitboxColor",
                                     "(I)I",
                                     false
@@ -128,7 +128,7 @@ public class RenderManagerTransformer_Hitboxes implements MWETransformer {
                         // Replaces the 2.0D with RenderManagerHook.getBlueVectLength(2.0D);
                         methodNode.instructions.insert(insnNode, new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("RenderManagerHook_Hitboxes"),
+                                getHookClass("mc/render/RenderManagerHook_Hitboxes"),
                                 "getBlueVectLength",
                                 "(D)D",
                                 false
@@ -152,7 +152,7 @@ public class RenderManagerTransformer_Hitboxes implements MWETransformer {
                         list.add(new VarInsnNode(ALOAD, 1));
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("RenderManagerHook_Hitboxes"),
+                                getHookClass("mc/render/RenderManagerHook_Hitboxes"),
                                 "shouldRenderBlueVect",
                                 "(L" + ClassMapping.ENTITY + ";)Z",
                                 false
@@ -177,7 +177,7 @@ public class RenderManagerTransformer_Hitboxes implements MWETransformer {
         list.add(new VarInsnNode(ALOAD, 0));
         list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.RENDERMANAGER$RENDEROUTLINES));
         list.add(new MethodInsnNode(INVOKESTATIC,
-                getHookClass("RenderManagerHook_Hitboxes"),
+                getHookClass("mc/render/RenderManagerHook_Hitboxes"),
                 "shouldRenderHitbox",
                 "(L" + ClassMapping.ENTITY + ";L" + ClassMapping.ENTITY + ";Z)Z",
                 false

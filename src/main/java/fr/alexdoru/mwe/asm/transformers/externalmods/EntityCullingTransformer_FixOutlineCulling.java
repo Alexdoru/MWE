@@ -58,7 +58,7 @@ public class EntityCullingTransformer_FixOutlineCulling implements MWETransforme
         final InsnList list = new InsnList();
         list.add(new MethodInsnNode(
                 INVOKESTATIC,
-                getHookClass("RenderGlobalHook_EntityOutlines"),
+                getHookClass("mc/render/RenderGlobalHook_EntityOutlines"),
                 "isRenderOutlines",
                 "()Z",
                 false

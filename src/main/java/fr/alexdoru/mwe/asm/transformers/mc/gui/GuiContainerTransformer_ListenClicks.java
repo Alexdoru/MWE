@@ -23,7 +23,7 @@ public class GuiContainerTransformer_ListenClicks implements MWETransformer {
                 list.add(new VarInsnNode(ALOAD, 1));
                 list.add(new MethodInsnNode(
                         INVOKESTATIC,
-                        getHookClass("GuiContainerHook_ListenClicks"),
+                        getHookClass("mc/gui/GuiContainerHook_ListenClicks"),
                         "listenClick",
                         "(L" + ClassMapping.GUICONTAINER + ";L" + ClassMapping.SLOT + ";)V",
                         false

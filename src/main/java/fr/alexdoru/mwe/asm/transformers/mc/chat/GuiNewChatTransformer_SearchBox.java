@@ -55,7 +55,7 @@ public class GuiNewChatTransformer_SearchBox implements MWETransformer {
                             methodNode.instructions.insertBefore(insnNode, list);
                             methodNode.instructions.insert(nextNode, new MethodInsnNode(
                                     INVOKEVIRTUAL,
-                                    getHookClass("GuiNewChatHook_SearchBox"),
+                                    getHookClass("mc/chat/GuiNewChatHook_SearchBox"),
                                     injectUpdate ? "updateLinesToRender" : "getLinesToRender",
                                     "(Ljava/util/List;)Ljava/util/List;",
                                     false
@@ -71,7 +71,7 @@ public class GuiNewChatTransformer_SearchBox implements MWETransformer {
                 list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.GUINEWCHAT$SEARCHBOXHOOK));
                 list.add(new MethodInsnNode(
                         INVOKEVIRTUAL,
-                        getHookClass("GuiNewChatHook_SearchBox"),
+                        getHookClass("mc/chat/GuiNewChatHook_SearchBox"),
                         "clearSearch",
                         "()V",
                         false
@@ -101,7 +101,7 @@ public class GuiNewChatTransformer_SearchBox implements MWETransformer {
                     methodNode.instructions.insertBefore(target1, list);
                     methodNode.instructions.insertBefore(target2, new MethodInsnNode(
                             INVOKEVIRTUAL,
-                            getHookClass("GuiNewChatHook_SearchBox"),
+                            getHookClass("mc/chat/GuiNewChatHook_SearchBox"),
                             "addDrawnChatLine",
                             "(L" + ClassMapping.CHATLINE + ";)L" + ClassMapping.CHATLINE + ";",
                             false
@@ -115,7 +115,7 @@ public class GuiNewChatTransformer_SearchBox implements MWETransformer {
                 list.add(new VarInsnNode(ILOAD, 1));
                 list.add(new MethodInsnNode(
                         INVOKEVIRTUAL,
-                        getHookClass("GuiNewChatHook_SearchBox"),
+                        getHookClass("mc/chat/GuiNewChatHook_SearchBox"),
                         "deleteChatLine",
                         "(I)V",
                         false
@@ -133,7 +133,7 @@ public class GuiNewChatTransformer_SearchBox implements MWETransformer {
         mn1.instructions.add(getNewFieldInsnNode(GETFIELD, FieldMapping.GUINEWCHAT$SEARCHBOXHOOK));
         mn1.instructions.add(new VarInsnNode(ALOAD, 1));
         mn1.instructions.add(new MethodInsnNode(INVOKEVIRTUAL,
-                getHookClass("GuiNewChatHook_SearchBox"),
+                getHookClass("mc/chat/GuiNewChatHook_SearchBox"),
                 "setSearchText",
                 "(Ljava/lang/Object;)V",
                 false));
@@ -153,7 +153,7 @@ public class GuiNewChatTransformer_SearchBox implements MWETransformer {
         mn2.instructions.add(new VarInsnNode(ALOAD, 0));
         mn2.instructions.add(getNewFieldInsnNode(GETFIELD, FieldMapping.GUINEWCHAT$SEARCHBOXHOOK));
         mn2.instructions.add(new MethodInsnNode(INVOKEVIRTUAL,
-                getHookClass("GuiNewChatHook_SearchBox"),
+                getHookClass("mc/chat/GuiNewChatHook_SearchBox"),
                 "clearSearch",
                 "()V",
                 false));

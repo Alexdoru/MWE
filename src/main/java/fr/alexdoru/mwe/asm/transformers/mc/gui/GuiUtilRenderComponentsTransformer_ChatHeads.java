@@ -33,7 +33,7 @@ public class GuiUtilRenderComponentsTransformer_ChatHeads implements MWETransfor
                             list.add(new VarInsnNode(ALOAD, 0));
                             list.add(new MethodInsnNode(
                                     INVOKESTATIC,
-                                    getHookClass("GuiUtilRenderComponentsHook_ChatHeads"),
+                                    getHookClass("mc/gui/GuiUtilRenderComponentsHook_ChatHeads"),
                                     "getStarterChatComponent",
                                     "(L" + ClassMapping.CHATCOMPONENTTEXT + ";L" + ClassMapping.ICHATCOMPONENT + ";)L" + ClassMapping.CHATCOMPONENTTEXT + ";",
                                     false
@@ -45,7 +45,7 @@ public class GuiUtilRenderComponentsTransformer_ChatHeads implements MWETransfor
                     } else if (checkVarInsnNode(insnNode, ILOAD, 1)) {
                         methodNode.instructions.insert(insnNode, new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("GuiUtilRenderComponentsHook_ChatHeads"),
+                                getHookClass("mc/gui/GuiUtilRenderComponentsHook_ChatHeads"),
                                 "modifyLineWidth",
                                 "(I)I",
                                 false
@@ -56,7 +56,7 @@ public class GuiUtilRenderComponentsTransformer_ChatHeads implements MWETransfor
                         if (checkInsnNode(nextNode, POP)) {
                             methodNode.instructions.insert(nextNode, new MethodInsnNode(
                                     INVOKESTATIC,
-                                    getHookClass("GuiUtilRenderComponentsHook_ChatHeads"),
+                                    getHookClass("mc/gui/GuiUtilRenderComponentsHook_ChatHeads"),
                                     "removeOffset",
                                     "()V",
                                     false

@@ -24,7 +24,7 @@ public class GuiNewChatTransformer_LongerChat implements MWETransformer {
                     if (checkIntInsnNode(insnNode, BIPUSH, 100)) {
                         methodNode.instructions.insert(insnNode, new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("GuiNewChatHook_LongerChat"),
+                                getHookClass("mc/chat/GuiNewChatHook_LongerChat"),
                                 "getLongerChatSize",
                                 "(I)I",
                                 false

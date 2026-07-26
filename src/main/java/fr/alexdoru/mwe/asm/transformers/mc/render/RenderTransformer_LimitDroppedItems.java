@@ -30,7 +30,7 @@ public class RenderTransformer_LimitDroppedItems implements MWETransformer {
                             if (checkFieldInsnNode(nextNode, PUTFIELD, FieldMapping.RENDERGLOBAL$COUNTENTITIESRENDERED)) {
                                 methodNode.instructions.insert(nextNode, new MethodInsnNode(
                                         INVOKESTATIC,
-                                        getHookClass("RenderHook_LimitDroppedItems"),
+                                        getHookClass("mc/render/RenderHook_LimitDroppedItems"),
                                         "resetEntityItemCount",
                                         "()V",
                                         false
@@ -76,7 +76,7 @@ public class RenderTransformer_LimitDroppedItems implements MWETransformer {
             list.add(new VarInsnNode(DLOAD, 7));
             list.add(new MethodInsnNode(
                     INVOKESTATIC,
-                    getHookClass("RenderHook_LimitDroppedItems"),
+                    getHookClass("mc/render/RenderHook_LimitDroppedItems"),
                     "shouldRenderEntityItem",
                     "(L" + ClassMapping.ENTITY + ";DDD)Z",
                     false

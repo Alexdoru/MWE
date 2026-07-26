@@ -28,7 +28,7 @@ public class GuiPlayerTabOverlayTransformer_HideHeaderFooter implements MWETrans
                                 final InsnList list = new InsnList();
                                 list.add(new MethodInsnNode(
                                         INVOKESTATIC,
-                                        getHookClass("GuiPlayerTabOverlayHook_HideHeaderFooter"),
+                                        getHookClass("mc/gui/GuiPlayerTabOverlayHook_HideHeaderFooter"),
                                         "shouldRenderHeader",
                                         "()Z",
                                         false
@@ -44,7 +44,7 @@ public class GuiPlayerTabOverlayTransformer_HideHeaderFooter implements MWETrans
                                 final InsnList list = new InsnList();
                                 list.add(new MethodInsnNode(
                                         INVOKESTATIC,
-                                        getHookClass("GuiPlayerTabOverlayHook_HideHeaderFooter"),
+                                        getHookClass("mc/gui/GuiPlayerTabOverlayHook_HideHeaderFooter"),
                                         "shouldRenderHeaderFooter",
                                         "()Z",
                                         false

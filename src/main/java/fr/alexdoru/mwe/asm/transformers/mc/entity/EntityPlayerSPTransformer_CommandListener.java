@@ -21,7 +21,7 @@ public class EntityPlayerSPTransformer_CommandListener implements MWETransformer
                 list.add(new VarInsnNode(ALOAD, 1));
                 list.add(new MethodInsnNode(
                         INVOKESTATIC,
-                        getHookClass("EntityPlayerSPHook_CommandListener"),
+                        getHookClass("mc/entity/EntityPlayerSPHook_CommandListener"),
                         "onMessageSent",
                         "(Ljava/lang/String;)V",
                         false

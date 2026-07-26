@@ -24,7 +24,7 @@ public class GuiPlayerTabOverlayTransformer_LongerTab implements MWETransformer 
                     if (checkIntInsnNode(insnNode, BIPUSH, 20)) {
                         methodNode.instructions.insert(insnNode, new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("GuiPlayerTabOverlayHook_LongerTab"),
+                                getHookClass("mc/gui/GuiPlayerTabOverlayHook_LongerTab"),
                                 "getTablistHeight",
                                 "(I)I",
                                 false
@@ -34,7 +34,7 @@ public class GuiPlayerTabOverlayTransformer_LongerTab implements MWETransformer 
                     if (checkIntInsnNode(insnNode, BIPUSH, 80)) {
                         methodNode.instructions.insert(insnNode, new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("GuiPlayerTabOverlayHook_LongerTab"),
+                                getHookClass("mc/gui/GuiPlayerTabOverlayHook_LongerTab"),
                                 "getTotalPlayerAmount",
                                 "(I)I",
                                 false

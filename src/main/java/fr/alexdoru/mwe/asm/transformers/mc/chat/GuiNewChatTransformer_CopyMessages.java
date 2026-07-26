@@ -28,7 +28,7 @@ public class GuiNewChatTransformer_CopyMessages implements MWETransformer {
                             list.add(new VarInsnNode(ALOAD, 10));
                             list.add(new MethodInsnNode(
                                     INVOKESTATIC,
-                                    getHookClass("GuiNewChatHook_CopyMessages"),
+                                    getHookClass("mc/chat/GuiNewChatHook_CopyMessages"),
                                     "copyChatLine",
                                     "(L" + ClassMapping.CHATLINE + ";)V",
                                     false
@@ -49,7 +49,7 @@ public class GuiNewChatTransformer_CopyMessages implements MWETransformer {
                             list.add(new VarInsnNode(ALOAD, 1));
                             list.add(new MethodInsnNode(
                                     INVOKESTATIC,
-                                    getHookClass("GuiNewChatHook_CopyMessages"),
+                                    getHookClass("mc/chat/GuiNewChatHook_CopyMessages"),
                                     "setText",
                                     "(L" + ClassMapping.CHATLINE + ";L" + ClassMapping.ICHATCOMPONENT + ";)L" + ClassMapping.CHATLINE + ";",
                                     false
@@ -57,7 +57,7 @@ public class GuiNewChatTransformer_CopyMessages implements MWETransformer {
                         } else {
                             list.add(new MethodInsnNode(
                                     INVOKESTATIC,
-                                    getHookClass("GuiNewChatHook_CopyMessages"),
+                                    getHookClass("mc/chat/GuiNewChatHook_CopyMessages"),
                                     "setText1",
                                     "(L" + ClassMapping.CHATLINE + ";)L" + ClassMapping.CHATLINE + ";",
                                     false

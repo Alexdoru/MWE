@@ -23,7 +23,7 @@ public class EntityLivingBaseTransformer_RotationTracker implements MWETransform
                 list.add(new VarInsnNode(FLOAD, 1));
                 list.add(new MethodInsnNode(
                         INVOKESTATIC,
-                        getHookClass("EntityLivingBaseHook_RotationTracker"),
+                        getHookClass("mc/entity/EntityLivingBaseHook_RotationTracker"),
                         "setRotationYawHead",
                         "(L" + ClassMapping.ENTITYLIVINGBASE + ";F)V",
                         false

@@ -26,7 +26,7 @@ public class GuiChatTransformer_TabCompletePlayers implements MWETransformer {
                 list.add(new VarInsnNode(ALOAD, 2));
                 list.add(new MethodInsnNode(
                         INVOKESTATIC,
-                        getHookClass("GuiChatHook_TabCompletePlayers"),
+                        getHookClass("mc/chat/GuiChatHook_TabCompletePlayers"),
                         "autoComplete",
                         "(ZLjava/lang/String;Ljava/lang/String;)Z",
                         false
@@ -42,7 +42,7 @@ public class GuiChatTransformer_TabCompletePlayers implements MWETransformer {
                         list.add(new VarInsnNode(ALOAD, 1));
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("GuiChatHook_TabCompletePlayers"),
+                                getHookClass("mc/chat/GuiChatHook_TabCompletePlayers"),
                                 "getLatestAutoComplete",
                                 "([Ljava/lang/String;)[Ljava/lang/String;",
                                 false
