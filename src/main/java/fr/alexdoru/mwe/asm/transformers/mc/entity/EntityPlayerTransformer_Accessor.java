@@ -6,7 +6,7 @@ import fr.alexdoru.mwe.asm.mappings.FieldMapping;
 import fr.alexdoru.mwe.asm.transformers.MWETransformer;
 import org.objectweb.asm.tree.*;
 
-public class EntityPlayerTransformer implements MWETransformer {
+public class EntityPlayerTransformer_Accessor implements MWETransformer {
 
     @Override
     public String[] getTargetClassName() {

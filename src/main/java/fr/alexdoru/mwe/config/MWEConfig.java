@@ -318,6 +318,13 @@ public final class MWEConfig {
     public static boolean fixActionbarTextOverlap = true;
 
     @ConfigProperty(
+            category = VANILLA, subCategory = "Bugfix",
+            name = "Fix Forge's item in use reset",
+            comment = "Fixes a forge bug allowing the client to start sprinting too early after consuming an item. " +
+                    "When on Hypixel this will cause the potions to not drink and turn to glass bottles")
+    public static boolean fixForgeItemInUseReset = true;
+
+    @ConfigProperty(
             category = VANILLA, subCategory = "Logs",
             name = "Clean chat logs",
             comment = "Removes formatting codes from chat logs")

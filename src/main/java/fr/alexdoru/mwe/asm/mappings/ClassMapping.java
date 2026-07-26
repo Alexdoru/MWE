@@ -27,6 +27,7 @@ public enum ClassMapping {
     ENUMCHATFORMATTING("a", "net/minecraft/util/EnumChatFormatting"),
     FLOATBUFFER("java/nio/FloatBuffer"),
     FONTRENDERER("avn", "net/minecraft/client/gui/FontRenderer"),
+    FORGEEVENTFACTORY("net/minecraftforge/event/ForgeEventFactory"),
     FRAMEBUFFER("bfw", "net/minecraft/client/shader/Framebuffer"),
     GAMEPROFILE("com/mojang/authlib/GameProfile"),
     GAMESETTINGS("avh", "net/minecraft/client/settings/GameSettings"),
