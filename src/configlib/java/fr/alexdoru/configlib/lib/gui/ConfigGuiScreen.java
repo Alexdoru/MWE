@@ -438,6 +438,14 @@ public class ConfigGuiScreen extends GuiScreen {
         }
     }
 
+    private static <T extends SizedElement> int getContentHeight(List<T> elements) {
+        int height = elements.isEmpty() ? 0 : -(elements.get(0).getTopMargin() + elements.get(elements.size()-1).getBottomMargin());
+        for (final T element : elements) {
+            height += element.getTopMargin() + element.getHeight() + element.getBottomMargin();
+        }
+        return height;
+    }
+
     private static <T extends SizedElement> boolean forEachVisible(List<T> elements, Box box, int scroll, ElementVisitor<T> visitor) {
         int drawY = box.TOP + PADDING - scroll;
         for (final T element : elements) {
