@@ -221,9 +221,18 @@ public class ConfigGuiScreen extends GuiScreen {
 
         CONFIG_BOX.applyScissors(mc, res, 1);
 
+        final boolean canMouseBeVisuallyOverElements = CONFIG_BOX.isMouseInBox(mouseX, mouseY) && (currentlyOpenOverlay == null || !currentlyOpenOverlay.isMouseOverOverlay(mouseX, mouseY));
+
+        final List<String> hoveringTextLines = new ArrayList<>();
         final int configDrawX = CONFIG_BOX.LEFT + PADDING;
         forEachVisible(this.renderedConfigElements, CONFIG_BOX, this.configScrollbar.getScroll(), (element, drawY) -> {
-            element.draw(colorPalette, configDrawX, drawY, mouseX, mouseY);
+            element.draw(colorPalette, configDrawX, drawY, mouseX, mouseY, canMouseBeVisuallyOverElements);
+            if (canMouseBeVisuallyOverElements && hoveringTextLines.isEmpty()) {
+                final List<String> hoveringTextLinesIn = element.getHoveringTextLines();
+                if (hoveringTextLinesIn != null && !hoveringTextLinesIn.isEmpty()) {
+                    hoveringTextLines.addAll(hoveringTextLinesIn);
+                }
+            }
             return false;
         });
 
@@ -232,6 +241,20 @@ public class ConfigGuiScreen extends GuiScreen {
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
+
+        if (currentlyOpenOverlay != null) {
+            currentlyOpenOverlay.drawOverlay(colorPalette, mouseX, mouseY);
+            if (hoveringTextLines.isEmpty()) {
+                final List<String> hoveringTextLinesIn = currentlyOpenOverlay.getOverlayHoveringTextLines();
+                if (hoveringTextLinesIn != null && !hoveringTextLinesIn.isEmpty()) {
+                    hoveringTextLines.addAll(hoveringTextLinesIn);
+                }
+            }
+        }
+
+        if (!hoveringTextLines.isEmpty()) {
+            drawHoveringText(hoveringTextLines, mouseX, mouseY);
+        }
     }
 
     @Override
