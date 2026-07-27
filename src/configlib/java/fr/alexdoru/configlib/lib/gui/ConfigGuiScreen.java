@@ -335,8 +335,10 @@ public class ConfigGuiScreen extends GuiScreen {
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
-        if (lastInteractedOverlay != null) {
-            return;
+        if (currentlyOpenOverlay != null) {
+            final boolean handledByOverlay = currentlyOpenOverlay.handleOverlayMouseInput();
+            if (!currentlyOpenOverlay.isOverlayOpen()) this.currentlyOpenOverlay = null;
+            if (handledByOverlay) return;
         }
         final int wheel = Mouse.getEventDWheel();
         if (wheel != 0) {
