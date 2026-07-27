@@ -260,53 +260,63 @@ public class ConfigGuiScreen extends GuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         final MouseButton button = MouseButton.from(mouseButton);
-        if (lastInteractedOverlay != null) {
+        OverlayConfigGuiButton overlayToClose = null;
+        if (currentlyOpenOverlay != null) {
             try {
-                lastInteractedOverlay.mouseClicked(mouseX, mouseY, button);
+                if (currentlyOpenOverlay.mouseClickedOnOverlay(mouseX, mouseY, button)) {
+                    if (!currentlyOpenOverlay.isOverlayOpen()) this.currentlyOpenOverlay = null;
+                    return;
+                }
             } catch (IllegalAccessException e) {
                 throw new RuntimeException("Caught exception running mouse click events!", e);
             }
-            if (!lastInteractedOverlay.isOverlayOpen()) {
-                lastInteractedOverlay = null;
+            if (currentlyOpenOverlay.isOverlayOpen()) {
+                overlayToClose = currentlyOpenOverlay;
             }
-            return;
+            this.currentlyOpenOverlay = null;
         }
-        if (CATEGORY_BOX.isMouseInBox(mouseX, mouseY)) {
-            final boolean consumedClick = forEachVisible(this.categoryElements, CATEGORY_BOX, this.categoryScrollbar.getScroll(), (element, drawY) ->
-                    element.mouseClicked(mouseX, mouseY, button)
-            );
-            if (consumedClick) return;
-            if (this.categoryScrollbar.mouseClicked(mouseX, mouseY, button)) {
-                return;
-            }
-        } else if (CONFIG_BOX.isMouseInBox(mouseX, mouseY)) {
-            final boolean consumedClick = forEachVisible(this.renderedConfigElements, CONFIG_BOX, this.configScrollbar.getScroll(), (element, drawY) -> {
-                try {
-                    if (element.mouseClicked(mouseX, mouseY, button)) {
-                        if (element instanceof SliderGuiButton) {
-                            lastInteractedSlider = ((SliderGuiButton) element);
-                        } else if (element instanceof OverlayConfigGuiButton) {
-                            final OverlayConfigGuiButton overlay = (OverlayConfigGuiButton) element;
-                            if (overlay.isOverlayOpen()) {
-                                lastInteractedOverlay = overlay;
-                            }
-                        }
-                        return true;
-                    }
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException("Caught exception running mouse click events!", e);
+        // keep this label, it will come in handy in the feature if you need to have more "cleanup code"
+        // for example, if in the feature you choose to use my "Searchbar"
+        click_scan: {
+            if (CATEGORY_BOX.isMouseInBox(mouseX, mouseY)) {
+                final boolean consumedClick = forEachVisible(this.categoryElements, CATEGORY_BOX, this.categoryScrollbar.getScroll(), (element, drawY) ->
+                        element.mouseClicked(mouseX, mouseY, button)
+                );
+                if (consumedClick || categoryScrollbar.mouseClicked(mouseX, mouseY, button)) {
+                    break click_scan;
                 }
-                return false;
-            });
-            if (consumedClick) return;
-            if (this.configScrollbar.mouseClicked(mouseX, mouseY, button)) {
-                return;
+            } else if (CONFIG_BOX.isMouseInBox(mouseX, mouseY)) {
+                final boolean consumedClick = forEachVisible(this.renderedConfigElements, CONFIG_BOX, this.configScrollbar.getScroll(), (element, drawY) -> {
+                    try {
+                        if (element.mouseClicked(mouseX, mouseY, button)) {
+                            if (element instanceof SliderGuiButton) {
+                                lastInteractedSlider = ((SliderGuiButton) element);
+                            } else if (element instanceof OverlayConfigGuiButton) {
+                                final OverlayConfigGuiButton overlay = (OverlayConfigGuiButton) element;
+                                if (overlay.isOverlayOpen()) {
+                                    currentlyOpenOverlay = overlay;
+                                }
+                            }
+                            return true;
+                        }
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException("Caught exception running mouse click events!", e);
+                    }
+                    return false;
+                });
+                if (consumedClick || configScrollbar.mouseClicked(mouseX, mouseY, button)) {
+                    break click_scan;
+                }
+            } else if (button.isLeft() && SEARCH_BOX.isMouseInBox(mouseX, mouseY)) {
+                searchField.setFocused(true);
+                break click_scan;
             }
-        } else if (button.isLeft() && SEARCH_BOX.isMouseInBox(mouseX, mouseY)) {
-            searchField.setFocused(true);
-            return;
+            super.mouseClicked(mouseX, mouseY, mouseButton);
         }
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+
+        if (overlayToClose != null && overlayToClose != currentlyOpenOverlay) {
+            overlayToClose.closeOverlay();
+        }
     }
 
     @Override
