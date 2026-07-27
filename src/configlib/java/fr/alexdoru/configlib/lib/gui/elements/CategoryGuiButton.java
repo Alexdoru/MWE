@@ -41,8 +41,7 @@ public class CategoryGuiButton implements SizedElement {
     }
 
     private boolean isMouseHovering(int mouseX, int mouseY) {
-        final int extraY = ConfigGuiScreen.ELEMENT_GAP / 2;
-        return mouseX >= posX && mouseY >= posY - extraY && mouseX < posX + getWidth() && mouseY < posY + extraY + getHeight();
+        return mouseX >= posX && mouseY >= posY - getTopMargin() && mouseX < posX + getWidth() && mouseY < posY + getHeight() + getBottomMargin();
     }
 
     public int getWidth() {
