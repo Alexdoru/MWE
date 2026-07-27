@@ -492,12 +492,16 @@ public class ConfigGuiScreen extends GuiScreen {
 
     private static <T extends SizedElement> boolean forEachVisible(List<T> elements, Box box, int scroll, ElementVisitor<T> visitor) {
         int drawY = box.TOP + PADDING - scroll;
+        if (!elements.isEmpty()) {
+            drawY -= elements.get(0).getTopMargin();
+        }
         for (final T element : elements) {
+            drawY += element.getTopMargin();
             final int elementHeight = element.getHeight();
             if (drawY + elementHeight >= box.TOP && drawY <= box.BOTTOM) {
                 if (visitor.visit(element, drawY)) return true;
             }
-            drawY += elementHeight + ELEMENT_GAP;
+            drawY += elementHeight + element.getBottomMargin();
         }
         return false;
     }
