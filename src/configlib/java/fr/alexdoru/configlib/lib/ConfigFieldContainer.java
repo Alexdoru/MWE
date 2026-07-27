@@ -280,7 +280,8 @@ public final class ConfigFieldContainer {
                 }
             }
             case ENUM_COLOR: {
-                return new ColorEnumGuiButton(configGuiScreen, field, event, annotation);
+                final EnumChatFormatting defaultColor = getEnumValue(this.getProp().getDefault());
+                return new ColorEnumGuiButton(configGuiScreen, field, event, annotation, defaultColor);
             }
             case ENUM: {
                 return new EnumGuiButton(field, event, annotation);
