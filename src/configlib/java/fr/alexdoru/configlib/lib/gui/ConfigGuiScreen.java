@@ -301,8 +301,10 @@ public class ConfigGuiScreen extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if (lastInteractedOverlay != null) {
-            return;
+        if (currentlyOpenOverlay != null) {
+            final boolean handledByOverlay = currentlyOpenOverlay.overlayKeyTyped(typedChar, keyCode);
+            if (!currentlyOpenOverlay.isOverlayOpen()) this.currentlyOpenOverlay = null;
+            if (handledByOverlay) return;
         }
         if (lastInteractedSlider != null && (keyCode == Keyboard.KEY_LEFT || keyCode == Keyboard.KEY_RIGHT)) {
             lastInteractedSlider.updateSliderFromIncrement(keyCode == Keyboard.KEY_LEFT ? -1 : 1);
