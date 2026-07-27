@@ -16,8 +16,9 @@ import java.util.List;
 
 public abstract class ConfigGuiButton implements ConfigUIElement {
 
-    protected static final int PADDING = 8;
+    protected static final int DEFAULT_PADDING = 8;
     protected static final int BUTTON_RIGHT_MARGIN = 20;
+    private static final int COMMENT_TOP_MARGIN = 4;
 
     protected final Minecraft mc = Minecraft.getMinecraft();
     protected final Field field;
@@ -26,6 +27,7 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     private final List<String> commentToRender = new ArrayList<>();
     protected int boxWidth;
     protected int posX, posY;
+    protected int boxHeight;
     protected int contentLeft;
 
     /** The distance between the left-most position of the content (button) and the right side of the rect */
@@ -41,33 +43,33 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     }
 
     /**
-     * @return The distance between the left-most position of the content (button) and the right side of the rect
+     * {@link #rightSideContentWidth} must be correctly set before this method is called
      */
-    protected abstract int getRightSideContentWidth();
-
     @Override
     public void setBoxWidth(int boxWidth) {
         this.boxWidth = boxWidth;
         if (this.hasComment()) {
-            final int wrapWidth = boxWidth - getLeftPadding() - getRightSideContentWidth() - 12; // 20
+            final int wrapWidth = boxWidth - getLeftPadding() - rightSideContentWidth - 16; // 20
             this.commentToRender.clear();
             this.commentToRender.addAll(resizeCommentLines(annotation.comment(), wrapWidth, mc));
         }
     }
 
     @Override
-    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
+    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY, boolean canMouseBeVisuallyOverElement) {
         this.posX = drawX;
         this.posY = drawY;
+        this.boxHeight = getHeight();
         final int right = drawX + boxWidth;
-        this.contentLeft = right - getRightSideContentWidth();
-        GuiUtil.drawBoxWithOutline(drawX, drawY, right, drawY + getHeight(), colorPalette.SETTING_BACKGROUND, colorPalette.SETTING_BACKGROUND_BORDER);
+        this.contentLeft = right - rightSideContentWidth;
+        GuiUtil.drawBoxWithOutline(drawX, drawY, right, drawY + boxHeight, colorPalette.SETTING_BACKGROUND, colorPalette.SETTING_BACKGROUND_BORDER);
         final int textX = drawX + getLeftPadding();
-        mc.fontRendererObj.drawStringWithShadow(annotation.name(), textX, drawY + PADDING, colorPalette.SETTING_NAME_TEXT);
+        final int textY = drawY + (this.hasComment() ? DEFAULT_PADDING : getCenterYOffset(mc.fontRendererObj.FONT_HEIGHT));
+        mc.fontRendererObj.drawStringWithShadow(annotation.name(), textX, textY, colorPalette.SETTING_NAME_TEXT);
         if (this.hasComment()) {
-            int commentY = drawY + PADDING + mc.fontRendererObj.FONT_HEIGHT + 6; // '6' here represents the vertical space between name and comment
+            int commentY = textY + mc.fontRendererObj.FONT_HEIGHT + COMMENT_TOP_MARGIN;
             for (final String line : commentToRender) {
-                mc.fontRendererObj.drawStringWithShadow(line, drawX + 8, commentY, colorPalette.SETTING_COMMENT_TEXT);
+                mc.fontRendererObj.drawStringWithShadow(line, textX, commentY, colorPalette.SETTING_COMMENT_TEXT);
                 commentY += mc.fontRendererObj.FONT_HEIGHT;
             }
         }
@@ -75,10 +77,11 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
 
     @Override
     public int getHeight() {
+        int textHeight = mc.fontRendererObj.FONT_HEIGHT;
         if (this.hasComment()) {
-            return PADDING + mc.fontRendererObj.FONT_HEIGHT + PADDING + mc.fontRendererObj.FONT_HEIGHT * commentToRender.size() + 6 - 1; // '6' here represents the vertical space between name and comment
+            textHeight += COMMENT_TOP_MARGIN + mc.fontRendererObj.FONT_HEIGHT * commentToRender.size();
         }
-        return PADDING + mc.fontRendererObj.FONT_HEIGHT + PADDING - 1;
+        return DEFAULT_PADDING + Math.max(textHeight, rightSideContentHeight) + DEFAULT_PADDING - 1;
     }
 
     @Override
@@ -116,7 +119,7 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
         this.mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
     }
 
-    protected int getLeftPadding() { return PADDING; }
+    protected int getLeftPadding() { return DEFAULT_PADDING; }
 
     protected final ClickGuiButton getMainButton(String text) {
         return new ClickGuiButton(-1, 0, 0, getMainButtonWidth(), 20, text);
@@ -128,5 +131,9 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
 
     protected static String getBooleanText(boolean value) {
         return value ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled";
+    }
+
+    protected final int getCenterYOffset(int height) {
+        return (this.boxHeight - height) / 2;
     }
 }
