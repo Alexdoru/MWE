@@ -12,7 +12,7 @@ public interface ConfigUIElement extends SizedElement {
 
     void setBoxWidth(int boxWidth);
 
-    void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY);
+    void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY, boolean canMouseBeVisuallyOverElement);
 
     boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) throws IllegalAccessException;
 
