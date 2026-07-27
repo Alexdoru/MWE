@@ -113,6 +113,24 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
         return false;
     }
 
+    @Override
+    public boolean handleOverlayMouseInput() {
+        if (Mouse.getEventDWheel() != 0) {
+            final int mouseX = Mouse.getEventX() * parentScreen.width / mc.displayWidth;
+            final int mouseY = parentScreen.height - Mouse.getEventY() * parentScreen.height / mc.displayHeight - 1;
+            return parentScreen.getConfigBoxSize().isMouseInBox(mouseX, mouseY); // don't allow 'config box scroll'
+        }
+        return false;
+    }
+
+    @Override
+    public boolean overlayKeyTyped(char typedChar, int keyCode) {
+        if (keyCode == Keyboard.KEY_ESCAPE) {
+            closeOverlay();
+        }
+        return true;
+    }
+
     private void setValue(EnumChatFormatting v) {
         this.color = mc.fontRendererObj.getColorCode(v.toString().charAt(1));
         this.button.displayString = v + v.name();
