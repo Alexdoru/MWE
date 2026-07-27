@@ -16,7 +16,7 @@ public class BooleanGuiButton extends ConfigGuiButton {
     public BooleanGuiButton(Field field, Method event, ConfigProperty annotation) throws IllegalAccessException {
         super(field, event, annotation);
         this.toggled = (boolean) this.field.get(null);
-        this.button = new ClickGuiButton(0, 0, 0, mc.fontRendererObj.getStringWidth(" Disabled "), 20, getButtonText());
+        this.button = new ClickGuiButton(mc.fontRendererObj.getStringWidth(" Disabled "), 20, getButtonText());
     }
 
     @Override
@@ -29,10 +29,9 @@ public class BooleanGuiButton extends ConfigGuiButton {
 
     @Override
     public boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) throws IllegalAccessException {
-        if (mouseButton.isLeft() && button.mousePressed(mc, mouseX, mouseY)) {
+        if (mouseButton.isLeft() && button.mousePressed(mouseX, mouseY)) {
             flipBooleanConfig();
             button.displayString = getButtonText();
-            button.playPressSound(mc.getSoundHandler());
             return true;
         }
         return false;

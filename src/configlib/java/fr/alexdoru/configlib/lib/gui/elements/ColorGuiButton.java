@@ -21,7 +21,7 @@ public class ColorGuiButton extends ConfigGuiButton {
         this.parentScreen = configGuiScreen;
         this.color = (int) this.field.get(null);
         this.defaultColor = defaultColor;
-        this.button = new ClickGuiButton(0, 0, 0, mc.fontRendererObj.getStringWidth(" Disabled "), 20, "Change");
+        this.button = new ClickGuiButton(mc.fontRendererObj.getStringWidth(" Disabled "), 20, "Change");
     }
 
     @Override
@@ -37,8 +37,7 @@ public class ColorGuiButton extends ConfigGuiButton {
 
     @Override
     public boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) throws IllegalAccessException {
-        if (mouseButton.isLeft() && button.mousePressed(mc, mouseX, mouseY)) {
-            button.playPressSound(mc.getSoundHandler());
+        if (mouseButton.isLeft() && button.mousePressed(mouseX, mouseY)) {
             mc.displayGuiScreen(new ColorSelectionGuiScreen(parentScreen, field, defaultColor, color -> this.color = color));
             return true;
         }

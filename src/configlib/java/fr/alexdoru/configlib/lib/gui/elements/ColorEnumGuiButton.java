@@ -7,7 +7,6 @@ import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.GuiUtil;
 import fr.alexdoru.configlib.lib.gui.MouseButton;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -38,7 +37,7 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
                 this.colorButtons.add(new ColorSquareButton(c));
             }
         }
-        this.button = new ClickGuiButton(0, 0, 0, maxWidth, 20, "");
+        this.button = new ClickGuiButton(maxWidth, 20);
         this.setValue((EnumChatFormatting) this.field.get(null));
     }
 
@@ -73,7 +72,7 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
                 final int col = i % 8;
                 colorButton.xPosition = startX + col * (SQUARE + GAP);
                 colorButton.yPosition = startY + row * (SQUARE + GAP);
-                colorButton.drawButton(mc, mouseX, mouseY);
+                colorButton.drawButton(colorPalette, mc, mouseX, mouseY);
                 if (colorButton.isMouseOver()) hovered = colorButton.color;
             }
 
@@ -94,8 +93,7 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
         if (isOverlayOpen) {
             if (panelBox.isMouseInBox(mouseX, mouseY)) {
                 for (final ColorSquareButton colorButton : this.colorButtons) {
-                    if (colorButton.isMouseOver()) {
-                        button.playPressSound(mc.getSoundHandler());
+                    if (colorButton.mousePressed(mouseX, mouseY)) {
                         this.setNewValue(colorButton.color);
                         return true;
                     }
@@ -105,8 +103,7 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
             }
             return true;
         }
-        if (button.mousePressed(mc, mouseX, mouseY)) {
-            button.playPressSound(mc.getSoundHandler());
+        if (button.mousePressed(mouseX, mouseY)) {
             isOverlayOpen = true;
             return true;
         }
@@ -124,17 +121,17 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
         this.invokeConfigEvent();
     }
 
-    private static class ColorSquareButton extends GuiButton {
+    private static class ColorSquareButton extends ClickGuiButton {
 
         private final EnumChatFormatting color;
 
         private ColorSquareButton(EnumChatFormatting color) {
-            super(0, 0, 0, SQUARE, SQUARE, "");
+            super(SQUARE, SQUARE);
             this.color = color;
         }
 
         @Override
-        public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+        public void drawButton(ColorPalette colorPalette, Minecraft mc, int mouseX, int mouseY) {
             final int argb = 255 << 24 | mc.fontRendererObj.getColorCode(color.toString().charAt(1));
             hovered = mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + width && mouseY < yPosition + height;
             GuiUtil.drawBoxWithOutline(

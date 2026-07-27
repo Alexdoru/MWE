@@ -33,8 +33,8 @@ public class RendererGuiButton extends ConfigGuiButton {
         this.rendererManager = rendererManager;
         this.rendererPosition = ((RendererPosition) field.get(null));
         this.toggled = this.rendererPosition.isEnabled();
-        this.buttonEnabled = new ClickGuiButton(0, 0, 0, mc.fontRendererObj.getStringWidth(" Disabled "), 20, getButtonText());
-        this.buttonMoveHud = new ClickGuiButton(0, 0, 0, 20, 20, "");
+        this.buttonEnabled = new ClickGuiButton(mc.fontRendererObj.getStringWidth(" Disabled "), 20, getButtonText());
+        this.buttonMoveHud = new ClickGuiButton(20, 20);
         this.buttonMoveHud.setTexture(new ResourceLocation("configlib", "move.png"));
     }
 
@@ -66,13 +66,11 @@ public class RendererGuiButton extends ConfigGuiButton {
     @Override
     public boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) {
         if (mouseButton.isLeft()) {
-            if (buttonEnabled.mousePressed(mc, mouseX, mouseY)) {
+            if (buttonEnabled.mousePressed(mouseX, mouseY)) {
                 flipBooleanConfig();
                 buttonEnabled.displayString = getButtonText();
-                buttonEnabled.playPressSound(mc.getSoundHandler());
                 return true;
-            } else if (buttonMoveHud.mousePressed(mc, mouseX, mouseY)) {
-                buttonEnabled.playPressSound(mc.getSoundHandler());
+            } else if (buttonMoveHud.mousePressed(mouseX, mouseY)) {
                 mc.displayGuiScreen(new RendererEditGuiScreen(rendererManager, rendererPosition, parentScreen, field));
                 return true;
             }

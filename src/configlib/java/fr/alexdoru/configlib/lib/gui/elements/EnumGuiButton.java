@@ -26,7 +26,7 @@ public class EnumGuiButton extends ConfigGuiButton {
         for (final Enum<?> e : values) {
             width = Math.max(width, mc.fontRendererObj.getStringWidth("  " + e.name()));
         }
-        this.button = new ClickGuiButton(0, 0, 0, width, 20, "");
+        this.button = new ClickGuiButton(width, 20);
         this.setValue((Enum<?>) this.field.get(null));
     }
 
@@ -40,8 +40,7 @@ public class EnumGuiButton extends ConfigGuiButton {
 
     @Override
     public boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) throws IllegalAccessException {
-        if ((mouseButton.isLeft() || mouseButton.isRight()) && button.mousePressed(mc, mouseX, mouseY)) {
-            button.playPressSound(mc.getSoundHandler());
+        if ((mouseButton.isLeft() || mouseButton.isRight()) && button.mousePressed(mouseX, mouseY)) {
             this.cycleEnum(mouseButton.isLeft() ? 1 : -1);
             return true;
         }

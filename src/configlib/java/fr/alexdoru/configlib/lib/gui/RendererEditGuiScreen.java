@@ -39,10 +39,10 @@ public class RendererEditGuiScreen extends GuiScreen {
         }
         this.originalRelativeX = rendererPosition.getRelativeX();
         this.originalRelativeY = rendererPosition.getRelativeY();
-        this.resetButton = new ClickGuiButton(-1, 0, 0, BUTTON_SIZE, BUTTON_SIZE, "");
+        this.resetButton = new ClickGuiButton(BUTTON_SIZE, BUTTON_SIZE);
         this.resetButton.setTexture(new ResourceLocation("configlib", "reload.png"));
         this.resetButton.setHoveringText("Reset to Default Position");
-        this.undoButton = new ClickGuiButton(-1, 0, 0, BUTTON_SIZE, BUTTON_SIZE, "");
+        this.undoButton = new ClickGuiButton(BUTTON_SIZE, BUTTON_SIZE);
         this.undoButton.setTexture(new ResourceLocation("configlib", "undo.png"));
         this.undoButton.setHoveringText("Undo Changes");
     }
@@ -94,19 +94,16 @@ public class RendererEditGuiScreen extends GuiScreen {
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         if (MouseButton.from(mouseButton).isLeft()) {
             if (!this.dragging) {
-                if (resetButton.mousePressed(mc, mouseX, mouseY)) {
+                if (resetButton.mousePressed(mouseX, mouseY)) {
                     rendererPosition.resetToDefault();
                     this.rendererPosition.updateAbsolutePosition(resolution);
                     this.adjustBounds();
-                    resetButton.playPressSound(mc.getSoundHandler());
                     return;
                 }
-
-                if (undoButton.mousePressed(mc, mouseX, mouseY)) {
+                if (undoButton.mousePressed(mouseX, mouseY)) {
                     rendererPosition.setRelativePosition(originalRelativeX, originalRelativeY);
                     this.rendererPosition.updateAbsolutePosition(resolution);
                     this.adjustBounds();
-                    undoButton.playPressSound(mc.getSoundHandler());
                     return;
                 }
             }
