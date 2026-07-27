@@ -465,4 +465,10 @@ public class ConfigGuiScreen extends GuiScreen {
         return CONFIG_BOX;
     }
 
+    private void closeOpenOverlay() {
+        if (this.currentlyOpenOverlay != null) {
+            this.currentlyOpenOverlay.closeOverlay();
+            this.currentlyOpenOverlay = null;
+        }
+    }
 }
