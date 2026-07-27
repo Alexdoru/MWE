@@ -28,19 +28,16 @@ public class EnumGuiButton extends ConfigGuiButton {
         }
         this.button = new ClickGuiButton(0, 0, 0, width, 20, "");
         this.setValue((Enum<?>) this.field.get(null));
+        this.rightSideContentWidth = button.width + BUTTON_RIGHT_MARGIN;
+        this.rightSideContentHeight = button.height;
     }
 
     @Override
-    protected int getRightSideContentWidth() {
-        return button.width + BUTTON_RIGHT_MARGIN;
-    }
-
-    @Override
-    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
-        super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
+    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY, boolean canMouseBeVisuallyOverElement) {
+        super.draw(colorPalette, drawX, drawY, mouseX, mouseY, canMouseBeVisuallyOverElement);
         button.xPosition = contentLeft;
-        button.yPosition = drawY + (this.hasComment() ? PADDING + mc.fontRendererObj.FONT_HEIGHT / 2 : (getHeight() - button.height) / 2);
-        button.drawButton(colorPalette, mc, mouseX, mouseY);
+        button.yPosition = drawY + getCenterYOffset(button.height);
+        button.drawButton(colorPalette, mc, mouseX, mouseY, canMouseBeVisuallyOverElement);
     }
 
     @Override

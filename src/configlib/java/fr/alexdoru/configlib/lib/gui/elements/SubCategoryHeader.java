@@ -22,7 +22,7 @@ public class SubCategoryHeader implements ConfigUIElement {
     }
 
     @Override
-    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
+    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY, boolean canMouseBeVisuallyOverElement) {
         final int textX = drawX + (boxWidth - mc.fontRendererObj.getStringWidth(subCategoryName)) / 2;
         mc.fontRendererObj.drawStringWithShadow(subCategoryName, textX, drawY, 0xFFFFFFFF);
     }
@@ -52,5 +52,4 @@ public class SubCategoryHeader implements ConfigUIElement {
         return categoryName.toLowerCase().contains(search)
                 || subCategoryName.toLowerCase().contains(search);
     }
-
 }

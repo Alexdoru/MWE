@@ -50,23 +50,20 @@ public class SliderGuiButton extends ConfigGuiButton {
         } else {
             throw new IllegalArgumentException("Field of type " + field.getType() + " not supported by SliderGuiButton.");
         }
+        this.rightSideContentWidth = (PLUS_BUTTON_SIZE + SLIDER_BUTTON_SIZE / 2) * 2 + 1 + SLIDER_WIDTH + 6;
+        this.rightSideContentHeight = SLIDER_BUTTON_SIZE + mc.fontRendererObj.FONT_HEIGHT + 6;
     }
 
     @Override
-    protected int getRightSideContentWidth() {
-        return (PLUS_BUTTON_SIZE + SLIDER_BUTTON_SIZE / 2) * 2 + 1 + SLIDER_WIDTH + 6;
-    }
-
-    @Override
-    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
-        super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
+    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY, boolean canMouseBeVisuallyOverElement) {
+        super.draw(colorPalette, drawX, drawY, mouseX, mouseY, canMouseBeVisuallyOverElement);
         if (dragging) {
             updateSliderFromPosition(mouseX - sliderBarX);
         }
         final int SLIDER_HEIGHT = 6;
         final int HALF_SLIDER_BUTTON_SIZE = SLIDER_BUTTON_SIZE / 2;
         sliderBarX = contentLeft + PLUS_BUTTON_SIZE + HALF_SLIDER_BUTTON_SIZE + 1;
-        final int sliderBarY = drawY + PADDING + mc.fontRendererObj.FONT_HEIGHT;
+        final int sliderBarY = drawY + getCenterYOffset(SLIDER_HEIGHT);
         sliderButtonX = sliderBarX + sliderIncrement - HALF_SLIDER_BUTTON_SIZE;
         sliderButtonY = sliderBarY + (SLIDER_HEIGHT - SLIDER_BUTTON_SIZE) / 2;
         minusButtonX = contentLeft;
@@ -74,18 +71,18 @@ public class SliderGuiButton extends ConfigGuiButton {
         plusButtonX = sliderBarX + SLIDER_WIDTH + HALF_SLIDER_BUTTON_SIZE;
         plusButtonY = minusButtonY;
         GuiUtil.drawBoxWithOutline(sliderBarX, sliderBarY, sliderBarX + SLIDER_WIDTH, sliderBarY + SLIDER_HEIGHT, colorPalette.SLIDER_BUTTON_TRACK, colorPalette.SLIDER_BUTTON_TRACK_BORDER);
-        final boolean silderHovered = isMouseOnButton(mouseX, mouseY, sliderButtonX, sliderButtonY, SLIDER_BUTTON_SIZE, SLIDER_BUTTON_SIZE);
+        final boolean silderHovered = canMouseBeVisuallyOverElement && isMouseOnButton(mouseX, mouseY, sliderButtonX, sliderButtonY, SLIDER_BUTTON_SIZE, SLIDER_BUTTON_SIZE);
         final int sliderColor = silderHovered ? GuiUtil.brightenColor(colorPalette.SLIDER_BUTTON_THUMB, 0.12f) : colorPalette.SLIDER_BUTTON_THUMB;
         if (sliderButtonX > (sliderBarX + 1)) {
             final int top = sliderBarY + 1;
             Gui.drawRect(sliderBarX + 1, top, sliderButtonX, top + SLIDER_HEIGHT - 2, sliderColor);
         }
         GuiUtil.drawBoxWithOutline(sliderButtonX, sliderButtonY, sliderButtonX + SLIDER_BUTTON_SIZE, sliderButtonY + SLIDER_BUTTON_SIZE, sliderColor, colorPalette.SLIDER_BUTTON_THUMB_BORDER);
-        final boolean isMinusHovered = isMouseOnButton(mouseX, mouseY, minusButtonX, minusButtonY, PLUS_BUTTON_SIZE, PLUS_BUTTON_SIZE);
+        final boolean isMinusHovered = canMouseBeVisuallyOverElement && isMouseOnButton(mouseX, mouseY, minusButtonX, minusButtonY, PLUS_BUTTON_SIZE, PLUS_BUTTON_SIZE);
         final int minusColor = isMinusHovered ? GuiUtil.brightenColor(colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND, 0.12f) : colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND;
         GuiUtil.drawBoxWithOutline(minusButtonX, minusButtonY, minusButtonX + PLUS_BUTTON_SIZE, minusButtonY + PLUS_BUTTON_SIZE, minusColor, colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND_BORDER);
         mc.fontRendererObj.drawStringWithShadow("-", minusButtonX + 2, minusButtonY + 1, colorPalette.SLIDER_BUTTON_PLUS_TEXT);
-        final boolean isPlusHovered = isMouseOnButton(mouseX, mouseY, plusButtonX, plusButtonY, PLUS_BUTTON_SIZE, PLUS_BUTTON_SIZE);
+        final boolean isPlusHovered = canMouseBeVisuallyOverElement && isMouseOnButton(mouseX, mouseY, plusButtonX, plusButtonY, PLUS_BUTTON_SIZE, PLUS_BUTTON_SIZE);
         final int plusColor = isPlusHovered ? GuiUtil.brightenColor(colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND, 0.12f) : colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND;
         GuiUtil.drawBoxWithOutline(plusButtonX, plusButtonY, plusButtonX + PLUS_BUTTON_SIZE, plusButtonY + PLUS_BUTTON_SIZE, plusColor, colorPalette.SLIDER_BUTTON_PLUS_BACKGROUND_BORDER);
         mc.fontRendererObj.drawStringWithShadow("+", plusButtonX + 2, plusButtonY + 1, colorPalette.SLIDER_BUTTON_PLUS_TEXT);
@@ -100,13 +97,8 @@ public class SliderGuiButton extends ConfigGuiButton {
             }
         }
         final int valueX = sliderButtonX + (SLIDER_BUTTON_SIZE - mc.fontRendererObj.getStringWidth(valueText)) / 2;
-        final int valueY = sliderBarY - mc.fontRendererObj.FONT_HEIGHT - 4;
+        final int valueY = sliderButtonY - mc.fontRendererObj.FONT_HEIGHT - 1;
         mc.fontRendererObj.drawStringWithShadow(valueText, valueX, valueY, colorPalette.SLIDER_BUTTON_VALUE_TEXT);
-    }
-
-    @Override
-    public int getHeight() {
-        return Math.max(super.getHeight(), PADDING + mc.fontRendererObj.FONT_HEIGHT + SLIDER_BUTTON_SIZE + PADDING);
     }
 
     @Override

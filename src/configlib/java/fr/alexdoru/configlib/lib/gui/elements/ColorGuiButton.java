@@ -22,22 +22,19 @@ public class ColorGuiButton extends ConfigGuiButton {
         this.color = (int) this.field.get(null);
         this.defaultColor = defaultColor;
         this.button = getMainButton("Change");
+        this.rightSideContentWidth = button.width + BUTTON_RIGHT_MARGIN + 1 + button.height; // button.height == color_box_size
+        this.rightSideContentHeight = button.height;
     }
 
     @Override
-    protected int getRightSideContentWidth() {
-        return button.width + BUTTON_RIGHT_MARGIN + button.height /* color box width */ + 1;
-    }
-
-    @Override
-    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
-        super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
-        final int top = drawY + (this.hasComment() ? PADDING + mc.fontRendererObj.FONT_HEIGHT / 2 : (getHeight() - button.height) / 2);
+    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY, boolean canMouseBeVisuallyOverElement) {
+        super.draw(colorPalette, drawX, drawY, mouseX, mouseY, canMouseBeVisuallyOverElement);
+        final int top = drawY + getCenterYOffset(button.height);
         final int colorBoxSize = button.height;
         GuiUtil.drawBoxWithOutline(contentLeft, top, contentLeft + colorBoxSize, top + colorBoxSize, 255 << 24 | color, colorPalette.COLOR_BUTTON_INDICATOR_BORDER);
         button.xPosition = contentLeft + colorBoxSize + 1;
         button.yPosition = top;
-        button.drawButton(colorPalette, mc, mouseX, mouseY);
+        button.drawButton(colorPalette, mc, mouseX, mouseY, canMouseBeVisuallyOverElement);
     }
 
     @Override

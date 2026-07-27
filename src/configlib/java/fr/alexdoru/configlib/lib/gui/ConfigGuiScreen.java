@@ -25,7 +25,6 @@ import java.util.*;
 public class ConfigGuiScreen extends GuiScreen {
 
     public static final int PADDING = 6;
-    public static final int ELEMENT_GAP = 4;
 
     private static final ResourceLocation BLUR = new ResourceLocation("configlib", "blur.json");
 
@@ -40,7 +39,7 @@ public class ConfigGuiScreen extends GuiScreen {
     private GuiTextField searchField;
     private String selectedCategory = "";
     private SliderGuiButton lastInteractedSlider;
-    private OverlayConfigGuiButton lastInteractedOverlay;
+    private OverlayConfigGuiButton currentlyOpenOverlay;
 
     private final Scrollbar configScrollbar = new Scrollbar();
     private final Scrollbar categoryScrollbar = new Scrollbar();
@@ -130,7 +129,7 @@ public class ConfigGuiScreen extends GuiScreen {
         CATEGORY_BOX.LEFT = GUI_INSIDE.LEFT;
         CATEGORY_BOX.TOP = GUI_INSIDE.TOP + fontRendererObj.FONT_HEIGHT + 1 + PADDING;
         CATEGORY_BOX.RIGHT = GUI_INSIDE.LEFT + GUI_WIDTH / 5;
-        final int categoryContentHeight = getCategoryContentHeight();
+        final int categoryContentHeight = getContentHeight(this.categoryElements);
         final int categoryMaxY = CATEGORY_BOX.TOP + categoryContentHeight + 2 * PADDING;
         CATEGORY_BOX.BOTTOM = Math.min(categoryMaxY, GUI_INSIDE.BOTTOM);
 
@@ -166,10 +165,10 @@ public class ConfigGuiScreen extends GuiScreen {
         SEARCH_BOX.BOTTOM = GUI_INSIDE.TOP + mc.fontRendererObj.FONT_HEIGHT;
 
         this.categoryScrollbar.init(lastCategoryScroll, categoryContentHeight, CATEGORY_BOX.getHeight());
-        this.configScrollbar.init(lastConfigScroll, this.getConfigContentHeight(), CONFIG_BOX.getHeight());
+        this.configScrollbar.init(lastConfigScroll, getContentHeight(this.renderedConfigElements), CONFIG_BOX.getHeight());
 
         this.lastInteractedSlider = null;
-        this.lastInteractedOverlay = null;
+        closeOpenOverlay();
 
         this.mc.entityRenderer.loadShader(BLUR);
         super.initGui();
@@ -178,8 +177,8 @@ public class ConfigGuiScreen extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
-        final int categoryContentHeight = this.getCategoryContentHeight();
-        final int configContentHeight = this.getConfigContentHeight();
+        final int categoryContentHeight = getContentHeight(this.categoryElements);
+        final int configContentHeight = getContentHeight(this.renderedConfigElements);
 
         this.categoryScrollbar.updateScrollPos(categoryContentHeight, CATEGORY_BOX.getHeight());
         this.configScrollbar.updateScrollPos(configContentHeight, CONFIG_BOX.getHeight());
@@ -352,7 +351,7 @@ public class ConfigGuiScreen extends GuiScreen {
             return;
         }
         if (searchField != null) {
-            if (keyCode == 1 && searchField.isFocused()) {
+            if (keyCode == Keyboard.KEY_ESCAPE && searchField.isFocused()) {
                 searchField.setText("");
                 updateSearch("");
                 searchField.setFocused(false);
@@ -408,24 +407,6 @@ public class ConfigGuiScreen extends GuiScreen {
         return false;
     }
 
-    private int getCategoryContentHeight() {
-        int height = 0;
-        for (final CategoryGuiButton category : this.categoryElements) {
-            height += category.getHeight() + ELEMENT_GAP;
-        }
-        if (!this.categoryElements.isEmpty()) height -= ELEMENT_GAP;
-        return height;
-    }
-
-    private int getConfigContentHeight() {
-        int height = 0;
-        for (final ConfigUIElement element : this.renderedConfigElements) {
-            height += element.getHeight() + ELEMENT_GAP;
-        }
-        if (!this.renderedConfigElements.isEmpty()) height -= ELEMENT_GAP;
-        return height;
-    }
-
     public void setFocusedCategory(String categoryName) {
         if (categoryName == null) return;
         this.selectedCategory = categoryName;
@@ -435,7 +416,7 @@ public class ConfigGuiScreen extends GuiScreen {
         }
         this.configScrollbar.resetScroll();
         this.lastInteractedSlider = null;
-        this.lastInteractedOverlay = null;
+        closeOpenOverlay();
         this.renderedConfigElements.clear();
         for (final ConfigUIElement element : this.configElements) {
             if (categoryName.equals(element.getCategory())) {
@@ -452,7 +433,7 @@ public class ConfigGuiScreen extends GuiScreen {
         search = search.toLowerCase();
         this.configScrollbar.resetScroll();
         this.lastInteractedSlider = null;
-        this.lastInteractedOverlay = null;
+        closeOpenOverlay();
         this.renderedConfigElements.clear();
         String lastKey = null;
         final int elementWidth = CONFIG_BOX.getWidth() - 2 * PADDING;

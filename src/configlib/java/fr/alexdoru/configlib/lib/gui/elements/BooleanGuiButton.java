@@ -3,7 +3,6 @@ package fr.alexdoru.configlib.lib.gui.elements;
 import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.api.ConfigProperty;
 import fr.alexdoru.configlib.lib.gui.MouseButton;
-import net.minecraft.util.EnumChatFormatting;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -17,19 +16,16 @@ public class BooleanGuiButton extends ConfigGuiButton {
         super(field, event, annotation);
         this.toggled = (boolean) this.field.get(null);
         this.button = getMainButton(getBooleanText(toggled));
+        this.rightSideContentWidth = button.width + BUTTON_RIGHT_MARGIN;
+        this.rightSideContentHeight = button.height;
     }
 
     @Override
-    protected int getRightSideContentWidth() {
-        return button.width + BUTTON_RIGHT_MARGIN;
-    }
-
-    @Override
-    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
-        super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
+    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY, boolean canMouseBeVisuallyOverElement) {
+        super.draw(colorPalette, drawX, drawY, mouseX, mouseY, canMouseBeVisuallyOverElement);
         button.xPosition = contentLeft;
-        button.yPosition = drawY + (this.hasComment() ? PADDING + mc.fontRendererObj.FONT_HEIGHT / 2 : (getHeight() - button.height) / 2);
-        button.drawButton(colorPalette, mc, mouseX, mouseY);
+        button.yPosition = drawY + getCenterYOffset(button.height);
+        button.drawButton(colorPalette, mc, mouseX, mouseY, canMouseBeVisuallyOverElement);
     }
 
     @Override
@@ -48,9 +44,4 @@ public class BooleanGuiButton extends ConfigGuiButton {
         toggled = (boolean) this.field.get(null);
         invokeConfigEvent();
     }
-
-    private String getButtonText() {
-        return toggled ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled";
-    }
-
 }

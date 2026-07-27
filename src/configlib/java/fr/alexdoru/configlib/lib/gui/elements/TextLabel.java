@@ -20,7 +20,7 @@ public class TextLabel implements ConfigUIElement {
     }
 
     @Override
-    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
+    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY, boolean canMouseBeVisuallyOverElement) {
         final int textX = drawX + (boxWidth - mc.fontRendererObj.getStringWidth(this.text)) / 2;
         mc.fontRendererObj.drawStringWithShadow(this.text, textX, drawY, colorPalette.LABEL_TEXT);
     }
@@ -49,5 +49,4 @@ public class TextLabel implements ConfigUIElement {
     public boolean matchSearch(String search) {
         return false;
     }
-
 }

@@ -7,13 +7,11 @@ import fr.alexdoru.configlib.lib.RendererManager;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.MouseButton;
 import fr.alexdoru.configlib.lib.gui.RendererEditGuiScreen;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class RendererGuiButton extends ConfigGuiButton {
 
@@ -36,38 +34,32 @@ public class RendererGuiButton extends ConfigGuiButton {
         this.rendererPosition = ((RendererPosition) field.get(null));
         this.toggled = this.rendererPosition.isEnabled();
         this.buttonEnabled = getMainButton(getBooleanText(toggled));
-        this.buttonMoveHud = new ClickGuiButton(0, 0, 0, 20, 20, "");
+        final int moveHudBtnSize = buttonEnabled.height;
+        this.buttonMoveHud = new ClickGuiButton(0, 0, 0, moveHudBtnSize, moveHudBtnSize, "");
         this.buttonMoveHud.setTexture(new ResourceLocation("configlib", "move.png"));
+        this.buttonMoveHud.setHoveringText("Move HUD");
+        this.rightSideContentWidth = buttonEnabled.width + BUTTON_RIGHT_MARGIN + 1 + buttonMoveHud.width;
+        this.rightSideContentHeight = buttonEnabled.height;
     }
 
     @Override
-    protected int getRightSideContentWidth() {
-        return buttonEnabled.width + BUTTON_RIGHT_MARGIN;
+    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY, boolean canMouseBeVisuallyOverElement) {
+        super.draw(colorPalette, drawX, drawY, mouseX, mouseY, canMouseBeVisuallyOverElement);
+
+        final int top = drawY + getCenterYOffset(buttonEnabled.height);
+
+        buttonMoveHud.xPosition = contentLeft;
+        buttonMoveHud.yPosition = top;
+        buttonMoveHud.drawButton(colorPalette, mc, mouseX, mouseY, canMouseBeVisuallyOverElement);
+
+        buttonEnabled.xPosition = buttonMoveHud.xPosition + buttonMoveHud.width + 1;
+        buttonEnabled.yPosition = top;
+        buttonEnabled.drawButton(colorPalette, mc, mouseX, mouseY, canMouseBeVisuallyOverElement);
     }
 
     @Override
-    public void setBoxWidth(int boxWidth) {
-        super.setBoxWidth(boxWidth - 20 - 1);
-        this.boxWidth = boxWidth;
-    }
-
-    @Override
-    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
-        super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
-        buttonEnabled.xPosition = contentLeft;
-        buttonEnabled.yPosition = drawY + PADDING;
-        buttonEnabled.drawButton(colorPalette, mc, mouseX, mouseY);
-
-        buttonMoveHud.xPosition = buttonEnabled.xPosition - buttonMoveHud.width - 1;
-        buttonMoveHud.yPosition = buttonEnabled.yPosition;
-        buttonMoveHud.drawButton(colorPalette, mc, mouseX, mouseY);
-
-        if (buttonMoveHud.isMouseOver()) {
-            final String text = "Move HUD";
-            final int textX = buttonMoveHud.xPosition - 4 - mc.fontRendererObj.getStringWidth(text);
-            final int textY = buttonMoveHud.yPosition + (buttonMoveHud.height - 8) / 2;
-            mc.fontRendererObj.drawStringWithShadow(text, textX, textY, colorPalette.HUD_BUTTON_HINT_TEXT);
-        }
+    public List<String> getHoveringTextLines() {
+        return (buttonMoveHud.isMouseOver() && buttonMoveHud.hasHoveringText()) ? buttonMoveHud.getHoveringTextLines() : null;
     }
 
     @Override
@@ -92,9 +84,4 @@ public class RendererGuiButton extends ConfigGuiButton {
         toggled = rendererPosition.isEnabled();
         invokeConfigEvent();
     }
-
-//    @Override
-//    public int getHeight() {
-//        return Math.max(super.getHeight(), PADDING + buttonEnabled.height + 1 + buttonMoveHud.height + PADDING - 1);
-//    }
 }
