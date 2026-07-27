@@ -28,6 +28,12 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     protected int posX, posY;
     protected int contentLeft;
 
+    /** The distance between the left-most position of the content (button) and the right side of the rect */
+    protected int rightSideContentWidth;
+
+    /** The height of the right-side content (button[s], slider, etc...) */
+    protected int rightSideContentHeight;
+
     protected ConfigGuiButton(Field field, Method event, ConfigProperty annotation) {
         this.field = field;
         this.event = event;
