@@ -158,9 +158,9 @@ public final class ConfigFieldContainer {
                 break;
             }
             case ENUM_COLOR: {
-                EnumChatFormatting value = (EnumChatFormatting) this.getEnumValue(this.getProp().getString());
+                EnumChatFormatting value = this.getEnumValue(this.getProp().getString());
                 if (value == null || !value.isColor()) {
-                    value = (EnumChatFormatting) this.getEnumValue(this.getProp().getDefault());
+                    value = this.getEnumValue(this.getProp().getDefault());
                 }
                 field.set(null, value);
                 break;
@@ -294,13 +294,13 @@ public final class ConfigFieldContainer {
     }
 
     @Nullable
-    private Enum<?> getEnumValue(@NotNull String valueName) {
+    private <T extends Enum<T>> T getEnumValue(@NotNull String valueName) {
         if (!Enum.class.isAssignableFrom(field.getType())) {
             throw new IllegalArgumentException();
         }
         try {
-            //noinspection rawtypes,unchecked
-            return Enum.valueOf((Class<? extends Enum>) field.getType(), valueName);
+            //noinspection unchecked
+            return Enum.valueOf((Class<T>) field.getType(), valueName);
         } catch (IllegalArgumentException ignored) {}
         return null;
     }
