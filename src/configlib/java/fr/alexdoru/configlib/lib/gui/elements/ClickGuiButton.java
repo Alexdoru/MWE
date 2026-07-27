@@ -35,7 +35,11 @@ public class ClickGuiButton extends GuiButton {
     }
 
     public void drawButton(ColorPalette colorPalette, Minecraft mc, int mouseX, int mouseY) {
-        this.hovered = this.visible && mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+        drawButton(colorPalette, mc, mouseX, mouseY, true);
+    }
+
+    public void drawButton(ColorPalette colorPalette, Minecraft mc, int mouseX, int mouseY, boolean canMouseBeVisuallyOverElement) {
+        this.hovered = canMouseBeVisuallyOverElement && this.visible && mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
         if (this.visible) {
             this.mouseDragged(mc, mouseX, mouseY);
             GuiUtil.drawBoxWithOutline(
