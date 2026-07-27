@@ -11,6 +11,8 @@ import java.util.List;
 
 public class CategoryHeader implements ConfigUIElement {
 
+    private static final int COMMENT_TOP_MARGIN = 4;
+
     private final Minecraft mc = Minecraft.getMinecraft();
     private final String name;
     private final String displayname;
@@ -44,7 +46,7 @@ public class CategoryHeader implements ConfigUIElement {
     }
 
     @Override
-    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
+    public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY, boolean canMouseBeVisuallyOverElement) {
         final int textX = drawX + (boxWidth - mc.fontRendererObj.getStringWidth(displayname) * 2) / 2;
         GlStateManager.translate(textX, drawY, 0);
         GlStateManager.scale(2, 2, 2);
@@ -52,7 +54,7 @@ public class CategoryHeader implements ConfigUIElement {
         GlStateManager.scale(0.5, 0.5, 0.5);
         GlStateManager.translate(-textX, -drawY, 0);
         if (hasComment) {
-            int commentY = drawY + mc.fontRendererObj.FONT_HEIGHT * 2 + 8;
+            int commentY = drawY + mc.fontRendererObj.FONT_HEIGHT * 2 + COMMENT_TOP_MARGIN;
             for (final String line : commentToRender) {
                 final int lineX = drawX + (boxWidth - mc.fontRendererObj.getStringWidth(line)) / 2;
                 mc.fontRendererObj.drawStringWithShadow(line, lineX, commentY, colorPalette.CATEGORY_HEADER_COMMENT_TEXT);
@@ -69,9 +71,9 @@ public class CategoryHeader implements ConfigUIElement {
     @Override
     public int getHeight() {
         if (hasComment) {
-            return mc.fontRendererObj.FONT_HEIGHT * 2 + 8 + mc.fontRendererObj.FONT_HEIGHT * commentToRender.size() + 8;
+            return mc.fontRendererObj.FONT_HEIGHT * 2 + COMMENT_TOP_MARGIN + mc.fontRendererObj.FONT_HEIGHT * commentToRender.size();
         }
-        return mc.fontRendererObj.FONT_HEIGHT * 2 + 8;
+        return mc.fontRendererObj.FONT_HEIGHT * 2;
     }
 
     @Override
@@ -89,4 +91,8 @@ public class CategoryHeader implements ConfigUIElement {
         return false;
     }
 
+    @Override
+    public int getBottomMargin() {
+        return 8;
+    }
 }
