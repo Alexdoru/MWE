@@ -22,23 +22,18 @@ public final class ConfigFieldContainer {
 
     private final Map<String, Property> propertyMap;
     private final Field field;
-    private final FieldType fieldType;
     private final ConfigProperty annotation;
     private final Method event;
     private final Method hideOverride;
+    private final FieldType fieldType;
 
-    ConfigFieldContainer(
-            Configuration config,
-            Map<String, Property> propertyMap,
-            Field field,
-            Map<String, Method> configEvents,
-            Map<String, Method> configHideOverrides) throws IllegalAccessException {
+    ConfigFieldContainer(Configuration config, Map<String, Property> propertyMap, Field field, ConfigNameResolver nameResolver) throws IllegalAccessException {
         this.propertyMap = propertyMap;
         this.field = field;
-        this.fieldType = getFieldType(field);
         this.annotation = field.getAnnotation(ConfigProperty.class);
-        this.event = configEvents.get(annotation.name());
-        this.hideOverride = configHideOverrides.get(annotation.name());
+        this.event = nameResolver.getEvent(annotation);
+        this.hideOverride = nameResolver.getHideOverride(annotation);
+        this.fieldType = getFieldType(field);
         this.createPropertyFromField(config);
         this.loadConfigValueToField();
     }
@@ -158,9 +153,9 @@ public final class ConfigFieldContainer {
                 break;
             }
             case ENUM_COLOR: {
-                EnumChatFormatting value = (EnumChatFormatting) this.getEnumValue(this.getProp().getString());
+                EnumChatFormatting value = this.getEnumValue(this.getProp().getString());
                 if (value == null || !value.isColor()) {
-                    value = (EnumChatFormatting) this.getEnumValue(this.getProp().getDefault());
+                    value = this.getEnumValue(this.getProp().getDefault());
                 }
                 field.set(null, value);
                 break;
@@ -231,20 +226,20 @@ public final class ConfigFieldContainer {
         }
     }
 
-    private String getKey(String key) {
-        return key + annotation.name();
-    }
-
-    private Property getProp(String key) {
-        return propertyMap.get(this.getKey(key));
-    }
-
     private String getKey() {
-        return annotation.name();
+        return annotation.category() + "$" + annotation.name();
+    }
+
+    private String getKey(String key) {
+        return annotation.category() + "$" + key + annotation.name();
     }
 
     private Property getProp() {
         return propertyMap.get(this.getKey());
+    }
+
+    private Property getProp(String key) {
+        return propertyMap.get(this.getKey(key));
     }
 
     public ConfigUIElement getConfigButton(ConfigGuiScreen configGuiScreen, RendererManager rendererManager) throws IllegalAccessException {
@@ -294,13 +289,13 @@ public final class ConfigFieldContainer {
     }
 
     @Nullable
-    private Enum<?> getEnumValue(@NotNull String valueName) {
+    private <T extends Enum<T>> T getEnumValue(@NotNull String valueName) {
         if (!Enum.class.isAssignableFrom(field.getType())) {
             throw new IllegalArgumentException();
         }
         try {
-            //noinspection rawtypes,unchecked
-            return Enum.valueOf((Class<? extends Enum>) field.getType(), valueName);
+            //noinspection unchecked
+            return Enum.valueOf((Class<T>) field.getType(), valueName);
         } catch (IllegalArgumentException ignored) {}
         return null;
     }

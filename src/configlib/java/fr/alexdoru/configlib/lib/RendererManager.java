@@ -17,12 +17,12 @@ import java.util.Objects;
 
 public final class RendererManager implements IRendererManager {
 
-    private final String configName;
+    private final String debugName;
     private final List<IRenderer> ALL_RENDERERS = new ArrayList<>();
     private final List<IRenderer> HUD_RENDERERS = new ArrayList<>();
 
     public RendererManager(String configName) {
-        this.configName = configName;
+        this.debugName = configName + " HUD";
     }
 
     @Override
@@ -46,7 +46,7 @@ public final class RendererManager implements IRendererManager {
         final Minecraft mc = Minecraft.getMinecraft();
         if (event.type == RenderGameOverlayEvent.ElementType.TEXT && !(mc.currentScreen instanceof RendererEditGuiScreen)) {
             final long time = System.currentTimeMillis();
-            mc.mcProfiler.startSection(this.configName + " HUD");
+            mc.mcProfiler.startSection(this.debugName);
             for (final IRenderer renderer : HUD_RENDERERS) {
                 if (renderer.isEnabled(time)) {
                     renderer.render(event.resolution);

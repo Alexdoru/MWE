@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ConfigPropertyHideOverride {
 
-    /** The names of the config settings that use this condition to hide from the config gui screen */
+    /** The names of the config settings that use this condition to hide from the config gui screen, the name can be simply the config name, or category name + "$" + config name */
     String[] name();
 
 }

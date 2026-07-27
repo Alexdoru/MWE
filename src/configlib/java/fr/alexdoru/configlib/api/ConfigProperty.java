@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ConfigProperty {
 
-    /** The name of this config property, used as a unique key in forge's property system */
+    /** The name of this config property */
     String name();
 
     /** The name of the category this config property belongs to */

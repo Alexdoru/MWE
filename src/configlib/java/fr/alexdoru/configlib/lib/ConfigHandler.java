@@ -30,6 +30,7 @@ public final class ConfigHandler implements IConfigHandler {
     private final String savedVersion;
     private final String version;
     private final boolean hasUpdated;
+    private final ConfigNameResolver configNameResolver = new ConfigNameResolver();
     private final Map<String, Property> propertyMap = new HashMap<>();
     private final List<ConfigFieldContainer> configFields = new ArrayList<>();
     private final Set<String> categoryNames = new HashSet<>();
@@ -80,33 +81,18 @@ public final class ConfigHandler implements IConfigHandler {
 
     @Override
     public void registerConfig(@NotNull Class<?> clazz) {
-        if (config == null) {
-            throw new IllegalStateException("Config file is not loaded yet");
-        }
         final List<Method> loadEvents = new ArrayList<>();
         final List<Method> updateEvents = new ArrayList<>();
         try {
-            final Map<String, Method> configEvents = new HashMap<>();
-            final Set<String> eventUsages = new HashSet<>();
-            final Map<String, Method> configHideOverrides = new HashMap<>();
-            final Set<String> hideUsages = new HashSet<>();
             for (final Method method : clazz.getDeclaredMethods()) {
                 if (method.isAnnotationPresent(ConfigPropertyEvent.class)) {
                     validateMethod(method, "event", "()V");
                     method.setAccessible(true);
-                    final String[] configName = method.getAnnotation(ConfigPropertyEvent.class).name();
-                    for (final String name : configName) {
-                        configEvents.put(name, method);
-                        eventUsages.add(name);
-                    }
+                    configNameResolver.addEvent(method.getAnnotation(ConfigPropertyEvent.class).name(), method);
                 } else if (method.isAnnotationPresent(ConfigPropertyHideOverride.class)) {
                     validateMethod(method, "hide condition", "()Z");
                     method.setAccessible(true);
-                    final String[] configName = method.getAnnotation(ConfigPropertyHideOverride.class).name();
-                    for (final String name : configName) {
-                        configHideOverrides.put(name, method);
-                        hideUsages.add(name);
-                    }
+                    configNameResolver.addHideOverride(method.getAnnotation(ConfigPropertyHideOverride.class).name(), method);
                 } else if (method.isAnnotationPresent(ConfigUpdatedEvent.class)) {
                     validateMethod(method, "update", "(Ljava/lang/String;Ljava/lang/String;)V");
                     method.setAccessible(true);
@@ -120,10 +106,8 @@ public final class ConfigHandler implements IConfigHandler {
             for (final Field field : clazz.getDeclaredFields()) {
                 if (field.isAnnotationPresent(ConfigProperty.class)) {
                     validateField(field);
-                    final ConfigFieldContainer fieldContainer = new ConfigFieldContainer(config, propertyMap, field, configEvents, configHideOverrides);
-                    eventUsages.remove(fieldContainer.getAnnotation().name());
-                    hideUsages.remove(fieldContainer.getAnnotation().name());
-                    configFields.add(fieldContainer);
+                    field.setAccessible(true);
+                    configFields.add(new ConfigFieldContainer(config, propertyMap, field, configNameResolver));
                 } else if (field.isAnnotationPresent(ConfigCategory.class)) {
                     validateField(field);
                     field.setAccessible(true);
@@ -135,12 +119,7 @@ public final class ConfigHandler implements IConfigHandler {
                     categories.add(categoryContainer);
                 }
             }
-            if (!eventUsages.isEmpty()) {
-                throw new IllegalStateException("Some config events are not used anywhere : " + Arrays.toString(eventUsages.toArray()));
-            }
-            if (!hideUsages.isEmpty()) {
-                throw new IllegalStateException("Some config hide conditions are not used anywhere : " + Arrays.toString(hideUsages.toArray()));
-            }
+            configNameResolver.checkUnused();
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Caught exception while registering config class " + clazz.getName(), e);
         }

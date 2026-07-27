@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ConfigPropertyEvent {
 
-    /** The names of the config settings that when switched will trigger this method event */
+    /** The names of the config settings that when switched will trigger this method event, the name can be simply the config name, or category name + "$" + config name */
     String[] name();
 
 }
