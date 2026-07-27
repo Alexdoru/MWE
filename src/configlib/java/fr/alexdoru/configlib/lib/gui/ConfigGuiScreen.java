@@ -289,6 +289,13 @@ public class ConfigGuiScreen extends GuiScreen {
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
         final MouseButton button = MouseButton.from(mouseButton);
+        if (currentlyOpenOverlay != null) {
+            final boolean handledByOverlay = currentlyOpenOverlay.mouseReleasedOnOverlay(mouseX, mouseY, button);
+            if (!currentlyOpenOverlay.isOverlayOpen()) this.currentlyOpenOverlay = null;
+            if (handledByOverlay) {
+                return;
+            }
+        }
         for (final ConfigUIElement element : this.renderedConfigElements) {
             if (element.mouseReleased(mouseX, mouseY, button)) {
                 return;
