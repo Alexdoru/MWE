@@ -41,4 +41,5 @@ public interface ConfigUIElement extends SizedElement {
         }
     }
 
+    default List<String> getHoveringTextLines() { return null; }
 }
