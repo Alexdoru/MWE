@@ -71,6 +71,11 @@ Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, th
 #### Bug Fix
 
 - **Fix actionbar text overlap** - Prevents the actionbar text from overlapping with the armor bar if the player has more than 2 rows of health
+- **Case Command fix** - fix the command handler being case-sensitive
+- **Slash command fix** - fix the command handler not checking for a `/` at the start of messages before running a
+  command
+- **Glass pot fix** - fix forge bug allowing the client to start sprinting too early after consuming an item which
+  triggers hypixel's anticheat
 
 </details>
 
