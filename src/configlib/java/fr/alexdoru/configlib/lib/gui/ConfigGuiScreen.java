@@ -169,7 +169,7 @@ public class ConfigGuiScreen extends GuiScreen {
         this.configScrollbar.init(lastConfigScroll, this.getConfigContentHeight(), CONFIG_BOX.getHeight());
 
         this.lastInteractedSlider = null;
-        this.lastInteractedOverlay = null;
+        this.closeOverlay();
 
         this.mc.entityRenderer.loadShader(BLUR);
         super.initGui();
@@ -302,6 +302,10 @@ public class ConfigGuiScreen extends GuiScreen {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (lastInteractedOverlay != null) {
+            if (keyCode == Keyboard.KEY_ESCAPE) {
+                lastInteractedOverlay.closeOverlay();
+                lastInteractedOverlay = null;
+            }
             return;
         }
         if (lastInteractedSlider != null && (keyCode == Keyboard.KEY_LEFT || keyCode == Keyboard.KEY_RIGHT)) {
@@ -391,7 +395,7 @@ public class ConfigGuiScreen extends GuiScreen {
         }
         this.configScrollbar.resetScroll();
         this.lastInteractedSlider = null;
-        this.lastInteractedOverlay = null;
+        this.closeOverlay();
         this.renderedConfigElements.clear();
         for (final ConfigUIElement element : this.configElements) {
             if (categoryName.equals(element.getCategory())) {
@@ -408,7 +412,7 @@ public class ConfigGuiScreen extends GuiScreen {
         search = search.toLowerCase();
         this.configScrollbar.resetScroll();
         this.lastInteractedSlider = null;
-        this.lastInteractedOverlay = null;
+        this.closeOverlay();
         this.renderedConfigElements.clear();
         String lastKey = null;
         final int elementWidth = CONFIG_BOX.getWidth() - 2 * PADDING;
@@ -435,6 +439,13 @@ public class ConfigGuiScreen extends GuiScreen {
             final TextLabel textLabel = new TextLabel("Nothing was found! :(");
             textLabel.setBoxWidth(elementWidth);
             this.renderedConfigElements.add(textLabel);
+        }
+    }
+
+    private void closeOverlay() {
+        if (this.lastInteractedOverlay != null) {
+            this.lastInteractedOverlay.closeOverlay();
+            this.lastInteractedOverlay = null;
         }
     }
 

@@ -99,7 +99,7 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
                     }
                 }
             } else {
-                isOverlayOpen = false;
+                this.closeOverlay();
             }
             return true;
         }

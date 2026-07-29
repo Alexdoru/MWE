@@ -13,7 +13,11 @@ public abstract class OverlayConfigGuiButton extends ConfigGuiButton {
         super(field, event, annotation);
     }
 
-    public boolean isOverlayOpen() {
+    public void closeOverlay() {
+        this.isOverlayOpen = false;
+    }
+
+    public final boolean isOverlayOpen() {
         return isOverlayOpen;
     }
 
