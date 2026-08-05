@@ -265,7 +265,7 @@ public final class ConfigFieldContainer {
             case INT: {
                 if (annotation.isColor()) {
                     final int defaultColor = Integer.parseInt(this.getProp().getDefault());
-                    return new ColorGuiButton(configGuiScreen, field, annotation, defaultColor);
+                    return new ColorGuiButton(configGuiScreen, field, event, annotation, defaultColor);
                 } else {
                     return new SliderGuiButton(field, event, annotation);
                 }

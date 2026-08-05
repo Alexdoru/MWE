@@ -18,6 +18,7 @@ public class ColorSelectionGuiScreen extends GuiScreen {
     private final Field field;
     private final int initialColor;
     private final int defaultColor;
+    private int lastSavedColor;
     private GuiSlider sliderRed;
     private GuiSlider sliderGreen;
     private GuiSlider sliderBlue;
@@ -30,6 +31,7 @@ public class ColorSelectionGuiScreen extends GuiScreen {
         this.field = field;
         this.initialColor = ((int) field.get(null));
         this.defaultColor = defaultColor;
+        this.lastSavedColor = this.initialColor;
         this.hasAlpha = ((defaultColor >> 24) & 0xff) != 0;
         this.setter = setter;
     }
@@ -50,12 +52,7 @@ public class ColorSelectionGuiScreen extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        try {
-            this.field.set(null, getCurrentColor());
-            this.setter.accept(getCurrentColor());
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException("Couldn't set color!");
-        }
+        this.saveColorToField();
         super.drawScreen(mouseX, mouseY, partialTicks);
         final int sideLength = 10 + (20 + 4) * (this.hasAlpha ? 4 : 3) + 20 + 10;
         final int leftX = getxCenter() + 10;
@@ -83,12 +80,7 @@ public class ColorSelectionGuiScreen extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
-        try {
-            this.field.set(null, getCurrentColor());
-            this.setter.accept(getCurrentColor());
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException("Couldn't set color!");
-        }
+        this.saveColorToField();
         this.mc.entityRenderer.stopUseShader();
         super.onGuiClosed();
     }
@@ -96,6 +88,19 @@ public class ColorSelectionGuiScreen extends GuiScreen {
     @Override
     public boolean doesGuiPauseGame() {
         return false;
+    }
+
+    private void saveColorToField() {
+        final int color = getCurrentColor();
+        if (color != this.lastSavedColor) {
+            try {
+                this.field.set(null, color);
+                this.setter.accept(color);
+                this.lastSavedColor = color;
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Couldn't set color!");
+            }
+        }
     }
 
     private int getCurrentColor() {

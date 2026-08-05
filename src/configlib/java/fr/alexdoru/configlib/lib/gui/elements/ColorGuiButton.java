@@ -8,6 +8,7 @@ import fr.alexdoru.configlib.lib.gui.GuiUtil;
 import fr.alexdoru.configlib.lib.gui.MouseButton;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 public class ColorGuiButton extends ConfigGuiButton {
 
@@ -16,8 +17,8 @@ public class ColorGuiButton extends ConfigGuiButton {
     private int color;
     private final int defaultColor;
 
-    public ColorGuiButton(ConfigGuiScreen configGuiScreen, Field field, ConfigProperty annotation, int defaultColor) throws IllegalAccessException {
-        super(field, null, annotation);
+    public ColorGuiButton(ConfigGuiScreen configGuiScreen, Field field, Method event, ConfigProperty annotation, int defaultColor) throws IllegalAccessException {
+        super(field, event, annotation);
         this.parentScreen = configGuiScreen;
         this.color = (int) this.field.get(null);
         this.defaultColor = defaultColor;
@@ -38,7 +39,10 @@ public class ColorGuiButton extends ConfigGuiButton {
     @Override
     public boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) throws IllegalAccessException {
         if (mouseButton.isLeft() && button.mousePressed(mouseX, mouseY)) {
-            mc.displayGuiScreen(new ColorSelectionGuiScreen(parentScreen, field, defaultColor, color -> this.color = color));
+            mc.displayGuiScreen(new ColorSelectionGuiScreen(parentScreen, field, defaultColor, color -> {
+                this.color = color;
+                this.invokeConfigEvent();
+            }));
             return true;
         }
         return false;
