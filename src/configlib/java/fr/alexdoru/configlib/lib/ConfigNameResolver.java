@@ -18,6 +18,7 @@ public final class ConfigNameResolver {
 
     public void addEvent(String[] names, Method method) {
         for (final String name : names) {
+            ConfigHandler.validateString(name, "Event config name");
             events.put(name, method);
             allEventNames.add(name);
         }
@@ -25,6 +26,7 @@ public final class ConfigNameResolver {
 
     public void addHideOverride(String[] names, Method method) {
         for (final String name : names) {
+            ConfigHandler.validateString(name, "Hide override config name");
             hideOverrides.put(name, method);
             allHideNames.add(name);
         }
@@ -67,7 +69,7 @@ public final class ConfigNameResolver {
     private void checkKeyCollison(String shortKey, ConfigProperty annotation, String type) {
         final ConfigProperty otherProp = shortKeyUsages.get(shortKey);
         if (otherProp != null && otherProp != annotation) {
-            throw new IllegalStateException("Ambiguous config name used for " + type + ", could be " + longKey(annotation) + " or " + longKey(otherProp));
+            throw new IllegalArgumentException("Ambiguous config name used for " + type + ", could be " + longKey(annotation) + " or " + longKey(otherProp));
         }
         shortKeyUsages.put(shortKey, annotation);
     }

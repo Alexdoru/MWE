@@ -29,6 +29,9 @@ public class SliderGuiButton extends ConfigGuiButton {
 
     public SliderGuiButton(Field field, Method event, ConfigProperty annotation) throws IllegalAccessException {
         super(field, event, annotation);
+        if (annotation.sliderMin() == annotation.sliderMax()) {
+            throw new IllegalArgumentException("Config slider cannot have same min and max values. Name : " + annotation.name());
+        }
         minValue = annotation.sliderMin();
         maxValue = annotation.sliderMax();
         if (field.getType() == int.class) {
@@ -47,7 +50,7 @@ public class SliderGuiButton extends ConfigGuiButton {
                 sliderIncrement = MathHelper.clamp_int((int) (((double) SLIDER_WIDTH - 1d) * (sliderValueD - (double) minValue) / (double) (maxValue - minValue)), 0, SLIDER_WIDTH - 1);
             }
         } else {
-            throw new IllegalArgumentException("Field of type " + field.getType() + " not supported by SliderGuiButton.");
+            throw new IllegalStateException("Field of type " + field.getType() + " not supported by SliderGuiButton.");
         }
     }
 

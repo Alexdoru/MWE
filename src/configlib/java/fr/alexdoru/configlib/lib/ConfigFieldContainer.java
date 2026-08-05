@@ -31,6 +31,8 @@ public final class ConfigFieldContainer {
         this.propertyMap = propertyMap;
         this.field = field;
         this.annotation = field.getAnnotation(ConfigProperty.class);
+        ConfigHandler.validateString(this.annotation.category(), "Config category name");
+        ConfigHandler.validateString(this.annotation.name(), "Config name");
         this.event = nameResolver.getEvent(annotation);
         this.hideOverride = nameResolver.getHideOverride(annotation);
         this.fieldType = getFieldType(field);
@@ -63,7 +65,7 @@ public final class ConfigFieldContainer {
                 }
             }
         }
-        throw new IllegalArgumentException("Type of field not handled by config lib " + field.getType());
+        throw new IllegalStateException("Type of field not handled by config lib " + field.getType());
     }
 
     private void createPropertyFromField(Configuration config) throws IllegalAccessException {
@@ -102,7 +104,7 @@ public final class ConfigFieldContainer {
                 final EnumChatFormatting color = (EnumChatFormatting) field.get(null);
                 Objects.requireNonNull(color);
                 if (!color.isColor()) {
-                    throw new IllegalArgumentException("EnumChatFormatting fields must be colors!");
+                    throw new IllegalStateException("EnumChatFormatting fields must be colors!");
                 }
                 propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), color.name()));
                 break;
@@ -120,7 +122,7 @@ public final class ConfigFieldContainer {
                 break;
             }
             default: {
-                throw new IllegalArgumentException("Type of field not handled by config lib " + field.getType());
+                throw new IllegalStateException("Type of field not handled by config lib " + field.getType());
             }
         }
     }
@@ -177,7 +179,7 @@ public final class ConfigFieldContainer {
                 break;
             }
             default: {
-                throw new IllegalArgumentException("Type of field not handled by config lib " + field.getType());
+                throw new IllegalStateException("Type of field not handled by config lib " + field.getType());
             }
         }
     }
@@ -221,7 +223,7 @@ public final class ConfigFieldContainer {
                 break;
             }
             default: {
-                throw new IllegalArgumentException("Type of field not handled by config lib " + field.getType());
+                throw new IllegalStateException("Type of field not handled by config lib " + field.getType());
             }
         }
     }
@@ -258,9 +260,6 @@ public final class ConfigFieldContainer {
                 return new BooleanGuiButton(field, event, annotation);
             }
             case DOUBLE: {
-                if (annotation.sliderMin() == annotation.sliderMax()) {
-                    throw new IllegalArgumentException("Config slider cannot have same min and max values. Name : " + annotation.name());
-                }
                 return new SliderGuiButton(field, event, annotation);
             }
             case INT: {
@@ -268,9 +267,6 @@ public final class ConfigFieldContainer {
                     final int defaultColor = Integer.parseInt(this.getProp().getDefault());
                     return new ColorGuiButton(configGuiScreen, field, annotation, defaultColor);
                 } else {
-                    if (annotation.sliderMin() == annotation.sliderMax()) {
-                        throw new IllegalArgumentException("Config slider cannot have same min and max values. Name : " + annotation.name());
-                    }
                     return new SliderGuiButton(field, event, annotation);
                 }
             }
@@ -281,7 +277,7 @@ public final class ConfigFieldContainer {
                 return new EnumGuiButton(field, event, annotation);
             }
         }
-        throw new IllegalArgumentException("Type of field not handled by config lib gui screen " + field.getType() + " you can mark the field as hidden to prevent crashing");
+        throw new IllegalStateException("Type of field not handled by config lib gui screen " + field.getType() + " you can mark the field as hidden to prevent crashing");
     }
 
     public ConfigProperty getAnnotation() {

@@ -13,6 +13,7 @@ public final class ConfigCategoryContainer {
 
     ConfigCategoryContainer(Field field) throws IllegalAccessException {
         this.categoryName = ((String) field.get(null));
+        ConfigHandler.validateString(this.categoryName, "Category name");
         this.annotation = field.getAnnotation(ConfigCategory.class);
     }
 

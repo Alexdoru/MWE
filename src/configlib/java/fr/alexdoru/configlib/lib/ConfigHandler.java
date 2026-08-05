@@ -110,6 +110,9 @@ public final class ConfigHandler implements IConfigHandler {
                     configFields.add(new ConfigFieldContainer(config, propertyMap, field, configNameResolver));
                 } else if (field.isAnnotationPresent(ConfigCategory.class)) {
                     validateField(field);
+                    if (field.getType() != String.class) {
+                        throw new IllegalStateException("Config category must be a String");
+                    }
                     field.setAccessible(true);
                     final ConfigCategoryContainer categoryContainer = new ConfigCategoryContainer(field);
                     final String categoryName = categoryContainer.getCategoryName();
@@ -148,21 +151,6 @@ public final class ConfigHandler implements IConfigHandler {
         }
         if (config.hasChanged()) {
             config.save();
-        }
-    }
-
-    private static void validateMethod(Method method, String methodType, String desc) {
-        if (!Modifier.isStatic(method.getModifiers())) {
-            throw new IllegalStateException("Config " + methodType + " method " + method.getName() + " must be static");
-        }
-        if (!desc.equals(Type.getMethodDescriptor(method))) {
-            throw new IllegalStateException("Config " + methodType + " method " + method.getName() + " must be " + desc);
-        }
-    }
-
-    private static void validateField(Field field) {
-        if (!Modifier.isStatic(field.getModifiers())) {
-            throw new IllegalStateException("Config field " + field.getName() + " must be static");
         }
     }
 
@@ -311,6 +299,27 @@ public final class ConfigHandler implements IConfigHandler {
                 categoryConfigs.addAll(configs);
             }
             config.setCategoryPropertyOrder(entry.getKey(), categoryConfigs);
+        }
+    }
+
+    private static void validateMethod(Method method, String methodType, String desc) {
+        if (!Modifier.isStatic(method.getModifiers())) {
+            throw new IllegalStateException("Config " + methodType + " method " + method.getName() + " must be static");
+        }
+        if (!desc.equals(Type.getMethodDescriptor(method))) {
+            throw new IllegalStateException("Config " + methodType + " method " + method.getName() + " must be " + desc);
+        }
+    }
+
+    private static void validateField(Field field) {
+        if (!Modifier.isStatic(field.getModifiers())) {
+            throw new IllegalStateException("Config field " + field.getName() + " must be static");
+        }
+    }
+
+    static void validateString(String s, String type) {
+        if (s == null || s.isEmpty()) {
+            throw new IllegalArgumentException(type + " cannot be null or empty");
         }
     }
 
