@@ -1,6 +1,7 @@
 package fr.alexdoru.configlib.lib.gui;
 
 import fr.alexdoru.configlib.api.ColorPalette;
+import fr.alexdoru.configlib.api.ConfigProperty;
 import fr.alexdoru.configlib.api.IConfigTitleRenderer;
 import fr.alexdoru.configlib.lib.ConfigCategoryContainer;
 import fr.alexdoru.configlib.lib.ConfigFieldContainer;
@@ -72,7 +73,8 @@ public class ConfigGuiScreen extends GuiScreen {
         for (final ConfigFieldContainer configField : configFields) {
             final ConfigUIElement guiButton = configField.getConfigButton(this, rendererManager);
             if (guiButton != null) {
-                configButtonsMap.put(configField.getAnnotation().name(), guiButton);
+                final ConfigProperty prop = configField.getAnnotation();
+                configButtonsMap.put(prop.category() + "$" + prop.name(), guiButton);
             }
         }
         // sort the category entries in the order they are declared in the config
@@ -85,7 +87,7 @@ public class ConfigGuiScreen extends GuiScreen {
                 final String subCategoryName = subCategoryEntry.getKey();
                 final List<String> subCatConfigs = subCategoryEntry.getValue();
                 for (final String propertyName : subCatConfigs) {
-                    final ConfigUIElement guiButton = configButtonsMap.get(propertyName);
+                    final ConfigUIElement guiButton = configButtonsMap.get(categoryName + "$" + propertyName);
                     if (guiButton != null) {
                         if (!addedCategory && !categoryName.isEmpty()) {
                             final ConfigCategoryContainer categoryContainer = this.categoryContainerMap.get(entry.getKey());

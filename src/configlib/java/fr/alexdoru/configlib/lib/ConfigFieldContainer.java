@@ -74,14 +74,11 @@ public final class ConfigFieldContainer {
         }
         switch (this.fieldType) {
             case RENDERER: {
-                final String showKey = this.getKey("Show ");
-                final String xKey = this.getKey("Xpos ");
-                final String yKey = this.getKey("Ypos ");
                 final RendererPosition rendererPosition = (RendererPosition) field.get(null);
                 Objects.requireNonNull(rendererPosition);
-                propertyMap.put(showKey, config.get(annotation.category(), showKey, rendererPosition.isEnabled()));
-                propertyMap.put(xKey, config.get(annotation.category(), xKey, rendererPosition.getRelativeX()));
-                propertyMap.put(yKey, config.get(annotation.category(), yKey, rendererPosition.getRelativeY()));
+                propertyMap.put(this.getKey("Show "), config.get(annotation.category(), "Show " + annotation.name(), rendererPosition.isEnabled()));
+                propertyMap.put(this.getKey("Xpos "), config.get(annotation.category(), "Xpos " + annotation.name(), rendererPosition.getRelativeX()));
+                propertyMap.put(this.getKey("Ypos "), config.get(annotation.category(), "Ypos " + annotation.name(), rendererPosition.getRelativeY()));
                 break;
             }
             case STRING: {
