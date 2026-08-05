@@ -1,17 +1,14 @@
 package fr.alexdoru.configlib.lib.gui.elements;
 
 import fr.alexdoru.configlib.api.ColorPalette;
-import fr.alexdoru.configlib.api.ConfigProperty;
 import fr.alexdoru.configlib.api.RendererPosition;
+import fr.alexdoru.configlib.lib.ConfigFieldContainer;
 import fr.alexdoru.configlib.lib.RendererManager;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.MouseButton;
 import fr.alexdoru.configlib.lib.gui.RendererEditGuiScreen;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 public class RendererGuiButton extends ConfigGuiButton {
 
@@ -22,13 +19,8 @@ public class RendererGuiButton extends ConfigGuiButton {
     private final ClickGuiButton buttonEnabled;
     private final ClickGuiButton buttonMoveHud;
 
-    public RendererGuiButton(
-            ConfigGuiScreen configGuiScreen,
-            RendererManager rendererManager,
-            Field field,
-            Method event,
-            ConfigProperty annotation) throws IllegalAccessException {
-        super(field, event, annotation);
+    public RendererGuiButton(ConfigFieldContainer container, ConfigGuiScreen configGuiScreen, RendererManager rendererManager) throws IllegalAccessException {
+        super(container);
         this.parentScreen = configGuiScreen;
         this.rendererManager = rendererManager;
         this.rendererPosition = ((RendererPosition) field.get(null));

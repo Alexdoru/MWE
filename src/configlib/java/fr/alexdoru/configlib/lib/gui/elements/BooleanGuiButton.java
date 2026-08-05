@@ -1,20 +1,17 @@
 package fr.alexdoru.configlib.lib.gui.elements;
 
 import fr.alexdoru.configlib.api.ColorPalette;
-import fr.alexdoru.configlib.api.ConfigProperty;
+import fr.alexdoru.configlib.lib.ConfigFieldContainer;
 import fr.alexdoru.configlib.lib.gui.MouseButton;
 import net.minecraft.util.EnumChatFormatting;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 public class BooleanGuiButton extends ConfigGuiButton {
 
     private final ClickGuiButton button;
     private boolean toggled;
 
-    public BooleanGuiButton(Field field, Method event, ConfigProperty annotation) throws IllegalAccessException {
-        super(field, event, annotation);
+    public BooleanGuiButton(ConfigFieldContainer container) throws IllegalAccessException {
+        super(container);
         this.toggled = (boolean) this.field.get(null);
         this.button = new ClickGuiButton(mc.fontRendererObj.getStringWidth(" Disabled "), 20, getButtonText());
     }

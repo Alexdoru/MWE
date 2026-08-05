@@ -2,6 +2,7 @@ package fr.alexdoru.configlib.lib.gui.elements;
 
 import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.api.ConfigProperty;
+import fr.alexdoru.configlib.lib.ConfigFieldContainer;
 import fr.alexdoru.configlib.lib.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -18,15 +19,15 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     protected final Minecraft mc = Minecraft.getMinecraft();
     protected final Field field;
     private final Method event;
-    private final ConfigProperty annotation;
+    protected final ConfigProperty annotation;
     private final List<String> commentToRender = new ArrayList<>();
     protected int boxWidth;
     protected int posX, posY;
 
-    protected ConfigGuiButton(Field field, Method event, ConfigProperty annotation) {
-        this.field = field;
-        this.event = event;
-        this.annotation = annotation;
+    protected ConfigGuiButton(ConfigFieldContainer container) {
+        this.field = container.getField();
+        this.event = container.getEvent();
+        this.annotation = container.getAnnotation();
     }
 
     @Override

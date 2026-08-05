@@ -1,7 +1,7 @@
 package fr.alexdoru.configlib.lib.gui.elements;
 
 import fr.alexdoru.configlib.api.ColorPalette;
-import fr.alexdoru.configlib.api.ConfigProperty;
+import fr.alexdoru.configlib.lib.ConfigFieldContainer;
 import fr.alexdoru.configlib.lib.gui.Box;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.GuiUtil;
@@ -11,8 +11,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.awt.Color;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +25,8 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
     private final Box panelBox = new Box();
     private int color;
 
-    public ColorEnumGuiButton(ConfigGuiScreen parentScreen, Field field, Method event, ConfigProperty annotation) throws IllegalAccessException {
-        super(field, event, annotation);
+    public ColorEnumGuiButton(ConfigFieldContainer container, ConfigGuiScreen parentScreen) throws IllegalAccessException {
+        super(container);
         this.parentScreen = parentScreen;
         int maxWidth = 0;
         for (final EnumChatFormatting c : EnumChatFormatting.values()) {

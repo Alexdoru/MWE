@@ -1,16 +1,13 @@
 package fr.alexdoru.configlib.lib.gui.elements;
 
-import fr.alexdoru.configlib.api.ConfigProperty;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import fr.alexdoru.configlib.lib.ConfigFieldContainer;
 
 public abstract class OverlayConfigGuiButton extends ConfigGuiButton {
 
     protected boolean isOverlayOpen;
 
-    protected OverlayConfigGuiButton(Field field, Method event, ConfigProperty annotation) {
-        super(field, event, annotation);
+    protected OverlayConfigGuiButton(ConfigFieldContainer container) {
+        super(container);
     }
 
     public void closeOverlay() {

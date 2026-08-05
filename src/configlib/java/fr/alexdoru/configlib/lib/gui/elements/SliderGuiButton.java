@@ -1,13 +1,10 @@
 package fr.alexdoru.configlib.lib.gui.elements;
 
 import fr.alexdoru.configlib.api.ColorPalette;
-import fr.alexdoru.configlib.api.ConfigProperty;
+import fr.alexdoru.configlib.lib.ConfigFieldContainer;
 import fr.alexdoru.configlib.lib.gui.GuiUtil;
 import fr.alexdoru.configlib.lib.gui.MouseButton;
 import net.minecraft.util.MathHelper;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 public class SliderGuiButton extends ConfigGuiButton {
 
@@ -27,8 +24,8 @@ public class SliderGuiButton extends ConfigGuiButton {
     private double incrementStepD;
     private boolean dragging = false;
 
-    public SliderGuiButton(Field field, Method event, ConfigProperty annotation) throws IllegalAccessException {
-        super(field, event, annotation);
+    public SliderGuiButton(ConfigFieldContainer container) throws IllegalAccessException {
+        super(container);
         if (annotation.sliderMin() == annotation.sliderMax()) {
             throw new IllegalArgumentException("Config slider cannot have same min and max values. Name : " + annotation.name());
         }

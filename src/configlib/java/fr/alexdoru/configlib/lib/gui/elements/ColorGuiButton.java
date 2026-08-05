@@ -1,14 +1,11 @@
 package fr.alexdoru.configlib.lib.gui.elements;
 
 import fr.alexdoru.configlib.api.ColorPalette;
-import fr.alexdoru.configlib.api.ConfigProperty;
+import fr.alexdoru.configlib.lib.ConfigFieldContainer;
 import fr.alexdoru.configlib.lib.gui.ColorSelectionGuiScreen;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.GuiUtil;
 import fr.alexdoru.configlib.lib.gui.MouseButton;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 public class ColorGuiButton extends ConfigGuiButton {
 
@@ -17,8 +14,8 @@ public class ColorGuiButton extends ConfigGuiButton {
     private int color;
     private final int defaultColor;
 
-    public ColorGuiButton(ConfigGuiScreen configGuiScreen, Field field, Method event, ConfigProperty annotation, int defaultColor) throws IllegalAccessException {
-        super(field, event, annotation);
+    public ColorGuiButton(ConfigFieldContainer container, ConfigGuiScreen configGuiScreen, int defaultColor) throws IllegalAccessException {
+        super(container);
         this.parentScreen = configGuiScreen;
         this.color = (int) this.field.get(null);
         this.defaultColor = defaultColor;

@@ -254,30 +254,38 @@ public final class ConfigFieldContainer {
         }
         switch (this.fieldType) {
             case RENDERER: {
-                return new RendererGuiButton(configGuiScreen, rendererManager, field, event, annotation);
+                return new RendererGuiButton(this, configGuiScreen, rendererManager);
             }
             case BOOLEAN: {
-                return new BooleanGuiButton(field, event, annotation);
+                return new BooleanGuiButton(this);
             }
             case DOUBLE: {
-                return new SliderGuiButton(field, event, annotation);
+                return new SliderGuiButton(this);
             }
             case INT: {
                 if (annotation.isColor()) {
                     final int defaultColor = Integer.parseInt(this.getProp().getDefault());
-                    return new ColorGuiButton(configGuiScreen, field, event, annotation, defaultColor);
+                    return new ColorGuiButton(this, configGuiScreen, defaultColor);
                 } else {
-                    return new SliderGuiButton(field, event, annotation);
+                    return new SliderGuiButton(this);
                 }
             }
             case ENUM_COLOR: {
-                return new ColorEnumGuiButton(configGuiScreen, field, event, annotation);
+                return new ColorEnumGuiButton(this, configGuiScreen);
             }
             case ENUM: {
-                return new EnumGuiButton(field, event, annotation);
+                return new EnumGuiButton(this);
             }
         }
         throw new IllegalStateException("Type of field not handled by config lib gui screen " + field.getType() + " you can mark the field as hidden to prevent crashing");
+    }
+
+    public Field getField() {
+        return field;
+    }
+
+    public Method getEvent() {
+        return event;
     }
 
     public ConfigProperty getAnnotation() {
