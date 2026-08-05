@@ -63,6 +63,12 @@ sourceSets {
         compileClasspath += configlib.output
         runtimeClasspath += configlib.output
     }
+    test {
+        java.srcDirs = ['src/test/java']
+        resources.srcDirs = ['src/test/resources']
+        compileClasspath += configlib.output
+        runtimeClasspath += configlib.output
+    }
 }
 
 compileJava {
