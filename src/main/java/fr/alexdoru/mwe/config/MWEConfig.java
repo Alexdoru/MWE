@@ -799,6 +799,12 @@ public final class MWEConfig {
     public static final RendererPosition classInLobbyHUDPosition = new RendererPosition(true, 0.15d, 0.15d);
 
     @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Always render class in lobby HUD",
+            comment = "Also renders the HUD when ingame")
+    public static boolean alwaysRenderClassInLobbyHUD;
+
+    @ConfigProperty(
             category = FINAL_KILL_COUNTER, subCategory = "HUD",
             name = "Final Kill Counter HUD",
             comment = "Displays the HUD of the final kill counter\n"

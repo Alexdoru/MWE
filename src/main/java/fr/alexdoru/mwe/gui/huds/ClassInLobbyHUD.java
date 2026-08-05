@@ -17,12 +17,12 @@ import java.util.Map;
 
 public class ClassInLobbyHUD extends AbstractRenderer {
 
-    private static final List<Map.Entry<MWSkin, Integer>> dummyToRenderList;
-
     private final TimerUtil timer = new TimerUtil(1000L);
+    private final List<Map.Entry<MWSkin, Integer>> dummyToRenderList;
     private List<Map.Entry<MWSkin, Integer>> toRenderList = new ArrayList<>();
 
-    static {
+    public ClassInLobbyHUD() {
+        super(MWEConfig.classInLobbyHUDPosition);
         final Map<MWSkin, Integer> map = new HashMap<>();
         map.put(MWSkin.DREADLORD$DREADLORD, 10);
         map.put(MWSkin.ENDERMAN$ENDERMAN, 5);
@@ -34,27 +34,23 @@ public class ClassInLobbyHUD extends AbstractRenderer {
         dummyToRenderList = MapUtil.sortByKey(map);
     }
 
-    public ClassInLobbyHUD() {
-        super(MWEConfig.classInLobbyHUDPosition);
-    }
-
     @Override
     public void render(ScaledResolution resolution) {
         if (this.timer.update()) {
             this.updateClassInLobby();
         }
         this.rendererPosition.updateAbsolutePosition(resolution);
-        renderClassHUD(this.toRenderList);
+        this.renderClassHUD(this.toRenderList);
     }
 
     @Override
     public void renderDummy() {
-        this.renderClassHUD(dummyToRenderList);
+        this.renderClassHUD(this.dummyToRenderList);
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return ScoreboardTracker.isPreGameLobby() && this.rendererPosition.isEnabled();
+        return this.rendererPosition.isEnabled() && (ScoreboardTracker.isPreGameLobby() || MWEConfig.alwaysRenderClassInLobbyHUD && ScoreboardTracker.isInMwGame());
     }
 
     private void renderClassHUD(List<Map.Entry<MWSkin, Integer>> list) {
