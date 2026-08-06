@@ -1,7 +1,6 @@
 package fr.alexdoru.configlib.lib.gui;
 
 import fr.alexdoru.configlib.api.ColorPalette;
-import fr.alexdoru.configlib.api.ConfigProperty;
 import fr.alexdoru.configlib.api.IConfigTitleRenderer;
 import fr.alexdoru.configlib.lib.ConfigCategoryContainer;
 import fr.alexdoru.configlib.lib.ConfigFieldContainer;
@@ -73,8 +72,7 @@ public class ConfigGuiScreen extends GuiScreen {
         for (final ConfigFieldContainer configField : configFields) {
             final ConfigUIElement guiButton = configField.getConfigButton(this, rendererManager);
             if (guiButton != null) {
-                final ConfigProperty prop = configField.getAnnotation();
-                configButtonsMap.put(prop.category() + "$" + prop.name(), guiButton);
+                configButtonsMap.put(configField.getKey(), guiButton);
             }
         }
         // sort the category entries in the order they are declared in the config
@@ -159,7 +157,7 @@ public class ConfigGuiScreen extends GuiScreen {
         searchField.setFocused(prevFocus);
         if (prevSearch != null && !prevSearch.isEmpty()) {
             searchField.setText(prevSearch);
-            updateSearch(prevSearch);
+            updateSearch();
         }
 
         SEARCH_BOX.LEFT = GUI_INSIDE.RIGHT - searchField.width - 8 - 1;
@@ -171,7 +169,10 @@ public class ConfigGuiScreen extends GuiScreen {
         this.configScrollbar.init(lastConfigScroll, this.getConfigContentHeight(), CONFIG_BOX.getHeight());
 
         this.lastInteractedSlider = null;
-        this.closeOverlay();
+        if (this.lastInteractedOverlay != null) {
+            this.lastInteractedOverlay.closeOverlay();
+            this.lastInteractedOverlay = null;
+        }
 
         this.mc.entityRenderer.loadShader(BLUR);
         super.initGui();
@@ -316,9 +317,9 @@ public class ConfigGuiScreen extends GuiScreen {
             return;
         }
         if (searchField != null) {
-            if (keyCode == 1 && searchField.isFocused()) {
+            if (keyCode == Keyboard.KEY_ESCAPE && searchField.isFocused()) {
                 searchField.setText("");
-                updateSearch("");
+                updateSearch();
                 searchField.setFocused(false);
                 return;
             }
@@ -327,7 +328,7 @@ public class ConfigGuiScreen extends GuiScreen {
             searchField.setFocused(true);
             if (searchField.textboxKeyTyped(typedChar, keyCode)) {
                 if (!search.equals(searchField.getText())) {
-                    updateSearch(searchField.getText());
+                    updateSearch();
                 }
                 return;
             }
@@ -397,57 +398,64 @@ public class ConfigGuiScreen extends GuiScreen {
         }
         this.configScrollbar.resetScroll();
         this.lastInteractedSlider = null;
-        this.closeOverlay();
-        this.renderedConfigElements.clear();
-        for (final ConfigUIElement element : this.configElements) {
-            if (categoryName.equals(element.getCategory())) {
-                this.renderedConfigElements.add(element);
-            }
-        }
+        this.rebuildRenderedElementList();
     }
 
-    private void updateSearch(String search) {
-        if (search.isEmpty()) {
+    private void updateSearch() {
+        if (searchField.getText().isEmpty()) {
             this.setFocusedCategory(selectedCategory);
             return;
         }
-        search = search.toLowerCase();
         this.configScrollbar.resetScroll();
         this.lastInteractedSlider = null;
-        this.closeOverlay();
-        this.renderedConfigElements.clear();
-        String lastKey = null;
-        final int elementWidth = CONFIG_BOX.getWidth() - 2 * PADDING;
-        for (final ConfigUIElement element : this.configElements) {
-            if (!(element instanceof SubCategoryHeader) && element.matchSearch(search)) {
-                final String subCategoryKey = element.getCategory() + "$" + element.getSubCategory();
-                if (!Objects.equals(lastKey, subCategoryKey)) {
-                    lastKey = subCategoryKey;
-                    final ConfigCategoryContainer categoryContainer = this.categoryContainerMap.get(element.getCategory());
-                    final String displayText;
-                    if (categoryContainer != null) {
-                        displayText = categoryContainer.getAnnotation().displayname() + EnumChatFormatting.RESET + (element.getSubCategory().isEmpty() ? "" : " - " + element.getSubCategory());
-                    } else {
-                        displayText = element.getCategory() + (element.getSubCategory().isEmpty() ? "" : " - " + element.getSubCategory());
-                    }
-                    final TextLabel textLabel = new TextLabel(displayText);
-                    textLabel.setBoxWidth(elementWidth);
-                    this.renderedConfigElements.add(textLabel);
-                }
-                this.renderedConfigElements.add(element);
-            }
-        }
-        if (this.renderedConfigElements.isEmpty()) {
-            final TextLabel textLabel = new TextLabel("Nothing was found! :(");
-            textLabel.setBoxWidth(elementWidth);
-            this.renderedConfigElements.add(textLabel);
-        }
+        this.rebuildRenderedElementList();
     }
 
-    private void closeOverlay() {
-        if (this.lastInteractedOverlay != null) {
-            this.lastInteractedOverlay.closeOverlay();
-            this.lastInteractedOverlay = null;
+    public void rebuildRenderedElementList() {
+        this.renderedConfigElements.clear();
+        if (searchField != null && !searchField.getText().isEmpty()) {
+            final String search = searchField.getText().toLowerCase();
+            String lastKey = null;
+            final int elementWidth = CONFIG_BOX.getWidth() - 2 * PADDING;
+            for (final ConfigUIElement element : this.configElements) {
+                if (element.isVisible() && element.matchSearch(search)) {
+                    final String subCategoryKey = element.getCategory() + "$" + element.getSubCategory();
+                    if (!Objects.equals(lastKey, subCategoryKey)) {
+                        lastKey = subCategoryKey;
+                        final ConfigCategoryContainer categoryContainer = this.categoryContainerMap.get(element.getCategory());
+                        final String displayText;
+                        if (categoryContainer != null) {
+                            displayText = categoryContainer.getAnnotation().displayname() + EnumChatFormatting.RESET + (element.getSubCategory().isEmpty() ? "" : " - " + element.getSubCategory());
+                        } else {
+                            displayText = element.getCategory() + (element.getSubCategory().isEmpty() ? "" : " - " + element.getSubCategory());
+                        }
+                        final TextLabel textLabel = new TextLabel(displayText);
+                        textLabel.setBoxWidth(elementWidth);
+                        this.renderedConfigElements.add(textLabel);
+                    }
+                    this.renderedConfigElements.add(element);
+                }
+            }
+            if (this.renderedConfigElements.isEmpty()) {
+                final TextLabel textLabel = new TextLabel("Nothing was found! :(");
+                textLabel.setBoxWidth(elementWidth);
+                this.renderedConfigElements.add(textLabel);
+            }
+        } else {
+            ConfigUIElement lastHeader = null;
+            for (final ConfigUIElement element : this.configElements) {
+                if (element.isVisible() && this.selectedCategory.equals(element.getCategory())) {
+                    if (element instanceof SubCategoryHeader) {
+                        lastHeader = element;
+                    } else {
+                        if (lastHeader != null && lastHeader.getSubCategory().equals(element.getSubCategory())) {
+                            this.renderedConfigElements.add(lastHeader);
+                            lastHeader = null;
+                        }
+                        this.renderedConfigElements.add(element);
+                    }
+                }
+            }
         }
     }
 

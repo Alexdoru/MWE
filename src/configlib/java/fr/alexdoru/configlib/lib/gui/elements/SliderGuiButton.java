@@ -134,6 +134,10 @@ public class SliderGuiButton extends ConfigGuiButton {
         return false;
     }
 
+    private boolean isMouseOnButton(int mouseX, int mouseY, int buttonX, int buttonY, int buttonWidth, int buttonHeight) {
+        return mouseX >= buttonX && mouseX < buttonX + buttonWidth && mouseY >= buttonY && mouseY < buttonY + buttonHeight;
+    }
+
     private void updateSliderFromPosition(int sliderIncrementIn) {
         sliderIncrement = MathHelper.clamp_int(sliderIncrementIn, 0, SLIDER_WIDTH - 1);
         try {

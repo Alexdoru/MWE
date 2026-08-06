@@ -171,4 +171,76 @@ public class ConfigExceptionTest {
         assertEquals("Ambiguous config name used for hide override, could be bar$bla or foo$bla", exception.getMessage());
     }
 
+    private static class TestConfig9 {
+
+        @ConfigProperty(category = "foo", name = "bla")
+        public static boolean testBool1;
+
+        @ConfigProperty(category = "bar", name = "bla")
+        public static boolean testBool2;
+
+        @ConfigProperty(category = "test", name = "test", dependsOn = "bar$bla")
+        private static boolean testBool3;
+
+    }
+
+    @Test
+    public void fullyQualifiedConfigDependenyNameWorks() {
+        this.configHandler.registerConfig(TestConfig9.class);
+    }
+
+    private static class TestConfig10 {
+
+        @ConfigProperty(category = "foo", name = "bla")
+        public static boolean testBool1;
+
+        @ConfigProperty(category = "bar", name = "bla")
+        public static boolean testBool2;
+
+        @ConfigProperty(category = "test", name = "test", dependsOn = "bla")
+        private static boolean testBool3;
+
+    }
+
+    @Test
+    public void ambiguousConfigDependenyNameThrows() {
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                this.configHandler.registerConfig(TestConfig10.class)
+        );
+        assertEquals("Ambiguous config name used for dependency, could be bar$bla or foo$bla", exception.getMessage());
+    }
+
+    private static class TestConfig11 {
+
+        @ConfigProperty(category = "test", name = "test", dependsOn = "bla")
+        private static boolean testBool3;
+
+    }
+
+    @Test
+    public void dependenyNotFoundThrows() {
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                this.configHandler.registerConfig(TestConfig11.class)
+        );
+        assertEquals("Dependency bla for config test test not found", exception.getMessage());
+    }
+
+    private static class TestConfig12 {
+
+        @ConfigProperty(category = "test", name = "test")
+        private static String test1 = "";
+
+        @ConfigProperty(category = "test", name = "test2", dependsOn = "test")
+        private static String test2 = "";
+
+    }
+
+    @Test
+    public void invalidFieldDependecyThrows() {
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                this.configHandler.registerConfig(TestConfig12.class)
+        );
+        assertEquals("Cannot depend on a config field other than boolean or RendererPosition", exception.getMessage());
+    }
+
 }

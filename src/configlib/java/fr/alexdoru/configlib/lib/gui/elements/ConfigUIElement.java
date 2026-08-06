@@ -24,18 +24,16 @@ public interface ConfigUIElement extends SizedElement {
 
     boolean matchSearch(String search);
 
-    default boolean isMouseOnButton(int mouseX, int mouseY, int buttonX, int buttonY, int buttonWidth, int buttonHeight) {
-        return mouseX >= buttonX && mouseX < buttonX + buttonWidth && mouseY >= buttonY && mouseY < buttonY + buttonHeight;
-    }
+    boolean isVisible();
 
-    default List<String> resizeCommentLines(String comment, int wrapWidth, Minecraft mc) {
+    default List<String> resizeCommentLines(String comment, int wrapWidth) {
         final String[] split = comment.split("\n");
         if (wrapWidth <= 0) {
             return Arrays.asList(split);
         } else {
             final List<String> resizedLines = new ArrayList<>();
             for (final String line : split) {
-                resizedLines.addAll(mc.fontRendererObj.listFormattedStringToWidth(line, wrapWidth));
+                resizedLines.addAll(Minecraft.getMinecraft().fontRendererObj.listFormattedStringToWidth(line, wrapWidth));
             }
             return resizedLines;
         }

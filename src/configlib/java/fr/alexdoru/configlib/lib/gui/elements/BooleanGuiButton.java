@@ -2,16 +2,19 @@ package fr.alexdoru.configlib.lib.gui.elements;
 
 import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.lib.ConfigFieldContainer;
+import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.MouseButton;
 import net.minecraft.util.EnumChatFormatting;
 
 public class BooleanGuiButton extends ConfigGuiButton {
 
+    private final ConfigGuiScreen configGuiScreen;
     private final ClickGuiButton button;
     private boolean toggled;
 
-    public BooleanGuiButton(ConfigFieldContainer container) throws IllegalAccessException {
+    public BooleanGuiButton(ConfigFieldContainer container, ConfigGuiScreen configGuiScreen) throws IllegalAccessException {
         super(container);
+        this.configGuiScreen = configGuiScreen;
         this.toggled = (boolean) this.field.get(null);
         this.button = new ClickGuiButton(mc.fontRendererObj.getStringWidth(" Disabled "), 20, getButtonText());
     }
@@ -29,6 +32,7 @@ public class BooleanGuiButton extends ConfigGuiButton {
         if (mouseButton.isLeft() && button.mousePressed(mouseX, mouseY)) {
             flipBooleanConfig();
             button.displayString = getButtonText();
+            toggleDependencies(this.configGuiScreen);
             return true;
         }
         return false;

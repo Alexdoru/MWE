@@ -6,15 +6,18 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public final class ConfigNameResolver {
+public final class ConfigFieldRegistry {
 
     private final Map<String, Method> events = new HashMap<>();
     private final Set<String> allEventNames = new HashSet<>();
     private final Map<String, Method> hideOverrides = new HashMap<>();
     private final Set<String> allHideNames = new HashSet<>();
+    private final List<ConfigFieldContainer> configFields = new ArrayList<>();
+    private final Map<String, ConfigFieldContainer> namesToConfigFields = new HashMap<>();
+    private final Map<String, ConfigFieldContainer> collidingConfigNames = new HashMap<>();
     private final Map<String, ConfigProperty> shortKeyUsages = new HashMap<>();
 
-    ConfigNameResolver() {}
+    ConfigFieldRegistry() {}
 
     public void addEvent(String[] names, Method method) {
         for (final String name : names) {
@@ -30,6 +33,18 @@ public final class ConfigNameResolver {
             hideOverrides.put(name, method);
             allHideNames.add(name);
         }
+    }
+
+    public void add(ConfigFieldContainer field) {
+        if (namesToConfigFields.containsKey(field.getKey())) {
+            throw new IllegalStateException("Config properties with duplicate key names : " + field.getAnnotation().category() + " " + field.getAnnotation().name());
+        }
+        namesToConfigFields.put(field.getKey(), field);
+        final ConfigFieldContainer oldValue = namesToConfigFields.put(field.getAnnotation().name(), field);
+        if (oldValue != null) {
+            collidingConfigNames.put(field.getAnnotation().name(), oldValue);
+        }
+        configFields.add(field);
     }
 
     @Nullable
@@ -66,6 +81,26 @@ public final class ConfigNameResolver {
         return hide;
     }
 
+    @Nullable
+    private ConfigFieldContainer getDependency(ConfigProperty annotation) {
+        if (annotation.dependsOn().isEmpty()) {
+            return null;
+        }
+        final ConfigFieldContainer dependency = namesToConfigFields.get(annotation.dependsOn());
+        if (dependency == null) {
+            throw new IllegalStateException("Dependency " + annotation.dependsOn() + " for config " + annotation.category() + " " + annotation.name() + " not found");
+        }
+        final boolean usedShortKey = annotation.dependsOn().equals(dependency.getAnnotation().name());
+        if (usedShortKey && collidingConfigNames.containsKey(annotation.dependsOn())) {
+            throw new IllegalArgumentException("Ambiguous config name used for dependency, could be "
+                    + longKey(namesToConfigFields.get(annotation.dependsOn()).getAnnotation())
+                    + " or "
+                    + longKey(collidingConfigNames.get(annotation.dependsOn()).getAnnotation())
+            );
+        }
+        return dependency;
+    }
+
     private void checkKeyCollison(String shortKey, ConfigProperty annotation, String type) {
         final ConfigProperty otherProp = shortKeyUsages.get(shortKey);
         if (otherProp != null && otherProp != annotation) {
@@ -82,6 +117,12 @@ public final class ConfigNameResolver {
         return annotation.category() + "$" + annotation.name();
     }
 
+    public void assignDependencies() {
+        for (final ConfigFieldContainer configField : this.configFields) {
+            configField.setDependency(this.getDependency(configField.getAnnotation()));
+        }
+    }
+
     public void checkUnused() {
         if (!allEventNames.isEmpty()) {
             throw new IllegalStateException("Some config events use config names that were not found : " + Arrays.toString(allEventNames.toArray()));
@@ -89,6 +130,14 @@ public final class ConfigNameResolver {
         if (!allHideNames.isEmpty()) {
             throw new IllegalStateException("Some config hide overrides use config names that were not found : " + Arrays.toString(allHideNames.toArray()));
         }
+    }
+
+    public List<ConfigFieldContainer> getFields() {
+        return this.configFields;
+    }
+
+    public boolean isEmpty() {
+        return this.configFields.isEmpty();
     }
 
 }

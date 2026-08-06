@@ -3,6 +3,7 @@ package fr.alexdoru.configlib.lib.gui.elements;
 import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.api.ConfigProperty;
 import fr.alexdoru.configlib.lib.ConfigFieldContainer;
+import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -10,24 +11,23 @@ import net.minecraft.util.ResourceLocation;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ConfigGuiButton implements ConfigUIElement {
 
     protected final Minecraft mc = Minecraft.getMinecraft();
+    private final ConfigFieldContainer fieldContainer;
     protected final Field field;
-    private final Method event;
     protected final ConfigProperty annotation;
     private final List<String> commentToRender = new ArrayList<>();
     protected int boxWidth;
     protected int posX, posY;
 
-    protected ConfigGuiButton(ConfigFieldContainer container) {
-        this.field = container.getField();
-        this.event = container.getEvent();
-        this.annotation = container.getAnnotation();
+    protected ConfigGuiButton(ConfigFieldContainer fieldContainer) {
+        this.fieldContainer = fieldContainer;
+        this.field = fieldContainer.getField();
+        this.annotation = fieldContainer.getAnnotation();
     }
 
     @Override
@@ -36,7 +36,7 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
         if (this.hasComment()) {
             final int wrapWidth = boxWidth - mc.fontRendererObj.getStringWidth(" Disabled ") - 20 - 20;
             this.commentToRender.clear();
-            this.commentToRender.addAll(resizeCommentLines(annotation.comment(), wrapWidth, mc));
+            this.commentToRender.addAll(resizeCommentLines(annotation.comment(), wrapWidth));
         }
     }
 
@@ -64,12 +64,12 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     }
 
     @Override
-    public String getCategory() {
+    public final String getCategory() {
         return annotation.category();
     }
 
     @Override
-    public String getSubCategory() {
+    public final String getSubCategory() {
         return annotation.subCategory();
     }
 
@@ -80,21 +80,32 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
                 || annotation.name().toLowerCase().contains(search);
     }
 
-    protected boolean hasComment() {
+    @Override
+    public final boolean isVisible() {
+        return fieldContainer.isVisible();
+    }
+
+    protected final void toggleDependencies(ConfigGuiScreen configGuiScreen) {
+        if (fieldContainer.hasDependent()) {
+            configGuiScreen.rebuildRenderedElementList();
+        }
+    }
+
+    protected final boolean hasComment() {
         return !this.annotation.comment().isEmpty();
     }
 
-    protected void invokeConfigEvent() {
-        if (event != null) {
+    protected final void invokeConfigEvent() {
+        if (fieldContainer.getEvent() != null) {
             try {
-                event.invoke(null);
+                fieldContainer.getEvent().invoke(null);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    protected void playPressSound() {
+    protected final void playPressSound() {
         this.mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
     }
 

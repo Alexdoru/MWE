@@ -39,7 +39,7 @@ public class CategoryHeader implements ConfigUIElement {
         if (hasComment) {
             final int wrapWidth = boxWidth * 4 / 5;
             this.commentToRender.clear();
-            this.commentToRender.addAll(resizeCommentLines(this.comment, wrapWidth, mc));
+            this.commentToRender.addAll(resizeCommentLines(this.comment, wrapWidth));
         }
     }
 
@@ -87,6 +87,11 @@ public class CategoryHeader implements ConfigUIElement {
     @Override
     public boolean matchSearch(String search) {
         return false;
+    }
+
+    @Override
+    public boolean isVisible() {
+        return true;
     }
 
 }

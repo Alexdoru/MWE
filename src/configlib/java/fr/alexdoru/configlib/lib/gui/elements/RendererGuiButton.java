@@ -61,6 +61,7 @@ public class RendererGuiButton extends ConfigGuiButton {
             if (buttonEnabled.mousePressed(mouseX, mouseY)) {
                 flipBooleanConfig();
                 buttonEnabled.displayString = getButtonText();
+                toggleDependencies(this.parentScreen);
                 return true;
             } else if (buttonMoveHud.mousePressed(mouseX, mouseY)) {
                 mc.displayGuiScreen(new RendererEditGuiScreen(rendererManager, rendererPosition, parentScreen, field));

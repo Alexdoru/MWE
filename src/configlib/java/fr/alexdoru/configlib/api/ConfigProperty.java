@@ -24,6 +24,12 @@ public @interface ConfigProperty {
     /** A comment with formatting to show in the config menu */
     String comment() default "";
 
+    /**
+     * The name of the config this config depends on. This config will be hidden if the parent config is disabled.
+     * The name can be simply the config name, or category name + "$" + config name.
+     */
+    String dependsOn() default "";
+
     /** Should this config be hidden from the config gui */
     boolean hidden() default false;
 

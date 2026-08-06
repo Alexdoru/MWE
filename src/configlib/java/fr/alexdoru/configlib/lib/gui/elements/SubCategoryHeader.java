@@ -49,8 +49,12 @@ public class SubCategoryHeader implements ConfigUIElement {
 
     @Override
     public boolean matchSearch(String search) {
-        return categoryName.toLowerCase().contains(search)
-                || subCategoryName.toLowerCase().contains(search);
+        return false;
+    }
+
+    @Override
+    public boolean isVisible() {
+        return true;
     }
 
 }

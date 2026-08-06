@@ -30,9 +30,8 @@ public final class ConfigHandler implements IConfigHandler {
     private final String savedVersion;
     private final String version;
     private final boolean hasUpdated;
-    private final ConfigNameResolver configNameResolver = new ConfigNameResolver();
+    private final ConfigFieldRegistry configFieldRegistry = new ConfigFieldRegistry();
     private final Map<String, Property> propertyMap = new HashMap<>();
-    private final List<ConfigFieldContainer> configFields = new ArrayList<>();
     private final Set<String> categoryNames = new HashSet<>();
     private final List<ConfigCategoryContainer> categories = new ArrayList<>();
     /** CategoryName -> SubCategoryName -> List of ConfigSetting */
@@ -88,11 +87,11 @@ public final class ConfigHandler implements IConfigHandler {
                 if (method.isAnnotationPresent(ConfigPropertyEvent.class)) {
                     validateMethod(method, "event", "()V");
                     method.setAccessible(true);
-                    configNameResolver.addEvent(method.getAnnotation(ConfigPropertyEvent.class).name(), method);
+                    configFieldRegistry.addEvent(method.getAnnotation(ConfigPropertyEvent.class).name(), method);
                 } else if (method.isAnnotationPresent(ConfigPropertyHideOverride.class)) {
                     validateMethod(method, "hide condition", "()Z");
                     method.setAccessible(true);
-                    configNameResolver.addHideOverride(method.getAnnotation(ConfigPropertyHideOverride.class).name(), method);
+                    configFieldRegistry.addHideOverride(method.getAnnotation(ConfigPropertyHideOverride.class).name(), method);
                 } else if (method.isAnnotationPresent(ConfigUpdatedEvent.class)) {
                     validateMethod(method, "update", "(Ljava/lang/String;Ljava/lang/String;)V");
                     method.setAccessible(true);
@@ -107,7 +106,7 @@ public final class ConfigHandler implements IConfigHandler {
                 if (field.isAnnotationPresent(ConfigProperty.class)) {
                     validateField(field);
                     field.setAccessible(true);
-                    configFields.add(new ConfigFieldContainer(config, propertyMap, field, configNameResolver));
+                    configFieldRegistry.add(new ConfigFieldContainer(config, propertyMap, field, configFieldRegistry));
                 } else if (field.isAnnotationPresent(ConfigCategory.class)) {
                     validateField(field);
                     if (field.getType() != String.class) {
@@ -122,7 +121,8 @@ public final class ConfigHandler implements IConfigHandler {
                     categories.add(categoryContainer);
                 }
             }
-            configNameResolver.checkUnused();
+            configFieldRegistry.assignDependencies();
+            configFieldRegistry.checkUnused();
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Caught exception while registering config class " + clazz.getName(), e);
         }
@@ -156,11 +156,11 @@ public final class ConfigHandler implements IConfigHandler {
 
     @Override
     public void saveConfig() {
-        if (configFields.isEmpty()) {
+        if (configFieldRegistry.isEmpty()) {
             throw new IllegalStateException("Config is empty!");
         }
         try {
-            for (final ConfigFieldContainer configField : configFields) {
+            for (final ConfigFieldContainer configField : configFieldRegistry.getFields()) {
                 configField.saveFieldValueToConfig();
             }
         } catch (IllegalAccessException e) {
@@ -173,11 +173,11 @@ public final class ConfigHandler implements IConfigHandler {
 
     @Override
     public @NotNull GuiScreen getConfigGuiScreen() {
-        if (configFields.isEmpty()) {
+        if (configFieldRegistry.isEmpty()) {
             throw new IllegalStateException("Config is empty!");
         }
         try {
-            return new ConfigGuiScreen(this, configName, categories, configFields, configStructure, colorPalette, titleRenderer, rendererManager);
+            return new ConfigGuiScreen(this, configName, categories, configFieldRegistry.getFields(), configStructure, colorPalette, titleRenderer, rendererManager);
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Failed to generate the config menu!", e);
         }

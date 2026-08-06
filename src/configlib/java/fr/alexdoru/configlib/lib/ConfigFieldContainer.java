@@ -25,16 +25,18 @@ public final class ConfigFieldContainer {
     private final ConfigProperty annotation;
     private final Method event;
     private final Method hideOverride;
+    private ConfigFieldContainer dependency;
+    private boolean hasDependent;
     private final FieldType fieldType;
 
-    ConfigFieldContainer(Configuration config, Map<String, Property> propertyMap, Field field, ConfigNameResolver nameResolver) throws IllegalAccessException {
+    ConfigFieldContainer(Configuration config, Map<String, Property> propertyMap, Field field, ConfigFieldRegistry fieldRegistry) throws IllegalAccessException {
         this.propertyMap = propertyMap;
         this.field = field;
         this.annotation = field.getAnnotation(ConfigProperty.class);
         ConfigHandler.validateString(this.annotation.category(), "Config category name");
         ConfigHandler.validateString(this.annotation.name(), "Config name");
-        this.event = nameResolver.getEvent(annotation);
-        this.hideOverride = nameResolver.getHideOverride(annotation);
+        this.event = fieldRegistry.getEvent(annotation);
+        this.hideOverride = fieldRegistry.getHideOverride(annotation);
         this.fieldType = getFieldType(field);
         this.createPropertyFromField(config);
         this.loadConfigValueToField();
@@ -69,9 +71,6 @@ public final class ConfigFieldContainer {
     }
 
     private void createPropertyFromField(Configuration config) throws IllegalAccessException {
-        if (propertyMap.containsKey(this.fieldType == FieldType.RENDERER ? this.getKey("Show ") : this.getKey())) {
-            throw new IllegalStateException("Config properties with duplicate key names : " + annotation.category() + " " + annotation.name());
-        }
         switch (this.fieldType) {
             case RENDERER: {
                 final RendererPosition rendererPosition = (RendererPosition) field.get(null);
@@ -225,7 +224,7 @@ public final class ConfigFieldContainer {
         }
     }
 
-    private String getKey() {
+    public String getKey() {
         return annotation.category() + "$" + annotation.name();
     }
 
@@ -254,7 +253,7 @@ public final class ConfigFieldContainer {
                 return new RendererGuiButton(this, configGuiScreen, rendererManager);
             }
             case BOOLEAN: {
-                return new BooleanGuiButton(this);
+                return new BooleanGuiButton(this, configGuiScreen);
             }
             case DOUBLE: {
                 return new SliderGuiButton(this);
@@ -277,6 +276,39 @@ public final class ConfigFieldContainer {
         throw new IllegalStateException("Type of field not handled by config lib gui screen " + field.getType() + " you can mark the field as hidden to prevent crashing");
     }
 
+    void setDependency(ConfigFieldContainer dependency) {
+        if (dependency != null) {
+            if (dependency.fieldType != FieldType.BOOLEAN && dependency.fieldType != FieldType.RENDERER) {
+                throw new IllegalStateException("Cannot depend on a config field other than boolean or RendererPosition");
+            }
+            this.dependency = dependency;
+            this.dependency.hasDependent = true;
+        }
+    }
+
+    public boolean isVisible() {
+        if (this.dependency == null) {
+            return true;
+        }
+        try {
+            return this.dependency.isActive();
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private boolean isActive() throws IllegalAccessException {
+        if (this.dependency != null && !this.dependency.isActive()) {
+            return false;
+        }
+        if (this.fieldType == FieldType.BOOLEAN) {
+            return (boolean) this.field.get(null);
+        } else if (this.fieldType == FieldType.RENDERER) {
+            return ((RendererPosition) this.field.get(null)).isEnabled();
+        }
+        throw new UnsupportedOperationException();
+    }
+
     public Field getField() {
         return field;
     }
@@ -287,6 +319,10 @@ public final class ConfigFieldContainer {
 
     public ConfigProperty getAnnotation() {
         return annotation;
+    }
+
+    public boolean hasDependent() {
+        return hasDependent;
     }
 
     @Nullable
