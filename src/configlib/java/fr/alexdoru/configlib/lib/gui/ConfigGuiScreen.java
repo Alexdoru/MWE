@@ -24,7 +24,7 @@ import java.util.*;
 
 public class ConfigGuiScreen extends GuiScreen {
 
-    public static final int PADDING = 6;
+    private static final int PADDING = 6;
 
     private static final ResourceLocation BLUR = new ResourceLocation("configlib", "blur.json");
 
