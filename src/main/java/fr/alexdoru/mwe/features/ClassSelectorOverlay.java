@@ -207,17 +207,22 @@ public final class ClassSelectorOverlay {
     }
 
     private void renderIcon(int x, int y, MWSkin skin, int prestiges, int classpoints) {
-        final Minecraft mc = Minecraft.getMinecraft();
-        GlStateManager.enableDepth();
-        GlStateManager.pushMatrix();
-        GlStateManager.enableRescaleNormal();
-        GlStateManager.alphaFunc(516, 0.1F);
-        GlStateManager.translate(0, 0, 250F);
+        final boolean renderSkull = MWEConfig.classSelectorPlayerHeads;
+        if (renderSkull) {
+            this.renderPlayerSkullItem(x, y, skin);
+        } else {
+            this.renderFlatSkin(x, y, skin);
+        }
         GlStateManager.disableLighting();
-        RenderHelper.renderSkinHead(skin.getSkin(), x, y, true, 16);
+        GlStateManager.disableDepth();
+        GlStateManager.disableBlend();
         final int classpointColor = ColorUtil.getColorInt(ColorUtil.getPrestige4Color(prestiges >= 4 ? classpoints : 0)) | 0xFF000000;
         if (MWEConfig.classSelectorColoredBorder && classpoints >= 2000 && prestiges >= 4) {
-            RenderHelper.drawOutline(x - 1, y - 1, x + 16 + 1, y + 16 + 1, classpointColor);
+            if (renderSkull) {
+                RenderHelper.drawOutline(x, y, x + 16, y + 16, classpointColor);
+            } else {
+                RenderHelper.drawOutline(x - 1, y - 1, x + 16 + 1, y + 16 + 1, classpointColor);
+            }
         }
         final float TEXT_SCALE = 0.6F;
         if (MWEConfig.classSelectorPrestigeLevel && prestiges != 0) {
@@ -235,6 +240,24 @@ public final class ClassSelectorOverlay {
                     classpointColor
             );
         }
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepth();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+    }
+
+    private void renderPlayerSkullItem(int x, int y, MWSkin skin) {
+        GlStateManager.enableDepth();
+        mc.getRenderItem().renderItemAndEffectIntoGUI(skin.getPlayerSkullItemStack(), x, y);
+    }
+
+    private void renderFlatSkin(int x, int y, MWSkin skin) {
+        GlStateManager.enableDepth();
+        GlStateManager.pushMatrix();
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.alphaFunc(516, 0.1F);
+        GlStateManager.translate(0, 0, 250F);
+        GlStateManager.disableLighting();
+        RenderHelper.renderSkinHead(skin.getSkin(), x, y, true, 16);
         GlStateManager.disableAlpha();
         GlStateManager.disableRescaleNormal();
         GlStateManager.disableLighting();

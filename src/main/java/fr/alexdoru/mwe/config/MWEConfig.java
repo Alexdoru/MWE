@@ -683,6 +683,13 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "Class Selector",
+            name = "Use player head items",
+            dependsOn = "Class selector overlay",
+            comment = "Renders player heads with the mega walls skin instead of the skin overlay")
+    public static boolean classSelectorPlayerHeads;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Class Selector",
             name = "Render colored border",
             dependsOn = "Class selector overlay",
             comment = "Renders a prestige colored border")
