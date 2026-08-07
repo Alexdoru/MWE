@@ -35,26 +35,28 @@ public final class Scrollbar {
     }
 
     public void drawScrollbar(ColorPalette colorPalette, Box box, int mouseY, int contentHeight) {
-        final int categoryBoxHeight = box.getHeight() - 2;
-        final boolean renderCategoryScrollbar = contentHeight > categoryBoxHeight;
-        if (renderCategoryScrollbar) {
-            final int scrollBarSize = categoryBoxHeight * categoryBoxHeight / contentHeight;
-            final int minScrollBarY = box.TOP + 1 + 1;
-            final int maxScrollBarY = box.BOTTOM - 1 - scrollBarSize - 1;
-            if (dragging) {
-                final int relativeMouseY = mouseY - minScrollBarY - grabbedAtY;
-                if (maxScrollBarY != minScrollBarY) {
-                    final int newScroll = relativeMouseY * (contentHeight - box.getHeight()) / (maxScrollBarY - minScrollBarY);
-                    this.scroll(this.scroll - newScroll, contentHeight, box.getHeight());
-                }
+        final int REAL_BOX_HEIGHT = box.getHeight();
+        if (contentHeight <= REAL_BOX_HEIGHT) return;
+        final int VERTICAL_MARGIN = 2;
+        final int AVAILABLE_BOX_HEIGHT = REAL_BOX_HEIGHT - VERTICAL_MARGIN * 2;
+        final int thumbHeight = AVAILABLE_BOX_HEIGHT * REAL_BOX_HEIGHT / contentHeight;
+        final int minY = box.TOP + VERTICAL_MARGIN;
+        final int maxY = box.BOTTOM - thumbHeight - VERTICAL_MARGIN;
+        final int scrollRange = contentHeight - REAL_BOX_HEIGHT;
+        final int trackRange = maxY - minY;
+        if (dragging) {
+            final int relativeMouseY = mouseY - minY - grabbedAtY;
+            if (trackRange != 0) {
+                final int newScroll = relativeMouseY * scrollRange / trackRange;
+                this.scroll(this.scroll - newScroll, contentHeight, REAL_BOX_HEIGHT);
             }
-            this.thumb.LEFT = box.RIGHT - 5;
-            this.thumb.TOP = ((maxScrollBarY - minScrollBarY) * this.scroll) / (contentHeight - categoryBoxHeight) + minScrollBarY;
-            this.thumb.RIGHT = this.thumb.LEFT + 3;
-            this.thumb.BOTTOM = this.thumb.TOP + scrollBarSize;
-            GuiUtil.drawVerticalLine(box.RIGHT - 4, box.TOP + 4, box.BOTTOM - 4, colorPalette.SCROLLBAR_TRACK);
-            GuiUtil.drawRect(this.thumb, colorPalette.SCROLLBAR_THUMB);
         }
+        this.thumb.LEFT = box.RIGHT - 5;
+        this.thumb.TOP = minY + (int) ((float)this.scroll / scrollRange * trackRange);
+        this.thumb.RIGHT = this.thumb.LEFT + 3;
+        this.thumb.BOTTOM = this.thumb.TOP + thumbHeight;
+        GuiUtil.drawVerticalLine(box.RIGHT - 4, box.TOP + 4, box.BOTTOM - 4, colorPalette.SCROLLBAR_TRACK);
+        GuiUtil.drawRect(this.thumb, colorPalette.SCROLLBAR_THUMB);
     }
 
     public boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) {
@@ -74,8 +76,8 @@ public final class Scrollbar {
 
     private void scroll(int amount, int contentHeight, int boxHeight) {
         this.scroll = this.scroll - amount;
-        if (this.scroll > contentHeight + 2 * ConfigGuiScreen.PADDING - boxHeight) {
-            this.scroll = contentHeight + 2 * ConfigGuiScreen.PADDING - boxHeight;
+        if (this.scroll > contentHeight - boxHeight) {
+            this.scroll = contentHeight - boxHeight;
             this.amountToScroll = 0;
         }
         if (this.scroll <= 0) {
