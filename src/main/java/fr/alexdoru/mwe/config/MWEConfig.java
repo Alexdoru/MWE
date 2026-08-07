@@ -977,6 +977,11 @@ public final class MWEConfig {
         }
     }
 
+    @ConfigProperty(category = NOCHEATERS, subCategory = "General",
+            name = "Show boosting report advice",
+            comment = "Shows a hint in chat to report party members for boosting when you report a player for cheating")
+    public static boolean showBoostingReportAdvance = true;
+
     @ConfigProperty(
             category = NOCHEATERS, subCategory = "General",
             name = "Show banned players",

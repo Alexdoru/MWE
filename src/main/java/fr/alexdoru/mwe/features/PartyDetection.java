@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.features;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
@@ -82,7 +83,7 @@ public class PartyDetection {
     }
 
     public static void printBoostingReportAdvice(String playername) {
-        if (playername == null) return;
+        if (playername == null || !MWEConfig.showBoostingReportAdvance) return;
         final Set<String> party = PARTYS.get(playername.toLowerCase());
         if (party == null) return;
         final Minecraft mc = Minecraft.getMinecraft();
