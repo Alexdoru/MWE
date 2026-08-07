@@ -130,7 +130,7 @@ public class ConfigGuiScreen extends GuiScreen {
         CATEGORY_BOX.TOP = GUI_INSIDE.TOP + fontRendererObj.FONT_HEIGHT + 1 + PADDING;
         CATEGORY_BOX.RIGHT = GUI_INSIDE.LEFT + GUI_WIDTH / 5;
         final int categoryContentHeight = getContentHeight(this.categoryElements);
-        final int categoryMaxY = CATEGORY_BOX.TOP + categoryContentHeight + 2 * PADDING;
+        final int categoryMaxY = CATEGORY_BOX.TOP + categoryContentHeight;
         CATEGORY_BOX.BOTTOM = Math.min(categoryMaxY, GUI_INSIDE.BOTTOM);
 
         CONFIG_BOX.LEFT = CATEGORY_BOX.RIGHT + PADDING;
