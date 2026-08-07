@@ -390,6 +390,7 @@ public class ConfigGuiScreen extends GuiScreen {
             if (CATEGORY_BOX.isMouseInBox(mouseX, mouseY)) {
                 this.categoryScrollbar.scheduleScroll(direction, amount);
             } else if (CONFIG_BOX.isMouseInBox(mouseX, mouseY)) {
+                closeOpenOverlay(); // won't be noticed for 'ColorEnumGuiButton's Overlay' but is a must for 'Selector' and probably for future 'Color Edit'
                 this.configScrollbar.scheduleScroll(direction, amount);
             }
         }
