@@ -1,6 +1,7 @@
 package fr.alexdoru.configlib.api;
 
 import net.minecraft.launchwrapper.LaunchClassLoader;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.FMLInjectionData;
 import org.junit.Before;
 import org.junit.Rule;
@@ -34,7 +35,7 @@ public class ConfigEventTest {
         static AtomicBoolean testBool = new AtomicBoolean(false);
 
         @ConfigUpdatedEvent
-        public static void onUpdate(String savedVersion, String version) {
+        public static void onUpdate(Configuration config, String savedVersion, String version) {
             testBool.set(true);
             assertEquals("2.0", savedVersion);
             assertEquals("3.0", version);

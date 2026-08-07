@@ -7,13 +7,13 @@ import java.lang.annotation.Target;
 
 /**
  * Methods annotated with this will be executed when the config version changes.
- * The signature of the method must be two strings, the handler method will receive
- * the version the config was saved with and the current version.
+ * The signature of the method must match the example, the handler method will receive
+ * the config object, the version the config was saved with and the current version.
  * <p>
  * <pre>
  * {@code
- *     @ConfigUpdate
- *     private static void onModUpdate(String savedVersion, String version) {
+ *     @ConfigUpdatedEvent
+ *     private static void onModUpdate(Configuration config, String savedVersion, String version) {
  *         // code that runs on mod version update
  *     }
  * }

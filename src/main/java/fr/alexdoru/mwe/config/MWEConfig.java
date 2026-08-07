@@ -13,6 +13,7 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Loader;
 
@@ -31,8 +32,7 @@ public final class MWEConfig {
     }
 
     @ConfigUpdatedEvent
-    private static void onModUpdate(String savedVersion, String version) {
-        // code that runs on mod version update
+    private static void onModUpdate(Configuration config, String savedVersion, String version) {
         if (flagMessagePrefix.equals(EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "NoCheaters" + EnumChatFormatting.GOLD + "]")) {
             flagMessagePrefix = EnumChatFormatting.DARK_PURPLE + "[Hack]";
             MWE.INSTANCE().getConfigHandler().saveConfig();

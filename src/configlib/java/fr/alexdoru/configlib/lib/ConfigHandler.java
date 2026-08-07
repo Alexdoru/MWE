@@ -93,7 +93,7 @@ public final class ConfigHandler implements IConfigHandler {
                     method.setAccessible(true);
                     configFieldRegistry.addHideOverride(method.getAnnotation(ConfigPropertyHideOverride.class).name(), method);
                 } else if (method.isAnnotationPresent(ConfigUpdatedEvent.class)) {
-                    validateMethod(method, "update", "(Ljava/lang/String;Ljava/lang/String;)V");
+                    validateMethod(method, "update", "(Lnet/minecraftforge/common/config/Configuration;Ljava/lang/String;Ljava/lang/String;)V");
                     method.setAccessible(true);
                     updateEvents.add(method);
                 } else if (method.isAnnotationPresent(ConfigLoadedEvent.class)) {
@@ -143,7 +143,7 @@ public final class ConfigHandler implements IConfigHandler {
         if (hasUpdated) {
             for (final Method method : updateEvents) {
                 try {
-                    method.invoke(null, this.savedVersion, this.version);
+                    method.invoke(null, this.config, this.savedVersion, this.version);
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
