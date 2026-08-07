@@ -957,6 +957,11 @@ public final class MWEConfig {
             comment = "Adds confirmation when clicking the \"Play Again\" paper if you have players in your squad")
     public static boolean warpProtection = true;
 
+    @ConfigProperty(category = NOCHEATERS, subCategory = "General",
+            name = "Save reported players",
+            comment = "Players reported via /wdr will be saved to the report list")
+    public static boolean saveReportedPlayers = true;
+
     @ConfigProperty(
             category = NOCHEATERS, subCategory = "General",
             name = "Warning messages in chat",

@@ -4,6 +4,7 @@ import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.api.MWECommandBase;
 import fr.alexdoru.mwe.chat.ChatUtil;
+import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.data.WdrDataManager;
@@ -67,14 +68,16 @@ public class CommandWDR extends MWECommandBase {
         }
         this.sendCommand(args);
         final String playername = args[0];
-        final List<String> cheats = new ArrayList<>();
-        if (args.length == 1) {
-            cheats.add("cheating");
-        } else {
-            cheats.addAll(Arrays.asList(args).subList(1, args.length));
-        }
         PartyDetection.printBoostingReportAdvice(playername);
-        addPlayerToReportList(playername, cheats);
+        if (MWEConfig.saveReportedPlayers) {
+            final List<String> cheats = new ArrayList<>();
+            if (args.length == 1) {
+                cheats.add("cheating");
+            } else {
+                cheats.addAll(Arrays.asList(args).subList(1, args.length));
+            }
+            addPlayerToReportList(playername, cheats);
+        }
     }
 
     @Override
