@@ -465,12 +465,10 @@ public class ConfigGuiScreen extends GuiScreen {
     }
 
     private static <T extends SizedElement> int getContentHeight(List<T> elements) {
-        int height = 0;
-        if (!elements.isEmpty()) {
-            height = PADDING * 2 - (elements.get(0).getTopMargin() + elements.get(elements.size()-1).getBottomMargin());
-            for (final T element : elements) {
-                height += element.getTopMargin() + element.getHeight() + element.getBottomMargin();
-            }
+        if (elements.isEmpty()) return 0;
+        int height = PADDING * 2 - (elements.get(0).getTopMargin() + elements.get(elements.size()-1).getBottomMargin());
+        for (final T element : elements) {
+            height += element.getTopMargin() + element.getHeight() + element.getBottomMargin();
         }
         return height;
     }
