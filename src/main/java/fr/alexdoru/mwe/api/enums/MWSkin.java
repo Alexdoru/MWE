@@ -1,16 +1,24 @@
 package fr.alexdoru.mwe.api.enums;
 
+import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import com.mojang.authlib.properties.Property;
 import fr.alexdoru.mwe.chat.SkinChatHead;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static fr.alexdoru.mwe.api.enums.MWClass.*;
 
@@ -349,6 +357,7 @@ public enum MWSkin {
     public final MWClass mwClass;
     public final String skinName;
     public final String hash;
+    private ItemStack skullItem;
     private SkinChatHead skinChatHead;
     private boolean skinLoaded;
 
@@ -395,6 +404,25 @@ public enum MWSkin {
         return null;
     }
 
+    @NotNull
+    public ItemStack getPlayerSkullItemStack() {
+        if (this.skullItem == null) {
+            final ItemStack skull = new ItemStack(Items.skull, 1, 3);
+            final GameProfile profile = new GameProfile(UUID.nameUUIDFromBytes(this.hash.getBytes()), "");
+            final String json = "{\"textures\":{\"SKIN\":{\"url\":\"http://textures.minecraft.net/texture/" + this.hash + "\"}}}";
+            final String base64 = Base64.getEncoder().encodeToString(json.getBytes());
+            profile.getProperties().put("textures", new Property("textures", base64));
+            final NBTTagCompound profileTag = new NBTTagCompound();
+            NBTUtil.writeGameProfile(profileTag, profile);
+            final NBTTagCompound stackTag = new NBTTagCompound();
+            stackTag.setTag("SkullOwner", profileTag);
+            skull.setTagCompound(stackTag);
+            this.skullItem = skull;
+        }
+        return this.skullItem;
+    }
+
+    @NotNull
     public SkinChatHead getSkinChatHead() {
         if (this.skinChatHead == null) {
             this.skinChatHead = new SkinChatHead();
@@ -403,6 +431,7 @@ public enum MWSkin {
         return this.skinChatHead;
     }
 
+    @NotNull
     public ResourceLocation getSkin() {
         return this.getSkinChatHead().getSkin();
     }
