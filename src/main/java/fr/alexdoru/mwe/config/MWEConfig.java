@@ -14,8 +14,10 @@ import fr.alexdoru.mwe.utils.SoundUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.versioning.ComparableVersion;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,8 +35,20 @@ public final class MWEConfig {
 
     @ConfigUpdatedEvent
     private static void onModUpdate(Configuration config, String savedVersion, String version) {
+        boolean changed = false;
         if (flagMessagePrefix.equals(EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "NoCheaters" + EnumChatFormatting.GOLD + "]")) {
             flagMessagePrefix = EnumChatFormatting.DARK_PURPLE + "[Hack]";
+            changed = true;
+        }
+        if (new ComparableVersion(version).compareTo(new ComparableVersion("4.5")) > 0) {
+            if (config.hasKey("vanilla", "Hide ping tablist")) {
+                final Property oldHidePing = config.get("vanilla", "Hide ping tablist", false);
+                MWEConfig.smartHidePingTablist = oldHidePing.getBoolean();
+                config.getCategory("vanilla").remove("Hide ping tablist");
+                changed = true;
+            }
+        }
+        if (changed) {
             MWE.INSTANCE().getConfigHandler().saveConfig();
         }
     }
@@ -294,9 +308,15 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Tablist",
-            name = "Hide ping tablist",
+            name = "Hide ping",
+            comment = "Stops rendering the ping in the tablist")
+    public static boolean hidePingTablist;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Tablist",
+            name = "Hide ping smart",
             comment = "Stops rendering the ping in the tablist when all values are equal to 1")
-    public static boolean hidePingTablist = true;
+    public static boolean smartHidePingTablist = true;
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Tablist",
