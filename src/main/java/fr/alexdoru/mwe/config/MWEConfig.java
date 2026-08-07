@@ -428,7 +428,7 @@ public final class MWEConfig {
             category = PVP_STUFF, subCategory = "Potion HUD",
             name = "Mini Potion HUD",
             comment = "Displays a minimalist potion HUD with the remaining duration of the following potion buffs :"
-                    + " §dregeneration§7, §8resistance§7, §bspeed§7, §cstrength§7, §finvisibility§7, §ajump boost§7")
+                    + " §dregeneration§7, §8resistance§7, §bspeed§7, §cstrength§7, §finvisibility§7, §ajump boost§7, §eabsorption§7")
     public static final RendererPosition miniPotionHUDPosition = new RendererPosition(false, 0.5d, 7.5d / 20d);
 
     @ConfigProperty(

@@ -12,8 +12,8 @@ import java.util.Collection;
 
 public class MiniPotionHUD extends AbstractRenderer {
 
-    private final String[] strings = new String[6];
-    private final int[] colors = new int[6];
+    private final String[] strings = new String[7];
+    private final int[] colors = new int[7];
 
     public MiniPotionHUD() {
         super(MWEConfig.miniPotionHUDPosition);
@@ -47,6 +47,12 @@ public class MiniPotionHUD extends AbstractRenderer {
                     break;
                 case 14: // invisibility
                     colors[count] = 0xFFF5F0DA;
+                    break;
+                case 22: // absorption
+                    if (mc.thePlayer.getAbsorptionAmount() <= 0F) {
+                        continue;
+                    }
+                    colors[count] = 0xFFFFEB13;
                     break;
                 default:
                     continue;
