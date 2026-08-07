@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
+import fr.alexdoru.mwe.utils.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.potion.PotionEffect;
@@ -10,6 +11,9 @@ import net.minecraft.util.EnumChatFormatting;
 import java.util.Collection;
 
 public class MiniPotionHUD extends AbstractRenderer {
+
+    private final String[] strings = new String[6];
+    private final int[] colors = new int[6];
 
     public MiniPotionHUD() {
         super(MWEConfig.miniPotionHUDPosition);
@@ -21,54 +25,39 @@ public class MiniPotionHUD extends AbstractRenderer {
         final Collection<PotionEffect> potionEffects = mc.thePlayer.getActivePotionEffects();
         if (potionEffects.isEmpty()) return;
         this.rendererPosition.updateAbsolutePosition(resolution);
-        final String[] strings = new String[5];
-        final int[] colors = new int[5];
-        int index = 0;
+        int count = 0;
         int len = 0;
         for (final PotionEffect effect : potionEffects) {
+            if (count >= strings.length) break;
             switch (effect.getPotionID()) {
                 case 1: // speed
-                    strings[index] = formatDuration(effect);
-                    colors[index] = mc.fontRendererObj.getColorCode('b');
-                    len += mc.fontRendererObj.getStringWidth(strings[index]) + 2;
-                    index++;
+                    colors[count] = ColorUtil.getColorInt(EnumChatFormatting.AQUA);
                     break;
                 case 5: // strength
-                    strings[index] = formatDuration(effect);
-                    colors[index] = mc.fontRendererObj.getColorCode('c');
-                    len += mc.fontRendererObj.getStringWidth(strings[index]) + 2;
-                    index++;
+                    colors[count] = ColorUtil.getColorInt(EnumChatFormatting.RED);
                     break;
                 case 8: // jump boost
-                    strings[index] = formatDuration(effect);
-                    colors[index] = 0xFF4DFF2F;
-                    len += mc.fontRendererObj.getStringWidth(strings[index]) + 2;
-                    index++;
+                    colors[count] = 0xFF4DFF2F;
                     break;
                 case 10: // regeneration
-                    strings[index] = formatDuration(effect);
-                    colors[index] = 0xFFFF66D5;
-                    len += mc.fontRendererObj.getStringWidth(strings[index]) + 2;
-                    index++;
+                    colors[count] = 0xFFFF66D5;
                     break;
                 case 11: // resistance
-                    strings[index] = formatDuration(effect);
-                    colors[index] = 0xFF515971;
-                    len += mc.fontRendererObj.getStringWidth(strings[index]) + 2;
-                    index++;
+                    colors[count] = 0xFF515971;
                     break;
                 case 14: // invisibility
-                    strings[index] = formatDuration(effect);
-                    colors[index] = 0xFFF5F0DA;
-                    len += mc.fontRendererObj.getStringWidth(strings[index]) + 2;
-                    index++;
+                    colors[count] = 0xFFF5F0DA;
                     break;
+                default:
+                    continue;
             }
+            strings[count] = formatDuration(effect);
+            len += mc.fontRendererObj.getStringWidth(strings[count]) + 2;
+            count++;
         }
         len -= 2;
         int x = this.rendererPosition.getAbsoluteRenderX() - len / 2;
-        for (int i = 0; i < 5; i++) {
-            if (strings[i] == null) return;
+        for (int i = 0; i < count; i++) {
             mc.fontRendererObj.drawStringWithShadow(strings[i], x, this.rendererPosition.getAbsoluteRenderY(), colors[i]);
             x += mc.fontRendererObj.getStringWidth(strings[i]) + 2;
         }
