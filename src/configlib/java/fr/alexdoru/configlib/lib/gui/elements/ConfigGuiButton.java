@@ -119,6 +119,7 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
         this.mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
     }
 
+    // doesn't seem useful, but it's a must for future 'CustomElements'
     protected int getLeftPadding() { return DEFAULT_PADDING; }
 
     protected final ClickGuiButton getMainButton(String text) {
