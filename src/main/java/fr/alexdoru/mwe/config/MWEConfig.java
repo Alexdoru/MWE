@@ -64,8 +64,8 @@ public final class MWEConfig {
     @ConfigCategory(
             displayname = "§cNoCheaters",
             comment = "§fNoCheaters saves players reported via §e/wdr name§f (not /report) and warns you about them ingame."
-                    + "§fTo remove a player from your report list use : §e/unwdr name§f or click the name on the warning message."
-                    + "§fYou can see all the players you have reported using §e/nocheaters reportlist§f.")
+                    + " §fTo remove a player from your report list use : §e/unwdr name§f or click the name on the warning message."
+                    + " §fYou can see all the players you have reported using §e/nocheaters reportlist§f.")
     private static final String NOCHEATERS = "NoCheaters";
 
     @ConfigCategory(
@@ -147,6 +147,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = VANILLA, subCategory = "Chat Search",
             name = "Always render search box",
+            dependsOn = "Search box in chat",
             comment = "Always renders the search box icon in the chat."
                     + " If the box is not rendered, you can still use the chat search by pressing CTRL + F")
     public static boolean showSearchBoxUnfocused = true;
@@ -154,18 +155,21 @@ public final class MWEConfig {
     @ConfigProperty(
             category = VANILLA, subCategory = "Chat Search",
             name = "Search box shortcuts",
+            dependsOn = "Search box in chat",
             comment = "Enables using CTRL + F shortcut to enter chat search")
     public static boolean searchBoxChatShortcuts = true;
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Chat Search",
             name = "Keep previous chat search",
+            dependsOn = "Search box in chat",
             comment = "Keeps the previous chat search when you re-open the chat")
     public static boolean keepPreviousChatSearch;
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Chat Search",
             name = "Search box X offset",
+            dependsOn = "Search box in chat",
             comment = "Allows moving the search box right and left. Positive values move to the right",
             sliderMin = -20, sliderMax = 400)
     public static int searchBoxXOffset = 0;
@@ -173,6 +177,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = VANILLA, subCategory = "Chat Search",
             name = "Search box Y offset",
+            dependsOn = "Search box in chat",
             comment = "Allows moving the search box up and down. Positive values move up",
             sliderMin = -20, sliderMax = 400)
     public static int searchBoxYOffset = 0;
@@ -214,6 +219,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = VANILLA, subCategory = "Performance",
             name = "Max amount of dropped item",
+            dependsOn = "Limit dropped item rendered",
             comment = "Max amount of items rendered",
             sliderMin = 40, sliderMax = 200)
     public static int maxDroppedEntityRendered = 80;
@@ -232,8 +238,8 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Render",
-            name = "Colored health/scores above head",
-            comment = "Renders the health/scores above head in the color according to the score's value compared to the player's maximum health points\n"
+            name = "Colored scores above head",
+            comment = "Displays the player's score above their head, with the color determined by the current value relative to their maximum health.\n"
                     + "\n"
                     + "    §222§c ❤\n"
                     + "    §a17§c ❤\n"
@@ -250,8 +256,8 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Tablist",
-            name = "Colored health/scores in Tablist",
-            comment = "Renders the health/scores in the tablist in the color according to the score's value compared to the player's maximum health points\n"
+            name = "Colored scores in Tablist",
+            comment = "Displays the player's score in the tablist, with the color determined by the current value relative to their maximum health.\n"
                     + "\n"
                     + "§cOrangeMarshall " + "§222§c ❤\n"
                     + "§cOrangeMarshall " + "§a17§c ❤\n"
@@ -289,7 +295,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = VANILLA, subCategory = "Tablist",
             name = "Hide ping tablist",
-            comment = "Stops rendering ping in the tablist when all values are equal to 1")
+            comment = "Stops rendering the ping in the tablist when all values are equal to 1")
     public static boolean hidePingTablist = true;
 
     @ConfigProperty(
@@ -339,32 +345,64 @@ public final class MWEConfig {
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Armor HUD",
             name = "Horizontal Armor HUD",
+            dependsOn = "Armor HUD",
             comment = "Displays the Armor HUD horizontally")
     public static boolean horizontalArmorHUD = true;
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Armor HUD",
-            name = "Low Durability Armor HUD",
-            comment = "Only renders the Armor HUD when the durability of one of your armor pieces falls below the threshold defined below")
-    public static boolean lowDuraArmorHUD;
-
-    @ConfigProperty(
-            category = PVP_STUFF, subCategory = "Armor HUD",
-            name = "Low Durability threshold",
-            sliderMax = 528)
-    public static int lowDuraArmorHUDValue = 50;
-
-    @ConfigProperty(
-            category = PVP_STUFF, subCategory = "Armor HUD",
             name = "Show Armor Durability",
+            dependsOn = "Armor HUD",
             comment = "Renders the durability of each armor piece")
     public static boolean showArmorDurability = true;
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Armor HUD",
             name = "Show Armor Durability as number",
+            dependsOn = "Show Armor Durability",
             comment = "Renders the durability of each armor piece as colored numbers instead of a bar")
     public static boolean showArmorDurabilityAsNumber;
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Armor HUD",
+            name = "Low Durability Armor HUD",
+            dependsOn = "Armor HUD",
+            comment = "Only renders the Armor HUD when the durability of one of your armor pieces falls below the threshold defined below")
+    public static boolean lowDuraArmorHUD;
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Armor HUD",
+            name = "Low Durability threshold",
+            dependsOn = "Low Durability Armor HUD",
+            sliderMax = 528)
+    public static int lowDuraArmorHUDValue = 50;
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Potion HUD",
+            name = "Potion HUD",
+            comment = "Displays your potions effects")
+    public static final RendererPosition potionHUDPosition = new RendererPosition(false, 0d, 0.5d);
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Potion HUD",
+            name = "Horizontal Potion HUD",
+            dependsOn = "Potion HUD",
+            comment = "Displays the Potion HUD horizontally")
+    public static boolean horizontalPotionHUD;
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Potion HUD",
+            name = "Show Potion names",
+            dependsOn = "Potion HUD",
+            comment = "Displays the full name of the potion effects next to the icons, only works with vertical display")
+    public static boolean showPotionEffectNames;
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Potion HUD",
+            name = "Potion HUD Text Color",
+            dependsOn = "Potion HUD",
+            isColor = true)
+    public static int potionHUDTextColor = 0xFFFFFF;
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Potion HUD",
@@ -376,32 +414,9 @@ public final class MWEConfig {
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Potion HUD",
             name = "Mini Potion HUD only in MW",
+            dependsOn = "Mini Potion HUD",
             comment = "Displays the mini potion HUD only in Mega Walls")
     public static boolean showMiniPotionHUDOnlyMW;
-
-    @ConfigProperty(
-            category = PVP_STUFF, subCategory = "Potion HUD",
-            name = "Potion HUD",
-            comment = "Displays your potions effects")
-    public static final RendererPosition potionHUDPosition = new RendererPosition(false, 0d, 0.5d);
-
-    @ConfigProperty(
-            category = PVP_STUFF, subCategory = "Potion HUD",
-            name = "Horizontal Potion HUD",
-            comment = "Displays the Potion HUD horizontally")
-    public static boolean horizontalPotionHUD;
-
-    @ConfigProperty(
-            category = PVP_STUFF, subCategory = "Potion HUD",
-            name = "Show Potion names",
-            comment = "Displays the full name of the potion effects next to the icons, only works with vertical display")
-    public static boolean showPotionEffectNames;
-
-    @ConfigProperty(
-            category = PVP_STUFF, subCategory = "Potion HUD",
-            name = "Potion HUD Text Color",
-            isColor = true)
-    public static int potionHUDTextColor = 0xFFFFFF;
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Toggle Sprint",
@@ -427,6 +442,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Health",
             name = "Health Threshold low HP",
+            dependsOn = "Sound warning low HP",
             comment = "The health threshold under which it will play a sound",
             sliderMax = 1)
     public static double healthThreshold = 0.5d;
@@ -446,18 +462,20 @@ public final class MWEConfig {
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Other HUD",
             name = "Show head on Arrow Hit HUD",
+            dependsOn = "Arrow Hit HUD",
             comment = "Show head of player shot on the Arrow Hit HUD")
     public static boolean showHeadOnArrowHitHUD;
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Other HUD",
             name = "Speed HUD",
-            comment = "Displays your own speed in the XZ plane")
+            comment = "Displays your horizontal speed")
     public static final RendererPosition speedHUDPosition = new RendererPosition(false, 1d, 1d);
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Other HUD",
             name = "Speed HUD Color",
+            dependsOn = "Speed HUD",
             isColor = true)
     public static int speedHUDColor = 0x00AA00;
 
@@ -532,12 +550,14 @@ public final class MWEConfig {
     @ConfigProperty(
             category = HITBOXES, subCategory = "Blue Vector",
             name = "Blue vector for players only",
+            dependsOn = "Render blue vector",
             comment = "Renders the blue vector for players only")
     public static boolean drawBlueVectForPlayersOnly;
 
     @ConfigProperty(
             category = HITBOXES, subCategory = "Blue Vector",
             name = "Make blue vector 3m long",
+            dependsOn = "Render blue vector",
             comment = "Make the blue vector 3 meters long, just like the player's attack reach")
     public static boolean makeBlueVect3Meters = true;
 
@@ -557,19 +577,19 @@ public final class MWEConfig {
     @ConfigProperty(
             category = HITBOXES, subCategory = "Color",
             name = "Team colored player hitbox",
-            comment = "The hitbox of players will take the color of their team, other entities will have the custom color defined above.")
+            comment = "For players, the hitbox will take the color of their team")
     public static boolean teamColoredPlayerHitbox = true;
 
     @ConfigProperty(
             category = HITBOXES, subCategory = "Color",
             name = "Team colored wither hitbox",
-            comment = "Wither hitboxes take the color of their team")
+            comment = "For withers, the hitbox will take the color of their team")
     public static boolean teamColoredWitherHitbox = true;
 
     @ConfigProperty(
             category = HITBOXES, subCategory = "Other",
             name = "Real size hitbox",
-            comment = "Hitboxes will be larger and accurately represent the hitbox where you can attack the entities")
+            comment = "Hitboxes will be displayed larger and accurately represent the hitbox where you can attack the entities")
     public static boolean realSizeHitbox;
 
     @ConfigProperty(
@@ -581,6 +601,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = HITBOXES, subCategory = "Other",
             name = "Hitbox render range",
+            dependsOn = "Hide close hitbox",
             comment = "Doesn't render the hitbox of entities closer than this",
             sliderMax = 64)
     public static double hitboxDrawRange = 8f;
@@ -629,6 +650,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "General",
             name = "Wither alerts threshold",
+            dependsOn = "Wither alerts",
             comment = "HP to give an alert",
             sliderMax = 500)
     public static int witherAlertsThreshold = 100;
@@ -642,18 +664,21 @@ public final class MWEConfig {
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "Class Selector",
             name = "Render colored border",
+            dependsOn = "Class selector overlay",
             comment = "Renders a prestige colored border")
     public static boolean classSelectorColoredBorder = true;
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "Class Selector",
             name = "Render prestige level",
+            dependsOn = "Class selector overlay",
             comment = "Renders the amount of prestiges")
     public static boolean classSelectorPrestigeLevel;
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "Class Selector",
             name = "Render classpoints",
+            dependsOn = "Class selector overlay",
             comment = "Renders the amount of classpoints")
     public static boolean classSelectorClasspoints;
 
@@ -708,6 +733,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Kill cooldown HUD Color",
+            dependsOn = "Kill cooldown HUD",
             isColor = true)
     public static int killCooldownHUDColor = 0xAA0000;
 
@@ -720,6 +746,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Last wither HUD in sidebar",
+            dependsOn = "Last wither HUD",
             comment = "Renders the Last wither HUD in the sidebar")
     public static boolean witherHUDinSidebar = true;
 
@@ -752,18 +779,21 @@ public final class MWEConfig {
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
             name = "High energy threshold",
+            dependsOn = "Energy display HUD",
             sliderMax = 160)
     public static int highEnergyThreshold = 100;
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Low energy color",
+            dependsOn = "Energy display HUD",
             isColor = true)
     public static int lowEnergyHUDColor = 0x55FF55;
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
             name = "High energy color",
+            dependsOn = "Energy display HUD",
             isColor = true)
     public static int highEnergyHUDColor = 0x55FFFF;
 
@@ -801,8 +831,15 @@ public final class MWEConfig {
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Always render class in lobby HUD",
+            dependsOn = "Class in lobby HUD",
             comment = "Also renders the HUD when ingame")
     public static boolean alwaysRenderClassInLobbyHUD;
+
+    @ConfigProperty(
+            category = FINAL_KILL_COUNTER, subCategory = "Chat",
+            name = "Show kill diff in chat",
+            comment = "Appends at the end of kill messages the amount of final kills the killed player had")
+    public static boolean showKillDiffInChat = true;
 
     @ConfigProperty(
             category = FINAL_KILL_COUNTER, subCategory = "HUD",
@@ -814,24 +851,28 @@ public final class MWEConfig {
     @ConfigProperty(
             category = FINAL_KILL_COUNTER, subCategory = "HUD",
             name = "Compact mode",
+            dependsOn = "Final Kill Counter HUD",
             comment = "Use a compact HUD for the final kill counter")
     public static boolean fkcounterHUDCompact = true;
 
     @ConfigProperty(
             category = FINAL_KILL_COUNTER, subCategory = "HUD",
             name = "Compact HUD in Sidebar",
+            dependsOn = "Final Kill Counter HUD",
             comment = "Renders the final kill counter HUD in the sidebar")
     public static boolean fkcounterHUDinSidebar = true;
 
     @ConfigProperty(
             category = FINAL_KILL_COUNTER, subCategory = "HUD",
             name = "Players mode",
+            dependsOn = "Final Kill Counter HUD",
             comment = "Displays players with most finals in each team")
     public static boolean fkcounterHUDShowPlayers;
 
     @ConfigProperty(
             category = FINAL_KILL_COUNTER, subCategory = "HUD",
             name = "Player amount",
+            dependsOn = "Players mode",
             comment = "Amount of players displayed on screen when you use the Players mode",
             sliderMin = 1, sliderMax = 10)
     public static int fkcounterHUDPlayerAmount = 3;
@@ -849,6 +890,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = FINAL_KILL_COUNTER, subCategory = "HUD",
             name = "Render HUD background",
+            dependsOn = "Final Kill Counter HUD",
             comment = "Renders a background behind the final kill counter HUD")
     public static boolean fkcounterHUDDrawBackground;
 
@@ -857,12 +899,6 @@ public final class MWEConfig {
             name = "Finals in tablist",
             comment = "Renders in the tablist next to their names the amount of final kills that each player has")
     public static boolean fkcounterHUDTablist = true;
-
-    @ConfigProperty(
-            category = FINAL_KILL_COUNTER, subCategory = "Chat",
-            name = "Show kill diff in chat",
-            comment = "Appends at the end of kill messages the amount of final kills the killed player had")
-    public static boolean showKillDiffInChat = true;
 
     @ConfigProperty(
             category = HYPIXEL,
@@ -924,6 +960,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = NOCHEATERS, subCategory = "General",
             name = "Time delete reports",
+            dependsOn = "Delete Old Report",
             comment = "Reports older than this will be deleted on game start (days)",
             sliderMin = 1, sliderMax = 365 * 2)
     public static int timeDeleteReport = 365;
@@ -942,6 +979,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = NOCHEATERS, subCategory = "Icons",
             name = "Warning Icons In Tab Only",
+            dependsOn = "Show Warning Icons",
             comment = "Displays the warning icons in the tablist only, not on nametags")
     public static boolean warningIconsTabOnly;
 
@@ -1006,50 +1044,58 @@ public final class MWEConfig {
     public static volatile boolean hackerDetector = true;
 
     @ConfigProperty(
-            category = HACKER_DETECTOR, subCategory = "General",
+            category = HACKER_DETECTOR, subCategory = "Flags",
             name = "Add to report list",
+            dependsOn = "Hacker Detector",
             comment = "Saves flagged players in NoCheaters to get warnings about them")
     public static boolean addToReportList = true;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Flags",
+            name = "Sound when flagging",
+            dependsOn = "Hacker Detector",
+            comment = "Plays a sound when it flags a player")
+    public static boolean soundWhenFlagging;
+
+    @ConfigProperty(
+            category = HACKER_DETECTOR, subCategory = "Flags",
             name = "Show flag messages",
+            dependsOn = "Hacker Detector",
             comment = "Prints a message in chat when it detects a player using cheats")
     public static boolean showFlagMessages = true;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Flags",
             name = "Show flag type",
+            dependsOn = "Show flag messages",
             comment = "Shows the flag type on the flag message. For example : Killaura(A), Killaura(B)...")
     public static boolean showFlagMessageType = true;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Flags",
             name = "Compact flags in chat",
+            dependsOn = "Show flag messages",
             comment = "Deletes previous flag message when printing a new identical flag message")
     public static boolean compactFlagMessages = true;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Flags",
             name = "Show single flag message",
+            dependsOn = "Show flag messages",
             comment = "Prints flag messages only once per game per player")
     public static boolean oneFlagMessagePerGame;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Flags",
-            name = "Sound when flagging",
-            comment = "Plays a sound when it flags a player")
-    public static boolean soundWhenFlagging;
-
-    @ConfigProperty(
-            category = HACKER_DETECTOR, subCategory = "Flags",
             name = "Show report button on flags",
+            dependsOn = "Show flag messages",
             comment = "Shows the report buttons on flag messages")
     public static boolean showReportButtonOnFlags = true;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Flags",
             name = "Flag message prefix",
+            dependsOn = "Show flag messages",
             comment = "Lets you choose the prefix of flags messages",
             hidden = true)
     public static String flagMessagePrefix = EnumChatFormatting.DARK_PURPLE + "[Hack]";
@@ -1057,6 +1103,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Report",
             name = "Auto-report cheaters",
+            dependsOn = "Hacker Detector",
             comment = "Sends a /report automatically to Hypixel when it flags a cheater\n"
                     + "§eOnly works in Mega Walls, sends one report per game per player, you need to stand still for the mod to type the report." +
                     " It will not send the report if you wait more than 30 seconds to send it.")
@@ -1072,12 +1119,14 @@ public final class MWEConfig {
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Report",
             name = "Report HUD",
+            dependsOn = "Auto-report cheaters",
             comment = "Displays a small text when the mod has reports to send to the server and when it is typing the report")
     public static final RendererPosition reportHUDPosition = new RendererPosition(true, 0d, 1d);
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Report",
             name = "Report HUD in chat only",
+            dependsOn = "Report HUD",
             comment = "Displays the report HUD only when the chat is open")
     public static boolean showReportHUDonlyInChat;
 
@@ -1090,66 +1139,77 @@ public final class MWEConfig {
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Checks",
             name = "Autoblock check",
+            dependsOn = "Hacker Detector",
             comment = "Checks if the player can attack while their sword is blocked")
     public static boolean enableAutoblockCheck = true;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Checks",
             name = "Fastbreak check",
+            dependsOn = "Hacker Detector",
             comment = "Checks if the player can break blocks faster than normal")
     public static boolean enableFastbreakCheck = true;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Checks",
             name = "Ghosthand check",
+            dependsOn = "Hacker Detector",
             comment = "Checks if the player can mine blocks through other players")
     public static boolean enableGhosthandCheck = true;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Checks",
             name = "Keepsprint A check",
+            dependsOn = "Hacker Detector",
             comment = "Checks if the player's sprint doesn't turn off when using items")
     public static boolean enableKeepsprintACheck = true;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Checks",
             name = "Keepsprint B check",
+            dependsOn = "Hacker Detector",
             comment = "Checks if the player's velocity doesn't decrease after attacking other players")
     public static boolean enableKeepsprintBCheck = true;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Checks",
             name = "Killaura A check",
+            dependsOn = "Hacker Detector",
             comment = "Checks if the player can attack through blocks/entities")
     public static boolean enableKillauraACheck = true;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Checks",
             name = "Killaura B check",
+            dependsOn = "Hacker Detector",
             comment = "Checks if the player can attack while eating and drinking potions")
     public static boolean enableKillauraBCheck = true;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Checks",
             name = "Noslowdown check",
+            dependsOn = "Hacker Detector",
             comment = "Checks if the player is running while using items")
     public static boolean enableNoslowdownCheck = true;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Checks",
             name = "Scaffold check",
+            dependsOn = "Hacker Detector",
             comment = "Checks if the player is scaffolding")
     public static boolean enableScaffoldCheck = true;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Debug",
             name = "Enable debug log",
+            dependsOn = "Hacker Detector",
             comment = "Logs every hacker detector related action in .minecraft/logs/HackerDetector.log")
     public static boolean debugLogging;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Debug",
             name = "Replay Killaura Flags",
+            dependsOn = "Hacker Detector",
             comment = "Prints a chat message whenever someone attacks another player through blocks, only works in replay, the attack detection system isn't accurate outside of replay")
     public static boolean debugKillauraFlags;
 
@@ -1177,6 +1237,12 @@ public final class MWEConfig {
     }
 
     @ConfigProperty(
+            category = SQUAD, subCategory = "HUD",
+            name = "Squad HUD",
+            comment = "Displays a mini-tablist with your squadmates")
+    public static final RendererPosition squadHUDPosition = new RendererPosition(true, 0.25d, 0d);
+
+    @ConfigProperty(
             category = SQUAD, subCategory = "General",
             name = "Colored squadmates",
             comment = "Your squadmates will have a fixed color for nametag, hitbox color and hurt color")
@@ -1185,12 +1251,14 @@ public final class MWEConfig {
     @ConfigProperty(
             category = SQUAD, subCategory = "General",
             name = "Colored tab name",
+            dependsOn = "Colored squadmates",
             comment = "Use the squadmate color in the tablist as well")
     public static boolean coloredSquadTabname = true;
 
     @ConfigProperty(
             category = SQUAD, subCategory = "General",
-            name = "Squadmate color")
+            name = "Squadmate color",
+            dependsOn = "Colored squadmates")
     public static EnumChatFormatting squadmateColor = EnumChatFormatting.LIGHT_PURPLE;
 
     @ConfigPropertyEvent(name = {
@@ -1227,14 +1295,9 @@ public final class MWEConfig {
     @ConfigProperty(
             category = SQUAD, subCategory = "Icons",
             name = "Squad Icons In Tab Only",
+            dependsOn = "Show Squad Icons",
             comment = "Displays the squad icons in the tablist only, not on nametags")
     public static boolean squadIconTabOnly;
-
-    @ConfigProperty(
-            category = SQUAD, subCategory = "HUD",
-            name = "Squad HUD",
-            comment = "Displays a mini-tablist with your squadmates")
-    public static final RendererPosition squadHUDPosition = new RendererPosition(true, 0.25d, 0d);
 
     @ConfigProperty(
             category = UPDATES,
@@ -1245,6 +1308,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = UPDATES,
             name = "Automatic Update",
+            dependsOn = "Check for Update",
             comment = "Updates the mod automatically")
     public static boolean automaticUpdate = true;
 
