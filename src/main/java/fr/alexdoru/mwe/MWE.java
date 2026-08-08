@@ -114,6 +114,7 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(new StrengthParticles());
         MinecraftForge.EVENT_BUS.register(new ScoreboardTracker());
         MinecraftForge.EVENT_BUS.register(new ClassSelectorOverlay(this.configFolder));
+        MinecraftForge.EVENT_BUS.register(new SpectatorCompassOverlay());
         MinecraftForge.EVENT_BUS.register(new PlayerDataManager.EventHandler());
         MinecraftForge.EVENT_BUS.register(new KeybindingListener());
         MinecraftForge.EVENT_BUS.register(new MegaWallsEndGameStats());

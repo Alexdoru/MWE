@@ -963,6 +963,18 @@ public final class MWEConfig {
             comment = "Adds confirmation when clicking the \"Play Again\" paper if you have players in your squad")
     public static boolean warpProtection = true;
 
+    @ConfigProperty(
+            category = HYPIXEL, subCategory = "Spectator Compass",
+            name = "Show team indicator",
+            comment = "In the spectator compass display the team of the player next to their skull")
+    public static boolean spectatorCompassTeamIndicator = true;
+
+    @ConfigProperty(
+            category = HYPIXEL, subCategory = "Spectator Compass",
+            name = "Show Mega Walls skins",
+            comment = "In the spectator compass display the Mega Walls skin instead of the player's skin")
+    public static boolean spectatorCompassMWSkins = true;
+
     @ConfigProperty(category = NOCHEATERS, subCategory = "General",
             name = "Save reported players",
             comment = "Players reported via /wdr will be saved to the report list")

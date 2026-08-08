@@ -86,7 +86,7 @@ public final class ClassSelectorOverlay {
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
             final boolean prevActive = this.active;
-            this.active = this.mc.thePlayer != null && MWEConfig.classSelectorOverlay && parser.isMWEnvironement() && (parser.isPreGameLobby() || !parser.isInMwGame());
+            this.active = MWEConfig.classSelectorOverlay && this.mc.thePlayer != null && parser.isMWEnvironement() && (parser.isPreGameLobby() || !parser.isInMwGame());
             if (this.active && !prevActive) {
                 final UUID uuid = this.mc.thePlayer.getUniqueID();
                 if (uuid != null && (this.loadedUUID == null || !this.loadedUUID.equals(uuid))) {
@@ -227,14 +227,13 @@ public final class ClassSelectorOverlay {
         final float TEXT_SCALE = 0.6F;
         if (MWEConfig.classSelectorPrestigeLevel && prestiges != 0) {
             final String prestigeText = this.formatPrestiges(prestiges);
-            this.drawTextAt(x + 1, y + 1, mc, prestigeText, TEXT_SCALE, 0xFFFFFFFF);
+            this.drawTextAt(x + 1, y + 1, prestigeText, TEXT_SCALE, 0xFFFFFFFF);
         }
         if (MWEConfig.classSelectorClasspoints && classpoints != 0) {
             final String pointsText = this.formatClasspoints(classpoints);
             this.drawTextAt(
                     x + 16 - mc.fontRendererObj.getStringWidth(pointsText) * TEXT_SCALE,
                     y + 16 - mc.fontRendererObj.FONT_HEIGHT * TEXT_SCALE,
-                    mc,
                     pointsText,
                     TEXT_SCALE,
                     classpointColor
@@ -266,7 +265,7 @@ public final class ClassSelectorOverlay {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void drawTextAt(float x, float y, Minecraft mc, String prestigeText, float scale, int color) {
+    private void drawTextAt(float x, float y, String prestigeText, float scale, int color) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, 0);
         GlStateManager.scale(scale, scale, scale);
