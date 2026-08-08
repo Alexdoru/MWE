@@ -84,30 +84,30 @@ public class PartyDetection {
 
     public static void printBoostingReportAdvice(String playername) {
         if (playername == null || !MWEConfig.showBoostingReportAdvance) return;
-        final Set<String> party = PARTYS.get(playername.toLowerCase());
-        if (party == null) return;
+        final Set<String> party = getPartyOf(playername);
+        if (party.isEmpty()) return;
         final Minecraft mc = Minecraft.getMinecraft();
+        final boolean checkSameTeam = ScoreboardTracker.isInMwGame();
         final NetworkPlayerInfo cheaterNetInfo = mc.getNetHandler().getPlayerInfo(playername);
-        if (cheaterNetInfo == null) {
+        if (checkSameTeam && cheaterNetInfo == null) {
             return;
         }
-        final char cheaterTeamColor = getTeamColor(cheaterNetInfo);
+        final char cheaterTeamColor = checkSameTeam ? getTeamColor(cheaterNetInfo) : 0;
         final ChatComponentText imsg = new ChatComponentText(EnumChatFormatting.GREEN + "This player joined in a party with : ");
         boolean containsPlayers = false;
         for (final String player : party) {
-            if (!player.equals(playername)) {
-                final NetworkPlayerInfo netInfo = mc.getNetHandler().getPlayerInfo(player);
-                if (netInfo != null) {
-                    final char teamColorPlayer = getTeamColor(netInfo);
-                    if (cheaterTeamColor == teamColorPlayer) {
-                        containsPlayers = true;
-                        imsg.appendSibling(new ChatComponentText(NameFormatter.getTablistName(netInfo) + " ")
-                                .setChatStyle(new ChatStyle()
-                                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report " + player + " for boosting")))
-                                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + player + " boo"))));
-                    }
-                }
+            if (player.equals(playername)) continue;
+            final NetworkPlayerInfo netInfo = mc.getNetHandler().getPlayerInfo(player);
+            if (checkSameTeam && netInfo == null) continue;
+            if (checkSameTeam) {
+                final char teamColorPlayer = getTeamColor(netInfo);
+                if (cheaterTeamColor != teamColorPlayer) continue;
             }
+            containsPlayers = true;
+            imsg.appendSibling(new ChatComponentText((netInfo != null ? NameFormatter.getTablistName(netInfo) : player) + " ")
+                    .setChatStyle(new ChatStyle()
+                            .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click here to report " + player + " for boosting")))
+                            .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + player + " boo"))));
         }
         imsg.appendText(EnumChatFormatting.GREEN + "you can click their name to report them for boosting.");
         if (containsPlayers) {
