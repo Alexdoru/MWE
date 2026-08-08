@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
 
 public final class ClassSelectorOverlay {
 
-    private static final Pattern DISPLAY_NAME_PATTERN = Pattern.compile("(\\w+)\\s?(:|✫{0,5})");
+    private static final Pattern DISPLAY_NAME_PATTERN = Pattern.compile("^(\\w+)\\s?(:|✫{0,5})$");
     private static final Pattern CLASSPOINTS_PATTERN = Pattern.compile("Class Points:\\s([,\\d]+)");
 
     private final Minecraft mc = Minecraft.getMinecraft();
@@ -65,7 +65,7 @@ public final class ClassSelectorOverlay {
             if (mwClass == null) return;
             final String displayName = StringUtil.removeFormattingCodes(event.itemStack.getDisplayName());
             final Matcher matcher = DISPLAY_NAME_PATTERN.matcher(displayName);
-            if (matcher.find()) {
+            if (matcher.matches()) {
                 final String classname = matcher.group(1);
                 if (mwClass != MWClass.fromName(classname)) return;
                 final int prestiges = matcher.groupCount() == 1 ? 0 : matcher.group(2).length();
