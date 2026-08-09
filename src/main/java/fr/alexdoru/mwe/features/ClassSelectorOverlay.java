@@ -4,10 +4,10 @@ import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.api.events.ContainerSlotRenderEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.scoreboard.ScoreboardParser;
-import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import fr.alexdoru.mwe.utils.*;
-import net.minecraft.client.Minecraft;
+import fr.alexdoru.mwe.utils.ColorUtil;
+import fr.alexdoru.mwe.utils.ItemStackUtil;
+import fr.alexdoru.mwe.utils.MultithreadingUtil;
+import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -31,17 +31,14 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class ClassSelectorOverlay {
+public final class ClassSelectorOverlay extends InventoryOverlay {
 
     private static final Pattern DISPLAY_NAME_PATTERN = Pattern.compile("^(\\w+)\\s?(:|✫{0,5})$");
     private static final Pattern CLASSPOINTS_PATTERN = Pattern.compile("Class Points:\\s([,\\d]+)");
 
-    private final Minecraft mc = Minecraft.getMinecraft();
-    private final ScoreboardParser parser = ScoreboardTracker.getParser();
     private final Map<MWClass, MWSkin> selectedSkins = new EnumMap<>(MWClass.class);
     private final File configFolder;
     private UUID loadedUUID;
-    private boolean active;
     private boolean dirty;
     private int tickCount;
     private MWSkin randomSkin = MWSkin.COW$COW;
@@ -52,29 +49,31 @@ public final class ClassSelectorOverlay {
 
     @SubscribeEvent
     public void onRenderSlot(ContainerSlotRenderEvent event) {
-        if (this.active && event.itemStack != null && event.guiContainer instanceof GuiChest && !(event.slot.inventory instanceof InventoryPlayer)) {
-            final Item item = event.itemStack.getItem();
-            if (item == null) return;
-            if (!event.itemStack.hasDisplayName()) return;
-            if (this.randomSkin != null && this.isRandomItem(event.itemStack)) {
-                this.renderIcon(event.slot.xDisplayPosition, event.slot.yDisplayPosition, this.randomSkin, 0, 0);
-                event.setCanceled(true);
-                return;
-            }
-            final MWClass mwClass = MWClass.fromItem(item);
-            if (mwClass == null) return;
-            final String displayName = StringUtil.removeFormattingCodes(event.itemStack.getDisplayName());
-            final Matcher matcher = DISPLAY_NAME_PATTERN.matcher(displayName);
-            if (matcher.matches()) {
-                final String classname = matcher.group(1);
-                if (mwClass != MWClass.fromName(classname)) return;
-                final int prestiges = matcher.groupCount() == 1 ? 0 : matcher.group(2).length();
-                final int classpoints = this.getClasspoints(event.itemStack);
-                final MWSkin skin = this.selectedSkins.get(mwClass);
-                if (skin == null) return;
-                this.renderIcon(event.slot.xDisplayPosition, event.slot.yDisplayPosition, skin, prestiges, classpoints);
-                event.setCanceled(true);
-            }
+        if (!this.active || event.itemStack == null || !(event.guiContainer instanceof GuiChest) || event.slot.inventory instanceof InventoryPlayer) {
+            return;
+        }
+        final Item item = event.itemStack.getItem();
+        if (item == null) return;
+        if (!event.itemStack.hasDisplayName()) return;
+        if (this.randomSkin != null && this.isRandomItem(event.itemStack)) {
+            this.renderIcon(event.slot.xDisplayPosition, event.slot.yDisplayPosition, this.randomSkin);
+            event.setCanceled(true);
+            return;
+        }
+        final MWClass mwClass = MWClass.fromItem(item);
+        if (mwClass == null) return;
+        final String displayName = StringUtil.removeFormattingCodes(event.itemStack.getDisplayName());
+        final Matcher matcher = DISPLAY_NAME_PATTERN.matcher(displayName);
+        if (matcher.matches()) {
+            final String classname = matcher.group(1);
+            if (mwClass != MWClass.fromName(classname)) return;
+            final int prestiges = matcher.groupCount() == 1 ? 0 : matcher.group(2).length();
+            final int classpoints = this.getClasspoints(event.itemStack);
+            final MWSkin skin = this.selectedSkins.get(mwClass);
+            if (skin == null) return;
+            this.renderIcon(event.slot.xDisplayPosition, event.slot.yDisplayPosition, skin);
+            this.renderPrestigesAndClasspoints(event.slot.xDisplayPosition, event.slot.yDisplayPosition, prestiges, classpoints);
+            event.setCanceled(true);
         }
     }
 
@@ -206,24 +205,27 @@ public final class ClassSelectorOverlay {
         return 0;
     }
 
-    private void renderIcon(int x, int y, MWSkin skin, int prestiges, int classpoints) {
+    private void renderIcon(int x, int y, MWSkin skin) {
         final boolean renderSkull = MWEConfig.classSelectorPlayerHeads;
         if (renderSkull) {
-            this.renderPlayerSkullItem(x, y, skin);
+            this.renderItemStack(x, y, skin.getPlayerSkullItemStack());
         } else {
             this.renderFlatSkin(x, y, skin);
+        }
+    }
+
+    private void renderPrestigesAndClasspoints(int x, int y, int prestiges, int classpoints) {
+        final int classpointColor = ColorUtil.getColorInt(ColorUtil.getPrestige4Color(prestiges >= 4 ? classpoints : 0));
+        if (MWEConfig.classSelectorColoredBorder && classpoints >= 2000 && prestiges >= 4) {
+            if (MWEConfig.classSelectorPlayerHeads) {
+                this.renderOutline(x, y, x + 16, y + 16, classpointColor);
+            } else {
+                this.renderOutline(x - 1, y - 1, x + 16 + 1, y + 16 + 1, classpointColor);
+            }
         }
         GlStateManager.disableLighting();
         GlStateManager.disableDepth();
         GlStateManager.disableBlend();
-        final int classpointColor = ColorUtil.getColorInt(ColorUtil.getPrestige4Color(prestiges >= 4 ? classpoints : 0)) | 0xFF000000;
-        if (MWEConfig.classSelectorColoredBorder && classpoints >= 2000 && prestiges >= 4) {
-            if (renderSkull) {
-                RenderHelper.drawOutline(x, y, x + 16, y + 16, classpointColor);
-            } else {
-                RenderHelper.drawOutline(x - 1, y - 1, x + 16 + 1, y + 16 + 1, classpointColor);
-            }
-        }
         final float TEXT_SCALE = 0.6F;
         if (MWEConfig.classSelectorPrestigeLevel && prestiges != 0) {
             final String prestigeText = this.formatPrestiges(prestiges);
@@ -242,35 +244,6 @@ public final class ClassSelectorOverlay {
         GlStateManager.enableLighting();
         GlStateManager.enableDepth();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-    }
-
-    private void renderPlayerSkullItem(int x, int y, MWSkin skin) {
-        GlStateManager.enableDepth();
-        mc.getRenderItem().renderItemAndEffectIntoGUI(skin.getPlayerSkullItemStack(), x, y);
-    }
-
-    private void renderFlatSkin(int x, int y, MWSkin skin) {
-        GlStateManager.enableDepth();
-        GlStateManager.pushMatrix();
-        GlStateManager.enableRescaleNormal();
-        GlStateManager.alphaFunc(516, 0.1F);
-        GlStateManager.translate(0, 0, 250F);
-        GlStateManager.disableLighting();
-        RenderHelper.renderSkinHead(skin.getSkin(), x, y, true, 16);
-        GlStateManager.disableAlpha();
-        GlStateManager.disableRescaleNormal();
-        GlStateManager.disableLighting();
-        GlStateManager.popMatrix();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private void drawTextAt(float x, float y, String prestigeText, float scale, int color) {
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y, 0);
-        GlStateManager.scale(scale, scale, scale);
-        mc.fontRendererObj.drawStringWithShadow(prestigeText, 0, 0, color);
-        GlStateManager.popMatrix();
     }
 
     private String formatPrestiges(int prestiges) {

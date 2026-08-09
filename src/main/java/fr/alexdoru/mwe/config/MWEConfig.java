@@ -207,7 +207,7 @@ public final class MWEConfig {
             category = VANILLA, subCategory = "Hurt Color",
             name = "Color armor when hurt",
             comment = "Armor will be colored as well when a player is hurt, like it does in 1.7\n"
-                    + "§eIf you have a 1.7 old animation mod, you might need to turn off their \"Red Armor\" setting for this to work.")
+                    + "§eIf you have an 1.7 old animation mod, you might need to turn off their \"Red Armor\" setting for this to work.")
     public static boolean colorArmorWhenHurt = true;
 
     @ConfigProperty(
@@ -400,7 +400,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Potion HUD",
             name = "Potion HUD",
-            comment = "Displays your potions effects")
+            comment = "Displays your potion effects")
     public static final RendererPosition potionHUDPosition = new RendererPosition(false, 0d, 0.5d);
 
     @ConfigProperty(
@@ -964,16 +964,22 @@ public final class MWEConfig {
     public static boolean warpProtection = true;
 
     @ConfigProperty(
-            category = HYPIXEL, subCategory = "Spectator Compass",
+            category = HYPIXEL, subCategory = "Spectating",
             name = "Show team indicator",
-            comment = "In the spectator compass display the team of the player next to their skull")
-    public static boolean spectatorCompassTeamIndicator = true;
+            comment = "In the spectator, replay compass and bookmarks display the teams of beds, players, withers")
+    public static boolean spectatingTeamIndicator = true;
 
     @ConfigProperty(
-            category = HYPIXEL, subCategory = "Spectator Compass",
+            category = HYPIXEL, subCategory = "Spectating",
+            name = "Better replay bookmarks",
+            comment = "Makes the replay bookmarks more insightful instead of white papers")
+    public static boolean betterReplayBookmarks = true;
+
+    @ConfigProperty(
+            category = HYPIXEL, subCategory = "Spectating",
             name = "Show Mega Walls skins",
-            comment = "In the spectator compass display the Mega Walls skin instead of the player's skin")
-    public static boolean spectatorCompassMWSkins = true;
+            comment = "In the spectator compass display the Mega Walls skins instead of the players' Minecraft skins")
+    public static boolean spectatingMegaWallsSkins = true;
 
     @ConfigProperty(category = NOCHEATERS, subCategory = "General",
             name = "Save reported players",
@@ -1003,13 +1009,13 @@ public final class MWEConfig {
     @ConfigProperty(
             category = NOCHEATERS, subCategory = "General",
             name = "Show banned players",
-            comment = "Reveals the name of the player getting disconnected after a ban when playing on hypixel")
+            comment = "Reveals the name of the player getting disconnected after a ban when playing on Hypixel")
     public static boolean showBannedPlayers = true;
 
     @ConfigProperty(
             category = NOCHEATERS, subCategory = "General",
             name = "Delete Old Report",
-            comment = "Deletes reports older than the specified value, the deletion occurs when you start game")
+            comment = "Deletes reports older than the specified value, the deletion occurs when you start the game")
     public static boolean deleteOldReports;
 
     @ConfigProperty(
@@ -1151,7 +1157,7 @@ public final class MWEConfig {
             category = HACKER_DETECTOR, subCategory = "Flags",
             name = "Flag message prefix",
             dependsOn = "Show flag messages",
-            comment = "Lets you choose the prefix of flags messages",
+            comment = "Lets you choose the prefix of flag messages",
             hidden = true)
     public static String flagMessagePrefix = EnumChatFormatting.DARK_PURPLE + "[Hack]";
 
