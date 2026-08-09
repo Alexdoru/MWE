@@ -106,6 +106,7 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(this.renegadeTracker);
         MinecraftForge.EVENT_BUS.register(this.hackerDetector);
 
+        MinecraftForge.EVENT_BUS.register(new AutoRequeue());
         MinecraftForge.EVENT_BUS.register(new ReportQueue());
         MinecraftForge.EVENT_BUS.register(new ChatListener(this.mweRenderers));
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());

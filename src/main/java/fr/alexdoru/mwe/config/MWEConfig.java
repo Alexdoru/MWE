@@ -676,6 +676,12 @@ public final class MWEConfig {
     public static int witherAlertsThreshold = 100;
 
     @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "General",
+            name = "Auto-requeue",
+            comment = "Automatically joins the next game of Mega Walls when your game ends")
+    public static boolean autoRequeue;
+
+    @ConfigProperty(
             category = MEGA_WALLS, subCategory = "Class Selector",
             name = "Class selector overlay",
             comment = "Renders an overlay on the class selector which shows the selected skin, prestiges and class points")
