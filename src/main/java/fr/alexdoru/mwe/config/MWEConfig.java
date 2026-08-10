@@ -658,7 +658,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "General",
             name = "Squad add halo player",
-            comment = "Automatically adds to the squad the player you give your halo to")
+            comment = "Automatically adds to the squad the player you give your halo when your wither is dead")
     public static boolean squadHaloPlayer = true;
 
     @ConfigProperty(

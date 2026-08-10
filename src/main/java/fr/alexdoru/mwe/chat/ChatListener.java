@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.chat;
 
 import fr.alexdoru.mwe.MWE;
+import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NameFormatter;
@@ -99,8 +100,11 @@ public class ChatListener {
                 if (MWEConfig.squadHaloPlayer) {
                     final Matcher haloGiveMatcher = HALO_GIVE_PATTERN.matcher(msg);
                     if (haloGiveMatcher.find()) {
-                        SquadHandler.addSelf();
-                        SquadHandler.addPlayer(haloGiveMatcher.group(1));
+                        final MWTeam myTeam = MWTeam.ofPlayer(Minecraft.getMinecraft().thePlayer.getGameProfile().getId());
+                        if (myTeam == null || !ScoreboardTracker.getParser().isWitherAlive(myTeam)) {
+                            SquadHandler.addSelf();
+                            SquadHandler.addPlayer(haloGiveMatcher.group(1));
+                        }
                     }
                 }
 
