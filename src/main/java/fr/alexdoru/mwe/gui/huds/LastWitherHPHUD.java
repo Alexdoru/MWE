@@ -3,6 +3,7 @@ package fr.alexdoru.mwe.gui.huds;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
+import fr.alexdoru.mwe.utils.DateUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
@@ -33,7 +34,7 @@ public class LastWitherHPHUD extends AbstractRenderer {
         }
         final long time = System.currentTimeMillis();
         final int timeToDie = (witherHp / 8) * 5 + (thirdWitherDeathTime + 55000L - time > 0 ? (int) ((thirdWitherDeathTime + 55000L - time) / 1000L) - 4 : (int) ((lastWitherHPUpdate - time) / 1000L) + 3);
-        displayText = color + "Wither dies in " + Math.max(0, timeToDie) + "s";
+        displayText = color + "Wither dies in " + DateUtil.formatTime(Math.max(0, timeToDie));
     }
 
     @SubscribeEvent

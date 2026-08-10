@@ -59,4 +59,16 @@ public class DateUtil {
         }
     }
 
+    public static String formatTime(int sec) {
+        if (sec < 60) {
+            return sec + "s";
+        }
+        final int min = sec / 60;
+        final int remainer = sec % 60;
+        if (remainer == 0) {
+            return min + "m";
+        }
+        return min + "m " + remainer + "s";
+    }
+
 }
