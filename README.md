@@ -53,7 +53,7 @@ Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, th
 - **Change size** - Change the amount of players displayed in the tablist
 - **Display playercount** - Display the amount of players in your current lobby at the top of the tablist
 - **Hide header/footer** - Hide the header and footer text of the tablist
-- **Hide ping** - Hide the ping values in the tablist if all the values are equal to 1
+- **Hide ping** - Hide the ping values in the tablist, always or if all the values are equal to 1
 - **Choose column spacing** - Choose the spacing between columns in the tablist
 - **Fix background** - Fix the background of the tablist not being symmetric and sometimes missing pixels on one side
 
@@ -102,6 +102,8 @@ Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, th
 
 - **Short coins messages** - on Hypixel, removes the booster info in the coin and token messages to make the messages smaller
 - **Warp Protection** - Adds confirmation when clicking the "Play Again" paper if you have players in your squad
+- **Spectator Compass Overlay** - shows a team indicator in the compass when in spectator and also renders the MW skins instead of the player skins
+- **Replay Bookmarks Overlay** - replaces the white paper bookmarks with player skulls, wither heads, beds and adds team colors
 
 </details>
 
@@ -170,6 +172,7 @@ Allows you to customize the look of the f3+b hitboxes.
 - **Class selector overlay** - in the class selector, renders your selected skins, prestige levels (default:off) and
   classpoints (default:off)
 - **Class in lobby HUD** - shows how many of each class is in the current lobby
+- **Auto-Requeue** - automatically joins the next game of MW when your game ends
 - Notification at 5 mins before a game ends, and 10 seconds before the walls fall if you are not on the game
 - Shows class and kit in the chat message when you hit an arrow
 
