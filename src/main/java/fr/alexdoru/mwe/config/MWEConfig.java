@@ -655,10 +655,10 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = INVENTORY_OVERLAYS, subCategory = "MW Class Selector",
-            name = "Use player head items",
+            name = "Class Selector skin style",
             dependsOn = "Class selector overlay",
-            comment = "Renders player heads with the mega walls skin instead of the skin overlay")
-    public static boolean classSelectorPlayerHeads;
+            comment = "Choose the type of render for the skin")
+    public static SkinStyle classSelectorHeadStyle = SkinStyle.FLAT_SKIN;
 
     @ConfigProperty(
             category = INVENTORY_OVERLAYS, subCategory = "MW Class Selector",

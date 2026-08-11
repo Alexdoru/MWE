@@ -206,22 +206,23 @@ public final class ClassSelectorOverlay extends InventoryOverlay {
     }
 
     private void renderIcon(int x, int y, MWSkin skin) {
-        final boolean renderSkull = MWEConfig.classSelectorPlayerHeads;
-        if (renderSkull) {
-            this.renderItemStack(x, y, skin.getPlayerSkullItemStack());
-        } else {
-            this.renderFlatSkin(x, y, skin);
+        switch (MWEConfig.classSelectorHeadStyle) {
+            case FLAT_SKIN:
+                this.renderFlatSkin(x, y, skin.getSkin());
+                break;
+            case SKULL:
+                this.renderItemStack(x, y, skin.getPlayerSkullItemStack());
+                break;
+            case FACING_SKULL:
+                this.renderFacingSkull(x, y, skin.getPlayerSkullItemStack());
+                break;
         }
     }
 
     private void renderPrestigesAndClasspoints(int x, int y, int prestiges, int classpoints) {
         final int classpointColor = ColorUtil.getColorInt(ColorUtil.getPrestige4Color(prestiges >= 4 ? classpoints : 0));
         if (MWEConfig.classSelectorColoredBorder && classpoints >= 2000 && prestiges >= 4) {
-            if (MWEConfig.classSelectorPlayerHeads) {
-                this.renderOutline(x, y, x + 16, y + 16, classpointColor);
-            } else {
-                this.renderOutline(x - 1, y - 1, x + 16 + 1, y + 16 + 1, classpointColor);
-            }
+            this.renderOutline(x, y, x + 16, y + 16, classpointColor);
         }
         GlStateManager.disableLighting();
         GlStateManager.disableDepth();

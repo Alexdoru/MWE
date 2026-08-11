@@ -1,7 +1,6 @@
 package fr.alexdoru.mwe.features.overlays;
 
 import com.mojang.authlib.GameProfile;
-import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.scoreboard.ScoreboardParser;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.ColorUtil;
@@ -11,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.tileentity.TileEntitySkullRenderer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
@@ -18,6 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,6 +73,43 @@ public abstract class InventoryOverlay {
         mc.getRenderItem().renderItemAndEffectIntoGUI(stack, x, y);
     }
 
+    protected void renderFacingSkull(int x, int y, @NotNull ItemStack stack) {
+        GameProfile profile = null;
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("SkullOwner", 10)) {
+            profile = NBTUtil.readGameProfileFromNBT(stack.getTagCompound().getCompoundTag("SkullOwner"));
+        }
+        this.renderFacingSkull(x, y, profile);
+    }
+
+    protected void renderFacingSkull(int x, int y, GameProfile profile) {
+        GlStateManager.enableDepth();
+        GlStateManager.pushMatrix();
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.enableAlpha();
+        GlStateManager.alphaFunc(516, 0.1F);
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(770, 771);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.enableLighting();
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.disableCull();
+
+        GlStateManager.translate(x - 4, y + 14, 100.0F);
+        GlStateManager.scale(1.0F, 1.0F, -1.0F);
+        final float size = 24F;
+        GlStateManager.scale(size, size, size);
+        GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
+
+        TileEntitySkullRenderer.instance.renderSkull(0.0F, 0.0F, 0.0F, EnumFacing.UP, 180F, 3, profile, -1);
+
+        GlStateManager.enableCull();
+
+        GlStateManager.disableAlpha();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.disableLighting();
+        GlStateManager.popMatrix();
+    }
+
     protected void renderTeamIndicator(int x, int y, NetworkPlayerInfo netinfo) {
         final ScorePlayerTeam team = netinfo.getPlayerTeam();
         if (team != null) {
@@ -103,14 +142,14 @@ public abstract class InventoryOverlay {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    protected void renderFlatSkin(int x, int y, MWSkin skin) {
+    protected void renderFlatSkin(int x, int y, ResourceLocation skin) {
         GlStateManager.enableDepth();
         GlStateManager.pushMatrix();
         GlStateManager.enableRescaleNormal();
         GlStateManager.alphaFunc(516, 0.1F);
         GlStateManager.translate(0, 0, 250F);
         GlStateManager.disableLighting();
-        RenderHelper.renderSkinHead(skin.getSkin(), x, y, true, 16);
+        RenderHelper.renderSkinHead(skin, x + 1, y + 1, true, 14);
         GlStateManager.disableAlpha();
         GlStateManager.disableRescaleNormal();
         GlStateManager.disableLighting();
