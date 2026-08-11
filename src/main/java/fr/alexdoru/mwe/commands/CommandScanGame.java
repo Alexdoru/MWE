@@ -146,7 +146,6 @@ public class CommandScanGame extends MWECommandBase {
                 megaWallsStats.getWlr() * megaWallsStats.getFkdr() > 0.33F * 1F * 6F) { // 6 times the average win/loss times the average fkdr
             return new ChatComponentText(GRAY + " played : " + GOLD + megaWallsStats.getGamesPlayed()
                     + GRAY + " games, fkd : " + GOLD + String.format("%.1f", megaWallsStats.getFkdr())
-                    + GRAY + " FK per game : " + GOLD + String.format("%.1f", megaWallsStats.getFkpergame())
                     + GRAY + " WLR : " + GOLD + String.format("%.1f", megaWallsStats.getWlr()));
 
         }
