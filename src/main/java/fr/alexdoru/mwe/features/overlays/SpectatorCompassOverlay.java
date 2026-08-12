@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.features;
+package fr.alexdoru.mwe.features.overlays;
 
 import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.api.events.ContainerSlotRenderEvent;

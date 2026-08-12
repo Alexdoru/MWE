@@ -96,10 +96,13 @@ public final class MWEConfig {
     @ConfigCategory(displayname = "§dExternal")
     private static final String EXTERNAL = "External";
 
-    @ConfigCategory(displayname = "§6Updater",
-            comment = "When starting your game the updater will check if a new version is available," +
-                    " if there is the new version will be downloaded and it will be installed when closing your game.")
+    @ConfigCategory(displayname = "§6Updater")
     private static final String UPDATES = "Updates";
+
+    @ConfigCategory(
+            displayname = "§2Inventory Overlays",
+            comment = "Overlays change how certain inventories are rendered")
+    private static final String INVENTORY_OVERLAYS = "Inventory Overlays";
 
     @ConfigProperty(
             category = "April Fools",
@@ -627,6 +630,58 @@ public final class MWEConfig {
     public static double hitboxDrawRange = 8f;
 
     @ConfigProperty(
+            category = INVENTORY_OVERLAYS, subCategory = "Spectating",
+            name = "Show team indicator",
+            comment = "In the spectator, replay compass and bookmarks display the teams of beds, players, withers")
+    public static boolean spectatingTeamIndicator = true;
+
+    @ConfigProperty(
+            category = INVENTORY_OVERLAYS, subCategory = "Spectating",
+            name = "Better replay bookmarks",
+            comment = "Makes the replay bookmarks more insightful instead of white papers")
+    public static boolean betterReplayBookmarks = true;
+
+    @ConfigProperty(
+            category = INVENTORY_OVERLAYS, subCategory = "Spectating",
+            name = "Show Mega Walls skins",
+            comment = "In the spectator compass display the Mega Walls skins instead of the players' Minecraft skins")
+    public static boolean spectatingMegaWallsSkins = true;
+
+    @ConfigProperty(
+            category = INVENTORY_OVERLAYS, subCategory = "MW Class Selector",
+            name = "Class selector overlay",
+            comment = "Renders an overlay on the class selector which shows the selected skin, prestiges and class points")
+    public static boolean classSelectorOverlay = true;
+
+    @ConfigProperty(
+            category = INVENTORY_OVERLAYS, subCategory = "MW Class Selector",
+            name = "Use player head items",
+            dependsOn = "Class selector overlay",
+            comment = "Renders player heads with the mega walls skin instead of the skin overlay")
+    public static boolean classSelectorPlayerHeads;
+
+    @ConfigProperty(
+            category = INVENTORY_OVERLAYS, subCategory = "MW Class Selector",
+            name = "Render colored border",
+            dependsOn = "Class selector overlay",
+            comment = "Renders a prestige colored border")
+    public static boolean classSelectorColoredBorder = true;
+
+    @ConfigProperty(
+            category = INVENTORY_OVERLAYS, subCategory = "MW Class Selector",
+            name = "Render prestige level",
+            dependsOn = "Class selector overlay",
+            comment = "Renders the amount of prestiges")
+    public static boolean classSelectorPrestigeLevel;
+
+    @ConfigProperty(
+            category = INVENTORY_OVERLAYS, subCategory = "MW Class Selector",
+            name = "Render classpoints",
+            dependsOn = "Class selector overlay",
+            comment = "Renders the amount of classpoints")
+    public static boolean classSelectorClasspoints;
+
+    @ConfigProperty(
             category = MEGA_WALLS, subCategory = "General",
             name = "Colored leather armor",
             comment = "Changes iron armor worn by other players to colored leather armor matching their team color")
@@ -680,40 +735,6 @@ public final class MWEConfig {
             name = "Auto-requeue",
             comment = "Automatically joins the next game of Mega Walls when your game ends")
     public static boolean autoRequeue;
-
-    @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "Class Selector",
-            name = "Class selector overlay",
-            comment = "Renders an overlay on the class selector which shows the selected skin, prestiges and class points")
-    public static boolean classSelectorOverlay = true;
-
-    @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "Class Selector",
-            name = "Use player head items",
-            dependsOn = "Class selector overlay",
-            comment = "Renders player heads with the mega walls skin instead of the skin overlay")
-    public static boolean classSelectorPlayerHeads;
-
-    @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "Class Selector",
-            name = "Render colored border",
-            dependsOn = "Class selector overlay",
-            comment = "Renders a prestige colored border")
-    public static boolean classSelectorColoredBorder = true;
-
-    @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "Class Selector",
-            name = "Render prestige level",
-            dependsOn = "Class selector overlay",
-            comment = "Renders the amount of prestiges")
-    public static boolean classSelectorPrestigeLevel;
-
-    @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "Class Selector",
-            name = "Render classpoints",
-            dependsOn = "Class selector overlay",
-            comment = "Renders the amount of classpoints")
-    public static boolean classSelectorClasspoints;
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "Chat",
@@ -962,24 +983,6 @@ public final class MWEConfig {
             name = "Warp Protection",
             comment = "Adds confirmation when clicking the \"Play Again\" paper if you have players in your squad")
     public static boolean warpProtection = true;
-
-    @ConfigProperty(
-            category = HYPIXEL, subCategory = "Spectating",
-            name = "Show team indicator",
-            comment = "In the spectator, replay compass and bookmarks display the teams of beds, players, withers")
-    public static boolean spectatingTeamIndicator = true;
-
-    @ConfigProperty(
-            category = HYPIXEL, subCategory = "Spectating",
-            name = "Better replay bookmarks",
-            comment = "Makes the replay bookmarks more insightful instead of white papers")
-    public static boolean betterReplayBookmarks = true;
-
-    @ConfigProperty(
-            category = HYPIXEL, subCategory = "Spectating",
-            name = "Show Mega Walls skins",
-            comment = "In the spectator compass display the Mega Walls skins instead of the players' Minecraft skins")
-    public static boolean spectatingMegaWallsSkins = true;
 
     @ConfigProperty(category = NOCHEATERS, subCategory = "General",
             name = "Save reported players",
@@ -1363,14 +1366,14 @@ public final class MWEConfig {
     @ConfigProperty(
             category = UPDATES,
             name = "Check for Update",
-            comment = "Checks if an update is available")
+            comment = "Checks if an update is available when starting the game")
     public static boolean checkForUpdate = true;
 
     @ConfigProperty(
             category = UPDATES,
             name = "Automatic Update",
             dependsOn = "Check for Update",
-            comment = "Updates the mod automatically")
+            comment = "Updates the mod automatically upon closing your game")
     public static boolean automaticUpdate = true;
 
 }

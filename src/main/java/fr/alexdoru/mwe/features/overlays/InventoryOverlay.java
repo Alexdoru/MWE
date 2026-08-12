@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.features;
+package fr.alexdoru.mwe.features.overlays;
 
 import com.mojang.authlib.GameProfile;
 import fr.alexdoru.mwe.api.enums.MWSkin;

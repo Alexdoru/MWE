@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.features;
+package fr.alexdoru.mwe.features.overlays;
 
 import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.api.enums.MWSkin;
