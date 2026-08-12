@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
 
 public final class ClassSelectorOverlay extends InventoryOverlay {
 
-    private static final Pattern DISPLAY_NAME_PATTERN = Pattern.compile("^(\\w+)\\s?(:|✫{0,5})$");
+    private static final Pattern DISPLAY_NAME_PATTERN = Pattern.compile("^(\\w+)\\s?(:|✫{0,5}|- RECOMMENDED)$");
     private static final Pattern CLASSPOINTS_PATTERN = Pattern.compile("Class Points:\\s([,\\d]+)");
 
     private final Map<MWClass, MWSkin> selectedSkins = new EnumMap<>(MWClass.class);
@@ -67,7 +67,7 @@ public final class ClassSelectorOverlay extends InventoryOverlay {
         if (matcher.matches()) {
             final String classname = matcher.group(1);
             if (mwClass != MWClass.fromName(classname)) return;
-            final int prestiges = matcher.groupCount() == 1 ? 0 : matcher.group(2).length();
+            final int prestiges = (matcher.groupCount() == 1 || matcher.group(2).contains("RECOMMENDED")) ? 0 : matcher.group(2).length();
             final int classpoints = this.getClasspoints(event.itemStack);
             final MWSkin skin = this.selectedSkins.get(mwClass);
             if (skin == null) return;
