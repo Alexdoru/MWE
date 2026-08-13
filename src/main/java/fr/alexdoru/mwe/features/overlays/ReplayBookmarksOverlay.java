@@ -3,7 +3,6 @@ package fr.alexdoru.mwe.features.overlays;
 import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.api.events.ContainerSlotRenderEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.config.TeamIndicatorStyle;
 import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.ItemStackUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
@@ -41,50 +40,42 @@ public final class ReplayBookmarksOverlay extends InventoryOverlay {
         if ("Final Kill".equals(clearStackName) || "Final Death".equals(clearStackName)) {
             final NetworkPlayerInfo netInfo = this.getPlayerInfo(event.itemStack);
             if (netInfo != null) {
-                if (MWEConfig.betterReplayBookmarks) {
-                    if (parser.isMWReplay()) {
-                        final MWSkin skin = MWSkin.fromResourceLocation(netInfo.getLocationSkin());
-                        if (skin != null) {
-                            this.renderItemStack(x, y, skin.getPlayerSkullItemStack());
-                            event.setCanceled(true);
-                        }
-                    } else {
-                        this.renderItemStack(x, y, this.getPlayerSkull(netInfo));
+                if (parser.isMWReplay()) {
+                    final MWSkin skin = MWSkin.fromResourceLocation(netInfo.getLocationSkin());
+                    if (skin != null) {
+                        this.renderSkin(x, y, skin, MWEConfig.replayBookmarksSkinStyle);
                         event.setCanceled(true);
                     }
+                } else {
+                    this.renderNetInfo(x, y, netInfo, MWEConfig.replayBookmarksSkinStyle);
+                    event.setCanceled(true);
                 }
-                if (MWEConfig.spectatingTeamIndicator) {
-                    this.renderTeamIndicator(x, y, netInfo, TeamIndicatorStyle.SMALL_SQUARE);
-                }
+                this.renderTeamIndicator(x, y, netInfo, MWEConfig.replayBookmarksPlayerTeamStyle);
             }
             return;
         }
         if (parser.isMWReplay()) {
             final Matcher witherMatcher = WITHER_PATTERN.matcher(clearStackName);
             if (witherMatcher.matches()) {
+                this.renderItemStack(x, y, WITHER_SKULL);
                 final String witherTeam = witherMatcher.group(1);
                 final int color = this.getTeamColor(witherTeam);
-                if (color != 0 && MWEConfig.spectatingTeamIndicator) {
-                    this.renderOutline(x, y, 16, color);
+                if (color != 0) {
+                    this.renderTeamIndicator(x, y, color, MWEConfig.replayBookmarksEventTeamStyle);
                 }
-                if (MWEConfig.betterReplayBookmarks) {
-                    this.renderItemStack(x, y, WITHER_SKULL);
-                    event.setCanceled(true);
-                }
+                event.setCanceled(true);
             }
             return;
         }
         final Matcher bedMatcher = BED_PATTERN.matcher(clearStackName);
         if (bedMatcher.matches()) {
-            final String bedColor = bedMatcher.group(1);
-            final int color = this.getTeamColor(bedColor);
-            if (color != 0 && MWEConfig.spectatingTeamIndicator) {
-                this.renderOutline(x, y, 16, color);
+            this.renderItemStack(x, y, BED);
+            final String bedTeam = bedMatcher.group(1);
+            final int color = this.getTeamColor(bedTeam);
+            if (color != 0) {
+                this.renderTeamIndicator(x, y, color, MWEConfig.replayBookmarksEventTeamStyle);
             }
-            if (MWEConfig.betterReplayBookmarks) {
-                this.renderItemStack(x, y, BED);
-                event.setCanceled(true);
-            }
+            event.setCanceled(true);
         }
     }
 
@@ -118,7 +109,7 @@ public final class ReplayBookmarksOverlay extends InventoryOverlay {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
-            this.active = (MWEConfig.betterReplayBookmarks || MWEConfig.spectatingTeamIndicator)
+            this.active = MWEConfig.replayBookmarksOverlay
                     && this.parser.isReplayMode()
                     && this.mc.thePlayer != null
                     && this.mc.thePlayer.capabilities.allowFlying

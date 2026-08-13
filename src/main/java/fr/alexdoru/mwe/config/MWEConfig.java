@@ -630,6 +630,33 @@ public final class MWEConfig {
     public static double hitboxDrawRange = 8f;
 
     @ConfigProperty(
+            category = INVENTORY_OVERLAYS, subCategory = "Replay Bookmarks",
+            name = "Replay bookmarks overlay",
+            comment = "Renders an overlay on the replay bookmarks to give more insightful information")
+    public static boolean replayBookmarksOverlay = true;
+
+    @ConfigProperty(
+            category = INVENTORY_OVERLAYS, subCategory = "Replay Bookmarks",
+            name = "Bookmarks skins style",
+            dependsOn = "Replay bookmarks overlay",
+            comment = "Choose the type of render for the player skins")
+    public static SkinStyle replayBookmarksSkinStyle = SkinStyle.SKULL;
+
+    @ConfigProperty(
+            category = INVENTORY_OVERLAYS, subCategory = "Replay Bookmarks",
+            name = "Bookmarks player team indicator style",
+            dependsOn = "Replay bookmarks overlay",
+            comment = "Choose the type of render for the team indicator of players")
+    public static TeamIndicatorStyle replayBookmarksPlayerTeamStyle = TeamIndicatorStyle.SMALL_SQUARE;
+
+    @ConfigProperty(
+            category = INVENTORY_OVERLAYS, subCategory = "Replay Bookmarks",
+            name = "Bookmarks event team indicator style",
+            dependsOn = "Replay bookmarks overlay",
+            comment = "Choose the type of render for the team indicator of events (bed destroyed, wither deaths")
+    public static TeamIndicatorStyle replayBookmarksEventTeamStyle = TeamIndicatorStyle.OUTLINE;
+
+    @ConfigProperty(
             category = INVENTORY_OVERLAYS, subCategory = "Teleporter Compass",
             name = "Compass overlay",
             comment = "Renders an overlay on the teleporter compass, shows team indicators, the skins in MW")
@@ -655,14 +682,6 @@ public final class MWEConfig {
             dependsOn = "Compass overlay",
             comment = "In Mega Walls, display the Mega Walls skins instead of the players' Minecraft skins")
     public static boolean teleporterCompassMegaWallsSkins = true;
-
-    public static boolean spectatingTeamIndicator = true;
-
-    @ConfigProperty(
-            category = INVENTORY_OVERLAYS, subCategory = "Replay Bookmarks",
-            name = "Replay bookmarks overlay",
-            comment = "Makes the replay bookmarks more insightful instead of white papers")
-    public static boolean betterReplayBookmarks = true;
 
     @ConfigProperty(
             category = INVENTORY_OVERLAYS, subCategory = "MW Class Selector",

@@ -81,6 +81,20 @@ public abstract class InventoryOverlay {
         return null;
     }
 
+    protected void renderNetInfo(int x, int y, NetworkPlayerInfo netInfo, SkinStyle style) {
+        switch (style) {
+            case FLAT_SKIN:
+                this.renderFlatSkin(x, y, netInfo.getLocationSkin());
+                break;
+            case SKULL:
+                this.renderItemStack(x, y, this.getPlayerSkull(netInfo));
+                break;
+            case FACING_SKULL:
+                this.renderFacingSkull(x, y, netInfo.getGameProfile());
+                break;
+        }
+    }
+
     protected void renderSkin(int x, int y, MWSkin skin, SkinStyle style) {
         switch (style) {
             case FLAT_SKIN:
@@ -173,15 +187,19 @@ public abstract class InventoryOverlay {
         final ScorePlayerTeam team = netInfo.getPlayerTeam();
         if (team != null) {
             final char c = StringUtil.getLastColorCharOf(team.getColorPrefix());
-            final int color = ColorUtil.getColorInt(c) | 0xFF000000;
-            switch (style) {
-                case SMALL_SQUARE:
-                    this.renderSmallSquare(x, y, color);
-                    break;
-                case OUTLINE:
-                    this.renderOutline(x, y, 16, color);
-                    break;
-            }
+            final int color = ColorUtil.getColorInt(c);
+            this.renderTeamIndicator(x, y, color, style);
+        }
+    }
+
+    protected void renderTeamIndicator(int x, int y, int color, TeamIndicatorStyle style) {
+        switch (style) {
+            case SMALL_SQUARE:
+                this.renderSmallSquare(x, y, color);
+                break;
+            case OUTLINE:
+                this.renderOutline(x, y, 16, color);
+                break;
         }
     }
 
@@ -195,7 +213,7 @@ public abstract class InventoryOverlay {
                 y + 1,
                 x + 16 - 1,
                 y + 1 + RECT_SIZE,
-                color
+                color | 0xFF000000
         );
         GlStateManager.enableLighting();
         GlStateManager.enableDepth();
