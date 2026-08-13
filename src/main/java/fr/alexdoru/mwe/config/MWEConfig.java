@@ -699,6 +699,12 @@ public final class MWEConfig {
     public static boolean classSelectorClasspoints;
 
     @ConfigProperty(
+            category = INVENTORY_OVERLAYS, subCategory = "MW Skin Selector",
+            name = "Skin selector style",
+            comment = "Choose the type of render for the skin")
+    public static SkinStyle skinSelectorStyle = SkinStyle.SKULL;
+
+    @ConfigProperty(
             category = MEGA_WALLS, subCategory = "General",
             name = "Colored leather armor",
             comment = "Changes iron armor worn by other players to colored leather armor matching their team color")

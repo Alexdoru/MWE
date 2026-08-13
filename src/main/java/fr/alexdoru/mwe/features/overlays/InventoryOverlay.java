@@ -20,6 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -42,6 +43,11 @@ public abstract class InventoryOverlay {
     protected final Minecraft mc = Minecraft.getMinecraft();
     protected final ScoreboardParser parser = ScoreboardTracker.getParser();
     protected boolean active;
+
+    protected boolean isPlayerSkull(ItemStack stack) {
+        final Item item = stack.getItem();
+        return item != null && item == Items.skull && stack.getMetadata() == 3;
+    }
 
     protected boolean isChestWithTitleOpened(@NotNull Predicate<String> titleTest) {
         if (mc.currentScreen instanceof GuiChest) {

@@ -16,6 +16,7 @@ import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.*;
 import fr.alexdoru.mwe.features.overlays.ClassSelectorOverlay;
 import fr.alexdoru.mwe.features.overlays.ReplayBookmarksOverlay;
+import fr.alexdoru.mwe.features.overlays.SkinSelectorOverlay;
 import fr.alexdoru.mwe.features.overlays.TeleporterCompassOverlay;
 import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
@@ -116,6 +117,7 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(new DataSaveScheduler());
         MinecraftForge.EVENT_BUS.register(new StrengthParticles());
         MinecraftForge.EVENT_BUS.register(new ScoreboardTracker());
+        MinecraftForge.EVENT_BUS.register(new SkinSelectorOverlay());
         MinecraftForge.EVENT_BUS.register(new ClassSelectorOverlay(this.configFolder));
         MinecraftForge.EVENT_BUS.register(new ReplayBookmarksOverlay());
         MinecraftForge.EVENT_BUS.register(new TeleporterCompassOverlay());

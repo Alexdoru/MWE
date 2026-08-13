@@ -11,7 +11,6 @@ import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -52,11 +51,6 @@ public final class TeleporterCompassOverlay extends InventoryOverlay {
                 }
             }
         }
-    }
-
-    private boolean isPlayerSkull(ItemStack stack) {
-        final Item item = stack.getItem();
-        return item != null && item == Items.skull && stack.getMetadata() == 3;
     }
 
     @SubscribeEvent
