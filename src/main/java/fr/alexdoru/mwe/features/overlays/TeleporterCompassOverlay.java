@@ -3,6 +3,8 @@ package fr.alexdoru.mwe.features.overlays;
 import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.api.events.ContainerSlotRenderEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.config.SkinStyle;
+import fr.alexdoru.mwe.config.TeamIndicatorStyle;
 import fr.alexdoru.mwe.utils.StringUtil;
 import fr.alexdoru.mwe.utils.UUIDUtil;
 import net.minecraft.client.gui.inventory.GuiChest;
@@ -21,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 import java.util.regex.Matcher;
 
-public final class SpectatorCompassOverlay extends InventoryOverlay {
+public final class TeleporterCompassOverlay extends InventoryOverlay {
 
     @SubscribeEvent
     public void onRenderSlot(ContainerSlotRenderEvent event) {
@@ -29,17 +31,25 @@ public final class SpectatorCompassOverlay extends InventoryOverlay {
             return;
         }
         if (!this.isPlayerSkull(event.itemStack)) return;
-        final NetworkPlayerInfo netInfo = this.getPlayerInfo(event.itemStack);
-        if (netInfo != null) {
-            if (MWEConfig.spectatingMegaWallsSkins && parser.isInMwGame()) {
-                final MWSkin skin = MWSkin.fromResourceLocation(netInfo.getLocationSkin());
-                if (skin != null) {
-                    this.renderItemStack(event.slot.xDisplayPosition, event.slot.yDisplayPosition, skin.getPlayerSkullItemStack());
-                    event.setCanceled(true);
+        final boolean showMWSkin = MWEConfig.teleporterCompassMegaWallsSkins && parser.isInMwGame();
+        final boolean showTeamIndicator = MWEConfig.teleporterCompassTeamIndicator != TeamIndicatorStyle.NONE;
+        if (!showMWSkin && MWEConfig.teleporterCompassSkinStyle != SkinStyle.SKULL) {
+            this.renderSkull(event.slot.xDisplayPosition, event.slot.yDisplayPosition, event.itemStack, MWEConfig.teleporterCompassSkinStyle);
+            event.setCanceled(true);
+        }
+        if (showMWSkin || showTeamIndicator) {
+            final NetworkPlayerInfo netInfo = this.getPlayerInfo(event.itemStack);
+            if (netInfo != null) {
+                if (showMWSkin) {
+                    final MWSkin skin = MWSkin.fromResourceLocation(netInfo.getLocationSkin());
+                    if (skin != null) {
+                        this.renderSkin(event.slot.xDisplayPosition, event.slot.yDisplayPosition, skin, MWEConfig.teleporterCompassSkinStyle);
+                        event.setCanceled(true);
+                    }
                 }
-            }
-            if (MWEConfig.spectatingTeamIndicator) {
-                this.renderTeamIndicator(event.slot.xDisplayPosition, event.slot.yDisplayPosition, netInfo);
+                if (showTeamIndicator) {
+                    this.renderTeamIndicator(event.slot.xDisplayPosition, event.slot.yDisplayPosition, netInfo, MWEConfig.teleporterCompassTeamIndicator);
+                }
             }
         }
     }
@@ -52,7 +62,7 @@ public final class SpectatorCompassOverlay extends InventoryOverlay {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
-            this.active = (MWEConfig.spectatingTeamIndicator || MWEConfig.spectatingMegaWallsSkins && parser.isInMwGame())
+            this.active = MWEConfig.teleporterCompassOverlay
                     && this.mc.thePlayer != null
                     && this.mc.thePlayer.capabilities.allowFlying
                     && (parser.isReplayMode() || this.mc.thePlayer.isPotionActive(Potion.invisibility))

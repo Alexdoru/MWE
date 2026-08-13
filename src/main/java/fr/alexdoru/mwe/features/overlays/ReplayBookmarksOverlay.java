@@ -3,6 +3,7 @@ package fr.alexdoru.mwe.features.overlays;
 import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.api.events.ContainerSlotRenderEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.config.TeamIndicatorStyle;
 import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.ItemStackUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
@@ -53,7 +54,7 @@ public final class ReplayBookmarksOverlay extends InventoryOverlay {
                     }
                 }
                 if (MWEConfig.spectatingTeamIndicator) {
-                    this.renderTeamIndicator(x, y, netInfo);
+                    this.renderTeamIndicator(x, y, netInfo, TeamIndicatorStyle.SMALL_SQUARE);
                 }
             }
             return;
@@ -64,7 +65,7 @@ public final class ReplayBookmarksOverlay extends InventoryOverlay {
                 final String witherTeam = witherMatcher.group(1);
                 final int color = this.getTeamColor(witherTeam);
                 if (color != 0 && MWEConfig.spectatingTeamIndicator) {
-                    this.renderOutline(x, y, x + 16, y + 16, color);
+                    this.renderOutline(x, y, 16, color);
                 }
                 if (MWEConfig.betterReplayBookmarks) {
                     this.renderItemStack(x, y, WITHER_SKULL);
@@ -78,7 +79,7 @@ public final class ReplayBookmarksOverlay extends InventoryOverlay {
             final String bedColor = bedMatcher.group(1);
             final int color = this.getTeamColor(bedColor);
             if (color != 0 && MWEConfig.spectatingTeamIndicator) {
-                this.renderOutline(x, y, x + 16, y + 16, color);
+                this.renderOutline(x, y, 16, color);
             }
             if (MWEConfig.betterReplayBookmarks) {
                 this.renderItemStack(x, y, BED);

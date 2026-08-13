@@ -630,32 +630,49 @@ public final class MWEConfig {
     public static double hitboxDrawRange = 8f;
 
     @ConfigProperty(
-            category = INVENTORY_OVERLAYS, subCategory = "Spectating",
-            name = "Show team indicator",
-            comment = "In the spectator, replay compass and bookmarks display the teams of beds, players, withers")
+            category = INVENTORY_OVERLAYS, subCategory = "Teleporter Compass",
+            name = "Compass overlay",
+            comment = "Renders an overlay on the teleporter compass, shows team indicators, the skins in MW")
+    public static boolean teleporterCompassOverlay = true;
+
+    @ConfigProperty(
+            category = INVENTORY_OVERLAYS, subCategory = "Teleporter Compass",
+            name = "Compass skin style",
+            dependsOn = "Compass overlay",
+            comment = "Choose the type of render for the skin")
+    public static SkinStyle teleporterCompassSkinStyle = SkinStyle.SKULL;
+
+    @ConfigProperty(
+            category = INVENTORY_OVERLAYS, subCategory = "Teleporter Compass",
+            name = "Compass team indicator style",
+            dependsOn = "Compass overlay",
+            comment = "Choose the type of render for the team indicator")
+    public static TeamIndicatorStyle teleporterCompassTeamIndicator = TeamIndicatorStyle.SMALL_SQUARE;
+
+    @ConfigProperty(
+            category = INVENTORY_OVERLAYS, subCategory = "Teleporter Compass",
+            name = "Show Mega Walls skins",
+            dependsOn = "Compass overlay",
+            comment = "In Mega Walls, display the Mega Walls skins instead of the players' Minecraft skins")
+    public static boolean teleporterCompassMegaWallsSkins = true;
+
     public static boolean spectatingTeamIndicator = true;
 
     @ConfigProperty(
-            category = INVENTORY_OVERLAYS, subCategory = "Spectating",
-            name = "Better replay bookmarks",
+            category = INVENTORY_OVERLAYS, subCategory = "Replay Bookmarks",
+            name = "Replay bookmarks overlay",
             comment = "Makes the replay bookmarks more insightful instead of white papers")
     public static boolean betterReplayBookmarks = true;
 
     @ConfigProperty(
-            category = INVENTORY_OVERLAYS, subCategory = "Spectating",
-            name = "Show Mega Walls skins",
-            comment = "In the spectator compass display the Mega Walls skins instead of the players' Minecraft skins")
-    public static boolean spectatingMegaWallsSkins = true;
-
-    @ConfigProperty(
             category = INVENTORY_OVERLAYS, subCategory = "MW Class Selector",
             name = "Class selector overlay",
-            comment = "Renders an overlay on the class selector which shows the selected skin, prestiges and class points")
+            comment = "Renders an overlay on the class selector, shows the selected skin, prestiges and class points")
     public static boolean classSelectorOverlay = true;
 
     @ConfigProperty(
             category = INVENTORY_OVERLAYS, subCategory = "MW Class Selector",
-            name = "Class Selector skin style",
+            name = "Class selector skin style",
             dependsOn = "Class selector overlay",
             comment = "Choose the type of render for the skin")
     public static SkinStyle classSelectorHeadStyle = SkinStyle.FLAT_SKIN;

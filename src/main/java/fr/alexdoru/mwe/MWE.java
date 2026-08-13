@@ -16,7 +16,7 @@ import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.*;
 import fr.alexdoru.mwe.features.overlays.ClassSelectorOverlay;
 import fr.alexdoru.mwe.features.overlays.ReplayBookmarksOverlay;
-import fr.alexdoru.mwe.features.overlays.SpectatorCompassOverlay;
+import fr.alexdoru.mwe.features.overlays.TeleporterCompassOverlay;
 import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
@@ -118,7 +118,7 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(new ScoreboardTracker());
         MinecraftForge.EVENT_BUS.register(new ClassSelectorOverlay(this.configFolder));
         MinecraftForge.EVENT_BUS.register(new ReplayBookmarksOverlay());
-        MinecraftForge.EVENT_BUS.register(new SpectatorCompassOverlay());
+        MinecraftForge.EVENT_BUS.register(new TeleporterCompassOverlay());
         MinecraftForge.EVENT_BUS.register(new PlayerDataManager.EventHandler());
         MinecraftForge.EVENT_BUS.register(new KeybindingListener());
         MinecraftForge.EVENT_BUS.register(new MegaWallsEndGameStats());

@@ -56,7 +56,7 @@ public final class ClassSelectorOverlay extends InventoryOverlay {
         if (item == null) return;
         if (!event.itemStack.hasDisplayName()) return;
         if (this.randomSkin != null && this.isRandomItem(event.itemStack)) {
-            this.renderIcon(event.slot.xDisplayPosition, event.slot.yDisplayPosition, this.randomSkin);
+            this.renderSkin(event.slot.xDisplayPosition, event.slot.yDisplayPosition, this.randomSkin, MWEConfig.classSelectorHeadStyle);
             event.setCanceled(true);
             return;
         }
@@ -71,7 +71,7 @@ public final class ClassSelectorOverlay extends InventoryOverlay {
             final int classpoints = this.getClasspoints(event.itemStack);
             final MWSkin skin = this.selectedSkins.get(mwClass);
             if (skin == null) return;
-            this.renderIcon(event.slot.xDisplayPosition, event.slot.yDisplayPosition, skin);
+            this.renderSkin(event.slot.xDisplayPosition, event.slot.yDisplayPosition, skin, MWEConfig.classSelectorHeadStyle);
             this.renderPrestigesAndClasspoints(event.slot.xDisplayPosition, event.slot.yDisplayPosition, prestiges, classpoints);
             event.setCanceled(true);
         }
@@ -205,24 +205,10 @@ public final class ClassSelectorOverlay extends InventoryOverlay {
         return 0;
     }
 
-    private void renderIcon(int x, int y, MWSkin skin) {
-        switch (MWEConfig.classSelectorHeadStyle) {
-            case FLAT_SKIN:
-                this.renderFlatSkin(x, y, skin.getSkin());
-                break;
-            case SKULL:
-                this.renderItemStack(x, y, skin.getPlayerSkullItemStack());
-                break;
-            case FACING_SKULL:
-                this.renderFacingSkull(x, y, skin.getPlayerSkullItemStack());
-                break;
-        }
-    }
-
     private void renderPrestigesAndClasspoints(int x, int y, int prestiges, int classpoints) {
         final int classpointColor = ColorUtil.getColorInt(ColorUtil.getPrestige4Color(prestiges >= 4 ? classpoints : 0));
         if (MWEConfig.classSelectorColoredBorder && classpoints >= 2000 && prestiges >= 4) {
-            this.renderOutline(x, y, x + 16, y + 16, classpointColor);
+            this.renderOutline(x, y, 16, classpointColor);
         }
         GlStateManager.disableLighting();
         GlStateManager.disableDepth();

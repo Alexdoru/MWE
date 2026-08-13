@@ -1,6 +1,10 @@
 package fr.alexdoru.mwe.features.overlays;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import fr.alexdoru.mwe.api.enums.MWSkin;
+import fr.alexdoru.mwe.config.SkinStyle;
+import fr.alexdoru.mwe.config.TeamIndicatorStyle;
 import fr.alexdoru.mwe.scoreboard.ScoreboardParser;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.ColorUtil;
@@ -11,6 +15,8 @@ import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySkullRenderer;
+import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
@@ -23,10 +29,12 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("SameParameterValue")
 public abstract class InventoryOverlay {
 
     protected static final Pattern NAME_PATTERN = Pattern.compile("(\\w+)$");
@@ -35,7 +43,6 @@ public abstract class InventoryOverlay {
     protected final ScoreboardParser parser = ScoreboardTracker.getParser();
     protected boolean active;
 
-    @SuppressWarnings("SameParameterValue")
     protected boolean isChestWithTitleOpened(@NotNull Predicate<String> titleTest) {
         if (mc.currentScreen instanceof GuiChest) {
             final GuiChest guiChest = (GuiChest) mc.currentScreen;
@@ -68,9 +75,54 @@ public abstract class InventoryOverlay {
         return null;
     }
 
+    protected void renderSkin(int x, int y, MWSkin skin, SkinStyle style) {
+        switch (style) {
+            case FLAT_SKIN:
+                this.renderFlatSkin(x, y, skin.getSkin());
+                break;
+            case SKULL:
+                this.renderItemStack(x, y, skin.getPlayerSkullItemStack());
+                break;
+            case FACING_SKULL:
+                this.renderFacingSkull(x, y, skin.getPlayerSkullItemStack());
+                break;
+        }
+    }
+
+    protected void renderSkull(int x, int y, ItemStack skullStack, SkinStyle style) {
+        switch (style) {
+            case FLAT_SKIN:
+                this.renderFlatSkin(x, y, this.getSkinResourceFromSkullStack(skullStack));
+                break;
+            case SKULL:
+                this.renderItemStack(x, y, skullStack);
+                break;
+            case FACING_SKULL:
+                this.renderFacingSkull(x, y, skullStack);
+                break;
+        }
+    }
+
     protected void renderItemStack(int x, int y, @NotNull ItemStack stack) {
         GlStateManager.enableDepth();
         mc.getRenderItem().renderItemAndEffectIntoGUI(stack, x, y);
+    }
+
+    protected ResourceLocation getSkinResourceFromSkullStack(ItemStack stack) {
+        GameProfile profile = null;
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("SkullOwner", 10)) {
+            profile = NBTUtil.readGameProfileFromNBT(stack.getTagCompound().getCompoundTag("SkullOwner"));
+        }
+        if (profile == null) {
+            return DefaultPlayerSkin.getDefaultSkinLegacy();
+        }
+        final Minecraft minecraft = Minecraft.getMinecraft();
+        final Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = minecraft.getSkinManager().loadSkinFromCache(profile);
+        if (map.containsKey(MinecraftProfileTexture.Type.SKIN)) {
+            return minecraft.getSkinManager().loadSkin(map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
+        } else {
+            return DefaultPlayerSkin.getDefaultSkin(EntityPlayer.getUUID(profile));
+        }
     }
 
     protected void renderFacingSkull(int x, int y, @NotNull ItemStack stack) {
@@ -110,33 +162,45 @@ public abstract class InventoryOverlay {
         GlStateManager.popMatrix();
     }
 
-    protected void renderTeamIndicator(int x, int y, NetworkPlayerInfo netinfo) {
-        final ScorePlayerTeam team = netinfo.getPlayerTeam();
+    protected void renderTeamIndicator(int x, int y, NetworkPlayerInfo netInfo, TeamIndicatorStyle style) {
+        if (style == TeamIndicatorStyle.NONE) return;
+        final ScorePlayerTeam team = netInfo.getPlayerTeam();
         if (team != null) {
             final char c = StringUtil.getLastColorCharOf(team.getColorPrefix());
             final int color = ColorUtil.getColorInt(c) | 0xFF000000;
-            GlStateManager.disableLighting();
-            GlStateManager.disableDepth();
-            GlStateManager.disableBlend();
-            final int RECT_SIZE = 3;
-            GuiChest.drawRect(
-                    x + 16 - RECT_SIZE - 1,
-                    y + 1,
-                    x + 16 - 1,
-                    y + 1 + RECT_SIZE,
-                    color
-            );
-            GlStateManager.enableLighting();
-            GlStateManager.enableDepth();
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            switch (style) {
+                case SMALL_SQUARE:
+                    this.renderSmallSquare(x, y, color);
+                    break;
+                case OUTLINE:
+                    this.renderOutline(x, y, 16, color);
+                    break;
+            }
         }
     }
 
-    protected void renderOutline(int left, int top, int right, int bot, int color) {
+    protected void renderSmallSquare(int x, int y, int color) {
         GlStateManager.disableLighting();
         GlStateManager.disableDepth();
         GlStateManager.disableBlend();
-        RenderHelper.drawOutline(left, top, right, bot, color | 0xFF000000);
+        final int RECT_SIZE = 3;
+        GuiChest.drawRect(
+                x + 16 - RECT_SIZE - 1,
+                y + 1,
+                x + 16 - 1,
+                y + 1 + RECT_SIZE,
+                color
+        );
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepth();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+    }
+
+    protected void renderOutline(int x, int y, int size, int color) {
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepth();
+        GlStateManager.disableBlend();
+        RenderHelper.drawOutline(x, y, x + size, y + size, color | 0xFF000000);
         GlStateManager.enableLighting();
         GlStateManager.enableDepth();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -157,7 +221,6 @@ public abstract class InventoryOverlay {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    @SuppressWarnings("SameParameterValue")
     protected void drawTextAt(float x, float y, String text, float scale, int color) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, 0);
