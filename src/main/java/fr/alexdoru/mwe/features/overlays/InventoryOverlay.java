@@ -73,12 +73,17 @@ public abstract class InventoryOverlay {
             } else {
                 toSearch = playername + "§r";
             }
-            final NetworkPlayerInfo netInfo = this.mc.getNetHandler().getPlayerInfo(toSearch);
-            if (netInfo != null) return netInfo;
             // fallback to the normal name in case they ever remove the §r from the names
-            return this.mc.getNetHandler().getPlayerInfo(playername);
+            return getPlayerNetInfoWithFallback(toSearch, playername);
         }
         return null;
+    }
+
+    @Nullable
+    protected NetworkPlayerInfo getPlayerNetInfoWithFallback(String playername, String fallback) {
+        final NetworkPlayerInfo netInfo = this.mc.getNetHandler().getPlayerInfo(playername);
+        if (netInfo != null) return netInfo;
+        return this.mc.getNetHandler().getPlayerInfo(fallback);
     }
 
     protected void renderNetInfo(int x, int y, NetworkPlayerInfo netInfo, SkinStyle style) {

@@ -18,6 +18,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +30,9 @@ public final class ReplayBookmarksOverlay extends InventoryOverlay {
     private static final Pattern WITHER_PATTERN = Pattern.compile("^(\\w+)\\sWither\\sDied$");
     private static final ItemStack WITHER_SKULL = new ItemStack(Items.skull, 1, 1);
     private static final ItemStack BED = new ItemStack(Items.bed);
+
+    private final Map<UUID, NetworkPlayerInfo> infoCache = new HashMap<>();
+    private boolean cacheInfo;
 
     @SubscribeEvent
     public void onRenderSlot(ContainerSlotRenderEvent event) {
@@ -109,11 +115,18 @@ public final class ReplayBookmarksOverlay extends InventoryOverlay {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
-            this.active = MWEConfig.replayBookmarksOverlay
+            final boolean preCacheInfo = this.cacheInfo;
+            this.cacheInfo = MWEConfig.replayBookmarksOverlay
                     && this.parser.isReplayMode()
                     && this.mc.thePlayer != null
-                    && this.mc.thePlayer.capabilities.allowFlying
-                    && this.isChestWithTitleOpened(s -> s.contains("Bookmarks"));
+                    && this.mc.thePlayer.capabilities.allowFlying;
+            this.active = this.cacheInfo && this.isChestWithTitleOpened(s -> s.contains("Bookmarks"));
+            if (this.cacheInfo) {
+                this.mc.getNetHandler().getPlayerInfoMap().forEach(n -> this.infoCache.put(n.getGameProfile().getId(), n));
+            }
+            if (preCacheInfo && !this.cacheInfo) {
+                this.infoCache.clear();
+            }
         }
     }
 
@@ -129,6 +142,19 @@ public final class ReplayBookmarksOverlay extends InventoryOverlay {
                         return getPlayerInfoFromReplayLine(line);
                     }
                 }
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    @Override
+    protected NetworkPlayerInfo getPlayerNetInfoWithFallback(String playername, String fallback) {
+        final NetworkPlayerInfo netInfo = super.getPlayerNetInfoWithFallback(playername, fallback);
+        if (netInfo != null) return netInfo;
+        for (final NetworkPlayerInfo networkplayerinfo : this.infoCache.values()) {
+            if (networkplayerinfo.getGameProfile().getName().equals(playername)) {
+                return networkplayerinfo;
             }
         }
         return null;
