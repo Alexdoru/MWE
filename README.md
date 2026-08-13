@@ -102,8 +102,6 @@ Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, th
 
 - **Short coins messages** - on Hypixel, removes the booster info in the coin and token messages to make the messages smaller
 - **Warp Protection** - Adds confirmation when clicking the "Play Again" paper if you have players in your squad
-- **Spectator Compass Overlay** - shows a team indicator in the compass when in spectator and also renders the MW skins instead of the player skins
-- **Replay Bookmarks Overlay** - replaces the white paper bookmarks with player skulls, wither heads, beds and adds team colors
 
 </details>
 
@@ -144,6 +142,18 @@ Allows you to customize the look of the f3+b hitboxes.
 </details>
 
 <details>
+  <summary>Inventory Overlays</summary>
+
+### Inventory Overlays
+
+- **Spectator Compass Overlay** - shows a team indicator in the compass when in spectator and also renders the MW skins instead of the player skins
+- **Replay Bookmarks Overlay** - replaces the white paper bookmarks with player skulls, wither heads, beds and adds team colors
+- **Mega Walls Class selector overlay** - in the class selector, renders your selected skins, prestige levels and classpoints
+- **Mega Walls Skin selector overlay** - in the skin selector, choose the skin render style
+
+</details>
+
+<details>
   <summary>Mega Walls features</summary>
 
 ### Mega Walls features
@@ -169,8 +179,6 @@ Allows you to customize the look of the f3+b hitboxes.
 - **Safe Inventory** - "Prevents hotkeying important kit items out of your inventory"
 - **Squad Halo Player** - Adds to the squad the player you give your halo to when playing the Angel class
 - **Wither alerts** - Plays an alert when a wither's health falls below a certain threshold
-- **Class selector overlay** - in the class selector, renders your selected skins, prestige levels (default:off) and
-  classpoints (default:off)
 - **Class in lobby HUD** - shows how many of each class is in the current lobby
 - **Auto-Requeue** - automatically joins the next game of MW when your game ends
 - Notification at 5 mins before a game ends, and 10 seconds before the walls fall if you are not on the game
