@@ -65,13 +65,13 @@ public class MiniPotionHUD extends AbstractRenderer {
         if (MWEConfig.verticalMiniPotionHUD) {
             int x = this.rendererPosition.getAbsoluteRenderX();
             int y = this.rendererPosition.getAbsoluteRenderY();
-            final int maxY = resolution.getScaledHeight() - count * mc.fontRendererObj.FONT_HEIGHT;
+            final int maxY = resolution.getScaledHeight() - count * (mc.fontRendererObj.FONT_HEIGHT + 2);
             if (y > maxY) {
                 y = maxY;
             }
             for (int i = 0; i < count; i++) {
                 mc.fontRendererObj.drawStringWithShadow(strings[i], x - mc.fontRendererObj.getStringWidth(strings[i]) / 2, y, colors[i]);
-                y += mc.fontRendererObj.FONT_HEIGHT;
+                y += mc.fontRendererObj.FONT_HEIGHT + 2;
             }
         } else {
             int x = this.rendererPosition.getAbsoluteRenderX() - len / 2;
