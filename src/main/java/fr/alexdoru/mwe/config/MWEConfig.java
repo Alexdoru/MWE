@@ -436,6 +436,13 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Potion HUD",
+            name = "Vertical Mini Potion HUD",
+            dependsOn = "Mini Potion HUD",
+            comment = "Displays the Mini Potion HUD vertically")
+    public static boolean verticalMiniPotionHUD;
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Potion HUD",
             name = "Mini Potion HUD only in MW",
             dependsOn = "Mini Potion HUD",
             comment = "Displays the mini potion HUD only in Mega Walls")
