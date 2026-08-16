@@ -61,7 +61,7 @@ public abstract class MWECommandBase extends CommandBase {
      *                     if (commandToPutOnClick) isn't provided will use (command)
      */
     protected static void printCommandHelpBlock(String header, String[][] commandLines) {
-        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.centerLine(EnumChatFormatting.GOLD + header)));
+        ChatUtil.addChatMessage(new ChatComponentText(ChatUtil.centerLine(EnumChatFormatting.GOLD + header + "\n")));
         for (final String[] line : commandLines) {
             if (line.length < 2) continue;
             final String command = line[0];
