@@ -660,7 +660,7 @@ public final class MWEConfig {
             category = INVENTORY_OVERLAYS, subCategory = "Replay Bookmarks",
             name = "Bookmarks event team indicator style",
             dependsOn = "Replay bookmarks overlay",
-            comment = "Choose the type of render for the team indicator of events (bed destroyed, wither deaths")
+            comment = "Choose the type of render for the team indicator of events (bed destroyed, wither deaths)")
     public static TeamIndicatorStyle replayBookmarksEventTeamStyle = TeamIndicatorStyle.OUTLINE;
 
     @ConfigProperty(
