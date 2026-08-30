@@ -11,7 +11,11 @@
 
 ## Download
 
-Download the latest version of the mod from the **[releases page](https://github.com/Alexdoru/MWE/releases)**
+Download the latest version of the mod from **[Modrinth](https://modrinth.com/mod/mwe/versions)**
+
+## Screenshots
+
+See screenshots in the **[Modrinth gallery](https://modrinth.com/mod/mwe/gallery)**
 
 ## Installation
 
