@@ -32,7 +32,7 @@ public class GuiPlayerTabOverlayHook_PlayerCount {
                     nicks++;
                 }
             }
-            list.add(GREEN + "Players: " + GOLD + i + (nicks == 0 ? "" : WHITE + " (" + GOLD + nicks + WHITE + ")"));
+            list.add(GREEN + "Players: " + GOLD + i + (nicks == 0 ? "" : WHITE + " (" + DARK_RED + nicks + WHITE + ")"));
         } else {
             list.add(GREEN + "Players: " + GOLD + i);
         }

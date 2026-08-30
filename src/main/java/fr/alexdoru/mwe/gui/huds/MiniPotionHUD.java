@@ -61,11 +61,26 @@ public class MiniPotionHUD extends AbstractRenderer {
             len += mc.fontRendererObj.getStringWidth(strings[count]) + 2;
             count++;
         }
+        if (count == 0) return;
         len -= 2;
-        int x = this.rendererPosition.getAbsoluteRenderX() - len / 2;
-        for (int i = 0; i < count; i++) {
-            mc.fontRendererObj.drawStringWithShadow(strings[i], x, this.rendererPosition.getAbsoluteRenderY(), colors[i]);
-            x += mc.fontRendererObj.getStringWidth(strings[i]) + 2;
+        if (MWEConfig.verticalMiniPotionHUD) {
+            final int x = this.rendererPosition.getAbsoluteRenderX();
+            int y = this.rendererPosition.getAbsoluteRenderY();
+            final int maxY = resolution.getScaledHeight() - count * (mc.fontRendererObj.FONT_HEIGHT + 2);
+            if (y > maxY) {
+                y = maxY;
+            }
+            for (int i = 0; i < count; i++) {
+                mc.fontRendererObj.drawStringWithShadow(strings[i], x - mc.fontRendererObj.getStringWidth(strings[i]) / 2F, y, colors[i]);
+                y += mc.fontRendererObj.FONT_HEIGHT + 2;
+            }
+        } else {
+            int x = this.rendererPosition.getAbsoluteRenderX() - len / 2;
+            final int y = this.rendererPosition.getAbsoluteRenderY();
+            for (int i = 0; i < count; i++) {
+                mc.fontRendererObj.drawStringWithShadow(strings[i], x, y, colors[i]);
+                x += mc.fontRendererObj.getStringWidth(strings[i]) + 2;
+            }
         }
     }
 
