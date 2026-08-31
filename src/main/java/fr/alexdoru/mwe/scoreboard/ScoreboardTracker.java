@@ -4,7 +4,9 @@ import fr.alexdoru.mwe.api.events.MapEvent;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent.Type;
 import net.minecraft.client.Minecraft;
+import net.minecraft.profiler.Profiler;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.EventBus;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -14,9 +16,18 @@ public final class ScoreboardTracker {
 
     private static final ScoreboardParser PARSER = new ScoreboardParser();
 
-    private boolean prevIsInMW = false;
-    private boolean prevHasGameEnded = false;
-    private int prevAmountWitherAlive = 4;
+    private final EventBus eventBus;
+    private boolean prevIsInMW;
+    private boolean prevHasGameEnded;
+    private int prevAmountWitherAlive;
+
+    public ScoreboardTracker() {
+        this(MinecraftForge.EVENT_BUS);
+    }
+
+    ScoreboardTracker(EventBus eventBus) {
+        this.eventBus = eventBus;
+    }
 
     @SubscribeEvent
     public void onGameStart(MegaWallsGameEvent event) {
@@ -28,45 +39,47 @@ public final class ScoreboardTracker {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
-            Minecraft.getMinecraft().mcProfiler.startSection("MWE Scoreboard");
+            final Profiler profiler = Minecraft.getMinecraft().mcProfiler;
+            profiler.startSection("MWE Scoreboard");
             PARSER.reset();
             PARSER.update();
-            if (PARSER.isMWReplay() && PARSER.getReplayMap() != null) {
-                MinecraftForge.EVENT_BUS.post(new MapEvent(PARSER.getReplayMap()));
-            }
-            this.fireScoreboardRelatedEvents();
-            Minecraft.getMinecraft().mcProfiler.endSection();
+            this.fireEvents();
+            profiler.endSection();
         }
     }
 
-    private void fireScoreboardRelatedEvents() {
+    void fireEvents() {
+
+        if (PARSER.isMWReplay() && PARSER.getReplayMap() != null) {
+            this.eventBus.post(new MapEvent(PARSER.getReplayMap()));
+        }
 
         if (PARSER.isInMwGame()) {
 
-            if (PARSER.getWitherCount() == 3 && prevAmountWitherAlive > 3) {
-                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(Type.FIRST_WITHER_DEATH));
-            }
-            if (PARSER.getWitherCount() == 1 && prevAmountWitherAlive > 1) {
-                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(Type.THIRD_WITHER_DEATH));
-            }
-            if (PARSER.getWitherCount() == 0 && prevAmountWitherAlive > 0) {
-                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(Type.DEATHMATCH_START));
+            if (!this.prevIsInMW) {
+                this.eventBus.post(new MegaWallsGameEvent(Type.CONNECT));
             }
 
-            if (!this.prevIsInMW) {
-                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(Type.CONNECT));
+            if (PARSER.getWitherCount() == 3 && prevAmountWitherAlive > 3) {
+                this.eventBus.post(new MegaWallsGameEvent(Type.FIRST_WITHER_DEATH));
+            }
+            if (PARSER.getWitherCount() == 1 && prevAmountWitherAlive > 1) {
+                this.eventBus.post(new MegaWallsGameEvent(Type.THIRD_WITHER_DEATH));
+            }
+            if (PARSER.getWitherCount() == 0 && prevAmountWitherAlive > 0) {
+                this.eventBus.post(new MegaWallsGameEvent(Type.DEATHMATCH_START));
             }
 
         } else {
 
             if (this.prevIsInMW) {
-                MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(Type.DISCONNECT));
+                this.eventBus.post(new MegaWallsGameEvent(Type.DISCONNECT));
             }
 
         }
 
         if (PARSER.hasGameEnded() && !this.prevHasGameEnded) {
-            MinecraftForge.EVENT_BUS.post(new MegaWallsGameEvent(Type.GAME_END));
+            this.eventBus.post(new MegaWallsGameEvent(Type.GAME_END));
         }
 
         this.prevIsInMW = PARSER.isInMwGame();
