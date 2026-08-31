@@ -61,6 +61,8 @@ public final class ScoreboardParser implements IScoreboardParser {
     private boolean isPrepPhase = false;
     private boolean hasGameEnded = false;
 
+    ScoreboardParser() {}
+
     void onGameStart() {
         triggeredBlueWitherAlert = false;
         triggeredGreenWitherAlert = false;
@@ -86,16 +88,17 @@ public final class ScoreboardParser implements IScoreboardParser {
     }
 
     void update() {
-
         final ScoreObjective objective = ScoreboardUtils.getActiveObjective();
-
         if (objective == null) {
             return;
         }
-
         final String title = objective.getDisplayName();
-        final String cleanTitle = StringUtil.removeFormattingCodes(title);
         final List<String> formattedLines = ScoreboardUtils.getFormattedSidebarText(objective);
+        this.update(title, formattedLines);
+    }
+
+    void update(String title, List<String> formattedLines) {
+        final String cleanTitle = StringUtil.removeFormattingCodes(title);
         final List<String> cleanLines = ScoreboardUtils.stripControlCodes(formattedLines);
 
         if (!cleanLines.isEmpty()) {
