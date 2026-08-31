@@ -9,6 +9,7 @@ import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.util.EnumChatFormatting;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.lwjgl.opengl.Display;
 
 import java.util.ArrayList;
@@ -89,6 +90,7 @@ public final class ScoreboardParser implements IScoreboardParser {
         this.update(title, formattedLines);
     }
 
+    @VisibleForTesting
     void update(String title, List<String> formattedLines) {
         final String cleanTitle = StringUtil.removeFormattingCodes(title);
         final List<String> cleanLines = ScoreboardUtils.stripControlCodes(formattedLines);

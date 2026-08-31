@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.VisibleForTesting;
 
 public final class ScoreboardTracker {
 
@@ -31,6 +32,7 @@ public final class ScoreboardTracker {
         this(MinecraftForge.EVENT_BUS);
     }
 
+    @VisibleForTesting
     ScoreboardTracker(EventBus eventBus) {
         this.eventBus = eventBus;
     }
@@ -54,6 +56,7 @@ public final class ScoreboardTracker {
         }
     }
 
+    @VisibleForTesting
     void fireEvents() {
 
         if (PARSER.isMWReplay() && PARSER.getReplayMap() != null) {
