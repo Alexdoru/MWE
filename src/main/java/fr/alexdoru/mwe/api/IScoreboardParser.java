@@ -33,6 +33,7 @@ public interface IScoreboardParser {
     boolean isMWReplay();
 
     /** True when is Skyblock */
+    @Deprecated
     boolean isInSkyblock();
 
     /** Returns the ID of the current server */

@@ -92,7 +92,7 @@ public class HackerDetector {
 
         final Minecraft mc = Minecraft.getMinecraft();
 
-        if (!MWEConfig.hackerDetector || ScoreboardTracker.isInSkyblock() || mc.theWorld == null || mc.thePlayer == null || !mc.theWorld.isRemote) {
+        if (!MWEConfig.hackerDetector || mc.theWorld == null || mc.thePlayer == null || !mc.theWorld.isRemote) {
             synchronized (this.scheduledTasks) {
                 this.scheduledTasks.clear();
             }

@@ -57,7 +57,6 @@ public final class ScoreboardParser implements IScoreboardParser {
     private boolean isAtlasMode = false;
     private boolean isMWReplay = false;
     private String replayMap = null;
-    private boolean isInSkyblock = false;
     private boolean isPreGameLobby = false;
     private boolean isPrepPhase = false;
     private boolean hasGameEnded = false;
@@ -81,7 +80,6 @@ public final class ScoreboardParser implements IScoreboardParser {
         isAtlasMode = false;
         isMWReplay = false;
         replayMap = null;
-        isInSkyblock = false;
         isPreGameLobby = false;
         isPrepPhase = false;
         hasGameEnded = false;
@@ -118,10 +116,7 @@ public final class ScoreboardParser implements IScoreboardParser {
             isReplayMode = true;
             isAtlasMode = true;
             this.parseReplayScoreboard(cleanLines);
-        } else if (cleanTitle.contains("SKYBLOCK")) {
-            isInSkyblock = true;
         }
-
     }
 
     private void parseMegaWallsScoreboard(List<String> formattedLines, List<String> cleanLines, String teamColor) {
@@ -318,7 +313,7 @@ public final class ScoreboardParser implements IScoreboardParser {
 
     @Override
     public boolean isInSkyblock() {
-        return isInSkyblock;
+        return false;
     }
 
     @Override

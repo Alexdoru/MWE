@@ -106,10 +106,6 @@ public final class ScoreboardTracker {
         return PARSER.isMWReplay();
     }
 
-    public static boolean isInSkyblock() {
-        return PARSER.isInSkyblock();
-    }
-
     public static String getServerID() {
         return PARSER.getServerID();
     }

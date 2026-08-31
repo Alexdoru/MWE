@@ -31,8 +31,6 @@ public class DebugScoreboardHUD {
             mc.fontRendererObj.drawStringWithShadow("isAtlasMode " + formatBool(ScoreboardTracker.isAtlasMode()), x, y, 0xFFFFFF);
             y += mc.fontRendererObj.FONT_HEIGHT;
             mc.fontRendererObj.drawStringWithShadow("isMWReplay " + formatBool(ScoreboardTracker.isMWReplay()), x, y, 0xFFFFFF);
-            y += mc.fontRendererObj.FONT_HEIGHT;
-            mc.fontRendererObj.drawStringWithShadow("isInSkyblock " + formatBool(ScoreboardTracker.isInSkyblock()), x, y, 0xFFFFFF);
         }
     }
 
