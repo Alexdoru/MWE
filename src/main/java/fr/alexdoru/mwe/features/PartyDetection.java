@@ -97,6 +97,7 @@ public class PartyDetection {
         boolean containsPlayers = false;
         for (final String player : party) {
             if (player.equals(playername)) continue;
+            if (mc.thePlayer != null && player.equals(mc.thePlayer.getName())) continue;
             final NetworkPlayerInfo netInfo = mc.getNetHandler().getPlayerInfo(player);
             if (checkSameTeam && netInfo == null) continue;
             if (checkSameTeam) {
