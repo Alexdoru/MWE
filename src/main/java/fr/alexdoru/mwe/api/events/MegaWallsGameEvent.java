@@ -34,6 +34,10 @@ public final class MegaWallsGameEvent extends Event {
          */
         GAME_END,
         /**
+         * fired when the first wither dies
+         */
+        FIRST_WITHER_DEATH,
+        /**
          * fired when the third wither dies
          */
         THIRD_WITHER_DEATH,
