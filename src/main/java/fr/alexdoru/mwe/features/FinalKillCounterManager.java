@@ -4,6 +4,7 @@ import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent.Type;
 import fr.alexdoru.mwe.gui.huds.FKCounterHUD;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,7 +17,7 @@ public final class FinalKillCounterManager {
         this.fkCounterHUD = fkCounterHUD;
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public void onMwGame(MegaWallsGameEvent event) {
 
         // to fix the bug where the FKCounter doesn't work properly if you play two games in a row on a server with the same serverID

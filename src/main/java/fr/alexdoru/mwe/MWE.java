@@ -113,6 +113,7 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(new AutoRequeue());
         MinecraftForge.EVENT_BUS.register(new ReportQueue());
         MinecraftForge.EVENT_BUS.register(new ChatListener(this.mweRenderers));
+        MinecraftForge.EVENT_BUS.register(new WitherAlerts());
         MinecraftForge.EVENT_BUS.register(new LowHPIndicator());
         MinecraftForge.EVENT_BUS.register(new DataSaveScheduler());
         MinecraftForge.EVENT_BUS.register(new StrengthParticles());

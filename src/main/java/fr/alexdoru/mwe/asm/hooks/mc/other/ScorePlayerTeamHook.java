@@ -12,14 +12,14 @@ public class ScorePlayerTeamHook {
                 && ScoreboardTracker.isInMwGame()
                 && "\ud83d\udca3".equals(playername)
                 && ScoreboardTracker.getParser().isOnlyOneWitherAlive()) {
-            return MWE.INSTANCE().getMweRenderers().lastWitherHPHUD.displayText;
+            return MWE.INSTANCE().getMweRenderers().lastWitherHPHUD.getDisplayText();
         }
         if (MWEConfig.fkcounterHUDinSidebar
                 && MWEConfig.fkcounterHUDPosition.isEnabled()
                 && ScoreboardTracker.isInMwGame()
                 && "\ud83d\udc7d".equals(playername)
                 && MWE.INSTANCE().getFinalKillCounter() != null) {
-            return MWE.INSTANCE().getMweRenderers().fkCounterHUD.displayText;
+            return MWE.INSTANCE().getMweRenderers().fkCounterHUD.getDisplayText();
         }
         return null;
     }

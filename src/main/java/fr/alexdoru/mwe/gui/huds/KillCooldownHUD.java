@@ -1,6 +1,10 @@
 package fr.alexdoru.mwe.gui.huds;
 
+import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.api.events.ChatMessageSentEvent;
+import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
+import fr.alexdoru.mwe.api.events.MegaWallsGameEvent.Type;
+import fr.alexdoru.mwe.api.events.WitherHealthDecayEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.TimerUtil;
@@ -12,8 +16,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class KillCooldownHUD extends AbstractRenderer {
 
-    private long lastkilltime = 0;
     private final TimerUtil timerKillCooldown = new TimerUtil(60000L);
+    private MWTeam ownTeam;
+    private boolean resetKillCooldown;
+    private long lastkilltime = 0;
 
     public KillCooldownHUD() {
         super(MWEConfig.killCooldownHUDPosition);
@@ -29,6 +35,24 @@ public class KillCooldownHUD extends AbstractRenderer {
                     lastkilltime = System.currentTimeMillis();
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onGameEvent(MegaWallsGameEvent event) {
+        if (event.type == Type.GAME_START) {
+            resetKillCooldown = false;
+        }
+        if (event.type == Type.CONNECT) {
+            ownTeam = MWTeam.fromColorChar(ScoreboardTracker.getParser().getOwnMWTeamColor());
+        }
+    }
+
+    @SubscribeEvent
+    public void onWitherHealthDecay(WitherHealthDecayEvent event) {
+        if (!resetKillCooldown && event.health < 100 && event.team == ownTeam) {
+            resetKillCooldown = true;
+            this.hideHUD();
         }
     }
 

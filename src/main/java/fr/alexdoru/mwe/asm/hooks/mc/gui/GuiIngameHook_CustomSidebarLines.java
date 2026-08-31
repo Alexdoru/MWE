@@ -13,14 +13,14 @@ public class GuiIngameHook_CustomSidebarLines {
                 && MWEConfig.lastWitherHUDPosition.isEnabled()
                 && ScoreboardTracker.isInMwGame()
                 && ScoreboardTracker.getParser().isOnlyOneWitherAlive()) {
-            return MWE.INSTANCE().getMweRenderers().lastWitherHPHUD.displayText;
+            return MWE.INSTANCE().getMweRenderers().lastWitherHPHUD.getDisplayText();
         }
         if (MWEConfig.fkcounterHUDinSidebar
                 && lineNumber == 12
                 && MWEConfig.fkcounterHUDPosition.isEnabled()
                 && ScoreboardTracker.isInMwGame()
                 && MWE.INSTANCE().getFinalKillCounter() != null) {
-            return MWE.INSTANCE().getMweRenderers().fkCounterHUD.displayText;
+            return MWE.INSTANCE().getMweRenderers().fkCounterHUD.getDisplayText();
         }
         return textIn;
     }
@@ -30,13 +30,13 @@ public class GuiIngameHook_CustomSidebarLines {
                 && MWEConfig.lastWitherHUDPosition.isEnabled()
                 && ScoreboardTracker.isInMwGame()
                 && ScoreboardTracker.getParser().isOnlyOneWitherAlive()) {
-            width = Math.max(width, fontRenderer.getStringWidth(MWE.INSTANCE().getMweRenderers().lastWitherHPHUD.displayText + (redNumbers ? ": 12" : "")));
+            width = Math.max(width, fontRenderer.getStringWidth(MWE.INSTANCE().getMweRenderers().lastWitherHPHUD.getDisplayText() + (redNumbers ? ": 12" : "")));
         }
         if (MWEConfig.fkcounterHUDinSidebar
                 && MWEConfig.fkcounterHUDPosition.isEnabled()
                 && ScoreboardTracker.isInMwGame()
                 && MWE.INSTANCE().getFinalKillCounter() != null) {
-            width = Math.max(width, fontRenderer.getStringWidth(MWE.INSTANCE().getMweRenderers().fkCounterHUD.displayText + (redNumbers ? ": 11" : "")));
+            width = Math.max(width, fontRenderer.getStringWidth(MWE.INSTANCE().getMweRenderers().fkCounterHUD.getDisplayText() + (redNumbers ? ": 11" : "")));
         }
         return width;
     }

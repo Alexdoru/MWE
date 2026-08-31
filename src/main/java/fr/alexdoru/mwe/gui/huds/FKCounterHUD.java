@@ -38,7 +38,7 @@ public class FKCounterHUD extends AbstractRenderer {
     private static final int BACKGROUND_COLOR = new Color(0, 0, 0, 96).getRGB();
     private static final int DUMMY_BACKGROUND_COLOR = new Color(255, 255, 255, 127).getRGB();
 
-    public String displayText = "";
+    private String displayText = "";
     private final List<String> textToRender = new ArrayList<>();
 
     public FKCounterHUD() {
@@ -182,6 +182,10 @@ public class FKCounterHUD extends AbstractRenderer {
 
         }
 
+    }
+
+    public String getDisplayText() {
+        return displayText;
     }
 
     private void drawStringList(List<String> list, int x, int y) {
