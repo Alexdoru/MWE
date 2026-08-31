@@ -28,7 +28,8 @@ import java.util.*;
 
 public class CommandWDR extends MWECommandBase {
 
-    public static final List<String> cheatsList = Collections.unmodifiableList(Arrays.asList("aura",
+    public static final List<String> cheatsList = Collections.unmodifiableList(Arrays.asList(
+            "aura",
             "aimbot",
             "bhop",
             "velocity",
@@ -51,7 +52,8 @@ public class CommandWDR extends MWECommandBase {
             "fastbreak",
             "speedmine",
             "cheating",
-            "scaffold"));
+            "scaffold")
+    );
 
     public static final Set<String> cheatsSet = Collections.unmodifiableSet(new HashSet<>(cheatsList));
 

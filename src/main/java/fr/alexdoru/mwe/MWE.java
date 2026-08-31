@@ -117,6 +117,7 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(new DataSaveScheduler());
         MinecraftForge.EVENT_BUS.register(new StrengthParticles());
         MinecraftForge.EVENT_BUS.register(new ScoreboardTracker());
+        MinecraftForge.EVENT_BUS.register(new ReportSentListener());
         MinecraftForge.EVENT_BUS.register(new SkinSelectorOverlay());
         MinecraftForge.EVENT_BUS.register(new ClassSelectorOverlay(this.configFolder));
         MinecraftForge.EVENT_BUS.register(new ReplayBookmarksOverlay());

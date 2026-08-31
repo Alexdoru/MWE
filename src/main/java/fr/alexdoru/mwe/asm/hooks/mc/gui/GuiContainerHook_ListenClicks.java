@@ -1,6 +1,5 @@
 package fr.alexdoru.mwe.asm.hooks.mc.gui;
 
-import fr.alexdoru.mwe.features.PartyDetection;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.gui.inventory.GuiChest;
@@ -53,7 +52,6 @@ public class GuiContainerHook_ListenClicks {
                         if (matcher.find()) {
                             final String playername = matcher.group(1);
                             ReportQueue.INSTANCE.addPlayerReportedThisGame(playername);
-                            PartyDetection.printBoostingReportAdvice(playername);
                         }
                     }
                 }

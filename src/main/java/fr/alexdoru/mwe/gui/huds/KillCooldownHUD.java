@@ -1,11 +1,14 @@
 package fr.alexdoru.mwe.gui.huds;
 
+import fr.alexdoru.mwe.api.events.ChatMessageSentEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.TimerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class KillCooldownHUD extends AbstractRenderer {
 
@@ -14,14 +17,18 @@ public class KillCooldownHUD extends AbstractRenderer {
 
     public KillCooldownHUD() {
         super(MWEConfig.killCooldownHUDPosition);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
-    /**
-     * Called to draw the HUD, when you use /kill
-     */
-    public void drawCooldownHUD() {
-        if (timerKillCooldown.update()) {
-            lastkilltime = System.currentTimeMillis();
+    @SubscribeEvent
+    public void onSentMessage(ChatMessageSentEvent event) {
+        if (this.getPosition().isEnabled() && ScoreboardTracker.isInMwGame()) {
+            final String message = event.message.toLowerCase();
+            if (message.equals("/kill") || message.startsWith("/kill ")) {
+                if (timerKillCooldown.update()) {
+                    lastkilltime = System.currentTimeMillis();
+                }
+            }
         }
     }
 
