@@ -1,8 +1,10 @@
 package fr.alexdoru.mwe.scoreboard;
 
+import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.api.events.MapEvent;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent.Type;
+import fr.alexdoru.mwe.api.events.WitherHealthDecayEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.profiler.Profiler;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,6 +22,10 @@ public final class ScoreboardTracker {
     private boolean prevIsInMW;
     private boolean prevHasGameEnded;
     private int prevAmountWitherAlive;
+    private int prevBlueHp;
+    private int prevGreenHp;
+    private int prevRedHp;
+    private int prevYellowHp;
 
     public ScoreboardTracker() {
         this(MinecraftForge.EVENT_BUS);
@@ -70,6 +76,19 @@ public final class ScoreboardTracker {
                 this.eventBus.post(new MegaWallsGameEvent(Type.DEATHMATCH_START));
             }
 
+            if (this.prevBlueHp != 0 && this.prevBlueHp > PARSER.getBlueWitherHp()) {
+                this.eventBus.post(new WitherHealthDecayEvent(MWTeam.BLUE, PARSER.getBlueWitherHp()));
+            }
+            if (this.prevGreenHp != 0 && this.prevGreenHp > PARSER.getGreenWitherHp()) {
+                this.eventBus.post(new WitherHealthDecayEvent(MWTeam.GREEN, PARSER.getGreenWitherHp()));
+            }
+            if (this.prevRedHp != 0 && this.prevRedHp > PARSER.getRedWitherHp()) {
+                this.eventBus.post(new WitherHealthDecayEvent(MWTeam.RED, PARSER.getRedWitherHp()));
+            }
+            if (this.prevYellowHp != 0 && this.prevYellowHp > PARSER.getYellowWitherHp()) {
+                this.eventBus.post(new WitherHealthDecayEvent(MWTeam.YELLOW, PARSER.getYellowWitherHp()));
+            }
+
         } else {
 
             if (this.prevIsInMW) {
@@ -85,6 +104,10 @@ public final class ScoreboardTracker {
         this.prevIsInMW = PARSER.isInMwGame();
         this.prevHasGameEnded = PARSER.hasGameEnded();
         this.prevAmountWitherAlive = PARSER.getWitherCount();
+        this.prevBlueHp = PARSER.getBlueWitherHp();
+        this.prevGreenHp = PARSER.getGreenWitherHp();
+        this.prevRedHp = PARSER.getRedWitherHp();
+        this.prevYellowHp = PARSER.getYellowWitherHp();
 
     }
 

@@ -1,11 +1,8 @@
 package fr.alexdoru.mwe.scoreboard;
 
-import com.google.common.collect.ImmutableMap;
-import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.IScoreboardParser;
 import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.features.AFKSoundWarning;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
@@ -17,7 +14,6 @@ import org.lwjgl.opengl.Display;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,25 +27,18 @@ public final class ScoreboardParser implements IScoreboardParser {
     private static final Pattern PREGAME_LOBBY_PATTERN = Pattern.compile("Players:\\s*[0-9]+/[0-9]+");
     private static final Pattern WITHER_ALIVE_PATTERN = Pattern.compile("(\\[[BGRY]]) Wither HP: ([,\\d]+)");
     private static final Pattern REPLAY_MAP_PATTERN = Pattern.compile("Map: ([a-zA-Z0-9_ ]+)");
-    private static final Map<String, MWTeam> TEAM_PREFIXES = new ImmutableMap.Builder<String, MWTeam>()
-            .put("[B]", MWTeam.BLUE)
-            .put("[G]", MWTeam.GREEN)
-            .put("[R]", MWTeam.RED)
-            .put("[Y]", MWTeam.YELLOW)
-            .build();
 
-    private boolean triggeredBlueWitherAlert = false;
-    private boolean triggeredGreenWitherAlert = false;
-    private boolean triggeredRedWitherAlert = false;
-    private boolean triggeredYellowWitherAlert = false;
     private boolean triggeredWallsFallAlert = false;
     private boolean triggeredGameEndAlert = false;
-    private boolean triggeredKillCooldownReset = false;
 
     private int prevGameEndTime;
 
     private final List<MWTeam> aliveWithers = new ArrayList<>(4);
     private final List<MWTeam> aliveWithersView = Collections.unmodifiableList(aliveWithers);
+    private int blueWitherHp;
+    private int greenWitherHp;
+    private int redWitherHp;
+    private int yellowWitherHp;
     private String serverID = null;
     private boolean isInMwGame = false;
     private boolean isMWEnvironement = false;
@@ -64,17 +53,16 @@ public final class ScoreboardParser implements IScoreboardParser {
     ScoreboardParser() {}
 
     void onGameStart() {
-        triggeredBlueWitherAlert = false;
-        triggeredGreenWitherAlert = false;
-        triggeredRedWitherAlert = false;
-        triggeredYellowWitherAlert = false;
         triggeredWallsFallAlert = false;
         triggeredGameEndAlert = false;
-        triggeredKillCooldownReset = false;
     }
 
     void reset() {
         aliveWithers.clear();
+        blueWitherHp = 0;
+        greenWitherHp = 0;
+        redWitherHp = 0;
+        yellowWitherHp = 0;
         serverID = null;
         isInMwGame = false;
         isMWEnvironement = false;
@@ -100,18 +88,15 @@ public final class ScoreboardParser implements IScoreboardParser {
     void update(String title, List<String> formattedLines) {
         final String cleanTitle = StringUtil.removeFormattingCodes(title);
         final List<String> cleanLines = ScoreboardUtils.stripControlCodes(formattedLines);
-
         if (!cleanLines.isEmpty()) {
             final Matcher gameIDMatcher = GAME_ID_PATTERN.matcher(cleanLines.get(0));
             if (gameIDMatcher.find()) {
                 serverID = gameIDMatcher.group(1);
             }
         }
-
         if (cleanTitle.contains("MEGA WALLS")) {
             isMWEnvironement = true;
-            final String teamColor = StringUtil.getLastColorCodeBefore(title, "MEGA WALLS");
-            this.parseMegaWallsScoreboard(formattedLines, cleanLines, teamColor);
+            this.parseMegaWallsScoreboard(cleanLines);
         } else if (cleanTitle.contains("REPLAY")) {
             isReplayMode = true;
             this.parseReplayScoreboard(cleanLines);
@@ -122,25 +107,21 @@ public final class ScoreboardParser implements IScoreboardParser {
         }
     }
 
-    private void parseMegaWallsScoreboard(List<String> formattedLines, List<String> cleanLines, String teamColor) {
-
-        if (cleanLines.size() < 10) {
-            return;
-        }
-
-        if (MW_INGAME_PATTERN.matcher(cleanLines.get(9)).find()) {
-            isInMwGame = true;
-        } else {
-            for (final String line : cleanLines) {
-                if (PREGAME_LOBBY_PATTERN.matcher(line).find()) {
-                    isPreGameLobby = true;
-                    return;
+    private void parseMegaWallsScoreboard(List<String> cleanLines) {
+        if (cleanLines.size() >= 10) {
+            if (MW_INGAME_PATTERN.matcher(cleanLines.get(9)).find()) {
+                isInMwGame = true;
+                this.parseMWTimeLine(cleanLines.get(1));
+                this.parseWitherAndTeamsLines(cleanLines);
+            } else {
+                for (final String line : cleanLines) {
+                    if (PREGAME_LOBBY_PATTERN.matcher(line).find()) {
+                        isPreGameLobby = true;
+                        return;
+                    }
                 }
             }
         }
-
-        this.parseMWTimeLine(cleanLines.get(1));
-        this.parseWitherAndTeamsLines(teamColor, formattedLines, cleanLines);
     }
 
     private void parseMWTimeLine(String gameTimeLine) {
@@ -180,81 +161,91 @@ public final class ScoreboardParser implements IScoreboardParser {
         }
     }
 
-    private void parseWitherAndTeamsLines(String teamColor, List<String> formattedLines, List<String> cleanLines) {
+    private void parseWitherAndTeamsLines(List<String> cleanLines) {
+
         int eliminatedTeams = 0;
-        int witherHP = 1000;
-
         for (int i = 3; i < 7; i++) {
-
             final String line = cleanLines.get(i);
-            /*Wither alive detection*/
-            final String colorCode;
-            final MWTeam witherTeam;
             final Matcher matcher = WITHER_ALIVE_PATTERN.matcher(line);
             if (matcher.find()) {
-                colorCode = StringUtil.getLastColorCodeBefore(formattedLines.get(i), "[");
-                witherTeam = TEAM_PREFIXES.get(matcher.group(1));
-                aliveWithers.add(witherTeam);
-                witherHP = Integer.parseInt(matcher.group(2).replace(",", ""));
+                final String witherPrefix = matcher.group(1);
+                final int witherHp = Integer.parseInt(matcher.group(2).replace(",", ""));
+                switch (witherPrefix) {
+                    case "[B]":
+                        aliveWithers.add(MWTeam.BLUE);
+                        blueWitherHp = witherHp;
+                        break;
+                    case "[G]":
+                        aliveWithers.add(MWTeam.GREEN);
+                        greenWitherHp = witherHp;
+                        break;
+                    case "[R]":
+                        aliveWithers.add(MWTeam.RED);
+                        redWitherHp = witherHp;
+                        break;
+                    case "[Y]":
+                        aliveWithers.add(MWTeam.YELLOW);
+                        yellowWitherHp = witherHp;
+                        break;
+                }
             } else {
                 if (line.contains("eliminated!")) {
                     eliminatedTeams++;
                 }
-                continue;
             }
-
-            if (!triggeredKillCooldownReset && witherHP < 100 && !colorCode.isEmpty() && colorCode.equals(teamColor)) {
-                MWE.INSTANCE().getMweRenderers().killCooldownHUD.hideHUD();
-                triggeredKillCooldownReset = true;
-            }
-
-            if (MWEConfig.witherAlerts && witherHP < MWEConfig.witherAlertsThreshold) {
-                boolean playNotif = false;
-                switch (witherTeam) {
-                    case BLUE: {
-                        if (!triggeredBlueWitherAlert) {
-                            triggeredBlueWitherAlert = true;
-                            playNotif = true;
-                        }
-                        break;
-                    }
-                    case GREEN: {
-                        if (!triggeredGreenWitherAlert) {
-                            triggeredGreenWitherAlert = true;
-                            playNotif = true;
-                        }
-                        break;
-                    }
-                    case RED: {
-                        if (!triggeredRedWitherAlert) {
-                            triggeredRedWitherAlert = true;
-                            playNotif = true;
-                        }
-                        break;
-                    }
-                    case YELLOW: {
-                        if (!triggeredYellowWitherAlert) {
-                            triggeredYellowWitherAlert = true;
-                            playNotif = true;
-                        }
-                        break;
-                    }
-                }
-                if (playNotif) {
-                    ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "The " + witherTeam.getColorPrefix() + witherTeam.getName() + " Wither " + EnumChatFormatting.GREEN + "is below " + EnumChatFormatting.YELLOW + MWEConfig.witherAlertsThreshold + "HP!");
-                    SoundUtil.playNotePling();
-                }
-            }
-
         }
 
         if (eliminatedTeams == 3) {
             hasGameEnded = true;
         }
 
-        if (aliveWithers.size() == 1) {
-            MWE.INSTANCE().getMweRenderers().lastWitherHPHUD.updateWitherHP(witherHP);
-        }
+//            if (!triggeredKillCooldownReset && witherHP < 100 && !colorCode.isEmpty() && colorCode.equals(teamColor)) {
+//                MWE.INSTANCE().getMweRenderers().killCooldownHUD.hideHUD();
+//                triggeredKillCooldownReset = true;
+//            }
+//
+//            if (MWEConfig.witherAlerts && witherHP < MWEConfig.witherAlertsThreshold) {
+//                boolean playNotif = false;
+//                switch (witherTeam) {
+//                    case BLUE: {
+//                        if (!triggeredBlueWitherAlert) {
+//                            triggeredBlueWitherAlert = true;
+//                            playNotif = true;
+//                        }
+//                        break;
+//                    }
+//                    case GREEN: {
+//                        if (!triggeredGreenWitherAlert) {
+//                            triggeredGreenWitherAlert = true;
+//                            playNotif = true;
+//                        }
+//                        break;
+//                    }
+//                    case RED: {
+//                        if (!triggeredRedWitherAlert) {
+//                            triggeredRedWitherAlert = true;
+//                            playNotif = true;
+//                        }
+//                        break;
+//                    }
+//                    case YELLOW: {
+//                        if (!triggeredYellowWitherAlert) {
+//                            triggeredYellowWitherAlert = true;
+//                            playNotif = true;
+//                        }
+//                        break;
+//                    }
+//                }
+//                if (playNotif) {
+//                    ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "The " + witherTeam.getColorPrefix() + witherTeam.getName() + " Wither " + EnumChatFormatting.GREEN + "is below " + EnumChatFormatting.YELLOW + MWEConfig.witherAlertsThreshold + "HP!");
+//                    SoundUtil.playNotePling();
+//                }
+//            }
+//
+//        if (aliveWithers.size() == 1) {
+//            MWE.INSTANCE().getMweRenderers().lastWitherHPHUD.updateWitherHP(witherHP);
+//        }
+
     }
 
     private void parseReplayScoreboard(List<String> cleanLines) {
@@ -342,6 +333,22 @@ public final class ScoreboardParser implements IScoreboardParser {
     @Override
     public int getWitherCount() {
         return aliveWithers.size();
+    }
+
+    int getBlueWitherHp() {
+        return blueWitherHp;
+    }
+
+    int getGreenWitherHp() {
+        return greenWitherHp;
+    }
+
+    int getRedWitherHp() {
+        return redWitherHp;
+    }
+
+    int getYellowWitherHp() {
+        return yellowWitherHp;
     }
 
 }
