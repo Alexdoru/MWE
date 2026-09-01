@@ -2,15 +2,10 @@ package fr.alexdoru.mwe.scoreboard;
 
 import fr.alexdoru.mwe.api.IScoreboardParser;
 import fr.alexdoru.mwe.api.enums.MWTeam;
-import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.features.AFKSoundWarning;
-import fr.alexdoru.mwe.utils.SoundUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.scoreboard.ScoreObjective;
-import net.minecraft.util.EnumChatFormatting;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.VisibleForTesting;
-import org.lwjgl.opengl.Display;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,18 +16,14 @@ import java.util.regex.Pattern;
 public final class ScoreboardParser implements IScoreboardParser {
 
     private static final Pattern GAME_ID_PATTERN = Pattern.compile("\\d+/\\d+/\\d+\\s+(\\w+)");
-    private static final Pattern GATES_OPEN_PATTERN = Pattern.compile("Gates Open: \\d+:\\d+");
+    private static final Pattern GATES_OPEN_PATTERN = Pattern.compile("Gates Open: (\\d+):(\\d+)");
     private static final Pattern WALLS_FALL_PATTERN = Pattern.compile("Walls Fall: (\\d+):(\\d+)");
+    private static final Pattern ENRAGE_OFF_PATTERN = Pattern.compile("Enrage Off: (\\d+):(\\d+)");
     private static final Pattern GAME_END_PATTERN = Pattern.compile("Game End: (\\d+):(\\d+)");
     private static final Pattern MW_INGAME_PATTERN = Pattern.compile("[0-9]+\\sF\\.\\sKills?\\s[0-9]+\\sF\\.\\sAssists?");
     private static final Pattern PREGAME_LOBBY_PATTERN = Pattern.compile("Players:\\s*[0-9]+/[0-9]+");
     private static final Pattern WITHER_ALIVE_PATTERN = Pattern.compile("(\\[[BGRY]]) Wither HP: ([,\\d]+)");
     private static final Pattern REPLAY_MAP_PATTERN = Pattern.compile("Map: ([a-zA-Z0-9_ ]+)");
-
-    private boolean triggeredWallsFallAlert = false;
-    private boolean triggeredGameEndAlert = false;
-
-    private int prevGameEndTime;
 
     private final List<MWTeam> aliveWithers = new ArrayList<>(4);
     private final List<MWTeam> aliveWithersView = Collections.unmodifiableList(aliveWithers);
@@ -42,6 +33,7 @@ public final class ScoreboardParser implements IScoreboardParser {
     private int yellowWitherHp;
     private int lastWitherHealth;
     private char ownMWTeamColor;
+    private int mwGameTime;
     private String serverID = null;
     private boolean isInMwGame = false;
     private boolean isMWEnvironement = false;
@@ -55,11 +47,6 @@ public final class ScoreboardParser implements IScoreboardParser {
 
     ScoreboardParser() {}
 
-    void onGameStart() {
-        triggeredWallsFallAlert = false;
-        triggeredGameEndAlert = false;
-    }
-
     void reset() {
         aliveWithers.clear();
         blueWitherHp = 0;
@@ -68,6 +55,7 @@ public final class ScoreboardParser implements IScoreboardParser {
         yellowWitherHp = 0;
         lastWitherHealth = 0;
         ownMWTeamColor = 0;
+        mwGameTime = 0;
         serverID = null;
         isInMwGame = false;
         isMWEnvironement = false;
@@ -131,41 +119,44 @@ public final class ScoreboardParser implements IScoreboardParser {
         }
     }
 
+    private static final int GATES_DURATION = 10;
+    private static final int PREP_DURATION = 6 * 60 + 30;
+    private static final int ENRAGE_DURATION = 6 * 60;
+    private static final int GAME_END_DURATION = 37 * 60 + 20;
+
     private void parseMWTimeLine(String gameTimeLine) {
         final Matcher gameEndMatcher = GAME_END_PATTERN.matcher(gameTimeLine);
         if (gameEndMatcher.find()) {
-            final int secLeft = Integer.parseInt(gameEndMatcher.group(1)) * 60 + Integer.parseInt(gameEndMatcher.group(2));
-            final boolean skip = Math.abs(prevGameEndTime - secLeft) > 10;
-            prevGameEndTime = secLeft;
-            if (skip) {
-                // this is here to fix the bug that fires events
-                // at 06:00 and 01:00 instead of 05:00 and 00:00
-                // It is caused by the client processing a new tick
-                // and parsing the scoreboard in between scoreboard
-                // packets
-                return;
-            }
-            if (!triggeredGameEndAlert && secLeft == 5 * 60) {
-                SoundUtil.playNotePling();
-                ChatUtil.addChatMessage(EnumChatFormatting.YELLOW + "Game ends in 5 minutes!");
-                triggeredGameEndAlert = true;
-            } else if (secLeft == 0) {
+            final int secLeft = getSecLeft(gameEndMatcher);
+            mwGameTime = GATES_DURATION + PREP_DURATION + ENRAGE_DURATION + GAME_END_DURATION - secLeft;
+            if (secLeft == 0) {
                 hasGameEnded = true;
             }
             return;
         }
-        final Matcher wallsFallMatcher = WALLS_FALL_PATTERN.matcher(gameTimeLine);
-        if (wallsFallMatcher.find()) {
-            isPrepPhase = true;
-            if (!triggeredWallsFallAlert && wallsFallMatcher.group(1).equals("00") && wallsFallMatcher.group(2).equals("10") && !Display.isActive()) {
-                AFKSoundWarning.playWallsFallSound();
-                triggeredWallsFallAlert = true;
-            }
+        final Matcher enrageOffMatcher = ENRAGE_OFF_PATTERN.matcher(gameTimeLine);
+        if (enrageOffMatcher.find()) {
+            final int secLeft = getSecLeft(enrageOffMatcher);
+            mwGameTime = GATES_DURATION + PREP_DURATION + ENRAGE_DURATION - secLeft;
             return;
         }
-        if (GATES_OPEN_PATTERN.matcher(gameTimeLine).find()) {
+        final Matcher wallsFallMatcher = WALLS_FALL_PATTERN.matcher(gameTimeLine);
+        if (wallsFallMatcher.find()) {
+            final int secLeft = getSecLeft(wallsFallMatcher);
+            mwGameTime = GATES_DURATION + PREP_DURATION - secLeft;
+            isPrepPhase = true;
+            return;
+        }
+        final Matcher gattesOpenMatcher = GATES_OPEN_PATTERN.matcher(gameTimeLine);
+        if (gattesOpenMatcher.find()) {
+            final int secLeft = getSecLeft(gattesOpenMatcher);
+            mwGameTime = GATES_DURATION - secLeft;
             isPrepPhase = true;
         }
+    }
+
+    private static int getSecLeft(Matcher matcher) {
+        return Integer.parseInt(matcher.group(1)) * 60 + Integer.parseInt(matcher.group(2));
     }
 
     private void parseWitherAndTeamsLines(List<String> cleanLines) {
@@ -322,6 +313,10 @@ public final class ScoreboardParser implements IScoreboardParser {
 
     int getYellowWitherHp() {
         return yellowWitherHp;
+    }
+
+    int getMwGameTime() {
+        return mwGameTime;
     }
 
 }

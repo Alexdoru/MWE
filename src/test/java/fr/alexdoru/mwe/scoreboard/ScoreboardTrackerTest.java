@@ -3,6 +3,7 @@ package fr.alexdoru.mwe.scoreboard;
 import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.api.events.MapEvent;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
+import fr.alexdoru.mwe.api.events.MegaWallsGameTimeEvent;
 import fr.alexdoru.mwe.api.events.WitherHealthDecayEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
@@ -309,6 +310,58 @@ public class ScoreboardTrackerTest {
         formattedLines.set(6, "§c[R] §fWither§c§c HP§7: §c600");
         this.onTick(title, formattedLines);
         assertPostedEventOfType(WitherHealthDecayEvent.class, 4);
+    }
+
+    @Test
+    public void gameTimeEventTest() {
+        final String title = "§6§lMEGA WALLS";
+        final List<String> formattedLines = new ArrayList<>(Arrays.asList(
+                "§708/31/26  §8M2§82C",
+                "Gates Open: §a§a00:06",
+                "",
+                "§6[Y] Wither§6 H§6P§7: §61,000",
+                "§1[B] §fWither§1§1 HP§7: §11,000",
+                "§2[G] §fWither§2§2 HP§7: §21,000",
+                "§c[R] §fWither§c§c HP§7: §c1,000",
+                "",
+                "§a0 §fKills §a0 Assists",
+                "§a0 §fF. Kills §a0 §fF. Assists",
+                "§60 §fCoins",
+                "§60 §fClass Points",
+                "",
+                "§ewww.hypixel.ne§et"
+        ));
+        this.onTick(title, formattedLines);
+
+        formattedLines.set(1, "Gates Open: §a§a00:05");
+        this.onTick(title, formattedLines);
+        assertPostedEventOfType(MegaWallsGameTimeEvent.class, e -> {
+            assertEquals(5, e.time);
+        });
+
+        formattedLines.set(1, "Walls Fall: §a§a1:01");
+        this.onTick(title, formattedLines);
+        formattedLines.set(1, "Walls Fall: §a§a1:00");
+        this.onTick(title, formattedLines);
+        assertPostedEventOfType(MegaWallsGameTimeEvent.class, e -> {
+            assertEquals(10 + 5 * 60 + 30, e.time);
+        });
+
+        formattedLines.set(1, "Enrage Off: §a§a1:01");
+        this.onTick(title, formattedLines);
+        formattedLines.set(1, "Enrage Off: §a§a1:00");
+        this.onTick(title, formattedLines);
+        assertPostedEventOfType(MegaWallsGameTimeEvent.class, e -> {
+            assertEquals(10 + 6 * 60 + 30 + 5 * 60, e.time);
+        });
+
+        formattedLines.set(1, "Game End: §a§a1:01");
+        this.onTick(title, formattedLines);
+        formattedLines.set(1, "Game End: §a§a1:00");
+        this.onTick(title, formattedLines);
+        assertPostedEventOfType(MegaWallsGameTimeEvent.class, e -> {
+            assertEquals(49 * 60, e.time);
+        });
     }
 
 }

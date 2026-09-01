@@ -4,6 +4,7 @@ import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.api.events.MapEvent;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent.Type;
+import fr.alexdoru.mwe.api.events.MegaWallsGameTimeEvent;
 import fr.alexdoru.mwe.api.events.WitherHealthDecayEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.profiler.Profiler;
@@ -27,6 +28,7 @@ public final class ScoreboardTracker {
     private int prevGreenHp;
     private int prevRedHp;
     private int prevYellowHp;
+    private int prevMWGameTime;
 
     public ScoreboardTracker() {
         this(MinecraftForge.EVENT_BUS);
@@ -35,13 +37,6 @@ public final class ScoreboardTracker {
     @VisibleForTesting
     ScoreboardTracker(EventBus eventBus) {
         this.eventBus = eventBus;
-    }
-
-    @SubscribeEvent
-    public void onGameStart(MegaWallsGameEvent event) {
-        if (event.type == Type.GAME_START) {
-            PARSER.onGameStart();
-        }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -92,6 +87,18 @@ public final class ScoreboardTracker {
                 this.eventBus.post(new WitherHealthDecayEvent(MWTeam.YELLOW, PARSER.getYellowWitherHp()));
             }
 
+            if (this.prevMWGameTime != PARSER.getMwGameTime()) {
+                final boolean skip = Math.abs(this.prevMWGameTime - PARSER.getMwGameTime()) > 10;
+                if (!skip) {
+                    // this is here to fix the bug that fires events
+                    // at 06:00 and 01:00 instead of 05:00 and 00:00
+                    // It is caused by the client processing a new tick
+                    // and parsing the scoreboard in between two
+                    // scoreboard update packets
+                    this.eventBus.post(new MegaWallsGameTimeEvent(PARSER.getMwGameTime()));
+                }
+            }
+
         } else {
 
             if (this.prevIsInMW) {
@@ -111,6 +118,7 @@ public final class ScoreboardTracker {
         this.prevGreenHp = PARSER.getGreenWitherHp();
         this.prevRedHp = PARSER.getRedWitherHp();
         this.prevYellowHp = PARSER.getYellowWitherHp();
+        this.prevMWGameTime = PARSER.getMwGameTime();
 
     }
 
