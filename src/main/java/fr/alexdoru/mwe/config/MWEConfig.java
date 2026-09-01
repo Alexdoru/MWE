@@ -1268,7 +1268,7 @@ public final class MWEConfig {
             name = "Ghosthand check",
             dependsOn = "Hacker Detector",
             comment = "Checks if the player can mine blocks through other players")
-    public static boolean enableGhosthandCheck = true;
+    public static boolean enableGhosthandCheck;
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Checks",
