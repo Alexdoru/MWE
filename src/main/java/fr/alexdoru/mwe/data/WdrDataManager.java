@@ -103,9 +103,9 @@ public final class WdrDataManager {
         }
         if (added || cheatsAdded) {
             if (PlayerDataManager.isRealPlayer(uuid)) {
-                PlayerDataManager.updatePlayerDataAndEntityData(uuid);
+                PlayerDataManager.refreshPlayerData(uuid);
             } else {
-                PlayerDataManager.updatePlayerDataAndEntityData(playername);
+                PlayerDataManager.refreshPlayerData(playername);
             }
         }
         dirty.set(true);
@@ -130,9 +130,9 @@ public final class WdrDataManager {
             cheatsAdded = wdr.addCheats(cheats);
         }
         if (PlayerDataManager.isRealPlayer(uuid)) {
-            PlayerDataManager.updatePlayerDataAndEntityData(uuid);
+            PlayerDataManager.refreshPlayerData(uuid);
         } else {
-            PlayerDataManager.updatePlayerDataAndEntityData(playername);
+            PlayerDataManager.refreshPlayerData(playername);
         }
         dirty.set(true);
         if (added) {
@@ -162,10 +162,10 @@ public final class WdrDataManager {
         WDR removed = null;
         if (uuid != null) {
             removed = uuidMap.remove(uuid);
-            PlayerDataManager.updatePlayerDataAndEntityData(uuid);
+            PlayerDataManager.refreshPlayerData(uuid);
         } else if (playername != null) {
             removed = nickMap.remove(playername);
-            PlayerDataManager.updatePlayerDataAndEntityData(playername);
+            PlayerDataManager.refreshPlayerData(playername);
         }
         if (removed != null) {
             MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.REMOVED, uuid, playername, removed));

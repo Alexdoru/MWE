@@ -35,7 +35,7 @@ public final class SquadHandler {
     public static void addPlayer(String playername, String friendlyName) {
         final String prevSquadname = squadmap.get(playername);
         squadmap.put(playername, friendlyName);
-        PlayerDataManager.updatePlayerDataAndEntityData(playername);
+        PlayerDataManager.refreshPlayerData(playername);
         if (prevSquadname == null) {
             MinecraftForge.EVENT_BUS.post(new SquadEvent(SquadEvent.Type.ADDED, playername));
         } else if (!prevSquadname.equals(friendlyName)) {
@@ -46,7 +46,7 @@ public final class SquadHandler {
     public static boolean removePlayer(String playername) {
         final boolean success = squadmap.remove(playername) != null;
         if (success) {
-            PlayerDataManager.updatePlayerDataAndEntityData(playername);
+            PlayerDataManager.refreshPlayerData(playername);
             MinecraftForge.EVENT_BUS.post(new SquadEvent(SquadEvent.Type.REMOVED, playername));
         }
         return success;

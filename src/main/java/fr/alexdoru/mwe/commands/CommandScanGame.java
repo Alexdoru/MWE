@@ -65,7 +65,7 @@ public class CommandScanGame extends MWECommandBase {
             ScangameData.clearScanGameData();
             if (ScoreboardTracker.isPreGameLobby()) ScangameData.clearRandomKits();
             ScangameData.setScanGameId(currentServerId);
-            PlayerDataManager.refreshAllNamesInWorld();
+            PlayerDataManager.refreshAllPlayerData();
         }
         int i = 0;
         final boolean isMythicHour = ScoreboardUtils.isMegaWallsMythicGame();
@@ -93,7 +93,7 @@ public class CommandScanGame extends MWECommandBase {
             } else if (scanResult.isLowLevelAccount() && doRandomKitCheck) {
                 scanResult.msg = getMythicRandomMsg(scanResult.networkLvl, scanResult.questamount);
                 addScanMessageToChat(netInfo, scanResult.msg);
-                PlayerDataManager.updatePlayerDataAndEntityData(netInfo);
+                PlayerDataManager.refreshPlayerData(netInfo);
             }
             return false;
         }
@@ -133,7 +133,7 @@ public class CommandScanGame extends MWECommandBase {
         if (imsg != null) {
             addScanMessageToChat(networkPlayerInfo, imsg);
             ScangameData.put(uuid, imsg);
-            PlayerDataManager.updatePlayerDataAndEntityData(networkPlayerInfo);
+            PlayerDataManager.refreshPlayerData(networkPlayerInfo);
         } else {
             ScangameData.put(uuid, (int) generalInfo.getNetworkLevel(), generalInfo.getCompletedQuests());
         }

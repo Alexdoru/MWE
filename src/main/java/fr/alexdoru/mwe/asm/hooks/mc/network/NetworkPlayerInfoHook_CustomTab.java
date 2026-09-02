@@ -9,7 +9,7 @@ import net.minecraft.util.IChatComponent;
 public class NetworkPlayerInfoHook_CustomTab {
 
     public static IChatComponent getDisplayName(GameProfile gameProfileIn) {
-        return PlayerDataManager.getDisplaynameForTablist(gameProfileIn);
+        return PlayerDataManager.initDisplaynameForTablist(gameProfileIn);
     }
 
     public static int getPlayersFinals(GameProfile gameProfileIn) {

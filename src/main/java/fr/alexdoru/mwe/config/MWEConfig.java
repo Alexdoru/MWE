@@ -1104,7 +1104,7 @@ public final class MWEConfig {
             "Show Warning Icons",
             "Warning Icons In Tab Only"})
     private static void refreshAllNames() {
-        PlayerDataManager.refreshAllNamesInWorld();
+        PlayerDataManager.refreshAllPlayerData();
     }
 
     @ConfigProperty(
@@ -1380,7 +1380,7 @@ public final class MWEConfig {
             "Squadmate color"
     })
     private static void refreshSquadName() {
-        PlayerDataManager.refreshAllNamesInWorld();
+        PlayerDataManager.refreshAllPlayerData();
     }
 
     @ConfigProperty(

@@ -84,11 +84,11 @@ public final class AliasDataManager {
         boolean added = false;
         if (id != null && PlayerDataManager.isRealPlayer(id)) {
             prevAlias = aliasMap.put(toKey(id), alias);
-            PlayerDataManager.updatePlayerDataAndEntityData(id);
+            PlayerDataManager.refreshPlayerData(id);
             added = true;
         } else if (playername != null) {
             prevAlias = aliasMap.put(playername, alias);
-            PlayerDataManager.updatePlayerDataAndEntityData(playername);
+            PlayerDataManager.refreshPlayerData(playername);
             added = true;
         }
         if (added) {
@@ -108,10 +108,10 @@ public final class AliasDataManager {
         String removed = null;
         if (id != null && PlayerDataManager.isRealPlayer(id)) {
             removed = aliasMap.remove(toKey(id));
-            PlayerDataManager.updatePlayerDataAndEntityData(id);
+            PlayerDataManager.refreshPlayerData(id);
         } else if (playername != null) {
             removed = aliasMap.remove(playername);
-            PlayerDataManager.updatePlayerDataAndEntityData(playername);
+            PlayerDataManager.refreshPlayerData(playername);
         }
         if (removed != null) {
             dirty.set(true);
