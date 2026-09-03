@@ -69,10 +69,10 @@ public final class PlayerDataManager {
     public static final String RED_WARNING_ICON = EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET;
     public static final String PINK_WARNING_ICON = EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET;
     public static final String SQUAD_ICON = EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] " + EnumChatFormatting.RESET;
-    private static final IChatComponent IWARNING_ICON = new ChatComponentText(WARNING_ICON);
-    private static final IChatComponent IRED_WARNING_ICON = new ChatComponentText(RED_WARNING_ICON);
-    private static final IChatComponent IPINK_WARNING_ICON = new ChatComponentText(PINK_WARNING_ICON);
-    private static final IChatComponent ISQUAD_ICON = new ChatComponentText(SQUAD_ICON);
+    private static final ChatComponentText IWARNING_ICON = new ChatComponentText(WARNING_ICON);
+    private static final ChatComponentText IRED_WARNING_ICON = new ChatComponentText(RED_WARNING_ICON);
+    private static final ChatComponentText IPINK_WARNING_ICON = new ChatComponentText(PINK_WARNING_ICON);
+    private static final ChatComponentText ISQUAD_ICON = new ChatComponentText(SQUAD_ICON);
     private static final List<IChatComponent> ALL_ICONS_LIST = Arrays.asList(IWARNING_ICON, IRED_WARNING_ICON, IPINK_WARNING_ICON, ISQUAD_ICON);
     private static final Set<UUID> warningMsgPrinted = new HashSet<>();
     private static final Map<UUID, PlayerData> PLAYER_DATA_CACHE = new HashMap<>();
@@ -190,35 +190,32 @@ public final class PlayerDataManager {
         final UUID id = gameProfile.getId();
         final String username = gameProfile.getName();
         final String squadname = SquadHandler.getSquadnameUnsafe(username);
-        String extraPrefix = "";
-        IChatComponent iExtraPrefix = null;
+        ChatComponentText extraPrefix = null;
 
         if (squadname != null) {
             if (MWEConfig.squadIconOnNames) {
-                extraPrefix = SQUAD_ICON;
-                iExtraPrefix = ISQUAD_ICON;
+                extraPrefix = ISQUAD_ICON;
             }
         } else {
             if (MWEConfig.warningIconsOnNames) {
                 final WDR wdr = WdrDataManager.getWdr(id, username);
                 if (wdr != null) {
                     if (wdr.hasRedIcon()) {
-                        extraPrefix = RED_WARNING_ICON;
-                        iExtraPrefix = IRED_WARNING_ICON;
+                        extraPrefix = IRED_WARNING_ICON;
                     } else if (wdr.hasYellowIcon()) {
-                        extraPrefix = WARNING_ICON;
-                        iExtraPrefix = IWARNING_ICON;
+                        extraPrefix = IWARNING_ICON;
                     }
                 } else if (ScangameData.doesPlayerFlag(id)) {
-                    extraPrefix = PINK_WARNING_ICON;
-                    iExtraPrefix = IPINK_WARNING_ICON;
+                    extraPrefix = IPINK_WARNING_ICON;
                 }
             }
         }
 
-        IChatComponent displayName = null;
+        String teamPrefix = "";
+        String teamSuffix = "";
         char teamColor = '\0';
         MWClass mwClass = null;
+
         final Minecraft mc = Minecraft.getMinecraft();
         if (mc.theWorld != null) {
             ScorePlayerTeam team = mc.theWorld.getScoreboard().getPlayersTeam(username);
@@ -226,46 +223,49 @@ public final class PlayerDataManager {
                 team = mc.theWorld.getScoreboard().getPlayersTeam(MWEConfig.hypixelNick);
             }
             if (team != null) {
-                final String teamprefix = team.getColorPrefix();
-                final String colorSuffix = team.getColorSuffix();
-                teamColor = StringUtil.getLastColorCharOf(teamprefix);
-                mwClass = MWClass.fromTeamTag(ScoreboardTracker.isMWReplay() ? teamprefix : colorSuffix);
-                final boolean isobf = teamprefix.contains("§k");
-                final boolean isNicked = PlayerDataManager.isNickedPlayer(id);
-                final String alias = AliasDataManager.getAlias(id, username);
-                if (iExtraPrefix != null || isobf && MWEConfig.deobfNamesInTab || squadname != null || isNicked && MWEConfig.showFakePlayersInTab || alias != null) {
-                    final StringBuilder sb = new StringBuilder();
-                    if (iExtraPrefix != null) {
-                        sb.append(extraPrefix);
-                    }
-                    if (isobf && MWEConfig.deobfNamesInTab) {
-                        sb.append(NameFormatter.deobfString(teamprefix));
-                    } else {
-                        sb.append(teamprefix);
-                    }
-                    if (squadname != null) {
-                        if (MWEConfig.coloredSquadmates && MWEConfig.coloredSquadTabname) {
-                            sb.append(MWEConfig.squadmateColor);
-                        }
-                        sb.append(squadname);
-                    } else {
-                        sb.append(username);
-                    }
-                    sb.append(colorSuffix);
-                    if (isNicked && MWEConfig.showFakePlayersInTab) {
-                        sb.append(EnumChatFormatting.DARK_RED).append(EnumChatFormatting.BOLD).append(" *");
-                    }
-                    if (alias != null) {
-                        sb.append(EnumChatFormatting.RESET).append(" (").append(EnumChatFormatting.GOLD).append(alias).append(EnumChatFormatting.RESET).append(")");
-                    }
-                    displayName = new ChatComponentText(sb.toString());
-                }
+                teamPrefix = team.getColorPrefix();
+                teamSuffix = team.getColorSuffix();
+                teamColor = StringUtil.getLastColorCharOf(teamPrefix);
+                mwClass = MWClass.fromTeamTag(ScoreboardTracker.isMWReplay() ? teamPrefix : teamSuffix);
             }
         }
 
-        final PlayerData playerData = new PlayerData(iExtraPrefix, displayName, teamColor, mwClass, squadname != null);
-        PLAYER_DATA_CACHE.put(id, playerData);
+        final boolean isobf = teamPrefix.contains("§k");
+        final boolean isNicked = PlayerDataManager.isNickedPlayer(id);
+        final String alias = AliasDataManager.getAlias(id, username);
 
+        IChatComponent displayName = null;
+
+        if (extraPrefix != null || isobf && MWEConfig.deobfNamesInTab || squadname != null || isNicked && MWEConfig.showFakePlayersInTab || alias != null) {
+            final StringBuilder sb = new StringBuilder();
+            if (extraPrefix != null) {
+                sb.append(extraPrefix.getUnformattedTextForChat());
+            }
+            if (isobf && MWEConfig.deobfNamesInTab) {
+                sb.append(NameFormatter.deobfString(teamPrefix));
+            } else {
+                sb.append(teamPrefix);
+            }
+            if (squadname != null) {
+                if (MWEConfig.coloredSquadmates && MWEConfig.coloredSquadTabname) {
+                    sb.append(MWEConfig.squadmateColor);
+                }
+                sb.append(squadname);
+            } else {
+                sb.append(username);
+            }
+            sb.append(teamSuffix);
+            if (isNicked && MWEConfig.showFakePlayersInTab) {
+                sb.append(EnumChatFormatting.DARK_RED).append(EnumChatFormatting.BOLD).append(" *");
+            }
+            if (alias != null) {
+                sb.append(EnumChatFormatting.RESET).append(" (").append(EnumChatFormatting.GOLD).append(alias).append(EnumChatFormatting.RESET).append(")");
+            }
+            displayName = new ChatComponentText(sb.toString());
+        }
+
+        final PlayerData playerData = new PlayerData(extraPrefix, displayName, teamColor, mwClass, squadname != null);
+        PLAYER_DATA_CACHE.put(id, playerData);
         return playerData;
     }
 
