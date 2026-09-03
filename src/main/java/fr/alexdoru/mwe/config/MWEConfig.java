@@ -8,7 +8,7 @@ import fr.alexdoru.mwe.chat.LocrawListener;
 import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.features.LeatherArmorManager;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
-import fr.alexdoru.mwe.nocheaters.WarningMessages;
+import fr.alexdoru.mwe.nocheaters.WarningMessageHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import net.minecraft.client.Minecraft;
@@ -1047,7 +1047,7 @@ public final class MWEConfig {
     @ConfigPropertyEvent(name = "Warning messages in chat")
     private static void onWarningMessageSetting() {
         if (MWEConfig.warningMessages) {
-            WarningMessages.printReportMessagesForWorld(false);
+            WarningMessageHandler.printReportMessagesForWorld();
         } else {
             ChatHandler.deleteAllWarningMessages();
         }

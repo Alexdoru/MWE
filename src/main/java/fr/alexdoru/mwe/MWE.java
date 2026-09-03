@@ -21,6 +21,7 @@ import fr.alexdoru.mwe.features.overlays.TeleporterCompassOverlay;
 import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
+import fr.alexdoru.mwe.nocheaters.WarningMessageHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.updater.MWEUpdater;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -125,6 +126,7 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(new ReplayBookmarksOverlay());
         MinecraftForge.EVENT_BUS.register(new TeleporterCompassOverlay());
         MinecraftForge.EVENT_BUS.register(new PlayerDataManager.EventHandler());
+        MinecraftForge.EVENT_BUS.register(new WarningMessageHandler());
         MinecraftForge.EVENT_BUS.register(new KeybindingListener());
         MinecraftForge.EVENT_BUS.register(new MegaWallsEndGameStats());
 

@@ -9,7 +9,7 @@ import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
 import fr.alexdoru.mwe.http.requests.HypixelPlayerData;
 import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
 import fr.alexdoru.mwe.nocheaters.WDR;
-import fr.alexdoru.mwe.nocheaters.WarningMessages;
+import fr.alexdoru.mwe.nocheaters.WarningMessageHandler;
 import fr.alexdoru.mwe.utils.DateUtil;
 import fr.alexdoru.mwe.utils.MapUtil;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
@@ -38,7 +38,10 @@ public class CommandNocheaters extends MWECommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length == 0) {
-            WarningMessages.printReportMessagesForWorld(true);
+            final int count = WarningMessageHandler.printReportMessagesForWorld();
+            if (count == 0) {
+                ChatUtil.addChatMessage(GREEN + "No reported player here !");
+            }
             return;
         }
         if (args[0].equalsIgnoreCase("reportlist")) {
@@ -158,17 +161,17 @@ class CreateReportLineTask implements Callable<IChatComponent> {
         try {
 
             if (uuid == null) {
-                return WarningMessages.getPlayernameWithHoverText(DARK_PURPLE + "[Nick] " + GOLD + nickname, null, nickname, nickname, wdr)
+                return WarningMessageHandler.getPlayernameWithHoverText(DARK_PURPLE + "[Nick] " + GOLD + nickname, null, nickname, nickname, wdr)
                         .appendText(GRAY + " reported : " + YELLOW + DateUtil.timeSince(wdr.getTimestamp()));
             } else if (!doStalk) {
                 final String name = MojangUUIDToName.getName(uuid);
-                return WarningMessages.getPlayernameWithHoverText(RED + name, null, name, uuid.toString(), wdr)
+                return WarningMessageHandler.getPlayernameWithHoverText(RED + name, null, name, uuid.toString(), wdr)
                         .appendText(GRAY + " reported : " + YELLOW + DateUtil.timeSince(wdr.getTimestamp()));
             }
 
             final HypixelPlayerData playerdata = new HypixelPlayerData(uuid);
             final LoginData logindata = new LoginData(playerdata.getPlayerData());
-            final IChatComponent imsg = WarningMessages.getPlayernameWithHoverText(logindata.getFormattedName(), null, logindata.getdisplayname(), uuid.toString(), wdr);
+            final IChatComponent imsg = WarningMessageHandler.getPlayernameWithHoverText(logindata.getFormattedName(), null, logindata.getdisplayname(), uuid.toString(), wdr);
 
             final IChatComponent ismgStatus = new ChatComponentText("");
 
