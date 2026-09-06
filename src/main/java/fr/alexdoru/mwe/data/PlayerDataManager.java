@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.data;
 
 import com.mojang.authlib.GameProfile;
+import fr.alexdoru.mwe.api.ITabNameModifier;
 import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
@@ -71,6 +72,12 @@ public final class PlayerDataManager {
     private static final ChatComponentText ISQUAD_ICON = new ChatComponentText(SQUAD_ICON);
     private static final List<IChatComponent> ALL_ICONS_LIST = Arrays.asList(IWARNING_ICON, IRED_WARNING_ICON, IPINK_WARNING_ICON, ISQUAD_ICON);
     private static final Map<UUID, PlayerData> PLAYER_DATA_CACHE = new HashMap<>();
+    private static final List<ITabNameModifier> REGISTERED_MODIFIERS = new ArrayList<>();
+
+    public static void registerTabNameModifier(ITabNameModifier tabNameModifier) {
+        REGISTERED_MODIFIERS.add(tabNameModifier);
+        REGISTERED_MODIFIERS.sort(Comparator.comparingInt(ITabNameModifier::getPriority));
+    }
 
     static void clearPlayerDataCache() {
         PLAYER_DATA_CACHE.clear();
@@ -78,6 +85,10 @@ public final class PlayerDataManager {
 
     static void removeFromDataCache(UUID uuid) {
         PLAYER_DATA_CACHE.remove(uuid);
+    }
+
+    static PlayerData getData(UUID uuid) {
+        return PLAYER_DATA_CACHE.get(uuid);
     }
 
     private static final Pattern MINECRAFT_NAME_PATTERN = Pattern.compile("[a-zA-Z0-9_]{1,16}");
@@ -139,16 +150,8 @@ public final class PlayerDataManager {
         LeatherArmorManager.onColorChange(player, oldColor, playerAccessor.getPlayerSpecialRenderColor());
 
         player.getPrefixes().removeAll(ALL_ICONS_LIST);
-        if (playerData.extraPrefix != null) {
-            if (playerData.extraPrefix == ISQUAD_ICON) {
-                if (!MWEConfig.squadIconTabOnly) {
-                    player.addPrefix(playerData.extraPrefix);
-                }
-            } else {
-                if (!MWEConfig.warningIconsTabOnly) {
-                    player.addPrefix(playerData.extraPrefix);
-                }
-            }
+        if (playerData.prefixIcon != null) {
+            player.addPrefix(playerData.prefixIcon);
         }
         player.refreshDisplayName();
 
@@ -174,23 +177,23 @@ public final class PlayerDataManager {
         final UUID id = gameProfile.getId();
         final String username = gameProfile.getName();
         final String squadname = SquadHandler.getSquadnameUnsafe(username);
-        ChatComponentText extraPrefix = null;
+        ChatComponentText prefixIcon = null;
 
         if (squadname != null) {
             if (MWEConfig.squadIconOnNames) {
-                extraPrefix = ISQUAD_ICON;
+                prefixIcon = ISQUAD_ICON;
             }
         } else {
             if (MWEConfig.warningIconsOnNames) {
                 final WDR wdr = WdrDataManager.getWdr(id, username);
                 if (wdr != null) {
                     if (wdr.hasRedIcon()) {
-                        extraPrefix = IRED_WARNING_ICON;
+                        prefixIcon = IRED_WARNING_ICON;
                     } else if (wdr.hasYellowIcon()) {
-                        extraPrefix = IWARNING_ICON;
+                        prefixIcon = IWARNING_ICON;
                     }
                 } else if (ScangameData.doesPlayerFlag(id)) {
-                    extraPrefix = IPINK_WARNING_ICON;
+                    prefixIcon = IPINK_WARNING_ICON;
                 }
             }
         }
@@ -218,37 +221,69 @@ public final class PlayerDataManager {
         final boolean isNicked = PlayerDataManager.isNickedPlayer(id);
         final String alias = AliasDataManager.getAlias(id, username);
 
-        IChatComponent displayName = null;
-
-        if (extraPrefix != null || isobf && MWEConfig.deobfNamesInTab || squadname != null || isNicked && MWEConfig.showFakePlayersInTab || alias != null) {
-            final StringBuilder sb = new StringBuilder();
-            if (extraPrefix != null) {
-                sb.append(extraPrefix.getUnformattedTextForChat());
+        final boolean modifyTabName = prefixIcon != null || isobf && MWEConfig.deobfNamesInTab || squadname != null || isNicked && MWEConfig.showFakePlayersInTab || alias != null;
+        boolean externalModifer = false;
+        if (!modifyTabName && !REGISTERED_MODIFIERS.isEmpty()) {
+            //noinspection ForLoopReplaceableByForEach
+            for (int i = 0; i < REGISTERED_MODIFIERS.size(); i++) {
+                final ITabNameModifier modifier = REGISTERED_MODIFIERS.get(i);
+                externalModifer = modifier.shouldModifyName(gameProfile);
+                if (externalModifer) break;
             }
+        }
+
+        final PlayerData playerData;
+
+        if (modifyTabName || externalModifer) {
+
+            final StringBuilder prefixBuilder = new StringBuilder();
+            if (prefixIcon != null) {
+                prefixBuilder.append(prefixIcon.getUnformattedTextForChat());
+            }
+
+            final StringBuilder nameBuilder = new StringBuilder();
             if (isobf && MWEConfig.deobfNamesInTab) {
-                sb.append(NameFormatter.deobfString(teamPrefix));
+                nameBuilder.append(NameFormatter.deobfString(teamPrefix));
             } else {
-                sb.append(teamPrefix);
+                nameBuilder.append(teamPrefix);
             }
             if (squadname != null) {
                 if (MWEConfig.coloredSquadmates && MWEConfig.coloredSquadTabname) {
-                    sb.append(MWEConfig.squadmateColor);
+                    nameBuilder.append(MWEConfig.squadmateColor);
                 }
-                sb.append(squadname);
+                nameBuilder.append(squadname);
             } else {
-                sb.append(username);
+                nameBuilder.append(username);
             }
-            sb.append(teamSuffix);
+            nameBuilder.append(teamSuffix);
+
+            final StringBuilder suffixBuilder = new StringBuilder();
+            if (externalModifer) {
+                //noinspection ForLoopReplaceableByForEach
+                for (int i = 0; i < REGISTERED_MODIFIERS.size(); i++) {
+                    REGISTERED_MODIFIERS.get(i).modifyTabname(gameProfile, prefixBuilder, suffixBuilder);
+                }
+            }
+
+            final String prefix = prefixBuilder.toString();
+            final String middleName = nameBuilder.toString();
+            final String suffix = suffixBuilder.toString();
+            final StringBuilder sb = new StringBuilder().append(prefix).append(middleName).append(suffix);
             if (isNicked && MWEConfig.showFakePlayersInTab) {
                 sb.append(EnumChatFormatting.DARK_RED).append(EnumChatFormatting.BOLD).append(" *");
             }
             if (alias != null) {
                 sb.append(EnumChatFormatting.RESET).append(" (").append(EnumChatFormatting.GOLD).append(alias).append(EnumChatFormatting.RESET).append(")");
             }
-            displayName = new ChatComponentText(sb.toString());
+            final IChatComponent displayName = new ChatComponentText(sb.toString());
+            playerData = new PlayerData(displayName, prefixIcon, prefix, middleName, suffix, alias, teamColor, mwClass, squadname != null);
+
+        } else {
+
+            playerData = new PlayerData(teamColor, mwClass);
+
         }
 
-        final PlayerData playerData = new PlayerData(extraPrefix, displayName, teamColor, mwClass, squadname != null);
         PLAYER_DATA_CACHE.put(id, playerData);
         return playerData;
     }
@@ -289,17 +324,29 @@ public final class PlayerDataManager {
         return uuid.version() == 4;
     }
 
-    private static class PlayerData {
+    static class PlayerData {
 
-        public final IChatComponent extraPrefix;
         public final IChatComponent displayName;
+        public final IChatComponent prefixIcon;
+        public final String prefix;
+        public final String middleName;
+        public final String suffix;
+        public final String alias;
         public final char teamColor;
         public final MWClass mwClass;
         public final boolean isSquadmate;
 
-        public PlayerData(IChatComponent extraPrefix, IChatComponent displayNameIn, char teamColor, MWClass mwClass, boolean isSquadmate) {
-            this.extraPrefix = extraPrefix;
+        public PlayerData(char teamColor, MWClass mwClass) {
+            this(null, null, null, null, null, null, teamColor, mwClass, false);
+        }
+
+        public PlayerData(IChatComponent displayNameIn, IChatComponent prefixIcon, String prefix, String middleName, String suffix, String alias, char teamColor, MWClass mwClass, boolean isSquadmate) {
             this.displayName = displayNameIn;
+            this.prefixIcon = prefixIcon;
+            this.prefix = prefix;
+            this.middleName = middleName;
+            this.suffix = suffix;
+            this.alias = alias;
             this.teamColor = teamColor;
             this.mwClass = mwClass;
             this.isSquadmate = isSquadmate;

@@ -9,6 +9,7 @@ import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
 import fr.alexdoru.mwe.data.AliasDataManager;
+import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.PartyDetection;
@@ -298,6 +299,17 @@ public final class MWEApi {
          */
         public static IPlayerUUID getPlayerUUID(String playername) throws ApiException {
             return MojangNameToUUID.getPlayerUUID(playername);
+        }
+
+    }
+
+    public static final class Names {
+
+        private Names() {}
+
+        public static void registerTabNameModifier(@NotNull ITabNameModifier modifier) {
+            Objects.requireNonNull(modifier);
+            PlayerDataManager.registerTabNameModifier(modifier);
         }
 
     }
