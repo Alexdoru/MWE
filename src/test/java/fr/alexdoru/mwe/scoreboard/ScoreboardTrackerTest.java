@@ -75,6 +75,16 @@ public class ScoreboardTrackerTest {
         }
     }
 
+    private <T extends Event> void assertNotPostedEventOfType(Class<T> expectedType, Consumer<T> test) {
+        for (final Event event : this.eventBus.postedEvents) {
+            if (expectedType == event.getClass()) {
+                //noinspection unchecked
+                test.accept(((T) event));
+                fail("Unexpected event has been posted");
+            }
+        }
+    }
+
     @Test
     public void mapEventTest() {
         final String title = "§e§lREPLAY";
@@ -362,6 +372,34 @@ public class ScoreboardTrackerTest {
         assertPostedEventOfType(MegaWallsGameTimeEvent.class, e -> {
             assertEquals(49 * 60, e.time);
         });
+    }
+
+    @Test
+    public void gameEndEventBugTest() {
+        final String title = "§6§lMEGA WALLS";
+        final List<String> formattedLines = new ArrayList<>(Arrays.asList(
+                "§708/31/26  §8M2§82C",
+                "Game End: §a§a1:01",
+                "",
+                "§6[Y] §fPlayers§7: §63",
+                "§1[B] §fPlayers§7: §19",
+                "§7Green eliminat§7ed!",
+                "§7Red eliminated§7!",
+                "",
+                "§a6 §fKills §a8 Assists",
+                "§a0 §fF. Kills §a0 §fF. Assists",
+                "§615,509 §fCoins",
+                "§616 §fClass Points",
+                "",
+                "§ewww.hypixel.ne§et"
+        ));
+        this.onTick(title, formattedLines);
+        formattedLines.set(1, "Game End: §a§a0:00");
+        this.onTick(title, formattedLines);
+        assertNotPostedEventOfType(MegaWallsGameEvent.class, e -> assertEquals(MegaWallsGameEvent.Type.GAME_END, e.type));
+        formattedLines.set(1, "Game End: §a§a1:00");
+        this.onTick(title, formattedLines);
+        assertNotPostedEventOfType(MegaWallsGameEvent.class, e -> assertEquals(MegaWallsGameEvent.Type.GAME_END, e.type));
     }
 
 }

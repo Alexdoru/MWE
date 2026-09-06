@@ -106,7 +106,7 @@ public final class ScoreboardParser implements IScoreboardParser {
         if (cleanLines.size() >= 10) {
             if (MW_INGAME_PATTERN.matcher(cleanLines.get(9)).find()) {
                 isInMwGame = true;
-                this.parseMWTimeLine(cleanLines.get(1));
+                mwGameTime = this.parseMWTimeLine(cleanLines.get(1));
                 this.parseWitherAndTeamsLines(cleanLines);
             } else {
                 for (final String line : cleanLines) {
@@ -124,35 +124,37 @@ public final class ScoreboardParser implements IScoreboardParser {
     private static final int ENRAGE_DURATION = 6 * 60;
     private static final int GAME_END_DURATION = 37 * 60 + 20;
 
-    private void parseMWTimeLine(String gameTimeLine) {
+    private int prevGameEndTime;
+
+    private int parseMWTimeLine(String gameTimeLine) {
         final Matcher gameEndMatcher = GAME_END_PATTERN.matcher(gameTimeLine);
         if (gameEndMatcher.find()) {
             final int secLeft = getSecLeft(gameEndMatcher);
-            mwGameTime = GATES_DURATION + PREP_DURATION + ENRAGE_DURATION + GAME_END_DURATION - secLeft;
-            if (secLeft == 0) {
+            final boolean skip = Math.abs(prevGameEndTime - secLeft) > 10;
+            prevGameEndTime = secLeft;
+            if (!skip && secLeft == 0) {
                 hasGameEnded = true;
             }
-            return;
+            return GATES_DURATION + PREP_DURATION + ENRAGE_DURATION + GAME_END_DURATION - secLeft;
         }
         final Matcher enrageOffMatcher = ENRAGE_OFF_PATTERN.matcher(gameTimeLine);
         if (enrageOffMatcher.find()) {
             final int secLeft = getSecLeft(enrageOffMatcher);
-            mwGameTime = GATES_DURATION + PREP_DURATION + ENRAGE_DURATION - secLeft;
-            return;
+            return GATES_DURATION + PREP_DURATION + ENRAGE_DURATION - secLeft;
         }
         final Matcher wallsFallMatcher = WALLS_FALL_PATTERN.matcher(gameTimeLine);
         if (wallsFallMatcher.find()) {
             final int secLeft = getSecLeft(wallsFallMatcher);
-            mwGameTime = GATES_DURATION + PREP_DURATION - secLeft;
             isPrepPhase = true;
-            return;
+            return GATES_DURATION + PREP_DURATION - secLeft;
         }
         final Matcher gattesOpenMatcher = GATES_OPEN_PATTERN.matcher(gameTimeLine);
         if (gattesOpenMatcher.find()) {
             final int secLeft = getSecLeft(gattesOpenMatcher);
-            mwGameTime = GATES_DURATION - secLeft;
             isPrepPhase = true;
+            return GATES_DURATION - secLeft;
         }
+        return 0;
     }
 
     private static int getSecLeft(Matcher matcher) {
@@ -228,10 +230,6 @@ public final class ScoreboardParser implements IScoreboardParser {
         return isInMwGame && this.getWitherCount() == 0;
     }
 
-    public boolean hasGameEnded() {
-        return hasGameEnded;
-    }
-
     @Override
     public boolean isPrepPhase() {
         return isPrepPhase;
@@ -297,6 +295,10 @@ public final class ScoreboardParser implements IScoreboardParser {
 
     public int getLastWitherHealth() {
         return lastWitherHealth;
+    }
+
+    boolean hasGameEnded() {
+        return hasGameEnded;
     }
 
     int getBlueWitherHp() {
