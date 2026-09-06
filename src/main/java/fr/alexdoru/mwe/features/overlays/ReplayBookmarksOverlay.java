@@ -3,6 +3,7 @@ package fr.alexdoru.mwe.features.overlays;
 import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.api.events.ContainerSlotRenderEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.config.SkinStyle;
 import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.ItemStackUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
@@ -39,28 +40,32 @@ public final class ReplayBookmarksOverlay extends InventoryOverlay {
         if (!this.active || event.itemStack == null || !(event.guiContainer instanceof GuiChest) || event.slot.inventory instanceof InventoryPlayer) {
             return;
         }
-        if (!this.isPaper(event.itemStack)) return;
+        final boolean isPaper = this.isPaper(event.itemStack);
+        final boolean isSkull = this.isPlayerSkull(event.itemStack);
+        if (!isPaper && !isSkull) return;
         final String clearStackName = StringUtil.removeFormattingCodes(event.itemStack.getDisplayName());
         final int x = event.slot.xDisplayPosition;
         final int y = event.slot.yDisplayPosition;
-        if ("Final Kill".equals(clearStackName) || "Final Death".equals(clearStackName)) {
+        if (isSkull && ("Final Kill".equals(clearStackName) || "Final Death".equals(clearStackName))) {
             final NetworkPlayerInfo netInfo = this.getPlayerInfo(event.itemStack);
             if (netInfo != null) {
-                if (parser.isMWReplay()) {
-                    final MWSkin skin = MWSkin.fromResourceLocation(netInfo.getLocationSkin());
-                    if (skin != null) {
-                        this.renderSkin(x, y, skin, MWEConfig.replayBookmarksSkinStyle);
+                if (MWEConfig.replayBookmarksSkinStyle != SkinStyle.SKULL) {
+                    if (parser.isMWReplay()) {
+                        final MWSkin skin = MWSkin.fromResourceLocation(netInfo.getLocationSkin());
+                        if (skin != null) {
+                            this.renderSkin(x, y, skin, MWEConfig.replayBookmarksSkinStyle);
+                            event.setCanceled(true);
+                        }
+                    } else {
+                        this.renderNetInfo(x, y, netInfo, MWEConfig.replayBookmarksSkinStyle);
                         event.setCanceled(true);
                     }
-                } else {
-                    this.renderNetInfo(x, y, netInfo, MWEConfig.replayBookmarksSkinStyle);
-                    event.setCanceled(true);
                 }
                 this.renderTeamIndicator(x, y, netInfo, MWEConfig.replayBookmarksPlayerTeamStyle);
             }
             return;
         }
-        if (parser.isMWReplay()) {
+        if (isPaper && parser.isMWReplay()) {
             final Matcher witherMatcher = WITHER_PATTERN.matcher(clearStackName);
             if (witherMatcher.matches()) {
                 this.renderItemStack(x, y, WITHER_SKULL);
@@ -73,15 +78,17 @@ public final class ReplayBookmarksOverlay extends InventoryOverlay {
             }
             return;
         }
-        final Matcher bedMatcher = BED_PATTERN.matcher(clearStackName);
-        if (bedMatcher.matches()) {
-            this.renderItemStack(x, y, BED);
-            final String bedTeam = bedMatcher.group(1);
-            final int color = this.getTeamColor(bedTeam);
-            if (color != 0) {
-                this.renderTeamIndicator(x, y, color, MWEConfig.replayBookmarksEventTeamStyle);
+        if (isSkull) {
+            final Matcher bedMatcher = BED_PATTERN.matcher(clearStackName);
+            if (bedMatcher.matches()) {
+                this.renderItemStack(x, y, BED);
+                final String bedTeam = bedMatcher.group(1);
+                final int color = this.getTeamColor(bedTeam);
+                if (color != 0) {
+                    this.renderTeamIndicator(x, y, color, MWEConfig.replayBookmarksEventTeamStyle);
+                }
+                event.setCanceled(true);
             }
-            event.setCanceled(true);
         }
     }
 
