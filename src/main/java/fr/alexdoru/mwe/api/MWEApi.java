@@ -9,6 +9,7 @@ import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.chat.SkinChatHead;
 import fr.alexdoru.mwe.data.AliasDataManager;
+import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.features.FinalKillCounter;
@@ -23,6 +24,7 @@ import fr.alexdoru.mwe.utils.DelayedTask;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.util.ChatComponentText;
@@ -310,6 +312,41 @@ public final class MWEApi {
         public static void registerTabNameModifier(@NotNull ITabNameModifier modifier) {
             Objects.requireNonNull(modifier);
             PlayerDataManager.registerTabNameModifier(modifier);
+        }
+
+        /**
+         * Returns the player's name exactly as it is shown in the tablist
+         */
+        public static String getTablistName(@NotNull NetworkPlayerInfo netInfo) {
+            return NameFormatter.getTablistName(netInfo);
+        }
+
+        /**
+         * Returns the player's name formatted according to the vanilla team
+         */
+        public static String getVanillaName(@NotNull NetworkPlayerInfo netInfo) {
+            return NameFormatter.getVanillaName(netInfo);
+        }
+
+        /**
+         * Returns the name formatted accorded to teams with eventually the squadname
+         */
+        public static String getFormattedNameSimple(String playername) {
+            return NameFormatter.getFormattedNameSimple(playername);
+        }
+
+        /**
+         * Returns the name formatted accorded to teams with eventually the squadname
+         */
+        public static String getFormattedNameSimple(@NotNull NetworkPlayerInfo netInfo) {
+            return NameFormatter.getFormattedNameSimple(netInfo);
+        }
+
+        /**
+         * Returns the name of the player with additional prefix and suffix icons and the alias
+         */
+        public static String getFormattedName(@NotNull NetworkPlayerInfo netInfo, boolean showPrefix, boolean showSuffix, boolean showAlias) {
+            return NameFormatter.getFormattedName(netInfo, showPrefix, showSuffix, showAlias);
         }
 
     }

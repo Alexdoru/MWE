@@ -157,7 +157,7 @@ public class ReportSuggestionHandler {
 
     private static String getReportTextWithFormattedName(String fmsg, String reportText, String reportedPlayer) {
         if (ScoreboardTracker.isInMwGame()) {
-            final String newReportText = EnumChatFormatting.DARK_RED + reportText.replace(reportedPlayer, NameFormatter.getFormattedNameWithoutIcons(reportedPlayer) + EnumChatFormatting.DARK_RED);
+            final String newReportText = EnumChatFormatting.DARK_RED + reportText.replace(reportedPlayer, NameFormatter.getFormattedNameSimple(reportedPlayer) + EnumChatFormatting.DARK_RED);
             return StringUtil.replaceTargetWith(fmsg, reportText, newReportText);
         }
         return StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED);

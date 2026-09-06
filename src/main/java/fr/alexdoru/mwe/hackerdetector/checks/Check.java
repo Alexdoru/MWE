@@ -76,7 +76,7 @@ public abstract class Check implements ICheck {
         }
         final String flagKey = playername + (MWEConfig.showFlagMessageType ? cheatType : this.getCheatName());
         final String msg = ChatUtil.getTagHackerDetector()
-                + NameFormatter.getFormattedNameWithoutIcons(player.getName())
+                + NameFormatter.getFormattedNameSimple(player.getName())
                 + EnumChatFormatting.YELLOW + " flags "
                 + EnumChatFormatting.RED + (MWEConfig.showFlagMessageType ? cheatType : this.getCheatName());
         if (MWEConfig.oneFlagMessagePerGame) {
@@ -121,7 +121,7 @@ public abstract class Check implements ICheck {
     }
 
     protected void fail(EntityPlayer player, String extramsg) {
-        ChatUtil.debug(NameFormatter.getFormattedNameWithoutIcons(player.getName())
+        ChatUtil.debug(NameFormatter.getFormattedNameSimple(player.getName())
                 + EnumChatFormatting.GRAY + " failed "
                 + EnumChatFormatting.RED + this.getCheatName()
                 + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")")

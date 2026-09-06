@@ -243,7 +243,7 @@ public class CommandScanGame extends MWECommandBase {
     }
 
     private static IChatComponent getFormattedNameWithPlanckeClickEvent(NetworkPlayerInfo netInfo) {
-        final String formattedName = NameFormatter.getFormattedNameWithoutIcons(netInfo);
+        final String formattedName = NameFormatter.getFormattedNameSimple(netInfo);
         return new ChatComponentText(formattedName)
                 .setChatStyle(new ChatStyle()
                         .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(EnumChatFormatting.YELLOW + "Click to see the mega walls stats of that player")))

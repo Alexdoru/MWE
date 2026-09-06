@@ -323,7 +323,7 @@ public class ChatListener {
                 final Matcher assistMatcher = ASSIST_PATTERN.matcher(msg);
                 if (assistMatcher.find()) {
                     final String playername = assistMatcher.group(1);
-                    fmsg = fmsg.replace(playername, NameFormatter.getFormattedNameWithoutIcons(playername));
+                    fmsg = fmsg.replace(playername, NameFormatter.getFormattedNameSimple(playername));
                     changed = true;
                 }
             }

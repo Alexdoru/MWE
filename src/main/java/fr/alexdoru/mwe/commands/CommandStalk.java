@@ -156,10 +156,10 @@ public class CommandStalk extends MWECommandBase {
             for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
                 if (PlayerDataManager.isNickedPlayer(netInfo.getGameProfile().getId()) && skin.hasSkinEquipped(netInfo)) {
                     flag = true;
-                    nickMsg.appendSibling(new ChatComponentText(RESET + NameFormatter.getFormattedNameWithoutIcons(netInfo) + " ")
+                    nickMsg.appendSibling(new ChatComponentText(RESET + NameFormatter.getFormattedNameSimple(netInfo) + " ")
                             .setChatStyle(new ChatStyle()
                                     .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ad " + netInfo.getGameProfile().getName() + " " + loginData.getdisplayname()))
-                                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(YELLOW + "Click to add an allias " + RESET + NameFormatter.getFormattedNameWithoutIcons(netInfo) + GOLD + " -> " + RESET + loginData.getFormattedName())))));
+                                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(YELLOW + "Click to add an allias " + RESET + NameFormatter.getFormattedNameSimple(netInfo) + GOLD + " -> " + RESET + loginData.getFormattedName())))));
                 }
             }
             if (flag) {

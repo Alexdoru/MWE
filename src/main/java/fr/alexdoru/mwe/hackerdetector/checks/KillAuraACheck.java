@@ -178,9 +178,9 @@ public class KillAuraACheck extends Check {
             }
             if (MWEConfig.debugKillauraFlags && ScoreboardTracker.isReplayMode() && (b > 2 || p > 2)) {
                 final StringBuilder sb = new StringBuilder();
-                sb.append(NameFormatter.getFormattedNameWithoutIcons(player.getName()));
+                sb.append(NameFormatter.getFormattedNameSimple(player.getName()));
                 sb.append(EnumChatFormatting.RESET).append(" attacked ");
-                sb.append(NameFormatter.getFormattedNameWithoutIcons(data.attackInfo.targetName));
+                sb.append(NameFormatter.getFormattedNameSimple(data.attackInfo.targetName));
                 sb.append(EnumChatFormatting.RESET).append(" through ");
                 if (b > 2) {
                     sb.append(b / 10d).append("m of blocks");

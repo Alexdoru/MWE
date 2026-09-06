@@ -13,10 +13,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
-import net.minecraft.scoreboard.Team;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
@@ -25,6 +23,7 @@ import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -55,13 +54,17 @@ public final class WarningMessageHandler {
     public void onPlayerJoin(EntityJoinWorldEvent event) {
         if (MWEConfig.warningMessages && event.entity.worldObj.isRemote && event.entity instanceof EntityOtherPlayerMP) {
             try {
-                final EntityPlayer player = (EntityPlayer) event.entity;
-                if (!msgPrinted.contains(player.getUniqueID())) {
-                    final WDR wdr = WdrDataManager.getWdr(player.getUniqueID(), player.getName());
+                final EntityOtherPlayerMP player = (EntityOtherPlayerMP) event.entity;
+                final UUID uuid = player.getUniqueID();
+                if (!msgPrinted.contains(uuid)) {
+                    final WDR wdr = WdrDataManager.getWdr(uuid, player.getName());
                     if (wdr != null) {
-                        msgPrinted.add(player.getUniqueID());
+                        msgPrinted.add(uuid);
                         ChatHandler.deleteWarningFromChat(player.getName());
-                        printWarningMessage(player.getUniqueID(), player.getTeam(), player.getName(), wdr);
+                        final NetworkPlayerInfo netInfo = Minecraft.getMinecraft().getNetHandler().getPlayerInfo(uuid);
+                        if (netInfo != null) {
+                            printWarningMessage(netInfo, wdr);
+                        }
                     }
                 }
             } catch (Exception e) {
@@ -82,25 +85,24 @@ public final class WarningMessageHandler {
                 continue;
             }
             count++;
-            printWarningMessage(uuid, netInfo.getPlayerTeam(), playerName, wdr);
+            printWarningMessage(netInfo, wdr);
         }
         return count;
     }
 
-    private static void printWarningMessage(UUID uuid, Team team, String playername, WDR wdr) {
+    private static void printWarningMessage(NetworkPlayerInfo netInfo, @NotNull WDR wdr) {
+        final UUID uuid = netInfo.getGameProfile().getId();
+        final String playername = netInfo.getGameProfile().getName();
         final String wdrmapKey = PlayerDataManager.isRealPlayer(uuid) ? uuid.toString() : playername;
         final IChatComponent imsg = new WarningChatComponent(playername, RED + "Warning : ")
-                .appendSibling(getPlayernameWithHoverText(null, team, playername, wdrmapKey, wdr))
+                .appendSibling(getPlayernameWithHoverText(NameFormatter.getFormattedNameSimple(netInfo), playername, wdrmapKey, wdr))
                 .appendText(GRAY + " joined, Cheats :")
                 .appendSibling(wdr.getFormattedCheats());
         ChatUtil.addSkinToComponent(imsg, playername);
         ChatUtil.addChatMessage(imsg);
     }
 
-    public static IChatComponent getPlayernameWithHoverText(String formattedName, Team team, String playername, String wdrmapKey, WDR wdr) {
-        if (formattedName == null) {
-            formattedName = NameFormatter.getFormattedNameWithoutIcons(team, playername);
-        }
+    public static IChatComponent getPlayernameWithHoverText(String formattedName, String playername, String wdrmapKey, WDR wdr) {
         return new ChatComponentText(formattedName).setChatStyle(new ChatStyle()
                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unwdr " + wdrmapKey + " " + playername))
                 .setChatHoverEvent(getWDRHoverEvent(formattedName, wdr)));

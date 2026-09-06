@@ -62,14 +62,10 @@ public final class PlayerDataManager {
 
     private PlayerDataManager() {}
 
-    public static final String WARNING_ICON = EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET;
-    public static final String RED_WARNING_ICON = EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET;
-    public static final String PINK_WARNING_ICON = EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET;
-    public static final String SQUAD_ICON = EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] " + EnumChatFormatting.RESET;
-    private static final ChatComponentText IWARNING_ICON = new ChatComponentText(WARNING_ICON);
-    private static final ChatComponentText IRED_WARNING_ICON = new ChatComponentText(RED_WARNING_ICON);
-    private static final ChatComponentText IPINK_WARNING_ICON = new ChatComponentText(PINK_WARNING_ICON);
-    private static final ChatComponentText ISQUAD_ICON = new ChatComponentText(SQUAD_ICON);
+    private static final ChatComponentText IWARNING_ICON = new ChatComponentText(EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET);
+    private static final ChatComponentText IRED_WARNING_ICON = new ChatComponentText(EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET);
+    private static final ChatComponentText IPINK_WARNING_ICON = new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET);
+    private static final ChatComponentText ISQUAD_ICON = new ChatComponentText(EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] " + EnumChatFormatting.RESET);
     private static final List<IChatComponent> ALL_ICONS_LIST = Arrays.asList(IWARNING_ICON, IRED_WARNING_ICON, IPINK_WARNING_ICON, ISQUAD_ICON);
     private static final Map<UUID, PlayerData> PLAYER_DATA_CACHE = new HashMap<>();
     private static final List<ITabNameModifier> REGISTERED_MODIFIERS = new ArrayList<>();
@@ -270,10 +266,10 @@ public final class PlayerDataManager {
             final String suffix = suffixBuilder.toString();
             final StringBuilder sb = new StringBuilder().append(prefix).append(middleName).append(suffix);
             if (isNicked && MWEConfig.showFakePlayersInTab) {
-                sb.append(EnumChatFormatting.DARK_RED).append(EnumChatFormatting.BOLD).append(" *");
+                sb.append(EnumChatFormatting.DARK_RED).append(EnumChatFormatting.BOLD).append(" *").append(EnumChatFormatting.RESET);
             }
             if (alias != null) {
-                sb.append(EnumChatFormatting.RESET).append(" (").append(EnumChatFormatting.GOLD).append(alias).append(EnumChatFormatting.RESET).append(")");
+                sb.append(" (").append(EnumChatFormatting.GOLD).append(alias).append(EnumChatFormatting.RESET).append(")");
             }
             final IChatComponent displayName = new ChatComponentText(sb.toString());
             playerData = new PlayerData(displayName, prefixIcon, prefix, middleName, suffix, alias, teamColor, mwClass, squadname != null);

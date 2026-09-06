@@ -5,7 +5,6 @@ import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
-import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.ColorUtil;
@@ -106,8 +105,7 @@ public class SquadHealthHUD extends AbstractRenderer {
     }
 
     private String getPlayerName(NetworkPlayerInfo netInfo) {
-        final String name = NameFormatter.getTablistName(netInfo);
-        return name.startsWith(PlayerDataManager.SQUAD_ICON) ? name.substring(PlayerDataManager.SQUAD_ICON.length()) : name;
+        return NameFormatter.getFormattedName(netInfo, false, true, false);
     }
 
     @Override
