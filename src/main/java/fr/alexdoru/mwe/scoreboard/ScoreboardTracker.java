@@ -6,6 +6,7 @@ import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent.Type;
 import fr.alexdoru.mwe.api.events.MegaWallsGameTimeEvent;
 import fr.alexdoru.mwe.api.events.WitherHealthDecayEvent;
+import fr.alexdoru.mwe.chat.LocrawListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.profiler.Profiler;
 import net.minecraftforge.common.MinecraftForge;
@@ -62,6 +63,7 @@ public final class ScoreboardTracker {
 
             if (!this.prevIsInMW) {
                 this.eventBus.post(new MegaWallsGameEvent(Type.CONNECT));
+                LocrawListener.setMegaWallsMap();
             }
 
             if (PARSER.getWitherCount() == 3 && prevAmountWitherAlive > 3) {
