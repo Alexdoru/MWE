@@ -349,6 +349,27 @@ public final class MWEApi {
             return NameFormatter.getFormattedName(netInfo, showPrefix, showSuffix, showAlias);
         }
 
+        /**
+         * Refreshes the data of all players
+         */
+        public static void refreshAllPlayerData() {
+            PlayerDataManager.refreshAllPlayerData();
+        }
+
+        /**
+         * Refreshes the data of one player
+         */
+        public static void refreshPlayerData(String playername) {
+            PlayerDataManager.refreshPlayerData(playername);
+        }
+
+        /**
+         * Refreshes the data of one player
+         */
+        public static void refreshPlayerData(NetworkPlayerInfo netInfo) {
+            PlayerDataManager.refreshPlayerData(netInfo);
+        }
+
     }
 
     public static final class Partys {
