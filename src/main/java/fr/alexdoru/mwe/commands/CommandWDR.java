@@ -128,10 +128,12 @@ public class CommandWDR extends MWECommandBase {
                 final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
                 String name = null;
                 if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                    final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(playerID.getId()));
-                    if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
-                        name = loginData.getFormattedName();
-                    }
+                    try {
+                        final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(playerID.getId()));
+                        if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
+                            name = loginData.getFormattedName();
+                        }
+                    } catch (ApiException ignored) {}
                 }
                 final String formattedName = name;
                 mc.addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), formattedName, cheats));

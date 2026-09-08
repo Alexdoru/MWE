@@ -212,14 +212,18 @@ public class CommandAddAlias extends MWECommandBase {
                 final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
                 String name = null;
                 if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                    final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(playerID.getId()));
-                    if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
-                        name = loginData.getFormattedName();
-                    }
+                    try {
+                        final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(playerID.getId()));
+                        if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
+                            name = loginData.getFormattedName();
+                        }
+                    } catch (ApiException ignored) {}
                 }
                 final String formattedName = name;
                 mc.addScheduledTask(() -> this.addAlias(playerID.getId(), playerID.getName(), alias, formattedName));
+                return;
             } catch (ApiException ignored) {}
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Couldn't find player named " + playername);
         });
     }
 
