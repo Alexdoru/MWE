@@ -266,10 +266,10 @@ public final class PlayerDataManager {
             final String suffix = suffixBuilder.toString();
             final StringBuilder sb = new StringBuilder().append(prefix).append(middleName).append(suffix);
             if (isNicked && MWEConfig.showFakePlayersInTab) {
-                sb.append(EnumChatFormatting.DARK_RED).append(EnumChatFormatting.BOLD).append(" *").append(EnumChatFormatting.RESET);
+                sb.append(EnumChatFormatting.DARK_RED).append(EnumChatFormatting.BOLD).append(" *");
             }
             if (alias != null) {
-                sb.append(" (").append(EnumChatFormatting.GOLD).append(alias).append(EnumChatFormatting.RESET).append(")");
+                sb.append(EnumChatFormatting.RESET).append(" (").append(EnumChatFormatting.GOLD).append(alias).append(EnumChatFormatting.RESET).append(")");
             }
             final IChatComponent displayName = new ChatComponentText(sb.toString());
             playerData = new PlayerData(displayName, prefixIcon, prefix, middleName, suffix, alias, teamColor, mwClass, squadname != null);

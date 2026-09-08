@@ -91,10 +91,10 @@ public final class NameFormatter {
             sb.append(data.suffix);
         }
         if (MWEConfig.showFakePlayersInTab && PlayerDataManager.isNickedPlayer(netInfo.getGameProfile().getId())) {
-            sb.append(EnumChatFormatting.DARK_RED).append(EnumChatFormatting.BOLD).append(" *").append(EnumChatFormatting.RESET);
+            sb.append(EnumChatFormatting.DARK_RED).append(EnumChatFormatting.BOLD).append(" *");
         }
         if (showAlias && data.alias != null) {
-            sb.append(" (").append(EnumChatFormatting.GOLD).append(data.alias).append(EnumChatFormatting.RESET).append(")");
+            sb.append(EnumChatFormatting.RESET).append(" (").append(EnumChatFormatting.GOLD).append(data.alias).append(EnumChatFormatting.RESET).append(")");
         }
         return sb.toString();
     }
