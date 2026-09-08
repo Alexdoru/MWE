@@ -59,8 +59,9 @@ public class LocrawListener {
     }
 
     private static void sendLocraw(LocrawAction action) {
-        if (Minecraft.getMinecraft().thePlayer != null) {
-            Minecraft.getMinecraft().thePlayer.sendChatMessage("/locraw");
+        final Minecraft mc = Minecraft.getMinecraft();
+        if (mc != null && mc.thePlayer != null) {
+            mc.thePlayer.sendChatMessage("/locraw");
             MinecraftForge.EVENT_BUS.register(new LocrawListener(action));
         }
     }
