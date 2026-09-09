@@ -1342,12 +1342,6 @@ public final class MWEConfig {
     }
 
     @ConfigProperty(
-            category = SQUAD, subCategory = "HUD",
-            name = "Squad HUD",
-            comment = "Displays a mini-tablist with your squadmates")
-    public static final RendererPosition squadHUDPosition = new RendererPosition(true, 0.25d, 0d);
-
-    @ConfigProperty(
             category = SQUAD, subCategory = "General",
             name = "Colored squadmates",
             comment = "Your squadmates will have a fixed color for nametag, hitbox color and hurt color")
@@ -1388,6 +1382,20 @@ public final class MWEConfig {
                     + " using§e /squad add <name> as <custom name>§7,"
                     + " it will keep the first letter of their real name so that you can track them on the compass")
     public static boolean keepFirstLetterSquadnames = true;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "HUD",
+            name = "Squad HUD",
+            comment = "Displays a mini-tablist with your squadmates")
+    public static final RendererPosition squadHUDPosition = new RendererPosition(true, 0.25d, 0d);
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "HUD",
+            name = "Squad HUD background aplha",
+            dependsOn = "Squad HUD",
+            comment = "Change the alpha of the background",
+            sliderMax = 255)
+    public static int squadHUDBackgroundAlpha = 0x20;
 
     @ConfigProperty(
             category = SQUAD, subCategory = "Icons",
