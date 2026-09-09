@@ -281,6 +281,13 @@ public final class MWEApi {
             MWE.INSTANCE().getConfigHandler().getRendererManager().registerHUDRenderer(renderer);
         }
 
+        /**
+         * Adds an extra renderer to the squad HUD
+         */
+        public static void registerSquadHUDExtraRenderer(@NotNull ISquadInfoRenderer renderer) {
+            MWE.INSTANCE().getMweRenderers().squadHUD.registerExtraRenderer(renderer);
+        }
+
     }
 
     public static final class MojangApi {

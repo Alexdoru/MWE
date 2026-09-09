@@ -12,6 +12,7 @@ public final class MWERenderers {
     public final KillCooldownHUD killCooldownHUD;
     public final LastWitherHPHUD lastWitherHPHUD;
     public final PhoenixBondHUD phoenixBondHUD;
+    public final SquadHealthHUD squadHUD;
     public final WarcryHUD warcryHUD;
 
     public MWERenderers(IRendererManager rendererManager) {
@@ -30,7 +31,7 @@ public final class MWERenderers {
         rendererManager.registerHUDRenderer(phoenixBondHUD = new PhoenixBondHUD());
         rendererManager.registerHUDRenderer(new PotionHUD());
         rendererManager.registerHUDRenderer(new SpeedHUD());
-        rendererManager.registerHUDRenderer(new SquadHealthHUD());
+        rendererManager.registerHUDRenderer(squadHUD = new SquadHealthHUD());
         rendererManager.registerHUDRenderer(warcryHUD = new WarcryHUD());
     }
 

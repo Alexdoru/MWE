@@ -23,6 +23,10 @@ public final class NetInfoOrdering {
                 .result();
     });
 
+    public static void vanillaSorting(List<NetworkPlayerInfo> list) {
+        list.sort(VANILLA_ORDERING);
+    }
+
     public static List<NetworkPlayerInfo> vanillaSortingCopyOf(Collection<NetworkPlayerInfo> list) {
         return VANILLA_ORDERING.sortedCopy(list);
     }
