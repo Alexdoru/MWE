@@ -205,7 +205,11 @@ public class SquadHealthHUD extends AbstractRenderer {
     }
 
     private String getPlayerName(NetworkPlayerInfo netInfo) {
-        return NameFormatter.getFormattedName(netInfo, false, true, false);
+        if (MWEConfig.squadHUDshowPrefix || MWEConfig.squadHUDshowSuffix || MWEConfig.squadHUDshowAlias) {
+            return NameFormatter.getFormattedName(netInfo, MWEConfig.squadHUDshowPrefix, MWEConfig.squadHUDshowSuffix, MWEConfig.squadHUDshowAlias);
+        } else {
+            return NameFormatter.getFormattedNameSimple(netInfo);
+        }
     }
 
 }

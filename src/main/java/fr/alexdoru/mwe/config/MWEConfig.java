@@ -1398,6 +1398,27 @@ public final class MWEConfig {
     public static int squadHUDBackgroundAlpha = 0x20;
 
     @ConfigProperty(
+            category = SQUAD, subCategory = "HUD",
+            name = "Squad HUD show prefix",
+            dependsOn = "Squad HUD",
+            comment = "Shows the extra prefix on names in the squad HUD")
+    public static boolean squadHUDshowPrefix;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "HUD",
+            name = "Squad HUD show suffix",
+            dependsOn = "Squad HUD",
+            comment = "Shows the extra suffix on names in the squad HUD")
+    public static boolean squadHUDshowSuffix;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "HUD",
+            name = "Squad HUD show alias",
+            dependsOn = "Squad HUD",
+            comment = "Shows the alias on names in the squad HUD")
+    public static boolean squadHUDshowAlias;
+
+    @ConfigProperty(
             category = SQUAD, subCategory = "Icons",
             name = "Show Squad Icons",
             comment = "Displays a squad icon for squad members on their nametag and in the tablist\n"
