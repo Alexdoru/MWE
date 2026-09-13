@@ -268,7 +268,7 @@ public final class PlayerDataManager {
             if (isNicked && MWEConfig.showFakePlayersInTab) {
                 sb.append(EnumChatFormatting.DARK_RED).append(EnumChatFormatting.BOLD).append(" *");
             }
-            if (alias != null) {
+            if (alias != null && MWEConfig.showAliasInTab) {
                 sb.append(EnumChatFormatting.RESET).append(" (").append(EnumChatFormatting.GOLD).append(alias).append(EnumChatFormatting.RESET).append(")");
             }
             final IChatComponent displayName = new ChatComponentText(sb.toString());

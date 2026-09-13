@@ -341,6 +341,12 @@ public final class MWEConfig {
     public static boolean showFakePlayersInTab;
 
     @ConfigProperty(
+            category = VANILLA, subCategory = "Tablist",
+            name = "Show alias in tab",
+            comment = "Shows the alias of players next to their name in the tablist")
+    public static boolean showAliasInTab = true;
+
+    @ConfigProperty(
             category = VANILLA, subCategory = "Bugfix",
             name = "Fix actionbar text overlap",
             comment = "Prevents the actionbar text from overlapping with the armor bar if you have more than 2 rows of health")
@@ -1090,6 +1096,7 @@ public final class MWEConfig {
     public static boolean warningIconsOnNames = true;
 
     @ConfigPropertyEvent(name = {
+            "Show alias in tab",
             "Show fake players in tab",
             "De-obfuscate names in tab",
             "Show Squad Icons",
