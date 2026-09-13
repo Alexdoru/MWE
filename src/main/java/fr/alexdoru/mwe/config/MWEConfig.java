@@ -104,6 +104,9 @@ public final class MWEConfig {
             comment = "Overlays change how certain inventories are rendered")
     private static final String INVENTORY_OVERLAYS = "Inventory Overlays";
 
+    @ConfigCategory(displayname = "§5Name Formatting")
+    private static final String NAME_FORMATTING = "Name Formatting";
+
     @ConfigProperty(
             category = "April Fools",
             name = "April Fun",
@@ -327,24 +330,6 @@ public final class MWEConfig {
             comment = "Spacing between columns in the tablist, in pixels (Vanilla 5)",
             sliderMin = 1, sliderMax = 20)
     public static int tablistColumnSpacing = 1;
-
-    @ConfigProperty(
-            category = VANILLA, subCategory = "Tablist",
-            name = "De-obfuscate names in tab",
-            comment = "Removes obfuscation in names in the tablist")
-    public static boolean deobfNamesInTab;
-
-    @ConfigProperty(
-            category = VANILLA, subCategory = "Tablist",
-            name = "Show fake players in tab",
-            comment = "Puts a red star next to fake player names")
-    public static boolean showFakePlayersInTab;
-
-    @ConfigProperty(
-            category = VANILLA, subCategory = "Tablist",
-            name = "Show alias in tab",
-            comment = "Shows the alias of players next to their name in the tablist")
-    public static boolean showAliasInTab = true;
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Bugfix",
@@ -991,7 +976,8 @@ public final class MWEConfig {
             "Compact mode",
             "Compact HUD in Sidebar",
             "Players mode",
-            "Player amount"})
+            "Player amount"
+    })
     private static void onFKSHUDSetting() {
         MWE.INSTANCE().getMweRenderers().fkCounterHUD.updateDisplayText();
     }
@@ -1343,6 +1329,42 @@ public final class MWEConfig {
             comment = "Hides the Toggle Sprint HUD from Orange's Marshall Simple Mod")
     public static boolean hideToggleSprintText;
 
+    @ConfigProperty(
+            category = NAME_FORMATTING, subCategory = "Squad HUD",
+            name = "Squad HUD show prefix",
+            comment = "Shows the extra prefix on names in the squad HUD")
+    public static boolean squadHUDshowPrefix;
+
+    @ConfigProperty(
+            category = NAME_FORMATTING, subCategory = "Squad HUD",
+            name = "Squad HUD show suffix",
+            comment = "Shows the extra suffix on names in the squad HUD")
+    public static boolean squadHUDshowSuffix;
+
+    @ConfigProperty(
+            category = NAME_FORMATTING, subCategory = "Squad HUD",
+            name = "Squad HUD show alias",
+            comment = "Shows the alias on names in the squad HUD")
+    public static boolean squadHUDshowAlias;
+
+    @ConfigProperty(
+            category = NAME_FORMATTING, subCategory = "Tablist",
+            name = "Show alias in tab",
+            comment = "Shows the alias of players next to their name in the tablist")
+    public static boolean showAliasInTab = true;
+
+    @ConfigProperty(
+            category = NAME_FORMATTING, subCategory = "Tablist",
+            name = "De-obfuscate names in tab",
+            comment = "Removes obfuscation from names in the tablist")
+    public static boolean deobfNamesInTab;
+
+    @ConfigProperty(
+            category = NAME_FORMATTING, subCategory = "Tablist",
+            name = "Show fake players in tab",
+            comment = "Puts a red star next to names of fake players")
+    public static boolean showFakePlayersInTab;
+
     @ConfigPropertyHideOverride(name = "Hide Orange's Toggle Sprint HUD")
     private static boolean hideOrangeToggleSprintSetting() {
         return !Loader.isModLoaded("orangesimplemod");
@@ -1403,27 +1425,6 @@ public final class MWEConfig {
             comment = "Change the alpha of the background",
             sliderMax = 255)
     public static int squadHUDBackgroundAlpha = 0x20;
-
-    @ConfigProperty(
-            category = SQUAD, subCategory = "HUD",
-            name = "Squad HUD show prefix",
-            dependsOn = "Squad HUD",
-            comment = "Shows the extra prefix on names in the squad HUD")
-    public static boolean squadHUDshowPrefix;
-
-    @ConfigProperty(
-            category = SQUAD, subCategory = "HUD",
-            name = "Squad HUD show suffix",
-            dependsOn = "Squad HUD",
-            comment = "Shows the extra suffix on names in the squad HUD")
-    public static boolean squadHUDshowSuffix;
-
-    @ConfigProperty(
-            category = SQUAD, subCategory = "HUD",
-            name = "Squad HUD show alias",
-            dependsOn = "Squad HUD",
-            comment = "Shows the alias on names in the squad HUD")
-    public static boolean squadHUDshowAlias;
 
     @ConfigProperty(
             category = SQUAD, subCategory = "Icons",
