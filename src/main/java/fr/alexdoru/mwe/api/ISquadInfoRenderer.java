@@ -6,7 +6,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Allows rendering arbitrary extra information next to each player line of the Squad Health HUD
+ * Implementing this interface and registering it via
+ * {@link fr.alexdoru.mwe.api.MWEApi.Hud#registerSquadHUDExtraRenderer(ISquadInfoRenderer)}
+ * allows you to render arbitrary extra information next to each player line of the Squad Health HUD.
  */
 public interface ISquadInfoRenderer {
 
