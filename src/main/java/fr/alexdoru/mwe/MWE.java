@@ -91,6 +91,7 @@ public class MWE {
         this.configHandler = ConfigLib.newConfigHandler(configFile, "MWE", MWE.version);
         this.configHandler.setConfigTitleRenderer(new MWEConfigTitle());
         this.configHandler.registerConfig(MWEConfig.class);
+        PlayerDataManager.assignIcons();
         if (MWEConfig.checkForUpdate && !Boolean.getBoolean("mwe.disableUpdater")) {
             new MWEUpdater(event.getSourceFile()).start();
         }

@@ -62,13 +62,21 @@ public final class PlayerDataManager {
 
     private PlayerDataManager() {}
 
-    private static final ChatComponentText IWARNING_ICON = new ChatComponentText(EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET);
-    private static final ChatComponentText IRED_WARNING_ICON = new ChatComponentText(EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET);
-    private static final ChatComponentText IPINK_WARNING_ICON = new ChatComponentText(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD + "⚠ " + EnumChatFormatting.RESET);
-    private static final ChatComponentText ISQUAD_ICON = new ChatComponentText(EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "] " + EnumChatFormatting.RESET);
-    private static final List<IChatComponent> ALL_ICONS_LIST = Arrays.asList(IWARNING_ICON, IRED_WARNING_ICON, IPINK_WARNING_ICON, ISQUAD_ICON);
+    private static ChatComponentText IWARNING_ICON;
+    private static ChatComponentText IRED_WARNING_ICON;
+    private static ChatComponentText IPINK_WARNING_ICON;
+    private static ChatComponentText ISQUAD_ICON;
+    private static final List<IChatComponent> ALL_ICONS_LIST = new ArrayList<>();
     private static final Map<UUID, PlayerData> PLAYER_DATA_CACHE = new HashMap<>();
     private static final List<ITabNameModifier> REGISTERED_MODIFIERS = new ArrayList<>();
+
+    public static void assignIcons() {
+        IWARNING_ICON = new ChatComponentText(MWEConfig.yellowWarningIcon + " " + EnumChatFormatting.RESET);
+        IRED_WARNING_ICON = new ChatComponentText(MWEConfig.redWarningIcon + " " + EnumChatFormatting.RESET);
+        IPINK_WARNING_ICON = new ChatComponentText(MWEConfig.scangameWarningIcon + " " + EnumChatFormatting.RESET);
+        ISQUAD_ICON = new ChatComponentText(MWEConfig.squadIcon + " " + EnumChatFormatting.RESET);
+        ALL_ICONS_LIST.addAll(Arrays.asList(IWARNING_ICON, IRED_WARNING_ICON, IPINK_WARNING_ICON, ISQUAD_ICON));
+    }
 
     public static void registerTabNameModifier(ITabNameModifier tabNameModifier) {
         REGISTERED_MODIFIERS.add(tabNameModifier);

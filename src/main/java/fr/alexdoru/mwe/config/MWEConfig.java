@@ -1447,4 +1447,28 @@ public final class MWEConfig {
             comment = "Updates the mod automatically upon closing your game")
     public static boolean automaticUpdate = true;
 
+    @ConfigProperty(
+            category = "Icons",
+            name = "Red Warning Icon",
+            hidden = true)
+    public static String redWarningIcon = EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.BOLD + "⚠";
+
+    @ConfigProperty(
+            category = "Icons",
+            name = "Yellow Warning Icon",
+            hidden = true)
+    public static String yellowWarningIcon = EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.BOLD + "⚠";
+
+    @ConfigProperty(
+            category = "Icons",
+            name = "Scangame Warning Icon",
+            hidden = true)
+    public static String scangameWarningIcon = EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD + "⚠";
+
+    @ConfigProperty(
+            category = "Icons",
+            name = "Squad Warning Icon",
+            hidden = true)
+    public static String squadIcon = EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "]";
+
 }
