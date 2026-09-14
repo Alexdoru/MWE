@@ -17,7 +17,6 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.versioning.ComparableVersion;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,28 +27,29 @@ import java.util.List;
 @SuppressWarnings("unused")
 public final class MWEConfig {
 
-    @ConfigLoadedEvent
-    private static void onConfigLoad() {
-        MWEConfig.aprilFools = true;
+    @ConfigLoadingEvent
+    private static void onConfigLoad(Configuration config) {
+        config.get("April Fools", "April Fun", aprilFools).setToDefault();
     }
 
     @ConfigUpdatedEvent
     private static void onModUpdate(Configuration config, String savedVersion, String version) {
-        boolean changed = false;
-        if (flagMessagePrefix.equals(EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "NoCheaters" + EnumChatFormatting.GOLD + "]")) {
-            flagMessagePrefix = EnumChatFormatting.DARK_PURPLE + "[Hack]";
-            changed = true;
-        }
-        if (new ComparableVersion(version).compareTo(new ComparableVersion("4.5")) > 0) {
-            if (config.hasKey("vanilla", "Hide ping tablist")) {
-                final Property oldHidePing = config.get("vanilla", "Hide ping tablist", false);
-                MWEConfig.smartHidePingTablist = oldHidePing.getBoolean();
-                config.getCategory("vanilla").remove("Hide ping tablist");
-                changed = true;
+        if (ConfigMigrationHelper.isVersionLowerThan(savedVersion, "4.1")) {
+            final Property flagMsgProp = config.get(HACKER_DETECTOR, "Flag message prefix", flagMessagePrefix);
+            if (flagMsgProp.getString().equals(EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GRAY + "NoCheaters" + EnumChatFormatting.GOLD + "]")) {
+                flagMsgProp.setToDefault();
             }
         }
-        if (changed) {
-            MWE.INSTANCE().getConfigHandler().saveConfig();
+        if (ConfigMigrationHelper.isVersionLowerThan(savedVersion, "4.6")) {
+            if (ConfigMigrationHelper.hasKey(config, VANILLA, "Hide ping tablist")) {
+                final Property oldHidePing = config.get(VANILLA, "Hide ping tablist", smartHidePingTablist);
+                MWEConfig.smartHidePingTablist = oldHidePing.getBoolean();
+                ConfigMigrationHelper.remove(config, VANILLA, "Hide ping tablist");
+            }
+        }
+        if (ConfigMigrationHelper.isVersionLowerThan(savedVersion, "4.8")) {
+            ConfigMigrationHelper.migrateConfig(config, VANILLA, NAME_FORMATTING, "De-obfuscate names in tab");
+            ConfigMigrationHelper.migrateConfig(config, VANILLA, NAME_FORMATTING, "Show fake players in tab");
         }
     }
 

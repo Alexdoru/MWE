@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Methods annotated with this will be executed when the config version changes.
+ * Methods annotated with this will be executed when the config version changes,
+ * it fires before any field are read/assigned.
  * The signature of the method must match the example, the handler method will receive
  * the config object, the version the config was saved with and the current version.
  * <p>

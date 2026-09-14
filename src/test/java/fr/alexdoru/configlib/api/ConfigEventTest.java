@@ -60,8 +60,8 @@ public class ConfigEventTest {
 
         static AtomicBoolean testBool = new AtomicBoolean(false);
 
-        @ConfigLoadedEvent
-        public static void onLoad() {
+        @ConfigLoadingEvent
+        public static void onLoad(Configuration config) {
             testBool.set(true);
         }
 
