@@ -83,6 +83,7 @@ minecraft {
 }
 
 runClient {
+    outputs.upToDateWhen { false }
     jvmArgs += [
             "-Dmwe.asm.strict=true"
             //, "-Dmwe.asm.classdump=true"
