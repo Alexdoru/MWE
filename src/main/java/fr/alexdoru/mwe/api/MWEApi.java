@@ -15,7 +15,6 @@ import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.PartyDetection;
 import fr.alexdoru.mwe.features.SquadHandler;
-import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
@@ -298,7 +297,7 @@ public final class MWEApi {
          * Queries the mojang api to get the name of a player from their UUID,
          * this should not be called from the main thread to avoid blocking
          */
-        public static String getPlayerName(UUID id) throws ApiException {
+        public static String getPlayerName(UUID id) throws Exception {
             return MojangUUIDToName.getName(id);
         }
 
@@ -306,7 +305,7 @@ public final class MWEApi {
          * Queries the mojang api to get the UUID of a player from their name,
          * this should not be called from the main thread to avoid blocking
          */
-        public static IPlayerUUID getPlayerUUID(String playername) throws ApiException {
+        public static IPlayerUUID getPlayerUUID(String playername) throws Exception {
             return MojangNameToUUID.getPlayerUUID(playername);
         }
 
