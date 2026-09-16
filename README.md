@@ -117,7 +117,7 @@ Note : OrangeMarshall's Vanilla Enhancements is not compatible with this mod, th
 Add players to your squad using the `/squad` command, your squadmates will appear with a pink nametag and a distinctive icon in front of their name. You can use `/squad add <name> as <alias>` to change the name of a squadmate.
 
 - **Squad Icons** - Toggle the icons in front of nametags for your squadmates
-- **Squad HUD** - A mini tablist that will display only members of your squad
+- **Squad HUD** - A mini tablist that will display members of your squad and optionally N teamates
 - **Colored Squadmates** - Your squadmates will render with a fixed color that you can choose for their nametag, hitbox, hurt color
 - **Nick hider** - Display to yourself your own name when you are nicked in a squad
 - **Keep First Letter** - Keeps the first letter of a squadmate when giving them an alias, so you can track them on the compass
