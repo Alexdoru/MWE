@@ -284,7 +284,7 @@ public final class PlayerDataManager {
 
         } else {
 
-            playerData = new PlayerData(teamColor, mwClass);
+            playerData = new PlayerData(null, null, "", teamPrefix + username + teamSuffix, "", null, teamColor, mwClass, false);
 
         }
 
@@ -339,10 +339,6 @@ public final class PlayerDataManager {
         public final char teamColor;
         public final MWClass mwClass;
         public final boolean isSquadmate;
-
-        public PlayerData(char teamColor, MWClass mwClass) {
-            this(null, null, null, null, null, null, teamColor, mwClass, false);
-        }
 
         public PlayerData(IChatComponent displayNameIn, IChatComponent prefixIcon, String prefix, String middleName, String suffix, String alias, char teamColor, MWClass mwClass, boolean isSquadmate) {
             this.displayName = displayNameIn;
