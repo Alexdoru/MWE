@@ -3,13 +3,14 @@ package fr.alexdoru.mwe.gui.huds;
 import fr.alexdoru.mwe.api.ISquadInfoRenderer;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.config.MWEConfig;
+import fr.alexdoru.mwe.config.TablistSorting;
 import fr.alexdoru.mwe.data.NameFormatter;
-import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.NetInfoOrdering;
 import fr.alexdoru.mwe.utils.RenderHelper;
+import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -19,15 +20,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraft.scoreboard.IScoreObjectiveCriteria;
 import net.minecraft.scoreboard.ScoreObjective;
+import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.WorldSettings;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class SquadHealthHUD extends AbstractRenderer {
 
@@ -40,6 +42,7 @@ public class SquadHealthHUD extends AbstractRenderer {
 
     public SquadHealthHUD() {
         super(MWEConfig.squadHUDPosition);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     public void registerExtraRenderer(@NotNull ISquadInfoRenderer renderer) {
@@ -48,29 +51,34 @@ public class SquadHealthHUD extends AbstractRenderer {
         maxExtraWidths = new int[extraInfoRenderers.size()];
     }
 
+    @SubscribeEvent
+    public void onTick(TickEvent.ClientTickEvent event) {
+        if (event.phase == TickEvent.Phase.START) {
+            netInfoList.clear();
+            playerList.clear();
+            playerNamesList.clear();
+            final Minecraft mc = Minecraft.getMinecraft();
+            if (mc.theWorld != null && mc.thePlayer != null && this.isEnabled(0)) {
+                final Scoreboard scoreboard = mc.theWorld.getScoreboard();
+                final ScoreObjective scoreobjective = scoreboard.getObjectiveInDisplaySlot(0);
+                if (!mc.isIntegratedServerRunning() || scoreobjective != null) {
+                    this.populateRenderList(mc, scoreboard, scoreobjective);
+                }
+            }
+        }
+    }
+
     @Override
     public void render(ScaledResolution resolution) {
         final Minecraft mc = Minecraft.getMinecraft();
         final Scoreboard scoreboard = mc.theWorld.getScoreboard();
         final ScoreObjective scoreobjective = scoreboard.getObjectiveInDisplaySlot(0);
-        if (mc.isIntegratedServerRunning() && scoreobjective == null) {
-            return;
-        }
-        try {
-            this.populateRenderList();
-            if (netInfoList.size() < 2) {
-                return;
-            }
-            NetInfoOrdering.vanillaSorting(netInfoList);
-            render(resolution, mc, scoreobjective, scoreboard);
-        } finally {
-            netInfoList.clear();
-            playerList.clear();
-            playerNamesList.clear();
+        if (!netInfoList.isEmpty() && (!mc.isIntegratedServerRunning() || scoreobjective != null)) {
+            this.render(resolution, mc, scoreboard, scoreobjective);
         }
     }
 
-    private void render(ScaledResolution resolution, Minecraft mc, ScoreObjective scoreobjective, Scoreboard scoreboard) {
+    private void render(ScaledResolution resolution, Minecraft mc, Scoreboard scoreboard, ScoreObjective scoreobjective) {
         final int listSize = netInfoList.size();
         final boolean showScores = scoreobjective != null && scoreobjective.getRenderType() != IScoreObjectiveCriteria.EnumRenderType.HEARTS;
         final boolean showFinals = this.parser.isInMwGame();
@@ -80,10 +88,8 @@ public class SquadHealthHUD extends AbstractRenderer {
         Arrays.fill(maxExtraWidths, 0);
         for (int i = 0; i < listSize; i++) {
             final NetworkPlayerInfo netInfo = netInfoList.get(i);
-            final EntityPlayer entityPlayer = PlayerDataManager.getPlayerEntityByUUID(netInfo.getGameProfile().getId());
-            playerList.add(entityPlayer);
-            final String playerName = this.getPlayerName(netInfo);
-            playerNamesList.add(playerName);
+            final EntityPlayer entityPlayer = playerList.get(i);
+            final String playerName = playerNamesList.get(i);
             maxNameWidth = Math.max(maxNameWidth, mc.fontRendererObj.getStringWidth(playerName));
             if (showScores) {
                 maxScoreWidth = Math.max(maxScoreWidth, mc.fontRendererObj.getStringWidth(String.valueOf(scoreboard.getValueFromObjective(netInfo.getGameProfile().getName(), scoreobjective).getScorePoints())));
@@ -192,24 +198,108 @@ public class SquadHealthHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return this.rendererPosition.isEnabled();
+        return this.rendererPosition.isEnabled() && (!SquadHandler.getSquad().isEmpty() || MWEConfig.squadHUDAutoShowTeamates);
     }
 
-    private void populateRenderList() {
-        for (final String squadmateName : SquadHandler.getSquad().keySet()) {
-            final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(squadmateName);
-            if (netInfo != null) {
+    private void populateRenderList(Minecraft mc, Scoreboard scoreboard, ScoreObjective scoreobjective) {
+
+        final String ownName = mc.thePlayer.getGameProfile().getName();
+        final char ownTeam = this.getPlayersTeam(scoreboard, ownName);
+        final boolean addTeamates = ownTeam != 0 && MWEConfig.squadHUDAutoShowTeamates && MWEConfig.squadHUDAutoShowTeamatesCount > 0;
+        final int distSqLimit = MWEConfig.squadHUDAutoShowTeamatesDistanceLimit * MWEConfig.squadHUDAutoShowTeamatesDistanceLimit;
+
+        final List<NetworkPlayerInfo> candidates = new ArrayList<>();
+        for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
+            final String name = netInfo.getGameProfile().getName();
+            if (ownName.equals(name)) continue;
+            if (SquadHandler.isSquadmate(name)) {
                 netInfoList.add(netInfo);
+                continue;
+            }
+            if (addTeamates && ownTeam == getPlayersTeam(scoreboard, name)) {
+                if (MWEConfig.squadHUDAutoShowTeamatesLimitDistance) {
+                    final EntityPlayer entity = PlayerDataManager.getPlayerEntityByUUID(netInfo.getGameProfile().getId());
+                    if (entity == null || mc.thePlayer.getDistanceSqToEntity(entity) > distSqLimit) {
+                        continue;
+                    }
+                }
+                candidates.add(netInfo);
             }
         }
+
+        if (!candidates.isEmpty()) {
+            if (candidates.size() > MWEConfig.squadHUDAutoShowTeamatesCount) {
+                this.sortRenderList(candidates, MWEConfig.squadHUDAutoShowTeamatesCritera, mc, scoreboard, scoreobjective);
+            }
+            final int limit = Math.min(candidates.size(), MWEConfig.squadHUDAutoShowTeamatesCount);
+            for (int i = 0; i < limit; i++) {
+                netInfoList.add(candidates.get(i));
+            }
+        }
+
+        if (!netInfoList.isEmpty()) {
+            if (MWEConfig.squadHUDShowSelf && !MWEConfig.squadHUDShowSelfFirst) {
+                netInfoList.add(mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID()));
+            }
+            this.sortRenderList(netInfoList, MWEConfig.squadHUDDisplaySorting, mc, scoreboard, scoreobjective);
+            if (MWEConfig.squadHUDShowSelf && MWEConfig.squadHUDShowSelfFirst) {
+                netInfoList.add(0, mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID()));
+            }
+            for (final NetworkPlayerInfo netInfo : netInfoList) {
+                playerList.add(PlayerDataManager.getPlayerEntityByUUID(netInfo.getGameProfile().getId()));
+                playerNamesList.add(this.getPlayerName(netInfo));
+            }
+        }
+
+    }
+
+    private char getPlayersTeam(Scoreboard scoreboard, String name) {
+        final ScorePlayerTeam team = scoreboard.getPlayersTeam(name);
+        if (team == null) {
+            return 0;
+        }
+        return StringUtil.getLastColorCharOf(team.getColorPrefix());
+    }
+
+    private void sortRenderList(List<NetworkPlayerInfo> list, TablistSorting sorting, Minecraft mc, Scoreboard scoreboard, ScoreObjective scoreobjective) {
+        switch (sorting) {
+            case LOWEST_SCORE:
+                if (scoreobjective != null && scoreobjective.getRenderType() != IScoreObjectiveCriteria.EnumRenderType.HEARTS) {
+                    list.sort(Comparator.comparingInt((NetworkPlayerInfo info) -> scoreboard.getValueFromObjective(info.getGameProfile().getName(), scoreobjective).getScorePoints()));
+                } else {
+                    NetInfoOrdering.vanillaSorting(list);
+                }
+                break;
+            case HIGHEST_SCORE:
+                if (scoreobjective != null && scoreobjective.getRenderType() != IScoreObjectiveCriteria.EnumRenderType.HEARTS) {
+                    list.sort(Comparator.comparingInt((NetworkPlayerInfo info) -> scoreboard.getValueFromObjective(info.getGameProfile().getName(), scoreobjective).getScorePoints()).reversed());
+                } else {
+                    NetInfoOrdering.vanillaSorting(list);
+                }
+                break;
+            case LOWEST_DISTANCE:
+                list.sort(Comparator.comparingDouble((NetworkPlayerInfo info) -> this.getDistanceSqToLocalPlayer(mc, info)));
+                break;
+            case HIGHEST_DISTANCE:
+                list.sort(Comparator.comparingDouble((NetworkPlayerInfo info) -> this.getDistanceSqToLocalPlayer(mc, info)).reversed());
+                break;
+            case VANILLA:
+            default:
+                NetInfoOrdering.vanillaSorting(list);
+                break;
+        }
+    }
+
+    private double getDistanceSqToLocalPlayer(Minecraft mc, NetworkPlayerInfo info) {
+        final EntityPlayer entity = PlayerDataManager.getPlayerEntityByUUID(info.getGameProfile().getId());
+        if (entity == null) {
+            return Double.MAX_VALUE;
+        }
+        return mc.thePlayer.getDistanceSqToEntity(entity);
     }
 
     private String getPlayerName(NetworkPlayerInfo netInfo) {
-        if (MWEConfig.squadHUDshowPrefix || MWEConfig.squadHUDshowSuffix || MWEConfig.squadHUDshowAlias) {
-            return NameFormatter.getFormattedName(netInfo, MWEConfig.squadHUDshowPrefix, MWEConfig.squadHUDshowSuffix, MWEConfig.squadHUDshowAlias);
-        } else {
-            return NameFormatter.getFormattedNameSimple(netInfo);
-        }
+        return NameFormatter.getFormattedName(netInfo, MWEConfig.squadHUDshowPrefix, MWEConfig.squadHUDshowSuffix, MWEConfig.squadHUDshowAlias);
     }
 
 }

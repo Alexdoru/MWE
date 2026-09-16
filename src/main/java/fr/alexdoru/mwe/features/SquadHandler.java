@@ -17,7 +17,8 @@ public final class SquadHandler {
 
     private SquadHandler() {}
 
-    private static final HashMap<String, String> squadmap = new HashMap<>();
+    private static final Map<String, String> squadmap = new HashMap<>();
+    private static final Map<String, String> squadmapView = Collections.unmodifiableMap(squadmap);
 
     public static void addSelf() {
         if (squadmap.isEmpty()) {
@@ -60,7 +61,7 @@ public final class SquadHandler {
      * Returns an unmodifiable view of the squad map
      */
     public static Map<String, String> getSquad() {
-        return Collections.unmodifiableMap(squadmap);
+        return squadmapView;
     }
 
     /**

@@ -1420,11 +1420,69 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = SQUAD, subCategory = "HUD",
+            name = "Show self in HUD",
+            dependsOn = "Squad HUD",
+            comment = "Displays yourself in the HUD")
+    public static boolean squadHUDShowSelf = true;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "HUD",
+            name = "Show self first",
+            dependsOn = "Show self in HUD",
+            comment = "Always displays yourself at the top of the HUD")
+    public static boolean squadHUDShowSelfFirst;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "HUD",
+            name = "Squad HUD display sorting",
+            dependsOn = "Squad HUD",
+            comment = "Select in which order the players are displayed")
+    public static TablistSorting squadHUDDisplaySorting = TablistSorting.VANILLA;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "HUD",
             name = "Squad HUD background aplha",
             dependsOn = "Squad HUD",
             comment = "Change the alpha of the background",
             sliderMax = 255)
     public static int squadHUDBackgroundAlpha = 0x20;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "HUD",
+            name = "Show additional teamates",
+            dependsOn = "Squad HUD",
+            comment = "Automatically show N teamates in the HUD")
+    public static boolean squadHUDAutoShowTeamates;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "HUD",
+            name = "Additional teamates count",
+            dependsOn = "Show additional teamates",
+            comment = "Amount of teamates to add the to HUD",
+            sliderMax = 50)
+    public static int squadHUDAutoShowTeamatesCount = 4;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "HUD",
+            name = "Teamate selection critera",
+            dependsOn = "Show additional teamates",
+            comment = "Critera to select the additional teamates")
+    public static TablistSorting squadHUDAutoShowTeamatesCritera = TablistSorting.VANILLA;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "HUD",
+            name = "Limit additional teamate distance",
+            dependsOn = "Show additional teamates",
+            comment = "Prevent teamates further than X distance from being added to the HUD")
+    public static boolean squadHUDAutoShowTeamatesLimitDistance;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "HUD",
+            name = "Distance limit",
+            dependsOn = "Limit additional teamate distance",
+            comment = "Only the teamates closer than this distance can be added to the HUD",
+            sliderMax = 256)
+    public static int squadHUDAutoShowTeamatesDistanceLimit = 64;
 
     @ConfigProperty(
             category = SQUAD, subCategory = "Icons",
