@@ -1073,7 +1073,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = NOCHEATERS, subCategory = "Icons",
             name = "Show Warning Icons",
-            comment = "Displays a warning icon in front of names of reported players on their nametags and in the tablist\n"
+            comment = "Displays a warning icon in front of names of reported players on their nametags and in the tablist. The icons can be changed in the config file.\n"
                     + "\n"
                     + "§4§l⚠ §r§7: players reported for blatant cheats\n"
                     + "§e§l⚠ §r§7: players reported for other cheats\n"
@@ -1429,7 +1429,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = SQUAD, subCategory = "Icons",
             name = "Show Squad Icons",
-            comment = "Displays a squad icon for squad members on their nametag and in the tablist\n"
+            comment = "Displays a squad icon for squad members on their nametag and in the tablist. The icon can be changed in the config file.\n"
                     + "\n"
                     + "§6[§2S§6] §r§7: players in your squad")
     public static boolean squadIconOnNames = true;
