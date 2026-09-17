@@ -238,12 +238,13 @@ public class SquadHealthHUD extends AbstractRenderer {
         }
 
         if (!netInfoList.isEmpty()) {
-            if (MWEConfig.squadHUDShowSelf && !MWEConfig.squadHUDShowSelfFirst) {
-                netInfoList.add(mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID()));
+            final NetworkPlayerInfo seftInfo = mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID());
+            if (MWEConfig.squadHUDShowSelf && !MWEConfig.squadHUDShowSelfFirst && seftInfo != null) {
+                netInfoList.add(seftInfo);
             }
             this.sortRenderList(netInfoList, MWEConfig.squadHUDDisplaySorting, mc, scoreboard, scoreobjective);
-            if (MWEConfig.squadHUDShowSelf && MWEConfig.squadHUDShowSelfFirst) {
-                netInfoList.add(0, mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID()));
+            if (MWEConfig.squadHUDShowSelf && MWEConfig.squadHUDShowSelfFirst && seftInfo != null) {
+                netInfoList.add(0, seftInfo);
             }
             for (final NetworkPlayerInfo netInfo : netInfoList) {
                 playerList.add(PlayerDataManager.getPlayerEntityByUUID(netInfo.getGameProfile().getId()));
