@@ -12,7 +12,9 @@ public interface ITabNameModifier {
     /**
      * The priority of this modifier
      */
-    int getPriority();
+    default int getPriority() {
+        return 0;
+    }
 
     /**
      * Return true if this modifier will change the tablist name of the player owning this gameProfile.

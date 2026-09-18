@@ -1081,12 +1081,21 @@ public final class MWEConfig {
                     + "You can define in the config file the lists of cheats that give a red icon and cheats that don't give any icon")
     public static boolean warningIconsOnNames = true;
 
+    @ConfigProperty(
+            category = NOCHEATERS, subCategory = "Icons",
+            name = "Warning Icons In Tab Only",
+            dependsOn = "Show Warning Icons",
+            comment = "Displays the warning icons in the tablist only, not on nametags")
+    public static boolean warningIconsTabOnly;
+
     @ConfigPropertyEvent(name = {
             "Show alias in tab",
             "Show fake players in tab",
             "De-obfuscate names in tab",
             "Show Squad Icons",
-            "Show Warning Icons"
+            "Squad Icons In Tab Only",
+            "Show Warning Icons",
+            "Warning Icons In Tab Only"
     })
     private static void refreshAllNames() {
         PlayerDataManager.refreshAllPlayerData();
@@ -1491,6 +1500,13 @@ public final class MWEConfig {
                     + "\n"
                     + "§6[§2S§6] §r§7: players in your squad")
     public static boolean squadIconOnNames = true;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "Icons",
+            name = "Squad Icons In Tab Only",
+            dependsOn = "Show Squad Icons",
+            comment = "Displays the squad icons in the tablist only, not on nametags")
+    public static boolean squadIconTabOnly;
 
     @ConfigProperty(
             category = UPDATES,

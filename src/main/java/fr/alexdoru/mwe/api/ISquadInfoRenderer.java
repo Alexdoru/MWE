@@ -15,6 +15,13 @@ import java.util.List;
  */
 public interface ISquadInfoRenderer {
 
+    /**
+     * The priority of this renderer
+     */
+    default int getPriority() {
+        return 0;
+    }
+
     /** @deprecated Use {@link #getWidth(int, NetworkPlayerInfo, EntityPlayer)} */
     @Deprecated
     default int getWidth(@NotNull NetworkPlayerInfo netInfo, @Nullable EntityPlayer entityPlayer) {return 0;}
