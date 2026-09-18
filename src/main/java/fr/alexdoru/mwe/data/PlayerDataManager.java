@@ -155,7 +155,15 @@ public final class PlayerDataManager {
 
         player.getPrefixes().removeAll(ALL_ICONS_LIST);
         if (playerData.prefixIcon != null) {
-            player.addPrefix(playerData.prefixIcon);
+            if (playerData.prefixIcon == ISQUAD_ICON) {
+                if (!MWEConfig.squadIconTabOnly) {
+                    player.addPrefix(playerData.prefixIcon);
+                }
+            } else {
+                if (!MWEConfig.warningIconsTabOnly) {
+                    player.addPrefix(playerData.prefixIcon);
+                }
+            }
         }
         player.refreshDisplayName();
 
