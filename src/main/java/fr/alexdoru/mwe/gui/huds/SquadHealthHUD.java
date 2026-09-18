@@ -47,15 +47,7 @@ public class SquadHealthHUD extends AbstractRenderer {
 
     public void registerExtraRenderer(@NotNull ISquadInfoRenderer renderer) {
         Objects.requireNonNull(renderer);
-        final ISquadInfoRenderer.Priority priority = renderer.getPriority();
-        int index = extraInfoRenderers.size();
-        for (int i = 0; i < index; i++) {
-            if (priority.ordinal() < extraInfoRenderers.get(i).getPriority().ordinal()) {
-                index = i;
-                break;
-            }
-        }
-        extraInfoRenderers.add(index, renderer);
+        extraInfoRenderers.add(renderer);
         maxExtraWidths = new int[extraInfoRenderers.size()];
     }
 

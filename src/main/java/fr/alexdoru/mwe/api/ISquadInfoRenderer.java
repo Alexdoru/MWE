@@ -15,25 +15,9 @@ import java.util.List;
  */
 public interface ISquadInfoRenderer {
 
-    /* Priority of info renderers, renderers will be sorted with respect to this priority level.
-     *
-     * Note:
-     *   Due to using a ArrayList,
-     *   these need to stay in a contiguous index starting at 0. {Default ordinal}
-     */
-    enum Priority {
-        HIGHEST,
-        HIGH,
-        NORMAL,
-        LOW,
-        LOWEST;
-    }
-
-    default Priority getPriority() { return Priority.NORMAL; }
-
     /** @deprecated Use {@link #getWidth(int, NetworkPlayerInfo, EntityPlayer)} */
     @Deprecated
-    default int getWidth(@NotNull NetworkPlayerInfo netInfo, @Nullable EntityPlayer entityPlayer) { return 0; }
+    default int getWidth(@NotNull NetworkPlayerInfo netInfo, @Nullable EntityPlayer entityPlayer) {return 0;}
 
     /**
      * @param listIndex    the index of the squad member in the list
@@ -42,8 +26,7 @@ public interface ISquadInfoRenderer {
      * @return the width in pixels needed to render this info for the given player,
      * or 0 if nothing should be rendered for this player
      */
-    default int getWidth(int listIndex, @NotNull NetworkPlayerInfo netInfo, @Nullable EntityPlayer entityPlayer) { return getWidth(netInfo, entityPlayer); }
-
+    default int getWidth(int listIndex, @NotNull NetworkPlayerInfo netInfo, @Nullable EntityPlayer entityPlayer) {return getWidth(netInfo, entityPlayer);}
 
     /** @deprecated Use {@link #render(int, NetworkPlayerInfo, EntityPlayer, int, int, int, int)} */
     @Deprecated
@@ -61,7 +44,7 @@ public interface ISquadInfoRenderer {
      *                       as previously returned by {@link #getWidth(int, NetworkPlayerInfo, EntityPlayer)}
      * @param reservedHeight the max height reserved for this row
      */
-    default void render(int listIndex, @NotNull NetworkPlayerInfo netInfo, @Nullable EntityPlayer entityPlayer, int x, int y, int reservedWidth, int reservedHeight) { render(netInfo, entityPlayer, x, y, reservedWidth); }
+    default void render(int listIndex, @NotNull NetworkPlayerInfo netInfo, @Nullable EntityPlayer entityPlayer, int x, int y, int reservedWidth, int reservedHeight) {render(netInfo, entityPlayer, x, y, reservedWidth);}
 
     /**
      * Use this to clean information created in {@link #processData(int, List, List)}
@@ -74,4 +57,5 @@ public interface ISquadInfoRenderer {
      * @param entityPlayerList a list containing either the corresponding EntityPlayer if loaded in the world or null
      */
     default void processData(int listSize, @Unmodifiable List<NetworkPlayerInfo> netInfoList, @Unmodifiable List<EntityPlayer> entityPlayerList) {}
+
 }
