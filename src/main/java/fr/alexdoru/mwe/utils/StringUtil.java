@@ -14,11 +14,11 @@ public final class StringUtil {
     }
 
     public static boolean isFormatColor(char c) {
-        return c >= 48 && c <= 57 || c >= 97 && c <= 102 || c >= 65 && c <= 70;
+        return c >= '0' && c <= '9' || c >= 'a' && c <= 'f' || c >= 'A' && c <= 'F';
     }
 
     public static boolean isFormatSpecial(char c) {
-        return c >= 107 && c <= 111 || c >= 75 && c <= 79 || c == 114 || c == 82;
+        return c >= 'k' && c <= 'o' || c >= 'K' && c <= 'O' || c == 'r' || c == 'R';
     }
 
     /**
@@ -37,27 +37,35 @@ public final class StringUtil {
             }
             chars[count++] = c;
         }
+        if (count == len) return text;
         return new String(chars, 0, count);
+    }
+
+    private static char getLastFormattingCharOf(String text, int maxIndex) {
+        for (int i = maxIndex - 1; i >= 0; --i) {
+            if (text.charAt(i) == '§' && i + 1 < maxIndex) {
+                final char format = text.charAt(i + 1);
+                if (isFormatCharacter(format)) {
+                    if (format >= 'A' && format <= 'R') {
+                        return Character.toLowerCase(format);
+                    } else {
+                        return format;
+                    }
+                }
+            }
+        }
+        return 0;
     }
 
     /**
      * Returns the last formatting code of a String
      * <p>
-     * Returns '\0' if it can't find any formatting code
+     * Returns 0 if it can't find any formatting code
      * <p>
      * Returns a single character
      */
     public static char getLastFormattingCharOf(String text) {
-        for (int i = text.length() - 1; i >= 0; --i) {
-            if (text.charAt(i) == '§' && i + 1 < text.length()) {
-                final char format = text.charAt(i + 1);
-                final int index = "0123456789abcdefklmnorABCDEFKLMNOR".indexOf(format);
-                if (index != -1) {
-                    return index < 22 ? format : "0123456789abcdefklmnorABCDEFKLMNOR".charAt(index - 12);
-                }
-            }
-        }
-        return '\0';
+        return getLastFormattingCharOf(text, text.length());
     }
 
     /**
@@ -69,17 +77,17 @@ public final class StringUtil {
      */
     public static String getLastFormattingCodeOf(String text) {
         final char c = getLastFormattingCharOf(text);
-        return c == '\0' ? "" : String.valueOf(c);
+        return c == 0 ? "" : String.valueOf(c);
     }
 
     /**
      * Returns the last formatting char before the first occurence of a certain target in a String
      * <p>
-     * Returns '\0' if it can't find any formatting code
+     * Returns 0 if it can't find any formatting code
      */
     public static char getLastFormattingCharBefore(String message, String target) {
         final int index = message.indexOf(target);
-        return index == -1 ? '\0' : getLastFormattingCharOf(message.substring(0, index));
+        return index == -1 ? 0 : getLastFormattingCharOf(message, index);
     }
 
     /**
@@ -90,28 +98,35 @@ public final class StringUtil {
      * Returns a single character as a String
      */
     public static String getLastFormattingCodeBefore(String message, String target) {
-        final int index = message.indexOf(target);
-        return index == -1 ? "" : getLastFormattingCodeOf(message.substring(0, index));
+        final char c = getLastFormattingCharBefore(message, target);
+        return c == 0 ? "" : String.valueOf(c);
+    }
+
+    private static char getLastColorCharOf(String text, int maxIndex) {
+        for (int i = maxIndex - 1; i >= 0; --i) {
+            if (text.charAt(i) == '§' && i + 1 < maxIndex) {
+                final char format = text.charAt(i + 1);
+                if (isFormatColor(format)) {
+                    if (format >= 'A' && format <= 'R') {
+                        return Character.toLowerCase(format);
+                    } else {
+                        return format;
+                    }
+                }
+            }
+        }
+        return 0;
     }
 
     /**
      * Returns the last color code character
      * <p>
-     * Returns '\0' if it can't find any color code
+     * Returns 0 if it can't find any color code
      * <p>
      * Returns a single character
      */
     public static char getLastColorCharOf(String text) {
-        for (int i = text.length() - 1; i >= 0; --i) {
-            if (text.charAt(i) == '§' && i + 1 < text.length()) {
-                final char format = text.charAt(i + 1);
-                final int index = "0123456789abcdefABCDEF".indexOf(format);
-                if (index != -1) {
-                    return index < 16 ? format : "0123456789abcdefABCDEF".charAt(index - 6);
-                }
-            }
-        }
-        return '\0';
+        return getLastColorCharOf(text, text.length());
     }
 
     /**
@@ -123,17 +138,17 @@ public final class StringUtil {
      */
     public static String getLastColorCodeOf(String text) {
         final char c = getLastColorCharOf(text);
-        return c == '\0' ? "" : String.valueOf(c);
+        return c == 0 ? "" : String.valueOf(c);
     }
 
     /**
      * Returns the last color char before the first occurence of a certain target in a String
      * <p>
-     * Returns '\0' if it can't find any color code
+     * Returns 0 if it can't find any color code
      */
     public static char getLastColorCharBefore(String message, String target) {
         final int index = message.indexOf(target);
-        return index == -1 ? '\0' : getLastColorCharOf(message.substring(0, index));
+        return index == -1 ? 0 : getLastColorCharOf(message, index);
     }
 
     /**
@@ -144,8 +159,8 @@ public final class StringUtil {
      * Returns a single character as a String
      */
     public static String getLastColorCodeBefore(String message, String target) {
-        final int index = message.indexOf(target);
-        return index == -1 ? "" : getLastColorCodeOf(message.substring(0, index));
+        final char c = getLastColorCharBefore(message, target);
+        return c == 0 ? "" : String.valueOf(c);
     }
 
     public static boolean isNullOrEmpty(String s) {
@@ -162,16 +177,95 @@ public final class StringUtil {
     }
 
     public static String uppercaseFirstLetter(String string) {
-        if (string == null) {
-            return null;
+        if (isNullOrEmpty(string)) {
+            return string;
         }
-        return string.substring(0, 1).toUpperCase() + string.substring(1);
+        if (string.length() == 1) {
+            return String.valueOf(Character.toUpperCase(string.charAt(0)));
+        }
+        return Character.toUpperCase(string.charAt(0)) + string.substring(1);
     }
 
     public static String getRepetitionOf(char c, int length) {
         final char[] chars = new char[length];
         Arrays.fill(chars, c);
         return new String(chars);
+    }
+
+    /**
+     * Removes the target char from the String
+     */
+    public static String remove(String s, char target) {
+        final int index = s.indexOf(target);
+        if (index == -1) return s;
+        final int len = s.length();
+        final char[] chars = s.toCharArray();
+        int write = index;
+        for (int read = index + 1; read < len; read++) {
+            if (chars[read] != target) {
+                chars[write++] = chars[read];
+            }
+        }
+        return new String(chars, 0, write);
+    }
+
+    /**
+     * Removes the target substring from the String
+     */
+    public static String remove(String s, String target) {
+        return replace(s, target, "");
+    }
+
+    /**
+     * Replaces every occurrence of target with replacement from the String
+     */
+    public static String replace(String s, String target, String replacement) {
+
+        final int len = s.length();
+        final int targetLen = target.length();
+        final int replLen = replacement.length();
+
+        if (targetLen == 0) {
+            final StringBuilder sb = new StringBuilder(len + (len + 1) * replLen);
+            sb.append(replacement);
+            for (int i = 0; i < len; i++) {
+                sb.append(s.charAt(i)).append(replacement);
+            }
+            return sb.toString();
+        }
+
+        int index = s.indexOf(target);
+        if (index == -1) {
+            return s;
+        }
+
+        final int PREDICTED_MATCHES = 2;
+        final StringBuilder sb = new StringBuilder(len + Math.max(0, replLen - targetLen) * PREDICTED_MATCHES);
+        int start = 0;
+        do {
+            sb.append(s, start, index).append(replacement);
+            start = index + targetLen;
+            index = s.indexOf(target, start);
+        } while (index >= 0);
+
+        return sb.append(s, start, len).toString();
+    }
+
+    public static String removeFirst(String s, String target) {
+        return replaceFirst(s, target, "");
+    }
+
+    @SuppressWarnings("StringBufferReplaceableByString") // allocated to exact length
+    public static String replaceFirst(String s, String target, String replacement) {
+        final int index = s.indexOf(target);
+        if (index == -1) {
+            return s;
+        }
+        return new StringBuilder(s.length() - target.length() + replacement.length())
+                .append(s, 0, index)
+                .append(replacement)
+                .append(s, index + target.length(), s.length())
+                .toString();
     }
 
     /**

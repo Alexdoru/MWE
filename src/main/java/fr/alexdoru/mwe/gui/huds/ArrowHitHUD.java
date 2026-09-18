@@ -9,6 +9,7 @@ import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.RenderHelper;
+import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.FontRenderer;
@@ -139,7 +140,7 @@ public class ArrowHitHUD extends AbstractRenderer {
             return false;
         }
         final ChatLine chatLine = chatLines.get(0);
-        final String chatMessage = EnumChatFormatting.getTextWithoutFormattingCodes(chatLine.getChatComponent().getUnformattedText()).replace("^\\[[RBGY]\\] ", "");
+        final String chatMessage = StringUtil.removeFormattingCodes(chatLine.getChatComponent().getUnformattedText()).replace("^\\[[RBGY]\\] ", "");
         final int updatedCounter = chatLine.getUpdatedCounter();
         final int currentUpdateCounter = mc.ingameGUI.getUpdateCounter();
         final int counterDiff = Math.abs(currentUpdateCounter - updatedCounter);
