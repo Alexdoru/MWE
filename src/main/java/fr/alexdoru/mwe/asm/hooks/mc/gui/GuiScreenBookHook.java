@@ -38,7 +38,7 @@ public class GuiScreenBookHook {
                         bookTotalPages = 1;
                     }
                     for (int i = 0; i < bookTotalPages; i++) {
-                        final String pagetext = StringUtil.removeFormattingCodes(IChatComponent.Serializer.jsonToComponent(bookPages.getStringTagAt(i)).getUnformattedText().replace("\n", ""));
+                        final String pagetext = StringUtil.removeFormattingCodes(StringUtil.remove(IChatComponent.Serializer.jsonToComponent(bookPages.getStringTagAt(i)).getUnformattedText(), '\n'));
                         Matcher matcher = nickSuccessPagePattern.matcher(pagetext);
                         if (matcher.find()) {
                             final String newNick = matcher.group(1);

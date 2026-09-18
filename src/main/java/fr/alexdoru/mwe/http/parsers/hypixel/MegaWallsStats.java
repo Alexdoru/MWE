@@ -142,7 +142,7 @@ public class MegaWallsStats {
                     if (legendarySkinsSet == null) {
                         legendarySkinsSet = new HashSet<>();
                     }
-                    legendarySkinsSet.add(achievementName.replace("walls3_legendary_", ""));
+                    legendarySkinsSet.add(StringUtil.remove(achievementName, "walls3_legendary_"));
                 }
             }
         } catch (Exception ignored) {}

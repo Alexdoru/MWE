@@ -6,6 +6,7 @@ import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.utils.MapUtil;
 import fr.alexdoru.mwe.utils.RenderHelper;
+import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -62,7 +63,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
                 final String amountHealed = selfHealedMatcher.group(1);
                 this.textToRender.add(getLine(null, amountHealed));
                 // to avoid matching "healed for x.x" as if "healed" was a playername
-                msg = msg.replace(selfHealedMatcher.group(), "");
+                msg = StringUtil.remove(msg, selfHealedMatcher.group());
             }
             final Matcher playerHealedMatcher = PLAYERS_HEALED_PATTERN.matcher(msg);
             final Map<String, Float> map = new HashMap<>();

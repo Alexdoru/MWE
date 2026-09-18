@@ -5,6 +5,7 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
+import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
@@ -108,7 +109,7 @@ public final class SquadHandler {
                 if (line.contains("www.hypixel.net") || line.contains("HAPPY HOUR!") || line.isEmpty()) {
                     break;
                 }
-                final String nameonscoreboard = line.replace(" ", "");
+                final String nameonscoreboard = StringUtil.remove(line, ' ');
                 final String squadmate = squadmap.get(nameonscoreboard);
                 // the player was already in the squad before, reuse the same name transformation
                 if (squadmate == null) {

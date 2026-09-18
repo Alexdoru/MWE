@@ -157,7 +157,7 @@ public class ReportSuggestionHandler {
 
     private static String getReportTextWithFormattedName(String fmsg, String reportText, String reportedPlayer) {
         if (ScoreboardTracker.isInMwGame()) {
-            final String newReportText = EnumChatFormatting.DARK_RED + reportText.replace(reportedPlayer, NameFormatter.getFormattedNameSimple(reportedPlayer) + EnumChatFormatting.DARK_RED);
+            final String newReportText = EnumChatFormatting.DARK_RED + StringUtil.replace(reportText, reportedPlayer, NameFormatter.getFormattedNameSimple(reportedPlayer) + EnumChatFormatting.DARK_RED);
             return StringUtil.replaceTargetWith(fmsg, reportText, newReportText);
         }
         return StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED);
@@ -172,7 +172,7 @@ public class ReportSuggestionHandler {
     }
 
     private static IChatComponent getIChatComponentWithSquadnameAsSender(String fmsg, @Nullable String messageSender, @Nullable String squadname) {
-        return new ChatComponentText(messageSender != null && squadname != null ? fmsg.replaceFirst(messageSender, squadname) : fmsg);
+        return new ChatComponentText(messageSender != null && squadname != null ? StringUtil.replaceFirst(fmsg, messageSender, squadname) : fmsg);
     }
 
     private static boolean isCheatValid(String cheat) {

@@ -196,7 +196,7 @@ public final class ClassSelectorOverlay extends InventoryOverlay {
                     if (line.contains("Class Points")) {
                         final Matcher matcher = CLASSPOINTS_PATTERN.matcher(StringUtil.removeFormattingCodes(line));
                         if (matcher.find()) {
-                            return Integer.parseInt(matcher.group(1).replace(",", ""));
+                            return Integer.parseInt(StringUtil.remove(matcher.group(1), ','));
                         }
                     }
                 }

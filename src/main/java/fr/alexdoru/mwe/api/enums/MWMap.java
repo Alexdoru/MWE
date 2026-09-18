@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.api.enums;
 
+import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -115,7 +116,7 @@ public enum MWMap {
 
     public static MWMap fromName(String name) {
         if (name == null) return null;
-        return fromNameMap.get(name.replace(" ", "").toLowerCase());
+        return fromNameMap.get(StringUtil.remove(name, ' ').toLowerCase());
     }
 
 }

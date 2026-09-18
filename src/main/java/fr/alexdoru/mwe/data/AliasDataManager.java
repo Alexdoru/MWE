@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.events.AliasEvent;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
+import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
@@ -66,7 +67,7 @@ public final class AliasDataManager {
     }
 
     private static @NotNull String toKey(@NotNull UUID id) {
-        return id.toString().replace("-", "");
+        return StringUtil.remove(id.toString(), '-');
     }
 
     @Nullable

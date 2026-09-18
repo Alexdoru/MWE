@@ -56,7 +56,7 @@ public class ArrowHitHUD extends AbstractRenderer {
                 displayText = getColor(hitValue) + hitValue;
                 setPlayerHead(playername);
             }
-            final String s = ScoreboardTracker.isInMwGame() ? fmsg.replaceFirst(playername, NameFormatter.getFormattedNameSimple(playername)) : fmsg;
+            final String s = ScoreboardTracker.isInMwGame() ? StringUtil.replaceFirst(fmsg, playername, NameFormatter.getFormattedNameSimple(playername)) : fmsg;
             event.message = new ChatComponentText(s);
             ChatUtil.addSkinToComponent(event.message, playername);
             return true;
@@ -73,7 +73,7 @@ public class ArrowHitHUD extends AbstractRenderer {
             final boolean canKill = Float.parseFloat(health) <= (Float.parseFloat(arrowsPinned)) * 2.0f;
             displayText = getColor(health) + health + EnumChatFormatting.GRAY + " (" + (canKill ? EnumChatFormatting.GOLD : EnumChatFormatting.GREEN) + arrowsPinned + EnumChatFormatting.GRAY + ")";
             setPlayerHead(playername);
-            final String s = ScoreboardTracker.isInMwGame() ? fmsg.replaceFirst(playername, NameFormatter.getFormattedNameSimple(playername)) : fmsg;
+            final String s = ScoreboardTracker.isInMwGame() ? StringUtil.replaceFirst(fmsg, playername, NameFormatter.getFormattedNameSimple(playername)) : fmsg;
             event.message = new ChatComponentText(s);
             ChatUtil.addSkinToComponent(event.message, playername);
             return true;
@@ -95,7 +95,7 @@ public class ArrowHitHUD extends AbstractRenderer {
             final String playername = matcherLeapDirectHit.group(1);
             displayText = EnumChatFormatting.GREEN + "-" + 2f * Float.parseFloat(matcherLeapDirectHit.group(2));
             skin = null;
-            final String s = ScoreboardTracker.isInMwGame() ? fmsg.replaceFirst(playername, NameFormatter.getFormattedNameSimple(playername)) : fmsg;
+            final String s = ScoreboardTracker.isInMwGame() ? StringUtil.replaceFirst(fmsg, playername, NameFormatter.getFormattedNameSimple(playername)) : fmsg;
             event.message = new ChatComponentText(s);
             ChatUtil.addSkinToComponent(event.message, playername);
             return true;
@@ -113,7 +113,7 @@ public class ArrowHitHUD extends AbstractRenderer {
                 final String playername = matcherRend2.group(2);
                 totalDamage += damage;
                 MWE.INSTANCE().getRenegadeTracker().removeArrowsFrom(playername, (int) (damage / 2));
-                s = ScoreboardTracker.isInMwGame() ? s.replaceFirst(playername, NameFormatter.getFormattedNameSimple(playername)) : s;
+                s = ScoreboardTracker.isInMwGame() ? StringUtil.replaceFirst(s, playername, NameFormatter.getFormattedNameSimple(playername)) : s;
             }
             if (!s.equals(fmsg)) event.message = new ChatComponentText(s);
             displayText = EnumChatFormatting.GREEN + "-" + totalDamage;

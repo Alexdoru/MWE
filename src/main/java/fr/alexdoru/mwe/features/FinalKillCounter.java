@@ -180,7 +180,7 @@ public final class FinalKillCounter {
                     final String killer = matcher.group(2);
                     final char victimTeamColor = StringUtil.getLastColorCharBefore(formattedText, victim);
                     // need to replace first in case the name of the killer contains the name of the killed player
-                    final char killerTeamColor = StringUtil.getLastColorCharBefore(formattedText.replaceFirst(victim, ""), killer);
+                    final char killerTeamColor = StringUtil.getLastColorCharBefore(StringUtil.removeFirst(formattedText, victim), killer);
                     final MWTeam victimTeam = getTeamFromColor(victimTeamColor);
                     final MWTeam killerTeam = getTeamFromColor(killerTeamColor);
                     int killsOfVictim = 0;
@@ -208,9 +208,11 @@ public final class FinalKillCounter {
                             ));
                         }
                     }
-                    final String s = formattedText.replace(killer, SquadHandler.getSquadname(killer))
-                            .replace(victim, SquadHandler.getSquadname(victim))
-                            + getKillDiffString(killsOfVictim, victimTeamColor);
+                    final String s = StringUtil.replace(
+                            StringUtil.replace(formattedText, killer, SquadHandler.getSquadname(killer)),
+                            victim,
+                            SquadHandler.getSquadname(victim)
+                    ) + getKillDiffString(killsOfVictim, victimTeamColor);
                     event.message = new ChatComponentText(s);
                     ChatUtil.addSkinToComponent(event.message, victim);
                     return true;
@@ -239,8 +241,7 @@ public final class FinalKillCounter {
                             ));
                         }
                     }
-                    final String s = formattedText.replace(victim, SquadHandler.getSquadname(victim))
-                            + getKillDiffString(killsOfVictim, victimTeamColor);
+                    final String s = StringUtil.replace(formattedText, victim, SquadHandler.getSquadname(victim)) + getKillDiffString(killsOfVictim, victimTeamColor);
                     event.message = new ChatComponentText(s);
                     ChatUtil.addSkinToComponent(event.message, victim);
                     return true;

@@ -170,7 +170,7 @@ public final class ScoreboardParser implements IScoreboardParser {
             final Matcher matcher = WITHER_ALIVE_PATTERN.matcher(line);
             if (matcher.find()) {
                 final String witherPrefix = matcher.group(1);
-                witherHp = Integer.parseInt(matcher.group(2).replace(",", ""));
+                witherHp = Integer.parseInt(StringUtil.remove(matcher.group(2), ','));
                 switch (witherPrefix) {
                     case "[B]":
                         aliveWithers.add(MWTeam.BLUE);

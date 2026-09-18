@@ -187,7 +187,7 @@ public class ChatListener {
             }
 
             if (squadname != null && messageSender != null) {
-                event.message = new ChatComponentText(fmsg.replaceFirst(messageSender, squadname));
+                event.message = new ChatComponentText(StringUtil.replaceFirst(fmsg, messageSender, squadname));
             }
 
             if (messageSender != null) {
@@ -232,7 +232,7 @@ public class ChatListener {
                     }
                 } else {
                     final String replacement = MWEConfig.coloredSquadmates ? MWEConfig.squadmateColor + squadname : squadname;
-                    event.message = new ChatComponentText(fmsg.replaceFirst(name, replacement));
+                    event.message = new ChatComponentText(StringUtil.replaceFirst(fmsg, name, replacement));
                 }
             }
 
@@ -251,7 +251,7 @@ public class ChatListener {
                 final Map<String, Integer> map = new HashMap<>();
                 while (matcher.find()) {
                     final String teamname = matcher.group(1);
-                    final int damage = Integer.parseInt(matcher.group(2).replace(",", ""));
+                    final int damage = Integer.parseInt(StringUtil.remove(matcher.group(2), ','));
                     if (damage != 0) {
                         map.put(teamname, damage);
                     }
@@ -301,17 +301,15 @@ public class ChatListener {
                     if (addGuildCoinsBonus) {
                         final String currency = matcherBooster.group(1);
                         final boolean isCoins = "coins".equals(currency);
-                        fmsg = fmsg.replaceFirst(currency + "!", currency + "! (" + (isCoins ? EnumChatFormatting.DARK_GREEN : "") + "Guild " + (isCoins ? EnumChatFormatting.GOLD : "") + "bonus)")
-                                .replace(matcherBooster.group(2), "");
-                    } else {
-                        fmsg = fmsg.replace(matcherBooster.group(2), "");
+                        fmsg = StringUtil.replaceFirst(fmsg, currency + "!", currency + "! (" + (isCoins ? EnumChatFormatting.DARK_GREEN : "") + "Guild " + (isCoins ? EnumChatFormatting.GOLD : "") + "bonus)");
                     }
+                    fmsg = StringUtil.remove(fmsg, matcherBooster.group(2));
                     changed = true;
                 } else {
                     if (addGuildCoinsBonus) {
                         final String currency = matcherCoins.group(1);
                         final boolean isCoins = "coins".equals(currency);
-                        fmsg = fmsg.replaceFirst(currency + "!", currency + "! (" + (isCoins ? EnumChatFormatting.DARK_GREEN : "") + "Guild " + (isCoins ? EnumChatFormatting.GOLD : "") + "bonus)");
+                        fmsg = StringUtil.replaceFirst(fmsg, currency + "!", currency + "! (" + (isCoins ? EnumChatFormatting.DARK_GREEN : "") + "Guild " + (isCoins ? EnumChatFormatting.GOLD : "") + "bonus)");
                         changed = true;
                     }
                 }
@@ -323,7 +321,7 @@ public class ChatListener {
                 final Matcher assistMatcher = ASSIST_PATTERN.matcher(msg);
                 if (assistMatcher.find()) {
                     final String playername = assistMatcher.group(1);
-                    fmsg = fmsg.replace(playername, NameFormatter.getFormattedNameSimple(playername));
+                    fmsg = StringUtil.replace(fmsg, playername, NameFormatter.getFormattedNameSimple(playername));
                     changed = true;
                 }
             }

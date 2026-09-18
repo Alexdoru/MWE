@@ -38,7 +38,7 @@ public class LocrawListener {
             final String msg = StringUtil.removeFormattingCodes(event.message.getUnformattedText());
             final Matcher locrawMatcher = LOCRAW_PATTERN.matcher(msg);
             if (locrawMatcher.matches()) {
-                final String gameId = locrawMatcher.group(1).replace("mega", "M");
+                final String gameId = StringUtil.replace(locrawMatcher.group(1), "mega", "M");
                 final String map = locrawMatcher.group(2);
                 if (action == LocrawAction.RUNSCANGAME) {
                     CommandScanGame.handleScangameCommand(gameId);
