@@ -47,7 +47,15 @@ public class SquadHealthHUD extends AbstractRenderer {
 
     public void registerExtraRenderer(@NotNull ISquadInfoRenderer renderer) {
         Objects.requireNonNull(renderer);
-        extraInfoRenderers.add(renderer);
+        final ISquadInfoRenderer.Priority priority = renderer.getPriority();
+        int index = extraInfoRenderers.size();
+        for (int i = 0; i < index; i++) {
+            if (priority.ordinal() < extraInfoRenderers.get(i).getPriority().ordinal()) {
+                index = i;
+                break;
+            }
+        }
+        extraInfoRenderers.add(index, renderer);
         maxExtraWidths = new int[extraInfoRenderers.size()];
     }
 
@@ -57,12 +65,21 @@ public class SquadHealthHUD extends AbstractRenderer {
             netInfoList.clear();
             playerList.clear();
             playerNamesList.clear();
+            extraInfoRenderers.forEach(ISquadInfoRenderer::clearData);
             final Minecraft mc = Minecraft.getMinecraft();
             if (mc.theWorld != null && mc.thePlayer != null && this.isEnabled(0)) {
                 final Scoreboard scoreboard = mc.theWorld.getScoreboard();
                 final ScoreObjective scoreobjective = scoreboard.getObjectiveInDisplaySlot(0);
                 if (!mc.isIntegratedServerRunning() || scoreobjective != null) {
                     this.populateRenderList(mc, scoreboard, scoreobjective);
+                    if (!extraInfoRenderers.isEmpty()) {
+                        final int listSize = netInfoList.size();
+                        final List<NetworkPlayerInfo> netInfoListView = Collections.unmodifiableList(netInfoList);
+                        final List<EntityPlayer> playerListView = Collections.unmodifiableList(playerList);
+                        for (final ISquadInfoRenderer infoRenderer : extraInfoRenderers) {
+                            infoRenderer.processData(listSize, netInfoListView, playerListView);
+                        }
+                    }
                 }
             }
         }
@@ -101,7 +118,7 @@ public class SquadHealthHUD extends AbstractRenderer {
                 }
             }
             for (int r = 0; r < this.extraInfoRenderers.size(); r++) {
-                final int width = this.extraInfoRenderers.get(r).getWidth(netInfo, entityPlayer);
+                final int width = this.extraInfoRenderers.get(r).getWidth(i, netInfo, entityPlayer);
                 maxExtraWidths[r] = Math.max(maxExtraWidths[r], width);
             }
         }
@@ -156,7 +173,7 @@ public class SquadHealthHUD extends AbstractRenderer {
                 for (int r = 0; r < this.extraInfoRenderers.size(); r++) {
                     final int reservedWidth = maxExtraWidths[r];
                     if (reservedWidth > 0) {
-                        this.extraInfoRenderers.get(r).render(netInfo, entityPlayer, xDrawingPos, yDrawingPos, reservedWidth);
+                        this.extraInfoRenderers.get(r).render(i, netInfo, entityPlayer, xDrawingPos, yDrawingPos, reservedWidth, 8);
                         xDrawingPos += reservedWidth + PADDING;
                     }
                 }
