@@ -13,6 +13,13 @@ import org.jetbrains.annotations.Nullable;
 public interface ISquadInfoRenderer {
 
     /**
+     * The priority of this renderer
+     */
+    default int getPriority() {
+        return 0;
+    }
+
+    /**
      * @param netInfo      the NetworkPlayerInfo of the squad member on this line
      * @param entityPlayer the corresponding EntityPlayer if loaded in the world, may be null
      * @return the width in pixels needed to render this info for the given player,
