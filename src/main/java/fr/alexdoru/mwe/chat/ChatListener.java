@@ -46,7 +46,8 @@ public class ChatListener {
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
     private static final String PREP_PHASE = "Prepare your defenses!";
-    private static final Pattern COINS_DOUBLED_GUILD_PATTERN = Pattern.compile("^(?:Tokens|Coins) just earned DOUBLED as a Guild Level Reward!$");
+    private static final String COINS_DOUBLED_GUILD_MESSAGE = "Coins just earned DOUBLED as a Guild Level Reward!";
+    private static final String TOKEN_DOUBLED_GUILD_MESSAGE = "Tokens just earned DOUBLED as a Guild Level Reward!";
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ (tokens|coins)!");
     private static final Pattern COINS_BOOSTER_PATTERN = Pattern.compile("^\\+\\d+ (tokens|coins)!( \\([^()]*(?:Coins \\+ EXP|Booster)[^()]*\\))");
     private static final Pattern ASSIST_PATTERN = Pattern.compile("^\\+\\d+ tokens|coins!.+ASSIST on (\\w{1,16})");
@@ -286,7 +287,7 @@ public class ChatListener {
 
     private boolean processCoinsMessages(ClientChatReceivedEvent event, String fmsg, String msg) {
         if (MWEConfig.shortCoinMessage) {
-            if (COINS_DOUBLED_GUILD_PATTERN.matcher(msg).matches()) {
+            if (COINS_DOUBLED_GUILD_MESSAGE.equals(msg) || TOKEN_DOUBLED_GUILD_MESSAGE.equals(msg)) {
                 event.setCanceled(true);
                 addGuildCoinsBonus = true;
                 return true;
@@ -296,22 +297,16 @@ public class ChatListener {
         if (matcherCoins.find()) {
             boolean changed = false;
             if (MWEConfig.shortCoinMessage) {
+                if (addGuildCoinsBonus) {
+                    final String currency = matcherCoins.group(1);
+                    final boolean isCoins = "coins".equals(currency);
+                    fmsg = StringUtil.replaceFirst(fmsg, currency + "!", currency + "! (" + (isCoins ? EnumChatFormatting.DARK_GREEN : "") + "Guild " + (isCoins ? EnumChatFormatting.GOLD : "") + "bonus)");
+                    changed = true;
+                }
                 final Matcher matcherBooster = COINS_BOOSTER_PATTERN.matcher(msg);
                 if (matcherBooster.find()) {
-                    if (addGuildCoinsBonus) {
-                        final String currency = matcherBooster.group(1);
-                        final boolean isCoins = "coins".equals(currency);
-                        fmsg = StringUtil.replaceFirst(fmsg, currency + "!", currency + "! (" + (isCoins ? EnumChatFormatting.DARK_GREEN : "") + "Guild " + (isCoins ? EnumChatFormatting.GOLD : "") + "bonus)");
-                    }
                     fmsg = StringUtil.remove(fmsg, matcherBooster.group(2));
                     changed = true;
-                } else {
-                    if (addGuildCoinsBonus) {
-                        final String currency = matcherCoins.group(1);
-                        final boolean isCoins = "coins".equals(currency);
-                        fmsg = StringUtil.replaceFirst(fmsg, currency + "!", currency + "! (" + (isCoins ? EnumChatFormatting.DARK_GREEN : "") + "Guild " + (isCoins ? EnumChatFormatting.GOLD : "") + "bonus)");
-                        changed = true;
-                    }
                 }
                 if (addGuildCoinsBonus) {
                     addGuildCoinsBonus = false;
