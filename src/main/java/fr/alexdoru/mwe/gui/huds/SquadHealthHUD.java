@@ -204,22 +204,23 @@ public class SquadHealthHUD extends AbstractRenderer {
 
     private void populateRenderList(Minecraft mc, Scoreboard scoreboard, ScoreObjective scoreobjective) {
 
-        final String ownName = mc.thePlayer.getGameProfile().getName();
-        final char ownTeam = this.getPlayersTeam(scoreboard, ownName);
+        final UUID ownId = mc.thePlayer.getGameProfile().getId();
+        final char ownTeam = this.getPlayersTeam(scoreboard, mc.thePlayer.getGameProfile().getName());
         final boolean addTeamates = ownTeam != 0 && MWEConfig.squadHUDAutoShowTeamates && MWEConfig.squadHUDAutoShowTeamatesCount > 0;
         final int distSqLimit = MWEConfig.squadHUDAutoShowTeamatesDistanceLimit * MWEConfig.squadHUDAutoShowTeamatesDistanceLimit;
 
         final List<NetworkPlayerInfo> candidates = new ArrayList<>();
         for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             final String name = netInfo.getGameProfile().getName();
-            if (ownName.equals(name)) continue;
+            final UUID uuid = netInfo.getGameProfile().getId();
+            if (ownId.equals(uuid)) continue;
             if (SquadHandler.isSquadmate(name)) {
                 netInfoList.add(netInfo);
                 continue;
             }
             if (addTeamates && ownTeam == getPlayersTeam(scoreboard, name)) {
                 if (MWEConfig.squadHUDAutoShowTeamatesLimitDistance) {
-                    final EntityPlayer entity = PlayerDataManager.getPlayerEntityByUUID(netInfo.getGameProfile().getId());
+                    final EntityPlayer entity = PlayerDataManager.getPlayerEntityByUUID(uuid);
                     if (entity == null || mc.thePlayer.getDistanceSqToEntity(entity) > distSqLimit) {
                         continue;
                     }
