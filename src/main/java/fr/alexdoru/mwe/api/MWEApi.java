@@ -287,6 +287,12 @@ public final class MWEApi {
             MWE.INSTANCE().getMweRenderers().squadHUD.registerExtraRenderer(renderer);
         }
 
+        /**
+         * @return {@code true} if the squad HUD is currently rendered
+         */
+        public static boolean isSquadHUDEnabled() {
+            return MWE.INSTANCE().getMweRenderers().squadHUD.isEnabled(-1);  // System.currentTimeMillis()
+        }
     }
 
     public static final class MojangApi {
