@@ -354,7 +354,7 @@ public final class MWEConfig {
             category = PVP_STUFF, subCategory = "Armor HUD",
             name = "Armor HUD",
             comment = "Displays your currently equipped armor")
-    public static final RendererPosition armorHUDPositon = new RendererPosition(false, 0.25d, 1d);
+    public static final RendererPosition armorHUDPositon = new RendererPosition(true, 0.25d, 1d);
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Armor HUD",
@@ -395,7 +395,7 @@ public final class MWEConfig {
             category = PVP_STUFF, subCategory = "Potion HUD",
             name = "Potion HUD",
             comment = "Displays your potion effects")
-    public static final RendererPosition potionHUDPosition = new RendererPosition(false, 0d, 0.5d);
+    public static final RendererPosition potionHUDPosition = new RendererPosition(true, 0d, 0.5d);
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Potion HUD",
@@ -444,7 +444,7 @@ public final class MWEConfig {
             name = "Toggle Sprint",
             comment = "Always sprint when you hold the forward key\n"
                     + "There is a keybind (ESC -> options -> controls -> MWE) to toggle it")
-    public static boolean toggleSprint;
+    public static boolean toggleSprint = true;
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Health",
