@@ -4,12 +4,10 @@ import fr.alexdoru.configlib.api.*;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.chat.ChatHandler;
-import fr.alexdoru.mwe.chat.LocrawListener;
 import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.features.LeatherArmorManager;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.nocheaters.WarningMessageHandler;
-import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
@@ -902,13 +900,6 @@ public final class MWEConfig {
             name = "Base Location HUD",
             comment = "Displays which base you are currently located in")
     public static final RendererPosition baseLocationHUDPosition = new RendererPosition(true, 0.90d, 0d);
-
-    @ConfigPropertyEvent(name = "Base Location HUD")
-    private static void onBaseLocationSetting() {
-        if (MWEConfig.baseLocationHUDPosition.isEnabled() && ScoreboardTracker.isInMwGame()) {
-            LocrawListener.setMegaWallsMap();
-        }
-    }
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
