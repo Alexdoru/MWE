@@ -103,12 +103,25 @@ test {
     ignoreFailures = false
 }
 
+def manifestAttributes = [
+        "FMLCorePlugin"              : 'fr.alexdoru.mwe.asm.MWELoadingPlugin',
+        'FMLCorePluginContainsFMLMod': 'Yes, yes it does'
+]
+
 jar {
     from sourceSets.configlib.output
-    manifest.attributes(
-            "FMLCorePlugin": 'fr.alexdoru.mwe.asm.MWELoadingPlugin',
-            'FMLCorePluginContainsFMLMod': 'Yes, yes it does'
-    )
+    manifest.attributes(manifestAttributes)
+}
+
+task devJar(type: Jar) {
+    from sourceSets.main.output
+    from sourceSets.configlib.output
+    manifest.attributes(manifestAttributes)
+    classifier = 'dev'
+}
+
+artifacts {
+    archives devJar
 }
 
 processResources {
