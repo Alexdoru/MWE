@@ -13,6 +13,7 @@ buildscript {
 
 plugins {
     id 'java-library'
+    id 'maven-publish'
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -118,6 +119,15 @@ task devJar(type: Jar) {
     from sourceSets.configlib.output
     manifest.attributes(manifestAttributes)
     classifier = 'dev'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact devJar
+        }
+    }
 }
 
 artifacts {
