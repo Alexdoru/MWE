@@ -1,20 +1,18 @@
 package fr.alexdoru.mwe.data;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.events.ReportListEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.nocheaters.WDR;
+import fr.alexdoru.mwe.utils.JsonUtil;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import fr.alexdoru.mwe.utils.UUIDUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
-import java.nio.file.Files;
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -181,21 +179,7 @@ public final class WdrDataManager {
                 reportLines.add(key + " " + value.getTimestamp() + value.cheatsToString());
             }
         });
-        try {
-            final File file = wdrDataFile;
-            if (file.getParentFile() != null) {
-                Files.createDirectories(file.getParentFile().toPath());
-            }
-            try (final BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
-                final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
-                final String jsonString = gson.toJson(reportLines);
-                bw.write(jsonString);
-                return true;
-            }
-        } catch (IOException e) {
-            MWE.logger.error(e);
-        }
-        return false;
+        return JsonUtil.writeJsonToFile(wdrDataFile, reportLines);
     }
 
     @NotNull
@@ -224,15 +208,11 @@ public final class WdrDataManager {
 
     private static void loadDataFromFile(File file, Map<Object, WDR> map) {
         if (file.exists()) {
-            try (Reader reader = new FileReader(file)) {
-                final List<String> list = new Gson().fromJson(reader, new TypeToken<List<String>>() {}.getType());
-                if (list != null) {
-                    for (final String line : list) {
-                        loadReportLine(line, map);
-                    }
+            final List<String> list = JsonUtil.readFromFile(file, new TypeToken<List<String>>() {}.getType());
+            if (list != null) {
+                for (final String line : list) {
+                    loadReportLine(line, map);
                 }
-            } catch (Exception e) {
-                MWE.logger.error(e);
             }
         }
     }

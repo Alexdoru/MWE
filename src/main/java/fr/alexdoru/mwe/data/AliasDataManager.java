@@ -1,10 +1,9 @@
 package fr.alexdoru.mwe.data;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.events.AliasEvent;
+import fr.alexdoru.mwe.utils.JsonUtil;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
@@ -12,8 +11,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
-import java.nio.file.Files;
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -145,28 +143,11 @@ public final class AliasDataManager {
 
     @Nullable
     private static Map<String, String> loadDataFromFile(File file) {
-        try (FileReader reader = new FileReader(file)) {
-            return new Gson().fromJson(reader, new TypeToken<HashMap<String, String>>() {}.getType());
-        } catch (Exception e) {
-            MWE.logger.error(e);
-        }
-        return null;
+        return JsonUtil.readFromFile(file, new TypeToken<HashMap<String, String>>() {}.getType());
     }
 
     private static boolean writeDataToFile(File file, Map<String, String> map) {
-        try {
-            if (file.getParentFile() != null) {
-                Files.createDirectories(file.getParentFile().toPath());
-            }
-            try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
-                final Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
-                bufferedWriter.write(gson.toJson(map));
-                return true;
-            }
-        } catch (IOException e) {
-            MWE.logger.error(e);
-        }
-        return false;
+        return JsonUtil.writeJsonToFile(file, map);
     }
 
 }
