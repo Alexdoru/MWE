@@ -369,8 +369,16 @@ public final class FinalKillCounter {
         return "§" + DEFAULT_PREFIXES.get(team);
     }
 
+    public static char getDefaultColorCharOfTeam(MWTeam team) {
+        return DEFAULT_PREFIXES.get(team);
+    }
+
     public String getColorPrefixOfTeam(MWTeam team) {
         return "§" + COLOR_PREFIXES.get(team);
+    }
+
+    public char getColorCharOfTeam(MWTeam team) {
+        return COLOR_PREFIXES.get(team);
     }
 
     /**

@@ -37,6 +37,17 @@ public enum MWTeam {
         return fkCounter.getColorPrefixOfTeam(this);
     }
 
+    /**
+     * Returns the color code for the team according to the colorblind setting set by the player
+     */
+    public char getColorChar() {
+        final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
+        if (fkCounter == null) {
+            return FinalKillCounter.getDefaultColorCharOfTeam(this);
+        }
+        return fkCounter.getColorCharOfTeam(this);
+    }
+
     public String getName() {
         switch (this) {
             case BLUE:
