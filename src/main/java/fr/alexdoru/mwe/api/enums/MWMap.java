@@ -3,6 +3,7 @@ package fr.alexdoru.mwe.api.enums;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -85,21 +86,37 @@ public enum MWMap {
                 return "MIDDLE(" + northBase.formattedName() + EnumChatFormatting.RESET + ")";
             }
         } else {
-            if (player.posZ < northLimit && player.posX > westLimit) {
-                return northBase.formattedName();
-            } else if (player.posX > eastLimit && player.posZ > northLimit) {
-                return eastBase.formattedName();
-            } else if (player.posZ > southLimit && player.posX < eastLimit) {
-                return southBase.formattedName();
-            } else if (player.posX < westLimit && player.posZ < southLimit) {
-                return westBase.formattedName();
+            final MWTeam base = getBaseAt(player.posX, player.posZ);
+            if (base != null) {
+                return base.formattedName();
             }
         }
         return "";
     }
 
+    @Nullable
+    public MWTeam getBaseAt(double x, double z) {
+        if (isPosAtMiddle(x, z)) {
+            return null;
+        }
+        if (z < northLimit && x > westLimit) {
+            return northBase;
+        } else if (x > eastLimit && z > northLimit) {
+            return eastBase;
+        } else if (z > southLimit && x < eastLimit) {
+            return southBase;
+        } else if (x < westLimit && z < southLimit) {
+            return westBase;
+        }
+        return null;
+    }
+
     public boolean isPlayerAtMiddle(EntityPlayer player) {
-        return player.posX < eastLimit && player.posX > westLimit && player.posZ < southLimit && player.posZ > northLimit;
+        return isPosAtMiddle(player.posX, player.posZ);
+    }
+
+    public boolean isPosAtMiddle(double x, double z) {
+        return x < eastLimit && x > westLimit && z < southLimit && z > northLimit;
     }
 
     public boolean isPlayerAtMidMid(EntityPlayer player) {

@@ -14,6 +14,7 @@ import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.*;
+import fr.alexdoru.mwe.features.ctf.CTFManager;
 import fr.alexdoru.mwe.features.overlays.ClassSelectorOverlay;
 import fr.alexdoru.mwe.features.overlays.ReplayBookmarksOverlay;
 import fr.alexdoru.mwe.features.overlays.SkinSelectorOverlay;
@@ -64,6 +65,7 @@ public class MWE {
     private FinalKillCounterManager fkManager;
     private RenegadeArrowTracker renegadeTracker;
     private HackerDetector hackerDetector;
+    private CTFManager ctfManager;
     private MWERenderers mweRenderers;
     private File configFolder;
 
@@ -108,9 +110,11 @@ public class MWE {
         this.fkManager = new FinalKillCounterManager(this.mweRenderers.fkCounterHUD);
         this.renegadeTracker = new RenegadeArrowTracker();
         this.hackerDetector = new HackerDetector();
+        this.ctfManager = new CTFManager();
         MinecraftForge.EVENT_BUS.register(this.fkManager);
         MinecraftForge.EVENT_BUS.register(this.renegadeTracker);
         MinecraftForge.EVENT_BUS.register(this.hackerDetector);
+        MinecraftForge.EVENT_BUS.register(this.ctfManager);
 
         MinecraftForge.EVENT_BUS.register(new MWNotifs());
         MinecraftForge.EVENT_BUS.register(new AutoRequeue());
@@ -172,6 +176,10 @@ public class MWE {
 
     public HackerDetector getHackerDetector() {
         return hackerDetector;
+    }
+
+    public CTFManager getCtfManager() {
+        return ctfManager;
     }
 
     public MWERenderers getMweRenderers() {

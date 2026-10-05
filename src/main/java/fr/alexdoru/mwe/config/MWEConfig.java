@@ -775,6 +775,31 @@ public final class MWEConfig {
     public static boolean autoRequeue;
 
     @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "CTF",
+            name = "Capture the flag",
+            comment = "Spawns a capture the flag minigame during games of Mega Walls")
+    public static boolean captureTheFlag = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "CTF",
+            name = "Show flag icon",
+            dependsOn = "Capture the flag",
+            comment = "Renders an in world flag icon")
+    public static boolean captureTheFlagIcon = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "CTF",
+            name = "Show flag particles",
+            dependsOn = "Capture the flag",
+            comment = "Renders in world particles")
+    public static boolean captureTheFlagParticles = true;
+
+    @ConfigPropertyEvent(name = "Capture the flag")
+    private static void onCTFToggle() {
+        MWE.INSTANCE().getCtfManager().onSettingToggle();
+    }
+
+    @ConfigProperty(
             category = MEGA_WALLS, subCategory = "Chat",
             name = "Print deathmatch damage in chat",
             comment = "Prints the deathmatch damage as a separate message in chat instead of having to hover over the message")
