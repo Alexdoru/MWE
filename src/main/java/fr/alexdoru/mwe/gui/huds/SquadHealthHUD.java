@@ -119,16 +119,20 @@ public class SquadHealthHUD extends AbstractRenderer {
         this.rendererPosition.updateAdjustedAbsolutePosition(resolution, hudWidth, hudHeight);
         final int hudXpos = this.rendererPosition.getAbsoluteRenderX();
         final int hudYpos = this.rendererPosition.getAbsoluteRenderY();
-        Gui.drawRect(hudXpos, hudYpos, hudXpos + hudWidth, hudYpos + hudHeight, Integer.MIN_VALUE);
+        if (MWEConfig.squadHUDShowBackground) {
+            Gui.drawRect(hudXpos, hudYpos, hudXpos + hudWidth, hudYpos + hudHeight, Integer.MIN_VALUE);
+        }
         for (int i = 0; i < listSize; i++) {
             final NetworkPlayerInfo netInfo = netInfoList.get(i);
             final EntityPlayer entityPlayer = playerList.get(i);
             final String playername = playerNamesList.get(i);
             int xDrawingPos = hudXpos + 1;
             final int yDrawingPos = hudYpos + 1 + i * 9;
-            // draw background
-            final int backGroundColor = 0xFFFFFF | (MWEConfig.squadHUDBackgroundAlpha << 24);
-            Gui.drawRect(xDrawingPos, yDrawingPos, hudXpos + maxLineWidth + 1, yDrawingPos + 8, backGroundColor);
+            if (MWEConfig.squadHUDShowBackground) {
+                // draw background
+                final int backGroundColor = 0xFFFFFF | (MWEConfig.squadHUDBackgroundAlpha << 24);
+                Gui.drawRect(xDrawingPos, yDrawingPos, hudXpos + maxLineWidth + 1, yDrawingPos + 8, backGroundColor);
+            }
             // draw head
             final boolean renderHatLayer = entityPlayer == null || entityPlayer.isWearing(EnumPlayerModelParts.HAT);
             RenderHelper.renderSkinHead(netInfo.getLocationSkin(), xDrawingPos, yDrawingPos, renderHatLayer, 8);
@@ -175,12 +179,16 @@ public class SquadHealthHUD extends AbstractRenderer {
         final int maxScoreWidth = mc.fontRendererObj.getStringWidth(" 00");
         final int maxFinalWidth = mc.fontRendererObj.getStringWidth(" 0");
         final int maxLineWidth = maxNameWidth + maxFinalWidth + maxScoreWidth + 9;
-        Gui.drawRect(hudXpos, hudYpos, hudXpos + maxLineWidth + 2, hudYpos + listSize * 9 + 1, Integer.MIN_VALUE);
+        if (MWEConfig.squadHUDShowBackground) {
+            Gui.drawRect(hudXpos, hudYpos, hudXpos + maxLineWidth + 2, hudYpos + listSize * 9 + 1, Integer.MIN_VALUE);
+        }
         for (int i = 0; i < listSize; i++) {
             int xDrawingPos = hudXpos + 1;
             final int yDrawingPos = hudYpos + 1 + i * 9;
-            final int backGroundColor = 0xFFFFFF | (MWEConfig.squadHUDBackgroundAlpha << 24);
-            Gui.drawRect(xDrawingPos, yDrawingPos, hudXpos + maxLineWidth + 1, yDrawingPos + 8, backGroundColor);
+            if (MWEConfig.squadHUDShowBackground) {
+                final int backGroundColor = 0xFFFFFF | (MWEConfig.squadHUDBackgroundAlpha << 24);
+                Gui.drawRect(xDrawingPos, yDrawingPos, hudXpos + maxLineWidth + 1, yDrawingPos + 8, backGroundColor);
+            }
             RenderHelper.renderSkinHead(DefaultPlayerSkin.getDefaultSkinLegacy(), xDrawingPos, yDrawingPos, true, 8);
             xDrawingPos += 9;
             final String formattedName = EnumChatFormatting.GREEN + mc.thePlayer.getName();

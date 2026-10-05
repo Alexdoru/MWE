@@ -1466,8 +1466,15 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = SQUAD, subCategory = "HUD",
-            name = "Squad HUD background aplha",
+            name = "Squad HUD show background",
             dependsOn = "Squad HUD",
+            comment = "Draws a background for the hud")
+    public static boolean squadHUDShowBackground = true;
+
+    @ConfigProperty(
+            category = SQUAD, subCategory = "HUD",
+            name = "Squad HUD background aplha",
+            dependsOn = "Squad HUD show background",
             comment = "Change the alpha of the background",
             sliderMax = 255)
     public static int squadHUDBackgroundAlpha = 0x20;
