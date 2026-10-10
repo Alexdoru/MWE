@@ -1539,10 +1539,11 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = UPDATES,
-            name = "Automatic Update",
+            name = "Automatic Update Installation",
             dependsOn = "Check for Update",
-            comment = "Updates the mod automatically upon closing your game")
-    public static boolean automaticUpdate = true;
+            comment = "Downloads and installs the updated mod automatically upon closing your game\n"
+                    + "§cWarning: using automatic download and installation may expose your computer to a security risk if my github account ever gets compromised.")
+    public static boolean automaticUpdate;
 
     @ConfigProperty(
             category = "Icons",
