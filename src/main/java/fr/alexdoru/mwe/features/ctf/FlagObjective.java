@@ -2,7 +2,6 @@ package fr.alexdoru.mwe.features.ctf;
 
 import fr.alexdoru.mwe.api.enums.MWMap;
 import fr.alexdoru.mwe.api.enums.MWTeam;
-import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.utils.ColorUtil;
@@ -138,32 +137,14 @@ public final class FlagObjective {
 
     private void countPlayersInRadius(World world) {
         playersInRadius.clear();
-        final char blue = MWTeam.BLUE.getColorChar();
-        final char green = MWTeam.GREEN.getColorChar();
-        final char red = MWTeam.RED.getColorChar();
-        final char yellow = MWTeam.YELLOW.getColorChar();
-        int bluePlayerCount = 0;
-        int greenPlayerCount = 0;
-        int redPlayerCount = 0;
-        int yellowPlayerCount = 0;
         for (final EntityPlayer player : world.playerEntities) {
             if (isPlayerInRange(player, this.radius) && player.posY < this.startingY + 6D) {
-                final char c = ((EntityPlayerAccessor) player).getPlayerTeamColor();
-                if (c == blue) {
-                    bluePlayerCount++;
-                } else if (c == green) {
-                    greenPlayerCount++;
-                } else if (c == red) {
-                    redPlayerCount++;
-                } else if (c == yellow) {
-                    yellowPlayerCount++;
+                final MWTeam team = MWTeam.ofPlayer(player);
+                if (team != null) {
+                    playersInRadius.merge(team, 1, Integer::sum);
                 }
             }
         }
-        if (bluePlayerCount > 0) playersInRadius.put(MWTeam.BLUE, bluePlayerCount);
-        if (greenPlayerCount > 0) playersInRadius.put(MWTeam.GREEN, greenPlayerCount);
-        if (redPlayerCount > 0) playersInRadius.put(MWTeam.RED, redPlayerCount);
-        if (yellowPlayerCount > 0) playersInRadius.put(MWTeam.YELLOW, yellowPlayerCount);
     }
 
     private void updateCaptureProgress() {
@@ -230,7 +211,7 @@ public final class FlagObjective {
             this.inWorldLabel.add("§7Capture the");
             this.inWorldLabel.add("§7objective");
         } else {
-            final MWTeam ownTeam = MWTeam.ofPlayer(thePlayer.getUniqueID());
+            final MWTeam ownTeam = MWTeam.ofPlayer(thePlayer);
             if (ownTeam != null) {
                 if (this.capturingTeam == ownTeam) {
                     this.inWorldLabel.add("§7Defend");

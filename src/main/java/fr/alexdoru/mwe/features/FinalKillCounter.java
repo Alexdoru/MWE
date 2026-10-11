@@ -130,6 +130,7 @@ public final class FinalKillCounter {
     @NotNull
     private final String serverID;
     private final Map<MWTeam, Character> COLOR_PREFIXES;
+    private String COLOR_PREFIXES_STR;
     private final Map<MWTeam, Map<String, Integer>> KILLS_MAP = new EnumMap<>(MWTeam.class);
     private final Map<String, Integer> allPlayerKills = new HashMap<>();
     private final Set<String> deadPlayers = new HashSet<>();
@@ -151,6 +152,7 @@ public final class FinalKillCounter {
         this.fkCounterHUD = fkCounterHUD;
         this.serverID = serverID;
         this.COLOR_PREFIXES = new EnumMap<>(DEFAULT_PREFIXES);
+        this.COLOR_PREFIXES_STR = this.getPrefixStr();
         for (final MWTeam team : MWTeam.values()) {
             KILLS_MAP.put(team, new HashMap<>());
         }
@@ -311,7 +313,15 @@ public final class FinalKillCounter {
                 }
             }
         }
+        this.COLOR_PREFIXES_STR = this.getPrefixStr();
         this.fkCounterHUD.updateDisplayText();
+    }
+
+    private String getPrefixStr() {
+        return String.valueOf(COLOR_PREFIXES.get(MWTeam.BLUE)) +
+                COLOR_PREFIXES.get(MWTeam.GREEN) +
+                COLOR_PREFIXES.get(MWTeam.RED) +
+                COLOR_PREFIXES.get(MWTeam.YELLOW);
     }
 
     /**
@@ -357,10 +367,17 @@ public final class FinalKillCounter {
 
     @Nullable
     public MWTeam getTeamFromColor(char color) {
-        for (final Map.Entry<MWTeam, Character> entry : COLOR_PREFIXES.entrySet()) {
-            if (entry.getValue() == color) {
-                return entry.getKey();
-            }
+        final int index = this.COLOR_PREFIXES_STR.indexOf(color);
+        if (index == -1) return null;
+        switch (index) {
+            case 0:
+                return MWTeam.BLUE;
+            case 1:
+                return MWTeam.GREEN;
+            case 2:
+                return MWTeam.RED;
+            case 3:
+                return MWTeam.YELLOW;
         }
         return null;
     }

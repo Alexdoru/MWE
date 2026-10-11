@@ -1,11 +1,13 @@
 package fr.alexdoru.mwe.api.enums;
 
 import fr.alexdoru.mwe.MWE;
+import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -70,6 +72,14 @@ public enum MWTeam {
         final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
         if (fkCounter == null) return null;
         return fkCounter.getTeamFromColor(color);
+    }
+
+    /**
+     * Returns the MWTeam of a player, might be null
+     */
+    @Nullable
+    public static MWTeam ofPlayer(@NotNull EntityPlayer player) {
+        return MWTeam.fromColorChar(((EntityPlayerAccessor) player).getPlayerTeamColor());
     }
 
     /**
