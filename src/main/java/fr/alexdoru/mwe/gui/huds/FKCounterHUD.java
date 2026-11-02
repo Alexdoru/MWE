@@ -2,11 +2,11 @@ package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.enums.MWTeam;
+import fr.alexdoru.mwe.api.utils.MapUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import fr.alexdoru.mwe.utils.MapUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;

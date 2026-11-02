@@ -1,6 +1,6 @@
 package fr.alexdoru.mwe.api.enums;
 
-import fr.alexdoru.mwe.utils.StringUtil;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 import org.jetbrains.annotations.Nullable;

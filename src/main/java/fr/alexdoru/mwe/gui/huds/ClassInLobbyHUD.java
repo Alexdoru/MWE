@@ -1,9 +1,9 @@
 package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.api.enums.MWSkin;
+import fr.alexdoru.mwe.api.utils.MapUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import fr.alexdoru.mwe.utils.MapUtil;
 import fr.alexdoru.mwe.utils.RenderHelper;
 import fr.alexdoru.mwe.utils.TimerUtil;
 import net.minecraft.client.Minecraft;

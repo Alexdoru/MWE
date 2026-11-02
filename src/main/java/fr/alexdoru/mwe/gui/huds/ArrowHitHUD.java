@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.MWE;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.asm.interfaces.GuiNewChatAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
@@ -9,7 +10,6 @@ import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.RenderHelper;
-import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.FontRenderer;

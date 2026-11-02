@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.hackerdetector.checks;
 
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.events.HackerFlagEvent;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
@@ -17,7 +18,6 @@ import fr.alexdoru.mwe.hackerdetector.data.ViolationLevelTracker;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.SoundUtil;
-import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;

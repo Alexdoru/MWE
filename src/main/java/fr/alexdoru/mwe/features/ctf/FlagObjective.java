@@ -2,11 +2,11 @@ package fr.alexdoru.mwe.features.ctf;
 
 import fr.alexdoru.mwe.api.enums.MWMap;
 import fr.alexdoru.mwe.api.enums.MWTeam;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.RenderHelper;
-import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;

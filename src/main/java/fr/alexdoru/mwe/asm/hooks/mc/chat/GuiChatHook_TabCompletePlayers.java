@@ -1,11 +1,11 @@
 package fr.alexdoru.mwe.asm.hooks.mc.chat;
 
 import fr.alexdoru.mwe.MWE;
+import fr.alexdoru.mwe.api.utils.TabCompletionUtil;
 import fr.alexdoru.mwe.commands.CommandWDR;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
-import fr.alexdoru.mwe.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.command.CommandBase;

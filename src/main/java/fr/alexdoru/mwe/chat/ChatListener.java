@@ -3,6 +3,8 @@ package fr.alexdoru.mwe.chat;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
+import fr.alexdoru.mwe.api.utils.MapUtil;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
@@ -15,8 +17,7 @@ import fr.alexdoru.mwe.nocheaters.ReportSuggestionHandler;
 import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
-import fr.alexdoru.mwe.utils.MapUtil;
-import fr.alexdoru.mwe.utils.StringUtil;
+import fr.alexdoru.mwe.utils.StringHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -229,7 +230,7 @@ public class ChatListener {
                 if (squadname == null) return;
                 if (squadname.equals(name)) {
                     if (MWEConfig.coloredSquadmates) {
-                        event.message = new ChatComponentText(StringUtil.changeColorOf(fmsg, name, MWEConfig.squadmateColor));
+                        event.message = new ChatComponentText(StringHelper.changeColorOf(fmsg, name, MWEConfig.squadmateColor));
                     }
                 } else {
                     final String replacement = MWEConfig.coloredSquadmates ? MWEConfig.squadmateColor + squadname : squadname;

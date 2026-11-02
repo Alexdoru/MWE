@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.utils;
+package fr.alexdoru.mwe.api.utils;
 
 import java.util.ArrayList;
 import java.util.Comparator;

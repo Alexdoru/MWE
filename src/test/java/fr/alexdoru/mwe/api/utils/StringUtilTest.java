@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.utils;
+package fr.alexdoru.mwe.api.utils;
 
 import net.minecraft.util.EnumChatFormatting;
 import org.junit.Test;

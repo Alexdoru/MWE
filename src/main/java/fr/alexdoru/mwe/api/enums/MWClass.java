@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.api.enums;
 
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;

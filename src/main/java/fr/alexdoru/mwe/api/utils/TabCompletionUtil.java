@@ -1,4 +1,4 @@
-package fr.alexdoru.mwe.utils;
+package fr.alexdoru.mwe.api.utils;
 
 import fr.alexdoru.mwe.data.AliasDataManager;
 import net.minecraft.client.Minecraft;
@@ -8,7 +8,9 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TabCompletionUtil {
+public final class TabCompletionUtil {
+
+    private TabCompletionUtil() {}
 
     public static List<String> getAlias() {
         return collectPlayers(true, false);

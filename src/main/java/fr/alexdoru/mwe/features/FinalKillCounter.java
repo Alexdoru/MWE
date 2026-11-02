@@ -2,6 +2,8 @@ package fr.alexdoru.mwe.features;
 
 import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.api.events.KillCounterEvent;
+import fr.alexdoru.mwe.api.utils.MapUtil;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
@@ -9,8 +11,6 @@ import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.gui.huds.FKCounterHUD;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
-import fr.alexdoru.mwe.utils.MapUtil;
-import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ChatComponentText;

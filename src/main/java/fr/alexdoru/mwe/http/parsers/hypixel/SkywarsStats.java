@@ -1,9 +1,9 @@
 package fr.alexdoru.mwe.http.parsers.hypixel;
 
 import com.google.gson.JsonObject;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.utils.JsonUtil;
-import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 

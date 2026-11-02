@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.api.MWECommandBase;
+import fr.alexdoru.mwe.api.utils.TabCompletionUtil;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.data.AliasDataManager;
 import fr.alexdoru.mwe.data.NameFormatter;
@@ -14,7 +15,6 @@ import fr.alexdoru.mwe.http.requests.HypixelPlayerData;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import fr.alexdoru.mwe.utils.NetInfoOrdering;
-import fr.alexdoru.mwe.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;

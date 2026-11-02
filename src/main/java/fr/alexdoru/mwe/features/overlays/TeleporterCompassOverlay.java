@@ -2,10 +2,10 @@ package fr.alexdoru.mwe.features.overlays;
 
 import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.api.events.ContainerSlotRenderEvent;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.config.SkinStyle;
 import fr.alexdoru.mwe.config.TeamIndicatorStyle;
-import fr.alexdoru.mwe.utils.StringUtil;
 import fr.alexdoru.mwe.utils.UUIDUtil;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.network.NetworkPlayerInfo;

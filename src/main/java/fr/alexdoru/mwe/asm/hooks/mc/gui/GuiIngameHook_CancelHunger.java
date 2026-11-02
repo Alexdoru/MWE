@@ -1,8 +1,8 @@
 package fr.alexdoru.mwe.asm.hooks.mc.gui;
 
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import fr.alexdoru.mwe.utils.StringUtil;
 
 public class GuiIngameHook_CancelHunger {
 

@@ -1,12 +1,12 @@
 package fr.alexdoru.mwe.chat;
 
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.asm.interfaces.GuiChatAccessor;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor_ChatHeads;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;

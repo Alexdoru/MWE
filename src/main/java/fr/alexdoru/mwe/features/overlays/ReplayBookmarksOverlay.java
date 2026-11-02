@@ -2,11 +2,11 @@ package fr.alexdoru.mwe.features.overlays;
 
 import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.api.events.ContainerSlotRenderEvent;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.config.SkinStyle;
 import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.ItemStackUtil;
-import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.InventoryPlayer;

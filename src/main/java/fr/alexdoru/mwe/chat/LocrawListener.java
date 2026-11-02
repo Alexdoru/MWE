@@ -1,8 +1,8 @@
 package fr.alexdoru.mwe.chat;
 
 import fr.alexdoru.mwe.api.events.MapEvent;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.commands.CommandScanGame;
-import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;

@@ -1,9 +1,9 @@
 package fr.alexdoru.mwe.api.enums;
 
 import fr.alexdoru.mwe.MWE;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.features.FinalKillCounter;
-import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;

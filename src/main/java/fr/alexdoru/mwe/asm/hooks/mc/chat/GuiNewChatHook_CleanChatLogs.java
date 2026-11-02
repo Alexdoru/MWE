@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks.mc.chat;
 
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.utils.StringUtil;
 
 public class GuiNewChatHook_CleanChatLogs {
 

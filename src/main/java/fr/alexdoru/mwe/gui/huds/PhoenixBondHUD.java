@@ -1,12 +1,12 @@
 package fr.alexdoru.mwe.gui.huds;
 
+import fr.alexdoru.mwe.api.utils.MapUtil;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.features.SquadHandler;
-import fr.alexdoru.mwe.utils.MapUtil;
 import fr.alexdoru.mwe.utils.RenderHelper;
-import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;

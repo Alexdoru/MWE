@@ -1,11 +1,11 @@
 package fr.alexdoru.mwe.features;
 
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
-import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;

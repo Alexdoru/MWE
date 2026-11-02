@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.scoreboard;
 
 import fr.alexdoru.mwe.api.IScoreboardParser;
 import fr.alexdoru.mwe.api.enums.MWTeam;
-import fr.alexdoru.mwe.utils.StringUtil;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import net.minecraft.scoreboard.ScoreObjective;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.VisibleForTesting;

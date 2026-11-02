@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.api.ISquadInfoRenderer;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.config.TablistSorting;
@@ -10,7 +11,6 @@ import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.NetInfoOrdering;
 import fr.alexdoru.mwe.utils.RenderHelper;
-import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;

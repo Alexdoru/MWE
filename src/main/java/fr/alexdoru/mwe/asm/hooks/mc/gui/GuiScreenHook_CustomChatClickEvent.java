@@ -1,8 +1,8 @@
 package fr.alexdoru.mwe.asm.hooks.mc.gui;
 
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.asm.interfaces.GuiChatAccessor;
 import fr.alexdoru.mwe.features.MegaWallsEndGameStats;
-import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiScreen;

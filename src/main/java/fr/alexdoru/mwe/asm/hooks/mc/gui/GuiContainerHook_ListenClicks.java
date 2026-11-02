@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks.mc.gui;
 
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
-import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.init.Blocks;

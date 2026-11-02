@@ -1,10 +1,10 @@
 package fr.alexdoru.mwe.asm.hooks.mc.gui;
 
 import fr.alexdoru.mwe.MWE;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.SquadHandler;
-import fr.alexdoru.mwe.utils.StringUtil;
 import fr.alexdoru.mwe.utils.TimerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;

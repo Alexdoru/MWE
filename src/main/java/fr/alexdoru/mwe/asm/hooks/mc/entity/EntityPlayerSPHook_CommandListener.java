@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks.mc.entity;
 
 import fr.alexdoru.mwe.api.events.ChatMessageSentEvent;
-import fr.alexdoru.mwe.utils.StringUtil;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import net.minecraftforge.common.MinecraftForge;
 
 public class EntityPlayerSPHook_CommandListener {

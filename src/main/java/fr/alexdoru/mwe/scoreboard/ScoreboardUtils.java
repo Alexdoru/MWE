@@ -2,7 +2,7 @@ package fr.alexdoru.mwe.scoreboard;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import fr.alexdoru.mwe.utils.StringUtil;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;

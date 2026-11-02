@@ -1,10 +1,10 @@
 package fr.alexdoru.mwe.asm.hooks.mc.chat;
 
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.utils.RenderHelper;
-import fr.alexdoru.mwe.utils.StringUtil;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.IChatComponent;

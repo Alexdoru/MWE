@@ -1,13 +1,13 @@
 package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.api.MWECommandBase;
+import fr.alexdoru.mwe.api.utils.StringUtil;
+import fr.alexdoru.mwe.api.utils.TabCompletionUtil;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardUtils;
-import fr.alexdoru.mwe.utils.StringUtil;
-import fr.alexdoru.mwe.utils.TabCompletionUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.ICommandSender;

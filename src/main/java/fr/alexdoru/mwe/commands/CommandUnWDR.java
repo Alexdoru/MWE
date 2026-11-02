@@ -2,6 +2,7 @@ package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.api.IPlayerUUID;
 import fr.alexdoru.mwe.api.MWECommandBase;
+import fr.alexdoru.mwe.api.utils.TabCompletionUtil;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.data.PlayerDataManager;
@@ -10,7 +11,6 @@ import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
-import fr.alexdoru.mwe.utils.TabCompletionUtil;
 import fr.alexdoru.mwe.utils.UUIDUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;

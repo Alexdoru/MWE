@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.commands;
 
 import fr.alexdoru.mwe.api.MWECommandBase;
+import fr.alexdoru.mwe.api.utils.MapUtil;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
@@ -11,7 +12,6 @@ import fr.alexdoru.mwe.http.requests.MojangUUIDToName;
 import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.nocheaters.WarningMessageHandler;
 import fr.alexdoru.mwe.utils.DateUtil;
-import fr.alexdoru.mwe.utils.MapUtil;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;

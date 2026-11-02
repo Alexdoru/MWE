@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.nocheaters;
 
 import fr.alexdoru.mwe.MWE;
+import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.commands.CommandWDR;
 import fr.alexdoru.mwe.config.MWEConfig;
@@ -11,7 +12,7 @@ import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.SoundUtil;
-import fr.alexdoru.mwe.utils.StringUtil;
+import fr.alexdoru.mwe.utils.StringHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.event.ClickEvent;
@@ -135,13 +136,13 @@ public class ReportSuggestionHandler {
         }
 
         if (isSenderCheating) {
-            final String msg = StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.YELLOW + " (Cheater)", EnumChatFormatting.GRAY + EnumChatFormatting.STRIKETHROUGH.toString(), true);
+            final String msg = StringHelper.insertAfterName(fmsg, messageSender, EnumChatFormatting.YELLOW + " (Cheater)", EnumChatFormatting.GRAY + EnumChatFormatting.STRIKETHROUGH.toString(), true);
             event.message = new ChatComponentText(msg);
             return;
         }
 
         if (isSenderFlaging) {
-            final String newFmsg = StringUtil.insertAfterName(fmsg, messageSender, EnumChatFormatting.LIGHT_PURPLE + " (Scangame)", "", true);
+            final String newFmsg = StringHelper.insertAfterName(fmsg, messageSender, EnumChatFormatting.LIGHT_PURPLE + " (Scangame)", "", true);
             final IChatComponent imsg = getIChatComponentWithSquadnameAsSender(newFmsg, messageSender, squadname);
             addButtons(imsg, reportedPlayer, cheat, isTargetMyself);
             event.message = imsg;
@@ -158,9 +159,9 @@ public class ReportSuggestionHandler {
     private static String getReportTextWithFormattedName(String fmsg, String reportText, String reportedPlayer) {
         if (ScoreboardTracker.isInMwGame()) {
             final String newReportText = EnumChatFormatting.DARK_RED + StringUtil.replace(reportText, reportedPlayer, NameFormatter.getFormattedNameSimple(reportedPlayer) + EnumChatFormatting.DARK_RED);
-            return StringUtil.replaceTargetWith(fmsg, reportText, newReportText);
+            return StringHelper.replaceFirstKeepFormat(fmsg, reportText, newReportText);
         }
-        return StringUtil.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED);
+        return StringHelper.changeColorOf(fmsg, reportText, EnumChatFormatting.DARK_RED);
     }
 
     private static void addButtons(IChatComponent imsg, String reportedPlayer, String cheat, boolean isTargetMyself) {
