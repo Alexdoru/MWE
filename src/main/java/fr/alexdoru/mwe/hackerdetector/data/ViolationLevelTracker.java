@@ -77,4 +77,8 @@ public class ViolationLevelTracker {
         return violationLevel;
     }
 
+    public int getFlagLevel() {
+        return flagLevel;
+    }
+
 }
