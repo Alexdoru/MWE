@@ -27,7 +27,7 @@ public class C08PacketPlayerBlockPlacementTransformer implements MWETransformer 
                         list.add(new MethodInsnNode(INVOKESTATIC,
                                 getHookClass("mc/network/C08PacketPlayerBlockPlacementHook"),
                                 "onBlockPlace",
-                                "(L" + ClassMapping.BLOCKPOS + ";IL" + ClassMapping.ITEMSTACK + ";)V",
+                                "(" + ClassMapping.BLOCKPOS.desc() + "I" + ClassMapping.ITEMSTACK.desc() + ")V",
                                 false));
                         methodNode.instructions.insertBefore(insnNode, list);
                         status.addInjection();

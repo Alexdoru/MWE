@@ -78,7 +78,7 @@ public class RenderTransformer_LimitDroppedItems implements MWETransformer {
                     INVOKESTATIC,
                     getHookClass("mc/render/RenderHook_LimitDroppedItems"),
                     "shouldRenderEntityItem",
-                    "(L" + ClassMapping.ENTITY + ";DDD)Z",
+                    "(" + ClassMapping.ENTITY.desc() + "DDD)Z",
                     false
             ));
             list.add(new JumpInsnNode(IFEQ, l1));
@@ -91,9 +91,9 @@ public class RenderTransformer_LimitDroppedItems implements MWETransformer {
             list.add(new FrameNode(F_SAME1, 0, null, 1, new Object[]{INTEGER}));
             list.add(new InsnNode(IRETURN));
             list.add(l3);
-            mn.localVariables.add(new LocalVariableNode("this", "L" + ClassMapping.RENDERENTITYITEM + ";", null, l0, l3, 0));
-            mn.localVariables.add(new LocalVariableNode("entityItem", "L" + ClassMapping.ENTITY + ";", null, l0, l3, 1));
-            mn.localVariables.add(new LocalVariableNode("camera", "L" + ClassMapping.ICAMERA + ";", null, l0, l3, 2));
+            mn.localVariables.add(new LocalVariableNode("this", ClassMapping.RENDERENTITYITEM.desc(), null, l0, l3, 0));
+            mn.localVariables.add(new LocalVariableNode("entityItem", ClassMapping.ENTITY.desc(), null, l0, l3, 1));
+            mn.localVariables.add(new LocalVariableNode("camera", ClassMapping.ICAMERA.desc(), null, l0, l3, 2));
             mn.localVariables.add(new LocalVariableNode("camX", "D", null, l0, l3, 3));
             mn.localVariables.add(new LocalVariableNode("camY", "D", null, l0, l3, 5));
             mn.localVariables.add(new LocalVariableNode("camZ", "D", null, l0, l3, 7));

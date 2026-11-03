@@ -26,7 +26,7 @@ public class LayerArrowTransformer implements MWETransformer {
                         final InsnList list = new InsnList();
                         list.add(new VarInsnNode(ALOAD, 10));
                         list.add(new InsnNode(ICONST_1));
-                        list.add(new FieldInsnNode(PUTFIELD, ClassMapping.ENTITYARROW.toString(), FieldMapping.ENTITYARROW$PINNEDTOPLAYER.name, "Z"));
+                        list.add(new FieldInsnNode(PUTFIELD, ClassMapping.ENTITYARROW.name, FieldMapping.ENTITYARROW$PINNEDTOPLAYER.name, "Z"));
                         methodNode.instructions.insert(insnNode, list);
                         status.addInjection();
                         return;

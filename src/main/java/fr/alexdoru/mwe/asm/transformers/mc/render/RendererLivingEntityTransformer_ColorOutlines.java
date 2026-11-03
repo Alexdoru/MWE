@@ -26,7 +26,7 @@ public class RendererLivingEntityTransformer_ColorOutlines implements MWETransfo
                                 INVOKESTATIC,
                                 getHookClass("mc/render/RendererLivingEntityHook_ColorOutlines"),
                                 "getEntityOutlineColor",
-                                "(IL" + ClassMapping.ENTITYLIVINGBASE + ";)I",
+                                "(I" + ClassMapping.ENTITYLIVINGBASE.desc() + ")I",
                                 false
                         ));
                         methodNode.instructions.insert(insnNode, list);

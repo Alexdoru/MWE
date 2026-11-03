@@ -34,7 +34,7 @@ public class RendererLivingEntityTransformer_HitColor implements MWETransformer 
                                             INVOKESTATIC,
                                             getHookClass("mc/render/RendererLivingEntityHook_HitColor"),
                                             "getRed",
-                                            "(FL" + ClassMapping.ENTITYLIVINGBASE + ";)F",
+                                            "(F" + ClassMapping.ENTITYLIVINGBASE.desc() + ")F",
                                             false
                                     ));
                                     methodNode.instructions.insert(thirdNode, list);

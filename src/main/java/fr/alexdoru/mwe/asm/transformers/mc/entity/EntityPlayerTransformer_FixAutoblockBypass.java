@@ -33,7 +33,7 @@ public class EntityPlayerTransformer_FixAutoblockBypass implements MWETransforme
                                             INVOKESTATIC,
                                             getHookClass("mc/entity/EntityPlayerHook_FixAutoblockBypass"),
                                             "areItemStackSemiEquals",
-                                            "(L" + ClassMapping.ITEMSTACK + ";L" + ClassMapping.ITEMSTACK + ";L" + ClassMapping.ENTITYPLAYER + ";)Z",
+                                            "(" + ClassMapping.ITEMSTACK.desc() + ClassMapping.ITEMSTACK.desc() + ClassMapping.ENTITYPLAYER.desc() + ")Z",
                                             false));
                                     methodNode.instructions.insert(thirdNode, list);
                                     ((JumpInsnNode) fourthNode).setOpcode(IFEQ);

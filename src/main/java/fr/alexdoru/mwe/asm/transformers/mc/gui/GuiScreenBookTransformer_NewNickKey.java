@@ -28,7 +28,7 @@ public class GuiScreenBookTransformer_NewNickKey implements MWETransformer {
                                 INVOKESTATIC,
                                 getHookClass("mc/gui/GuiScreenBookHook"),
                                 "onBookInit",
-                                "(L" + ClassMapping.ITEMSTACK + ";)V",
+                                "(" + ClassMapping.ITEMSTACK.desc() + ")V",
                                 false
                         ));
                         methodNode.instructions.insertBefore(insnNode, list);

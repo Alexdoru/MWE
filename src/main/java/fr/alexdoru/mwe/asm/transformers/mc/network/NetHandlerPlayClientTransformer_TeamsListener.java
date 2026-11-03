@@ -27,7 +27,7 @@ public class NetHandlerPlayClientTransformer_TeamsListener implements MWETransfo
                                 INVOKESTATIC,
                                 getHookClass("mc/network/NetHandlerPlayClientHook_TeamsListener"),
                                 "handleTeamPacket",
-                                "(L" + ClassMapping.S3EPACKETTEAMS + ";L" + ClassMapping.SCOREPLAYERTEAM + ";)V",
+                                "(" + ClassMapping.S3EPACKETTEAMS.desc() + ClassMapping.SCOREPLAYERTEAM.desc() + ")V",
                                 false
                         ));
                         methodNode.instructions.insertBefore(insnNode, list);

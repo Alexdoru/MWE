@@ -30,7 +30,7 @@ public class EntityFXTransformer_ClearView implements MWETransformer {
                         INVOKESTATIC,
                         getHookClass("mc/entity/EntityFXHook_CleanView"),
                         "shouldHideParticle",
-                        "(L" + ClassMapping.ENTITYFX + ";L" + ClassMapping.ENTITY + ";)Z",
+                        "(" + ClassMapping.ENTITYFX.desc() + ClassMapping.ENTITY.desc() + ")Z",
                         false
                 ));
                 list.add(new JumpInsnNode(IFEQ, notCanceled));

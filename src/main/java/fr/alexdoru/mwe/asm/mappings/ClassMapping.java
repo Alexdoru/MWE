@@ -114,7 +114,7 @@ public enum ClassMapping {
 
     @Override
     public String toString() {
-        return name;
+        throw new UnsupportedOperationException();
     }
 
 }

@@ -35,7 +35,7 @@ public class GuiNewChatTransformer_ChatHeads implements MWETransformer {
                                 INVOKESTATIC,
                                 getHookClass("mc/chat/GuiNewChatHook_ChatHeads"),
                                 "preRenderStringCall",
-                                "(L" + ClassMapping.CHATLINE + ";III)V",
+                                "(" + ClassMapping.CHATLINE.desc() + "III)V",
                                 false
                         ));
                         methodNode.instructions.insert(insnNode, list);
@@ -59,7 +59,7 @@ public class GuiNewChatTransformer_ChatHeads implements MWETransformer {
                         INVOKESTATIC,
                         getHookClass("mc/chat/GuiNewChatHook_ChatHeads"),
                         "addHeadToMessage",
-                        "(L" + ClassMapping.ICHATCOMPONENT + ";)V",
+                        "(" + ClassMapping.ICHATCOMPONENT.desc() + ")V",
                         false
                 ));
                 methodNode.instructions.insert(list);
@@ -77,7 +77,7 @@ public class GuiNewChatTransformer_ChatHeads implements MWETransformer {
                                         INVOKESTATIC,
                                         getHookClass("mc/chat/GuiNewChatHook_ChatHeads"),
                                         "fixComponentHover",
-                                        "(L" + ClassMapping.CHATLINE + ";)I",
+                                        "(" + ClassMapping.CHATLINE.desc() + ")I",
                                         false
                                 ));
                                 list.add(new InsnNode(IADD));

@@ -29,7 +29,7 @@ public class MinecraftTransformer_WarpProtection implements MWETransformer {
                                     INVOKESTATIC,
                                     getHookClass("mc/MinecraftHook_WarpProtection"),
                                     "shouldCancelRightClick",
-                                    "(L" + ClassMapping.ITEMSTACK + ";)Z",
+                                    "(" + ClassMapping.ITEMSTACK.desc() + ")Z",
                                     false
                             ));
                             final LabelNode notCancelled = new LabelNode();

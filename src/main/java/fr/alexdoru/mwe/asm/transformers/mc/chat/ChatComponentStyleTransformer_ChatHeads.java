@@ -31,7 +31,7 @@ public class ChatComponentStyleTransformer_ChatHeads implements MWETransformer {
                         INVOKESTATIC,
                         getHookClass("mc/chat/ChatComponentStyleHook_ChatHeads"),
                         "transferHeadToComponent",
-                        "(L" + ClassMapping.ICHATCOMPONENT + ";L" + ClassMapping.ICHATCOMPONENT + ";)V",
+                        "(" + ClassMapping.ICHATCOMPONENT.desc() + ClassMapping.ICHATCOMPONENT.desc() + ")V",
                         false
                 ));
                 methodNode.instructions.insert(list);

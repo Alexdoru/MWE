@@ -31,7 +31,7 @@ public class NetworkManagerTransformer_ServerPacketListener implements MWETransf
                             INVOKESTATIC,
                             getHookClass("mc/network/NetworkManagerHook_PacketListener"),
                             "listen",
-                            "(L" + ClassMapping.PACKET + ";)V",
+                            "(" + ClassMapping.PACKET.desc() + ")V",
                             false));
                     methodNode.instructions.insert(targetNode, list);
                     status.addInjection();

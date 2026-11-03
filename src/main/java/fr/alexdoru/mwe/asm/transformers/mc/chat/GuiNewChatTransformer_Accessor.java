@@ -21,13 +21,13 @@ public class GuiNewChatTransformer_Accessor implements MWETransformer {
                 classNode,
                 "getChatLines",
                 FieldMapping.GUINEWCHAT$CHATLINES,
-                "()Ljava/util/List<L" + ClassMapping.CHATLINE + ";>;"
+                "()Ljava/util/List<" + ClassMapping.CHATLINE.desc() + ">;"
         );
         addGetterMethod(
                 classNode,
                 "getDrawnChatLines",
                 FieldMapping.GUINEWCHAT$DRAWNCHATLINES,
-                "()Ljava/util/List<L" + ClassMapping.CHATLINE + ";>;"
+                "()Ljava/util/List<" + ClassMapping.CHATLINE.desc() + ">;"
         );
     }
 

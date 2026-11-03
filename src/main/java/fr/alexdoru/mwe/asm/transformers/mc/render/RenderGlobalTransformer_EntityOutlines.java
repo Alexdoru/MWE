@@ -69,11 +69,11 @@ public class RenderGlobalTransformer_EntityOutlines implements MWETransformer {
                 getHookClass("mc/render/RenderGlobalHook_EntityOutlines"),
                 "renderWitherOutline",
                 "(Z" +
-                        "L" + ClassMapping.ENTITY + ";" +
-                        "L" + ClassMapping.ICAMERA + ";" +
+                        ClassMapping.ENTITY.desc() +
+                        ClassMapping.ICAMERA.desc() +
                         "F" +
-                        "L" + ClassMapping.FRAMEBUFFER + ";" +
-                        "L" + ClassMapping.SHADERGROUP + ";" +
+                        ClassMapping.FRAMEBUFFER.desc() +
+                        ClassMapping.SHADERGROUP.desc() +
                         ")Z",
                 false
         ));

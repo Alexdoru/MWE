@@ -29,7 +29,7 @@ public class RendererLivingEntityTransformer_Renegade implements MWETransformer 
                                     INVOKESTATIC,
                                     getHookClass("mc/render/RenderHook_Renegade"),
                                     "appendToNametag",
-                                    "(Ljava/lang/String;L" + ClassMapping.ENTITYLIVINGBASE + ";D)Ljava/lang/String;",
+                                    "(Ljava/lang/String;" + ClassMapping.ENTITYLIVINGBASE.desc() + "D)Ljava/lang/String;",
                                     false
                             ));
                             methodNode.instructions.insert(nextNode, list);

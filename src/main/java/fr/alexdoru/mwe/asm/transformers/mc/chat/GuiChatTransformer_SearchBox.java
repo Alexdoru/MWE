@@ -31,7 +31,7 @@ public class GuiChatTransformer_SearchBox implements MWETransformer {
                                 INVOKESPECIAL,
                                 ClassMapping.GUICHATHOOKSEARCHBOX.name,
                                 "<init>",
-                                "(L" + ClassMapping.GUICHAT + ";)V",
+                                "(" + ClassMapping.GUICHAT.desc() + ")V",
                                 false
                         ));
                         list.add(getNewFieldInsnNode(PUTFIELD, FieldMapping.GUICHAT$SEARCHBOXHOOK));

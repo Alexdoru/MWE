@@ -30,7 +30,7 @@ public class GuiIngameTransformer_CustomSidebarLines implements MWETransformer {
                             list.add(new MethodInsnNode(
                                     INVOKESTATIC,
                                     getHookClass("mc/gui/GuiIngameHook_CustomSidebarLines"),
-                                    "getSidebarTextLineWidth", "(IL" + ClassMapping.FONTRENDERER + ";Z)I",
+                                    "getSidebarTextLineWidth", "(I" + ClassMapping.FONTRENDERER.desc() + "Z)I",
                                     false
                             ));
                             methodNode.instructions.insert(nextNode, list);

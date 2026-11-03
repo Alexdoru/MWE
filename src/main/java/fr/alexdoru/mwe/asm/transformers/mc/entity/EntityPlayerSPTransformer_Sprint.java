@@ -30,7 +30,7 @@ public class EntityPlayerSPTransformer_Sprint implements MWETransformer {
                                     INVOKESTATIC,
                                     getHookClass("mc/entity/EntityPlayerSPHook_Sprint"),
                                     "shouldSprint",
-                                    "(ZL" + ClassMapping.MINECRAFT + ";)Z",
+                                    "(Z" + ClassMapping.MINECRAFT.desc() + ")Z",
                                     false
                             ));
                             methodNode.instructions.insert(nextNode, list);

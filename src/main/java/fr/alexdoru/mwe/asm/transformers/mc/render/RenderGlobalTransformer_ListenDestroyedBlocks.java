@@ -27,7 +27,7 @@ public class RenderGlobalTransformer_ListenDestroyedBlocks implements MWETransfo
                                 INVOKESTATIC,
                                 getHookClass("mc/render/RenderGlobalHook_ListenDestroyedBlocks"),
                                 "listenDestroyedBlocks",
-                                "(L" + ClassMapping.IBLOCKSTATE + ";L" + ClassMapping.BLOCKPOS + ";)V",
+                                "(" + ClassMapping.IBLOCKSTATE.desc() + ClassMapping.BLOCKPOS.desc() + ")V",
                                 false
                         ));
                         methodNode.instructions.insertBefore(insnNode, list);

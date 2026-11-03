@@ -30,7 +30,7 @@ public class RenderPlayerTransformer_Renegade implements MWETransformer {
                                         INVOKESTATIC,
                                         getHookClass("mc/render/RenderHook_Renegade"),
                                         "appendToScore",
-                                        "(Ljava/lang/StringBuilder;L" + ClassMapping.ABSTRACTCLIENTPLAYER + ";)Ljava/lang/StringBuilder;",
+                                        "(Ljava/lang/StringBuilder;" + ClassMapping.ABSTRACTCLIENTPLAYER.desc() + ")Ljava/lang/StringBuilder;",
                                         false
                                 ));
                                 methodNode.instructions.insert(secondNode, list);

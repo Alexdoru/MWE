@@ -31,7 +31,7 @@ public class MinecraftTransformer_DebugMessages implements MWETransformer {
                                 INVOKESTATIC,
                                 getHookClass("mc/MinecraftHook_DebugMessages"),
                                 "onReloadChunks",
-                                "(L" + ClassMapping.MINECRAFT + ";)V",
+                                "(" + ClassMapping.MINECRAFT.desc() + ")V",
                                 false
                         ));
                         methodNode.instructions.insert(insnNode, list);
@@ -51,7 +51,7 @@ public class MinecraftTransformer_DebugMessages implements MWETransformer {
                                 INVOKESTATIC,
                                 getHookClass("mc/MinecraftHook_DebugMessages"),
                                 "onSettingChange",
-                                "(L" + ClassMapping.MINECRAFT + ";ZLjava/lang/String;)V",
+                                "(" + ClassMapping.MINECRAFT.desc() + "ZLjava/lang/String;)V",
                                 false
                         ));
                         methodNode.instructions.insert(insnNode, list);
@@ -71,7 +71,7 @@ public class MinecraftTransformer_DebugMessages implements MWETransformer {
                                 INVOKESTATIC,
                                 getHookClass("mc/MinecraftHook_DebugMessages"),
                                 "onSettingChange",
-                                "(L" + ClassMapping.MINECRAFT + ";ZLjava/lang/String;)V",
+                                "(" + ClassMapping.MINECRAFT.desc() + "ZLjava/lang/String;)V",
                                 false
                         ));
                         methodNode.instructions.insert(insnNode, list);
@@ -91,7 +91,7 @@ public class MinecraftTransformer_DebugMessages implements MWETransformer {
                                 INVOKESTATIC,
                                 getHookClass("mc/MinecraftHook_DebugMessages"),
                                 "onSettingChange",
-                                "(L" + ClassMapping.MINECRAFT + ";ZLjava/lang/String;)V",
+                                "(" + ClassMapping.MINECRAFT.desc() + "ZLjava/lang/String;)V",
                                 false
                         ));
                         methodNode.instructions.insert(insnNode, list);

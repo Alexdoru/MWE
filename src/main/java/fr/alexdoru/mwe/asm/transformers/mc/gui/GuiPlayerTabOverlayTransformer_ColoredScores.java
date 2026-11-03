@@ -27,7 +27,7 @@ public class GuiPlayerTabOverlayTransformer_ColoredScores implements MWETransfor
                                 INVOKESTATIC,
                                 getHookClass("mc/gui/GuiPlayerTabOverlayHook_ColoredScores"),
                                 "getColoredHP",
-                                "(L" + ClassMapping.ENUMCHATFORMATTING + ";I)L" + ClassMapping.ENUMCHATFORMATTING + ";",
+                                "(" + ClassMapping.ENUMCHATFORMATTING.desc() + "I)" + ClassMapping.ENUMCHATFORMATTING.desc() + "",
                                 false
                         ));
                         methodNode.instructions.insert(insnNode, list);

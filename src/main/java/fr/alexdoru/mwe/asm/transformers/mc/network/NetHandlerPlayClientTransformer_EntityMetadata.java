@@ -26,7 +26,7 @@ public class NetHandlerPlayClientTransformer_EntityMetadata implements MWETransf
                                 INVOKESTATIC,
                                 getHookClass("mc/network/NetHandlerPlayClientHook_EntityMetadata"),
                                 "onEntityMetadata",
-                                "(L" + ClassMapping.ENTITY + ";)V",
+                                "(" + ClassMapping.ENTITY.desc() + ")V",
                                 false
                         ));
                         methodNode.instructions.insertBefore(insnNode, list);

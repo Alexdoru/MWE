@@ -70,7 +70,7 @@ public class NetHandlerPlayClientTransformer_PlayerMapTracker implements MWETran
                             INVOKESTATIC,
                             getHookClass("mc/network/NetHandlerPlayClientHook_PlayerMapTracker"),
                             "onAddPlayerPacket",
-                            "(L" + ClassMapping.NETWORKPLAYERINFO + ";)V",
+                            "(" + ClassMapping.NETWORKPLAYERINFO.desc() + ")V",
                             false
                     ));
                     methodNode.instructions.insertBefore(targetPutNode, listPut);

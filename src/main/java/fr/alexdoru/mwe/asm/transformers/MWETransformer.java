@@ -23,7 +23,7 @@ public interface MWETransformer extends IClassNodeTransformer {
     }
 
     default boolean checkTypeInsnNode(AbstractInsnNode insnNode, int opcode, ClassMapping desc) {
-        return checkTypeInsnNode(insnNode, opcode, desc.toString());
+        return checkTypeInsnNode(insnNode, opcode, desc.name);
     }
 
     default boolean checkMethodInsnNode(AbstractInsnNode insnNode, MethodMapping method) {
@@ -54,8 +54,8 @@ public interface MWETransformer extends IClassNodeTransformer {
     }
 
     default void addGetterAndSetterMethod(ClassNode classNode, String methodName, ClassMapping owner, String fieldName, String fieldDesc, String methodSignature) {
-        addGetterMethod(classNode, "get" + methodName, owner.toString(), fieldName, fieldDesc, methodSignature);
-        addSetterMethod(classNode, "set" + methodName, owner.toString(), fieldName, fieldDesc, methodSignature);
+        addGetterMethod(classNode, "get" + methodName, owner.name, fieldName, fieldDesc, methodSignature);
+        addSetterMethod(classNode, "set" + methodName, owner.name, fieldName, fieldDesc, methodSignature);
     }
 
     default void addGetterMethod(ClassNode classNode, String methodName, FieldMapping field, String methodSignature) {
@@ -63,7 +63,7 @@ public interface MWETransformer extends IClassNodeTransformer {
     }
 
     default void addGetterMethod(ClassNode classNode, String methodName, ClassMapping owner, String fieldName, String fieldDesc, String methodSignature) {
-        addGetterMethod(classNode, methodName, owner.toString(), fieldName, fieldDesc, methodSignature);
+        addGetterMethod(classNode, methodName, owner.name, fieldName, fieldDesc, methodSignature);
     }
 
     default void addSetterMethod(ClassNode classNode, String methodName, FieldMapping field, String methodSignature) {
@@ -71,7 +71,7 @@ public interface MWETransformer extends IClassNodeTransformer {
     }
 
     default void addSetterMethod(ClassNode classNode, String methodName, ClassMapping owner, String fieldName, String fieldDesc, String methodSignature) {
-        addSetterMethod(classNode, methodName, owner.toString(), fieldName, fieldDesc, methodSignature);
+        addSetterMethod(classNode, methodName, owner.name, fieldName, fieldDesc, methodSignature);
     }
 
 }

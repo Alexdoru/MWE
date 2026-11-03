@@ -30,7 +30,7 @@ public class GuiNewChatTransformer_CopyMessages implements MWETransformer {
                                     INVOKESTATIC,
                                     getHookClass("mc/chat/GuiNewChatHook_CopyMessages"),
                                     "copyChatLine",
-                                    "(L" + ClassMapping.CHATLINE + ";)V",
+                                    "(" + ClassMapping.CHATLINE.desc() + ")V",
                                     false
                             ));
                             methodNode.instructions.insertBefore(insnNode, list);
@@ -51,7 +51,7 @@ public class GuiNewChatTransformer_CopyMessages implements MWETransformer {
                                     INVOKESTATIC,
                                     getHookClass("mc/chat/GuiNewChatHook_CopyMessages"),
                                     "setText",
-                                    "(L" + ClassMapping.CHATLINE + ";L" + ClassMapping.ICHATCOMPONENT + ";)L" + ClassMapping.CHATLINE + ";",
+                                    "(" + ClassMapping.CHATLINE.desc() + ClassMapping.ICHATCOMPONENT.desc() + ")" + ClassMapping.CHATLINE.desc() + "",
                                     false
                             ));
                         } else {
@@ -59,7 +59,7 @@ public class GuiNewChatTransformer_CopyMessages implements MWETransformer {
                                     INVOKESTATIC,
                                     getHookClass("mc/chat/GuiNewChatHook_CopyMessages"),
                                     "setText1",
-                                    "(L" + ClassMapping.CHATLINE + ";)L" + ClassMapping.CHATLINE + ";",
+                                    "(" + ClassMapping.CHATLINE.desc() + ")" + ClassMapping.CHATLINE.desc() + "",
                                     false
                             ));
                         }

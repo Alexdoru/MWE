@@ -26,7 +26,7 @@ public class EntityOtherPlayerMPTransformer_FixAutoblockBypass implements MWETra
                         INVOKESTATIC,
                         getHookClass("mc/entity/EntityOtherPlayerMPHook_FixAutoblockBypass"),
                         "shouldCancelEquipmentUpdate",
-                        "(L" + ClassMapping.ENTITYOTHERPLAYERMP + ";IL" + ClassMapping.ITEMSTACK + ";)Z",
+                        "(" + ClassMapping.ENTITYOTHERPLAYERMP.desc() + "I" + ClassMapping.ITEMSTACK.desc() + ")Z",
                         false
                 ));
                 final LabelNode notCancelled = new LabelNode();

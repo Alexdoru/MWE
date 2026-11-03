@@ -35,7 +35,7 @@ public class MinecraftTransformer_DropProtection implements MWETransformer {
                         INVOKESTATIC,
                         getHookClass("mc/MinecraftHook_DropProtection"),
                         "updateCurrentSlot",
-                        "(L" + ClassMapping.MINECRAFT + ";)V",
+                        "(" + ClassMapping.MINECRAFT.desc() + ")V",
                         false
                 ));
                 methodNode.instructions.insert(insnNode, list);
@@ -66,7 +66,7 @@ public class MinecraftTransformer_DropProtection implements MWETransformer {
                         INVOKESTATIC,
                         getHookClass("mc/MinecraftHook_DropProtection"),
                         "shouldDropItem",
-                        "(L" + ClassMapping.MINECRAFT + ";)Z",
+                        "(" + ClassMapping.MINECRAFT.desc() + ")Z",
                         false
                 ));
                 list.add(new JumpInsnNode(IFEQ, label));

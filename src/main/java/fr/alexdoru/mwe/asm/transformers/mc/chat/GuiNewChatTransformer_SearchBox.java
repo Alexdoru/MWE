@@ -32,7 +32,7 @@ public class GuiNewChatTransformer_SearchBox implements MWETransformer {
                                 INVOKESPECIAL,
                                 ClassMapping.GUINEWCHATHOOKSEARCHBOX.name,
                                 "<init>",
-                                "(L" + ClassMapping.GUINEWCHAT + ";)V",
+                                "(" + ClassMapping.GUINEWCHAT.desc() + ")V",
                                 false
                         ));
                         list.add(getNewFieldInsnNode(PUTFIELD, FieldMapping.GUINEWCHAT$SEARCHBOXHOOK));
@@ -103,7 +103,7 @@ public class GuiNewChatTransformer_SearchBox implements MWETransformer {
                             INVOKEVIRTUAL,
                             getHookClass("mc/chat/GuiNewChatHook_SearchBox"),
                             "addDrawnChatLine",
-                            "(L" + ClassMapping.CHATLINE + ";)L" + ClassMapping.CHATLINE + ";",
+                            "(" + ClassMapping.CHATLINE.desc() + ")" + ClassMapping.CHATLINE.desc() + "",
                             false
                     ));
                     status.addInjection();
@@ -142,7 +142,7 @@ public class GuiNewChatTransformer_SearchBox implements MWETransformer {
         mn1.instructions.add(new InsnNode(RETURN));
         final LabelNode l2 = new LabelNode();
         mn1.instructions.add(l2);
-        mn1.localVariables.add(new LocalVariableNode("this", "L" + ClassMapping.GUINEWCHAT.name + ";", null, l0, l2, 0));
+        mn1.localVariables.add(new LocalVariableNode("this", ClassMapping.GUINEWCHAT.desc(), null, l0, l2, 0));
         mn1.localVariables.add(new LocalVariableNode("obj", "Ljava/lang/Object;", null, l0, l2, 1));
         mn1.visitMaxs(2, 2);
 
@@ -162,7 +162,7 @@ public class GuiNewChatTransformer_SearchBox implements MWETransformer {
         mn2.instructions.add(new InsnNode(RETURN));
         final LabelNode l22 = new LabelNode();
         mn2.instructions.add(l22);
-        mn2.localVariables.add(new LocalVariableNode("this", "L" + ClassMapping.GUINEWCHAT.name + ";", null, l00, l22, 0));
+        mn2.localVariables.add(new LocalVariableNode("this", ClassMapping.GUINEWCHAT.desc(), null, l00, l22, 0));
         mn2.visitMaxs(1, 1);
 
     }

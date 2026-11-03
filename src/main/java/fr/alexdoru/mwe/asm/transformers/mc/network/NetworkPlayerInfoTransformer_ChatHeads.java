@@ -26,7 +26,7 @@ public class NetworkPlayerInfoTransformer_ChatHeads implements MWETransformer {
         status.setInjectionPoints(0);
         addInterface(classNode, "NetworkPlayerInfoAccessor_ChatHeads");
         final String SKIN_FIELD_NAME = "mwe$skin";
-        final String SKIN_FIELD_DESC = "L" + ClassMapping.SKINCHATHEAD + ";";
+        final String SKIN_FIELD_DESC = ClassMapping.SKINCHATHEAD.desc();
         classNode.visitField(ACC_PRIVATE, SKIN_FIELD_NAME, SKIN_FIELD_DESC, null, null);
         addSetterMethod(classNode, "setSkinChatHead", ClassMapping.NETWORKPLAYERINFO, SKIN_FIELD_NAME, SKIN_FIELD_DESC, null);
 
@@ -52,7 +52,7 @@ public class NetworkPlayerInfoTransformer_ChatHeads implements MWETransformer {
         mv.visitFieldInsn(GETFIELD, ClassMapping.NETWORKPLAYERINFO.name, SKIN_FIELD_NAME, SKIN_FIELD_DESC);
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, ClassMapping.NETWORKPLAYERINFO.name, FieldMapping.NETWORKPLAYERINFO$LOCATIONSKIN.name, FieldMapping.NETWORKPLAYERINFO$LOCATIONSKIN.desc);
-        mv.visitMethodInsn(INVOKEVIRTUAL, ClassMapping.SKINCHATHEAD.name, "setSkin", "(L" + ClassMapping.RESOURCELOCATION + ";)V", false);
+        mv.visitMethodInsn(INVOKEVIRTUAL, ClassMapping.SKINCHATHEAD.name, "setSkin", "(" + ClassMapping.RESOURCELOCATION.desc() + ")V", false);
         final Label l2 = new Label();
         mv.visitLabel(l2);
         mv.visitVarInsn(ALOAD, 0);
@@ -60,7 +60,7 @@ public class NetworkPlayerInfoTransformer_ChatHeads implements MWETransformer {
         mv.visitFieldInsn(PUTFIELD, ClassMapping.NETWORKPLAYERINFO.name, SKIN_FIELD_NAME, SKIN_FIELD_DESC);
         mv.visitLabel(l3);
         mv.visitInsn(RETURN);
-        mv.visitLocalVariable("this", "L" + ClassMapping.NETWORKPLAYERINFO + ";", null, l0, l3, 0);
+        mv.visitLocalVariable("this", ClassMapping.NETWORKPLAYERINFO.desc(), null, l0, l3, 0);
         mv.visitMaxs(2, 1);
         mv.visitEnd();
 

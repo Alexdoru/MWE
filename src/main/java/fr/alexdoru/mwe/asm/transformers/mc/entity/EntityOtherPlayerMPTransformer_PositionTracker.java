@@ -29,7 +29,7 @@ public class EntityOtherPlayerMPTransformer_PositionTracker implements MWETransf
                         INVOKESTATIC,
                         getHookClass("mc/entity/EntityOtherPlayerMPHook_PositionTracker"),
                         "setPositionAndRotation",
-                        "(L" + ClassMapping.ENTITYOTHERPLAYERMP + ";DDDFF)V",
+                        "(" + ClassMapping.ENTITYOTHERPLAYERMP.desc() + "DDDFF)V",
                         false
                 ));
                 methodNode.instructions.insert(list);

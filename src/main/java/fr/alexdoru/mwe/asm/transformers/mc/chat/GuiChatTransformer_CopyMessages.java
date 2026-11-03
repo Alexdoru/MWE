@@ -39,7 +39,7 @@ public class GuiChatTransformer_CopyMessages implements MWETransformer {
                                     INVOKESTATIC,
                                     getHookClass("mc/chat/GuiChatHook_CopyMessages"),
                                     "onChatLeftClick",
-                                    "(ZL" + ClassMapping.ICHATCOMPONENT + ";)Z",
+                                    "(Z" + ClassMapping.ICHATCOMPONENT.desc() + ")Z",
                                     false
                             ));
                             methodNode.instructions.insert(nextNode, list2);

@@ -30,7 +30,7 @@ public class NetHandlerPlayClientTransformer_BlockBreakAnimListener implements M
                                 INVOKESTATIC,
                                 getHookClass("mc/network/NetHandlerPlayClientHook_BlockBreakAnim"),
                                 "handleBlockBreakAnim",
-                                "(L" + ClassMapping.WORLDCLIENT + ";L" + ClassMapping.S25PACKETBLOCKBREAKANIM + ";)V",
+                                "(" + ClassMapping.WORLDCLIENT.desc() + ClassMapping.S25PACKETBLOCKBREAKANIM.desc() + ")V",
                                 false
                         ));
                         methodNode.instructions.insert(insnNode, list);

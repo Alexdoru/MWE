@@ -28,7 +28,7 @@ public class NetHandlerPlayClientTransformer_BlockChangeListener implements MWET
                                 INVOKESTATIC,
                                 getHookClass("mc/network/NetHandlerPlayClientHook_BlockChangeListener"),
                                 isBlockChange ? "onBlockChange" : "onMultiBlockChange",
-                                "(L" + (isBlockChange ? ClassMapping.S23PACKETBLOCKCHANGE : ClassMapping.S22PACKETMULTIBLOCKCHANGE) + ";)V",
+                                "(" + (isBlockChange ? ClassMapping.S23PACKETBLOCKCHANGE : ClassMapping.S22PACKETMULTIBLOCKCHANGE).desc() + ")V",
                                 false));
                         methodNode.instructions.insert(insnNode, list);
                         status.addInjection();

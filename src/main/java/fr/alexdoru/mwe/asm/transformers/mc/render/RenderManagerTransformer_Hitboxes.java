@@ -65,7 +65,7 @@ public class RenderManagerTransformer_Hitboxes implements MWETransformer {
                                 INVOKESTATIC,
                                 getHookClass("mc/render/RenderManagerHook_Hitboxes"),
                                 "getAxisAlignedBB",
-                                "(L" + ClassMapping.AXISALIGNEDBB + ";L" + ClassMapping.ENTITY + ";)L" + ClassMapping.AXISALIGNEDBB + ";",
+                                "(" + ClassMapping.AXISALIGNEDBB.desc() + ClassMapping.ENTITY.desc() + ")" + ClassMapping.AXISALIGNEDBB.desc() + "",
                                 false
                         ));
                         methodNode.instructions.insert(insnNode, list);
@@ -80,7 +80,7 @@ public class RenderManagerTransformer_Hitboxes implements MWETransformer {
                                     INVOKESTATIC,
                                     getHookClass("mc/render/RenderManagerHook_Hitboxes"),
                                     "getRedHitboxColor",
-                                    "(IL" + ClassMapping.ENTITY + ";)I",
+                                    "(I" + ClassMapping.ENTITY.desc() + ")I",
                                     false
                             ));
                             methodNode.instructions.insert(insnNode, list);
@@ -154,7 +154,7 @@ public class RenderManagerTransformer_Hitboxes implements MWETransformer {
                                 INVOKESTATIC,
                                 getHookClass("mc/render/RenderManagerHook_Hitboxes"),
                                 "shouldRenderBlueVect",
-                                "(L" + ClassMapping.ENTITY + ";)Z",
+                                "(" + ClassMapping.ENTITY.desc() + ")Z",
                                 false
                         ));
                         list.add(new JumpInsnNode(IFEQ, label));
@@ -179,7 +179,7 @@ public class RenderManagerTransformer_Hitboxes implements MWETransformer {
         list.add(new MethodInsnNode(INVOKESTATIC,
                 getHookClass("mc/render/RenderManagerHook_Hitboxes"),
                 "shouldRenderHitbox",
-                "(L" + ClassMapping.ENTITY + ";L" + ClassMapping.ENTITY + ";Z)Z",
+                "(" + ClassMapping.ENTITY.desc() + ClassMapping.ENTITY.desc() + "Z)Z",
                 false
         ));
         list.add(new JumpInsnNode(IFNE, label));
