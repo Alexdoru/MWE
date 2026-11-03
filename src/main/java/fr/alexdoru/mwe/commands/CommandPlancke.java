@@ -132,7 +132,7 @@ public class CommandPlancke extends MWECommandBase {
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (args.length == 1) {
-            return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAlias());
+            return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAliasAndDeadPlayers());
         }
         if (args.length == 2) {
             final String[] games = {"blitz", "megawalls", "skywars", "uhc"};

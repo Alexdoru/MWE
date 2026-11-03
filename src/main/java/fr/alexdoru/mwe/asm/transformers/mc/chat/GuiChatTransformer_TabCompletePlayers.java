@@ -23,12 +23,11 @@ public class GuiChatTransformer_TabCompletePlayers implements MWETransformer {
                 list.add(new VarInsnNode(ALOAD, 0));
                 list.add(getNewFieldInsnNode(GETFIELD, FieldMapping.GUICHAT$WAITINGONAUTOCOMPLETE));
                 list.add(new VarInsnNode(ALOAD, 1));
-                list.add(new VarInsnNode(ALOAD, 2));
                 list.add(new MethodInsnNode(
                         INVOKESTATIC,
                         getHookClass("mc/chat/GuiChatHook_TabCompletePlayers"),
                         "autoComplete",
-                        "(ZLjava/lang/String;Ljava/lang/String;)Z",
+                        "(ZLjava/lang/String;)Z",
                         false
                 ));
                 list.add(getNewFieldInsnNode(PUTFIELD, FieldMapping.GUICHAT$WAITINGONAUTOCOMPLETE));

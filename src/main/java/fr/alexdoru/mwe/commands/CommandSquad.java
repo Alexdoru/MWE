@@ -78,8 +78,8 @@ public class CommandSquad extends MWECommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        final String[] args1 = {"add", "addteam", "disband", "formsquad", "list", "remove"};
         if (args.length == 1) {
+            final String[] args1 = {"add", "addteam", "disband", "formsquad", "list", "remove"};
             return getListOfStringsMatchingLastWord(args, args1);
         }
         if (args.length >= 2) {

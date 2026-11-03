@@ -53,8 +53,8 @@ public class CommandNocheaters extends MWECommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        final String[] arguments = {"help", "reportlist"};
         if (args.length == 1) {
+            final String[] arguments = {"help", "reportlist"};
             return getListOfStringsMatchingLastWord(args, arguments);
         }
         return null;

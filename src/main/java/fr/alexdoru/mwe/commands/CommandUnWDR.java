@@ -43,7 +43,7 @@ public class CommandUnWDR extends MWECommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAlias());
+        return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAliasAndDeadPlayers());
     }
 
     private void unwdrPlayer(String playername) {

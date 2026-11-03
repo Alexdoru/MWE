@@ -106,8 +106,8 @@ public class CommandFKCounter extends MWECommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        final String[] fksarguments = {"players", "remove", "settings", "help"};
         if (args.length == 1) {
+            final String[] fksarguments = {"players", "remove", "settings", "help"};
             return getListOfStringsMatchingLastWord(args, fksarguments);
         }
         if (args.length == 2) {

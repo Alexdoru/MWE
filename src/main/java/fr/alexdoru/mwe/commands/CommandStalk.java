@@ -56,7 +56,7 @@ public class CommandStalk extends MWECommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-        return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAlias());
+        return getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAliasAndDeadPlayers());
     }
 
     private void stalkPlayer(String name) {

@@ -75,6 +75,9 @@ public final class RenegadeArrowTracker {
     }
 
     public List<Long> getArrowsForPlayer(String playername) {
+        if (arrowHitMap.isEmpty()) {
+            return null;
+        }
         return arrowHitMap.get(playername);
     }
 

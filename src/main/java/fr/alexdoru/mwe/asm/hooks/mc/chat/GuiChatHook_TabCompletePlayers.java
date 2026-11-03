@@ -20,7 +20,7 @@ public class GuiChatHook_TabCompletePlayers {
 
     private static List<String> tabCompleteOptions;
 
-    public static boolean autoComplete(boolean original, String leftOfCursor, String full) {
+    public static boolean autoComplete(boolean original, String leftOfCursor) {
         tabCompleteOptions = null;
         if (!leftOfCursor.isEmpty()) {
             final String[] args = leftOfCursor.split(" ", -1);
@@ -28,17 +28,17 @@ public class GuiChatHook_TabCompletePlayers {
             if (isCommand) {
                 final String lowerCase = leftOfCursor.toLowerCase();
                 if (lowerCase.startsWith("/msg ") || lowerCase.startsWith("/w ") || lowerCase.startsWith("/r ") || ScoreboardTracker.isPrepPhase() && (lowerCase.startsWith("/shout ") || lowerCase.startsWith("/cr ") || lowerCase.startsWith("/chatreport "))) {
-                    tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAlias());
+                    tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAliasAndDeadPlayers());
                 } else if (lowerCase.startsWith("/report ")) {
-                    tabCompleteReport(args);
+                    tabCompleteOptions = tabCompleteReport(args);
                 }
             } else {
-                tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAlias());
+                tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAliasAndDeadPlayers());
             }
             return original;
         } else {
             ClientCommandHandler.instance.latestAutoComplete = null;
-            tabCompleteOptions = TabCompletionUtil.getPlayersAndAlias();
+            tabCompleteOptions = TabCompletionUtil.getPlayersAndAliasAndDeadPlayers();
             new DelayedTask(() -> {
                 if (Minecraft.getMinecraft().currentScreen instanceof GuiChat && tabCompleteOptions != null) {
                     ((GuiChat) Minecraft.getMinecraft().currentScreen).onAutocompleteResponse(tabCompleteOptions.toArray(new String[0]));
@@ -58,12 +58,11 @@ public class GuiChatHook_TabCompletePlayers {
         return optionSet.toArray(new String[0]);
     }
 
-    private static void tabCompleteReport(String[] args) {
+    private static List<String> tabCompleteReport(String[] args) {
         if (args.length == 2) {
             if (ScoreboardTracker.isInMwGame()) {
                 if (ScoreboardTracker.isPrepPhase()) {
-                    tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAlias());
-                    return;
+                    return CommandBase.getListOfStringsMatchingLastWord(args, TabCompletionUtil.getPlayersAndAlias());
                 } else {
                     final List<String> players = TabCompletionUtil.getAlias();
                     final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
@@ -71,17 +70,18 @@ public class GuiChatHook_TabCompletePlayers {
                         players.addAll(fkCounter.getPlayersInThisGame());
                         players.removeAll(TabCompletionUtil.getPlayers());
                     }
-                    tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, players);
+                    return CommandBase.getListOfStringsMatchingLastWord(args, players);
                 }
             }
-            return;
+            return null;
         }
         if (args.length > 2) {
             final List<String> list = new ArrayList<>(CommandWDR.cheatsList);
             list.add("boosting");
             list.add("crossteaming");
-            tabCompleteOptions = CommandBase.getListOfStringsMatchingLastWord(args, list);
+            return CommandBase.getListOfStringsMatchingLastWord(args, list);
         }
+        return null;
     }
 
 }
