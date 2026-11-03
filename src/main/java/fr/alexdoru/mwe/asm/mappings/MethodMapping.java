@@ -1,11 +1,12 @@
 package fr.alexdoru.mwe.asm.mappings;
 
+import fr.alexdoru.mwe.api.asm.IMethodInfo;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 
 import static fr.alexdoru.mwe.asm.mappings.ClassMapping.*;
 import static org.objectweb.asm.Opcodes.*;
 
-public enum MethodMapping {
+public enum MethodMapping implements IMethodInfo {
 
     C08PACKETPLAYERBLOCKPLACEMENT$INIT3("<init>", "(" + BLOCKPOS.desc() + "I" + ITEMSTACK.desc() + "FFF)V"),
     CHATCOMPONENTSTYLE$APPENDSIBLING("a", "appendSibling", "(" + ICHATCOMPONENT.desc() + ")" + ICHATCOMPONENT.desc()),
@@ -125,7 +126,7 @@ public enum MethodMapping {
     TESSELLATOR$GETINSTANCE(INVOKESTATIC, TESSELLATOR, "a", "getInstance", "()" + TESSELLATOR.desc()),
     WORLDCLIENT$SENDBLOCKBREAKPROGRESS(INVOKEVIRTUAL, WORLDCLIENT, "c", "sendBlockBreakProgress", "(I" + BLOCKPOS.desc() + "I)V");
 
-    public final int opcode;
+    private final int opcode;
     public final String owner;
     public final String name;
     public final String desc;
@@ -153,10 +154,27 @@ public enum MethodMapping {
         this(opcode, owner.name, MWELoadingPlugin.isObf() ? obfName : clearName, desc);
     }
 
-    public final void validate() {
+    @Override
+    public int opcode() {
         if (opcode == -1) {
             throw new IllegalArgumentException("MethodMapping doesn't have opcode defined");
         }
+        return opcode;
+    }
+
+    @Override
+    public String owner() {
+        return owner;
+    }
+
+    @Override
+    public String methodName() {
+        return name;
+    }
+
+    @Override
+    public String desc() {
+        return desc;
     }
 
 }

@@ -1,8 +1,9 @@
 package fr.alexdoru.mwe.asm.mappings;
 
+import fr.alexdoru.mwe.api.asm.IClassInfo;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 
-public enum ClassMapping {
+public enum ClassMapping implements IClassInfo {
 
     ABSTRACTCLIENTPLAYER("bet", "net/minecraft/client/entity/AbstractClientPlayer"),
     AXISALIGNEDBB("aug", "net/minecraft/util/AxisAlignedBB"),
@@ -108,8 +109,9 @@ public enum ClassMapping {
         this(MWELoadingPlugin.isObf() ? obfName : clearName);
     }
 
-    public String desc() {
-        return "L" + name + ";";
+    @Override
+    public String internalName() {
+        return name;
     }
 
     @Override

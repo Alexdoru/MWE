@@ -1,10 +1,11 @@
 package fr.alexdoru.mwe.asm.mappings;
 
+import fr.alexdoru.mwe.api.asm.IFieldInfo;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 
 import static fr.alexdoru.mwe.asm.mappings.ClassMapping.*;
 
-public enum FieldMapping {
+public enum FieldMapping implements IFieldInfo {
 
     CLIENTCOMMANDHANDLER$INSTANCE(CLIENTCOMMANDHANDLER, "instance", CLIENTCOMMANDHANDLER),
     ENTITYARROW$ISINGROUND(ENTITYARROW, "i", "inGround", "Z"),
@@ -76,6 +77,21 @@ public enum FieldMapping {
 
     FieldMapping(ClassMapping owner, String obfName, String clearName, ClassMapping type) {
         this(owner.name, MWELoadingPlugin.isObf() ? obfName : clearName, type.desc());
+    }
+
+    @Override
+    public String owner() {
+        return owner;
+    }
+
+    @Override
+    public String fieldName() {
+        return name;
+    }
+
+    @Override
+    public String desc() {
+        return desc;
     }
 
 }

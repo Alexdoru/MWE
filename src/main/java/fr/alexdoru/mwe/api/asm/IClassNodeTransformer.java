@@ -32,8 +32,16 @@ public interface IClassNodeTransformer extends Opcodes {
         return methodNode.name.startsWith("<init>");
     }
 
+    default boolean checkMethodNode(MethodNode methodNode, IMethodInfo mapping) {
+        return checkMethodNode(methodNode, mapping.methodName(), mapping.desc());
+    }
+
     default boolean checkMethodNode(MethodNode methodNode, String name, String desc) {
         return methodNode.name.equals(name) && methodNode.desc.equals(desc);
+    }
+
+    default boolean checkTypeInsnNode(AbstractInsnNode insnNode, int opcode, IClassInfo desc) {
+        return checkTypeInsnNode(insnNode, opcode, desc.internalName());
     }
 
     default boolean checkTypeInsnNode(AbstractInsnNode insnNode, int opcode, String desc) {
@@ -68,6 +76,10 @@ public interface IClassNodeTransformer extends Opcodes {
         return insnNode instanceof FrameNode && ((FrameNode) insnNode).type == type;
     }
 
+    default boolean checkMethodInsnNode(AbstractInsnNode insnNode, IMethodInfo method) {
+        return checkMethodInsnNode(insnNode, method.opcode(), method.owner(), method.methodName(), method.desc());
+    }
+
     default boolean checkMethodInsnNode(AbstractInsnNode insnNode, int opcode, String owner, String name, String desc) {
         return insnNode instanceof MethodInsnNode && insnNode.getOpcode() == opcode
                 && ((MethodInsnNode) insnNode).owner.equals(owner)
@@ -75,11 +87,49 @@ public interface IClassNodeTransformer extends Opcodes {
                 && ((MethodInsnNode) insnNode).desc.equals(desc);
     }
 
+    default boolean checkFieldInsnNode(AbstractInsnNode insnNode, int opcode, IFieldInfo field) {
+        return checkFieldInsnNode(insnNode, opcode, field.owner(), field.fieldName(), field.desc());
+    }
+
     default boolean checkFieldInsnNode(AbstractInsnNode insnNode, int opcode, String owner, String name, String desc) {
         return insnNode instanceof FieldInsnNode && insnNode.getOpcode() == opcode
                 && ((FieldInsnNode) insnNode).owner.equals(owner)
                 && ((FieldInsnNode) insnNode).name.equals(name)
                 && ((FieldInsnNode) insnNode).desc.equals(desc);
+    }
+
+    default MethodInsnNode getNewMethodInsnNode(IMethodInfo method) {
+        return new MethodInsnNode(method.opcode(), method.owner(), method.methodName(), method.desc(), method.opcode() == INVOKEINTERFACE);
+    }
+
+    default FieldInsnNode getNewFieldInsnNode(int opcode, IFieldInfo field) {
+        return new FieldInsnNode(opcode, field.owner(), field.fieldName(), field.desc());
+    }
+
+    default void addGetterAndSetterMethod(ClassNode classNode, String methodName, IFieldInfo field, String methodSignature) {
+        addGetterMethod(classNode, "get" + methodName, field, methodSignature);
+        addSetterMethod(classNode, "set" + methodName, field, methodSignature);
+    }
+
+    default void addGetterAndSetterMethod(ClassNode classNode, String methodName, IClassInfo owner, String fieldName, String fieldDesc, String methodSignature) {
+        addGetterMethod(classNode, "get" + methodName, owner.internalName(), fieldName, fieldDesc, methodSignature);
+        addSetterMethod(classNode, "set" + methodName, owner.internalName(), fieldName, fieldDesc, methodSignature);
+    }
+
+    default void addGetterMethod(ClassNode classNode, String methodName, IFieldInfo field, String methodSignature) {
+        addGetterMethod(classNode, methodName, field.owner(), field.fieldName(), field.desc(), methodSignature);
+    }
+
+    default void addGetterMethod(ClassNode classNode, String methodName, IClassInfo owner, String fieldName, String fieldDesc, String methodSignature) {
+        addGetterMethod(classNode, methodName, owner.internalName(), fieldName, fieldDesc, methodSignature);
+    }
+
+    default void addSetterMethod(ClassNode classNode, String methodName, IFieldInfo field, String methodSignature) {
+        addSetterMethod(classNode, methodName, field.owner(), field.fieldName(), field.desc(), methodSignature);
+    }
+
+    default void addSetterMethod(ClassNode classNode, String methodName, IClassInfo owner, String fieldName, String fieldDesc, String methodSignature) {
+        addSetterMethod(classNode, methodName, owner.internalName(), fieldName, fieldDesc, methodSignature);
     }
 
     /**
