@@ -51,7 +51,7 @@ public class HitboxRenderTransformer implements MWETransformer {
             methodNode.instructions.add(new InsnNode(IRETURN));
             methodNode.instructions.add(l0);
             methodNode.instructions.add(new VarInsnNode(ALOAD, 0));
-            methodNode.instructions.add(getNewFieldInsnNode(GETFIELD, FieldMapping.ENTITYARROW$PINNEDTOPLAYER));
+            methodNode.instructions.add(getNewFieldInsnNode(GETFIELD, FieldMapping.ENTITYARROW$PINNEDTOENTITY));
             final LabelNode l1 = new LabelNode();
             methodNode.instructions.add(new JumpInsnNode(IFEQ, l1));
             methodNode.instructions.add(getNewConfigFieldInsnNode("drawHitboxForPinnedArrows"));

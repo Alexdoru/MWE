@@ -1,9 +1,13 @@
 package fr.alexdoru.mwe.asm.interfaces;
 
+import net.minecraft.entity.EntityLivingBase;
+
 public interface EntityArrowAccessor {
 
-    boolean isInGround();
+    boolean mwe$isInGround();
 
-    boolean isPinnedToPlayer();
+    EntityLivingBase mwe$PinnedEntity();
+
+    boolean mwe$isPinnedToEntity();
 
 }

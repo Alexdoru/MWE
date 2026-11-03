@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.asm.hooks.mc.render;
 
+import fr.alexdoru.mwe.asm.interfaces.EntityArrowAccessor;
 import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.asm.interfaces.IHitboxRender;
 import fr.alexdoru.mwe.asm.interfaces.IWitherColor;
@@ -33,16 +34,7 @@ public class RenderManagerHook_Hitboxes {
     private static int hitboxColor = 0xFFFFFF;
 
     public static int getRedHitboxColor(int r, Entity entity) {
-        if (MWEConfig.teamColoredPlayerHitbox && entity instanceof EntityPlayerAccessor) {
-            hitboxColor = ((EntityPlayerAccessor) entity).getPlayerSpecialRenderColor();
-        } else if (MWEConfig.teamColoredWitherHitbox && entity instanceof IWitherColor) {
-            final int i = ((IWitherColor) entity).getmwe$Color();
-            hitboxColor = i == 0 ? MWEConfig.hitboxColor : i;
-        } else if (MWEConfig.teamColoredArrowHitbox && entity instanceof EntityArrow && ((EntityArrow) entity).shootingEntity instanceof EntityPlayerAccessor) {
-            hitboxColor = ((EntityPlayerAccessor) ((EntityArrow) entity).shootingEntity).getPlayerSpecialRenderColor();
-        } else {
-            hitboxColor = MWEConfig.hitboxColor;
-        }
+        hitboxColor = getColorForEntity(entity);
         return hitboxColor >> 16 & 255;
     }
 
@@ -52,6 +44,25 @@ public class RenderManagerHook_Hitboxes {
 
     public static int getBlueHitboxColor(int b) {
         return hitboxColor & 255;
+    }
+
+    private static int getColorForEntity(Entity entity) {
+        if (MWEConfig.teamColoredPlayerHitbox && entity instanceof EntityPlayerAccessor) {
+            return ((EntityPlayerAccessor) entity).getPlayerSpecialRenderColor();
+        }
+        if (MWEConfig.teamColoredWitherHitbox && entity instanceof IWitherColor) {
+            final int i = ((IWitherColor) entity).getmwe$Color();
+            return i == 0 ? MWEConfig.hitboxColor : i;
+        }
+        if (MWEConfig.teamColoredArrowHitbox && entity instanceof EntityArrow) {
+            if (((EntityArrow) entity).shootingEntity instanceof EntityPlayerAccessor) {
+                return ((EntityPlayerAccessor) ((EntityArrow) entity).shootingEntity).getPlayerSpecialRenderColor();
+            }
+            if (((EntityArrowAccessor) entity).mwe$PinnedEntity() instanceof EntityPlayerAccessor) {
+                return ((EntityPlayerAccessor) ((EntityArrowAccessor) entity).mwe$PinnedEntity()).getPlayerSpecialRenderColor();
+            }
+        }
+        return MWEConfig.hitboxColor;
     }
 
     public static boolean shouldRenderBlueVect(Entity entityIn) {

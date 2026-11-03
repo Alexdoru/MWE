@@ -16,17 +16,24 @@ public class EntityArrowTransformer implements MWETransformer {
     public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(0);
         addInterface(classNode, "EntityArrowAccessor");
-        classNode.visitField(ACC_PUBLIC, FieldMapping.ENTITYARROW$PINNEDTOPLAYER.name, FieldMapping.ENTITYARROW$PINNEDTOPLAYER.desc, null, 0);
+        classNode.visitField(ACC_PUBLIC, FieldMapping.ENTITYARROW$PINNEDENTITY.name, FieldMapping.ENTITYARROW$PINNEDENTITY.desc, null, 0);
+        classNode.visitField(ACC_PUBLIC, FieldMapping.ENTITYARROW$PINNEDTOENTITY.name, FieldMapping.ENTITYARROW$PINNEDTOENTITY.desc, null, 0);
         addGetterMethod(
                 classNode,
-                "isInGround",
+                "mwe$isInGround",
                 FieldMapping.ENTITYARROW$ISINGROUND,
                 null
         );
         addGetterMethod(
                 classNode,
-                "isPinnedToPlayer",
-                FieldMapping.ENTITYARROW$PINNEDTOPLAYER,
+                "mwe$PinnedEntity",
+                FieldMapping.ENTITYARROW$PINNEDENTITY,
+                null
+        );
+        addGetterMethod(
+                classNode,
+                "mwe$isPinnedToEntity",
+                FieldMapping.ENTITYARROW$PINNEDTOENTITY,
                 null
         );
     }
